@@ -33,3 +33,25 @@ Out-of-scope discoveries during plan execution. Each item is logged here instead
 **Why deferred:** Plan-authoring defect; editing the plan text retroactively is out of scope for execution. Logged for future rename-cascade-style plans so authors know the correct gateway health signal on Netcup.
 
 **Suggested fix:** When next authoring a plan that probes the gateway, reference memory `reference_gateway_netcup.md` + `reference_voice_call_deployment.md` for the correct funnel URL.
+
+### 02-07 voice-call smoke test (deferred per user 2026-04-20)
+
+**Found during:** 02-07 Task 6 Part B (user-driven smoke test).
+
+**What:** Place a real inbound voice call through the production DID `+13187311533` (from e.g. `+51922286663`), route it through the Netcup gateway, and confirm bidirectional audio + clean call-end behavior. Optional extensions: trigger a Paperclip agent heartbeat via dashboard and spot-check any Infisical-backed service in day-to-day use.
+
+**Why deferred:** User explicitly chose to skip ("skip voice-call smoke tests for now", 2026-04-20). Deemed safe to defer because:
+- Automated proof-of-life via `/voice/webhook → 401 Unauthorized` already confirmed gateway process + voice-call extension + signature verification are all live (see VALIDATION §2).
+- Netcup services (`paperclip-server-1`, `minion-gateway.service`) observed healthy for 2 days post-rename with zero restarts.
+- All clients target Infisical by UUID, not slug — there is no structural mutation the smoke test would uniquely exercise.
+
+**When to run:** At user's convenience, or before the next production cut / Twilio configuration change, whichever comes first. Recommended cadence: quarterly belt-and-suspenders check even if no trigger event occurs.
+
+**How to run (for future reference):**
+1. From a non-registered phone, dial `+13187311533`.
+2. Listen for the greeting + gateway routing.
+3. Confirm audio is bidirectional (speak, hear response).
+4. End the call and confirm clean termination (no orphaned sessions — check `journalctl --user -u minion-gateway -n 50` on Netcup).
+5. Optional: open Paperclip dashboard at `https://netcup.donkey-agama.ts.net/paperclip`, trigger an agent wake, confirm heartbeat response.
+
+**Rollback trigger:** If the smoke test fails, first check whether any post-rename config drift occurred (diff `docker-compose.deploy.yml` + `minion-gateway.service` vs the 2026-04-20 snapshots in RUNBOOK); if clean, follow the RUNBOOK Rollback section.

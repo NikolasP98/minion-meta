@@ -28,7 +28,7 @@ Requirements for the initial meta-repo buildout (M0–M7). Each maps to a roadma
 - [ ] **FOUND-08**: `minion.json` registry at meta-repo root declares each subproject's path, package manager, branch, Infisical project, and primary commands
 - [ ] **FOUND-09**: Changesets is configured at the meta-repo root for independent semver releases of each `@minion/*` package
 - [ ] **FOUND-10**: Existing `infisical-dev.sh` logic is absorbed into `@minion/env`; the old script is deprecated with a shim
-- [ ] **FOUND-11**: Infisical projects renamed to the `minion-<name>` convention (`paperclip` → `minion-paperclip`, new `minion-core`, etc.) with all references updated in Netcup systemd units, docker-compose, CI workflows, scripts, and memory entries
+- [x] **FOUND-11**: Infisical projects renamed to the `minion-<name>` convention (`paperclip` → `minion-paperclip`, new `minion-core`, etc.) with all references updated in Netcup systemd units, docker-compose, CI workflows, scripts, and memory entries
 - [ ] **FOUND-12**: Root `CLAUDE.md` updated to document the new meta-repo workflow; meta-repo `README.md` describes onboarding
 
 ### Adoption (M2)
@@ -138,7 +138,7 @@ Populated during roadmap creation — each requirement maps to exactly one phase
 | FOUND-08 | Phase 2 | Pending |
 | FOUND-09 | Phase 2 | Pending |
 | FOUND-10 | Phase 2 | Pending |
-| FOUND-11 | Phase 2 | Pending |
+| FOUND-11 | Phase 2 | Complete |
 | FOUND-12 | Phase 2 | Pending |
 | ADOPT-01 | Phase 3 | Pending |
 | ADOPT-02 | Phase 3 | Pending |
