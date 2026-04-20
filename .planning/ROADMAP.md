@@ -1,0 +1,204 @@
+# Roadmap: Minion Meta-Repo
+
+## Overview
+
+Transform `/home/nikolas/Documents/CODE/AI/` from a loose collection of sibling subprojects into a coherent meta-repo with a root-level git repo, a hierarchical env/secrets system, a unified `minion` CLI, and aggressive extraction of cross-cutting code into shared `@minion/*` npm packages. The journey starts with a clean-slate pass across every subproject, stands up foundational tooling, propagates adoption, then executes the aggressive extraction of `minion-shared`, DB schema, auth, and WS/gateway client — each as its own release-gated milestone with coordinated cross-repo updates. Ends with release automation and steady-state developer onboarding docs.
+
+## Phases
+
+**Phase Numbering:**
+- Integer phases (1, 2, 3): Planned milestone work
+- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+
+- [ ] **Phase 1: Clean Slate** — Audit, triage, and bring every subproject to a known-clean state
+- [ ] **Phase 2: Foundation** — Stand up meta-repo, `@minion/cli` + `@minion/env` + shared configs, Infisical rename cascade
+- [ ] **Phase 3: Adopt Foundation in Subprojects** — Propagate shared tsconfig/lint/env into every subproject
+- [ ] **Phase 4: Fold minion-shared** — Import history into `packages/shared`, publish `@minion/shared`, update consumers, archive old repo
+- [ ] **Phase 5: DB Extraction** — Move Drizzle schema to `@minion/db`, two-step cutover of migration ownership from hub to meta-repo
+- [ ] **Phase 6: Auth Extraction** — Extract Better Auth config to `@minion/auth`, hub+site consume factory with shared session continuity
+- [ ] **Phase 7: WS Consolidation** — Consolidate duplicated WS client into `@minion/shared`, hub+site+paperclip consume
+- [ ] **Phase 8: Polish & Automation** — Meta-repo CI, changesets release automation, `minion doctor` polish, onboarding docs
+
+## Phase Details
+
+### Phase 1: Clean Slate
+**Goal**: Every subproject in a known-clean state with documented head commits, zero uncommitted drift, zero stray worktrees, and a fully-triaged open-PR list — before any meta-repo construction begins.
+**Depends on**: Nothing (first phase)
+**Requirements**: CLEAN-01, CLEAN-02, CLEAN-03, CLEAN-04, CLEAN-05, CLEAN-06
+**Success Criteria** (what must be TRUE):
+  1. Running `git status` in every subproject directory returns "working tree clean"
+  2. Every subproject's default branch (DEV / dev / master / main / minion-integration) tracks a valid upstream remote with no "[gone]" markers
+  3. No stray git worktrees remain (`paperclip-pi-fallback`, `paperclip-meta-repair`, or any others)
+  4. Every open PR across the 7 subproject repos is classified in `specs/clean-slate-inventory.md` as merged, closed, rebased, or explicitly held with a reason
+  5. The meta-repo root directory contains only meta-repo files, symlinks, and the 7 subproject directories — no stray one-time research artifacts
+  6. `specs/clean-slate-inventory.md` captures the pre-mutation state of every subproject (branch, ahead/behind, dirty files, worktrees, open PRs) for audit purposes
+**UI hint**: no
+**Plans**: TBD (likely 4–5 plans: inventory audit, uncommitted/worktree resolution, PR triage sweep, root cleanup, tracking fixes)
+
+Plans:
+- [ ] 01-01: Inventory audit — parallel subagents walk each subproject, produce `specs/clean-slate-inventory.md`
+- [ ] 01-02: Resolve uncommitted changes and stray worktrees per the inventory report
+- [ ] 01-03: PR triage sweep across all 7 subproject repos (parallel subagents)
+- [ ] 01-04: Root cleanup — relocate/delete A3, RETENTION, KPI one-time research artifacts
+- [ ] 01-05: Fix broken upstream tracking (e.g., `minion_plugins` main → origin/master [gone])
+
+### Phase 2: Foundation
+**Goal**: Stand up the meta-repo and foundational shared packages so that `minion dev <any-project>` works end-to-end with hierarchical env resolution.
+**Depends on**: Phase 1
+**Requirements**: FOUND-01, FOUND-02, FOUND-03, FOUND-04, FOUND-05, FOUND-06, FOUND-07, FOUND-08, FOUND-09, FOUND-10, FOUND-11, FOUND-12
+**Success Criteria** (what must be TRUE):
+  1. Meta-repo is a live git repo at `AI/` pushed to `NikolasP98/minion-meta` on GitHub
+  2. `@minion/tsconfig`, `@minion/lint-config`, `@minion/env`, `@minion/cli` all published to npm under the new `@minion` scope
+  3. Running `minion dev <any-project>` resolves env from the 6-level hierarchy and successfully launches that subproject's native dev command
+  4. `minion doctor` reports env resolution status for every subproject in `minion.json` and flags any missing required vars
+  5. Infisical projects all renamed to `minion-<name>` convention; no remaining references to old names in Netcup systemd, docker-compose, CI, or scripts
+  6. Changesets is configured and a dry-run release of all four packages succeeds
+**UI hint**: no
+**Plans**: TBD (likely 6–8 plans: git init + workspace, npm org, tsconfig, lint-config, env package, cli package, registry + minion.json, infisical rename cascade, docs)
+
+Plans:
+- [ ] 02-01: Root git repo + pnpm workspace + subproject `.gitignore` + `minion.json` registry
+- [ ] 02-02: Register `@minion` npm org, publishing setup, changesets config
+- [ ] 02-03: `@minion/tsconfig` package (base, node, svelte, library variants)
+- [ ] 02-04: `@minion/lint-config` package (oxlint + eslint + prettier presets)
+- [ ] 02-05: `@minion/env` package (Infisical auth, 6-level hierarchy, validation)
+- [ ] 02-06: `@minion/cli` package (all commands wired to env + registry)
+- [ ] 02-07: Infisical rename cascade — dashboard renames + script/systemd/compose/memory updates
+- [ ] 02-08: Root CLAUDE.md + README.md onboarding; deprecate `infisical-dev.sh`
+
+### Phase 3: Adopt Foundation in Subprojects
+**Goal**: Every TypeScript-using subproject consumes `@minion/tsconfig` and `@minion/lint-config`, ships `.env.defaults` + `.env.example`, and continues to build green against published shared versions without requiring the meta-repo to be checked out.
+**Depends on**: Phase 2
+**Requirements**: ADOPT-01, ADOPT-02, ADOPT-03, ADOPT-04, ADOPT-05, ADOPT-06, ADOPT-07
+**Success Criteria** (what must be TRUE):
+  1. Every subproject's `tsconfig.json` extends from `@minion/tsconfig/*.json`
+  2. Every subproject's lint config references `@minion/lint-config` presets
+  3. Every subproject has committed `.env.defaults` (non-secret) and `.env.example` (secret var names) files
+  4. Every subproject's own CI continues to pass against published `@minion/*` npm versions — no meta-repo checkout needed
+  5. `minion doctor` reports all 6 adopted subprojects as healthy
+**UI hint**: no
+**Plans**: TBD (one plan per subproject — runs in parallel-capable waves but serialized to avoid shared-package churn)
+
+Plans:
+- [ ] 03-01: Adopt shared configs + env files in `minion`
+- [ ] 03-02: Adopt shared configs + env files in `minion_hub`
+- [ ] 03-03: Adopt shared configs + env files in `minion_site`
+- [ ] 03-04: Adopt shared configs + env files in `paperclip-minion`
+- [ ] 03-05: Adopt shared configs + env files in `pixel-agents`
+- [ ] 03-06: Adopt shared configs + env files in `minion_plugins` (where TS exists)
+
+### Phase 4: Fold minion-shared
+**Goal**: `minion-shared/` is absorbed into `packages/shared` as `@minion/shared` with history preserved, all consumers migrate off the old package name, and the old GitHub repo is archived.
+**Depends on**: Phase 3
+**Requirements**: SHARE-01, SHARE-02, SHARE-03, SHARE-04, SHARE-05
+**Success Criteria** (what must be TRUE):
+  1. `packages/shared` contains the full `minion-shared` commit history (verified via `git log --follow`)
+  2. `@minion/shared` is published to npm and importable via standard package install
+  3. Old `minion-shared` package on npm is deprecated with a notice pointing to `@minion/shared`
+  4. `minion_hub`, `minion_site`, and `paperclip-minion` all import from `@minion/shared` — no references to the old package name remain in their source trees
+  5. Old `minion-shared` GitHub repo is archived with a README redirect
+**UI hint**: no
+**Plans**: TBD (subtree import, publish, per-consumer migration, archive)
+
+Plans:
+- [ ] 04-01: Import `minion-shared` history into `packages/shared` via git subtree
+- [ ] 04-02: Publish first `@minion/shared` release + deprecated shim of old name
+- [ ] 04-03: Update import paths in `minion_hub`, `minion_site`, `paperclip-minion` (parallel subagents)
+- [ ] 04-04: Archive old `minion-shared` repo with redirect README
+
+### Phase 5: DB Extraction
+**Goal**: A single Drizzle schema source lives in `@minion/db`, both hub and site consume its types, and migration ownership cleanly transitions to the meta-repo via a staged two-step cutover.
+**Depends on**: Phase 4
+**Requirements**: DB-01, DB-02, DB-03, DB-04, DB-05, DB-06, DB-07
+**Success Criteria** (what must be TRUE):
+  1. `packages/db/src/schema/` contains all 35+ Drizzle tables from the former `minion_hub/src/server/db/schema/`
+  2. `@minion/db` is published and exports schema types plus a migration runner
+  3. `minion_hub` and `minion_site` both import schema types from `@minion/db`; neither defines its own copy
+  4. Only the meta-repo runs `db:push` / migrations; hub's `db:push` script is removed or points to the meta-repo
+  5. Staging DB dry-run of the cutover completes with no data loss or schema drift
+  6. Production deploy of both hub and site on the new schema source passes smoke tests
+**UI hint**: no
+**Plans**: TBD (extraction, publish, site-consume-only, hub-consume-only + dry-run, cutover)
+
+Plans:
+- [ ] 05-01: Extract Drizzle schema to `packages/db` and publish `@minion/db`
+- [ ] 05-02: `minion_site` migrates to consume-only import of schema types
+- [ ] 05-03: `minion_hub` migrates to consume-only while retaining migration ownership (two-step)
+- [ ] 05-04: Staging DB dry-run of meta-repo-owned migrations
+- [ ] 05-05: Production cutover: meta-repo takes over migrations, hub stops running db:push
+
+### Phase 6: Auth Extraction
+**Goal**: Better Auth configuration lives in `@minion/auth` as a `createAuth()` factory; hub and site consume it with identical config and shared session continuity.
+**Depends on**: Phase 4
+**Requirements**: AUTH-01, AUTH-02, AUTH-03, AUTH-04
+**Success Criteria** (what must be TRUE):
+  1. `packages/auth` exports a `createAuth()` factory that accepts environment-specific params
+  2. `@minion/auth` is published on npm
+  3. Both `minion_hub` and `minion_site` call `createAuth()` with identical secret and provider config
+  4. A user logging into hub has a valid session on site (shared-session continuity works end-to-end in staging)
+  5. Coordinated production deploy of hub + site passes smoke tests with no forced logouts
+**UI hint**: no
+**Plans**: TBD
+
+Plans:
+- [ ] 06-01: Extract Better Auth config from hub + site into `packages/auth` factory
+- [ ] 06-02: Publish `@minion/auth` + update hub + site consumers (parallel subagents)
+- [ ] 06-03: Staging verification of shared session continuity
+- [ ] 06-04: Coordinated production deploy
+
+### Phase 7: WS Consolidation
+**Goal**: Exactly one WS/gateway client implementation exists across the platform, living in `@minion/shared`, consumed by hub, site, and paperclip's `openclaw_gateway` adapter.
+**Depends on**: Phase 4
+**Requirements**: WS-01, WS-02, WS-03, WS-04, WS-05
+**Success Criteria** (what must be TRUE):
+  1. Audit doc `specs/ws-duplication-audit.md` documents current state across hub, site, paperclip
+  2. A single WS client implementation lives in `@minion/shared` and is published
+  3. `minion_hub`, `minion_site`, and `paperclip-minion` all import the WS client from `@minion/shared`
+  4. Grep of all consumers shows zero duplicate WebSocket class definitions or gateway-frame implementations
+  5. End-to-end gateway session (paperclip agent → gateway → hub/site dashboard) works using the consolidated client
+**UI hint**: no
+**Plans**: TBD
+
+Plans:
+- [ ] 07-01: Audit WS/gateway duplication — produce `specs/ws-duplication-audit.md`
+- [ ] 07-02: Consolidate WS client implementation into `@minion/shared`
+- [ ] 07-03: Update hub + site + paperclip to consume shared client (parallel subagents)
+- [ ] 07-04: E2E gateway session verification across all three consumers
+
+### Phase 8: Polish & Automation
+**Goal**: Meta-repo CI is green on every PR, changesets publishes releases automatically, `minion doctor` is polished, and a new dev can go from clone to `minion dev` in under 10 minutes.
+**Depends on**: Phase 7
+**Requirements**: POLISH-01, POLISH-02, POLISH-03, POLISH-04, POLISH-05
+**Success Criteria** (what must be TRUE):
+  1. Meta-repo PR checks run lint-all, typecheck-all, and changesets-status; all currently green on main
+  2. Merges to main automatically publish updated `@minion/*` packages with changelog entries generated from changesets
+  3. `minion doctor` reports env validation, link drift, subproject git status, and CI status in a single command
+  4. Root `CLAUDE.md` describes the steady-state developer workflow (not the migration narrative) and is accurate
+  5. A fresh developer following `README.md` + onboarding docs can clone, check out subprojects, configure Infisical auth, and run `minion dev` in under 10 minutes (verified by timed dry-run)
+**UI hint**: no
+**Plans**: TBD
+
+Plans:
+- [ ] 08-01: Meta-repo CI workflows (lint, typecheck, changesets-status)
+- [ ] 08-02: Changesets release automation on merge to main
+- [ ] 08-03: `minion doctor` polish based on real-world M2–M7 usage feedback
+- [ ] 08-04: Root CLAUDE.md rewrite for steady-state + README.md onboarding
+- [ ] 08-05: Timed onboarding dry-run to verify <10-min criterion
+
+## Progress
+
+**Execution Order:**
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
+
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 1. Clean Slate | 0/5 | Not started | - |
+| 2. Foundation | 0/8 | Not started | - |
+| 3. Adopt Foundation | 0/6 | Not started | - |
+| 4. Fold minion-shared | 0/4 | Not started | - |
+| 5. DB Extraction | 0/5 | Not started | - |
+| 6. Auth Extraction | 0/4 | Not started | - |
+| 7. WS Consolidation | 0/4 | Not started | - |
+| 8. Polish & Automation | 0/5 | Not started | - |
+
+**Coverage:** 49/49 v1 requirements mapped to phases ✓
