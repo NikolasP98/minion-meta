@@ -131,5 +131,9 @@ export async function main(argv: string[] = process.argv): Promise<number> {
 main().catch((err: unknown) => {
 	const msg = err instanceof Error ? err.message : String(err);
 	console.error('minion:', msg);
+	// D9 exit code mapping based on error message content.
+	if (/not found in minion\.json/.test(msg)) process.exit(4);
+	if (/minion\.json (not found|missing|invalid)/.test(msg)) process.exit(2);
+	if (/infisical.*auth/i.test(msg)) process.exit(3);
 	process.exit(1);
 });
