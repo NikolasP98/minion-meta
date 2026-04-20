@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 3 context gathered
-last_updated: "2026-04-20T22:10:15.593Z"
-last_activity: 2026-04-20 -- Phase 03 planning complete
+stopped_at: "Completed 03-01-PLAN.md — minion adoption PR #77 open"
+last_updated: "2026-04-20T22:25:22.384Z"
+last_activity: 2026-04-20
 progress:
   total_phases: 8
   completed_phases: 2
   total_plans: 19
-  completed_plans: 13
-  percent: 68
+  completed_plans: 14
+  percent: 74
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-19)
 
 **Core value:** One command resolves the right env and runs the right build for any subproject, and every piece of cross-cutting code lives in exactly one place under uniform standardization — no exceptions.
-**Current focus:** Phase 02 — foundation
+**Current focus:** Phase 03 — adopt-foundation-in-subprojects
 
 ## Current Position
 
-Phase: 3
-Plan: Not started
+Phase: 03 (adopt-foundation-in-subprojects) — EXECUTING
+Plan: 2 of 6
 Status: Ready to execute
-Last activity: 2026-04-20 -- Phase 03 planning complete
+Last activity: 2026-04-20
 
 Progress: ░░░░░░░░░░ 0%
 
@@ -55,6 +55,7 @@ Progress: ░░░░░░░░░░ 0%
 
 | Phase 02 P07 | 90 min | 6 tasks | 11 files |
 | Phase 02 P08 | 8 | 3 tasks | 3 files |
+| Phase 03 P01 | 35 min | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,8 @@ Recent decisions affecting current work:
 - [Phase 02]: UUID-based zero-edit Netcup — paperclip + bot-prd targeted Infisical by projectId, so slug rename required zero production edits — Confirmed on-host during Task 5 verification; Discovery §7 risk prediction held
 - [Phase 02]: Voice-call smoke test deferred per user 2026-04-20 — Automated proof-of-life (/voice/webhook 401 + systemd active 2d uptime) sufficient given UUID-stable targeting; tracked in deferred-items.md for future belt-and-suspenders run
 - [Phase 02]: Phase 2 closed with docs-only plan (02-08): CLAUDE.md Meta-repo Workflow section + README.md onboarding (138 lines) + infisical-dev.sh deprecation shim
+- [Phase 03]: Transitional noUncheckedIndexedAccess=false in minion/tsconfig.json — enabling shared base default would surface 1616 warnings; Phase 8 follow-up
+- [Phase 03]: pnpm.minimumReleaseAgeExclude for @minion-stack/* required — minion's 48h min-release-age blocks freshly published internal packages
 
 ### Pending Todos
 
@@ -89,6 +92,6 @@ yet. Phase 1 depends on nothing and can be planned immediately.
 
 ## Session Continuity
 
-Last session: 2026-04-20T21:31:49.316Z
-Stopped at: Phase 3 context gathered
-Resume file: .planning/phases/03-adopt-foundation-in-subprojects/03-CONTEXT.md
+Last session: 2026-04-20T22:25:22.380Z
+Stopped at: Completed 03-01-PLAN.md — minion adoption PR #77 open
+Resume file: None

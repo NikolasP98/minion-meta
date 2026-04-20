@@ -80,7 +80,7 @@ Plans:
 **Plans**: 6 plans across 3 waves (Wave 1: minion + paperclip-minion; Wave 2: hub + site; Wave 3: pixel-agents + minion_plugins)
 
 Plans:
-- [ ] 03-01-PLAN.md — Adopt @minion-stack shared configs + env files in `minion` (pnpm, Wave 1)
+- [x] 03-01-PLAN.md — Adopt @minion-stack shared configs + env files in `minion` (pnpm, Wave 1)
 - [ ] 03-02-PLAN.md — Adopt @minion-stack shared configs + env files in `minion_hub` (bun SvelteKit, Wave 2; adds net-new CI)
 - [ ] 03-03-PLAN.md — Adopt @minion-stack shared configs + env files in `minion_site` (bun SvelteKit, Wave 2; adds net-new CI)
 - [ ] 03-04-PLAN.md — Adopt @minion-stack shared configs + env files in `paperclip-minion` (pnpm workspace, Wave 1; targets tsconfig.base.json not root)
