@@ -29,26 +29,26 @@ curl -sI https://registry.npmjs.org/@minion%2Fenv  → 404
 
 ## Human-action steps (for user to run locally)
 
-The npm org creation cannot be automated — it requires your npm login + (optionally) 2FA. Run these at your convenience:
+npm CLI does NOT support org creation — `npm org` only manages membership in an existing org. Org creation is web-only.
 
 ```bash
-# 1. Log in to npm (opens browser for OAuth or prompts for OTP)
+# 1. Log in to npm (prompts for browser OAuth or OTP)
 npm login
 
-# 2. Create the organization
-# Option A: CLI (recommended)
-npm org set minion --role owner NikolasP98
+# 2. Create the "minion" organization via the web UI (browser must be signed in to same npm account):
+xdg-open https://www.npmjs.com/org/create
+# On the form: Name = "minion" · Tier = "Unlimited public packages (free)"
 
-# Option B: Web UI (if CLI org-create is not supported in your npm version)
-# Visit https://www.npmjs.com/org/create, name the org "minion", pick the "Unlimited public packages (free)" tier
-
-# 3. Verify access
+# 3. Verify from CLI
+npm whoami                          # should print NikolasP98
+npm org ls minion                   # should list NikolasP98 as owner
 npm access list packages @minion    # should not error with ENOSCOPE
-npm whoami                           # should print NikolasP98
 
 # 4. (Recommended) Enable 2FA on publish
 npm profile enable-2fa auth-and-writes
 ```
+
+**Previous note in this file suggested `npm org set minion --role owner NikolasP98` as a CLI-only path — that was incorrect** (tried 2026-04-20, errored because `npm org set` requires an existing org + positional `role` arg: `npm org set <org> <user> <role>`). Web UI is the only way to create the org.
 
 ## Impact
 
