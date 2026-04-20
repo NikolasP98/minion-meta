@@ -57,12 +57,12 @@ Plans:
 **Plans**: 8 plans across 6 waves
 
 Plans:
-- [ ] 02-01-PLAN.md — Meta-repo scaffold: git branch rename, package.json, pnpm-workspace.yaml, new .gitignore, minion.json registry, .env.defaults/.env.example, empty package skeletons, changesets init (Wave 1)
-- [ ] 02-02-PLAN.md — Register `@minion` npm org + gh repo create NikolasP98/minion-meta + first push + scope-fallback decision (Wave 2, human-action checkpoints)
-- [ ] 02-03-PLAN.md — Ship @minion/tsconfig@0.1.0 (base/node/svelte/library variants) (Wave 3)
-- [ ] 02-04-PLAN.md — Ship @minion/lint-config@0.1.0 (oxlint + ESLint + Prettier presets) (Wave 3)
-- [ ] 02-05-PLAN.md — Ship @minion/env@0.1.0 (6-layer hierarchy, Infisical CLI wrapper, cache, validation) — TDD (Wave 3)
-- [ ] 02-06-PLAN.md — Ship @minion/cli@0.1.0 (15 subcommands: dev/build/test/check/run/fanout/status/doctor/sync-env/rotate-env/infisical/link/list/branch) (Wave 4)
+- [x] 02-01-PLAN.md — Meta-repo scaffold: git branch rename, package.json, pnpm-workspace.yaml, new .gitignore, minion.json registry, .env.defaults/.env.example, empty package skeletons, changesets init (Wave 1)
+- [x] 02-02-PLAN.md — Register `@minion` npm org + gh repo create NikolasP98/minion-meta + first push + scope-fallback decision (Wave 2, human-action checkpoints)
+- [x] 02-03-PLAN.md — Ship @minion/tsconfig@0.1.0 (base/node/svelte/library variants) (Wave 3)
+- [x] 02-04-PLAN.md — Ship @minion/lint-config@0.1.0 (oxlint + ESLint + Prettier presets) (Wave 3)
+- [x] 02-05-PLAN.md — Ship @minion/env@0.1.0 (6-layer hierarchy, Infisical CLI wrapper, cache, validation) — TDD (Wave 3)
+- [x] 02-06-PLAN.md — Ship @minion/cli@0.1.0 (15 subcommands: dev/build/test/check/run/fanout/status/doctor/sync-env/rotate-env/infisical/link/list/branch) (Wave 4)
 - [ ] 02-07-PLAN.md — Infisical rename cascade: discovery → dashboard/API → Netcup systemd+compose → memory entries → production smoke test (Wave 5, multi-checkpoint)
 - [ ] 02-08-PLAN.md — Root CLAUDE.md + README.md onboarding + infisical-dev.sh deprecation shim (Wave 6)
 
@@ -193,7 +193,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Clean Slate | 5/5 | Complete    | 2026-04-20 |
-| 2. Foundation | 0/8 | Not started | - |
+| 2. Foundation | 5/8 | In Progress|  |
 | 3. Adopt Foundation | 0/6 | Not started | - |
 | 4. Fold minion-shared | 0/4 | Not started | - |
 | 5. DB Extraction | 0/5 | Not started | - |
