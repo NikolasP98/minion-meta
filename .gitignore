@@ -1,0 +1,125 @@
+# ============================================================
+# Minion Meta-Repo — Root .gitignore
+# Subprojects are INDEPENDENT git repos and are ignored here.
+# Meta-repo tracks only: packages/*, specs/, .planning/, .changeset/,
+# minion.json, CLAUDE.md, README.md, package.json, pnpm-workspace.yaml,
+# .env.defaults, .env.example, .gitignore, infisical-dev.sh (deprecated shim).
+# ============================================================
+
+# ---- Dependencies ----
+node_modules/
+.pnpm-store/
+.yarn/
+.npm/
+
+# ---- Build outputs ----
+dist/
+build/
+out/
+.next/
+.nuxt/
+.output/
+.vercel/
+.netlify/
+
+# ---- SvelteKit / Vite ----
+.svelte-kit/
+vite.config.ts.timestamp-*
+
+# ---- TypeScript ----
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# ---- Bun ----
+bun.lockb
+
+# ---- Environment & secrets ----
+.env
+.env.local
+.env.*.local
+.env.production
+!.env.example
+!.env.defaults
+
+# ---- OS / Editor ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/settings.json
+!.vscode/extensions.json
+*.swp
+*.swo
+.serena/
+
+# ---- Logs ----
+*.log
+logs/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+
+# ---- Coverage & test outputs ----
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# ---- Turbo (not used but defensive) ----
+.turbo/
+
+# ---- Docker ----
+*.env.docker
+
+# ---- Drizzle / DB ----
+*.db
+*.db-shm
+*.db-wal
+data/
+.pglite/
+
+# ---- LanceDB (memory extension) ----
+*.lance/
+lancedb/
+
+# ---- Generated files ----
+minion/src/channels/_generated/
+minion/packages/plugin-sdk/dist/
+
+# ---- Fly.io ----
+fly.toml.bak
+
+# ============================================================
+# Subprojects — independent repos, intentionally ignored
+# ============================================================
+minion/
+minion_hub/
+minion_site/
+minion-shared/
+minion_plugins/
+paperclip-minion/
+pixel-agents/
+omnisearch/
+# Post-Phase-1 worktrees (already removed — defensive anti-resurrection entries):
+paperclip-pi-fallback/
+paperclip-meta-repair/
+
+# ============================================================
+# VAULT symlinks (point at ~/Documents/VAULT/MINION/*)
+# ============================================================
+ai-studio
+docs
+knowledge/
+
+# ============================================================
+# Root one-off state files NOT tracked in meta-repo
+# ============================================================
+entities.json
+mempalace.yaml
+mascot.png
+agents/
+
+# ============================================================
+# .playwright-mcp / .playwright-cli ephemeral browser state
+# ============================================================
+.playwright-mcp/
+.playwright-cli/
