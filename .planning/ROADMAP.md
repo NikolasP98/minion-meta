@@ -83,7 +83,7 @@ Plans:
 - [x] 03-01-PLAN.md — Adopt @minion-stack shared configs + env files in `minion` (pnpm, Wave 1)
 - [ ] 03-02-PLAN.md — Adopt @minion-stack shared configs + env files in `minion_hub` (bun SvelteKit, Wave 2; adds net-new CI)
 - [ ] 03-03-PLAN.md — Adopt @minion-stack shared configs + env files in `minion_site` (bun SvelteKit, Wave 2; adds net-new CI)
-- [ ] 03-04-PLAN.md — Adopt @minion-stack shared configs + env files in `paperclip-minion` (pnpm workspace, Wave 1; targets tsconfig.base.json not root)
+- [x] 03-04-PLAN.md — Adopt @minion-stack shared configs + env files in `paperclip-minion` (pnpm workspace, Wave 1; targets tsconfig.base.json not root)
 - [ ] 03-05-PLAN.md — Adopt @minion-stack shared configs + env files in `pixel-agents` (npm, Wave 3; dual tsconfig + local ESLint plugin preserved)
 - [ ] 03-06-PLAN.md — Resolve ADOPT-06 for `minion_plugins` (npm; markdown+YAML catalog, Wave 3; likely D-27 deferral)
 
@@ -194,7 +194,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 |-------|----------------|--------|-----------|
 | 1. Clean Slate | 5/5 | Complete    | 2026-04-20 |
 | 2. Foundation | 6/8 | In Progress|  |
-| 3. Adopt Foundation | 0/6 | Not started | - |
+| 3. Adopt Foundation | 2/6 | In Progress|  |
 | 4. Fold minion-shared | 0/4 | Not started | - |
 | 5. DB Extraction | 0/5 | Not started | - |
 | 6. Auth Extraction | 0/4 | Not started | - |
