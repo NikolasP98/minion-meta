@@ -9,12 +9,12 @@ Requirements for the initial meta-repo buildout (M0–M7). Each maps to a roadma
 
 ### Clean Slate (M0)
 
-- [ ] **CLEAN-01**: Every subproject has a clean `git status` with no uncommitted or untracked changes
-- [ ] **CLEAN-02**: Every subproject's default branch tracks a valid upstream remote
-- [ ] **CLEAN-03**: All stray git worktrees (`paperclip-pi-fallback`, `paperclip-meta-repair`, etc.) are merged back or removed
-- [ ] **CLEAN-04**: All open PRs across subproject repos are classified (merged / closed / rebased / explicitly held with reason)
-- [ ] **CLEAN-05**: Root-level one-time research artifacts are relocated or deleted so the root contains only meta-repo files, symlinks, and subproject directories
-- [ ] **CLEAN-06**: `specs/clean-slate-inventory.md` documents the pre-mutation state for auditability
+- [x] **CLEAN-01**: Every subproject has a clean `git status` with no uncommitted or untracked changes
+- [x] **CLEAN-02**: Every subproject's default branch tracks a valid upstream remote
+- [x] **CLEAN-03**: All stray git worktrees (`paperclip-pi-fallback`, `paperclip-meta-repair`, etc.) are merged back or removed
+- [x] **CLEAN-04**: All open PRs across subproject repos are classified (merged / closed / rebased / explicitly held with reason)
+- [x] **CLEAN-05**: Root-level one-time research artifacts are relocated or deleted so the root contains only meta-repo files, symlinks, and subproject directories
+- [x] **CLEAN-06**: `specs/clean-slate-inventory.md` documents the pre-mutation state for auditability
 
 ### Foundation (M1)
 
@@ -122,12 +122,12 @@ Populated during roadmap creation — each requirement maps to exactly one phase
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CLEAN-01 | Phase 1 | Pending |
-| CLEAN-02 | Phase 1 | Pending |
-| CLEAN-03 | Phase 1 | Pending |
-| CLEAN-04 | Phase 1 | Pending |
-| CLEAN-05 | Phase 1 | Pending |
-| CLEAN-06 | Phase 1 | Pending |
+| CLEAN-01 | Phase 1 | Complete |
+| CLEAN-02 | Phase 1 | Complete |
+| CLEAN-03 | Phase 1 | Complete |
+| CLEAN-04 | Phase 1 | Complete |
+| CLEAN-05 | Phase 1 | Complete |
+| CLEAN-06 | Phase 1 | Complete |
 | FOUND-01 | Phase 2 | Pending |
 | FOUND-02 | Phase 2 | Pending |
 | FOUND-03 | Phase 2 | Pending |

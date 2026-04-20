@@ -10,7 +10,7 @@ Transform `/home/nikolas/Documents/CODE/AI/` from a loose collection of sibling 
 - Integer phases (1, 2, 3): Planned milestone work
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 1: Clean Slate** — Audit, triage, and bring every subproject to a known-clean state
+- [x] **Phase 1: Clean Slate** — Audit, triage, and bring every subproject to a known-clean state (completed 2026-04-20)
 - [ ] **Phase 2: Foundation** — Stand up meta-repo, `@minion/cli` + `@minion/env` + shared configs, Infisical rename cascade
 - [ ] **Phase 3: Adopt Foundation in Subprojects** — Propagate shared tsconfig/lint/env into every subproject
 - [ ] **Phase 4: Fold minion-shared** — Import history into `packages/shared`, publish `@minion/shared`, update consumers, archive old repo
@@ -36,11 +36,11 @@ Transform `/home/nikolas/Documents/CODE/AI/` from a loose collection of sibling 
 **Plans**: 5 plans (Wave 1: inventory audit; Wave 2: uncommitted/worktree resolution, PR triage sweep, root cleanup, tracking fixes — all depend on Wave 1 approval)
 
 Plans:
-- [ ] 01-01-PLAN.md — Inventory audit: 7 parallel Explore subagents produce `specs/clean-slate-inventory.md` (Wave 1, read-only)
-- [ ] 01-02-PLAN.md — Resolve uncommitted changes + stray worktrees per inventory dispositions (Wave 2)
-- [ ] 01-03-PLAN.md — PR triage sweep: 7 parallel general-purpose subagents classify + execute merges/closes (Wave 2)
-- [ ] 01-04-PLAN.md — Root cleanup: relocate/delete A3/RETENTION/KPI research artifacts (Wave 2)
-- [ ] 01-05-PLAN.md — Fix broken upstream tracking (e.g., `minion_plugins` main → origin/master [gone]) (Wave 2)
+- [x] 01-01-PLAN.md — Inventory audit: 7 parallel Explore subagents produce `specs/clean-slate-inventory.md` (Wave 1, read-only)
+- [x] 01-02-PLAN.md — Resolve uncommitted changes + stray worktrees per inventory dispositions (Wave 2)
+- [x] 01-03-PLAN.md — PR triage sweep: 7 parallel general-purpose subagents classify + execute merges/closes (Wave 2)
+- [x] 01-04-PLAN.md — Root cleanup: relocate/delete A3/RETENTION/KPI research artifacts (Wave 2)
+- [x] 01-05-PLAN.md — Fix broken upstream tracking (e.g., `minion_plugins` main → origin/master [gone]) (Wave 2)
 
 ### Phase 2: Foundation
 **Goal**: Stand up the meta-repo and foundational shared packages so that `minion dev <any-project>` works end-to-end with hierarchical env resolution.
@@ -192,7 +192,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Clean Slate | 0/5 | Not started | - |
+| 1. Clean Slate | 5/5 | Complete    | 2026-04-20 |
 | 2. Foundation | 0/8 | Not started | - |
 | 3. Adopt Foundation | 0/6 | Not started | - |
 | 4. Fold minion-shared | 0/4 | Not started | - |
