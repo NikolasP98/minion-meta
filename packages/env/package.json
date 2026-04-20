@@ -1,18 +1,32 @@
 {
   "name": "@minion-stack/env",
-  "version": "0.0.0",
-  "private": true,
-  "description": "Minion env resolver — 6-level hierarchy, Infisical-backed, validates against .env.example.",
-  "publishConfig": {
-    "access": "public"
+  "version": "0.1.0",
+  "description": "Six-layer env hierarchy resolver — Infisical CLI wrapper, .env.* parser, validator.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NikolasP98/minion-meta.git",
+    "directory": "packages/env"
   },
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "dist",
     "README.md"
   ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "build": "tsdown",
     "test": "vitest run",
@@ -22,7 +36,7 @@
   "devDependencies": {
     "@minion-stack/tsconfig": "workspace:*",
     "@types/node": "^22.19.17",
-    "tsdown": "^0.6.10",
+    "tsdown": "^0.21.9",
     "typescript": "^5.9.3",
     "vitest": "^2.1.9"
   }
