@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-07-PLAN.md (Infisical rename cascade); voice-call smoke test deferred per user
-last_updated: "2026-04-20T20:19:06.101Z"
+stopped_at: Completed 02-08-PLAN.md — Phase 2 docs close-out (CLAUDE.md + README.md + infisical-dev.sh shim); ready for /gsd-verify-phase 2
+last_updated: "2026-04-20T20:26:20.595Z"
 last_activity: 2026-04-20
 progress:
   total_phases: 8
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 13
-  completed_plans: 12
-  percent: 92
+  completed_plans: 13
+  percent: 100
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-19)
 ## Current Position
 
 Phase: 02 (foundation) — EXECUTING
-Plan: 2 of 8
+Plan: 3 of 8
 Status: Ready to execute
 Last activity: 2026-04-20
 
@@ -53,6 +53,7 @@ Progress: ░░░░░░░░░░ 0%
 - Trend: — (not yet started)
 
 | Phase 02 P07 | 90 min | 6 tasks | 11 files |
+| Phase 02 P08 | 8 | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -73,6 +74,7 @@ Recent decisions affecting current work:
 - [Phase 02]: Dashboard-only Infisical rename path (CLI v0.43.76 has no projects subcommand) — Discovery §1 confirmed no CLI support for project mgmt; user executed via web dashboard at http://100.80.222.29:8080
 - [Phase 02]: UUID-based zero-edit Netcup — paperclip + bot-prd targeted Infisical by projectId, so slug rename required zero production edits — Confirmed on-host during Task 5 verification; Discovery §7 risk prediction held
 - [Phase 02]: Voice-call smoke test deferred per user 2026-04-20 — Automated proof-of-life (/voice/webhook 401 + systemd active 2d uptime) sufficient given UUID-stable targeting; tracked in deferred-items.md for future belt-and-suspenders run
+- [Phase 02]: Phase 2 closed with docs-only plan (02-08): CLAUDE.md Meta-repo Workflow section + README.md onboarding (138 lines) + infisical-dev.sh deprecation shim
 
 ### Pending Todos
 
@@ -86,6 +88,6 @@ yet. Phase 1 depends on nothing and can be planned immediately.
 
 ## Session Continuity
 
-Last session: 2026-04-20T20:19:06.097Z
-Stopped at: Completed 02-07-PLAN.md (Infisical rename cascade); voice-call smoke test deferred per user
+Last session: 2026-04-20T20:26:20.592Z
+Stopped at: Completed 02-08-PLAN.md — Phase 2 docs close-out (CLAUDE.md + README.md + infisical-dev.sh shim); ready for /gsd-verify-phase 2
 Resume file: None

@@ -64,7 +64,7 @@ Plans:
 - [x] 02-05-PLAN.md — Ship @minion/env@0.1.0 (6-layer hierarchy, Infisical CLI wrapper, cache, validation) — TDD (Wave 3)
 - [x] 02-06-PLAN.md — Ship @minion/cli@0.1.0 (15 subcommands: dev/build/test/check/run/fanout/status/doctor/sync-env/rotate-env/infisical/link/list/branch) (Wave 4)
 - [x] 02-07-PLAN.md — Infisical rename cascade: discovery → dashboard/API → Netcup systemd+compose → memory entries → production smoke test (Wave 5, multi-checkpoint)
-- [ ] 02-08-PLAN.md — Root CLAUDE.md + README.md onboarding + infisical-dev.sh deprecation shim (Wave 6)
+- [x] 02-08-PLAN.md — Root CLAUDE.md + README.md onboarding + infisical-dev.sh deprecation shim (Wave 6)
 
 ### Phase 3: Adopt Foundation in Subprojects
 **Goal**: Every TypeScript-using subproject consumes `@minion/tsconfig` and `@minion/lint-config`, ships `.env.defaults` + `.env.example`, and continues to build green against published shared versions without requiring the meta-repo to be checked out.
