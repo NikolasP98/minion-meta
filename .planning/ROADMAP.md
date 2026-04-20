@@ -67,25 +67,25 @@ Plans:
 - [x] 02-08-PLAN.md — Root CLAUDE.md + README.md onboarding + infisical-dev.sh deprecation shim (Wave 6)
 
 ### Phase 3: Adopt Foundation in Subprojects
-**Goal**: Every TypeScript-using subproject consumes `@minion/tsconfig` and `@minion/lint-config`, ships `.env.defaults` + `.env.example`, and continues to build green against published shared versions without requiring the meta-repo to be checked out.
+**Goal**: Every TypeScript-using subproject consumes `@minion-stack/tsconfig` and `@minion-stack/lint-config`, ships `.env.defaults` + `.env.example`, and continues to build green against published shared versions without requiring the meta-repo to be checked out.
 **Depends on**: Phase 2
 **Requirements**: ADOPT-01, ADOPT-02, ADOPT-03, ADOPT-04, ADOPT-05, ADOPT-06, ADOPT-07
 **Success Criteria** (what must be TRUE):
-  1. Every subproject's `tsconfig.json` extends from `@minion/tsconfig/*.json`
-  2. Every subproject's lint config references `@minion/lint-config` presets
-  3. Every subproject has committed `.env.defaults` (non-secret) and `.env.example` (secret var names) files
-  4. Every subproject's own CI continues to pass against published `@minion/*` npm versions — no meta-repo checkout needed
-  5. `minion doctor` reports all 6 adopted subprojects as healthy
+  1. Every subproject's `tsconfig.json` extends from `@minion-stack/tsconfig/*.json` (or is explicitly deferred per D-27 for zero-code repos)
+  2. Every subproject's lint config references `@minion-stack/lint-config` presets (or is explicitly deferred)
+  3. Every subproject has committed `.env.defaults` (non-secret) and `.env.example` (secret var names) files OR deferral is logged
+  4. Every subproject's own CI passes against published `@minion-stack/*` npm versions — no meta-repo checkout needed
+  5. `minion doctor` reports all 6 adopted subprojects as healthy (or flagged as expected-no-install for markdown-only repos)
 **UI hint**: no
-**Plans**: TBD (one plan per subproject — runs in parallel-capable waves but serialized to avoid shared-package churn)
+**Plans**: 6 plans across 3 waves (Wave 1: minion + paperclip-minion; Wave 2: hub + site; Wave 3: pixel-agents + minion_plugins)
 
 Plans:
-- [ ] 03-01: Adopt shared configs + env files in `minion`
-- [ ] 03-02: Adopt shared configs + env files in `minion_hub`
-- [ ] 03-03: Adopt shared configs + env files in `minion_site`
-- [ ] 03-04: Adopt shared configs + env files in `paperclip-minion`
-- [ ] 03-05: Adopt shared configs + env files in `pixel-agents`
-- [ ] 03-06: Adopt shared configs + env files in `minion_plugins` (where TS exists)
+- [ ] 03-01-PLAN.md — Adopt @minion-stack shared configs + env files in `minion` (pnpm, Wave 1)
+- [ ] 03-02-PLAN.md — Adopt @minion-stack shared configs + env files in `minion_hub` (bun SvelteKit, Wave 2; adds net-new CI)
+- [ ] 03-03-PLAN.md — Adopt @minion-stack shared configs + env files in `minion_site` (bun SvelteKit, Wave 2; adds net-new CI)
+- [ ] 03-04-PLAN.md — Adopt @minion-stack shared configs + env files in `paperclip-minion` (pnpm workspace, Wave 1; targets tsconfig.base.json not root)
+- [ ] 03-05-PLAN.md — Adopt @minion-stack shared configs + env files in `pixel-agents` (npm, Wave 3; dual tsconfig + local ESLint plugin preserved)
+- [ ] 03-06-PLAN.md — Resolve ADOPT-06 for `minion_plugins` (npm; markdown+YAML catalog, Wave 3; likely D-27 deferral)
 
 ### Phase 4: Fold minion-shared
 **Goal**: `minion-shared/` is absorbed into `packages/shared` as `@minion/shared` with history preserved, all consumers migrate off the old package name, and the old GitHub repo is archived.
