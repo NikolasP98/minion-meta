@@ -54,17 +54,17 @@ Plans:
   5. Infisical projects all renamed to `minion-<name>` convention; no remaining references to old names in Netcup systemd, docker-compose, CI, or scripts
   6. Changesets is configured and a dry-run release of all four packages succeeds
 **UI hint**: no
-**Plans**: TBD (likely 6–8 plans: git init + workspace, npm org, tsconfig, lint-config, env package, cli package, registry + minion.json, infisical rename cascade, docs)
+**Plans**: 8 plans across 6 waves
 
 Plans:
-- [ ] 02-01: Root git repo + pnpm workspace + subproject `.gitignore` + `minion.json` registry
-- [ ] 02-02: Register `@minion` npm org, publishing setup, changesets config
-- [ ] 02-03: `@minion/tsconfig` package (base, node, svelte, library variants)
-- [ ] 02-04: `@minion/lint-config` package (oxlint + eslint + prettier presets)
-- [ ] 02-05: `@minion/env` package (Infisical auth, 6-level hierarchy, validation)
-- [ ] 02-06: `@minion/cli` package (all commands wired to env + registry)
-- [ ] 02-07: Infisical rename cascade — dashboard renames + script/systemd/compose/memory updates
-- [ ] 02-08: Root CLAUDE.md + README.md onboarding; deprecate `infisical-dev.sh`
+- [ ] 02-01-PLAN.md — Meta-repo scaffold: git branch rename, package.json, pnpm-workspace.yaml, new .gitignore, minion.json registry, .env.defaults/.env.example, empty package skeletons, changesets init (Wave 1)
+- [ ] 02-02-PLAN.md — Register `@minion` npm org + gh repo create NikolasP98/minion-meta + first push + scope-fallback decision (Wave 2, human-action checkpoints)
+- [ ] 02-03-PLAN.md — Ship @minion/tsconfig@0.1.0 (base/node/svelte/library variants) (Wave 3)
+- [ ] 02-04-PLAN.md — Ship @minion/lint-config@0.1.0 (oxlint + ESLint + Prettier presets) (Wave 3)
+- [ ] 02-05-PLAN.md — Ship @minion/env@0.1.0 (6-layer hierarchy, Infisical CLI wrapper, cache, validation) — TDD (Wave 3)
+- [ ] 02-06-PLAN.md — Ship @minion/cli@0.1.0 (15 subcommands: dev/build/test/check/run/fanout/status/doctor/sync-env/rotate-env/infisical/link/list/branch) (Wave 4)
+- [ ] 02-07-PLAN.md — Infisical rename cascade: discovery → dashboard/API → Netcup systemd+compose → memory entries → production smoke test (Wave 5, multi-checkpoint)
+- [ ] 02-08-PLAN.md — Root CLAUDE.md + README.md onboarding + infisical-dev.sh deprecation shim (Wave 6)
 
 ### Phase 3: Adopt Foundation in Subprojects
 **Goal**: Every TypeScript-using subproject consumes `@minion/tsconfig` and `@minion/lint-config`, ships `.env.defaults` + `.env.example`, and continues to build green against published shared versions without requiring the meta-repo to be checked out.
