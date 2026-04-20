@@ -804,24 +804,28 @@ The following are missing and must either be created in Wave 0 or explicitly def
 
 **How the planner uses these:** A1, A3, A8 should become explicit plan task risks with fallback paths. A2 should become a pre-plan verification step. A4, A5, A6, A7 are likely-correct and only need validation during the verify phase.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Does `minion_plugins` read any env vars in its plugin runtime?**
+   - RESOLVED: 03-06 Task 1 is a checkpoint that queries Infisical at runtime; Branch A (full deferral per D-27) vs Branch B (env-only) is chosen based on the result.
    - What we know: No code files, no package.json, pure markdown/YAML catalog. Plugins themselves may run inside Claude Code and could read env vars but that's out of scope (plugin marketplace repo, not plugin runtime).
    - What's unclear: Whether Infisical `minion-plugins` project was created in Phase 2 and has any vars.
    - Recommendation: Run `minion infisical plugins` as the first step of the 03-06 plan. If empty, fully defer per D-27 with note. If populated, ship `.env.example` only.
 
 2. **Will hub/site users accept ESLint + Prettier being installed net-new during this adoption?**
+   - RESOLVED: Prettier-only in Phase 3 per VALIDATION.md §Open Q#2 recommendation; ESLint deferred to Phase 8. Implemented by 03-02, 03-03 (and 03-04 for paperclip).
    - What we know: D-13/D-14 require lint-config adoption. Hub/site have zero lint tooling.
    - What's unclear: Whether the user wants full flat-ESLint install or Prettier-only in Phase 3.
    - Recommendation: Flag as a discretion call in the plan. Default to Prettier-only for minimum disruption; ESLint can land in Phase 8.
 
 3. **Should paperclip-minion's `ui/tsconfig.json` stay untouched or extend `@minion-stack/tsconfig/base.json`?**
+   - RESOLVED: left unchanged per VALIDATION.md §Open Q#3; React variant deferred to Phase 8 backlog. Implemented by 03-04.
    - What we know: D-10 says paperclip → `node.json`. But UI is React+bundler, not Node.
    - What's unclear: Whether the user considers `ui/` in-scope for Phase 3 tsconfig adoption.
    - Recommendation: Leave `ui/tsconfig.json` unchanged in 03-04; document as future work once a `@minion-stack/tsconfig/react` variant ships.
 
 4. **What happens to pixel-agents' `webview-ui/package.json` vs root `package.json`?**
+   - RESOLVED: minimal ci.yml workflows added in 03-02 + 03-03 adoption PRs; 03-06 logs explicit D-27 deferral for minion_plugins (markdown-only repo). (Note: this question was originally scoped to pixel-agents adoption shape; that sub-question resolves as "add to both package.jsons" per the recommendation below, implemented by 03-05.)
    - What we know: pixel-agents has a NESTED package with its own deps, tsconfig, eslint. Adoption applies to both.
    - What's unclear: Whether `@minion-stack/*` should be added to both package.jsons or only root.
    - Recommendation: Add to both (webview has its own node_modules). Apply shared tsconfig to both `tsconfig.json` (extension) and `webview-ui/tsconfig.app.json`. Apply shared eslint preset to both eslint configs.
