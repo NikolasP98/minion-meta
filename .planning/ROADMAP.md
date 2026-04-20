@@ -193,7 +193,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Clean Slate | 5/5 | Complete    | 2026-04-20 |
-| 2. Foundation | 5/8 | In Progress|  |
+| 2. Foundation | 6/8 | In Progress|  |
 | 3. Adopt Foundation | 0/6 | Not started | - |
 | 4. Fold minion-shared | 0/4 | Not started | - |
 | 5. DB Extraction | 0/5 | Not started | - |
