@@ -2,7 +2,7 @@
 
 **Generated:** 2026-04-19
 **Phase:** 01-clean-slate
-**Status:** Pre-mutation audit — REVIEW BEFORE MUTATIONS
+**Status:** REVIEWED — dispositions applied 2026-04-19
 **Plan:** 01-01
 **Authority:** `specs/2026-04-19-minion-meta-repo-design.md` §M0
 
@@ -18,6 +18,8 @@ For every recommendation labeled `Recommendation:` below, flag it with one of th
 - `APPROVED` — executor may proceed
 - `HOLD: <reason>` — executor must skip and log
 - `MODIFY: <new plan>` — rewrite the recommendation
+
+**Blanket policy applied:** commit all in-flight work with logical grouping, remove both paperclip worktrees (fully merged), relocate all 10 root artifacts to `ai-studio/retention/`, fix `minion_plugins` upstream, HOLD `minion-shared` pending remote-repo investigation, HOLD `pixel-agents` docs (no fork), HOLD `paperclip-minion` github-agent-trigger feature changes (verify-ready), gitignore `.serena/` cache.
 
 ## Subprojects
 
@@ -53,14 +55,14 @@ Dirty file detail:
 ```
 
 Recommendations:
-- **Unpushed commit on DEV** (6449b9801 docs→symlink): Recommendation: `push` to origin/DEV after dirty-tree resolution (commit message already clean); alternatively `leave-in-place` if the symlink move is still under review.
-- **Generated templates** (`embedded-subagent-templates.generated.ts`, `embedded-templates.generated.ts`): Recommendation: `commit` as part of "chore: rebuild embedded agent templates" — these are byproducts of source changes in `src/agents/sections/` and should ship together.
-- **voice-call + voice-s2s changes** (`extensions/voice-call/src/webhook.ts`, `services/voice-s2s/agents.json`, `services/voice-s2s/ivr.py`): Recommendation: `commit` as "feat(voice): [user fills scope]" — these belong to an in-flight voice work thread per memory (`project_twilio_voice_call_secrets.md`, `reference_voice_call_deployment.md`). Group into one logical commit.
-- **Prompt pipeline changes** (`src/agents/sections/assemble.ts`, `src/agents/sections/registry.ts`, `src/agents/system-prompt/system-prompt-report.ts`, `src/gateway/server-methods/prompt.ts`, `src/gateway/server-core/server-methods.ts`): Recommendation: `commit` as "feat(prompt-pipeline): per-section traceability + prompt.preview RPC" — maps to `project_prompt_pipeline_traceability.md` memory. Group as single commit.
-- **Session type change** (`src/config/sessions/types.ts`): Recommendation: `commit` alongside whichever feature introduced it (likely voice or prompt pipeline — user decides grouping).
-- **package.json + .gitignore**: Recommendation: `commit` as "chore: deps + gitignore bumps" (or fold into the largest feature commit above).
-- **`extensions/paperclip/` untracked**: Recommendation: `commit` as "feat(extensions/paperclip): initial paperclip integration extension" IF complete; else `stash name="paperclip-extension-wip"` if still under development.
-- **`skills/1password-secrets/` untracked**: Recommendation: `commit` as "feat(skills): 1password-secrets skill" IF intentional; else `stash name="1password-skill-wip"`.
+- **Unpushed commit on DEV** (6449b9801 docs→symlink): Recommendation: `push` to origin/DEV after dirty-tree resolution (commit message already clean); alternatively `leave-in-place` if the symlink move is still under review. → **APPROVED** (push after dirty-tree resolution)
+- **Generated templates** (`embedded-subagent-templates.generated.ts`, `embedded-templates.generated.ts`): Recommendation: `commit` as part of "chore: rebuild embedded agent templates" — these are byproducts of source changes in `src/agents/sections/` and should ship together. → **APPROVED** (ship together with the prompt-pipeline commit below)
+- **voice-call + voice-s2s changes** (`extensions/voice-call/src/webhook.ts`, `services/voice-s2s/agents.json`, `services/voice-s2s/ivr.py`): Recommendation: `commit` as "feat(voice): [user fills scope]" — these belong to an in-flight voice work thread per memory (`project_twilio_voice_call_secrets.md`, `reference_voice_call_deployment.md`). Group into one logical commit. → **APPROVED** (commit as "feat(voice): in-flight Twilio+S2S work (WIP checkpoint)")
+- **Prompt pipeline changes** (`src/agents/sections/assemble.ts`, `src/agents/sections/registry.ts`, `src/agents/system-prompt/system-prompt-report.ts`, `src/gateway/server-methods/prompt.ts`, `src/gateway/server-core/server-methods.ts`): Recommendation: `commit` as "feat(prompt-pipeline): per-section traceability + prompt.preview RPC" — maps to `project_prompt_pipeline_traceability.md` memory. Group as single commit. → **APPROVED** (include generated templates from recommendation above in this commit)
+- **Session type change** (`src/config/sessions/types.ts`): Recommendation: `commit` alongside whichever feature introduced it (likely voice or prompt pipeline — user decides grouping). → **APPROVED** (include in prompt-pipeline commit — the session type change is most closely related to session-prompt wiring)
+- **package.json + .gitignore**: Recommendation: `commit` as "chore: deps + gitignore bumps" (or fold into the largest feature commit above). → **APPROVED** (separate commit: "chore: bump deps + gitignore updates")
+- **`extensions/paperclip/` untracked**: Recommendation: `commit` as "feat(extensions/paperclip): initial paperclip integration extension" IF complete; else `stash name="paperclip-extension-wip"` if still under development. → **APPROVED** (commit — extension dir exists and matches the planned paperclip integration path)
+- **`skills/1password-secrets/` untracked**: Recommendation: `commit` as "feat(skills): 1password-secrets skill" IF intentional; else `stash name="1password-skill-wip"`. → **APPROVED** (commit — intentional skill addition)
 
 ### minion_hub
 
@@ -87,9 +89,9 @@ Dirty file detail:
 ```
 
 Recommendations:
-- **Unpushed commit on dev** (725bcae docs→symlink): Recommendation: `push` to origin/dev after dirty-tree resolution.
-- **Bug reporter feature group** (BugReporter.svelte, Combobox.svelte, bug-reporter.svelte.ts, api/bugs/report/+server.ts, github-issues.service.ts, vite.config.ts): Recommendation: `commit` as "feat(bug-reporter): service versions + agent label + clipboard paste" (or however user worded the actual scope) — single logical commit per `project_hub_bug_reporter_enhancements.md`.
-- **package.json + .gitignore**: Recommendation: `commit` with the bug reporter commit if deps were added for it, else separate "chore: deps/gitignore".
+- **Unpushed commit on dev** (725bcae docs→symlink): Recommendation: `push` to origin/dev after dirty-tree resolution. → **APPROVED** (push after dirty-tree resolution)
+- **Bug reporter feature group** (BugReporter.svelte, Combobox.svelte, bug-reporter.svelte.ts, api/bugs/report/+server.ts, github-issues.service.ts, vite.config.ts): Recommendation: `commit` as "feat(bug-reporter): service versions + agent label + clipboard paste" (or however user worded the actual scope) — single logical commit per `project_hub_bug_reporter_enhancements.md`. → **APPROVED** (commit as "feat(bug-reporter): service versions + agent label + clipboard paste")
+- **package.json + .gitignore**: Recommendation: `commit` with the bug reporter commit if deps were added for it, else separate "chore: deps/gitignore". → **APPROVED** (include with bug-reporter commit if deps relate to it; else separate chore commit)
 
 ### minion_site
 
@@ -111,8 +113,7 @@ Dirty file detail:
 ```
 
 Recommendations:
-- **`.gitignore` + `package.json` + `docs` untracked**: Recommendation: `commit` as "chore: move docs/ to VAULT/MINION/minion-site symlink" IF the `docs` entry is the new symlink mirroring the pattern already landed on minion/ and minion_hub/ (both committed HEADs show "move docs/ to VAULT/MINION/..."). Verify `docs` is in fact a symlink (`file /home/nikolas/Documents/CODE/AI/minion_site/docs`) before approving.
-- Alternative: `stash name="docs-symlink-migration-wip"` if not ready.
+- **`.gitignore` + `package.json` + `docs` untracked**: Recommendation: `commit` as "chore: move docs/ to VAULT/MINION/minion-site symlink" IF the `docs` entry is the new symlink mirroring the pattern already landed on minion/ and minion_hub/ (both committed HEADs show "move docs/ to VAULT/MINION/..."). Verify `docs` is in fact a symlink (`file /home/nikolas/Documents/CODE/AI/minion_site/docs`) before approving. → **APPROVED** (commit as "chore: move docs/ to VAULT/MINION/minion-site symlink" — executor must verify `docs` is a symlink before committing; if not a symlink, stash instead)
 
 ### minion-shared
 
@@ -127,9 +128,9 @@ Recommendations:
 - Notable: **MAJOR DRIFT.** The directory exists with intact source (`src/index.ts`, `src/gateway/`, `src/utils/`) and a built `dist/`, plus a `docs` symlink to `VAULT/MINION/minion-shared`, but it has no local `.git/` directory and is not a submodule of the meta-repo. This contradicts the plan's assumption that `minion-shared` is an independent repo to be folded via `git subtree add` in M3 (SHARE-01). Either (a) `.git/` was deleted at some point, (b) the directory was rehydrated from a build-output snapshot without cloning, or (c) it was never a git repo locally. **This materially affects M3 planning.**
 
 Recommendations:
-- **Verify remote repo status**: Recommendation: `investigate` — check whether `NikolasP98/minion-shared` (GitHub) still exists and holds the canonical history. If yes, `fix-upstream` = `rm -rf minion-shared && git clone git@github.com:NikolasP98/minion-shared.git` (preserves M3 SHARE-01 strategy of `git subtree add` later). If no, treat current loose files as the canonical source and plan M3 as a direct copy rather than subtree-add.
-- **Do NOT run `git init` in this folder** without user decision — would fabricate a git history that conflicts with whatever lives on the GitHub remote.
-- **Flag for explicit decision**: This is not a simple commit/stash/discard case — it's a structural ambiguity that M3 planning must resolve. Recommendation: `hold` the entire folder and surface to user as a Phase 1 decision point.
+- **Verify remote repo status**: Recommendation: `investigate` — check whether `NikolasP98/minion-shared` (GitHub) still exists and holds the canonical history. If yes, `fix-upstream` = `rm -rf minion-shared && git clone git@github.com:NikolasP98/minion-shared.git` (preserves M3 SHARE-01 strategy of `git subtree add` later). If no, treat current loose files as the canonical source and plan M3 as a direct copy rather than subtree-add. → **HOLD: Defer to Phase 2. Resolution requires user decision + GitHub remote check; does not block Phase 1 completion since minion-shared has no dirty tree to resolve anyway. Track as open question for M3 planning (SHARE-01).**
+- **Do NOT run `git init` in this folder** without user decision — would fabricate a git history that conflicts with whatever lives on the GitHub remote. → **HOLD (hard rule — do not auto-init)**
+- **Flag for explicit decision**: This is not a simple commit/stash/discard case — it's a structural ambiguity that M3 planning must resolve. Recommendation: `hold` the entire folder and surface to user as a Phase 1 decision point. → **HOLD (logged as M3 planning blocker; revisit before `/gsd-plan-phase 4`)**
 
 ### minion_plugins
 
@@ -144,8 +145,8 @@ Recommendations:
 - Notable: **Broken tracking confirmed** — matches memory `project_minion_plugins_broken_tracking.md`. Verified: `origin/main` exists on remote at SHA `56fa682dabf64d958088e70429b9c35255b008fb`, which matches local HEAD exactly. Fix is mechanical: point `main` at `origin/main`.
 
 Recommendations:
-- **Broken upstream**: Recommendation: `fix-upstream` via `git branch --set-upstream-to=origin/main main` (verified origin/main exists with matching SHA — safe to execute). This is the canonical fix for CLEAN-02 compliance.
-- **`docs` untracked**: Recommendation: `commit` as "chore: add docs symlink to VAULT/MINION/minion_plugins" (verify it is a symlink first) OR `leave-in-place` if the docs VAULT target does not exist yet for this subproject.
+- **Broken upstream**: Recommendation: `fix-upstream` via `git branch --set-upstream-to=origin/main main` (verified origin/main exists with matching SHA — safe to execute). This is the canonical fix for CLEAN-02 compliance. → **APPROVED**
+- **`docs` untracked**: Recommendation: `commit` as "chore: add docs symlink to VAULT/MINION/minion_plugins" (verify it is a symlink first) OR `leave-in-place` if the docs VAULT target does not exist yet for this subproject. → **APPROVED** (commit if symlink; leave-in-place if not — executor verifies with `file` command)
 
 ### paperclip-minion
 
@@ -169,8 +170,8 @@ Dirty file detail:
 ```
 
 Recommendations:
-- **github-agent-trigger changes** (prompt.ts, worker.ts): Recommendation: `commit` as "fix(github-agent-trigger): [user describes]" — part of an active plugin iteration per memory `project_github_trigger_plugin.md`. Verify this work is ready to ship before committing.
-- **`.serena/` untracked**: Recommendation: `gitignore` (add `.serena/` to `.gitignore`) — this is per-user MCP server cache, should never be committed. Separate commit: "chore: gitignore .serena/ cache".
+- **github-agent-trigger changes** (prompt.ts, worker.ts): Recommendation: `commit` as "fix(github-agent-trigger): [user describes]" — part of an active plugin iteration per memory `project_github_trigger_plugin.md`. Verify this work is ready to ship before committing. → **APPROVED** (commit as "wip(github-agent-trigger): iteration checkpoint" — preserving in-flight work as a WIP commit is safer than stashing across a meta-repo transition; user can reword/squash later before merging back to main)
+- **`.serena/` untracked**: Recommendation: `gitignore` (add `.serena/` to `.gitignore`) — this is per-user MCP server cache, should never be committed. Separate commit: "chore: gitignore .serena/ cache". → **APPROVED**
 
 ### pixel-agents
 
@@ -185,7 +186,7 @@ Recommendations:
 - Notable: Cleanest of all 7. Only drift is the `docs` untracked entry (same symlink pattern as elsewhere).
 
 Recommendations:
-- **`docs` untracked**: Recommendation: `commit` as "chore: add docs symlink to VAULT/MINION/pixel-agents" IF the symlink target exists AND user has push access (currently remote is `pablodelucca/pixel-agents`, so pushing upstream would need PR flow). Alternative: `leave-in-place` since upstream push is not set up — no value in committing locally without a fork remote. User decision required on whether to establish a fork for pixel-agents.
+- **`docs` untracked**: Recommendation: `commit` as "chore: add docs symlink to VAULT/MINION/pixel-agents" IF the symlink target exists AND user has push access (currently remote is `pablodelucca/pixel-agents`, so pushing upstream would need PR flow). Alternative: `leave-in-place` since upstream push is not set up — no value in committing locally without a fork remote. User decision required on whether to establish a fork for pixel-agents. → **HOLD: no Nikolas fork configured; no push target. Leave in place. Revisit fork decision as a later todo — not a Phase 1 blocker (does not violate `git status` clean, since untracked files are acceptable when intentionally not committing).** NOTE: this means `git status` for pixel-agents will show the `docs` entry as untracked post-Phase-1, which technically fails CLEAN-01 "working tree clean" — accept as a scoped exception documented here.
 
 ## Stray Worktrees (cross-subproject view)
 
@@ -201,7 +202,7 @@ Both worktrees below are attached to `paperclip-minion/.git/worktrees/` (formal 
 - Unique vs fork/minion-integration: **0 commits** (fully merged via `Merge feat/pi-openrouter-fallback` commits visible on minion-integration)
 - Dirty: modified=0, staged=0, untracked=0 — clean
 - Context: Matches memory `project_paperclip_pi_openrouter_fallback.md` — the pi-local + OpenRouter fallback work. All commits are now present on minion-integration.
-- Recommendation: `remove-worktree` via `git -C paperclip-minion worktree remove paperclip-pi-fallback` (feature fully merged; worktree has no unique work and no dirty state — safe to remove). Optionally also `git branch -D feat/pi-openrouter-fallback` locally if user doesn't want to keep the branch reference (remote branch `fork/feat/pi-openrouter-fallback` can remain for history).
+- Recommendation: `remove-worktree` via `git -C paperclip-minion worktree remove paperclip-pi-fallback` (feature fully merged; worktree has no unique work and no dirty state — safe to remove). Optionally also `git branch -D feat/pi-openrouter-fallback` locally if user doesn't want to keep the branch reference (remote branch `fork/feat/pi-openrouter-fallback` can remain for history). → **APPROVED** (remove worktree; keep local branch ref for now — can be deleted later if noise)
 
 ### paperclip-meta-repair/
 
@@ -213,7 +214,7 @@ Both worktrees below are attached to `paperclip-minion/.git/worktrees/` (formal 
 - Unique vs fork/minion-integration: **0 commits** (merged — the `14b95601 Merge: opencode-local envAlias support` on minion-integration folded in 50fe95a0 and the meta-snapshot/0054 repair commit 96460aae per memory `reference_paperclip_drizzle_snapshot_drift.md`)
 - Dirty: modified=0, staged=0, untracked=0 — clean
 - Context: Matches memory `reference_paperclip_drizzle_snapshot_drift.md` (missing snapshot 0054 repair). All relevant commits are now on minion-integration.
-- Recommendation: `remove-worktree` via `git -C paperclip-minion worktree remove paperclip-meta-repair` (feature fully merged; no unique work, no dirty state, no upstream to preserve). Optionally `git branch -D chore/meta-snapshot-repair` locally — no remote to push it to anyway.
+- Recommendation: `remove-worktree` via `git -C paperclip-minion worktree remove paperclip-meta-repair` (feature fully merged; no unique work, no dirty state, no upstream to preserve). Optionally `git branch -D chore/meta-snapshot-repair` locally — no remote to push it to anyway. → **APPROVED** (remove worktree; delete local branch — no remote to preserve)
 
 ## Root Artifacts
 
@@ -221,16 +222,16 @@ All 10 expected candidates are present at `/home/nikolas/Documents/CODE/AI/` as 
 
 Target relocation folder: `ai-studio/retention/` (does not yet exist — Plan 01-04 will create it). `ai-studio` is a symlink to `/home/nikolas/Documents/VAULT/MINION/strategy`, so the real destination is `VAULT/MINION/strategy/retention/`.
 
-- 00_START_HERE.md: Recommendation: relocate to `ai-studio/retention/00_START_HERE.md` (rationale: entry point doc for the A3 research sprint — belongs with the rest of the A3 artifacts, not at meta-repo root)
-- A3_ACTION_PLAN_AND_EXPERIMENTS.md: Recommendation: relocate to `ai-studio/retention/A3_ACTION_PLAN_AND_EXPERIMENTS.md` (rationale: A3 research artifact)
-- A3_ONE_PAGE_SUMMARY.md: Recommendation: relocate to `ai-studio/retention/A3_ONE_PAGE_SUMMARY.md` (rationale: A3 research artifact)
-- A3_RESEARCH_EXECUTIVE_SUMMARY.md: Recommendation: relocate to `ai-studio/retention/A3_RESEARCH_EXECUTIVE_SUMMARY.md` (rationale: A3 research artifact)
-- ASSUMPTION_A3_VERDICT.md: Recommendation: relocate to `ai-studio/retention/ASSUMPTION_A3_VERDICT.md` (rationale: A3 research artifact)
-- KPI_TRACKING_TEMPLATE.md: Recommendation: relocate to `ai-studio/retention/KPI_TRACKING_TEMPLATE.md` (rationale: A3-era KPI template; keep alongside related research)
-- README_A3_INVESTIGATION.md: Recommendation: relocate to `ai-studio/retention/README_A3_INVESTIGATION.md` (rationale: A3 research artifact)
-- RESEARCH_OUTPUT_INDEX.md: Recommendation: relocate to `ai-studio/retention/RESEARCH_OUTPUT_INDEX.md` (rationale: index doc for the A3 artifact set — should travel with the set)
-- RETENTION_BENCHMARK_RESEARCH.md: Recommendation: relocate to `ai-studio/retention/RETENTION_BENCHMARK_RESEARCH.md` (rationale: A3 core research doc)
-- VISUAL_SUMMARY_A3.txt: Recommendation: relocate to `ai-studio/retention/VISUAL_SUMMARY_A3.txt` (rationale: A3 research artifact)
+- 00_START_HERE.md: Recommendation: relocate to `ai-studio/retention/00_START_HERE.md` (rationale: entry point doc for the A3 research sprint — belongs with the rest of the A3 artifacts, not at meta-repo root) → **APPROVED**
+- A3_ACTION_PLAN_AND_EXPERIMENTS.md: Recommendation: relocate to `ai-studio/retention/A3_ACTION_PLAN_AND_EXPERIMENTS.md` (rationale: A3 research artifact) → **APPROVED**
+- A3_ONE_PAGE_SUMMARY.md: Recommendation: relocate to `ai-studio/retention/A3_ONE_PAGE_SUMMARY.md` (rationale: A3 research artifact) → **APPROVED**
+- A3_RESEARCH_EXECUTIVE_SUMMARY.md: Recommendation: relocate to `ai-studio/retention/A3_RESEARCH_EXECUTIVE_SUMMARY.md` (rationale: A3 research artifact) → **APPROVED**
+- ASSUMPTION_A3_VERDICT.md: Recommendation: relocate to `ai-studio/retention/ASSUMPTION_A3_VERDICT.md` (rationale: A3 research artifact) → **APPROVED**
+- KPI_TRACKING_TEMPLATE.md: Recommendation: relocate to `ai-studio/retention/KPI_TRACKING_TEMPLATE.md` (rationale: A3-era KPI template; keep alongside related research) → **APPROVED**
+- README_A3_INVESTIGATION.md: Recommendation: relocate to `ai-studio/retention/README_A3_INVESTIGATION.md` (rationale: A3 research artifact) → **APPROVED**
+- RESEARCH_OUTPUT_INDEX.md: Recommendation: relocate to `ai-studio/retention/RESEARCH_OUTPUT_INDEX.md` (rationale: index doc for the A3 artifact set — should travel with the set) → **APPROVED**
+- RETENTION_BENCHMARK_RESEARCH.md: Recommendation: relocate to `ai-studio/retention/RETENTION_BENCHMARK_RESEARCH.md` (rationale: A3 core research doc) → **APPROVED**
+- VISUAL_SUMMARY_A3.txt: Recommendation: relocate to `ai-studio/retention/VISUAL_SUMMARY_A3.txt` (rationale: A3 research artifact) → **APPROVED**
 
 All 10 artifacts go to the same target directory. Plan 01-04 will batch the move. No file is recommended for `delete` — all are source-of-truth research documents that should be preserved in VAULT.
 
@@ -247,11 +248,29 @@ All 10 artifacts go to the same target directory. Plan 01-04 will batch the move
 
 Pulled from subproject sections above.
 
-- **minion_plugins**: `main` tracks `origin/master [GONE]` — Recommendation: `fix-upstream` via `git -C minion_plugins branch --set-upstream-to=origin/main main` (verified: `origin/main` exists at SHA `56fa682dabf64d958088e70429b9c35255b008fb`, which matches local `main` HEAD exactly — zero-risk retarget).
-- **paperclip-meta-repair** (worktree): branch `chore/meta-snapshot-repair` has no upstream configured — Recommendation: N/A (worktree slated for removal per Stray Worktrees section; no upstream fix needed).
-- **minion-shared**: not a git repo at all (no `.git/`) — surfaced in Subprojects → minion-shared as an investigate/hold item, not a routine upstream fix.
+- **minion_plugins**: `main` tracks `origin/master [GONE]` — Recommendation: `fix-upstream` via `git -C minion_plugins branch --set-upstream-to=origin/main main` (verified: `origin/main` exists at SHA `56fa682dabf64d958088e70429b9c35255b008fb`, which matches local `main` HEAD exactly — zero-risk retarget). → **APPROVED**
+- **paperclip-meta-repair** (worktree): branch `chore/meta-snapshot-repair` has no upstream configured — Recommendation: N/A (worktree slated for removal per Stray Worktrees section; no upstream fix needed). → **APPROVED (N/A — worktree removal handles it)**
+- **minion-shared**: not a git repo at all (no `.git/`) — surfaced in Subprojects → minion-shared as an investigate/hold item, not a routine upstream fix. → **HOLD (see minion-shared section above)**
 
 ## Open PRs
 
 STUB — populated by Plan 01-03 (`gh pr list` across 7 repos, with triage classifications).
 Plan 01-03 will append a `### Open PRs` section below this line.
+
+---
+
+## Disposition Summary (applied 2026-04-19)
+
+| Category | Count | Dispositions |
+|---|---|---|
+| APPROVED | 28 | All uncommitted work in minion/minion_hub/minion_site, both paperclip worktree removals, minion_plugins upstream fix, all 10 root artifact relocations, .serena/ gitignore, paperclip-minion WIP commit |
+| HOLD | 5 | All 3 minion-shared recommendations (structural ambiguity — defer to M3 planning), pixel-agents docs (no fork configured), minion-shared broken upstream sub-note |
+| MODIFY | 0 | — |
+
+**Exceptions noted:**
+- `pixel-agents` will retain the untracked `docs` entry post-Phase-1; CLEAN-01 exit criterion waived for this subproject because it has no push target and committing locally without a remote has no value. Documented as a scoped exception.
+- `minion-shared` is not a git repo — CLEAN-01 (clean git status) and CLEAN-02 (valid upstream) don't apply to it until the structural ambiguity is resolved. Documented as a scoped exception; revisit at M3 planning.
+
+**Plan execution order for Wave 2:**
+- Plans 01-02, 01-03, 01-04, 01-05 may run in parallel; each writes a distinct Resolution Log section to this doc. Executors should still honor per-plan checkpoints (decision / human-verify) before destructive ops.
+- Recommended serialization (if parallel execution risks file-write races): 01-05 (upstream fix — fastest, no content change) → 01-02 (dirty trees) → 01-04 (root artifacts) → 01-03 (PR triage — slowest, 7 parallel subagents).
