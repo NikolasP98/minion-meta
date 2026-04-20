@@ -254,8 +254,68 @@ Pulled from subproject sections above.
 
 ## Open PRs
 
-STUB — populated by Plan 01-03 (`gh pr list` across 7 repos, with triage classifications).
-Plan 01-03 will append a `### Open PRs` section below this line.
+Classifications surveyed 2026-04-19. **No merge/close/rebase actions executed** — classifications documented here for explicit user go-ahead as a follow-up (those are GitHub-state mutations, not local). `minion-shared` has no GitHub repo under NikolasP98 — confirmed, simplifies M3 strategy (direct copy into `packages/shared` with no upstream history to preserve).
+
+### NikolasP98/minion-ai (22 open PRs)
+
+Classifications for PRs #34–#68 inherit from `project_pr_review_sweep_apr17.md` (sweep 2 days ago; reverify before mutating). PRs #69–#76 are new since that sweep — held pending fresh review.
+
+| PR | Title | Author | Classification | Action (pending user go) |
+|---|---|---|---|---|
+| #34 | DevOps: repo references → minion-ai | bot | NEEDS_REBASE | Post rebase ask (bot ignored Apr 11 request) |
+| #42 | Telegram emoji validation | bot | RECOMMEND_CLOSE | Close — 50 ESG files bundled |
+| #44 | MCP dual content fix | **user** | REQUEST_CHANGES | Fix try/catch + regression test |
+| #46 | Runtime model override | bot | NEEDS_REBASE | Post rebase + planning-doc strip ask |
+| #52 | github_access preset | bot | NEEDS_REBASE | Post rebase + rename ask |
+| #59 | Voxtral TTS provider | bot | REQUEST_CHANGES | API shape wrong (`input` not `text`, needs `voice_id`, correct model id is `voxtral-mini-tts-2603`) |
+| #60 | Discord media parity | bot | RECOMMEND_CLOSE | Close — already exists + wrong base |
+| #61 | Shell injection fixes | bot | RECOMMEND_CLOSE | Close — 163 files for shell-injection fix |
+| #62 | File upload API | bot | RECOMMEND_CLOSE | Close — 174 files (~165 unrelated) |
+| **#63** | **AudAgent consent fixes** | bot | **APPROVE** | **Merge** (clean, approved Apr 17) |
+| #64 | Opus 4.7 model | bot | RECOMMEND_CLOSE | Close — 22 files for 3-line add; wrong base |
+| #65 | Dockerfile healthcheck | bot | RECOMMEND_CLOSE | Close — 180 files for 1-char change |
+| #66 | GH Actions healthchecks | bot | RECOMMEND_CLOSE | Close — 24 files for 3-line fix; wrong base |
+| #67 | BYOK feasibility spike | bot | REQUEST_CHANGES | SQLite NULL schema bug; fabricated registry detail |
+| **#68** | **VPS_HOST fix** | bot | **APPROVE** | **Merge** (clean, approved Apr 17) |
+| #69 | Interpreter blocking | bot | HOLD | New since Apr 17 — fresh review needed |
+| #70 | Thompson Sampling bandit | bot | HOLD | New — large feature, review before mutating |
+| #71 | /api/config auth | bot | HOLD | New — security-adjacent, review carefully |
+| #72 | SSRF redirect bypass | bot | HOLD | New — security fix, verify scope minimal |
+| #73 | Auth perm hardening | bot | HOLD | New — security fix, verify scope |
+| #74 | Stripe reconciliation Turso | bot | HOLD | New — wiring change, verify scope |
+| #75 | AgentAssert middleware | bot | HOLD | New — large feature, review before mutating |
+| #76 | Docker digest pinning | bot | HOLD | New — verify scope minimal |
+
+### NikolasP98/minion_hub (2 open PRs)
+
+| PR | Title | Author | Classification | Action (pending user go) |
+|---|---|---|---|---|
+| #14 | AI disclosure badge (EU AI Act Art 50) | bot | HOLD | Review scope — compliance work, may be valuable |
+| #15 | AI disclosure non-chat surfaces | bot | HOLD | Review after #14; likely follow-up |
+
+### NikolasP98/minion-site (1 open PR)
+
+| PR | Title | Author | Classification | Action (pending user go) |
+|---|---|---|---|---|
+| #1 | SEO: OpenClaw brand clarification | bot | HOLD | Review scope — SEO work may be relevant |
+
+### Other repos
+
+- **NikolasP98/minion_plugins** — 0 open PRs
+- **NikolasP98/paperclip (fork)** — 0 open PRs
+- **pablodelucca/pixel-agents** — 0 PRs from @me (Nikolas has no push access here)
+- **minion-shared** — GitHub repo `NikolasP98/minion-shared` DOES NOT EXIST. Combined with local having no `.git/`, this means the loose files at `/home/nikolas/Documents/CODE/AI/minion-shared/` are the canonical source. **M3 SHARE-01 implication:** drop `git subtree add` strategy; use direct file copy into `packages/shared/` in M3.
+
+### Summary
+
+Total classified: **26 PRs** across 3 repos (minion-ai 22, minion_hub 2, minion-site 1). Zero mutations executed in Phase 1. Recommended follow-up order once user is ready to mutate GitHub state:
+1. **Merge** #63 and #68 (zero-risk, pre-approved from sweep)
+2. **Close** the 7 RECOMMEND_CLOSE PRs (#42, #60, #61, #62, #64, #65, #66) — freeing the PR queue
+3. **Post rebase asks** on #34, #46, #52 — bot has one more chance to deliver
+4. **Review + decide** on the 11 HOLD PRs (#69–#76 in minion-ai, #14–#15 in minion_hub, #1 in minion-site)
+5. **Address REQUEST_CHANGES** (#44 user's own, #59, #67) — fix or close per decision
+
+CLEAN-04 satisfied at the "classified" level — every PR has a documented disposition. Execution of merges/closes/rebases is a separate follow-up under explicit user control.
 
 ---
 
