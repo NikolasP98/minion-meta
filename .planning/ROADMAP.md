@@ -33,14 +33,14 @@ Transform `/home/nikolas/Documents/CODE/AI/` from a loose collection of sibling 
   5. The meta-repo root directory contains only meta-repo files, symlinks, and the 7 subproject directories — no stray one-time research artifacts
   6. `specs/clean-slate-inventory.md` captures the pre-mutation state of every subproject (branch, ahead/behind, dirty files, worktrees, open PRs) for audit purposes
 **UI hint**: no
-**Plans**: TBD (likely 4–5 plans: inventory audit, uncommitted/worktree resolution, PR triage sweep, root cleanup, tracking fixes)
+**Plans**: 5 plans (Wave 1: inventory audit; Wave 2: uncommitted/worktree resolution, PR triage sweep, root cleanup, tracking fixes — all depend on Wave 1 approval)
 
 Plans:
-- [ ] 01-01: Inventory audit — parallel subagents walk each subproject, produce `specs/clean-slate-inventory.md`
-- [ ] 01-02: Resolve uncommitted changes and stray worktrees per the inventory report
-- [ ] 01-03: PR triage sweep across all 7 subproject repos (parallel subagents)
-- [ ] 01-04: Root cleanup — relocate/delete A3, RETENTION, KPI one-time research artifacts
-- [ ] 01-05: Fix broken upstream tracking (e.g., `minion_plugins` main → origin/master [gone])
+- [ ] 01-01-PLAN.md — Inventory audit: 7 parallel Explore subagents produce `specs/clean-slate-inventory.md` (Wave 1, read-only)
+- [ ] 01-02-PLAN.md — Resolve uncommitted changes + stray worktrees per inventory dispositions (Wave 2)
+- [ ] 01-03-PLAN.md — PR triage sweep: 7 parallel general-purpose subagents classify + execute merges/closes (Wave 2)
+- [ ] 01-04-PLAN.md — Root cleanup: relocate/delete A3/RETENTION/KPI research artifacts (Wave 2)
+- [ ] 01-05-PLAN.md — Fix broken upstream tracking (e.g., `minion_plugins` main → origin/master [gone]) (Wave 2)
 
 ### Phase 2: Foundation
 **Goal**: Stand up the meta-repo and foundational shared packages so that `minion dev <any-project>` works end-to-end with hierarchical env resolution.
