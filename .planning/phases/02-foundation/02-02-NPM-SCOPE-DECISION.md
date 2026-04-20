@@ -3,80 +3,78 @@ plan: 02-02
 phase: 02-foundation
 decision_date: 2026-04-19
 updated: 2026-04-20
-scope_chosen: "@nikolasp98"
-package_name_pattern: "@nikolasp98/minion-<name>"
+scope_chosen: "@minion-stack"
+package_name_pattern: "@minion-stack/<name>"
 fallback_used: true
-fallback_trigger: "@minion org name taken when user attempted creation"
-npm_org_created: not_required
+fallback_trigger: "@minion org name reserved by npm; user chose @minion-stack as dedicated org"
+npm_org_created: true
+npm_org_name: "minion-stack"
+npm_org_tier: "Unlimited public packages (free)"
+npm_org_owner: "nikolasp98"
 github_repo_created: true
 ---
 
-# NPM Scope Decision — `@nikolasp98/minion-*` (FALLBACK USED)
+# NPM Scope Decision — `@minion-stack/*` (FINAL)
 
 ## Resolution summary
 
 - **Intended scope:** `@minion` (public org)
-- **Actual scope:** `@nikolasp98` (user's personal scope, already registered)
-- **Package name pattern:** `@nikolasp98/minion-<name>` (e.g. `@nikolasp98/minion-cli`, `@nikolasp98/minion-env`)
-- **Why fallback:** User attempted org creation at `npmjs.com/org/create` on 2026-04-20; `minion` name was unavailable (rejected by npm).
-- **Advantage:** No org creation needed — `@nikolasp98` is the user's personal scope, publish works after `npm login` alone.
+- **Final scope:** `@minion-stack` (dedicated public org, created 2026-04-20)
+- **Package name pattern:** `@minion-stack/<name>` (e.g. `@minion-stack/cli`, `@minion-stack/env`)
+- **Org owner:** `nikolasp98`
+- **Why this scope:** `@minion` was reserved/unavailable on npm. Instead of fallback to the personal `@nikolasp98` scope, user created a dedicated org `minion-stack` with free tier — cleaner branding (scope IS the product identity, no `minion-` prefix redundancy).
 
 ## Timeline
 
-**2026-04-19 (initial probe):** Public `curl` probes returned 404 on `@minion` scope + example packages, suggesting availability. Decision doc locked `@minion`.
+| Date | Event |
+|---|---|
+| 2026-04-19 | Public curl probe returned 404 for `@minion` — appeared available; locked initial decision |
+| 2026-04-20 | User ran incorrect `npm org set` CLI command; corrected to web UI flow |
+| 2026-04-20 | User attempted `npmjs.com/org/create` for `minion` — npm rejected (name reserved/taken) |
+| 2026-04-20 | First fallback: cascaded to `@nikolasp98/minion-*` (commit `f4276ab`) |
+| 2026-04-20 | User created `minion-stack` org instead — dedicated scope beats personal-prefixed name |
+| 2026-04-20 | Second cascade: `@nikolasp98/minion-*` → `@minion-stack/*` (this commit) |
 
-**2026-04-20 (first npm CLI attempt):** User ran `npm org set minion --role owner NikolasP98` — errored. Corrected the instructions: npm CLI cannot create orgs; web UI only.
+## Cascade applied (5 files, final state)
 
-**2026-04-20 (user attempts web creation):** User reported "minion is not available" — the org name is reserved/taken even though the public API probe returned 404. Likely cause: npm reserves some common names; the 404 on `/org/minion` probe was a negative signal that didn't reflect reserved-name status.
+| File | Final name |
+|---|---|
+| `/package.json` | `@minion-stack/root` |
+| `/packages/cli/package.json` | `@minion-stack/cli` |
+| `/packages/env/package.json` | `@minion-stack/env` |
+| `/packages/tsconfig/package.json` | `@minion-stack/tsconfig` |
+| `/packages/lint-config/package.json` | `@minion-stack/lint-config` |
 
-**2026-04-20 (fallback cascade executed):** All 5 `package.json` files renamed from `@minion/<name>` → `@nikolasp98/minion-<name>`. `pnpm install` confirmed workspace resolution still works. No other references to update (the `minion` CLI bin name, the `minion.schema.json` `$id` GitHub URL, `minion.json` registry file — none are npm-scope-dependent; they remain unchanged).
-
-## Cascade applied (5 files)
-
-| File | Old name | New name |
-|---|---|---|
-| `/package.json` | `@minion/root` | `@nikolasp98/minion-root` |
-| `/packages/cli/package.json` | `@minion/cli` | `@nikolasp98/minion-cli` |
-| `/packages/env/package.json` | `@minion/env` | `@nikolasp98/minion-env` |
-| `/packages/tsconfig/package.json` | `@minion/tsconfig` | `@nikolasp98/minion-tsconfig` |
-| `/packages/lint-config/package.json` | `@minion/lint-config` | `@nikolasp98/minion-lint-config` |
-
-Also updated `packages/cli/package.json` description ("via minion.json registry and @nikolasp98/minion-env").
+Also: `packages/cli/package.json` description updated ("…via minion.json registry and @minion-stack/env").
 
 ## Unchanged (intentionally)
 
-- `bin: { "minion": "dist/index.js" }` — the CLI binary is still invoked as `minion`, not `nikolasp98-minion`
-- `minion.schema.json` `$id` URL points to `github.com/NikolasP98/minion-meta/packages/cli/minion.schema.json` — GitHub path, not npm, unaffected
-- `minion.json` filename and all `infisicalProject: "minion-<name>"` references — internal, not npm-scoped
-- Root CLAUDE.md / README.md / code / scripts referring to "minion" as the product — product name is unchanged, only the npm package distribution name changes
-- `.changeset/config.json` `access: public` — still applies
+- `bin: { "minion": "dist/index.js" }` — CLI binary still invoked as `minion`, NOT `minion-stack`
+- `minion.schema.json` `$id` — points to `github.com/NikolasP98/minion-meta/...`, not npm
+- `minion.json` registry filename — internal file, not npm-scoped
+- `infisicalProject: "minion-<name>"` values in `minion.json` — Infisical project names stay `minion-*` per design spec D10
+- Product branding "minion" at root (CLAUDE.md, README.md, scripts, CLI commands) — unchanged
+- `.changeset/config.json` — `access: public` still applies
 
-## Human-action steps (simplified — NO org creation needed)
+## Key insight captured
 
-`@nikolasp98` scope already exists as your personal npm user scope. Just:
+**Don't trust the public `/org/<name>` curl probe for scope availability.** It returned 404 for `@minion` on 2026-04-19 but the name was actually reserved/unavailable when the user tried to create the org on 2026-04-20. The registry endpoint doesn't reveal reservations. Always have the USER attempt creation before locking in a scope choice.
 
-```bash
-# 1. Log in (if not already)
-npm login
+## Human-action status
 
-# 2. Verify
-npm whoami                                     # NikolasP98
-npm access list packages @nikolasp98           # your existing packages (may include @nikolasp98/minion if already published)
-
-# 3. (Recommended) Enable 2FA on publish
-npm profile enable-2fa auth-and-writes
-```
-
-Once `npm whoami` returns `NikolasP98`, Wave 3 can publish `@nikolasp98/minion-tsconfig`, `@nikolasp98/minion-lint-config`, `@nikolasp98/minion-env`.
+- [x] `minion-stack` org created with free public tier, owner `nikolasp98`
+- [ ] User to verify: `npm login` + `npm whoami` returns `nikolasp98`
+- [ ] (Recommended) `npm profile enable-2fa auth-and-writes`
+- [ ] (Recommended) Enable 2FA enforcement on `minion-stack` org via the "Enable 2FA Enforcement" button visible in the org dashboard
 
 ## Phase 2 progress impact
 
-- FOUND-01 (meta-repo at remote `NikolasP98/minion-meta`) — **SATISFIED** (GitHub repo live, push succeeded)
-- FOUND-03 (publishable scope registered) — **SATISFIED** once user confirms `npm whoami` works. No org creation blocker. Effectively unblocks Wave 3.
+- FOUND-01 (meta-repo at remote `NikolasP98/minion-meta`) — **SATISFIED**
+- FOUND-03 (publishable scope registered + usable) — **SATISFIED** once `npm whoami` works. Scope `@minion-stack` created, owned by user, Wave 3 publishes unblock.
 
-## If the scope must change again
+## Rollback plan (if publishing breaks)
 
-`@nikolasp98` is the final fallback — it's the user's personal scope, inherently available. If for some reason publishing fails (e.g., user decides to create a different org later), the cascade pattern is:
-1. Edit 5 `package.json` `name:` fields
-2. Run `pnpm install` to re-resolve workspace
-3. Update any intra-package `dependencies` / `peerDependencies` that reference the old name (none currently; `@minion/cli` would depend on `@minion/env` in 02-06 — that task must use the current scope, whatever it is)
+If a Wave 3 publish fails with permission error:
+1. Check `npm access list packages @minion-stack` — confirm user has publish rights
+2. Check `npm profile get`  — confirm 2FA mode (if `auth-and-writes`, need OTP at publish)
+3. Worst case: fall back to `@nikolasp98` (personal scope, no permission issues) — run the cascade again via `find packages -name package.json -exec sed -i 's|@minion-stack/|@nikolasp98/minion-|g' {} +` plus root `package.json`
