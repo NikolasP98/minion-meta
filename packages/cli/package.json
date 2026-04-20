@@ -3,8 +3,45 @@
   "version": "0.0.0",
   "private": true,
   "description": "The `minion` CLI — orchestrates subprojects via minion.json registry and @minion-stack/env.",
-  "publishConfig": { "access": "public" },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NikolasP98/minion-meta.git",
+    "directory": "packages/cli"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
-  "bin": { "minion": "dist/index.js" },
-  "files": ["dist", "minion.schema.json", "README.md"]
+  "bin": {
+    "minion": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "minion.schema.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.test.json"
+  },
+  "dependencies": {
+    "@minion-stack/env": "workspace:*",
+    "ajv": "^8.18.0",
+    "commander": "^12.1.0",
+    "concurrently": "^9.2.1",
+    "execa": "^9.6.1"
+  },
+  "devDependencies": {
+    "@minion-stack/tsconfig": "workspace:*",
+    "@types/node": "^22.19.17",
+    "tsdown": "^0.21.9",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
+  }
 }
