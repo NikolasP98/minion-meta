@@ -14,33 +14,30 @@ A root-level orchestration layer and shared-package ecosystem that transforms `/
 
 <!-- Shipped and confirmed valuable. -->
 
-(None yet — ship to validate)
+**M1 — Foundation** (Validated in Phase 02: foundation, 2026-04-20)
+
+Scope substitution: `@minion/*` → `@minion-stack/*` (locked in Phase 02 plan 02-02 after npm scope availability check).
+
+- [x] FOUND-01: Meta-repo live at `NikolasP98/minion-meta` — default branch `main`, synced with origin
+- [x] FOUND-02: Root `package.json` + `pnpm-workspace.yaml` configured with `packages/*`; subproject dirs gitignored
+- [x] FOUND-03: `@minion-stack/*` npm scope registered (public); all 4 packages published at 0.1.0
+- [x] FOUND-04: `@minion-stack/tsconfig` exports `base`, `node`, `svelte`, `library` variants
+- [x] FOUND-05: `@minion-stack/lint-config` exports oxlint, flat-eslint, and prettier presets
+- [x] FOUND-06: `@minion-stack/env` resolves env per 6-level hierarchy + validates against `.env.example`
+- [x] FOUND-07: `@minion-stack/cli` ships `minion` binary with full command surface (`dev|build|test|check|run|<project>`, `--all`, `status`, `doctor`, `sync-env`, `rotate-env`, `infisical`, `link|unlink`, `list`, `branch`)
+- [x] FOUND-08: `minion.json` registry declares each subproject's path, package manager, branch, Infisical project, and primary commands
+- [x] FOUND-09: Changesets configured for independent semver releases; zero pending changesets post-phase
+- [x] FOUND-10: `infisical-dev.sh` absorbed into `@minion-stack/env`; shim prints deprecation notice and exits 1
+- [x] FOUND-11: 7 Infisical projects renamed to `minion-<name>` convention; Netcup services unchanged (UUID-based refs preserved); 6 memory files synced
+- [x] FOUND-12: Root `CLAUDE.md` documents meta-repo workflow; root `README.md` provides ≤200-line onboarding
+
+**M0 — Clean slate** (Validated in Phase 01: clean-slate)
+
+- [x] CLEAN-01..06 (see `.planning/phases/01-clean-slate/01-VERIFICATION.md`)
 
 ### Active
 
 <!-- Current scope. Building toward these. -->
-
-**M0 — Clean slate**
-- [ ] CLEAN-01: Every subproject has a clean `git status` with no uncommitted or untracked changes
-- [ ] CLEAN-02: Every subproject's default branch tracks a valid upstream remote
-- [ ] CLEAN-03: All stray git worktrees (e.g., `paperclip-pi-fallback`, `paperclip-meta-repair`) are merged back or removed
-- [ ] CLEAN-04: All open PRs across subproject repos are classified (merged / closed / rebased / explicitly held with reason)
-- [ ] CLEAN-05: Root-level one-time research artifacts are relocated or deleted so root contains only meta-repo files, symlinks, and subproject dirs
-- [ ] CLEAN-06: `specs/clean-slate-inventory.md` documents the pre-mutation state for auditability
-
-**M1 — Foundation**
-- [ ] FOUND-01: Meta-repo is initialized as a git repo at `AI/` with remote `NikolasP98/minion-meta`
-- [ ] FOUND-02: Root `package.json` + `pnpm-workspace.yaml` are configured with `packages/*`; subproject directories are gitignored by the meta-repo
-- [ ] FOUND-03: `@minion/*` npm scope is registered (public) and the meta-repo can publish to it
-- [ ] FOUND-04: `@minion/tsconfig` package exports `base`, `node`, `svelte`, and `library` variants
-- [ ] FOUND-05: `@minion/lint-config` package exports oxlint, flat-eslint, and prettier presets
-- [ ] FOUND-06: `@minion/env` package resolves env per the 6-level hierarchy (root defaults → minion-core Infisical → subproject defaults → minion-&lt;name&gt; Infisical → .env.local → shell) and validates required vars from `.env.example`
-- [ ] FOUND-07: `@minion/cli` exposes the `minion` binary with commands: `dev|build|test|check|run|<project>`, `--all` fan-out, `status`, `doctor`, `sync-env`, `rotate-env`, `infisical`, `link|unlink`, `list`, `branch`
-- [ ] FOUND-08: `minion.json` registry at meta-repo root declares each subproject's path, package manager, branch, Infisical project, and primary commands
-- [ ] FOUND-09: Changesets is configured at the meta-repo root for independent semver releases of each `@minion/*` package
-- [ ] FOUND-10: Existing `infisical-dev.sh` logic is absorbed into `@minion/env`; the old script is deprecated with a shim that prints a deprecation notice
-- [ ] FOUND-11: Infisical projects renamed to the `minion-<name>` convention (`paperclip` → `minion-paperclip`, new `minion-core`, etc.) with all references updated in Netcup systemd units, docker-compose, CI workflows, and scripts
-- [ ] FOUND-12: Root `CLAUDE.md` updated to document the new meta-repo workflow; meta-repo `README.md` describes onboarding
 
 **M2 — Adopt foundation in subprojects**
 - [ ] ADOPT-01: `minion` subproject extends `@minion/tsconfig`, adopts `@minion/lint-config`, and ships `.env.defaults` + `.env.example`
@@ -167,4 +164,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-19 after initialization*
+*Last updated: 2026-04-20 after Phase 02 (foundation) completion*
