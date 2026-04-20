@@ -18,15 +18,15 @@ Requirements for the initial meta-repo buildout (M0–M7). Each maps to a roadma
 
 ### Foundation (M1)
 
-- [ ] **FOUND-01**: Meta-repo is initialized as a git repo at `AI/` with remote `NikolasP98/minion-meta`
-- [ ] **FOUND-02**: Root `package.json` and `pnpm-workspace.yaml` are configured with `packages/*`; subproject directories are gitignored by the meta-repo
-- [ ] **FOUND-03**: `@minion/*` npm scope is registered (public) and the meta-repo can publish to it
-- [ ] **FOUND-04**: `@minion/tsconfig` package exports `base`, `node`, `svelte`, and `library` variants
-- [ ] **FOUND-05**: `@minion/lint-config` package exports oxlint, flat-eslint, and prettier presets
-- [ ] **FOUND-06**: `@minion/env` package resolves env per the 6-level hierarchy and validates required vars from `.env.example`
-- [ ] **FOUND-07**: `@minion/cli` exposes the `minion` binary with commands: `dev`, `build`, `test`, `check`, `run`, `<project>` alias, `--all` fan-out, `status`, `doctor`, `sync-env`, `rotate-env`, `infisical`, `link`, `unlink`, `list`, `branch`
-- [ ] **FOUND-08**: `minion.json` registry at meta-repo root declares each subproject's path, package manager, branch, Infisical project, and primary commands
-- [ ] **FOUND-09**: Changesets is configured at the meta-repo root for independent semver releases of each `@minion/*` package
+- [x] **FOUND-01**: Meta-repo is initialized as a git repo at `AI/` with remote `NikolasP98/minion-meta`
+- [x] **FOUND-02**: Root `package.json` and `pnpm-workspace.yaml` are configured with `packages/*`; subproject directories are gitignored by the meta-repo
+- [x] **FOUND-03**: `@minion/*` npm scope is registered (public) and the meta-repo can publish to it
+- [x] **FOUND-04**: `@minion/tsconfig` package exports `base`, `node`, `svelte`, and `library` variants
+- [x] **FOUND-05**: `@minion/lint-config` package exports oxlint, flat-eslint, and prettier presets
+- [x] **FOUND-06**: `@minion/env` package resolves env per the 6-level hierarchy and validates required vars from `.env.example`
+- [x] **FOUND-07**: `@minion/cli` exposes the `minion` binary with commands: `dev`, `build`, `test`, `check`, `run`, `<project>` alias, `--all` fan-out, `status`, `doctor`, `sync-env`, `rotate-env`, `infisical`, `link`, `unlink`, `list`, `branch`
+- [x] **FOUND-08**: `minion.json` registry at meta-repo root declares each subproject's path, package manager, branch, Infisical project, and primary commands
+- [x] **FOUND-09**: Changesets is configured at the meta-repo root for independent semver releases of each `@minion/*` package
 - [x] **FOUND-10**: Existing `infisical-dev.sh` logic is absorbed into `@minion/env`; the old script is deprecated with a shim
 - [x] **FOUND-11**: Infisical projects renamed to the `minion-<name>` convention (`paperclip` → `minion-paperclip`, new `minion-core`, etc.) with all references updated in Netcup systemd units, docker-compose, CI workflows, scripts, and memory entries
 - [x] **FOUND-12**: Root `CLAUDE.md` updated to document the new meta-repo workflow; meta-repo `README.md` describes onboarding
@@ -128,15 +128,15 @@ Populated during roadmap creation — each requirement maps to exactly one phase
 | CLEAN-04 | Phase 1 | Complete |
 | CLEAN-05 | Phase 1 | Complete |
 | CLEAN-06 | Phase 1 | Complete |
-| FOUND-01 | Phase 2 | Pending |
-| FOUND-02 | Phase 2 | Pending |
-| FOUND-03 | Phase 2 | Pending |
-| FOUND-04 | Phase 2 | Pending |
-| FOUND-05 | Phase 2 | Pending |
-| FOUND-06 | Phase 2 | Pending |
-| FOUND-07 | Phase 2 | Pending |
-| FOUND-08 | Phase 2 | Pending |
-| FOUND-09 | Phase 2 | Pending |
+| FOUND-01 | Phase 2 | Complete |
+| FOUND-02 | Phase 2 | Complete |
+| FOUND-03 | Phase 2 | Complete |
+| FOUND-04 | Phase 2 | Complete |
+| FOUND-05 | Phase 2 | Complete |
+| FOUND-06 | Phase 2 | Complete |
+| FOUND-07 | Phase 2 | Complete |
+| FOUND-08 | Phase 2 | Complete |
+| FOUND-09 | Phase 2 | Complete |
 | FOUND-10 | Phase 2 | Complete |
 | FOUND-11 | Phase 2 | Complete |
 | FOUND-12 | Phase 2 | Complete |
