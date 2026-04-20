@@ -3,9 +3,27 @@
   "version": "0.0.0",
   "private": true,
   "description": "Minion env resolver — 6-level hierarchy, Infisical-backed, validates against .env.example.",
-  "publishConfig": { "access": "public" },
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist", "README.md"]
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit -p tsconfig.test.json"
+  },
+  "devDependencies": {
+    "@minion-stack/tsconfig": "workspace:*",
+    "@types/node": "^22.19.17",
+    "tsdown": "^0.6.10",
+    "typescript": "^5.9.3",
+    "vitest": "^2.1.9"
+  }
 }
