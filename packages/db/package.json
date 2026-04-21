@@ -1,0 +1,54 @@
+{
+  "name": "@minion-stack/db",
+  "version": "0.1.0",
+  "description": "Drizzle ORM schema for the Minion shared database (LibSQL/Turso).",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NikolasP98/minion-meta.git",
+    "directory": "packages/db"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./schema": {
+      "types": "./dist/schema/index.d.ts",
+      "import": "./dist/schema/index.js"
+    },
+    "./auth": {
+      "types": "./dist/schema/auth/index.d.ts",
+      "import": "./dist/schema/auth/index.js"
+    },
+    "./relations": {
+      "types": "./dist/relations.d.ts",
+      "import": "./dist/relations.js"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "import": "./dist/utils.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": ["dist", "src", "README.md"],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "tsc"
+  },
+  "peerDependencies": {
+    "drizzle-orm": ">=0.45.0"
+  },
+  "devDependencies": {
+    "@minion-stack/tsconfig": "workspace:*",
+    "@paralleldrive/cuid2": "^3.3.0",
+    "drizzle-orm": "^0.45.1",
+    "drizzle-kit": "^0.31.9",
+    "typescript": "^5.0.0"
+  }
+}
