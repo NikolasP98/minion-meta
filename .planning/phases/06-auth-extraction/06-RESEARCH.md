@@ -6,61 +6,86 @@
 
 ---
 
+<user_constraints>
 ## User Constraints (from CONTEXT.md)
 
-> CONTEXT.md for phase 6 does **not yet exist**. The constraints below are derived from project-wide
-> decisions in `.planning/STATE.md`, ROADMAP.md, the roadmap pre-sketched outline, and the
-> precedent set by Phase 5 (which locked the `@minion-stack/*` scope). The planner or
-> `/gsd-discuss-phase` should confirm these before execution.
+### Locked Decisions
 
-### Locked Decisions (derived from project-level decisions)
-
-- **Package scope:** `@minion-stack/auth` — NOT `@minion/auth`. ROADMAP.md Phase 6 and AUTH-02 both say "@minion/auth" but every shipped package uses `@minion-stack/*` (env, cli, tsconfig, lint-config, shared, db). Phase 5 RESEARCH.md explicitly called this a "scope correction" and the same correction applies here. [VERIFIED: codebase grep — 0 `@minion/*` packages exist in `packages/`; 6 `@minion-stack/*` packages exist]
-- **Build toolchain:** `tsc` only, mirroring `packages/db` and `packages/shared` (tsconfig extends `@minion-stack/tsconfig/library.json`). [VERIFIED: `/home/nikolas/Documents/CODE/AI/packages/db/tsconfig.json`, `/home/nikolas/Documents/CODE/AI/packages/shared/tsconfig.json`]
-- **Publish via Changesets:** initial release `0.1.0`, `publishConfig: { access: "public" }`. [VERIFIED: pattern in every existing `packages/*/package.json`]
-- **Consumers:** `minion_hub` (SvelteKit dashboard) and `minion_site` (SvelteKit marketing+members). Both use `bun` and Better Auth 1.4.19 today. [VERIFIED: package.json files]
-- **Shared DB:** hub + site already share the same Turso DB via `@minion-stack/db@0.2.0`, which includes the Better Auth schema at `./schema/auth` (user, session, account, verification, oauth*, jwks, organization, member, invitation, team). Session continuity at the row level is already guaranteed by DB sharing. [VERIFIED: `/home/nikolas/Documents/CODE/AI/packages/db/src/schema/auth/index.ts`]
-- **Target version:** stay on `better-auth@1.4.19` for this phase. Upgrading to 1.6.x is a separate concern (changelog flags a session `freshAge` breaking change) and should not be bundled with the extraction refactor. [VERIFIED: `npm view better-auth time` — 1.4.19 published 2026-02-23; 1.6.5 published 2026-04-16]
+- **D-01 Package name:** `@minion-stack/auth` — NOT `@minion/auth`. Scope locked in Phase 02 to `@minion-stack`.
+- **D-02 Factory API shape:**
+  ```typescript
+  export interface CreateAuthParams {
+    db: any;                   // drizzle instance — caller owns creation via getDb()
+    schema: Record<string, unknown>; // full schema + relations object
+    secret: string;
+    baseURL: string;
+    trustedOrigins?: string[]; // extra origins beyond the built-in localhost list
+    google?: { clientId: string; clientSecret: string }; // optional — omit to disable
+    extraPlugins?: NonNullable<BetterAuthOptions['plugins']>; // hub passes [oidcProvider()]
+    hooks?: BetterAuthOptions['hooks']; // hub passes personal-agent provision hook
+  }
+  export function createAuth(params: CreateAuthParams): ReturnType<typeof betterAuth>
+  ```
+  Factory always includes: `jwt` (EdDSA, 1h, audience=`openclaw-gateway`) + `organization`. Hub adds: `oidcProvider({ loginPage: '/login' })` via `extraPlugins`. Hub adds: personal-agent provision + invitation email hook via `hooks`.
+- **D-02 revised (from CONTEXT.md specifics section):** Factory does NOT call `organization()` internally. Factory accepts a `plugins` param. Hub passes `organization({ sendInvitationEmail })` + `oidcProvider()`. Site passes `organization()`. `plugins` replaces `extraPlugins` name.
+- **D-03 Built-in trustedOrigins in factory:** Always includes `['http://localhost:5173', 'http://localhost:5174', 'http://localhost:4173']` plus `baseURL` (if not already localhost). Caller passes additional origins via `trustedOrigins` param.
+- **D-04 useSecureCookies logic:** Derived from `baseURL` inside factory: `baseURL.startsWith('https://')`. Not a param.
+- **D-05 drizzleAdapter provider stays 'sqlite':** Both hub and site use `provider: 'sqlite'` with Turso (LibSQL uses SQLite wire protocol). No change.
+- **D-06 Session sharing mechanism:** No extra config needed. Better Auth stores sessions in shared Turso DB and validates them using `BETTER_AUTH_SECRET`. Both apps use same DB URL + same secret. Already true in production (both pull from Infisical `minion-hub` project).
+- **D-07 auth-client.ts stays per-app:** Both hub and site have identical 5-line files. Not extracted.
+- **D-08 Lazy init pattern stays per-app:** Consuming apps keep their own `let _auth | null = null` lazy getter wrapping `createAuth()`. Factory does NOT implement lazy caching internally — returns a fresh `betterAuth()` instance on each call.
+- **D-09 Hub dependency sequencing:** Phase 5 PRs (#17 consume @minion-stack/db, #18 remove migration scripts) must merge into `minion_hub/dev` before Phase 6 hub consumer work begins.
+- **D-10 Wave structure:**
+  | Wave | Plans | Notes |
+  |------|-------|-------|
+  | 1 | 06-01 Scaffold + publish | Checkpoint for npm 2FA |
+  | 2 | 06-02 Hub consumer, 06-03 Site consumer | Autonomous parallel (different repos) |
+  | 3 | 06-04 Staging session continuity test | Human verification checkpoint |
+  | 4 | 06-05 Production deploy | Human action checkpoint (prod-touching) |
+- **accountLinking:** Include in factory unconditionally (`accountLinking: { enabled: true, trustedProviders: ['google'] }`). Safe for site.
+- **Hub schema import fix:** `auth.ts` currently imports from `$server/db/schema` — must update to `@minion-stack/db/schema` during Phase 6 hub consumer update (was missed in Phase 5).
 
 ### Claude's Discretion
 
-- Exact factory signature for `createAuth()` — what params are required vs optional, whether the JWT hook (`provisionPersonalAgent`) is passed as a callback or kept hub-local
-- Whether `@minion-stack/auth` also exports a `createAuthClient()` helper for the browser, or only the server factory
-- Whether the factory takes a drizzle-client instance OR creates one internally from a connection URL (Phase 5 left clients up to consumers — follow that pattern)
-- Plugin set strategy: superset-with-feature-flags vs per-consumer-plugins-array
-- Whether to write a `README.md` or keep docs to code-level JSDoc (Phase 5 shipped README — follow precedent)
+- TypeScript types for `CreateAuthParams` — use `any` for `db` type or import from `drizzle-orm` (prefer `any` to avoid peer dep complexity)
+- Whether to export a `createAuthClient` helper (probably not — auth-client.ts is app-specific)
+- Package version: start at 0.1.0 via changeset (same pattern as packages/db)
+- Whether `accountLinking` should be in factory or passed via params (recommend: include in factory since both apps should have it)
 
 ### Deferred Ideas (OUT OF SCOPE)
 
-- Upgrading Better Auth to 1.5.x or 1.6.x — breaking-change-bearing minor bumps; do as a separate phase post-extraction
-- Migrating off password-based auth / adding passkeys / adding 2FA — not in AUTH-01..04
-- Consolidating the gateway-jwt.service.ts custom JWT signer (uses `jose` directly, not the Better Auth `jwt` plugin's `sign` API) — hub-local, not part of the extraction
-- Desktop-mode cookie persistence (`src/server/auth/desktop-session.ts`) — hub-only Electrobun workaround; stays in hub
-- Cross-subdomain cookie configuration for `hub.example.com` + `site.example.com` — deployment concern for AUTH-04 staging, not a package-shape concern
-- WS client consolidation — Phase 7
+- `@minion-stack/auth` as a standalone OIDC client for paperclip (separate phase)
+- Centralizing auth middleware (hooks.server.ts) across apps — complex, different apps have different session enrichment needs
+- Multi-tenant auth (organization isolation) — existing behavior, not changing
+- Upgrading Better Auth to 1.5.x or 1.6.x — bundling an upgrade with a refactor increases rollback risk
+- Consolidating the gateway-jwt.service.ts custom JWT signer — hub-local
+- Desktop-mode cookie persistence (`src/server/auth/desktop-session.ts`) — hub-only Electrobun workaround
+</user_constraints>
 
 ---
 
+<phase_requirements>
 ## Phase Requirements
 
 | ID | Description | Research Support |
 |----|-------------|------------------|
-| AUTH-01 | Better Auth config extracted from hub and site into `packages/auth` as `createAuth()` factory | Hub auth.ts (3.3 KB, 8 config keys, 3 plugins) + site auth.ts (1.3 KB, 5 config keys, 2 plugins) inventoried below; factory contract designed |
-| AUTH-02 | `@minion-stack/auth` publishes first release | Mirrors `@minion-stack/db@0.1.0` and `@minion-stack/shared@0.1.0` release pattern; Changesets already configured at meta-repo root |
-| AUTH-03 | `minion_hub` and `minion_site` consume the factory with identical secret/provider config | 6 files in hub + 4 files in site reference `getAuth()` or `authClient`; known `BETTER_AUTH_SECRET` + `BETTER_AUTH_URL` + `GOOGLE_CLIENT_*` contract |
-| AUTH-04 | Staging deploy with shared session continuity (login to hub → session on site) | Shared DB already in place; critical gates identified below (identical secret, identical JWT issuer/audience, cookie domain for cross-subdomain) |
+| AUTH-01 | Better Auth config extracted from hub and site into `packages/auth` as `createAuth()` factory | Hub auth.ts (102 lines, 8 config keys, 3 plugins) + site auth.ts (36 lines, 5 config keys, 2 plugins) fully inventoried; factory contract documented; D-02 revised API shape verified against actual source |
+| AUTH-02 | `@minion-stack/auth` publishes first release | Mirrors `@minion-stack/db@0.1.0` release pattern; Changesets at meta-repo root; peerDep structure and exports map documented |
+| AUTH-03 | `minion_hub` and `minion_site` consume the factory with identical secret/provider config | Consumer call sites inventoried (hub: 9 files, site: 5 files); D-09 sequencing dependency (Phase 5 PRs #17/#18) documented; hub schema import fix identified |
+| AUTH-04 | Staging deploy of both services verified with shared session continuity (login to hub → session works on site) | Cross-domain cookie mechanism researched; JWT issuer/audience parity requirements verified; JWKS DB storage confirmed; session-sharing mechanism clarified |
+</phase_requirements>
 
 ---
 
 ## Summary
 
-Both `minion_hub` and `minion_site` already ship Better Auth 1.4.19 against the same shared Turso database. The auth schema lives in `@minion-stack/db` at the `./auth` export path (published in Phase 5). Hub runs a **superset** config (jwt + oidcProvider + organization plugins + email+Google providers + a `createAuthMiddleware` hook that provisions a personal agent on signup). Site runs a **subset** of that config (jwt + organization, email+Google, no OIDC, no signup hook). Both point to identical envs (`BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `GOOGLE_CLIENT_ID/SECRET`, `VITE_BETTER_AUTH_URL`).
+Both `minion_hub` and `minion_site` already ship Better Auth 1.4.19 against the same shared Turso database. The auth schema lives in `@minion-stack/db` at the `./auth` export path (published in Phase 5). Hub runs a superset config (jwt + oidcProvider + organization plugins + email+Google providers + a `createAuthMiddleware` hook that provisions a personal agent on signup). Site runs a subset (jwt + organization, email+Google, no OIDC, no signup hook).
 
-The extraction needs to collapse hub.auth.ts + site.auth.ts into one `createAuth()` factory that accepts the drizzle client, the env, and — critically — a set of feature flags or callback hooks so that hub can opt into the OIDC plugin and the signup-time `provisionPersonalAgent` hook while site opts out. A naive "same plugins for both" approach would (a) force site to ship OIDC routes it doesn't need, and (b) force `@minion-stack/auth` to import hub-specific services like `$server/services/personal-agent.service`, which would turn `@minion-stack/auth` into a fat runtime dependency with a reverse import into hub — unacceptable.
+The extraction creates `@minion-stack/auth` exporting `createAuth(params)`. Per the locked D-02 revised design, the factory always includes `jwt(fullConfig)`. Callers pass `organization()` (with or without `sendInvitationEmail`) and hub also passes `oidcProvider()` via the `plugins` param. This avoids duplicate plugin registration and keeps hub-specific callbacks out of the package.
 
-Session continuity (AUTH-04) is the hard constraint. Better Auth's session cookies are signed with `BETTER_AUTH_SECRET`. Two apps sharing the same DB + same secret will **produce mutually-recognizable session rows** — but the browser will only send the cookie to each app if (i) the apps are served from the same domain (same-origin), or (ii) cross-subdomain cookie sharing is explicitly configured via `advanced.crossSubDomainCookies.{enabled,domain}`. This is a production-deployment concern, not a package-shape concern, but the factory must expose the `advanced` knob so the staging deploy can turn it on. The JWT plugin's `issuer`, `audience`, and JWKS-key storage must also be identical — JWKS is stored in the DB and is already shared.
+Session continuity (AUTH-04) works by construction: Better Auth signs session cookies with `BETTER_AUTH_SECRET` and stores session rows in the shared DB. Both apps already point to the same Turso instance. The critical operational requirement is identical `BETTER_AUTH_SECRET` in production — confirmed to be sourced from Infisical `minion-hub` project for both apps. Cross-subdomain cookie sharing is a staging/production deploy concern; the factory's `useSecureCookies` is already derived from `baseURL` (D-04).
 
-**Primary recommendation:** Ship `@minion-stack/auth@0.1.0` exporting a single `createAuth({ db, env, features })` factory where `features` is an object with booleans/callbacks for the hub-specific opt-ins (`oidc: boolean`, `onSignUp?: (session) => Promise<void>`, `invitationEmail?: (data) => Promise<void>`). Keep the client-side `createAuthClient` wiring in the consuming app (it's trivial — 4 lines — and depends on plugin selection, which is naturally app-scoped). Replicate the Phase 5 cutover pattern: parallel-subagent migration PRs on hub and site, staging dry-run, then production deploy.
+**Primary recommendation:** Ship `@minion-stack/auth@0.1.0` with a single `createAuth(params)` factory following D-02 revised. Build with plain `tsc` (same as packages/db). Declare `better-auth` and `drizzle-orm` as peerDependencies pinned to project versions. Scaffold with 5 plans across 4 waves per D-10.
 
 ---
 
@@ -70,87 +95,73 @@ Session continuity (AUTH-04) is the hard constraint. Better Auth's session cooki
 
 | Library | Version | Purpose | Why Standard |
 |---------|---------|---------|--------------|
-| `better-auth` | `1.4.19` | Auth server (sessions, providers, plugins, OIDC) | Already installed in both hub and site; do NOT bump during extraction [VERIFIED: hub + site package.json] |
+| `better-auth` | `1.4.19` | Auth server (sessions, providers, plugins, OIDC) | Already installed in both hub and site; pinned — do NOT bump during extraction [VERIFIED: hub + site package.json] |
 | `better-auth/adapters/drizzle` | (bundled) | Drizzle adapter wiring to SQLite/LibSQL | Same adapter both apps already use [VERIFIED: hub + site auth.ts] |
-| `better-auth/plugins` | (bundled) | `jwt`, `oidcProvider`, `organization` | Existing plugin selection in hub + site [VERIFIED: codebase grep] |
-| `better-auth/api` | (bundled) | `createAuthMiddleware` for signup hook | Used by hub for `provisionPersonalAgent` hook [VERIFIED: hub auth.ts L6] |
-| `@minion-stack/db` | `^0.2.0` | Schema + Drizzle client types | Peer dep; do not bundle schema [VERIFIED: already consumed by hub + site] |
-| `@minion-stack/tsconfig` | `workspace:*` | Shared TS build config | Extended by every existing package [VERIFIED: packages/*/tsconfig.json] |
+| `better-auth/plugins` | (bundled) | `jwt`, `oidcProvider`, `organization` | Existing plugin selection in hub + site [VERIFIED: hub auth.ts L4-6] |
+| `better-auth/api` | (bundled) | `createAuthMiddleware` for signup hook export | Used by hub for `provisionPersonalAgent` hook; exported from `better-auth/api` path [VERIFIED: hub auth.ts L6, better-auth/dist/api/index.d.mts] |
+| `@minion-stack/db` | `^0.2.0` | Schema import in factory | JWKS table, auth tables, schema barrel [VERIFIED: packages/db/src/schema/auth/index.ts] |
+| `@minion-stack/tsconfig` | `workspace:*` | Shared TS build config | Extended by every existing package [VERIFIED: packages/db/tsconfig.json] |
+
+### Supporting
+
+| Library | Version | Purpose | When to Use |
+|---------|---------|---------|-------------|
+| `drizzle-orm` | `>=0.45.0` | Peer dep for type definitions | Always — `drizzleAdapter` accepts the Drizzle client type |
+| `vitest` | `^2.x` | Package-level tests | Wave 0: minimal smoke test suite for factory behaviour |
 
 ### Alternatives Considered
 
 | Instead of | Could Use | Tradeoff |
 |------------|-----------|----------|
-| `tsc` build | `tsup` / `tsdown` | Existing packages use plain `tsc` for consistency — don't introduce a new builder mid-phase |
-| Superset factory with `features` flags | Two exported factories (`createHubAuth`, `createSiteAuth`) | Worse: pushes hub-specific plugin imports into the site bundle and vice versa; duplicates the baseline config |
-| Factory takes connection URL | Factory takes drizzle client | Consumers already own `getDb()`; reusing it avoids duplicate client instantiation and lets each app pick libsql vs Turso flavour without changes to `@minion-stack/auth` |
-| Upgrade to `better-auth@1.6.5` during extraction | Stay on 1.4.19 | 1.6 has a `freshAge` breaking change; bundling an upgrade with a refactor makes rollback harder — defer |
+| `tsc` build | `tsdown` / `tsup` | db package uses plain `tsc` — consistency beats marginal bundling gains; auth package has no CJS consumers |
+| Single `createAuth()` with `plugins` param | Two separate factories (`createHubAuth`, `createSiteAuth`) | Two factories duplicate the jwt config; harder to keep in sync |
+| `BetterAuthPlugin[]` for `plugins` param | `extraPlugins?: ...` name | D-02 revised: `plugins` is clearer; `extraPlugins` name was rejected |
+| Better Auth `1.6.x` (latest) | Stay on `1.4.19` | `1.6.0` has a `freshAge` session breaking change; bundling upgrade with refactor adds rollback complexity; defer |
 
 **Installation:**
 ```bash
 # In packages/auth/
-pnpm add -D @minion-stack/tsconfig typescript
 pnpm add better-auth@1.4.19
-pnpm add -D @minion-stack/db drizzle-orm # peer deps for types
+pnpm add -D @minion-stack/tsconfig @minion-stack/db drizzle-orm typescript
 ```
 
 **Version verification (2026-04-21):**
 ```bash
-npm view better-auth version        # => 1.6.5 (latest)
-npm view better-auth@1.4.19 version # => 1.4.19 (published 2026-02-23)
+npm view better-auth version           # => 1.6.6 (latest — NOT what we want)
+npm view better-auth@1.4.19 version   # => 1.4.19 [VERIFIED]
+npm view @minion-stack/db version      # => 0.2.0 [VERIFIED]
+npm view better-auth dist-tags         # => { 'release-1.4': '1.4.22', latest: '1.6.6' }
 ```
-[VERIFIED: `npm view better-auth time --json` returned 1.4.19: "2026-02-23T15:43:49.316Z"]
+
+Note: npm `latest` is 1.6.6. The project is pinned to `1.4.19`. The `peerDependency` should be `"better-auth": "1.4.19"` (exact pin, not range) to prevent silent breakage if a consumer accidentally upgrades. [VERIFIED: npm registry]
 
 ---
 
-## Current State Inventory (VERIFIED: codebase read)
+## Current State Inventory
 
-### Hub auth config (`minion_hub/src/lib/auth/auth.ts` — 102 lines)
+### Hub auth config (`minion_hub/src/lib/auth/auth.ts` — 102 lines) [VERIFIED]
 
 **Imports:**
 - `betterAuth`, `drizzleAdapter`, `jwt`, `oidcProvider`, `organization`, `createAuthMiddleware`
 - `getDb()` from `$server/db/client`
-- `schema` from `$server/db/schema` (still a local barrel — per ADOPT-02 hub imports DB from `@minion-stack/db` but keeps re-export stubs)
+- `schema` from `$server/db/schema` — **STILL LOCAL** (missed in Phase 5; fix in Phase 6 consumer update)
 - `env` from `$env/dynamic/private`
-- `sendInvitationEmail` from `$server/services/email.service` — **hub-specific**
-- `provisionPersonalAgent` from `$server/services/personal-agent.service` — **hub-specific**
+- `sendInvitationEmail` from `$server/services/email.service` — hub-specific
+- `provisionPersonalAgent` from `$server/services/personal-agent.service` — hub-specific
 
-**Config keys:**
-- `database: drizzleAdapter(getDb(), { provider: 'sqlite', schema })`
-- `secret: env.BETTER_AUTH_SECRET`
-- `baseURL: env.BETTER_AUTH_URL ?? 'http://localhost:5173'`
-- `advanced.useSecureCookies: hubUrl.startsWith('https://')` — desktop-mode CEF-incognito workaround
-- `trustedOrigins: [localhost:5173, localhost:5174, localhost:4173, BETTER_AUTH_URL, VERCEL_URL]`
-- `emailAndPassword.enabled: true`
-- `accountLinking.enabled: true, trustedProviders: ['google']`
-- `socialProviders.google: { clientId, clientSecret }` when envs present
-- Plugins: `jwt({ jwt: { issuer: hubUrl, audience: 'openclaw-gateway', expirationTime: '1h' }, jwks: { keyPairConfig: { alg: 'EdDSA' } } })`, `oidcProvider({ loginPage: '/login' })`, `organization({ sendInvitationEmail })`
-- `hooks.after: createAuthMiddleware` — on `/sign-up`, calls `provisionPersonalAgent(tenantCtx, { userId, email, serverId: '' })`
+**Config keys:** database (drizzleAdapter), secret, baseURL (hubUrl), advanced.useSecureCookies, trustedOrigins (localhost 5173/5174/4173 + BETTER_AUTH_URL + VERCEL_URL), emailAndPassword.enabled=true, accountLinking.{enabled,trustedProviders}, socialProviders.google (conditional), plugins [jwt+oidcProvider+organization], hooks.after (provisionPersonalAgent on sign-up)
 
-**Singleton pattern:** lazy `let _auth: ReturnType<typeof betterAuth> | null = null; export function getAuth() { if (!_auth) _auth = betterAuth({...}); return _auth; }` — avoids evaluating `env` at module load, which is critical for SvelteKit SSR/build.
+**Singleton pattern:** `let _auth: ReturnType<typeof betterAuth> | null = null; export function getAuth() {...}` — lazy eval avoids reading `env` at module load (critical for SvelteKit SSR/build).
 
-### Site auth config (`minion_site/src/lib/auth/auth.ts` — 36 lines)
+### Site auth config (`minion_site/src/lib/auth/auth.ts` — 36 lines) [VERIFIED]
 
-**Imports:**
-- `betterAuth`, `drizzleAdapter`, `jwt`, `organization` (no `oidcProvider`, no `createAuthMiddleware`)
-- `getDb()` from `$server/db/client`
-- `schema` from `@minion-stack/db/schema` — already migrated to the shared package
-- `env` from `$env/dynamic/private`
-- No service-layer imports
+**Imports:** `betterAuth`, `drizzleAdapter`, `jwt`, `organization`; `getDb()`; `schema` from `@minion-stack/db/schema` (already migrated); `env`. No hub-specific service imports.
 
-**Config keys:**
-- `database: drizzleAdapter(getDb(), { provider: 'sqlite', schema })`
-- `secret: env.BETTER_AUTH_SECRET`
-- `baseURL: env.BETTER_AUTH_URL ?? 'http://localhost:5173'`
-- `trustedOrigins: [...same list as hub...]`
-- `emailAndPassword.enabled: true`
-- `socialProviders.google: { clientId, clientSecret }` when envs present
-- Plugins: `jwt()` (no custom issuer/audience — **drift from hub, will break JWT-based session continuity**), `organization()` (no invitation-email callback)
-- No `hooks`, no `advanced`, no `accountLinking`
+**Config keys:** database, secret, baseURL, trustedOrigins (same list), emailAndPassword.enabled=true, socialProviders.google (conditional), plugins [jwt(), organization()]
 
-### Auth-client configs
+**Drift vs hub:** Site calls `jwt()` with NO custom issuer/audience/expirationTime. Hub calls with `{ issuer: hubUrl, audience: 'openclaw-gateway', expirationTime: '1h' }`. **This is a latent bug** — JWTs minted from site sessions use Better Auth's defaults and may not validate for gateway calls. The factory normalizes this.
 
-Hub `auth-client.ts` (8 lines) and site `auth-client.ts` (8 lines) are **identical**:
+### Auth-client configs (both apps identical, 8 lines) [VERIFIED]
 ```typescript
 import { createAuthClient } from 'better-auth/svelte';
 import { jwtClient, organizationClient } from 'better-auth/client/plugins';
@@ -159,38 +170,20 @@ export const authClient = createAuthClient({
   plugins: [jwtClient(), organizationClient()],
 });
 ```
+These stay per-app (D-07).
 
-### Consumers (files that will need updating in hub + site)
+### Consumer files requiring update
 
-**Hub (6 files consume auth):**
-1. `src/hooks.server.ts` — `import { getAuth } from '$lib/auth/auth'`; three call sites (`handler(request)`, `handler(new Request(oidcUrl, request))`, `api.getSession`)
-2. `src/lib/auth/auth-client.ts` — `authClient` browser instance
-3. `src/routes/login/+page.svelte` — `authClient.signIn.email`, `authClient.signIn.social`, `authClient.organization.list/setActive`
-4. `src/routes/auth/google-callback/+page.svelte` — `authClient.organization.list/setActive`
-5. `src/routes/invite/accept/+page.svelte` — `authClient.getSession`, `organization.acceptInvitation`, `signUp.email`
-6. `src/lib/components/users/TeamTab.svelte` — `authClient.organization.*`
-7. `src/lib/state/features/user.svelte.ts` — `authClient` session state
-8. `src/server/services/user.service.ts` — server-side auth usage
-9. `src/server/services/gateway-jwt.service.ts` — uses `jwks` table directly (not via `getAuth()`); signs with `jose` manually. No change needed for this phase.
+**Hub (files that import auth, will need `@minion-stack/auth`):**
+1. `src/lib/auth/auth.ts` — replace `betterAuth({...})` body with `createAuth({...})` call
+2. `src/hooks.server.ts` — no change (imports `getAuth()` from `auth.ts`; proxy logic stays as-is)
+3. `src/lib/auth/auth-client.ts` — no change (D-07)
+4. Auth-consuming routes — no change (import `authClient` or `getAuth()`, not from better-auth directly)
 
-**Site (4 files consume auth):**
-1. `src/hooks.server.ts` — `import { getAuth } from '$lib/auth/auth'`
-2. `src/lib/auth/auth-client.ts` — `authClient` browser instance
-3. `src/routes/(app)/login/+page.svelte` — `authClient.signIn.email`, `authClient.signIn.social`
-4. `src/routes/(app)/register/+page.svelte` — `authClient.signUp.email`, `authClient.signIn.social`
-5. `src/lib/components/members/AppBar.svelte` — `authClient` session state
-
-### Env contract (consistent across both apps)
-
-Both `.env.example` files define:
-- `BETTER_AUTH_SECRET` (Infisical `minion-core` — **must be identical** between hub + site)
-- `BETTER_AUTH_URL` (per-app: hub e.g. `https://hub.minion.example.com`, site e.g. `https://site.minion.example.com`)
-- `VITE_BETTER_AUTH_URL` (client-side mirror of BETTER_AUTH_URL)
-- `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` (Infisical `minion-core` — shared OAuth app)
-- `AUTH_DISABLED` (hub only — dev-time bypass)
-- `VERCEL_URL` (auto-injected by Vercel)
-
-[VERIFIED: `/home/nikolas/Documents/CODE/AI/minion_hub/.env.example` L24-35 and `/home/nikolas/Documents/CODE/AI/minion_site/.env.example` L20-27]
+**Site (files that import auth):**
+1. `src/lib/auth/auth.ts` — replace `betterAuth({...})` with `createAuth({...})`
+2. `src/hooks.server.ts` — no change
+3. `src/lib/auth/auth-client.ts` — no change (D-07)
 
 ---
 
@@ -198,117 +191,97 @@ Both `.env.example` files define:
 
 ### Recommended Project Structure
 
-Mirror `packages/db/` and `packages/shared/` exactly.
-
 ```
 packages/auth/
-├── package.json            # name: @minion-stack/auth, version: 0.1.0
+├── package.json            # @minion-stack/auth, version 0.1.0, tsc build
 ├── tsconfig.json           # extends @minion-stack/tsconfig/library.json
 ├── README.md               # factory usage, env contract, session-continuity gates
 ├── src/
-│   ├── index.ts            # re-export createAuth + types
-│   ├── factory.ts          # createAuth({ db, env, features })
-│   └── types.ts            # CreateAuthOptions, AuthFeatures, AuthInstance type alias
+│   └── index.ts            # createAuth() factory + types export
 └── dist/                   # tsc output (gitignored)
 ```
 
-### Pattern 1: Factory with feature flags + callbacks
+Single file `src/index.ts` is sufficient — no need for sub-files unless the factory grows large. This matches the simplicity of packages/shared which is also a thin barrel.
 
-**What:** A single `createAuth()` exported from the package. Consumers pass their drizzle client, their env bag, and an optional `features` object describing which hub-only plugins and hooks to enable.
+### Pattern 1: D-02 revised factory API
 
-**When to use:** Both consumers (hub + site) share ~80% of config. Feature flags keep the package surface minimal while letting hub opt into OIDC + signup hooks without dragging hub-specific services into the package.
+**What:** `createAuth(params)` always emits `jwt(fullConfig)` and accepts an optional `plugins` array for callers to append their own (organization, oidcProvider). Factory never calls `organization()` internally to avoid duplicate registration.
 
-**Example:**
+**When to use:** Hub passes `organization({ sendInvitationEmail })` + `oidcProvider()`. Site passes `organization()` only.
+
 ```typescript
-// packages/auth/src/factory.ts
-// Source: adapted from hub/site auth.ts + Better Auth 1.4.19 docs
+// Source: adapted from hub/site auth.ts + D-02 revised locked decision + BetterAuthOptions type [VERIFIED]
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { jwt, oidcProvider, organization } from 'better-auth/plugins';
-import { createAuthMiddleware } from 'better-auth/api';
+import type { BetterAuthOptions, BetterAuthPlugin } from 'better-auth';
+import { jwt } from 'better-auth/plugins';
 import * as schema from '@minion-stack/db/schema';
 
-export interface AuthFeatures {
-  /** Enable OIDC provider plugin (exposes /.well-known/openid-configuration). Hub-only. */
-  oidc?: boolean;
-  /** Gateway JWT audience — if absent, `jwt` plugin uses Better Auth defaults. */
-  jwtAudience?: string;
-  /** Called after a successful /sign-up. Hub uses this to provision a personal agent. */
-  onSignUp?: (newSession: { user: { id: string; email: string } }) => Promise<void>;
-  /** Called when the organization plugin wants to email an invitation. */
-  sendInvitationEmail?: (data: InvitationEmailPayload) => Promise<void>;
-  /** Whether to opt into browser-Secure cookies. Hub sets false for CEF/desktop mode. */
-  useSecureCookies?: boolean;
-}
-
-export interface CreateAuthOptions {
-  db: Parameters<typeof drizzleAdapter>[0]; // a Drizzle client instance
+export interface CreateAuthParams {
+  db: any;                              // drizzle instance (DrizzleClient)
+  schema?: Record<string, unknown>;    // defaults to @minion-stack/db/schema full barrel
   secret: string;
   baseURL: string;
-  trustedOrigins: string[];
-  googleOAuth?: { clientId: string; clientSecret: string };
-  features?: AuthFeatures;
+  trustedOrigins?: string[];           // extra origins; factory always adds localhost dev set
+  google?: { clientId: string; clientSecret: string };
+  plugins?: BetterAuthPlugin[];        // hub: [organization({...}), oidcProvider()]; site: [organization()]
+  hooks?: BetterAuthOptions['hooks']; // hub: createAuthMiddleware for provisionPersonalAgent
 }
 
-export function createAuth(opts: CreateAuthOptions) {
-  const plugins: any[] = [
-    jwt({
-      jwt: {
-        issuer: opts.baseURL,
-        audience: opts.features?.jwtAudience ?? opts.baseURL,
-        expirationTime: '1h',
-      },
-      jwks: { keyPairConfig: { alg: 'EdDSA' } },
-    }),
-    organization(
-      opts.features?.sendInvitationEmail
-        ? { sendInvitationEmail: opts.features.sendInvitationEmail }
-        : {},
-    ),
+export function createAuth(params: CreateAuthParams) {
+  const useSchema = params.schema ?? schema;
+  const builtInOrigins = [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:4173',
   ];
-
-  if (opts.features?.oidc) {
-    plugins.push(oidcProvider({ loginPage: '/login' }));
+  // Add baseURL if it isn't already localhost
+  if (!params.baseURL.startsWith('http://localhost')) {
+    builtInOrigins.push(params.baseURL);
   }
 
   return betterAuth({
-    database: drizzleAdapter(opts.db, { provider: 'sqlite', schema }),
-    secret: opts.secret,
-    baseURL: opts.baseURL,
-    trustedOrigins: opts.trustedOrigins,
+    database: drizzleAdapter(params.db, { provider: 'sqlite', schema: useSchema }),
+    secret: params.secret,
+    baseURL: params.baseURL,
     advanced: {
-      useSecureCookies: opts.features?.useSecureCookies ?? opts.baseURL.startsWith('https://'),
+      useSecureCookies: params.baseURL.startsWith('https://'),  // D-04
     },
+    trustedOrigins: [...builtInOrigins, ...(params.trustedOrigins ?? [])],
     emailAndPassword: { enabled: true },
-    accountLinking: { enabled: true, trustedProviders: ['google'] },
-    socialProviders: opts.googleOAuth ? { google: opts.googleOAuth } : {},
-    plugins,
-    hooks: opts.features?.onSignUp
-      ? {
-          after: createAuthMiddleware(async (ctx) => {
-            if (ctx.path.startsWith('/sign-up') && ctx.context.newSession) {
-              await opts.features!.onSignUp!(ctx.context.newSession);
-            }
-          }),
-        }
-      : undefined,
+    accountLinking: { enabled: true, trustedProviders: ['google'] }, // always on (D-02/discretion)
+    socialProviders: params.google ? { google: params.google } : {},
+    plugins: [
+      jwt({
+        jwt: {
+          issuer: params.baseURL,
+          audience: 'openclaw-gateway',
+          expirationTime: '1h',
+        },
+        jwks: { keyPairConfig: { alg: 'EdDSA' } },
+      }),
+      ...(params.plugins ?? []),
+    ],
+    hooks: params.hooks,
   });
 }
 
 export type AuthInstance = ReturnType<typeof createAuth>;
 ```
 
-### Pattern 2: Consumer keeps a local `getAuth()` singleton
+### Pattern 2: Consumer lazy singleton
 
-**What:** Each consumer keeps a thin `src/lib/auth/auth.ts` that calls `createAuth(...)` lazily and memoizes. This preserves the existing lazy-eval pattern (critical for SvelteKit `$env/dynamic/private` which only evaluates at request time).
+**What:** Per D-08, each consumer keeps its own `let _auth: AuthInstance | null = null` wrapper. The factory returns a fresh instance; callers memoize.
 
-**When to use:** Always. Better Auth's `betterAuth({...})` is expensive to call (opens DB adapter, generates JWKS), and `$env/dynamic/private` throws if evaluated at module load in build contexts.
+**Why:** `$env/dynamic/private` in SvelteKit throws if evaluated at module load time during `vite build`. The singleton must be created inside a function called at request time.
 
-**Example:**
 ```typescript
-// minion_hub/src/lib/auth/auth.ts (after extraction)
+// minion_hub/src/lib/auth/auth.ts — after extraction
 import { createAuth, type AuthInstance } from '@minion-stack/auth';
+import { organization, oidcProvider } from 'better-auth/plugins';
+import { createAuthMiddleware } from 'better-auth/api';
 import { getDb } from '$server/db/client';
+import * as schema from '@minion-stack/db/schema';      // fix from Phase 5 miss
 import { env } from '$env/dynamic/private';
 import { sendInvitationEmail } from '$server/services/email.service';
 import { provisionPersonalAgent } from '$server/services/personal-agent.service';
@@ -320,35 +293,47 @@ export function getAuth(): AuthInstance {
     const hubUrl = env.BETTER_AUTH_URL ?? 'http://localhost:5173';
     _auth = createAuth({
       db: getDb(),
+      schema,
       secret: env.BETTER_AUTH_SECRET,
       baseURL: hubUrl,
       trustedOrigins: [
-        'http://localhost:5173', 'http://localhost:5174', 'http://localhost:4173',
-        ...(env.BETTER_AUTH_URL && env.BETTER_AUTH_URL !== 'http://localhost:5173' ? [env.BETTER_AUTH_URL] : []),
         ...(env.VERCEL_URL ? [`https://${env.VERCEL_URL}`] : []),
       ],
-      googleOAuth: env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
+      google: env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
         ? { clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET }
         : undefined,
-      features: {
-        oidc: true,
-        jwtAudience: 'openclaw-gateway',
-        onSignUp: async ({ user }) => {
-          try {
-            const db = getDb();
-            await provisionPersonalAgent({ db, tenantId: 'default' }, { userId: user.id, email: user.email, serverId: '' });
-          } catch (err) { console.error('[personal-agent] Failed to provision on signup:', err); }
-        },
-        sendInvitationEmail: async (data) => {
-          const baseUrl = env.BETTER_AUTH_URL ?? 'http://localhost:5173';
-          await sendInvitationEmail({
-            to: data.email,
-            inviterName: data.inviter.user.name ?? data.inviter.user.email,
-            organizationName: data.organization.name,
-            role: data.role ?? 'member',
-            inviteUrl: `${baseUrl}/invite/accept?id=${data.id}`,
-          });
-        },
+      plugins: [
+        organization({
+          async sendInvitationEmail(data) {
+            const baseUrl = env.BETTER_AUTH_URL ?? 'http://localhost:5173';
+            await sendInvitationEmail({
+              to: data.email,
+              inviterName: data.inviter.user.name ?? data.inviter.user.email,
+              organizationName: data.organization.name,
+              role: data.role ?? 'member',
+              inviteUrl: `${baseUrl}/invite/accept?id=${data.id}`,
+            });
+          },
+        }),
+        oidcProvider({ loginPage: '/login' }),
+      ],
+      hooks: {
+        after: createAuthMiddleware(async (ctx) => {
+          if (ctx.path.startsWith('/sign-up')) {
+            const newSession = ctx.context.newSession;
+            if (newSession) {
+              try {
+                const db = getDb();
+                await provisionPersonalAgent(
+                  { db, tenantId: 'default' },
+                  { userId: newSession.user.id, email: newSession.user.email, serverId: '' }
+                );
+              } catch (err) {
+                console.error('[personal-agent] Failed to provision on signup:', err);
+              }
+            }
+          }
+        }),
       },
     });
   }
@@ -357,9 +342,11 @@ export function getAuth(): AuthInstance {
 ```
 
 ```typescript
-// minion_site/src/lib/auth/auth.ts (after extraction)
+// minion_site/src/lib/auth/auth.ts — after extraction
 import { createAuth, type AuthInstance } from '@minion-stack/auth';
+import { organization } from 'better-auth/plugins';
 import { getDb } from '$server/db/client';
+import * as schema from '@minion-stack/db/schema';
 import { env } from '$env/dynamic/private';
 
 let _auth: AuthInstance | null = null;
@@ -368,19 +355,16 @@ export function getAuth(): AuthInstance {
   if (!_auth) {
     _auth = createAuth({
       db: getDb(),
+      schema,
       secret: env.BETTER_AUTH_SECRET,
       baseURL: env.BETTER_AUTH_URL ?? 'http://localhost:5173',
       trustedOrigins: [
-        'http://localhost:5173', 'http://localhost:5174', 'http://localhost:4173',
-        ...(env.BETTER_AUTH_URL && env.BETTER_AUTH_URL !== 'http://localhost:5173' ? [env.BETTER_AUTH_URL] : []),
         ...(env.VERCEL_URL ? [`https://${env.VERCEL_URL}`] : []),
       ],
-      googleOAuth: env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
+      google: env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET
         ? { clientId: env.GOOGLE_CLIENT_ID, clientSecret: env.GOOGLE_CLIENT_SECRET }
         : undefined,
-      features: {
-        jwtAudience: 'openclaw-gateway', // CRITICAL — must match hub for session continuity
-      },
+      plugins: [organization()],
     });
   }
   return _auth;
@@ -389,10 +373,11 @@ export function getAuth(): AuthInstance {
 
 ### Anti-Patterns to Avoid
 
-- **Shipping hub service imports from `@minion-stack/auth`:** If the package imports `$server/services/personal-agent.service`, circular dependency + impossible-to-install-in-site. Always accept as callback.
-- **Evaluating `env` at module load inside `@minion-stack/auth`:** Breaks SvelteKit build. The package must never touch `process.env`. All env reading stays in consumers.
-- **Bundling the browser `createAuthClient` into the factory package:** It's 4 lines, it's app-scoped (plugin selection is app-specific), and mixing server+client exports makes the package harder to consume. Leave `auth-client.ts` in each app.
-- **Drifting JWT issuer/audience between hub and site:** Today site omits `{ issuer, audience }` while hub sets them. A JWT minted by hub won't validate in site and vice versa. The factory should set these based on `baseURL` by default, and both apps should pass the same `jwtAudience`. [CITED: better-auth.com/docs/plugins/jwt — "Both apps must use identical issuer and audience values to share sessions"]
+- **Shipping hub service imports from `@minion-stack/auth`:** If the package imports `$server/services/personal-agent.service`, circular dependency + impossible-to-install-in-site. Always accept as callback via `hooks` param.
+- **Calling `organization()` inside factory:** Hub needs `organization({ sendInvitationEmail })` and site needs `organization()`. If factory calls `organization()` unconditionally, hub would duplicate the plugin and overwrite the callback.
+- **Evaluating `env` at module load inside `@minion-stack/auth`:** The package must never touch `process.env`. All env reading stays in consumers.
+- **Drifting JWT issuer/audience between hub and site:** Factory hardcodes `audience: 'openclaw-gateway'` for both — this is the normalization that closes the existing site drift bug.
+- **Bundling browser `createAuthClient` into the factory package:** Mixing server+client exports complicates tree-shaking and is not needed (auth-client.ts is 8 lines, app-specific per D-07).
 
 ---
 
@@ -401,126 +386,245 @@ export function getAuth(): AuthInstance {
 | Problem | Don't Build | Use Instead | Why |
 |---------|-------------|-------------|-----|
 | Session cookie signing + verification | Custom HMAC/AES wrapper | Better Auth's built-in | Timing attacks, cookie-same-site misconfigs, session replay |
-| JWKS key rotation | Custom `jose` helpers | Better Auth `jwt` plugin's JWKS storage | Key rotation + multi-key serving is already solved; hub's `gateway-jwt.service.ts` reads JWKS rows written by the plugin |
+| JWKS key rotation | Custom `jose` helpers | Better Auth `jwt` plugin's JWKS storage in DB | Key rotation + multi-key serving is already solved; JWKS rows in `jwks` table are shared via shared DB |
 | OIDC discovery endpoints | Hand-rolled `/.well-known/openid-configuration` | `oidcProvider` plugin | Full spec compliance (claims, PKCE, RP-initiated logout) |
-| Cross-subdomain cookie logic | Manual `Set-Cookie` header munging | `advanced.crossSubDomainCookies.{enabled,domain}` | Domain-attribute rules are subtle (leading-dot, path defaults) |
-| Organization / invitation tables | Custom multi-tenant schema | `organization` plugin | Already populated schema in `@minion-stack/db/schema/auth`: `organization`, `member`, `invitation`, `team` |
+| Cross-subdomain cookie logic | Manual `Set-Cookie` header munging | `advanced.crossSubDomainCookies.{enabled,domain}` in BetterAuthOptions | Domain-attribute rules are subtle |
+| Organization / invitation schema | Custom multi-tenant tables | `organization` plugin + existing `@minion-stack/db/schema` tables | Already in shared DB: `organization`, `member`, `invitation` tables |
 
-**Key insight:** Better Auth's value proposition is the plugin ecosystem + DB-first session model. The extraction should preserve every opinion the framework already makes — the package only **composes**, it doesn't replace.
+**Key insight:** Better Auth's value is the plugin ecosystem + DB-first session model. The factory only composes — it does not replace.
 
 ---
 
-## Runtime State Inventory
+## Research Question Answers
 
-> This is a refactor phase. Rename/string-replacement is minor — the main mutation is moving code and adding a new package. Still, every category below must be answered.
+These answer the 7 specific questions from the phase brief.
 
-| Category | Items Found | Action Required |
-|----------|-------------|------------------|
-| Stored data | **Session rows** in shared Turso DB (table: `session`, see `@minion-stack/db/schema/auth/index.ts` L24-41). **JWKS keypairs** in the shared `jwks` table. **User/account/organization/member/invitation/team** rows in shared DB. None of these need migration — schema already shared in Phase 5, rows unchanged. | None — data stays put |
-| Live service config | **Vercel env vars** for hub and site deployments: `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`, `VITE_BETTER_AUTH_URL`, `GOOGLE_CLIENT_ID/SECRET`. **Must already be identical for `BETTER_AUTH_SECRET` + `GOOGLE_CLIENT_*` (they live in Infisical `minion-core` shared project). AUTH-04 gate: confirm this pre-cutover via `minion doctor` and `infisical secrets list --projectId minion-core`. | Verify secret-sharing pre-cutover; no config change needed if already shared |
-| OS-registered state | None — this is a web auth stack, not a daemon. No systemd units, no launchd plists, no Windows Task Scheduler entries reference the Better Auth config. [VERIFIED: no matches for `BETTER_AUTH` in `/etc/systemd` via project-local search; production is Vercel-hosted]. | None |
-| Secrets and env vars | `BETTER_AUTH_SECRET` — **code edit only**, no secret rotation needed. Rotating the secret would invalidate every live session (forced global logout). The migration keeps the same secret, moves the code that reads it. Same for `GOOGLE_CLIENT_*`. | None (preserve secrets) |
-| Build artifacts / installed packages | Hub + site both have `better-auth` in their `node_modules`. After extraction, they continue to have `better-auth` (peer dep of `@minion-stack/auth`, also direct dep). **No stale .egg-info-style leftover.** The new `packages/auth/dist/` will be a fresh build artifact. | Run `bun install` in hub + site after their `package.json` picks up `@minion-stack/auth@^0.1.0` |
+### Q1: Better Auth 1.4.19 TypeScript type export patterns for clean factory typing
 
-**The canonical question:** After hub + site swap to `createAuth()` from the shared package, what runtime systems still reference Better Auth in a way that could drift? Answer: **only the Vercel deployment envs**, and they must stay in sync. `minion doctor` will surface drift.
+**Answer:** [VERIFIED: inspected better-auth/dist/index.d.mts and @better-auth/core/dist/types/]
+
+- `BetterAuthOptions` is exported from `'better-auth'` as a `type` — importable directly. Its `plugins` field is typed as `([] | BetterAuthPlugin[]) | undefined`.
+- `BetterAuthPlugin` is exported from `'better-auth'` as a `type`.
+- `BetterAuthOptions['hooks']` gives the correct type for the hooks param: `{ before?: AuthMiddleware; after?: AuthMiddleware } | undefined`.
+- `BetterAuthOptions['plugins']` gives `([] | BetterAuthPlugin[]) | undefined` — use `NonNullable<BetterAuthOptions['plugins']>` or just `BetterAuthPlugin[]` for the factory's `plugins` param.
+- `ReturnType<typeof betterAuth>` gives the return type — use as `AuthInstance` alias.
+- For `db`, the CONTEXT.md decision is to use `any` to avoid peer dep complexity. The actual type is a Drizzle client instance, but typing it precisely requires importing from `drizzle-orm` which adds a mandatory peer dep at type level.
+
+**Pattern for `CreateAuthParams` signature:**
+```typescript
+import type { BetterAuthOptions, BetterAuthPlugin } from 'better-auth';
+
+export interface CreateAuthParams {
+  db: any;
+  schema?: Record<string, unknown>;
+  secret: string;
+  baseURL: string;
+  trustedOrigins?: string[];
+  google?: { clientId: string; clientSecret: string };
+  plugins?: BetterAuthPlugin[];
+  hooks?: BetterAuthOptions['hooks'];
+}
+```
+
+### Q2: Correct peerDependency setup for @minion-stack/auth
+
+**Answer:** [VERIFIED: inspected existing packages, npm registry, hub/site package.json]
+
+```jsonc
+// packages/auth/package.json
+{
+  "peerDependencies": {
+    "better-auth": "1.4.19",
+    "drizzle-orm": ">=0.45.0"
+  },
+  "devDependencies": {
+    "@minion-stack/db": "workspace:*",
+    "@minion-stack/tsconfig": "workspace:*",
+    "better-auth": "1.4.19",
+    "drizzle-orm": "^0.45.1",
+    "typescript": "^5.0.0"
+  }
+}
+```
+
+**Rationale for `"better-auth": "1.4.19"` exact pin (not range):** The project is pinned at 1.4.19 in both hub and site. Using `>=1.4.19` would allow accidental upgrades to 1.5.x or 1.6.x (which have breaking session changes). An exact pin forces consumers to explicitly update when ready. This mirrors the project's intentional pinning.
+
+`@minion-stack/db` is NOT a peerDependency of `@minion-stack/auth` — the factory imports the schema directly in its source (`import * as schema from '@minion-stack/db/schema'`). This means `@minion-stack/db` is a regular `devDependency` for the build and will be bundled into the type output. The consuming app already has `@minion-stack/db` installed independently.
+
+Wait — if `@minion-stack/db` is imported inside `factory.ts`, consumers need `@minion-stack/db` too to satisfy the type resolution. But since schema can be passed by the caller (the `schema?: Record<string, unknown>` param), the factory doesn't necessarily need to bundle `@minion-stack/db`. The design decision: **factory does NOT import schema internally**. The caller always passes `schema`. This keeps `@minion-stack/auth` decoupled from `@minion-stack/db`'s internal structure.
+
+**Revised peerDeps (no `@minion-stack/db`):**
+```jsonc
+{
+  "peerDependencies": {
+    "better-auth": "1.4.19",
+    "drizzle-orm": ">=0.45.0"
+  }
+}
+```
+
+### Q3: JWT plugin JWKS key storage between restarts and cross-app distribution
+
+**Answer:** [VERIFIED: better-auth/dist/plugins/jwt/schema.d.mts and index.d.mts]
+
+The JWT plugin stores JWKS keypairs in a DB table `jwks` with fields `publicKey`, `privateKey`, `createdAt`, `expiresAt`. This table already exists in `@minion-stack/db/schema/auth/index.ts`.
+
+**Key facts:**
+- Keys are persistent in the DB, not ephemeral in memory. They survive process restarts.
+- Both hub and site point to the same Turso DB → they already share the same `jwks` rows.
+- A JWT minted by hub (using its JWKS key) can be verified by site via the same JWKS endpoint, because the `publicKey` field is shared in the same DB row.
+- The `/.well-known/jwks.json` endpoint (or `/api/auth/jwks`) will return the same public keys from both apps since they read the same DB.
+- The EdDSA `keyPairConfig` (`alg: 'EdDSA'`) is correct and used by hub today.
+- **No keystore migration needed** — the table is already shared.
+
+**Gotcha with distributing jwt plugin across two apps sharing a DB:** Both apps will attempt to generate a keypair on first init if the `jwks` table is empty. If both apps start simultaneously against an empty table, there may be a race — both insert a key. Better Auth handles this gracefully (multiple valid keys in `jwks` are normal for key rotation support). Once keys exist, subsequent inits read the existing key. No special config needed.
+
+**Private key encryption:** The JWT plugin defaults to encrypting private keys at rest in the DB using the `BETTER_AUTH_SECRET`. Both apps using the same secret can decrypt each other's private keys — this is by design for shared-secret deployments.
+
+### Q4: Session cookie domain/SameSite issues between hub and site on different Vercel domains
+
+**Answer:** [VERIFIED: @better-auth/core/dist/types/init-options.d.mts lines 169-194]
+
+Better Auth exposes `advanced.crossSubDomainCookies`:
+```typescript
+crossSubDomainCookies?: {
+  enabled: boolean;
+  additionalCookies?: string[];
+  domain?: string; // defaults to root domain from baseURL if not set
+}
+```
+
+**Scenarios:**
+
+1. **Hub and site on different Vercel preview URLs** (e.g., `hub-xxx.vercel.app` + `site-xxx.vercel.app`): These are different domains entirely — cross-subdomain cookie sharing CANNOT work. The `better-auth.session_token` cookie set by hub will not be sent to site's domain. AUTH-04 would require either a token-handoff mechanism or testing under a custom shared domain.
+
+2. **Hub and site on the same apex domain** (e.g., `hub.minion.pe` + `site.minion.pe`): This is the expected production topology. Configure `crossSubDomainCookies: { enabled: true, domain: 'minion.pe' }` in both apps. The session cookie will be scoped to `.minion.pe` and shared between subdomains.
+
+3. **Hub and site at same URL with path prefixes** (same host): Would work without any cookie config changes, but this is not the Vercel topology.
+
+**Factory design:** The `CreateAuthParams` does NOT include a `crossSubDomainCookies` param (per D-04 and the CONTEXT.md deferred list: "cross-subdomain cookie configuration for AUTH-04 staging is a deployment concern, not a package-shape concern"). Consumers can extend the return by wrapping, or the factory could accept an `advanced` passthrough. Since CONTEXT.md defers this, the AUTH-04 staging plan must address it manually.
+
+**For AUTH-04:** The staging test must be run under a custom domain with shared apex (not Vercel preview URLs). The plan should include `crossSubDomainCookies` config as a staging-environment env var or explicit factory param, OR clarify that the test is done via API (curl with cookie jar) not browser.
+
+### Q5: "Shared session continuity" — operational meaning
+
+**Answer:** [VERIFIED: source inspection of Better Auth session model]
+
+Better Auth stores sessions as rows in the `session` table (id, token, userId, expiresAt, ipAddress, userAgent, activeOrganizationId). The `session_token` cookie contains the session token (a random string), which is used to look up the row.
+
+**What "shared session continuity" means:**
+
+- When a user logs into hub, Better Auth creates a `session` row in the shared Turso DB and sets a `better-auth.session_token` cookie with the token value.
+- If that same cookie (with the same token value) is sent to site's `/api/auth/*`, Better Auth on site will look up the same row in the same DB and find it valid.
+- This means: a user with a hub session cookie visiting site will be **automatically authenticated** on site — no re-login required — IF the browser sends the cookie to site's domain.
+
+**This is NOT OIDC-based SSO.** It is simpler: both apps share the same session table. The session cookie is the only artifact needed.
+
+**Preconditions for this to work:**
+1. Same `BETTER_AUTH_SECRET` (for cookie HMAC signing) — [VERIFIED: both pull from Infisical `minion-hub`]
+2. Same DB (for session row lookup) — [VERIFIED: shared Turso DB]
+3. Browser sends the cookie to site's domain — requires either same-origin or configured cross-subdomain cookies
+
+**Re-authenticating on site:** If the cookie is NOT shared (different domain), the user must sign in on site. But they won't have to provide a new password — they can reuse their existing credentials. Better Auth will create a NEW session row for site (linked to the same `user` row). This is separate sessions, not shared sessions.
+
+### Q6: oidcProvider plugin and the factory design — does it need to be the SAME instance?
+
+**Answer:** [VERIFIED: OIDC plugin schema inspection + hub hooks.server.ts]
+
+The `oidcProvider` plugin manages state in three DB tables: `oauth_application`, `oauth_access_token`, `oauth_consent`. All three exist in `@minion-stack/db/schema/auth/index.ts`.
+
+**Key finding:** The OIDC provider is currently hub-only. Site has never included `oidcProvider`. This means:
+- OIDC flows (authorization code, token exchange) only go through hub's `/api/auth/oauth2/*` endpoints.
+- Site does not participate in OIDC.
+- If a third-party service (e.g., paperclip) uses the gateway's OIDC flow, it connects to hub, not site.
+- Token validation (via JWKS) works cross-app because the JWKS keys are in the shared DB.
+
+**For the factory design:** The D-02 revised decision (callers pass `oidcProvider()` via `plugins` param) is correct. Site does not pass it, hub does. There is no "SAME instance" requirement — the OIDC state lives in DB tables, not in-process memory. Multiple hub replicas could run simultaneously (e.g., Vercel edge functions) and share OIDC state via the shared DB.
+
+**The hub OIDC proxy in hooks.server.ts:** Hub's `hooks.server.ts` proxies `/.well-known/openid-configuration` to `/api/auth/.well-known/openid-configuration`. This is hub-local and must be preserved. It does NOT change during Phase 6.
+
+### Q7: Build tooling — tsc vs tsdown, exports map
+
+**Answer:** [VERIFIED: packages/db/package.json, packages/db/tsconfig.json, packages/db/dist/]
+
+The packages/db package uses plain `tsc` (not tsdown) with `"scripts": { "build": "tsc", "prepublishOnly": "tsc" }`. The tsconfig extends `@minion-stack/tsconfig/library.json` which sets `declaration: true`, `declarationMap: true`, `sourceMap: true`, `composite: true`.
+
+**For @minion-stack/auth:** Use the same approach. The package has a single entry point (`src/index.ts`), so a simple exports map suffices:
+
+```jsonc
+{
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  }
+}
+```
+
+No need for sub-path exports (unlike packages/db which exports `./schema`, `./auth`, `./relations`). The auth package has exactly one export: `createAuth` and its types.
+
+**Why not tsdown?** packages/db used plain tsc successfully. The auth factory is simpler (no sub-schemas). tsdown adds build complexity without benefit for a simple ESM package. [VERIFIED: consistent with project pattern]
 
 ---
 
 ## Common Pitfalls
 
-### Pitfall 1: Lazy-eval singleton is lost in the refactor
-**What goes wrong:** Developer sees hub's `let _auth: ReturnType<typeof betterAuth> | null = null` and "simplifies" it into `export const auth = createAuth({...})` at module scope.
-**Why it happens:** The factory pattern suggests eager instantiation is fine. It is not.
-**How to avoid:** `@minion-stack/auth` exports a factory (pure function), but each consumer must keep its lazy memoization. SvelteKit's `$env/dynamic/private` throws at build time if you try to read it at module load.
-**Warning signs:** Build fails with `Cannot find module '$env/dynamic/private'` during `vite build`, or `env.BETTER_AUTH_SECRET is undefined` warnings in server logs.
+### Pitfall 1: Lazy-eval singleton lost in refactor
+**What goes wrong:** Developer "simplifies" hub's lazy `let _auth = null; if (!_auth) _auth = createAuth(...)` into `export const auth = createAuth({...})` at module scope.
+**Why it happens:** Factory pattern suggests eager instantiation is fine. It's not.
+**How to avoid:** `@minion-stack/auth` exports a factory (pure function). Each consumer must keep its lazy memoization. SvelteKit's `$env/dynamic/private` throws at build time if evaluated at module load.
+**Warning signs:** Build fails with `Cannot find module '$env/dynamic/private'` during `vite build`, or `env.BETTER_AUTH_SECRET is undefined`.
 
-### Pitfall 2: Silent JWT-audience drift breaks gateway auth
-**What goes wrong:** Site's current `jwt()` call has no custom audience; hub's has `audience: 'openclaw-gateway'`. A JWT minted from a site-login session would not validate for gateway calls.
-**Why it happens:** Existing site config is simpler — developer might forget to add `jwtAudience: 'openclaw-gateway'` on the site side after extraction.
-**How to avoid:** Factory default: `audience: opts.baseURL`. Both consumers must explicitly set `features.jwtAudience: 'openclaw-gateway'` — document this as an AUTH-04 gate. Add a staging smoke test that mints a JWT from hub, validates it via site's `jwt` plugin.
-**Warning signs:** Gateway rejects JWTs with "invalid audience" after site users try to connect.
+### Pitfall 2: JWT audience drift breaks gateway auth
+**What goes wrong:** Site's current `jwt()` call has no custom audience; hub's has `audience: 'openclaw-gateway'`. A JWT minted from a site session would not validate for gateway calls.
+**Why it happens:** Existing site config is simpler — developer might carry the simplification forward.
+**How to avoid:** Factory hardcodes `audience: 'openclaw-gateway'` — this is the fix. Both consumers call the same factory, getting the same JWT config. No per-consumer drift possible.
+**Warning signs:** Gateway rejects JWTs with "invalid audience" for site-authenticated users.
 
-### Pitfall 3: `createAuthMiddleware` hook fires during tests / seeds
-**What goes wrong:** Hub seed script or test runner triggers sign-up paths; the `provisionPersonalAgent` hook runs against a partial tenant context and errors.
-**Why it happens:** Hooks are registered per-instance and always fire. Hub already swallows errors (`try { ... } catch (err) { console.error(...) }`), but an overly-strict hook could block signup.
-**How to avoid:** Factory must keep the hook wrapped in try/catch; never let an `onSignUp` callback throw. Document this contract in the factory JSDoc.
-**Warning signs:** Signup returns 500, or test runs emit `[personal-agent] Failed to provision on signup` log noise.
+### Pitfall 3: organization() duplicate registration
+**What goes wrong:** If factory calls `organization()` internally AND the caller also passes `organization({...})` via `plugins`, Better Auth may register the plugin twice (behavior: last one wins or error).
+**Why it happens:** Early design (D-02 original) included `organization` in the factory's always-on plugins set.
+**How to avoid:** D-02 revised resolves this — factory does NOT call `organization()`. Callers always pass it. Factory only hardcodes `jwt(fullConfig)`.
+**Warning signs:** Organization-related API routes return 404 (plugin not found), or organization callbacks fire twice.
 
-### Pitfall 4: Cross-subdomain cookies not configured in production
-**What goes wrong:** Hub at `hub.example.com` logs a user in. User navigates to `site.example.com`. Site has no session because the browser scoped the cookie to `hub.example.com`.
-**Why it happens:** Better Auth default cookie domain is host-only. Cross-subdomain requires explicit `advanced.crossSubDomainCookies.{enabled: true, domain: 'example.com'}`.
-**How to avoid:** Factory must accept an `advanced` override (or a `crossSubDomainCookies` convenience option). AUTH-04 staging verification **must** exercise the cross-host flow, not just same-host. If apps are served as path-prefixes under the same domain (e.g. `app.com/hub` + `app.com/site`), this is moot — but that's not the Vercel-deployed topology.
-**Warning signs:** AUTH-04 staging test fails: hub login → site shows "not logged in" despite shared DB + identical secret.
-**[CITED: better-auth.com/docs/concepts/cookies — "crossSubDomainCookies: { enabled: true, domain: 'example.com' }"]**
+### Pitfall 4: Cross-subdomain cookies not configured for AUTH-04
+**What goes wrong:** Hub at `hub.minion.pe` logs a user in. User navigates to `site.minion.pe`. Site has no session — cookie scoped to `hub.minion.pe`.
+**Why it happens:** Better Auth default cookie domain is host-only. Cross-subdomain requires explicit `advanced.crossSubDomainCookies`.
+**How to avoid:** AUTH-04 staging plan must either (a) configure `crossSubDomainCookies` in both apps, or (b) test session sharing via API (curl with manual cookie forwarding, not browser). If staging uses Vercel preview URLs (different domains), (b) is the only option.
+**Warning signs:** AUTH-04 staging test fails — hub login, site shows "not logged in".
 
-### Pitfall 5: Better Auth version drift between hub and site
-**What goes wrong:** After extraction, hub upgrades to 1.5.x for a feature; site stays on 1.4.19. Session-cookie format or JWKS format changes; sessions mint by one app don't validate in the other.
-**Why it happens:** Each consumer has its own `package.json better-auth` entry. `@minion-stack/auth` declares it as a peer dep.
-**How to avoid:** Declare `"better-auth": "1.4.19"` as a peer dep AND add a runtime sanity check in `createAuth()` that reads `better-auth/package.json` and warns if the two don't match. Or — pin exact versions in hub + site and document the coupling.
-**Warning signs:** Intermittent "invalid session" after a subset of users log in; logs show JWKS parse errors.
+### Pitfall 5: Hub schema import not updated
+**What goes wrong:** Hub auth.ts still imports `schema` from `$server/db/schema` (local barrel) instead of `@minion-stack/db/schema`. After Phase 6, this is a missed fix.
+**Why it happens:** Phase 5 (05-03) updated 56 import sites but auth.ts's schema import goes to `drizzleAdapter`, not to drizzle query API. The SUMMARY explicitly notes it was missed.
+**How to avoid:** Phase 6 hub consumer plan must include this schema import fix. It's a 1-line change: `import * as schema from '$server/db/schema'` → `import * as schema from '@minion-stack/db/schema'`.
+**Warning signs:** Hub auth.ts still shows `$server/db/schema` after Phase 6 execution — grep check required.
 
 ### Pitfall 6: OIDC discovery 404s after extraction
-**What goes wrong:** Hub's `hooks.server.ts` proxies `/.well-known/openid-configuration` to `/api/auth/.well-known/openid-configuration` (lines 57-66). After extraction, developer removes this hook thinking the plugin handles it.
-**Why it happens:** The `oidcProvider` plugin mounts on `/api/auth/*`, but the standard OIDC discovery path is `/.well-known/openid-configuration` — the hub manually proxies. This is hub-local and must be preserved.
-**How to avoid:** Do not touch `hooks.server.ts` OIDC proxy logic during extraction. It stays unchanged.
-**Warning signs:** OIDC clients (e.g. Better Auth's own oidc-provider consumers) can't discover the IdP.
+**What goes wrong:** Hub's `hooks.server.ts` proxies `/.well-known/openid-configuration` to `/api/auth/.well-known/openid-configuration`. After extraction, if developer assumes the plugin handles the well-known URL directly, removing or bypassing this proxy would break OIDC discovery.
+**Why it happens:** The `oidcProvider` plugin mounts at `/api/auth/*`, not at `/.well-known/*`. Hub manually proxies.
+**How to avoid:** Do not touch hub's `hooks.server.ts` OIDC proxy logic during extraction. Only change the `auth.ts` file.
+**Warning signs:** `GET /.well-known/openid-configuration` returns 404.
+
+### Pitfall 7: `@minion-stack/auth` accidentally imports `@minion-stack/db` schema
+**What goes wrong:** If factory imports `* as schema from '@minion-stack/db/schema'` internally, then `@minion-stack/auth`'s types reference `@minion-stack/db` internals. Consumer apps must have `@minion-stack/db` installed to satisfy types, AND schema changes in `@minion-stack/db` may break type-level compatibility with `@minion-stack/auth`.
+**How to avoid:** Per D-02, the `schema` param is passed by callers. Factory receives `schema?: Record<string, unknown>`. This decouples the two packages. If a default schema is provided, use `@minion-stack/db` in devDependencies only — but to avoid the type coupling, it's cleaner to always require callers to pass the schema.
 
 ---
 
 ## Code Examples
 
-### Example 1: Minimal Better Auth drizzleAdapter + plugins call (reference)
-
-```typescript
-// Source: Better Auth 1.4.19 internal reference + hub/site auth.ts
-import { betterAuth } from 'better-auth';
-import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { jwt, organization } from 'better-auth/plugins';
-import * as schema from '@minion-stack/db/schema';
-
-const auth = betterAuth({
-  database: drizzleAdapter(db, { provider: 'sqlite', schema }),
-  secret: process.env.BETTER_AUTH_SECRET!,
-  baseURL: process.env.BETTER_AUTH_URL!,
-  emailAndPassword: { enabled: true },
-  plugins: [jwt(), organization()],
-});
-```
-
-### Example 2: Lazy singleton pattern (preserved in both consumers)
-
-```typescript
-// Source: current minion_hub/src/lib/auth/auth.ts L13-17 pattern
-let _auth: AuthInstance | null = null;
-export function getAuth(): AuthInstance {
-  if (!_auth) _auth = createAuth({ /* opts */ });
-  return _auth;
-}
-```
-
-### Example 3: Cross-subdomain cookie opt-in for AUTH-04 staging
-
-```typescript
-// Source: better-auth.com/docs/concepts/cookies (VERIFIED via WebFetch 2026-04-21)
-betterAuth({
-  // ...
-  advanced: {
-    crossSubDomainCookies: {
-      enabled: true,
-      domain: 'example.com', // or '.minion.example.com' — root domain for subdomain sharing
-    },
-  },
-});
-```
-
-### Example 4: Consumer package.json shape
+### Example 1: package.json template for @minion-stack/auth
 
 ```jsonc
-// packages/auth/package.json
+// Source: packages/db/package.json pattern [VERIFIED]
 {
   "name": "@minion-stack/auth",
   "version": "0.1.0",
-  "description": "Better Auth factory for the Minion platform — shared between hub and site.",
+  "description": "Better Auth createAuth() factory for the Minion platform — shared between hub and site.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -531,7 +635,10 @@ betterAuth({
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" }
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "publishConfig": { "access": "public" },
   "files": ["dist", "README.md"],
@@ -541,17 +648,56 @@ betterAuth({
   },
   "peerDependencies": {
     "better-auth": "1.4.19",
-    "@minion-stack/db": ">=0.2.0",
     "drizzle-orm": ">=0.45.0"
   },
   "devDependencies": {
     "@minion-stack/tsconfig": "workspace:*",
-    "@minion-stack/db": "workspace:*",
     "better-auth": "1.4.19",
     "drizzle-orm": "^0.45.1",
     "typescript": "^5.0.0"
   }
 }
+```
+
+### Example 2: BetterAuthOptions type imports (verified from source)
+
+```typescript
+// Source: better-auth/dist/index.d.mts + @better-auth/core/dist/types/plugin.d.mts [VERIFIED]
+import type { BetterAuthOptions, BetterAuthPlugin } from 'better-auth';
+// hooks type: BetterAuthOptions['hooks'] = { before?: AuthMiddleware; after?: AuthMiddleware } | undefined
+// plugins type: BetterAuthOptions['plugins'] = ([] | BetterAuthPlugin[]) | undefined
+// For factory params: use BetterAuthPlugin[] (the non-nullable extracted form)
+```
+
+### Example 3: JWKS table — already in @minion-stack/db
+
+```typescript
+// Source: packages/db/src/schema/auth/index.ts [VERIFIED]
+export const jwks = sqliteTable('jwks', {
+  id: text('id').primaryKey(),
+  publicKey: text('public_key').notNull(),
+  privateKey: text('private_key').notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+  // expiresAt is optional in the Better Auth plugin schema — not in our table
+  // Keys persist in DB, are shared across both apps via shared Turso DB
+});
+```
+
+### Example 4: Cross-subdomain cookie configuration (for AUTH-04)
+
+```typescript
+// Source: @better-auth/core/dist/types/init-options.d.mts lines 169-187 [VERIFIED]
+// Note: this is NOT in the factory (D-04, deferred), but AUTH-04 staging plan needs it
+betterAuth({
+  // ...
+  advanced: {
+    useSecureCookies: true,
+    crossSubDomainCookies: {
+      enabled: true,
+      domain: 'minion.pe', // narrowest shared apex — NOT '.com'
+    },
+  },
+});
 ```
 
 ---
@@ -560,14 +706,15 @@ betterAuth({
 
 | Old Approach | Current Approach | When Changed | Impact |
 |--------------|------------------|--------------|--------|
-| Per-app inlined `betterAuth({...})` config | Shared `createAuth()` factory | This phase | Config drift eliminated; JWT audience gate automatic |
-| Hub schema re-exported locally | `@minion-stack/db/schema` shared | Phase 5 (complete) | Auth tables already centralized — prerequisite satisfied |
-| Old `minion-shared` npm scope | `@minion-stack/*` scope | Phase 4 (complete) | Package name = `@minion-stack/auth` (NOT `@minion/auth`) |
-| `better-auth@1.4.x` (current) | `better-auth@1.5.x` / `1.6.x` | Deferred — separate phase | 1.6 has `freshAge` breaking change; bundling with extraction increases rollback complexity |
+| Per-app inlined `betterAuth({...})` config | Shared `createAuth()` factory | This phase | JWT audience drift bug fixed; config drift eliminated |
+| Hub schema from `$server/db/schema` (local) | `@minion-stack/db/schema` | Phase 5 (missed in auth.ts) — **fix in Phase 6** | Single source of truth for schema in all files |
+| `@minion/auth` (ROADMAP.md reference) | `@minion-stack/auth` | Phase 2 scope pivot | Package name corrected |
+| `better-auth@1.4.x` (current) | `better-auth@1.5.x` / `1.6.x` | Deferred | Post-extraction upgrade; `1.6.0` has `freshAge` breaking change |
+| Site `jwt()` with no config | `jwt({ issuer, audience, expirationTime })` | This phase (via factory normalization) | JWT audience parity achieved — site users can use gateway |
 
 **Deprecated/outdated:**
-- ROADMAP.md reference to `@minion/auth` — outdated since Phase 2 scope pivot; treat as `@minion-stack/auth`
-- Any training-knowledge assumption that Better Auth `jwt` plugin signs session cookies — it does NOT. Session cookies are signed with `secret`; the `jwt` plugin is for minting gateway/API JWTs that are separate from session state. [VERIFIED: hub `gateway-jwt.service.ts` reads `jwks` rows directly and signs with `jose`]
+- ROADMAP.md reference to `@minion/auth` — treat as `@minion-stack/auth`
+- Site auth.ts's `jwt()` call with no config — factory replaces with normalized config
 
 ---
 
@@ -575,47 +722,33 @@ betterAuth({
 
 | # | Claim | Section | Risk if Wrong |
 |---|-------|---------|---------------|
-| A1 | `@minion-stack/auth` is the correct scope (roadmap says `@minion/auth`) | User Constraints, Standard Stack | LOW — Phase 2/5 precedent is unambiguous; `/gsd-discuss-phase` should confirm |
-| A2 | Hub + site will stay on `better-auth@1.4.19` during extraction | User Constraints | MEDIUM — user may want to bundle an upgrade; clarify in discuss |
-| A3 | Feature-flag factory is preferred over two separate factories | Architecture | MEDIUM — could also ship two `createAuth` variants; confirm with user |
-| A4 | Cross-subdomain cookie config is a deploy-time concern, not package-shape | Pitfalls | LOW — but factory must expose `advanced` passthrough |
+| A1 | `BETTER_AUTH_SECRET` is identical between hub and site in production (both Infisical `minion-hub`) | Runtime State | **HIGH** — if different secrets, sessions are not cross-valid and AUTH-04 cannot pass without a secret-sync step |
+| A2 | Staging AUTH-04 test will be performed under a shared-apex custom domain (not Vercel preview URLs) | Common Pitfalls / Q4 | **HIGH** — if Vercel preview URLs, browser-based cross-domain session sharing is impossible; switch to curl-based API test |
+| A3 | Hub and site are deployed at subdomains of a shared apex (e.g., hub.minion.pe + site.minion.pe) in production | Architecture | MEDIUM — if fully different domains (different registrars), AUTH-04 requires a token-handoff mechanism |
+| A4 | `@minion-stack/auth` does NOT ship a browser `createAuthClient` helper | Architecture | LOW — easy to add post-extraction if needed |
 | A5 | Hub's desktop-mode session-persistence (`src/server/auth/desktop-session.ts`) stays in hub | Deferred | LOW — it's clearly hub-specific (Electrobun/CEF workaround) |
-| A6 | The hub's manual JWT-minting in `gateway-jwt.service.ts` stays in hub | Deferred | LOW — it uses `jose` directly against the shared `jwks` table; shared table is already in `@minion-stack/db` |
-| A7 | `@minion-stack/auth` does NOT ship a browser `createAuthClient` helper | Architecture | MEDIUM — if discuss wants one, it's a 4-line addition (export `createAuthClient` from `better-auth/svelte`) |
-| A8 | Lazy singleton `getAuth()` pattern is kept per-consumer | Patterns | LOW — refactor-safe, matches today's pattern |
-| A9 | `BETTER_AUTH_SECRET` is already shared between hub + site in production via Infisical `minion-core` | Runtime State | **HIGH if wrong** — if hub + site have different secrets today, AUTH-04 cannot pass without a secret-sync step. Must verify pre-execution via `minion doctor` or Infisical dashboard. |
-| A10 | Hub and site will be served from domains that can share cookies (either same-origin path-prefix or cross-subdomain under a shared root) in AUTH-04 staging | Pitfalls, Runtime State | HIGH — if they're completely different domains (e.g. `hub.com` + `site.io`), cookies cannot be shared via any config; AUTH-04 needs a token-handoff mechanism instead |
-
-**If this table is empty:** N/A — assumptions exist; user should review A2, A9, A10 before plan execution.
+| A6 | The hub's manual JWT-minting in `gateway-jwt.service.ts` stays in hub | Deferred | LOW — uses `jose` directly against shared `jwks` table; no change needed |
+| A7 | Factory does NOT need an `advanced` passthrough param (crossSubDomainCookies deferred per CONTEXT.md) | Q4 | LOW — can add later; AUTH-04 can use API-based session test if needed |
+| A8 | Phase 5 PRs #17 (hub) and #18 (migration removal) will merge before hub consumer work begins | D-09 | MEDIUM — if PRs stall, Wave 2 hub consumer work blocks; plan should note this gate |
 
 ---
 
 ## Open Questions
 
-1. **Should we upgrade Better Auth to 1.5.x or 1.6.x during this phase?**
-   - What we know: 1.4.19 is stable (2026-02-23), 1.6.5 is current (2026-04-16), 1.6 has a `freshAge` breaking change
-   - What's unclear: User's risk appetite for bundling an upgrade with a refactor
-   - Recommendation: Defer to separate post-extraction phase; document in deferred list
+1. **Will AUTH-04 staging test be browser-based or API-based?**
+   - What we know: Cross-subdomain cookie sharing requires a shared apex domain; Vercel preview URLs are different domains entirely
+   - What's unclear: Whether staging infra for this phase will use a custom domain or Vercel preview URLs
+   - Recommendation: AUTH-04 plan should include both options with explicit branch: (a) custom domain — configure `crossSubDomainCookies`; (b) Vercel preview — test via curl with cookie jar
 
-2. **Is there a plan for AUTH-04 cross-host cookie topology in staging?**
-   - What we know: Hub + site share DB + secret; that's necessary but not sufficient
-   - What's unclear: Staging DNS layout — are hub and site under a common root (`*.minion.example.com`) or fully independent?
-   - Recommendation: Discuss with user during CONTEXT phase; may need an explicit "AUTH-04 cannot pass without cross-subdomain cookie config" entry
+2. **Is `BETTER_AUTH_SECRET` confirmed to be shared between hub and site in production?**
+   - What we know: Both apps pull from Infisical `minion-hub` project
+   - What's unclear: Whether the secret is in `minion-hub` or `minion-core` (earlier in env hierarchy)
+   - Recommendation: AUTH-04 pre-flight gate: `infisical secrets list --projectId minion-core | grep BETTER_AUTH_SECRET` + same for `minion-hub`
 
-3. **Does site need the OIDC plugin?**
-   - What we know: Site currently does NOT include `oidcProvider` in its plugin list
-   - What's unclear: Any roadmap for site to act as an OIDC client or provider
-   - Recommendation: Start with site opting OUT; it's easy to flip `features.oidc: true` later
-
-4. **Does the factory need an `advanced` passthrough for cross-subdomain cookies, OR a dedicated `crossSubDomainCookies` convenience option?**
-   - What we know: Hub already uses `advanced.useSecureCookies`; the config shape exists
-   - What's unclear: Developer ergonomics preference
-   - Recommendation: Add a narrow `features.crossSubDomainCookies?: { enabled: boolean; domain: string }` that writes into `advanced` — keeps the API explicit
-
-5. **Should hub's `provisionPersonalAgent` hook stay in hub, or is the `onSignUp` callback sufficient?**
-   - What we know: Today's implementation lives in `src/lib/auth/auth.ts`; it calls a hub-local service
-   - What's unclear: Whether user wants this logic promoted/shared
-   - Recommendation: Keep in hub via `features.onSignUp` callback (called from factory). Do NOT move service-layer code into `@minion-stack/auth`.
+3. **Does hub's organization invitation email callback need to be type-safe in the factory?**
+   - What we know: Hub passes `sendInvitationEmail` callback with specific arg shape (`data.email`, `data.inviter.user.name`, `data.organization.name`, `data.role`, `data.id`)
+   - What's unclear: Whether to export the `InvitationEmailPayload` type or let callers use the organization plugin's own type
+   - Recommendation: Export nothing extra — hub can import `OrganizationOptions` from `better-auth/plugins` directly for the callback type
 
 ---
 
@@ -623,164 +756,149 @@ betterAuth({
 
 | Dependency | Required By | Available | Version | Fallback |
 |------------|------------|-----------|---------|----------|
-| Node.js | Build / tests | ✓ | 22+ (meta-repo engine requirement) | — |
-| pnpm | Meta-repo workspace | ✓ | 10.x | — |
-| bun | Hub + site runtime | ✓ | (installed per CLAUDE.md) | — |
+| Node.js | Build / tsc | ✓ | 22+ | — |
+| pnpm | Meta-repo workspace (`packages/auth`) | ✓ | 10.x | — |
+| bun | Hub + site runtime (consumer apps) | ✓ | installed | — |
 | TypeScript | `tsc` build | ✓ | 5.x | — |
-| Changesets CLI | Publishing | ✓ | (existing) | — |
-| `better-auth@1.4.19` | Factory runtime | ✓ | 1.4.19 installed in hub + site | — |
-| `@minion-stack/db@>=0.2.0` | Schema imports | ✓ | 0.2.0 published | — |
-| `@minion-stack/tsconfig@workspace:*` | Build config | ✓ | workspace | — |
-| LibSQL/Turso (staging) | AUTH-04 dry-run | ? | — | Use local SQLite clone, mirror Phase 5's staging pattern |
-| npm registry 2FA | Publishing | human-in-loop | — | Checkpoint in plan — same as `@minion-stack/db@0.1.0` publish |
-
-**Missing dependencies with no fallback:** none
-
-**Missing dependencies with fallback:** Staging Turso — use SQLite clone for dry-run, same as Phase 5.
+| Changesets CLI | Publishing | ✓ | configured at root | — |
+| `better-auth@1.4.19` | Factory runtime | ✓ | 1.4.19 in hub+site node_modules | — |
+| npm registry 2FA | Publishing `@minion-stack/auth@0.1.0` | human-in-loop | — | Wave 1 checkpoint (same as db@0.1.0 publish) |
+| Turso DB (staging) | AUTH-04 dry-run | ? | — | Use local SQLite; mirror Phase 5's staging pattern |
 
 ---
 
 ## Validation Architecture
 
 ### Test Framework
+
 | Property | Value |
 |----------|-------|
-| Framework | Vitest 4.x (hub) — no existing test framework in site yet |
-| Config file | `minion_hub/vitest.config.ts` (auto-detected via `bun run vitest`); no site config |
-| Quick run command | `cd minion_hub && bun run test` / `cd packages/auth && pnpm test` (to be created) |
-| Full suite command | `cd minion_hub && bun run test && cd ../minion_site && bun run check && cd ../packages/auth && pnpm build && pnpm test` |
-| Package-level test | `packages/auth/` will add minimal vitest setup + a single smoke test that `createAuth()` returns an object with `.handler`, `.api.getSession` |
+| Framework | vitest (already in packages/cli, packages/env) |
+| Config file | none in packages/db; packages/auth will also need none (vitest detects `test` files automatically with `vitest run`) |
+| Quick run command | `cd packages/auth && pnpm test` |
+| Full suite command | `pnpm -w test` or sequential: `packages/auth test` + `hub check` + `site check` |
 
 ### Phase Requirements → Test Map
+
 | Req ID | Behavior | Test Type | Automated Command | File Exists? |
 |--------|----------|-----------|-------------------|-------------|
-| AUTH-01 | `createAuth()` returns a Better Auth instance with the same public shape as `betterAuth()` | unit | `cd packages/auth && pnpm test` | ❌ Wave 0 |
-| AUTH-01 | Factory composes organization + jwt plugins with correct defaults | unit (type-level + runtime) | `cd packages/auth && pnpm test -- factory.test.ts` | ❌ Wave 0 |
-| AUTH-01 | Factory emits `oidcProvider` only when `features.oidc: true` | unit | `cd packages/auth && pnpm test -- features.test.ts` | ❌ Wave 0 |
-| AUTH-01 | Factory emits `hooks.after` only when `features.onSignUp` provided | unit | `cd packages/auth && pnpm test -- features.test.ts` | ❌ Wave 0 |
-| AUTH-02 | Package builds cleanly, tsconfig extends library preset, exports resolve via types + import maps | build | `cd packages/auth && pnpm build` | (implicit via `tsc`) |
-| AUTH-02 | `@minion-stack/auth@0.1.0` published to npm public registry | manual-only | human 2FA + `npm view @minion-stack/auth version` | N/A (human action) |
-| AUTH-03 | Hub `getAuth()` returns an instance that handles `/api/auth/sign-up` end-to-end against test DB | integration | `cd minion_hub && bun run test -- auth.test.ts` (to be written) | ❌ Wave 0 |
-| AUTH-03 | Site `getAuth()` returns an instance that handles `/api/auth/sign-in` end-to-end against test DB | integration | `cd minion_site && bun run vitest auth.test.ts` (and install vitest if absent) | ❌ Wave 0 |
-| AUTH-03 | `bun run check` passes in hub after migration (no TS errors) | smoke | `cd minion_hub && bun run check` | ✅ |
+| AUTH-01 | `createAuth()` returns an object with `.handler` and `.api.getSession` | unit | `pnpm -F @minion-stack/auth test` | ❌ Wave 0 |
+| AUTH-01 | Factory always includes jwt plugin with correct issuer/audience | unit | `pnpm -F @minion-stack/auth test` | ❌ Wave 0 |
+| AUTH-01 | Factory includes only plugins passed in `plugins` param (not `organization` by default) | unit | `pnpm -F @minion-stack/auth test` | ❌ Wave 0 |
+| AUTH-02 | Package builds cleanly with `tsc` | build | `cd packages/auth && pnpm build` | — (Wave 1) |
+| AUTH-02 | `@minion-stack/auth@0.1.0` visible on npm | manual | `npm view @minion-stack/auth version` | N/A human |
+| AUTH-03 | `bun run check` passes in hub after migration | smoke | `cd minion_hub && bun run check` | ✅ |
 | AUTH-03 | `bun run check` passes in site after migration | smoke | `cd minion_site && bun run check` | ✅ |
-| AUTH-04 | User signs up via hub staging URL → DB session row created | manual-only | staging smoke test | N/A (human) |
-| AUTH-04 | User's session cookie from hub is accepted by site (curl with cookie jar) | manual-only / automatable | `curl -b cookies.txt https://site-staging/api/auth/session` | N/A (staging) |
-| AUTH-04 | JWT minted by hub validates against JWKS served by site | integration | scripted against staging `/api/auth/jwks` endpoints | ❌ Wave 0 optional |
-| AUTH-04 | Coordinated production cutover: no forced logouts observed in 24h post-deploy | manual-only | PostHog session_started events + user reports | N/A (production) |
+| AUTH-03 | Hub `getAuth()` returns instance with handler (runtime smoke) | integration | `cd minion_hub && bun run test` | ❌ Wave 0 |
+| AUTH-04 | Login on hub → session row in DB | manual/staging | staging smoke test | N/A |
+| AUTH-04 | Hub session cookie accepted by site (curl test) | manual/staging | `curl -b hub-cookies.txt $SITE_URL/api/auth/session` | N/A |
 
 ### Sampling Rate
-- **Per task commit:** `cd packages/auth && pnpm test && pnpm build` (after AUTH-01)
+- **Per task commit:** `pnpm -F @minion-stack/auth build` (after scaffold); `bun run check` in hub/site (after consumer update)
 - **Per wave merge:** full suite above
-- **Phase gate:** full suite green + AUTH-04 staging manual smoke passing before `/gsd-verify-work`
+- **Phase gate:** AUTH-04 staging manual smoke passing before `/gsd-verify-work`
 
 ### Wave 0 Gaps
-- [ ] `packages/auth/vitest.config.ts` — new, mirrors `packages/db/` approach (or use bundled vitest from workspace)
-- [ ] `packages/auth/src/factory.test.ts` — factory smoke tests (no plugins, with oidc, with onSignUp)
-- [ ] `packages/auth/src/features.test.ts` — feature-flag behaviour tests
-- [ ] `minion_hub/src/lib/auth/auth.test.ts` — integration test against test DB; may already be blocked by existing patterns — inspect during Wave 0
-- [ ] `minion_site/vitest.config.ts` — site has no vitest today; install if integration test is desired. Otherwise, rely on `bun run check` + staging smoke for site
-- [ ] A shared `tests/shared-session.test.ts` or staging-only script for AUTH-04 cross-host verification
+- [ ] `packages/auth/src/index.test.ts` — factory smoke: returns handler, jwt plugin present in returned config
+- [ ] `packages/auth/package.json` — `"test": "vitest run"` + `"vitest": "^2.1.9"` in devDependencies
+- [ ] No site vitest needed — `bun run check` is sufficient for type-level verification
 
 ---
 
 ## Security Domain
-
-> `security_enforcement` is not explicitly disabled in `.planning/config.json`, so include this section.
 
 ### Applicable ASVS Categories
 
 | ASVS Category | Applies | Standard Control |
 |---------------|---------|-----------------|
 | V2 Authentication | yes | Better Auth built-in (scrypt passwords, session management, Google OAuth via `socialProviders`) |
-| V3 Session Management | yes | Better Auth session cookies + DB row; `BETTER_AUTH_SECRET` for signing; `advanced.useSecureCookies` for HTTPS |
-| V4 Access Control | yes | `organization` plugin for multi-tenant member/invitation model; hub's `hooks.server.ts` enforces route protection |
-| V5 Input Validation | yes | Better Auth validates email/password inputs; consumers should not parse auth bodies themselves |
-| V6 Cryptography | yes | Better Auth JWKS (EdDSA keypair via `jwt` plugin `keyPairConfig`); hub's token-at-rest encryption (`src/server/auth/crypto.ts`) uses AES-256-GCM — **stays in hub** |
-| V7 Error Handling | yes | `authHandle` catches and logs; `onSignUp` callback must not throw |
-| V9 Communication | yes | `useSecureCookies` + HTTPS-only in production; `trustedOrigins` prevents CSRF |
-| V14 Configuration | yes | `BETTER_AUTH_SECRET` must be managed via Infisical `minion-core`, NOT committed; `@minion-stack/auth` never reads process.env directly |
+| V3 Session Management | yes | Better Auth session cookies + DB row; `BETTER_AUTH_SECRET` for signing; `useSecureCookies` auto from baseURL |
+| V4 Access Control | yes | `organization` plugin for multi-tenant member/invitation model |
+| V5 Input Validation | yes | Better Auth validates email/password inputs; callers should not parse auth bodies themselves |
+| V6 Cryptography | yes | Better Auth JWKS (EdDSA keypair stored in DB); private key encrypted with `BETTER_AUTH_SECRET`; hub's token-at-rest AES-256-GCM stays in hub |
+| V14 Configuration | yes | `BETTER_AUTH_SECRET` managed via Infisical `minion-core`; `@minion-stack/auth` never reads process.env |
 
-### Known Threat Patterns for Better Auth + SvelteKit
+### Known Threat Patterns
 
 | Pattern | STRIDE | Standard Mitigation |
 |---------|--------|---------------------|
-| Secret mismatch → forced logout at scale | Denial of Service | Secret lives in Infisical `minion-core`, loaded into both hub + site env at boot; `minion doctor` flags drift |
-| JWT audience mismatch → gateway rejects | Spoofing / DoS | Factory defaults `audience: baseURL`; both consumers explicitly set `features.jwtAudience: 'openclaw-gateway'` |
-| Cookie-scope too broad → cross-app session bleed | Elevation of Privilege | `crossSubDomainCookies.domain` set to narrowest-possible shared root, not `.com` |
-| CSRF on `/api/auth/*` | Tampering | `trustedOrigins` enforced by Better Auth; CORS respected by SvelteKit |
-| Session hijacking via non-HTTPS cookie in prod | Information Disclosure | `useSecureCookies: true` automatic when `baseURL.startsWith('https://')` |
-| OIDC discovery spoof | Spoofing | `oidcProvider` mounted only on hub; site has no OIDC endpoints to attack |
-| Leaked `BETTER_AUTH_SECRET` in logs during extraction | Information Disclosure | `@minion-stack/auth` never logs opts; `minion sync-env` writes to `.env.local` (gitignored), not git-tracked files |
+| Secret mismatch → forced logout at scale | DoS | Secret from Infisical `minion-core`, identical for hub + site; verify pre-cutover |
+| JWT audience mismatch → gateway rejects site users | Spoofing / DoS | Factory hardcodes `audience: 'openclaw-gateway'` — both apps get same audience |
+| Cookie scope too broad → cross-app session bleed | Elevation of Privilege | `crossSubDomainCookies.domain` set to narrowest shared root when configured |
+| CSRF on `/api/auth/*` | Tampering | `trustedOrigins` enforced by Better Auth; factory builds trusted origins list correctly |
+| Session hijacking via non-HTTPS cookie in prod | Information Disclosure | `useSecureCookies: baseURL.startsWith('https://')` — automatic in factory (D-04) |
+| OIDC discovery spoof | Spoofing | `oidcProvider` hub-only; site has no OIDC endpoints to attack |
+| Leaked `BETTER_AUTH_SECRET` in logs | Information Disclosure | `@minion-stack/auth` never logs opts; secret passed as param, not read from env |
 
 ### Pre-Cutover Security Gates (AUTH-04)
 
-1. **Secret parity:** `infisical secrets list --projectId minion-core | grep BETTER_AUTH_SECRET` — confirm exactly one value, no per-app override
-2. **OAuth redirect parity:** Google Cloud Console OAuth app's authorized redirect URIs must include `https://<hub>/api/auth/callback/google` AND `https://<site>/api/auth/callback/google`
-3. **Cookie scope:** verify `advanced.crossSubDomainCookies.domain` matches the deployed apex and does not include untrusted subdomains
-4. **Rate limits:** Better Auth 1.4.19 default rate limits applied on both apps
+1. **Secret parity:** confirm `BETTER_AUTH_SECRET` is the SAME value in both hub and site via Infisical dashboard or `infisical secrets list`
+2. **Google OAuth redirect parity:** Google Cloud Console must include `https://<hub>/api/auth/callback/google` AND `https://<site>/api/auth/callback/google`
+3. **Cookie scope:** if using `crossSubDomainCookies`, verify `domain` matches the deployed apex and does not include untrusted subdomains
+4. **JWKS cross-validation smoke:** after deploy, mint a token via hub's `/api/auth/token` and validate it via site's `/api/auth/jwks` endpoint (or via direct jose verification)
 
 ---
 
 ## Project Constraints (from CLAUDE.md)
 
-**Root `/home/nikolas/Documents/CODE/AI/CLAUDE.md`:**
-- Package scope is `@minion-stack/*` (user instruction: scope established Phase 2; all packages follow) — **applies: `@minion-stack/auth` not `@minion/auth`**
+**Root CLAUDE.md:**
+- Package scope is `@minion-stack/*` — locked, applies to this phase
 - Subprojects use their own package managers: hub + site use `bun`; meta-repo packages use `pnpm`
-- Cross-project auth changes affect both hub and site — called out explicitly in "Cross-Project Impact Zones"
-- Never commit directly to main/master; use feature branches
-- Svelte 5 runes + snippets syntax only (no legacy Svelte 4) — applies to any `.svelte` edits
-- TypeScript strict mode everywhere — `@minion-stack/auth` must pass strict + `noUncheckedIndexedAccess` where the base tsconfig allows
+- Cross-project auth changes affect both hub and site — both are Phase 6 targets
+- Never commit directly to main/master; use feature branches → dev
 
-**`minion_hub/CLAUDE.md`:**
-- Better Auth uses **scrypt** for passwords (not argon2). Password reset via `import { hashPassword } from 'better-auth/crypto'`. — **applies: factory must not override the hash algorithm**
-- Dev auth bypass needs BOTH `AUTH_DISABLED=true` (server) AND `PUBLIC_AUTH_DISABLED=true` (client) in `.env` — **bypass logic stays in hub `hooks.server.ts`, NOT in the factory**
-- Drizzle relations referencing non-existent columns fail silently at compile time — only crash at runtime. — **applies: factory uses `import * as schema` NOT explicit column picks; schema comes from `@minion-stack/db`**
-- Feature branch workflow: `feature/* → dev → main`
+**minion_hub/CLAUDE.md:**
+- Better Auth uses **scrypt** for passwords (not argon2). Factory must not override hash algorithm.
+- Dev auth bypass (`AUTH_DISABLED=true`) stays in hub `hooks.server.ts`, NOT in the factory.
+- Drizzle relations referencing non-existent columns fail silently at compile time — use `import * as schema` (not column picks) in factory. [VERIFIED: hub CLAUDE.md auth section]
+- Feature branch → `dev` → `master` workflow
 
-**`minion_site/CLAUDE.md`:**
-- Svelte 5 runes + snippets + `onclick={}` syntax only
-- Better Auth 1.4.19 (confirmed)
-- `@minion-stack/db` already consumed — prerequisite for auth extraction satisfied
+**minion_site/CLAUDE.md:**
+- Svelte 5 runes + snippets + `onclick={}` syntax only (applies to any .svelte file edits)
+- `@minion-stack/db` already consumed — prerequisite satisfied
 - Server-side auth in `lib/auth/`; client in `lib/auth/auth-client.ts`
-- i18n via Paraglide; no auth strings touch translation layer currently
 
 ---
 
 ## Sources
 
 ### Primary (HIGH confidence)
-- `/home/nikolas/Documents/CODE/AI/minion_hub/src/lib/auth/auth.ts` — source truth for hub config (102 lines inventoried)
-- `/home/nikolas/Documents/CODE/AI/minion_site/src/lib/auth/auth.ts` — source truth for site config (36 lines inventoried)
-- `/home/nikolas/Documents/CODE/AI/minion_hub/src/hooks.server.ts` — OIDC proxy + session-extract logic
-- `/home/nikolas/Documents/CODE/AI/minion_site/src/hooks.server.ts` — session-extract logic
-- `/home/nikolas/Documents/CODE/AI/packages/db/src/schema/auth/index.ts` — auth table definitions
-- `/home/nikolas/Documents/CODE/AI/packages/db/package.json` — pattern reference
-- `/home/nikolas/Documents/CODE/AI/packages/shared/package.json` — pattern reference
-- `/home/nikolas/Documents/CODE/AI/.planning/phases/05-db-extraction/05-RESEARCH.md` — extraction-pattern precedent
-- `/home/nikolas/Documents/CODE/AI/minion_hub/.env.example` + `/home/nikolas/Documents/CODE/AI/minion_site/.env.example` — env contract
-- `npm view better-auth time --json` — version publish dates verified 2026-04-21
-- `npm view better-auth@1.6.5 dependencies` — dependency tree verified
+- `/home/nikolas/Documents/CODE/AI/minion_hub/src/lib/auth/auth.ts` — hub auth config (102 lines inventoried)
+- `/home/nikolas/Documents/CODE/AI/minion_site/src/lib/auth/auth.ts` — site auth config (36 lines inventoried)
+- `/home/nikolas/Documents/CODE/AI/minion_hub/node_modules/better-auth/dist/index.d.mts` — verified exported types
+- `/home/nikolas/Documents/CODE/AI/minion_hub/node_modules/@better-auth/core/dist/types/init-options.d.mts` — BetterAuthOptions type definition (1270+ lines inspected)
+- `/home/nikolas/Documents/CODE/AI/minion_hub/node_modules/@better-auth/core/dist/types/plugin.d.mts` — BetterAuthPlugin type definition
+- `/home/nikolas/Documents/CODE/AI/minion_hub/node_modules/better-auth/dist/plugins/jwt/schema.d.mts` — jwks DB table schema
+- `/home/nikolas/Documents/CODE/AI/minion_hub/node_modules/better-auth/dist/plugins/jwt/index.d.mts` — jwt plugin return type
+- `/home/nikolas/Documents/CODE/AI/minion_hub/node_modules/better-auth/dist/plugins/jwt/types.d.mts` — JwtOptions type
+- `/home/nikolas/Documents/CODE/AI/minion_hub/node_modules/better-auth/dist/plugins/oidc-provider/schema.d.mts` — OIDC DB tables
+- `/home/nikolas/Documents/CODE/AI/minion_hub/node_modules/better-auth/dist/plugins/organization/types.d.mts` — OrganizationOptions.sendInvitationEmail type
+- `/home/nikolas/Documents/CODE/AI/packages/db/src/schema/auth/index.ts` — confirmed jwks + OIDC tables exist in shared schema
+- `/home/nikolas/Documents/CODE/AI/packages/db/package.json` — package.json template
+- `/home/nikolas/Documents/CODE/AI/packages/db/tsconfig.json` — tsconfig template
+- `/home/nikolas/Documents/CODE/AI/.planning/phases/06-auth-extraction/06-CONTEXT.md` — locked decisions D-01 through D-10
+- `npm view better-auth dist-tags` — confirmed 1.4.19 is `release-1.4` tag, 1.6.6 is `latest` [VERIFIED 2026-04-21]
+- `npm view @minion-stack/db version` — confirmed 0.2.0 published [VERIFIED 2026-04-21]
 
 ### Secondary (MEDIUM confidence)
-- https://www.better-auth.com/docs/plugins/jwt (WebFetch 2026-04-21) — confirmed JWT issuer/audience parity requirement + JWKS DB storage
-- https://www.better-auth.com/docs/concepts/cookies (WebFetch 2026-04-21) — confirmed `advanced.crossSubDomainCookies` config shape
-- https://github.com/better-auth/better-auth/releases/tag/v1.6.0 (WebFetch 2026-04-21) — confirmed breaking changes between 1.4.19 and 1.6.x
+- `@better-auth/core/dist/types/init-options.d.mts` lines 169-187 — `crossSubDomainCookies` config shape [VERIFIED directly from node_modules]
+- Hub CLAUDE.md — scrypt password note; no argon2 override in factory [CITED]
+- Phase 5 05-03-SUMMARY.md — hub schema import fix context; PRs #17/#18 status [CITED]
 
-### Tertiary (LOW confidence — flagged for validation)
-- https://www.better-auth.com/docs/concepts/session-management — did not explicitly cover cross-instance session sharing; combined with JWT plugin doc + codebase to infer behaviour
-- https://www.better-auth.com/docs/concepts/typescript — did not document factory pattern; factory design is derived from hub/site existing patterns + Better Auth's public type surface
+### Tertiary (LOW confidence)
+- Session sharing behavior across two Better Auth instances on a shared DB — inferred from session model (token lookup in DB), not from explicit Better Auth documentation. Behavior is logically sound but not officially documented as a use case.
 
 ---
 
 ## Metadata
 
 **Confidence breakdown:**
-- Standard stack: HIGH — versions verified via npm; packages already installed in consumers
-- Architecture: HIGH — factory pattern is the only sensible shape given hub/site drift; precedent exists in Phase 5
-- Pitfalls: HIGH for 1-6 (grounded in codebase inspection + official docs); MEDIUM for anything requiring deploy-topology assumptions (A10)
-- Runtime State: HIGH — code and DB state inventoried directly
-- Security: HIGH for schema-level controls; MEDIUM for deploy-time controls (pending AUTH-04 staging topology confirmation)
+- Standard stack: HIGH — versions verified from node_modules and npm registry
+- Architecture: HIGH — D-02 revised factory API is locked; examples based on real auth.ts files
+- Pitfalls: HIGH for pitfalls 1-6 (grounded in codebase inspection); MEDIUM for pitfall 7 (peer dep coupling — design choice)
+- Runtime state: HIGH — JWKS table confirmed in @minion-stack/db; all auth tables confirmed
+- Security: HIGH for schema-level controls; MEDIUM for deploy-time controls (AUTH-04 topology unconfirmed)
+- Q1-Q7 answers: HIGH for TypeScript types and JWKS (inspected source); MEDIUM for cross-domain cookie behavior in AUTH-04 (depends on actual deploy topology)
 
 **Research date:** 2026-04-21
-**Valid until:** 2026-05-21 (30 days — stable ecosystem, Better Auth is mature; only invalidated by a major Better Auth release or a change in hub/site auth config before the phase starts)
+**Valid until:** 2026-05-21 (stable ecosystem; invalidated by Better Auth upgrade or hub/site auth config changes)
