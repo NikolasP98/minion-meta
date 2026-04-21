@@ -82,7 +82,7 @@ Plans:
 Plans:
 - [x] 03-01-PLAN.md — Adopt @minion-stack shared configs + env files in `minion` (pnpm, Wave 1)
 - [x] 03-02-PLAN.md — Adopt @minion-stack shared configs + env files in `minion_hub` (bun SvelteKit, Wave 2; adds net-new CI)
-- [ ] 03-03-PLAN.md — Adopt @minion-stack shared configs + env files in `minion_site` (bun SvelteKit, Wave 2; adds net-new CI)
+- [x] 03-03-PLAN.md — Adopt @minion-stack shared configs + env files in `minion_site` (bun SvelteKit, Wave 2; adds net-new CI)
 - [x] 03-04-PLAN.md — Adopt @minion-stack shared configs + env files in `paperclip-minion` (pnpm workspace, Wave 1; targets tsconfig.base.json not root)
 - [ ] 03-05-PLAN.md — Adopt @minion-stack shared configs + env files in `pixel-agents` (npm, Wave 3; dual tsconfig + local ESLint plugin preserved)
 - [ ] 03-06-PLAN.md — Resolve ADOPT-06 for `minion_plugins` (npm; markdown+YAML catalog, Wave 3; likely D-27 deferral)

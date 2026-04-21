@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Completed 03-02-PLAN.md — minion_hub adoption PR #16 open on NikolasP98/minion_hub"
-last_updated: "2026-04-21T00:19:10.364Z"
+stopped_at: "Completed 03-03-PLAN.md — minion_site adoption PR #2 open on NikolasP98/minion-site"
+last_updated: "2026-04-21T02:26:56.566Z"
 last_activity: 2026-04-21
 progress:
   total_phases: 8
   completed_phases: 2
   total_plans: 19
-  completed_plans: 16
-  percent: 84
+  completed_plans: 17
+  percent: 89
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-19)
 ## Current Position
 
 Phase: 03 (adopt-foundation-in-subprojects) — EXECUTING
-Plan: 4 of 6
+Plan: 5 of 6
 Status: Ready to execute
 Last activity: 2026-04-21
 
@@ -58,6 +58,7 @@ Progress: ░░░░░░░░░░ 0%
 | Phase 03 P01 | 35 min | 3 tasks | 8 files |
 | Phase 03 P04 | 16 min | 3 tasks tasks | 6 files files |
 | Phase 03 P02 | 11 min | 3 tasks | 6 files |
+| Phase 03 P03 | 17 min | 3 tasks tasks | 8 files files |
 
 ## Accumulated Context
 
@@ -86,6 +87,9 @@ Recent decisions affecting current work:
 - [Phase 03]: Consume @minion-stack/lint-config@0.1.1 directly via package.json prettier key — 0.1.0 CJS/ESM bug (03-04 shim workaround) is fixed; Wave 2 blocker resolved for 03-03
 - [Phase 03]: Transitional noUncheckedIndexedAccess=false + noImplicitOverride=false in minion_hub/tsconfig.json — 408 errors across MinionLogo/WorkshopCanvas/reliability; Phase 8 refactor
 - [Phase 03]: Separate formatting-only commit (218 files) from adoption commits in hub — keeps logical 3-commit diff reviewable on un-formatted codebase
+- [Phase 03]: Consume @minion-stack/lint-config@0.1.1 directly in minion_site via package.json prettier key (no shim) — Wave 2 structural-copy pattern matches 03-02 hub
+- [Phase 03]: Transitional noUncheckedIndexedAccess=false + noImplicitOverride=false in minion_site/tsconfig.json — 53 errors concentrated in Channels.svelte; Phase 8 refactor
+- [Phase 03]: Separate formatting-only commit (26 files) from adoption commits in site — keeps logical 4-commit diff reviewable, mirrors 03-02 pattern
 
 ### Pending Todos
 
@@ -99,6 +103,6 @@ yet. Phase 1 depends on nothing and can be planned immediately.
 
 ## Session Continuity
 
-Last session: 2026-04-21T00:19:10.361Z
-Stopped at: Completed 03-02-PLAN.md — minion_hub adoption PR #16 open on NikolasP98/minion_hub
+Last session: 2026-04-21T02:26:46.269Z
+Stopped at: Completed 03-03-PLAN.md — minion_site adoption PR #2 open on NikolasP98/minion-site
 Resume file: None

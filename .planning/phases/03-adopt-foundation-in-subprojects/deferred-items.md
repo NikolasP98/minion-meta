@@ -65,3 +65,14 @@ Tracks out-of-scope findings surfaced during Phase 3 adoption work.
 - **Detail:** `bun run check` reports 18 errors on dev branch regardless of whether `@minion-stack/tsconfig` adoption is applied. Mix of Better Auth `accountLinking` schema drift, Zag.js generic mismatches in `AgentCreateWizard`, channel schema drift in `ChannelsTab`, and a stray `autocorrect` textarea attribute.
 - **Scope:** NOT Phase 3. The adoption PR preserves this pre-existing state, not fix it.
 - **Recommended resolution:** Dedicated hub-maintenance plan post-Phase 3. Not blocking.
+
+## From Plan 03-03 (minion_site adoption)
+
+### Item: Strict-mode fallout in minion_site requires follow-up refactor
+
+- **Surfaced:** 2026-04-21 during 03-03 Task 1
+- **Detail:** Extending `@minion-stack/tsconfig/svelte.json` (which inherits `base.json`'s `noUncheckedIndexedAccess: true` + `noImplicitOverride: true`) produces 53 new type errors in minion_site (count went from 0 pre-adoption → 53 post-adoption without transitional override).
+- **Workaround applied:** `minion_site/tsconfig.json` layers both as `false` (transitional overrides).
+- **Detailed triage:** `.planning/phases/03-adopt-foundation-in-subprojects/03-03-ISSUES.md`
+- **Recommended resolution:** Phase 8 (Polish) plan — focused refactor. Primary heavy-hitter files: `Channels.svelte` (~32 errors, 60% concentration), `DashboardPreview.svelte`, `HeroParticles.svelte`, `(app)/members/+page.svelte`. Expected effort: <0.5 day due to tight concentration.
+- **Severity:** Very low — extends contract preserved, overrides explicit and documented. Site's fallout (53) is dramatically smaller than hub's (408) and paperclip's (428).
