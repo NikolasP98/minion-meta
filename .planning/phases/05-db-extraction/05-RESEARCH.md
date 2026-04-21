@@ -790,22 +790,25 @@ drizzleAdapter(getDb(), { provider: 'sqlite', schema })
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **drizzle-kit node_modules source resolution**
+1. **drizzle-kit node_modules source resolution** — RESOLVED
    - What we know: drizzle-kit requires TypeScript source for schema analysis
    - What's unclear: Whether drizzle-kit's schema glob resolves `.ts` files inside `node_modules/` (typically not traversed)
    - Recommendation: Plan 05-01 must include a verification step: run `drizzle-kit push --dry-run` against a SQLite test DB after initial publish, using the node_modules glob. If it fails, switch to Option B (local re-export stubs in hub for Step 1).
+   - **Resolution:** A1 empirical test added to plan 05-01 Task 2 Step 9 (runs from minion_hub against node_modules path post-publish). Result drives 05-03 option selection.
 
-2. **Hub local auth.ts re-export stubs after extraction**
+2. **Hub local auth.ts re-export stubs after extraction** — RESOLVED
    - What we know: Hub's `$server/db/schema` path alias is used in ~5 files (client.ts, auth.ts, seed.ts, hooks.server.ts, various API routes)
    - What's unclear: Whether the hub leaves local re-export shims or deletes `src/server/db/schema/` entirely
    - Recommendation: Delete the entire `src/server/db/schema/` tree and update all consumer imports to `@minion-stack/db`. Do NOT leave re-export shims — they create two sources of truth.
+   - **Resolution:** Plan 05-03 deletes hub's schema directory entirely; Option A/B choice depends on A1 result.
 
-3. **Migration journal consolidation**
+3. **Migration journal consolidation** — RESOLVED
    - What we know: Hub's journal only covers 0-7; SQL files 0008-0011 exist but are unenrolled
    - What's unclear: Should the meta-repo's `drizzle/` include only the journal-tracked files (0000-0007) or all 12?
    - Recommendation: Include all 12 SQL files in `packages/db/drizzle/`. Update the journal to include 0008-0011 entries when copying — they were applied to prod, so they belong in the history. This makes the journal match reality.
+   - **Resolution:** Plan 05-01 Task 2 Step 5 copies all 12 SQL files and reconciles journal entries for 0008-0011.
 
 ---
 
