@@ -35,6 +35,15 @@ Scope substitution: `@minion/*` → `@minion-stack/*` (locked in Phase 02 plan 0
 
 - [x] CLEAN-01..06 (see `.planning/phases/01-clean-slate/01-VERIFICATION.md`)
 
+**M5 — Auth Extraction** (Validated in Phase 06: auth-extraction, 2026-04-21)
+
+`@minion-stack/auth@0.2.0` published. `createAuth()` factory with jwt(EdDSA/1h/openclaw-gateway) + accountLinking + emailAndPassword always included; callers pass plugins + hooks. JWKS kid identical on both services. Session continuity verified staging + production.
+
+- [x] AUTH-01: Better Auth config extracted into `packages/auth` as `createAuth()` factory — `@minion-stack/auth@0.2.0`
+- [x] AUTH-02: `@minion-stack/auth` published on npm
+- [x] AUTH-03: `minion_hub` + `minion_site` both call `createAuth()` with identical base config; hub passes `oidcProvider` + `organization({sendInvitationEmail})` + hooks; site passes `organization()` only
+- [x] AUTH-04: Staging + production verified — JWKS kid `gR0h1QKBswrpsykV0JRW7WD4C4F1y3vc` identical, cross-app session continuity confirmed, no forced logouts
+
 **M4 — DB Extraction** (Validated in Phase 05: db-extraction, 2026-04-21)
 
 Scope note: package published as `@minion-stack/db` (not `@minion/db` — scope locked in Phase 02). drizzle-kit cannot read `.ts` from node_modules (A1=FAILED); meta-repo drizzle.config.ts points at `./packages/db/src/schema/**/*.ts` (local workspace source).
@@ -172,4 +181,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 after Phase 05 (db-extraction) completion*
+*Last updated: 2026-04-21 after Phase 06 (auth-extraction) completion*
