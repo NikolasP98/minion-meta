@@ -76,3 +76,25 @@ Tracks out-of-scope findings surfaced during Phase 3 adoption work.
 - **Detailed triage:** `.planning/phases/03-adopt-foundation-in-subprojects/03-03-ISSUES.md`
 - **Recommended resolution:** Phase 8 (Polish) plan — focused refactor. Primary heavy-hitter files: `Channels.svelte` (~32 errors, 60% concentration), `DashboardPreview.svelte`, `HeroParticles.svelte`, `(app)/members/+page.svelte`. Expected effort: <0.5 day due to tight concentration.
 - **Severity:** Very low — extends contract preserved, overrides explicit and documented. Site's fallout (53) is dramatically smaller than hub's (408) and paperclip's (428).
+
+## From Plan 03-05 (pixel-agents adoption)
+
+### Item: Strict-mode fallout in pixel-agents requires follow-up refactor (both extension + webview)
+
+- **Surfaced:** 2026-04-21 during 03-05 Task 1
+- **Detail:** Extending `@minion-stack/tsconfig/node.json` (extension) + `@minion-stack/tsconfig/base.json` (webview-ui) — both inherit `noUncheckedIndexedAccess: true` + `noImplicitOverride: true` from the shared base. Enabling produces 12 extension + 108 webview = 120 total new errors (vs 0 pre-adoption baseline confirmed by `git stash` A/B).
+- **Workaround applied:** Both `pixel-agents/tsconfig.json` and `pixel-agents/webview-ui/tsconfig.app.json` layer the two flags as `false` (transitional overrides).
+- **Detailed triage:** inline in both tsconfig files (no separate ISSUES.md needed — error concentration is tight and well-cataloged inline).
+- **Recommended resolution:** Phase 8 (Polish) plan — focused refactor. Primary heavy-hitter files:
+  - Extension: `shared/assets/build.ts`, `shared/assets/loader.ts`, `shared/assets/pngDecoder.ts`, `src/PixelAgentsViewProvider.ts`, `src/agentManager.ts`, `src/assetLoader.ts` (all asset-metadata lookup null-guards)
+  - Webview: `src/office/sprites/spriteData.ts` (character palette lookups — ~60% of webview errors), `src/office/wallTiles.ts` (16-bitmask neighbor lookups)
+- **Expected effort:** <0.5 day (tight concentration, mostly mechanical null-guards + `as` assertions where the index is provably in range).
+- **Severity:** Very low — extends contract preserved, overrides explicit and documented. Pixel-agents fallout (120) is smaller than hub (408) or paperclip (428).
+
+### Item: Shared lint-config preset needs `files` scoping for subprojects with nested node_modules
+
+- **Surfaced:** 2026-04-21 during 03-05 Task 2 (webview-ui/eslint.config.js lint run)
+- **Detail:** `@minion-stack/lint-config/eslint.config.js` spreads `tseslint.configs.recommended` without a `files` restriction. When consumed in a subproject that has nested `node_modules` (e.g., webview-ui's own `node_modules/@minion-stack/lint-config`), tseslint's type-aware parser errors "No tsconfigRootDir was set, and multiple candidate TSConfigRootDirs are present".
+- **Workaround applied (pixel-agents webview-ui):** Map the spread config array to inject `files: '**/*.{ts,tsx}'` on each non-ignores entry + pin `parserOptions.tsconfigRootDir = import.meta.dirname` + `globalIgnores(['eslint.config.js'])`.
+- **Recommended resolution:** Upstream fix in `@minion-stack/lint-config@0.1.2` — add `files: ['**/*.{ts,tsx,mts,cts}']` to the `tseslint.configs.recommended` entries so downstream consumers don't need the `.map()` workaround. Keep the `js.configs.recommended` entry global (it's safe on JS config files).
+- **Severity:** Low — workaround is 10 lines. Only affects subprojects with nested `node_modules` (webview-ui, paperclip-minion workspaces). Hub + site didn't hit this because their node_modules are flat.
