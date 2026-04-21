@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 07-02-PLAN.md — @minion-stack/shared@0.3.0 published
-last_updated: "2026-04-21T20:30:32.918Z"
+stopped_at: Completed 07-03-PLAN.md
+last_updated: "2026-04-21T20:47:38.939Z"
 last_activity: 2026-04-21
 progress:
   total_phases: 8
   completed_phases: 6
   total_plans: 37
-  completed_plans: 35
-  percent: 95
+  completed_plans: 36
+  percent: 97
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-19)
 ## Current Position
 
 Phase: 07 (ws-consolidation) — EXECUTING
-Plan: 3 of 4
+Plan: 4 of 4
 Status: Ready to execute
 Last activity: 2026-04-21
 
@@ -72,6 +72,7 @@ Progress: ████████░░ 97%
 | Phase 06-auth-extraction P03 | 3min | 1 tasks | 3 files |
 | Phase 07 P01 | 25 | 1 tasks | 1 files |
 | Phase 07 P02 | 30 | 2 tasks | 10 files |
+| Phase 07 P03 | 90 min | 3 tasks | 20 files |
 
 ## Accumulated Context
 
@@ -131,6 +132,8 @@ Recent decisions affecting current work:
 - [Phase 07]: vitest downgraded to ^2.1.9 in packages/shared — workspace vite@5.4.21 conflicts with vitest@4.x (requires vite^6)
 - [Phase 07]: vitest downgraded to ^2.1.9 (workspace vite@5.4.21 conflicts with vitest@4.x)
 - [Phase 07]: ws is optional peerDep — browser consumers of root '.' entry never pull ws into bundle
+- [Phase 07]: Hub binary channel (Yjs) uses (client as any).ws shim — TODO(phase-8) upstream proper binary channel accessor
+- [Phase 07]: gateway-client.ts paperclip shim is 29 lines (re-exports helpers); deviceIdentity hoisted outside while loop for onChallenge closure access
 
 ### Pending Todos
 
@@ -144,6 +147,6 @@ yet. Phase 1 depends on nothing and can be planned immediately.
 
 ## Session Continuity
 
-Last session: 2026-04-21T20:30:32.915Z
-Stopped at: Completed 07-02-PLAN.md — @minion-stack/shared@0.3.0 published
+Last session: 2026-04-21T20:47:38.935Z
+Stopped at: Completed 07-03-PLAN.md
 Resume file: None
