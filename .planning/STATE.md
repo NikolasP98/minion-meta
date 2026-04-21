@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 04-04-PLAN.md
-last_updated: "2026-04-21T08:28:21.567Z"
-last_activity: 2026-04-21 -- Phase 5 planning complete
+stopped_at: Completed 05-01-PLAN.md (A1=failed, @minion-stack/db@0.2.0 published)
+last_updated: "2026-04-21T16:30:00.000Z"
+last_activity: 2026-04-21 -- Phase 05 Plan 01 complete; A1=failed; plan 05-03 uses Option B
 progress:
   total_phases: 8
   completed_phases: 4
   total_plans: 28
-  completed_plans: 23
-  percent: 82
+  completed_plans: 24
+  percent: 86
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-19)
 
 **Core value:** One command resolves the right env and runs the right build for any subproject, and every piece of cross-cutting code lives in exactly one place under uniform standardization — no exceptions.
-**Current focus:** Phase 05 — DB Extraction (next)
+**Current focus:** Phase 05 — db-extraction
 
 ## Current Position
 
-Phase: 04 (fold-minion-shared) — COMPLETE ✓
-Plan: 4 of 4
-Status: Ready to execute
-Last activity: 2026-04-21 -- Phase 5 planning complete
+Phase: 05 (db-extraction) — EXECUTING
+Plan: 2 of 5
+Status: Plan 01 complete — ready for 05-02 (minion_site consumer)
+Last activity: 2026-04-21 -- Plan 05-01 complete; A1=failed; 05-03 uses Option B
 
-Progress: ░░░░░░░░░░ 0%
+Progress: ██░░░░░░░░ 20%
 
 ## Performance Metrics
 
@@ -110,6 +110,9 @@ Recent decisions affecting current work:
 - [Phase 04-fold-minion-shared]: SHARE-01 N/A: minion-shared/ had no git history (plain gitignored directory, not a submodule)
 - [Phase 04-fold-minion-shared]: SHARE-05 N/A: minion-shared had no GitHub repo (npm-only package, nothing to archive)
 - [Phase 04-fold-minion-shared]: Phase 04 complete: all 5 SHARE requirements satisfied or documented N/A with rationale
+- [Phase 05-01]: @minion-stack/db@0.2.0 published (0.1.0 was already live from prior session; changeset bumped to 0.2.0)
+- [Phase 05-01]: A1=FAILED — drizzle-kit cannot read .ts from node_modules even with src/ in npm files array; error: "No schema files found"
+- [Phase 05-01]: Plan 05-03 uses Option B: hub keeps thin local re-export stubs in src/server/db/schema/ pointing at @minion-stack/db; drizzle-kit reads hub-local stubs
 
 ### Pending Todos
 

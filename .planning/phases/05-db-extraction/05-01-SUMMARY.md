@@ -14,7 +14,7 @@ provides:
   - "@minion-stack/db@0.1.0 npm package with 38 Drizzle schema files"
   - "packages/db/src/schema/ — single source of truth for Minion shared DB schema"
   - "packages/db/drizzle/ — migration history (0000-0011) with reconciled journal"
-  - "A1 verification result: TBD (pending publish + minion_hub install)"
+  - "A1 verification result: FAILED — drizzle-kit cannot read .ts from node_modules; plan 05-03 uses Option B (local re-export stubs)"
 
 affects: [05-02-minion-site-consumer, 05-03-hub-migration-cutover]
 
@@ -42,7 +42,7 @@ key-decisions:
   - "src/ included in npm files array — mandatory for drizzle-kit to read TypeScript source from node_modules"
   - "nodenext import extension fix: all relative imports updated to .js; directory imports become dir/index.js"
   - "Journal entries 0008-0011 added with placeholder timestamps (1700000008000-1700000011000) since hub journal only covered 0-7"
-  - "A1 result determines plan 05-03 approach: Option A (node_modules glob) if confirmed, Option B (local re-export stubs) if failed"
+  - "A1 result determines plan 05-03 approach: A1=failed → Option B (local re-export stubs in hub src/server/db/schema/)"
 
 patterns-established:
   - "Pattern 1: When copying schema from SvelteKit (bundler resolution) to library package (nodenext), add .js extensions to all relative imports and convert directory imports to explicit /index.js"
@@ -56,14 +56,14 @@ completed: 2026-04-21
 
 # Phase 05 Plan 01: DB Extraction — @minion-stack/db Package Summary
 
-**38 Drizzle schema files extracted from minion_hub into packages/db, tsc-built, ready to publish as @minion-stack/db@0.1.0 pending npm 2FA**
+**38 Drizzle schema files extracted from minion_hub into packages/db, tsc-built, published as @minion-stack/db@0.2.0. A1 verification FAILED — plan 05-03 uses Option B (local re-export stubs).**
 
 ## Performance
 
-- **Duration:** ~25 min (Tasks 1-2 complete; Task 3 is human checkpoint)
+- **Duration:** ~25 min (Tasks 1-3 complete)
 - **Started:** 2026-04-21T~15:43:00Z
-- **Completed:** 2026-04-21 (partial — stopped at publish checkpoint)
-- **Tasks:** 2/3 complete (Task 3 requires npm 2FA + A1 verification)
+- **Completed:** 2026-04-21
+- **Tasks:** 3/3 complete
 - **Files modified:** 63
 
 ## Accomplishments
@@ -81,7 +81,7 @@ completed: 2026-04-21
 
 1. **Task 1: Scaffold packages/db workspace package** — `a247371` (chore)
 2. **Task 2: Copy schema files verbatim and build** — `d6565fc` (feat)
-3. **Task 3: Publish @minion-stack/db@0.1.0** — PENDING (human checkpoint)
+3. **Task 3: Publish @minion-stack/db@0.2.0 + A1 verification** — COMPLETE
 
 ## Files Created/Modified
 
@@ -124,50 +124,29 @@ completed: 2026-04-21
 
 ## A1 Verification Status
 
-**PENDING** — Will run after Task 3 (npm publish) completes:
+**A1 = FAILED**
 
-Steps to run after publish:
-```bash
-cd /home/nikolas/Documents/CODE/AI/minion_hub
-bun add @minion-stack/db
+drizzle-kit cannot read `.ts` source files from `node_modules`. The test was run against `@minion-stack/db@0.2.0` installed in `minion_hub`. Error:
 
-cat > /home/nikolas/Documents/CODE/AI/minion_hub/drizzle.config.test.ts << 'EOF'
-import { defineConfig } from 'drizzle-kit';
-export default defineConfig({
-  dialect: 'sqlite',
-  schema: ['./node_modules/@minion-stack/db/src/schema/**/*.ts'],
-  out: '/tmp/drizzle-a1-test-out',
-  dbCredentials: { url: 'file:/tmp/test-a1-minion.db' },
-});
-EOF
-
-bunx drizzle-kit push --config=drizzle.config.test.ts 2>&1 | tail -30
-sqlite3 /tmp/test-a1-minion.db ".tables" 2>/dev/null | head -5
-
-# Clean up
-rm -f /home/nikolas/Documents/CODE/AI/minion_hub/drizzle.config.test.ts
-rm -f /tmp/test-a1-minion.db
-rm -rf /tmp/drizzle-a1-test-out
+```
+No schema files found for path config ['./node_modules/@minion-stack/db/src/schema/**/*.ts']
 ```
 
-A1 result will determine plan 05-03 approach:
-- **A1 CONFIRMED** → Option A: use `node_modules/@minion-stack/db/src/schema/**/*.ts` glob in hub's drizzle.config.ts
-- **A1 FAILED** → Option B: hub keeps thin local re-export stubs in `src/server/db/schema/`
+drizzle-kit silently finds zero tables — it does not parse TypeScript from inside node_modules regardless of the `src/` being present in the npm `files` array.
 
-## Publish Steps (Task 3 — Human Required)
+**Plan 05-03 approach: Option B** — Hub keeps thin local re-export stubs in `src/server/db/schema/` that re-export from `@minion-stack/db`. drizzle-kit reads hub-local `.ts` stubs (which it can find), and those stubs re-export the Drizzle table definitions from the package. This satisfies both drizzle-kit's schema discovery requirement and the single-source-of-truth goal.
 
-```bash
-cd /home/nikolas/Documents/CODE/AI
-pnpm changeset version
-cd packages/db && npm publish --access public
-# Enter 2FA OTP when prompted
-npm view @minion-stack/db
+## Publish Outcome (Task 3 — Complete)
+
+`@minion-stack/db@0.2.0` is live on npm. The changeset version bump applied as a minor bump to `0.2.0` because `0.1.0` had already been published in a prior session.
+
+```
+npm view @minion-stack/db → 0.2.0
+files: includes "src", "dist", "README.md"
+exports: ".", "./schema", "./auth", "./relations", "./utils"
 ```
 
-Expected `npm view @minion-stack/db` output:
-- version: 0.1.0
-- files: includes "src"
-- exports: `.`, `./schema`, `./auth`, `./relations`, `./utils`
+`packages/db/package.json` now reflects version `0.2.0`. The `CHANGELOG.md` was generated by `pnpm changeset version`.
 
 ## Issues Encountered
 
@@ -175,10 +154,9 @@ Expected `npm view @minion-stack/db` output:
 
 ## Next Phase Readiness
 
-- **Ready:** `packages/db` scaffold + source complete, tsc build confirmed
-- **Blocked on:** npm publish (Task 3 human action — 2FA OTP required)
-- **After publish:** A1 verification drives 05-03 approach selection
-- **Plan 05-02** (minion_site consumer) can proceed after publish is confirmed and A1 result documented
+- **Ready:** `@minion-stack/db@0.2.0` live on npm, tsc build confirmed, A1 result documented
+- **Plan 05-02** (minion_site consumer): can proceed immediately — install `@minion-stack/db` and update site imports
+- **Plan 05-03** (hub migration cutover): uses **Option B** — hub keeps thin local re-export stubs in `src/server/db/schema/` that re-export from `@minion-stack/db`. drizzle-kit reads hub-local stubs for migration runs; TypeScript consumers import from the package directly.
 
 ## Self-Check: PASSED
 
@@ -201,4 +179,5 @@ Schema file count: 38 (37 domain + auth/index.ts)
 
 ---
 *Phase: 05-db-extraction*
-*Completed: 2026-04-21 (partial — Task 3 pending human action)*
+*Completed: 2026-04-21*
+*A1 result: FAILED → plan 05-03 uses Option B (local re-export stubs)*
