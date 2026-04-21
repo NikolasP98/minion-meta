@@ -313,3 +313,42 @@ After `gateway-client.ts` is replaced by a re-export shim pointing to `@minion-s
 
 **A7 — 0.2.0 publish-first vs squash into 0.3.0:**
 Local `packages/shared/package.json` is at `0.2.0` with a staged changeset; npm `latest` is `0.1.0`. The safer path is to publish `0.2.0` first (as Phase 4 intended) to preserve changelog linearity, then `0.3.0` for Phase 7 additions. The risk is that squashing both into `0.3.0` would lose the Phase 4 → Phase 7 attribution in the CHANGELOG. Plan 07-02 should publish `0.2.0` first (D-02 above).
+
+---
+
+## Post-consolidation status (2026-04-21, after Phase 7)
+
+**WS-05 verified: zero duplicates.**
+
+All five grep sweeps executed from meta-repo root after 07-03 migration (commits fb42dd9, dc6233e, f01da4e0).
+
+| Sweep | Command | Matches | Result |
+|-------|---------|---------|--------|
+| Frame-type interfaces | `grep -rn "interface RequestFrame\|interface ResponseFrame\|interface EventFrame\|type GatewayFrame" minion_hub/src minion_site/src paperclip-minion/packages/adapters --include="*.ts" --include="*.svelte" \| grep -v node_modules \| grep -v dist/` | 1 (re-export in shim) | CLEAR — match is `type GatewayFrame,` inside `export { ... } from "@minion-stack/shared/node"` in gateway-client.ts; not a local declaration |
+| WS client classes | `grep -rn "class GatewayWsClient\|class GatewayClient" minion_hub/src minion_site/src paperclip-minion/packages --include="*.ts" \| grep -v node_modules \| grep -v dist/ \| grep -v packages/shared` | 0 | CLEAR |
+| new WebSocket() in adapter | `grep -rn "new WebSocket(" minion_hub/src minion_site/src paperclip-minion/packages/adapters --include="*.ts" --include="*.svelte" \| grep -v node_modules \| grep -v dist/` | 1 (out-of-scope) | EXCEPTION documented — match is in `paperclip-minion/packages/adapters/openclaw-gateway/src/server/test.ts:128` (AdapterEnvironmentTestContext diagnostic probe, not a gateway client) |
+| uuid()/parseAgentSessionKey impls | `grep -rn "function uuid\|export const uuid\|export function parseAgentSessionKey" minion_hub/src minion_site/src paperclip-minion/packages --include="*.ts" \| grep -v node_modules \| grep -v dist/ \| grep -v packages/shared` | 0 | CLEAR |
+| Old hub imports | `grep -rn "\$lib/types/gateway\|\$lib/utils/uuid\|\$lib/utils/session-key" minion_hub/src --include="*.ts" --include="*.svelte"` | 0 | CLEAR |
+
+**In-scope matches: 0. Out-of-scope exceptions: 2 (documented).**
+
+Exception 1 — `gateway-client.ts` sweep 1 match: The `type GatewayFrame,` token appears in a `export { … } from "@minion-stack/shared/node"` re-export block. The type's authoritative definition is in `packages/shared/src/gateway/types.ts`. No local declaration exists.
+
+Exception 2 — `test.ts` sweep 3 match: `paperclip-minion/packages/adapters/openclaw-gateway/src/server/test.ts` is the adapter environment-check utility. It implements a minimal diagnostic WebSocket probe (not a gateway client) that bypasses GatewayClient intentionally to verify raw gateway connectivity. This is equivalent to the pre-existing `live-events-ws.ts` server-side out-of-scope exception documented in the Phase 7 plan (A6).
+
+**Deletions (hub duplicates removed in 07-03, commit fb42dd9):**
+
+| File deleted | Pre-deletion LOC |
+|-------------|-----------------|
+| `minion_hub/src/lib/types/gateway.ts` | 136 |
+| `minion_hub/src/lib/utils/uuid.ts` | 7 |
+| `minion_hub/src/lib/utils/session-key.ts` | 16 |
+| **Total removed** | **159 LOC** |
+
+**paperclip gateway-client.ts:** Was 355 LOC full implementation. Now a 29-line re-export shim pointing to `@minion-stack/shared/node` (commit f01da4e0). Reduction: 326 LOC.
+
+**Preserved (by design):**
+
+- `minion_hub/src/lib/utils/text.ts` (115 LOC) — hub superset handles `tool_use`/`tool_result`/`image` content blocks [D-05]
+- `paperclip-minion/packages/adapters/openclaw-gateway/src/server/gateway-helpers.ts` (120 LOC) — auth helpers extracted from gateway-client.ts [D-04]
+- `paperclip-minion/packages/adapters/openclaw-gateway/src/shared/device-auth.ts` — Ed25519 signing stays local (not a gateway concern)
