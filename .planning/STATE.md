@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 07-01-PLAN.md
-last_updated: "2026-04-21T20:14:53.185Z"
+stopped_at: 07-02 Task 1 complete — awaiting npm OTP for publish checkpoint
+last_updated: "2026-04-21T20:24:01.781Z"
 last_activity: 2026-04-21
 progress:
   total_phases: 8
   completed_phases: 6
   total_plans: 37
-  completed_plans: 34
-  percent: 92
+  completed_plans: 35
+  percent: 95
 ---
 
 # Project State
@@ -127,6 +127,7 @@ Recent decisions affecting current work:
 - [Phase 06-auth-extraction]: secret: env.BETTER_AUTH_SECRET ?? '' in site auth.ts to satisfy strict TypeScript — site's ambient.d.ts types env vars as string|undefined
 - [Phase 06]: Phase 6 complete — createAuth() factory live at @minion-stack/auth@0.2.0; hub + site migrated; JWKS kid gR0h1QKBswrpsykV0JRW7WD4C4F1y3vc identical on both services; session continuity verified staging + prod; AUTH-01..04 all Complete
 - [Phase 07]: D-01..D-08 locked for Phase 7 WS consolidation: package target @minion-stack/shared; publish 0.2.0 then 0.3.0; Yjs binary frames and onLog stay local; hub text.ts kept local; site uses manual smoke runbook; minion/ gateway server out of scope
+- [Phase 07]: vitest downgraded to ^2.1.9 in packages/shared — workspace vite@5.4.21 conflicts with vitest@4.x (requires vite^6)
 
 ### Pending Todos
 
@@ -140,6 +141,6 @@ yet. Phase 1 depends on nothing and can be planned immediately.
 
 ## Session Continuity
 
-Last session: 2026-04-21T20:14:53.182Z
-Stopped at: Completed 07-01-PLAN.md
+Last session: 2026-04-21T20:24:00.043Z
+Stopped at: 07-02 Task 1 complete — awaiting npm OTP for publish checkpoint
 Resume file: None
