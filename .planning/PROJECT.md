@@ -35,6 +35,18 @@ Scope substitution: `@minion/*` → `@minion-stack/*` (locked in Phase 02 plan 0
 
 - [x] CLEAN-01..06 (see `.planning/phases/01-clean-slate/01-VERIFICATION.md`)
 
+**M4 — DB Extraction** (Validated in Phase 05: db-extraction, 2026-04-21)
+
+Scope note: package published as `@minion-stack/db` (not `@minion/db` — scope locked in Phase 02). drizzle-kit cannot read `.ts` from node_modules (A1=FAILED); meta-repo drizzle.config.ts points at `./packages/db/src/schema/**/*.ts` (local workspace source).
+
+- [x] DB-01: Drizzle schema moved to `packages/db/src/schema/` — 38 files (37 domain + auth/), tsc build exits 0
+- [x] DB-02: `@minion-stack/db@0.2.0` published to npm
+- [x] DB-03: `minion_site` imports from `@minion-stack/db` — local schema deleted, 6 import sites updated, `bun run check` 0 errors (PR #4)
+- [x] DB-04: `minion_hub` imports from `@minion-stack/db` — 56 import sites updated; local schema retained for drizzle-kit only (PRs #17, #18)
+- [x] DB-05: Staging dry-run: local SQLite 4 additive ADD COLUMN changes applied cleanly; no data loss
+- [x] DB-06: Meta-repo owns migrations; hub `db:push/generate/migrate/studio` removed; production Turso push: "No changes detected", exit 0
+- [x] DB-07: Hub `drizzle.config.ts` removed; meta-repo config at root using local workspace schema path
+
 **M2 — Adopt foundation in subprojects** (Validated in Phase 03: adopt-foundation-in-subprojects, 2026-04-21)
 
 All 5 TypeScript-using subprojects adopted `@minion-stack/tsconfig` + lint-config + env files with open PRs (user-controlled merge per D-24). `minion_plugins` is a full D-27 deferral (pure catalog, no code/vars).
@@ -59,14 +71,6 @@ All 5 TypeScript-using subprojects adopted `@minion-stack/tsconfig` + lint-confi
 - [ ] SHARE-04: `minion_hub`, `minion_site`, and `paperclip-minion` import paths updated to `@minion/shared`
 - [ ] SHARE-05: Old `minion-shared` GitHub repo archived with README redirect
 
-**M4 — `@minion/db` extraction**
-- [ ] DB-01: Drizzle schema from `minion_hub/src/server/db/schema/` is moved to `packages/db/src/schema/`
-- [ ] DB-02: `@minion/db` publishes first release exposing schema types + migration runner
-- [ ] DB-03: `minion_site` imports schema types from `@minion/db` (consume-only first)
-- [ ] DB-04: `minion_hub` imports schema types from `@minion/db` while retaining migration ownership (two-step cutover)
-- [ ] DB-05: Staging DB dry-run of migration-ownership cutover passes
-- [ ] DB-06: Meta-repo takes over migration ownership; hub stops running `db:push`
-- [ ] DB-07: Drizzle config in hub + site updated to reference `@minion/db` location
 
 **M5 — `@minion/auth` extraction**
 - [ ] AUTH-01: Better Auth config extracted from hub + site into `packages/auth` as `createAuth()` factory
@@ -168,4 +172,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 after Phase 03 (adopt-foundation-in-subprojects) completion*
+*Last updated: 2026-04-21 after Phase 05 (db-extraction) completion*
