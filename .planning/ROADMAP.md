@@ -12,7 +12,7 @@ Transform `/home/nikolas/Documents/CODE/AI/` from a loose collection of sibling 
 
 - [x] **Phase 1: Clean Slate** — Audit, triage, and bring every subproject to a known-clean state (completed 2026-04-20)
 - [ ] **Phase 2: Foundation** — Stand up meta-repo, `@minion/cli` + `@minion/env` + shared configs, Infisical rename cascade
-- [ ] **Phase 3: Adopt Foundation in Subprojects** — Propagate shared tsconfig/lint/env into every subproject
+- [x] **Phase 3: Adopt Foundation in Subprojects** — Propagate shared tsconfig/lint/env into every subproject (completed 2026-04-21)
 - [ ] **Phase 4: Fold minion-shared** — Import history into `packages/shared`, publish `@minion/shared`, update consumers, archive old repo
 - [ ] **Phase 5: DB Extraction** — Move Drizzle schema to `@minion/db`, two-step cutover of migration ownership from hub to meta-repo
 - [ ] **Phase 6: Auth Extraction** — Extract Better Auth config to `@minion/auth`, hub+site consume factory with shared session continuity
@@ -194,7 +194,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 |-------|----------------|--------|-----------|
 | 1. Clean Slate | 5/5 | Complete    | 2026-04-20 |
 | 2. Foundation | 6/8 | In Progress|  |
-| 3. Adopt Foundation | 3/6 | In Progress|  |
+| 3. Adopt Foundation | 6/6 | Complete    | 2026-04-21 |
 | 4. Fold minion-shared | 0/4 | Not started | - |
 | 5. DB Extraction | 0/5 | Not started | - |
 | 6. Auth Extraction | 0/4 | Not started | - |
