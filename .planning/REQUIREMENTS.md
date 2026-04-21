@@ -43,8 +43,8 @@ Requirements for the initial meta-repo buildout (M0–M7). Each maps to a roadma
 
 ### Shared Fold-in (M3)
 
-- [ ] **SHARE-01**: `minion-shared/` history is imported into `packages/shared/` via `git subtree add`, preserving commits
-- [ ] **SHARE-02**: `@minion/shared` publishes first release to npm under the new scope
+- [x] **SHARE-01**: `minion-shared/` history is imported into `packages/shared/` via `git subtree add`, preserving commits
+- [x] **SHARE-02**: `@minion/shared` publishes first release to npm under the new scope
 - [ ] **SHARE-03**: Re-export shim published under the old package name and deprecated with notice
 - [ ] **SHARE-04**: `minion_hub`, `minion_site`, and `paperclip-minion` import paths updated to `@minion/shared`
 - [ ] **SHARE-05**: Old `minion-shared` GitHub repo archived with README redirect
@@ -147,8 +147,8 @@ Populated during roadmap creation — each requirement maps to exactly one phase
 | ADOPT-05 | Phase 3 | Complete |
 | ADOPT-06 | Phase 3 | Complete |
 | ADOPT-07 | Phase 3 | Complete |
-| SHARE-01 | Phase 4 | Pending |
-| SHARE-02 | Phase 4 | Pending |
+| SHARE-01 | Phase 4 | Complete |
+| SHARE-02 | Phase 4 | Complete |
 | SHARE-03 | Phase 4 | Pending |
 | SHARE-04 | Phase 4 | Pending |
 | SHARE-05 | Phase 4 | Pending |
