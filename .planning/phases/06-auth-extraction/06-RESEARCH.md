@@ -733,22 +733,25 @@ betterAuth({
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Will AUTH-04 staging test be browser-based or API-based?**
+1. **Will AUTH-04 staging test be browser-based or API-based?** (RESOLVED)
    - What we know: Cross-subdomain cookie sharing requires a shared apex domain; Vercel preview URLs are different domains entirely
    - What's unclear: Whether staging infra for this phase will use a custom domain or Vercel preview URLs
    - Recommendation: AUTH-04 plan should include both options with explicit branch: (a) custom domain — configure `crossSubDomainCookies`; (b) Vercel preview — test via curl with cookie jar
+   - **Resolution:** Plan 06-04 Task 2 documents both paths; defaults to curl-based cookie jar test for Vercel preview URL environments.
 
-2. **Is `BETTER_AUTH_SECRET` confirmed to be shared between hub and site in production?**
+2. **Is `BETTER_AUTH_SECRET` confirmed to be shared between hub and site in production?** (RESOLVED)
    - What we know: Both apps pull from Infisical `minion-hub` project
    - What's unclear: Whether the secret is in `minion-hub` or `minion-core` (earlier in env hierarchy)
    - Recommendation: AUTH-04 pre-flight gate: `infisical secrets list --projectId minion-core | grep BETTER_AUTH_SECRET` + same for `minion-hub`
+   - **Resolution:** Plan 06-04 Task 1 includes Infisical verification as a blocking pre-flight gate before staging deploy.
 
-3. **Does hub's organization invitation email callback need to be type-safe in the factory?**
+3. **Does hub's organization invitation email callback need to be type-safe in the factory?** (RESOLVED)
    - What we know: Hub passes `sendInvitationEmail` callback with specific arg shape (`data.email`, `data.inviter.user.name`, `data.organization.name`, `data.role`, `data.id`)
    - What's unclear: Whether to export the `InvitationEmailPayload` type or let callers use the organization plugin's own type
    - Recommendation: Export nothing extra — hub can import `OrganizationOptions` from `better-auth/plugins` directly for the callback type
+   - **Resolution:** Plan 06-02 implements hub consumer without extra exported types; hub imports organization callback type from `better-auth/plugins` directly.
 
 ---
 
