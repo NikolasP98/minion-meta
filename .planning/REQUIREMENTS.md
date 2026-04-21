@@ -38,7 +38,7 @@ Requirements for the initial meta-repo buildout (M0–M7). Each maps to a roadma
 - [x] **ADOPT-03**: `minion_site` subproject adopts shared configs and ships env files
 - [x] **ADOPT-04**: `paperclip-minion` subproject adopts shared configs and ships env files
 - [x] **ADOPT-05**: `pixel-agents` subproject adopts shared configs and ships env files
-- [ ] **ADOPT-06**: `minion_plugins` subproject adopts shared configs where applicable (tsconfig/lint for any TS portions)
+- [x] **ADOPT-06**: `minion_plugins` subproject adopts shared configs where applicable (tsconfig/lint for any TS portions)
 - [x] **ADOPT-07**: Every subproject's own CI passes against published `@minion/*` versions (no meta-repo dependency)
 
 ### Shared Fold-in (M3)
@@ -145,7 +145,7 @@ Populated during roadmap creation — each requirement maps to exactly one phase
 | ADOPT-03 | Phase 3 | Complete |
 | ADOPT-04 | Phase 3 | Complete |
 | ADOPT-05 | Phase 3 | Complete |
-| ADOPT-06 | Phase 3 | Pending |
+| ADOPT-06 | Phase 3 | Complete |
 | ADOPT-07 | Phase 3 | Complete |
 | SHARE-01 | Phase 4 | Pending |
 | SHARE-02 | Phase 4 | Pending |
