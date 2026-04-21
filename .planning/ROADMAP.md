@@ -102,8 +102,8 @@ Plans:
 
 Plans:
 - [x] 04-01-PLAN.md — Create `packages/shared/` workspace package: copy source from `minion-shared/src/`, write package.json + tsconfig, build with tsc, add changeset (Wave 1)
-- [ ] 04-02-PLAN.md — Publish `@minion-stack/shared@0.1.0` to npm + build and publish `minion-shared@0.2.0` deprecation shim (Wave 2, 2x human-action checkpoint for 2FA)
-- [ ] 04-03-PLAN.md — Migrate `minion_site` off `minion-shared` to `@minion-stack/shared`: update package.json, update 3 import files, bun check, open PR on minion-site repo (Wave 3)
+- [x] 04-02-PLAN.md — Publish `@minion-stack/shared@0.1.0` to npm + build and publish `minion-shared@0.2.0` deprecation shim (Wave 2, 2x human-action checkpoint for 2FA)
+- [x] 04-03-PLAN.md — Migrate `minion_site` off `minion-shared` to `@minion-stack/shared`: update package.json, update 3 import files, bun check, open PR on minion-site repo (Wave 3)
 - [ ] 04-04-PLAN.md — Remove `minion-shared/` from .gitignore + delete directory + write phase VERIFICATION.md (Wave 4)
 
 ### Phase 5: DB Extraction
@@ -195,7 +195,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 1. Clean Slate | 5/5 | Complete    | 2026-04-20 |
 | 2. Foundation | 6/8 | In Progress|  |
 | 3. Adopt Foundation | 6/6 | Complete    | 2026-04-21 |
-| 4. Fold minion-shared | 1/4 | In Progress|  |
+| 4. Fold minion-shared | 3/4 | In Progress|  |
 | 5. DB Extraction | 0/5 | Not started | - |
 | 6. Auth Extraction | 0/4 | Not started | - |
 | 7. WS Consolidation | 0/4 | Not started | - |
