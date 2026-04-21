@@ -6,7 +6,7 @@ Three shared lint presets for the Minion meta-repo.
 |-------|-----|------------------|
 | `oxlint-preset.json` | oxlint-based projects (minion, paperclip-minion) | `.oxlintrc.json`: `{ "extends": ["@minion-stack/lint-config/oxlint-preset.json"] }` |
 | `eslint.config.js` | flat-ESLint projects (hub, site, plugins) | `eslint.config.js`: `import config from '@minion-stack/lint-config/eslint.config.js'; export default config;` |
-| `prettier.config.js` | all projects | `package.json`: `"prettier": "@minion-stack/lint-config/prettier.config.js"` |
+| `prettier.config.cjs` | all projects | `package.json`: `"prettier": "@minion-stack/lint-config/prettier.config.cjs"` |
 
 ## Peer dependencies
 
