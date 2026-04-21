@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: 07-02 Task 1 complete — awaiting npm OTP for publish checkpoint
-last_updated: "2026-04-21T20:24:01.781Z"
+stopped_at: Completed 07-02-PLAN.md — @minion-stack/shared@0.3.0 published
+last_updated: "2026-04-21T20:30:32.918Z"
 last_activity: 2026-04-21
 progress:
   total_phases: 8
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-19)
 ## Current Position
 
 Phase: 07 (ws-consolidation) — EXECUTING
-Plan: 2 of 4
+Plan: 3 of 4
 Status: Ready to execute
 Last activity: 2026-04-21
 
@@ -71,6 +71,7 @@ Progress: ████████░░ 97%
 | Phase 06 P02 | 25min | 1 tasks | 3 files |
 | Phase 06-auth-extraction P03 | 3min | 1 tasks | 3 files |
 | Phase 07 P01 | 25 | 1 tasks | 1 files |
+| Phase 07 P02 | 30 | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -128,6 +129,8 @@ Recent decisions affecting current work:
 - [Phase 06]: Phase 6 complete — createAuth() factory live at @minion-stack/auth@0.2.0; hub + site migrated; JWKS kid gR0h1QKBswrpsykV0JRW7WD4C4F1y3vc identical on both services; session continuity verified staging + prod; AUTH-01..04 all Complete
 - [Phase 07]: D-01..D-08 locked for Phase 7 WS consolidation: package target @minion-stack/shared; publish 0.2.0 then 0.3.0; Yjs binary frames and onLog stay local; hub text.ts kept local; site uses manual smoke runbook; minion/ gateway server out of scope
 - [Phase 07]: vitest downgraded to ^2.1.9 in packages/shared — workspace vite@5.4.21 conflicts with vitest@4.x (requires vite^6)
+- [Phase 07]: vitest downgraded to ^2.1.9 (workspace vite@5.4.21 conflicts with vitest@4.x)
+- [Phase 07]: ws is optional peerDep — browser consumers of root '.' entry never pull ws into bundle
 
 ### Pending Todos
 
@@ -141,6 +144,6 @@ yet. Phase 1 depends on nothing and can be planned immediately.
 
 ## Session Continuity
 
-Last session: 2026-04-21T20:24:00.043Z
-Stopped at: 07-02 Task 1 complete — awaiting npm OTP for publish checkpoint
+Last session: 2026-04-21T20:30:32.915Z
+Stopped at: Completed 07-02-PLAN.md — @minion-stack/shared@0.3.0 published
 Resume file: None

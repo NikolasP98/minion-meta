@@ -69,7 +69,7 @@ Requirements for the initial meta-repo buildout (M0–M7). Each maps to a roadma
 ### WS Consolidation (M6)
 
 - [x] **WS-01**: WS client duplication audited across hub, site, and paperclip's `openclaw_gateway` adapter; report written to specs
-- [ ] **WS-02**: Shared WS client implementation consolidated into `@minion/shared`
+- [x] **WS-02**: Shared WS client implementation consolidated into `@minion/shared`
 - [ ] **WS-03**: `minion_hub` and `minion_site` updated to consume the shared client
 - [ ] **WS-04**: `paperclip-minion` `openclaw_gateway` adapter updated to consume the shared client
 - [ ] **WS-05**: Exactly one WS client implementation exists across the platform (grep confirms no duplicate WebSocket classes)
@@ -164,7 +164,7 @@ Populated during roadmap creation — each requirement maps to exactly one phase
 | AUTH-03 | Phase 6 | Complete |
 | AUTH-04 | Phase 6 | Complete |
 | WS-01 | Phase 7 | Complete |
-| WS-02 | Phase 7 | Pending |
+| WS-02 | Phase 7 | Complete |
 | WS-03 | Phase 7 | Pending |
 | WS-04 | Phase 7 | Pending |
 | WS-05 | Phase 7 | Pending |

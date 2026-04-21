@@ -162,7 +162,7 @@ Plans:
 
 Plans:
 - [x] 07-01: Audit WS/gateway duplication — produce `specs/ws-duplication-audit.md`
-- [ ] 07-02: Consolidate WS client implementation into `@minion/shared`
+- [x] 07-02: Consolidate WS client implementation into `@minion/shared`
 - [ ] 07-03: Update hub + site + paperclip to consume shared client (parallel subagents)
 - [ ] 07-04: E2E gateway session verification across all three consumers
 

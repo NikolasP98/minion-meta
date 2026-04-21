@@ -27,9 +27,9 @@ decisions:
   - "connectTimeoutMs set to 999_999 in unit tests to avoid fake-timer interaction with connect timeout"
   - "ws peerDep is optional — browser consumers of '.' entry never pull ws into their bundle"
 metrics:
-  duration: "~6 min (Task 1 only; Task 2 awaiting human publish action)"
+  duration: "~30 min (Task 1 scaffold + Task 2 human publish with 2FA)"
   completed_date: "2026-04-21"
-  tasks_completed: 1
+  tasks_completed: 2
   tasks_total: 2
 requirements:
   - WS-02
@@ -43,7 +43,7 @@ requirements:
 
 **Task 1 — COMPLETE** (commit `2dfb9f2`): GatewayClient scaffolded, 12/12 tests pass, build produces `dist/node/index.js`.
 
-**Task 2 — AWAITING HUMAN ACTION**: npm 2FA publish of `@minion-stack/shared@0.2.0` then `@minion-stack/shared@0.3.0` (see checkpoint below).
+**Task 2 — COMPLETE**: `@minion-stack/shared@0.2.0` and `@minion-stack/shared@0.3.0` published to npm with 2FA. Both versions confirmed live.
 
 ---
 
@@ -97,29 +97,32 @@ OK node   (createNodeGatewayClient exported from dist/node/index.js)
 
 ---
 
-## Task 2: Publish to npm (AWAITING HUMAN ACTION)
+## Task 2: Publish to npm — COMPLETE
 
-The checkpoint is emitted in the plan execution output. User must:
+Published via human-in-the-loop checkpoint with npm 2FA OTP.
 
-1. `npm whoami` — confirm auth (should return your npm username)
-2. Publish `@minion-stack/shared@0.2.0` first (close Phase 4 gap):
-   ```bash
-   cd /home/nikolas/Documents/CODE/AI/packages/shared
-   # Temporarily set version to 0.2.0
-   npm version 0.2.0 --no-git-tag-version
-   pnpm build
-   npm publish --access public --otp <YOUR_OTP>
-   # Restore to 0.3.0
-   npm version 0.3.0 --no-git-tag-version
-   ```
-3. Publish `@minion-stack/shared@0.3.0`:
-   ```bash
-   pnpm build
-   npm publish --access public --otp <YOUR_OTP>
-   ```
-4. Verify: `npm view @minion-stack/shared version` → `0.3.0`
-5. Commit the package.json version restoration: `git add packages/shared/package.json && git commit -m "chore(shared): publish @minion-stack/shared@0.3.0 for WS consolidation"`
-6. Reply `published` to resume plan 07-03.
+**Verification (post-publish):**
+
+```
+npm view @minion-stack/shared versions --json
+["0.1.0", "0.2.0", "0.3.0"]
+
+npm view @minion-stack/shared exports --json
+{
+  ".":         { "types": "dist/index.d.ts",           "import": "dist/index.js" },
+  "./gateway": { "types": "dist/gateway/index.d.ts",   "import": "dist/gateway/index.js" },
+  "./utils":   { "types": "dist/utils/index.d.ts",     "import": "dist/utils/index.js" },
+  "./node":    { "types": "dist/node/index.d.ts",      "import": "dist/node/index.js" }
+}
+```
+
+**Tarball contents (dist/node confirmed):**
+- `dist/node/index.js` — PRESENT
+- `dist/node/index.d.ts` — PRESENT
+- `dist/gateway/client.js` — PRESENT
+- `dist/gateway/client.d.ts` — PRESENT
+
+**Changelog linearity preserved:** 0.1.0 (Phase 4 fold) → 0.2.0 (Phase 4 changeset) → 0.3.0 (Phase 7 client).
 
 ---
 
@@ -151,7 +154,7 @@ The checkpoint is emitted in the plan execution output. User must:
 | T-07-03 (Pending request DoS) | Mitigated: setTimeout per request + flushPending in close() |
 | T-07-04 (Reconnect storm) | Mitigated: backoff capped at 15000ms, autoReconnect defaults false |
 | T-07-05 (Stale socket) | Mitigated: generation counter gates all event handlers |
-| T-07-06 (npm publish credentials) | Pending: human checkpoint with 2FA OTP |
+| T-07-06 (npm publish credentials) | Mitigated: human checkpoint with 2FA OTP completed |
 
 ---
 
@@ -173,5 +176,12 @@ None. The GatewayClient implementation is fully functional — no placeholder da
 
 **Commits exist:**
 - `2dfb9f2` — FOUND (feat(07-02): add GatewayClient class + Node subpath to @minion-stack/shared)
+- `bead54f` — FOUND (docs(07-02): partial summary — Task 1 complete, Task 2 awaiting npm publish)
+
+**npm publish verified:**
+- `npm view @minion-stack/shared version` → `0.3.0` (CONFIRMED)
+- versions array includes `0.2.0` and `0.3.0` (CONFIRMED)
+- exports map includes `./node` (CONFIRMED)
+- `dist/node/index.js` in tarball (CONFIRMED)
 
 ## Self-Check: PASSED
