@@ -98,3 +98,50 @@ Tracks out-of-scope findings surfaced during Phase 3 adoption work.
 - **Workaround applied (pixel-agents webview-ui):** Map the spread config array to inject `files: '**/*.{ts,tsx}'` on each non-ignores entry + pin `parserOptions.tsconfigRootDir = import.meta.dirname` + `globalIgnores(['eslint.config.js'])`.
 - **Recommended resolution:** Upstream fix in `@minion-stack/lint-config@0.1.2` — add `files: ['**/*.{ts,tsx,mts,cts}']` to the `tseslint.configs.recommended` entries so downstream consumers don't need the `.map()` workaround. Keep the `js.configs.recommended` entry global (it's safe on JS config files).
 - **Severity:** Low — workaround is 10 lines. Only affects subprojects with nested `node_modules` (webview-ui, paperclip-minion workspaces). Hub + site didn't hit this because their node_modules are flat.
+
+## From Plan 03-06 (minion_plugins adoption)
+
+### Item: minion_plugins — FULL DEFERRAL (ADOPT-06, per D-27)
+
+**Decision:** `minion_plugins` is deferred from Phase 3 adoption. ADOPT-06 is CLOSED with "not applicable" status for this subproject. ADOPT-07 is N/A (no CI exists to gate).
+
+**Rationale:**
+
+- No `package.json` exists — no dependencies to manage, no `@minion-stack/*` to install
+- Zero TypeScript/JavaScript files — **tsconfig adoption N/A per D-12**
+- Zero code to lint — **lint-config adoption N/A per D-12**
+- Infisical project `minion-plugins` contains **ZERO secrets** (verified 2026-04-21 checkpoint via 3 signals: memory reference `reference_infisical_setup.md` table, `~/.infisical/secrets-backup/` absence, repo structure)
+- No GitHub Actions workflow exists or is meaningful to add for a markdown+YAML catalog
+
+**Structure confirmed (2026-04-21):**
+
+```
+minion_plugins/
+├── .claude-plugin/           # Claude Code plugin metadata
+├── plugins/                  # 6 plugin dirs: fork-sync, lessons-learned, minion-docs,
+│                             # mintlify, provision-server, pr-workflow (markdown + YAML)
+├── templates/plugin-template/
+├── docs/ → VAULT symlink
+├── README.md
+└── .gitignore
+```
+
+**Impact on Phase 3 success criteria:**
+
+- **ADOPT-06** CLOSED with "not applicable" status — no action needed in Phase 3
+- **ADOPT-07** ("subproject's own CI passes") is N/A for minion_plugins — no CI exists, no meaningful CI to add
+- `minion doctor --all` reporting for `plugins` row: expected state is *"no @minion-stack/\* installed"* — this is **correct for this subproject, NOT drift**
+
+**Revisit condition (Phase 8 candidate):**
+
+- If `minion_plugins` ever gains TypeScript/JavaScript code → re-open ADOPT-06 and adopt `@minion-stack/tsconfig` + `@minion-stack/lint-config`
+- If Infisical project `minion-plugins` ever gains secrets → add `.env.example` at that time (partial adoption, no tsconfig still)
+- Until one of those triggers: this subproject legitimately has nothing to adopt and should not be forced through the pipeline
+
+**Tracking:**
+
+- Checkpoint record: `.planning/phases/03-adopt-foundation-in-subprojects/03-06-CHECKPOINT.md`
+- This deferral does NOT block Phase 3 completion.
+- `.planning/ROADMAP.md` ADOPT-06 row reflects N/A status for plugins row.
+- No subproject branch on NikolasP98/minion_plugins. No PR.
+- Severity: Zero — nothing was skipped that applies; skipped only what D-12 explicitly excludes.
