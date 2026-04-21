@@ -1,0 +1,45 @@
+{
+  "name": "@minion-stack/auth",
+  "version": "0.1.0",
+  "description": "Better Auth factory for the Minion platform — shared between minion_hub and minion_site.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NikolasP98/minion-meta.git",
+    "directory": "packages/auth"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "tsc",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "better-auth": "1.4.19",
+    "drizzle-orm": ">=0.45.0"
+  },
+  "devDependencies": {
+    "@minion-stack/tsconfig": "workspace:*",
+    "@minion-stack/db": "workspace:*",
+    "better-auth": "1.4.19",
+    "drizzle-orm": "^0.45.1",
+    "typescript": "^5.0.0",
+    "vitest": "^2.1.9"
+  }
+}
