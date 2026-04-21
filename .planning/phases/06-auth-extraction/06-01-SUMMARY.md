@@ -14,7 +14,7 @@ provides:
   - "@minion-stack/auth@0.2.0 workspace package with createAuth() factory"
   - "12 unit tests covering all factory behaviors (jwt, EdDSA, audience, cookies, plugins, hooks, accountLinking)"
   - "Changeset versioned and CHANGELOG.md generated"
-  - "Package ready for npm publish (pending 2FA checkpoint)"
+  - "@minion-stack/auth@0.2.0 published to public npm (AUTH-02 complete)"
 affects: [06-02-hub-consumer, 06-03-site-consumer, 06-04-staging]
 
 # Tech tracking
@@ -55,7 +55,7 @@ patterns-established:
   - "Pattern 2: Plugin composition — factory provides jwt(fullConfig) always; callers append organization/oidcProvider via plugins param"
   - "Pattern 3: Secret handling — factory never console.logs params; callers own env reading (no process.env in @minion-stack/auth)"
 
-requirements-completed: [AUTH-01]
+requirements-completed: [AUTH-01, AUTH-02]
 
 # Metrics
 duration: ~25min
@@ -70,8 +70,8 @@ completed: 2026-04-21
 
 - **Duration:** ~25 min
 - **Started:** 2026-04-21T17:35:31Z
-- **Completed:** 2026-04-21T17:41:45Z (pending 2FA checkpoint for npm publish)
-- **Tasks:** 3 tasks (2 fully committed, Task 3 at npm 2FA checkpoint)
+- **Completed:** 2026-04-21T18:30:00Z (npm publish confirmed — registry HTTP 200 on /0.2.0 endpoint)
+- **Tasks:** 3 tasks (all complete)
 - **Files modified/created:** 10 files
 
 ## Accomplishments
@@ -88,7 +88,7 @@ completed: 2026-04-21
 2. **Task 2: Factory TDD — RED→GREEN** - `6d321c3` (feat)
 3. **Task 3: Changeset + version** - `cc747fe` (feat)
 
-Note: Task 3 publish step hit npm 2FA checkpoint — publish pending.
+Task 3 publish: User ran `npm publish --access public --otp <OTP>` — confirmed published. Registry HTTP 200 on `https://registry.npmjs.org/@minion-stack/auth/0.2.0` (E403 "cannot publish over 0.2.0" on retry also confirms success).
 
 ## Files Created/Modified
 
@@ -127,21 +127,12 @@ Note: Task 3 publish step hit npm 2FA checkpoint — publish pending.
 **Total deviations:** 1 auto-fixed (Rule 3 - blocking build issue)
 **Impact on plan:** Essential fix for tsc build correctness. Test behavior unchanged — vitest uses its own transform pipeline, not tsc. No scope creep.
 
-## Auth Gate: npm 2FA Required
+## Auth Gate: npm 2FA (Resolved)
 
-The publish step at Task 3 hit an npm OTP gate:
+The publish step at Task 3 required an npm OTP:
 - npm is configured with 2FA enforcement on `@minion-stack/*` scope
-- `npm publish --access public` prompts for OTP via browser auth URL
-- This is expected behavior (same as `@minion-stack/db@0.1.0` publish in Phase 5)
-
-**What was attempted:** `npm publish --access public` in `packages/auth/`
-
-**What is ready for publish:**
-- `dist/` emitted cleanly (index.js, index.d.ts, factory.js, factory.d.ts, types.js, types.d.ts)
-- `CHANGELOG.md` generated with `## 0.2.0` entry
-- `package.json` at version `0.2.0`
-
-**User action needed:** Provide npm OTP to publish `@minion-stack/auth@0.2.0`
+- User ran `npm publish --access public --otp <OTP>` from `packages/auth/`
+- **Result: Published successfully** — confirmed via `curl https://registry.npmjs.org/@minion-stack/auth/0.2.0` returning HTTP 200 with correct version/name, and E403 "cannot publish over 0.2.0" on re-attempt confirming the version is live.
 
 ## Threat Mitigations Applied
 
@@ -157,9 +148,9 @@ None — the factory is fully implemented and all 12 behaviors are tested.
 
 ## Next Phase Readiness
 
-- After npm 2FA publish: `npm view @minion-stack/auth version` should return `0.2.0`
-- **Handoff to Plans 06-02 + 06-03:** Once `@minion-stack/auth@0.2.0` is live on npm, hub consumer (06-02) and site consumer (06-03) can execute in parallel. Both plans will replace their `betterAuth({...})` body with `createAuth({...})` call, importing from `@minion-stack/auth`.
-- AUTH-01 is complete (factory built and tested). AUTH-02 completes after npm publish.
+- `@minion-stack/auth@0.2.0` is live on npm — confirmed via registry API
+- **Handoff to Plans 06-02 + 06-03:** `@minion-stack/auth@0.2.0` is live; hub consumer (06-02) and site consumer (06-03) can execute in parallel. Both plans will replace their `betterAuth({...})` body with `createAuth({...})` call, importing from `@minion-stack/auth`.
+- AUTH-01 complete (factory built and tested). AUTH-02 complete (published to npm).
 
 ## Self-Check
 
@@ -174,13 +165,12 @@ Verifying claims before finalizing:
 - [x] `grep -q '"better-auth": "1.4.19"' packages/auth/package.json` → true
 - [x] `grep -c '"@minion-stack/db"' packages/auth/package.json` → 1 (devDeps only, not peerDeps)
 - [x] Commits 97a8f73, 6d321c3, cc747fe all exist in git log
-- [ ] `npm view @minion-stack/auth version` → PENDING (2FA checkpoint)
+- [x] `@minion-stack/auth@0.2.0` on npm — confirmed via `curl https://registry.npmjs.org/@minion-stack/auth/0.2.0` → HTTP 200, version=0.2.0, name=@minion-stack/auth
 
-## Self-Check: PARTIAL (npm publish pending 2FA)
+## Self-Check: PASSED
 
-Task 1 and Task 2 self-check: PASSED
-Task 3 publish step: BLOCKED at npm 2FA checkpoint
+All tasks complete. All artifacts verified.
 
 ---
 *Phase: 06-auth-extraction*
-*Completed: 2026-04-21 (Tasks 1+2 complete; Task 3 at npm 2FA checkpoint)*
+*Completed: 2026-04-21*
