@@ -35,18 +35,22 @@ Scope substitution: `@minion/*` → `@minion-stack/*` (locked in Phase 02 plan 0
 
 - [x] CLEAN-01..06 (see `.planning/phases/01-clean-slate/01-VERIFICATION.md`)
 
+**M2 — Adopt foundation in subprojects** (Validated in Phase 03: adopt-foundation-in-subprojects, 2026-04-21)
+
+All 5 TypeScript-using subprojects adopted `@minion-stack/tsconfig` + lint-config + env files with open PRs (user-controlled merge per D-24). `minion_plugins` is a full D-27 deferral (pure catalog, no code/vars).
+
+- [x] ADOPT-01: `minion` extends `@minion-stack/tsconfig/node`, oxlint preset adopted, env files shipped — PR #77
+- [x] ADOPT-02: `minion_hub` extends array `[svelte, .svelte-kit]`, Prettier via 0.1.1, net-new ci.yml — PR #16
+- [x] ADOPT-03: `minion_site` same pattern as hub — PR #2
+- [x] ADOPT-04: `paperclip-minion` extends `node` at `tsconfig.base.json`, Prettier CJS shim for 0.1.0 — PR #1
+- [x] ADOPT-05: `pixel-agents` dual tsconfig (extension=`node`, webview=`base`), local ESLint plugin preserved — PR pablodelucca/pixel-agents#246
+- [x] ADOPT-06: `minion_plugins` full D-27 deferral (no code, no vars) — documented in deferred-items.md
+- [x] ADOPT-07: Net-new CI workflows added for hub + site; existing CI validated against published `@minion-stack/*` versions
+
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-**M2 — Adopt foundation in subprojects**
-- [ ] ADOPT-01: `minion` subproject extends `@minion/tsconfig`, adopts `@minion/lint-config`, and ships `.env.defaults` + `.env.example`
-- [ ] ADOPT-02: `minion_hub` subproject adopts shared configs and ships env files
-- [ ] ADOPT-03: `minion_site` subproject adopts shared configs and ships env files
-- [ ] ADOPT-04: `paperclip-minion` subproject adopts shared configs and ships env files
-- [ ] ADOPT-05: `pixel-agents` subproject adopts shared configs and ships env files
-- [ ] ADOPT-06: `minion_plugins` subproject adopts shared configs where applicable
-- [ ] ADOPT-07: Every subproject's own CI passes against published `@minion/*` versions (no meta-repo dependency)
 
 **M3 — Fold `minion-shared` → `@minion/shared`**
 - [ ] SHARE-01: `minion-shared/` history is imported into `packages/shared/` via `git subtree add`, preserving commits
@@ -164,4 +168,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-20 after Phase 02 (foundation) completion*
+*Last updated: 2026-04-21 after Phase 03 (adopt-foundation-in-subprojects) completion*
