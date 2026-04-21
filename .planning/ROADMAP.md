@@ -164,7 +164,7 @@ Plans:
 - [x] 07-01: Audit WS/gateway duplication — produce `specs/ws-duplication-audit.md`
 - [x] 07-02: Consolidate WS client implementation into `@minion/shared`
 - [x] 07-03: Update hub + site + paperclip to consume shared client (parallel subagents)
-- [ ] 07-04: E2E gateway session verification across all three consumers
+- [x] 07-04: E2E gateway session verification across all three consumers
 
 ### Phase 8: Polish & Automation
 **Goal**: Meta-repo CI is green on every PR, changesets publishes releases automatically, `minion doctor` is polished, and a new dev can go from clone to `minion dev` in under 10 minutes.

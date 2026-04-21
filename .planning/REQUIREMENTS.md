@@ -72,7 +72,7 @@ Requirements for the initial meta-repo buildout (M0–M7). Each maps to a roadma
 - [x] **WS-02**: Shared WS client implementation consolidated into `@minion/shared`
 - [x] **WS-03**: `minion_hub` and `minion_site` updated to consume the shared client
 - [x] **WS-04**: `paperclip-minion` `openclaw_gateway` adapter updated to consume the shared client
-- [ ] **WS-05**: Exactly one WS client implementation exists across the platform (grep confirms no duplicate WebSocket classes)
+- [x] **WS-05**: Exactly one WS client implementation exists across the platform (grep confirms no duplicate WebSocket classes)
 
 ### Polish & Automation (M7)
 
@@ -167,7 +167,7 @@ Populated during roadmap creation — each requirement maps to exactly one phase
 | WS-02 | Phase 7 | Complete |
 | WS-03 | Phase 7 | Complete |
 | WS-04 | Phase 7 | Complete |
-| WS-05 | Phase 7 | Pending |
+| WS-05 | Phase 7 | Complete |
 | POLISH-01 | Phase 8 | Pending |
 | POLISH-02 | Phase 8 | Pending |
 | POLISH-03 | Phase 8 | Pending |
