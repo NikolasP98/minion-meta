@@ -13,7 +13,7 @@ Transform `/home/nikolas/Documents/CODE/AI/` from a loose collection of sibling 
 - [x] **Phase 1: Clean Slate** — Audit, triage, and bring every subproject to a known-clean state (completed 2026-04-20)
 - [x] **Phase 2: Foundation** — Stand up meta-repo, `@minion/cli` + `@minion/env` + shared configs, Infisical rename cascade (completed 2026-04-20)
 - [x] **Phase 3: Adopt Foundation in Subprojects** — Propagate shared tsconfig/lint/env into every subproject (completed 2026-04-21)
-- [ ] **Phase 4: Fold minion-shared** — Import history into `packages/shared`, publish `@minion/shared`, update consumers, archive old repo
+- [ ] **Phase 4: Fold minion-shared** — Migrate `minion-shared/` source into `packages/shared`, publish `@minion-stack/shared`, update consumers, publish deprecation shim
 - [ ] **Phase 5: DB Extraction** — Move Drizzle schema to `@minion/db`, two-step cutover of migration ownership from hub to meta-repo
 - [ ] **Phase 6: Auth Extraction** — Extract Better Auth config to `@minion/auth`, hub+site consume factory with shared session continuity
 - [ ] **Phase 7: WS Consolidation** — Consolidate duplicated WS client into `@minion/shared`, hub+site+paperclip consume
@@ -88,23 +88,23 @@ Plans:
 - [x] 03-06-PLAN.md — Resolve ADOPT-06 for `minion_plugins` (npm; markdown+YAML catalog, Wave 3; likely D-27 deferral)
 
 ### Phase 4: Fold minion-shared
-**Goal**: `minion-shared/` is absorbed into `packages/shared` as `@minion/shared` with history preserved, all consumers migrate off the old package name, and the old GitHub repo is archived.
+**Goal**: `minion-shared/` source is migrated into `packages/shared` as `@minion-stack/shared`, all consumers migrate off the old package name, and a deprecation shim is published.
 **Depends on**: Phase 3
 **Requirements**: SHARE-01, SHARE-02, SHARE-03, SHARE-04, SHARE-05
 **Success Criteria** (what must be TRUE):
-  1. `packages/shared` contains the full `minion-shared` commit history (verified via `git log --follow`)
-  2. `@minion/shared` is published to npm and importable via standard package install
-  3. Old `minion-shared` package on npm is deprecated with a notice pointing to `@minion/shared`
-  4. `minion_hub`, `minion_site`, and `paperclip-minion` all import from `@minion/shared` — no references to the old package name remain in their source trees
-  5. Old `minion-shared` GitHub repo is archived with a README redirect
+  1. `packages/shared` contains the complete `minion-shared` source (SHARE-01 via directory copy — git subtree N/A, no separate git history existed)
+  2. `@minion-stack/shared` is published to npm and importable via standard package install
+  3. Old `minion-shared` package on npm is deprecated with a notice pointing to `@minion-stack/shared`
+  4. `minion_site` imports from `@minion-stack/shared` — no references to the old package name remain (minion_hub + paperclip confirmed non-consumers)
+  5. Old `minion-shared` GitHub repo archived — N/A (no separate GitHub repo existed; npm-only package)
 **UI hint**: no
-**Plans**: TBD (subtree import, publish, per-consumer migration, archive)
+**Plans**: 4 plans across 4 sequential waves (each wave gates the next due to npm publish dependency)
 
 Plans:
-- [ ] 04-01: Import `minion-shared` history into `packages/shared` via git subtree
-- [ ] 04-02: Publish first `@minion/shared` release + deprecated shim of old name
-- [ ] 04-03: Update import paths in `minion_hub`, `minion_site`, `paperclip-minion` (parallel subagents)
-- [ ] 04-04: Archive old `minion-shared` repo with redirect README
+- [ ] 04-01-PLAN.md — Create `packages/shared/` workspace package: copy source from `minion-shared/src/`, write package.json + tsconfig, build with tsc, add changeset (Wave 1)
+- [ ] 04-02-PLAN.md — Publish `@minion-stack/shared@0.1.0` to npm + build and publish `minion-shared@0.2.0` deprecation shim (Wave 2, 2x human-action checkpoint for 2FA)
+- [ ] 04-03-PLAN.md — Migrate `minion_site` off `minion-shared` to `@minion-stack/shared`: update package.json, update 3 import files, bun check, open PR on minion-site repo (Wave 3)
+- [ ] 04-04-PLAN.md — Remove `minion-shared/` from .gitignore + delete directory + write phase VERIFICATION.md (Wave 4)
 
 ### Phase 5: DB Extraction
 **Goal**: A single Drizzle schema source lives in `@minion/db`, both hub and site consume its types, and migration ownership cleanly transitions to the meta-repo via a staged two-step cutover.
