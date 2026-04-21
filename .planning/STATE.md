@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Completed 03-06-PLAN.md — minion_plugins full D-27 deferral (no code, 0 Infisical secrets); Phase 3 CLOSED (5 PRs + 1 documented deferral)
-last_updated: "2026-04-21T02:56:37.643Z"
+status: executing
+stopped_at: Completed 04-01-PLAN.md
+last_updated: "2026-04-21T07:07:57.709Z"
 last_activity: 2026-04-21
 progress:
   total_phases: 8
   completed_phases: 3
-  total_plans: 19
-  completed_plans: 19
-  percent: 100
+  total_plans: 23
+  completed_plans: 20
+  percent: 87
 ---
 
 # Project State
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-19)
 
 **Core value:** One command resolves the right env and runs the right build for any subproject, and every piece of cross-cutting code lives in exactly one place under uniform standardization — no exceptions.
-**Current focus:** Phase 03 — adopt-foundation-in-subprojects
+**Current focus:** Phase 04 — fold-minion-shared
 
 ## Current Position
 
-Phase: 4
-Plan: Not started
-Status: Phase complete — ready for verification
+Phase: 04 (fold-minion-shared) — EXECUTING
+Plan: 2 of 4
+Status: Ready to execute
 Last activity: 2026-04-21
 
 Progress: ░░░░░░░░░░ 0%
@@ -62,6 +62,7 @@ Progress: ░░░░░░░░░░ 0%
 | Phase 03 P03 | 17 min | 3 tasks tasks | 8 files files |
 | Phase 03 P05 | 8min | 3 tasks tasks | 10 files files |
 | Phase 03 P06 | 2min | 2 tasks | 2 files |
+| Phase 04 P01 | 12 | 2 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -100,6 +101,9 @@ Recent decisions affecting current work:
 - [Phase 03]: Shared lint-config preset needs 'files' scoping in downstream consumers with nested node_modules — workaround applied in pixel-agents/webview-ui, upstream fix deferred to lint-config 0.1.2
 - [Phase 03]: minion_plugins fully deferred per D-27 — markdown+YAML catalog with 0 TS/JS + 0 Infisical secrets; ADOPT-06 + ADOPT-07 closed as N/A with Phase 8 revisit triggers
 - [Phase 03]: Phase 3 CLOSED — 5 adoption PRs open + 1 documented deferral for the no-code subproject
+- [Phase 04]: SHARE-01 git subtree N/A: minion-shared/ has no independent git history (plain gitignored directory, not a submodule) — source copied verbatim
+- [Phase 04]: tsconfig extends @minion-stack/tsconfig/library.json (with .json extension) per package exports map
+- [Phase 04]: noUncheckedIndexedAccess narrowing fix in _formatTs: hm[1] -> hm?.[1] for strict-mode compatibility with base.json
 
 ### Pending Todos
 
@@ -113,6 +117,6 @@ yet. Phase 1 depends on nothing and can be planned immediately.
 
 ## Session Continuity
 
-Last session: 2026-04-21T02:46:48.547Z
-Stopped at: Completed 03-06-PLAN.md — minion_plugins full D-27 deferral (no code, 0 Infisical secrets); Phase 3 CLOSED (5 PRs + 1 documented deferral)
+Last session: 2026-04-21T07:07:57.707Z
+Stopped at: Completed 04-01-PLAN.md
 Resume file: None
