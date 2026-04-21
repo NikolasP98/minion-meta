@@ -63,7 +63,7 @@ Requirements for the initial meta-repo buildout (M0–M7). Each maps to a roadma
 
 - [x] **AUTH-01**: Better Auth config extracted from hub and site into `packages/auth` as `createAuth()` factory
 - [x] **AUTH-02**: `@minion/auth` publishes first release
-- [ ] **AUTH-03**: `minion_hub` and `minion_site` consume the factory with identical secret/provider config
+- [x] **AUTH-03**: `minion_hub` and `minion_site` consume the factory with identical secret/provider config
 - [ ] **AUTH-04**: Staging deploy of both services verified with shared session continuity (user logs into hub, session works on site)
 
 ### WS Consolidation (M6)
@@ -161,7 +161,7 @@ Populated during roadmap creation — each requirement maps to exactly one phase
 | DB-07 | Phase 5 | Complete |
 | AUTH-01 | Phase 6 | Complete |
 | AUTH-02 | Phase 6 | Complete |
-| AUTH-03 | Phase 6 | Pending |
+| AUTH-03 | Phase 6 | Complete |
 | AUTH-04 | Phase 6 | Pending |
 | WS-01 | Phase 7 | Pending |
 | WS-02 | Phase 7 | Pending |

@@ -142,7 +142,7 @@ Plans:
 
 Plans:
 - [x] 06-01-PLAN.md — Scaffold `packages/auth` + implement `createAuth()` factory + publish `@minion-stack/auth@0.1.0` (Wave 1; checkpoint: npm 2FA)
-- [ ] 06-02-PLAN.md — Migrate `minion_hub` to consume `createAuth()` factory; fix schema import miss from Phase 5 (Wave 2; parallel with 06-03)
+- [x] 06-02-PLAN.md — Migrate `minion_hub` to consume `createAuth()` factory; fix schema import miss from Phase 5 (Wave 2; parallel with 06-03)
 - [ ] 06-03-PLAN.md — Migrate `minion_site` to consume `createAuth()` factory; eliminates JWT audience drift (Wave 2; parallel with 06-02)
 - [ ] 06-04-PLAN.md — Staging verification of shared session continuity (Wave 3; checkpoint: human-verify)
 - [ ] 06-05-PLAN.md — Coordinated production deploy + phase VERIFICATION.md (Wave 4; checkpoint: human-action)

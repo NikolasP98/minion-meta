@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 06-auth-extraction/06-01-PLAN.md
-last_updated: "2026-04-21T18:32:15.030Z"
+stopped_at: Completed 06-auth-extraction/06-02-PLAN.md
+last_updated: "2026-04-21T18:42:06.066Z"
 last_activity: 2026-04-21
 progress:
   total_phases: 8
   completed_phases: 5
   total_plans: 33
-  completed_plans: 29
-  percent: 88
+  completed_plans: 30
+  percent: 91
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-19)
 ## Current Position
 
 Phase: 06 (auth-extraction) — EXECUTING
-Plan: 2 of 5
+Plan: 3 of 5
 Status: Ready to execute
 Last activity: 2026-04-21
 
@@ -67,6 +67,7 @@ Progress: ██████░░░░ 62%
 | Phase 04-fold-minion-shared P03 | 15min | 2 tasks | 5 files |
 | Phase 04-fold-minion-shared P04 | 2min | 2 tasks | 2 files |
 | Phase 06-auth-extraction P06-01 | 30min | 3 tasks | 10 files |
+| Phase 06 P02 | 25min | 1 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -118,6 +119,7 @@ Recent decisions affecting current work:
 - [Phase 06-auth-extraction]: Version 0.2.0 not 0.1.0: changeset minor bump applied to 0.1.0 scaffold → produced 0.2.0 as initial npm release
 - [Phase 06-auth-extraction]: factory.ts excludes organization() (D-02 revised): hub passes organization+oidcProvider via plugins param; site passes organization(); factory never calls organization() internally
 - [Phase 06-auth-extraction]: schema NOT imported in factory — passed as param to keep @minion-stack/auth decoupled from @minion-stack/db internals
+- [Phase 06]: Hub auth.ts delegates to createAuth() factory; @minion-stack/db added as explicit dep; PR #19 open on NikolasP98/minion_hub targeting dev (not merged — gated on 06-04 staging)
 
 ### Pending Todos
 
@@ -131,6 +133,6 @@ yet. Phase 1 depends on nothing and can be planned immediately.
 
 ## Session Continuity
 
-Last session: 2026-04-21T18:32:15.027Z
-Stopped at: Completed 06-auth-extraction/06-01-PLAN.md
+Last session: 2026-04-21T18:42:06.062Z
+Stopped at: Completed 06-auth-extraction/06-02-PLAN.md
 Resume file: None
