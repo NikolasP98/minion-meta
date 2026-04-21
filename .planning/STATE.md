@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 06-05-PLAN.md
-last_updated: "2026-04-21T19:18:43.000Z"
+stopped_at: Completed 07-01-PLAN.md
+last_updated: "2026-04-21T20:14:53.185Z"
 last_activity: 2026-04-21
 progress:
   total_phases: 8
   completed_phases: 6
-  total_plans: 33
-  completed_plans: 32
-  percent: 97
+  total_plans: 37
+  completed_plans: 34
+  percent: 92
 ---
 
 # Project State
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-19)
 
 **Core value:** One command resolves the right env and runs the right build for any subproject, and every piece of cross-cutting code lives in exactly one place under uniform standardization — no exceptions.
-**Current focus:** Phase 06 — auth-extraction
+**Current focus:** Phase 07 — ws-consolidation
 
 ## Current Position
 
-Phase: 06 (auth-extraction) — COMPLETE
-Plan: 5 of 5
-Status: Phase closed — ready for Phase 7
+Phase: 07 (ws-consolidation) — EXECUTING
+Plan: 2 of 4
+Status: Ready to execute
 Last activity: 2026-04-21
 
 Progress: ████████░░ 97%
@@ -36,7 +36,7 @@ Progress: ████████░░ 97%
 
 **Velocity:**
 
-- Total plans completed: 24
+- Total plans completed: 29
 - Average duration: —
 - Total execution time: —
 
@@ -49,6 +49,7 @@ Progress: ████████░░ 97%
 | 02 | 8 | - | - |
 | 3 | 6 | - | - |
 | 05 | 5 | - | - |
+| 06 | 5 | - | - |
 
 **Recent Trend:**
 
@@ -69,6 +70,7 @@ Progress: ████████░░ 97%
 | Phase 06-auth-extraction P06-01 | 30min | 3 tasks | 10 files |
 | Phase 06 P02 | 25min | 1 tasks | 3 files |
 | Phase 06-auth-extraction P03 | 3min | 1 tasks | 3 files |
+| Phase 07 P01 | 25 | 1 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -124,6 +126,7 @@ Recent decisions affecting current work:
 - [Phase 06-auth-extraction]: Used @minion-stack/auth@^0.2.0 for site consumer (plan referenced 0.1.0 but 0.2.0 was published in 06-01)
 - [Phase 06-auth-extraction]: secret: env.BETTER_AUTH_SECRET ?? '' in site auth.ts to satisfy strict TypeScript — site's ambient.d.ts types env vars as string|undefined
 - [Phase 06]: Phase 6 complete — createAuth() factory live at @minion-stack/auth@0.2.0; hub + site migrated; JWKS kid gR0h1QKBswrpsykV0JRW7WD4C4F1y3vc identical on both services; session continuity verified staging + prod; AUTH-01..04 all Complete
+- [Phase 07]: D-01..D-08 locked for Phase 7 WS consolidation: package target @minion-stack/shared; publish 0.2.0 then 0.3.0; Yjs binary frames and onLog stay local; hub text.ts kept local; site uses manual smoke runbook; minion/ gateway server out of scope
 
 ### Pending Todos
 
@@ -137,6 +140,6 @@ yet. Phase 1 depends on nothing and can be planned immediately.
 
 ## Session Continuity
 
-Last session: 2026-04-21T19:18:43.000Z
-Stopped at: Completed 06-05-PLAN.md
+Last session: 2026-04-21T20:14:53.182Z
+Stopped at: Completed 07-01-PLAN.md
 Resume file: None
