@@ -47,3 +47,21 @@ Tracks out-of-scope findings surfaced during Phase 3 adoption work.
 - **Detail:** All paperclip GitHub Actions workflows (pr.yml, docker.yml, release.yml, refresh-lockfile.yml) trigger only on `master`. PRs to `minion-integration` get zero automated verification.
 - **Scope:** NOT Phase 3. The `minion-integration` branch is paperclip's long-lived integration branch for the minion gateway fork work; CI gap pre-existed this phase.
 - **Recommended resolution:** Either (a) retarget the adoption PR to `master` (requires rebasing + separate lockfile PR first, per §Pitfall 7), (b) add a copy of pr.yml that triggers on `minion-integration` PRs too. Not blocking for adoption — local verification passed.
+
+## From Plan 03-02 (minion_hub adoption)
+
+### Item: Strict-mode fallout in minion_hub requires follow-up refactor
+
+- **Surfaced:** 2026-04-21 during 03-02 Task 1
+- **Detail:** Extending `@minion-stack/tsconfig/svelte.json` (which inherits `base.json`'s `noUncheckedIndexedAccess: true` + `noImplicitOverride: true`) produces 408 new type errors in minion_hub (count went from 18 pre-adoption → 426 post-adoption without transitional override).
+- **Workaround applied:** `minion_hub/tsconfig.json` layers both as `false` (transitional overrides).
+- **Detailed triage:** `.planning/phases/03-adopt-foundation-in-subprojects/03-02-ISSUES.md`
+- **Recommended resolution:** Phase 8 (Polish) plan — incremental refactor. Primary heavy-hitter files: `MinionLogo.svelte`, `WorkshopCanvas.svelte`, `reliability/*.svelte`, multiple `(app)/*/+page.svelte`. Expected effort: ~2 days of null-guards + theme preset unwrapping.
+- **Severity:** Low — `extends` contract preserved, overrides explicit and documented. Matches 03-01 + 03-04 precedent.
+
+### Item: 18 pre-existing type errors on minion_hub dev (not adoption-caused)
+
+- **Surfaced:** 2026-04-21 (verified via `git stash` comparison during 03-02 Task 1)
+- **Detail:** `bun run check` reports 18 errors on dev branch regardless of whether `@minion-stack/tsconfig` adoption is applied. Mix of Better Auth `accountLinking` schema drift, Zag.js generic mismatches in `AgentCreateWizard`, channel schema drift in `ChannelsTab`, and a stray `autocorrect` textarea attribute.
+- **Scope:** NOT Phase 3. The adoption PR preserves this pre-existing state, not fix it.
+- **Recommended resolution:** Dedicated hub-maintenance plan post-Phase 3. Not blocking.

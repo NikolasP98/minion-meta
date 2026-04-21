@@ -34,7 +34,7 @@ Requirements for the initial meta-repo buildout (M0–M7). Each maps to a roadma
 ### Adoption (M2)
 
 - [x] **ADOPT-01**: `minion` subproject extends `@minion/tsconfig`, adopts `@minion/lint-config`, and ships `.env.defaults` + `.env.example`
-- [ ] **ADOPT-02**: `minion_hub` subproject adopts shared configs and ships env files
+- [x] **ADOPT-02**: `minion_hub` subproject adopts shared configs and ships env files
 - [ ] **ADOPT-03**: `minion_site` subproject adopts shared configs and ships env files
 - [x] **ADOPT-04**: `paperclip-minion` subproject adopts shared configs and ships env files
 - [ ] **ADOPT-05**: `pixel-agents` subproject adopts shared configs and ships env files
@@ -141,7 +141,7 @@ Populated during roadmap creation — each requirement maps to exactly one phase
 | FOUND-11 | Phase 2 | Complete |
 | FOUND-12 | Phase 2 | Complete |
 | ADOPT-01 | Phase 3 | Complete |
-| ADOPT-02 | Phase 3 | Pending |
+| ADOPT-02 | Phase 3 | Complete |
 | ADOPT-03 | Phase 3 | Pending |
 | ADOPT-04 | Phase 3 | Complete |
 | ADOPT-05 | Phase 3 | Pending |
