@@ -15,7 +15,7 @@ Transform `/home/nikolas/Documents/CODE/AI/` from a loose collection of sibling 
 - [x] **Phase 3: Adopt Foundation in Subprojects** — Propagate shared tsconfig/lint/env into every subproject (completed 2026-04-21)
 - [x] **Phase 4: Fold minion-shared** — Migrate `minion-shared/` source into `packages/shared`, publish `@minion-stack/shared`, update consumers, publish deprecation shim (completed 2026-04-21)
 - [ ] **Phase 5: DB Extraction** — Move Drizzle schema to `@minion-stack/db`, two-step cutover of migration ownership from hub to meta-repo
-- [ ] **Phase 6: Auth Extraction** — Extract Better Auth config to `@minion/auth`, hub+site consume factory with shared session continuity
+- [ ] **Phase 6: Auth Extraction** — Extract Better Auth config to `@minion-stack/auth`, hub+site consume factory with shared session continuity
 - [ ] **Phase 7: WS Consolidation** — Consolidate duplicated WS client into `@minion/shared`, hub+site+paperclip consume
 - [ ] **Phase 8: Polish & Automation** — Meta-repo CI, changesets release automation, `minion doctor` polish, onboarding docs
 
@@ -128,23 +128,24 @@ Plans:
 - [x] 05-05-PLAN.md — Production cutover (Step 2): remove hub migration scripts, run meta-repo db:push against prod Turso, write VERIFICATION.md (Wave 4; checkpoint: blocking)
 
 ### Phase 6: Auth Extraction
-**Goal**: Better Auth configuration lives in `@minion/auth` as a `createAuth()` factory; hub and site consume it with identical config and shared session continuity.
+**Goal**: Better Auth configuration lives in `@minion-stack/auth` as a `createAuth()` factory; hub and site consume it with identical config and shared session continuity.
 **Depends on**: Phase 4
 **Requirements**: AUTH-01, AUTH-02, AUTH-03, AUTH-04
 **Success Criteria** (what must be TRUE):
   1. `packages/auth` exports a `createAuth()` factory that accepts environment-specific params
-  2. `@minion/auth` is published on npm
+  2. `@minion-stack/auth` is published on npm
   3. Both `minion_hub` and `minion_site` call `createAuth()` with identical secret and provider config
   4. A user logging into hub has a valid session on site (shared-session continuity works end-to-end in staging)
   5. Coordinated production deploy of hub + site passes smoke tests with no forced logouts
 **UI hint**: no
-**Plans**: TBD
+**Plans**: 5 plans across 4 waves
 
 Plans:
-- [ ] 06-01: Extract Better Auth config from hub + site into `packages/auth` factory
-- [ ] 06-02: Publish `@minion/auth` + update hub + site consumers (parallel subagents)
-- [ ] 06-03: Staging verification of shared session continuity
-- [ ] 06-04: Coordinated production deploy
+- [ ] 06-01-PLAN.md — Scaffold `packages/auth` + implement `createAuth()` factory + publish `@minion-stack/auth@0.1.0` (Wave 1; checkpoint: npm 2FA)
+- [ ] 06-02-PLAN.md — Migrate `minion_hub` to consume `createAuth()` factory; fix schema import miss from Phase 5 (Wave 2; parallel with 06-03)
+- [ ] 06-03-PLAN.md — Migrate `minion_site` to consume `createAuth()` factory; eliminates JWT audience drift (Wave 2; parallel with 06-02)
+- [ ] 06-04-PLAN.md — Staging verification of shared session continuity (Wave 3; checkpoint: human-verify)
+- [ ] 06-05-PLAN.md — Coordinated production deploy + phase VERIFICATION.md (Wave 4; checkpoint: human-action)
 
 ### Phase 7: WS Consolidation
 **Goal**: Exactly one WS/gateway client implementation exists across the platform, living in `@minion/shared`, consumed by hub, site, and paperclip's `openclaw_gateway` adapter.
@@ -157,7 +158,7 @@ Plans:
   4. Grep of all consumers shows zero duplicate WebSocket class definitions or gateway-frame implementations
   5. End-to-end gateway session (paperclip agent → gateway → hub/site dashboard) works using the consolidated client
 **UI hint**: no
-**Plans**: TBD
+**Plans**: 4 plans across 4 waves
 
 Plans:
 - [ ] 07-01: Audit WS/gateway duplication — produce `specs/ws-duplication-audit.md`
@@ -176,7 +177,7 @@ Plans:
   4. Root `CLAUDE.md` describes the steady-state developer workflow (not the migration narrative) and is accurate
   5. A fresh developer following `README.md` + onboarding docs can clone, check out subprojects, configure Infisical auth, and run `minion dev` in under 10 minutes (verified by timed dry-run)
 **UI hint**: no
-**Plans**: TBD
+**Plans**: 4 plans across 4 waves
 
 Plans:
 - [ ] 08-01: Meta-repo CI workflows (lint, typecheck, changesets-status)
@@ -197,7 +198,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 3. Adopt Foundation | 6/6 | Complete    | 2026-04-21 |
 | 4. Fold minion-shared | 4/4 | Complete   | 2026-04-21 |
 | 5. DB Extraction | 0/5 | Not started | - |
-| 6. Auth Extraction | 0/4 | Not started | - |
+| 6. Auth Extraction | 0/5 | Not started | - |
 | 7. WS Consolidation | 0/4 | Not started | - |
 | 8. Polish & Automation | 0/5 | Not started | - |
 
