@@ -121,11 +121,11 @@ Plans:
 **Plans**: 5 plans across 4 waves
 
 Plans:
-- [ ] 05-01-PLAN.md — Scaffold `packages/db`, copy 38 schema files verbatim, build with tsc, publish `@minion-stack/db@0.1.0` (Wave 1; checkpoint: npm 2FA publish + A1 verification)
-- [ ] 05-02-PLAN.md — Migrate `minion_site` to consume `@minion-stack/db`: delete local schema (5 files), update client.ts + auth.ts, bun check, open PR (Wave 2; parallel with 05-03)
-- [ ] 05-03-PLAN.md — Migrate `minion_hub` to consume `@minion-stack/db` while retaining db:push (Step 1): delete local schema, update all import sites + drizzle.config.ts, open PR (Wave 2; parallel with 05-02)
-- [ ] 05-04-PLAN.md — Add meta-repo drizzle.config.ts + db:push scripts, run staging dry-run against SQLite clone, checkpoint approval gates cutover (Wave 3)
-- [ ] 05-05-PLAN.md — Production cutover (Step 2): remove hub migration scripts, run meta-repo db:push against prod Turso, write VERIFICATION.md (Wave 4; checkpoint: blocking)
+- [x] 05-01-PLAN.md — Scaffold `packages/db`, copy 38 schema files verbatim, build with tsc, publish `@minion-stack/db@0.1.0` (Wave 1; checkpoint: npm 2FA publish + A1 verification)
+- [x] 05-02-PLAN.md — Migrate `minion_site` to consume `@minion-stack/db`: delete local schema (5 files), update client.ts + auth.ts, bun check, open PR (Wave 2; parallel with 05-03)
+- [x] 05-03-PLAN.md — Migrate `minion_hub` to consume `@minion-stack/db` while retaining db:push (Step 1): delete local schema, update all import sites + drizzle.config.ts, open PR (Wave 2; parallel with 05-02)
+- [x] 05-04-PLAN.md — Add meta-repo drizzle.config.ts + db:push scripts, run staging dry-run against SQLite clone, checkpoint approval gates cutover (Wave 3)
+- [x] 05-05-PLAN.md — Production cutover (Step 2): remove hub migration scripts, run meta-repo db:push against prod Turso, write VERIFICATION.md (Wave 4; checkpoint: blocking)
 
 ### Phase 6: Auth Extraction
 **Goal**: Better Auth configuration lives in `@minion/auth` as a `createAuth()` factory; hub and site consume it with identical config and shared session continuity.

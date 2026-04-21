@@ -51,13 +51,13 @@ Requirements for the initial meta-repo buildout (M0–M7). Each maps to a roadma
 
 ### Database Extraction (M4)
 
-- [ ] **DB-01**: Drizzle schema from `minion_hub/src/server/db/schema/` is moved to `packages/db/src/schema/`
-- [ ] **DB-02**: `@minion/db` publishes first release exposing schema types and migration runner
-- [ ] **DB-03**: `minion_site` imports schema types from `@minion/db` (consume-only first, no migration ownership)
-- [ ] **DB-04**: `minion_hub` imports schema types from `@minion/db` while retaining migration ownership (two-step cutover)
-- [ ] **DB-05**: Staging DB dry-run of migration-ownership cutover passes with no data loss or schema drift
-- [ ] **DB-06**: Meta-repo takes over migration ownership; hub stops running `db:push`
-- [ ] **DB-07**: Drizzle config in hub and site updated to reference `@minion/db` schema location
+- [x] **DB-01**: Drizzle schema from `minion_hub/src/server/db/schema/` is moved to `packages/db/src/schema/`
+- [x] **DB-02**: `@minion-stack/db` publishes first release exposing schema types and migration runner
+- [x] **DB-03**: `minion_site` imports schema types from `@minion-stack/db` (consume-only; PR #4 open on NikolasP98/minion-site)
+- [x] **DB-04**: `minion_hub` imports schema types from `@minion-stack/db` while retaining migration ownership (two-step cutover; PR #17 open on NikolasP98/minion_hub)
+- [x] **DB-05**: Staging DB dry-run of migration-ownership cutover passes with no data loss or schema drift
+- [x] **DB-06**: Meta-repo takes over migration ownership; hub stops running `db:push` (PR #18; production push exit 0)
+- [x] **DB-07**: Drizzle config in hub and site updated — hub drizzle.config.ts removed; meta-repo drizzle.config.ts at root is canonical
 
 ### Auth Extraction (M5)
 
@@ -152,13 +152,13 @@ Populated during roadmap creation — each requirement maps to exactly one phase
 | SHARE-03 | Phase 4 | Complete |
 | SHARE-04 | Phase 4 | Complete |
 | SHARE-05 | Phase 4 | Complete |
-| DB-01 | Phase 5 | Pending |
-| DB-02 | Phase 5 | Pending |
-| DB-03 | Phase 5 | Pending |
-| DB-04 | Phase 5 | Pending |
-| DB-05 | Phase 5 | Pending |
-| DB-06 | Phase 5 | Pending |
-| DB-07 | Phase 5 | Pending |
+| DB-01 | Phase 5 | Complete |
+| DB-02 | Phase 5 | Complete |
+| DB-03 | Phase 5 | Complete |
+| DB-04 | Phase 5 | Complete |
+| DB-05 | Phase 5 | Complete |
+| DB-06 | Phase 5 | Complete |
+| DB-07 | Phase 5 | Complete |
 | AUTH-01 | Phase 6 | Pending |
 | AUTH-02 | Phase 6 | Pending |
 | AUTH-03 | Phase 6 | Pending |
