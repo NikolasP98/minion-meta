@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 06-auth-extraction/06-03-PLAN.md
-last_updated: "2026-04-21T18:46:57.744Z"
+stopped_at: Completed 06-05-PLAN.md
+last_updated: "2026-04-21T19:18:43.000Z"
 last_activity: 2026-04-21
 progress:
   total_phases: 8
-  completed_phases: 5
+  completed_phases: 6
   total_plans: 33
-  completed_plans: 31
-  percent: 94
+  completed_plans: 32
+  percent: 97
 ---
 
 # Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-04-19)
 
 ## Current Position
 
-Phase: 06 (auth-extraction) — EXECUTING
-Plan: 4 of 5
-Status: Ready to execute
+Phase: 06 (auth-extraction) — COMPLETE
+Plan: 5 of 5
+Status: Phase closed — ready for Phase 7
 Last activity: 2026-04-21
 
-Progress: ██████░░░░ 62%
+Progress: ████████░░ 97%
 
 ## Performance Metrics
 
@@ -123,6 +123,7 @@ Recent decisions affecting current work:
 - [Phase 06]: Hub auth.ts delegates to createAuth() factory; @minion-stack/db added as explicit dep; PR #19 open on NikolasP98/minion_hub targeting dev (not merged — gated on 06-04 staging)
 - [Phase 06-auth-extraction]: Used @minion-stack/auth@^0.2.0 for site consumer (plan referenced 0.1.0 but 0.2.0 was published in 06-01)
 - [Phase 06-auth-extraction]: secret: env.BETTER_AUTH_SECRET ?? '' in site auth.ts to satisfy strict TypeScript — site's ambient.d.ts types env vars as string|undefined
+- [Phase 06]: Phase 6 complete — createAuth() factory live at @minion-stack/auth@0.2.0; hub + site migrated; JWKS kid gR0h1QKBswrpsykV0JRW7WD4C4F1y3vc identical on both services; session continuity verified staging + prod; AUTH-01..04 all Complete
 
 ### Pending Todos
 
@@ -136,6 +137,6 @@ yet. Phase 1 depends on nothing and can be planned immediately.
 
 ## Session Continuity
 
-Last session: 2026-04-21T18:46:57.741Z
-Stopped at: Completed 06-auth-extraction/06-03-PLAN.md
+Last session: 2026-04-21T19:18:43.000Z
+Stopped at: Completed 06-05-PLAN.md
 Resume file: None

@@ -14,8 +14,8 @@ Transform `/home/nikolas/Documents/CODE/AI/` from a loose collection of sibling 
 - [x] **Phase 2: Foundation** — Stand up meta-repo, `@minion/cli` + `@minion/env` + shared configs, Infisical rename cascade (completed 2026-04-20)
 - [x] **Phase 3: Adopt Foundation in Subprojects** — Propagate shared tsconfig/lint/env into every subproject (completed 2026-04-21)
 - [x] **Phase 4: Fold minion-shared** — Migrate `minion-shared/` source into `packages/shared`, publish `@minion-stack/shared`, update consumers, publish deprecation shim (completed 2026-04-21)
-- [ ] **Phase 5: DB Extraction** — Move Drizzle schema to `@minion-stack/db`, two-step cutover of migration ownership from hub to meta-repo
-- [ ] **Phase 6: Auth Extraction** — Extract Better Auth config to `@minion-stack/auth`, hub+site consume factory with shared session continuity
+- [x] **Phase 5: DB Extraction** — Move Drizzle schema to `@minion-stack/db`, two-step cutover of migration ownership from hub to meta-repo (completed 2026-04-21)
+- [x] **Phase 6: Auth Extraction** — Extract Better Auth config to `@minion-stack/auth`, hub+site consume factory with shared session continuity (completed 2026-04-21)
 - [ ] **Phase 7: WS Consolidation** — Consolidate duplicated WS client into `@minion/shared`, hub+site+paperclip consume
 - [ ] **Phase 8: Polish & Automation** — Meta-repo CI, changesets release automation, `minion doctor` polish, onboarding docs
 
@@ -144,8 +144,8 @@ Plans:
 - [x] 06-01-PLAN.md — Scaffold `packages/auth` + implement `createAuth()` factory + publish `@minion-stack/auth@0.1.0` (Wave 1; checkpoint: npm 2FA)
 - [x] 06-02-PLAN.md — Migrate `minion_hub` to consume `createAuth()` factory; fix schema import miss from Phase 5 (Wave 2; parallel with 06-03)
 - [x] 06-03-PLAN.md — Migrate `minion_site` to consume `createAuth()` factory; eliminates JWT audience drift (Wave 2; parallel with 06-02)
-- [ ] 06-04-PLAN.md — Staging verification of shared session continuity (Wave 3; checkpoint: human-verify)
-- [ ] 06-05-PLAN.md — Coordinated production deploy + phase VERIFICATION.md (Wave 4; checkpoint: human-action)
+- [x] 06-04-PLAN.md — Staging verification of shared session continuity (Wave 3; checkpoint: human-verify)
+- [x] 06-05-PLAN.md — Coordinated production deploy + phase VERIFICATION.md (Wave 4; checkpoint: human-action)
 
 ### Phase 7: WS Consolidation
 **Goal**: Exactly one WS/gateway client implementation exists across the platform, living in `@minion/shared`, consumed by hub, site, and paperclip's `openclaw_gateway` adapter.
@@ -194,11 +194,11 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Clean Slate | 5/5 | Complete    | 2026-04-20 |
-| 2. Foundation | 6/8 | In Progress|  |
+| 2. Foundation | 8/8 | Complete    | 2026-04-21 |
 | 3. Adopt Foundation | 6/6 | Complete    | 2026-04-21 |
 | 4. Fold minion-shared | 4/4 | Complete   | 2026-04-21 |
-| 5. DB Extraction | 0/5 | Not started | - |
-| 6. Auth Extraction | 0/5 | Not started | - |
+| 5. DB Extraction | 5/5 | Complete    | 2026-04-21 |
+| 6. Auth Extraction | 5/5 | Complete    | 2026-04-21 |
 | 7. WS Consolidation | 0/4 | Not started | - |
 | 8. Polish & Automation | 0/5 | Not started | - |
 
