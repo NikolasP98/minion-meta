@@ -1,0 +1,20 @@
+import { sqliteTable, text, integer, primaryKey, index } from 'drizzle-orm/sqlite-core';
+import { user } from './auth/index.js';
+import { servers } from './servers.js';
+
+export const userServers = sqliteTable(
+  'user_servers',
+  {
+    userId: text('user_id')
+      .notNull()
+      .references(() => user.id, { onDelete: 'cascade' }),
+    serverId: text('server_id')
+      .notNull()
+      .references(() => servers.id, { onDelete: 'cascade' }),
+    createdAt: integer('created_at').notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.userId, t.serverId] }),
+    index('idx_user_servers_server').on(t.serverId),
+  ],
+);
