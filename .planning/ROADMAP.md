@@ -14,7 +14,7 @@ Transform `/home/nikolas/Documents/CODE/AI/` from a loose collection of sibling 
 - [x] **Phase 2: Foundation** — Stand up meta-repo, `@minion/cli` + `@minion/env` + shared configs, Infisical rename cascade (completed 2026-04-20)
 - [x] **Phase 3: Adopt Foundation in Subprojects** — Propagate shared tsconfig/lint/env into every subproject (completed 2026-04-21)
 - [x] **Phase 4: Fold minion-shared** — Migrate `minion-shared/` source into `packages/shared`, publish `@minion-stack/shared`, update consumers, publish deprecation shim (completed 2026-04-21)
-- [ ] **Phase 5: DB Extraction** — Move Drizzle schema to `@minion/db`, two-step cutover of migration ownership from hub to meta-repo
+- [ ] **Phase 5: DB Extraction** — Move Drizzle schema to `@minion-stack/db`, two-step cutover of migration ownership from hub to meta-repo
 - [ ] **Phase 6: Auth Extraction** — Extract Better Auth config to `@minion/auth`, hub+site consume factory with shared session continuity
 - [ ] **Phase 7: WS Consolidation** — Consolidate duplicated WS client into `@minion/shared`, hub+site+paperclip consume
 - [ ] **Phase 8: Polish & Automation** — Meta-repo CI, changesets release automation, `minion doctor` polish, onboarding docs
@@ -107,25 +107,25 @@ Plans:
 - [x] 04-04-PLAN.md — Remove `minion-shared/` from .gitignore + delete directory + write phase VERIFICATION.md (Wave 4)
 
 ### Phase 5: DB Extraction
-**Goal**: A single Drizzle schema source lives in `@minion/db`, both hub and site consume its types, and migration ownership cleanly transitions to the meta-repo via a staged two-step cutover.
+**Goal**: A single Drizzle schema source lives in `@minion-stack/db`, both hub and site consume its types, and migration ownership cleanly transitions to the meta-repo via a staged two-step cutover.
 **Depends on**: Phase 4
 **Requirements**: DB-01, DB-02, DB-03, DB-04, DB-05, DB-06, DB-07
 **Success Criteria** (what must be TRUE):
-  1. `packages/db/src/schema/` contains all 35+ Drizzle tables from the former `minion_hub/src/server/db/schema/`
-  2. `@minion/db` is published and exports schema types plus a migration runner
-  3. `minion_hub` and `minion_site` both import schema types from `@minion/db`; neither defines its own copy
-  4. Only the meta-repo runs `db:push` / migrations; hub's `db:push` script is removed or points to the meta-repo
+  1. `packages/db/src/schema/` contains all 38 Drizzle source files (56 table constants) from the former `minion_hub/src/server/db/schema/`
+  2. `@minion-stack/db` is published and exports schema types, relations, and utilities
+  3. `minion_hub` and `minion_site` both import schema types from `@minion-stack/db`; neither defines its own copy
+  4. Only the meta-repo runs `db:push` / migrations; hub's `db:push` script is removed
   5. Staging DB dry-run of the cutover completes with no data loss or schema drift
   6. Production deploy of both hub and site on the new schema source passes smoke tests
 **UI hint**: no
-**Plans**: TBD (extraction, publish, site-consume-only, hub-consume-only + dry-run, cutover)
+**Plans**: 5 plans across 4 waves
 
 Plans:
-- [ ] 05-01: Extract Drizzle schema to `packages/db` and publish `@minion/db`
-- [ ] 05-02: `minion_site` migrates to consume-only import of schema types
-- [ ] 05-03: `minion_hub` migrates to consume-only while retaining migration ownership (two-step)
-- [ ] 05-04: Staging DB dry-run of meta-repo-owned migrations
-- [ ] 05-05: Production cutover: meta-repo takes over migrations, hub stops running db:push
+- [ ] 05-01-PLAN.md — Scaffold `packages/db`, copy 38 schema files verbatim, build with tsc, publish `@minion-stack/db@0.1.0` (Wave 1; checkpoint: npm 2FA publish + A1 verification)
+- [ ] 05-02-PLAN.md — Migrate `minion_site` to consume `@minion-stack/db`: delete local schema (5 files), update client.ts + auth.ts, bun check, open PR (Wave 2; parallel with 05-03)
+- [ ] 05-03-PLAN.md — Migrate `minion_hub` to consume `@minion-stack/db` while retaining db:push (Step 1): delete local schema, update all import sites + drizzle.config.ts, open PR (Wave 2; parallel with 05-02)
+- [ ] 05-04-PLAN.md — Add meta-repo drizzle.config.ts + db:push scripts, run staging dry-run against SQLite clone, checkpoint approval gates cutover (Wave 3)
+- [ ] 05-05-PLAN.md — Production cutover (Step 2): remove hub migration scripts, run meta-repo db:push against prod Turso, write VERIFICATION.md (Wave 4; checkpoint: blocking)
 
 ### Phase 6: Auth Extraction
 **Goal**: Better Auth configuration lives in `@minion/auth` as a `createAuth()` factory; hub and site consume it with identical config and shared session continuity.
