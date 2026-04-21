@@ -13,7 +13,7 @@ Transform `/home/nikolas/Documents/CODE/AI/` from a loose collection of sibling 
 - [x] **Phase 1: Clean Slate** — Audit, triage, and bring every subproject to a known-clean state (completed 2026-04-20)
 - [x] **Phase 2: Foundation** — Stand up meta-repo, `@minion/cli` + `@minion/env` + shared configs, Infisical rename cascade (completed 2026-04-20)
 - [x] **Phase 3: Adopt Foundation in Subprojects** — Propagate shared tsconfig/lint/env into every subproject (completed 2026-04-21)
-- [ ] **Phase 4: Fold minion-shared** — Migrate `minion-shared/` source into `packages/shared`, publish `@minion-stack/shared`, update consumers, publish deprecation shim
+- [x] **Phase 4: Fold minion-shared** — Migrate `minion-shared/` source into `packages/shared`, publish `@minion-stack/shared`, update consumers, publish deprecation shim (completed 2026-04-21)
 - [ ] **Phase 5: DB Extraction** — Move Drizzle schema to `@minion/db`, two-step cutover of migration ownership from hub to meta-repo
 - [ ] **Phase 6: Auth Extraction** — Extract Better Auth config to `@minion/auth`, hub+site consume factory with shared session continuity
 - [ ] **Phase 7: WS Consolidation** — Consolidate duplicated WS client into `@minion/shared`, hub+site+paperclip consume
@@ -104,7 +104,7 @@ Plans:
 - [x] 04-01-PLAN.md — Create `packages/shared/` workspace package: copy source from `minion-shared/src/`, write package.json + tsconfig, build with tsc, add changeset (Wave 1)
 - [x] 04-02-PLAN.md — Publish `@minion-stack/shared@0.1.0` to npm + build and publish `minion-shared@0.2.0` deprecation shim (Wave 2, 2x human-action checkpoint for 2FA)
 - [x] 04-03-PLAN.md — Migrate `minion_site` off `minion-shared` to `@minion-stack/shared`: update package.json, update 3 import files, bun check, open PR on minion-site repo (Wave 3)
-- [ ] 04-04-PLAN.md — Remove `minion-shared/` from .gitignore + delete directory + write phase VERIFICATION.md (Wave 4)
+- [x] 04-04-PLAN.md — Remove `minion-shared/` from .gitignore + delete directory + write phase VERIFICATION.md (Wave 4)
 
 ### Phase 5: DB Extraction
 **Goal**: A single Drizzle schema source lives in `@minion/db`, both hub and site consume its types, and migration ownership cleanly transitions to the meta-repo via a staged two-step cutover.
@@ -195,7 +195,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 1. Clean Slate | 5/5 | Complete    | 2026-04-20 |
 | 2. Foundation | 6/8 | In Progress|  |
 | 3. Adopt Foundation | 6/6 | Complete    | 2026-04-21 |
-| 4. Fold minion-shared | 3/4 | In Progress|  |
+| 4. Fold minion-shared | 4/4 | Complete   | 2026-04-21 |
 | 5. DB Extraction | 0/5 | Not started | - |
 | 6. Auth Extraction | 0/4 | Not started | - |
 | 7. WS Consolidation | 0/4 | Not started | - |
