@@ -11,7 +11,7 @@ Transform `/home/nikolas/Documents/CODE/AI/` from a loose collection of sibling 
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
 - [x] **Phase 1: Clean Slate** — Audit, triage, and bring every subproject to a known-clean state (completed 2026-04-20)
-- [ ] **Phase 2: Foundation** — Stand up meta-repo, `@minion/cli` + `@minion/env` + shared configs, Infisical rename cascade
+- [x] **Phase 2: Foundation** — Stand up meta-repo, `@minion/cli` + `@minion/env` + shared configs, Infisical rename cascade (completed 2026-04-20)
 - [x] **Phase 3: Adopt Foundation in Subprojects** — Propagate shared tsconfig/lint/env into every subproject (completed 2026-04-21)
 - [ ] **Phase 4: Fold minion-shared** — Import history into `packages/shared`, publish `@minion/shared`, update consumers, archive old repo
 - [ ] **Phase 5: DB Extraction** — Move Drizzle schema to `@minion/db`, two-step cutover of migration ownership from hub to meta-repo
