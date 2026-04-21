@@ -1,6 +1,6 @@
 {
   "name": "@minion-stack/shared",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Shared gateway protocol types and utilities for the Minion platform.",
   "license": "MIT",
   "repository": {
@@ -23,6 +23,18 @@
     "./utils": {
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js"
+    },
+    "./node": {
+      "types": "./dist/node/index.d.ts",
+      "import": "./dist/node/index.js"
+    }
+  },
+  "peerDependencies": {
+    "ws": "^8.0.0"
+  },
+  "peerDependenciesMeta": {
+    "ws": {
+      "optional": true
     }
   },
   "publishConfig": {
@@ -34,10 +46,15 @@
   ],
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "tsc"
+    "prepublishOnly": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@minion-stack/tsconfig": "workspace:*",
-    "typescript": "^5.7.0"
+    "@types/ws": "^8.18.1",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.9",
+    "ws": "^8.19.0"
   }
 }
