@@ -182,7 +182,7 @@ Plans:
 Plans:
 - [x] 08-01-PLAN.md — Meta-repo CI workflow (.github/workflows/ci.yml) + root fanout scripts + per-package lint scripts (Wave 1)
 - [x] 08-02-PLAN.md — Changesets release automation (.github/workflows/release.yml) + NPM_TOKEN setup doc (Wave 2)
-- [ ] 08-03-PLAN.md — `minion doctor` polish: extend link-drift to shared/db/auth + git-status column + clone-presence handling (Wave 2)
+- [x] 08-03-PLAN.md — `minion doctor` polish: extend link-drift to shared/db/auth + git-status column + clone-presence handling (Wave 2)
 - [ ] 08-04-PLAN.md — Root CLAUDE.md rewrite (remove minion-shared stale refs, add shared/db/auth) + README.md CI section (Wave 3)
 - [ ] 08-05-PLAN.md — Timed onboarding dry-run UAT (ONBOARDING-DRY-RUN.md) — checkpoint:human-verify for <10-min criterion (Wave 4)
 
