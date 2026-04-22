@@ -183,7 +183,7 @@ Plans:
 - [x] 08-01-PLAN.md — Meta-repo CI workflow (.github/workflows/ci.yml) + root fanout scripts + per-package lint scripts (Wave 1)
 - [x] 08-02-PLAN.md — Changesets release automation (.github/workflows/release.yml) + NPM_TOKEN setup doc (Wave 2)
 - [x] 08-03-PLAN.md — `minion doctor` polish: extend link-drift to shared/db/auth + git-status column + clone-presence handling (Wave 2)
-- [ ] 08-04-PLAN.md — Root CLAUDE.md rewrite (remove minion-shared stale refs, add shared/db/auth) + README.md CI section (Wave 3)
+- [x] 08-04-PLAN.md — Root CLAUDE.md rewrite (remove minion-shared stale refs, add shared/db/auth) + README.md CI section (Wave 3)
 - [ ] 08-05-PLAN.md — Timed onboarding dry-run UAT (ONBOARDING-DRY-RUN.md) — checkpoint:human-verify for <10-min criterion (Wave 4)
 
 ## Progress
@@ -200,6 +200,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 5. DB Extraction | 5/5 | Complete    | 2026-04-21 |
 | 6. Auth Extraction | 5/5 | Complete    | 2026-04-21 |
 | 7. WS Consolidation | 0/4 | Not started | - |
-| 8. Polish & Automation | 2/5 | In Progress|  |
+| 8. Polish & Automation | 4/5 | In Progress|  |
 
 **Coverage:** 49/49 v1 requirements mapped to phases ✓
