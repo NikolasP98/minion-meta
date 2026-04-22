@@ -49,6 +49,23 @@ minion doctor
 minion dev hub
 ```
 
+## CI & Releases
+
+Meta-repo PRs are gated by `.github/workflows/ci.yml`:
+- `pnpm install --frozen-lockfile`
+- `pnpm run build-all` (sequential — respects workspace dependency order)
+- `pnpm run typecheck-all`
+- `pnpm run lint-all`
+- `pnpm run test-all`
+- `pnpm run changeset:status` (PR only — blocks PRs missing a changeset)
+
+Releases are automated via `.github/workflows/release.yml` (changesets/action):
+1. Land a feature PR with a staged `.changeset/*.md` file
+2. On merge to main, a "Version Packages" PR opens automatically
+3. On merge of that PR, `@minion-stack/*` packages publish to npm
+
+One-time setup: see [`.planning/phases/08-polish-automation/NPM_TOKEN-SETUP.md`](.planning/phases/08-polish-automation/NPM_TOKEN-SETUP.md) for `NPM_TOKEN` + Actions permissions.
+
 ## Commands
 
 Full surface:
@@ -63,7 +80,7 @@ minion <id> <cmd...>            # alias for run
 minion dev --all                # parallel fanout
 minion check --all              # parallel check
 minion status                   # git status across all subprojects
-minion doctor                   # env validation + health
+minion doctor                   # env validation + Infisical auth + link drift + git status + clone-presence — one table
 minion sync-env <id>            # write merged env to <sub>/.env.local
 minion rotate-env <id>          # wipe + re-pull .env.local
 minion infisical <id>           # open Infisical dashboard URL
@@ -98,14 +115,15 @@ Edit `minion.json` to add or reconfigure a subproject. Validation schema: [`pack
 
 Published to npm under `@minion-stack/*` with Changesets for independent versioning.
 
-| Package | Version | Description |
-|---------|---------|-------------|
-| [`@minion-stack/cli`](packages/cli/) | 0.1.0 | The `minion` CLI |
-| [`@minion-stack/env`](packages/env/) | 0.1.0 | 6-layer env resolver |
-| [`@minion-stack/tsconfig`](packages/tsconfig/) | 0.1.0 | TS configs (base/node/svelte/library) |
-| [`@minion-stack/lint-config`](packages/lint-config/) | 0.1.0 | oxlint + ESLint + Prettier presets |
-
-Future: `@minion-stack/shared`, `@minion-stack/db`, `@minion-stack/auth` (Phases 4–6).
+| Package | Description |
+|---------|-------------|
+| [`@minion-stack/cli`](packages/cli/) | The `minion` CLI |
+| [`@minion-stack/env`](packages/env/) | 6-layer env resolver |
+| [`@minion-stack/tsconfig`](packages/tsconfig/) | TS configs (base/node/svelte/library) |
+| [`@minion-stack/lint-config`](packages/lint-config/) | oxlint + ESLint + Prettier presets |
+| [`@minion-stack/shared`](packages/shared/) | Gateway protocol types + WS client + utils |
+| [`@minion-stack/db`](packages/db/) | Canonical Drizzle schema (38 tables) + migration runner |
+| [`@minion-stack/auth`](packages/auth/) | Better Auth `createAuth()` factory |
 
 ## Subprojects
 
@@ -119,16 +137,14 @@ Each has its own repository + README. See their own CLAUDE.md / AGENTS.md for pr
 | `paperclip-minion/` | [NikolasP98/paperclip](https://github.com/NikolasP98/paperclip) — Agent control plane |
 | `minion_plugins/` | [NikolasP98/minion_plugins](https://github.com/NikolasP98/minion_plugins) — Marketplace |
 | `pixel-agents/` | [pablodelucca/pixel-agents](https://github.com/pablodelucca/pixel-agents) — VS Code pixel office |
-| `minion-shared/` | (to be folded into `packages/shared` in Phase 4) |
+| `packages/shared/` | `@minion-stack/shared` — gateway protocol types + WS client (folded from `minion-shared/` in Phase 4) |
 
 ## Contributing
 
 1. Edit in `packages/*`, commit on a feature branch in this repo
 2. Run `pnpm changeset` to add a release note for any `@minion-stack/*` package change
-3. Open a PR against `main` — CI runs lint + type-check + `changeset status` (Phase 8 POLISH-01)
-4. Merge to main triggers `changeset publish` (Phase 8 POLISH-02)
-
-Until Phase 8 ships, release is manual: `pnpm exec changeset version && pnpm exec changeset publish`.
+3. Open a PR against `main` — CI runs lint + type-check + `changeset:status` automatically
+4. Merge to main — `changesets/action` opens a "Version Packages" PR; merge that to publish
 
 ## Links
 
