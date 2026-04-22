@@ -4,6 +4,7 @@ import { resolveEnv } from '@minion-stack/env';
 import { findMetaRoot, loadRegistry } from '../registry.js';
 import { printTable, printJson } from '../lib/output.js';
 import { detectLinkDrift, renderDriftLine, hasDrift } from '../lib/link-drift.js';
+import { gitStatusSummary, isCloned } from '../lib/git-status.js';
 
 export async function doctorCommand(json: boolean): Promise<number> {
 	const metaRoot = findMetaRoot();
@@ -22,11 +23,27 @@ export async function doctorCommand(json: boolean): Promise<number> {
 		vars: infisicalBin ? 'infisical-cli-ok' : 'infisical-cli-MISSING',
 		warnings: infisicalAuth === 'ok' ? '' : 'INFISICAL_* auth env vars missing',
 		links: '-',
+		git: '-',
 	});
 
 	let anyDrift = false;
 	let authFailure = false;
 	for (const [id, entry] of Object.entries(reg.subprojects)) {
+		const subAbsPath = path.join(metaRoot, entry.path);
+
+		// Clone-presence: distinguish missing from broken.
+		if (!isCloned(subAbsPath)) {
+			rows.push({
+				id,
+				vars: '-',
+				warnings: '(not cloned — skip)',
+				links: '-',
+				git: '(not cloned)',
+			});
+			continue;
+		}
+
+		const git = await gitStatusSummary(subAbsPath);
 		try {
 			const { env, warnings } = await resolveEnv({ subprojectId: id, cwd: metaRoot });
 			const pmOk = await hasBin(entry.packageManager);
@@ -43,6 +60,7 @@ export async function doctorCommand(json: boolean): Promise<number> {
 						? 'ok'
 						: `missing-pm:${entry.packageManager}`,
 				links: driftLine.replace(`${id}: `, ''),
+				git,
 			});
 		} catch (e) {
 			rows.push({
@@ -50,6 +68,7 @@ export async function doctorCommand(json: boolean): Promise<number> {
 				vars: 'err',
 				warnings: String((e as Error).message).slice(0, 80),
 				links: '-',
+				git,
 			});
 		}
 	}
