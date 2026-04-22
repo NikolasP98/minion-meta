@@ -9,7 +9,6 @@ This is the **Minion meta-repo** (formerly the loose "OpenClaw" root) — a self
 | `minion/` | Core gateway + CLI (pnpm monorepo) | pnpm 10.x, Node 22+, TS, tsdown | `DEV` | `.dmux-hooks/CLAUDE.md` |
 | `minion_hub/` | Web dashboard for gateway management | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `dev` | `CLAUDE.md` |
 | `minion_site/` | Marketing site + members dashboard | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `master` | `CLAUDE.md` |
-| `minion-shared/` | Shared gateway protocol types + utils | npm, TypeScript | — | — |
 | `minion_plugins/` | Claude Code plugin marketplace | — | `main` | — |
 | `docs/` | Agent registry, profiles, docs, sprints | YAML + Markdown | `main` | `CLAUDE.md` |
 | `paperclip-minion/` | Control plane for AI-agent companies | pnpm, Express, React + Vite, Drizzle + PGlite | `minion-integration` | `AGENTS.md` |
@@ -58,8 +57,33 @@ Published to npm under the `@minion-stack` scope. Independent semver via Changes
 | `@minion-stack/env` | 6-layer env resolver (wraps Infisical CLI) |
 | `@minion-stack/tsconfig` | Base / node / svelte / library TS configs |
 | `@minion-stack/lint-config` | oxlint + flat-ESLint + Prettier presets |
+| `@minion-stack/shared` | Gateway protocol types (frames, agents, sessions, chat events) + WS client + utils — consumed by hub, site, paperclip |
+| `@minion-stack/db` | Canonical Drizzle schema (38 tables) + migration runner — consumed by hub + site |
+| `@minion-stack/auth` | Better Auth `createAuth()` factory — consumed by hub + site with shared session continuity |
 
-Future phases (M3+) add `@minion-stack/shared`, `@minion-stack/db`, `@minion-stack/auth`.
+Releases are automated: merges to `main` with `.changeset/*.md` trigger a "Version Packages" PR via `changesets/action`; merging that PR publishes to npm.
+
+### CI & Release Automation
+
+The meta-repo ships two GitHub Actions workflows:
+
+| Workflow | Trigger | Purpose |
+|---|---|---|
+| `.github/workflows/ci.yml` | PR to main, push to main | Runs `pnpm run build-all`, `typecheck-all`, `lint-all`, `test-all`, and `changeset:status` on every PR |
+| `.github/workflows/release.yml` | Push to main | Uses `changesets/action@v1.7.0` to open a "Version Packages" PR when changesets are present; publishes `@minion-stack/*` to npm when that PR is merged |
+
+Root scripts that fan out across workspace packages:
+
+| Script | What |
+|---|---|
+| `pnpm run build-all` | `pnpm -r run build` (sequential — dependency-order) |
+| `pnpm run typecheck-all` | `pnpm -r --parallel --if-present run typecheck` |
+| `pnpm run lint-all` | `pnpm -r --parallel --if-present run lint` |
+| `pnpm run test-all` | `pnpm -r --parallel --if-present run test` |
+| `pnpm run ci` | build-all → typecheck-all → lint-all → test-all → changeset:status |
+| `pnpm run changeset` | Interactive changeset authoring |
+
+Release tokens and secrets: `NPM_TOKEN` (automation type) must be set as a GitHub repo secret — see `.planning/phases/08-polish-automation/NPM_TOKEN-SETUP.md` for one-time setup.
 
 ### Subprojects stay independent
 
@@ -72,9 +96,10 @@ Design spec: [`specs/2026-04-19-minion-meta-repo-design.md`](specs/2026-04-19-mi
 ### Cross-Project Data Flow
 
 ```
-minion-shared/          ← Protocol types (frames, agents, sessions, chat events)
-  ├──→ minion_hub/      ← Imports types + WS utils for dashboard
-  └──→ minion_site/     ← Imports types + WS utils for members area
+@minion-stack/shared     ← Protocol types (frames, agents, sessions, chat events) + WS client
+  ├──→ minion_hub/       ← Imports types + WS utils for dashboard
+  ├──→ minion_site/      ← Imports types + WS utils for members area
+  └──→ paperclip-minion/ ← openclaw_gateway adapter consumes the shared WS client
 
 minion/ (gateway)
   ├── WebSocket server  ←──→  minion_hub/ (dashboard connects via WS)
@@ -83,12 +108,12 @@ minion/ (gateway)
   └── REST API + CLI
 
 minion_hub/ ←──shared DB──→ minion_site/
-  (Drizzle ORM + LibSQL/Turso, Better Auth 1.4.19)
+  (@minion-stack/db schema + @minion-stack/auth factory — identical config both sides)
 ```
 
 ### Gateway Protocol
 
-All frontends connect to the gateway via WebSocket using a custom JSON frame protocol with three frame types: `req`, `res`, and `event`. Types live in `minion-shared/`.
+All frontends connect to the gateway via WebSocket using a custom JSON frame protocol with three frame types: `req`, `res`, and `event`. Types and the WS client live in `@minion-stack/shared` (consumed by hub, site, and paperclip's `openclaw_gateway` adapter).
 
 Connection flow: WS connect → `connect.challenge` event → `connect` request with token → authenticated session.
 
@@ -159,9 +184,6 @@ bun run build        # Production build
 bun run check        # Type-check
 ```
 
-### minion-shared/ — Protocol Types
-
-Lightweight TypeScript package exporting gateway protocol types and utilities. Three export paths: `.` (root), `./gateway`, `./utils`. Source: `src/index.ts`, `src/gateway/`, `src/utils/`. Build: `tsc → dist/`.
 
 ### docs/ — Agent Registry + Project Docs
 
@@ -236,7 +258,6 @@ Research workspace for an AI course. Docs-only — no production code. Uses the 
 | minion/ | `pnpm dev` | `pnpm build` | `pnpm test` | `pnpm check` |
 | minion_hub/ | `bun run dev` | `bun run build` | `bun run test` | `bun run check` |
 | minion_site/ | `bun dev` | `bun run build` | — | `bun run check` |
-| minion-shared/ | — | `npm run build` | — | — |
 | paperclip-minion/ | `pnpm dev` | `pnpm build` | `pnpm test:run` | `pnpm typecheck` |
 
 ## Orchestration Guide
@@ -246,13 +267,13 @@ Research workspace for an AI course. Docs-only — no production code. Uses the 
 When sending work to a subproject, always include:
 1. The subproject path and its CLAUDE.md location
 2. The current git branch (see Project Map above)
-3. Relevant cross-project context (e.g., "this touches the WS protocol — changes must be reflected in minion-shared, hub, and site")
+3. Relevant cross-project context (e.g., "this touches the WS protocol — changes must be reflected in @minion-stack/shared, hub, site, and paperclip's openclaw_gateway adapter")
 
 ### Cross-Project Impact Zones
 
 | Change Type | Projects Affected |
 |---|---|
-| Gateway protocol (frame types, events) | `minion-shared/` → `minion_hub/` → `minion_site/` |
+| Gateway protocol (frame types, events) | `packages/shared/` → `minion_hub/` + `minion_site/` + `paperclip-minion/` (openclaw_gateway adapter) |
 | Channel extension (new/modify) | `minion/extensions/<channel>/` + `minion/src/channels/` |
 | DB schema change | `minion_hub/src/server/db/schema/` → `minion_site/src/server/db/` (shared DB) |
 | Agent definition format | `docs/agents/` → `minion_hub/` (marketplace) → `minion/` (runtime) |
@@ -266,7 +287,7 @@ When sending work to a subproject, always include:
 - **TypeScript** strict mode everywhere. Avoid `any`. Never add `@ts-nocheck`.
 - **Svelte 5 only** (hub + site): runes, snippets (`Snippet` type for children), `onclick={}` syntax. No legacy Svelte 4 patterns.
 - **Formatting**: minion/ uses oxlint + oxfmt. SvelteKit projects use svelte-check.
-- **Package managers**: pnpm for minion/ and paperclip-minion/. Bun for SvelteKit projects. npm for pixel-agents and minion-shared. Don't mix.
+- **Package managers**: pnpm for the meta-repo root, `minion/`, and `paperclip-minion/`. Bun for SvelteKit projects (`minion_hub/`, `minion_site/`). npm for `pixel-agents/`. Don't mix within a subproject.
 - **Naming**: "OpenClaw" or "Minion" for product/docs headings; `minion`/`openclaw` for CLI/package/paths.
 - **Git workflow**: Feature branches → dev/DEV → main/master. Use worktrees for isolation. Never commit directly to main.
 - **Multi-agent safety**: Don't touch git stash, worktrees, or switch branches unless explicitly asked. Scope commits to your changes only.
