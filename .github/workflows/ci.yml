@@ -1,0 +1,51 @@
+# .github/workflows/ci.yml
+# Meta-repo CI — gates every PR against main.
+# Runs lint-all, typecheck-all, build-all, test-all, and changeset:status.
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4.4.0
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build all packages
+        run: pnpm run build-all
+
+      - name: Typecheck
+        run: pnpm run typecheck-all
+
+      - name: Lint
+        run: pnpm run lint-all
+
+      - name: Test
+        run: pnpm run test-all
+
+      - name: Changesets status (PR only)
+        if: github.event_name == 'pull_request'
+        run: pnpm run changeset:status
