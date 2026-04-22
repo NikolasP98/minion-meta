@@ -1,0 +1,54 @@
+# .github/workflows/release.yml
+# Release automation via changesets/action.
+# On push to main:
+#   - If .changeset/*.md files exist → opens/updates a "Version Packages" PR
+#   - If no changesets remain (i.e. Version PR was merged) → runs changeset publish → npm
+# Manual setup required: see .planning/phases/08-polish-automation/NPM_TOKEN-SETUP.md
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4.4.0
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build all packages
+        run: pnpm run build-all
+
+      - name: Create Release PR or Publish
+        uses: changesets/action@v1.7.0
+        with:
+          version: pnpm run release:version
+          publish: pnpm run release:publish
+          commit: "chore: release @minion-stack packages"
+          title: "chore: version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
