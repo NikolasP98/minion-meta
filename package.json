@@ -18,7 +18,13 @@
     "db:studio": "drizzle-kit studio",
     "changeset": "changeset",
     "changeset:status": "changeset status --since=origin/main",
-    "release:publish": "changeset publish"
+    "release:publish": "changeset publish",
+    "release:version": "changeset version",
+    "build-all": "pnpm -r run build",
+    "typecheck-all": "pnpm -r --parallel --if-present run typecheck",
+    "lint-all": "pnpm -r --parallel --if-present run lint",
+    "test-all": "pnpm -r --parallel --if-present run test",
+    "ci": "pnpm run build-all && pnpm run typecheck-all && pnpm run lint-all && pnpm run test-all && pnpm run changeset:status"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.0",
