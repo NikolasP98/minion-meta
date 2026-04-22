@@ -76,7 +76,7 @@ Requirements for the initial meta-repo buildout (M0–M7). Each maps to a roadma
 
 ### Polish & Automation (M7)
 
-- [ ] **POLISH-01**: Meta-repo CI runs lint-all, typecheck-all, and changesets-status on every PR
+- [x] **POLISH-01**: Meta-repo CI runs lint-all, typecheck-all, and changesets-status on every PR
 - [ ] **POLISH-02**: Changesets release automation publishes `@minion/*` packages on merge to main
 - [ ] **POLISH-03**: `minion doctor` surfaces env validation, link drift, and subproject health in a single report
 - [ ] **POLISH-04**: Root `CLAUDE.md` final rewrite reflects the steady-state workflow (not the migration narrative)
@@ -168,7 +168,7 @@ Populated during roadmap creation — each requirement maps to exactly one phase
 | WS-03 | Phase 7 | Complete |
 | WS-04 | Phase 7 | Complete |
 | WS-05 | Phase 7 | Complete |
-| POLISH-01 | Phase 8 | Pending |
+| POLISH-01 | Phase 8 | Complete |
 | POLISH-02 | Phase 8 | Pending |
 | POLISH-03 | Phase 8 | Pending |
 | POLISH-04 | Phase 8 | Pending |

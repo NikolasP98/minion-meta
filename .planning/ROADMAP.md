@@ -180,7 +180,7 @@ Plans:
 **Plans**: 5 plans across 4 waves (Wave 1: 08-01 CI foundation; Wave 2 parallel: 08-02 releases + 08-03 doctor; Wave 3: 08-04 docs; Wave 4: 08-05 onboarding dry-run)
 
 Plans:
-- [ ] 08-01-PLAN.md — Meta-repo CI workflow (.github/workflows/ci.yml) + root fanout scripts + per-package lint scripts (Wave 1)
+- [x] 08-01-PLAN.md — Meta-repo CI workflow (.github/workflows/ci.yml) + root fanout scripts + per-package lint scripts (Wave 1)
 - [ ] 08-02-PLAN.md — Changesets release automation (.github/workflows/release.yml) + NPM_TOKEN setup doc (Wave 2)
 - [ ] 08-03-PLAN.md — `minion doctor` polish: extend link-drift to shared/db/auth + git-status column + clone-presence handling (Wave 2)
 - [ ] 08-04-PLAN.md — Root CLAUDE.md rewrite (remove minion-shared stale refs, add shared/db/auth) + README.md CI section (Wave 3)

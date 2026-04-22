@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Completed 07-04-PLAN.md — Phase 07 ws-consolidation COMPLETE
-last_updated: "2026-04-21T20:54:26.247Z"
-last_activity: 2026-04-21
+status: executing
+stopped_at: Completed 08-polish-automation/08-01-PLAN.md
+last_updated: "2026-04-22T01:39:40.754Z"
+last_activity: 2026-04-22
 progress:
   total_phases: 8
   completed_phases: 7
-  total_plans: 37
-  completed_plans: 37
-  percent: 100
+  total_plans: 42
+  completed_plans: 38
+  percent: 90
 ---
 
 # Project State
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-19)
 
 **Core value:** One command resolves the right env and runs the right build for any subproject, and every piece of cross-cutting code lives in exactly one place under uniform standardization — no exceptions.
-**Current focus:** Phase 07 — ws-consolidation
+**Current focus:** Phase 08 — polish-automation
 
 ## Current Position
 
-Phase: 07 (ws-consolidation) — EXECUTING
-Plan: 4 of 4
-Status: Phase complete — ready for verification
-Last activity: 2026-04-21
+Phase: 08 (polish-automation) — EXECUTING
+Plan: 2 of 5
+Status: Ready to execute
+Last activity: 2026-04-22
 
 Progress: ████████░░ 97%
 
@@ -36,7 +36,7 @@ Progress: ████████░░ 97%
 
 **Velocity:**
 
-- Total plans completed: 29
+- Total plans completed: 33
 - Average duration: —
 - Total execution time: —
 
@@ -50,6 +50,7 @@ Progress: ████████░░ 97%
 | 3 | 6 | - | - |
 | 05 | 5 | - | - |
 | 06 | 5 | - | - |
+| 07 | 4 | - | - |
 
 **Recent Trend:**
 
@@ -74,6 +75,7 @@ Progress: ████████░░ 97%
 | Phase 07 P02 | 30 | 2 tasks | 10 files |
 | Phase 07 P03 | 90 min | 3 tasks | 20 files |
 | Phase 07 P04 | 4min | 3 tasks | 2 files |
+| Phase 08-polish-automation P01 | 12 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -137,6 +139,9 @@ Recent decisions affecting current work:
 - [Phase 07]: gateway-client.ts paperclip shim is 29 lines (re-exports helpers); deviceIdentity hoisted outside while loop for onChallenge closure access
 - [Phase 07]: Sweep 1 match in gateway-client.ts re-export shim classified as CLEAR — re-export, not local declaration
 - [Phase 07]: E2E checkpoint auto-approved; manual staging smoke deferred to post-PR-merge (SITE-SMOKE.md in place)
+- [Phase 08-polish-automation]: build-all runs sequentially (not --parallel) so downstream packages have upstream dists for typecheck
+- [Phase 08-polish-automation]: changeset:status in CI only runs on pull_request events — omitting on push-to-main avoids failure after changesets are consumed
+- [Phase 08-polish-automation]: oxlint added as explicit devDependency per TS package to ensure binary resolves correctly within each package
 
 ### Pending Todos
 
@@ -150,6 +155,6 @@ yet. Phase 1 depends on nothing and can be planned immediately.
 
 ## Session Continuity
 
-Last session: 2026-04-21T20:54:26.244Z
-Stopped at: Completed 07-04-PLAN.md — Phase 07 ws-consolidation COMPLETE
+Last session: 2026-04-22T01:39:40.750Z
+Stopped at: Completed 08-polish-automation/08-01-PLAN.md
 Resume file: None
