@@ -14,9 +14,16 @@ export interface DriftReport {
 	status: LinkStatus;
 }
 
-// The four shared packages governed by the meta-repo. Matches `packages/` directory names
-// under `@minion-stack/*` scope.
-const MINION_PKGS = ['tsconfig', 'lint-config', 'env', 'cli'];
+// All published @minion-stack packages. Additions must match packages/<name> directories.
+const MINION_PKGS = [
+	'tsconfig',
+	'lint-config',
+	'env',
+	'cli',
+	'shared', // Phase 4
+	'db', // Phase 5
+	'auth', // Phase 6
+];
 const SCOPE = '@minion-stack';
 
 function readVersion(pkgJsonPath: string): string | null {
