@@ -68,38 +68,37 @@ All 5 TypeScript-using subprojects adopted `@minion-stack/tsconfig` + lint-confi
 - [x] ADOPT-06: `minion_plugins` full D-27 deferral (no code, no vars) — documented in deferred-items.md
 - [x] ADOPT-07: Net-new CI workflows added for hub + site; existing CI validated against published `@minion-stack/*` versions
 
+**M3 — Fold `minion-shared`** (Validated in Phase 04: fold-minion-shared, 2026-04-21)
+
+Scope substitution: `@minion/shared` → `@minion-stack/shared`. Old package deprecated as shim; source folded into `packages/shared`.
+
+- [x] SHARE-01: `minion-shared/` source migrated into `packages/shared/`; source imported (not subtree due to scope rename + layout changes)
+- [x] SHARE-02: `@minion-stack/shared@0.1.0` published to npm
+- [x] SHARE-03: `minion-shared@0.2.0` deprecation shim published with `console.warn` + npm registry notice
+- [x] SHARE-04: `minion_site` migrated to `@minion-stack/shared` (PR #3); hub + paperclip follow in Phase 7
+- [x] SHARE-05: `minion-shared/` directory deleted from meta-repo, removed from .gitignore; old GitHub repo archived
+
+**M6 — WS / gateway consolidation** (Validated in Phase 07: ws-consolidation, 2026-04-22)
+
+- [x] WS-01: WS client duplication audited — 315-LOC audit at `specs/ws-duplication-audit.md` (hub 920 LOC, site 373 LOC, paperclip 355 LOC)
+- [x] WS-02: Shared `GatewayClient` consolidated into `@minion-stack/shared`
+- [x] WS-03: `minion_hub`, `minion_site` migrated to shared client
+- [x] WS-04: `paperclip-minion` `openclaw_gateway` adapter migrated to shared client
+- [x] WS-05: One WS client implementation exists across the platform (no duplicates)
+
+**M7 — Polish & automation** (Validated in Phase 08: polish-automation, 2026-04-22)
+
+- [x] POLISH-01: Meta-repo CI runs lint-all, typecheck-all, build-all, test-all + changesets-status on every PR
+- [x] POLISH-02: Changesets release automation publishes `@minion-stack/*` on merge to main (NPM_TOKEN automation type)
+- [x] POLISH-03: `minion doctor` surfaces env validation, seven-package link-drift coverage, and git-status column per subproject
+- [x] POLISH-04: Root `CLAUDE.md` rewritten for steady-state workflow; README full package table + CI docs
+- [x] POLISH-05: Onboarding dry-run confirmed clone → `minion dev` in under 10 minutes (4:15 actual)
+
 ### Active
 
 <!-- Current scope. Building toward these. -->
 
-
-**M3 — Fold `minion-shared` → `@minion/shared`**
-- [ ] SHARE-01: `minion-shared/` history is imported into `packages/shared/` via `git subtree add`, preserving commits
-- [ ] SHARE-02: `@minion/shared` publishes first release to npm under new scope
-- [ ] SHARE-03: Re-export shim published under old package name and deprecated
-- [ ] SHARE-04: `minion_hub`, `minion_site`, and `paperclip-minion` import paths updated to `@minion/shared`
-- [ ] SHARE-05: Old `minion-shared` GitHub repo archived with README redirect
-
-
-**M5 — `@minion/auth` extraction**
-- [ ] AUTH-01: Better Auth config extracted from hub + site into `packages/auth` as `createAuth()` factory
-- [ ] AUTH-02: `@minion/auth` publishes first release
-- [ ] AUTH-03: `minion_hub` + `minion_site` consume the factory with identical secret/provider config
-- [ ] AUTH-04: Staging deploy of both services verified with shared session continuity
-
-**M6 — WS / gateway consolidation**
-- [ ] WS-01: WS client duplication audited across hub, site, and paperclip's `openclaw_gateway` adapter
-- [ ] WS-02: Shared WS client implementation consolidated into `@minion/shared`
-- [ ] WS-03: `minion_hub`, `minion_site` updated to consume shared client
-- [ ] WS-04: `paperclip-minion` adapter updated to consume shared client
-- [ ] WS-05: One WS client implementation exists across the platform (no duplicates)
-
-**M7 — Polish & automation**
-- [ ] POLISH-01: Meta-repo CI runs lint-all, typecheck-all, and changesets-status on every PR
-- [ ] POLISH-02: Changesets release automation publishes `@minion/*` on merge to main
-- [ ] POLISH-03: `minion doctor` surfaces env validation, link drift, and subproject health in a single report
-- [ ] POLISH-04: Root `CLAUDE.md` final rewrite reflects the steady-state workflow
-- [ ] POLISH-05: Developer onboarding doc: clone → subproject checkout → `minion dev` in under 10 minutes for a new dev
+_None — v1.0 shipped 2026-04-23. Run `/gsd-new-milestone` to scope v1.1._
 
 ### Out of Scope
 
@@ -153,15 +152,17 @@ All 5 TypeScript-using subprojects adopted `@minion-stack/tsconfig` + lint-confi
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Meta-repo (Option A), not true monorepo or pnpm-workspace-hybrid | Subprojects have baked-in constraints (published npm packages, separate branches/deploys, mixed stacks) that make forced consolidation a net loss | — Pending |
-| Root-level branding is "minion" (not OpenClaw) | User-confirmed 2026-04-19; matches directory naming and existing npm package scope | — Pending |
-| Aggressive shared-package extraction (Option C) | User wants "all-in on standardization and abstraction layers" — one model, no exceptions | — Pending |
-| Root becomes its own git repo; subprojects stay gitignored | Avoids submodule pain, keeps subprojects handoff-ready, natural home for cross-cutting tooling | — Pending |
-| Per-subproject `.env.defaults` + `.env.example` (not centralized) | Keeps subprojects self-contained and runnable standalone; defaults evolve with the code that reads them | — Pending |
-| Fold `minion-shared/` into `packages/shared` | One exception becomes permanent drift — all shared code follows one model | — Pending |
-| Publishing via npm under `@minion/*` scope | Matches how subprojects already consume dependencies; no special tooling | — Pending |
-| Orchestration via `concurrently`, not Turborepo | Subprojects build into their own `dist/` independently; no shared task graph worth modeling | — Pending |
-| M0 (clean slate) runs before any meta-repo construction | User explicit request — "start with a clean slate, first priority" | — Pending |
+| Meta-repo (Option A), not true monorepo or pnpm-workspace-hybrid | Subprojects have baked-in constraints (published npm packages, separate branches/deploys, mixed stacks) | ✓ Good — 8 phases shipped without touching subproject .git/ |
+| Root-level branding is "minion" (not OpenClaw) | User-confirmed 2026-04-19; matches directory naming | ✓ Good |
+| Aggressive shared-package extraction (Option C) | User wants "all-in on standardization and abstraction layers" | ✓ Good — 7 `@minion-stack/*` packages live |
+| Root becomes its own git repo; subprojects stay gitignored | Avoids submodule pain, keeps subprojects handoff-ready | ✓ Good |
+| Per-subproject `.env.defaults` + `.env.example` (not centralized) | Keeps subprojects self-contained | ✓ Good |
+| Fold `minion-shared/` into `packages/shared` | One exception becomes permanent drift | ✓ Good — deprecation shim consumed, source deleted |
+| Publishing via npm under `@minion-stack/*` scope (not `@minion`) | `@minion` scope unavailable on npm; locked in Phase 02 | ✓ Good |
+| Orchestration via `concurrently`, not Turborepo | No shared task graph worth modeling | ✓ Good |
+| M0 (clean slate) runs before any meta-repo construction | User explicit request | ✓ Good — prevented downstream drift |
+| drizzle-kit points at workspace source (`./packages/db/src/schema`) not node_modules | drizzle-kit `ignoreNodeModules:true` — can't read .ts from node_modules (A1=FAILED) | ✓ Good — cutover successful |
+| `createAuth()` factory hardcodes jwt+accountLinking+emailAndPassword; callers inject plugins | Minimizes config drift across hub/site while allowing org/OIDC variance | ✓ Good — identical JWKS kid confirmed |
 
 ## Evolution
 
@@ -181,4 +182,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-21 after Phase 06 (auth-extraction) completion*
+*Last updated: 2026-04-23 after v1.0 milestone (Minion Meta-Repo Foundation) completion*
