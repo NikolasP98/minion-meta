@@ -50,3 +50,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # actions/setup-node@v4 writes ${NODE_AUTH_TOKEN} into ~/.npmrc
+          # authToken placeholder. Without this, scoped PUT returns E404.
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
