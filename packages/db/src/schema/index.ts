@@ -57,3 +57,5 @@ export {
   agentBuiltSkills,
 } from './builder.js';
 export { userPreferences } from './user-preferences.js';
+export { workspaceMembership } from './workspace-membership.js';
+export type { WorkspaceMembership, NewWorkspaceMembership } from './workspace-membership.js';
