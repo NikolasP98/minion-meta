@@ -1,0 +1,21 @@
+{$PUBLIC_HOST:localhost} {
+  encode zstd gzip
+
+  @ws path /ws /ws/*
+  handle @ws {
+    reverse_proxy gateway:8080
+  }
+
+  # /api/pc/* is handled by hub's [...path] catch-all route.
+  # handle_path strips the matched prefix, so we rewrite to restore it
+  # before forwarding to hub. Hub's route at /api/pc/[...path] sees the
+  # full path and proxies onward to paperclip.
+  handle_path /api/pc/* {
+    rewrite * /api/pc{uri}
+    reverse_proxy hub:3000
+  }
+
+  handle {
+    reverse_proxy hub:3000
+  }
+}
