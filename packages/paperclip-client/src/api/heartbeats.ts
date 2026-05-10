@@ -1,6 +1,6 @@
 // VENDORED FROM paperclip-minion/ui/src/api/heartbeats.ts @ 1bcd90b38694bd8158356afd4c8bbb3994da6503
 
-import type { PaperclipClient } from '../client.js';
+import type { PaperclipClientBase } from '../client.js';
 import type { HeartbeatRun, HeartbeatRunEvent, InstanceSchedulerHeartbeatAgent } from '../types/heartbeat.js';
 import type { WorkspaceOperation } from '../types/workspace-runtime.js';
 
@@ -24,7 +24,7 @@ export interface LiveRunForIssue {
   issueId?: string | null;
 }
 
-export function heartbeatsApi(client: PaperclipClient) {
+export function heartbeatsApi(client: PaperclipClientBase) {
   return {
     list(companyId: string, agentId?: string, limit?: number): Promise<HeartbeatRun[]> {
       return client.request({

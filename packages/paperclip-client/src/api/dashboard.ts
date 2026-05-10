@@ -1,7 +1,7 @@
-import type { PaperclipClient } from '../client.js';
+import type { PaperclipClientBase } from '../client.js';
 import type { DashboardSummary } from '../types/dashboard.js';
 
-export function dashboardApi(client: PaperclipClient) {
+export function dashboardApi(client: PaperclipClientBase) {
   return {
     summary(companyId: string): Promise<DashboardSummary> {
       return client.request<DashboardSummary>({

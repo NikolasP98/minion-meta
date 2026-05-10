@@ -1,13 +1,13 @@
 // VENDORED FROM paperclip-minion/ui/src/api/execution-workspaces.ts @ 1bcd90b38694bd8158356afd4c8bbb3994da6503
 
-import type { PaperclipClient } from '../client.js';
+import type { PaperclipClientBase } from '../client.js';
 import type {
   ExecutionWorkspace,
   ExecutionWorkspaceCloseReadiness,
   WorkspaceOperation,
 } from '../types/workspace-runtime.js';
 
-export function executionWorkspacesApi(client: PaperclipClient) {
+export function executionWorkspacesApi(client: PaperclipClientBase) {
   return {
     list(
       companyId: string,

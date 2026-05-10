@@ -1,6 +1,6 @@
 // VENDORED FROM paperclip-minion/ui/src/api/costs.ts @ 1bcd90b38694bd8158356afd4c8bbb3994da6503
 
-import type { PaperclipClient } from '../client.js';
+import type { PaperclipClientBase } from '../client.js';
 import type {
   CostSummary,
   CostByAgent,
@@ -25,7 +25,7 @@ function dateQuery(from?: string, to?: string): Record<string, string | undefine
   return Object.keys(q).length ? q : undefined;
 }
 
-export function costsApi(client: PaperclipClient) {
+export function costsApi(client: PaperclipClientBase) {
   return {
     summary(companyId: string, from?: string, to?: string): Promise<CostSummary> {
       return client.request({ method: 'GET', path: `/api/companies/${companyId}/costs/summary`, query: dateQuery(from, to) });

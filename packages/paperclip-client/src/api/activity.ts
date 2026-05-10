@@ -1,4 +1,4 @@
-import type { PaperclipClient } from '../client.js';
+import type { PaperclipClientBase } from '../client.js';
 import type { ActivityEvent } from '../types/activity.js';
 
 // Local types copied from paperclip-minion/ui/src/api/activity.ts @ 1bcd90b38694bd8158356afd4c8bbb3994da6503
@@ -24,7 +24,7 @@ export interface IssueForRun {
   priority: string;
 }
 
-export function activityApi(client: PaperclipClient) {
+export function activityApi(client: PaperclipClientBase) {
   return {
     list(
       companyId: string,

@@ -4,10 +4,10 @@
 // multipart uploads themselves or extend the client. Methods here use JSON paths only
 // where possible; upload methods are marked DONE_WITH_CONCERNS.
 
-import type { PaperclipClient } from '../client.js';
+import type { PaperclipClientBase } from '../client.js';
 import type { AssetImage } from '../types/asset.js';
 
-export function assetsApi(client: PaperclipClient) {
+export function assetsApi(client: PaperclipClientBase) {
   return {
     /**
      * Upload an image file for a company.

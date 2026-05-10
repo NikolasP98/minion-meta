@@ -1,6 +1,6 @@
 // VENDORED FROM paperclip-minion/ui/src/api/plugins.ts @ 1bcd90b38694bd8158356afd4c8bbb3994da6503
 
-import type { PaperclipClient } from '../client.js';
+import type { PaperclipClientBase } from '../client.js';
 import type {
   PluginRecord,
   PluginConfig,
@@ -82,7 +82,7 @@ export interface AvailablePluginExample {
   tag: 'example';
 }
 
-export function pluginsApi(client: PaperclipClient) {
+export function pluginsApi(client: PaperclipClientBase) {
   return {
     list(status?: PluginStatus): Promise<PluginRecord[]> {
       return client.request({ method: 'GET', path: '/api/plugins', query: status ? { status } : undefined });

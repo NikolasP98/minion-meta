@@ -1,6 +1,6 @@
 // VENDORED FROM paperclip-minion/ui/src/api/companies.ts @ 1bcd90b38694bd8158356afd4c8bbb3994da6503
 
-import type { PaperclipClient } from '../client.js';
+import type { PaperclipClientBase } from '../client.js';
 import type { Company } from '../types/company.js';
 import type {
   CompanyPortabilityExportRequest,
@@ -19,7 +19,7 @@ export interface UpdateCompanyBranding {
   logoAssetId?: string | null;
 }
 
-export function companiesApi(client: PaperclipClient) {
+export function companiesApi(client: PaperclipClientBase) {
   return {
     list(): Promise<Company[]> {
       return client.request({ method: 'GET', path: '/api/companies' });

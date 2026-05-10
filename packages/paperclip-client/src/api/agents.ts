@@ -1,19 +1,21 @@
 // VENDORED FROM paperclip-minion/ui/src/api/agents.ts @ 1bcd90b38694bd8158356afd4c8bbb3994da6503
 
-import type { PaperclipClient } from '../client.js';
+import type { PaperclipClientBase } from '../client.js';
 import type {
   Agent,
   AgentDetail,
   AgentInstructionsBundle,
   AgentInstructionsFileDetail,
   AgentKeyCreated,
+  AgentConfigRevision,
+  AdapterEnvironmentTestResult,
+} from '../types/agent.js';
+import type {
   AgentRuntimeState,
   AgentTaskSession,
   AgentWakeupResponse,
   HeartbeatRun,
-  AgentConfigRevision,
-  AdapterEnvironmentTestResult,
-} from '../types/agent.js';
+} from '../types/heartbeat.js';
 import type { Approval } from '../types/approval.js';
 import type { AgentSkillSnapshot } from '../types/agent-skills.js';
 
@@ -69,7 +71,7 @@ export interface AvailableSkill {
   isPaperclipManaged: boolean;
 }
 
-export function agentsApi(client: PaperclipClient) {
+export function agentsApi(client: PaperclipClientBase) {
   return {
     list(companyId: string): Promise<Agent[]> {
       return client.request({ method: 'GET', path: `/api/companies/${companyId}/agents` });

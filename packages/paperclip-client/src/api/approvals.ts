@@ -1,10 +1,10 @@
 // VENDORED FROM paperclip-minion/ui/src/api/approvals.ts @ 1bcd90b38694bd8158356afd4c8bbb3994da6503
 
-import type { PaperclipClient } from '../client.js';
+import type { PaperclipClientBase } from '../client.js';
 import type { Approval, ApprovalComment } from '../types/approval.js';
 import type { Issue } from '../types/issue.js';
 
-export function approvalsApi(client: PaperclipClient) {
+export function approvalsApi(client: PaperclipClientBase) {
   return {
     list(companyId: string, status?: string): Promise<Approval[]> {
       return client.request({

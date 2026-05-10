@@ -1,6 +1,6 @@
 // VENDORED FROM paperclip-minion/ui/src/api/routines.ts @ 1bcd90b38694bd8158356afd4c8bbb3994da6503
 
-import type { PaperclipClient } from '../client.js';
+import type { PaperclipClientBase } from '../client.js';
 import type {
   Routine,
   RoutineDetail,
@@ -21,7 +21,7 @@ export interface RotateRoutineTriggerResponse {
   secretMaterial: RoutineTriggerSecretMaterial;
 }
 
-export function routinesApi(client: PaperclipClient) {
+export function routinesApi(client: PaperclipClientBase) {
   return {
     list(companyId: string): Promise<RoutineListItem[]> {
       return client.request({ method: 'GET', path: `/api/companies/${companyId}/routines` });

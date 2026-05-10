@@ -20,4 +20,19 @@ describe('createPaperclipClient', () => {
       status: 500,
     });
   });
+
+  it('exposes all domain namespaces as objects with methods', () => {
+    const fetch = vi.fn();
+    const client = createPaperclipClient({ baseUrl: 'http://x', fetch });
+    expect(typeof client.dashboard.summary).toBe('function');
+    expect(typeof client.issues.list).toBe('function');
+    expect(typeof client.agents.list).toBe('function');
+    expect(typeof client.plugins.list).toBe('function');
+    expect(typeof client.projects.list).toBe('function');
+    expect(typeof client.companies.list).toBe('function');
+    expect(typeof client.routines.list).toBe('function');
+    expect(typeof client.goals.list).toBe('function');
+    expect(typeof client.heartbeats.list).toBe('function');
+    expect(typeof client.secrets.list).toBe('function');
+  });
 });

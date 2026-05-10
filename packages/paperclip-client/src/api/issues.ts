@@ -1,6 +1,6 @@
 // VENDORED FROM paperclip-minion/ui/src/api/issues.ts @ 1bcd90b38694bd8158356afd4c8bbb3994da6503
 
-import type { PaperclipClient } from '../client.js';
+import type { PaperclipClientBase } from '../client.js';
 import type {
   Issue,
   IssueComment,
@@ -19,7 +19,7 @@ import type { Approval } from '../types/approval.js';
 
 export type IssueUpdateResponse = Issue & { comment?: IssueComment | null };
 
-export function issuesApi(client: PaperclipClient) {
+export function issuesApi(client: PaperclipClientBase) {
   return {
     list(
       companyId: string,

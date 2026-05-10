@@ -4,6 +4,7 @@ import type { Goal } from './goal.js';
 import type { Project, ProjectWorkspace } from './project.js';
 import type { ExecutionWorkspace, IssueExecutionWorkspaceSettings } from './workspace-runtime.js';
 import type { IssueWorkProduct } from './work-product.js';
+export type { IssueWorkProduct };
 
 export type IssueStatus =
   | 'backlog'

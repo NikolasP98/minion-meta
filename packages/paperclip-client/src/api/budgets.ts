@@ -1,6 +1,6 @@
 // VENDORED FROM paperclip-minion/ui/src/api/budgets.ts @ 1bcd90b38694bd8158356afd4c8bbb3994da6503
 
-import type { PaperclipClient } from '../client.js';
+import type { PaperclipClientBase } from '../client.js';
 import type {
   BudgetIncident,
   BudgetIncidentResolutionInput,
@@ -9,7 +9,7 @@ import type {
   BudgetPolicyUpsertInput,
 } from '../types/budget.js';
 
-export function budgetsApi(client: PaperclipClient) {
+export function budgetsApi(client: PaperclipClientBase) {
   return {
     overview(companyId: string): Promise<BudgetOverview> {
       return client.request({ method: 'GET', path: `/api/companies/${companyId}/budgets/overview` });
