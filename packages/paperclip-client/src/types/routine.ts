@@ -1,0 +1,130 @@
+// VENDORED FROM paperclip-minion/packages/shared/src/types/routine.ts @ 1bcd90b38694bd8158356afd4c8bbb3994da6503
+
+export type RoutineVariableType = 'text' | 'textarea' | 'number' | 'boolean' | 'select';
+export type RoutineVariableDefaultValue = string | number | boolean | null;
+
+export interface RoutineProjectSummary {
+  id: string;
+  name: string;
+  description: string | null;
+  status: string;
+  goalId?: string | null;
+}
+
+export interface RoutineAgentSummary {
+  id: string;
+  name: string;
+  role: string;
+  title: string | null;
+  urlKey?: string | null;
+}
+
+export interface RoutineIssueSummary {
+  id: string;
+  identifier: string | null;
+  title: string;
+  status: string;
+  priority: string;
+  updatedAt: Date;
+}
+
+export interface RoutineVariable {
+  name: string;
+  label: string | null;
+  type: RoutineVariableType;
+  defaultValue: RoutineVariableDefaultValue;
+  required: boolean;
+  options: string[];
+}
+
+export interface Routine {
+  id: string;
+  companyId: string;
+  projectId: string | null;
+  goalId: string | null;
+  parentIssueId: string | null;
+  title: string;
+  description: string | null;
+  assigneeAgentId: string | null;
+  priority: string;
+  status: string;
+  concurrencyPolicy: string;
+  catchUpPolicy: string;
+  variables: RoutineVariable[];
+  createdByAgentId: string | null;
+  createdByUserId: string | null;
+  updatedByAgentId: string | null;
+  updatedByUserId: string | null;
+  lastTriggeredAt: Date | null;
+  lastEnqueuedAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface RoutineTrigger {
+  id: string;
+  companyId: string;
+  routineId: string;
+  kind: string;
+  label: string | null;
+  enabled: boolean;
+  cronExpression: string | null;
+  timezone: string | null;
+  nextRunAt: Date | null;
+  lastFiredAt: Date | null;
+  publicId: string | null;
+  secretId: string | null;
+  signingMode: string | null;
+  replayWindowSec: number | null;
+  lastRotatedAt: Date | null;
+  lastResult: string | null;
+  createdByAgentId: string | null;
+  createdByUserId: string | null;
+  updatedByAgentId: string | null;
+  updatedByUserId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface RoutineRun {
+  id: string;
+  companyId: string;
+  routineId: string;
+  triggerId: string | null;
+  source: string;
+  status: string;
+  triggeredAt: Date;
+  idempotencyKey: string | null;
+  triggerPayload: Record<string, unknown> | null;
+  linkedIssueId: string | null;
+  coalescedIntoRunId: string | null;
+  failureReason: string | null;
+  completedAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface RoutineTriggerSecretMaterial {
+  webhookUrl: string;
+  webhookSecret: string;
+}
+
+export interface RoutineRunSummary extends RoutineRun {
+  linkedIssue: RoutineIssueSummary | null;
+  trigger: Pick<RoutineTrigger, 'id' | 'kind' | 'label'> | null;
+}
+
+export interface RoutineDetail extends Routine {
+  project: RoutineProjectSummary | null;
+  assignee: RoutineAgentSummary | null;
+  parentIssue: RoutineIssueSummary | null;
+  triggers: RoutineTrigger[];
+  recentRuns: RoutineRunSummary[];
+  activeIssue: RoutineIssueSummary | null;
+}
+
+export interface RoutineListItem extends Routine {
+  triggers: Pick<RoutineTrigger, 'id' | 'kind' | 'label' | 'enabled' | 'nextRunAt' | 'lastFiredAt' | 'lastResult'>[];
+  lastRun: RoutineRunSummary | null;
+  activeIssue: RoutineIssueSummary | null;
+}
