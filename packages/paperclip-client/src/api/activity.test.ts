@@ -22,13 +22,16 @@ describe('activityApi', () => {
   });
 
   it('GETs /api/companies/:companyId/activity with query params', async () => {
-    const fetch = mockFetch();
-    const api = activityApi(makeClient(fetch));
+    let capturedUrl = '';
+    const fetch = vi.fn(async (url: RequestInfo | URL) => {
+      capturedUrl = url.toString();
+      return new Response('[]', { status: 200, headers: { 'content-type': 'application/json' } });
+    });
+    const api = activityApi(makeClient(fetch as typeof globalThis.fetch));
     await api.list('c123', { entityType: 'issue', agentId: 'a1' });
-    const url = (fetch.mock.calls[0][0] as string);
-    expect(url).toContain('/api/companies/c123/activity');
-    expect(url).toContain('entityType=issue');
-    expect(url).toContain('agentId=a1');
+    expect(capturedUrl).toContain('/api/companies/c123/activity');
+    expect(capturedUrl).toContain('entityType=issue');
+    expect(capturedUrl).toContain('agentId=a1');
   });
 
   it('GETs /api/issues/:issueId/activity', async () => {
