@@ -1,22 +1,35 @@
 {
   "name": "@minion-stack/paperclip-client",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Typed client for the Paperclip control plane HTTP API. Used by minion_hub to proxy authenticated, company-scoped requests to a headless paperclip-server.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" },
-    "./identity-jwt": { "import": "./dist/identity-jwt.js", "types": "./dist/identity-jwt.d.ts" }
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./identity-jwt": {
+      "import": "./dist/identity-jwt.js",
+      "types": "./dist/identity-jwt.d.ts"
+    }
   },
-  "files": ["dist", "README.md"],
-  "publishConfig": { "access": "public" },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc -b tsconfig.json",
     "test": "vitest run",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": { "jose": "^5.9.6" },
+  "dependencies": {
+    "jose": "^5.9.6"
+  },
   "devDependencies": {
     "@minion-stack/tsconfig": "workspace:*",
     "@types/node": "^22.0.0",
