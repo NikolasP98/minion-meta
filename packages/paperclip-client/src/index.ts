@@ -1,2 +1,3 @@
-// Placeholder — filled in by later tasks (Task 4+).
-export {};
+export * from './client.js';
+export * from './identity-jwt.js';
+export * from './types.js';
