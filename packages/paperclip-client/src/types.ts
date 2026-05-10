@@ -1,2 +1,4 @@
-// Domain types re-exported as they are ported in subsequent tasks.
-export {};
+export * from './types/dashboard.js';
+export * from './types/sidebar-badges.js';
+export * from './types/activity.js';
+export * from './types/company.js';
