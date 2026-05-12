@@ -3,27 +3,42 @@ import type { Backend, CacheBackend, CacheEntry } from '../types.js';
 export class MemoryBackend implements CacheBackend {
   name: Backend = 'memory';
   private store = new Map<string, CacheEntry<unknown>>();
+  private tagIndex = new Map<string, Set<string>>();
 
   async get<T>(key: string): Promise<CacheEntry<T> | null> {
     const e = this.store.get(key) as CacheEntry<T> | undefined;
     if (!e) return null;
     if (Date.now() > e.staleUntil) {
-      this.store.delete(key);
+      this.dropKey(key);
       return null;
     }
     return e;
   }
 
   async set<T>(key: string, entry: CacheEntry<T>): Promise<void> {
+    this.dropKey(key);
     this.store.set(key, entry as CacheEntry<unknown>);
+    for (const t of entry.tags) {
+      let set = this.tagIndex.get(t);
+      if (!set) {
+        set = new Set();
+        this.tagIndex.set(t, set);
+      }
+      set.add(key);
+    }
   }
 
   async del(keys: string[]): Promise<void> {
-    for (const k of keys) this.store.delete(k);
+    for (const k of keys) this.dropKey(k);
   }
 
-  async delByTag(_tags: string[]): Promise<void> {
-    // Filled in Task 6
+  async delByTag(tags: string[]): Promise<void> {
+    const keys = new Set<string>();
+    for (const t of tags) {
+      const set = this.tagIndex.get(t);
+      if (set) for (const k of set) keys.add(k);
+    }
+    for (const k of keys) this.dropKey(k);
   }
 
   async mget<T>(keys: string[]): Promise<(CacheEntry<T> | null)[]> {
@@ -32,5 +47,19 @@ export class MemoryBackend implements CacheBackend {
 
   async close(): Promise<void> {
     this.store.clear();
+    this.tagIndex.clear();
+  }
+
+  private dropKey(key: string): void {
+    const e = this.store.get(key);
+    if (!e) return;
+    for (const t of e.tags) {
+      const set = this.tagIndex.get(t);
+      if (set) {
+        set.delete(key);
+        if (set.size === 0) this.tagIndex.delete(t);
+      }
+    }
+    this.store.delete(key);
   }
 }

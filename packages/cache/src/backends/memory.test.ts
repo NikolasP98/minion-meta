@@ -55,3 +55,46 @@ describe('MemoryBackend TTL expiry', () => {
     expect((await backend.get('k'))?.value).toBe('v');
   });
 });
+
+describe('MemoryBackend delByTag', () => {
+  it('drops all keys carrying a tag', async () => {
+    const b = new MemoryBackend();
+    await b.set('a', entry('A', { tags: ['d:groups', 't:1'] }));
+    await b.set('b', entry('B', { tags: ['d:groups', 't:2'] }));
+    await b.set('c', entry('C', { tags: ['d:sessions', 't:1'] }));
+
+    await b.delByTag(['d:groups']);
+
+    expect(await b.get('a')).toBeNull();
+    expect(await b.get('b')).toBeNull();
+    expect((await b.get('c'))?.value).toBe('C');
+  });
+
+  it('handles multiple tags (union)', async () => {
+    const b = new MemoryBackend();
+    await b.set('a', entry('A', { tags: ['t:1'] }));
+    await b.set('b', entry('B', { tags: ['t:2'] }));
+    await b.delByTag(['t:1', 't:2']);
+    expect(await b.get('a')).toBeNull();
+    expect(await b.get('b')).toBeNull();
+  });
+
+  it('updates tag index when a key is overwritten', async () => {
+    const b = new MemoryBackend();
+    await b.set('a', entry('A', { tags: ['t:1'] }));
+    await b.set('a', entry('A2', { tags: ['t:2'] }));
+    await b.delByTag(['t:1']);
+    expect((await b.get('a'))?.value).toBe('A2');
+    await b.delByTag(['t:2']);
+    expect(await b.get('a')).toBeNull();
+  });
+
+  it('removes tag index entries on del', async () => {
+    const b = new MemoryBackend();
+    await b.set('a', entry('A', { tags: ['t:1'] }));
+    await b.del(['a']);
+    await b.set('b', entry('B', { tags: ['t:1'] }));
+    await b.delByTag(['t:1']);
+    expect(await b.get('b')).toBeNull();
+  });
+});
