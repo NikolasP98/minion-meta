@@ -61,3 +61,59 @@ describe('cached()', () => {
     expect(loader).toHaveBeenCalledTimes(2);
   });
 });
+
+import { NoopBroadcaster } from './broadcaster';
+
+describe('cached() — broadcaster wiring', () => {
+  it('invalidateTags calls broadcaster.emit after backend.delByTag', async () => {
+    resetConfig();
+    const backend = new MemoryBackend();
+    const emit = vi.fn(async () => {});
+    configureCache({
+      backend, namespace: 'hub',
+      broadcaster: { emit } as unknown as NoopBroadcaster,
+      source: 'hub', sourceId: 'fn-1',
+    });
+    await invalidateTags(['t:abc']);
+    expect(emit).toHaveBeenCalledTimes(1);
+    const payload = emit.mock.calls[0]![0];
+    expect(payload).toMatchObject({
+      tags: ['t:abc'],
+      source: 'hub',
+      sourceId: 'fn-1',
+    });
+    expect(typeof payload.ts).toBe('number');
+  });
+
+  it('invalidateKey calls broadcaster.emit with keys field', async () => {
+    resetConfig();
+    const backend = new MemoryBackend();
+    const emit = vi.fn(async () => {});
+    configureCache({
+      backend, namespace: 'hub',
+      broadcaster: { emit } as unknown as NoopBroadcaster,
+      source: 'hub', sourceId: 'fn-1',
+    });
+    await invalidateKey('k');
+    expect(emit).toHaveBeenCalledTimes(1);
+    const payload = emit.mock.calls[0]![0];
+    expect(payload).toMatchObject({ tags: [], keys: ['k'], source: 'hub', sourceId: 'fn-1' });
+  });
+
+  it('no broadcaster — invalidate still works (no throw)', async () => {
+    resetConfig();
+    configureCache({ backend: new MemoryBackend(), namespace: 'hub' });
+    await expect(invalidateTags(['t'])).resolves.toBeUndefined();
+    await expect(invalidateKey('k')).resolves.toBeUndefined();
+  });
+
+  it('broadcaster failure does not break invalidate', async () => {
+    resetConfig();
+    configureCache({
+      backend: new MemoryBackend(), namespace: 'hub',
+      broadcaster: { emit: vi.fn(async () => { throw new Error('boom'); }) } as unknown as NoopBroadcaster,
+      source: 'hub', sourceId: 'fn-1',
+    });
+    await expect(invalidateTags(['t'])).resolves.toBeUndefined();
+  });
+});
