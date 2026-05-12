@@ -17,3 +17,9 @@ export type {
 } from './types.js';
 export type { Duration } from './ttl.js';
 export type { CreateBackendOptions } from './factory.js';
+export { NoopBroadcaster, HttpBroadcaster } from './broadcaster.js';
+export type {
+  CacheBroadcaster,
+  CacheInvalidatePayload,
+  HttpBroadcasterOptions,
+} from './broadcaster.js';
