@@ -39,3 +39,19 @@ describe('MemoryBackend get/set/del', () => {
     expect(out.map((e) => (e === null ? null : e.value))).toEqual([1, null, 3]);
   });
 });
+
+describe('MemoryBackend TTL expiry', () => {
+  it('returns null after staleUntil', async () => {
+    const backend = new MemoryBackend();
+    const past = Date.now() - 1_000;
+    await backend.set('k', { value: 'v', expiresAt: past, staleUntil: past, tags: [] });
+    expect(await backend.get('k')).toBeNull();
+  });
+
+  it('keeps fresh entries', async () => {
+    const backend = new MemoryBackend();
+    const future = Date.now() + 60_000;
+    await backend.set('k', { value: 'v', expiresAt: future, staleUntil: future, tags: [] });
+    expect((await backend.get('k'))?.value).toBe('v');
+  });
+});

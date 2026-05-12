@@ -5,7 +5,13 @@ export class MemoryBackend implements CacheBackend {
   private store = new Map<string, CacheEntry<unknown>>();
 
   async get<T>(key: string): Promise<CacheEntry<T> | null> {
-    return (this.store.get(key) as CacheEntry<T> | undefined) ?? null;
+    const e = this.store.get(key) as CacheEntry<T> | undefined;
+    if (!e) return null;
+    if (Date.now() > e.staleUntil) {
+      this.store.delete(key);
+      return null;
+    }
+    return e;
   }
 
   async set<T>(key: string, entry: CacheEntry<T>): Promise<void> {
@@ -21,7 +27,7 @@ export class MemoryBackend implements CacheBackend {
   }
 
   async mget<T>(keys: string[]): Promise<(CacheEntry<T> | null)[]> {
-    return keys.map((k) => (this.store.get(k) as CacheEntry<T> | undefined) ?? null);
+    return Promise.all(keys.map((k) => this.get<T>(k)));
   }
 
   async close(): Promise<void> {
