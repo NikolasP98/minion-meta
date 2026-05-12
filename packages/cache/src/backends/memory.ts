@@ -5,6 +5,9 @@ export class MemoryBackend implements CacheBackend {
   private store = new Map<string, CacheEntry<unknown>>();
   private tagIndex = new Map<string, Set<string>>();
 
+  constructor(private opts: { maxEntries?: number } = {}) {}
+  private maxEntries() { return this.opts.maxEntries ?? 1_000; }
+
   async get<T>(key: string): Promise<CacheEntry<T> | null> {
     const e = this.store.get(key) as CacheEntry<T> | undefined;
     if (!e) return null;
@@ -12,6 +15,8 @@ export class MemoryBackend implements CacheBackend {
       this.dropKey(key);
       return null;
     }
+    this.store.delete(key);
+    this.store.set(key, e as CacheEntry<unknown>);
     return e;
   }
 
@@ -20,11 +25,13 @@ export class MemoryBackend implements CacheBackend {
     this.store.set(key, entry as CacheEntry<unknown>);
     for (const t of entry.tags) {
       let set = this.tagIndex.get(t);
-      if (!set) {
-        set = new Set();
-        this.tagIndex.set(t, set);
-      }
+      if (!set) { set = new Set(); this.tagIndex.set(t, set); }
       set.add(key);
+    }
+    while (this.store.size > this.maxEntries()) {
+      const oldest = this.store.keys().next().value;
+      if (oldest === undefined) break;
+      this.dropKey(oldest);
     }
   }
 

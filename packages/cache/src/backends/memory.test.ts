@@ -98,3 +98,17 @@ describe('MemoryBackend delByTag', () => {
     expect(await b.get('b')).toBeNull();
   });
 });
+
+describe('MemoryBackend LRU eviction', () => {
+  it('evicts the least recently used when over capacity', async () => {
+    const b = new MemoryBackend({ maxEntries: 3 });
+    await b.set('a', entry('A'));
+    await b.set('b', entry('B'));
+    await b.set('c', entry('C'));
+    await b.get('a');                          // bump 'a' as MRU
+    await b.set('d', entry('D'));              // forces eviction of 'b'
+    expect(await b.get('b')).toBeNull();
+    expect((await b.get('a'))?.value).toBe('A');
+    expect((await b.get('d'))?.value).toBe('D');
+  });
+});
