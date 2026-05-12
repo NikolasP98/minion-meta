@@ -1,0 +1,44 @@
+{
+  "name": "@minion-stack/cache",
+  "version": "0.0.1",
+  "description": "Read-aside cache for the Minion platform — pluggable backends (memory/valkey/noop), TTL + SWR + single-flight + tag invalidation.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NikolasP98/minion-meta.git",
+    "directory": "packages/cache"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint src"
+  },
+  "dependencies": {
+    "ioredis": "^5.4.1"
+  },
+  "devDependencies": {
+    "@minion-stack/tsconfig": "workspace:*",
+    "@testcontainers/redis": "^10.13.0",
+    "@types/node": "^22.19.17",
+    "oxlint": ">=0.15.0",
+    "testcontainers": "^10.13.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.9"
+  }
+}
