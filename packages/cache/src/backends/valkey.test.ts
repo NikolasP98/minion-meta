@@ -13,26 +13,28 @@ const entry = <T>(value: T, opts: Partial<CacheEntry<T>> = {}): CacheEntry<T> =>
 
 const d = isDockerAvailable() ? describe : describe.skip;
 
+let sharedContainer: StartedTestContainer | undefined;
+let sharedUrl = '';
+
+beforeAll(async () => {
+  if (!isDockerAvailable()) return;
+  sharedContainer = await new GenericContainer('valkey/valkey:8-alpine')
+    .withExposedPorts(6379).start();
+  sharedUrl = `redis://${sharedContainer.getHost()}:${sharedContainer.getMappedPort(6379)}`;
+}, 60_000);
+
+afterAll(async () => {
+  await sharedContainer?.stop();
+});
+
 d('ValkeyBackend (containerized)', () => {
-  let container: StartedTestContainer;
   let backend: ValkeyBackend;
-  let url: string;
 
-  beforeAll(async () => {
-    container = await new GenericContainer('valkey/valkey:8-alpine')
-      .withExposedPorts(6379)
-      .start();
-    url = `redis://${container.getHost()}:${container.getMappedPort(6379)}`;
-  }, 60_000);
-
-  afterAll(async () => {
-    await backend?.close?.();
-    await container?.stop();
-  });
+  afterAll(async () => { await backend?.close?.(); });
 
   beforeEach(async () => {
     if (backend) await backend.close?.();
-    backend = new ValkeyBackend({ url });
+    backend = new ValkeyBackend({ url: sharedUrl });
     await backend.flushAll();
   });
 
@@ -55,6 +57,36 @@ d('ValkeyBackend (containerized)', () => {
     await backend.set('a', entry(1));
     await backend.set('c', entry(3));
     const out = await backend.mget<number>(['a', 'b', 'c']);
-    expect(out.map((e) => e === null ? null : e.value)).toEqual([1, null, 3]);
+    expect(out.map((e) => (e === null ? null : e.value))).toEqual([1, null, 3]);
+  });
+});
+
+d('ValkeyBackend delByTag', () => {
+  let backend: ValkeyBackend;
+  afterAll(async () => { await backend?.close?.(); });
+
+  beforeEach(async () => {
+    if (backend) await backend.close?.();
+    backend = new ValkeyBackend({ url: sharedUrl });
+    await backend.flushAll();
+  });
+
+  it('drops all keys carrying a tag', async () => {
+    await backend.set('a', entry('A', { tags: ['d:groups', 't:1'] }));
+    await backend.set('b', entry('B', { tags: ['d:groups', 't:2'] }));
+    await backend.set('c', entry('C', { tags: ['d:sessions'] }));
+    await backend.delByTag(['d:groups']);
+    expect(await backend.get('a')).toBeNull();
+    expect(await backend.get('b')).toBeNull();
+    expect((await backend.get('c'))?.value).toBe('C');
+  });
+
+  it('updates tag set on re-set with different tags', async () => {
+    await backend.set('a', entry('A', { tags: ['t:1'] }));
+    await backend.set('a', entry('A2', { tags: ['t:2'] }));
+    await backend.delByTag(['t:1']);
+    expect((await backend.get('a'))?.value).toBe('A2');
+    await backend.delByTag(['t:2']);
+    expect(await backend.get('a')).toBeNull();
   });
 });
