@@ -1,4 +1,5 @@
 import type { Duration } from './ttl.js';
+import type { CacheBroadcaster } from './broadcaster.js';
 
 export type Backend = 'memory' | 'valkey' | 'noop';
 
@@ -49,4 +50,10 @@ export interface CacheConfig {
   backend: CacheBackend;
   namespace: string;
   logger?: CacheLogger;
+  /** Optional broadcaster — emits cache.invalidate events on tag/key busts. Default: no-op. */
+  broadcaster?: CacheBroadcaster;
+  /** Required when `broadcaster` is set — identifies the runtime emitting. */
+  source?: 'hub' | 'gateway' | 'paperclip' | 'browser' | 'site';
+  /** Required when `broadcaster` is set — unique per-process id for self-dedup. */
+  sourceId?: string;
 }
