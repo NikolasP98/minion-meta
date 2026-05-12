@@ -37,15 +37,42 @@ export async function remember<T>(
 }
 
 export async function invalidateTags(tags: string[]): Promise<void> {
-  const { backend, logger } = getConfig();
+  const { backend, logger, broadcaster, source, sourceId } = getConfig();
   await backend.delByTag(tags);
   logger?.({ type: 'invalidate', tags });
+  if (broadcaster) {
+    try {
+      await broadcaster.emit({
+        tags,
+        source: source ?? 'hub',
+        sourceId: sourceId ?? 'unknown',
+        tenantId: '',
+        ts: Date.now(),
+      });
+    } catch (err) {
+      logger?.({ type: 'error', tags, error: err instanceof Error ? err : new Error(String(err)) });
+    }
+  }
 }
 
 export async function invalidateKey(key: string): Promise<void> {
-  const { backend, logger } = getConfig();
+  const { backend, logger, broadcaster, source, sourceId } = getConfig();
   await backend.del([key]);
   logger?.({ type: 'invalidate', key });
+  if (broadcaster) {
+    try {
+      await broadcaster.emit({
+        tags: [],
+        keys: [key],
+        source: source ?? 'hub',
+        sourceId: sourceId ?? 'unknown',
+        tenantId: '',
+        ts: Date.now(),
+      });
+    } catch (err) {
+      logger?.({ type: 'error', key, error: err instanceof Error ? err : new Error(String(err)) });
+    }
+  }
 }
 
 export async function mget<T>(keys: string[]): Promise<(T | null)[]> {
