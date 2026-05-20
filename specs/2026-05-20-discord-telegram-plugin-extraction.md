@@ -126,7 +126,7 @@ Per-channel, in order; discord first since it's cleaner.
 | Phase | Scope | Files touched | Reversibility |
 |---|---|---|---|
 | T-0 ✅ 2026-05-20 | Renamed `src/channels/telegram/` → `src/channels/telegram-helpers/` via `git mv` (preserves history). Two consumer import paths updated: `src/cli/commands/doctor/doctor-config-flow.ts` (both files) and `src/security/audit-channel.ts` (allow-from). The dir's 5 tests pass. Helpers stay in core because they run pre-plugin-bootstrap (CLI doctor + security audit). Commit `e3ef80b67` on DEV. | 4 files | trivial |
-| T-1 | Same as D-1. | 0–1 | trivial |
+| T-1 ✅ 2026-05-20 | Confirmed `api.registerChannelImpl` supports the telegram shape. Same generic API as D-1 (`K extends keyof PluginRuntime["channel"]`). `runtime.channel.telegram` is a typed slot at `src/plugins/runtime/types.ts:312-321` with exactly **8 functions**: `auditGroupMembership, collectUnmentionedGroupIds, probeTelegram, resolveTelegramToken, sendMessageTelegram, sendPollTelegram, monitorTelegramProvider, messageActions`. No code change required. | 0 | trivial |
 | T-2-lite | Same as D-2-lite for telegram's 8 bridge functions. Boot-order risk is higher than discord because of CLI/audit consumers — verify they don't touch the bridge before plugin load. | ~7 | low |
 | T-3 | Mirror D-3 for telegram UI. | new dir | additive |
 | T-2 (big-bang, deferred) | Physical move. Will need either an SDK re-export shim or a documented breaking change for `TelegramProbe`/`resolveTelegramAccount` consumers. | 23+ | high |
