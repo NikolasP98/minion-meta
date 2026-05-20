@@ -51,7 +51,7 @@ export async function resolveEnv(opts: ResolveOptions = {}): Promise<ResolvedEnv
 	// Layer 1 — root .env.defaults
 	applyLayer('root-defaults', parseDotenvFile(path.join(metaRoot, '.env.defaults')));
 
-	// Layer 2 — Infisical minion-core
+	// Layer 2 — Infisical minion-core (narrowed to MINION_SECRETS_KEY only)
 	const core = await fetchInfisicalSecrets('minion-core', {
 		domain:
 			opts.infisicalDomain ??
@@ -59,24 +59,33 @@ export async function resolveEnv(opts: ResolveOptions = {}): Promise<ResolvedEnv
 			process.env.INFISICAL_DOMAIN,
 		noCache: opts.noCache,
 	});
-	if (core.ok) applyLayer('infisical-core', core.env);
-	else warnings.push(`Infisical layer minion-core unavailable: ${core.error}`);
+	if (core.ok) {
+		const NARROWED_KEYS = new Set(['MINION_SECRETS_KEY']);
+		const narrowed: Record<string, string> = {};
+		for (const [k, v] of Object.entries(core.env)) {
+			if (NARROWED_KEYS.has(k)) narrowed[k] = v;
+		}
+		applyLayer('infisical-core', narrowed);
+		// Warn if Infisical still has other keys — operators should migrate them to the vault.
+		const stale = Object.keys(core.env).filter((k) => !NARROWED_KEYS.has(k));
+		if (stale.length > 0) {
+			warnings.push(
+				`Infisical project minion-core has ${stale.length} key(s) outside the narrowed set ` +
+					`[${[...NARROWED_KEYS].join(', ')}]; ` +
+					`migrate to gateway vault via 'minion secrets import-static' then remove from Infisical: ${stale.join(', ')}`,
+			);
+		}
+	} else {
+		warnings.push(`Infisical layer minion-core unavailable: ${core.error}`);
+	}
 
 	if (subproject) {
 		const subRoot = path.resolve(metaRoot, subproject.path);
 		// Layer 3 — subproject .env.defaults
 		applyLayer('subproject-defaults', parseDotenvFile(path.join(subRoot, '.env.defaults')));
-		// Layer 4 — Infisical minion-<name>
-		const sub = await fetchInfisicalSecrets(subproject.infisicalProject, {
-			domain:
-				opts.infisicalDomain ??
-				env.MINION_DEFAULT_INFISICAL_DOMAIN ??
-				process.env.INFISICAL_DOMAIN,
-			noCache: opts.noCache,
-		});
-		if (sub.ok) applyLayer('infisical-subproject', sub.env);
-		else
-			warnings.push(`Infisical layer ${subproject.infisicalProject} unavailable: ${sub.error}`);
+		// (Layer 4 — Infisical minion-<name> — REMOVED. All subproject secrets now live in the
+		//  gateway vault and are accessed via runtime.secrets.get() at gateway runtime, or via
+		//  `minion secrets` CLI offline. The subproject Infisical project is deprecated.)
 		// Layer 5 — subproject .env.local (gitignored)
 		applyLayer('subproject-local', parseDotenvFile(path.join(subRoot, '.env.local')));
 		// Validation against <subproject>/.env.example
