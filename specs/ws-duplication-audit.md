@@ -4,7 +4,7 @@
 **Phase:** 07-ws-consolidation
 **Status:** pre-migration inventory
 
-Three independent WebSocket gateway-client implementations exist across the minion stack: a 920-LOC browser client in `minion_hub`, a 373-LOC browser client in `minion_site`, and a 355-LOC Node.js client in `paperclip-minion/packages/adapters/openclaw-gateway`. All three implement the same custom JSON frame protocol (req/res/event) and the same `connect.challenge` → `connect` handshake, but with divergent reconnect policies, auth wiring, and runtime assumptions. Phase 4 already consolidated the _protocol layer_ (`sendRequest`, `handleResponseFrame`, `flushPending`, frame types) into `@minion-stack/shared`; it also migrated `minion_site` to consume that shared package. Phase 7 finishes the job by extracting the outer _WebSocket lifecycle_ (connection management, challenge handshake, backoff) into a new `GatewayClient` class in `@minion-stack/shared`, and deleting the duplicate implementations and types that remain in `minion_hub` and `paperclip-minion`.
+Three independent WebSocket gateway-client implementations exist across the minion stack: a 920-LOC browser client in `minion_hub`, a 373-LOC browser client in `minion_site`, and a 355-LOC Node.js client in `paperclip-minion/packages/adapters/minion-gateway`. All three implement the same custom JSON frame protocol (req/res/event) and the same `connect.challenge` → `connect` handshake, but with divergent reconnect policies, auth wiring, and runtime assumptions. Phase 4 already consolidated the _protocol layer_ (`sendRequest`, `handleResponseFrame`, `flushPending`, frame types) into `@minion-stack/shared`; it also migrated `minion_site` to consume that shared package. Phase 7 finishes the job by extracting the outer _WebSocket lifecycle_ (connection management, challenge handshake, backoff) into a new `GatewayClient` class in `@minion-stack/shared`, and deleting the duplicate implementations and types that remain in `minion_hub` and `paperclip-minion`.
 
 ---
 
@@ -145,9 +145,9 @@ No duplicate local copies of types or utils exist in `minion_site/src`. The site
 
 ## Consumer 3: paperclip-minion (Node, pnpm workspace)
 
-_Adapter: `@paperclipai/adapter-openclaw-gateway`. **No** dependency on `@minion-stack/shared`._
+_Adapter: `@paperclipai/adapter-minion-gateway`. **No** dependency on `@minion-stack/shared`._
 
-### `paperclip-minion/packages/adapters/openclaw-gateway/src/server/gateway-client.ts` — **355 LOC**
+### `paperclip-minion/packages/adapters/minion-gateway/src/server/gateway-client.ts` — **355 LOC**
 
 Exports `class GatewayWsClient` — the paperclip Node.js gateway client. Uses `ws` npm package (not browser `WebSocket`).
 
@@ -170,14 +170,14 @@ Full export inventory:
 | `headerMapGetIgnoreCase` | **Keep local** — paperclip auth header parsing |
 | `headerMapHasIgnoreCase` | **Keep local** — paperclip auth header parsing |
 | `toAuthorizationHeaderValue` | **Keep local** — paperclip auth formatting |
-| `resolveAuthToken` | **Keep local** — paperclip auth resolution (reads `x-openclaw-token`, `x-openclaw-auth`, `authorization`) |
+| `resolveAuthToken` | **Keep local** — paperclip auth resolution (reads `x-minion-token`, `x-minion-auth`, `authorization`) |
 | `toStringRecord` | **Keep local** — paperclip utility |
 
 **Key difference from shared `GatewayClient` pattern:** Paperclip's `GatewayWsClient.connect()` takes a `buildConnectParams(nonce)` callback and a `timeoutMs` argument, does NOT auto-reconnect (single-shot: one adapter run = one WS connection), and uses Node.js `ws` events (`.on()`). The shared `GatewayClient` uses `onChallenge` callback and `autoReconnect: boolean` flag; paperclip will call it with `autoReconnect: false`.
 
 ### Import-site inventory (paperclip adapter)
 
-Grep: `grep -rn "./gateway-client" paperclip-minion/packages/adapters/openclaw-gateway/src`
+Grep: `grep -rn "./gateway-client" paperclip-minion/packages/adapters/minion-gateway/src`
 
 | File | LOC | Symbols imported from gateway-client |
 |------|-----|--------------------------------------|
@@ -309,7 +309,7 @@ Publishing `@minion-stack/shared` with `ws` as an optional peerDependency and is
 The assumption is that hub's `extractText` (which handles `tool_use`/`tool_result`/`image`) is called in code paths that actually receive those block types from the live gateway. Import sites: `src/lib/services/gateway.svelte.ts` and `src/lib/workshop/gateway-bridge.ts` and `src/lib/components/chat/ChatMessage.svelte`. The chat panel import site confirms UI rendering dependency. Verify by checking if Claude API responses with tool-use content flow through the chat panel in a real session — if yes, keeping hub-local is mandatory; if no, shared's simpler version is safe.
 
 **A3 — Paperclip test suite survives adapter shim:**
-After `gateway-client.ts` is replaced by a re-export shim pointing to `@minion-stack/shared/node`, the existing paperclip adapter test file (`server/src/__tests__/openclaw-gateway-adapter.test.ts`) should pass without modification if the re-exported class surface matches. Must be verified by running `pnpm --filter @paperclipai/server test:run` after the adapter migration in plan 07-04.
+After `gateway-client.ts` is replaced by a re-export shim pointing to `@minion-stack/shared/node`, the existing paperclip adapter test file (`server/src/__tests__/minion-gateway-adapter.test.ts`) should pass without modification if the re-exported class surface matches. Must be verified by running `pnpm --filter @paperclipai/server test:run` after the adapter migration in plan 07-04.
 
 **A7 — 0.2.0 publish-first vs squash into 0.3.0:**
 Local `packages/shared/package.json` is at `0.2.0` with a staged changeset; npm `latest` is `0.1.0`. The safer path is to publish `0.2.0` first (as Phase 4 intended) to preserve changelog linearity, then `0.3.0` for Phase 7 additions. The risk is that squashing both into `0.3.0` would lose the Phase 4 → Phase 7 attribution in the CHANGELOG. Plan 07-02 should publish `0.2.0` first (D-02 above).
@@ -326,7 +326,7 @@ All five grep sweeps executed from meta-repo root after 07-03 migration (commits
 |-------|---------|---------|--------|
 | Frame-type interfaces | `grep -rn "interface RequestFrame\|interface ResponseFrame\|interface EventFrame\|type GatewayFrame" minion_hub/src minion_site/src paperclip-minion/packages/adapters --include="*.ts" --include="*.svelte" \| grep -v node_modules \| grep -v dist/` | 1 (re-export in shim) | CLEAR — match is `type GatewayFrame,` inside `export { ... } from "@minion-stack/shared/node"` in gateway-client.ts; not a local declaration |
 | WS client classes | `grep -rn "class GatewayWsClient\|class GatewayClient" minion_hub/src minion_site/src paperclip-minion/packages --include="*.ts" \| grep -v node_modules \| grep -v dist/ \| grep -v packages/shared` | 0 | CLEAR |
-| new WebSocket() in adapter | `grep -rn "new WebSocket(" minion_hub/src minion_site/src paperclip-minion/packages/adapters --include="*.ts" --include="*.svelte" \| grep -v node_modules \| grep -v dist/` | 1 (out-of-scope) | EXCEPTION documented — match is in `paperclip-minion/packages/adapters/openclaw-gateway/src/server/test.ts:128` (AdapterEnvironmentTestContext diagnostic probe, not a gateway client) |
+| new WebSocket() in adapter | `grep -rn "new WebSocket(" minion_hub/src minion_site/src paperclip-minion/packages/adapters --include="*.ts" --include="*.svelte" \| grep -v node_modules \| grep -v dist/` | 1 (out-of-scope) | EXCEPTION documented — match is in `paperclip-minion/packages/adapters/minion-gateway/src/server/test.ts:128` (AdapterEnvironmentTestContext diagnostic probe, not a gateway client) |
 | uuid()/parseAgentSessionKey impls | `grep -rn "function uuid\|export const uuid\|export function parseAgentSessionKey" minion_hub/src minion_site/src paperclip-minion/packages --include="*.ts" \| grep -v node_modules \| grep -v dist/ \| grep -v packages/shared` | 0 | CLEAR |
 | Old hub imports | `grep -rn "\$lib/types/gateway\|\$lib/utils/uuid\|\$lib/utils/session-key" minion_hub/src --include="*.ts" --include="*.svelte"` | 0 | CLEAR |
 
@@ -334,7 +334,7 @@ All five grep sweeps executed from meta-repo root after 07-03 migration (commits
 
 Exception 1 — `gateway-client.ts` sweep 1 match: The `type GatewayFrame,` token appears in a `export { … } from "@minion-stack/shared/node"` re-export block. The type's authoritative definition is in `packages/shared/src/gateway/types.ts`. No local declaration exists.
 
-Exception 2 — `test.ts` sweep 3 match: `paperclip-minion/packages/adapters/openclaw-gateway/src/server/test.ts` is the adapter environment-check utility. It implements a minimal diagnostic WebSocket probe (not a gateway client) that bypasses GatewayClient intentionally to verify raw gateway connectivity. This is equivalent to the pre-existing `live-events-ws.ts` server-side out-of-scope exception documented in the Phase 7 plan (A6).
+Exception 2 — `test.ts` sweep 3 match: `paperclip-minion/packages/adapters/minion-gateway/src/server/test.ts` is the adapter environment-check utility. It implements a minimal diagnostic WebSocket probe (not a gateway client) that bypasses GatewayClient intentionally to verify raw gateway connectivity. This is equivalent to the pre-existing `live-events-ws.ts` server-side out-of-scope exception documented in the Phase 7 plan (A6).
 
 **Deletions (hub duplicates removed in 07-03, commit fb42dd9):**
 
@@ -350,5 +350,5 @@ Exception 2 — `test.ts` sweep 3 match: `paperclip-minion/packages/adapters/ope
 **Preserved (by design):**
 
 - `minion_hub/src/lib/utils/text.ts` (115 LOC) — hub superset handles `tool_use`/`tool_result`/`image` content blocks [D-05]
-- `paperclip-minion/packages/adapters/openclaw-gateway/src/server/gateway-helpers.ts` (120 LOC) — auth helpers extracted from gateway-client.ts [D-04]
-- `paperclip-minion/packages/adapters/openclaw-gateway/src/shared/device-auth.ts` — Ed25519 signing stays local (not a gateway concern)
+- `paperclip-minion/packages/adapters/minion-gateway/src/server/gateway-helpers.ts` (120 LOC) — auth helpers extracted from gateway-client.ts [D-04]
+- `paperclip-minion/packages/adapters/minion-gateway/src/shared/device-auth.ts` — Ed25519 signing stays local (not a gateway concern)

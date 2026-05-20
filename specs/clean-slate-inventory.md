@@ -297,7 +297,7 @@ Classifications for PRs #34–#68 inherit from `project_pr_review_sweep_apr17.md
 
 | PR | Title | Author | Classification | Action (pending user go) |
 |---|---|---|---|---|
-| #1 | SEO: OpenClaw brand clarification | bot | HOLD | Review scope — SEO work may be relevant |
+| #1 | SEO: Minion brand clarification | bot | HOLD | Review scope — SEO work may be relevant |
 
 ### Other repos
 

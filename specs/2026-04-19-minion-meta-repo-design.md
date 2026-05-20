@@ -48,7 +48,7 @@ Why: subprojects have baked-in constraints — published npm packages, independe
 
 ### D2. Root-level branding is "minion"
 
-All root-level tooling is branded "minion" (not "OpenClaw"). Applies to:
+All root-level tooling is branded "minion" (not "Minion"). Applies to:
 - CLI wrapper name: `minion`
 - Root package name: `@minion/root` (private)
 - Infisical project names: `minion-core`, `minion-<project>`
@@ -200,7 +200,7 @@ minion branch <project>              # print current branch
 | `@minion/env` | absorbs `infisical-dev.sh` | `@minion/cli` runtime + optional programmatic | low | Infisical machine-identity auth, `.env.*` parser/merger, validator |
 | `@minion/tsconfig` | new | all TS subprojects | low | Variants: `base`, `node`, `svelte`, `library` |
 | `@minion/lint-config` | new | all subprojects | low | Per-tool: oxlint preset, flat eslint config, prettier config |
-| `@minion/shared` | absorbs `minion-shared/` + hub/site WS duplication | hub, site, paperclip (`openclaw_gateway` adapter) | medium | Full WS client, gateway frame helpers, session utilities |
+| `@minion/shared` | absorbs `minion-shared/` + hub/site WS duplication | hub, site, paperclip (`minion_gateway` adapter) | medium | Full WS client, gateway frame helpers, session utilities |
 | `@minion/db` | extracts `minion_hub/src/server/db/schema/` | hub, site | **high** | 35+ Drizzle tables. Meta-repo owns migrations; hub+site consume types only |
 | `@minion/auth` | extracts `minion_hub/src/lib/auth/` + `minion_site/src/lib/auth/` | hub, site | medium | Better Auth `createAuth()` factory |
 
@@ -289,7 +289,7 @@ Exit: auth changes require only a meta-repo PR; hub+site consume shared factory.
 
 ### M6 — WS/gateway consolidation
 
-- Audit WS client duplication across hub, site, paperclip (`openclaw_gateway` adapter).
+- Audit WS client duplication across hub, site, paperclip (`minion_gateway` adapter).
 - Consolidate into `@minion/shared`.
 - Update all consumers (parallel subagents).
 

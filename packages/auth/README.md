@@ -7,7 +7,7 @@ Better Auth `createAuth()` factory shared between `minion_hub` and `minion_site`
 This package provides a single `createAuth()` factory function that creates a fully-configured Better Auth instance with consistent defaults across the Minion platform. It ensures JWT audience, cookie security, and account linking behave identically in both apps.
 
 **Always included by the factory:**
-- JWT plugin (EdDSA keypair, 1h expiry, `audience: 'openclaw-gateway'`, `issuer: baseURL`)
+- JWT plugin (EdDSA keypair, 1h expiry, `audience: 'minion-gateway'`, `issuer: baseURL`)
 - Email + password authentication
 - Account linking with Google as a trusted provider
 - Localhost dev origins (`:5173`, `:5174`, `:4173`)
