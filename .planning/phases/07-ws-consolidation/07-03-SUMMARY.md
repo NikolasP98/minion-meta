@@ -12,7 +12,7 @@ tech_stack:
   patterns: ["onChallenge callback pattern", "autoReconnect: true (browser)", "autoReconnect: false (Node/paperclip)", "(client as any).ws binary shim"]
 key_files:
   created:
-    - paperclip-minion/packages/adapters/openclaw-gateway/src/server/gateway-helpers.ts
+    - paperclip-minion/packages/adapters/minion-gateway/src/server/gateway-helpers.ts
     - .planning/phases/07-ws-consolidation/SITE-SMOKE.md
   modified:
     - minion_hub/package.json
@@ -31,10 +31,10 @@ key_files:
     - minion_hub/src/lib/workshop/gateway-bridge.ts
     - minion_site/package.json
     - minion_site/src/lib/services/member-gateway.svelte.ts
-    - paperclip-minion/packages/adapters/openclaw-gateway/package.json
-    - paperclip-minion/packages/adapters/openclaw-gateway/src/server/gateway-client.ts
-    - paperclip-minion/packages/adapters/openclaw-gateway/src/server/execute.ts
-    - paperclip-minion/packages/adapters/openclaw-gateway/src/server/hire-approved.ts
+    - paperclip-minion/packages/adapters/minion-gateway/package.json
+    - paperclip-minion/packages/adapters/minion-gateway/src/server/gateway-client.ts
+    - paperclip-minion/packages/adapters/minion-gateway/src/server/execute.ts
+    - paperclip-minion/packages/adapters/minion-gateway/src/server/hire-approved.ts
 decisions:
   - "Hub binary channel (Yjs) uses (client as any).ws shim — GatewayClient exposes no public binary API; TODO(phase-8) upstream proper binary channel accessor"
   - "EventFrame cast to Record<string,unknown> uses double-cast (frame as unknown as Record<string,unknown>) to satisfy TypeScript strict mode"
@@ -142,7 +142,7 @@ Three `GatewayWsClient` instantiation sites updated to `createNodeGatewayClient`
 ### Test results
 
 - `pnpm typecheck`: **all packages green** (0 errors)
-- `pnpm --filter @paperclipai/adapter-openclaw-gateway build`: succeeds
+- `pnpm --filter @paperclipai/adapter-minion-gateway build`: succeeds
 - `pnpm test:run`: **1187/1188 tests pass** (1 pre-existing skip)
 
 ## Deviations from Plan
@@ -164,7 +164,7 @@ Three `GatewayWsClient` instantiation sites updated to `createNodeGatewayClient`
 **3. [Rule 2 - Missing] deviceIdentity hoisted out of while loop**
 - **Found during:** Task 3 — `onChallenge` closure needed access to `deviceIdentity` which was set inside the loop body after the client was created
 - **Fix:** Moved `let deviceIdentity` declaration outside the `while (true)` loop; assignment remains inside loop (before client construction)
-- **Files modified:** `paperclip-minion/packages/adapters/openclaw-gateway/src/server/execute.ts`
+- **Files modified:** `paperclip-minion/packages/adapters/minion-gateway/src/server/execute.ts`
 
 ### Plan Note: gateway-client.ts shim is 29 lines (plan said ≤20)
 

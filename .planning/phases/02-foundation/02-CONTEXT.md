@@ -197,7 +197,7 @@ This is the highest-risk task in Phase 2 because it touches production services.
 - Keep the file tracked (not deleted) for 1 release cycle so users who have `infisical-dev.sh` baked into their shell aliases get the warning instead of "command not found".
 
 ### D12 — Root CLAUDE.md + README.md
-- Existing root `CLAUDE.md` (the big "OpenClaw orchestrator hub" doc) — KEEP ITS SUBPROJECT MAP, update the top header to mention the meta-repo, add a new "Meta-repo workflow" section under the Project Map that documents:
+- Existing root `CLAUDE.md` (the big "Minion orchestrator hub" doc) — KEEP ITS SUBPROJECT MAP, update the top header to mention the meta-repo, add a new "Meta-repo workflow" section under the Project Map that documents:
   - `minion dev <id>`, `minion --all`, `minion doctor`, `minion status`
   - How `.env.defaults`, `.env.local`, Infisical layers merge
   - Where subprojects' own CLAUDE.md files live (unchanged)

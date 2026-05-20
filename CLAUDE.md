@@ -1,6 +1,6 @@
 # CLAUDE.md — Minion Meta-Repo Orchestrator Hub
 
-This is the **Minion meta-repo** (formerly the loose "OpenClaw" root) — a self-hosted personal AI assistant platform with orchestration tooling, shared packages (`@minion-stack/*`), and specs at the root, wrapped around 7 independent subprojects. The agent operating from this directory is the **orchestrator**: it has full knowledge of every subdirectory, connects concepts cross-project, and dispatches subagents with the right context.
+This is the **Minion meta-repo** — a self-hosted personal AI assistant platform with orchestration tooling, shared packages (`@minion-stack/*`), and specs at the root, wrapped around 7 independent subprojects. The agent operating from this directory is the **orchestrator**: it has full knowledge of every subdirectory, connects concepts cross-project, and dispatches subagents with the right context.
 
 ## Project Map
 
@@ -99,7 +99,7 @@ Design spec: [`specs/2026-04-19-minion-meta-repo-design.md`](specs/2026-04-19-mi
 @minion-stack/shared     ← Protocol types (frames, agents, sessions, chat events) + WS client
   ├──→ minion_hub/       ← Imports types + WS utils for dashboard
   ├──→ minion_site/      ← Imports types + WS utils for members area
-  └──→ paperclip-minion/ ← openclaw_gateway adapter consumes the shared WS client
+  └──→ paperclip-minion/ ← minion_gateway adapter consumes the shared WS client
 
 minion/ (gateway)
   ├── WebSocket server  ←──→  minion_hub/ (dashboard connects via WS)
@@ -113,7 +113,7 @@ minion_hub/ ←──shared DB──→ minion_site/
 
 ### Gateway Protocol
 
-All frontends connect to the gateway via WebSocket using a custom JSON frame protocol with three frame types: `req`, `res`, and `event`. Types and the WS client live in `@minion-stack/shared` (consumed by hub, site, and paperclip's `openclaw_gateway` adapter).
+All frontends connect to the gateway via WebSocket using a custom JSON frame protocol with three frame types: `req`, `res`, and `event`. Types and the WS client live in `@minion-stack/shared` (consumed by hub, site, and paperclip's `minion_gateway` adapter).
 
 Connection flow: WS connect → `connect.challenge` event → `connect` request with token → authenticated session.
 
@@ -227,7 +227,7 @@ VS Code extension: pixel art office where Claude Code agents are animated charac
 
 ### ai-studio/ — Research Studio
 
-Research workspace for an AI course. Docs-only — no production code. Uses the OpenClaw project as a live testbed for agentic techniques (tool use, multi-agent coordination, memory, planning).
+Research workspace for an AI course. Docs-only — no production code. Uses the Minion project as a live testbed for agentic techniques (tool use, multi-agent coordination, memory, planning).
 
 **Structure**: `context/` (briefs), `vault/` (knowledge), `reports/` (analysis), `product-thinking/` (PRDs), `class content/` (course materials + presentations).
 
@@ -267,13 +267,13 @@ Research workspace for an AI course. Docs-only — no production code. Uses the 
 When sending work to a subproject, always include:
 1. The subproject path and its CLAUDE.md location
 2. The current git branch (see Project Map above)
-3. Relevant cross-project context (e.g., "this touches the WS protocol — changes must be reflected in @minion-stack/shared, hub, site, and paperclip's openclaw_gateway adapter")
+3. Relevant cross-project context (e.g., "this touches the WS protocol — changes must be reflected in @minion-stack/shared, hub, site, and paperclip's minion_gateway adapter")
 
 ### Cross-Project Impact Zones
 
 | Change Type | Projects Affected |
 |---|---|
-| Gateway protocol (frame types, events) | `packages/shared/` → `minion_hub/` + `minion_site/` + `paperclip-minion/` (openclaw_gateway adapter) |
+| Gateway protocol (frame types, events) | `packages/shared/` → `minion_hub/` + `minion_site/` + `paperclip-minion/` (minion_gateway adapter) |
 | Channel extension (new/modify) | `minion/extensions/<channel>/` + `minion/src/channels/` |
 | DB schema change | `minion_hub/src/server/db/schema/` → `minion_site/src/server/db/` (shared DB) |
 | Agent definition format | `docs/agents/` → `minion_hub/` (marketplace) → `minion/` (runtime) |
@@ -288,7 +288,7 @@ When sending work to a subproject, always include:
 - **Svelte 5 only** (hub + site): runes, snippets (`Snippet` type for children), `onclick={}` syntax. No legacy Svelte 4 patterns.
 - **Formatting**: minion/ uses oxlint + oxfmt. SvelteKit projects use svelte-check.
 - **Package managers**: pnpm for the meta-repo root, `minion/`, and `paperclip-minion/`. Bun for SvelteKit projects (`minion_hub/`, `minion_site/`). npm for `pixel-agents/`. Don't mix within a subproject.
-- **Naming**: "OpenClaw" or "Minion" for product/docs headings; `minion`/`openclaw` for CLI/package/paths.
+- **Naming**: "Minion" for product/docs headings; `minion` for CLI/package/paths.
 - **Git workflow**: Feature branches → dev/DEV → main/master. Use worktrees for isolation. Never commit directly to main.
 - **Multi-agent safety**: Don't touch git stash, worktrees, or switch branches unless explicitly asked. Scope commits to your changes only.
 
@@ -297,7 +297,7 @@ When sending work to a subproject, always include:
 Key variables (see `.env.example` in each project):
 
 - `ANTHROPIC_API_KEY` — Claude API
-- `OPENCLAW_GATEWAY_TOKEN` — Gateway auth
+- `MINION_GATEWAY_TOKEN` — Gateway auth
 - `TURSO_DB_URL`, `TURSO_DB_AUTH_TOKEN` — Database (production)
 - `BETTER_AUTH_SECRET` — Auth secret
 - `B2_*` — Backblaze B2 file storage (hub)

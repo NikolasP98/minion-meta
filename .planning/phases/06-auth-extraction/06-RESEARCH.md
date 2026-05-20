@@ -26,7 +26,7 @@
   }
   export function createAuth(params: CreateAuthParams): ReturnType<typeof betterAuth>
   ```
-  Factory always includes: `jwt` (EdDSA, 1h, audience=`openclaw-gateway`) + `organization`. Hub adds: `oidcProvider({ loginPage: '/login' })` via `extraPlugins`. Hub adds: personal-agent provision + invitation email hook via `hooks`.
+  Factory always includes: `jwt` (EdDSA, 1h, audience=`minion-gateway`) + `organization`. Hub adds: `oidcProvider({ loginPage: '/login' })` via `extraPlugins`. Hub adds: personal-agent provision + invitation email hook via `hooks`.
 - **D-02 revised (from CONTEXT.md specifics section):** Factory does NOT call `organization()` internally. Factory accepts a `plugins` param. Hub passes `organization({ sendInvitationEmail })` + `oidcProvider()`. Site passes `organization()`. `plugins` replaces `extraPlugins` name.
 - **D-03 Built-in trustedOrigins in factory:** Always includes `['http://localhost:5173', 'http://localhost:5174', 'http://localhost:4173']` plus `baseURL` (if not already localhost). Caller passes additional origins via `trustedOrigins` param.
 - **D-04 useSecureCookies logic:** Derived from `baseURL` inside factory: `baseURL.startsWith('https://')`. Not a param.
@@ -159,7 +159,7 @@ Note: npm `latest` is 1.6.6. The project is pinned to `1.4.19`. The `peerDepende
 
 **Config keys:** database, secret, baseURL, trustedOrigins (same list), emailAndPassword.enabled=true, socialProviders.google (conditional), plugins [jwt(), organization()]
 
-**Drift vs hub:** Site calls `jwt()` with NO custom issuer/audience/expirationTime. Hub calls with `{ issuer: hubUrl, audience: 'openclaw-gateway', expirationTime: '1h' }`. **This is a latent bug** — JWTs minted from site sessions use Better Auth's defaults and may not validate for gateway calls. The factory normalizes this.
+**Drift vs hub:** Site calls `jwt()` with NO custom issuer/audience/expirationTime. Hub calls with `{ issuer: hubUrl, audience: 'minion-gateway', expirationTime: '1h' }`. **This is a latent bug** — JWTs minted from site sessions use Better Auth's defaults and may not validate for gateway calls. The factory normalizes this.
 
 ### Auth-client configs (both apps identical, 8 lines) [VERIFIED]
 ```typescript
@@ -255,7 +255,7 @@ export function createAuth(params: CreateAuthParams) {
       jwt({
         jwt: {
           issuer: params.baseURL,
-          audience: 'openclaw-gateway',
+          audience: 'minion-gateway',
           expirationTime: '1h',
         },
         jwks: { keyPairConfig: { alg: 'EdDSA' } },
@@ -376,7 +376,7 @@ export function getAuth(): AuthInstance {
 - **Shipping hub service imports from `@minion-stack/auth`:** If the package imports `$server/services/personal-agent.service`, circular dependency + impossible-to-install-in-site. Always accept as callback via `hooks` param.
 - **Calling `organization()` inside factory:** Hub needs `organization({ sendInvitationEmail })` and site needs `organization()`. If factory calls `organization()` unconditionally, hub would duplicate the plugin and overwrite the callback.
 - **Evaluating `env` at module load inside `@minion-stack/auth`:** The package must never touch `process.env`. All env reading stays in consumers.
-- **Drifting JWT issuer/audience between hub and site:** Factory hardcodes `audience: 'openclaw-gateway'` for both — this is the normalization that closes the existing site drift bug.
+- **Drifting JWT issuer/audience between hub and site:** Factory hardcodes `audience: 'minion-gateway'` for both — this is the normalization that closes the existing site drift bug.
 - **Bundling browser `createAuthClient` into the factory package:** Mixing server+client exports complicates tree-shaking and is not needed (auth-client.ts is 8 lines, app-specific per D-07).
 
 ---
@@ -580,9 +580,9 @@ No need for sub-path exports (unlike packages/db which exports `./schema`, `./au
 **Warning signs:** Build fails with `Cannot find module '$env/dynamic/private'` during `vite build`, or `env.BETTER_AUTH_SECRET is undefined`.
 
 ### Pitfall 2: JWT audience drift breaks gateway auth
-**What goes wrong:** Site's current `jwt()` call has no custom audience; hub's has `audience: 'openclaw-gateway'`. A JWT minted from a site session would not validate for gateway calls.
+**What goes wrong:** Site's current `jwt()` call has no custom audience; hub's has `audience: 'minion-gateway'`. A JWT minted from a site session would not validate for gateway calls.
 **Why it happens:** Existing site config is simpler — developer might carry the simplification forward.
-**How to avoid:** Factory hardcodes `audience: 'openclaw-gateway'` — this is the fix. Both consumers call the same factory, getting the same JWT config. No per-consumer drift possible.
+**How to avoid:** Factory hardcodes `audience: 'minion-gateway'` — this is the fix. Both consumers call the same factory, getting the same JWT config. No per-consumer drift possible.
 **Warning signs:** Gateway rejects JWTs with "invalid audience" for site-authenticated users.
 
 ### Pitfall 3: organization() duplicate registration
@@ -826,7 +826,7 @@ betterAuth({
 | Pattern | STRIDE | Standard Mitigation |
 |---------|--------|---------------------|
 | Secret mismatch → forced logout at scale | DoS | Secret from Infisical `minion-core`, identical for hub + site; verify pre-cutover |
-| JWT audience mismatch → gateway rejects site users | Spoofing / DoS | Factory hardcodes `audience: 'openclaw-gateway'` — both apps get same audience |
+| JWT audience mismatch → gateway rejects site users | Spoofing / DoS | Factory hardcodes `audience: 'minion-gateway'` — both apps get same audience |
 | Cookie scope too broad → cross-app session bleed | Elevation of Privilege | `crossSubDomainCookies.domain` set to narrowest shared root when configured |
 | CSRF on `/api/auth/*` | Tampering | `trustedOrigins` enforced by Better Auth; factory builds trusted origins list correctly |
 | Session hijacking via non-HTTPS cookie in prod | Information Disclosure | `useSecureCookies: baseURL.startsWith('https://')` — automatic in factory (D-04) |

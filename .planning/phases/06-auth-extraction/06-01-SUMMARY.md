@@ -26,7 +26,7 @@ tech-stack:
     - "createAuth() factory: callers pass organization/oidcProvider plugins; factory never calls organization() internally (D-02 revised)"
     - "Schema decoupling: factory accepts schema as param, NOT importing @minion-stack/db internally"
     - "useSecureCookies derived from baseURL (not a param) — prevents prod cookie downgrade"
-    - "JWT audience hardcoded to 'openclaw-gateway' in factory — callers cannot drift"
+    - "JWT audience hardcoded to 'minion-gateway' in factory — callers cannot drift"
     - "TDD workflow: RED (factory.ts missing → test fail) → GREEN (12 tests pass) → BUILD (tsc clean)"
 
 key-files:
@@ -64,7 +64,7 @@ completed: 2026-04-21
 
 # Phase 06 Plan 01: Auth Package Scaffold + Factory Summary
 
-**`@minion-stack/auth@0.2.0` workspace package with `createAuth()` factory: jwt(EdDSA/1h/openclaw-gateway) + accountLinking hardcoded; callers inject organization/oidcProvider via plugins param (D-02 revised)**
+**`@minion-stack/auth@0.2.0` workspace package with `createAuth()` factory: jwt(EdDSA/1h/minion-gateway) + accountLinking hardcoded; callers inject organization/oidcProvider via plugins param (D-02 revised)**
 
 ## Performance
 
@@ -77,7 +77,7 @@ completed: 2026-04-21
 ## Accomplishments
 
 - Scaffold `packages/auth/` as a pnpm workspace package with complete manifest (package.json, tsconfig.json, vitest.config.ts, README.md)
-- Implemented `createAuth()` factory matching CONTEXT.md D-02 revised contract: jwt plugin always included with EdDSA keypair + `audience: 'openclaw-gateway'` + 1h expiry; callers pass organization/oidcProvider via `plugins` param; factory never calls `organization()` internally
+- Implemented `createAuth()` factory matching CONTEXT.md D-02 revised contract: jwt plugin always included with EdDSA keypair + `audience: 'minion-gateway'` + 1h expiry; callers pass organization/oidcProvider via `plugins` param; factory never calls `organization()` internally
 - 12 unit tests written TDD (RED→GREEN): cover handler/api surface, jwt audience/alg/expiry, useSecureCookies (http vs https), trustedOrigins defaults + append, google gating, hooks forwarding, accountLinking defaults, plugin append
 - Changeset queued (auth-initial.md), `pnpm changeset version` ran, CHANGELOG.md generated with `## 0.2.0` entry
 - All commits atomic; `pnpm --filter @minion-stack/auth test` passes (12/12); `pnpm --filter @minion-stack/auth build` emits clean dist/
@@ -138,7 +138,7 @@ The publish step at Task 3 required an npm OTP:
 
 Per threat register (T-06-01 through T-06-07):
 - T-06-01 (secret logging): factory never logs params — verified by inspection
-- T-06-02 (JWT audience drift): `audience: 'openclaw-gateway'` hardcoded in factory — test asserts this
+- T-06-02 (JWT audience drift): `audience: 'minion-gateway'` hardcoded in factory — test asserts this
 - T-06-03 (cookie downgrade): `useSecureCookies` derived from `baseURL.startsWith('https://')` — tests assert both http/https cases
 - T-06-07 (org plugin duplicate): `organization()` NOT called in factory — grep confirms 0 code calls (only JSDoc mentions)
 

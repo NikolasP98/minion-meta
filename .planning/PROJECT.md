@@ -37,7 +37,7 @@ Scope substitution: `@minion/*` → `@minion-stack/*` (locked in Phase 02 plan 0
 
 **M5 — Auth Extraction** (Validated in Phase 06: auth-extraction, 2026-04-21)
 
-`@minion-stack/auth@0.2.0` published. `createAuth()` factory with jwt(EdDSA/1h/openclaw-gateway) + accountLinking + emailAndPassword always included; callers pass plugins + hooks. JWKS kid identical on both services. Session continuity verified staging + production.
+`@minion-stack/auth@0.2.0` published. `createAuth()` factory with jwt(EdDSA/1h/minion-gateway) + accountLinking + emailAndPassword always included; callers pass plugins + hooks. JWKS kid identical on both services. Session continuity verified staging + production.
 
 - [x] AUTH-01: Better Auth config extracted into `packages/auth` as `createAuth()` factory — `@minion-stack/auth@0.2.0`
 - [x] AUTH-02: `@minion-stack/auth` published on npm
@@ -83,7 +83,7 @@ Scope substitution: `@minion/shared` → `@minion-stack/shared`. Old package dep
 - [x] WS-01: WS client duplication audited — 315-LOC audit at `specs/ws-duplication-audit.md` (hub 920 LOC, site 373 LOC, paperclip 355 LOC)
 - [x] WS-02: Shared `GatewayClient` consolidated into `@minion-stack/shared`
 - [x] WS-03: `minion_hub`, `minion_site` migrated to shared client
-- [x] WS-04: `paperclip-minion` `openclaw_gateway` adapter migrated to shared client
+- [x] WS-04: `paperclip-minion` `minion_gateway` adapter migrated to shared client
 - [x] WS-05: One WS client implementation exists across the platform (no duplicates)
 
 **M7 — Polish & automation** (Validated in Phase 08: polish-automation, 2026-04-22)
@@ -128,7 +128,7 @@ _None — v1.0 shipped 2026-04-23. Run `/gsd-new-milestone` to scope v1.1._
 
 **Shared database:** `minion_hub` and `minion_site` literally share a Turso (LibSQL) database in production; both currently maintain schema code independently. M4 extracts this to a single source.
 
-**Cross-project integration:** Paperclip's `openclaw_gateway` adapter connects to the minion gateway via Tailscale funnel WSS. This creates a triangle: hub, site, paperclip all speak the same gateway protocol currently duplicated in separate codebases. M6 consolidates.
+**Cross-project integration:** Paperclip's `minion_gateway` adapter connects to the minion gateway via Tailscale funnel WSS. This creates a triangle: hub, site, paperclip all speak the same gateway protocol currently duplicated in separate codebases. M6 consolidates.
 
 **Deployment reality:**
 - `minion` (gateway) deployed to Netcup VPS as user-level systemd (`bot-prd`), plus Docker / Fly.io options
@@ -153,7 +153,7 @@ _None — v1.0 shipped 2026-04-23. Run `/gsd-new-milestone` to scope v1.1._
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Meta-repo (Option A), not true monorepo or pnpm-workspace-hybrid | Subprojects have baked-in constraints (published npm packages, separate branches/deploys, mixed stacks) | ✓ Good — 8 phases shipped without touching subproject .git/ |
-| Root-level branding is "minion" (not OpenClaw) | User-confirmed 2026-04-19; matches directory naming | ✓ Good |
+| Root-level branding is "minion" (not Minion) | User-confirmed 2026-04-19; matches directory naming | ✓ Good |
 | Aggressive shared-package extraction (Option C) | User wants "all-in on standardization and abstraction layers" | ✓ Good — 7 `@minion-stack/*` packages live |
 | Root becomes its own git repo; subprojects stay gitignored | Avoids submodule pain, keeps subprojects handoff-ready | ✓ Good |
 | Per-subproject `.env.defaults` + `.env.example` (not centralized) | Keeps subprojects self-contained | ✓ Good |

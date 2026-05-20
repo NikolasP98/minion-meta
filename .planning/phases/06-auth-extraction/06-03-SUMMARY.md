@@ -66,7 +66,7 @@ completed: 2026-04-21
 ## Accomplishments
 
 - Site auth.ts replaced 36-line inline `betterAuth()` config with compact factory delegation to `createAuth()`
-- JWT drift bug closed: site previously called `jwt()` with no arguments (no issuer/audience); factory normalizes to `{ issuer: baseURL, audience: 'openclaw-gateway', expirationTime: '1h', alg: 'EdDSA' }` — matching hub's config exactly
+- JWT drift bug closed: site previously called `jwt()` with no arguments (no issuer/audience); factory normalizes to `{ issuer: baseURL, audience: 'minion-gateway', expirationTime: '1h', alg: 'EdDSA' }` — matching hub's config exactly
 - Schema import from `@minion-stack/db/schema` preserved (was already correct from Phase 5 — not regressed)
 - Lazy `getAuth()` singleton pattern preserved — env vars not evaluated at module load (critical for SvelteKit SSR build)
 - Site-specific plugins: only `organization()` — no OIDC provider, no signup hook (site scope is minimal)
@@ -113,7 +113,7 @@ grep -c "jwt(" minion_site/src/lib/auth/auth.ts  → 0
 
 Site auth.ts no longer calls `jwt()` directly. Factory injects full JWT config unconditionally:
 - `issuer: baseURL` (env.BETTER_AUTH_URL)
-- `audience: 'openclaw-gateway'`
+- `audience: 'minion-gateway'`
 - `expirationTime: '1h'`
 - `alg: 'EdDSA'`
 

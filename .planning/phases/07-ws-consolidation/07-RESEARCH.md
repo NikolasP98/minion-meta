@@ -26,10 +26,10 @@ Scope assumptions derived from the roadmap + success criteria (planner should co
 
 | ID | Description | Research Support |
 |----|-------------|------------------|
-| WS-01 | WS client duplication audited across hub, site, and paperclip's `openclaw_gateway` adapter; report written to `specs/ws-duplication-audit.md` | Duplication fully inventoried below (3 implementations: hub 920 LOC, site 373 LOC, paperclip 1107+128 LOC); exact file paths identified |
+| WS-01 | WS client duplication audited across hub, site, and paperclip's `minion_gateway` adapter; report written to `specs/ws-duplication-audit.md` | Duplication fully inventoried below (3 implementations: hub 920 LOC, site 373 LOC, paperclip 1107+128 LOC); exact file paths identified |
 | WS-02 | Shared WS client implementation consolidated into `@minion-stack/shared` | Shared package already contains protocol + connection primitives ([VERIFIED: packages/shared/src/gateway/{types,protocol,connection}.ts]); need to add Node-compatible client + PROTOCOL_VERSION constant |
 | WS-03 | `minion_hub` and `minion_site` updated to consume the shared client | Site already consumes [VERIFIED: site package.json has `@minion-stack/shared@^0.1.0`, member-gateway.svelte.ts imports]; hub needs migration — currently has no `@minion-stack/shared` dep and duplicates types/utils |
-| WS-04 | `paperclip-minion` `openclaw_gateway` adapter updated to consume the shared client | Adapter has its own `GatewayWsClient` class using Node `ws` — requires runtime-neutral design or a Node-flavored export from shared |
+| WS-04 | `paperclip-minion` `minion_gateway` adapter updated to consume the shared client | Adapter has its own `GatewayWsClient` class using Node `ws` — requires runtime-neutral design or a Node-flavored export from shared |
 | WS-05 | Exactly one WS client implementation exists — grep confirms no duplicate WebSocket classes | Grep targets identified: `new WebSocket(` outside shared; `class.*WsClient\|class Gateway` pattern; duplicate frame type definitions |
 </phase_requirements>
 
@@ -45,7 +45,7 @@ Three distinct implementations exist, and they are only superficially similar:
 |------|---------|-----------|-----------|---------------------|-------------|
 | `minion_hub/src/lib/services/gateway.svelte.ts` (920 LOC) | Browser | `window.WebSocket` | Yes, exponential backoff 800ms→15s | Yes, via `/api/device-identity/sign` | Yes, server-side signed payload |
 | `minion_site/src/lib/services/member-gateway.svelte.ts` (373 LOC) | Browser | `window.WebSocket` | Yes, simpler backoff | Yes, via `/api/device-identity/sign` | Yes, identical to hub |
-| `paperclip-minion/.../openclaw-gateway/src/server/gateway-client.ts` (356 LOC, exposed as `GatewayWsClient` class) | Node | `ws` package | **No**, single-shot per adapter call | Yes, with callback-built connect params | Yes, `signDevicePayload` in `shared/device-auth.ts` |
+| `paperclip-minion/.../minion-gateway/src/server/gateway-client.ts` (356 LOC, exposed as `GatewayWsClient` class) | Node | `ws` package | **No**, single-shot per adapter call | Yes, with callback-built connect params | Yes, `signDevicePayload` in `shared/device-auth.ts` |
 
 They also carry **independent copies** of the gateway frame type definitions (hub has `$lib/types/gateway.ts`, paperclip has inline types in `gateway-client.ts`, site consumes from `@minion-stack/shared` ← the right answer).
 
@@ -61,7 +61,7 @@ They also carry **independent copies** of the gateway frame type definitions (hu
 |---------|---------|---------|--------------|
 | `@minion-stack/shared` | workspace:* (local 0.2.0, npm latest 0.1.0) | Shared protocol types + connection primitives + (new) `GatewayClient` | Phase 4 established this as the single home for gateway code [VERIFIED: packages/shared/package.json, npm view] |
 | `ws` | 8.20.0 (current paperclip uses ^8.19.0) | Node WebSocket implementation | Standard Node WS client; used by paperclip today [VERIFIED: `npm view ws version` returned 8.20.0] |
-| `@types/ws` | ^8.18.1 | TS types for `ws` | Paperclip already depends [VERIFIED: openclaw-gateway/package.json] |
+| `@types/ws` | ^8.18.1 | TS types for `ws` | Paperclip already depends [VERIFIED: minion-gateway/package.json] |
 | `vitest` | 4.1.5 | Test runner (paperclip root + hub) | Already wired in all consumers [VERIFIED: `npm view vitest version`] |
 
 ### Supporting
@@ -88,7 +88,7 @@ cd minion_hub && bun add @minion-stack/shared@^0.3.0
 # site (already has dep — will bump version)
 cd minion_site && bun add @minion-stack/shared@^0.3.0
 # paperclip adapter (new dep — already in pnpm workspace)
-cd paperclip-minion && pnpm --filter @paperclipai/adapter-openclaw-gateway add @minion-stack/shared@^0.3.0
+cd paperclip-minion && pnpm --filter @paperclipai/adapter-minion-gateway add @minion-stack/shared@^0.3.0
 ```
 
 **Version verification:**
@@ -130,7 +130,7 @@ minion_hub/ — NOT a consumer of @minion-stack/shared
 minion_site/ — already a consumer of @minion-stack/shared ✓
 └── src/lib/services/member-gateway.svelte.ts           ← uses @minion-stack/shared primitives; keeps WebSocket lifecycle locally
 
-paperclip-minion/packages/adapters/openclaw-gateway/
+paperclip-minion/packages/adapters/minion-gateway/
 └── src/server/gateway-client.ts                         ← DUPLICATE class GatewayWsClient + DUPLICATE frame types
     └── used by execute.ts (3 call sites: main run, pairing approval) + hire-approved.ts
 ```
@@ -161,7 +161,7 @@ minion_hub/src/lib/
 minion_site/src/lib/services/
 └── member-gateway.svelte.ts     ← MINOR REWRITE: use shared GatewayClient for lifecycle (currently rolls its own)
 
-paperclip-minion/packages/adapters/openclaw-gateway/src/server/
+paperclip-minion/packages/adapters/minion-gateway/src/server/
 ├── gateway-client.ts            ← RE-EXPORTS from @minion-stack/shared/node (1-line file or deleted)
 ├── execute.ts                   ← imports from @minion-stack/shared + @minion-stack/shared/node
 └── hire-approved.ts             ← imports from @minion-stack/shared + @minion-stack/shared/node
@@ -293,10 +293,10 @@ Phase 7 is a **refactor** (code migration) — no persisted state, OS registrati
 | Category | Items Found | Action Required |
 |----------|-------------|------------------|
 | Stored data | None — the gateway itself persists sessions/frames in its own SQLite, not in consumers | None |
-| Live service config | **n8n / Tailscale ACLs / systemd:** None reference WS client code paths. Gateway URL env vars (`OPENCLAW_GATEWAY_URL`, `OPENCLAW_GATEWAY_TOKEN`) continue to be read by consumers; no shape change | None |
+| Live service config | **n8n / Tailscale ACLs / systemd:** None reference WS client code paths. Gateway URL env vars (`MINION_GATEWAY_URL`, `MINION_GATEWAY_TOKEN`) continue to be read by consumers; no shape change | None |
 | OS-registered state | **bot-prd systemd on Netcup:** runs `minion gateway:watch` — gateway server code is in `minion/`, not touched by Phase 7. `@minion-stack/shared` is a library consumed by hub/site/paperclip | None |
-| Secrets / env vars | `OPENCLAW_GATEWAY_TOKEN`, `OPENCLAW_GATEWAY_URL` — code rename only, key/env var names unchanged. Site already uses these via Infisical `minion-site`. Hub uses via `minion-hub`. Paperclip via `minion-paperclip` | None to env vars; consumer code continues reading same keys |
-| Build artifacts | **Hub:** `.svelte-kit/` rebuild required after deleting local types/utils. **Paperclip:** `packages/adapters/openclaw-gateway/dist/` rebuild after adapter rewrite. **Site:** `.svelte-kit/` rebuild. **@minion-stack/shared `dist/`:** rebuild + publish to npm | Rebuild on install; publish new shared version |
+| Secrets / env vars | `MINION_GATEWAY_TOKEN`, `MINION_GATEWAY_URL` — code rename only, key/env var names unchanged. Site already uses these via Infisical `minion-site`. Hub uses via `minion-hub`. Paperclip via `minion-paperclip` | None to env vars; consumer code continues reading same keys |
+| Build artifacts | **Hub:** `.svelte-kit/` rebuild required after deleting local types/utils. **Paperclip:** `packages/adapters/minion-gateway/dist/` rebuild after adapter rewrite. **Site:** `.svelte-kit/` rebuild. **@minion-stack/shared `dist/`:** rebuild + publish to npm | Rebuild on install; publish new shared version |
 
 **Import-surface migration (grep-able):**
 
@@ -567,7 +567,7 @@ export * from '../utils/index.js';
 ### Paperclip adapter — after migration
 
 ```typescript
-// paperclip-minion/packages/adapters/openclaw-gateway/src/server/gateway-client.ts — AFTER
+// paperclip-minion/packages/adapters/minion-gateway/src/server/gateway-client.ts — AFTER
 // 5-line shim OR delete this file and update imports
 export {
   GatewayClient as GatewayWsClient,
@@ -606,7 +606,7 @@ export { asRecord, nonEmpty, withTimeout, headerMapGetIgnoreCase,
 |---|-------|---------|---------------|
 | A1 | Publishing `@minion-stack/shared` with `ws` as peerDep (optional) won't break browser bundlers when `./` is imported | Common Pitfalls, exports map | [ASSUMED] Must verify with a hub `bun run build` after the new shared version is linked locally. If Vite still tries to resolve `ws`, fall back to a completely separate `@minion-stack/gateway-node` package |
 | A2 | Hub's `text.ts` superset behavior is actually being used by UI chat rendering (i.e. removing it would cause visible regression) | Pitfall 5 | [ASSUMED — code review only; no runtime reproduction]. Should confirm by grepping `extractText` consumers in hub; if only chat-panel imports it, a site-style fallback may be fine |
-| A3 | Paperclip's `GatewayWsClient` tests in `server/src/__tests__/openclaw-gateway-adapter.test.ts` can be preserved verbatim if the shimmed `gateway-client.ts` re-exports the same class/interface surface | WS-04 migration | [ASSUMED]. Run `pnpm --filter @paperclipai/server test:run` after adapter change; expect green; if fails, adjust re-export names |
+| A3 | Paperclip's `GatewayWsClient` tests in `server/src/__tests__/minion-gateway-adapter.test.ts` can be preserved verbatim if the shimmed `gateway-client.ts` re-exports the same class/interface surface | WS-04 migration | [ASSUMED]. Run `pnpm --filter @paperclipai/server test:run` after adapter change; expect green; if fails, adjust re-export names |
 | A4 | The `connect.challenge` → `connect` handshake payload shape is identical across all three consumers (minProtocol/maxProtocol/client/role/scopes/auth/device) | Pattern 3 consumer wrap | [CITED: grep of all 3 impls shows same shape]. Minor variance in `client.mode` ('ui' for hub/site, 'backend' for paperclip) — handled by caller passing different params |
 | A5 | Gateway server (in `minion/` — not this phase) accepts both `minProtocol: 3` clients and doesn't care about client-side implementation changes | WS-05 E2E verification | [ASSUMED]. Gateway server version running on Netcup is stable; no server-side change in Phase 7. Verify by running 07-04 E2E smoke against live staging gateway |
 | A6 | `paperclip-minion/server/src/realtime/live-events-ws.ts` (WebSocketServer) is OUT OF SCOPE — it's an inbound server, not a gateway client | Scope definition | [VERIFIED by code inspection] — it uses `WebSocketServer` from `ws`, not a client |
@@ -657,7 +657,7 @@ export { asRecord, nonEmpty, withTimeout, headerMapGetIgnoreCase,
 | Live gateway on Netcup (for E2E) | WS-05 end-to-end verification | ✓ | Stable per phase 2 verification | Can spin up local gateway via `pnpm gateway:watch` in `minion/` if Netcup unavailable |
 | Running hub instance (staging or local) | E2E: hub dashboard connects via consolidated client | ✓ | — | Local `bun run dev` against local gateway |
 | Running site instance (staging or local) | E2E: member dashboard connects via consolidated client | ✓ | — | Local `bun run dev` against local gateway |
-| Paperclip control plane on Netcup | E2E: paperclip agent → gateway round-trip | ✓ | `http://100.80.222.29:3200` [CITED: memory `project_paperclip_netcup_deployment.md`] | Use `scripts/smoke/openclaw-gateway-e2e.sh` locally |
+| Paperclip control plane on Netcup | E2E: paperclip agent → gateway round-trip | ✓ | `http://100.80.222.29:3200` [CITED: memory `project_paperclip_netcup_deployment.md`] | Use `scripts/smoke/minion-gateway-e2e.sh` locally |
 
 **Missing dependencies with no fallback:** None.
 
@@ -677,10 +677,10 @@ export { asRecord, nonEmpty, withTimeout, headerMapGetIgnoreCase,
 | Config file (hub) | `/home/nikolas/Documents/CODE/AI/minion_hub/vitest.config.ts` |
 | Config file (paperclip) | `/home/nikolas/Documents/CODE/AI/paperclip-minion/vitest.config.ts` |
 | Quick run command (hub) | `bun run vitest run src/lib/services/gateway.svelte.test.ts` (file to be created) |
-| Quick run command (paperclip) | `pnpm --filter @paperclipai/server test:run -- openclaw-gateway-adapter` |
+| Quick run command (paperclip) | `pnpm --filter @paperclipai/server test:run -- minion-gateway-adapter` |
 | Full suite command (hub) | `bun run test` |
 | Full suite command (paperclip) | `pnpm test:run` |
-| E2E command (paperclip) | `pnpm smoke:openclaw-gateway` (via `./scripts/smoke/openclaw-gateway-e2e.sh`) |
+| E2E command (paperclip) | `pnpm smoke:minion-gateway` (via `./scripts/smoke/minion-gateway-e2e.sh`) |
 
 ### Phase Requirements → Test Map
 | Req ID | Behavior | Test Type | Automated Command | File Exists? |
@@ -692,9 +692,9 @@ export { asRecord, nonEmpty, withTimeout, headerMapGetIgnoreCase,
 | WS-03 | Hub `gateway.svelte.ts` orchestration passes unit tests (event routing, device-identity fetch, reconnect toast) | unit | `cd minion_hub && bun run test src/lib/services/gateway.svelte.test.ts` | ❌ Wave 0: create test file, mock the shared `GatewayClient` |
 | WS-03 | Site consumes shared — type-check passes | type-check | `cd minion_site && bun run check` | ✓ already exists |
 | WS-03 | Site `member-gateway` passes smoke (manual — no vitest on site) | manual | Human: log into staging site, connect, send chat, verify response | — |
-| WS-04 | Paperclip `openclaw-gateway-adapter.test.ts` passes unchanged after adapter rewrite | regression | `pnpm --filter @paperclipai/server test:run openclaw-gateway-adapter` | ✓ already exists (250+ LOC, mocks gateway server) |
-| WS-04 | Paperclip adapter `execute.test.ts` passes | unit | `pnpm --filter @paperclipai/adapter-openclaw-gateway test:run` | ✓ already exists (small, tests `resolveSessionKey`) |
-| WS-04 | Paperclip E2E smoke passes | e2e | `pnpm smoke:openclaw-gateway-e2e` (requires Docker + local gateway + Paperclip API up) | ✓ script exists (`scripts/smoke/openclaw-gateway-e2e.sh`) |
+| WS-04 | Paperclip `minion-gateway-adapter.test.ts` passes unchanged after adapter rewrite | regression | `pnpm --filter @paperclipai/server test:run minion-gateway-adapter` | ✓ already exists (250+ LOC, mocks gateway server) |
+| WS-04 | Paperclip adapter `execute.test.ts` passes | unit | `pnpm --filter @paperclipai/adapter-minion-gateway test:run` | ✓ already exists (small, tests `resolveSessionKey`) |
+| WS-04 | Paperclip E2E smoke passes | e2e | `pnpm smoke:minion-gateway-e2e` (requires Docker + local gateway + Paperclip API up) | ✓ script exists (`scripts/smoke/minion-gateway-e2e.sh`) |
 | WS-05 | Zero duplicate WS classes/frame-types | grep-assertion | `! grep -rn "interface RequestFrame\|interface ResponseFrame\|interface EventFrame\|class GatewayWsClient" minion_hub/src minion_site/src paperclip-minion/packages/adapters --include='*.ts' \| grep -v 'node_modules\|dist/'` | — (run as 07-04 verification step) |
 | WS-05 | All three consumers build green against the new shared version | build | `cd minion_hub && bun run build && cd minion_site && bun run build && cd paperclip-minion && pnpm build` | — |
 
@@ -703,7 +703,7 @@ export { asRecord, nonEmpty, withTimeout, headerMapGetIgnoreCase,
   - Shared edits: `cd packages/shared && pnpm test && pnpm build`
   - Hub edits: `cd minion_hub && bun run check && bun run vitest run src/lib/services/`
   - Site edits: `cd minion_site && bun run check`
-  - Paperclip edits: `pnpm --filter @paperclipai/server test:run && pnpm --filter @paperclipai/adapter-openclaw-gateway test:run`
+  - Paperclip edits: `pnpm --filter @paperclipai/server test:run && pnpm --filter @paperclipai/adapter-minion-gateway test:run`
 - **Per wave merge:** Full suite in the affected consumer (`bun run test` / `pnpm test:run`)
 - **Phase gate:** All three consumer type-checks green + paperclip E2E smoke green + grep for duplicate classes returns empty
 
@@ -758,7 +758,7 @@ Extracted from `/home/nikolas/Documents/CODE/AI/CLAUDE.md` (root meta-repo), `/h
 - **Package managers:** pnpm for `minion/`, `paperclip-minion/`, and the meta-repo (`packages/shared`). Bun for `minion_hub/` and `minion_site/`. Don't mix.
 - **TypeScript strict mode everywhere.** Avoid `any`. Never `@ts-nocheck`.
 - **Don't touch git stash, worktrees, or branch switching without explicit ask.** Scope commits narrowly.
-- **Cross-project impact — Phase 7 touches:** `packages/shared/` (publish) → `minion_hub/` (new consumer) + `minion_site/` (existing consumer, bump dep) + `paperclip-minion/packages/adapters/openclaw-gateway/` (migration) — this is the exact impact-zone row "Gateway protocol (frame types, events)" in the root CLAUDE.md table.
+- **Cross-project impact — Phase 7 touches:** `packages/shared/` (publish) → `minion_hub/` (new consumer) + `minion_site/` (existing consumer, bump dep) + `paperclip-minion/packages/adapters/minion-gateway/` (migration) — this is the exact impact-zone row "Gateway protocol (frame types, events)" in the root CLAUDE.md table.
 - **Changesets workflow for publishes:** Root meta-repo has changesets configured. Each version bump is a changeset file. `pnpm changeset` → commit → merge → publish.
 - **Infisical env hierarchy:** Gateway URL + token come from Infisical projects `minion-hub`, `minion-site`, `minion-paperclip`. Phase 7 does NOT change any secret names.
 - **Never use `@ts-nocheck` or `@ts-expect-error` to suppress strict-mode errors introduced by the refactor.** If strictness issues arise, solve at the API boundary (e.g., type assertions on injected `WebSocketImpl`).
@@ -773,11 +773,11 @@ Extracted from `/home/nikolas/Documents/CODE/AI/CLAUDE.md` (root meta-repo), `/h
 - [VERIFIED: local code inspection 2026-04-21] `/home/nikolas/Documents/CODE/AI/minion_hub/src/lib/services/gateway.svelte.ts` (920 LOC)
 - [VERIFIED: local code inspection 2026-04-21] `/home/nikolas/Documents/CODE/AI/minion_hub/src/lib/types/gateway.ts` (hub's duplicate)
 - [VERIFIED: local code inspection 2026-04-21] `/home/nikolas/Documents/CODE/AI/minion_site/src/lib/services/member-gateway.svelte.ts` (373 LOC, already consumes shared)
-- [VERIFIED: local code inspection 2026-04-21] `/home/nikolas/Documents/CODE/AI/paperclip-minion/packages/adapters/openclaw-gateway/src/server/{gateway-client,execute,hire-approved,index}.ts`
+- [VERIFIED: local code inspection 2026-04-21] `/home/nikolas/Documents/CODE/AI/paperclip-minion/packages/adapters/minion-gateway/src/server/{gateway-client,execute,hire-approved,index}.ts`
 - [VERIFIED: `npm view @minion-stack/shared` 2026-04-21] Latest on npm: 0.1.0; local workspace: 0.2.0 (unreleased)
 - [VERIFIED: `npm view ws version` 2026-04-21] 8.20.0
 - [VERIFIED: `npm view vitest version` 2026-04-21] 4.1.5
-- [VERIFIED: `/home/nikolas/Documents/CODE/AI/paperclip-minion/server/src/__tests__/openclaw-gateway-adapter.test.ts`] Mock gateway server pattern already exists — can be leveraged for shared client tests
+- [VERIFIED: `/home/nikolas/Documents/CODE/AI/paperclip-minion/server/src/__tests__/minion-gateway-adapter.test.ts`] Mock gateway server pattern already exists — can be leveraged for shared client tests
 
 ### Secondary (MEDIUM confidence)
 - [CITED: `.planning/ROADMAP.md`] Phase 7 goal + success criteria

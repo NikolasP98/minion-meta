@@ -77,7 +77,7 @@ completed: 2026-04-20
 - `paperclip-minion/tsconfig.base.json` extends the shared node variant while preserving all 6 paperclip-specific overrides (declaration, declarationMap, sourceMap, outDir, rootDir, isolatedModules)
 - 21 of 21 workspace packages typecheck clean via transitive `extends` inheritance
 - `paperclip-minion/.env.defaults` (net-new) ships 6 non-secret defaults harvested from `process.env.X ?? "..."` patterns
-- `paperclip-minion/.env.example` expanded from 4 vars to 85+ covering every `process.env.*` reference in source + Infisical `minion-paperclip` vars (Twilio, GitHub, OpenClaw gateway, LLM adapters, agent JWT, storage, telemetry, secrets provider)
+- `paperclip-minion/.env.example` expanded from 4 vars to 85+ covering every `process.env.*` reference in source + Infisical `minion-paperclip` vars (Twilio, GitHub, Minion gateway, LLM adapters, agent JWT, storage, telemetry, secrets provider)
 - Feature branch `feat/adopt-minion-stack` pushed to `git@github.com:NikolasP98/paperclip.git` (fork remote) with 2 atomic commits
 - PR #1 opened against `minion-integration`
 

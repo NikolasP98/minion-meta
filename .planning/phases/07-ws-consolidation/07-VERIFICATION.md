@@ -21,7 +21,7 @@ score: 5/5 requirements verified
 | WS-01 | WS client duplication audited; specs/ws-duplication-audit.md written | 07-01 | Complete | specs/ws-duplication-audit.md at 315 LOC (commit 878bdbf) |
 | WS-02 | Shared WS client consolidated into @minion-stack/shared; 0.2.0 + 0.3.0 published | 07-02 | Complete | npm view confirms ["0.1.0","0.2.0","0.3.0"]; commit 2dfb9f2 |
 | WS-03 | minion_hub and minion_site migrated to shared client | 07-03 | Complete | hub commit fb42dd9, site commit dc6233e; PRs #20 + #6 open |
-| WS-04 | paperclip-minion openclaw_gateway adapter migrated to shared client | 07-03 | Complete | paperclip commit f01da4e0; PR #2 open on NikolasP98/paperclip |
+| WS-04 | paperclip-minion minion_gateway adapter migrated to shared client | 07-03 | Complete | paperclip commit f01da4e0; PR #2 open on NikolasP98/paperclip |
 | WS-05 | Zero duplicate WS client implementations across platform (grep-verified) | 07-04 | Complete | 5 grep sweeps: 0 in-scope matches (see below); commit 5441844 |
 
 ---
@@ -73,7 +73,7 @@ grep -rn "interface RequestFrame|interface ResponseFrame|interface EventFrame|ty
 
 **Result:**
 ```
-paperclip-minion/packages/adapters/openclaw-gateway/src/server/gateway-client.ts:12:  type GatewayFrame,
+paperclip-minion/packages/adapters/minion-gateway/src/server/gateway-client.ts:12:  type GatewayFrame,
 ```
 
 **Classification:** CLEAR — re-export shim, not a local declaration. Line 12 is inside `export { ... } from "@minion-stack/shared/node"`. The authoritative type definition lives in `packages/shared/src/gateway/types.ts`. No `type GatewayFrame = ...` or `interface GatewayFrame` declaration exists outside shared.
@@ -98,7 +98,7 @@ grep -rn "new WebSocket(" \
 
 **Result:**
 ```
-paperclip-minion/packages/adapters/openclaw-gateway/src/server/test.ts:128:    const ws = new WebSocket(input.url, { headers: input.headers, maxPayload: 2 * 1024 * 1024 });
+paperclip-minion/packages/adapters/minion-gateway/src/server/test.ts:128:    const ws = new WebSocket(input.url, { headers: input.headers, maxPayload: 2 * 1024 * 1024 });
 ```
 
 **Classification:** OUT-OF-SCOPE exception — `test.ts` is the adapter environment-check utility (`AdapterEnvironmentTestContext`). It implements a minimal diagnostic probe that tests raw gateway connectivity without the full `GatewayClient` lifecycle. This is an intentional design choice: the diagnostic probe bypasses `GatewayClient` to verify the gateway responds to the handshake at the raw frame level. Equivalent to `live-events-ws.ts` (inbound WS server, explicitly out-of-scope in the Phase 7 plan). Not a gateway client.
@@ -134,7 +134,7 @@ grep -rn "\$lib/types/gateway|\$lib/utils/uuid|\$lib/utils/session-key" \
 
 ```
 pnpm typecheck: 0 errors (all packages)
-pnpm --filter @paperclipai/adapter-openclaw-gateway build: exits 0
+pnpm --filter @paperclipai/adapter-minion-gateway build: exits 0
 pnpm test:run: 1187/1188 tests pass (1 pre-existing skip, unrelated to migration)
 ```
 
@@ -178,8 +178,8 @@ Paperclip adapter refactored in 07-03 (commit f01da4e0):
 
 | File | Before | After | Change |
 |------|--------|-------|--------|
-| `paperclip-minion/packages/adapters/openclaw-gateway/src/server/gateway-client.ts` | 355 LOC full implementation | 29-line re-export shim | -326 LOC |
-| `paperclip-minion/packages/adapters/openclaw-gateway/src/server/gateway-helpers.ts` | (did not exist) | 120 LOC (extracted local helpers) | new file |
+| `paperclip-minion/packages/adapters/minion-gateway/src/server/gateway-client.ts` | 355 LOC full implementation | 29-line re-export shim | -326 LOC |
+| `paperclip-minion/packages/adapters/minion-gateway/src/server/gateway-helpers.ts` | (did not exist) | 120 LOC (extracted local helpers) | new file |
 
 Net platform reduction: ~465 LOC of duplicated WS implementation eliminated.
 

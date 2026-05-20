@@ -6,7 +6,7 @@
 ## Prerequisites
 
 - Local gateway running at a known WSS URL (e.g. `wss://localhost:3000` or Tailscale funnel URL)
-- `.env.local` in minion_site with `OPENCLAW_GATEWAY_URL` set
+- `.env.local` in minion_site with `MINION_GATEWAY_URL` set
 - A registered member account in the shared DB
 
 ## Steps

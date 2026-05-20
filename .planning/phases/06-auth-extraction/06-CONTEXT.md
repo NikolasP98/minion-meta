@@ -42,7 +42,7 @@ export interface CreateAuthParams {
 export function createAuth(params: CreateAuthParams): ReturnType<typeof betterAuth>
 ```
 
-Factory always includes: `jwt` (EdDSA, 1h, audience=`openclaw-gateway`) + `organization`.
+Factory always includes: `jwt` (EdDSA, 1h, audience=`minion-gateway`) + `organization`.
 Hub adds: `oidcProvider({ loginPage: '/login' })` via `extraPlugins`.
 Hub adds: personal-agent provision + invitation email hook via `hooks`.
 
@@ -137,7 +137,7 @@ This was missed in Phase 5 (auth.ts is passed to drizzleAdapter, not drizzle-kit
 ### JWT config (must be identical in factory)
 ```typescript
 jwt({
-  jwt: { issuer: hubUrl, audience: 'openclaw-gateway', expirationTime: '1h' },
+  jwt: { issuer: hubUrl, audience: 'minion-gateway', expirationTime: '1h' },
   jwks: { keyPairConfig: { alg: 'EdDSA' } },
 })
 ```

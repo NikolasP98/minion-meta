@@ -170,8 +170,8 @@ All four packages are live at 0.1.0 on the public registry [VERIFIED: terminal o
     "outDir": "dist",
     "useDefineForClassFields": false,
     "paths": {
-      "openclaw/plugin-sdk": ["./src/plugin-sdk/index.ts"],
-      "openclaw/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
+      "minion/plugin-sdk": ["./src/plugin-sdk/index.ts"],
+      "minion/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
       "minion/plugin-sdk": ["./src/plugin-sdk/index.ts"],
       "minion/plugin-sdk/*": ["./src/plugin-sdk/*.ts"]
     }
@@ -322,7 +322,7 @@ Source: read `packages/lint-config/README.md` for the extending pattern. Preset 
 | `.oxlintrc.json` | Exists; plugins: unicorn/typescript/oxc; `typescript/no-explicit-any: error`; extensive overrides + ignore patterns | 46 lines; per-file override for `bash-tools.exec-runtime.ts` |
 | oxlint/oxfmt versions | oxlint `^1.48.0`, oxfmt `0.33.0` in devDependencies | Satisfies `@minion-stack/lint-config` peer `oxlint >=0.15` |
 | ESLint / Prettier | NOT installed | No adoption needed (this subproject uses oxlint only) |
-| `.env.example` | Exists, 121 lines, well-commented with sections | Precedence note at top (process.env, ./.env, ~/.openclaw/.env, openclaw.json) — preserve; migrate all vars |
+| `.env.example` | Exists, 121 lines, well-commented with sections | Precedence note at top (process.env, ./.env, ~/.minion/.env, minion.json) — preserve; migrate all vars |
 | `.env.defaults` | Does NOT exist | Net-new — move non-secret defaults (port overrides, feature flags like `LLAMA4_MAVERICK_ENABLED=false`, `MINION_SESSION_LOG_ENABLED=false`) here |
 | `.github/workflows/` | 16 workflows incl. `ci.yml` (23k), `install-smoke.yml`, `npm-publish.yml`, `claude.yml`, `deploy-production.yml` | Robust; `ci.yml` has docs-scope + changed-scope detection, will run lint+format+typecheck+tests on adoption PR |
 | Scripts of interest | `check: pnpm format:check && pnpm tsgo && pnpm lint`; `lint: oxlint --type-aware`; `format: oxfmt --write` | `tsgo` is TypeScript Go (faster); adoption must preserve |

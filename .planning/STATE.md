@@ -90,7 +90,7 @@ Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
 - 2026-04-19: Meta-repo (Option A), not true monorepo — subproject independence wins
-- 2026-04-19: Root-level branding is "minion", not OpenClaw
+- 2026-04-19: Root-level branding is "minion", not Minion
 - 2026-04-19: Aggressive shared-package extraction (Option C) — uniform standardization
 - 2026-04-19: Root becomes its own git repo; subprojects stay gitignored
 - 2026-04-19: Per-subproject `.env.defaults` + `.env.example` (not centralized)

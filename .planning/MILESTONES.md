@@ -28,7 +28,7 @@
 - minion_hub app code migrated to @minion-stack/db — 56 import sites updated across client.ts, auth.ts, seed.ts, hooks.server.ts, 14 API routes, and 26 services. Local schema files retained for drizzle-kit. bun run check: 18 pre-existing errors. bun run db:push: exits 0. PR #17 open on NikolasP98/minion_hub.
 - drizzle.config.ts created at meta-repo root pointing at packages/db/src/schema. Staging dry-run against SQLite clone: "No changes detected" (56 tables, zero DDL). A2 CONFIRMED. Checkpoint gate awaiting human approval for production cutover.
 - Hub migration scripts removed (PR #18). Production Turso push: "No changes detected", exit 0. Phase 5 COMPLETE — all DB-01..DB-07 requirements satisfied. VERIFICATION.md written.
-- `@minion-stack/auth@0.2.0` workspace package with `createAuth()` factory: jwt(EdDSA/1h/openclaw-gateway) + accountLinking hardcoded; callers inject organization/oidcProvider via plugins param (D-02 revised)
+- `@minion-stack/auth@0.2.0` workspace package with `createAuth()` factory: jwt(EdDSA/1h/minion-gateway) + accountLinking hardcoded; callers inject organization/oidcProvider via plugins param (D-02 revised)
 - minion_hub/src/lib/auth/auth.ts migrated from inline betterAuth() to createAuth() factory; $server/db/schema import fixed to @minion-stack/db/schema; PR #19 open on NikolasP98/minion_hub
 - minion_site/src/lib/auth/auth.ts migrated from inline betterAuth() to createAuth() factory; JWT audience drift bug eliminated; PR #5 open on NikolasP98/minion-site targeting master
 - Pre-flight checks run; CI failures found on both PRs; exact fixes documented; checkpoint returned for human action — merge PRs after applying fixes, then run Task 2 smoke tests.

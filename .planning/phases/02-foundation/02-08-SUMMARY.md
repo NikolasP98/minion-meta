@@ -69,7 +69,7 @@ metrics:
 
 ## Accomplishments
 
-1. **CLAUDE.md** — Renamed header "OpenClaw Orchestrator Hub" → "Minion Meta-Repo Orchestrator Hub", updated intro paragraph to describe meta-repo + shared packages, inserted new **"Meta-repo Workflow"** section between the existing Project Map and Architecture Overview. The new section covers:
+1. **CLAUDE.md** — Renamed header "Minion Orchestrator Hub" → "Minion Meta-Repo Orchestrator Hub", updated intro paragraph to describe meta-repo + shared packages, inserted new **"Meta-repo Workflow"** section between the existing Project Map and Architecture Overview. The new section covers:
    - Core `minion` CLI commands (list, dev, build, test, check, status, doctor, sync-env, branch) with a command-purpose table
    - 6-layer env hierarchy (root defaults → minion-core Infisical → subproject defaults → minion-* Infisical → .env.local → shell)
    - Infisical Universal Auth setup pointers (env vars or `~/.config/minion/infisical-auth.json`)
@@ -116,7 +116,7 @@ Plan-closure metadata commit (STATE.md + ROADMAP.md + REQUIREMENTS.md + this SUM
 
 ## CLAUDE.md diff summary
 
-**Line 1 (header):** `# CLAUDE.md — OpenClaw Orchestrator Hub` → `# CLAUDE.md — Minion Meta-Repo Orchestrator Hub`
+**Line 1 (header):** `# CLAUDE.md — Minion Orchestrator Hub` → `# CLAUDE.md — Minion Meta-Repo Orchestrator Hub`
 
 **Line 3 (intro paragraph):** Updated to describe the Minion meta-repo + shared `@minion-stack/*` packages + 7 independent subprojects.
 

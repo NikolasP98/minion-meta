@@ -46,7 +46,7 @@ Cross-app session test (staging, same infrastructure as production):
 ## Post-Deploy Smoke Tests
 
 - **Sign-up smoke:** HTTP 200 + set-cookie: YES (confirmed via 06-04 cross-app session test on production infrastructure)
-- **JWT audience:** `openclaw-gateway` (hardcoded in `createAuth()` factory — factory enforces this; 12 unit tests assert it)
+- **JWT audience:** `minion-gateway` (hardcoded in `createAuth()` factory — factory enforces this; 12 unit tests assert it)
 - **Rollback executed:** No
 
 ## 30-Minute Observation Window
