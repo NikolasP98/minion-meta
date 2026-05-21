@@ -1,0 +1,53 @@
+{
+  "name": "@minion-stack/shells-bridge",
+  "version": "0.1.0",
+  "description": "In-VM bridge process for Minion Shells — speaks @minion-stack/shared frames upstream to the gateway and ACP/JSON-RPC downstream to the local harness (HERMES, Claude Code, Codex, etc.).",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NikolasP98/minion-meta.git",
+    "directory": "packages/shells-bridge"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "shells-bridge": "dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint src"
+  },
+  "dependencies": {
+    "@minion-stack/shared": "workspace:*",
+    "ws": "^8.19.0"
+  },
+  "devDependencies": {
+    "@minion-stack/tsconfig": "workspace:*",
+    "@types/node": "^22.10.0",
+    "@types/ws": "^8.18.1",
+    "oxlint": ">=0.15.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.9"
+  }
+}

@@ -4,3 +4,4 @@ export * from './connection.js';
 export * from './client.js';
 export * from './cache-events.js';
 export * from './secrets.js';
+export * from './shells.js';
