@@ -1,0 +1,42 @@
+# hermes-shell-v1 — HERMES agent harness running inside an exe.dev VM.
+#
+# Build:
+#   docker buildx build -f Dockerfile.hermes -t minionstack/hermes-shell:v1 .
+#   docker push minionstack/hermes-shell:v1
+#
+# Use:
+#   ssh exe.dev new --image=minionstack/hermes-shell:v1 --name=<name> \
+#     --env=SHELLS_SHELL_ID=... --env=SHELLS_GATEWAY_URL=... \
+#     --env=SHELLS_DEVICE_TOKEN=... --env=SHELLS_HARNESS=hermes \
+#     --env=SHELLS_HARNESS_VERSION=2026.5.0 \
+#     --env=SHELLS_HARNESS_CMD="python -m hermes_agent.acp_adapter" \
+#     --env=SHELLS_BACKUP_TARGET="b2://minion-shells/<shellId>/"
+
+FROM minionstack/shells-bridge-base:v1
+
+# Python 3.12 + pipx so we can install hermes-agent from PyPI into an isolated
+# venv. The harness exposes an ACP adapter on stdio that the bridge spawns.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      python3 python3-pip python3-venv pipx git \
+  && rm -rf /var/lib/apt/lists/*
+
+ARG HERMES_VERSION=latest
+USER agent
+WORKDIR /home/agent
+RUN pipx install --pip-args="--upgrade" "hermes-agent==${HERMES_VERSION}" || \
+    pipx install --pip-args="--upgrade" hermes-agent
+ENV PATH=/home/agent/.local/bin:$PATH
+
+# Harness command — spawned by the bridge via ACP/stdio JSON-RPC.
+# The actual `SHELLS_HARNESS_CMD` env var the provisioner injects should
+# point at this. Documented here so image consumers know the contract:
+#   SHELLS_HARNESS_CMD="hermes acp"
+# Falls back to a stub if the user forgets to set it (visible in logs).
+
+USER root
+LABEL minion.harness="hermes" \
+      minion.bridge.version="0.1.0" \
+      org.opencontainers.image.source="https://github.com/NikolasP98/minion-meta"
+
+# Pre-create the state directory the harness writes into.
+RUN mkdir -p /home/agent/state && chown -R agent:agent /home/agent/state

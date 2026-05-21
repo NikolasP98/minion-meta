@@ -1,0 +1,29 @@
+# codex-shell-v1 — OpenAI Codex CLI running inside an exe.dev VM,
+# wired through the shells-bridge via ACP/JSON-RPC over stdio.
+#
+# Build:
+#   docker buildx build -f Dockerfile.codex -t minionstack/codex-shell:v1 .
+#   docker push minionstack/codex-shell:v1
+#
+# Use:
+#   ssh exe.dev new --image=minionstack/codex-shell:v1 --name=<name> \
+#     --env=SHELLS_SHELL_ID=... --env=SHELLS_GATEWAY_URL=... \
+#     --env=SHELLS_DEVICE_TOKEN=... --env=SHELLS_HARNESS=codex \
+#     --env=SHELLS_HARNESS_VERSION=0.x \
+#     --env=SHELLS_HARNESS_CMD="codex --acp" \
+#     --env=OPENAI_API_KEY=... \
+#     --env=SHELLS_BACKUP_TARGET="b2://minion-shells/<shellId>/"
+
+FROM minionstack/shells-bridge-base:v1
+
+# Codex CLI via npm.
+ARG CODEX_VERSION=latest
+RUN npm install --global "@openai/codex@${CODEX_VERSION}"
+
+USER root
+LABEL minion.harness="codex" \
+      minion.bridge.version="0.1.0" \
+      org.opencontainers.image.source="https://github.com/NikolasP98/minion-meta"
+
+RUN mkdir -p /home/agent/state /home/agent/.codex \
+  && chown -R agent:agent /home/agent/state /home/agent/.codex

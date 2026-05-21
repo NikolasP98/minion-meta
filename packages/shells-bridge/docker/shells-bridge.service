@@ -1,0 +1,27 @@
+[Unit]
+Description=Minion Shells Bridge
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=agent
+Group=agent
+WorkingDirectory=/home/agent
+EnvironmentFile=/etc/shells-bridge.env
+ExecStart=/usr/local/bin/shells-bridge
+Restart=always
+RestartSec=5s
+StartLimitBurst=5
+StartLimitIntervalSec=60
+
+# stdout/stderr land in journald, picked up by `journalctl -u shells-bridge`.
+StandardOutput=journal
+StandardError=journal
+
+# The bridge needs to spawn the harness as a child process and tar workdir for
+# backups; full filesystem access inside the VM is intentional per spec D1.
+NoNewPrivileges=false
+
+[Install]
+WantedBy=multi-user.target

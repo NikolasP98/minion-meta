@@ -1,0 +1,64 @@
+# Base image for all shell harness images.
+#
+# Provides: Ubuntu 24.04 + Node 22 + rclone + tar + the shells-bridge npm package
+# + the systemd unit + a non-root `agent` user with full sudo.
+#
+# Harness-specific Dockerfiles (Dockerfile.hermes, Dockerfile.claude-code,
+# Dockerfile.codex) FROM this image and add their harness binary + the env file
+# that systemd reads on boot.
+#
+# Build:
+#   docker buildx build -f Dockerfile.base -t minionstack/shells-bridge-base:v1 .
+#   docker push minionstack/shells-bridge-base:v1
+#
+# This image is NOT meant to be used directly by exe.dev — only as a FROM base.
+
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      ca-certificates curl gnupg systemd systemd-sysv tar rclone sudo \
+  && rm -rf /var/lib/apt/lists/*
+
+# Node 22 LTS via NodeSource.
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+  && apt-get install -y --no-install-recommends nodejs \
+  && rm -rf /var/lib/apt/lists/*
+
+# Non-root agent user with passwordless sudo (full admin per spec D1 —
+# "agent has full admin rights inside its own VM").
+RUN useradd --create-home --shell /bin/bash agent \
+  && echo "agent ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/agent \
+  && chmod 0440 /etc/sudoers.d/agent \
+  && mkdir -p /home/agent/state \
+  && chown -R agent:agent /home/agent
+
+# Install shells-bridge globally so the `shells-bridge` bin is on PATH.
+# Pin to a specific version per image build for reproducibility.
+ARG SHELLS_BRIDGE_VERSION=0.1.0
+RUN npm install --global @minion-stack/shells-bridge@${SHELLS_BRIDGE_VERSION} \
+  && ln -sf "$(npm bin -g)/shells-bridge" /usr/local/bin/shells-bridge \
+  && /usr/local/bin/shells-bridge --version 2>/dev/null || true
+
+# Install the systemd unit. EnvironmentFile is populated by exe.dev provisioner
+# via --env=SHELLS_*=... flags translated into /etc/shells-bridge.env.
+COPY shells-bridge.service /etc/systemd/system/shells-bridge.service
+RUN systemctl enable shells-bridge.service
+
+# Bake a stub env file. The exe.dev provisioner overwrites this on `new` via
+# the --env injection; the stub exists so systemd doesn't error pre-config.
+RUN printf 'SHELLS_SHELL_ID=\nSHELLS_GATEWAY_URL=\nSHELLS_DEVICE_TOKEN=\nSHELLS_HARNESS=\nSHELLS_HARNESS_VERSION=\nSHELLS_HARNESS_CMD=\nSHELLS_HARNESS_WORKDIR=/home/agent/state\nSHELLS_BACKUP_TARGET=\n' > /etc/shells-bridge.env \
+  && chmod 0644 /etc/shells-bridge.env
+
+# rclone config — bridges expect a remote named "b2". Real credentials are
+# supplied at provision time via env vars (RCLONE_CONFIG_B2_*).
+RUN mkdir -p /home/agent/.config/rclone \
+  && printf '[b2]\ntype = b2\n' > /home/agent/.config/rclone/rclone.conf \
+  && chown -R agent:agent /home/agent/.config
+
+# exe.dev expects the container to run a real init system so journald, systemd,
+# and the bridge service all come up. CMD is overridden by --command on `new`
+# only if the user wants something custom; default is systemd PID 1.
+STOPSIGNAL SIGRTMIN+3
+CMD ["/sbin/init"]
