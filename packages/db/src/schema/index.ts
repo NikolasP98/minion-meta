@@ -44,6 +44,7 @@ export { serverBackups } from './server-backups.js';
 export { agentGroups, agentGroupMembers } from './agent-groups.js';
 export { unifiedEvents } from './unified-events.js';
 export { channelIdentities } from './channel-identities.js';
+export { userIdentities } from './user-identities.js';
 export { personalAgents } from './personal-agents.js';
 export {
   builtSkills,
