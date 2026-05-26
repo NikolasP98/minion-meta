@@ -44,7 +44,7 @@ export const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
  * with an explicit model-vs-agent discriminator rather than a prefix check.
  */
 export function resolveModelId(agentId: string): string {
-  return agentId.startsWith('claude-') ? agentId : DEFAULT_MODEL;
+  return (agentId ?? '').startsWith('claude-') ? agentId : DEFAULT_MODEL;
 }
 
 interface ChatModel {

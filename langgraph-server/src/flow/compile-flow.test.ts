@@ -74,4 +74,7 @@ describe('resolveModelId', () => {
   it('falls back to the default for non-model ids', () => {
     expect(resolveModelId('built:abc123')).toBe(DEFAULT_MODEL);
   });
+  it('falls back to the default when agentId is missing', () => {
+    expect(resolveModelId(undefined as unknown as string)).toBe(DEFAULT_MODEL);
+  });
 });
