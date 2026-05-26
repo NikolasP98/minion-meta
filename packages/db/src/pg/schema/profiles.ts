@@ -15,6 +15,9 @@ export const profiles = pgTable('profiles', {
     .notNull()
     .default('user'),
   personalAgentId: text('personal_agent_id'),
+  // Better Auth `user.id` (text) this profile was migrated from. Null for
+  // users created natively in Supabase. Lets Phase 2 remap legacy FKs.
+  legacyUserId: text('legacy_user_id'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 });

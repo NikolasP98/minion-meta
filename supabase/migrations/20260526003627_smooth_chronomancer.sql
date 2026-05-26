@@ -1,0 +1,1 @@
+ALTER TABLE "profiles" ADD COLUMN "legacy_user_id" text;
