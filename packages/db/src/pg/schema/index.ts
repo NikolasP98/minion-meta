@@ -11,3 +11,4 @@ export type {
   MappedIdentity,
 } from '../identity-mapper.js';
 export { sealSecret, openSecret } from '../crypto.js';
+export { gateway, userGateway } from './gateway.js';
