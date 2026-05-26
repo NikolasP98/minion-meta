@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { validateFlowShape } from './compile-flow.js';
+import { validateFlowShape, compileFlow, resolveModelId } from './compile-flow.js';
 import { UnsupportedFlowError } from './types.js';
 import type { FlowNode, FlowEdge } from './types.js';
+import { AIMessage, HumanMessage, type BaseMessage } from '@langchain/core/messages';
 
 const prompt: FlowNode = {
   id: 'p1', type: 'promptBox', position: { x: 0, y: 0 },
@@ -32,5 +33,40 @@ describe('validateFlowShape', () => {
 
   it('rejects when prompt is not connected to the agent', () => {
     expect(() => validateFlowShape([prompt, agent], [])).toThrow(UnsupportedFlowError);
+  });
+});
+
+describe('compileFlow', () => {
+  it('seeds the prompt value and runs the agent node', async () => {
+    const fakeModel = {
+      async invoke(messages: BaseMessage[]) {
+        const last = messages[messages.length - 1];
+        return new AIMessage(`echo:${String(last.content)}`);
+      },
+    };
+
+    const { graph, initialState } = compileFlow([prompt, agent], [edge], {
+      model: fakeModel,
+    });
+
+    expect(initialState.messages[0]).toBeInstanceOf(HumanMessage);
+    expect(initialState.messages[0].content).toBe('Hello');
+
+    const result = await graph.invoke(initialState);
+    const final = result.messages[result.messages.length - 1];
+    expect(final.content).toBe('echo:Hello');
+  });
+
+  it('throws on an unsupported flow before building a graph', () => {
+    expect(() => compileFlow([prompt], [], {})).toThrow(UnsupportedFlowError);
+  });
+});
+
+describe('resolveModelId', () => {
+  it('passes through a claude model id', () => {
+    expect(resolveModelId('claude-haiku-4-5-20251001')).toBe('claude-haiku-4-5-20251001');
+  });
+  it('falls back to the default for non-model ids', () => {
+    expect(resolveModelId('built:abc123')).toBe('claude-haiku-4-5-20251001');
   });
 });
