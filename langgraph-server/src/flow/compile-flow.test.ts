@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { validateFlowShape, compileFlow, resolveModelId, DEFAULT_MODEL } from './compile-flow.js';
 import { UnsupportedFlowError } from './types.js';
-import type { FlowNode, FlowEdge } from './types.js';
+import type { FlowNode, FlowEdge, LLMNodeData } from './types.js';
 import { AIMessage, HumanMessage, type BaseMessage } from '@langchain/core/messages';
 
 const prompt: FlowNode = {
@@ -10,7 +10,7 @@ const prompt: FlowNode = {
 };
 const agent: FlowNode = {
   id: 'a1', type: 'agent', position: { x: 200, y: 0 },
-  data: { agentId: 'claude-haiku-4-5-20251001', label: 'Agent' },
+  data: { agentId: 'claude-haiku-4-5-20251001', label: 'Agent', sessionMode: 'ephemeral' },
 };
 const edge: FlowEdge = {
   id: 'e1', source: 'p1', sourceHandle: 'prompt-out',
@@ -76,5 +76,81 @@ describe('resolveModelId', () => {
   });
   it('falls back to the default when agentId is missing', () => {
     expect(resolveModelId(undefined as unknown as string)).toBe(DEFAULT_MODEL);
+  });
+});
+
+// ── New node types ────────────────────────────────────────────────────────────
+
+const llmNode: FlowNode = {
+  id: 'l1', type: 'llm', position: { x: 200, y: 0 },
+  data: { modelId: 'openai/gpt-4o', label: 'LLM' } satisfies LLMNodeData,
+};
+const edgeToLlm: FlowEdge = {
+  id: 'e-llm', source: 'p1', sourceHandle: 'prompt-out',
+  target: 'l1', targetHandle: 'in', type: 'flow',
+};
+
+describe('validateFlowShape — llm nodes', () => {
+  it('accepts one prompt connected to one llm node', () => {
+    expect(() => validateFlowShape([prompt, llmNode], [edgeToLlm])).not.toThrow();
+  });
+
+  it('rejects two execution nodes (agent + llm)', () => {
+    expect(() => validateFlowShape([prompt, agent, llmNode], [edge, edgeToLlm])).toThrow(
+      UnsupportedFlowError,
+    );
+  });
+});
+
+describe('compileFlow — llm node', () => {
+  it('uses modelId from LLMNodeData and calls the injected model', async () => {
+    const fakeModel = {
+      async invoke(messages: BaseMessage[]) {
+        const last = messages[messages.length - 1];
+        return new AIMessage(`llm-echo:${String(last.content)}`);
+      },
+    };
+    const { graph, initialState } = compileFlow([prompt, llmNode], [edgeToLlm], {
+      model: fakeModel,
+    });
+    expect(initialState.messages[0]).toBeInstanceOf(HumanMessage);
+    const result = await graph.invoke(initialState);
+    expect(result.messages[result.messages.length - 1].content).toBe('llm-echo:Hello');
+  });
+});
+
+describe('compileFlow — agent node (real gateway agent)', () => {
+  it('calls gatewayClient.sendAgentTurn with correct args and returns reply', async () => {
+    const calls: Array<{ agentId: string; prompt: string; sessionMode: string }> = [];
+    const fakeGateway = {
+      async sendAgentTurn(agentId: string, p: string, sessionMode: 'ephemeral' | 'shared') {
+        calls.push({ agentId, prompt: p, sessionMode });
+        return 'gateway-reply';
+      },
+    };
+    const agentNodeGw: FlowNode = {
+      id: 'a1', type: 'agent', position: { x: 200, y: 0 },
+      data: {
+        agentId: 'PANIK',
+        label: 'PANIK',
+        sessionMode: 'ephemeral',
+        inputHandles: [{ id: 'in', label: 'input' }],
+        outputHandles: [{ id: 'out', label: 'output' }],
+        contextHandles: [{ id: 'ctx', label: 'context' }],
+      },
+    };
+    const edgeGw: FlowEdge = {
+      id: 'eg', source: 'p1', sourceHandle: 'prompt-out',
+      target: 'a1', targetHandle: 'in', type: 'flow',
+    };
+    const { graph, initialState } = compileFlow([prompt, agentNodeGw], [edgeGw], {
+      gatewayClient: fakeGateway,
+    });
+    const result = await graph.invoke(initialState);
+    expect(calls).toHaveLength(1);
+    expect(calls[0].agentId).toBe('PANIK');
+    expect(calls[0].prompt).toBe('Hello');
+    expect(calls[0].sessionMode).toBe('ephemeral');
+    expect(result.messages[result.messages.length - 1].content).toBe('gateway-reply');
   });
 });
