@@ -11,7 +11,7 @@ const FlowRunRequest = z.object({
   nodes: z.array(
     z.object({
       id: z.string(),
-      type: z.enum(['agent', 'promptBox']),
+      type: z.enum(['agent', 'promptBox', 'llm']),
       position: z.object({ x: z.number(), y: z.number() }),
       data: z.record(z.string(), z.unknown()),
     }),
