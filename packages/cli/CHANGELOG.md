@@ -1,5 +1,12 @@
 # @minion-stack/cli
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [13ee5a7]
+  - @minion-stack/env@1.0.0
+
 ## 0.1.1
 
 ### Patch Changes

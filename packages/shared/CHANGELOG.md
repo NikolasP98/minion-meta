@@ -1,5 +1,13 @@
 # @minion-stack/shared
 
+## 0.7.0
+
+### Minor Changes
+
+- 948630d: feat: secrets vault RPC method names + param/result types (static + dynamic).
+  Adds `secrets.list`, `secrets.set`, `secrets.clear`, `secrets.probe`, and the
+  `*_scoped` dynamic variants. Payloads never carry plaintext values.
+
 ## 0.6.0
 
 ### Minor Changes
