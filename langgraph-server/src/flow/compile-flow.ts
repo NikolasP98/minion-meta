@@ -102,7 +102,7 @@ function buildExecNode(
   // llm node — direct model call
   if (node.type === 'llm') {
     const { modelId } = node.data as LLMNodeData;
-    const model: ChatModel = opts.model ?? resolveProviderModel(modelId);
+    const model: ChatModel = opts.model ?? resolveProviderModel(modelId ?? DEFAULT_MODEL);
     return async (state) => {
       const response = await model.invoke(state.messages);
       return { messages: [response] };
@@ -111,9 +111,11 @@ function buildExecNode(
 
   // agent node — check for legacy claude-* id (backward compat)
   const agentData = node.data as AgentNodeData;
-  const isLegacyLLM = agentData.agentId?.startsWith('claude-');
+  const isLegacyLLM = agentData.agentId && agentData.agentId.startsWith('claude-');
 
   if (isLegacyLLM) {
+    // Intentional duplicate of the llm-node path — kept separate for clarity,
+    // not collapsed to preserve the ability to diverge these paths later.
     const modelId = resolveModelId(agentData.agentId);
     const model: ChatModel = opts.model ?? resolveProviderModel(modelId);
     return async (state) => {
@@ -126,7 +128,10 @@ function buildExecNode(
   const gc: GatewayClient = opts.gatewayClient ?? { sendAgentTurn };
   return async (state) => {
     const lastHuman = [...state.messages].reverse().find((m) => m._getType() === 'human');
-    const prompt = String(lastHuman?.content ?? '');
+    if (!lastHuman) {
+      throw new Error('Agent node received no human message in state — cannot dispatch.');
+    }
+    const prompt = String(lastHuman.content);
     const reply = await gc.sendAgentTurn(
       agentData.agentId,
       prompt,
