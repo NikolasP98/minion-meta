@@ -25,7 +25,7 @@ export function validateFlowShape(nodes: FlowNode[], edges: FlowEdge[]): void {
   const prompt = prompts[0];
   const agent = agents[0];
   const connected = edges.some(
-    (e) => e.source === prompt.id && e.target === agent.id,
+    (e) => e.source === prompt.id && e.target === agent.id && e.type === 'flow',
   );
   if (!connected) {
     throw new UnsupportedFlowError(
@@ -34,9 +34,15 @@ export function validateFlowShape(nodes: FlowNode[], edges: FlowEdge[]): void {
   }
 }
 
-const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
+export const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 
-/** MVP: the picker writes a model id into agentId; non-model ids fall back. */
+/**
+ * MVP contract: a flow agent node's `agentId` is treated as a raw Anthropic
+ * model string when it starts with "claude-"; otherwise it is a built/registered
+ * agent id we cannot run directly yet, so we fall back to the default model.
+ * NOTE: this is a heuristic — when real gateway-agent routing lands, replace it
+ * with an explicit model-vs-agent discriminator rather than a prefix check.
+ */
 export function resolveModelId(agentId: string): string {
   return agentId.startsWith('claude-') ? agentId : DEFAULT_MODEL;
 }

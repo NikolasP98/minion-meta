@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { validateFlowShape, compileFlow, resolveModelId } from './compile-flow.js';
+import { validateFlowShape, compileFlow, resolveModelId, DEFAULT_MODEL } from './compile-flow.js';
 import { UnsupportedFlowError } from './types.js';
 import type { FlowNode, FlowEdge } from './types.js';
 import { AIMessage, HumanMessage, type BaseMessage } from '@langchain/core/messages';
@@ -34,6 +34,11 @@ describe('validateFlowShape', () => {
   it('rejects when prompt is not connected to the agent', () => {
     expect(() => validateFlowShape([prompt, agent], [])).toThrow(UnsupportedFlowError);
   });
+
+  it('rejects when prompt connects to agent only via a context edge', () => {
+    const ctxEdge: FlowEdge = { ...edge, id: 'e2', type: 'context' };
+    expect(() => validateFlowShape([prompt, agent], [ctxEdge])).toThrow(UnsupportedFlowError);
+  });
 });
 
 describe('compileFlow', () => {
@@ -67,6 +72,6 @@ describe('resolveModelId', () => {
     expect(resolveModelId('claude-haiku-4-5-20251001')).toBe('claude-haiku-4-5-20251001');
   });
   it('falls back to the default for non-model ids', () => {
-    expect(resolveModelId('built:abc123')).toBe('claude-haiku-4-5-20251001');
+    expect(resolveModelId('built:abc123')).toBe(DEFAULT_MODEL);
   });
 });
