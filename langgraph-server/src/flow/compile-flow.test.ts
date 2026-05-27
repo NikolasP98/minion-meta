@@ -451,6 +451,19 @@ describe('buildRouterRoute — llm mode', () => {
   });
 });
 
+describe('matchesRule — regex input cap', () => {
+  it('still matches within the cap', () => {
+    expect(matchesRule('a'.repeat(50) + 'NEEDLE', { op: 'contains', value: 'NEEDLE' })).toBe(true);
+  });
+  it('only tests the capped prefix for regex (match beyond cap is not seen)', () => {
+    const big = 'x'.repeat(10_000) + 'TAIL';
+    // 'TAIL' is past the 10k cap, so an anchored search for it should NOT match the sliced input.
+    expect(matchesRule(big, { op: 'regex', value: 'TAIL$' })).toBe(false);
+    // but a pattern matching within the cap still works
+    expect(matchesRule(big, { op: 'regex', value: '^x+' })).toBe(true);
+  });
+});
+
 describe('compileFlow — router integration', () => {
   const mkLlm = (id: string): FlowNode => ({ id, type: 'llm', position: { x: 0, y: 0 }, data: { modelId: 'm', label: id } });
 

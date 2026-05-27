@@ -19,6 +19,9 @@ import { sendAgentTurn, callGatewayMethod } from '../gateway/client.js';
 
 export const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 
+/** Cap regex-matched input length to bound catastrophic-backtracking (ReDoS) risk. */
+const MAX_REGEX_INPUT = 10_000;
+
 const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router'] as const;
 
 export function validateFlowShape(nodes: FlowNode[], edges: FlowEdge[]): void {
@@ -194,7 +197,13 @@ export function matchesRule(input: string, rule: { op: RouterRuleOp; value: stri
   switch (rule.op) {
     case 'contains': return input.includes(rule.value);
     case 'equals': return input === rule.value;
-    case 'regex': { try { return new RegExp(rule.value).test(input); } catch { return false; } }
+    case 'regex': {
+      try {
+        return new RegExp(rule.value).test(input.slice(0, MAX_REGEX_INPUT));
+      } catch {
+        return false;
+      }
+    }
   }
 }
 
