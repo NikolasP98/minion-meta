@@ -49,9 +49,20 @@ export type PluginActionNodeData = {
   label: string;
 };
 
+export type TransformNodeData = {
+  template: string;
+  label: string;
+};
+
+export type StructuredNodeData = {
+  modelId: string;
+  schema: string;
+  label: string;
+};
+
 export type FlowNode = {
   id: string;
-  type: 'agent' | 'promptBox' | 'llm' | 'trigger' | 'pluginTrigger' | 'pluginAction';
+  type: 'agent' | 'promptBox' | 'llm' | 'trigger' | 'pluginTrigger' | 'pluginAction' | 'transform' | 'structured';
   position: { x: number; y: number };
   data:
     | AgentNodeData
@@ -59,7 +70,9 @@ export type FlowNode = {
     | LLMNodeData
     | TriggerNodeData
     | PluginTriggerNodeData
-    | PluginActionNodeData;
+    | PluginActionNodeData
+    | TransformNodeData
+    | StructuredNodeData;
 };
 
 export type FlowEdge = {

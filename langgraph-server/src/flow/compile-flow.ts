@@ -58,6 +58,7 @@ export function resolveModelId(agentId: string): string {
 
 interface ChatModel {
   invoke(messages: BaseMessage[]): Promise<BaseMessage>;
+  withStructuredOutput?(schema: unknown): ChatModel;
 }
 
 interface GatewayClient {
