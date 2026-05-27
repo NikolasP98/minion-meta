@@ -449,6 +449,10 @@ describe('buildRouterRoute — llm mode', () => {
     const fakeModel = { async invoke() { return new AIMessage('zzz'); } };
     expect(await buildRouterRoute(node, connected, { model: fakeModel })(stateWith('x'))).toBe('default');
   });
+  it('normalizes mixed-case model output to the branch id', async () => {
+    const fakeModel = { async invoke() { return new AIMessage('Support'); } };
+    expect(await buildRouterRoute(node, connected, { model: fakeModel })(stateWith('x'))).toBe('b2');
+  });
 });
 
 describe('matchesRule — regex input cap', () => {

@@ -21,6 +21,13 @@ export const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 
 /** Cap regex-matched input length to bound catastrophic-backtracking (ReDoS) risk. */
 const MAX_REGEX_INPUT = 10_000;
+/**
+ * Cap regex pattern length as defense-in-depth. NOTE: neither cap fully eliminates
+ * ReDoS for adversarial patterns (a short pattern like (a+)+$ can still backtrack);
+ * a linear-time engine (RE2) or a match timeout is the complete fix — tracked as a
+ * follow-up. These caps bound the common case at near-zero cost.
+ */
+const MAX_REGEX_PATTERN = 1_000;
 
 const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router'] as const;
 
@@ -198,6 +205,7 @@ export function matchesRule(input: string, rule: { op: RouterRuleOp; value: stri
     case 'contains': return input.includes(rule.value);
     case 'equals': return input === rule.value;
     case 'regex': {
+      if (rule.value.length > MAX_REGEX_PATTERN) return false;
       try {
         return new RegExp(rule.value).test(input.slice(0, MAX_REGEX_INPUT));
       } catch {
@@ -209,7 +217,14 @@ export function matchesRule(input: string, rule: { op: RouterRuleOp; value: stri
 
 async function classifyWithLlm(input: string, data: RouterNodeData, opts: CompileOptions): Promise<string> {
   const model: ChatModel = opts.model ?? resolveProviderModel(data.modelId ?? DEFAULT_MODEL);
-  const labels = [...data.branches.map((b) => b.label), 'default'];
+  const seen = new Set<string>();
+  const labels: string[] = [];
+  for (const lbl of [...data.branches.map((b) => b.label), 'default']) {
+    const key = lbl.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    labels.push(lbl);
+  }
   const sys =
     `Classify the input into exactly one of these labels: ${labels.join(', ')}. ` +
     `Reply with ONLY the label, nothing else.`;
