@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { validateFlowShape, compileFlow, resolveModelId, DEFAULT_MODEL } from './compile-flow.js';
+import { validateFlowShape, compileFlow, resolveModelId, DEFAULT_MODEL, matchesRule, buildRouterRoute } from './compile-flow.js';
 import { UnsupportedFlowError } from './types.js';
-import type { FlowNode, FlowEdge, LLMNodeData, TriggerNodeData } from './types.js';
+import type { FlowNode, FlowEdge, LLMNodeData, TriggerNodeData, RouterNodeData } from './types.js';
 import { AIMessage, HumanMessage, type BaseMessage } from '@langchain/core/messages';
 
 const prompt: FlowNode = {
@@ -396,5 +396,57 @@ describe('compileFlow — structured node', () => {
     const e1: FlowEdge = { id: 'e1', source: 'p1', sourceHandle: 'o', target: 's1', targetHandle: 'i', type: 'flow' };
     const { graph, initialState } = compileFlow([prompt, structured], [e1], { model: { invoke: async () => new AIMessage('x') } });
     return expect(graph.invoke(initialState)).rejects.toThrow(UnsupportedFlowError);
+  });
+});
+
+// ── Router node routing functions (B2-T2) ────────────────────────────────────
+
+describe('matchesRule', () => {
+  it('contains', () => {
+    expect(matchesRule('hello world', { op: 'contains', value: 'world' })).toBe(true);
+    expect(matchesRule('hello', { op: 'contains', value: 'world' })).toBe(false);
+  });
+  it('equals', () => {
+    expect(matchesRule('hi', { op: 'equals', value: 'hi' })).toBe(true);
+    expect(matchesRule('hi ', { op: 'equals', value: 'hi' })).toBe(false);
+  });
+  it('regex (and invalid regex → false)', () => {
+    expect(matchesRule('abc123', { op: 'regex', value: '\\d+' })).toBe(true);
+    expect(matchesRule('abc', { op: 'regex', value: '[' })).toBe(false);
+  });
+});
+
+function routerNode(data: Partial<RouterNodeData>): FlowNode {
+  return { id: 'r1', type: 'router', position: { x: 0, y: 0 }, data: { mode: 'rule', branches: [], label: 'R', ...data } as never };
+}
+const stateWith = (text: string) => ({ messages: [new HumanMessage(text)] }) as never;
+
+describe('buildRouterRoute — rule mode', () => {
+  const node = routerNode({ mode: 'rule', branches: [
+    { id: 'b1', label: 'urgent', rule: { op: 'contains', value: 'urgent' } },
+    { id: 'b2', label: 'greet', rule: { op: 'contains', value: 'hello' } },
+  ] });
+  const connected = new Set(['b1', 'b2', 'default']);
+  it('first match wins, ordered', async () => {
+    expect(await buildRouterRoute(node, connected, {})(stateWith('this is urgent and hello'))).toBe('b1');
+  });
+  it('falls to default when none match', async () => {
+    expect(await buildRouterRoute(node, connected, {})(stateWith('nothing here'))).toBe('default');
+  });
+  it('clamps a matched-but-unconnected branch to default', async () => {
+    expect(await buildRouterRoute(node, new Set(['b2', 'default']), {})(stateWith('urgent'))).toBe('default');
+  });
+});
+
+describe('buildRouterRoute — llm mode', () => {
+  const node = routerNode({ mode: 'llm', branches: [ { id: 'b1', label: 'sales' }, { id: 'b2', label: 'support' } ] });
+  const connected = new Set(['b1', 'b2', 'default']);
+  it('maps the model label to the branch id', async () => {
+    const fakeModel = { async invoke() { return new AIMessage('support'); } };
+    expect(await buildRouterRoute(node, connected, { model: fakeModel })(stateWith('my app is broken'))).toBe('b2');
+  });
+  it('unknown label → default', async () => {
+    const fakeModel = { async invoke() { return new AIMessage('zzz'); } };
+    expect(await buildRouterRoute(node, connected, { model: fakeModel })(stateWith('x'))).toBe('default');
   });
 });

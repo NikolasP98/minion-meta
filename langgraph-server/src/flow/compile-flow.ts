@@ -1,5 +1,5 @@
 import { MessagesAnnotation, StateGraph, START, END } from '@langchain/langgraph';
-import { HumanMessage, AIMessage, type BaseMessage } from '@langchain/core/messages';
+import { HumanMessage, AIMessage, SystemMessage, type BaseMessage } from '@langchain/core/messages';
 import { randomUUID } from 'node:crypto';
 import {
   UnsupportedFlowError,
@@ -12,6 +12,7 @@ import {
   type TransformNodeData,
   type StructuredNodeData,
   type RouterNodeData,
+  type RouterRuleOp,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
 import { sendAgentTurn, callGatewayMethod } from '../gateway/client.js';
@@ -166,6 +167,47 @@ export function compileFlow(
 function lastMessageContent(state: typeof MessagesAnnotation.State): string {
   const last = state.messages[state.messages.length - 1];
   return last ? String(last.content) : '';
+}
+
+export function matchesRule(input: string, rule: { op: RouterRuleOp; value: string }): boolean {
+  switch (rule.op) {
+    case 'contains': return input.includes(rule.value);
+    case 'equals': return input === rule.value;
+    case 'regex': { try { return new RegExp(rule.value).test(input); } catch { return false; } }
+  }
+}
+
+async function classifyWithLlm(input: string, data: RouterNodeData, opts: CompileOptions): Promise<string> {
+  const model: ChatModel = opts.model ?? resolveProviderModel(data.modelId ?? DEFAULT_MODEL);
+  const labels = [...data.branches.map((b) => b.label), 'default'];
+  const sys =
+    `Classify the input into exactly one of these labels: ${labels.join(', ')}. ` +
+    `Reply with ONLY the label, nothing else.`;
+  const res = await model.invoke([new SystemMessage(sys), new HumanMessage(input)]);
+  const answer = String(res.content).trim().toLowerCase();
+  const match = data.branches.find((b) => b.label.toLowerCase() === answer);
+  return match ? match.id : 'default';
+}
+
+/** Build the conditional-edge routing fn for a router node. Exported for tests. */
+export function buildRouterRoute(
+  node: FlowNode,
+  connectedHandles: Set<string>,
+  opts: CompileOptions,
+): (state: typeof MessagesAnnotation.State) => Promise<string> {
+  const data = node.data as RouterNodeData;
+  return async (state) => {
+    const input = lastMessageContent(state);
+    let chosen = 'default';
+    if (data.mode === 'rule') {
+      for (const b of data.branches) {
+        if (b.rule && matchesRule(input, b.rule)) { chosen = b.id; break; }
+      }
+    } else {
+      chosen = await classifyWithLlm(input, data, opts);
+    }
+    return connectedHandles.has(chosen) ? chosen : 'default';
+  };
 }
 
 function buildNodeRunner(
