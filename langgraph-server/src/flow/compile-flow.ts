@@ -9,6 +9,7 @@ import {
   type PromptBoxData,
   type LLMNodeData,
   type PluginActionNodeData,
+  type TransformNodeData,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
 import { sendAgentTurn, callGatewayMethod } from '../gateway/client.js';
@@ -220,6 +221,15 @@ function buildNodeRunner(
         agentData.agentId, prompt, agentData.sessionMode ?? 'ephemeral', runId, node.id,
       );
       return { messages: [new AIMessage(reply)] };
+    };
+  }
+
+  // transform node — string template with {input} substitution
+  if (node.type === 'transform') {
+    const { template } = node.data as TransformNodeData;
+    return async (state) => {
+      const text = template.replaceAll('{input}', lastMessageContent(state));
+      return { messages: [new HumanMessage(text)] };
     };
   }
 

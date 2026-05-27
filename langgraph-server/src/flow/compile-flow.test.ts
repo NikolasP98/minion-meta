@@ -354,3 +354,24 @@ describe('compileFlow — chain ordering (B1)', () => {
     expect(result.messages[result.messages.length - 1].content).toBe('<<Hello>>');
   });
 });
+
+describe('compileFlow — transform node', () => {
+  it('templates {input} with the last message and feeds the next node', async () => {
+    const seen: string[] = [];
+    const fakeModel = { async invoke(msgs: BaseMessage[]) { seen.push(String(msgs[msgs.length - 1].content)); return new AIMessage('done'); } };
+    const transform: FlowNode = { id: 't1', type: 'transform', position: { x: 0, y: 0 }, data: { template: 'Q: {input}', label: 'T' } as never };
+    const e1: FlowEdge = { id: 'e1', source: 'p1', sourceHandle: 'o', target: 't1', targetHandle: 'i', type: 'flow' };
+    const e2: FlowEdge = { id: 'e2', source: 't1', sourceHandle: 'o', target: 'l1', targetHandle: 'i', type: 'flow' };
+    const { graph, initialState } = compileFlow([prompt, transform, llmNode], [e1, e2], { model: fakeModel });
+    await graph.invoke(initialState);
+    expect(seen).toEqual(['Q: Hello']);
+  });
+
+  it('runs a standalone transform (prompt->transform) producing the templated text', async () => {
+    const transform: FlowNode = { id: 't1', type: 'transform', position: { x: 0, y: 0 }, data: { template: 'X:{input}:Y', label: 'T' } as never };
+    const e1: FlowEdge = { id: 'e1', source: 'p1', sourceHandle: 'o', target: 't1', targetHandle: 'i', type: 'flow' };
+    const { graph, initialState } = compileFlow([prompt, transform], [e1], {});
+    const result = await graph.invoke(initialState);
+    expect(String(result.messages[result.messages.length - 1].content)).toBe('X:Hello:Y');
+  });
+});
