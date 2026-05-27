@@ -1,5 +1,17 @@
 # @minion-stack/db
 
+## 0.4.0
+
+### Minor Changes
+
+- Add a dedicated `@minion-stack/db/crypto` export with the canonical app-level
+  AES-256-GCM secret helpers (`sealSecret`/`openSecret` plus
+  `encrypt`/`decrypt`/`encryptToken`/`decryptToken` aliases). The PG identity
+  path (`./pg` crypto) now re-exports this single implementation, and
+  `minion_hub`'s `crypto.ts` can become a thin re-export — eliminating the
+  byte-matched duplicate implementations. No change to the ciphertext layout or
+  key derivation, so existing encrypted data remains readable.
+
 ## 0.3.0
 
 ### Minor Changes

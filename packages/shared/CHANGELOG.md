@@ -1,5 +1,16 @@
 # @minion-stack/shared
 
+## 0.8.0
+
+### Minor Changes
+
+- Add `buildConnectParams()` to `@minion-stack/shared/gateway` — a typed builder
+  for the WebSocket `connect` handshake params (protocol version, role, scopes,
+  `auth.token`/`auth.password`, `jwt`, `userId`). Centralizes the object shape
+  that hub/site/paperclip each hand-rolled inside their `onChallenge` callbacks,
+  so protocol bumps and field renames live in one place. Additive — existing
+  `onChallenge` implementations are unaffected.
+
 ## 0.7.0
 
 ### Minor Changes
