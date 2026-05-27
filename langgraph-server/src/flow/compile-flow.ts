@@ -150,6 +150,11 @@ function buildExecNode(
 
   // agent node — check for legacy claude-* id (backward compat)
   const agentData = node.data as AgentNodeData;
+
+  if (agentData.agentKind === 'drone') {
+    throw new UnsupportedFlowError('Drone execution is not yet supported — coming soon.');
+  }
+
   const isLegacyLLM = agentData.agentId && agentData.agentId.startsWith('claude-');
 
   if (isLegacyLLM) {

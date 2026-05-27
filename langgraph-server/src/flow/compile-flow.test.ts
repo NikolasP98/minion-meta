@@ -265,3 +265,31 @@ describe('compileFlow — pluginTrigger node', () => {
     expect(() => compileFlow([pluginTrigger, llmNode], [edgeFromPluginTrigger], {})).toThrow(UnsupportedFlowError);
   });
 });
+
+describe('compileFlow — agent node agentKind', () => {
+  it('routes a custom-kind agent to gatewayClient.sendAgentTurn', async () => {
+    const calls: string[] = [];
+    const fakeGateway = {
+      async sendAgentTurn(agentId: string) { calls.push(agentId); return 'gw-reply'; },
+    };
+    const customAgent: FlowNode = {
+      id: 'a1', type: 'agent', position: { x: 200, y: 0 },
+      data: { agentKind: 'custom', agentId: 'PANIK', label: 'PANIK', sessionMode: 'ephemeral' } as never,
+    };
+    const e: FlowEdge = { id: 'e', source: 'p1', sourceHandle: 'prompt-out', target: 'a1', targetHandle: 'in', type: 'flow' };
+    const { graph, initialState } = compileFlow([prompt, customAgent], [e], { gatewayClient: fakeGateway });
+    const result = await graph.invoke(initialState);
+    expect(calls).toEqual(['PANIK']);
+    expect(result.messages[result.messages.length - 1].content).toBe('gw-reply');
+  });
+
+  it('throws UnsupportedFlowError for a drone-kind agent', () => {
+    const droneAgent: FlowNode = {
+      id: 'a1', type: 'agent', position: { x: 200, y: 0 },
+      data: { agentKind: 'drone', agentId: 'summarize', label: 'summarize', sessionMode: 'ephemeral' } as never,
+    };
+    const e: FlowEdge = { id: 'e', source: 'p1', sourceHandle: 'prompt-out', target: 'a1', targetHandle: 'in', type: 'flow' };
+    expect(() => compileFlow([prompt, droneAgent], [e], { gatewayClient: { async sendAgentTurn() { return 'x'; } } }))
+      .toThrow(UnsupportedFlowError);
+  });
+});
