@@ -192,32 +192,37 @@ function buildNodeRunner(
   }
 
   // agent node — check for legacy claude-* id (backward compat)
-  const agentData = node.data as AgentNodeData;
+  if (node.type === 'agent') {
+    const agentData = node.data as AgentNodeData;
 
-  if (agentData.agentKind === 'drone') {
-    throw new UnsupportedFlowError('Drone execution is not yet supported — coming soon.');
-  }
+    if (agentData.agentKind === 'drone') {
+      throw new UnsupportedFlowError('Drone execution is not yet supported — coming soon.');
+    }
 
-  const isLegacyLLM = agentData.agentId && agentData.agentId.startsWith('claude-');
+    const isLegacyLLM = agentData.agentId && agentData.agentId.startsWith('claude-');
 
-  if (isLegacyLLM) {
-    // Intentional duplicate of the llm-node path — kept separate for clarity,
-    // not collapsed to preserve the ability to diverge these paths later.
-    const modelId = resolveModelId(agentData.agentId);
-    const model: ChatModel = opts.model ?? resolveProviderModel(modelId);
+    if (isLegacyLLM) {
+      // Intentional duplicate of the llm-node path — kept separate for clarity,
+      // not collapsed to preserve the ability to diverge these paths later.
+      const modelId = resolveModelId(agentData.agentId);
+      const model: ChatModel = opts.model ?? resolveProviderModel(modelId);
+      return async (state) => {
+        const response = await model.invoke(state.messages);
+        return { messages: [response] };
+      };
+    }
+
+    // agent node — real gateway agent
+    const gc: GatewayClient = opts.gatewayClient ?? { sendAgentTurn };
     return async (state) => {
-      const response = await model.invoke(state.messages);
-      return { messages: [response] };
+      const prompt = lastMessageContent(state);
+      const reply = await gc.sendAgentTurn(
+        agentData.agentId, prompt, agentData.sessionMode ?? 'ephemeral', runId, node.id,
+      );
+      return { messages: [new AIMessage(reply)] };
     };
   }
 
-  // agent node — real gateway agent
-  const gc: GatewayClient = opts.gatewayClient ?? { sendAgentTurn };
-  return async (state) => {
-    const prompt = lastMessageContent(state);
-    const reply = await gc.sendAgentTurn(
-      agentData.agentId, prompt, agentData.sessionMode ?? 'ephemeral', runId, node.id,
-    );
-    return { messages: [new AIMessage(reply)] };
-  };
+  // No runner exists for this node type yet — fail loudly rather than mis-casting.
+  throw new UnsupportedFlowError(`No runner for node type "${node.type}".`);
 }

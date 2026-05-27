@@ -172,7 +172,7 @@ describe('validateFlowShape — trigger nodes', () => {
     const edgePrompt: FlowEdge = { id: 'ep', source: 'p1', sourceHandle: 'prompt-out', target: 'l1', targetHandle: 'in', type: 'flow' };
     expect(() => validateFlowShape([triggerNode, prompt, llmNode], [edgeFromTrigger, edgePrompt])).toThrow(UnsupportedFlowError);
   });
-  it('rejects two execution nodes: trigger + agent + llm', () => {
+  it('rejects an unreachable processing node (agent has no edge from trigger)', () => {
     expect(() => validateFlowShape([triggerNode, llmNode, agent], [edgeFromTrigger])).toThrow(UnsupportedFlowError);
   });
 });
