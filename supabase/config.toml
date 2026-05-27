@@ -1,3 +1,8 @@
+# Supabase config.
+#
+# NOTE: `project_id` is the LINKED prod project. These settings apply to the
+# LOCAL stack (`supabase start`). Do NOT run `supabase config push` — it would
+# push this auth config to prod. Prod auth is managed in the Supabase dashboard.
 project_id = "gxvsaskbohavnurfvshr"
 
 [db]
@@ -5,3 +10,26 @@ major_version = 15
 
 [db.migrations]
 schema_paths = ["./migrations"]
+
+[auth]
+enabled = true
+# Hub dev server (Vite). Used as the OAuth post-login redirect base.
+site_url = "http://127.0.0.1:5173"
+additional_redirect_urls = [
+  "http://127.0.0.1:5173",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173/auth/callback",
+  "http://localhost:5173/auth/callback",
+]
+jwt_expiry = 3600
+enable_signup = true
+
+# Google OAuth for LOCAL login parity. client_id/secret are read from the
+# environment when `supabase start` runs — export them first (they live in
+# Infisical for this repo). Then add this callback to the Google OAuth client's
+# Authorized redirect URIs:  http://127.0.0.1:54321/auth/v1/callback
+[auth.external.google]
+enabled = true
+client_id = "env(GOOGLE_CLIENT_ID)"
+secret = "env(GOOGLE_CLIENT_SECRET)"
+skip_nonce_check = true
