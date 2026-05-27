@@ -1,4 +1,5 @@
 import { MessagesAnnotation, StateGraph, START, END } from '@langchain/langgraph';
+import { createReactAgent } from '@langchain/langgraph/prebuilt';
 import { HumanMessage, AIMessage, SystemMessage, type BaseMessage } from '@langchain/core/messages';
 import { randomUUID } from 'node:crypto';
 import {
@@ -13,19 +14,24 @@ import {
   type StructuredNodeData,
   type RouterNodeData,
   type RouterRuleOp,
+  type ToolAgentNodeData,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
 import { sendAgentTurn, callGatewayMethod } from '../gateway/client.js';
+import { buildTools } from './tools.js';
 import RE2 from 're2';
 
 export const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
+
+/** Fixed cap on toolAgent ReAct loop super-steps (not user-tunable in B3). */
+export const TOOL_AGENT_RECURSION_LIMIT = 10;
 
 /** Memory bound on regex-matched input (the RE2 engine handles ReDoS-safety). */
 const MAX_REGEX_INPUT = 10_000;
 /** Sanity bound on regex pattern length. */
 const MAX_REGEX_PATTERN = 1_000;
 
-const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router'] as const;
+const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent'] as const;
 
 export function validateFlowShape(nodes: FlowNode[], edges: FlowEdge[]): void {
   const prompts = nodes.filter((n) => n.type === 'promptBox');
@@ -112,6 +118,13 @@ export interface CompileOptions {
   gatewayClient?: GatewayClient;
   /** Event payload passed by the trigger-manager when running trigger-based flows. */
   initialPrompt?: string;
+  /** Inject the ReAct agent factory for tests (toolAgent path). Defaults to createReactAgent. */
+  reactAgentFactory?: (args: { llm: unknown; tools: unknown[] }) => {
+    invoke(
+      input: { messages: BaseMessage[] },
+      config?: { recursionLimit?: number },
+    ): Promise<{ messages: BaseMessage[] }>;
+  };
 }
 
 export function compileFlow(
@@ -140,7 +153,8 @@ export function compileFlow(
 
   const processing = nodes.filter((n) =>
     n.type === 'llm' || n.type === 'agent' || n.type === 'pluginAction' ||
-    n.type === 'transform' || n.type === 'structured' || n.type === 'router',
+    n.type === 'transform' || n.type === 'structured' || n.type === 'router' ||
+    n.type === 'toolAgent',
   );
   const flowEdges = edges.filter((e) => e.type === 'flow');
 
@@ -343,6 +357,27 @@ function buildNodeRunner(
   // router node — routing happens on the conditional edge; the node itself is a pass-through.
   if (node.type === 'router') {
     return async () => ({ messages: [] });
+  }
+
+  // toolAgent node — ReAct tool-calling loop via createReactAgent
+  if (node.type === 'toolAgent') {
+    const data = node.data as ToolAgentNodeData;
+    const model: ChatModel = opts.model ?? resolveProviderModel(data.modelId ?? DEFAULT_MODEL);
+    const factory = opts.reactAgentFactory ?? (createReactAgent as unknown as typeof opts.reactAgentFactory);
+    return async (state) => {
+      const tools = buildTools(data.tools ?? [], {
+        gatewayInvoke: opts.gatewayClient?.callGatewayMethod,
+        runId,
+        nodeId: node.id,
+      });
+      const agent = factory!({ llm: model as unknown, tools });
+      const messages = data.systemPrompt
+        ? [new SystemMessage(data.systemPrompt), ...state.messages]
+        : state.messages;
+      const result = await agent.invoke({ messages }, { recursionLimit: TOOL_AGENT_RECURSION_LIMIT });
+      const last = result.messages[result.messages.length - 1];
+      return { messages: [last] };
+    };
   }
 
   // No runner exists for this node type yet — fail loudly rather than mis-casting.

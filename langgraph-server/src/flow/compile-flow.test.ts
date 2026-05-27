@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { validateFlowShape, compileFlow, resolveModelId, DEFAULT_MODEL, matchesRule, buildRouterRoute } from './compile-flow.js';
 import { UnsupportedFlowError } from './types.js';
 import type { FlowNode, FlowEdge, LLMNodeData, TriggerNodeData, RouterNodeData } from './types.js';
-import { AIMessage, HumanMessage, type BaseMessage } from '@langchain/core/messages';
+import { AIMessage, HumanMessage, SystemMessage, type BaseMessage } from '@langchain/core/messages';
 
 const prompt: FlowNode = {
   id: 'p1', type: 'promptBox', position: { x: 0, y: 0 },
@@ -494,5 +494,71 @@ describe('compileFlow — router integration', () => {
     const { graph, initialState } = compileFlow([prompt, router, a], [eIn, eA], { model: fakeModel });
     const result = await graph.invoke(initialState);
     expect(String(result.messages[result.messages.length - 1].content)).toBe('Hello'); // 'na' never ran
+  });
+});
+
+describe('compileFlow — toolAgent node', () => {
+  const prompt = { id: 'p', type: 'promptBox', position: { x: 0, y: 0 }, data: { label: 'P', value: 'hi agent' } } as const;
+  const toolAgent = {
+    id: 'ta', type: 'toolAgent', position: { x: 1, y: 0 },
+    data: { modelId: 'm', systemPrompt: 'You are helpful.', tools: [], label: 'Tool Agent' },
+  } as const;
+  const edge = { id: 'e', source: 'p', sourceHandle: 'out', target: 'ta', targetHandle: 'in', type: 'flow' } as const;
+
+  it('appends only the agent final message and passes system prompt + recursionLimit', async () => {
+    let seenMessages: BaseMessage[] = [];
+    let seenConfig: { recursionLimit?: number } | undefined;
+    const fakeFactory = (_args: { llm: unknown; tools: unknown[] }) => ({
+      async invoke(input: { messages: BaseMessage[] }, config?: { recursionLimit?: number }) {
+        seenMessages = input.messages;
+        seenConfig = config;
+        return { messages: [...input.messages, new AIMessage('AGENT_FINAL')] };
+      },
+    });
+
+    const { graph, initialState } = compileFlow(
+      [prompt, toolAgent] as never,
+      [edge] as never,
+      { model: { async invoke() { return new AIMessage('x'); } }, reactAgentFactory: fakeFactory },
+    );
+    const result = await graph.invoke(initialState);
+    const last = result.messages[result.messages.length - 1];
+    expect(String(last.content)).toBe('AGENT_FINAL');
+    expect(String(seenMessages[0].content)).toBe('You are helpful.');
+    expect(seenConfig?.recursionLimit).toBe(10);
+  });
+
+  it('omits the system message when systemPrompt is empty', async () => {
+    let seenMessages: BaseMessage[] = [];
+    const fakeFactory = () => ({
+      async invoke(input: { messages: BaseMessage[] }) {
+        seenMessages = input.messages;
+        return { messages: [...input.messages, new AIMessage('OK')] };
+      },
+    });
+    const ta2 = { ...toolAgent, data: { ...toolAgent.data, systemPrompt: '' } };
+    const { graph, initialState } = compileFlow(
+      [prompt, ta2] as never, [edge] as never,
+      { model: { async invoke() { return new AIMessage('x'); } }, reactAgentFactory: fakeFactory },
+    );
+    await graph.invoke(initialState);
+    expect(String(seenMessages[0].content)).toBe('hi agent');
+  });
+});
+
+describe('validateFlowShape — toolAgent', () => {
+  it('accepts a prompt → toolAgent flow', () => {
+    const prompt = { id: 'p', type: 'promptBox', position: { x: 0, y: 0 }, data: { label: 'P', value: 'x' } };
+    const ta = { id: 'ta', type: 'toolAgent', position: { x: 1, y: 0 }, data: { modelId: 'm', tools: [], label: 'T' } };
+    const edge = { id: 'e', source: 'p', sourceHandle: 'out', target: 'ta', targetHandle: 'in', type: 'flow' };
+    expect(() => validateFlowShape([prompt, ta] as never, [edge] as never)).not.toThrow();
+  });
+
+  it('rejects a cycle through a toolAgent', () => {
+    const prompt = { id: 'p', type: 'promptBox', position: { x: 0, y: 0 }, data: { label: 'P', value: 'x' } };
+    const ta = { id: 'ta', type: 'toolAgent', position: { x: 1, y: 0 }, data: { modelId: 'm', tools: [], label: 'T' } };
+    const e1 = { id: 'e1', source: 'p', sourceHandle: 'out', target: 'ta', targetHandle: 'in', type: 'flow' };
+    const e2 = { id: 'e2', source: 'ta', sourceHandle: 'out', target: 'ta', targetHandle: 'in', type: 'flow' };
+    expect(() => validateFlowShape([prompt, ta] as never, [e1, e2] as never)).toThrow();
   });
 });
