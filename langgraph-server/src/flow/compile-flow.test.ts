@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { validateFlowShape, compileFlow, resolveModelId, DEFAULT_MODEL } from './compile-flow.js';
 import { UnsupportedFlowError } from './types.js';
-import type { FlowNode, FlowEdge, LLMNodeData } from './types.js';
+import type { FlowNode, FlowEdge, LLMNodeData, TriggerNodeData } from './types.js';
 import { AIMessage, HumanMessage, type BaseMessage } from '@langchain/core/messages';
 
 const prompt: FlowNode = {
@@ -152,5 +152,49 @@ describe('compileFlow — agent node (real gateway agent)', () => {
     expect(calls[0].prompt).toBe('Hello');
     expect(calls[0].sessionMode).toBe('ephemeral');
     expect(result.messages[result.messages.length - 1].content).toBe('gateway-reply');
+  });
+});
+
+// ── Trigger node ──────────────────────────────────────────────────────────────
+
+const triggerNode: FlowNode = {
+  id: 't1', type: 'trigger', position: { x: 0, y: 0 },
+  data: { event: 'message:received', label: 'Message received', deliverResponse: false } satisfies TriggerNodeData,
+};
+const edgeFromTrigger: FlowEdge = {
+  id: 'e-t', source: 't1', sourceHandle: 'out', target: 'l1', targetHandle: 'in', type: 'flow',
+};
+
+describe('validateFlowShape — trigger nodes', () => {
+  it('accepts one trigger connected to one llm node', () => {
+    expect(() => validateFlowShape([triggerNode, llmNode], [edgeFromTrigger])).not.toThrow();
+  });
+  it('rejects trigger + promptBox together', () => {
+    const edgePrompt: FlowEdge = { id: 'ep', source: 'p1', sourceHandle: 'prompt-out', target: 'l1', targetHandle: 'in', type: 'flow' };
+    expect(() => validateFlowShape([triggerNode, prompt, llmNode], [edgeFromTrigger, edgePrompt])).toThrow(UnsupportedFlowError);
+  });
+  it('rejects two execution nodes: trigger + agent + llm', () => {
+    expect(() => validateFlowShape([triggerNode, llmNode, agent], [edgeFromTrigger])).toThrow(UnsupportedFlowError);
+  });
+});
+
+describe('compileFlow — trigger node', () => {
+  it('uses initialPrompt from opts when trigger node is present', async () => {
+    const fakeModel = {
+      async invoke(messages: BaseMessage[]) {
+        const last = messages[messages.length - 1];
+        return new AIMessage(`trigger-echo:${String(last.content)}`);
+      },
+    };
+    const { graph, initialState } = compileFlow([triggerNode, llmNode], [edgeFromTrigger], {
+      model: fakeModel, initialPrompt: 'event payload text',
+    });
+    expect(initialState.messages[0]).toBeInstanceOf(HumanMessage);
+    expect(initialState.messages[0].content).toBe('event payload text');
+    const result = await graph.invoke(initialState);
+    expect(result.messages[result.messages.length - 1].content).toBe('trigger-echo:event payload text');
+  });
+  it('throws when trigger node present but initialPrompt not provided', () => {
+    expect(() => compileFlow([triggerNode, llmNode], [edgeFromTrigger], {})).toThrow(UnsupportedFlowError);
   });
 });

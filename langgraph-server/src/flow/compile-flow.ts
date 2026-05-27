@@ -8,36 +8,42 @@ import {
   type AgentNodeData,
   type PromptBoxData,
   type LLMNodeData,
+  type TriggerNodeData,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
 import { sendAgentTurn } from '../gateway/client.js';
-
-const MVP_HINT = 'MVP runner supports exactly one Prompt connected to one Agent or LLM node.';
 
 export const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 
 export function validateFlowShape(nodes: FlowNode[], edges: FlowEdge[]): void {
   const prompts = nodes.filter((n) => n.type === 'promptBox');
+  const triggers = nodes.filter((n) => n.type === 'trigger');
   const execNodes = nodes.filter((n) => n.type === 'agent' || n.type === 'llm');
+  const HINT = 'MVP runner supports exactly one Prompt (or Trigger) connected to one Agent or LLM node.';
 
-  if (prompts.length !== 1) {
-    throw new UnsupportedFlowError(
-      `Expected exactly 1 prompt node, found ${prompts.length}. ${MVP_HINT}`,
-    );
+  if (prompts.length > 0 && triggers.length > 0) {
+    throw new UnsupportedFlowError('A flow cannot have both a trigger and a prompt box.');
+  }
+  if (triggers.length > 1) {
+    throw new UnsupportedFlowError(`Expected exactly 1 trigger node, found ${triggers.length}. ${HINT}`);
+  }
+  const entryNodes = [...prompts, ...triggers];
+  if (entryNodes.length !== 1) {
+    throw new UnsupportedFlowError(`Expected exactly 1 prompt or trigger node, found ${entryNodes.length}. ${HINT}`);
   }
   if (execNodes.length !== 1) {
     throw new UnsupportedFlowError(
-      `Expected exactly 1 agent or LLM node, found ${execNodes.length}. ${MVP_HINT}`,
+      `Expected exactly 1 agent or LLM node, found ${execNodes.length}. ${HINT}`,
     );
   }
 
-  const prompt = prompts[0];
+  const entry = entryNodes[0];
   const exec = execNodes[0];
   const connected = edges.some(
-    (e) => e.source === prompt.id && e.target === exec.id && e.type === 'flow',
+    (e) => e.source === entry.id && e.target === exec.id && e.type === 'flow',
   );
   if (!connected) {
-    throw new UnsupportedFlowError(`Prompt must be connected to the agent or LLM. ${MVP_HINT}`);
+    throw new UnsupportedFlowError(`Entry node must be connected to the agent or LLM. ${HINT}`);
   }
 }
 
@@ -68,6 +74,8 @@ export interface CompileOptions {
   model?: ChatModel;
   /** Inject a gateway client for tests (agent node path). Defaults to the real client. */
   gatewayClient?: GatewayClient;
+  /** Event payload passed by the trigger-manager when running trigger-based flows. */
+  initialPrompt?: string;
 }
 
 export function compileFlow(
@@ -77,10 +85,21 @@ export function compileFlow(
 ) {
   validateFlowShape(nodes, edges);
 
-  const promptNode = nodes.find((n) => n.type === 'promptBox')!;
+  const entryNode = nodes.find((n) => n.type === 'promptBox' || n.type === 'trigger')!;
   const execNode = nodes.find((n) => n.type === 'agent' || n.type === 'llm')!;
-  const promptValue = (promptNode.data as PromptBoxData).value ?? '';
   const runId = randomUUID();
+
+  let promptValue: string;
+  if (entryNode.type === 'trigger') {
+    if (!opts.initialPrompt) {
+      throw new UnsupportedFlowError(
+        'Trigger node requires an initialPrompt (event payload) — call via /flows/run-triggered.',
+      );
+    }
+    promptValue = opts.initialPrompt;
+  } else {
+    promptValue = (entryNode.data as PromptBoxData).value ?? '';
+  }
 
   const callNode = buildExecNode(execNode, opts, runId);
 
