@@ -123,13 +123,14 @@ function buildExecNode(
   // pluginAction node — call gateway method contributed by a plugin
   if (node.type === 'pluginAction') {
     const data = node.data as PluginActionNodeData;
-    const gc = opts.gatewayClient ?? { sendAgentTurn, callGatewayMethod };
+    const invoke = opts.gatewayClient?.callGatewayMethod ?? callGatewayMethod;
     return async (state) => {
       const lastHuman = [...state.messages].reverse().find((m) => m._getType() === 'human');
       if (!lastHuman) {
-        throw new Error('Plugin action node received no human message in state — cannot dispatch.');
+        throw new Error(
+          `Plugin action node "${node.id}" (${data.method}) received no human message in state — cannot dispatch.`,
+        );
       }
-      const invoke = gc.callGatewayMethod ?? callGatewayMethod;
       const reply = await invoke(data.method, {
         input: String(lastHuman.content), runId, nodeId: node.id,
       });
