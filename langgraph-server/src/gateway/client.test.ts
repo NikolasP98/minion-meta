@@ -29,3 +29,9 @@ describe('deriveSessionKey', () => {
     expect(deriveSessionKey('shared', 'PANIK', 'any', 'any')).toBe('agent:PANIK:main');
   });
 });
+
+describe('extractReply — plugin action reply', () => {
+  it('reads { reply } from a plugin action response', () => {
+    expect(extractReply({ reply: 'echo: hi' })).toBe('echo: hi');
+  });
+});

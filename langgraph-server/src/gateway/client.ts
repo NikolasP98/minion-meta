@@ -140,3 +140,17 @@ export async function sendAgentTurn(
   }
   return reply;
 }
+
+export async function callGatewayMethod(
+  method: string,
+  params: Record<string, unknown>,
+): Promise<string> {
+  const result = await request(method, params);
+  const reply = extractReply(result);
+  if (reply === null) {
+    throw new Error(
+      `Gateway method "${method}" returned no recognisable reply. Raw: ${JSON.stringify(result)}`,
+    );
+  }
+  return reply;
+}
