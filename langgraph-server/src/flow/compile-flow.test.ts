@@ -95,10 +95,9 @@ describe('validateFlowShape — llm nodes', () => {
     expect(() => validateFlowShape([prompt, llmNode], [edgeToLlm])).not.toThrow();
   });
 
-  it('rejects two execution nodes (agent + llm)', () => {
-    expect(() => validateFlowShape([prompt, agent, llmNode], [edge, edgeToLlm])).toThrow(
-      UnsupportedFlowError,
-    );
+  // B1: fan-out from one entry to two reachable processing nodes is now a valid DAG.
+  it('accepts fan-out to two processing nodes (agent + llm)', () => {
+    expect(() => validateFlowShape([prompt, agent, llmNode], [edge, edgeToLlm])).not.toThrow();
   });
 });
 
@@ -229,8 +228,9 @@ describe('validateFlowShape — plugin nodes', () => {
     const ep: FlowEdge = { id: 'ep', source: 'p1', sourceHandle: 'prompt-out', target: 'l1', targetHandle: 'in', type: 'flow' };
     expect(() => validateFlowShape([pluginTrigger, prompt, llmNode], [edgeFromPluginTrigger, ep])).toThrow(UnsupportedFlowError);
   });
-  it('rejects two execs: pluginAction + llm', () => {
-    expect(() => validateFlowShape([prompt, pluginAction, llmNode], [edgeToPluginAction, edgeToLlm])).toThrow(UnsupportedFlowError);
+  // B1: fan-out to two reachable processing nodes (pluginAction + llm) is now a valid DAG.
+  it('accepts fan-out: pluginAction + llm', () => {
+    expect(() => validateFlowShape([prompt, pluginAction, llmNode], [edgeToPluginAction, edgeToLlm])).not.toThrow();
   });
 });
 
@@ -291,5 +291,66 @@ describe('compileFlow — agent node agentKind', () => {
     const e: FlowEdge = { id: 'e', source: 'p1', sourceHandle: 'prompt-out', target: 'a1', targetHandle: 'in', type: 'flow' };
     expect(() => compileFlow([prompt, droneAgent], [e], { gatewayClient: { async sendAgentTurn() { return 'x'; } } }))
       .toThrow(UnsupportedFlowError);
+  });
+});
+
+describe('chaining input contract', () => {
+  it('agent node reads the latest message (not just the last human)', async () => {
+    const fakeModel = { async invoke() { return new AIMessage('LLM_OUT'); } };
+    const seen: string[] = [];
+    const fakeGateway = { async sendAgentTurn(_id: string, p: string) { seen.push(p); return 'AGENT_OUT'; } };
+    const llm: FlowNode = { id: 'l1', type: 'llm', position: { x: 0, y: 0 }, data: { modelId: 'm', label: 'LLM' } };
+    const ag: FlowNode = { id: 'a2', type: 'agent', position: { x: 0, y: 0 }, data: { agentKind: 'custom', agentId: 'PANIK', label: 'PANIK', sessionMode: 'ephemeral' } as never };
+    const e1: FlowEdge = { id: 'e1', source: 'p1', sourceHandle: 'o', target: 'l1', targetHandle: 'i', type: 'flow' };
+    const e2: FlowEdge = { id: 'e2', source: 'l1', sourceHandle: 'o', target: 'a2', targetHandle: 'i', type: 'flow' };
+    const { graph, initialState } = compileFlow([prompt, llm, ag], [e1, e2], { model: fakeModel, gatewayClient: fakeGateway });
+    await graph.invoke(initialState);
+    expect(seen).toEqual(['LLM_OUT']);
+  });
+});
+
+describe('validateFlowShape — graph (B1)', () => {
+  const llm2: FlowNode = { id: 'l2', type: 'llm', position: { x: 0, y: 0 }, data: { modelId: 'm', label: 'LLM2' } };
+  it('accepts a 3-node chain prompt->llm->llm2', () => {
+    const e1: FlowEdge = { id: 'e1', source: 'p1', sourceHandle: 'o', target: 'l1', targetHandle: 'i', type: 'flow' };
+    const e2: FlowEdge = { id: 'e2', source: 'l1', sourceHandle: 'o', target: 'l2', targetHandle: 'i', type: 'flow' };
+    expect(() => validateFlowShape([prompt, llmNode, llm2], [e1, e2])).not.toThrow();
+  });
+  it('rejects a cycle', () => {
+    const e1: FlowEdge = { id: 'e1', source: 'p1', sourceHandle: 'o', target: 'l1', targetHandle: 'i', type: 'flow' };
+    const e2: FlowEdge = { id: 'e2', source: 'l1', sourceHandle: 'o', target: 'l2', targetHandle: 'i', type: 'flow' };
+    const e3: FlowEdge = { id: 'e3', source: 'l2', sourceHandle: 'o', target: 'l1', targetHandle: 'i', type: 'flow' };
+    expect(() => validateFlowShape([prompt, llmNode, llm2], [e1, e2, e3])).toThrow(UnsupportedFlowError);
+  });
+  it('rejects an unreachable processing node', () => {
+    const e1: FlowEdge = { id: 'e1', source: 'p1', sourceHandle: 'o', target: 'l1', targetHandle: 'i', type: 'flow' };
+    expect(() => validateFlowShape([prompt, llmNode, llm2], [e1])).toThrow(UnsupportedFlowError);
+  });
+  it('rejects zero processing nodes', () => {
+    expect(() => validateFlowShape([prompt], [])).toThrow(UnsupportedFlowError);
+  });
+  it('still accepts the classic single prompt->agent flow', () => {
+    expect(() => validateFlowShape([prompt, agent], [edge])).not.toThrow();
+  });
+});
+
+describe('compileFlow — chain ordering (B1)', () => {
+  it('runs prompt->llm->llm2 in order, passing outputs forward', async () => {
+    const calls: string[] = [];
+    const fakeModel = {
+      async invoke(msgs: BaseMessage[]) {
+        const inp = String(msgs[msgs.length - 1].content);
+        calls.push(inp);
+        return new AIMessage(`<${inp}>`);
+      },
+    };
+    const llm2: FlowNode = { id: 'l2', type: 'llm', position: { x: 0, y: 0 }, data: { modelId: 'm', label: 'LLM2' } };
+    const e1: FlowEdge = { id: 'e1', source: 'p1', sourceHandle: 'o', target: 'l1', targetHandle: 'i', type: 'flow' };
+    const e2: FlowEdge = { id: 'e2', source: 'l1', sourceHandle: 'o', target: 'l2', targetHandle: 'i', type: 'flow' };
+    const { graph, initialState } = compileFlow([prompt, llmNode, llm2], [e1, e2], { model: fakeModel });
+    const result = await graph.invoke(initialState);
+    expect(calls[0]).toBe('Hello');
+    expect(calls[1]).toBe('<Hello>');
+    expect(result.messages[result.messages.length - 1].content).toBe('<<Hello>>');
   });
 });

@@ -1,4 +1,4 @@
-import { MessagesAnnotation, StateGraph } from '@langchain/langgraph';
+import { MessagesAnnotation, StateGraph, START, END } from '@langchain/langgraph';
 import { HumanMessage, AIMessage, type BaseMessage } from '@langchain/core/messages';
 import { randomUUID } from 'node:crypto';
 import {
@@ -8,7 +8,6 @@ import {
   type AgentNodeData,
   type PromptBoxData,
   type LLMNodeData,
-  type TriggerNodeData,
   type PluginActionNodeData,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
@@ -16,36 +15,60 @@ import { sendAgentTurn, callGatewayMethod } from '../gateway/client.js';
 
 export const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 
+const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured'] as const;
+
 export function validateFlowShape(nodes: FlowNode[], edges: FlowEdge[]): void {
   const prompts = nodes.filter((n) => n.type === 'promptBox');
   const triggers = nodes.filter((n) => n.type === 'trigger' || n.type === 'pluginTrigger');
-  const execNodes = nodes.filter((n) => n.type === 'agent' || n.type === 'llm' || n.type === 'pluginAction');
-  const HINT = 'MVP runner supports exactly one Prompt (or Trigger) connected to one Agent or LLM node.';
+  const processing = nodes.filter((n) => (PROCESSING_TYPES as readonly string[]).includes(n.type));
 
   if (prompts.length > 0 && triggers.length > 0) {
     throw new UnsupportedFlowError('A flow cannot have both a trigger and a prompt box.');
   }
-  if (triggers.length > 1) {
-    throw new UnsupportedFlowError(`Expected exactly 1 trigger node, found ${triggers.length}. ${HINT}`);
-  }
   const entryNodes = [...prompts, ...triggers];
   if (entryNodes.length !== 1) {
-    throw new UnsupportedFlowError(`Expected exactly 1 prompt or trigger node, found ${entryNodes.length}. ${HINT}`);
+    throw new UnsupportedFlowError(`Expected exactly 1 prompt or trigger node, found ${entryNodes.length}.`);
   }
-  if (execNodes.length !== 1) {
-    throw new UnsupportedFlowError(
-      `Expected exactly 1 agent or LLM node, found ${execNodes.length}. ${HINT}`,
-    );
+  if (processing.length < 1) {
+    throw new UnsupportedFlowError('Flow needs at least one processing node.');
   }
 
   const entry = entryNodes[0];
-  const exec = execNodes[0];
-  const connected = edges.some(
-    (e) => e.source === entry.id && e.target === exec.id && e.type === 'flow',
-  );
-  if (!connected) {
-    throw new UnsupportedFlowError(`Entry node must be connected to the agent or LLM. ${HINT}`);
+  const flowEdges = edges.filter((e) => e.type === 'flow');
+  const adj = new Map<string, string[]>();
+  for (const e of flowEdges) {
+    if (!adj.has(e.source)) adj.set(e.source, []);
+    adj.get(e.source)!.push(e.target);
   }
+
+  // Reachability from entry.
+  const reachable = new Set<string>();
+  const stack = [entry.id];
+  while (stack.length) {
+    const cur = stack.pop()!;
+    if (reachable.has(cur)) continue;
+    reachable.add(cur);
+    for (const next of adj.get(cur) ?? []) stack.push(next);
+  }
+  for (const p of processing) {
+    if (!reachable.has(p.id)) {
+      throw new UnsupportedFlowError(`Node "${p.id}" is not connected to the entry node.`);
+    }
+  }
+
+  // Cycle detection (DFS).
+  const WHITE = 0, GRAY = 1, BLACK = 2;
+  const color = new Map<string, number>();
+  const visit = (id: string): void => {
+    color.set(id, GRAY);
+    for (const next of adj.get(id) ?? []) {
+      const c = color.get(next) ?? WHITE;
+      if (c === GRAY) throw new UnsupportedFlowError('Flow graph has a cycle — loops are not supported.');
+      if (c === WHITE) visit(next);
+    }
+    color.set(id, BLACK);
+  };
+  for (const n of nodes) if ((color.get(n.id) ?? WHITE) === WHITE) visit(n.id);
 }
 
 /**
@@ -88,8 +111,9 @@ export function compileFlow(
 ) {
   validateFlowShape(nodes, edges);
 
-  const entryNode = nodes.find((n) => n.type === 'promptBox' || n.type === 'trigger' || n.type === 'pluginTrigger')!;
-  const execNode = nodes.find((n) => n.type === 'agent' || n.type === 'llm' || n.type === 'pluginAction')!;
+  const entryNode = nodes.find(
+    (n) => n.type === 'promptBox' || n.type === 'trigger' || n.type === 'pluginTrigger',
+  )!;
   const runId = randomUUID();
 
   let promptValue: string;
@@ -104,19 +128,44 @@ export function compileFlow(
     promptValue = (entryNode.data as PromptBoxData).value ?? '';
   }
 
-  const callNode = buildExecNode(execNode, opts, runId);
+  const processing = nodes.filter((n) =>
+    n.type === 'llm' || n.type === 'agent' || n.type === 'pluginAction' ||
+    n.type === 'transform' || n.type === 'structured',
+  );
+  const flowEdges = edges.filter((e) => e.type === 'flow');
 
-  const graph = new StateGraph(MessagesAnnotation)
-    .addNode('exec', callNode)
-    .addEdge('__start__', 'exec')
-    .addEdge('exec', '__end__')
-    .compile();
+  const builder = new StateGraph(MessagesAnnotation);
+  type AnyGraph = {
+    addNode: (name: string, fn: (s: typeof MessagesAnnotation.State) => Promise<{ messages: BaseMessage[] }>) => void;
+    addEdge: (from: string, to: string) => void;
+    compile: () => ReturnType<typeof builder.compile>;
+  };
+  const g = builder as unknown as AnyGraph;
 
+  for (const node of processing) {
+    g.addNode(node.id, buildNodeRunner(node, opts, runId));
+  }
+  const hasOutgoing = new Set(flowEdges.map((e) => e.source));
+  for (const e of flowEdges) {
+    if (e.source === entryNode.id) g.addEdge(START, e.target);
+    else g.addEdge(e.source, e.target);
+  }
+  for (const node of processing) {
+    if (!hasOutgoing.has(node.id)) g.addEdge(node.id, END);
+  }
+
+  const graph = g.compile();
   const initialState = { messages: [new HumanMessage(promptValue)] };
   return { graph, initialState };
 }
 
-function buildExecNode(
+/** A processing node's input = the content of the most recent message in state. */
+function lastMessageContent(state: typeof MessagesAnnotation.State): string {
+  const last = state.messages[state.messages.length - 1];
+  return last ? String(last.content) : '';
+}
+
+function buildNodeRunner(
   node: FlowNode,
   opts: CompileOptions,
   runId: string,
@@ -126,15 +175,8 @@ function buildExecNode(
     const data = node.data as PluginActionNodeData;
     const invoke = opts.gatewayClient?.callGatewayMethod ?? callGatewayMethod;
     return async (state) => {
-      const lastHuman = [...state.messages].reverse().find((m) => m._getType() === 'human');
-      if (!lastHuman) {
-        throw new Error(
-          `Plugin action node "${node.id}" (${data.method}) received no human message in state — cannot dispatch.`,
-        );
-      }
-      const reply = await invoke(data.method, {
-        input: String(lastHuman.content), runId, nodeId: node.id,
-      });
+      const input = lastMessageContent(state);
+      const reply = await invoke(data.method, { input, runId, nodeId: node.id });
       return { messages: [new AIMessage(reply)] };
     };
   }
@@ -172,17 +214,9 @@ function buildExecNode(
   // agent node — real gateway agent
   const gc: GatewayClient = opts.gatewayClient ?? { sendAgentTurn };
   return async (state) => {
-    const lastHuman = [...state.messages].reverse().find((m) => m._getType() === 'human');
-    if (!lastHuman) {
-      throw new Error('Agent node received no human message in state — cannot dispatch.');
-    }
-    const prompt = String(lastHuman.content);
+    const prompt = lastMessageContent(state);
     const reply = await gc.sendAgentTurn(
-      agentData.agentId,
-      prompt,
-      agentData.sessionMode ?? 'ephemeral',
-      runId,
-      node.id,
+      agentData.agentId, prompt, agentData.sessionMode ?? 'ephemeral', runId, node.id,
     );
     return { messages: [new AIMessage(reply)] };
   };
