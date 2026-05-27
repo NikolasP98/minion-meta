@@ -1,3 +1,10 @@
+import { tool } from '@langchain/core/tools';
+import type { StructuredToolInterface } from '@langchain/core/tools';
+import { z } from 'zod';
+import { TavilySearch } from '@langchain/tavily';
+import { callGatewayMethod } from '../gateway/client.js';
+import type { ToolRef, FlowRunEvent } from './types.js';
+
 /**
  * Evaluate a basic arithmetic expression safely.
  * Only `0-9 . + - * / ( )` and whitespace are permitted (regex-gated), and the
@@ -52,4 +59,54 @@ export function safeEvalArithmetic(expr: string): number {
   const result = parseExpr();
   if (pos !== tokens.length) throw new Error('calculator: unexpected trailing input');
   return result;
+}
+
+export const BUILTIN_TOOL_IDS = ['web_search', 'current_time', 'calculator'] as const;
+
+export type GatewayInvoke = (method: string, params: Record<string, unknown>) => Promise<string>;
+
+export interface BuildToolsOptions {
+  gatewayInvoke?: GatewayInvoke;
+  env?: Record<string, string | undefined>;
+  runId?: string;
+  nodeId?: string;
+  onEvent?: (e: FlowRunEvent) => void;
+}
+
+export function buildTools(refs: ToolRef[], opts: BuildToolsOptions = {}): StructuredToolInterface[] {
+  const env = opts.env ?? process.env;
+  const invoke = opts.gatewayInvoke ?? callGatewayMethod;
+  const out: StructuredToolInterface[] = [];
+
+  for (const ref of refs) {
+    if (ref.kind === 'builtin') {
+      if (ref.id === 'web_search') {
+        if (!env.TAVILY_API_KEY) {
+          opts.onEvent?.({ level: 'warn', message: 'web_search skipped — TAVILY_API_KEY not set', nodeId: opts.nodeId });
+          continue;
+        }
+        out.push(new TavilySearch({ maxResults: 5, tavilyApiKey: env.TAVILY_API_KEY }) as unknown as StructuredToolInterface);
+      } else if (ref.id === 'current_time') {
+        out.push(tool(async () => new Date().toISOString(), {
+          name: 'current_time',
+          description: 'Returns the current date and time as an ISO 8601 string.',
+          schema: z.object({}),
+        }));
+      } else if (ref.id === 'calculator') {
+        out.push(tool(async ({ expression }: { expression: string }) => String(safeEvalArithmetic(expression)), {
+          name: 'calculator',
+          description: 'Evaluates a basic arithmetic expression (+, -, *, /, parentheses).',
+          schema: z.object({ expression: z.string() }),
+        }));
+      }
+      // Unknown builtin id → skipped (forward-compatible).
+    } else {
+      const { method, name, description } = ref;
+      out.push(tool(
+        async ({ input }: { input: string }) => invoke(method, { input, runId: opts.runId, nodeId: opts.nodeId }),
+        { name, description, schema: z.object({ input: z.string() }) },
+      ));
+    }
+  }
+  return out;
 }
