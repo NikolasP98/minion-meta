@@ -10,6 +10,7 @@ import {
   type LLMNodeData,
   type PluginActionNodeData,
   type TransformNodeData,
+  type StructuredNodeData,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
 import { sendAgentTurn, callGatewayMethod } from '../gateway/client.js';
@@ -230,6 +231,26 @@ function buildNodeRunner(
     return async (state) => {
       const text = template.replaceAll('{input}', lastMessageContent(state));
       return { messages: [new HumanMessage(text)] };
+    };
+  }
+
+  // structured node — withStructuredOutput + JSON schema
+  if (node.type === 'structured') {
+    const data = node.data as StructuredNodeData;
+    const model: ChatModel = opts.model ?? resolveProviderModel(data.modelId ?? DEFAULT_MODEL);
+    return async (state) => {
+      let schema: Record<string, unknown>;
+      try {
+        schema = JSON.parse(data.schema || '{}');
+      } catch {
+        throw new UnsupportedFlowError(`Structured node "${node.id}" has invalid JSON schema.`);
+      }
+      const structuredModel = model.withStructuredOutput?.(schema) ?? model;
+      const response = await structuredModel.invoke(state.messages);
+      const content = typeof response.content === 'string'
+        ? response.content
+        : JSON.stringify(response.content ?? response);
+      return { messages: [new AIMessage(content)] };
     };
   }
 

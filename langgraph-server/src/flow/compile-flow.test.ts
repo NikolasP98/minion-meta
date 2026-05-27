@@ -375,3 +375,26 @@ describe('compileFlow — transform node', () => {
     expect(String(result.messages[result.messages.length - 1].content)).toBe('X:Hello:Y');
   });
 });
+
+describe('compileFlow — structured node', () => {
+  it('uses withStructuredOutput and stringifies the result', async () => {
+    const fakeModel = {
+      invoke: async () => new AIMessage('ignored'),
+      withStructuredOutput() {
+        return { async invoke() { return new AIMessage('{"name":"Ada"}'); } } as never;
+      },
+    };
+    const structured: FlowNode = { id: 's1', type: 'structured', position: { x: 0, y: 0 }, data: { modelId: 'm', schema: '{"type":"object"}', label: 'S' } as never };
+    const e1: FlowEdge = { id: 'e1', source: 'p1', sourceHandle: 'o', target: 's1', targetHandle: 'i', type: 'flow' };
+    const { graph, initialState } = compileFlow([prompt, structured], [e1], { model: fakeModel });
+    const result = await graph.invoke(initialState);
+    expect(String(result.messages[result.messages.length - 1].content)).toBe('{"name":"Ada"}');
+  });
+
+  it('throws on invalid JSON schema', () => {
+    const structured: FlowNode = { id: 's1', type: 'structured', position: { x: 0, y: 0 }, data: { modelId: 'm', schema: 'not json', label: 'S' } as never };
+    const e1: FlowEdge = { id: 'e1', source: 'p1', sourceHandle: 'o', target: 's1', targetHandle: 'i', type: 'flow' };
+    const { graph, initialState } = compileFlow([prompt, structured], [e1], { model: { invoke: async () => new AIMessage('x') } });
+    return expect(graph.invoke(initialState)).rejects.toThrow(UnsupportedFlowError);
+  });
+});
