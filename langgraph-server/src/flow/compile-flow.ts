@@ -362,7 +362,8 @@ function buildNodeRunner(
   // toolAgent node — ReAct tool-calling loop via createReactAgent
   if (node.type === 'toolAgent') {
     const data = node.data as ToolAgentNodeData;
-    const model: ChatModel = opts.model ?? resolveProviderModel(data.modelId ?? DEFAULT_MODEL);
+    // `||` (not `??`) so a freshly-dropped node's empty modelId falls back too.
+    const model: ChatModel = opts.model ?? resolveProviderModel(data.modelId || DEFAULT_MODEL);
     const factory = opts.reactAgentFactory ?? (createReactAgent as unknown as typeof opts.reactAgentFactory);
     return async (state) => {
       const tools = buildTools(data.tools ?? [], {
