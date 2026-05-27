@@ -16,17 +16,13 @@ import {
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
 import { sendAgentTurn, callGatewayMethod } from '../gateway/client.js';
+import RE2 from 're2';
 
 export const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 
-/** Cap regex-matched input length to bound catastrophic-backtracking (ReDoS) risk. */
+/** Memory bound on regex-matched input (the RE2 engine handles ReDoS-safety). */
 const MAX_REGEX_INPUT = 10_000;
-/**
- * Cap regex pattern length as defense-in-depth. NOTE: neither cap fully eliminates
- * ReDoS for adversarial patterns (a short pattern like (a+)+$ can still backtrack);
- * a linear-time engine (RE2) or a match timeout is the complete fix — tracked as a
- * follow-up. These caps bound the common case at near-zero cost.
- */
+/** Sanity bound on regex pattern length. */
 const MAX_REGEX_PATTERN = 1_000;
 
 const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router'] as const;
@@ -207,7 +203,9 @@ export function matchesRule(input: string, rule: { op: RouterRuleOp; value: stri
     case 'regex': {
       if (rule.value.length > MAX_REGEX_PATTERN) return false;
       try {
-        return new RegExp(rule.value).test(input.slice(0, MAX_REGEX_INPUT));
+        // RE2 is a linear-time engine (no catastrophic backtracking) — safe for
+        // flow-author-supplied patterns run against untrusted input.
+        return new RE2(rule.value).test(input.slice(0, MAX_REGEX_INPUT));
       } catch {
         return false;
       }
