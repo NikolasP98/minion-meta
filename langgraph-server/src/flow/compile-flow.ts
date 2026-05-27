@@ -142,6 +142,11 @@ export function compileFlow(
   type AnyGraph = {
     addNode: (name: string, fn: (s: typeof MessagesAnnotation.State) => Promise<{ messages: BaseMessage[] }>) => void;
     addEdge: (from: string, to: string) => void;
+    addConditionalEdges: (
+      source: string,
+      path: (s: typeof MessagesAnnotation.State) => Promise<string>,
+      pathMap: Record<string, string>,
+    ) => void;
     compile: () => ReturnType<typeof builder.compile>;
   };
   const g = builder as unknown as AnyGraph;
@@ -149,13 +154,29 @@ export function compileFlow(
   for (const node of processing) {
     g.addNode(node.id, buildNodeRunner(node, opts, runId));
   }
-  const hasOutgoing = new Set(flowEdges.map((e) => e.source));
+
+  const outgoing = new Map<string, FlowEdge[]>();
   for (const e of flowEdges) {
-    if (e.source === entryNode.id) g.addEdge(START, e.target);
-    else g.addEdge(e.source, e.target);
+    if (!outgoing.has(e.source)) outgoing.set(e.source, []);
+    outgoing.get(e.source)!.push(e);
   }
+
+  // Entry node's out-edges start the graph.
+  for (const e of outgoing.get(entryNode.id) ?? []) g.addEdge(START, e.target);
+
   for (const node of processing) {
-    if (!hasOutgoing.has(node.id)) g.addEdge(node.id, END);
+    const outs = outgoing.get(node.id) ?? [];
+    if (node.type === 'router') {
+      const pathMap: Record<string, string> = {};
+      for (const e of outs) pathMap[e.sourceHandle || 'default'] = e.target;
+      if (!pathMap.default) pathMap.default = END;
+      const connected = new Set(Object.keys(pathMap));
+      g.addConditionalEdges(node.id, buildRouterRoute(node, connected, opts), pathMap);
+    } else if (outs.length === 0) {
+      g.addEdge(node.id, END);
+    } else {
+      for (const e of outs) g.addEdge(node.id, e.target);
+    }
   }
 
   const graph = g.compile();

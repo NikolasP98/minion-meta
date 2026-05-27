@@ -450,3 +450,32 @@ describe('buildRouterRoute — llm mode', () => {
     expect(await buildRouterRoute(node, connected, { model: fakeModel })(stateWith('x'))).toBe('default');
   });
 });
+
+describe('compileFlow — router integration', () => {
+  const mkLlm = (id: string): FlowNode => ({ id, type: 'llm', position: { x: 0, y: 0 }, data: { modelId: 'm', label: id } });
+
+  it('rule router fires the matching branch only', async () => {
+    const invoked: string[] = [];
+    const fakeModel = { async invoke(msgs: BaseMessage[]) { invoked.push(String(msgs[msgs.length - 1].content)); return new AIMessage('out'); } };
+    const router: FlowNode = { id: 'r1', type: 'router', position: { x: 0, y: 0 }, data: { mode: 'rule', label: 'R', branches: [{ id: 'b1', label: 'A', rule: { op: 'contains', value: 'go-a' } }] } as never };
+    const a = mkLlm('na'); const b = mkLlm('nb');
+    const eIn: FlowEdge = { id: 'e0', source: 'p1', sourceHandle: 'o', target: 'r1', targetHandle: 'i', type: 'flow' };
+    const eA: FlowEdge = { id: 'ea', source: 'r1', sourceHandle: 'b1', target: 'na', targetHandle: 'i', type: 'flow' };
+    const eB: FlowEdge = { id: 'eb', source: 'r1', sourceHandle: 'default', target: 'nb', targetHandle: 'i', type: 'flow' };
+    const promptGoA: FlowNode = { id: 'p1', type: 'promptBox', position: { x: 0, y: 0 }, data: { label: 'P', value: 'please go-a now' } };
+    const { graph, initialState } = compileFlow([promptGoA, router, a, b], [eIn, eA, eB], { model: fakeModel });
+    await graph.invoke(initialState);
+    expect(invoked).toEqual(['please go-a now']); // only branch A's node ran
+  });
+
+  it('routes to default → END when nothing matches and default is unconnected', async () => {
+    const fakeModel = { async invoke() { return new AIMessage('x'); } };
+    const router: FlowNode = { id: 'r1', type: 'router', position: { x: 0, y: 0 }, data: { mode: 'rule', label: 'R', branches: [{ id: 'b1', label: 'A', rule: { op: 'contains', value: 'zzz' } }] } as never };
+    const a = mkLlm('na');
+    const eIn: FlowEdge = { id: 'e0', source: 'p1', sourceHandle: 'o', target: 'r1', targetHandle: 'i', type: 'flow' };
+    const eA: FlowEdge = { id: 'ea', source: 'r1', sourceHandle: 'b1', target: 'na', targetHandle: 'i', type: 'flow' };
+    const { graph, initialState } = compileFlow([prompt, router, a], [eIn, eA], { model: fakeModel });
+    const result = await graph.invoke(initialState);
+    expect(String(result.messages[result.messages.length - 1].content)).toBe('Hello'); // 'na' never ran
+  });
+});
