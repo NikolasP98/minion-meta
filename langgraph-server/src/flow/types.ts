@@ -60,9 +60,24 @@ export type StructuredNodeData = {
   label: string;
 };
 
+export type RouterRuleOp = 'contains' | 'equals' | 'regex';
+
+export type RouterBranch = {
+  id: string;
+  label: string;
+  rule?: { op: RouterRuleOp; value: string };
+};
+
+export type RouterNodeData = {
+  mode: 'rule' | 'llm';
+  modelId?: string;
+  branches: RouterBranch[];
+  label: string;
+};
+
 export type FlowNode = {
   id: string;
-  type: 'agent' | 'promptBox' | 'llm' | 'trigger' | 'pluginTrigger' | 'pluginAction' | 'transform' | 'structured';
+  type: 'agent' | 'promptBox' | 'llm' | 'trigger' | 'pluginTrigger' | 'pluginAction' | 'transform' | 'structured' | 'router';
   position: { x: number; y: number };
   data:
     | AgentNodeData
@@ -72,7 +87,8 @@ export type FlowNode = {
     | PluginTriggerNodeData
     | PluginActionNodeData
     | TransformNodeData
-    | StructuredNodeData;
+    | StructuredNodeData
+    | RouterNodeData;
 };
 
 export type FlowEdge = {

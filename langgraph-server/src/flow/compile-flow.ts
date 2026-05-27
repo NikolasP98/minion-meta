@@ -11,13 +11,14 @@ import {
   type PluginActionNodeData,
   type TransformNodeData,
   type StructuredNodeData,
+  type RouterNodeData,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
 import { sendAgentTurn, callGatewayMethod } from '../gateway/client.js';
 
 export const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 
-const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured'] as const;
+const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router'] as const;
 
 export function validateFlowShape(nodes: FlowNode[], edges: FlowEdge[]): void {
   const prompts = nodes.filter((n) => n.type === 'promptBox');
@@ -132,7 +133,7 @@ export function compileFlow(
 
   const processing = nodes.filter((n) =>
     n.type === 'llm' || n.type === 'agent' || n.type === 'pluginAction' ||
-    n.type === 'transform' || n.type === 'structured',
+    n.type === 'transform' || n.type === 'structured' || n.type === 'router',
   );
   const flowEdges = edges.filter((e) => e.type === 'flow');
 
@@ -252,6 +253,11 @@ function buildNodeRunner(
         : JSON.stringify(response.content ?? response);
       return { messages: [new AIMessage(content)] };
     };
+  }
+
+  // router node — routing happens on the conditional edge; the node itself is a pass-through.
+  if (node.type === 'router') {
+    return async () => ({ messages: [] });
   }
 
   // No runner exists for this node type yet — fail loudly rather than mis-casting.
