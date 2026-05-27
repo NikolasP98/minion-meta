@@ -11,6 +11,8 @@ export const profiles = pgTable('profiles', {
   id: uuid('id').primaryKey(), // == auth.users.id
   email: text('email').notNull(),
   displayName: text('display_name'),
+  // Public avatar URL (B2-served signed URL or external provider image).
+  avatarUrl: text('avatar_url'),
   role: text('role', { enum: ['user', 'admin'] })
     .notNull()
     .default('user'),
