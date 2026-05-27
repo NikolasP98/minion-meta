@@ -198,3 +198,70 @@ describe('compileFlow — trigger node', () => {
     expect(() => compileFlow([triggerNode, llmNode], [edgeFromTrigger], {})).toThrow(UnsupportedFlowError);
   });
 });
+
+// ── Plugin node types ─────────────────────────────────────────────────────────
+
+import type { PluginActionNodeData, PluginTriggerNodeData } from './types.js';
+
+const pluginAction: FlowNode = {
+  id: 'pa1', type: 'pluginAction', position: { x: 200, y: 0 },
+  data: { pluginId: 'flow-example', contributionId: 'echo', method: 'flowExample.echo', label: 'Example echo' } satisfies PluginActionNodeData,
+};
+const edgeToPluginAction: FlowEdge = {
+  id: 'e-pa', source: 'p1', sourceHandle: 'prompt-out', target: 'pa1', targetHandle: 'in', type: 'flow',
+};
+const pluginTrigger: FlowNode = {
+  id: 'pt1', type: 'pluginTrigger', position: { x: 0, y: 0 },
+  data: { pluginId: 'flow-example', contributionId: 'ping', event: 'flow-example:ping', label: 'Example ping', deliverResponse: false } satisfies PluginTriggerNodeData,
+};
+const edgeFromPluginTrigger: FlowEdge = {
+  id: 'e-pt', source: 'pt1', sourceHandle: 'out', target: 'l1', targetHandle: 'in', type: 'flow',
+};
+
+describe('validateFlowShape — plugin nodes', () => {
+  it('accepts promptBox → pluginAction', () => {
+    expect(() => validateFlowShape([prompt, pluginAction], [edgeToPluginAction])).not.toThrow();
+  });
+  it('accepts pluginTrigger → llm', () => {
+    expect(() => validateFlowShape([pluginTrigger, llmNode], [edgeFromPluginTrigger])).not.toThrow();
+  });
+  it('rejects pluginTrigger + promptBox together', () => {
+    const ep: FlowEdge = { id: 'ep', source: 'p1', sourceHandle: 'prompt-out', target: 'l1', targetHandle: 'in', type: 'flow' };
+    expect(() => validateFlowShape([pluginTrigger, prompt, llmNode], [edgeFromPluginTrigger, ep])).toThrow(UnsupportedFlowError);
+  });
+  it('rejects two execs: pluginAction + llm', () => {
+    expect(() => validateFlowShape([prompt, pluginAction, llmNode], [edgeToPluginAction, edgeToLlm])).toThrow(UnsupportedFlowError);
+  });
+});
+
+describe('compileFlow — pluginAction node', () => {
+  it('calls gatewayClient.callGatewayMethod with method + input and returns reply', async () => {
+    const calls: Array<{ method: string; params: Record<string, unknown> }> = [];
+    const fakeGateway = {
+      async sendAgentTurn() { return 'unused'; },
+      async callGatewayMethod(method: string, params: Record<string, unknown>) {
+        calls.push({ method, params });
+        return 'echo: Hello';
+      },
+    };
+    const { graph, initialState } = compileFlow([prompt, pluginAction], [edgeToPluginAction], { gatewayClient: fakeGateway });
+    const result = await graph.invoke(initialState);
+    expect(calls).toHaveLength(1);
+    expect(calls[0].method).toBe('flowExample.echo');
+    expect(calls[0].params.input).toBe('Hello');
+    expect(result.messages[result.messages.length - 1].content).toBe('echo: Hello');
+  });
+});
+
+describe('compileFlow — pluginTrigger node', () => {
+  it('requires initialPrompt and seeds it', async () => {
+    const fakeModel = { async invoke(msgs: BaseMessage[]) { return new AIMessage(`pt-echo:${String(msgs[msgs.length - 1].content)}`); } };
+    const { graph, initialState } = compileFlow([pluginTrigger, llmNode], [edgeFromPluginTrigger], { model: fakeModel, initialPrompt: 'evt' });
+    expect(initialState.messages[0].content).toBe('evt');
+    const result = await graph.invoke(initialState);
+    expect(result.messages[result.messages.length - 1].content).toBe('pt-echo:evt');
+  });
+  it('throws when pluginTrigger present but initialPrompt missing', () => {
+    expect(() => compileFlow([pluginTrigger, llmNode], [edgeFromPluginTrigger], {})).toThrow(UnsupportedFlowError);
+  });
+});

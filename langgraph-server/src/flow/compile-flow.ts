@@ -9,16 +9,17 @@ import {
   type PromptBoxData,
   type LLMNodeData,
   type TriggerNodeData,
+  type PluginActionNodeData,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
-import { sendAgentTurn } from '../gateway/client.js';
+import { sendAgentTurn, callGatewayMethod } from '../gateway/client.js';
 
 export const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 
 export function validateFlowShape(nodes: FlowNode[], edges: FlowEdge[]): void {
   const prompts = nodes.filter((n) => n.type === 'promptBox');
-  const triggers = nodes.filter((n) => n.type === 'trigger');
-  const execNodes = nodes.filter((n) => n.type === 'agent' || n.type === 'llm');
+  const triggers = nodes.filter((n) => n.type === 'trigger' || n.type === 'pluginTrigger');
+  const execNodes = nodes.filter((n) => n.type === 'agent' || n.type === 'llm' || n.type === 'pluginAction');
   const HINT = 'MVP runner supports exactly one Prompt (or Trigger) connected to one Agent or LLM node.';
 
   if (prompts.length > 0 && triggers.length > 0) {
@@ -67,6 +68,7 @@ interface GatewayClient {
     runId: string,
     nodeId: string,
   ): Promise<string>;
+  callGatewayMethod?(method: string, params: Record<string, unknown>): Promise<string>;
 }
 
 export interface CompileOptions {
@@ -85,12 +87,12 @@ export function compileFlow(
 ) {
   validateFlowShape(nodes, edges);
 
-  const entryNode = nodes.find((n) => n.type === 'promptBox' || n.type === 'trigger')!;
-  const execNode = nodes.find((n) => n.type === 'agent' || n.type === 'llm')!;
+  const entryNode = nodes.find((n) => n.type === 'promptBox' || n.type === 'trigger' || n.type === 'pluginTrigger')!;
+  const execNode = nodes.find((n) => n.type === 'agent' || n.type === 'llm' || n.type === 'pluginAction')!;
   const runId = randomUUID();
 
   let promptValue: string;
-  if (entryNode.type === 'trigger') {
+  if (entryNode.type === 'trigger' || entryNode.type === 'pluginTrigger') {
     if (!opts.initialPrompt) {
       throw new UnsupportedFlowError(
         'Trigger node requires an initialPrompt (event payload) — call via /flows/run-triggered.',
@@ -118,6 +120,23 @@ function buildExecNode(
   opts: CompileOptions,
   runId: string,
 ): (state: typeof MessagesAnnotation.State) => Promise<{ messages: BaseMessage[] }> {
+  // pluginAction node — call gateway method contributed by a plugin
+  if (node.type === 'pluginAction') {
+    const data = node.data as PluginActionNodeData;
+    const gc = opts.gatewayClient ?? { sendAgentTurn, callGatewayMethod };
+    return async (state) => {
+      const lastHuman = [...state.messages].reverse().find((m) => m._getType() === 'human');
+      if (!lastHuman) {
+        throw new Error('Plugin action node received no human message in state — cannot dispatch.');
+      }
+      const invoke = gc.callGatewayMethod ?? callGatewayMethod;
+      const reply = await invoke(data.method, {
+        input: String(lastHuman.content), runId, nodeId: node.id,
+      });
+      return { messages: [new AIMessage(reply)] };
+    };
+  }
+
   // llm node — direct model call
   if (node.type === 'llm') {
     const { modelId } = node.data as LLMNodeData;
