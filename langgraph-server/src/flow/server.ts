@@ -77,6 +77,51 @@ app.post('/flows/run', async (c) => {
   });
 });
 
+const TriggeredRunRequest = z.object({
+  flowId: z.string(),
+  prompt: z.string(),
+  eventPayload: z.record(z.string(), z.unknown()).optional(),
+  sessionKey: z.string().optional(),
+});
+
+app.post('/flows/run-triggered', async (c) => {
+  const parsed = TriggeredRunRequest.safeParse(await c.req.json().catch(() => null));
+  if (!parsed.success) {
+    return c.json({ error: 'Invalid request payload.' }, 400);
+  }
+  const { flowId, prompt } = parsed.data;
+
+  const HUB_URL = process.env.HUB_URL ?? 'http://localhost:5173';
+  const HUB_API_TOKEN = process.env.HUB_API_TOKEN ?? '';
+
+  let nodes: FlowNode[];
+  let edges: FlowEdge[];
+  try {
+    const res = await fetch(`${HUB_URL}/api/internal/flows/${flowId}`, {
+      headers: HUB_API_TOKEN ? { Authorization: `Bearer ${HUB_API_TOKEN}` } : {},
+    });
+    if (!res.ok) {
+      return c.json({ error: `Hub returned ${res.status} for flow ${flowId}` }, 502);
+    }
+    const body = (await res.json()) as { nodes: FlowNode[]; edges: FlowEdge[] };
+    nodes = body.nodes;
+    edges = body.edges;
+  } catch (err) {
+    return c.json({ error: `Hub unreachable: ${err instanceof Error ? err.message : String(err)}` }, 503);
+  }
+
+  try {
+    const { graph, initialState } = compileFlow(nodes, edges, { initialPrompt: prompt });
+    const result = await graph.invoke(initialState);
+    const lastMessage = result.messages[result.messages.length - 1];
+    const reply = String(lastMessage?.content ?? '');
+    return c.json({ reply });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return c.json({ error: `Flow run failed: ${message}` }, 500);
+  }
+});
+
 const port = Number(process.env.FLOWS_PORT ?? 2025);
 serve({ fetch: app.fetch, port });
 console.log(`[flows] listening on http://localhost:${port}`);
