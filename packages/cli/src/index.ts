@@ -14,6 +14,7 @@ import { infisicalCommand } from './commands/infisical.js';
 import { linkCommand } from './commands/link.js';
 import { listCommand } from './commands/list.js';
 import { branchCommand } from './commands/branch.js';
+import { pluginNewCommand } from './commands/plugin.js';
 
 /**
  * Build and parse the Commander program. Exits via `process.exit` inside each action
@@ -112,6 +113,19 @@ export async function main(argv: string[] = process.argv): Promise<number> {
 		.action(async (id: string) => {
 			process.exit(await branchCommand(id));
 		});
+
+	const plugin = program.command('plugin').description('Plugin authoring helpers');
+	plugin
+		.command('new')
+		.argument('<id>', 'plugin id (lowercase kebab-case)')
+		.option('-t, --template <template>', 'basic | channel | rpc', 'basic')
+		.option('-d, --description <text>', 'plugin description')
+		.option('--force', 'overwrite a non-empty target directory')
+		.action(
+			async (id: string, opts: { template?: string; description?: string; force?: boolean }) => {
+				process.exit(await pluginNewCommand(id, opts));
+			},
+		);
 
 	// Shorthand alias: `minion <id> <cmd...>` → run
 	const knownCommands = new Set(program.commands.map((c) => c.name()));
