@@ -11,7 +11,22 @@ const FlowRunRequest = z.object({
   nodes: z.array(
     z.object({
       id: z.string(),
-      type: z.enum(['agent', 'promptBox', 'llm']),
+      // Must mirror the FlowNode type union (and compile-flow's runners). The
+      // original enum only allowed agent/promptBox/llm, which rejected every
+      // flow built with the v2 / plugin nodes — including channel triggers and
+      // plugin-contributed actions.
+      type: z.enum([
+        'agent',
+        'promptBox',
+        'llm',
+        'trigger',
+        'pluginTrigger',
+        'pluginAction',
+        'transform',
+        'structured',
+        'router',
+        'toolAgent',
+      ]),
       position: z.object({ x: z.number(), y: z.number() }),
       data: z.record(z.string(), z.unknown()),
     }),
@@ -27,6 +42,9 @@ const FlowRunRequest = z.object({
       label: z.string().optional(),
     }),
   ),
+  // Optional seed input for trigger-entry flows run manually from the editor —
+  // without it a pluginTrigger/trigger entry starts with empty input.
+  prompt: z.string().optional(),
 });
 
 const app = new Hono();
@@ -51,7 +69,9 @@ app.post('/flows/run', async (c) => {
 
     try {
       await send({ level: 'info', message: 'Starting flow run…' });
-      const { graph, initialState } = compileFlow(nodes, edges);
+      const { graph, initialState } = compileFlow(nodes, edges, {
+        initialPrompt: parsed.data.prompt,
+      });
       await send({ level: 'debug', message: 'Compiled flow to StateGraph.' });
 
       for await (const chunk of await graph.stream(initialState, {
