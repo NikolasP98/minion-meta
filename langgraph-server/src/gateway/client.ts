@@ -31,20 +31,26 @@ function connect() {
     try { frame = JSON.parse(raw.toString()) as Frame; } catch { return; }
 
     if (frame.type === 'event' && frame.event === 'connect.challenge') {
-      const challenge = (frame.payload as { challenge: string }).challenge;
       const id = randomUUID();
-      // The gateway's connect schema requires minProtocol/maxProtocol
-      // (PROTOCOL_VERSION = 3); without them it rejects with INVALID_REQUEST
-      // ("must have required property 'minProtocol'") and the WS never
-      // authenticates — breaking pluginAction gateway callbacks.
+      // Connect frame must match the gateway's ConnectParamsSchema
+      // (protocol/schema/frames.ts, PROTOCOL_VERSION = 3): minProtocol/maxProtocol
+      // at root, a required `client` object {id,version,platform,mode}, and the
+      // token (if any) nested under `auth`. The challenge is NOT echoed back —
+      // additionalProperties:false rejects unknown keys. Omit `auth` entirely
+      // for localhost no-auth (gateway bound to 127.0.0.1 needs no token).
       ws!.send(JSON.stringify({
         id, type: 'req', method: 'connect',
         params: {
-          token: GATEWAY_TOKEN,
-          challenge,
           minProtocol: GATEWAY_PROTOCOL_VERSION,
           maxProtocol: GATEWAY_PROTOCOL_VERSION,
-          clientInfo: { name: 'langgraph-flows-runner' },
+          client: {
+            id: 'gateway-client',
+            version: 'dev',
+            platform: 'node',
+            mode: 'backend',
+            instanceId: randomUUID(),
+          },
+          ...(GATEWAY_TOKEN ? { auth: { token: GATEWAY_TOKEN } } : {}),
         },
       } satisfies RequestFrame));
       return;
