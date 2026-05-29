@@ -12,6 +12,8 @@ type Frame = RequestFrame | ResponseFrame | EventFrame;
 
 const GATEWAY_URL = process.env.GATEWAY_URL ?? '';
 const GATEWAY_TOKEN = process.env.GATEWAY_TOKEN ?? '';
+// Must match the gateway's PROTOCOL_VERSION (minion protocol-schemas.ts).
+const GATEWAY_PROTOCOL_VERSION = 3;
 
 let ws: WebSocket | null = null;
 let reconnectDelay = 1_000;
@@ -31,9 +33,19 @@ function connect() {
     if (frame.type === 'event' && frame.event === 'connect.challenge') {
       const challenge = (frame.payload as { challenge: string }).challenge;
       const id = randomUUID();
+      // The gateway's connect schema requires minProtocol/maxProtocol
+      // (PROTOCOL_VERSION = 3); without them it rejects with INVALID_REQUEST
+      // ("must have required property 'minProtocol'") and the WS never
+      // authenticates — breaking pluginAction gateway callbacks.
       ws!.send(JSON.stringify({
         id, type: 'req', method: 'connect',
-        params: { token: GATEWAY_TOKEN, challenge },
+        params: {
+          token: GATEWAY_TOKEN,
+          challenge,
+          minProtocol: GATEWAY_PROTOCOL_VERSION,
+          maxProtocol: GATEWAY_PROTOCOL_VERSION,
+          clientInfo: { name: 'langgraph-flows-runner' },
+        },
       } satisfies RequestFrame));
       return;
     }
