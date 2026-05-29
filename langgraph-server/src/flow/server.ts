@@ -143,5 +143,10 @@ app.post('/flows/run-triggered', async (c) => {
 });
 
 const port = Number(process.env.FLOWS_PORT ?? 2025);
-serve({ fetch: app.fetch, port });
-console.log(`[flows] listening on http://localhost:${port}`);
+// Bind to loopback by default: the runner is reached only by the co-located
+// gateway (localhost) and executes flows + calls gateway methods, so it must
+// NOT be world-reachable. Override with FLOWS_HOST only if you intentionally
+// expose it behind an authenticating proxy.
+const hostname = process.env.FLOWS_HOST ?? '127.0.0.1';
+serve({ fetch: app.fetch, port, hostname });
+console.log(`[flows] listening on http://${hostname}:${port}`);
