@@ -1,29 +1,115 @@
 import WebSocket from 'ws';
 import { randomUUID } from 'node:crypto';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import {
+  buildDeviceAuthPayload,
+  loadOrCreateDeviceIdentity,
+  publicKeyRawBase64UrlFromPem,
+  signDevicePayload,
+  type DeviceIdentity,
+} from './device-identity.js';
 
 // ── Frame protocol (mirrors minion gateway frame types) ──────────────────────
+// Response frames carry `ok` + `payload`, with `error` as an object {code,message}.
 
 type RequestFrame = { id: string; type: 'req'; method: string; params?: unknown };
-type ResponseFrame = { id: string; type: 'res'; result?: unknown; error?: string };
+type ResponseFrame = {
+  id: string;
+  type: 'res';
+  ok?: boolean;
+  payload?: unknown;
+  error?: { code?: string; message?: string };
+};
 type EventFrame = { type: 'event'; event: string; payload?: unknown };
 type Frame = RequestFrame | ResponseFrame | EventFrame;
 
 // ── Singleton WS connection ───────────────────────────────────────────────────
 
 const GATEWAY_URL = process.env.GATEWAY_URL ?? '';
-const GATEWAY_TOKEN = process.env.GATEWAY_TOKEN ?? '';
 // Must match the gateway's PROTOCOL_VERSION (minion protocol-schemas.ts).
 const GATEWAY_PROTOCOL_VERSION = 3;
+// Connect identity — must satisfy the gateway's GATEWAY_CLIENT_NAMES / MODES /
+// role / scope enums. `operator` + `operator.admin` is the broad backend role
+// the canonical minion GatewayClient uses by default.
+const CLIENT_ID = 'gateway-client';
+const CLIENT_MODE = 'backend';
+const CLIENT_ROLE = 'operator';
+const CLIENT_SCOPES = ['operator.admin'];
+
+/**
+ * Resolve the gateway shared-secret token. Prefer GATEWAY_TOKEN, but fall back to
+ * reading it out of the gateway's own config on the same host so the secret never
+ * has to be duplicated into the runner's environment. The gateway's auth.mode is
+ * `token`, so a token is required even over loopback.
+ */
+function resolveGatewayToken(): string {
+  const fromEnv = process.env.GATEWAY_TOKEN?.trim();
+  if (fromEnv) return fromEnv;
+  const stateDir = process.env.MINION_STATE_DIR?.trim() || path.join(os.homedir(), '.minion');
+  try {
+    const raw = fs.readFileSync(path.join(stateDir, 'gateway.json'), 'utf8');
+    const token = (JSON.parse(raw) as { gateway?: { auth?: { token?: unknown } } })?.gateway?.auth
+      ?.token;
+    return typeof token === 'string' ? token : '';
+  } catch {
+    return '';
+  }
+}
+
+const GATEWAY_TOKEN = resolveGatewayToken();
+const deviceIdentity: DeviceIdentity = loadOrCreateDeviceIdentity();
 
 let ws: WebSocket | null = null;
+let authed = false;
 let reconnectDelay = 1_000;
 const pending = new Map<
   string,
   { resolve: (v: unknown) => void; reject: (e: Error) => void }
 >();
 
+function buildConnectParams(nonce: string | null): Record<string, unknown> {
+  const signedAtMs = Date.now();
+  const token = GATEWAY_TOKEN || null;
+  const payload = buildDeviceAuthPayload({
+    deviceId: deviceIdentity.deviceId,
+    clientId: CLIENT_ID,
+    clientMode: CLIENT_MODE,
+    role: CLIENT_ROLE,
+    scopes: CLIENT_SCOPES,
+    signedAtMs,
+    token,
+    nonce,
+  });
+  return {
+    minProtocol: GATEWAY_PROTOCOL_VERSION,
+    maxProtocol: GATEWAY_PROTOCOL_VERSION,
+    client: {
+      id: CLIENT_ID,
+      version: 'dev',
+      platform: 'node',
+      mode: CLIENT_MODE,
+      instanceId: randomUUID(),
+    },
+    role: CLIENT_ROLE,
+    scopes: CLIENT_SCOPES,
+    ...(GATEWAY_TOKEN ? { auth: { token: GATEWAY_TOKEN } } : {}),
+    // Signed device identity — the gateway auto-pairs local (loopback) devices
+    // silently, so presenting a valid signature is sufficient over 127.0.0.1.
+    device: {
+      id: deviceIdentity.deviceId,
+      publicKey: publicKeyRawBase64UrlFromPem(deviceIdentity.publicKeyPem),
+      signature: signDevicePayload(deviceIdentity.privateKeyPem, payload),
+      signedAt: signedAtMs,
+      ...(nonce ? { nonce } : {}),
+    },
+  };
+}
+
 function connect() {
   if (!GATEWAY_URL) return;
+  authed = false;
   ws = new WebSocket(GATEWAY_URL);
 
   ws.on('message', (raw) => {
@@ -31,28 +117,29 @@ function connect() {
     try { frame = JSON.parse(raw.toString()) as Frame; } catch { return; }
 
     if (frame.type === 'event' && frame.event === 'connect.challenge') {
+      const payload = frame.payload as { nonce?: unknown } | undefined;
+      const nonce = payload && typeof payload.nonce === 'string' ? payload.nonce : null;
       const id = randomUUID();
-      // Connect frame must match the gateway's ConnectParamsSchema
-      // (protocol/schema/frames.ts, PROTOCOL_VERSION = 3): minProtocol/maxProtocol
-      // at root, a required `client` object {id,version,platform,mode}, and the
-      // token (if any) nested under `auth`. The challenge is NOT echoed back —
-      // additionalProperties:false rejects unknown keys. Omit `auth` entirely
-      // for localhost no-auth (gateway bound to 127.0.0.1 needs no token).
-      ws!.send(JSON.stringify({
-        id, type: 'req', method: 'connect',
-        params: {
-          minProtocol: GATEWAY_PROTOCOL_VERSION,
-          maxProtocol: GATEWAY_PROTOCOL_VERSION,
-          client: {
-            id: 'gateway-client',
-            version: 'dev',
-            platform: 'node',
-            mode: 'backend',
-            instanceId: randomUUID(),
-          },
-          ...(GATEWAY_TOKEN ? { auth: { token: GATEWAY_TOKEN } } : {}),
+      // Track the connect request so we learn whether the handshake (hello-ok)
+      // actually succeeded, rather than assuming connection on socket-open.
+      pending.set(id, {
+        resolve: () => {
+          authed = true;
         },
-      } satisfies RequestFrame));
+        reject: (e) => {
+          authed = false;
+          console.error(`[gateway] connect handshake failed: ${e.message}`);
+          ws?.close(1008, 'connect failed');
+        },
+      });
+      ws!.send(
+        JSON.stringify({
+          id,
+          type: 'req',
+          method: 'connect',
+          params: buildConnectParams(nonce),
+        } satisfies RequestFrame),
+      );
       return;
     }
 
@@ -60,8 +147,11 @@ function connect() {
       const p = pending.get(frame.id);
       if (!p) return;
       pending.delete(frame.id);
-      if (frame.error) p.reject(new Error(frame.error));
-      else p.resolve(frame.result);
+      if (frame.ok === false || (frame.ok === undefined && frame.error)) {
+        p.reject(new Error(frame.error?.message ?? 'unknown gateway error'));
+      } else {
+        p.resolve(frame.payload);
+      }
     }
   });
 
@@ -69,6 +159,7 @@ function connect() {
 
   ws.on('close', () => {
     ws = null;
+    authed = false;
     reconnectDelay = Math.min(reconnectDelay * 2, 30_000);
     if (GATEWAY_URL) setTimeout(connect, reconnectDelay);
   });
@@ -81,7 +172,7 @@ if (GATEWAY_URL) connect();
 // ── Public helpers ─────────────────────────────────────────────────────────────
 
 export function isConnected(): boolean {
-  return ws !== null && ws.readyState === WebSocket.OPEN;
+  return ws !== null && ws.readyState === WebSocket.OPEN && authed;
 }
 
 export async function request(method: string, params?: unknown): Promise<unknown> {
