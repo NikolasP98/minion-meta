@@ -276,9 +276,12 @@ function buildNodeRunner(
   if (node.type === 'pluginAction') {
     const data = node.data as PluginActionNodeData;
     const invoke = opts.gatewayClient?.callGatewayMethod ?? callGatewayMethod;
+    // Forward the node's declared config values (from the editor form) as
+    // `config` so the gateway method can read them (e.g. model, minSeverity).
+    const config = data.config ?? {};
     return async (state) => {
       const input = lastMessageContent(state);
-      const reply = await invoke(data.method, { input, runId, nodeId: node.id });
+      const reply = await invoke(data.method, { input, runId, nodeId: node.id, config });
       return { messages: [new AIMessage(reply)] };
     };
   }

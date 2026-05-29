@@ -47,6 +47,9 @@ export type PluginActionNodeData = {
   contributionId: string;
   method: string;
   label: string;
+  /** Values for the contribution's declared config fields; forwarded as params
+   *  to the gateway method alongside the upstream input. */
+  config?: Record<string, unknown>;
 };
 
 export type TransformNodeData = {
