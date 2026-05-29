@@ -3,7 +3,6 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { streamSSE } from 'hono/streaming';
 import { z } from 'zod';
-import { AIMessage } from '@langchain/core/messages';
 import { compileFlow } from './compile-flow.js';
 import { UnsupportedFlowError, type FlowNode, type FlowEdge, type FlowRunEvent } from './types.js';
 
@@ -56,7 +55,14 @@ app.post('/flows/run', async (c) => {
   const parsed = FlowRunRequest.safeParse(await c.req.json().catch(() => null));
 
   return streamSSE(c, async (stream) => {
-    const send = (e: FlowRunEvent) => stream.writeSSE({ data: JSON.stringify(e) });
+    // Serialize all SSE writes through one promise chain so node-lifecycle
+    // events (emitted synchronously from inside node execution) flush in the
+    // order they were produced without interleaving.
+    let writeChain: Promise<void> = Promise.resolve();
+    const send = (e: FlowRunEvent): Promise<void> => {
+      writeChain = writeChain.then(() => stream.writeSSE({ data: JSON.stringify(e) }));
+      return writeChain;
+    };
 
     if (!parsed.success) {
       await send({ level: 'error', message: 'Invalid flow payload.' });
@@ -68,30 +74,25 @@ app.post('/flows/run', async (c) => {
     const edges = parsed.data.edges as FlowEdge[];
 
     try {
-      await send({ level: 'info', message: 'Starting flow run…' });
+      await send({ level: 'info', kind: 'run-start', message: 'Starting flow run…', ts: Date.now() });
       const { graph, initialState } = compileFlow(nodes, edges, {
         initialPrompt: parsed.data.prompt,
+        // Per-node lifecycle (start/end/error with input+output) streams live.
+        emit: (e) => void send(e),
       });
       await send({ level: 'debug', message: 'Compiled flow to StateGraph.' });
 
-      for await (const chunk of await graph.stream(initialState, {
-        streamMode: 'values',
-      })) {
-        const messages = (chunk as typeof import('@langchain/langgraph').MessagesAnnotation.State).messages ?? [];
-        const last = messages[messages.length - 1];
-        if (last instanceof AIMessage && last.content) {
-          await send({ level: 'info', message: String(last.content) });
-        }
-      }
+      await graph.invoke(initialState);
 
-      await send({ level: 'info', message: 'Flow run complete.' });
+      await send({ level: 'info', kind: 'run-end', message: 'Flow run complete.', ts: Date.now() });
     } catch (err) {
       const message =
         err instanceof UnsupportedFlowError
           ? err.message
           : `Flow run failed: ${err instanceof Error ? err.message : String(err)}`;
-      await send({ level: 'error', message });
+      await send({ level: 'error', kind: 'run-end', message, ts: Date.now() });
     } finally {
+      await writeChain; // flush every queued write before signalling done
       await stream.writeSSE({ event: 'done', data: '{}' });
     }
   });

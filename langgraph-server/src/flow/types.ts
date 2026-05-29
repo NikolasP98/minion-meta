@@ -116,11 +116,35 @@ export type FlowEdge = {
   label?: string;
 };
 
-/** One streamed line of execution feedback, sent to the hub console. */
+/**
+ * One streamed unit of execution feedback, sent to the hub console.
+ *
+ * `kind` distinguishes plain log lines from node lifecycle events so the hub
+ * can show which node is running and its input/output. Older consumers that
+ * only read `{level, message}` still work (those fields are always present).
+ */
+export type FlowRunEventKind =
+  | 'run-start'
+  | 'node-start'
+  | 'node-end'
+  | 'node-error'
+  | 'run-end'
+  | 'log';
+
 export type FlowRunEvent = {
   level: 'info' | 'warn' | 'error' | 'debug';
   message: string;
   nodeId?: string;
+  /** Lifecycle classification; absent/`'log'` for plain log lines. */
+  kind?: FlowRunEventKind;
+  /** Node identity (for node-* kinds). */
+  nodeType?: string;
+  nodeLabel?: string;
+  /** Node I/O content (node-start carries input; node-end carries both). */
+  input?: string;
+  output?: string;
+  /** Epoch ms when emitted. */
+  ts?: number;
 };
 
 /** Thrown when a flow is not a shape the MVP runner can execute. */

@@ -15,6 +15,7 @@ import {
   type RouterNodeData,
   type RouterRuleOp,
   type ToolAgentNodeData,
+  type FlowRunEvent,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
 import { sendAgentTurn, callGatewayMethod } from '../gateway/client.js';
@@ -125,6 +126,47 @@ export interface CompileOptions {
       config?: { recursionLimit?: number },
     ): Promise<{ messages: BaseMessage[] }>;
   };
+  /**
+   * Per-node lifecycle sink. When provided, each processing node emits
+   * node-start (with its input) before running and node-end (with input +
+   * output) after, or node-error on throw — so callers can show live progress.
+   */
+  emit?: (event: FlowRunEvent) => void;
+}
+
+/** Human label for a node — its editor label, falling back to the type. */
+function nodeLabelOf(node: FlowNode): string {
+  const label = (node.data as { label?: unknown })?.label;
+  return typeof label === 'string' && label.trim() ? label : node.type;
+}
+
+/**
+ * Wrap a node runner so it emits node-start/node-end/node-error around
+ * execution. No-op passthrough when no sink is configured.
+ */
+function instrumentNode(
+  node: FlowNode,
+  run: (state: typeof MessagesAnnotation.State) => Promise<{ messages: BaseMessage[] }>,
+  emit?: (event: FlowRunEvent) => void,
+): (state: typeof MessagesAnnotation.State) => Promise<{ messages: BaseMessage[] }> {
+  if (!emit) return run;
+  const nodeLabel = nodeLabelOf(node);
+  const base = { nodeId: node.id, nodeType: node.type, nodeLabel } as const;
+  return async (state) => {
+    const input = lastMessageContent(state);
+    emit({ ...base, kind: 'node-start', level: 'info', input, message: `▶ ${nodeLabel}`, ts: Date.now() });
+    try {
+      const result = await run(state);
+      const out = result?.messages?.[result.messages.length - 1];
+      const output = out ? String(out.content) : '';
+      emit({ ...base, kind: 'node-end', level: 'info', input, output, message: `✓ ${nodeLabel}`, ts: Date.now() });
+      return result;
+    } catch (err) {
+      const detail = err instanceof Error ? err.message : String(err);
+      emit({ ...base, kind: 'node-error', level: 'error', input, message: `✗ ${nodeLabel}: ${detail}`, ts: Date.now() });
+      throw err;
+    }
+  };
 }
 
 export function compileFlow(
@@ -172,7 +214,7 @@ export function compileFlow(
   const g = builder as unknown as AnyGraph;
 
   for (const node of processing) {
-    g.addNode(node.id, buildNodeRunner(node, opts, runId));
+    g.addNode(node.id, instrumentNode(node, buildNodeRunner(node, opts, runId), opts.emit));
   }
 
   const outgoing = new Map<string, FlowEdge[]>();
@@ -201,7 +243,7 @@ export function compileFlow(
 
   const graph = g.compile();
   const initialState = { messages: [new HumanMessage(promptValue)] };
-  return { graph, initialState };
+  return { graph, initialState, runId };
 }
 
 /** A processing node's input = the content of the most recent message in state. */
