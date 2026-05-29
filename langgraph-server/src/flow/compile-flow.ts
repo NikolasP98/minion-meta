@@ -271,17 +271,23 @@ export function matchesRule(input: string, rule: { op: RouterRuleOp; value: stri
 
 async function classifyWithLlm(input: string, data: RouterNodeData, opts: CompileOptions): Promise<string> {
   const model: ChatModel = opts.model ?? resolveProviderModel(data.modelId ?? DEFAULT_MODEL);
+  // Build a deduped label list, carrying each branch's description (rubric) so
+  // the model classifies against the conditions, not just bare label names.
   const seen = new Set<string>();
-  const labels: string[] = [];
-  for (const lbl of [...data.branches.map((b) => b.label), 'default']) {
-    const key = lbl.toLowerCase();
+  const lines: string[] = [];
+  for (const b of data.branches) {
+    const key = b.label.toLowerCase();
     if (seen.has(key)) continue;
     seen.add(key);
-    labels.push(lbl);
+    const desc = b.description?.trim();
+    lines.push(desc ? `- ${b.label}: ${desc}` : `- ${b.label}`);
+  }
+  if (!seen.has('default')) {
+    lines.push('- default: none of the above');
   }
   const sys =
-    `Classify the input into exactly one of these labels: ${labels.join(', ')}. ` +
-    `Reply with ONLY the label, nothing else.`;
+    `Classify the input into exactly one of the following labels based on its description. ` +
+    `Reply with ONLY the label, nothing else.\n${lines.join('\n')}`;
   const res = await model.invoke([new SystemMessage(sys), new HumanMessage(input)]);
   const answer = String(res.content).trim().toLowerCase();
   const match = data.branches.find((b) => b.label.toLowerCase() === answer);
