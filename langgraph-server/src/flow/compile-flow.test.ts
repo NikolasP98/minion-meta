@@ -177,6 +177,34 @@ describe('validateFlowShape — trigger nodes', () => {
   });
 });
 
+describe('validateFlowShape — orphaned entry nodes are ignored', () => {
+  // Repro: a user drops a stray trigger / extra prompt box on the canvas next to
+  // a valid promptBox→agent flow and never wires them. The orphans must not break
+  // the flow ("A flow cannot have both a trigger and a prompt box.").
+  const orphanTrigger: FlowNode = {
+    id: 'orphan-t', type: 'trigger', position: { x: 0, y: 400 },
+    data: { event: 'message:received', label: 'Stray', deliverResponse: false } satisfies TriggerNodeData,
+  };
+  const orphanPrompt: FlowNode = {
+    id: 'orphan-p', type: 'promptBox', position: { x: 0, y: 500 }, data: { label: 'Stray', value: '' },
+  };
+
+  it('ignores an orphaned (unwired) trigger when a prompt box is the real entry', () => {
+    expect(() => validateFlowShape([prompt, agent, orphanTrigger], [edge])).not.toThrow();
+  });
+  it('ignores an orphaned (unwired) second prompt box', () => {
+    expect(() => validateFlowShape([prompt, agent, orphanPrompt], [edge])).not.toThrow();
+  });
+  it('ignores both a stray trigger AND a stray prompt box at once', () => {
+    expect(() => validateFlowShape([prompt, agent, orphanTrigger, orphanPrompt], [edge])).not.toThrow();
+  });
+  it('still rejects when BOTH a trigger and a prompt box are wired in', () => {
+    const edgePrompt: FlowEdge = { id: 'ep2', source: 'p1', sourceHandle: 'prompt-out', target: 'a1', targetHandle: 'in', type: 'flow' };
+    const edgeTrig: FlowEdge = { id: 'et2', source: 'orphan-t', sourceHandle: 'out', target: 'a1', targetHandle: 'in', type: 'flow' };
+    expect(() => validateFlowShape([prompt, agent, orphanTrigger], [edgePrompt, edgeTrig])).toThrow(UnsupportedFlowError);
+  });
+});
+
 describe('compileFlow — trigger node', () => {
   it('uses initialPrompt from opts when trigger node is present', async () => {
     const fakeModel = {

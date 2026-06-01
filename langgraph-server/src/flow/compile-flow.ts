@@ -34,9 +34,26 @@ const MAX_REGEX_PATTERN = 1_000;
 
 const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent'] as const;
 
+/**
+ * Entry nodes that are actually wired into the flow (i.e. they source a `flow`
+ * edge). A prompt/trigger node a user dropped on the canvas but never connected
+ * is an orphan — it must NOT count toward the entry-node checks, otherwise a
+ * single stray node breaks an otherwise-valid flow ("cannot have both…",
+ * "expected exactly 1…").
+ */
+export function wiredEntryNodes(nodes: FlowNode[], edges: FlowEdge[]): FlowNode[] {
+  const flowSources = new Set(edges.filter((e) => e.type === 'flow').map((e) => e.source));
+  return nodes.filter(
+    (n) =>
+      (n.type === 'promptBox' || n.type === 'trigger' || n.type === 'pluginTrigger') &&
+      flowSources.has(n.id),
+  );
+}
+
 export function validateFlowShape(nodes: FlowNode[], edges: FlowEdge[]): void {
-  const prompts = nodes.filter((n) => n.type === 'promptBox');
-  const triggers = nodes.filter((n) => n.type === 'trigger' || n.type === 'pluginTrigger');
+  const entries = wiredEntryNodes(nodes, edges);
+  const prompts = entries.filter((n) => n.type === 'promptBox');
+  const triggers = entries.filter((n) => n.type === 'trigger' || n.type === 'pluginTrigger');
   const processing = nodes.filter((n) => (PROCESSING_TYPES as readonly string[]).includes(n.type));
 
   if (prompts.length > 0 && triggers.length > 0) {
@@ -44,7 +61,7 @@ export function validateFlowShape(nodes: FlowNode[], edges: FlowEdge[]): void {
   }
   const entryNodes = [...prompts, ...triggers];
   if (entryNodes.length !== 1) {
-    throw new UnsupportedFlowError(`Expected exactly 1 prompt or trigger node, found ${entryNodes.length}.`);
+    throw new UnsupportedFlowError(`Expected exactly 1 connected prompt or trigger node, found ${entryNodes.length}.`);
   }
   if (processing.length < 1) {
     throw new UnsupportedFlowError('Flow needs at least one processing node.');
@@ -176,9 +193,8 @@ export function compileFlow(
 ) {
   validateFlowShape(nodes, edges);
 
-  const entryNode = nodes.find(
-    (n) => n.type === 'promptBox' || n.type === 'trigger' || n.type === 'pluginTrigger',
-  )!;
+  // Pick the wired entry (matches validateFlowShape), never an orphaned node.
+  const entryNode = wiredEntryNodes(nodes, edges)[0]!;
   const runId = randomUUID();
 
   let promptValue: string;
