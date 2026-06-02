@@ -15,10 +15,11 @@ import {
   type RouterNodeData,
   type RouterRuleOp,
   type ToolAgentNodeData,
+  type ChannelNodeData,
   type FlowRunEvent,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
-import { sendAgentTurn, callGatewayMethod } from '../gateway/client.js';
+import { sendAgentTurn, callGatewayMethod, sendChannelMessage, type ChannelSendResult } from '../gateway/client.js';
 import { buildTools } from './tools.js';
 import RE2 from 're2';
 
@@ -32,7 +33,7 @@ const MAX_REGEX_INPUT = 10_000;
 /** Sanity bound on regex pattern length. */
 const MAX_REGEX_PATTERN = 1_000;
 
-const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent'] as const;
+const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent', 'channel'] as const;
 
 /**
  * Entry nodes that are actually wired into the flow (i.e. they source a `flow`
@@ -127,6 +128,15 @@ interface GatewayClient {
     nodeId: string,
   ): Promise<string>;
   callGatewayMethod?(method: string, params: Record<string, unknown>): Promise<string>;
+  sendChannelMessage?(
+    channel: string,
+    to: string,
+    message: string,
+    accountId: string | undefined,
+    runId: string,
+    nodeId: string,
+    index: number,
+  ): Promise<ChannelSendResult>;
 }
 
 export interface CompileOptions {
@@ -212,7 +222,7 @@ export function compileFlow(
   const processing = nodes.filter((n) =>
     n.type === 'llm' || n.type === 'agent' || n.type === 'pluginAction' ||
     n.type === 'transform' || n.type === 'structured' || n.type === 'router' ||
-    n.type === 'toolAgent',
+    n.type === 'toolAgent' || n.type === 'channel',
   );
   const flowEdges = edges.filter((e) => e.type === 'flow');
 
@@ -347,6 +357,45 @@ function buildNodeRunner(
       const input = lastMessageContent(state);
       const reply = await invoke(data.method, { input, runId, nodeId: node.id, config });
       return { messages: [new AIMessage(reply)] };
+    };
+  }
+
+  // channel node — built-in delivery of the upstream message to one or more
+  // destinations on a chosen channel, via the gateway `send` RPC. Not tied to a
+  // plugin: the gateway routes by `channel` to the right channel implementation.
+  if (node.type === 'channel') {
+    const data = node.data as ChannelNodeData;
+    const invoke = opts.gatewayClient?.sendChannelMessage ?? sendChannelMessage;
+    const destinations = Array.isArray(data.destinations) ? data.destinations : [];
+    return async (state) => {
+      const message = lastMessageContent(state);
+      if (!data.channel) {
+        throw new UnsupportedFlowError(`Channel node "${node.id}" has no channel selected.`);
+      }
+      if (destinations.length === 0) {
+        throw new UnsupportedFlowError(`Channel node "${node.id}" has no destinations.`);
+      }
+      const results: Array<ChannelSendResult & { to: string }> = [];
+      for (let i = 0; i < destinations.length; i++) {
+        const to = (destinations[i]?.to ?? '').trim();
+        if (!to) {
+          results.push({ to: '', ok: false, error: 'empty destination' });
+          continue;
+        }
+        const r = await invoke(data.channel, to, message, data.accountId, runId, node.id, i);
+        results.push({ to, ...r });
+      }
+      const okCount = results.filter((r) => r.ok).length;
+      const failed = results.filter((r) => !r.ok);
+      const summary = `Sent to ${okCount}/${results.length} ${data.channel} destination(s).`;
+      const detail = failed.length
+        ? ` Failed: ${failed.map((r) => `${r.to || '(empty)'}${r.error ? ` — ${r.error}` : ''}`).join('; ')}`
+        : '';
+      // Total failure surfaces as a node error; partial success still completes.
+      if (okCount === 0) {
+        throw new Error(summary + detail);
+      }
+      return { messages: [new AIMessage(summary + detail)] };
     };
   }
 

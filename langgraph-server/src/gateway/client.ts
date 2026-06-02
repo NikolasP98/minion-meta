@@ -250,6 +250,42 @@ export async function sendAgentTurn(
   return reply;
 }
 
+/** Result of one channel-node delivery attempt. */
+export type ChannelSendResult = { ok: boolean; messageId?: string; error?: string };
+
+/**
+ * Deliver a message to one channel destination via the built-in gateway `send`
+ * RPC (channel-agnostic; the gateway routes to the right channel plugin). Unlike
+ * callGatewayMethod this does NOT expect a text reply — `send` returns a delivery
+ * receipt ({messageId, channel, …}) — and it never throws: a failed delivery is
+ * reported as `{ok:false, error}` so a channel node can report per-destination
+ * success without aborting the whole flow.
+ */
+export async function sendChannelMessage(
+  channel: string,
+  to: string,
+  message: string,
+  accountId: string | undefined,
+  runId: string,
+  nodeId: string,
+  index: number,
+): Promise<ChannelSendResult> {
+  try {
+    const result = await request('send', {
+      to,
+      message,
+      channel,
+      ...(accountId ? { accountId } : {}),
+      // Stable per-destination key so the gateway dedupes retries of the same run.
+      idempotencyKey: `flow:${runId}:${nodeId}:${index}`,
+    });
+    const messageId = (result as { messageId?: unknown } | null)?.messageId;
+    return { ok: true, messageId: typeof messageId === 'string' ? messageId : undefined };
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : String(err) };
+  }
+}
+
 export async function callGatewayMethod(
   method: string,
   params: Record<string, unknown>,

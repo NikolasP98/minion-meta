@@ -281,6 +281,80 @@ describe('compileFlow — pluginAction node', () => {
   });
 });
 
+const channelNode: FlowNode = {
+  id: 'ch1', type: 'channel', position: { x: 200, y: 0 },
+  data: {
+    channel: 'whatsapp',
+    label: 'WhatsApp',
+    destinations: [
+      { kind: 'custom', to: '+51922286663', label: 'Owner 1' },
+      { kind: 'user', to: '+51999999999', label: 'Renzo' },
+    ],
+  },
+};
+const edgeToChannel: FlowEdge = {
+  id: 'e-ch', source: 'p1', sourceHandle: 'prompt-out', target: 'ch1', targetHandle: 'in', type: 'flow',
+};
+
+describe('validateFlowShape — channel node', () => {
+  it('accepts promptBox → channel', () => {
+    expect(() => validateFlowShape([prompt, channelNode], [edgeToChannel])).not.toThrow();
+  });
+});
+
+describe('compileFlow — channel node', () => {
+  it('sends the upstream message to every destination via sendChannelMessage', async () => {
+    const calls: Array<{ channel: string; to: string; message: string; index: number }> = [];
+    const fakeGateway = {
+      async sendAgentTurn() { return 'unused'; },
+      async sendChannelMessage(
+        channel: string, to: string, message: string,
+        _accountId: string | undefined, _runId: string, _nodeId: string, index: number,
+      ) {
+        calls.push({ channel, to, message, index });
+        return { ok: true, messageId: `m-${index}` };
+      },
+    };
+    const { graph, initialState } = compileFlow([prompt, channelNode], [edgeToChannel], { gatewayClient: fakeGateway });
+    const result = await graph.invoke(initialState);
+    expect(calls).toHaveLength(2);
+    expect(calls.map((c) => c.to)).toEqual(['+51922286663', '+51999999999']);
+    expect(calls.every((c) => c.channel === 'whatsapp' && c.message === 'Hello')).toBe(true);
+    expect(String(result.messages[result.messages.length - 1].content)).toContain('Sent to 2/2');
+  });
+
+  it('completes with a partial-failure summary when some destinations fail', async () => {
+    const fakeGateway = {
+      async sendAgentTurn() { return 'unused'; },
+      async sendChannelMessage(_c: string, to: string) {
+        return to.endsWith('663') ? { ok: true } : { ok: false, error: 'unknown_channel' };
+      },
+    };
+    const { graph, initialState } = compileFlow([prompt, channelNode], [edgeToChannel], { gatewayClient: fakeGateway });
+    const result = await graph.invoke(initialState);
+    const out = String(result.messages[result.messages.length - 1].content);
+    expect(out).toContain('Sent to 1/2');
+    expect(out).toContain('Failed');
+  });
+
+  it('throws (node error) when every destination fails', async () => {
+    const fakeGateway = {
+      async sendAgentTurn() { return 'unused'; },
+      async sendChannelMessage() { return { ok: false, error: 'boom' }; },
+    };
+    const { graph, initialState } = compileFlow([prompt, channelNode], [edgeToChannel], { gatewayClient: fakeGateway });
+    await expect(graph.invoke(initialState)).rejects.toThrow(/Sent to 0\/2/);
+  });
+
+  it('throws UnsupportedFlowError when the channel node has no destinations', async () => {
+    const empty: FlowNode = { ...channelNode, data: { channel: 'whatsapp', label: 'WhatsApp', destinations: [] } };
+    const { graph, initialState } = compileFlow([prompt, empty], [edgeToChannel], {
+      gatewayClient: { async sendAgentTurn() { return 'x'; }, async sendChannelMessage() { return { ok: true }; } },
+    });
+    await expect(graph.invoke(initialState)).rejects.toThrow(UnsupportedFlowError);
+  });
+});
+
 describe('compileFlow — pluginTrigger node', () => {
   it('requires initialPrompt and seeds it', async () => {
     const fakeModel = { async invoke(msgs: BaseMessage[]) { return new AIMessage(`pt-echo:${String(msgs[msgs.length - 1].content)}`); } };

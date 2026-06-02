@@ -91,9 +91,32 @@ export type ToolAgentNodeData = {
   label: string;
 };
 
+/** One delivery target for a built-in channel node. */
+export type ChannelDestination = {
+  /** 'user' = chosen from the channel's registered directory; 'custom' = manual address. */
+  kind: 'user' | 'custom';
+  /** Channel-native address: WhatsApp E.164/JID, Telegram chat id, Discord user/channel id. */
+  to: string;
+  label?: string;
+};
+
+/**
+ * Built-in channel node — delivers the upstream message to one or more
+ * destinations on a chosen channel via the gateway `send` RPC. Not tied to any
+ * plugin (replaces per-plugin "send alert" actions with a generic primitive).
+ */
+export type ChannelNodeData = {
+  /** Channel id: 'whatsapp' | 'telegram' | 'discord' | … (any channel plugin). */
+  channel: string;
+  /** Optional sending account; defaults to the channel's default account. */
+  accountId?: string;
+  destinations: ChannelDestination[];
+  label: string;
+};
+
 export type FlowNode = {
   id: string;
-  type: 'agent' | 'promptBox' | 'llm' | 'trigger' | 'pluginTrigger' | 'pluginAction' | 'transform' | 'structured' | 'router' | 'toolAgent';
+  type: 'agent' | 'promptBox' | 'llm' | 'trigger' | 'pluginTrigger' | 'pluginAction' | 'transform' | 'structured' | 'router' | 'toolAgent' | 'channel';
   position: { x: number; y: number };
   data:
     | AgentNodeData
@@ -105,7 +128,8 @@ export type FlowNode = {
     | TransformNodeData
     | StructuredNodeData
     | RouterNodeData
-    | ToolAgentNodeData;
+    | ToolAgentNodeData
+    | ChannelNodeData;
 };
 
 export type FlowEdge = {

@@ -25,6 +25,7 @@ const FlowRunRequest = z.object({
         'structured',
         'router',
         'toolAgent',
+        'channel',
       ]),
       position: z.object({ x: z.number(), y: z.number() }),
       data: z.record(z.string(), z.unknown()),
