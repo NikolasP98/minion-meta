@@ -25,11 +25,26 @@ export type LLMNodeData = {
   label: string;
 };
 
+/** One inbound source for a Channel Trigger: channel + optional linked account. */
+export type ChannelTriggerSource = {
+  channel: string;
+  accountId?: string;
+};
+
 export type TriggerNodeData = {
-  event: 'message:received' | 'message:sent' | 'agent:bootstrap'
-        | 'memory:node_created' | 'memory:node_updated' | 'memory:node_deleted';
+  /** Channel-scoped events only (non-channel events don't belong on a Channel Trigger). */
+  event: 'message:received' | 'message:sent';
   label: string;
   deliverResponse: boolean;
+  /**
+   * Inbound sources (channel + optional account) this trigger listens on.
+   * Empty/absent = all channels. The gateway's trigger-manager does the filtering;
+   * the runner itself doesn't — it's structural here for type parity.
+   */
+  sources?: ChannelTriggerSource[];
+  /** @deprecated slice-1 multi-channel shape; superseded by `sources`. */
+  channels?: string[];
+  /** @deprecated single-channel filter; superseded by `sources`. */
   filterChannelId?: string;
   filterAgentId?: string;
 };
