@@ -89,7 +89,9 @@ export type RouterBranch = {
 };
 
 export type RouterNodeData = {
-  mode: 'rule' | 'llm';
+  /** 'rule' = text matching; 'llm' = rubric classification; 'hybrid' = rule
+   *  fast-path then LLM rubric fallback (Classify/Route). */
+  mode: 'rule' | 'llm' | 'hybrid';
   modelId?: string;
   branches: RouterBranch[];
   label: string;

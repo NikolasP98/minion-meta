@@ -330,11 +330,16 @@ export function buildRouterRoute(
   return async (state) => {
     const input = lastMessageContent(state);
     let chosen = 'default';
-    if (data.mode === 'rule') {
+    // Rule fast-path runs for 'rule' and 'hybrid' — deterministic and cheap.
+    if (data.mode === 'rule' || data.mode === 'hybrid') {
       for (const b of data.branches) {
         if (b.rule && matchesRule(input, b.rule)) { chosen = b.id; break; }
       }
-    } else {
+    }
+    // LLM rubric classification runs for 'llm' always, and for 'hybrid' only when
+    // no rule matched — so a Classify/Route node can combine deterministic
+    // overrides with sentiment/rubric judgement in a single node.
+    if (chosen === 'default' && (data.mode === 'llm' || data.mode === 'hybrid')) {
       chosen = await classifyWithLlm(input, data, opts);
     }
     return connectedHandles.has(chosen) ? chosen : 'default';

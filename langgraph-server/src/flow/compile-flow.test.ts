@@ -557,6 +557,24 @@ describe('buildRouterRoute — llm mode', () => {
   });
 });
 
+describe('buildRouterRoute — hybrid mode', () => {
+  const node = routerNode({ mode: 'hybrid', branches: [
+    { id: 'b1', label: 'high', rule: { op: 'contains', value: 'URGENT' }, description: 'severe' },
+    { id: 'b2', label: 'low', description: 'minor' },
+  ] });
+  const connected = new Set(['b1', 'b2', 'default']);
+  it('rule fast-path wins WITHOUT calling the LLM', async () => {
+    let called = false;
+    const fakeModel = { async invoke() { called = true; return new AIMessage('low'); } };
+    expect(await buildRouterRoute(node, connected, { model: fakeModel })(stateWith('this is URGENT'))).toBe('b1');
+    expect(called).toBe(false);
+  });
+  it('falls back to the LLM rubric when no rule matches', async () => {
+    const fakeModel = { async invoke() { return new AIMessage('low'); } };
+    expect(await buildRouterRoute(node, connected, { model: fakeModel })(stateWith('just a small thing'))).toBe('b2');
+  });
+});
+
 describe('matchesRule — regex input cap', () => {
   it('still matches within the cap', () => {
     expect(matchesRule('a'.repeat(50) + 'NEEDLE', { op: 'contains', value: 'NEEDLE' })).toBe(true);
