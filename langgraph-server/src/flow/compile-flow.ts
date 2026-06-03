@@ -17,6 +17,7 @@ import {
   type RouterRuleOp,
   type ToolAgentNodeData,
   type ChannelNodeData,
+  type HandoffNodeData,
   type FlowRunEvent,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
@@ -34,7 +35,7 @@ const MAX_REGEX_INPUT = 10_000;
 /** Sanity bound on regex pattern length. */
 const MAX_REGEX_PATTERN = 1_000;
 
-const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent', 'channel'] as const;
+const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent', 'channel', 'handoff'] as const;
 
 /**
  * Entry nodes that are actually wired into the flow (i.e. they source a `flow`
@@ -147,6 +148,10 @@ export interface CompileOptions {
   gatewayClient?: GatewayClient;
   /** Event payload passed by the trigger-manager when running trigger-based flows. */
   initialPrompt?: string;
+  /** Origin session key of the triggering event (handoff node → relay.open). */
+  originSessionKey?: string;
+  /** Raw trigger event payload (carries channel/chatId/accountId for handoff). */
+  eventPayload?: Record<string, unknown>;
   /** Inject the ReAct agent factory for tests (toolAgent path). Defaults to createReactAgent. */
   reactAgentFactory?: (args: { llm: unknown; tools: unknown[] }) => {
     invoke(
@@ -223,7 +228,7 @@ export function compileFlow(
   const processing = nodes.filter((n) =>
     n.type === 'llm' || n.type === 'agent' || n.type === 'pluginAction' ||
     n.type === 'transform' || n.type === 'structured' || n.type === 'router' ||
-    n.type === 'toolAgent' || n.type === 'channel',
+    n.type === 'toolAgent' || n.type === 'channel' || n.type === 'handoff',
   );
   const flowEdges = edges.filter((e) => e.type === 'flow');
 

@@ -133,7 +133,11 @@ app.post('/flows/run-triggered', async (c) => {
   }
 
   try {
-    const { graph, initialState } = compileFlow(nodes, edges, { initialPrompt: prompt });
+    const { graph, initialState } = compileFlow(nodes, edges, {
+      initialPrompt: prompt,
+      originSessionKey: parsed.data.sessionKey,
+      eventPayload: parsed.data.eventPayload,
+    });
     const result = await graph.invoke(initialState);
     const lastMessage = result.messages[result.messages.length - 1];
     const reply = String(lastMessage?.content ?? '');
