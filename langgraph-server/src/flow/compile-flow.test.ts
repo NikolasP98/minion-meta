@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { validateFlowShape, compileFlow, resolveModelId, DEFAULT_MODEL, matchesRule, buildRouterRoute } from './compile-flow.js';
+import { validateFlowShape, compileFlow, resolveModelId, DEFAULT_MODEL, matchesRule, buildRouterRoute, buildBranchRoute, findBranchConfig } from './compile-flow.js';
 import { UnsupportedFlowError } from './types.js';
 import type { FlowNode, FlowEdge, LLMNodeData, TriggerNodeData, RouterNodeData } from './types.js';
 import { AIMessage, HumanMessage, SystemMessage, type BaseMessage } from '@langchain/core/messages';
@@ -614,6 +614,75 @@ describe('compileFlow — router integration', () => {
     const { graph, initialState } = compileFlow([prompt, router, a], [eIn, eA], { model: fakeModel });
     const result = await graph.invoke(initialState);
     expect(String(result.messages[result.messages.length - 1].content)).toBe('Hello'); // 'na' never ran
+  });
+});
+
+describe('findBranchConfig', () => {
+  it('returns router data directly for a router node', () => {
+    const router: FlowNode = { id: 'r1', type: 'router', position: { x: 0, y: 0 }, data: { mode: 'llm', label: 'R', branches: [{ id: 'b1', label: 'A' }] } as never };
+    expect(findBranchConfig(router)?.branches).toHaveLength(1);
+    expect(findBranchConfig(router)?.mode).toBe('llm');
+  });
+  it('detects a branch-editor config value embedded on a pluginAction by shape', () => {
+    const node: FlowNode = {
+      id: 'pa', type: 'pluginAction', position: { x: 0, y: 0 },
+      data: { pluginId: 'p', contributionId: 'c', method: 'm', label: 'L',
+        config: { routing: { mode: 'rule', branches: [{ id: 'b1', label: 'A', rule: { op: 'contains', value: 'x' } }] } } } as never,
+    };
+    const bc = findBranchConfig(node);
+    expect(bc?.branches).toHaveLength(1);
+    expect(bc?.mode).toBe('rule');
+  });
+  it('returns null when config has no branches (e.g. a destination-list value)', () => {
+    const node: FlowNode = {
+      id: 'pa', type: 'pluginAction', position: { x: 0, y: 0 },
+      data: { pluginId: 'p', contributionId: 'c', method: 'm', label: 'L',
+        config: { dest: { channel: 'whatsapp', destinations: [{ kind: 'custom', to: '+1' }] } } } as never,
+    };
+    expect(findBranchConfig(node)).toBeNull();
+  });
+  it('ignores invalid mode and falls back to rule', () => {
+    const node: FlowNode = {
+      id: 'pa', type: 'pluginAction', position: { x: 0, y: 0 },
+      data: { pluginId: 'p', contributionId: 'c', method: 'm', label: 'L',
+        config: { r: { mode: 'bogus', branches: [] } } } as never,
+    };
+    expect(findBranchConfig(node)?.mode).toBe('rule');
+  });
+});
+
+describe('compileFlow — config-embedded brancher (branch-editor field)', () => {
+  const mkLlm = (id: string): FlowNode => ({ id, type: 'llm', position: { x: 0, y: 0 }, data: { modelId: 'm', label: id } });
+
+  it('runs the plugin method, then routes on its OUTPUT via the embedded branch config', async () => {
+    const ran: string[] = [];
+    const fakeModel = { async invoke(msgs: BaseMessage[]) { ran.push(String(msgs[msgs.length - 1].content)); return new AIMessage('llm-out'); } };
+    const fakeGateway = {
+      async sendAgentTurn() { return 'unused'; },
+      // The plugin classifies and returns a label string; the brancher routes on it.
+      async callGatewayMethod() { return 'urgent'; },
+    };
+    const brancher: FlowNode = {
+      id: 'pa', type: 'pluginAction', position: { x: 0, y: 0 },
+      data: { pluginId: 'p', contributionId: 'c', method: 'plugin.classify', label: 'Classify',
+        config: { routing: { mode: 'rule', branches: [{ id: 'b1', label: 'urgent', rule: { op: 'contains', value: 'urgent' } }] } } } as never,
+    };
+    const a = mkLlm('na'); const b = mkLlm('nb');
+    const eIn: FlowEdge = { id: 'e0', source: 'p1', sourceHandle: 'o', target: 'pa', targetHandle: 'i', type: 'flow' };
+    const eA: FlowEdge = { id: 'ea', source: 'pa', sourceHandle: 'b1', target: 'na', targetHandle: 'i', type: 'flow' };
+    const eB: FlowEdge = { id: 'eb', source: 'pa', sourceHandle: 'default', target: 'nb', targetHandle: 'i', type: 'flow' };
+    const { graph, initialState } = compileFlow([prompt, brancher, a, b], [eIn, eA, eB], { model: fakeModel, gatewayClient: fakeGateway });
+    await graph.invoke(initialState);
+    // The plugin returned 'urgent' → branch b1 ('contains urgent') matched → only na ran on that output.
+    expect(ran).toEqual(['urgent']);
+  });
+
+  it('buildBranchRoute classifies by LLM rubric when mode=llm', async () => {
+    const fakeModel = { async invoke() { return new AIMessage('support'); } };
+    const data = { mode: 'llm' as const, label: '', branches: [{ id: 'b1', label: 'sales' }, { id: 'b2', label: 'support' }] };
+    const connected = new Set(['b1', 'b2', 'default']);
+    const route = buildBranchRoute(data, connected, { model: fakeModel });
+    expect(await route(stateWith('my app is broken'))).toBe('b2');
   });
 });
 

@@ -13,6 +13,7 @@ import {
   type TransformNodeData,
   type StructuredNodeData,
   type RouterNodeData,
+  type RouterBranch,
   type RouterRuleOp,
   type ToolAgentNodeData,
   type ChannelNodeData,
@@ -254,12 +255,18 @@ export function compileFlow(
 
   for (const node of processing) {
     const outs = outgoing.get(node.id) ?? [];
-    if (node.type === 'router') {
+    // A node is a "brancher" if it carries branch config — either a built-in
+    // router (routes on its INPUT, pass-through runner) or any node whose config
+    // embeds a `branch-editor` field value (e.g. a plugin action: runs its
+    // method, then routes on its OUTPUT). Both reuse the same routing engine;
+    // `lastMessageContent` naturally yields input vs output per node kind.
+    const branch = findBranchConfig(node);
+    if (branch) {
       const pathMap: Record<string, string> = {};
       for (const e of outs) pathMap[e.sourceHandle || 'default'] = e.target;
       if (!pathMap.default) pathMap.default = END;
       const connected = new Set(Object.keys(pathMap));
-      g.addConditionalEdges(node.id, buildRouterRoute(node, connected, opts), pathMap);
+      g.addConditionalEdges(node.id, buildBranchRoute(branch, connected, opts), pathMap);
     } else if (outs.length === 0) {
       g.addEdge(node.id, END);
     } else {
@@ -320,13 +327,51 @@ async function classifyWithLlm(input: string, data: RouterNodeData, opts: Compil
   return match ? match.id : 'default';
 }
 
-/** Build the conditional-edge routing fn for a router node. Exported for tests. */
+/**
+ * Resolve a node's branch routing config, if any. A built-in `router` carries it
+ * directly on `data`. Any other node may embed it via a `branch-editor` config
+ * field — stored as `{ mode, modelId?, branches }` somewhere in `data.config`.
+ * The runner has no descriptor, so it detects the field by shape (a value with a
+ * `branches` array). Returns null for non-branching nodes.
+ */
+export function findBranchConfig(node: FlowNode): RouterNodeData | null {
+  if (node.type === 'router') return node.data as RouterNodeData;
+  const config = (node.data as { config?: Record<string, unknown> }).config;
+  if (!config || typeof config !== 'object') return null;
+  for (const v of Object.values(config)) {
+    if (v && typeof v === 'object' && Array.isArray((v as { branches?: unknown }).branches)) {
+      const bc = v as { mode?: unknown; modelId?: unknown; branches: RouterBranch[] };
+      const mode = bc.mode === 'llm' || bc.mode === 'hybrid' ? bc.mode : 'rule';
+      return {
+        mode,
+        modelId: typeof bc.modelId === 'string' ? bc.modelId : undefined,
+        branches: Array.isArray(bc.branches) ? bc.branches : [],
+        label: '',
+      };
+    }
+  }
+  return null;
+}
+
+/**
+ * Build the conditional-edge routing fn for a router node. Exported for tests;
+ * thin wrapper over buildBranchRoute reading the node's own router data.
+ */
 export function buildRouterRoute(
   node: FlowNode,
   connectedHandles: Set<string>,
   opts: CompileOptions,
 ): (state: typeof MessagesAnnotation.State) => Promise<string> {
-  const data = node.data as RouterNodeData;
+  return buildBranchRoute(node.data as RouterNodeData, connectedHandles, opts);
+}
+
+/** Build the conditional-edge routing fn from resolved branch config (router data
+ *  or a config-embedded branch-editor value). */
+export function buildBranchRoute(
+  data: RouterNodeData,
+  connectedHandles: Set<string>,
+  opts: CompileOptions,
+): (state: typeof MessagesAnnotation.State) => Promise<string> {
   return async (state) => {
     const input = lastMessageContent(state);
     let chosen = 'default';
