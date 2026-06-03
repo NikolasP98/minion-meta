@@ -751,3 +751,57 @@ describe('validateFlowShape — toolAgent', () => {
     expect(() => validateFlowShape([prompt, ta] as never, [e1, e2] as never)).toThrow();
   });
 });
+
+describe("compileFlow — handoff node", () => {
+  it("calls flows.relay.open with origin + destinations and ends", async () => {
+    const calls: Array<{ method: string; params: Record<string, unknown> }> = [];
+    const fakeGateway = {
+      async sendAgentTurn() {
+        return "x";
+      },
+      async callGatewayMethod(method: string, params: Record<string, unknown>) {
+        calls.push({ method, params });
+        return "relay opened (#1)";
+      },
+    };
+    const trigger: FlowNode = {
+      id: "t",
+      type: "trigger",
+      position: { x: 0, y: 0 },
+      data: { event: "message:received", label: "T", deliverResponse: false, sources: [] } as never,
+    };
+    const handoff: FlowNode = {
+      id: "h",
+      type: "handoff",
+      position: { x: 1, y: 0 },
+      data: {
+        label: "Handoff",
+        destinations: [{ channel: "whatsapp", to: "O1" }],
+        priority: "ALTA",
+        suggestionCount: 3,
+        language: "es",
+      } as never,
+    };
+    const e: FlowEdge = {
+      id: "e",
+      source: "t",
+      sourceHandle: "out",
+      target: "h",
+      targetHandle: "in",
+      type: "flow",
+    };
+    const { graph, initialState } = compileFlow([trigger, handoff], [e], {
+      initialPrompt: "tengo dolor intenso",
+      gatewayClient: fakeGateway,
+      originSessionKey: "whatsapp:default:51999@c.us",
+      eventPayload: { channelId: "whatsapp", chatId: "51999@c.us", accountId: "default" },
+    });
+    await graph.invoke(initialState);
+    expect(calls).toHaveLength(1);
+    expect(calls[0].method).toBe("flows.relay.open");
+    expect(calls[0].params.originChannel).toBe("whatsapp");
+    expect(calls[0].params.originChatId).toBe("51999@c.us");
+    expect(calls[0].params.originalMessage).toBe("tengo dolor intenso");
+    expect((calls[0].params.destinations as unknown[]).length).toBe(1);
+  });
+});

@@ -415,6 +415,41 @@ function buildNodeRunner(
     };
   }
 
+  // handoff node — built-in terminal: open a live human relay session via the
+  // gateway `flows.relay.open` method, threading the triggering event's origin
+  // (channel/chat/account) so owners can claim and relay to the client.
+  if (node.type === 'handoff') {
+    const data = node.data as HandoffNodeData;
+    const invoke = opts.gatewayClient?.callGatewayMethod ?? callGatewayMethod;
+    const ep = opts.eventPayload ?? {};
+    // Prefer explicit event payload fields; fall back to parsing the sessionKey
+    // "channel:account:chatId[:...]" if the payload lacks them.
+    const sk = (opts.originSessionKey ?? '').split(':');
+    const originChannel = (ep.channelId as string | undefined) ?? sk[0] ?? '';
+    const originAccountId =
+      (ep.accountId as string | undefined) ?? (sk.length >= 3 ? sk[1] : undefined);
+    const originChatId = (ep.chatId as string | undefined) ?? (sk.length >= 3 ? sk[2] : sk[1]) ?? '';
+    return async (state) => {
+      const originalMessage = lastMessageContent(state);
+      if (!originChannel || !originChatId) {
+        return { messages: [new AIMessage('Handoff skipped: no origin session (manual run).')] };
+      }
+      const reply = await invoke('flows.relay.open', {
+        originChannel,
+        originChatId,
+        originAccountId,
+        destinations: data.destinations ?? [],
+        priority: data.priority,
+        suggestionCount: data.suggestionCount ?? 3,
+        language: data.language ?? 'es',
+        systemPrompt: data.systemPrompt ?? '',
+        originalMessage,
+        closingMessage: data.closingMessage,
+      });
+      return { messages: [new AIMessage(String(reply))] };
+    };
+  }
+
   // channel node — built-in delivery of the upstream message to one or more
   // destinations on a chosen channel, via the gateway `send` RPC. Not tied to a
   // plugin: the gateway routes by `channel` to the right channel implementation.
