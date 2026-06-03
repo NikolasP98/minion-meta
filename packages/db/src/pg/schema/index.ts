@@ -12,3 +12,4 @@ export type {
 } from '../identity-mapper.js';
 export { sealSecret, openSecret } from '../crypto.js';
 export { gateway, userGateway } from './gateway.js';
+export { messages } from './messages.js';
