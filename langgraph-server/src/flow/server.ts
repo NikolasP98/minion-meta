@@ -28,6 +28,7 @@ const FlowRunRequest = z.object({
         'channel',
         'handoff',
         'reaction',
+        'subflow',
       ]),
       position: z.object({ x: z.number(), y: z.number() }),
       data: z.record(z.string(), z.unknown()),
@@ -48,6 +49,28 @@ const FlowRunRequest = z.object({
   // without it a pluginTrigger/trigger entry starts with empty input.
   prompt: z.string().optional(),
 });
+
+/**
+ * Resolve a flow's definition by id from the hub — the loader injected into the
+ * runner so `subflow` nodes can run a referenced flow. Server-to-server: bypasses
+ * user auth via the optional HUB_API_TOKEN bearer. Reused by the triggered-run
+ * entry too (which loads the top-level flow the same way).
+ */
+function createHubFlowLoader(): (flowId: string) => Promise<{ nodes: FlowNode[]; edges: FlowEdge[] }> {
+  const HUB_URL = process.env.HUB_URL ?? 'http://localhost:5173';
+  const HUB_API_TOKEN = process.env.HUB_API_TOKEN ?? '';
+  return async (flowId: string) => {
+    const res = await fetch(`${HUB_URL}/api/internal/flows/${flowId}`, {
+      headers: HUB_API_TOKEN ? { Authorization: `Bearer ${HUB_API_TOKEN}` } : {},
+    });
+    if (!res.ok) {
+      throw new UnsupportedFlowError(`Hub returned ${res.status} for flow ${flowId}.`);
+    }
+    return (await res.json()) as { nodes: FlowNode[]; edges: FlowEdge[] };
+  };
+}
+
+const loadHubFlow = createHubFlowLoader();
 
 const app = new Hono();
 app.use('/*', cors());
@@ -82,6 +105,10 @@ app.post('/flows/run', async (c) => {
         initialPrompt: parsed.data.prompt,
         // Per-node lifecycle (start/end/error with input+output) streams live.
         emit: (e) => void send(e),
+        // Enable subflow nodes — the editor run doesn't know the top-level flow
+        // id, so the stack seeds empty (a direct self-reference is still caught
+        // one level in, and depth is bounded).
+        loadFlow: loadHubFlow,
       });
       await send({ level: 'debug', message: 'Compiled flow to StateGraph.' });
 
@@ -115,19 +142,10 @@ app.post('/flows/run-triggered', async (c) => {
   }
   const { flowId, prompt } = parsed.data;
 
-  const HUB_URL = process.env.HUB_URL ?? 'http://localhost:5173';
-  const HUB_API_TOKEN = process.env.HUB_API_TOKEN ?? '';
-
   let nodes: FlowNode[];
   let edges: FlowEdge[];
   try {
-    const res = await fetch(`${HUB_URL}/api/internal/flows/${flowId}`, {
-      headers: HUB_API_TOKEN ? { Authorization: `Bearer ${HUB_API_TOKEN}` } : {},
-    });
-    if (!res.ok) {
-      return c.json({ error: `Hub returned ${res.status} for flow ${flowId}` }, 502);
-    }
-    const body = (await res.json()) as { nodes: FlowNode[]; edges: FlowEdge[] };
+    const body = await loadHubFlow(flowId);
     nodes = body.nodes;
     edges = body.edges;
   } catch (err) {
@@ -139,6 +157,10 @@ app.post('/flows/run-triggered', async (c) => {
       initialPrompt: prompt,
       originSessionKey: parsed.data.sessionKey,
       eventPayload: parsed.data.eventPayload,
+      // Subflow support: seed the call stack with this flow's id so a self- or
+      // cyclic reference is caught on the first hop.
+      loadFlow: loadHubFlow,
+      subflowStack: [flowId],
     });
     const result = await graph.invoke(initialState);
     const lastMessage = result.messages[result.messages.length - 1];

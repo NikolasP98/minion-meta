@@ -19,6 +19,7 @@ import {
   type ChannelNodeData,
   type HandoffNodeData,
   type ReactionNodeData,
+  type SubflowNodeData,
   type FlowRunEvent,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
@@ -31,12 +32,16 @@ export const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 /** Fixed cap on toolAgent ReAct loop super-steps (not user-tunable in B3). */
 export const TOOL_AGENT_RECURSION_LIMIT = 10;
 
+/** Max nesting depth for subflow → subflow → … chains, a backstop against
+ *  runaway recursion when the precise call-stack id seed is unavailable. */
+export const DEFAULT_MAX_SUBFLOW_DEPTH = 8;
+
 /** Memory bound on regex-matched input (the RE2 engine handles ReDoS-safety). */
 const MAX_REGEX_INPUT = 10_000;
 /** Sanity bound on regex pattern length. */
 const MAX_REGEX_PATTERN = 1_000;
 
-const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent', 'channel', 'handoff', 'reaction'] as const;
+const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent', 'channel', 'handoff', 'reaction', 'subflow'] as const;
 
 /**
  * Entry nodes that are actually wired into the flow (i.e. they source a `flow`
@@ -166,6 +171,20 @@ export interface CompileOptions {
    * output) after, or node-error on throw — so callers can show live progress.
    */
   emit?: (event: FlowRunEvent) => void;
+  /**
+   * Resolve a flow's definition by id — used by `subflow` nodes to load the
+   * referenced flow at execution time. Injectable for tests; production wires a
+   * hub fetch. A subflow node throws if this is absent.
+   */
+  loadFlow?: (flowId: string) => Promise<{ nodes: FlowNode[]; edges: FlowEdge[] }>;
+  /**
+   * Ids of the flows currently on the subflow call stack (outermost → innermost),
+   * for cross-flow cycle detection. A subflow node throws if its target is
+   * already on the stack. Threaded automatically into nested compiles.
+   */
+  subflowStack?: string[];
+  /** Max subflow nesting depth (defaults to DEFAULT_MAX_SUBFLOW_DEPTH). */
+  maxSubflowDepth?: number;
 }
 
 /** Human label for a node — its editor label, falling back to the type. */
@@ -223,14 +242,19 @@ export function compileFlow(
     }
     promptValue = opts.initialPrompt;
   } else {
-    promptValue = (entryNode.data as PromptBoxData).value ?? '';
+    // A promptBox carries its own input, but when this flow is invoked AS a
+    // subflow the caller passes the upstream message via `initialPrompt`, which
+    // must win — that's how a reusable subflow receives its input. Manual runs
+    // never set `initialPrompt` for promptBox entries (see hub testRunPrompt),
+    // so this is a no-op there.
+    promptValue = opts.initialPrompt ?? (entryNode.data as PromptBoxData).value ?? '';
   }
 
   const processing = nodes.filter((n) =>
     n.type === 'llm' || n.type === 'agent' || n.type === 'pluginAction' ||
     n.type === 'transform' || n.type === 'structured' || n.type === 'router' ||
     n.type === 'toolAgent' || n.type === 'channel' || n.type === 'handoff' ||
-    n.type === 'reaction',
+    n.type === 'reaction' || n.type === 'subflow',
   );
   const flowEdges = edges.filter((e) => e.type === 'flow');
 
@@ -614,6 +638,46 @@ function buildNodeRunner(
       const result = await agent.invoke({ messages }, { recursionLimit: TOOL_AGENT_RECURSION_LIMIT });
       const last = result.messages[result.messages.length - 1];
       return { messages: [last] };
+    };
+  }
+
+  // subflow node — run another flow as a subroutine. Loads the referenced flow,
+  // compiles it, and invokes it with THIS node's input as the entry prompt; the
+  // subflow's final message becomes this node's output. The triggering event
+  // context (eventPayload/originSessionKey) and any injected model/gateway are
+  // threaded through, so a subflow can contain handoff/reaction nodes that act
+  // on the original trigger. Guarded against cross-flow cycles and runaway depth.
+  if (node.type === 'subflow') {
+    const data = node.data as SubflowNodeData;
+    const flowId = data.flowId;
+    const load = opts.loadFlow;
+    const stack = opts.subflowStack ?? [];
+    const maxDepth = opts.maxSubflowDepth ?? DEFAULT_MAX_SUBFLOW_DEPTH;
+    return async (state) => {
+      const input = lastMessageContent(state);
+      if (!flowId) {
+        throw new UnsupportedFlowError(`Subflow node "${node.id}" has no flow selected.`);
+      }
+      if (!load) {
+        throw new UnsupportedFlowError(`Subflow node "${node.id}" cannot run: no flow loader configured.`);
+      }
+      if (stack.includes(flowId)) {
+        throw new UnsupportedFlowError(`Subflow cycle detected: ${[...stack, flowId].join(' → ')}.`);
+      }
+      if (stack.length >= maxDepth) {
+        throw new UnsupportedFlowError(`Subflow nesting too deep (limit ${maxDepth}).`);
+      }
+      const sub = await load(flowId);
+      const childOpts: CompileOptions = {
+        ...opts,
+        initialPrompt: input,
+        subflowStack: [...stack, flowId],
+      };
+      const { graph, initialState } = compileFlow(sub.nodes, sub.edges, childOpts);
+      const result = await graph.invoke(initialState);
+      const last = result.messages[result.messages.length - 1];
+      const reply = last ? String(last.content) : '';
+      return { messages: [new AIMessage(reply)] };
     };
   }
 

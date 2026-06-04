@@ -858,3 +858,106 @@ describe("compileFlow — handoff node", () => {
     expect((calls[0].params.destinations as unknown[]).length).toBe(1);
   });
 });
+
+describe('subflow node', () => {
+  // Parent flow: promptBox("hi there") → subflow(child-1).
+  const pPrompt: FlowNode = {
+    id: 'pp', type: 'promptBox', position: { x: 0, y: 0 },
+    data: { label: 'P', value: 'hi there' },
+  };
+  const sfNode: FlowNode = {
+    id: 'sf', type: 'subflow', position: { x: 200, y: 0 },
+    data: { label: 'Subflow', flowId: 'child-1' },
+  };
+  const pEdge: FlowEdge = {
+    id: 'pe', source: 'pp', sourceHandle: 'out', target: 'sf', targetHandle: 'in', type: 'flow',
+  };
+
+  // Child flow: promptBox("IGNORED") → transform("sub:{input}"). The child's
+  // promptBox value must be overridden by the parent's input.
+  const cPrompt: FlowNode = {
+    id: 'cp', type: 'promptBox', position: { x: 0, y: 0 },
+    data: { label: 'C', value: 'IGNORED' },
+  };
+  const cXform: FlowNode = {
+    id: 'cx', type: 'transform', position: { x: 200, y: 0 },
+    data: { label: 'X', template: 'sub:{input}' },
+  };
+  const cEdge: FlowEdge = {
+    id: 'ce', source: 'cp', sourceHandle: 'out', target: 'cx', targetHandle: 'in', type: 'flow',
+  };
+  const childFlow = { nodes: [cPrompt, cXform], edges: [cEdge] };
+  const loadFlow = async (id: string) => {
+    if (id === 'child-1') return childFlow;
+    throw new Error(`unknown flow ${id}`);
+  };
+
+  it('runs the referenced flow with the caller input and returns its output', async () => {
+    const { graph, initialState } = compileFlow([pPrompt, sfNode], [pEdge], { loadFlow });
+    const result = await graph.invoke(initialState);
+    const final = result.messages[result.messages.length - 1];
+    // Proves: input override (child promptBox "IGNORED" → "hi there"),
+    // execution, and output propagation downstream.
+    expect(final.content).toBe('sub:hi there');
+  });
+
+  it('threads injected options (model) into the subflow', async () => {
+    const cLlm: FlowNode = {
+      id: 'cl', type: 'llm', position: { x: 200, y: 0 },
+      data: { modelId: 'claude-haiku-4-5-20251001', label: 'LLM' },
+    };
+    const childLlmFlow = {
+      nodes: [cPrompt, cLlm],
+      edges: [{ id: 'cle', source: 'cp', sourceHandle: 'out', target: 'cl', targetHandle: 'in', type: 'flow' } as FlowEdge],
+    };
+    const fakeModel = {
+      async invoke(msgs: BaseMessage[]) {
+        return new AIMessage(`model:${String(msgs[msgs.length - 1].content)}`);
+      },
+    };
+    const sfLlm: FlowNode = { ...sfNode, data: { label: 'Subflow', flowId: 'child-llm' } };
+    const { graph, initialState } = compileFlow([pPrompt, sfLlm], [pEdge], {
+      loadFlow: async () => childLlmFlow,
+      model: fakeModel,
+    });
+    const result = await graph.invoke(initialState);
+    expect(result.messages[result.messages.length - 1].content).toBe('model:hi there');
+  });
+
+  it('throws when the subflow node has no flow selected', async () => {
+    const sfNoId: FlowNode = { ...sfNode, data: { label: 'Subflow' } };
+    const { graph, initialState } = compileFlow([pPrompt, sfNoId], [pEdge], { loadFlow });
+    await expect(graph.invoke(initialState)).rejects.toThrow(/no flow selected/);
+  });
+
+  it('throws when no flow loader is configured', async () => {
+    const { graph, initialState } = compileFlow([pPrompt, sfNode], [pEdge], {});
+    await expect(graph.invoke(initialState)).rejects.toThrow(/no flow loader/);
+  });
+
+  it('detects a cross-flow cycle (flow references itself via a subflow)', async () => {
+    // child-cyc loads a flow whose own subflow node points back at child-cyc.
+    const cSelf: FlowNode = {
+      id: 'cs', type: 'subflow', position: { x: 200, y: 0 },
+      data: { label: 'Self', flowId: 'child-cyc' },
+    };
+    const cyclicFlow = {
+      nodes: [cPrompt, cSelf],
+      edges: [{ id: 'ce2', source: 'cp', sourceHandle: 'out', target: 'cs', targetHandle: 'in', type: 'flow' } as FlowEdge],
+    };
+    const parentToCyc: FlowNode = { ...sfNode, data: { label: 'Subflow', flowId: 'child-cyc' } };
+    const { graph, initialState } = compileFlow([pPrompt, parentToCyc], [pEdge], {
+      loadFlow: async () => cyclicFlow,
+    });
+    await expect(graph.invoke(initialState)).rejects.toThrow(/cycle detected/);
+  });
+
+  it('enforces the max nesting depth', async () => {
+    const { graph, initialState } = compileFlow([pPrompt, sfNode], [pEdge], {
+      loadFlow,
+      subflowStack: ['x', 'y'],
+      maxSubflowDepth: 2,
+    });
+    await expect(graph.invoke(initialState)).rejects.toThrow(/too deep/);
+  });
+});

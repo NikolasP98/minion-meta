@@ -158,9 +158,19 @@ export type ReactionNodeData = {
   emoji: string;
 };
 
+/** Subflow node — runs another flow as a subroutine, feeding it this node's
+ *  input and returning that flow's final output downstream. */
+export type SubflowNodeData = {
+  label: string;
+  /** Id of the flow to run. Resolved + compiled + invoked at execution time. */
+  flowId?: string;
+  /** Cached display name of the referenced flow (editor convenience only). */
+  flowName?: string;
+};
+
 export type FlowNode = {
   id: string;
-  type: 'agent' | 'promptBox' | 'llm' | 'trigger' | 'pluginTrigger' | 'pluginAction' | 'transform' | 'structured' | 'router' | 'toolAgent' | 'channel' | 'handoff' | 'reaction';
+  type: 'agent' | 'promptBox' | 'llm' | 'trigger' | 'pluginTrigger' | 'pluginAction' | 'transform' | 'structured' | 'router' | 'toolAgent' | 'channel' | 'handoff' | 'reaction' | 'subflow';
   position: { x: number; y: number };
   data:
     | AgentNodeData
@@ -175,7 +185,8 @@ export type FlowNode = {
     | ToolAgentNodeData
     | ChannelNodeData
     | HandoffNodeData
-    | ReactionNodeData;
+    | ReactionNodeData
+    | SubflowNodeData;
 };
 
 export type FlowEdge = {
