@@ -645,9 +645,16 @@ function buildNodeRunner(
         nodeId: node.id,
       });
       const agent = factory!({ llm: model as unknown, tools });
+      // Process this node's INPUT (the upstream message) as a single clean user
+      // turn — not the whole accumulated graph history. Replaying history can
+      // start the model on an empty seed message (a scheduled/trigger entry seeds
+      // one) or an assistant-role message, both of which providers reject; the
+      // node's job is to act on its input.
+      const input = lastMessageContent(state);
+      const userTurn = new HumanMessage(input);
       const messages = data.systemPrompt
-        ? [new SystemMessage(data.systemPrompt), ...state.messages]
-        : state.messages;
+        ? [new SystemMessage(data.systemPrompt), userTurn]
+        : [userTurn];
       const result = await agent.invoke({ messages }, { recursionLimit: TOOL_AGENT_RECURSION_LIMIT });
       const last = result.messages[result.messages.length - 1];
       return { messages: [last] };

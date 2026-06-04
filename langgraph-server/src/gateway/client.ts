@@ -219,8 +219,12 @@ export function deriveSessionKey(
   runId: string,
   nodeId: string,
 ): string {
+  // Canonical agent session key is `agent:<agentId>:<rest>` — the gateway
+  // resolves which agent to run from that prefix. Ephemeral runs still need the
+  // agent encoded (the rest stays unique per run/node so they don't share
+  // history); a bare `flow-run:...` key has no agent and chat.send can't route it.
   return sessionMode === 'ephemeral'
-    ? `flow-run:${runId}:${nodeId}`
+    ? `agent:${agentId}:flow-run:${runId}:${nodeId}`
     : `agent:${agentId}:main`;
 }
 
@@ -233,8 +237,10 @@ export async function sendAgentTurn(
 ): Promise<string> {
   const sessionKey = deriveSessionKey(sessionMode, agentId, runId, nodeId);
 
+  // NB: chat.send's schema is `additionalProperties: false` and has no agentId —
+  // the agent is derived from the sessionKey prefix above. Passing agentId here
+  // makes the gateway reject the whole call ("unexpected property 'agentId'").
   const result = await request('chat.send', {
-    agentId,
     message: prompt,
     sessionKey,
     deliver: false,
