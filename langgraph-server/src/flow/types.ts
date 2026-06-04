@@ -143,9 +143,24 @@ export type HandoffNodeData = {
   closingMessage?: string;
 };
 
+/**
+ * Built-in reaction node — sets a status emoji on the flow's TRIGGER message
+ * (the inbound message that fired the flow) via the gateway
+ * `flows.reaction.set` RPC. A transparent side-effect: it reacts and passes the
+ * upstream message through unchanged, so it can sit anywhere in a chain (e.g.
+ * mark a complaint 👀 received → classify → 🔴 escalated). Needs the trigger's
+ * channel/chat/message id from the run's eventPayload, so it only does anything
+ * on triggered runs (no-op with a friendly note on manual runs).
+ */
+export type ReactionNodeData = {
+  label: string;
+  /** Single emoji to set (Telegram restricts to its allowed set; WhatsApp is open). */
+  emoji: string;
+};
+
 export type FlowNode = {
   id: string;
-  type: 'agent' | 'promptBox' | 'llm' | 'trigger' | 'pluginTrigger' | 'pluginAction' | 'transform' | 'structured' | 'router' | 'toolAgent' | 'channel' | 'handoff';
+  type: 'agent' | 'promptBox' | 'llm' | 'trigger' | 'pluginTrigger' | 'pluginAction' | 'transform' | 'structured' | 'router' | 'toolAgent' | 'channel' | 'handoff' | 'reaction';
   position: { x: number; y: number };
   data:
     | AgentNodeData
@@ -159,7 +174,8 @@ export type FlowNode = {
     | RouterNodeData
     | ToolAgentNodeData
     | ChannelNodeData
-    | HandoffNodeData;
+    | HandoffNodeData
+    | ReactionNodeData;
 };
 
 export type FlowEdge = {

@@ -18,6 +18,7 @@ import {
   type ToolAgentNodeData,
   type ChannelNodeData,
   type HandoffNodeData,
+  type ReactionNodeData,
   type FlowRunEvent,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
@@ -35,7 +36,7 @@ const MAX_REGEX_INPUT = 10_000;
 /** Sanity bound on regex pattern length. */
 const MAX_REGEX_PATTERN = 1_000;
 
-const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent', 'channel', 'handoff'] as const;
+const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent', 'channel', 'handoff', 'reaction'] as const;
 
 /**
  * Entry nodes that are actually wired into the flow (i.e. they source a `flow`
@@ -228,7 +229,8 @@ export function compileFlow(
   const processing = nodes.filter((n) =>
     n.type === 'llm' || n.type === 'agent' || n.type === 'pluginAction' ||
     n.type === 'transform' || n.type === 'structured' || n.type === 'router' ||
-    n.type === 'toolAgent' || n.type === 'channel' || n.type === 'handoff',
+    n.type === 'toolAgent' || n.type === 'channel' || n.type === 'handoff' ||
+    n.type === 'reaction',
   );
   const flowEdges = edges.filter((e) => e.type === 'flow');
 
@@ -447,6 +449,34 @@ function buildNodeRunner(
         closingMessage: data.closingMessage,
       });
       return { messages: [new AIMessage(String(reply))] };
+    };
+  }
+
+  // reaction node — built-in transparent side-effect: set a status emoji on the
+  // flow's TRIGGER message (the inbound message that fired the flow) via the
+  // gateway `flows.reaction.set` RPC, then pass the upstream message through
+  // unchanged. Needs the trigger's channel/chat/message id from the event
+  // payload, so it no-ops on manual runs (no trigger message).
+  if (node.type === 'reaction') {
+    const data = node.data as ReactionNodeData;
+    const invoke = opts.gatewayClient?.callGatewayMethod ?? callGatewayMethod;
+    const ep = opts.eventPayload ?? {};
+    const channel = (ep.channelId as string | undefined) ?? '';
+    const to = (ep.chatId as string | undefined) ?? '';
+    const messageId = (ep.messageId as string | undefined) ?? '';
+    const accountId = ep.accountId as string | undefined;
+    const emoji = (data.emoji ?? '').trim();
+    return async () => {
+      if (emoji && channel && to && messageId) {
+        await invoke('flows.reaction.set', {
+          channel,
+          to,
+          messageId,
+          emoji,
+          ...(accountId ? { accountId } : {}),
+        });
+      }
+      return { messages: [] };
     };
   }
 

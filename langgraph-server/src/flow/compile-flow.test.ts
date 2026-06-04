@@ -355,6 +355,59 @@ describe('compileFlow — channel node', () => {
   });
 });
 
+const reactionNode: FlowNode = {
+  id: 'rx1', type: 'reaction', position: { x: 200, y: 0 },
+  data: { label: 'React', emoji: '👀' },
+};
+const edgeToReaction: FlowEdge = {
+  id: 'e-rx', source: 'p1', sourceHandle: 'prompt-out', target: 'rx1', targetHandle: 'in', type: 'flow',
+};
+
+describe('validateFlowShape — reaction node', () => {
+  it('accepts promptBox → reaction (reaction counts as a processing node)', () => {
+    expect(() => validateFlowShape([prompt, reactionNode], [edgeToReaction])).not.toThrow();
+  });
+});
+
+describe('compileFlow — reaction node', () => {
+  it('reacts to the trigger message via flows.reaction.set, then passes the upstream message through', async () => {
+    const calls: Array<{ method: string; params: Record<string, unknown> }> = [];
+    const fakeGateway = {
+      async sendAgentTurn() { return 'unused'; },
+      async callGatewayMethod(method: string, params: Record<string, unknown>) {
+        calls.push({ method, params });
+        return 'reacted 👀';
+      },
+    };
+    const { graph, initialState } = compileFlow([prompt, reactionNode], [edgeToReaction], {
+      gatewayClient: fakeGateway,
+      eventPayload: { channelId: 'telegram', chatId: '9001', messageId: 'm-42', accountId: 'tg1' },
+    });
+    const result = await graph.invoke(initialState);
+    expect(calls).toHaveLength(1);
+    expect(calls[0].method).toBe('flows.reaction.set');
+    expect(calls[0].params).toMatchObject({
+      channel: 'telegram', to: '9001', messageId: 'm-42', emoji: '👀', accountId: 'tg1',
+    });
+    // Transparent side-effect: the upstream prompt message is still the last message.
+    expect(String(result.messages[result.messages.length - 1].content)).toBe('Hello');
+  });
+
+  it('no-ops on a manual run (no trigger message in the event payload)', async () => {
+    const calls: string[] = [];
+    const fakeGateway = {
+      async sendAgentTurn() { return 'unused'; },
+      async callGatewayMethod(method: string) { calls.push(method); return 'x'; },
+    };
+    const { graph, initialState } = compileFlow([prompt, reactionNode], [edgeToReaction], {
+      gatewayClient: fakeGateway,
+    });
+    const result = await graph.invoke(initialState);
+    expect(calls).toHaveLength(0);
+    expect(String(result.messages[result.messages.length - 1].content)).toBe('Hello');
+  });
+});
+
 describe('compileFlow — pluginTrigger node', () => {
   it('requires initialPrompt and seeds it', async () => {
     const fakeModel = { async invoke(msgs: BaseMessage[]) { return new AIMessage(`pt-echo:${String(msgs[msgs.length - 1].content)}`); } };
