@@ -76,6 +76,6 @@ describe('resolveEnv — Infisical narrowed to MINION_SECRETS_KEY', () => {
 
 		// Infisical fetched exactly once (for minion-core only) — NOT for minion-hub.
 		expect(fake).toHaveBeenCalledTimes(1);
-		expect(fake.mock.calls[0][0]).toBe('minion-core');
+		expect(fake.mock.calls[0]?.[0]).toBe('minion-core');
 	});
 });
