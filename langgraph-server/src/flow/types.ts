@@ -168,9 +168,63 @@ export type SubflowNodeData = {
   flowName?: string;
 };
 
+/** Database CRUD action. `read` runs a SELECT via the hardened `flows.db.query`
+ *  RPC (SELECT-only + optional consume-marker); `create`/`update`/`delete` run a
+ *  write via `flows.db.exec` and return the change count. */
+export type DatabaseAction = 'read' | 'create' | 'update' | 'delete';
+
+/**
+ * Built-in Database node — a single node covering all CRUD against a sqlite DB
+ * (defaults to the message ledger). The `action` selects the RPC: `read` →
+ * `flows.db.query` (SELECT-only, returns rows JSON, optional consume-marker on
+ * the returned rows for at-most-once draining); `create`/`update`/`delete` →
+ * `flows.db.exec` (write, returns the change count). The gateway handlers enforce
+ * SELECT-only + identifier allowlist + DB-path confinement; the runner forwards
+ * the configured fields. `{input}` expands in the SQL.
+ */
+export type DatabaseNodeData = {
+  label: string;
+  action: DatabaseAction;
+  sql: string;
+  /** Optional db file (blank = message ledger). Confined to ledger or state dir. */
+  dbPath?: string;
+  /** Read-only: consume-marker column stamped on returned rows (e.g. last_checked). */
+  markColumn?: string;
+  markTable?: string;
+  markIdColumn?: string;
+};
+
+/**
+ * Built-in file-write node — writes the upstream message content to a file via
+ * the gateway `flows.file.write` RPC. The gateway confines writes to a base dir
+ * and expands `{date}` → YYYY-MM-DD in the path.
+ */
+export type FileWriteNodeData = {
+  label: string;
+  /** Destination path (confined to the gateway's flow-files base). {date} expands. */
+  path: string;
+  /** 'overwrite' (default) replaces the file; 'append' adds a line. */
+  mode: 'overwrite' | 'append';
+};
+
+/**
+ * Built-in Schedule trigger — an ENTRY node (no runner) that fires the flow on a
+ * recurring interval. The gateway's flows-plugin scheduler service evaluates the
+ * interval and POSTs `/flows/run-triggered` when due. A scheduled run carries no
+ * inbound message, so the entry seeds an empty prompt.
+ */
+export type ScheduleNodeData = {
+  label: string;
+  /** Interval count (paired with `unit`). */
+  every: number;
+  unit: 'minutes' | 'hours' | 'days';
+  /** Optional "HH:MM" local anchor — for the 'days' unit, fire at/after this time. */
+  atTime?: string;
+};
+
 export type FlowNode = {
   id: string;
-  type: 'agent' | 'promptBox' | 'llm' | 'trigger' | 'pluginTrigger' | 'pluginAction' | 'transform' | 'structured' | 'router' | 'toolAgent' | 'channel' | 'handoff' | 'reaction' | 'subflow';
+  type: 'agent' | 'promptBox' | 'llm' | 'trigger' | 'pluginTrigger' | 'pluginAction' | 'transform' | 'structured' | 'router' | 'toolAgent' | 'channel' | 'handoff' | 'reaction' | 'subflow' | 'database' | 'fileWrite' | 'schedule';
   position: { x: number; y: number };
   data:
     | AgentNodeData
@@ -186,7 +240,10 @@ export type FlowNode = {
     | ChannelNodeData
     | HandoffNodeData
     | ReactionNodeData
-    | SubflowNodeData;
+    | SubflowNodeData
+    | DatabaseNodeData
+    | FileWriteNodeData
+    | ScheduleNodeData;
 };
 
 export type FlowEdge = {

@@ -20,6 +20,8 @@ import {
   type HandoffNodeData,
   type ReactionNodeData,
   type SubflowNodeData,
+  type DatabaseNodeData,
+  type FileWriteNodeData,
   type FlowRunEvent,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
@@ -41,7 +43,7 @@ const MAX_REGEX_INPUT = 10_000;
 /** Sanity bound on regex pattern length. */
 const MAX_REGEX_PATTERN = 1_000;
 
-const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent', 'channel', 'handoff', 'reaction', 'subflow'] as const;
+const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent', 'channel', 'handoff', 'reaction', 'subflow', 'database', 'fileWrite'] as const;
 
 /**
  * Entry nodes that are actually wired into the flow (i.e. they source a `flow`
@@ -54,7 +56,10 @@ export function wiredEntryNodes(nodes: FlowNode[], edges: FlowEdge[]): FlowNode[
   const flowSources = new Set(edges.filter((e) => e.type === 'flow').map((e) => e.source));
   return nodes.filter(
     (n) =>
-      (n.type === 'promptBox' || n.type === 'trigger' || n.type === 'pluginTrigger') &&
+      (n.type === 'promptBox' ||
+        n.type === 'trigger' ||
+        n.type === 'pluginTrigger' ||
+        n.type === 'schedule') &&
       flowSources.has(n.id),
   );
 }
@@ -62,7 +67,9 @@ export function wiredEntryNodes(nodes: FlowNode[], edges: FlowEdge[]): FlowNode[
 export function validateFlowShape(nodes: FlowNode[], edges: FlowEdge[]): void {
   const entries = wiredEntryNodes(nodes, edges);
   const prompts = entries.filter((n) => n.type === 'promptBox');
-  const triggers = entries.filter((n) => n.type === 'trigger' || n.type === 'pluginTrigger');
+  const triggers = entries.filter(
+    (n) => n.type === 'trigger' || n.type === 'pluginTrigger' || n.type === 'schedule',
+  );
   const processing = nodes.filter((n) => (PROCESSING_TYPES as readonly string[]).includes(n.type));
 
   if (prompts.length > 0 && triggers.length > 0) {
@@ -234,7 +241,12 @@ export function compileFlow(
   const runId = randomUUID();
 
   let promptValue: string;
-  if (entryNode.type === 'trigger' || entryNode.type === 'pluginTrigger') {
+  if (entryNode.type === 'schedule') {
+    // A scheduled run has no inbound message — seed an empty prompt (the
+    // scheduler POSTs prompt:'' to /flows/run-triggered). Downstream nodes that
+    // need data fetch it themselves (e.g. a dbQuery node reading the ledger).
+    promptValue = opts.initialPrompt ?? '';
+  } else if (entryNode.type === 'trigger' || entryNode.type === 'pluginTrigger') {
     if (!opts.initialPrompt) {
       throw new UnsupportedFlowError(
         'Trigger node requires an initialPrompt (event payload) — call via /flows/run-triggered.',
@@ -254,7 +266,8 @@ export function compileFlow(
     n.type === 'llm' || n.type === 'agent' || n.type === 'pluginAction' ||
     n.type === 'transform' || n.type === 'structured' || n.type === 'router' ||
     n.type === 'toolAgent' || n.type === 'channel' || n.type === 'handoff' ||
-    n.type === 'reaction' || n.type === 'subflow',
+    n.type === 'reaction' || n.type === 'subflow' || n.type === 'database' ||
+    n.type === 'fileWrite',
   );
   const flowEdges = edges.filter((e) => e.type === 'flow');
 
@@ -677,6 +690,58 @@ function buildNodeRunner(
       const result = await graph.invoke(initialState);
       const last = result.messages[result.messages.length - 1];
       const reply = last ? String(last.content) : '';
+      return { messages: [new AIMessage(reply)] };
+    };
+  }
+
+  // database node — built-in: a single CRUD node over a sqlite DB. `read` runs a
+  // SELECT via the gateway `flows.db.query` RPC (SELECT-only + identifier
+  // allowlist + DB-path confinement gateway-side), returning the rows (JSON) and
+  // optionally stamping a consume-marker; `create`/`update`/`delete` run a write
+  // via `flows.db.exec`, returning the change count. The node's fields are
+  // forwarded under `config` (mirroring the former plugin-action shape). {input}
+  // expands in the SQL.
+  if (node.type === 'database') {
+    const data = node.data as DatabaseNodeData;
+    const invoke = opts.gatewayClient?.callGatewayMethod ?? callGatewayMethod;
+    const isRead = (data.action ?? 'read') === 'read';
+    return async (state) => {
+      const input = lastMessageContent(state);
+      const sql = (data.sql ?? '').replaceAll('{input}', input);
+      if (isRead) {
+        const config = {
+          sql,
+          dbPath: data.dbPath,
+          markColumn: data.markColumn,
+          markTable: data.markTable,
+          markIdColumn: data.markIdColumn,
+        };
+        const reply = await invoke('flows.db.query', { input, config, runId, nodeId: node.id });
+        return { messages: [new AIMessage(reply)] };
+      }
+      const reply = await invoke('flows.db.exec', {
+        input,
+        config: { sql, dbPath: data.dbPath },
+        runId,
+        nodeId: node.id,
+      });
+      return { messages: [new AIMessage(reply)] };
+    };
+  }
+
+  // fileWrite node — built-in: write the upstream message content to a file via
+  // the gateway `flows.file.write` RPC (path confined + {date} expanded gateway-
+  // side). Returns the written path downstream.
+  if (node.type === 'fileWrite') {
+    const data = node.data as FileWriteNodeData;
+    const invoke = opts.gatewayClient?.callGatewayMethod ?? callGatewayMethod;
+    return async (state) => {
+      const input = lastMessageContent(state);
+      const config = {
+        path: (data.path ?? '').replaceAll('{input}', input),
+        mode: data.mode ?? 'overwrite',
+      };
+      const reply = await invoke('flows.file.write', { input, config, runId, nodeId: node.id });
       return { messages: [new AIMessage(reply)] };
     };
   }

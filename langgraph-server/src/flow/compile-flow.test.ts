@@ -961,3 +961,120 @@ describe('subflow node', () => {
     await expect(graph.invoke(initialState)).rejects.toThrow(/too deep/);
   });
 });
+
+describe('built-in data nodes (database / fileWrite)', () => {
+  const edgeFrom = (target: string): FlowEdge => ({
+    id: `e-${target}`, source: 'p1', sourceHandle: 'prompt-out', target, targetHandle: 'in', type: 'flow',
+  });
+  const captureGateway = (reply: string) => {
+    const calls: Array<{ method: string; params: Record<string, unknown> }> = [];
+    return {
+      calls,
+      client: {
+        async sendAgentTurn() { return 'unused'; },
+        async callGatewayMethod(method: string, params: Record<string, unknown>) {
+          calls.push({ method, params });
+          return reply;
+        },
+      },
+    };
+  };
+
+  it('database (read) calls flows.db.query with the configured SQL + mark fields, {input} expanded', async () => {
+    const node: FlowNode = {
+      id: 'db1', type: 'database', position: { x: 200, y: 0 },
+      data: {
+        label: 'Read rows', action: 'read',
+        sql: 'SELECT * FROM messages WHERE chat_id = {input} AND last_checked IS NULL',
+        markColumn: 'last_checked', markTable: 'messages', markIdColumn: 'id',
+      },
+    };
+    const { calls, client } = captureGateway('[{"id":1}]');
+    const { graph, initialState } = compileFlow([prompt, node], [edgeFrom('db1')], { gatewayClient: client });
+    const result = await graph.invoke(initialState);
+    expect(calls).toHaveLength(1);
+    expect(calls[0].method).toBe('flows.db.query');
+    const cfg = calls[0].params.config as Record<string, unknown>;
+    expect(cfg.sql).toBe('SELECT * FROM messages WHERE chat_id = Hello AND last_checked IS NULL');
+    expect(cfg.markColumn).toBe('last_checked');
+    expect(cfg.markTable).toBe('messages');
+    expect(String(result.messages[result.messages.length - 1].content)).toBe('[{"id":1}]');
+  });
+
+  it('database (update) calls flows.db.exec with the configured SQL + dbPath', async () => {
+    const node: FlowNode = {
+      id: 'db2', type: 'database', position: { x: 200, y: 0 },
+      data: { label: 'Write', action: 'update', sql: 'UPDATE messages SET seen = 1', dbPath: '~/.minion/message-ledger.db' },
+    };
+    const { calls, client } = captureGateway('{"changes":3}');
+    const { graph, initialState } = compileFlow([prompt, node], [edgeFrom('db2')], { gatewayClient: client });
+    const result = await graph.invoke(initialState);
+    expect(calls[0].method).toBe('flows.db.exec');
+    const cfg = calls[0].params.config as Record<string, unknown>;
+    expect(cfg.sql).toBe('UPDATE messages SET seen = 1');
+    expect(cfg.dbPath).toBe('~/.minion/message-ledger.db');
+    expect(String(result.messages[result.messages.length - 1].content)).toBe('{"changes":3}');
+  });
+
+  it('database (create) routes to flows.db.exec', async () => {
+    const node: FlowNode = {
+      id: 'db3', type: 'database', position: { x: 200, y: 0 },
+      data: { label: 'Insert', action: 'create', sql: "INSERT INTO log (msg) VALUES ('{input}')" },
+    };
+    const { calls, client } = captureGateway('{"changes":1}');
+    const { graph, initialState } = compileFlow([prompt, node], [edgeFrom('db3')], { gatewayClient: client });
+    await graph.invoke(initialState);
+    expect(calls[0].method).toBe('flows.db.exec');
+    expect((calls[0].params.config as Record<string, unknown>).sql).toBe("INSERT INTO log (msg) VALUES ('Hello')");
+  });
+
+  it('fileWrite calls flows.file.write with the upstream content as input and the configured path/mode', async () => {
+    const node: FlowNode = {
+      id: 'fw1', type: 'fileWrite', position: { x: 200, y: 0 },
+      data: { label: 'Write file', path: '~/.minion/recon/report-{date}.md', mode: 'append' },
+    };
+    const { calls, client } = captureGateway('/home/x/.minion/recon/report-2026-06-04.md');
+    const { graph, initialState } = compileFlow([prompt, node], [edgeFrom('fw1')], { gatewayClient: client });
+    const result = await graph.invoke(initialState);
+    expect(calls[0].method).toBe('flows.file.write');
+    expect(calls[0].params.input).toBe('Hello');
+    const cfg = calls[0].params.config as Record<string, unknown>;
+    expect(cfg.path).toBe('~/.minion/recon/report-{date}.md');
+    expect(cfg.mode).toBe('append');
+    expect(String(result.messages[result.messages.length - 1].content)).toContain('report-2026-06-04.md');
+  });
+});
+
+describe('schedule trigger entry node', () => {
+  const scheduleNode: FlowNode = {
+    id: 's1', type: 'schedule', position: { x: 0, y: 0 },
+    data: { label: 'Every day', every: 1, unit: 'days', atTime: '09:00' },
+  };
+  const schedEdge: FlowEdge = {
+    id: 'se', source: 's1', sourceHandle: 'out', target: 'a1', targetHandle: 'in', type: 'flow',
+  };
+
+  it('is a valid entry node (like a trigger)', () => {
+    expect(() => validateFlowShape([scheduleNode, agent], [schedEdge])).not.toThrow();
+  });
+
+  it('rejects a flow with both a schedule and a prompt box', () => {
+    const pEdge2: FlowEdge = { id: 'e1', source: 'p1', sourceHandle: 'prompt-out', target: 'a1', targetHandle: 'in', type: 'flow' };
+    expect(() => validateFlowShape([scheduleNode, prompt, agent], [schedEdge, pEdge2])).toThrow(
+      /cannot have both/,
+    );
+  });
+
+  it('compiles with an empty seed prompt — no initialPrompt required', async () => {
+    const fakeModel = {
+      async invoke(msgs: BaseMessage[]) {
+        return new AIMessage(`seen:[${String(msgs[0].content)}]`);
+      },
+    };
+    const llmNode: FlowNode = { id: 'a1', type: 'llm', position: { x: 200, y: 0 }, data: { label: 'LLM', modelId: 'x' } };
+    const { graph, initialState } = compileFlow([scheduleNode, llmNode], [schedEdge], { model: fakeModel });
+    const result = await graph.invoke(initialState);
+    // The entry seeded an empty HumanMessage (no inbound message on a scheduled run).
+    expect(String(result.messages[result.messages.length - 1].content)).toBe('seen:[]');
+  });
+});
