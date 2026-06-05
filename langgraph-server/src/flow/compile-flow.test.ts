@@ -737,6 +737,16 @@ describe('compileFlow — config-embedded brancher (branch-editor field)', () =>
     const route = buildBranchRoute(data, connected, { model: fakeModel });
     expect(await route(stateWith('my app is broken'))).toBe('b2');
   });
+
+  it('buildBranchRoute tolerates a label wrapped in extra words (no silent downgrade)', async () => {
+    // A triage model that answers verbosely must still classify, not fall to
+    // 'default' — that downgrade would mean an 'alto' emergency alerts nobody.
+    const fakeModel = { async invoke() { return new AIMessage('La categoría es: ALTO'); } };
+    const data = { mode: 'llm' as const, label: '', branches: [{ id: 'b1', label: 'alto' }, { id: 'b2', label: 'medio' }] };
+    const connected = new Set(['b1', 'b2', 'default']);
+    const route = buildBranchRoute(data, connected, { model: fakeModel });
+    expect(await route(stateWith('dolor intenso y palidez'))).toBe('b1');
+  });
 });
 
 describe('compileFlow — toolAgent node', () => {

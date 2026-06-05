@@ -138,6 +138,9 @@ export type HandoffNodeData = {
   destinations: HandoffDestination[];
   priority?: string;
   suggestionCount?: number;
+  /** Model for generating suggested replies (e.g. 'claude-haiku-4-5', or a
+   *  'claude-sonnet-…' for higher quality). Defaults to claude-haiku-4-5. */
+  suggestionModel?: string;
   language?: string;
   systemPrompt?: string;
   closingMessage?: string;

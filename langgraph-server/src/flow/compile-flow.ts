@@ -367,7 +367,19 @@ async function classifyWithLlm(input: string, data: RouterNodeData, opts: Compil
     `Reply with ONLY the label, nothing else.\n${lines.join('\n')}`;
   const res = await model.invoke([new SystemMessage(sys), new HumanMessage(input)]);
   const answer = String(res.content).trim().toLowerCase();
-  const match = data.branches.find((b) => b.label.toLowerCase() === answer);
+  // Prefer an exact label match. If the model wrapped the label in extra words
+  // (e.g. "the category is alto"), fall back to a contained-label match so a
+  // valid classification isn't silently downgraded to 'default'. For a triage
+  // flow that downgrade would mean a real emergency never alerts anyone — the
+  // tolerant match is a safety net, and 'hybrid' mode (rule overrides) is the
+  // stronger guard for must-not-miss categories.
+  const labels = data.branches.filter((b) => b.label);
+  let match = labels.find((b) => b.label.toLowerCase() === answer);
+  if (!match) {
+    // Longest label first so "alto" doesn't win over a more specific overlap.
+    const byLen = [...labels].sort((a, b) => b.label.length - a.label.length);
+    match = byLen.find((b) => answer.includes(b.label.toLowerCase()));
+  }
   return match ? match.id : 'default';
 }
 
@@ -480,6 +492,7 @@ function buildNodeRunner(
         destinations: data.destinations ?? [],
         priority: data.priority,
         suggestionCount: data.suggestionCount ?? 3,
+        suggestionModel: data.suggestionModel,
         language: data.language ?? 'es',
         systemPrompt: data.systemPrompt ?? '',
         originalMessage,
