@@ -34,3 +34,17 @@ export {
   agentBuiltSkills,
   builtTools,
 } from './builder.js';
+export { channels, channelAssignments, channelIdentities } from './channels.js';
+export { sessions, sessionTasks } from './sessions.js';
+export { missions, tasks } from './missions.js';
+export { chatMessages } from './chat-messages.js';
+export { userAgents } from './user-agents.js';
+export { skills, skillExecutionStats } from './skills.js';
+export {
+  serverBackups,
+  serverProvisionConfigs,
+  backupConfigs,
+  configSnapshots,
+} from './server-ops.js';
+export { workspaceMembership } from './workspace-membership.js';
+export type { WorkspaceMembership, NewWorkspaceMembership } from './workspace-membership.js';
