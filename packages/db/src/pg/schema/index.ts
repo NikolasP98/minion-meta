@@ -17,3 +17,9 @@ export { messages } from './messages.js';
 // docs/superpowers/specs/2026-06-05-turso-supabase-split-migration.md
 export { userPreferences } from './user-preferences.js';
 export { personalAgents } from './personal-agents.js';
+export { settings } from './settings.js';
+export { workshopSaves } from './workshop-saves.js';
+export { deviceIdentities } from './device-identities.js';
+export { files } from './files.js';
+export { agentGroups, agentGroupMembers } from './agent-groups.js';
+export { marketplaceAgents, marketplaceInstalls } from './marketplace.js';
