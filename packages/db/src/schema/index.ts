@@ -60,3 +60,5 @@ export {
 export { userPreferences } from './user-preferences.js';
 export { workspaceMembership } from './workspace-membership.js';
 export type { WorkspaceMembership, NewWorkspaceMembership } from './workspace-membership.js';
+export { joinRequests } from './join-requests.js';
+export type { JoinRequest, NewJoinRequest } from './join-requests.js';
