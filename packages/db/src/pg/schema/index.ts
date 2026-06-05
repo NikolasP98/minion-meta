@@ -48,3 +48,5 @@ export {
 } from './server-ops.js';
 export { workspaceMembership } from './workspace-membership.js';
 export type { WorkspaceMembership, NewWorkspaceMembership } from './workspace-membership.js';
+// Org-scoped agent memory corpus (pgvector) — RAG retrieval + hub visualization.
+export { agentMemories } from './agent-memories.js';
