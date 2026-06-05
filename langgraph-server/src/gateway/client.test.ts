@@ -20,9 +20,9 @@ describe('extractReply', () => {
 });
 
 describe('deriveSessionKey', () => {
-  it('makes an ephemeral key from runId + nodeId', () => {
+  it('makes an ephemeral key that still encodes the agent (canonical agent:<id>:<rest>)', () => {
     expect(deriveSessionKey('ephemeral', 'agent1', 'run-123', 'node-abc')).toBe(
-      'flow-run:run-123:node-abc',
+      'agent:agent1:flow-run:run-123:node-abc',
     );
   });
   it('makes a shared key from agentId', () => {

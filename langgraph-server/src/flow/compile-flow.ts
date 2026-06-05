@@ -13,11 +13,19 @@ import {
   type TransformNodeData,
   type StructuredNodeData,
   type RouterNodeData,
+  type RouterBranch,
   type RouterRuleOp,
   type ToolAgentNodeData,
+  type ChannelNodeData,
+  type HandoffNodeData,
+  type ReactionNodeData,
+  type SubflowNodeData,
+  type DatabaseNodeData,
+  type FileWriteNodeData,
+  type FlowRunEvent,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
-import { sendAgentTurn, callGatewayMethod } from '../gateway/client.js';
+import { sendAgentTurn, callGatewayMethod, sendChannelMessage, type ChannelSendResult } from '../gateway/client.js';
 import { buildTools } from './tools.js';
 import RE2 from 're2';
 
@@ -26,16 +34,42 @@ export const DEFAULT_MODEL = 'claude-haiku-4-5-20251001';
 /** Fixed cap on toolAgent ReAct loop super-steps (not user-tunable in B3). */
 export const TOOL_AGENT_RECURSION_LIMIT = 10;
 
+/** Max nesting depth for subflow → subflow → … chains, a backstop against
+ *  runaway recursion when the precise call-stack id seed is unavailable. */
+export const DEFAULT_MAX_SUBFLOW_DEPTH = 8;
+
 /** Memory bound on regex-matched input (the RE2 engine handles ReDoS-safety). */
 const MAX_REGEX_INPUT = 10_000;
 /** Sanity bound on regex pattern length. */
 const MAX_REGEX_PATTERN = 1_000;
 
-const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent'] as const;
+const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent', 'channel', 'handoff', 'reaction', 'subflow', 'database', 'fileWrite'] as const;
+
+/**
+ * Entry nodes that are actually wired into the flow (i.e. they source a `flow`
+ * edge). A prompt/trigger node a user dropped on the canvas but never connected
+ * is an orphan — it must NOT count toward the entry-node checks, otherwise a
+ * single stray node breaks an otherwise-valid flow ("cannot have both…",
+ * "expected exactly 1…").
+ */
+export function wiredEntryNodes(nodes: FlowNode[], edges: FlowEdge[]): FlowNode[] {
+  const flowSources = new Set(edges.filter((e) => e.type === 'flow').map((e) => e.source));
+  return nodes.filter(
+    (n) =>
+      (n.type === 'promptBox' ||
+        n.type === 'trigger' ||
+        n.type === 'pluginTrigger' ||
+        n.type === 'schedule') &&
+      flowSources.has(n.id),
+  );
+}
 
 export function validateFlowShape(nodes: FlowNode[], edges: FlowEdge[]): void {
-  const prompts = nodes.filter((n) => n.type === 'promptBox');
-  const triggers = nodes.filter((n) => n.type === 'trigger' || n.type === 'pluginTrigger');
+  const entries = wiredEntryNodes(nodes, edges);
+  const prompts = entries.filter((n) => n.type === 'promptBox');
+  const triggers = entries.filter(
+    (n) => n.type === 'trigger' || n.type === 'pluginTrigger' || n.type === 'schedule',
+  );
   const processing = nodes.filter((n) => (PROCESSING_TYPES as readonly string[]).includes(n.type));
 
   if (prompts.length > 0 && triggers.length > 0) {
@@ -43,7 +77,7 @@ export function validateFlowShape(nodes: FlowNode[], edges: FlowEdge[]): void {
   }
   const entryNodes = [...prompts, ...triggers];
   if (entryNodes.length !== 1) {
-    throw new UnsupportedFlowError(`Expected exactly 1 prompt or trigger node, found ${entryNodes.length}.`);
+    throw new UnsupportedFlowError(`Expected exactly 1 connected prompt or trigger node, found ${entryNodes.length}.`);
   }
   if (processing.length < 1) {
     throw new UnsupportedFlowError('Flow needs at least one processing node.');
@@ -109,6 +143,15 @@ interface GatewayClient {
     nodeId: string,
   ): Promise<string>;
   callGatewayMethod?(method: string, params: Record<string, unknown>): Promise<string>;
+  sendChannelMessage?(
+    channel: string,
+    to: string,
+    message: string,
+    accountId: string | undefined,
+    runId: string,
+    nodeId: string,
+    index: number,
+  ): Promise<ChannelSendResult>;
 }
 
 export interface CompileOptions {
@@ -118,12 +161,71 @@ export interface CompileOptions {
   gatewayClient?: GatewayClient;
   /** Event payload passed by the trigger-manager when running trigger-based flows. */
   initialPrompt?: string;
+  /** Origin session key of the triggering event (handoff node → relay.open). */
+  originSessionKey?: string;
+  /** Raw trigger event payload (carries channel/chatId/accountId for handoff). */
+  eventPayload?: Record<string, unknown>;
   /** Inject the ReAct agent factory for tests (toolAgent path). Defaults to createReactAgent. */
   reactAgentFactory?: (args: { llm: unknown; tools: unknown[] }) => {
     invoke(
       input: { messages: BaseMessage[] },
       config?: { recursionLimit?: number },
     ): Promise<{ messages: BaseMessage[] }>;
+  };
+  /**
+   * Per-node lifecycle sink. When provided, each processing node emits
+   * node-start (with its input) before running and node-end (with input +
+   * output) after, or node-error on throw — so callers can show live progress.
+   */
+  emit?: (event: FlowRunEvent) => void;
+  /**
+   * Resolve a flow's definition by id — used by `subflow` nodes to load the
+   * referenced flow at execution time. Injectable for tests; production wires a
+   * hub fetch. A subflow node throws if this is absent.
+   */
+  loadFlow?: (flowId: string) => Promise<{ nodes: FlowNode[]; edges: FlowEdge[] }>;
+  /**
+   * Ids of the flows currently on the subflow call stack (outermost → innermost),
+   * for cross-flow cycle detection. A subflow node throws if its target is
+   * already on the stack. Threaded automatically into nested compiles.
+   */
+  subflowStack?: string[];
+  /** Max subflow nesting depth (defaults to DEFAULT_MAX_SUBFLOW_DEPTH). */
+  maxSubflowDepth?: number;
+}
+
+/** Human label for a node — its editor label, falling back to the type. */
+function nodeLabelOf(node: FlowNode): string {
+  const label = (node.data as { label?: unknown })?.label;
+  return typeof label === 'string' && label.trim() ? label : node.type;
+}
+
+/**
+ * Wrap a node runner so it emits node-start/node-end/node-error around
+ * execution. No-op passthrough when no sink is configured.
+ */
+function instrumentNode(
+  node: FlowNode,
+  run: (state: typeof MessagesAnnotation.State) => Promise<{ messages: BaseMessage[] }>,
+  emit?: (event: FlowRunEvent) => void,
+): (state: typeof MessagesAnnotation.State) => Promise<{ messages: BaseMessage[] }> {
+  if (!emit) return run;
+  const nodeLabel = nodeLabelOf(node);
+  const base = { nodeId: node.id, nodeType: node.type, nodeLabel } as const;
+  return async (state) => {
+    const input = lastMessageContent(state);
+    emit({ ...base, kind: 'node-start', level: 'info', input, message: `▶ ${nodeLabel}`, ts: Date.now() });
+    try {
+      const result = await run(state);
+      const out = result?.messages?.[result.messages.length - 1];
+      const output = out ? String(out.content) : '';
+      emit({ ...base, kind: 'node-end', level: 'info', input, output, message: `✓ ${nodeLabel}`, ts: Date.now() });
+      return result;
+    } catch (err) {
+      const detail = err instanceof Error ? err.message : String(err);
+      emit({ ...base, kind: 'node-error', level: 'error', input, message: `✗ ${nodeLabel}: ${detail}`, ts: Date.now() });
+      throw err;
+    }
   };
 }
 
@@ -134,13 +236,17 @@ export function compileFlow(
 ) {
   validateFlowShape(nodes, edges);
 
-  const entryNode = nodes.find(
-    (n) => n.type === 'promptBox' || n.type === 'trigger' || n.type === 'pluginTrigger',
-  )!;
+  // Pick the wired entry (matches validateFlowShape), never an orphaned node.
+  const entryNode = wiredEntryNodes(nodes, edges)[0]!;
   const runId = randomUUID();
 
   let promptValue: string;
-  if (entryNode.type === 'trigger' || entryNode.type === 'pluginTrigger') {
+  if (entryNode.type === 'schedule') {
+    // A scheduled run has no inbound message — seed an empty prompt (the
+    // scheduler POSTs prompt:'' to /flows/run-triggered). Downstream nodes that
+    // need data fetch it themselves (e.g. a dbQuery node reading the ledger).
+    promptValue = opts.initialPrompt ?? '';
+  } else if (entryNode.type === 'trigger' || entryNode.type === 'pluginTrigger') {
     if (!opts.initialPrompt) {
       throw new UnsupportedFlowError(
         'Trigger node requires an initialPrompt (event payload) — call via /flows/run-triggered.',
@@ -148,13 +254,20 @@ export function compileFlow(
     }
     promptValue = opts.initialPrompt;
   } else {
-    promptValue = (entryNode.data as PromptBoxData).value ?? '';
+    // A promptBox carries its own input, but when this flow is invoked AS a
+    // subflow the caller passes the upstream message via `initialPrompt`, which
+    // must win — that's how a reusable subflow receives its input. Manual runs
+    // never set `initialPrompt` for promptBox entries (see hub testRunPrompt),
+    // so this is a no-op there.
+    promptValue = opts.initialPrompt ?? (entryNode.data as PromptBoxData).value ?? '';
   }
 
   const processing = nodes.filter((n) =>
     n.type === 'llm' || n.type === 'agent' || n.type === 'pluginAction' ||
     n.type === 'transform' || n.type === 'structured' || n.type === 'router' ||
-    n.type === 'toolAgent',
+    n.type === 'toolAgent' || n.type === 'channel' || n.type === 'handoff' ||
+    n.type === 'reaction' || n.type === 'subflow' || n.type === 'database' ||
+    n.type === 'fileWrite',
   );
   const flowEdges = edges.filter((e) => e.type === 'flow');
 
@@ -172,7 +285,7 @@ export function compileFlow(
   const g = builder as unknown as AnyGraph;
 
   for (const node of processing) {
-    g.addNode(node.id, buildNodeRunner(node, opts, runId));
+    g.addNode(node.id, instrumentNode(node, buildNodeRunner(node, opts, runId), opts.emit));
   }
 
   const outgoing = new Map<string, FlowEdge[]>();
@@ -186,12 +299,18 @@ export function compileFlow(
 
   for (const node of processing) {
     const outs = outgoing.get(node.id) ?? [];
-    if (node.type === 'router') {
+    // A node is a "brancher" if it carries branch config — either a built-in
+    // router (routes on its INPUT, pass-through runner) or any node whose config
+    // embeds a `branch-editor` field value (e.g. a plugin action: runs its
+    // method, then routes on its OUTPUT). Both reuse the same routing engine;
+    // `lastMessageContent` naturally yields input vs output per node kind.
+    const branch = findBranchConfig(node);
+    if (branch) {
       const pathMap: Record<string, string> = {};
       for (const e of outs) pathMap[e.sourceHandle || 'default'] = e.target;
       if (!pathMap.default) pathMap.default = END;
       const connected = new Set(Object.keys(pathMap));
-      g.addConditionalEdges(node.id, buildRouterRoute(node, connected, opts), pathMap);
+      g.addConditionalEdges(node.id, buildBranchRoute(branch, connected, opts), pathMap);
     } else if (outs.length === 0) {
       g.addEdge(node.id, END);
     } else {
@@ -201,7 +320,7 @@ export function compileFlow(
 
   const graph = g.compile();
   const initialState = { messages: [new HumanMessage(promptValue)] };
-  return { graph, initialState };
+  return { graph, initialState, runId };
 }
 
 /** A processing node's input = the content of the most recent message in state. */
@@ -229,38 +348,99 @@ export function matchesRule(input: string, rule: { op: RouterRuleOp; value: stri
 
 async function classifyWithLlm(input: string, data: RouterNodeData, opts: CompileOptions): Promise<string> {
   const model: ChatModel = opts.model ?? resolveProviderModel(data.modelId ?? DEFAULT_MODEL);
+  // Build a deduped label list, carrying each branch's description (rubric) so
+  // the model classifies against the conditions, not just bare label names.
   const seen = new Set<string>();
-  const labels: string[] = [];
-  for (const lbl of [...data.branches.map((b) => b.label), 'default']) {
-    const key = lbl.toLowerCase();
+  const lines: string[] = [];
+  for (const b of data.branches) {
+    const key = b.label.toLowerCase();
     if (seen.has(key)) continue;
     seen.add(key);
-    labels.push(lbl);
+    const desc = b.description?.trim();
+    lines.push(desc ? `- ${b.label}: ${desc}` : `- ${b.label}`);
+  }
+  if (!seen.has('default')) {
+    lines.push('- default: none of the above');
   }
   const sys =
-    `Classify the input into exactly one of these labels: ${labels.join(', ')}. ` +
-    `Reply with ONLY the label, nothing else.`;
+    `Classify the input into exactly one of the following labels based on its description. ` +
+    `Reply with ONLY the label, nothing else.\n${lines.join('\n')}`;
   const res = await model.invoke([new SystemMessage(sys), new HumanMessage(input)]);
   const answer = String(res.content).trim().toLowerCase();
-  const match = data.branches.find((b) => b.label.toLowerCase() === answer);
+  // Prefer an exact label match. If the model wrapped the label in extra words
+  // (e.g. "the category is alto"), fall back to a contained-label match so a
+  // valid classification isn't silently downgraded to 'default'. For a triage
+  // flow that downgrade would mean a real emergency never alerts anyone — the
+  // tolerant match is a safety net, and 'hybrid' mode (rule overrides) is the
+  // stronger guard for must-not-miss categories.
+  const labels = data.branches.filter((b) => b.label);
+  let match = labels.find((b) => b.label.toLowerCase() === answer);
+  if (!match) {
+    // Longest label first so "alto" doesn't win over a more specific overlap.
+    const byLen = [...labels].sort((a, b) => b.label.length - a.label.length);
+    match = byLen.find((b) => answer.includes(b.label.toLowerCase()));
+  }
   return match ? match.id : 'default';
 }
 
-/** Build the conditional-edge routing fn for a router node. Exported for tests. */
+/**
+ * Resolve a node's branch routing config, if any. A built-in `router` carries it
+ * directly on `data`. Any other node may embed it via a `branch-editor` config
+ * field — stored as `{ mode, modelId?, branches }` somewhere in `data.config`.
+ * The runner has no descriptor, so it detects the field by shape (a value with a
+ * `branches` array). Returns null for non-branching nodes.
+ */
+export function findBranchConfig(node: FlowNode): RouterNodeData | null {
+  if (node.type === 'router') return node.data as RouterNodeData;
+  const config = (node.data as { config?: Record<string, unknown> }).config;
+  if (!config || typeof config !== 'object') return null;
+  for (const v of Object.values(config)) {
+    if (v && typeof v === 'object' && Array.isArray((v as { branches?: unknown }).branches)) {
+      const bc = v as { mode?: unknown; modelId?: unknown; branches: RouterBranch[] };
+      const mode = bc.mode === 'llm' || bc.mode === 'hybrid' ? bc.mode : 'rule';
+      return {
+        mode,
+        modelId: typeof bc.modelId === 'string' ? bc.modelId : undefined,
+        branches: Array.isArray(bc.branches) ? bc.branches : [],
+        label: '',
+      };
+    }
+  }
+  return null;
+}
+
+/**
+ * Build the conditional-edge routing fn for a router node. Exported for tests;
+ * thin wrapper over buildBranchRoute reading the node's own router data.
+ */
 export function buildRouterRoute(
   node: FlowNode,
   connectedHandles: Set<string>,
   opts: CompileOptions,
 ): (state: typeof MessagesAnnotation.State) => Promise<string> {
-  const data = node.data as RouterNodeData;
+  return buildBranchRoute(node.data as RouterNodeData, connectedHandles, opts);
+}
+
+/** Build the conditional-edge routing fn from resolved branch config (router data
+ *  or a config-embedded branch-editor value). */
+export function buildBranchRoute(
+  data: RouterNodeData,
+  connectedHandles: Set<string>,
+  opts: CompileOptions,
+): (state: typeof MessagesAnnotation.State) => Promise<string> {
   return async (state) => {
     const input = lastMessageContent(state);
     let chosen = 'default';
-    if (data.mode === 'rule') {
+    // Rule fast-path runs for 'rule' and 'hybrid' — deterministic and cheap.
+    if (data.mode === 'rule' || data.mode === 'hybrid') {
       for (const b of data.branches) {
         if (b.rule && matchesRule(input, b.rule)) { chosen = b.id; break; }
       }
-    } else {
+    }
+    // LLM rubric classification runs for 'llm' always, and for 'hybrid' only when
+    // no rule matched — so a Classify/Route node can combine deterministic
+    // overrides with sentiment/rubric judgement in a single node.
+    if (chosen === 'default' && (data.mode === 'llm' || data.mode === 'hybrid')) {
       chosen = await classifyWithLlm(input, data, opts);
     }
     return connectedHandles.has(chosen) ? chosen : 'default';
@@ -276,10 +456,116 @@ function buildNodeRunner(
   if (node.type === 'pluginAction') {
     const data = node.data as PluginActionNodeData;
     const invoke = opts.gatewayClient?.callGatewayMethod ?? callGatewayMethod;
+    // Forward the node's declared config values (from the editor form) as
+    // `config` so the gateway method can read them (e.g. model, minSeverity).
+    const config = data.config ?? {};
     return async (state) => {
       const input = lastMessageContent(state);
-      const reply = await invoke(data.method, { input, runId, nodeId: node.id });
+      const reply = await invoke(data.method, { input, runId, nodeId: node.id, config });
       return { messages: [new AIMessage(reply)] };
+    };
+  }
+
+  // handoff node — built-in terminal: open a live human relay session via the
+  // gateway `flows.relay.open` method, threading the triggering event's origin
+  // (channel/chat/account) so owners can claim and relay to the client.
+  if (node.type === 'handoff') {
+    const data = node.data as HandoffNodeData;
+    const invoke = opts.gatewayClient?.callGatewayMethod ?? callGatewayMethod;
+    const ep = opts.eventPayload ?? {};
+    // Prefer explicit event payload fields; fall back to parsing the sessionKey
+    // "channel:account:chatId[:...]" if the payload lacks them.
+    const sk = (opts.originSessionKey ?? '').split(':');
+    const originChannel = (ep.channelId as string | undefined) ?? sk[0] ?? '';
+    const originAccountId =
+      (ep.accountId as string | undefined) ?? (sk.length >= 3 ? sk[1] : undefined);
+    const originChatId = (ep.chatId as string | undefined) ?? (sk.length >= 3 ? sk[2] : sk[1]) ?? '';
+    return async (state) => {
+      const originalMessage = lastMessageContent(state);
+      if (!originChannel || !originChatId) {
+        return { messages: [new AIMessage('Handoff skipped: no origin session (manual run).')] };
+      }
+      const reply = await invoke('flows.relay.open', {
+        originChannel,
+        originChatId,
+        originAccountId,
+        destinations: data.destinations ?? [],
+        priority: data.priority,
+        suggestionCount: data.suggestionCount ?? 3,
+        suggestionModel: data.suggestionModel,
+        language: data.language ?? 'es',
+        systemPrompt: data.systemPrompt ?? '',
+        originalMessage,
+        closingMessage: data.closingMessage,
+      });
+      return { messages: [new AIMessage(String(reply))] };
+    };
+  }
+
+  // reaction node — built-in transparent side-effect: set a status emoji on the
+  // flow's TRIGGER message (the inbound message that fired the flow) via the
+  // gateway `flows.reaction.set` RPC, then pass the upstream message through
+  // unchanged. Needs the trigger's channel/chat/message id from the event
+  // payload, so it no-ops on manual runs (no trigger message).
+  if (node.type === 'reaction') {
+    const data = node.data as ReactionNodeData;
+    const invoke = opts.gatewayClient?.callGatewayMethod ?? callGatewayMethod;
+    const ep = opts.eventPayload ?? {};
+    const channel = (ep.channelId as string | undefined) ?? '';
+    const to = (ep.chatId as string | undefined) ?? '';
+    const messageId = (ep.messageId as string | undefined) ?? '';
+    const accountId = ep.accountId as string | undefined;
+    const emoji = (data.emoji ?? '').trim();
+    return async () => {
+      if (emoji && channel && to && messageId) {
+        await invoke('flows.reaction.set', {
+          channel,
+          to,
+          messageId,
+          emoji,
+          ...(accountId ? { accountId } : {}),
+        });
+      }
+      return { messages: [] };
+    };
+  }
+
+  // channel node — built-in delivery of the upstream message to one or more
+  // destinations on a chosen channel, via the gateway `send` RPC. Not tied to a
+  // plugin: the gateway routes by `channel` to the right channel implementation.
+  if (node.type === 'channel') {
+    const data = node.data as ChannelNodeData;
+    const invoke = opts.gatewayClient?.sendChannelMessage ?? sendChannelMessage;
+    const destinations = Array.isArray(data.destinations) ? data.destinations : [];
+    return async (state) => {
+      const message = lastMessageContent(state);
+      if (!data.channel) {
+        throw new UnsupportedFlowError(`Channel node "${node.id}" has no channel selected.`);
+      }
+      if (destinations.length === 0) {
+        throw new UnsupportedFlowError(`Channel node "${node.id}" has no destinations.`);
+      }
+      const results: Array<ChannelSendResult & { to: string }> = [];
+      for (let i = 0; i < destinations.length; i++) {
+        const to = (destinations[i]?.to ?? '').trim();
+        if (!to) {
+          results.push({ to: '', ok: false, error: 'empty destination' });
+          continue;
+        }
+        const r = await invoke(data.channel, to, message, data.accountId, runId, node.id, i);
+        results.push({ to, ...r });
+      }
+      const okCount = results.filter((r) => r.ok).length;
+      const failed = results.filter((r) => !r.ok);
+      const summary = `Sent to ${okCount}/${results.length} ${data.channel} destination(s).`;
+      const detail = failed.length
+        ? ` Failed: ${failed.map((r) => `${r.to || '(empty)'}${r.error ? ` — ${r.error}` : ''}`).join('; ')}`
+        : '';
+      // Total failure surfaces as a node error; partial success still completes.
+      if (okCount === 0) {
+        throw new Error(summary + detail);
+      }
+      return { messages: [new AIMessage(summary + detail)] };
     };
   }
 
@@ -372,12 +658,111 @@ function buildNodeRunner(
         nodeId: node.id,
       });
       const agent = factory!({ llm: model as unknown, tools });
+      // Process this node's INPUT (the upstream message) as a single clean user
+      // turn — not the whole accumulated graph history. Replaying history can
+      // start the model on an empty seed message (a scheduled/trigger entry seeds
+      // one) or an assistant-role message, both of which providers reject; the
+      // node's job is to act on its input.
+      const input = lastMessageContent(state);
+      const userTurn = new HumanMessage(input);
       const messages = data.systemPrompt
-        ? [new SystemMessage(data.systemPrompt), ...state.messages]
-        : state.messages;
+        ? [new SystemMessage(data.systemPrompt), userTurn]
+        : [userTurn];
       const result = await agent.invoke({ messages }, { recursionLimit: TOOL_AGENT_RECURSION_LIMIT });
       const last = result.messages[result.messages.length - 1];
       return { messages: [last] };
+    };
+  }
+
+  // subflow node — run another flow as a subroutine. Loads the referenced flow,
+  // compiles it, and invokes it with THIS node's input as the entry prompt; the
+  // subflow's final message becomes this node's output. The triggering event
+  // context (eventPayload/originSessionKey) and any injected model/gateway are
+  // threaded through, so a subflow can contain handoff/reaction nodes that act
+  // on the original trigger. Guarded against cross-flow cycles and runaway depth.
+  if (node.type === 'subflow') {
+    const data = node.data as SubflowNodeData;
+    const flowId = data.flowId;
+    const load = opts.loadFlow;
+    const stack = opts.subflowStack ?? [];
+    const maxDepth = opts.maxSubflowDepth ?? DEFAULT_MAX_SUBFLOW_DEPTH;
+    return async (state) => {
+      const input = lastMessageContent(state);
+      if (!flowId) {
+        throw new UnsupportedFlowError(`Subflow node "${node.id}" has no flow selected.`);
+      }
+      if (!load) {
+        throw new UnsupportedFlowError(`Subflow node "${node.id}" cannot run: no flow loader configured.`);
+      }
+      if (stack.includes(flowId)) {
+        throw new UnsupportedFlowError(`Subflow cycle detected: ${[...stack, flowId].join(' → ')}.`);
+      }
+      if (stack.length >= maxDepth) {
+        throw new UnsupportedFlowError(`Subflow nesting too deep (limit ${maxDepth}).`);
+      }
+      const sub = await load(flowId);
+      const childOpts: CompileOptions = {
+        ...opts,
+        initialPrompt: input,
+        subflowStack: [...stack, flowId],
+      };
+      const { graph, initialState } = compileFlow(sub.nodes, sub.edges, childOpts);
+      const result = await graph.invoke(initialState);
+      const last = result.messages[result.messages.length - 1];
+      const reply = last ? String(last.content) : '';
+      return { messages: [new AIMessage(reply)] };
+    };
+  }
+
+  // database node — built-in: a single CRUD node over a sqlite DB. `read` runs a
+  // SELECT via the gateway `flows.db.query` RPC (SELECT-only + identifier
+  // allowlist + DB-path confinement gateway-side), returning the rows (JSON) and
+  // optionally stamping a consume-marker; `create`/`update`/`delete` run a write
+  // via `flows.db.exec`, returning the change count. The node's fields are
+  // forwarded under `config` (mirroring the former plugin-action shape). {input}
+  // expands in the SQL.
+  if (node.type === 'database') {
+    const data = node.data as DatabaseNodeData;
+    const invoke = opts.gatewayClient?.callGatewayMethod ?? callGatewayMethod;
+    const isRead = (data.action ?? 'read') === 'read';
+    return async (state) => {
+      const input = lastMessageContent(state);
+      const sql = (data.sql ?? '').replaceAll('{input}', input);
+      if (isRead) {
+        const config = {
+          sql,
+          dbPath: data.dbPath,
+          markColumn: data.markColumn,
+          markTable: data.markTable,
+          markIdColumn: data.markIdColumn,
+        };
+        const reply = await invoke('flows.db.query', { input, config, runId, nodeId: node.id });
+        return { messages: [new AIMessage(reply)] };
+      }
+      const reply = await invoke('flows.db.exec', {
+        input,
+        config: { sql, dbPath: data.dbPath },
+        runId,
+        nodeId: node.id,
+      });
+      return { messages: [new AIMessage(reply)] };
+    };
+  }
+
+  // fileWrite node — built-in: write the upstream message content to a file via
+  // the gateway `flows.file.write` RPC (path confined + {date} expanded gateway-
+  // side). Returns the written path downstream.
+  if (node.type === 'fileWrite') {
+    const data = node.data as FileWriteNodeData;
+    const invoke = opts.gatewayClient?.callGatewayMethod ?? callGatewayMethod;
+    return async (state) => {
+      const input = lastMessageContent(state);
+      const config = {
+        path: (data.path ?? '').replaceAll('{input}', input),
+        mode: data.mode ?? 'overwrite',
+      };
+      const reply = await invoke('flows.file.write', { input, config, runId, nodeId: node.id });
+      return { messages: [new AIMessage(reply)] };
     };
   }
 

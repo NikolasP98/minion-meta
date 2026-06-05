@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { validateFlowShape, compileFlow, resolveModelId, DEFAULT_MODEL, matchesRule, buildRouterRoute } from './compile-flow.js';
+import { validateFlowShape, compileFlow, resolveModelId, DEFAULT_MODEL, matchesRule, buildRouterRoute, buildBranchRoute, findBranchConfig } from './compile-flow.js';
 import { UnsupportedFlowError } from './types.js';
 import type { FlowNode, FlowEdge, LLMNodeData, TriggerNodeData, RouterNodeData } from './types.js';
 import { AIMessage, HumanMessage, SystemMessage, type BaseMessage } from '@langchain/core/messages';
@@ -177,6 +177,34 @@ describe('validateFlowShape — trigger nodes', () => {
   });
 });
 
+describe('validateFlowShape — orphaned entry nodes are ignored', () => {
+  // Repro: a user drops a stray trigger / extra prompt box on the canvas next to
+  // a valid promptBox→agent flow and never wires them. The orphans must not break
+  // the flow ("A flow cannot have both a trigger and a prompt box.").
+  const orphanTrigger: FlowNode = {
+    id: 'orphan-t', type: 'trigger', position: { x: 0, y: 400 },
+    data: { event: 'message:received', label: 'Stray', deliverResponse: false } satisfies TriggerNodeData,
+  };
+  const orphanPrompt: FlowNode = {
+    id: 'orphan-p', type: 'promptBox', position: { x: 0, y: 500 }, data: { label: 'Stray', value: '' },
+  };
+
+  it('ignores an orphaned (unwired) trigger when a prompt box is the real entry', () => {
+    expect(() => validateFlowShape([prompt, agent, orphanTrigger], [edge])).not.toThrow();
+  });
+  it('ignores an orphaned (unwired) second prompt box', () => {
+    expect(() => validateFlowShape([prompt, agent, orphanPrompt], [edge])).not.toThrow();
+  });
+  it('ignores both a stray trigger AND a stray prompt box at once', () => {
+    expect(() => validateFlowShape([prompt, agent, orphanTrigger, orphanPrompt], [edge])).not.toThrow();
+  });
+  it('still rejects when BOTH a trigger and a prompt box are wired in', () => {
+    const edgePrompt: FlowEdge = { id: 'ep2', source: 'p1', sourceHandle: 'prompt-out', target: 'a1', targetHandle: 'in', type: 'flow' };
+    const edgeTrig: FlowEdge = { id: 'et2', source: 'orphan-t', sourceHandle: 'out', target: 'a1', targetHandle: 'in', type: 'flow' };
+    expect(() => validateFlowShape([prompt, agent, orphanTrigger], [edgePrompt, edgeTrig])).toThrow(UnsupportedFlowError);
+  });
+});
+
 describe('compileFlow — trigger node', () => {
   it('uses initialPrompt from opts when trigger node is present', async () => {
     const fakeModel = {
@@ -250,6 +278,133 @@ describe('compileFlow — pluginAction node', () => {
     expect(calls[0].method).toBe('flowExample.echo');
     expect(calls[0].params.input).toBe('Hello');
     expect(result.messages[result.messages.length - 1].content).toBe('echo: Hello');
+  });
+});
+
+const channelNode: FlowNode = {
+  id: 'ch1', type: 'channel', position: { x: 200, y: 0 },
+  data: {
+    channel: 'whatsapp',
+    label: 'WhatsApp',
+    destinations: [
+      { kind: 'custom', to: '+51922286663', label: 'Owner 1' },
+      { kind: 'user', to: '+51999999999', label: 'Renzo' },
+    ],
+  },
+};
+const edgeToChannel: FlowEdge = {
+  id: 'e-ch', source: 'p1', sourceHandle: 'prompt-out', target: 'ch1', targetHandle: 'in', type: 'flow',
+};
+
+describe('validateFlowShape — channel node', () => {
+  it('accepts promptBox → channel', () => {
+    expect(() => validateFlowShape([prompt, channelNode], [edgeToChannel])).not.toThrow();
+  });
+});
+
+describe('compileFlow — channel node', () => {
+  it('sends the upstream message to every destination via sendChannelMessage', async () => {
+    const calls: Array<{ channel: string; to: string; message: string; index: number }> = [];
+    const fakeGateway = {
+      async sendAgentTurn() { return 'unused'; },
+      async sendChannelMessage(
+        channel: string, to: string, message: string,
+        _accountId: string | undefined, _runId: string, _nodeId: string, index: number,
+      ) {
+        calls.push({ channel, to, message, index });
+        return { ok: true, messageId: `m-${index}` };
+      },
+    };
+    const { graph, initialState } = compileFlow([prompt, channelNode], [edgeToChannel], { gatewayClient: fakeGateway });
+    const result = await graph.invoke(initialState);
+    expect(calls).toHaveLength(2);
+    expect(calls.map((c) => c.to)).toEqual(['+51922286663', '+51999999999']);
+    expect(calls.every((c) => c.channel === 'whatsapp' && c.message === 'Hello')).toBe(true);
+    expect(String(result.messages[result.messages.length - 1].content)).toContain('Sent to 2/2');
+  });
+
+  it('completes with a partial-failure summary when some destinations fail', async () => {
+    const fakeGateway = {
+      async sendAgentTurn() { return 'unused'; },
+      async sendChannelMessage(_c: string, to: string) {
+        return to.endsWith('663') ? { ok: true } : { ok: false, error: 'unknown_channel' };
+      },
+    };
+    const { graph, initialState } = compileFlow([prompt, channelNode], [edgeToChannel], { gatewayClient: fakeGateway });
+    const result = await graph.invoke(initialState);
+    const out = String(result.messages[result.messages.length - 1].content);
+    expect(out).toContain('Sent to 1/2');
+    expect(out).toContain('Failed');
+  });
+
+  it('throws (node error) when every destination fails', async () => {
+    const fakeGateway = {
+      async sendAgentTurn() { return 'unused'; },
+      async sendChannelMessage() { return { ok: false, error: 'boom' }; },
+    };
+    const { graph, initialState } = compileFlow([prompt, channelNode], [edgeToChannel], { gatewayClient: fakeGateway });
+    await expect(graph.invoke(initialState)).rejects.toThrow(/Sent to 0\/2/);
+  });
+
+  it('throws UnsupportedFlowError when the channel node has no destinations', async () => {
+    const empty: FlowNode = { ...channelNode, data: { channel: 'whatsapp', label: 'WhatsApp', destinations: [] } };
+    const { graph, initialState } = compileFlow([prompt, empty], [edgeToChannel], {
+      gatewayClient: { async sendAgentTurn() { return 'x'; }, async sendChannelMessage() { return { ok: true }; } },
+    });
+    await expect(graph.invoke(initialState)).rejects.toThrow(UnsupportedFlowError);
+  });
+});
+
+const reactionNode: FlowNode = {
+  id: 'rx1', type: 'reaction', position: { x: 200, y: 0 },
+  data: { label: 'React', emoji: '👀' },
+};
+const edgeToReaction: FlowEdge = {
+  id: 'e-rx', source: 'p1', sourceHandle: 'prompt-out', target: 'rx1', targetHandle: 'in', type: 'flow',
+};
+
+describe('validateFlowShape — reaction node', () => {
+  it('accepts promptBox → reaction (reaction counts as a processing node)', () => {
+    expect(() => validateFlowShape([prompt, reactionNode], [edgeToReaction])).not.toThrow();
+  });
+});
+
+describe('compileFlow — reaction node', () => {
+  it('reacts to the trigger message via flows.reaction.set, then passes the upstream message through', async () => {
+    const calls: Array<{ method: string; params: Record<string, unknown> }> = [];
+    const fakeGateway = {
+      async sendAgentTurn() { return 'unused'; },
+      async callGatewayMethod(method: string, params: Record<string, unknown>) {
+        calls.push({ method, params });
+        return 'reacted 👀';
+      },
+    };
+    const { graph, initialState } = compileFlow([prompt, reactionNode], [edgeToReaction], {
+      gatewayClient: fakeGateway,
+      eventPayload: { channelId: 'telegram', chatId: '9001', messageId: 'm-42', accountId: 'tg1' },
+    });
+    const result = await graph.invoke(initialState);
+    expect(calls).toHaveLength(1);
+    expect(calls[0].method).toBe('flows.reaction.set');
+    expect(calls[0].params).toMatchObject({
+      channel: 'telegram', to: '9001', messageId: 'm-42', emoji: '👀', accountId: 'tg1',
+    });
+    // Transparent side-effect: the upstream prompt message is still the last message.
+    expect(String(result.messages[result.messages.length - 1].content)).toBe('Hello');
+  });
+
+  it('no-ops on a manual run (no trigger message in the event payload)', async () => {
+    const calls: string[] = [];
+    const fakeGateway = {
+      async sendAgentTurn() { return 'unused'; },
+      async callGatewayMethod(method: string) { calls.push(method); return 'x'; },
+    };
+    const { graph, initialState } = compileFlow([prompt, reactionNode], [edgeToReaction], {
+      gatewayClient: fakeGateway,
+    });
+    const result = await graph.invoke(initialState);
+    expect(calls).toHaveLength(0);
+    expect(String(result.messages[result.messages.length - 1].content)).toBe('Hello');
   });
 });
 
@@ -455,6 +610,24 @@ describe('buildRouterRoute — llm mode', () => {
   });
 });
 
+describe('buildRouterRoute — hybrid mode', () => {
+  const node = routerNode({ mode: 'hybrid', branches: [
+    { id: 'b1', label: 'high', rule: { op: 'contains', value: 'URGENT' }, description: 'severe' },
+    { id: 'b2', label: 'low', description: 'minor' },
+  ] });
+  const connected = new Set(['b1', 'b2', 'default']);
+  it('rule fast-path wins WITHOUT calling the LLM', async () => {
+    let called = false;
+    const fakeModel = { async invoke() { called = true; return new AIMessage('low'); } };
+    expect(await buildRouterRoute(node, connected, { model: fakeModel })(stateWith('this is URGENT'))).toBe('b1');
+    expect(called).toBe(false);
+  });
+  it('falls back to the LLM rubric when no rule matches', async () => {
+    const fakeModel = { async invoke() { return new AIMessage('low'); } };
+    expect(await buildRouterRoute(node, connected, { model: fakeModel })(stateWith('just a small thing'))).toBe('b2');
+  });
+});
+
 describe('matchesRule — regex input cap', () => {
   it('still matches within the cap', () => {
     expect(matchesRule('a'.repeat(50) + 'NEEDLE', { op: 'contains', value: 'NEEDLE' })).toBe(true);
@@ -494,6 +667,85 @@ describe('compileFlow — router integration', () => {
     const { graph, initialState } = compileFlow([prompt, router, a], [eIn, eA], { model: fakeModel });
     const result = await graph.invoke(initialState);
     expect(String(result.messages[result.messages.length - 1].content)).toBe('Hello'); // 'na' never ran
+  });
+});
+
+describe('findBranchConfig', () => {
+  it('returns router data directly for a router node', () => {
+    const router: FlowNode = { id: 'r1', type: 'router', position: { x: 0, y: 0 }, data: { mode: 'llm', label: 'R', branches: [{ id: 'b1', label: 'A' }] } as never };
+    expect(findBranchConfig(router)?.branches).toHaveLength(1);
+    expect(findBranchConfig(router)?.mode).toBe('llm');
+  });
+  it('detects a branch-editor config value embedded on a pluginAction by shape', () => {
+    const node: FlowNode = {
+      id: 'pa', type: 'pluginAction', position: { x: 0, y: 0 },
+      data: { pluginId: 'p', contributionId: 'c', method: 'm', label: 'L',
+        config: { routing: { mode: 'rule', branches: [{ id: 'b1', label: 'A', rule: { op: 'contains', value: 'x' } }] } } } as never,
+    };
+    const bc = findBranchConfig(node);
+    expect(bc?.branches).toHaveLength(1);
+    expect(bc?.mode).toBe('rule');
+  });
+  it('returns null when config has no branches (e.g. a destination-list value)', () => {
+    const node: FlowNode = {
+      id: 'pa', type: 'pluginAction', position: { x: 0, y: 0 },
+      data: { pluginId: 'p', contributionId: 'c', method: 'm', label: 'L',
+        config: { dest: { channel: 'whatsapp', destinations: [{ kind: 'custom', to: '+1' }] } } } as never,
+    };
+    expect(findBranchConfig(node)).toBeNull();
+  });
+  it('ignores invalid mode and falls back to rule', () => {
+    const node: FlowNode = {
+      id: 'pa', type: 'pluginAction', position: { x: 0, y: 0 },
+      data: { pluginId: 'p', contributionId: 'c', method: 'm', label: 'L',
+        config: { r: { mode: 'bogus', branches: [] } } } as never,
+    };
+    expect(findBranchConfig(node)?.mode).toBe('rule');
+  });
+});
+
+describe('compileFlow — config-embedded brancher (branch-editor field)', () => {
+  const mkLlm = (id: string): FlowNode => ({ id, type: 'llm', position: { x: 0, y: 0 }, data: { modelId: 'm', label: id } });
+
+  it('runs the plugin method, then routes on its OUTPUT via the embedded branch config', async () => {
+    const ran: string[] = [];
+    const fakeModel = { async invoke(msgs: BaseMessage[]) { ran.push(String(msgs[msgs.length - 1].content)); return new AIMessage('llm-out'); } };
+    const fakeGateway = {
+      async sendAgentTurn() { return 'unused'; },
+      // The plugin classifies and returns a label string; the brancher routes on it.
+      async callGatewayMethod() { return 'urgent'; },
+    };
+    const brancher: FlowNode = {
+      id: 'pa', type: 'pluginAction', position: { x: 0, y: 0 },
+      data: { pluginId: 'p', contributionId: 'c', method: 'plugin.classify', label: 'Classify',
+        config: { routing: { mode: 'rule', branches: [{ id: 'b1', label: 'urgent', rule: { op: 'contains', value: 'urgent' } }] } } } as never,
+    };
+    const a = mkLlm('na'); const b = mkLlm('nb');
+    const eIn: FlowEdge = { id: 'e0', source: 'p1', sourceHandle: 'o', target: 'pa', targetHandle: 'i', type: 'flow' };
+    const eA: FlowEdge = { id: 'ea', source: 'pa', sourceHandle: 'b1', target: 'na', targetHandle: 'i', type: 'flow' };
+    const eB: FlowEdge = { id: 'eb', source: 'pa', sourceHandle: 'default', target: 'nb', targetHandle: 'i', type: 'flow' };
+    const { graph, initialState } = compileFlow([prompt, brancher, a, b], [eIn, eA, eB], { model: fakeModel, gatewayClient: fakeGateway });
+    await graph.invoke(initialState);
+    // The plugin returned 'urgent' → branch b1 ('contains urgent') matched → only na ran on that output.
+    expect(ran).toEqual(['urgent']);
+  });
+
+  it('buildBranchRoute classifies by LLM rubric when mode=llm', async () => {
+    const fakeModel = { async invoke() { return new AIMessage('support'); } };
+    const data = { mode: 'llm' as const, label: '', branches: [{ id: 'b1', label: 'sales' }, { id: 'b2', label: 'support' }] };
+    const connected = new Set(['b1', 'b2', 'default']);
+    const route = buildBranchRoute(data, connected, { model: fakeModel });
+    expect(await route(stateWith('my app is broken'))).toBe('b2');
+  });
+
+  it('buildBranchRoute tolerates a label wrapped in extra words (no silent downgrade)', async () => {
+    // A triage model that answers verbosely must still classify, not fall to
+    // 'default' — that downgrade would mean an 'alto' emergency alerts nobody.
+    const fakeModel = { async invoke() { return new AIMessage('La categoría es: ALTO'); } };
+    const data = { mode: 'llm' as const, label: '', branches: [{ id: 'b1', label: 'alto' }, { id: 'b2', label: 'medio' }] };
+    const connected = new Set(['b1', 'b2', 'default']);
+    const route = buildBranchRoute(data, connected, { model: fakeModel });
+    expect(await route(stateWith('dolor intenso y palidez'))).toBe('b1');
   });
 });
 
@@ -560,5 +812,279 @@ describe('validateFlowShape — toolAgent', () => {
     const e1 = { id: 'e1', source: 'p', sourceHandle: 'out', target: 'ta', targetHandle: 'in', type: 'flow' };
     const e2 = { id: 'e2', source: 'ta', sourceHandle: 'out', target: 'ta', targetHandle: 'in', type: 'flow' };
     expect(() => validateFlowShape([prompt, ta] as never, [e1, e2] as never)).toThrow();
+  });
+});
+
+describe("compileFlow — handoff node", () => {
+  it("calls flows.relay.open with origin + destinations and ends", async () => {
+    const calls: Array<{ method: string; params: Record<string, unknown> }> = [];
+    const fakeGateway = {
+      async sendAgentTurn() {
+        return "x";
+      },
+      async callGatewayMethod(method: string, params: Record<string, unknown>) {
+        calls.push({ method, params });
+        return "relay opened (#1)";
+      },
+    };
+    const trigger: FlowNode = {
+      id: "t",
+      type: "trigger",
+      position: { x: 0, y: 0 },
+      data: { event: "message:received", label: "T", deliverResponse: false, sources: [] } as never,
+    };
+    const handoff: FlowNode = {
+      id: "h",
+      type: "handoff",
+      position: { x: 1, y: 0 },
+      data: {
+        label: "Handoff",
+        destinations: [{ channel: "whatsapp", to: "O1" }],
+        priority: "ALTA",
+        suggestionCount: 3,
+        language: "es",
+      } as never,
+    };
+    const e: FlowEdge = {
+      id: "e",
+      source: "t",
+      sourceHandle: "out",
+      target: "h",
+      targetHandle: "in",
+      type: "flow",
+    };
+    const { graph, initialState } = compileFlow([trigger, handoff], [e], {
+      initialPrompt: "tengo dolor intenso",
+      gatewayClient: fakeGateway,
+      originSessionKey: "whatsapp:default:51999@c.us",
+      eventPayload: { channelId: "whatsapp", chatId: "51999@c.us", accountId: "default" },
+    });
+    await graph.invoke(initialState);
+    expect(calls).toHaveLength(1);
+    expect(calls[0].method).toBe("flows.relay.open");
+    expect(calls[0].params.originChannel).toBe("whatsapp");
+    expect(calls[0].params.originChatId).toBe("51999@c.us");
+    expect(calls[0].params.originalMessage).toBe("tengo dolor intenso");
+    expect((calls[0].params.destinations as unknown[]).length).toBe(1);
+  });
+});
+
+describe('subflow node', () => {
+  // Parent flow: promptBox("hi there") → subflow(child-1).
+  const pPrompt: FlowNode = {
+    id: 'pp', type: 'promptBox', position: { x: 0, y: 0 },
+    data: { label: 'P', value: 'hi there' },
+  };
+  const sfNode: FlowNode = {
+    id: 'sf', type: 'subflow', position: { x: 200, y: 0 },
+    data: { label: 'Subflow', flowId: 'child-1' },
+  };
+  const pEdge: FlowEdge = {
+    id: 'pe', source: 'pp', sourceHandle: 'out', target: 'sf', targetHandle: 'in', type: 'flow',
+  };
+
+  // Child flow: promptBox("IGNORED") → transform("sub:{input}"). The child's
+  // promptBox value must be overridden by the parent's input.
+  const cPrompt: FlowNode = {
+    id: 'cp', type: 'promptBox', position: { x: 0, y: 0 },
+    data: { label: 'C', value: 'IGNORED' },
+  };
+  const cXform: FlowNode = {
+    id: 'cx', type: 'transform', position: { x: 200, y: 0 },
+    data: { label: 'X', template: 'sub:{input}' },
+  };
+  const cEdge: FlowEdge = {
+    id: 'ce', source: 'cp', sourceHandle: 'out', target: 'cx', targetHandle: 'in', type: 'flow',
+  };
+  const childFlow = { nodes: [cPrompt, cXform], edges: [cEdge] };
+  const loadFlow = async (id: string) => {
+    if (id === 'child-1') return childFlow;
+    throw new Error(`unknown flow ${id}`);
+  };
+
+  it('runs the referenced flow with the caller input and returns its output', async () => {
+    const { graph, initialState } = compileFlow([pPrompt, sfNode], [pEdge], { loadFlow });
+    const result = await graph.invoke(initialState);
+    const final = result.messages[result.messages.length - 1];
+    // Proves: input override (child promptBox "IGNORED" → "hi there"),
+    // execution, and output propagation downstream.
+    expect(final.content).toBe('sub:hi there');
+  });
+
+  it('threads injected options (model) into the subflow', async () => {
+    const cLlm: FlowNode = {
+      id: 'cl', type: 'llm', position: { x: 200, y: 0 },
+      data: { modelId: 'claude-haiku-4-5-20251001', label: 'LLM' },
+    };
+    const childLlmFlow = {
+      nodes: [cPrompt, cLlm],
+      edges: [{ id: 'cle', source: 'cp', sourceHandle: 'out', target: 'cl', targetHandle: 'in', type: 'flow' } as FlowEdge],
+    };
+    const fakeModel = {
+      async invoke(msgs: BaseMessage[]) {
+        return new AIMessage(`model:${String(msgs[msgs.length - 1].content)}`);
+      },
+    };
+    const sfLlm: FlowNode = { ...sfNode, data: { label: 'Subflow', flowId: 'child-llm' } };
+    const { graph, initialState } = compileFlow([pPrompt, sfLlm], [pEdge], {
+      loadFlow: async () => childLlmFlow,
+      model: fakeModel,
+    });
+    const result = await graph.invoke(initialState);
+    expect(result.messages[result.messages.length - 1].content).toBe('model:hi there');
+  });
+
+  it('throws when the subflow node has no flow selected', async () => {
+    const sfNoId: FlowNode = { ...sfNode, data: { label: 'Subflow' } };
+    const { graph, initialState } = compileFlow([pPrompt, sfNoId], [pEdge], { loadFlow });
+    await expect(graph.invoke(initialState)).rejects.toThrow(/no flow selected/);
+  });
+
+  it('throws when no flow loader is configured', async () => {
+    const { graph, initialState } = compileFlow([pPrompt, sfNode], [pEdge], {});
+    await expect(graph.invoke(initialState)).rejects.toThrow(/no flow loader/);
+  });
+
+  it('detects a cross-flow cycle (flow references itself via a subflow)', async () => {
+    // child-cyc loads a flow whose own subflow node points back at child-cyc.
+    const cSelf: FlowNode = {
+      id: 'cs', type: 'subflow', position: { x: 200, y: 0 },
+      data: { label: 'Self', flowId: 'child-cyc' },
+    };
+    const cyclicFlow = {
+      nodes: [cPrompt, cSelf],
+      edges: [{ id: 'ce2', source: 'cp', sourceHandle: 'out', target: 'cs', targetHandle: 'in', type: 'flow' } as FlowEdge],
+    };
+    const parentToCyc: FlowNode = { ...sfNode, data: { label: 'Subflow', flowId: 'child-cyc' } };
+    const { graph, initialState } = compileFlow([pPrompt, parentToCyc], [pEdge], {
+      loadFlow: async () => cyclicFlow,
+    });
+    await expect(graph.invoke(initialState)).rejects.toThrow(/cycle detected/);
+  });
+
+  it('enforces the max nesting depth', async () => {
+    const { graph, initialState } = compileFlow([pPrompt, sfNode], [pEdge], {
+      loadFlow,
+      subflowStack: ['x', 'y'],
+      maxSubflowDepth: 2,
+    });
+    await expect(graph.invoke(initialState)).rejects.toThrow(/too deep/);
+  });
+});
+
+describe('built-in data nodes (database / fileWrite)', () => {
+  const edgeFrom = (target: string): FlowEdge => ({
+    id: `e-${target}`, source: 'p1', sourceHandle: 'prompt-out', target, targetHandle: 'in', type: 'flow',
+  });
+  const captureGateway = (reply: string) => {
+    const calls: Array<{ method: string; params: Record<string, unknown> }> = [];
+    return {
+      calls,
+      client: {
+        async sendAgentTurn() { return 'unused'; },
+        async callGatewayMethod(method: string, params: Record<string, unknown>) {
+          calls.push({ method, params });
+          return reply;
+        },
+      },
+    };
+  };
+
+  it('database (read) calls flows.db.query with the configured SQL + mark fields, {input} expanded', async () => {
+    const node: FlowNode = {
+      id: 'db1', type: 'database', position: { x: 200, y: 0 },
+      data: {
+        label: 'Read rows', action: 'read',
+        sql: 'SELECT * FROM messages WHERE chat_id = {input} AND last_checked IS NULL',
+        markColumn: 'last_checked', markTable: 'messages', markIdColumn: 'id',
+      },
+    };
+    const { calls, client } = captureGateway('[{"id":1}]');
+    const { graph, initialState } = compileFlow([prompt, node], [edgeFrom('db1')], { gatewayClient: client });
+    const result = await graph.invoke(initialState);
+    expect(calls).toHaveLength(1);
+    expect(calls[0].method).toBe('flows.db.query');
+    const cfg = calls[0].params.config as Record<string, unknown>;
+    expect(cfg.sql).toBe('SELECT * FROM messages WHERE chat_id = Hello AND last_checked IS NULL');
+    expect(cfg.markColumn).toBe('last_checked');
+    expect(cfg.markTable).toBe('messages');
+    expect(String(result.messages[result.messages.length - 1].content)).toBe('[{"id":1}]');
+  });
+
+  it('database (update) calls flows.db.exec with the configured SQL + dbPath', async () => {
+    const node: FlowNode = {
+      id: 'db2', type: 'database', position: { x: 200, y: 0 },
+      data: { label: 'Write', action: 'update', sql: 'UPDATE messages SET seen = 1', dbPath: '~/.minion/message-ledger.db' },
+    };
+    const { calls, client } = captureGateway('{"changes":3}');
+    const { graph, initialState } = compileFlow([prompt, node], [edgeFrom('db2')], { gatewayClient: client });
+    const result = await graph.invoke(initialState);
+    expect(calls[0].method).toBe('flows.db.exec');
+    const cfg = calls[0].params.config as Record<string, unknown>;
+    expect(cfg.sql).toBe('UPDATE messages SET seen = 1');
+    expect(cfg.dbPath).toBe('~/.minion/message-ledger.db');
+    expect(String(result.messages[result.messages.length - 1].content)).toBe('{"changes":3}');
+  });
+
+  it('database (create) routes to flows.db.exec', async () => {
+    const node: FlowNode = {
+      id: 'db3', type: 'database', position: { x: 200, y: 0 },
+      data: { label: 'Insert', action: 'create', sql: "INSERT INTO log (msg) VALUES ('{input}')" },
+    };
+    const { calls, client } = captureGateway('{"changes":1}');
+    const { graph, initialState } = compileFlow([prompt, node], [edgeFrom('db3')], { gatewayClient: client });
+    await graph.invoke(initialState);
+    expect(calls[0].method).toBe('flows.db.exec');
+    expect((calls[0].params.config as Record<string, unknown>).sql).toBe("INSERT INTO log (msg) VALUES ('Hello')");
+  });
+
+  it('fileWrite calls flows.file.write with the upstream content as input and the configured path/mode', async () => {
+    const node: FlowNode = {
+      id: 'fw1', type: 'fileWrite', position: { x: 200, y: 0 },
+      data: { label: 'Write file', path: '~/.minion/recon/report-{date}.md', mode: 'append' },
+    };
+    const { calls, client } = captureGateway('/home/x/.minion/recon/report-2026-06-04.md');
+    const { graph, initialState } = compileFlow([prompt, node], [edgeFrom('fw1')], { gatewayClient: client });
+    const result = await graph.invoke(initialState);
+    expect(calls[0].method).toBe('flows.file.write');
+    expect(calls[0].params.input).toBe('Hello');
+    const cfg = calls[0].params.config as Record<string, unknown>;
+    expect(cfg.path).toBe('~/.minion/recon/report-{date}.md');
+    expect(cfg.mode).toBe('append');
+    expect(String(result.messages[result.messages.length - 1].content)).toContain('report-2026-06-04.md');
+  });
+});
+
+describe('schedule trigger entry node', () => {
+  const scheduleNode: FlowNode = {
+    id: 's1', type: 'schedule', position: { x: 0, y: 0 },
+    data: { label: 'Every day', every: 1, unit: 'days', atTime: '09:00' },
+  };
+  const schedEdge: FlowEdge = {
+    id: 'se', source: 's1', sourceHandle: 'out', target: 'a1', targetHandle: 'in', type: 'flow',
+  };
+
+  it('is a valid entry node (like a trigger)', () => {
+    expect(() => validateFlowShape([scheduleNode, agent], [schedEdge])).not.toThrow();
+  });
+
+  it('rejects a flow with both a schedule and a prompt box', () => {
+    const pEdge2: FlowEdge = { id: 'e1', source: 'p1', sourceHandle: 'prompt-out', target: 'a1', targetHandle: 'in', type: 'flow' };
+    expect(() => validateFlowShape([scheduleNode, prompt, agent], [schedEdge, pEdge2])).toThrow(
+      /cannot have both/,
+    );
+  });
+
+  it('compiles with an empty seed prompt — no initialPrompt required', async () => {
+    const fakeModel = {
+      async invoke(msgs: BaseMessage[]) {
+        return new AIMessage(`seen:[${String(msgs[0].content)}]`);
+      },
+    };
+    const llmNode: FlowNode = { id: 'a1', type: 'llm', position: { x: 200, y: 0 }, data: { label: 'LLM', modelId: 'x' } };
+    const { graph, initialState } = compileFlow([scheduleNode, llmNode], [schedEdge], { model: fakeModel });
+    const result = await graph.invoke(initialState);
+    // The entry seeded an empty HumanMessage (no inbound message on a scheduled run).
+    expect(String(result.messages[result.messages.length - 1].content)).toBe('seen:[]');
   });
 });
