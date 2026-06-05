@@ -23,3 +23,14 @@ export { deviceIdentities } from './device-identities.js';
 export { files } from './files.js';
 export { agentGroups, agentGroupMembers } from './agent-groups.js';
 export { marketplaceAgents, marketplaceInstalls } from './marketplace.js';
+export {
+  builtSkills,
+  builtSkillTools,
+  builtChapters,
+  builtChapterEdges,
+  builtChapterTools,
+  builtAgents,
+  builtAgentSkills,
+  agentBuiltSkills,
+  builtTools,
+} from './builder.js';
