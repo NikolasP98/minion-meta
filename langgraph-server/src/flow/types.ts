@@ -225,9 +225,28 @@ export type ScheduleNodeData = {
   atTime?: string;
 };
 
+/**
+ * Built-in Memory node — semantic recall from the hub corpus (pgvector). Queries
+ * the upstream message against `agent_memories` via the gateway `memory.recall`
+ * RPC (the gateway embeds the query hub-side) and prepends the top matches to the
+ * message so downstream LLM/agent nodes answer with that context. Passes the
+ * input through unchanged when nothing relevant is found or the corpus is
+ * unavailable. This is the flow-runner's path to memory (flows are otherwise
+ * memory-blind).
+ */
+export type MemoryNodeData = {
+  label: string;
+  /** Which agent's memory corpus to query. */
+  agentId: string;
+  /** Max memories to inject (default 5). */
+  limit?: number;
+  /** Minimum cosine similarity 0..1 to include a hit (default 0.2). */
+  minScore?: number;
+};
+
 export type FlowNode = {
   id: string;
-  type: 'agent' | 'promptBox' | 'llm' | 'trigger' | 'pluginTrigger' | 'pluginAction' | 'transform' | 'structured' | 'router' | 'toolAgent' | 'channel' | 'handoff' | 'reaction' | 'subflow' | 'database' | 'fileWrite' | 'schedule';
+  type: 'agent' | 'promptBox' | 'llm' | 'trigger' | 'pluginTrigger' | 'pluginAction' | 'transform' | 'structured' | 'router' | 'toolAgent' | 'channel' | 'handoff' | 'reaction' | 'subflow' | 'database' | 'fileWrite' | 'schedule' | 'memory';
   position: { x: number; y: number };
   data:
     | AgentNodeData
@@ -246,7 +265,8 @@ export type FlowNode = {
     | SubflowNodeData
     | DatabaseNodeData
     | FileWriteNodeData
-    | ScheduleNodeData;
+    | ScheduleNodeData
+    | MemoryNodeData;
 };
 
 export type FlowEdge = {

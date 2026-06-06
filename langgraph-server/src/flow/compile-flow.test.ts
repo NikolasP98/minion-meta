@@ -1053,6 +1053,45 @@ describe('built-in data nodes (database / fileWrite)', () => {
     expect(cfg.mode).toBe('append');
     expect(String(result.messages[result.messages.length - 1].content)).toContain('report-2026-06-04.md');
   });
+
+  it('memory node recalls via memory.recall and prepends relevant matches (score-filtered) to the query', async () => {
+    const node: FlowNode = {
+      id: 'mem1', type: 'memory', position: { x: 200, y: 0 },
+      data: { label: 'Recall', agentId: 'clinic', minScore: 0.2, limit: 3 },
+    };
+    const reply = JSON.stringify({
+      hits: [
+        { content: 'owner prefers mornings', score: 0.9 },
+        { content: 'irrelevant noise', score: 0.05 },
+      ],
+    });
+    const { calls, client } = captureGateway(reply);
+    const { graph, initialState } = compileFlow([prompt, node], [edgeFrom('mem1')], {
+      gatewayClient: client,
+    });
+    const result = await graph.invoke(initialState);
+    expect(calls[0].method).toBe('memory.recall');
+    expect(calls[0].params).toMatchObject({ agentId: 'clinic', query: 'Hello', limit: 3 });
+    const out = String(result.messages[result.messages.length - 1].content);
+    expect(out).toContain('## Relevant memories');
+    expect(out).toContain('- owner prefers mornings');
+    expect(out).not.toContain('irrelevant noise'); // below minScore
+    expect(out).toContain('Hello'); // original query preserved
+  });
+
+  it('memory node passes through unchanged when there are no qualifying hits', async () => {
+    const node: FlowNode = {
+      id: 'mem2', type: 'memory', position: { x: 200, y: 0 },
+      data: { label: 'Recall', agentId: 'clinic' },
+    };
+    const { client } = captureGateway(JSON.stringify({ hits: [] }));
+    const { graph, initialState } = compileFlow([prompt, node], [edgeFrom('mem2')], {
+      gatewayClient: client,
+    });
+    const result = await graph.invoke(initialState);
+    // No memory message appended → the upstream prompt remains the last message.
+    expect(String(result.messages[result.messages.length - 1].content)).toBe('Hello');
+  });
 });
 
 describe('schedule trigger entry node', () => {
