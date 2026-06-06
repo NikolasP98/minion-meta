@@ -123,7 +123,9 @@ export const builtAgents = pgTable(
       .notNull()
       .default('draft'),
     gatewayId: uuid('gateway_id').references(() => gateway.id, { onDelete: 'cascade' }),
-    tenantId: uuid('tenant_id'),
+    // Org-owned (Phase 4: no global drafts). Matches the NOT NULL constraint in
+    // 20260606224238_built_agents_tenant_not_null.sql.
+    tenantId: uuid('tenant_id').notNull(),
     createdBy: text('created_by'),
     publishedAt: timestamp('published_at', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
