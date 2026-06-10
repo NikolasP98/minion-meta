@@ -5,6 +5,12 @@ export interface CreateAuthParams {
   db: unknown;
   /** Schema object — pass `import * as schema from '@minion-stack/db/schema'`. */
   schema: Record<string, unknown>;
+  /**
+   * Drizzle dialect for the Better Auth adapter. Defaults to `'sqlite'` (Turso).
+   * Pass `'pg'` with a Postgres `db` + the `@minion-stack/db/pg` Better Auth
+   * schema for the Supabase cutover (Track B).
+   */
+  provider?: 'sqlite' | 'pg' | 'mysql';
   /** BETTER_AUTH_SECRET — MUST be identical between hub and site for session continuity. */
   secret: string;
   /** BETTER_AUTH_URL — used as JWT issuer and to derive `useSecureCookies`. */
