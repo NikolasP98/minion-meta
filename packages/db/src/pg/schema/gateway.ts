@@ -9,6 +9,10 @@ import { profiles } from './profiles.js';
 export const gateway = pgTable('gateway', {
   id: uuid('id').primaryKey().defaultRandom(),
   legacyServerId: text('legacy_server_id'),
+  // Owning org (soft ref to organizations.id). Used by server-token ingest auth
+  // (resolveServerTokenAuth) to resolve the tenant — the Turso `servers.tenant_id`
+  // equivalent. Nullable during the Turso→Supabase gateway-token cutover bake.
+  orgId: uuid('org_id'),
   name: text('name').notNull(),
   url: text('url').notNull(),
   tokenCiphertext: text('token_ciphertext').notNull().default(''),

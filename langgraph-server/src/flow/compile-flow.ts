@@ -22,6 +22,7 @@ import {
   type SubflowNodeData,
   type DatabaseNodeData,
   type FileWriteNodeData,
+  type MemoryNodeData,
   type FlowRunEvent,
 } from './types.js';
 import { resolveProviderModel } from './provider.js';
@@ -43,7 +44,7 @@ const MAX_REGEX_INPUT = 10_000;
 /** Sanity bound on regex pattern length. */
 const MAX_REGEX_PATTERN = 1_000;
 
-const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent', 'channel', 'handoff', 'reaction', 'subflow', 'database', 'fileWrite'] as const;
+const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent', 'channel', 'handoff', 'reaction', 'subflow', 'database', 'fileWrite', 'memory'] as const;
 
 /**
  * Entry nodes that are actually wired into the flow (i.e. they source a `flow`
@@ -267,7 +268,7 @@ export function compileFlow(
     n.type === 'transform' || n.type === 'structured' || n.type === 'router' ||
     n.type === 'toolAgent' || n.type === 'channel' || n.type === 'handoff' ||
     n.type === 'reaction' || n.type === 'subflow' || n.type === 'database' ||
-    n.type === 'fileWrite',
+    n.type === 'fileWrite' || n.type === 'memory',
   );
   const flowEdges = edges.filter((e) => e.type === 'flow');
 
@@ -763,6 +764,44 @@ function buildNodeRunner(
       };
       const reply = await invoke('flows.file.write', { input, config, runId, nodeId: node.id });
       return { messages: [new AIMessage(reply)] };
+    };
+  }
+
+  // memory node — built-in: semantic recall from the hub corpus (pgvector) via
+  // the gateway `memory.recall` RPC (gateway embeds the query hub-side). Prepends
+  // the top matches to the upstream message so downstream LLM/agent nodes answer
+  // with that context. Passes the input through unchanged when nothing relevant
+  // is found / the corpus is unavailable. This is how flows get memory (they are
+  // otherwise memory-blind). Best-effort: never fails the run.
+  if (node.type === 'memory') {
+    const data = node.data as MemoryNodeData;
+    const invoke = opts.gatewayClient?.callGatewayMethod ?? callGatewayMethod;
+    const limit = typeof data.limit === 'number' && data.limit > 0 ? data.limit : 5;
+    const minScore = typeof data.minScore === 'number' ? data.minScore : 0.2;
+    return async (state) => {
+      const query = lastMessageContent(state);
+      const agentId = (data.agentId ?? '').trim();
+      if (!agentId || !query) {
+        return { messages: [] };
+      }
+      let lines: string[] = [];
+      try {
+        const reply = await invoke('memory.recall', { agentId, query, limit });
+        const parsed = JSON.parse(reply) as {
+          hits?: { content?: string; score?: number }[];
+        };
+        lines = (parsed.hits ?? [])
+          .filter((h) => typeof h.content === 'string' && (h.score ?? 0) >= minScore)
+          .map((h) => `- ${h.content}`);
+      } catch {
+        // Best-effort: recall failures pass the input through unchanged.
+        return { messages: [] };
+      }
+      if (lines.length === 0) {
+        return { messages: [] };
+      }
+      const enriched = `## Relevant memories\n${lines.join('\n')}\n\n${query}`;
+      return { messages: [new HumanMessage(enriched)] };
     };
   }
 
