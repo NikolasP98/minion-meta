@@ -1,5 +1,12 @@
 # @minion-stack/db
 
+## 0.8.0
+
+### Minor Changes
+
+- 656d9cf: Add `gateway.org_id` (soft uuid ref → organizations.id) for server-token ingest tenant resolution, and make `built_agents.tenant_id` NOT NULL for the org-shared builder set. Companion org_guc RLS migrations for the hub tables ship separately in the hub repo. Additive to the `@minion-stack/db/pg` exports.
+- 9637cf8: Add the Better Auth schema (Postgres) under `@minion-stack/db/pg` — `user`, `session`, `account`, `verification`, `jwks`, `organization`, `member`, `invitation`, `oauthApplication`, `oauthAccessToken`, `oauthConsent`. A faithful 1:1 port of the existing sqlite Better Auth schema (text ids preserved, `integer{timestamp}`→`timestamptz`, `integer{boolean}`→`boolean`) for the Turso→Supabase Better Auth cutover (Stage 5 / Track B). Export names mirror Better Auth's model names so the auth factory can pass the module straight to `drizzleAdapter({ provider: 'pg' })`. Additive — existing exports unchanged.
+
 ## 0.7.0
 
 ### Minor Changes
