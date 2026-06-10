@@ -50,3 +50,19 @@ export { workspaceMembership } from './workspace-membership.js';
 export type { WorkspaceMembership, NewWorkspaceMembership } from './workspace-membership.js';
 // Org-scoped agent memory corpus (pgvector) — RAG retrieval + hub visualization.
 export { agentMemories } from './agent-memories.js';
+// Better Auth tables (Postgres) — Turso→Supabase Better Auth cutover (Track B).
+// Export names mirror Better Auth's model names so the auth factory can pass
+// this module straight to the drizzle adapter (provider: 'pg').
+export {
+  user,
+  session,
+  account,
+  verification,
+  jwks,
+  organization,
+  member,
+  invitation,
+  oauthApplication,
+  oauthAccessToken,
+  oauthConsent,
+} from './auth.js';
