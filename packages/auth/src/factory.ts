@@ -30,6 +30,7 @@ const DEFAULT_LOCAL_ORIGINS = [
  */
 export function createAuth(params: CreateAuthParams): AuthInstance {
   const { db, schema, secret, baseURL, trustedOrigins, google, plugins, hooks } = params;
+  const provider = params.provider ?? 'sqlite';
 
   const allOrigins: string[] = [
     ...DEFAULT_LOCAL_ORIGINS,
@@ -41,7 +42,7 @@ export function createAuth(params: CreateAuthParams): AuthInstance {
   ];
 
   return betterAuth({
-    database: drizzleAdapter(db as never, { provider: 'sqlite', schema }),
+    database: drizzleAdapter(db as never, { provider, schema }),
     secret,
     baseURL,
     advanced: {

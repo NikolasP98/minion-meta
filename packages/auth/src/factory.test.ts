@@ -17,6 +17,12 @@ describe('createAuth factory', () => {
     expect(typeof auth.api.getSession).toBe('function');
   });
 
+  it('constructs with the pg provider (Track B Better Auth cutover)', () => {
+    const auth = createAuth({ ...base, provider: 'pg' });
+    expect(typeof auth.handler).toBe('function');
+    expect(auth.api).toBeDefined();
+  });
+
   it('appends caller plugins to the default jwt plugin', () => {
     const auth = createAuth({ ...base, plugins: [organization()] });
     const pluginIds = (auth.options.plugins ?? []).map((p: any) => p.id);
