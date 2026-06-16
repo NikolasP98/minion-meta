@@ -5,15 +5,43 @@ import type { CacheEntry, CacheOptions } from './types.js';
 
 const coalescer = createCoalescer<unknown>();
 
+const toError = (err: unknown): Error => (err instanceof Error ? err : new Error(String(err)));
+
+/**
+ * Config accessor that never throws. `getConfig()` throws when the cache was
+ * never configured (e.g. a misconfigured `CACHE_BACKEND` made `initCache()`
+ * fail). The cache is an optimization, not a hard dependency — so callers
+ * degrade to the source loader rather than 500 the request. Returns null when
+ * unconfigured.
+ */
+function tryGetConfig(): ReturnType<typeof getConfig> | null {
+  try {
+    return getConfig();
+  } catch {
+    return null;
+  }
+}
+
 export async function cached<T>(
   key: string,
   opts: CacheOptions,
   loader: () => Promise<T>,
 ): Promise<T> {
-  const { backend, logger } = getConfig();
+  const cfg = tryGetConfig();
+  if (!cfg) return loader(); // cache not configured — run uncached
+  const { backend, logger } = cfg;
   const t0 = Date.now();
 
-  const hit = await backend.get<T>(key);
+  // The cache is a best-effort optimization, never a hard dependency. If the
+  // backend (e.g. Valkey) is unreachable, degrade to the loader and serve fresh
+  // data from the source rather than failing the request.
+  let hit: CacheEntry<T> | null;
+  try {
+    hit = await backend.get<T>(key);
+  } catch (err) {
+    logger?.({ type: 'error', key, error: toError(err) });
+    return loadAndStore(key, opts, loader);
+  }
   if (hit) {
     if (Date.now() <= hit.expiresAt) {
       logger?.({ type: 'hit', key, ms: Date.now() - t0 });
@@ -37,9 +65,17 @@ export async function remember<T>(
 }
 
 export async function invalidateTags(tags: string[]): Promise<void> {
-  const { backend, logger, broadcaster, source, sourceId } = getConfig();
-  await backend.delByTag(tags);
-  logger?.({ type: 'invalidate', tags });
+  const cfg = tryGetConfig();
+  if (!cfg) return; // cache not configured — nothing to invalidate
+  const { backend, logger, broadcaster, source, sourceId } = cfg;
+  try {
+    await backend.delByTag(tags);
+    logger?.({ type: 'invalidate', tags });
+  } catch (err) {
+    // Best-effort: a failed bust must not fail the mutation that triggered it.
+    // The data is already written to the source; stale entries expire by TTL.
+    logger?.({ type: 'error', tags, error: toError(err) });
+  }
   if (broadcaster) {
     try {
       await broadcaster.emit({
@@ -56,9 +92,15 @@ export async function invalidateTags(tags: string[]): Promise<void> {
 }
 
 export async function invalidateKey(key: string): Promise<void> {
-  const { backend, logger, broadcaster, source, sourceId } = getConfig();
-  await backend.del([key]);
-  logger?.({ type: 'invalidate', key });
+  const cfg = tryGetConfig();
+  if (!cfg) return; // cache not configured — nothing to invalidate
+  const { backend, logger, broadcaster, source, sourceId } = cfg;
+  try {
+    await backend.del([key]);
+    logger?.({ type: 'invalidate', key });
+  } catch (err) {
+    logger?.({ type: 'error', key, error: toError(err) });
+  }
   if (broadcaster) {
     try {
       await broadcaster.emit({
@@ -76,9 +118,17 @@ export async function invalidateKey(key: string): Promise<void> {
 }
 
 export async function mget<T>(keys: string[]): Promise<(T | null)[]> {
-  const { backend } = getConfig();
-  const entries = await backend.mget<T>(keys);
-  return entries.map((e) => (e ? e.value : null));
+  const cfg = tryGetConfig();
+  if (!cfg) return keys.map(() => null); // cache not configured — all misses
+  const { backend, logger } = cfg;
+  try {
+    const entries = await backend.mget<T>(keys);
+    return entries.map((e) => (e ? e.value : null));
+  } catch (err) {
+    // Best-effort read — a dead backend yields all-misses, not a thrown request.
+    logger?.({ type: 'error', error: toError(err) });
+    return keys.map(() => null);
+  }
 }
 
 async function loadAndStore<T>(
@@ -119,6 +169,12 @@ async function writeEntry<T>(key: string, opts: CacheOptions, value: T): Promise
     staleUntil: now + ttlMs + swrMs,
     tags: opts.tags ?? [],
   };
-  await backend.set(key, entry);
-  logger?.({ type: 'set', key, tags: entry.tags });
+  try {
+    await backend.set(key, entry);
+    logger?.({ type: 'set', key, tags: entry.tags });
+  } catch (err) {
+    // Best-effort store — the value is already computed and returned to the
+    // caller; a failed cache write must not turn a successful load into a 500.
+    logger?.({ type: 'error', key, error: toError(err) });
+  }
 }
