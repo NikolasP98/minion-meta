@@ -1,0 +1,100 @@
+/*
+ * @minion-stack/design-tokens — shared design-system utilities.
+ *
+ * Elevation surfaces + functional type scale built on tokens.css. Import AFTER
+ * tokens.css (and after `@import 'tailwindcss'`) in an app's entry CSS:
+ *
+ *   @import 'tailwindcss';
+ *   @import '@minion-stack/design-tokens/tokens.css';
+ *   @import '@minion-stack/design-tokens/utilities.css';
+ *
+ * Prefer these over ad-hoc `bg-bg3 border border-border` and
+ * `text-[11px] font-semibold uppercase tracking-wide` stacks.
+ */
+
+@layer components {
+  /* ── Elevation surfaces (compound: bg + hairline border + shadow) ── */
+  .surface-1 {
+    background-color: var(--elevation-1-bg);
+    border: 1px solid var(--elevation-1-border);
+    box-shadow: var(--shadow-sm);
+  }
+  .surface-2 {
+    background-color: var(--elevation-2-bg);
+    border: 1px solid var(--elevation-2-border);
+    box-shadow: var(--shadow-md);
+  }
+  .surface-3 {
+    background-color: var(--elevation-3-bg);
+    border: 1px solid var(--elevation-3-border);
+    box-shadow: var(--shadow-lg);
+  }
+  .surface-4 {
+    background-color: var(--elevation-4-bg);
+    border: 1px solid var(--elevation-4-border);
+    box-shadow: var(--shadow-xl);
+  }
+
+  /* Hairline divider helpers — structure over floating gaps */
+  .divide-hairline > * + * {
+    border-top: 1px solid var(--hairline);
+  }
+  .border-hairline {
+    border-color: var(--hairline);
+  }
+
+  /* ── Hover lift — standardized card/row/cell micro-interaction ── */
+  .hover-lift {
+    transition: transform var(--duration-fast) var(--ease-standard);
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+  }
+
+  /* ── Functional type scale (size · weight · leading · tracking) ── */
+  .t-display {
+    font-size: 1.75rem; /* 28px */
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .t-heading {
+    font-size: 1.125rem; /* 18px */
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    font-variant-numeric: tabular-nums;
+  }
+  .t-title {
+    font-size: 0.875rem; /* 14px */
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .t-body {
+    font-size: 0.8125rem; /* 13px */
+    font-weight: 400;
+    line-height: 1.55;
+  }
+  .t-label {
+    font-size: 0.6875rem; /* 11px */
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .t-caption {
+    font-size: 0.625rem; /* 10px */
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color-muted-foreground);
+  }
+  .t-mono {
+    font-family: var(--font-mono);
+    font-size: 0.75rem; /* 12px */
+    font-weight: 400;
+    line-height: 1.5;
+    font-variant-numeric: tabular-nums;
+  }
+}

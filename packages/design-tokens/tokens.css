@@ -1,0 +1,116 @@
+/*
+ * @minion-stack/design-tokens — canonical design tokens for the Minion platform.
+ *
+ * Single source of truth for color, radius, shadow, elevation, motion and type
+ * tokens shared by minion_hub and minion_site. Consume from an app's entry CSS:
+ *
+ *   @import 'tailwindcss';
+ *   @import '@minion-stack/design-tokens/tokens.css';
+ *
+ * Tailwind 4 merges multiple @theme blocks, so an app overrides any SEMANTIC
+ * token (e.g. brand accent) by re-declaring it in its own @theme block AFTER the
+ * import — the marketing site sets a pink accent, the hub keeps blue, both share
+ * the same token contract. See README for the override pattern.
+ *
+ * Two tiers:
+ *   1. PRIMITIVES — raw scales (zinc backgrounds, the brand hues). Rarely
+ *      referenced directly by components.
+ *   2. SEMANTIC   — what components actually consume (bg, foreground, accent,
+ *      success…). Re-theme by swapping these, never the primitives.
+ */
+
+@theme {
+  /* ─────────────────────────── Typography ─────────────────────────── */
+  --font-sans:
+    'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-mono:
+    'JetBrains Mono NF', 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
+  /* Marketing display face — apps without it fall back to --font-sans. */
+  --font-display: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* ─────────────────────────── Backgrounds ────────────────────────── */
+  --color-bg: #09090b;
+  --color-bg2: #18181b;
+  --color-bg3: #27272a;
+
+  /* Card / surface */
+  --color-card: #0c0c0e;
+  --color-card-foreground: #fafafa;
+
+  /* Borders — white-alpha hairline depth cue (matches .surface-*). */
+  --color-border: rgba(255, 255, 255, 0.08);
+
+  /* ───────────────────────── Text hierarchy ───────────────────────── */
+  --color-foreground: #fafafa;
+  --color-muted: #a1a1aa;
+  --color-muted-foreground: #71717a;
+  /* AA-passing dim text — use instead of opacity-suffixed muted. */
+  --color-muted-strong: #9ca3af;
+
+  /* ────────────────────────── Brand / accent ──────────────────────── */
+  /* SEMANTIC accent — apps override. Hub: blue. Site: pink (--color-brand-pink). */
+  --color-accent: #3b82f6;
+  --color-accent-foreground: #fafafa;
+  /* Brand hue primitive — the Minion pink, available to both apps. */
+  --color-brand-pink: #e8547a;
+
+  /* ───────────────────────── Semantic status ──────────────────────── */
+  --color-success: #22c55e;
+  --color-destructive: #ef4444;
+  --color-warning: #f59e0b;
+  --color-purple: #a855f7;
+  --color-pink: #ec4899;
+  --color-cyan: #06b6d4;
+  --color-emerald: #10b981;
+  /* Neutral / inactive — slate. Distinct from the zinc bg ramp; use for
+     disabled, "static", and non-status chart series instead of raw #64748b. */
+  --color-neutral: #64748b;
+  /* Info — semantic blue for informational chart series / badges. Tracks accent
+     by default but stays blue even when a theme recolors --color-accent. */
+  --color-info: #3b82f6;
+
+  /* Agent run status */
+  --color-status-running: #22c55e;
+  --color-status-thinking: #a855f7;
+  --color-status-idle: #71717a;
+  --color-status-aborted: #f59e0b;
+
+  /* ───────────────────────────── Radius ───────────────────────────── */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  /* ───────────────────────────── Shadows ──────────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
+
+  /* ──────────────────────────── Elevation ─────────────────────────── */
+  /* Compound surfaces (bg + hairline border + shadow). Use .surface-* utils. */
+  --elevation-1-bg: #131316; /* sits just above page bg */
+  --elevation-1-border: rgba(255, 255, 255, 0.06);
+  --elevation-2-bg: #18181b; /* cards, list rows, panels */
+  --elevation-2-border: rgba(255, 255, 255, 0.08);
+  --elevation-3-bg: #1e1e22; /* popovers, dropdowns, floating */
+  --elevation-3-border: rgba(255, 255, 255, 0.1);
+  --elevation-4-bg: #232327; /* modals, dialogs */
+  --elevation-4-border: rgba(255, 255, 255, 0.12);
+  /* Hairline divider — reads as intentional structure, not floating gaps. */
+  --hairline: rgba(255, 255, 255, 0.07);
+
+  /* ───────────────────────────── Motion ───────────────────────────── */
+  --duration-instant: 75ms; /* press depression, tactile feedback */
+  --duration-fast: 150ms; /* hover, focus, color change */
+  --duration-normal: 250ms; /* panels/toasts/modals entering */
+  --duration-slow: 400ms; /* status transitions, large moves */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1); /* general UI */
+  --ease-out: cubic-bezier(0, 0, 0.2, 1); /* entering */
+  --ease-in: cubic-bezier(0.4, 0, 1, 1); /* exiting */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* success-pop, card-expand */
+}
