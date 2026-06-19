@@ -1,4 +1,4 @@
-export { resolveEnv } from './hierarchy.js';
+export { resolveEnv, findMetaRoot } from './hierarchy.js';
 export { validateEnv } from './validate.js';
 export { parseDotenv, parseDotenvFile } from './dotenv.js';
 export { fetchInfisicalSecrets } from './infisical.js';

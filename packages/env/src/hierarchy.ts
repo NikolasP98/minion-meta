@@ -12,7 +12,7 @@ import type {
 } from './types.js';
 
 /** Walk upward from cwd until minion.json is found; returns the directory containing it, or throws. */
-function findMetaRoot(start: string): string {
+export function findMetaRoot(start: string = process.cwd()): string {
 	let dir = path.resolve(start);
 	for (let i = 0; i < 10; i++) {
 		if (fs.existsSync(path.join(dir, 'minion.json'))) return dir;

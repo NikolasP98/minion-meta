@@ -90,13 +90,6 @@ export function getSubproject(reg: MinionRegistry, id: string): SubprojectRegist
 	return entry;
 }
 
-export function findMetaRoot(start: string = process.cwd()): string {
-	let dir = path.resolve(start);
-	for (let i = 0; i < 10; i++) {
-		if (fs.existsSync(path.join(dir, 'minion.json'))) return dir;
-		const parent = path.dirname(dir);
-		if (parent === dir) break;
-		dir = parent;
-	}
-	throw new Error(`minion.json not found upward from ${start}`);
-}
+// findMetaRoot lives in @minion-stack/env (the package that owns minion.json
+// resolution); re-exported here so existing cli importers keep their path.
+export { findMetaRoot } from '@minion-stack/env';
