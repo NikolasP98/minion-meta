@@ -34,7 +34,12 @@ export {
   agentBuiltSkills,
   builtTools,
 } from './builder.js';
-export { channels, channelAssignments, channelIdentities } from './channels.js';
+export {
+  channels,
+  channelAssignments,
+  channelIdentities,
+  channelBindings,
+} from './channels.js';
 export { sessions, sessionTasks } from './sessions.js';
 export { missions, tasks } from './missions.js';
 export { chatMessages } from './chat-messages.js';
