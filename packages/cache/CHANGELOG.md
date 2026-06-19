@@ -1,5 +1,11 @@
 # @minion-stack/cache
 
+## 0.3.0
+
+### Minor Changes
+
+- 3cc0c64: Trim dead surface: remove unused public exports `remember()`, `invalidateKey()`, and `mget()` from `@minion-stack/cache` (no importers; `cached`/`invalidateTags` remain). `@minion-stack/shared`'s `uuid()` now uses native `crypto.randomUUID()` and drops the legacy `Math.random` fallback.
+
 ## 0.2.1
 
 ### Patch Changes

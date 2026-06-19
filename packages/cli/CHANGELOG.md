@@ -1,5 +1,13 @@
 # @minion-stack/cli
 
+## 0.1.3
+
+### Patch Changes
+
+- 3cc0c64: Dedupe `findMetaRoot` into `@minion-stack/env` (it owns `minion.json` resolution) and re-export it from `@minion-stack/cli`. `env` now exports `findMetaRoot`; `cli` drops its byte-for-byte copy. The published `cli` requires this `env` version — keep them released together.
+- Updated dependencies [3cc0c64]
+  - @minion-stack/env@1.1.0
+
 ## 0.1.2
 
 ### Patch Changes
