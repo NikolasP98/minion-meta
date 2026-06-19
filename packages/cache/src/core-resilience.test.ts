@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { configureCache, resetConfig } from './config.js';
-import { cached, invalidateTags, invalidateKey } from './core.js';
+import { cached, invalidateTags } from './core.js';
 import type { CacheBackend, CacheEntry } from './types.js';
 
 /**
@@ -66,11 +66,10 @@ describe('cached() — backend failure resilience', () => {
     );
   });
 
-  it('invalidateTags / invalidateKey do not throw when the backend is down', async () => {
+  it('invalidateTags does not throw when the backend is down', async () => {
     resetConfig();
     configureCache({ backend: new ThrowingBackend(), namespace: 'test' });
     await expect(invalidateTags(['t:a'])).resolves.toBeUndefined();
-    await expect(invalidateKey('k')).resolves.toBeUndefined();
   });
 });
 
@@ -85,9 +84,8 @@ describe('cached() — not-configured resilience', () => {
     expect(loader).toHaveBeenCalledTimes(1);
   });
 
-  it('invalidateTags / invalidateKey are no-ops when not configured', async () => {
+  it('invalidateTags is a no-op when not configured', async () => {
     resetConfig();
     await expect(invalidateTags(['t:a'])).resolves.toBeUndefined();
-    await expect(invalidateKey('k')).resolves.toBeUndefined();
   });
 });

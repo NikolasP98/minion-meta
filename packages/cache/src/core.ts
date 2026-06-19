@@ -56,14 +56,6 @@ export async function cached<T>(
   return loadAndStore(key, opts, loader);
 }
 
-export async function remember<T>(
-  key: string,
-  opts: CacheOptions,
-  loader: () => Promise<T>,
-): Promise<T> {
-  return cached(key, opts, loader);
-}
-
 export async function invalidateTags(tags: string[]): Promise<void> {
   const cfg = tryGetConfig();
   if (!cfg) return; // cache not configured — nothing to invalidate
@@ -88,46 +80,6 @@ export async function invalidateTags(tags: string[]): Promise<void> {
     } catch (err) {
       logger?.({ type: 'error', tags, error: err instanceof Error ? err : new Error(String(err)) });
     }
-  }
-}
-
-export async function invalidateKey(key: string): Promise<void> {
-  const cfg = tryGetConfig();
-  if (!cfg) return; // cache not configured — nothing to invalidate
-  const { backend, logger, broadcaster, source, sourceId } = cfg;
-  try {
-    await backend.del([key]);
-    logger?.({ type: 'invalidate', key });
-  } catch (err) {
-    logger?.({ type: 'error', key, error: toError(err) });
-  }
-  if (broadcaster) {
-    try {
-      await broadcaster.emit({
-        tags: [],
-        keys: [key],
-        source: source ?? 'hub',
-        sourceId: sourceId ?? 'unknown',
-        tenantId: '',
-        ts: Date.now(),
-      });
-    } catch (err) {
-      logger?.({ type: 'error', key, error: err instanceof Error ? err : new Error(String(err)) });
-    }
-  }
-}
-
-export async function mget<T>(keys: string[]): Promise<(T | null)[]> {
-  const cfg = tryGetConfig();
-  if (!cfg) return keys.map(() => null); // cache not configured — all misses
-  const { backend, logger } = cfg;
-  try {
-    const entries = await backend.mget<T>(keys);
-    return entries.map((e) => (e ? e.value : null));
-  } catch (err) {
-    // Best-effort read — a dead backend yields all-misses, not a thrown request.
-    logger?.({ type: 'error', error: toError(err) });
-    return keys.map(() => null);
   }
 }
 

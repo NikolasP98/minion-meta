@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryBackend } from './backends/memory.js';
 import { configureCache, resetConfig } from './config.js';
-import { cached, invalidateTags, invalidateKey } from './core.js';
+import { cached, invalidateTags } from './core.js';
 
 describe('cached()', () => {
   beforeEach(() => {
@@ -52,14 +52,6 @@ describe('cached()', () => {
     await cached('k', { ttl: '1m', tags: ['t:a'] }, loader);
     expect(loader).toHaveBeenCalledTimes(2);
   });
-
-  it('invalidateKey drops one key', async () => {
-    const loader = vi.fn(async () => 'v');
-    await cached('k', { ttl: '1m' }, loader);
-    await invalidateKey('k');
-    await cached('k', { ttl: '1m' }, loader);
-    expect(loader).toHaveBeenCalledTimes(2);
-  });
 });
 
 import { NoopBroadcaster } from './broadcaster';
@@ -85,26 +77,10 @@ describe('cached() — broadcaster wiring', () => {
     expect(typeof payload.ts).toBe('number');
   });
 
-  it('invalidateKey calls broadcaster.emit with keys field', async () => {
-    resetConfig();
-    const backend = new MemoryBackend();
-    const emit = vi.fn(async () => {});
-    configureCache({
-      backend, namespace: 'hub',
-      broadcaster: { emit } as unknown as NoopBroadcaster,
-      source: 'hub', sourceId: 'fn-1',
-    });
-    await invalidateKey('k');
-    expect(emit).toHaveBeenCalledTimes(1);
-    const payload = emit.mock.calls[0]![0];
-    expect(payload).toMatchObject({ tags: [], keys: ['k'], source: 'hub', sourceId: 'fn-1' });
-  });
-
   it('no broadcaster — invalidate still works (no throw)', async () => {
     resetConfig();
     configureCache({ backend: new MemoryBackend(), namespace: 'hub' });
     await expect(invalidateTags(['t'])).resolves.toBeUndefined();
-    await expect(invalidateKey('k')).resolves.toBeUndefined();
   });
 
   it('broadcaster failure does not break invalidate', async () => {

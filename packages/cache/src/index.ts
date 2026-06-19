@@ -1,4 +1,4 @@
-export { cached, remember, invalidateTags, invalidateKey, mget } from './core.js';
+export { cached, invalidateTags } from './core.js';
 export { configureCache } from './config.js';
 export { createBackend, createBackendAsync } from './factory.js';
 export { keys } from './keys.js';

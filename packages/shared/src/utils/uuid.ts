@@ -1,7 +1,3 @@
-export function uuid(): string {
-  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = (Math.random() * 16) | 0;
-    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
-  });
-}
+// ponytail: crypto.randomUUID is native in Node 15.7+ and all browser secure
+// contexts (https + localhost). No fallback needed.
+export const uuid = (): string => crypto.randomUUID();
