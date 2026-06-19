@@ -33,7 +33,6 @@ export { marketplaceAgents } from './marketplace-agents.js';
 export { marketplaceInstalls } from './marketplace-installs.js';
 export { workshopSaves } from './workshop-saves.js';
 export { deviceIdentities } from './device-identities.js';
-export { flows } from './flows.js';
 export { userServers } from './user-servers.js';
 export { userAgents } from './user-agents.js';
 export { channels } from './channels.js';
