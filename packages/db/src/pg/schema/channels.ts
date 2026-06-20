@@ -29,6 +29,10 @@ export const channels = pgTable(
       .notNull()
       .references(() => gateway.id, { onDelete: 'cascade' }),
     type: text('type', { enum: ['discord', 'whatsapp', 'telegram'] }).notNull(),
+    // Gateway account key (phone/handle, e.g. '+51906090526') — the join to the
+    // gateway's per-account config. Nullable for legacy rows; the natural upsert
+    // key for a linked account is (tenant_id, gateway_id, type, account_id).
+    accountId: text('account_id'),
     label: text('label').notNull(),
     credentials: text('credentials').notNull().default(''),
     credentialsIv: text('credentials_iv').notNull().default(''),
@@ -63,6 +67,8 @@ export const channels = pgTable(
   (t) => [
     index('idx_channels_tenant_gateway').on(t.tenantId, t.gatewayId),
     uniqueIndex('channels_uniq_type_label').on(t.tenantId, t.gatewayId, t.type, t.label),
+    // Upsert key for gateway-account sync (account_id is the gateway account key).
+    uniqueIndex('channels_uniq_type_account').on(t.tenantId, t.gatewayId, t.type, t.accountId),
   ],
 );
 
