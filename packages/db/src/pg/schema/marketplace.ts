@@ -12,6 +12,9 @@ export const marketplaceAgents = pgTable('marketplace_agents', {
   catchphrase: text('catchphrase'),
   version: text('version').notNull(),
   model: text('model'),
+  // 'autonomous' | 'copilot' — drives the catalog avatar style. Nullable: legacy
+  // rows + agents whose agent.json omits it fall back to the copilot baseline.
+  archetype: text('archetype'),
   avatarSeed: text('avatar_seed').notNull(),
   githubPath: text('github_path').notNull(),
   soulMd: text('soul_md'),

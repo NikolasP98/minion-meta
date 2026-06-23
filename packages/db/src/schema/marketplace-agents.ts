@@ -10,6 +10,7 @@ export const marketplaceAgents = sqliteTable('marketplace_agents', {
   catchphrase: text('catchphrase'),
   version: text('version').notNull(),
   model: text('model'),
+  archetype: text('archetype'), // 'autonomous' | 'copilot' — catalog avatar style
   avatarSeed: text('avatar_seed').notNull(),
   githubPath: text('github_path').notNull(),
   soulMd: text('soul_md'),
