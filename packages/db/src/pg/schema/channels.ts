@@ -5,6 +5,7 @@ import {
   timestamp,
   boolean,
   integer,
+  jsonb,
   index,
   uniqueIndex,
 } from 'drizzle-orm/pg-core';
@@ -60,6 +61,14 @@ export const channels = pgTable(
     reconnectCount: integer('reconnect_count').notNull().default(0),
     lastSeenAt: timestamp('last_seen_at', { withTimezone: true }),
     lastError: text('last_error'),
+
+    // --- Phase 0, gateway.json → DB migration (specs/2026-06-26-...) ---
+    // Explicit pointer to this account's creds (e.g. 'whatsapp/51906090526');
+    // never the creds. Replaces the authDir-by-convention guess.
+    authRef: text('auth_ref'),
+    // Transport knobs not worth typed columns (debounceMs/streamMode/
+    // sendReadReceipts/selfChatMode/mediaMaxMb), validated by zod at the write path.
+    settings: jsonb('settings').notNull().default({}),
 
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
