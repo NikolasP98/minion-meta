@@ -41,6 +41,12 @@ export interface GatewayClientOptions {
   connectTimeoutMs?: number;
   /** Default timeout for request<T>() (ms). Default: 15000. */
   requestTimeoutMs?: number;
+  /**
+   * Optional source of a parent W3C `traceparent`. When it returns one, outgoing
+   * request frames descend from that trace (child span id) instead of minting a
+   * fresh root — lets a SvelteKit server span parent the gateway RPCs.
+   */
+  getParentTraceparent?: () => string | undefined | null;
 }
 
 export class GatewayClient {
@@ -56,8 +62,15 @@ export class GatewayClient {
   private closed = false;
   private helloResolve: ((value: unknown) => void) | null = null;
   private helloReject: ((err: Error) => void) | null = null;
+  /** Imperatively-set parent traceparent; takes precedence over opts.getParentTraceparent. */
+  private parentTraceparent: string | undefined;
 
   constructor(private readonly opts: GatewayClientOptions) {}
+
+  /** Set (or clear) the parent traceparent that outgoing requests descend from. */
+  setParentTraceparent(traceparent: string | undefined | null): void {
+    this.parentTraceparent = traceparent ?? undefined;
+  }
 
   /**
    * Open the WebSocket and complete the connect.challenge handshake.
@@ -130,7 +143,8 @@ export class GatewayClient {
         resolve: (v) => { clearTimeout(timer); resolve(v as T); },
         reject: (e) => { clearTimeout(timer); reject(e); },
       });
-      ws.send(JSON.stringify({ type: 'req', id, method, params, traceparent: newTraceparent() }));
+      const parent = this.parentTraceparent ?? this.opts.getParentTraceparent?.() ?? undefined;
+      ws.send(JSON.stringify({ type: 'req', id, method, params, traceparent: newTraceparent(parent) }));
     });
   }
 

@@ -18,6 +18,7 @@ export function sendRequest(
   method: string,
   params?: unknown,
   timeoutMs = 15000,
+  parentTraceparent?: string,
 ): Promise<unknown> {
   return new Promise((resolve, reject) => {
     if (!ws || ws.readyState !== WebSocket.OPEN) {
@@ -32,7 +33,7 @@ export function sendRequest(
       resolve: (v) => { clearTimeout(timer); resolve(v); },
       reject: (e) => { clearTimeout(timer); reject(e); },
     });
-    const frame: RequestFrame = { type: 'req', id, method, params, traceparent: newTraceparent() };
+    const frame: RequestFrame = { type: 'req', id, method, params, traceparent: newTraceparent(parentTraceparent) };
     ws.send(JSON.stringify(frame));
   });
 }
