@@ -39,6 +39,7 @@ export {
   channelAssignments,
   channelIdentities,
   channelBindings,
+  channelPairingRequests,
 } from './channels.js';
 export { sessions, sessionTasks } from './sessions.js';
 export { missions, tasks } from './missions.js';

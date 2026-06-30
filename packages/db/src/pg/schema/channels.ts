@@ -145,3 +145,49 @@ export const channelIdentities = pgTable(
     index('idx_channel_identity_user').on(t.userId),
   ],
 );
+
+/**
+ * Pending channel pairing requests — DB-backed replacement for the gateway's
+ * `~/.minion/credentials/<channel>-pairing.json` files (removed in favor of this table,
+ * 2026-06-29). A request is created when an unknown sender DMs a channel whose access
+ * policy is `pairing` (opt-in). The operator approves a code → the sender is added to
+ * `channels.allow_from` and the request is deleted. Never stores the plaintext code —
+ * only its SHA-256 hash (`code_hash`), matching the json store's `hashToken`.
+ *
+ * Ephemeral: rows older than the pairing TTL (1h) are pruned on read/write; the gateway
+ * reaches this table via the hub's `/api/internal/channels/pairing/*` endpoints
+ * (thin-gateway HTTP — the gateway holds no DB creds).
+ */
+export const channelPairingRequests = pgTable(
+  'channel_pairing_requests',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    tenantId: uuid('tenant_id').notNull(),
+    gatewayId: uuid('gateway_id')
+      .notNull()
+      .references(() => gateway.id, { onDelete: 'cascade' }),
+    // Channel type + gateway account key (e.g. 'whatsapp' + '+51906090526'). Plain text
+    // (not the channels.type enum) so non-migrated channels can pair too.
+    channelType: text('channel_type').notNull(),
+    accountId: text('account_id').notNull(),
+    // The requesting sender (phone/handle), as the gateway normalizes it.
+    senderId: text('sender_id').notNull(),
+    // SHA-256 of the pairing code — never the plaintext code.
+    codeHash: text('code_hash').notNull(),
+    // Free-form metadata (e.g. { name }).
+    meta: jsonb('meta').notNull().default({}),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    lastSeenAt: timestamp('last_seen_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [
+    index('idx_channel_pairing_lookup').on(t.tenantId, t.gatewayId, t.channelType, t.accountId),
+    // One pending request per (account, sender): re-request refreshes the code.
+    uniqueIndex('channel_pairing_uniq_sender').on(
+      t.tenantId,
+      t.gatewayId,
+      t.channelType,
+      t.accountId,
+      t.senderId,
+    ),
+  ],
+);
