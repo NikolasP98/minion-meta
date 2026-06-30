@@ -3,6 +3,7 @@
 import { flushPending, handleResponseFrame, type PendingRequest } from './protocol.js';
 import type { EventFrame } from './types.js';
 import { uuid } from '../utils/uuid.js';
+import { newTraceparent } from './traceparent.js';
 
 export const PROTOCOL_VERSION = 3;
 
@@ -129,7 +130,7 @@ export class GatewayClient {
         resolve: (v) => { clearTimeout(timer); resolve(v as T); },
         reject: (e) => { clearTimeout(timer); reject(e); },
       });
-      ws.send(JSON.stringify({ type: 'req', id, method, params }));
+      ws.send(JSON.stringify({ type: 'req', id, method, params, traceparent: newTraceparent() }));
     });
   }
 

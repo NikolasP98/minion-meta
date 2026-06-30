@@ -5,6 +5,8 @@ export interface RequestFrame {
   id: string;
   method: string;
   params?: unknown;
+  /** W3C Trace Context for distributed-trace stitching (optional). */
+  traceparent?: string;
 }
 
 export interface ResponseFrame {

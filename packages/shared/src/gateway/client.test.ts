@@ -165,8 +165,10 @@ describe('GatewayClient', () => {
     // Now send a real request
     const reqPromise = client.request<{ value: number }>('agents.list', { page: 1 });
     const lastMsg = mockWs.sentMessages.at(-1)!;
-    const sentReq = JSON.parse(lastMsg) as { id: string; method: string };
+    const sentReq = JSON.parse(lastMsg) as { id: string; method: string; traceparent?: string };
     expect(sentReq.method).toBe('agents.list');
+    // Outgoing frames carry a W3C traceparent for distributed-trace stitching.
+    expect(sentReq.traceparent).toMatch(/^00-[0-9a-f]{32}-[0-9a-f]{16}-01$/);
 
     // Simulate matching response
     mockWs.__simulateMessage(

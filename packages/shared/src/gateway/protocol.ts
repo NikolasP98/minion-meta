@@ -1,4 +1,5 @@
 import { uuid } from '../utils/uuid.js';
+import { newTraceparent } from './traceparent.js';
 import type { RequestFrame, ResponseFrame } from './types.js';
 
 /** Pending request tracker */
@@ -31,7 +32,7 @@ export function sendRequest(
       resolve: (v) => { clearTimeout(timer); resolve(v); },
       reject: (e) => { clearTimeout(timer); reject(e); },
     });
-    const frame: RequestFrame = { type: 'req', id, method, params };
+    const frame: RequestFrame = { type: 'req', id, method, params, traceparent: newTraceparent() };
     ws.send(JSON.stringify(frame));
   });
 }

@@ -1,4 +1,5 @@
 export * from './types.js';
+export * from './traceparent.js';
 export * from './protocol.js';
 export * from './connection.js';
 export * from './client.js';
