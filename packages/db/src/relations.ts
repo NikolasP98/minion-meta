@@ -8,22 +8,12 @@ import {
   invitation,
   servers,
   agents,
-  skills,
   sessions,
   chatMessages,
   bugs,
   connectionEvents,
-  settings,
-  files,
-  missions,
-  tasks,
-  sessionTasks,
   userServers,
   userAgents,
-  backupConfigs,
-  serverBackups,
-  agentGroups,
-  agentGroupMembers,
   channelIdentities,
   personalAgents,
   userPreferences,
@@ -36,7 +26,6 @@ export const userRelations = relations(user, ({ one, many }) => ({
   accounts: many(account),
   memberships: many(member),
   invitations: many(invitation),
-  files: many(files),
   userServers: many(userServers),
   userAgents: many(userAgents),
   channelIdentities: many(channelIdentities),
@@ -62,7 +51,6 @@ export const organizationRelations = relations(organization, ({ many }) => ({
   members: many(member),
   invitations: many(invitation),
   servers: many(servers),
-  files: many(files),
 }));
 
 // ── Better Auth: Member ───────────────────────────────────────────────────────
@@ -90,16 +78,12 @@ export const invitationRelations = relations(invitation, ({ one }) => ({
 export const serversRelations = relations(servers, ({ one, many }) => ({
   organization: one(organization, { fields: [servers.tenantId], references: [organization.id] }),
   agents: many(agents),
-  skills: many(skills),
   sessions: many(sessions),
   chatMessages: many(chatMessages),
   bugs: many(bugs),
   connectionEvents: many(connectionEvents),
-  settings: many(settings),
   userServers: many(userServers),
   userAgents: many(userAgents),
-  serverBackups: many(serverBackups),
-  agentGroups: many(agentGroups),
 }));
 
 // ── Agents ───────────────────────────────────────────────────────────────────
@@ -109,19 +93,11 @@ export const agentsRelations = relations(agents, ({ one }) => ({
   organization: one(organization, { fields: [agents.tenantId], references: [organization.id] }),
 }));
 
-// ── Skills ───────────────────────────────────────────────────────────────────
-
-export const skillsRelations = relations(skills, ({ one }) => ({
-  server: one(servers, { fields: [skills.serverId], references: [servers.id] }),
-  organization: one(organization, { fields: [skills.tenantId], references: [organization.id] }),
-}));
-
 // ── Sessions (gateway sessions, not auth sessions) ────────────────────────────
 
-export const sessionsRelations = relations(sessions, ({ one, many }) => ({
+export const sessionsRelations = relations(sessions, ({ one }) => ({
   server: one(servers, { fields: [sessions.serverId], references: [servers.id] }),
   organization: one(organization, { fields: [sessions.tenantId], references: [organization.id] }),
-  missions: many(missions),
 }));
 
 // ── Chat Messages ────────────────────────────────────────────────────────────
@@ -151,46 +127,6 @@ export const connectionEventsRelations = relations(connectionEvents, ({ one }) =
   }),
 }));
 
-// ── Settings ─────────────────────────────────────────────────────────────────
-
-export const settingsRelations = relations(settings, ({ one }) => ({
-  server: one(servers, { fields: [settings.serverId], references: [servers.id] }),
-  organization: one(organization, { fields: [settings.tenantId], references: [organization.id] }),
-}));
-
-// ── Files ────────────────────────────────────────────────────────────────────
-
-export const filesRelations = relations(files, ({ one }) => ({
-  organization: one(organization, { fields: [files.tenantId], references: [organization.id] }),
-  uploadedByUser: one(user, { fields: [files.uploadedBy], references: [user.id] }),
-}));
-
-// ── Missions ──────────────────────────────────────────────────────────────────
-
-export const missionsRelations = relations(missions, ({ one, many }) => ({
-  organization: one(organization, { fields: [missions.tenantId], references: [organization.id] }),
-  server: one(servers, { fields: [missions.serverId], references: [servers.id] }),
-  session: one(sessions, { fields: [missions.sessionId], references: [sessions.id] }),
-  tasks: many(tasks),
-}));
-
-// ── Tasks ─────────────────────────────────────────────────────────────────────
-
-export const tasksRelations = relations(tasks, ({ one }) => ({
-  organization: one(organization, { fields: [tasks.tenantId], references: [organization.id] }),
-  mission: one(missions, { fields: [tasks.missionId], references: [missions.id] }),
-}));
-
-// ── Session Tasks ────────────────────────────────────────────────────────
-
-export const sessionTasksRelations = relations(sessionTasks, ({ one }) => ({
-  organization: one(organization, {
-    fields: [sessionTasks.tenantId],
-    references: [organization.id],
-  }),
-  server: one(servers, { fields: [sessionTasks.serverId], references: [servers.id] }),
-}));
-
 // ── User Servers ─────────────────────────────────────────────────────────
 
 export const userServersRelations = relations(userServers, ({ one }) => ({
@@ -203,39 +139,6 @@ export const userServersRelations = relations(userServers, ({ one }) => ({
 export const userAgentsRelations = relations(userAgents, ({ one }) => ({
   user: one(user, { fields: [userAgents.userId], references: [user.id] }),
   server: one(servers, { fields: [userAgents.serverId], references: [servers.id] }),
-}));
-
-// ── Backup Configs ──────────────────────────────────────────────────────
-
-export const backupConfigsRelations = relations(backupConfigs, ({ one }) => ({
-  organization: one(organization, {
-    fields: [backupConfigs.tenantId],
-    references: [organization.id],
-  }),
-}));
-
-// ── Server Backups ──────────────────────────────────────────────────────
-
-export const serverBackupsRelations = relations(serverBackups, ({ one }) => ({
-  server: one(servers, { fields: [serverBackups.serverId], references: [servers.id] }),
-  organization: one(organization, {
-    fields: [serverBackups.tenantId],
-    references: [organization.id],
-  }),
-}));
-
-// ── Agent Groups ─────────────────────────────────────────────────────
-
-export const agentGroupsRelations = relations(agentGroups, ({ one, many }) => ({
-  organization: one(organization, {
-    fields: [agentGroups.tenantId],
-    references: [organization.id],
-  }),
-  members: many(agentGroupMembers),
-}));
-
-export const agentGroupMembersRelations = relations(agentGroupMembers, ({ one }) => ({
-  group: one(agentGroups, { fields: [agentGroupMembers.groupId], references: [agentGroups.id] }),
 }));
 
 // ── Channel Identities ──────────────────────────────────────────────────
