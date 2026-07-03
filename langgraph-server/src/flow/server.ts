@@ -4,6 +4,7 @@ import { cors } from 'hono/cors';
 import { streamSSE } from 'hono/streaming';
 import { z } from 'zod';
 import { compileFlow } from './compile-flow.js';
+import { startHubEventListener } from './hub-events.js';
 import { UnsupportedFlowError, type FlowNode, type FlowEdge, type FlowRunEvent } from './types.js';
 
 const FlowRunRequest = z.object({
@@ -183,3 +184,5 @@ const port = Number(process.env.FLOWS_PORT ?? 2025);
 const hostname = process.env.FLOWS_HOST ?? '127.0.0.1';
 serve({ fetch: app.fetch, port, hostname });
 console.log(`[flows] listening on http://${hostname}:${port}`);
+
+startHubEventListener();
