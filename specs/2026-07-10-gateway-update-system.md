@@ -1,7 +1,7 @@
 # Gateway Update System — Design Spec
 
 **Date:** 2026-07-10
-**Status:** Draft — pending user review
+**Status:** Approved 2026-07-10 — in execution
 **Repos touched:** `minion/` (gateway), `minion_hub/`, `.github/workflows/npm-publish.yml` (gateway repo), netcup VPS config
 **Companion plan:** `specs/2026-07-10-gateway-update-system-plan.md`
 
