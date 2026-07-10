@@ -44,11 +44,11 @@ paperclip github-bugs handler (NEW):
    │     → upsert paperclip issue (idempotent key: gh repo + issue number)
    │     → assign to "bug-fixer" agent → wake (existing wakeup/checkout path)
    ├─ push (any registered repo)
-   │     → repo-sandbox refresh: git fetch --prune on that repo's mirror clone
-   └─ everything else → 200 + ignore (delivery logged/deduped by GUID)
+   │     → repo-sandbox refresh: git fetch --prune on that repo's clone
+   └─ everything else → 200 + ignore
 
 bug-fixer agent run (EXISTING heartbeat machinery):
-   worktree cut from mirror clone (pre-run fetch first)
+   worktree cut from base clone (pre-run fetch first)
    claude-local adapter → investigate → fix → check/test → push branch
    → gh pr create --draft → gh issue comment (diagnosis + PR link)
 
@@ -72,7 +72,7 @@ Behavior: after HMAC verification, POST the raw payload + `x-github-event` + `x-
 ### 5.2 Paperclip: repo-sandbox service (`paperclip-minion/server/src/services/repo-sandbox.ts`)
 
 - **Registry** (config, env or JSON): `[{ name, gitUrl, defaultBranch }]` for the 6 repos. Sandbox root: `REPO_SANDBOX_DIR` (netcup: `/home/bot-prd/repos/sandbox/`).
-- **Bootstrap**: on service start, `git clone --mirror <gitUrl> <root>/<name>.git` for any missing repo. Mirror clones = full ref mirror, no working tree ("minus the bloat"), and `git worktree add` works directly off them.
+- **Bootstrap**: on service start, `git clone <gitUrl> <root>/<name>` for any missing repo. **Regular clones, not mirror/bare** — paperclip's `resolveGitOwnerRepoRoot` runs `git rev-parse --show-toplevel`, which fails in bare repos; the working tree is never touched.
 - **Refresh**: `refresh(name)` runs `git -C <root>/<name>.git fetch --prune` (serialized per repo; concurrent calls coalesce). Called from: (a) push webhook, (b) **always immediately before creating a run worktree** — a missed webhook can never yield a stale base. Push-webhook refresh is a warm-cache optimization; pre-run fetch is the correctness guarantee.
 - **Worktrees**: per-run workspaces via the existing `workspaceStrategy: git_worktree` with `baseRef: <defaultBranch>` (mirror refs track origin heads), `branchTemplate: bug/{issueNumber}-{slug}`, `worktreeParentDir: <root>/worktrees/<name>/`. Cleanup uses the existing `git_worktree_remove` path.
 
