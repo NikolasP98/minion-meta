@@ -37,7 +37,7 @@ Hub "Report a Bug"
 GitHub repo webhooks (events: issues, push; one per repo, shared secret)
    └─→ gateway /hooks  (HMAC verify — EXISTS)
          └─→ NEW mapping action "forward": POST raw verified payload
-              → http://127.0.0.1:3200/api/plugins/github-bugs/webhooks/github
+              → http://127.0.0.1:3200/api/github-bugs/webhook
 
 paperclip github-bugs handler (NEW):
    ├─ issues.opened|reopened  AND label "bug"  AND repo == GITHUB_BUG_REPO
@@ -63,8 +63,8 @@ Extend the hooks mapping config (`src/config/types.hooks.ts`) and dispatcher (`s
 
 ```jsonc
 // gateway hooks config (conceptual)
-{ "event": "github/issues", "action": "forward", "url": "http://127.0.0.1:3200/api/plugins/github-bugs/webhooks/github" }
-{ "event": "github/push",   "action": "forward", "url": "http://127.0.0.1:3200/api/plugins/github-bugs/webhooks/github" }
+{ "event": "github/issues", "action": "forward", "url": "http://127.0.0.1:3200/api/github-bugs/webhook" }
+{ "event": "github/push",   "action": "forward", "url": "http://127.0.0.1:3200/api/github-bugs/webhook" }
 ```
 
 Behavior: after HMAC verification, POST the raw payload + `x-github-event` + `x-github-delivery` headers to the configured URL. Loopback-only expectation but not enforced beyond config (operator-controlled). Fire-and-forget with a short timeout; failures logged, webhook still returns 200 to GitHub (GitHub redelivery + paperclip dedupe make this safe). No response body forwarding.
@@ -78,7 +78,7 @@ Behavior: after HMAC verification, POST the raw payload + `x-github-event` + `x-
 
 ### 5.3 Paperclip: github-bugs webhook handler
 
-Registered at the plugin webhook ingress (`/api/plugins/github-bugs/webhooks/github`), reusing delivery-GUID dedupe.
+Implemented as a plain Express route `POST /api/github-bugs/webhook` mounted ABOVE `hubIdentityMiddleware` (the plugin webhook ingress was rejected during implementation: it requires a DB-registered plugin + manifest + worker process, and its delivery-GUID dedupe is unimplemented). Idempotency rests on the `issues.origin*` columns. NOTE: the GitHub webhook MUST be configured with content type application/json — rawBody (needed for HMAC) is only captured for JSON bodies.
 
 - `X-GitHub-Event: issues`, action `opened` or `reopened`, label set contains `bug`, repo is `GITHUB_BUG_REPO`:
   1. Upsert paperclip issue in the MINION company. Idempotency key: `github:<owner>/<repo>#<number>` (stored in issue metadata; re-delivery and reopen update rather than duplicate).
