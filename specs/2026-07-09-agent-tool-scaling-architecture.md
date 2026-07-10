@@ -175,6 +175,43 @@ Each WP is a self-contained brief; builders read this spec section + pinned cont
 - **D6 — Publish is pull-based registration** (gateway fetches published customs per TTL + reload nudge). No push pipeline.
 - **D7 — Favorites re-rank deferred** (unstudied; seam kept in selectTools).
 
+## 4.5 — v2.1 addendum: Mini-IDE + builder-agent + SDK flashlight (2026-07-09 late)
+
+**User ask (verbatim):** "the tool editor should look and feel like a mini IDE with draggable components such as variables/constants from other integrations, as well as db queries (allow db query intellisense if possible; I want an agent to be able to be in charge of this builder/section. create a tool for it to scavenge different SDKs endpoints, basically a flashlight to see into different plugin sdks, exposed variables that they can access data from, either from the gw or any other system thats registered"
+
+### Contracts (continue numbering)
+
+**C10 — CodeMirror 6 editor.** Replace the `<textarea>` in CodeEditorPane with CM6 (new deps, minimal set: `@codemirror/state`, `@codemirror/view`, `@codemirror/autocomplete`, `@codemirror/commands`, `@codemirror/language`, `@codemirror/lang-javascript`, `@codemirror/lang-python`, `@codemirror/lang-sql`, `@codemirror/legacy-modes` for shell). Per-language highlighting; one dark/light-token-aware theme built from hub CSS vars. Value stays bound to the page's `scriptCode` state (autosave/Run/Publish untouched). Completion sources (all client-side, from data already fetched): MINION_* system vars, module endpoint paths, DB tables + columns (C11), env-var keys the user defined. SQL completion active inside string literals containing `select`/`from` (cheap heuristic) and in a dedicated SQL context — table→columns from C11.
+
+**C11 — Schema catalog** `GET /api/builder/tools/schema-catalog` (session, tools.view) AND mirrored `GET /api/gateway/query/sdk-catalog` (agent-facing, `requireAssistantCapability('tools','view')`, superset — see C15). Shape: `{ tables: [{ name, columns: [{name, type}] }] }` derived **offline** via drizzle `getTableColumns()` over the org-scoped business tables exported by `@minion-stack/db/pg` (no live DB introspection). Exclude auth/system tables (user/session/account/verification/jwks).
+
+**C12 — Draggable chips.** Every variable row (all tabs) and every query-snippet card is `draggable="true"`; drop into the editor inserts at the drop position the language-appropriate accessor: JS `process.env.KEY`, Python `os.environ["KEY"]`, Bash `"$KEY"`; snippet cards insert their full snippet text. CM6 handles drop position natively (`dropCursor` extension); the chip sets `dataTransfer` text to the resolved insertion string for the current language.
+
+**C13 — Queries palette.** 5th tab "Queries": one card per `/api/gateway/query/*` endpoint with a ready-to-run fetch snippet in the current language, e.g. JS:
+```js
+const res = await fetch(`${process.env.MINION_HUB_URL}/api/gateway/query/notes?agentId=${process.env.MINION_AGENT_ID}`, { headers: { Authorization: `Bearer ${process.env.MINION_HUB_TOKEN}` } });
+```
+plus one card per DB table with a commented SQL SELECT template (documented as reference for the intellisense — no raw-SQL execution endpoint exists yet; the fetch snippets are the executable path). **Gateway change:** custom-tool env injection gains `MINION_HUB_TOKEN` (the hub server token) so these snippets actually run — acceptable under D5's admin-authored trust model; document in the tab.
+
+**C14 — Builder-agent tools.** The agent can drive the builder: hub `POST /api/gateway/actions/tool-save` (`requireAssistantCapability('tools','manage')`) — `{id?, name, description?, scriptLang, scriptCode, envVars?, permission?, publish?, confirm:true}` → creates/updates a builtTool (permission into executionConfig.permission), optionally publishes; returns `{ok, toolId, status}`. Plus `GET /api/gateway/query/custom-tools?status=all` extension (drafts included) for the agent to list its own work. Gateway tools: `tool_builder_save` + extend the existing custom-tools list path. Both metas carry `permission: {module:'tools', action:'manage'}` / `('tools','view')`.
+
+**C15 — `sdk_inspect` (the flashlight).** Gateway tool, read-only, meta permission `('tools','view')`. Input `{ source?: 'all'|'tools'|'plugins'|'rpc'|'mcp'|'skills'|'hub-modules'|'db-schema', query?: string }`. Returns a structured catalog (filtered by `query` substring where given):
+- `tools`: native registry metas (id, title/description, groups, permission) — meta-only, no factory instantiation.
+- `plugins`: loaded plugins/extensions + their RPC methods + tools + config surface (per recon).
+- `rpc`: gateway server-method names.
+- `mcp`: listMcpTools() entries (name, description, method).
+- `skills`: installed skills w/ descriptions (reuse skills.status source).
+- `hub-modules` + `db-schema`: proxied from hub `GET /api/gateway/query/sdk-catalog` (module endpoint list from C9 + tables from C11).
+Output capped (~32KB) with per-source counts; description tells the agent this is its flashlight for discovering what it can reach.
+
+### Work packages (wave 3)
+
+- **WP-7 (hub, opus) — mini-IDE.** C10 + C12 + C13 UI: CM6 swap, theme, completions, DnD chips, Queries tab. Don't touch endpoints. Files: tools/[id]/* only (+package.json deps, messages).
+- **WP-8 (hub, sonnet) — endpoints.** C11 both variants, C14 tool-save + custom-tools?status=all, extend variables endpoint if needed. Server-only.
+- **WP-9 (gateway, sonnet) — flashlight + builder tools + token injection.** C15 sdk_inspect, C14 tool_builder_save, MINION_HUB_TOKEN in custom-tool env (C13). After WP-8.
+
+WP-7 ∥ WP-8, then WP-9. Same repo-hygiene/commit/signing rules as §3.
+
 ## 5. Definition of done (this session)
 
 - Every registry tool carries permission metadata where hub-backed; codegen enforces shape for future tools.
