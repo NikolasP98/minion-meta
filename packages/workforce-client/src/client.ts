@@ -16,7 +16,9 @@ import { heartbeatsApi } from './api/heartbeats.js';
 import { inboxDismissalsApi } from './api/inbox-dismissals.js';
 import { instanceSettingsApi } from './api/instance-settings.js';
 import { issuesApi } from './api/issues.js';
+import { pipelinesApi } from './api/pipelines.js';
 import { pluginsApi } from './api/plugins.js';
+import { portfoliosApi } from './api/portfolios.js';
 import { projectsApi } from './api/projects.js';
 import { routinesApi } from './api/routines.js';
 import { secretsApi } from './api/secrets.js';
@@ -64,7 +66,9 @@ export type WorkforceClient = WorkforceClientBase & {
   inboxDismissals: ReturnType<typeof inboxDismissalsApi>;
   instanceSettings: ReturnType<typeof instanceSettingsApi>;
   issues: ReturnType<typeof issuesApi>;
+  pipelines: ReturnType<typeof pipelinesApi>;
   plugins: ReturnType<typeof pluginsApi>;
+  portfolios: ReturnType<typeof portfoliosApi>;
   projects: ReturnType<typeof projectsApi>;
   routines: ReturnType<typeof routinesApi>;
   secrets: ReturnType<typeof secretsApi>;
@@ -115,7 +119,9 @@ export function createWorkforceClient(opts: WorkforceClientOptions): WorkforceCl
     inboxDismissals: inboxDismissalsApi(base),
     instanceSettings: instanceSettingsApi(base),
     issues: issuesApi(base),
+    pipelines: pipelinesApi(base),
     plugins: pluginsApi(base),
+    portfolios: portfoliosApi(base),
     projects: projectsApi(base),
     routines: routinesApi(base),
     secrets: secretsApi(base),

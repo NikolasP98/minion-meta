@@ -149,11 +149,19 @@ export interface IssueExecutionStageParticipant extends IssueExecutionStagePrinc
   id: string;
 }
 
+export interface IssueExecutionStageMeta {
+  kind?: string;
+  minScore?: number | null;
+  maxScore?: number | null;
+  rubric?: string | null;
+}
+
 export interface IssueExecutionStage {
   id: string;
   type: IssueExecutionStageType;
   approvalsNeeded: 1;
   participants: IssueExecutionStageParticipant[];
+  meta?: IssueExecutionStageMeta | null;
 }
 
 export interface IssueExecutionPolicy {
@@ -174,12 +182,28 @@ export interface IssueExecutionState {
   lastDecisionOutcome: IssueExecutionDecisionOutcome | null;
 }
 
+export interface IssueExecutionDecision {
+  id: string;
+  companyId: string;
+  issueId: string;
+  stageId: string;
+  stageType: IssueExecutionStageType;
+  outcome: IssueExecutionDecisionOutcome;
+  actorAgentId: string | null;
+  actorUserId: string | null;
+  body: string | null;
+  score: number | null;
+  maxScore: number | null;
+  createdAt: Date;
+}
+
 export interface Issue {
   id: string;
   companyId: string;
   projectId: string | null;
   projectWorkspaceId: string | null;
   goalId: string | null;
+  pipelineId?: string | null;
   parentId: string | null;
   ancestors?: IssueAncestor[];
   title: string;

@@ -29,6 +29,8 @@ describe('createWorkforceClient', () => {
     expect(typeof client.agents.list).toBe('function');
     expect(typeof client.plugins.list).toBe('function');
     expect(typeof client.projects.list).toBe('function');
+    expect(typeof client.portfolios.list).toBe('function');
+    expect(typeof client.pipelines.list).toBe('function');
     expect(typeof client.companies.list).toBe('function');
     expect(typeof client.routines.list).toBe('function');
     expect(typeof client.goals.list).toBe('function');

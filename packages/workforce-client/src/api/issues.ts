@@ -9,6 +9,7 @@ import type {
   IssueDocumentSummary,
   IssueAttachment,
   IssueWorkProduct,
+  IssueExecutionDecision,
   DocumentRevision,
   UpsertIssueDocument,
   FeedbackVote,
@@ -204,6 +205,10 @@ export function issuesApi(client: WorkforceClientBase) {
 
     deleteAttachment(id: string): Promise<{ ok: true }> {
       return client.request({ method: 'DELETE', path: `/api/attachments/${id}` });
+    },
+
+    listExecutionDecisions(id: string): Promise<IssueExecutionDecision[]> {
+      return client.request({ method: 'GET', path: `/api/issues/${id}/execution-decisions` });
     },
 
     listApprovals(id: string): Promise<Approval[]> {
