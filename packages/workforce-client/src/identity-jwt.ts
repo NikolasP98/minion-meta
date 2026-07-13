@@ -8,8 +8,9 @@ export type IdentityClaims = {
   roleKeys: string[];
 };
 
-const MAX_ROLE_KEYS = 64;
-const MAX_ROLE_KEY_LENGTH = 128;
+const MAX_ROLE_KEYS = 20;
+const MAX_ROLE_KEY_LENGTH = 80;
+const ROLE_KEY_PATTERN = /^[a-zA-Z0-9][a-zA-Z0-9:_-]*$/;
 
 function normalizeRoleKeys(value: unknown): string[] {
   // Tokens minted before role-scoped HITL assignments did not carry this
@@ -27,7 +28,7 @@ function normalizeRoleKeys(value: unknown): string[] {
       roleKey.length === 0 ||
       roleKey.length > MAX_ROLE_KEY_LENGTH ||
       roleKey.trim() !== roleKey ||
-      /[\u0000-\u001f\u007f]/u.test(roleKey)
+      !ROLE_KEY_PATTERN.test(roleKey)
     ) {
       throw new Error('invalid identity roleKey');
     }

@@ -82,7 +82,7 @@ describe('identity-jwt', () => {
           email: null,
           name: null,
           companyId: 'c1',
-          roleKeys: Array.from({ length: 65 }, (_, index) => `role-${index}`),
+          roleKeys: Array.from({ length: 21 }, (_, index) => `role-${index}`),
         },
         ttlSeconds: 60,
       }),
