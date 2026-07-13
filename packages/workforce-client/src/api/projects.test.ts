@@ -7,11 +7,22 @@ function mockClient(response: unknown) {
 
 describe('projectsApi', () => {
   it('list calls GET /api/companies/:id/projects', async () => {
-    const client = mockClient([{ id: 'proj1', name: 'Alpha' }]);
+    const client = mockClient([
+      {
+        id: 'proj1',
+        name: 'Alpha',
+        portfolioId: 'portfolio1',
+        metadata: { repositoryKey: 'minion_hub', groupKey: 'workforce' },
+      },
+    ]);
     const api = projectsApi(client as never);
     const result = await api.list('comp1');
     expect(client.request).toHaveBeenCalledWith({ method: 'GET', path: '/api/companies/comp1/projects' });
-    expect(result[0]).toMatchObject({ id: 'proj1' });
+    expect(result[0]).toMatchObject({
+      id: 'proj1',
+      portfolioId: 'portfolio1',
+      metadata: { repositoryKey: 'minion_hub', groupKey: 'workforce' },
+    });
   });
 
   it('create calls POST /api/companies/:id/projects', async () => {

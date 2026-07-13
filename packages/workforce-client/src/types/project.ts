@@ -29,6 +29,13 @@ export interface ProjectGoalRef {
   title: string;
 }
 
+/** Stable control-plane metadata used for repository/concern grouping and deterministic routing. */
+export interface ProjectMetadata {
+  repositoryKey?: string;
+  groupKey?: string;
+  [key: string]: unknown;
+}
+
 export interface ProjectWorkspace {
   id: string;
   companyId: string;
@@ -71,6 +78,7 @@ export interface Project {
   id: string;
   companyId: string;
   urlKey: string;
+  portfolioId: string | null;
   goalId: string | null;
   goalIds: string[];
   goals: ProjectGoalRef[];
@@ -81,6 +89,7 @@ export interface Project {
   targetDate: string | null;
   color: string | null;
   env: AgentEnvConfig | null;
+  metadata: ProjectMetadata | null;
   pauseReason: PauseReason | null;
   pausedAt: Date | null;
   executionWorkspacePolicy: ProjectExecutionWorkspacePolicy | null;
