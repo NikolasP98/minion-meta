@@ -29,6 +29,25 @@ describe('pipelinesApi', () => {
     });
   });
 
+  it('preserves role-scoped human stage participants', async () => {
+    const client = mockClient({ id: 'pl-role', name: 'delivery' });
+    const api = pipelinesApi(client as never);
+    const steps = [
+      {
+        key: 'approval',
+        kind: 'approval',
+        label: 'Approval',
+        participant: { type: 'role', roleKeys: ['owner', 'release-manager'] },
+      },
+    ];
+    await api.create('comp1', { name: 'delivery', steps });
+    expect(client.request).toHaveBeenCalledWith({
+      method: 'POST',
+      path: '/api/companies/comp1/pipelines',
+      body: { name: 'delivery', steps },
+    });
+  });
+
   it('archive calls PATCH /api/pipelines/:id with archivedAt', async () => {
     const client = mockClient({ id: 'pl1', archivedAt: '2026-07-11T00:00:00.000Z' });
     const api = pipelinesApi(client as never);

@@ -3,11 +3,10 @@
 
 export type PipelineStepKind = 'work' | 'review' | 'approval' | 'eval';
 
-export interface PipelineParticipant {
-  type: 'agent' | 'user';
-  agentId?: string | null;
-  userId?: string | null;
-}
+export type PipelineParticipant =
+  | { type: 'agent'; agentId: string }
+  | { type: 'user'; userId: string }
+  | { type: 'role'; roleKeys: string[] };
 
 export interface PipelineStep {
   key: string;
