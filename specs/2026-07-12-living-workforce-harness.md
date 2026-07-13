@@ -1,7 +1,7 @@
 # Living Workforce Harness — Governed Stage-Task Delivery
 
 **Date:** 2026-07-12  
-**Status:** Normative implementation contract; assembled on isolated feature branches but not production-verified until the replacement E2E and deployment gate pass  
+**Status:** Normative implementation contract. The governed pipeline and user-scoped HITL path were production-verified by disposable GitHub issue #56; the registry-only evaluator Drone bridge was deployed immediately afterward with focused integration coverage. Deterministic merge execution remains intentionally absent.
 **Repos:** `paperclip-minion/`, `minion/`, `minion_hub/`, meta `packages/workforce-client/`
 
 ## 1. Purpose and supersession
@@ -37,14 +37,14 @@ signed GitHub issues webhook
        Plan (agent work task)
        -> Plan approval (specific-user or role-targeted human task; fail retries Plan)
        -> exact-revision accepted-plan decomposition into durable subtasks
-       -> Implement (agent work task)
-       -> Evaluate (agent score task; score < frozenMinimum retries Implement; seed minimum = 7/10)
+       -> Implement (agent work task; receives the exact accepted revision identity, objective, and decomposition)
+       -> Evaluate (typed Minion Drone score task; score < frozenMinimum retries Implement; seed minimum = 7/10)
        -> Release approval (specific-user or role-targeted human task; freezes typed PR evidence; fail retries Implement)
        -> Merge readiness (read-only agent task; records `mergeExecuted=false`)
   -> deterministic merge executor [not implemented in this slice]
 ```
 
-Each stage materializes exactly once per `(run, step, attempt)` using `originKind=pipeline_step`, the pipeline run ID as `originId`, and a stable step/attempt fingerprint. A `stage-terminal:<childIssueId>` event is claimed under the run lock before the graph advances. The run snapshot freezes the pipeline steps, participants, score contract, retry edges, routing evidence, and classifier input; edits to authoring rows never rewrite an in-flight run. Planner output is stored as a versioned plan document. A Plan gate approves that exact document revision, after which deterministic decomposition creates the planned child tasks exactly once. A later plan revision therefore requires a new approval and cannot inherit acceptance of an older artifact.
+Each stage materializes exactly once per `(run, step, attempt)` using `originKind=pipeline_step`, the pipeline run ID as `originId`, and a stable step/attempt fingerprint. A `stage-terminal:<childIssueId>` event is claimed under the run lock before the graph advances. The run snapshot freezes the pipeline steps, participants, score contract, retry edges, routing evidence, and classifier input; edits to authoring rows never rewrite an in-flight run. Planner output is stored as a versioned plan document. A Plan gate approves that exact document revision, after which deterministic decomposition creates the planned child tasks exactly once. The accepted revision ID, objective, and ordered materialized subtask summaries are then handed to the Implement stage as durable execution context; the full accepted revision remains the evaluator's immutable specification input. The implementer does not reconstruct or silently replace the approved plan from comments. A later plan revision therefore requires a new approval and cannot inherit acceptance of an older artifact.
 
 Statuses use Paperclip’s standard vocabulary: `backlog`, `todo`, `in_progress`, `in_review`, `done`, `blocked`, and `cancelled`. A failed gate is still a terminal child task (`done` plus typed `pipelineOutcome=failed`) whose retry edge immediately creates and wakes a new work attempt. The seeded Plan and Implement retry paths allow three total work attempts; exhaustion blocks both the delivery run and its root Paperclip issue with an immutable reason. Blocked and cancelled children cannot be submitted as stale approvals. Release approval accepts exactly one primary GitHub `pull_request` work product with explicit head/base refs and SHAs plus non-empty typed checks, and freezes that evidence in the terminal gate event. Missing or ambiguous evidence blocks readiness instead of falling back to URLs or comments. Successful Merge readiness completes the orchestration run and marks the root Paperclip issue `done`; it explicitly records `mergeExecuted=false`, leaves the PR unchanged, and performs no GitHub or git merge/push side effect.
 
@@ -57,12 +57,12 @@ Runtime selection follows the shape and authority of the job, not a single prefe
 | Issue classifier | Minion Drone `portfolio-issue-classifier-v1` | `anthropic/claude-haiku-4-5`, fallback `openrouter/google/gemini-2.5-flash`; 1,500 output tokens, 30s | Cheap, fast, typed taxonomy output with no tools or side effects. The caller cannot replace its prompt, model, tools, or schema. |
 | Spec planner | Minion Drone `portfolio-spec-planner-v1` | `anthropic/claude-opus-4-7`, fallback `openai/gpt-5.4`; 6,000 output tokens, 120s | Planning needs high reasoning quality but no repository writes. The Drone emits a bounded plan that deterministic code materializes. |
 | Implementer | OpenCode local | `github-copilot/claude-sonnet-5` | Default repository-writing runtime: isolated worktree, shell/tests, draft PR workflow, and a strong cost/quality balance. |
-| Evaluator | Codex local | `gpt-5.4`, high reasoning, approvals/sandbox bypass disabled | Independent, read-only inspection and rubric scoring. Keeping a different runtime/model from the implementer reduces correlated blind spots. |
+| Evaluator | Minion Drone, registry-only typed evaluator | Frozen high-reasoning model policy; concrete provider/model is attributed on every heartbeat | Independent, read-only typed inspection and rubric scoring. Deterministic traversal, not the Drone, compares the score with the frozen minimum and selects the retry edge. Keeping a different execution contract from the implementer reduces correlated blind spots. |
 | Merge-readiness reviewer | Minion Drone `portfolio-merge-readiness-v1` | `anthropic/claude-haiku-4-5`, fallback `openrouter/google/gemini-2.5-flash`; 1,500 output tokens, 30s | Cheap typed validation over immutable SHA, approval, and check evidence. It cannot push or merge. |
 | Portfolio monitor | OpenCode local fallback | `github-copilot/gpt-5.4-mini` | Bounded read-only monitoring until an allowlisted monitor Drone exists. It may propose deduplicated remediation work, not execute it. |
 | Learning reviewer | Hermes local | Operator-probed model only; otherwise paused | Hermes curates evidence-backed role-guidance proposals and reusable memory/skills. It never self-promotes a harness revision. |
 
-Use **Minion Drone** when the task has a small typed input/output contract, no tool-mediated filesystem or external-service side effects, and benefits from a fixed cheap/high-end model policy. Model inference may still use its configured provider transport. Use **OpenCode** for the default autonomous coding stage because it needs repository tools and provider portability. Use **Codex** for independent high-reasoning evaluation or for coding only when Codex-specific tooling is materially useful; do not make it both implementer and evaluator on the same run. Use **Claude Code** instead of OpenCode for exceptional repository work that specifically needs its plugin/hook/subagent ecosystem or extended interactive investigation; it is not the default stage runtime. Use **Hermes** only for longitudinal learning curation after a model probe, never for normal task execution or approval authority.
+Use **Minion Drone** when the task has a small typed input/output contract, no tool-mediated filesystem or external-service side effects, and benefits from a fixed cheap/high-end model policy. Model inference may still use its configured provider transport. The evaluator follows this rule: it emits a bounded rubric breakdown, overall score, findings, required changes, summary, and recommendation, but it cannot advance the run itself. Deterministic traversal validates that result against the frozen rubric and derives the maximum/outcome. Use **OpenCode** for the default autonomous coding stage because it needs repository tools and provider portability. Use **Codex** for exceptional independent high-reasoning review or for coding only when Codex-specific tooling is materially useful; do not make it both implementer and evaluator on the same run. Use **Claude Code** instead of OpenCode for exceptional repository work that specifically needs its plugin/hook/subagent ecosystem or extended interactive investigation; it is not the default stage runtime. Use **Hermes** only for longitudinal learning curation after a model probe, never for normal task execution or approval authority.
 
 Runtime readiness is verified by live probe. Model aliases that are not present in the installed transport catalog are not silently substituted.
 
@@ -89,6 +89,8 @@ Evaluator scores and human gate input are attributed to the worker that produced
 - Evaluation feeds the latest Implement worker, never the evaluator.
 - Release approval feeds the latest Implement worker.
 - Evaluations persist score and the frozen maximum; human gates accept an optional 0–10 quality score plus a required summary.
+
+Evaluator input is pinned to the accepted plan revision, the current Implement attempt, and the primary PR work product with its frozen head/base SHAs and typed checks. The Minion Drone evaluator returns a schema-validated rubric breakdown, overall score, findings, required changes, summary, and retry recommendation. Deterministic traversal validates the rubric coverage and aggregate score, derives the pass/fail outcome from the frozen minimum, owns any retry to Implement, and enforces the attempt limit; the evaluator cannot select an arbitrary task, edit the accepted plan, or advance the run directly. Release evidence may classify a failing repository check as `known_base_only` only when equivalent evidence shows it also fails on the frozen base revision and the human Release gate explicitly accepts that classification. The failure stays visible and is not rewritten as a passing check; a head-only regression, missing comparison evidence, malformed evaluator result, or score below the frozen minimum blocks progression.
 
 The signal key is deterministic, bounded, and replay-safe. The signal points to the worker, child issue, heartbeat run, and harness revision when that evidence exists. Low scores, failures, or requested changes create only a `review_needed` placeholder. They do not invent new instructions.
 
@@ -124,7 +126,7 @@ On the local development workstation, the Workforce SSH-tunnel/backend unit is o
 
 ## 9. Verification and deployment gate
 
-Before production promotion:
+The disposable production trace in §10 executed this gate. Repeat it for future promotions that change the pipeline, adapters, authority boundary, or merge-readiness evidence contract:
 
 1. Run focused Paperclip tests for stage traversal, classifier attribution/reconciliation, governance routes/services, session revision pinning, adapters, seed, MCP decomposition, and authz.
 2. Run Paperclip package/server typechecks and migration validation for `0110_project_metadata.sql` and `0111_harness_guidance_governance.sql`.
@@ -135,4 +137,22 @@ Before production promotion:
 7. Close the disposable PR/issue as appropriate, delete its remote branch, and archive or mark its Paperclip records retired without deleting task, run, signal, or trace evidence.
 8. Only after that trace passes: record the source and target SHAs, fetch each repository, run checks that cover every commit being promoted, and fast-forward the production branch only when it is an ancestor of the checked development tip. Stop for reconciliation if a fast-forward is impossible. Then verify service/Vercel health.
 
-Known residuals for this slice: the GitHub root-issue create path still lacks a partial unique index for its existing race window; classifier reconciliation currently scans frozen snapshots and may need an indexed discriminator at larger scale; wake deduplication relies on Paperclip’s execution lock/coalescing rather than a database-unique idempotency key; deterministic merge execution is intentionally absent.
+## 10. Production evidence — disposable GitHub issue #56
+
+The replacement E2E used real `NikolasP98/minion_hub` GitHub issue #56 as a disposable bug report and completed the governed delivery run without executing a merge:
+
+1. The webhook created the root Paperclip task, classified and routed it into the MINION Code portfolio, and materialized the frozen shared delivery pipeline.
+2. Plan approval appeared in `/workforce/inbox` only for the configured specific Hub user. Approval froze the exact planner document revision, materialized its decomposition, and handed that accepted plan to the Implement stage.
+3. The implementation path exercised retry handling before OpenCode completed the accepted scope with its Sonnet 5 policy in an isolated `minion_hub` worktree. It pushed only the issue branch, opened implementation PR `NikolasP98/minion_hub#61`, and recorded the PR as the primary typed work product rather than treating a URL or comment as evidence.
+4. Because the registry-only evaluator bridge was not yet present in the deployed Workforce image, this disposable run used the explicitly configured OpenCode/OpenRouter GPT-5.4 evaluator fallback. It inspected the frozen implementation evidence and returned a typed **9/10** result, above the frozen **7/10** threshold. The release evidence retained the retry history and classified failures reproduced only on the frozen base revision as known base-only evidence; it did not misreport those checks as green or as head regressions.
+5. Release approval appeared only for the same configured user and froze the reviewed PR revision and checks. The final registry-only Minion Drone readiness task returned a typed successful readiness result with `mergeExecuted:false`.
+6. Deterministic traversal completed the Paperclip run and root orchestration task. No merge executor ran, PR #61 was never merged, and no default branch was pushed by the pipeline.
+7. End-of-test cleanup closed GitHub issue #56 and all disposable PRs, including #61, without merging them; deleted their disposable remote branches; and closed or hid the internal test issues/tasks from normal board views. Durable run events, decisions, scores, attempts, and work-product evidence remain available for audit rather than being deleted.
+
+This trace validates user-scoped Plan and Release HITL, accepted-plan handoff, OpenCode implementation, typed evaluator scoring and retry semantics, immutable release evidence, Minion Drone advisory merge readiness, and cleanup behavior. It does **not** claim that issue #56 itself exercised the subsequently deployed evaluator Drone bridge, and it does **not** validate or authorize automatic merge execution.
+
+After the disposable trace completed, Workforce commits `dbe9eb391`, `a53580ada`, and `4d8111af5` were fast-forwarded through `dev` to `main` and deployed as `ghcr.io/nikolasp98/minion-workforce:sha-4d8111a` (manifest digest `sha256:742bff4772eda65c7057211fc843ee7534cc30132cf747074609e128a154d380`). The evaluator was restored from its temporary fallback to `minion_drone:portfolio-implementation-evaluator-v1`. Focused embedded-Postgres coverage proves the post-trace bridge validates the frozen rubric and weighted score, requires threshold-consistent recommendations, emits one attributed `pipeline_evaluation` learning signal, and replay-reconciles one marked feedback block plus one idempotent downstream wake. This closes the living-harness/crash-window gaps found during the trace without retroactively changing its evidence.
+
+## 11. Known residuals
+
+The GitHub root-issue create path still lacks a partial unique index for its existing race window; classifier reconciliation currently scans frozen snapshots and may need an indexed discriminator at larger scale; wake deduplication relies on Paperclip’s execution lock/coalescing rather than a database-unique idempotency key; deterministic merge execution is intentionally absent.
