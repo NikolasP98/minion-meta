@@ -1,5 +1,12 @@
 # @minion-stack/shells-bridge
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [cf38341]
+  - @minion-stack/shared@0.9.0
+
 ## 0.1.3
 
 ### Patch Changes

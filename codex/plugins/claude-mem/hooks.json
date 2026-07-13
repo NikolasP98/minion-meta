@@ -1,0 +1,92 @@
+{
+  "hooks": {
+    "Setup": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ./hooks/claude-mem-forwarder.sh setup",
+            "timeout": 300,
+            "statusMessage": "Installing claude-mem runtime dependencies..."
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ./hooks/claude-mem-forwarder.sh setup",
+            "timeout": 300,
+            "statusMessage": "Checking claude-mem setup..."
+          },
+          {
+            "type": "command",
+            "command": "bash ./hooks/claude-mem-forwarder.sh start",
+            "timeout": 60,
+            "statusMessage": "Starting claude-mem worker..."
+          },
+          {
+            "type": "command",
+            "command": "bash ./hooks/claude-mem-forwarder.sh context",
+            "timeout": 60,
+            "statusMessage": "Loading claude-mem context..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ./hooks/claude-mem-forwarder.sh session-init",
+            "timeout": 60,
+            "statusMessage": "Initializing claude-mem session..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ./hooks/claude-mem-forwarder.sh observation",
+            "timeout": 120,
+            "statusMessage": "Saving claude-mem observation..."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ./hooks/claude-mem-forwarder.sh file-context",
+            "timeout": 60,
+            "statusMessage": "Loading claude-mem file context..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ./hooks/claude-mem-forwarder.sh summarize",
+            "timeout": 120,
+            "statusMessage": "Summarizing session to claude-mem..."
+          }
+        ]
+      }
+    ]
+  }
+}

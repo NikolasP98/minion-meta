@@ -1,5 +1,13 @@
 # @minion-stack/db
 
+## 0.9.4
+
+### Patch Changes
+
+- 33cd624: Add `auth_ref` (explicit creds pointer) and `settings` jsonb to `channels` —
+  Phase 0 of the gateway.json → DB channel-config migration.
+- 1757ba2: Add nullable `archetype` column to `marketplace_agents` (`autonomous` | `copilot`) — drives the marketplace catalog avatar style.
+
 ## 0.9.0
 
 ### Minor Changes
