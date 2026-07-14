@@ -436,12 +436,13 @@ Execution later diverged from step 1: the route/persona/fixture/capture contract
 
 ## Resolution/status appendix
 
-**Current local authority:** local Hub `dev` checkpoint `b3b168fe` on 2026-07-14.
+**Current local authority:** local Hub `dev` checkpoint `5028464c` on 2026-07-14.
 
 - The semantic token contract, theme roles, shared primitives/foundations, route-design manifest, route-access registry, mutation boundary, page migration waves, primitive consolidation, design-debt cleanup, and final interaction repairs are implemented locally.
 - Current route authority: 146 endpoints, 136 reachable screens (126 authenticated app and ten public/auth), ten redirects, and 27 dynamic screen/fixture families. The planned compact/medium/wide base archive is 408 frames.
-- Final source certification is green under Node 22: the serialized suite passes 256 files/1,942 tests, `svelte-check` reports 0 errors/0 warnings, and the production build succeeds with zero invalid-selector warnings.
-- The token-integrity gate resolves 12,337 consumers across 1,913 files against 214 declared names, with 114 reason-coded runtime/component/render exceptions and zero violations.
+- Final source certification is green under Node 22: the serialized suite passes 257 files/1,946 tests, `svelte-check` reports 0 errors/0 warnings, and the production build succeeds with zero invalid-selector warnings.
+- The token-integrity gate resolves 12,342 consumers across 1,911 files against 213 declared names, with 112 reason-coded runtime/component/render exceptions and zero violations.
+- The first authenticated feedback loop aligns Home's legacy and semantic theme roles, derives theme previews from the shared contract, fixes light-theme navigation hover, and moves Notes & Todos to a responsive trailing rail. Desktop and 375px open/collapsed browser geometry are certified with zero console errors; see the execution log for exact evidence.
 - The absolute design-lint gate reports zero non-exempt governed findings. Its remaining 242 matches are all existing reason-coded expressive/render exceptions; palette utilities, bare buttons outside the UI foundation, and native selects outside the UI foundation are at zero.
 - The static contract scanner resolves 146 pages, 352 API handlers, 298 navigation references, and 387 API calls with zero unresolved destinations and zero HTTP-method mismatches. The one remaining ambiguity is the deliberate typed Builder `DELETE` target across its three registered handlers.
 - Still open: a successful safe disposable authenticated capture matrix, creation and reconciliation of the actual Figma file/frames/components after workspace selection, and normal Changeset/npm publication with released consumer versions.

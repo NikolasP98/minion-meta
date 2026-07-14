@@ -18,7 +18,7 @@ This log distinguishes implemented work, verified work, and remaining gates. A f
 |---|---|---|
 | Shared packages and DB | `feat/ui-coherence-packages` / `MINION-worktrees/ui-coherence-packages` | Commits `bd44656`, `732e3ed`; meta-repo local `dev` safely fast-forwarded to `732e3ed`; token generation/schema/contrast suite (six tests) and UI test/build/typecheck (seven tests, 0 diagnostics) revalidated from local `dev` |
 | Hub consolidated program | `feat/ui-coherence-program` / `minion_hub/.worktrees/ui-coherence-program` | Commit `ff9d47f4`; correctness, composition, package-consumer, behavioral-integrity, executable route/API/runtime/wave contracts, six-viewport and representative-theme capture contracts, expanded token ratchet, and Wave A first-tranche gates green |
-| Hub dev integration | local `dev` (program history retained on `feat/ui-coherence-dev-integration`) | Current local authority `b3b168fe`; all page waves, policy/capture/token/primitive foundations, component and route debt tranches, compiler cleanup, interaction repairs, and the latest origin PostgreSQL/host/token patch are integrated. Source check/test/build, design/token, and static contract gates are green |
+| Hub dev integration | local `dev` (program history retained on `feat/ui-coherence-dev-integration`) | Current local authority `5028464c`; the certified program checkpoint `b3b168fe` plus the first authenticated feedback-loop repair for Home theme coherence and the trailing Notes rail are integrated. Source check/test/build, design/token, static contracts, and targeted authenticated browser geometry are green |
 | Hub foundations and high-risk layouts | `feat/ui-coherence-foundations` / `minion_hub/.worktrees/ui-coherence-foundations` | Commit `ecc10da`; composition gates green |
 | Hub Phase 5 Wave A | `feat/ui-coherence-wave-a` / `minion_hub/.worktrees/ui-coherence-wave-a` | First tranche `73ea4791`, merged as `f8b23dd0`; all 43 named core-platform files pass gates |
 | Hub Phase 5 Wave A residual | `feat/ui-coherence-wave-a-residual` / `minion_hub/.worktrees/ui-coherence-wave-a-residual` | Complete at `559ad6cc`; all ten remaining Account/organization/platform screens merged into dev integration as `fbae2395` |
@@ -37,6 +37,16 @@ This log distinguishes implemented work, verified work, and remaining gates. A f
 | Site consumer | `feat/ui-coherence-consumer` / `minion_site/.worktrees/ui-coherence-consumer` | Commit `613cb69`; local Site `dev` fast-forwarded without conflicts; frozen Bun install, Svelte check (0 diagnostics), and Node 22 Vercel-adapter build revalidated in the local checkout |
 
 The user's original dirty Hub state was archived before reconciliation, its genuine Cloud/session/chat and PostgreSQL/host/token behavior was preserved in committed form, and local Hub `dev` was advanced without discarding that behavior. The meta-repo's unrelated dirty files remain untouched.
+
+## Post-certification feedback loop 1 — Home theme and Notes rail
+
+The first review session used the authenticated local 5173 Hub as the feedback surface. It exposed two coupled coherence failures: Ayu Light updated legacy `--color-*` aliases while migrated semantic surfaces remained on New York dark, and the Notes & Todos rail rendered immediately after the left navigation instead of at the workspace's trailing edge.
+
+- Isolated branch `fix/home-theme-notes-right` committed the repair as `c7997357`; local Hub `dev` merged it without conflict as `5028464c`.
+- Runtime theme selection now activates the shared `data-minion-theme` semantic preset and removes stale inline legacy palette/style overrides. Preset previews, contrast checks, all 16 themes, and all ten accent choices derive from `@minion-stack/design-tokens/contract.json` rather than a duplicated local palette.
+- `PageShell` now owns an explicit `direction="row"` composition contract. Home uses it to place Notes after the chat column at the right edge. Below 768px, open Notes becomes a 320px right overlay while the Home column retains full width; collapsed Notes shrinks both the visible rail and its pointer hitbox to 46px and removes the overlay shadow.
+- Authenticated browser evidence for Ayu Light recorded a desktop 910px Home column followed by a 46px Notes rail at the 1180px viewport edge. Inactive navigation hover resolved to `rgb(243, 244, 245)`, not a dark surface. At 375px, open Notes occupied x=55–375 over a full-width 375px Home column; collapsed Notes occupied only x=329–375. Browser console errors were zero in all three proofs.
+- Final source evidence at `5028464c`: 257 files/1,946 tests green, `svelte-check` 0 errors/0 warnings, production Vite/Vercel-adapter build green, changed-file design debt zero, token-integrity violations zero, and independent review with no merge blockers. The live main 5173 process also resolved Ayu Light semantic and legacy canvas/border roles to identical computed values after the merge.
 
 ## Completed and independently verified
 
