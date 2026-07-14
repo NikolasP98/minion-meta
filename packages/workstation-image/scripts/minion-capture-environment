@@ -1,0 +1,27 @@
+#!/bin/sh
+set -eu
+
+runtime_dir=/run/minion-workstation
+environment_file="${runtime_dir}/bridge.env"
+temporary_file="${runtime_dir}/.bridge.env.$$"
+
+install -d -o root -g agent -m 0750 "${runtime_dir}"
+trap 'rm -f "${temporary_file}"' EXIT HUP INT TERM
+
+# exe.dev places --env values on container PID 1. systemd intentionally does
+# not copy arbitrary inherited values into system services, so capture only the
+# bridge allowlist into a short-lived, non-world-readable EnvironmentFile.
+tr '\000' '\n' </proc/1/environ | while IFS= read -r entry; do
+  case "${entry}" in
+    SHELLS_SHELL_ID=* | SHELLS_ORG_ID=* | SHELLS_GATEWAY_URL=* | SHELLS_DEVICE_TOKEN=* | \
+      SHELLS_HARNESS=* | SHELLS_HARNESS_VERSION=* | SHELLS_HARNESS_CMD=* | \
+      SHELLS_HARNESS_WORKDIR=* | SHELLS_RUNTIMES=* | SHELLS_BACKUP_TARGET=*)
+      printf '%s\n' "${entry}"
+      ;;
+  esac
+done >"${temporary_file}"
+
+chown root:agent "${temporary_file}"
+chmod 0640 "${temporary_file}"
+mv -f "${temporary_file}" "${environment_file}"
+trap - EXIT HUP INT TERM
