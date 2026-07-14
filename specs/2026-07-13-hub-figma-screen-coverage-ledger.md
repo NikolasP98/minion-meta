@@ -2,7 +2,7 @@
 
 Authoritative source: `/home/nikolas/Documents/CODE/MINION/minion_hub` on local branch `dev`
 
-Source checkpoint: `b3b168fe` (local Hub `dev`; source migration, compiler/interaction repairs, static contracts, and absolute governed-debt cleanup are certified)
+Source checkpoint: `5028464c` (local Hub `dev`; source migration, compiler/interaction repairs, absolute governed-debt cleanup, and the first authenticated Home feedback-loop repair are certified)
 
 Transfer status: this ledger is the planned capture authority. The owning workspace was not selected, so no Figma file was created; no file key, editable route frames, variables, or component keys exist yet.
 
