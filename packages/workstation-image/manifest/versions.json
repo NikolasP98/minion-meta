@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "blueprint": "minion-workstation-v1",
+  "os": {
+    "distribution": "Ubuntu",
+    "version": "24.04",
+    "aptSnapshot": "20260712T000000Z"
+  },
+  "baseImage": {
+    "reference": "ghcr.io/boldsoftware/exeuntu",
+    "digest": "sha256:26ea0bc1d751680557772354f28808bea406b4f19157ea66101882cfd6de554d"
+  },
+  "desktop": {
+    "environment": "Xfce",
+    "vnc": "TigerVNC",
+    "vncListen": "127.0.0.1:5901",
+    "webClient": "noVNC/websockify",
+    "webListen": "0.0.0.0:8000"
+  },
+  "runtimes": {
+    "hermes": {
+      "release": "v2026.7.7.2",
+      "packageVersion": "0.18.2",
+      "commit": "9de9c25f620ff7f1ce0fd5457d596052d5159596"
+    },
+    "opencode": {
+      "version": "1.17.18",
+      "amd64Sha256": "bcc60c929aabb5eb30f8aeeadec9754e3304c11c5966b708329067943b9f8934",
+      "arm64Sha256": "5f9783e732d6a9be72e83caea4085b2cfd42e5c5e1a147f216df098d376407e1"
+    },
+    "minion": {
+      "version": "2026.7.11-dev",
+      "npmTarballSha512": "f45ab3bf4bcbdcb6f6f69629fd5e9610f847eb73bff38f0aa4fab1f0ab4e634199bc440dd0ebeec4de7928cd752b468458aa7c931c94c151a14545820b271746",
+      "includes": ["@minion-stack/drone"]
+    },
+    "drone": {
+      "version": "0.3.0",
+      "npmTarballSha512": "9dff67108ff248f55580d634698bf49e0b813d90f7574c4439975821eacda575601b54019b37900ab4724ebadad1cb5830eb5f99af34bb33930dd4d4d5dc594b"
+    },
+    "shellsBridge": {
+      "version": "0.1.4",
+      "npmTarballSha512": "da101cd4167ce1a202a7973dbda9158e0f7e066cc8534f5ab8b7d7101b843f525a2697cc6f5664f5af3d79dcbced52caa152c061329039029f333e6bb213536a",
+      "service": "shells-bridge.service"
+    },
+    "claudeCode": {
+      "source": "exeuntu base image"
+    },
+    "codex": {
+      "source": "exeuntu base image"
+    },
+    "pi": {
+      "source": "exeuntu base image"
+    }
+  },
+  "tools": {
+    "node": {
+      "version": "22.23.1",
+      "amd64Sha256": "9749e988f437343b7fa832c69ded82a312e41a03116d766797ac14f6f9eee578",
+      "arm64Sha256": "0294e8b915ab75f92c7513d2fcb830ae06e10684e6c603e99a87dbf8835389c1"
+    },
+    "notesmd": {
+      "version": "0.3.6",
+      "amd64Sha256": "e9c484adca59d46365d27a52a6a2e82f2c50b932457bef86e4972c73ccc209c2",
+      "arm64Sha256": "2a7d662816859a1b8f0ad25ebaadeafd7e284b0173b85ec547cb6c7b18603366",
+      "commands": ["notesmd-cli", "obsidian-cli"]
+    },
+    "backup": {
+      "command": "rclone",
+      "remote": "b2"
+    },
+    "preview": {
+      "command": "minion-preview",
+      "portRange": "3000-9999",
+      "defaultPort": 4173,
+      "defaultTtlSeconds": 7200,
+      "maxTtlSeconds": 86400
+    },
+    "browser": {
+      "amd64": {
+        "name": "Google Chrome",
+        "version": "150.0.7871.114-1",
+        "sha256": "0f19e68dca574849632e25229f15853d2beac33fa06498feed43f34628bc2d53",
+        "commands": ["chromium", "browser"]
+      },
+      "arm64": {
+        "name": "GNOME Web",
+        "source": "Ubuntu snapshot",
+        "commands": ["browser"]
+      }
+    }
+  }
+}
