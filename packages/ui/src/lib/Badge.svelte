@@ -4,34 +4,87 @@
   export type SemanticValue = 'success' | 'error' | 'warning' | 'info' | 'accent' | 'brand';
   export type BadgeSize = 'sm' | 'md';
 
-  // Maps variant+value to the CSS token used for color/background tint.
-  const STATUS_TOKEN: Record<StatusValue, string> = {
-    running: 'var(--color-status-running)',
-    thinking: 'var(--color-status-thinking)',
-    idle: 'var(--color-status-idle)',
-    aborted: 'var(--color-status-aborted)',
+  export interface BadgeTokens {
+    foreground: string;
+    surface: string;
+    border: string;
+  }
+
+  const STATUS_TOKENS: Record<StatusValue, BadgeTokens> = {
+    running: {
+      foreground: 'var(--color-success-fg)',
+      surface: 'var(--color-success-surface)',
+      border: 'var(--color-success-border)',
+    },
+    thinking: {
+      foreground: 'var(--color-purple)',
+      surface: 'color-mix(in srgb, var(--color-purple) 14%, var(--color-surface-1))',
+      border: 'color-mix(in srgb, var(--color-purple) 35%, var(--color-border-default))',
+    },
+    idle: {
+      foreground: 'var(--color-text-secondary)',
+      surface: 'var(--color-surface-1)',
+      border: 'var(--color-border-default)',
+    },
+    aborted: {
+      foreground: 'var(--color-warning-fg)',
+      surface: 'var(--color-warning-surface)',
+      border: 'var(--color-warning-border)',
+    },
   };
 
-  const SEMANTIC_TOKEN: Record<SemanticValue, string> = {
-    success: 'var(--color-success)',
-    error: 'var(--color-destructive)',
-    warning: 'var(--color-warning)',
-    info: 'var(--color-cyan)',
-    accent: 'var(--color-accent)',
-    brand: 'var(--color-brand-pink)',
+  const SEMANTIC_TOKENS: Record<SemanticValue, BadgeTokens> = {
+    success: {
+      foreground: 'var(--color-success-fg)',
+      surface: 'var(--color-success-surface)',
+      border: 'var(--color-success-border)',
+    },
+    error: {
+      foreground: 'var(--color-danger-fg)',
+      surface: 'var(--color-danger-surface)',
+      border: 'var(--color-danger-border)',
+    },
+    warning: {
+      foreground: 'var(--color-warning-fg)',
+      surface: 'var(--color-warning-surface)',
+      border: 'var(--color-warning-border)',
+    },
+    info: {
+      foreground: 'var(--color-info-fg)',
+      surface: 'var(--color-info-surface)',
+      border: 'var(--color-info-border)',
+    },
+    accent: {
+      foreground: 'var(--color-accent)',
+      surface: 'var(--color-surface-1)',
+      border: 'var(--color-accent)',
+    },
+    brand: {
+      foreground: 'var(--color-brand)',
+      surface: 'var(--color-surface-1)',
+      border: 'var(--color-brand)',
+    },
   };
 
-  export function resolveBadgeColor(
+  export function resolveBadgeTokens(
     variant: BadgeVariant,
-    value: StatusValue | SemanticValue | undefined
-  ): string | null {
-    if (variant === 'status' && value && value in STATUS_TOKEN) {
-      return STATUS_TOKEN[value as StatusValue];
+    value: StatusValue | SemanticValue | undefined,
+  ): BadgeTokens | null {
+    if (variant === 'status' && value && value in STATUS_TOKENS) {
+      return STATUS_TOKENS[value as StatusValue];
     }
-    if (variant === 'semantic' && value && value in SEMANTIC_TOKEN) {
-      return SEMANTIC_TOKEN[value as SemanticValue];
+    if (variant === 'semantic' && value && value in SEMANTIC_TOKENS) {
+      return SEMANTIC_TOKENS[value as SemanticValue];
     }
     return null;
+  }
+
+  /** Compatibility helper retained from 0.1.x. */
+  export function resolveBadgeColor(
+    variant: BadgeVariant,
+    value: StatusValue | SemanticValue | undefined,
+  ): string | null {
+    return resolveBadgeTokens(variant, value)?.foreground ?? null;
   }
 </script>
 
@@ -58,33 +111,33 @@
     children,
   }: Props = $props();
 
-  const color = $derived(resolveBadgeColor(variant, value));
-
-  const sizeCls = $derived(
-    size === 'sm' ? 'text-[10px] px-1.5 py-0.5 gap-1' : 'text-xs px-2 py-0.5 gap-1.5'
+  const tokens = $derived(resolveBadgeTokens(variant, value));
+  const sizeClass = $derived(
+    size === 'sm'
+      ? 'text-[length:var(--font-size-telemetry)] px-1.5 py-0.5 gap-1'
+      : 'text-[length:var(--font-size-label)] px-2 py-1 gap-1.5',
   );
-
-  const tintStyle = $derived(
-    color
-      ? `background-color: color-mix(in srgb, ${color} 18%, transparent); color: ${color}; border-color: color-mix(in srgb, ${color} 30%, transparent);`
-      : ''
+  const style = $derived(
+    tokens
+      ? `background-color: ${tokens.surface}; color: ${tokens.foreground}; border-color: ${tokens.border};`
+      : '',
   );
 </script>
 
 <span
-  class={`inline-flex items-center rounded-[var(--radius-sm)] border border-border font-medium leading-none whitespace-nowrap ${sizeCls} ${color ? '' : 'bg-bg3 text-muted-foreground'} ${cls}`}
-  style={tintStyle}
+  class={`inline-flex items-center rounded-[var(--radius-sm)] border font-[var(--font-weight-medium)] leading-none whitespace-nowrap
+    ${sizeClass} ${tokens ? '' : 'bg-[var(--color-surface-1)] text-[var(--color-text-secondary)] border-[var(--color-border-default)]'} ${cls}`}
+  {style}
+  data-part="badge"
+  data-variant={variant}
+  data-value={value}
 >
   {#if dot}
     <span
-      class={`inline-block rounded-full ${size === 'sm' ? 'w-1.5 h-1.5' : 'w-2 h-2'} ${pulse ? 'animate-pulse' : ''}`}
-      style={color ? `background-color: ${color};` : 'background-color: var(--color-muted-foreground);'}
+      class={`inline-block rounded-[var(--radius-full)] ${size === 'sm' ? 'w-1.5 h-1.5' : 'w-2 h-2'} ${pulse ? 'motion-safe:animate-pulse' : ''}`}
+      style={tokens ? `background-color: ${tokens.foreground};` : 'background-color: var(--color-text-tertiary);'}
       aria-hidden="true"
     ></span>
   {/if}
-  {#if children}
-    {@render children()}
-  {:else if value}
-    {value}
-  {/if}
+  {#if children}{@render children()}{:else if value}{value}{/if}
 </span>

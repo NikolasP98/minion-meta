@@ -1,53 +1,55 @@
 <script lang="ts" module>
-  export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
-  export type ButtonSize = 'sm' | 'md' | 'lg' | 'icon';
+  import type { Snippet } from 'svelte';
 
-  // Variant → token-driven classes. Every variant defines hover + active(press) states.
+  export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
+  export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'touch' | 'icon';
+  export type ButtonShape = 'default' | 'icon';
+
+  export interface ButtonProps {
+    variant?: ButtonVariant;
+    size?: ButtonSize;
+    shape?: ButtonShape;
+    loading?: boolean;
+    disabled?: boolean;
+    href?: string;
+    type?: 'button' | 'submit' | 'reset';
+    class?: string;
+    icon?: Snippet;
+    children?: Snippet;
+    onclick?: (event: MouseEvent) => void;
+    [key: string]: unknown;
+  }
+
   const VARIANT: Record<ButtonVariant, string> = {
     primary:
-      'bg-accent text-accent-foreground hover:brightness-110 active:brightness-95 shadow-sm',
+      'bg-[var(--color-accent)] text-[var(--color-on-accent)] border border-transparent hover:brightness-105 active:brightness-95 shadow-[var(--shadow-elevation-1)]',
     secondary:
-      'bg-bg3 text-foreground border border-[var(--hairline)] hover:bg-[var(--elevation-3-bg)]',
-    ghost: 'bg-transparent text-muted hover:text-foreground hover:bg-white/[0.06]',
+      'bg-[var(--color-surface-2)] text-[var(--color-text-primary)] border border-[var(--color-border-default)] hover:bg-[var(--color-surface-3)] hover:border-[var(--color-border-strong)]',
+    ghost:
+      'bg-transparent text-[var(--color-text-secondary)] border border-transparent hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-1)]',
     danger:
-      'bg-[color-mix(in_srgb,var(--color-destructive)_14%,transparent)] text-destructive border border-[color-mix(in_srgb,var(--color-destructive)_30%,transparent)] hover:bg-[color-mix(in_srgb,var(--color-destructive)_22%,transparent)] hover:border-[color-mix(in_srgb,var(--color-destructive)_50%,transparent)]',
+      'bg-[var(--color-danger-surface)] text-[var(--color-danger-fg)] border border-[var(--color-danger-border)] hover:brightness-105',
     outline:
-      'bg-transparent text-accent border border-[color-mix(in_srgb,var(--color-accent)_30%,transparent)] hover:bg-[color-mix(in_srgb,var(--color-accent)_10%,transparent)] hover:border-[color-mix(in_srgb,var(--color-accent)_50%,transparent)]',
+      'bg-transparent text-[var(--color-accent)] border border-[var(--color-border-strong)] hover:bg-[var(--color-surface-1)] hover:border-[var(--color-accent)]',
   };
 
-  const SIZE: Record<ButtonSize, string> = {
-    sm: 'h-7 px-3 text-xs gap-1.5 rounded-[var(--radius-md)]',
-    md: 'h-8 px-4 text-sm gap-2 rounded-[var(--radius-md)]',
-    lg: 'h-10 px-5 text-sm font-semibold gap-2 rounded-[var(--radius-lg)]',
-    icon: 'h-8 w-8 p-0 gap-0 rounded-[var(--radius-md)] justify-center',
+  const SIZE: Record<Exclude<ButtonSize, 'icon'>, string> = {
+    xs: 'h-[var(--control-height-xs)] px-2 text-[length:var(--font-size-label)] gap-1 rounded-[var(--radius-sm)]',
+    sm: 'h-[var(--control-height-sm)] px-3 text-[length:var(--font-size-label)] gap-1.5 rounded-[var(--radius-md)]',
+    md: 'h-[var(--control-height-md)] px-4 text-[length:var(--font-size-body)] gap-2 rounded-[var(--radius-md)]',
+    lg: 'h-[var(--control-height-lg)] px-5 text-[length:var(--font-size-body)] gap-2 rounded-[var(--radius-lg)]',
+    touch:
+      'h-[var(--control-height-touch)] px-5 text-[length:var(--font-size-body)] gap-2 rounded-[var(--radius-lg)]',
   };
 </script>
 
 <script lang="ts">
-  import type { Snippet } from 'svelte';
-  import { Loader2 } from 'lucide-svelte';
-
-  interface Props {
-    variant?: ButtonVariant;
-    size?: ButtonSize;
-    /** Shows a width-preserving spinner and blocks interaction. */
-    loading?: boolean;
-    disabled?: boolean;
-    /** Renders an <a> instead of <button> when set. */
-    href?: string;
-    type?: 'button' | 'submit' | 'reset';
-    class?: string;
-    /** Optional leading icon snippet (replaced by spinner while loading). */
-    icon?: Snippet;
-    children?: Snippet;
-    onclick?: (e: MouseEvent) => void;
-    /** Passthrough attributes (aria-label, title, form, target, …). */
-    [key: string]: unknown;
-  }
+  import Spinner from './Spinner.svelte';
 
   let {
     variant = 'secondary',
     size = 'md',
+    shape = 'default',
     loading = false,
     disabled = false,
     href,
@@ -57,42 +59,61 @@
     children,
     onclick,
     ...rest
-  }: Props = $props();
+  }: ButtonProps = $props();
 
   const isDisabled = $derived(disabled || loading);
-  const spinnerPx = $derived(size === 'lg' ? 16 : size === 'sm' ? 12 : 14);
+  const resolvedSize = $derived(size === 'icon' ? 'md' : size);
+  const isIcon = $derived(shape === 'icon' || size === 'icon');
+  const element = $derived(href ? 'a' : 'button');
+  const enabledHref = $derived(href && !isDisabled ? href : undefined);
+  const sizeClass = $derived(
+    isIcon
+      ? `${SIZE[resolvedSize]} aspect-square px-0 justify-center`
+      : SIZE[resolvedSize],
+  );
 
   const base =
-    'relative inline-flex items-center justify-center font-medium whitespace-nowrap select-none ' +
-    'transition-[transform,background-color,border-color,color,filter,box-shadow] ' +
-    'duration-[150ms] ease-[cubic-bezier(0.2,0,0,1)] ' +
-    'active:scale-[0.97] active:duration-[75ms] ' +
-    'disabled:opacity-40 disabled:pointer-events-none disabled:active:scale-100 ' +
-    'aria-disabled:opacity-40 aria-disabled:pointer-events-none';
+    'relative inline-flex items-center justify-center font-[var(--font-weight-medium)] whitespace-nowrap select-none outline-none ' +
+    'transition-[transform,background-color,border-color,color,filter,box-shadow] duration-[var(--duration-fast)] ease-[var(--ease-standard)] ' +
+    'focus-visible:shadow-[var(--shadow-focus)] active:scale-[0.97] active:duration-[var(--duration-instant)] ' +
+    'disabled:opacity-45 disabled:pointer-events-none disabled:active:scale-100 aria-disabled:opacity-45 aria-disabled:pointer-events-none';
 
-  const classes = $derived(`${base} ${VARIANT[variant]} ${SIZE[size]} ${cls}`);
+  const classes = $derived(`${base} ${VARIANT[variant]} ${sizeClass} ${cls}`);
+
+  function handleClick(event: MouseEvent) {
+    if (isDisabled) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    onclick?.(event);
+  }
 </script>
 
 <svelte:element
-  this={href ? 'a' : 'button'}
-  {href}
+  this={element}
+  {...rest}
+  href={enabledHref}
   type={href ? undefined : type}
-  role={href ? 'button' : undefined}
   class={classes}
   disabled={href ? undefined : isDisabled}
   aria-disabled={href && isDisabled ? 'true' : undefined}
+  role={href && isDisabled ? 'link' : undefined}
   aria-busy={loading ? 'true' : undefined}
-  {onclick}
-  {...rest}
+  tabindex={href && isDisabled ? -1 : undefined}
+  onclick={handleClick}
+  data-part="button"
+  data-variant={variant}
+  data-size={resolvedSize}
+  data-shape={isIcon ? 'icon' : 'default'}
 >
   {#if loading}
-    <Loader2 size={spinnerPx} class="animate-spin shrink-0" aria-hidden="true" />
-  {:else if icon}
-    {@render icon()}
+    <span class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+      <Spinner size={resolvedSize === 'lg' || resolvedSize === 'touch' ? 'md' : 'sm'} />
+    </span>
   {/if}
-  {#if children && size !== 'icon'}
-    {@render children()}
-  {:else if children && size === 'icon' && !icon && !loading}
-    {@render children()}
-  {/if}
+  <span class={`inline-flex items-center justify-center gap-[var(--space-control-gap)] ${loading ? 'opacity-0' : ''}`}>
+    {#if icon}{@render icon()}{/if}
+    {#if children && (!isIcon || !icon)}{@render children()}{/if}
+  </span>
 </svelte:element>

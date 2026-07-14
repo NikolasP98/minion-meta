@@ -1,7 +1,7 @@
 {
   "name": "@minion-stack/design-tokens",
   "version": "0.1.0",
-  "description": "Canonical design tokens (CSS custom properties via Tailwind 4 @theme) shared across the Minion platform.",
+  "description": "Generated semantic design-token contract shared across the Minion platform.",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -12,12 +12,23 @@
     "access": "public"
   },
   "files": [
+    "contract.json",
+    "contract.schema.json",
     "tokens.css",
     "utilities.css",
     "README.md"
   ],
   "exports": {
+    "./contract.json": "./contract.json",
+    "./contract.schema.json": "./contract.schema.json",
     "./tokens.css": "./tokens.css",
     "./utilities.css": "./utilities.css"
+  },
+  "scripts": {
+    "generate": "node scripts/generate-css.mjs",
+    "check:generated": "node scripts/generate-css.mjs --check",
+    "build": "pnpm run check:generated && pnpm run test",
+    "typecheck": "pnpm run check:generated",
+    "test": "node --test tests/*.test.mjs"
   }
 }

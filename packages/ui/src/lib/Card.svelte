@@ -4,9 +4,9 @@
 
   const PAD: Record<CardPadding, string> = {
     none: '',
-    sm: 'p-3',
-    md: 'p-4',
-    lg: 'p-5',
+    sm: 'p-[var(--space-card-compact)]',
+    md: 'p-[var(--space-card)]',
+    lg: 'p-[var(--space-6)]',
   };
 </script>
 
@@ -41,24 +41,24 @@
   const surface = $derived(`surface-${elevation}`);
   const interactiveCls = $derived(
     interactive
-      ? 'transition-[border-color,box-shadow,transform] duration-[150ms] ease-[cubic-bezier(0.2,0,0,1)] ' +
-          'hover:border-[var(--elevation-3-border)] hover:shadow-lg ' +
-          'has-[a:hover,button:hover]:border-[var(--elevation-3-border)]'
+      ? 'transition-[border-color,box-shadow,transform] duration-[var(--duration-fast)] ease-[var(--ease-standard)] ' +
+          'hover:border-[var(--color-border-strong)] hover:shadow-[var(--shadow-elevation-3)] ' +
+          'has-[a:hover,button:hover]:border-[var(--color-border-strong)]'
       : ''
   );
 </script>
 
-<div class={`${surface} rounded-[var(--radius-lg)] ${interactiveCls} ${cls}`}>
+<div class={`${surface} rounded-[var(--radius-lg)] ${interactiveCls} ${cls}`} data-part="card" data-elevation={elevation}>
   {#if header}
-    <div class={`${padding === 'none' ? '' : 'px-4 py-3'} border-b border-[var(--hairline)]`}>
+    <div class={`${padding === 'none' ? '' : 'px-[var(--space-card)] py-[var(--space-card-compact)]'} border-b border-[var(--color-border-subtle)]`} data-part="card-header">
       {@render header()}
     </div>
   {/if}
-  <div class={PAD[padding]}>
+  <div class={PAD[padding]} data-part="card-body">
     {#if children}{@render children()}{/if}
   </div>
   {#if footer}
-    <div class={`${padding === 'none' ? '' : 'px-4 py-3'} border-t border-[var(--hairline)]`}>
+    <div class={`${padding === 'none' ? '' : 'px-[var(--space-card)] py-[var(--space-card-compact)]'} border-t border-[var(--color-border-subtle)]`} data-part="card-footer">
       {@render footer()}
     </div>
   {/if}
