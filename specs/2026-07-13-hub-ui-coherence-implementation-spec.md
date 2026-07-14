@@ -2,13 +2,15 @@
 
 **Date:** 2026-07-13
 
-**Status:** Source implementation certified locally at Hub `dev` checkpoint `b3b168fe`; authenticated capture, Figma transfer, and package publication remain open
+**Status:** Source implementation plus the first authenticated feedback-loop repair are certified locally at Hub `dev` checkpoint `5028464c`; full authenticated capture, Figma transfer, and package publication remain open
 
 **Governing product direction:** [Minion Hub Design Manifesto](./2026-07-13-hub-design-manifesto.md)
 
 **Evidence:** [Minion Hub UI Coherence Audit](./2026-07-13-hub-ui-coherence-audit.md)
 
 The semantic contract, shared foundations, route/access authorities, page migration waves, primitive consolidation, token integrity, absolute zero-governed-debt gate, and final interaction repairs are implemented and source-certified on local Hub `dev`. The disposable authenticated capture, actual Figma file/frames, and package publication remain open. This document preserves the intended dependency order while the [execution log](./2026-07-13-hub-ui-coherence-execution-log.md) records where execution diverged from it.
+
+Post-certification user review is handled as an evidence loop: reproduce the observation in the authenticated local Hub, trace it to the token/component/page contract, implement in an isolated worktree, require independent review plus source and browser gates, then merge the bounded commit into local `dev`. The first loop is recorded at `5028464c` and covers Home theme coherence, navigation hover, and the responsive right-side Notes & Todos rail.
 
 ## Outcome
 
