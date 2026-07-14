@@ -1,0 +1,240 @@
+#!/usr/bin/env node
+
+import { spawn } from 'node:child_process';
+import { closeSync, existsSync, openSync } from 'node:fs';
+import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { hostname } from 'node:os';
+import { createConnection } from 'node:net';
+import { resolve } from 'node:path';
+
+const DEFAULT_PORT = 4173;
+const DEFAULT_TTL_SECONDS = 2 * 60 * 60;
+const MAX_TTL_SECONDS = 24 * 60 * 60;
+const stateRoot = process.env.MINION_PREVIEW_STATE_DIR
+  ?? resolve(process.env.HOME ?? '/tmp', '.local/state/minion-previews');
+
+function usage(exitCode = 0) {
+  const stream = exitCode === 0 ? process.stdout : process.stderr;
+  stream.write(`Usage:
+  minion-preview start [directory] [--port 4173] [--ttl 2h] [--name draft] [--json]
+  minion-preview run --port 4173 [--ttl 2h] [--name app] -- <command> [args...]
+  minion-preview status [--json]
+  minion-preview url <name-or-port>
+  minion-preview stop <name-or-port> [--json]
+
+Preview ports must be between 3000 and 9999. TTL defaults to 2h and is capped at 24h.
+`);
+  process.exit(exitCode);
+}
+
+function fail(message) {
+  process.stderr.write(`minion-preview: ${message}\n`);
+  process.exit(1);
+}
+
+function parseArgs(args) {
+  const separator = args.indexOf('--');
+  const command = separator === -1 ? [] : args.slice(separator + 1);
+  const input = separator === -1 ? args : args.slice(0, separator);
+  const options = { port: DEFAULT_PORT, ttl: DEFAULT_TTL_SECONDS, name: null, json: false };
+  const positional = [];
+
+  for (let index = 0; index < input.length; index += 1) {
+    const value = input[index];
+    if (value === '--json') options.json = true;
+    else if (value === '--port') options.port = Number(input[++index]);
+    else if (value.startsWith('--port=')) options.port = Number(value.slice(7));
+    else if (value === '--ttl') options.ttl = parseTtl(input[++index]);
+    else if (value.startsWith('--ttl=')) options.ttl = parseTtl(value.slice(6));
+    else if (value === '--name') options.name = input[++index];
+    else if (value.startsWith('--name=')) options.name = value.slice(7);
+    else if (value.startsWith('-')) fail(`unknown option: ${value}`);
+    else positional.push(value);
+  }
+  return { options, positional, command };
+}
+
+function parseTtl(value) {
+  const match = String(value ?? '').match(/^(\d+)(s|m|h)?$/);
+  if (!match) fail(`invalid TTL: ${value}`);
+  const unit = match[2] ?? 's';
+  const seconds = Number(match[1]) * ({ s: 1, m: 60, h: 3600 }[unit]);
+  if (seconds < 30 || seconds > MAX_TTL_SECONDS) fail('TTL must be between 30s and 24h');
+  return seconds;
+}
+
+function validatePort(port) {
+  if (!Number.isInteger(port) || port < 3000 || port > 9999 || port === 8000) {
+    fail('port must be an integer between 3000 and 9999; port 8000 is reserved for the GUI');
+  }
+}
+
+function safeName(value, port) {
+  const name = value ?? `preview-${port}`;
+  if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,47}$/.test(name)) {
+    fail('name must contain only letters, numbers, underscores, or dashes');
+  }
+  return name;
+}
+
+function previewUrl(port) {
+  const origin = process.env.MINION_PREVIEW_ORIGIN
+    ?? `https://${hostname().replace(/\.exe\.xyz$/, '')}.exe.xyz`;
+  return `${origin.replace(/\/$/, '')}:${port}/`;
+}
+
+function alive(pid) {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function waitForPort(port, pid, timeoutMs = 30_000) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline && alive(pid)) {
+    const connected = await new Promise((resolvePromise) => {
+      const socket = createConnection({ host: '127.0.0.1', port });
+      socket.setTimeout(400);
+      socket.once('connect', () => { socket.destroy(); resolvePromise(true); });
+      socket.once('error', () => resolvePromise(false));
+      socket.once('timeout', () => { socket.destroy(); resolvePromise(false); });
+    });
+    if (connected) return true;
+    await new Promise((resolvePromise) => setTimeout(resolvePromise, 250));
+  }
+  return false;
+}
+
+async function readStates() {
+  await mkdir(stateRoot, { recursive: true });
+  const files = (await readdir(stateRoot)).filter((file) => file.endsWith('.json'));
+  const states = [];
+  for (const file of files) {
+    try {
+      const state = JSON.parse(await readFile(resolve(stateRoot, file), 'utf8'));
+      if (alive(state.pid)) states.push(state);
+      else await rm(resolve(stateRoot, file), { force: true });
+    } catch {
+      await rm(resolve(stateRoot, file), { force: true });
+    }
+  }
+  return states.sort((a, b) => a.port - b.port);
+}
+
+async function selectState(identifier) {
+  const states = await readStates();
+  return states.find((state) => state.name === identifier || String(state.port) === identifier) ?? null;
+}
+
+function printState(state, json = false) {
+  if (json) process.stdout.write(`${JSON.stringify(state)}\n`);
+  else process.stdout.write(`${state.name}\t${state.url}\texpires ${state.expiresAt}\n`);
+}
+
+async function launch({ options, argv, directory, label }) {
+  validatePort(options.port);
+  const name = safeName(options.name, options.port);
+  const states = await readStates();
+  if (states.some((state) => state.port === options.port || state.name === name)) {
+    fail(`preview name or port is already active: ${name}/${options.port}`);
+  }
+
+  await mkdir(stateRoot, { recursive: true });
+  const logPath = resolve(stateRoot, `${name}.log`);
+  const logFd = openSync(logPath, 'a', 0o600);
+  const url = previewUrl(options.port);
+  const child = spawn('nice', ['-n', '5', 'timeout',
+    '--signal=TERM',
+    '--kill-after=10s',
+    `${options.ttl}s`,
+    ...argv,
+  ], {
+    cwd: directory,
+    detached: true,
+    env: {
+      ...process.env,
+      HOST: '0.0.0.0',
+      PORT: String(options.port),
+      MINION_PREVIEW_URL: url,
+      __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS: hostname().replace(/\.exe\.xyz$/, '') + '.exe.xyz',
+    },
+    stdio: ['ignore', logFd, logFd],
+  });
+  child.unref();
+  closeSync(logFd);
+
+  if (!(await waitForPort(options.port, child.pid))) {
+    try { process.kill(-child.pid, 'SIGTERM'); } catch { /* already stopped */ }
+    const log = existsSync(logPath) ? (await readFile(logPath, 'utf8')).trim().slice(-1200) : '';
+    fail(`${label} did not listen on port ${options.port}${log ? `:\n${log}` : ''}`);
+  }
+
+  const started = Date.now();
+  const state = {
+    name,
+    port: options.port,
+    pid: child.pid,
+    url,
+    directory,
+    command: argv,
+    logPath,
+    startedAt: new Date(started).toISOString(),
+    expiresAt: new Date(started + options.ttl * 1000).toISOString(),
+  };
+  await writeFile(resolve(stateRoot, `${name}.json`), `${JSON.stringify(state, null, 2)}\n`, { mode: 0o600 });
+  printState(state, options.json);
+}
+
+async function main() {
+  const [action, ...args] = process.argv.slice(2);
+  if (!action || action === 'help' || action === '--help' || action === '-h') usage();
+  const parsed = parseArgs(args);
+
+  if (action === 'start') {
+    const directory = resolve(parsed.positional[0] ?? process.cwd());
+    if (!existsSync(directory)) fail(`directory does not exist: ${directory}`);
+    await launch({
+      options: parsed.options,
+      directory,
+      label: 'static preview server',
+      argv: ['python3', '-m', 'http.server', String(parsed.options.port), '--bind', '0.0.0.0', '--directory', directory],
+    });
+    return;
+  }
+
+  if (action === 'run') {
+    if (parsed.command.length === 0) fail('run requires a command after --');
+    await launch({ options: parsed.options, directory: process.cwd(), label: parsed.command[0], argv: parsed.command });
+    return;
+  }
+
+  if (action === 'status') {
+    const states = await readStates();
+    if (parsed.options.json) process.stdout.write(`${JSON.stringify(states)}\n`);
+    else if (states.length === 0) process.stdout.write('No active previews.\n');
+    else states.forEach((state) => printState(state));
+    return;
+  }
+
+  if (action === 'url' || action === 'stop') {
+    const identifier = parsed.positional[0];
+    if (!identifier) fail(`${action} requires a name or port`);
+    const state = await selectState(identifier);
+    if (!state) fail(`active preview not found: ${identifier}`);
+    if (action === 'url') process.stdout.write(`${state.url}\n`);
+    else {
+      try { process.kill(-state.pid, 'SIGTERM'); } catch { /* already stopped */ }
+      await rm(resolve(stateRoot, `${state.name}.json`), { force: true });
+      if (parsed.options.json) process.stdout.write(`${JSON.stringify({ stopped: true, name: state.name, port: state.port })}\n`);
+      else process.stdout.write(`Stopped ${state.name} (${state.port}).\n`);
+    }
+    return;
+  }
+
+  usage(1);
+}
+
+await main();

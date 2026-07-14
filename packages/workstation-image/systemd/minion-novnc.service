@@ -1,0 +1,20 @@
+[Unit]
+Description=Minion noVNC browser gateway
+Requires=minion-vnc.service
+After=minion-vnc.service
+
+[Service]
+Type=simple
+User=exedev
+Group=exedev
+WorkingDirectory=/
+ExecStart=/usr/bin/websockify --web=/usr/share/novnc --heartbeat=30 0.0.0.0:8000 127.0.0.1:5901
+Restart=on-failure
+RestartSec=3s
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

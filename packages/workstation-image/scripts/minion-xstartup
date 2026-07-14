@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+
+# Keep idle cloud desktops reachable and avoid a blank VNC canvas after Xfce's
+# default power-management timeout.
+xset s off
+xset -dpms
+xset s noblank
+
+exec dbus-run-session -- /usr/bin/startxfce4
