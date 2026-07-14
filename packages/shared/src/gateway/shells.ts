@@ -23,6 +23,7 @@ export const SHELLS_METHODS = {
   get: 'shells.get',
   quota: 'shells.quota',
   provision: 'shells.provision',
+  access: 'shells.access',
   invoke: 'shells.invoke',
   cancel: 'shells.cancel',
   archive: 'shells.archive',
@@ -56,8 +57,53 @@ export const SHELLS_EVENTS = {
 // Domain types
 // =============================================================================
 
-/** Identifier of a harness baked into an exe.dev image. */
-export type ShellHarness = 'hermes' | 'claude-code' | 'codex' | (string & {});
+/** Identifier of the primary agent harness running inside a workspace. */
+export type ShellHarness = 'hermes' | 'claude-code' | 'opencode' | 'minion-drone' | 'pi' | (string & {});
+
+/**
+ * Installable components exposed by the workspace provisioner. Some entries
+ * are agent runtimes while others are user-facing applications; keeping one
+ * ordered manifest makes a provision request reproducible across providers.
+ */
+export const SHELL_RUNTIME_IDS = [
+  'hermes',
+  'obsidian-cli',
+  'chromium',
+  'claude-code',
+  'opencode',
+  'minion-drone',
+  'pi',
+] as const;
+export type ShellRuntime = (typeof SHELL_RUNTIME_IDS)[number];
+
+export type ShellProvider = 'exedev' | (string & {});
+
+export interface ShellMachineSpec {
+  cpu: number;
+  memoryMB: number;
+  diskGB: number;
+}
+
+/** Provider-neutral, versioned base machine definition. */
+export interface ShellBlueprint {
+  id: string;
+  version: string;
+  distribution: string;
+  desktop: string;
+  guiTransport: 'novnc' | (string & {});
+  defaultSpec: ShellMachineSpec;
+  defaultRuntimes: ShellRuntime[];
+}
+
+export const DEFAULT_SHELL_BLUEPRINT: ShellBlueprint = {
+  id: 'minion-workstation-v1',
+  version: '1',
+  distribution: 'ubuntu-24.04',
+  desktop: 'xfce',
+  guiTransport: 'novnc',
+  defaultSpec: { cpu: 2, memoryMB: 8192, diskGB: 100 },
+  defaultRuntimes: ['hermes'],
+};
 
 /** Lifecycle state. */
 export type ShellStatus =
@@ -81,16 +127,31 @@ export type ShellBackupCadence = 'hourly' | 'daily' | 'weekly' | 'manual';
 /** One shell row as returned by shells.list / shells.get. Never contains secrets. */
 export interface ShellSummary {
   shellId: string;
+  /** Owning organization. Caller-side handlers must scope access to this value. */
+  orgId: string;
   vmName: string;          // exe.dev VM name (1:1 with shellId)
   displayName: string;     // user-chosen label
+  provider: ShellProvider;
+  /** Versioned provider-neutral machine definition (for example minion-workstation-v1). */
+  blueprint: string;
+  /** True for the first/default workspace assigned to an organization. */
+  isDefault: boolean;
   harness: ShellHarness;
+  runtimes: ShellRuntime[];
   image: string;           // baked image, e.g. "minionstack/hermes-shell:v1"
   region: string;          // exe.dev region code, e.g. "lax"
   status: ShellStatus;
   errorReason?: ShellErrorReason;
   errorMessage?: string;
+  cpu: number;
   diskGB: number;
   memoryMB: number;
+  /** Provider access metadata only. These fields never contain credentials. */
+  sshHost?: string;
+  sshCommand?: string;
+  terminalUrl?: string;
+  guiUrl?: string;
+  noVncUrl?: string;
   /** Null = always-on (auto-archive disabled). */
   archiveIdleMs: number | null;
   backupCadence: ShellBackupCadence;
@@ -135,12 +196,22 @@ export type ShellsQuotaResponse = ShellsQuota;
 export interface ShellsProvisionParams {
   displayName: string;
   harness: ShellHarness;
-  image?: string;             // override baked image (advanced)
+  /** Optional explicit org for service/admin callers. Gateways derive it from JWT otherwise. */
+  orgId?: string;
+  provider?: ShellProvider;   // default: gateway-configured provider
+  /** Blueprint id. `image` remains accepted as a backwards-compatible alias. */
+  blueprint?: string;
+  image?: string;
   region?: string;            // default: gateway-configured region
-  diskGB?: number;            // default 4
-  memoryMB?: number;          // default 512
-  archiveIdleMs?: number | null; // default 24h; null = always-on
+  cpu?: number;               // default 2
+  diskGB?: number;            // default 100
+  memoryMB?: number;          // default 8192
+  /** User-selected runtime inventory. Independent of the Hermes control bridge harness. */
+  runtimes?: ShellRuntime[];  // default ['hermes']
+  archiveIdleMs?: number | null; // default null (always-on)
   backupCadence?: ShellBackupCadence; // default 'daily'
+  /** Explicitly request the org's default workspace. Idempotent when one exists. */
+  isDefault?: boolean;
   /** Optional initial prompt forwarded to the harness on first boot. */
   initialPrompt?: string;
 }
@@ -148,7 +219,19 @@ export interface ShellsProvisionResponse {
   shellId: string;
   vmName: string;
   status: ShellStatus;       // typically 'provisioning' on return
-  deviceToken: string;       // one-time token bridge will use to register
+  /** Current summary, including non-secret provider access metadata when available. */
+  shell?: ShellSummary;
+}
+
+export interface ShellsAccessParams {
+  shellId: string;
+  kind: 'desktop' | 'terminal';
+}
+
+export interface ShellsAccessResponse {
+  /** Authenticated provider URL. It never embeds provider credentials. */
+  url: string;
+  token?: string;
 }
 
 /** shells.invoke — forwards to the bridge, which translates to ACP `session/prompt`. */
@@ -264,7 +347,7 @@ export type ShellsUpdateResponse = ShellSummary;
 /** shells.register — bridge claims its shellId after connecting. */
 export interface ShellsRegisterParams {
   shellId: string;
-  deviceToken: string;       // one-time token from ShellsProvisionResponse
+  deviceToken: string;       // machine credential injected by the gateway provisioner
   harness: ShellHarness;
   harnessVersion: string;    // e.g. "hermes@2026.05.0"
   bridgeVersion: string;     // e.g. "@minion-stack/shells-bridge@1.0.0"

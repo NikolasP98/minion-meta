@@ -1,0 +1,25 @@
+[Unit]
+Description=Minion Shells Bridge
+After=network-online.target minion-workstation-env.service
+Wants=network-online.target
+Requires=minion-workstation-env.service
+StartLimitBurst=5
+StartLimitIntervalSec=60
+
+[Service]
+Type=simple
+User=agent
+Group=agent
+WorkingDirectory=/home/agent
+EnvironmentFile=-/run/minion-workstation/bridge.env
+Environment=PATH=/opt/hermes-agent/.venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ExecCondition=/usr/bin/test -s /run/minion-workstation/bridge.env
+ExecStart=/usr/local/bin/shells-bridge
+Restart=always
+RestartSec=5s
+StandardOutput=journal
+StandardError=journal
+NoNewPrivileges=false
+
+[Install]
+WantedBy=multi-user.target
