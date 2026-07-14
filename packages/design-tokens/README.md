@@ -1,73 +1,91 @@
 # @minion-stack/design-tokens
 
-Canonical design tokens for the Minion platform — one source of truth for color,
-radius, shadow, elevation, motion and type tokens shared by `minion_hub` and
-`minion_site`. Tokens are plain CSS custom properties declared via Tailwind 4's
-`@theme` directive, so they generate utilities (`bg-bg`, `text-foreground`,
-`rounded-lg`, `shadow-md`, …) **and** are available at runtime as `var(--…)`.
+Generated semantic foundations shared by Minion Hub and Minion Site. The package
+keeps product expression themeable while making component roles, spacing,
+typography, layers, and motion predictable.
 
-## Install
+## Source of truth
 
-Hub and site use Bun and are not part of the pnpm workspace, so consume via the
-published package once released:
+`contract.json` is the machine-readable authority. It contains:
 
-```jsonc
-// package.json
-"dependencies": { "@minion-stack/design-tokens": "^0.1.0" }
-```
+- the complete semantic color vocabulary for all 16 current Hub theme modes;
+- mode-aware success, warning, danger, and information triples;
+- ten selectable accent/on-accent pairs that pass contrast as inseparable pairs;
+- typography, spacing, radius, control, shadow, motion, layer, and layout scales;
+- responsive page gutters and the compact/medium/wide boundaries;
+- compatibility aliases used during the Hub and Site migration.
 
-…or, for local development before publishing, a workspace file dependency:
+`tokens.css` is generated from the contract. Do not edit it manually.
 
 ```bash
-bun add @minion-stack/design-tokens@file:../packages/design-tokens
+pnpm --filter @minion-stack/design-tokens generate
+pnpm --filter @minion-stack/design-tokens build
 ```
 
-## Usage
+The build fails when generated CSS is stale, a theme is incomplete, an alias
+points to an unknown token, or an essential text/action/status pair falls below
+WCAG AA contrast.
 
-In the app's entry stylesheet (`src/app.css`), import Tailwind, then the tokens,
-then optionally the shared utilities:
+## Install and import
+
+```bash
+bun add @minion-stack/design-tokens
+```
 
 ```css
 @import 'tailwindcss';
 @import '@minion-stack/design-tokens/tokens.css';
-@import '@minion-stack/design-tokens/utilities.css'; /* .surface-*, .t-* type scale */
+@import '@minion-stack/design-tokens/utilities.css';
 ```
 
-Tailwind 4 cannot split a single `@theme` across files at the language level, but
-it **merges** multiple `@theme` blocks — so the shared tokens load first and the
-app overrides only what differs.
+The default variable mode is `new-york`. A consumer can select another contract
+mode without rewriting component CSS:
 
-## Per-app overrides (the brand-accent pattern)
-
-The shared accent is blue (`--color-accent: #3b82f6`, hub default). The marketing
-site re-declares the semantic accent to pink **after** the import:
-
-```css
-@import 'tailwindcss';
-@import '@minion-stack/design-tokens/tokens.css';
-
-/* site-only semantic overrides */
-@theme {
-  --color-accent: #e8547a; /* --color-brand-pink */
-  --color-accent-foreground: #ffffff;
-  --color-accent-light: #f472b6;
-  --color-accent-glow: rgba(232, 84, 122, 0.15);
-}
+```ts
+document.documentElement.dataset.minionTheme = 'github-light';
 ```
 
-Components reference only semantic tokens (`bg-accent`, `text-foreground`), so the
-same component renders blue in the hub and pink on the site with zero forking.
+`data-theme-preset` is also supported for migration adapters. Decorative CRT and
+Voxelized behavior remains consumer-owned and should target stable
+`data-part`/`data-variant` hooks rather than broad element selectors.
 
-## Runtime theming
+## Which tokens to use
 
-The hub recolors tokens at runtime (8 theme presets) by setting the same custom
-properties on `:root` via `applyTheme()`. Inline `:root` declarations win over
-`@theme` defaults by the normal cascade, so runtime theming composes cleanly on
-top of these tokens.
+| Need | Use | Avoid |
+|---|---|---|
+| Page background | `--color-canvas` | literal gray/black values |
+| Cards and panels | `--color-surface-1..3` | elevation guessed from opacity |
+| Modals/menus | `--color-overlay` and `--shadow-overlay` | bespoke shadow stacks |
+| Copy hierarchy | `--color-text-primary/secondary/tertiary` | opacity-suffixed text |
+| Main action | `--color-accent` + `--color-on-accent` | brand or chart palettes |
+| Status | the relevant `-fg/-surface/-border` triple | a single status hue |
+| Layout gaps | spacing and semantic spacing tokens | arbitrary pixel gaps |
+| Control height | `--control-height-*` | route-local button/input heights |
+| Overlay order | `--layer-*` | numeric feature z-index values |
+| UI transitions | duration/easing tokens | route-local timing curves |
 
-## Files
+Categorical `purple`, `pink`, `cyan`, `emerald`, and `neutral` colors are allowed
+for charts and data categories. They do not replace action or status semantics.
 
-| Export | Contents |
+## Typography roles
+
+Use `.t-display`, `.t-heading`, `.t-title`, `.t-body`, `.t-label`, `.t-caption`,
+and `.t-mono`. `.t-telemetry` is the only sanctioned 10px role and is limited to
+non-essential, high-density telemetry—not prose, form help, or actions.
+
+## Compatibility policy
+
+Legacy `--color-bg`, `--color-card`, `--font-sans`, `--shadow-md`, elevation, and
+motion names remain aliases during the additive migration. Undeclared names such
+as `--accent`, `--color-bg1`, `--color-background`, `--color-primary`, and
+`--color-error` are intentionally not promoted. Alias removal requires a later
+breaking release after Hub and Site both report zero usage.
+
+## Exports
+
+| Export | Purpose |
 |---|---|
-| `./tokens.css` | The `@theme` block: fonts, colors, radius, shadows, elevation, motion. |
-| `./utilities.css` | `@layer components` — `.surface-1..4`, `.divide-hairline`, `.hover-lift`, `.t-display..t-mono` type scale. |
+| `./contract.json` | Canonical values and theme metadata for code/Figma tooling |
+| `./contract.schema.json` | JSON Schema for contract-aware tools |
+| `./tokens.css` | Generated Tailwind 4 `@theme` variables and theme-mode selectors |
+| `./utilities.css` | Semantic surface, typography, divider, hover, and coarse-pointer utilities |

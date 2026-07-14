@@ -1,4 +1,5 @@
 import { pgTable, uuid, text, integer, real, timestamp, index } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 import { gateway } from './gateway.js';
 
 /**
@@ -123,6 +124,10 @@ export const builtAgents = pgTable(
       .notNull()
       .default('draft'),
     gatewayId: uuid('gateway_id').references(() => gateway.id, { onDelete: 'cascade' }),
+    // External runtime/gateway agent identifier created when this draft is published.
+    // Intentionally nullable and without an FK: runtime agents live behind the gateway,
+    // not in this database. Draft deletion must not imply runtime-agent deletion.
+    runtimeAgentId: text('runtime_agent_id'),
     // Org-owned (Phase 4: no global drafts). Matches the NOT NULL constraint in
     // 20260606224238_built_agents_tenant_not_null.sql.
     tenantId: uuid('tenant_id').notNull(),
@@ -133,6 +138,9 @@ export const builtAgents = pgTable(
   },
   (t) => [
     index('idx_built_agents_gateway').on(t.gatewayId),
+    index('idx_built_agents_runtime_agent')
+      .on(t.runtimeAgentId)
+      .where(sql`${t.runtimeAgentId} is not null`),
     index('idx_built_agents_tenant').on(t.tenantId),
   ],
 );
