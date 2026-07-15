@@ -59,6 +59,14 @@ One design system, machine-enforced. Semantic tokens and shared primitives only;
 
 Known gaps with NO primitive yet (proposals in `specs/2026-07-15-ui-design-governance-hardening.md`): icon-size scale (use `size={16}` md / `{14}` sm / `{12}` xs until tokenized — do not invent new values), Chip/Tag, Avatar, `.clamp-2/3`, `.transition-fast`. Hand-roll minimally and note it; do not create a new local system.
 
+## Layout contracts (root-caused 2026-07-15 — violating these caused 7 shipped bugs)
+
+- **One scroll owner per screen** (spec §D6). The module content pane owns scroll (`overflow-y-auto` on the page body); the section nav NEVER scrolls with content. If scrolling drags the section nav away, scroll ownership has silently fallen through to `route-viewport` — the shell chain lost its height bound somewhere above.
+- **The `(app)/+layout.svelte` fade-wrapper must stay `flex flex-col`.** Every `SectionShell`/`PageShell` below it relies on `flex: 1` for viewport-height lock; a plain block wrapper makes all of them size to content (symptoms: section nav ends mid-panel, `overflow-y-auto` panes never activate, page bottoms clip).
+- **Page roots inside a `SectionShell` must fill the row**: use `PageShell` (has `flex: 1`), or put `flex-1 min-w-0` on a bare root div. `class="flex flex-col h-full min-h-0"` alone shrinks to intrinsic width in the shell's flex-row — and a narrow container trips `EditableGrid`'s container query into single-column stacking. If a dashboard collapses to one column, check the container width before blaming the grid.
+- **`Button` slot trap**: `@minion-stack/ui` Button renders slotted children inside an inner fixed-height `inline-flex` row `<span>`. Consumer classes (`flex-col`, `truncate`, `!h-auto`) on the Button do NOT reach it. For card-shaped buttons, override via a scoped ancestor: `.wrapper :global(.myclass > span) { flex-direction: column; width: 100%; align-items: stretch; }` and `height: auto` on the button itself (see POS sell `.card`, appearance `.theme-card`).
+- **Svelte scoping needs a real ancestor anchor for component children.** `.a :global(.b)` matches only if `.b` is a DESCENDANT of a scoped `.a` element. A rule targeting a component's forwarded class placed next to (not inside) the anchor silently never applies — wrap the component in a scoped element and anchor on that (see ShiftBanner `.mini-rail`).
+
 ## Gates — run after EVERY UI change
 
 ```bash

@@ -63,6 +63,19 @@ P-numbers are priority-ordered. Contract changes go through `contract.json` → 
 - **P8 — Delete dead `dark:` variants** in the 3 workforce files; rewrite to semantic tokens. (Mechanical, no design decision.)
 - **P9 — Zag wrapper styling pass.** Wrappers compose `.surface-*`/`--shadow-overlay`/`--layer-*` instead of duplicating part constants.
 
+## Layout-contract bugs (2026-07-15, post P1–P9)
+
+Seven user-reported visual bugs traced to four root causes; all fixed and browser-verified. The systemic lessons are codified in the skill's "Layout contracts" section.
+
+| Root cause | Fix | Bugs |
+|---|---|---|
+| `(app)/+layout.svelte` fade-wrapper was a block, so every shell's `flex:1` was inert — nav height, scroll ownership fell through to `route-viewport`, page bottoms clipped | wrapper → `flex flex-col`; `SectionNav` nav `height:100%` → `flex:1 1 auto` | POS nav height; settings nav scrolls with content; settings content cut |
+| `@minion-stack/ui` Button slots children into a fixed-height inner `inline-flex` row span consumer classes can't reach | scoped `> span` overrides (POS sell `.card`, appearance `.theme-card`) | POS sell tiles collapse/overlap; theme cards non-uniform |
+| ShiftBanner `.mini` display rules used `.box :global(.mini)` but `.mini` was a *sibling* of `.box` — never matched, mini rendered at all breakpoints | scoped `.mini-rail` wrapper anchors the rules | duplicate open-shift CTA |
+| Stock/socials page roots lacked horizontal fill inside SectionShell's flex-row → shrink-to-content width tripped EditableGrid's `max-width: 620px` container query into 1 column | `flex-1 min-w-0` on both roots | stock dashboard single-column |
+
+**P10 proposal (new):** `packages/ui` Button should expose its content wrapper to consumer layout (e.g. a `data-part="content"` hook or a `stacked` prop) so card-shaped buttons stop needing per-page `> span` overrides — three pages already carry the same workaround.
+
 ## Follow-up discovered during P9
 
 Tooltip's positioner uses `!z-[9999]` and cannot adopt `--layer-*` in isolation: `app.css` has peer overlays hardcoded at 9998/9999 (lines ~589/925/968) and `ConnectionStatusIndicator.svelte` sits at 9999. These out-of-scale values exceed `--layer-debug` (100). Needs one coordinated stacking cleanup that moves all four surfaces onto the layer scale in a single change.
