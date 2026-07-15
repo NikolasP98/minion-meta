@@ -1,0 +1,17 @@
+[Unit]
+Description=Minion Xfce desktop session
+After=minion-x-display.service
+Requires=minion-x-display.service
+
+[Service]
+Type=simple
+User=agent
+Group=agent
+Environment=DISPLAY=:1
+Environment=HOME=/home/agent
+ExecStart=/usr/bin/dbus-run-session -- /usr/bin/startxfce4
+Restart=always
+RestartSec=3s
+
+[Install]
+WantedBy=multi-user.target

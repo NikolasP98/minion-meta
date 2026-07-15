@@ -15,6 +15,7 @@
 #     --env=SHELLS_BACKUP_TARGET="b2://minion-shells/<shellId>/"
 
 FROM minionstack/shells-bridge-base:v1
+ARG SHELLS_BRIDGE_VERSION=0.1.4
 
 # Codex CLI via npm.
 ARG CODEX_VERSION=latest
@@ -22,7 +23,7 @@ RUN npm install --global "@openai/codex@${CODEX_VERSION}"
 
 USER root
 LABEL minion.harness="codex" \
-      minion.bridge.version="0.1.0" \
+      minion.bridge.version="${SHELLS_BRIDGE_VERSION}" \
       org.opencontainers.image.source="https://github.com/NikolasP98/minion-meta"
 
 RUN mkdir -p /home/agent/state /home/agent/.codex \

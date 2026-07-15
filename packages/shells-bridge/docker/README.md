@@ -15,6 +15,7 @@ The base image is harness-agnostic; the three harness images `FROM` it.
 
 | Image | Harness | Tag |
 |---|---|---|
+| `minionstack/minion-workstation` | Ubuntu 24.04 + Xfce/noVNC + selectable runtimes | `v1` |
 | `minionstack/shells-bridge-base` | (base only — not for direct use) | `v1` |
 | `minionstack/hermes-shell` | HERMES (Nous Research) | `v1` |
 | `minionstack/claude-code-shell` | Claude Code | `v1` |
@@ -35,7 +36,7 @@ cd packages/shells-bridge/docker
 ./build-all.sh --push --platform=linux/amd64,linux/arm64
 ```
 
-The build script reads `SHELLS_BRIDGE_VERSION` (default `0.1.0`) and passes it
+The build script reads `SHELLS_BRIDGE_VERSION` (default `0.1.4`) and passes it
 to the base Dockerfile so `npm install -g @minion-stack/shells-bridge@<v>` is
 pinned. Bump after each `shells-bridge` release.
 
@@ -43,7 +44,7 @@ pinned. Bump after each `shells-bridge` release.
 
 ```bash
 ssh exe.dev new --name=my-hermes --image=minionstack/hermes-shell:v1 \
-  --memory=512MB --disk=4GB --region=lax --json \
+  --cpu=2 --memory=8192MB --disk=100GB --json \
   --env=SHELLS_SHELL_ID=shl_... \
   --env=SHELLS_GATEWAY_URL=wss://gateway.example.com/shells-bridge \
   --env=SHELLS_DEVICE_TOKEN=... \

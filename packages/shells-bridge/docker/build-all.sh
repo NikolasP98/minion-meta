@@ -14,7 +14,7 @@
 set -euo pipefail
 
 REGISTRY="${REGISTRY:-minionstack}"
-SHELLS_BRIDGE_VERSION="${SHELLS_BRIDGE_VERSION:-0.1.0}"
+SHELLS_BRIDGE_VERSION="${SHELLS_BRIDGE_VERSION:-0.1.4}"
 PUSH=0
 PLATFORM="${PLATFORM:-linux/amd64}"
 
@@ -43,6 +43,10 @@ echo "=== building $REGISTRY/shells-bridge-base:v1 ==="
 docker buildx build "${build_args[@]}" \
   -f Dockerfile.base -t "$REGISTRY/shells-bridge-base:v1" .
 
+echo "=== building $REGISTRY/minion-workstation:v1 ==="
+docker buildx build "${build_args[@]}" \
+  -f Dockerfile.workstation -t "$REGISTRY/minion-workstation:v1" .
+
 for harness in hermes claude-code codex; do
   echo "=== building $REGISTRY/${harness}-shell:v1 ==="
   docker buildx build "${build_args[@]}" \
@@ -52,6 +56,7 @@ done
 echo ""
 echo "Done. Tags:"
 echo "  $REGISTRY/shells-bridge-base:v1"
+echo "  $REGISTRY/minion-workstation:v1"
 echo "  $REGISTRY/hermes-shell:v1"
 echo "  $REGISTRY/claude-code-shell:v1"
 echo "  $REGISTRY/codex-shell:v1"
