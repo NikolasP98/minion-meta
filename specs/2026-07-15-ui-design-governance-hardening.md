@@ -76,6 +76,17 @@ Seven user-reported visual bugs traced to four root causes; all fixed and browse
 
 **P10 proposal (new):** `packages/ui` Button should expose its content wrapper to consumer layout (e.g. a `data-part="content"` hook or a `stacked` prop) so card-shaped buttons stop needing per-page `> span` overrides — three pages already carry the same workaround.
 
+## DataTable batch (2026-07-15, later same day)
+
+Three user-reported clusters (invisible/size-shifting row checkboxes, broken header filter dropdowns + dead click-outside, fit-to-content resize growing a few px per double-click) traced to one unifying root plus two independents — all fixed, measured, and browser-verified:
+
+- **Unifying root:** DataTable/ColumnFilter passed styling classes as props to the shared `Button` primitive; every plain scoped rule for them (`.dt-check`, `.head`, `.backdrop`, `.ctx-item`, `.sort-h`, …) compiled but shipped dead, so Button's variant chrome rendered instead. Fixed by re-anchoring as `.ancestor :global(.class)`. Codified as the skill's **forwarded-class contract**.
+- **Click-outside:** the dismissal backdrop was `position:fixed` inside the sticky `backdrop-blur` thead — `backdrop-filter` makes that thead the containing block, shrinking the backdrop to a 32px strip. Replaced with `<svelte:document onpointerdown>` + Escape. Codified as the **floating-panel dismissal contract**. Same fix applied to DataTable's column/bulk menus.
+- **autoFit:** measured `td.scrollWidth`, which inner-truncating cells cap at current width. Now clones cell content into an off-screen `max-content` probe (font-copied), adds cell padding, clamps 64–640px — idempotent on second double-click (240→281→281px verified).
+- New **selection-control contract** (fixed 1rem box both states, border-strong/surface-2 → accent/on-accent) applied to DataTable checkboxes and MultiSelectFilter.
+
+**P11 proposal:** conformance tests for primitives-adjacent contracts (a probe that fails when a scoped rule targets a component-forwarded class without `:global`), candidate for `token-integrity.mjs` or a svelte-check preprocessor pass.
+
 ## Follow-up discovered during P9
 
 Tooltip's positioner uses `!z-[9999]` and cannot adopt `--layer-*` in isolation: `app.css` has peer overlays hardcoded at 9998/9999 (lines ~589/925/968) and `ConnectionStatusIndicator.svelte` sits at 9999. These out-of-scale values exceed `--layer-debug` (100). Needs one coordinated stacking cleanup that moves all four surfaces onto the layer scale in a single change.
