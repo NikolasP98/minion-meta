@@ -1,10 +1,10 @@
-# CLAUDE.md — Minion Meta-Repo Orchestrator Hub
+# AGENTS.md — Minion Meta-Repo Orchestrator Hub
 
 This is the **Minion meta-repo** — a self-hosted personal AI assistant platform with orchestration tooling, shared packages (`@minion-stack/*`), and specs at the root, wrapped around 7 independent subprojects. The agent operating from this directory is the **orchestrator**: it has full knowledge of every subdirectory, connects concepts cross-project, and dispatches subagents with the right context.
 
 ## Project Map
 
-| Directory | What | Stack | Git Branch | Own CLAUDE.md |
+| Directory | What | Stack | Git Branch | Own Instructions |
 |---|---|---|---|---|
 | `minion/` | Core gateway + CLI (pnpm monorepo) | pnpm 10.x, Node 22+, TS, tsdown | `DEV` | `.dmux-hooks/CLAUDE.md` |
 | `minion_hub/` | Web dashboard for gateway management | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `dev` | `CLAUDE.md` |
@@ -15,11 +15,21 @@ This is the **Minion meta-repo** — a self-hosted personal AI assistant platfor
 | `pixel-agents/` | VS Code extension — pixel art office for Claude agents | npm, esbuild, React webview | `main` | `CLAUDE.md` |
 | `ai-studio/` | Research/product studio (AI course workspace) | Docs only | — | `CLAUDE.md` |
 
-**Always read the sub-project's CLAUDE.md (or AGENTS.md) before working in it.**
+**Always read the sub-project's CLAUDE.md or AGENTS.md before working in it.**
 
 ## Meta-repo Workflow
 
 The `minion` CLI (`@minion-stack/cli` npm package, binary `minion`) orchestrates every subproject with resolved env vars. Install once: `npm install -g @minion-stack/cli` (or `pnpm add -g @minion-stack/cli`).
+
+## Codex Memory Parity
+
+This repo carries Codex parity artifacts under `codex/` so Codex can use the same durable-memory patterns as Claude without changing Claude's workflow:
+
+- `codex/plugins/claude-mem/` wraps the existing `claude-mem` runtime for cross-session memory search through MCP and Codex root-level `hooks.json` lifecycle hooks.
+- `codex/skills/mempalace-memory/` documents the installed `mempalace` CLI workflow and this repo's `mempalace.yaml` room map.
+- `codex/skills/lessons-learned/` ports the post-task observation workflow.
+
+Use these when the user asks about prior-session context, durable memory, project wake-up context, or lessons learned. Do not save secrets, raw credentials, or unrelated transcript bulk into memory.
 
 ### Core commands
 
@@ -265,7 +275,7 @@ Research workspace for an AI course. Docs-only — no production code. Uses the 
 ### Dispatching Subagents
 
 When sending work to a subproject, always include:
-1. The subproject path and its CLAUDE.md location
+1. The subproject path and its CLAUDE.md or AGENTS.md location
 2. The current git branch (see Project Map above)
 3. Relevant cross-project context (e.g., "this touches the WS protocol — changes must be reflected in @minion-stack/shared, hub, site, and paperclip's minion_gateway adapter")
 
@@ -313,3 +323,56 @@ You are committed to honesty and accuracy above all else. Follow these rules in 
 3. **STATISTICS & NUMBERS** — Flag any statistic you are not 100% confident in. Say "I believe this is approximately..." and recommend the user verify it from an official or primary source.
 4. **RECENT EVENTS** — Remind the user when a topic may have changed since your knowledge cutoff. Do not guess at current events or present outdated info as current.
 5. **PEOPLE & QUOTES** — Never attribute a quote to a real person unless you are certain they said it. If unsure, say "I cannot confirm this quote is accurate."
+
+
+<claude-mem-context>
+# Memory Context
+
+# [MINION] recent context, 2026-07-14 8:22pm GMT-5
+
+Legend: 🎯session 🔴bugfix 🟣feature 🔄refactor ✅change 🔵discovery ⚖️decision 🚨security_alert 🔐security_note
+Format: ID TIME TYPE TITLE
+Fetch details: get_observations([IDs]) | Search: mem-search skill
+
+Stats: 25 obs (8,604t read) | 114,619t work | 92% savings
+
+### Jul 11, 2026
+S6178 Live browser test and demonstration of bug triage kanban process with multi-stage execution policy and HITL approval gates (Jul 11, 1:16 AM)
+S6179 Enable comprehensive password authentication for Minion Hub: password-based login for OAuth-only users (username OR email), password reset via Resend, username/password management in /account page. End goal: set username+password on nikolas.pinon98@gmail.com (Google OAuth-only) and re-login with both variants. (Jul 11, 1:37 AM)
+S6180 Enable comprehensive password authentication for Minion Hub: password-based login for OAuth-only users (username OR email), password reset via Resend email, username/password management in /account page. End goal: set username+password on nikolas.pinon98@gmail.com (Google OAuth-only) and re-login with both username and email variants. (Jul 11, 4:13 PM)
+S6183 Login UI Refinement: Username Field Email Validation and Password Dot Aesthetics (Jul 11, 4:18 PM)
+S6184 Login UI Polish: Email Validation for Username Input and Improved Password Dot Aesthetics (Jul 11, 4:45 PM)
+S6181 Password Authentication Feature Security Hardening and E2E Verification (Jul 11, 4:45 PM)
+S6182 Password Authentication Feature Security Hardening and E2E Verification (Jul 11, 4:46 PM)
+S6186 Deploy password dots styling and username login to production (Jul 11, 4:47 PM)
+S6185 Login UI Polish: Email Validation and Password Dot Aesthetics (Jul 11, 5:13 PM)
+S6189 Deploy password/username authentication updates to production hub.minion-ai.org (Jul 11, 9:02 PM)
+### Jul 14, 2026
+29472 8:13p 🟣 Transparent HTML injection proxy for Figma capture script
+29474 " 🔵 Figma capture script successfully loaded but page content still empty
+29475 " 🔵 Page successfully rendering with authentication working through proxy
+29479 " 🔵 Agent pool recovery after sustained exhaustion
+29473 8:14p 🔵 Agent pool exhaustion pattern after message dispatch
+29477 8:15p 🟣 Successful Figma design capture from authenticated localhost SvelteKit app
+29480 8:16p 🔵 SvelteKit preview server terminated with Vercel Insights missing
+29482 " ✅ Switched minion_hub from preview to dev mode
+29478 " ✅ Figma capture frame annotated with Minion route and viewport metadata
+29481 8:17p ✅ Figma screenshot export validated for captured home route
+29485 " ✅ Visual verification of Minion Hub home route capture in base64 format
+29489 " 🔵 Error 500 page captured showing Internal Error with Retry action
+29483 " 🔵 MINION agent pool capacity and recovery characteristics
+29484 8:18p 🔵 Multiple concurrent Vite server instances causing port conflicts
+29486 " ✅ Vite dev server started on port 5175 after cleanup of preview servers
+29487 " ✅ Reclaimed port 5173 for dev server after process cleanup
+29488 " 🔵 Figma capture recorded error state instead of home route content
+29491 8:19p ✅ Switched from dev mode to preview mode after startup failures
+29493 " 🔵 Preview server startup reveals cache and gateway configuration gaps
+29490 " 🔵 Upstream SvelteKit server crash caused proxy connection failures and 500 error
+29492 " 🔵 SvelteKit development server on port 5173 completely stopped
+29495 " 🔵 Server lifecycle leak with port 5173 double-bound across IPv4 and IPv6
+29494 " ✅ Vite preview server started on port 5173 as replacement for crashed dev server
+29496 8:21p 🔵 Dev server successfully started on port 5175 after auto-increment from conflicts
+29497 " 🔵 MINION development environment startup and coordination patterns
+
+Access 115k tokens of past work via get_observations([IDs]) or mem-search skill.
+</claude-mem-context>
