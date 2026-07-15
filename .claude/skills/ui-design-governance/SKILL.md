@@ -23,6 +23,7 @@ One design system, machine-enforced. Semantic tokens and shared primitives only;
 - **Theme = `data-theme` on `<html>` only.** No Tailwind `dark:` variants (dead code here — no class/media wiring), no `prefers-color-scheme`, no per-theme selectors in components. Components read semantic tokens; themes swap the values.
 - **Accent is a pair.** `--color-accent` always with `--color-on-accent`. Categorical `--color-purple/pink/cyan/emerald/neutral` are for charts/data-viz ONLY, never action or status semantics.
 - **Compat aliases** (`--color-bg`, `--color-foreground`, `--color-muted`, `--shadow-sm`, `--hairline`, …) are legal but write new code with the canonical names.
+- **Text tokens never paint surfaces.** `--color-text-*` — and their aliases `--color-muted` (→text-secondary), `--color-foreground` (→text-primary) — are foreground-only. As a `background` they render dark-gray panels under dark text on light themes (shipped: unreadable chat bubbles, note cards, score tracks). Surfaces come only from `--color-canvas`, `--color-surface-1..3`, `--color-overlay`; dim indicator DOTS may use text colors (the `--color-status-idle` precedent), panels never.
 
 ## Which token
 
