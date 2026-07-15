@@ -2,13 +2,13 @@
 
 **Date:** 2026-07-13
 
-**Status:** Source implementation plus the first authenticated feedback-loop repair are certified locally at Hub `dev` checkpoint `5028464c`; full authenticated capture, Figma transfer, and package publication remain open
+**Status:** Source implementation plus the first authenticated feedback-loop repair are certified locally at Hub `dev` checkpoint `5028464c`; the Sandbox Figma destination and partial foundations exist, while the full authenticated archive, Figma transfer, and package publication remain open
 
 **Governing product direction:** [Minion Hub Design Manifesto](./2026-07-13-hub-design-manifesto.md)
 
 **Evidence:** [Minion Hub UI Coherence Audit](./2026-07-13-hub-ui-coherence-audit.md)
 
-The semantic contract, shared foundations, route/access authorities, page migration waves, primitive consolidation, token integrity, absolute zero-governed-debt gate, and final interaction repairs are implemented and source-certified on local Hub `dev`. The disposable authenticated capture, actual Figma file/frames, and package publication remain open. This document preserves the intended dependency order while the [execution log](./2026-07-13-hub-ui-coherence-execution-log.md) records where execution diverged from it.
+The semantic contract, shared foundations, route/access authorities, page migration waves, primitive consolidation, token integrity, absolute zero-governed-debt gate, and final interaction repairs are implemented and source-certified on local Hub `dev`. The approved Sandbox Figma file now exists with partial foundation variables, but the authenticated route archive, route frames/components, and package publication remain open. This document preserves the intended dependency order while the [execution log](./2026-07-13-hub-ui-coherence-execution-log.md) records where execution diverged from it.
 
 Post-certification user review is handled as an evidence loop: reproduce the observation in the authenticated local Hub, trace it to the token/component/page contract, implement in an isolated worktree, require independent review plus source and browser gates, then merge the bounded commit into local `dev`. The first loop is recorded at `5028464c` and covers Home theme coherence, navigation hover, and the responsive right-side Notes & Todos rail.
 
@@ -620,7 +620,7 @@ Each domain PR must:
 
 8. Re-run its authenticated route matrix and update the canonical Figma frames/component mappings in the same review.
 
-At checkpoint `b3b168fe`, the source migration, governed-debt, compiler, interaction, and static certification portions of these waves are implemented. Item 8 remains open because the disposable authenticated capture has not completed and no target Figma file or route frames exist yet.
+At checkpoint `5028464c`, the source migration, governed-debt, compiler, interaction, and static certification portions of these waves are implemented. Item 8 remains open because the authenticated archive is still running and the target Figma file contains only partial foundations, not route frames or reconciled component mappings.
 
 ### Phase 6 — Final certification and Figma reconciliation
 
@@ -704,16 +704,16 @@ Figma variables use the CSS token name without the leading `--`; Figma modes mat
 
 Figma connector authorization is session-specific and must be confirmed at execution time; it is not part of the source contract. Install and authorize the Figma plugin/MCP through the active Codex client, then start a session that exposes the Figma tools.
 
-At the 2026-07-14 execution checkpoint, the connector reported the eligible Starter workspaces `Sandbox`, `MELOFOBIA`, and `Harvest Fintech`; `Sandbox` was recommended as the isolated owner. The user authorized creation of a new Design file and full screen transfer, but did not choose the owning workspace. Because file creation requires that explicit workspace selection, no Figma file was created. Reconfirm workspace eligibility and plan limits before writing because connector state and workspace plans can change.
+At the 2026-07-14 execution checkpoint, the user selected `Sandbox`. The connector created [Minion Hub — UI Coherence & Screen Archive](https://www.figma.com/design/nOlaUw5ggsuBx2jknshFam) with file key `nOlaUw5ggsuBx2jknshFam`. Six canonical collections and the first 48 variables were written before Figma returned the Starter-plan MCP call-limit error. The file is the approved destination, but it does not yet contain route frames, canonical components, styles, or component keys.
 
 After connection, provide:
 
-- A Figma Design file URL with edit access, or permission to create a new file
-- An explicit target Figma team/project or workspace
-- A successful safe disposable authenticated capture artifact from the implemented Phase 0 harness
+- Edit access to the existing Sandbox Design file
+- Sufficient Figma MCP write quota to finish foundations, components, and route transfer
+- A successful audited authenticated capture artifact from the implemented Phase 0 harness
 - Interactive OAuth only for Figma; no Hub or production credentials need to be shared
 
-All eligible workspaces currently expose Starter-plan variable limits. Screen transfer can proceed, but the canonical 16-theme system cannot be represented as one multi-mode variable collection until the owning workspace supports the required modes. Do not silently flatten or split the canonical theme contract to work around this limitation.
+The current Sandbox workspace exposes both a Starter MCP call quota and Starter variable-mode limits. The call quota currently blocks further automated writes, and the canonical 16-theme system cannot be represented as one multi-mode collection until the owning workspace supports the required modes. Do not silently flatten or split the canonical theme contract to work around either limitation.
 
 Official setup: <https://developers.figma.com/docs/figma-mcp-server/remote-server-installation/>
 
@@ -792,4 +792,4 @@ The original implementation series was intended to follow the same dependency or
 9. UI-009/UI-010: remove or implement dead controls and label all confirmed icon-only controls.
 10. Re-run the full Phase 0 matrix and close Phase 1. Then begin the additive package release; the shell/component migration was intended to remain blocked until UI-001 through UI-010 were all green.
 
-Execution did not preserve the Phase 0 screenshot/Figma prerequisite: the source migration proceeded while safe authenticated capture remained blocked. Source implementation and certification are now complete at `b3b168fe`. The remaining slice is to complete the disposable authenticated matrix, select the owning workspace and create/reconcile the Figma file and 136-screen/408-base-frame archive, then publish the package candidates through the normal release flow.
+Execution did not preserve the Phase 0 screenshot/Figma prerequisite: the source migration proceeded while safe authenticated capture remained blocked. Source implementation and certification are now complete at `5028464c`. The Sandbox file has since been created and partial foundation variables seeded. The remaining slice is to audit the authenticated current-state bundle, complete the disposable named-state matrix, restore Figma MCP write capacity, finish the 136-screen/408-base-frame archive and component reconciliation, then publish the package candidates through the normal release flow.
