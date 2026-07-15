@@ -63,6 +63,10 @@ P-numbers are priority-ordered. Contract changes go through `contract.json` → 
 - **P8 — Delete dead `dark:` variants** in the 3 workforce files; rewrite to semantic tokens. (Mechanical, no design decision.)
 - **P9 — Zag wrapper styling pass.** Wrappers compose `.surface-*`/`--shadow-overlay`/`--layer-*` instead of duplicating part constants.
 
+## Follow-up discovered during P9
+
+Tooltip's positioner uses `!z-[9999]` and cannot adopt `--layer-*` in isolation: `app.css` has peer overlays hardcoded at 9998/9999 (lines ~589/925/968) and `ConnectionStatusIndicator.svelte` sits at 9999. These out-of-scale values exceed `--layer-debug` (100). Needs one coordinated stacking cleanup that moves all four surfaces onto the layer scale in a single change.
+
 ## Non-goals
 
 - No changes to the frozen alias map or theme recipes here.
