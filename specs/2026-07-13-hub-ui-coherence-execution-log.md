@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-13
 
-**Status:** Source implementation certified; Sandbox Figma destination and partial foundations created; authenticated archive running; full Figma transfer and publication pending
+**Status:** Source implementation certified; Figma destination moved to the MINION Professional team; partial foundations preserved; authenticated archive and screen-first Figma transfer in progress; themes and publication deferred
 **Governing documents:**
 
 - [UI coherence audit](./2026-07-13-hub-ui-coherence-audit.md)
@@ -50,12 +50,15 @@ The first review session used the authenticated local 5173 Hub as the feedback s
 
 ## 2026-07-14 Figma and authenticated archive checkpoint
 
-- The user selected `Sandbox`. The connector created [Minion Hub — UI Coherence & Screen Archive](https://www.figma.com/design/nOlaUw5ggsuBx2jknshFam) with file key `nOlaUw5ggsuBx2jknshFam` under `team::1236841014053239771`.
+- The connector created [Minion Hub — UI Coherence & Screen Archive](https://www.figma.com/design/nOlaUw5ggsuBx2jknshFam) with file key `nOlaUw5ggsuBx2jknshFam`. The user subsequently moved it from Sandbox into the MINION team; live account verification reports `team::1659021478034388080`, Professional tier, Full seat.
 - Read-only discovery confirmed one blank page, no existing local variables/styles/components, the canonical source token authority, 40 design-registry entries (38 unique exports), 413 reusable Svelte components, and no existing Code Connect mappings.
 - Six canonical variable collections were created. The first 48 variables are present: 32 hidden color primitives and 16 semantic aliases. No route frames, component library, styles, or component keys are claimed as transferred.
-- Further Figma writes, including a Code-to-Canvas attempt, returned the Sandbox Starter-plan MCP call-limit error. Work is resumable from `/tmp/dsb-state-minion-hub-ui-coherence-2026-07-14.json`, but the canonical system and all 408 base frames remain blocked on additional Figma MCP quota.
+- The former Sandbox Starter-plan MCP call-limit blocker is resolved by the move to MINION Professional. The user explicitly prioritized transferring the UI before completing theme modes; theme work is therefore frozen without changing the implemented 16-theme code contract.
+- The first editable `/home` wide import created node `19:2` at 1440x900, but browser/Figma visual verification found it uniformly blank because submission preceded Hub hydration. It is rejected evidence and must be deleted only after a visually valid replacement exists. No valid route frame is claimed yet.
 - A read-only localhost capture runner now resolves the executable route manifest and dynamic fixtures, reuses the user's authenticated browser session without logging cookie values, and captures exact 390×844, 1024×768, and 1440×900 viewports. Its current bundle target is `/tmp/minion-hub-figma-capture-5028464c`; the manifest distinguishes captured routes, auth redirects, and failures instead of overstating coverage.
+- Capture-readiness hardening is integrated into Hub `dev` as `bc6c343c`: it waits for the mounted app/public sentinel, permits one bounded retry only for confirmed local Vite `504 Outdated Optimize Dep`, rejects empty DOM and single-color screenshots, and keeps unrelated failures visible.
 - A successful wide `/home` smoke capture verified the current authenticated light-theme shell and the repaired right-side Notes & Todos rail. It also showed an unconnected-server empty state, so that image is current-state evidence rather than proof of a seeded `populated` fixture.
+- Two concurrent Hub Vite processes on ports 5173 and 5174 were found mutating the same optimizer/generated caches, producing missing dependency chunks and mass HMR reloads. Both were retired; capture certification now requires one strict 5173 process, a clean optimizer rebuild, and a green `/home` plus `/account/connections` preflight before route batches resume.
 
 ## Completed and independently verified
 
@@ -216,11 +219,11 @@ The audit also found three architectural/certification gaps that remained after 
 Current remaining order:
 
 1. Complete and audit the authenticated current-state 408-viewport local archive, then run the deterministic named-state matrix after a safe seeded database is available; the current database has not been destructively reset.
-2. Restore Figma MCP write capacity for the existing Sandbox file, finish canonical foundations/components, transfer all 136 current screens (408 compact/medium/wide base frames), and reconcile route/component IDs with code.
+2. Finish the screen-first Figma transfer in the existing MINION Professional file: validate the corrected editable `/home` pilot, transfer all 136 current screens (408 compact/medium/wide base frames), and reconcile route/component IDs with code. Complete themes/components after the route archive unless a screen requires them.
 3. Publish the package candidates through the normal Changeset/npm flow and replace packed `file:` consumers with recorded released versions; no external publication has been performed.
 
 ## Open external decisions
 
-- **Figma capacity:** `Sandbox` is selected and the file exists, but its Starter MCP call quota stopped automation after six collections and 48 variables. Additional quota or an eligible paid workspace/plan is required to resume transfer.
-- **Figma variables:** Starter's variable-mode limit is independent of the call quota. The canonical 16-theme collection requires a plan that supports the required modes; silently splitting or flattening the theme model is not an accepted substitute.
+- **Figma capacity:** Resolved. The existing file is now being edited under the MINION Professional team with a Full seat.
+- **Figma variables:** Professional supports fewer modes per collection than the implemented 16-theme contract requires. Per the user's screen-first priority, modes are deferred; silently flattening the theme model is still not an accepted substitute.
 - **Package publication:** the local release candidate is ready for normal Changeset review, but no push, merge, npm publish, or production migration has been performed.
