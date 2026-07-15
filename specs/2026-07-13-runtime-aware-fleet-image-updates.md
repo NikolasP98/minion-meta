@@ -1,7 +1,7 @@
 # Runtime-Aware Fleet and Swarm Image Updates
 
 **Date:** 2026-07-13  
-**Status:** Implementation in progress  
+**Status:** Production verified
 **Supersedes for containers:** the npm self-update path in `2026-07-10-gateway-update-system.md` and the per-process rollout unit in `2026-07-11-fleet-update-orchestration.md`  
 **Preserves:** legacy systemd/package updates and the existing drain/reconnect behavior
 
@@ -191,3 +191,16 @@ Existing rows created under package semantics are historical. A new check/start 
 ## 12. Exit criteria
 
 The incident is closed only when Hub no longer sends npm `update.run` to an image-managed gateway, production services are pinned to the newest resolved `prd` digest, progress is controller-aware, and a legacy systemd gateway can still complete its existing package update path.
+
+## 13. Production verification
+
+Production verification completed on 2026-07-13 (America/Lima):
+
+- Gateway runtime inference, external-image delegation, image metadata, the host controller, and the dedicated Swarm rollout workflow shipped to `minion-ai` main.
+- Mixed-runtime orchestration and container-image rollout state shipped to `minion_hub` master and deployed successfully on Vercel.
+- `minion_gateway-default` and `minion_gateway-faces` converged sequentially with 1/1 replicas to `ghcr.io/nikolasp98/minion-ai@sha256:cf3e6be49d501d0d653291ae009520162c77a3cf657e003a0afcf76e29421bf9` (OCI revision `f3852fe46e434d7ca5e3282330e6a0f3cdbddb1c`).
+- Both live `update.status` RPCs reported `kind=container`, `updateStrategy=external-image`, controller `swarm:production/minion`, the exact digest above, healthy connections, and `draining=false`.
+- Obsolete package-oriented pending state was cleared only after digest convergence; both gateways then reported `pending=null`.
+- Dedicated workflow run `29304917349` validated the protected SSH/controller path and completed successfully as an idempotent exact-digest no-op.
+
+These checks satisfy the exit criteria. Future container releases use the image controller; legacy systemd installations retain the npm self-update path.
