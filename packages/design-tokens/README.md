@@ -60,12 +60,26 @@ Voxelized behavior remains consumer-owned and should target stable
 | Main action | `--color-accent` + `--color-on-accent` | brand or chart palettes |
 | Status | the relevant `-fg/-surface/-border` triple | a single status hue |
 | Layout gaps | spacing and semantic spacing tokens | arbitrary pixel gaps |
+| Field/control gaps | `--space-control-gap`, `--space-field-gap` (8px) | ad-hoc 6/10px gaps |
+| Card padding | `--space-card-compact` (12) / `--space-card` (16) | per-card padding |
+| Section rhythm | `--space-section` (24) / `--space-page-section` (32) / `--space-page-gutter` (responsive 16/24/32) | route-local section margins |
 | Control height | `--control-height-*` | route-local button/input heights |
+| Icon size | `--icon-size-xs/sm/md/lg` (12/14/16/20) | hardcoded `size={N}` values |
 | Overlay order | `--layer-*` | numeric feature z-index values |
-| UI transitions | duration/easing tokens | route-local timing curves |
+| UI transitions | duration/easing tokens or `.transition-fast`/`.transition-colors-fast` | route-local timing curves |
+| Playful motion | `--ease-spring` | bespoke bounce beziers |
+| Focus indication | the global `:focus-visible` ring + `--shadow-focus` | per-component outlines |
+| Status emphasis glow | `--shadow-status-glow` | bespoke colored shadows |
+| Loading placeholder | `.skeleton` | hand-rolled pulse keyframes |
+| Inline metadata pill | `.chip` | per-file `.chip/.pill/.tag` styles |
+| Multiline truncation | `.clamp-2` / `.clamp-3` | hand-rolled `-webkit-line-clamp` stacks |
 
 Categorical `purple`, `pink`, `cyan`, `emerald`, and `neutral` colors are allowed
 for charts and data categories. They do not replace action or status semantics.
+
+The spacing scale is deliberately non-contiguous: `--space-0/0-5/1/2/3/4/6/8/12`
+exist; `--space-5/7/9/10/11/16` do not and will not resolve. Use the semantic
+spacing tokens when a gap has a role.
 
 ## Typography roles
 
@@ -80,6 +94,18 @@ motion names remain aliases during the additive migration. Undeclared names such
 as `--accent`, `--color-bg1`, `--color-background`, `--color-primary`, and
 `--color-error` are intentionally not promoted. Alias removal requires a later
 breaking release after Hub and Site both report zero usage.
+
+The `aliases` map is frozen by an exact deep-equal assertion in
+`tests/contract.test.mjs` — adding or removing an alias is a deliberate,
+test-edited change. `domainAliases` is the extensible bucket for temporary
+domain names (e.g. `--color-status-running`) whose targets are only
+existence-checked.
+
+## Authoring split
+
+`tokens.css` is generated — never edit it. `utilities.css` is hand-authored in
+this package and validated only by consumers' token-integrity lint; add new
+utility classes there (in `@layer components`) alongside a README row.
 
 ## Exports
 
