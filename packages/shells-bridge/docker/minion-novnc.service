@@ -1,0 +1,15 @@
+[Unit]
+Description=Minion noVNC web gateway
+After=minion-vnc.service
+Requires=minion-vnc.service
+
+[Service]
+Type=simple
+User=agent
+Group=agent
+ExecStart=/usr/bin/websockify --web=/usr/share/novnc/ 0.0.0.0:8000 localhost:5900
+Restart=always
+RestartSec=2s
+
+[Install]
+WantedBy=multi-user.target

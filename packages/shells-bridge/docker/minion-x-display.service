@@ -1,0 +1,14 @@
+[Unit]
+Description=Minion virtual X display
+After=network.target
+
+[Service]
+Type=simple
+User=agent
+Group=agent
+ExecStart=/usr/bin/Xvfb :1 -screen 0 1440x900x24 -nolisten tcp -noreset
+Restart=always
+RestartSec=2s
+
+[Install]
+WantedBy=multi-user.target
