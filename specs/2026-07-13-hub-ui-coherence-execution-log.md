@@ -2,7 +2,7 @@
 
 **Date:** 2026-07-13
 
-**Status:** Source implementation certified; authenticated capture, Figma transfer, and publication pending
+**Status:** Source implementation certified; Sandbox Figma destination and partial foundations created; authenticated archive running; full Figma transfer and publication pending
 **Governing documents:**
 
 - [UI coherence audit](./2026-07-13-hub-ui-coherence-audit.md)
@@ -47,6 +47,15 @@ The first review session used the authenticated local 5173 Hub as the feedback s
 - `PageShell` now owns an explicit `direction="row"` composition contract. Home uses it to place Notes after the chat column at the right edge. Below 768px, open Notes becomes a 320px right overlay while the Home column retains full width; collapsed Notes shrinks both the visible rail and its pointer hitbox to 46px and removes the overlay shadow.
 - Authenticated browser evidence for Ayu Light recorded a desktop 910px Home column followed by a 46px Notes rail at the 1180px viewport edge. Inactive navigation hover resolved to `rgb(243, 244, 245)`, not a dark surface. At 375px, open Notes occupied x=55–375 over a full-width 375px Home column; collapsed Notes occupied only x=329–375. Browser console errors were zero in all three proofs.
 - Final source evidence at `5028464c`: 257 files/1,946 tests green, `svelte-check` 0 errors/0 warnings, production Vite/Vercel-adapter build green, changed-file design debt zero, token-integrity violations zero, and independent review with no merge blockers. The live main 5173 process also resolved Ayu Light semantic and legacy canvas/border roles to identical computed values after the merge.
+
+## 2026-07-14 Figma and authenticated archive checkpoint
+
+- The user selected `Sandbox`. The connector created [Minion Hub — UI Coherence & Screen Archive](https://www.figma.com/design/nOlaUw5ggsuBx2jknshFam) with file key `nOlaUw5ggsuBx2jknshFam` under `team::1236841014053239771`.
+- Read-only discovery confirmed one blank page, no existing local variables/styles/components, the canonical source token authority, 40 design-registry entries (38 unique exports), 413 reusable Svelte components, and no existing Code Connect mappings.
+- Six canonical variable collections were created. The first 48 variables are present: 32 hidden color primitives and 16 semantic aliases. No route frames, component library, styles, or component keys are claimed as transferred.
+- Further Figma writes, including a Code-to-Canvas attempt, returned the Sandbox Starter-plan MCP call-limit error. Work is resumable from `/tmp/dsb-state-minion-hub-ui-coherence-2026-07-14.json`, but the canonical system and all 408 base frames remain blocked on additional Figma MCP quota.
+- A read-only localhost capture runner now resolves the executable route manifest and dynamic fixtures, reuses the user's authenticated browser session without logging cookie values, and captures exact 390×844, 1024×768, and 1440×900 viewports. Its current bundle target is `/tmp/minion-hub-figma-capture-5028464c`; the manifest distinguishes captured routes, auth redirects, and failures instead of overstating coverage.
+- A successful wide `/home` smoke capture verified the current authenticated light-theme shell and the repaired right-side Notes & Todos rail. It also showed an unconnected-server empty state, so that image is current-state evidence rather than proof of a seeded `populated` fixture.
 
 ## Completed and independently verified
 
@@ -206,12 +215,12 @@ The audit also found three architectural/certification gaps that remained after 
 
 Current remaining order:
 
-1. Complete the deterministic authenticated local capture after a safe seeded database is available; the current local Supabase schema is drifted and has not been destructively reset.
-2. Reconfirm the session-specific Figma connector authorization, select the owning workspace, create the actual file, transfer all 136 current screens (408 planned compact/medium/wide base frames), and reconcile route/component IDs with code.
+1. Complete and audit the authenticated current-state 408-viewport local archive, then run the deterministic named-state matrix after a safe seeded database is available; the current database has not been destructively reset.
+2. Restore Figma MCP write capacity for the existing Sandbox file, finish canonical foundations/components, transfer all 136 current screens (408 compact/medium/wide base frames), and reconcile route/component IDs with code.
 3. Publish the package candidates through the normal Changeset/npm flow and replace packed `file:` consumers with recorded released versions; no external publication has been performed.
 
 ## Open external decisions
 
-- **Figma owner:** the connector reports three eligible Starter workspaces: MELOFOBIA, Harvest Fintech, and Sandbox. The required choice was not made, so no Figma file exists; Sandbox remains recommended.
-- **Figma variables:** all three workspaces are currently Starter. Starter permits only one variable mode per collection, so the canonical 16-theme collection requires Pro. Screen capture can start before that upgrade; silently splitting or flattening the theme model is not an accepted substitute.
+- **Figma capacity:** `Sandbox` is selected and the file exists, but its Starter MCP call quota stopped automation after six collections and 48 variables. Additional quota or an eligible paid workspace/plan is required to resume transfer.
+- **Figma variables:** Starter's variable-mode limit is independent of the call quota. The canonical 16-theme collection requires a plan that supports the required modes; silently splitting or flattening the theme model is not an accepted substitute.
 - **Package publication:** the local release candidate is ready for normal Changeset review, but no push, merge, npm publish, or production migration has been performed.
