@@ -4,7 +4,7 @@ Authoritative source: `/home/nikolas/Documents/CODE/MINION/minion_hub` on local 
 
 Source checkpoint: `5028464c` (local Hub `dev`; source migration, compiler/interaction repairs, absolute governed-debt cleanup, and the first authenticated Home feedback-loop repair are certified)
 
-Transfer status: this ledger is the planned capture authority. The owning workspace was not selected, so no Figma file was created; no file key, editable route frames, variables, or component keys exist yet.
+Transfer status: the user selected the `Sandbox` workspace and the connector created [Minion Hub — UI Coherence & Screen Archive](https://www.figma.com/design/nOlaUw5ggsuBx2jknshFam) (`nOlaUw5ggsuBx2jknshFam`). Six canonical variable collections and 48 variables were seeded before the Sandbox Starter MCP quota stopped further writes. No route frames, canonical components, styles, or component keys have been created yet. The authenticated local 408-viewport screenshot bundle is being generated from source checkpoint `5028464c` at `/tmp/minion-hub-figma-capture-5028464c` so capture work can continue without mutating Figma.
 
 ## Inventory totals
 
@@ -281,10 +281,20 @@ Root `/` is a hooks-level landing-page redirect and receives redirect-policy cov
 - The eventual current-UI archive must identify its actual source checkpoint and preserve observed inconsistencies; canonical foundations and Figma variables must follow the implemented contract rather than hand-entered values.
 - Image-bearing routes/components require parallel `generate_figma_design` capture so image hashes can be transferred into reusable composed screens.
 
+## 2026-07-14 Sandbox file checkpoint
+
+- Owner/workspace: `Sandbox` (`team::1236841014053239771`).
+- Design file: [Minion Hub — UI Coherence & Screen Archive](https://www.figma.com/design/nOlaUw5ggsuBx2jknshFam), file key `nOlaUw5ggsuBx2jknshFam`.
+- Initial inspection: one blank `Page 1`; zero variables, styles, components, or component sets.
+- Created collections: `Minion / Color Primitives`, `Minion / Semantic Color`, `Minion / Spacing & Layout`, `Minion / Radius`, `Minion / Typography`, and `Minion / Motion & Layer`.
+- Created variables: 32 hidden color primitives and 16 semantic aliases. The remaining foundation variables and every page/component/screen write are pending.
+- Connector blocker: Figma returned `You've reached the Figma MCP tool call limit on the Starter plan` for subsequent writes. The file remains usable, but automation cannot resume until Sandbox has additional MCP quota or the work moves to an eligible plan.
+- Starter variable-mode limitation is separate from the call quota: the canonical 16-theme contract must not be silently flattened or split to fit a one-mode collection.
+- Authenticated capture source: localhost port 5173, exact base viewports 390×844, 1024×768, and 1440×900. Cookie values are read from the local browser session without being printed or persisted in the artifact.
+
 ## Pending capture and Figma gates
 
-- Explicit owning-workspace selection and target Figma file key. The missing workspace choice prevented file creation at the recorded checkpoint.
-- Read-only Figma inspection: pages, variables, styles, components, fonts, editor type.
-- Library discovery/search for components, variables, typography, effects, and icons.
-- Successful execution of the implemented deterministic persona/state harness against a safe seeded disposable Supabase environment, with explicit blocker records for any unprovisioned state.
-- Creation of the approved Design file, transfer of all 136 screens and applicable states, canonical component/variable construction, and route/component key reconciliation back to code.
+- Finish and audit the authenticated local 408-viewport current-state bundle, with explicit records for authentication redirects, failed routes, and states that are not actually provisioned.
+- Restore Figma MCP write capacity for the Sandbox file, then finish foundations and create the recommended page structure.
+- Transfer all 136 screens and applicable states, construct canonical components, and reconcile route/component keys back to code.
+- Run the implemented deterministic persona/state harness against a safe seeded disposable Supabase environment for named non-default states; a live current-state screenshot must not be relabelled as a provisioned populated/loading/error state.
