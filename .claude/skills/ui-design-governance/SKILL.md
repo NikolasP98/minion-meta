@@ -57,7 +57,7 @@ One design system, machine-enforced. Semantic tokens and shared primitives only;
 | Dropdown/Popover/Combobox/Dialog | existing Zag wrappers (`Dropdown`, `Popover`, `Combobox`, `Modal`) | `$lib/components/ui` |
 | Status indicator | `StatusDot` from `$lib/components/ui` (the `decorations/` copy is deprecated) | `$lib/components/ui` |
 | Segmented toggle | `SegmentedControl` (active = accent-TINTED pill, never full-accent-fill Button) | `$lib/components/ui` |
-| Dashboard date controls | `DateRangeControls` (inclusive from/to + quick + extended menu + smart period); logic in `date-range.ts` | `$lib/components/dashboard` |
+| Dashboard date controls | `DateRangeControls` (inclusive from/to + quick + extended menu + smart period); logic in the `date-range/` SDK (periods · ranges · url · storage) | `$lib/components/dashboard` |
 | Tables | `DataTable` (custom cells via its single `cell` snippet) | `$lib/components/data-table` |
 | Page scaffold | `PageHeader` + section shells per route archetype (spec §D6) | `$lib/components/layout` |
 
