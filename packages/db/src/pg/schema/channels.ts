@@ -34,6 +34,16 @@ export const channels = pgTable(
     // gateway's per-account config. Nullable for legacy rows; the natural upsert
     // key for a linked account is (tenant_id, gateway_id, type, account_id).
     accountId: text('account_id'),
+    // Scope classifier (specs/2026-07-19-channel-scoping-fix-plan.md P0).
+    // Set  => account is USER-scoped: it belongs to this person and follows them
+    //         across every org they're a member of (their own WhatsApp/Telegram/
+    //         Discord), so the same real account is never duplicated per org.
+    //         tenant_id remains the "home" org (it is NOT NULL) but stops gating
+    //         visibility.
+    // Null => account is ORG-scoped via tenant_id (shared business accounts).
+    ownerProfileId: uuid('owner_profile_id').references(() => profiles.id, {
+      onDelete: 'set null',
+    }),
     label: text('label').notNull(),
     credentials: text('credentials').notNull().default(''),
     credentialsIv: text('credentials_iv').notNull().default(''),
@@ -75,6 +85,7 @@ export const channels = pgTable(
   },
   (t) => [
     index('idx_channels_tenant_gateway').on(t.tenantId, t.gatewayId),
+    index('channels_owner_profile_idx').on(t.ownerProfileId),
     uniqueIndex('channels_uniq_type_label').on(t.tenantId, t.gatewayId, t.type, t.label),
     // Upsert key for gateway-account sync (account_id is the gateway account key).
     uniqueIndex('channels_uniq_type_account').on(t.tenantId, t.gatewayId, t.type, t.accountId),
