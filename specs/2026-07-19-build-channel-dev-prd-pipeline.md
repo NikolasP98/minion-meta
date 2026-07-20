@@ -116,8 +116,19 @@ A0. Verify free port; verify `minion` user can run docker (add to `docker` group
 A1. Install CI's deploy SSH key for the deploy user; record which user CI uses (`user` vs `admin_user` in the registry).
 A2. `docker login ghcr.io` on the host (or pull via a token in the deploy step).
 A3. Create `/home/minion/.minion`, the state volume, and a `docker-compose.dev.yml` (single service, memory-capped, restart policy, `MINION_STATE_DIR` pinned, port published on the tailnet interface).
-A4. First manual pull+run of `:dev`; verify `/health` returns `200 {"ok":true}` (the endpoint added in `9f6722da5`) and that the WS upgrade actually succeeds — **not** just an HTTP 200, which is precisely how `minion-1` fooled us.
+A4. First manual pull+run of `:dev`; verify `/health` returns `200 {"ok":true}` and that the WS upgrade actually succeeds — **not** just an HTTP 200, which is precisely how `minion-1` fooled us.
 A5. Record the gateway token and register the row (feeds WP-C).
+
+### WP-A RESULT (done 2026-07-19) — live, with five constraints the rest of the work inherits
+Live at `wss://protopi.donkey-agama.ts.net` (443, no port suffix) / raw `ws://protopi.donkey-agama.ts.net:18789`. Volume `minion_dev_state`, compose `/home/minion/dev/docker-compose.dev.yml`, arm64 digest `…fc20bba1`. Proven: `HTTP_UPGRADE_STATUS 101` → real `connect.challenge` → `CONNECT_OK {"version":"dev","host":"protopi","protocol":3}`; a wrong token gets `unauthorized: gateway token mismatch`.
+
+1. ★★**`network_mode: host` is REQUIRED on protopi.** Docker bridge networking there is broken for inbound traffic (pre-existing — n8n has the same symptom). A published bridge port was completely unreachable *while `/health` still looked plausible*. WP-B must not use bridge port publishing on this host.
+2. ★★**Watchtower on protopi watches every container with no label filter.** Left alone it would silently auto-restart the gateway on any `:dev` push and bypass WP-B's health gate. Neutralised with `com.centurylinklabs.watchtower.enable: 'false'` — keep that label on any new container.
+3. **`mem_limit` is inert on this Pi** — no memory cgroup controller (`cgroup.controllers` = `cpuset cpu io pids`; needs `cgroup_enable=memory` in `/boot/firmware/cmdline.txt` + reboot). Docker logs `Limitation discarded`. Mitigated with `oom_score_adj: 800`. RSS ~54 MB.
+4. ⚠**Funnel is ON** (pre-existing `tailscale serve` config) — this DEV gateway is reachable from the public internet, token-protected. The same config carries `/oauth-callback` and `/notion-oauth-callback`, so disabling Funnel likely breaks those. OPEN DECISION.
+5. **`:dev` arm64 image defects** (gateway still runs): `better-sqlite3` native binding missing for arm64 ⇒ **secrets manager unavailable**; `/db/migrations/004_free_tier_users.sql` ENOENT; Control UI assets absent. The secrets gap will bite when pairing channels on DEV — i.e. the main thing a DEV sandbox is for. Fix belongs in the gateway image, not here.
+
+Unproven: reboot survival (`restart: unless-stopped` set, `docker.service` enabled, but the host was not rebooted). Disclosed: the gateway token is stored plaintext at `/home/minion/dev/.env` (0600, owner `minion`) because compose requires it.
 
 ### WP-B — CI deploys `:dev` → protopi
 B1. Re-enable `prd-protopi` in `.github/servers/production.json`, renaming it to `dev-protopi`, and give the registry a `channel` field (`dev`|`prd`).
