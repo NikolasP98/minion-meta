@@ -39,6 +39,22 @@ Consequences: this is the **plain-Docker path, not Swarm** (netcup's `update-con
 - `minion-1`'s URL is the one that **refuses the WS upgrade** (returns HTTP 200) — see `gateway-selection-nondeterministic` memory.
 - `gateway.org_id` is single-valued and is an *assignment*, not ownership. Two rows may share a URL.
 
+### 2.2b There is NO redundancy today — corrected premise (measured)
+`minion-1`/`minion-2` were believed to be redundant instances. They are not.
+```
+netcup hostname: v2202603342963439612          ← ONE host, one failure domain
+minion_gateway-default | …@sha256:61494235… | 1/1
+minion_gateway-faces   | …@sha256:61494235… | 1/1   ← same image digest, 1 replica each
+```
+They are **two tenanted services on the same box, reached by two different routes**:
+`gateway.minion-ai.org` → Cloudflare (`2606:4700:…`) → default (MINION);
+`netcup.donkey-agama.ts.net:10000` → direct tailnet `100.80.222.29` → faces (FACES).
+Both return `/health` 200. If netcup dies, both die.
+
+`1/1` is deliberate, not an oversight: the gateway is **single-writer per org** (SQLite + Baileys WA sessions on a local volume). Two instances serving one org would corrupt its channel state — which is why a naive round-robin balancer is not an option, and why replicas cannot simply be scaled up.
+
+**Adding protopi introduces the first second failure domain in the fleet.**
+
 ### 2.3 CI already builds both channels
 `.github/actions/docker-tag`: `refs/heads/DEV→:dev`, `refs/heads/main→:prd`.
 `docker-release.yml` builds **amd64 + arm64** and pushes a multi-arch manifest on pushes to DEV and main.
@@ -63,6 +79,9 @@ MINION    → 2 rows (prd + dev)    → DEV | PRD toggle
 PINONITE  → 2 rows (prd + dev)    → DEV | PRD toggle
 ```
 
+**D4 — A human picks the CHANNEL; the system picks the INSTANCE.**
+Assignment is a health-aware **lease**, not a round-robin. `(org, channel) → one healthy instance`, and every protocol (HTTP, RPC, WS) follows the lease holder — never a per-protocol independent choice, which is how the all-day intermittency happened (browser used an explicit host while the server guessed). The lease flips when the holder fails health checks. Until state replication exists (a separate project), a failover is honest about what it cannot carry: the org's channel state stays on the old host, so failover restores *service*, not *sessions*. `daf64d23`'s deterministic ordering is the stopgap this replaces.
+
 **D3 — Version compatibility is asymmetric.** Frontend ahead of gateway is the safe direction and must be tolerated; gateway ahead of frontend is the breaking direction and is blocked in CI. (§7)
 
 ## 4. Target state
@@ -70,11 +89,13 @@ PINONITE  → 2 rows (prd + dev)    → DEV | PRD toggle
 ### 4.1 Gateway rows after this work
 | channel | org | endpoint | notes |
 |---|---|---|---|
-| prd | FACES | netcup faces service | exists (`minion-2`), rename only |
-| prd | MINION | netcup default service | **repoint** `minion-1` off the broken public URL |
-| prd | PINONITE | netcup default service | **new row** (same URL as MINION-prd; row = assignment) |
-| dev | MINION | protopi | **new** |
-| dev | PINONITE | protopi | **new** |
+| prd | FACES | `netcup/faces` | exists (`minion-2`), rename only |
+| prd | MINION | `netcup/default` | **repoint** `minion-1` off the Cloudflare route that never carried WS |
+| prd | PINONITE | `netcup/default` | **new row** (same instance as MINION-prd; a row is an assignment, not ownership) |
+| dev | MINION | `protopi` | **new** |
+| dev | PINONITE | `protopi` | **new** |
+
+The `url` column stops being the identity of a gateway: identity is `(host, service, channel)`, and the URL is just the current route to it. Two routes to one service (Cloudflare vs tailnet) must never again present as two instances.
 
 `user_gateway` must stop linking every user to every gateway; visibility is `active org → its rows` (§6.2).
 
@@ -131,15 +152,27 @@ E4. **CI rule, asymmetric:**
 E5. Runtime counterpart: on connect, if the gateway's protocol is newer than the hub supports, surface one clear banner instead of a cascade of broken calls.
 E6. The check runs per channel: DEV gateway vs DEV frontend, PRD vs PRD.
 
+### WP-F — assignment lease + health-aware balancer (D4)
+F1. **Instances** become first-class, distinct from gateway *rows*: `(host, service, channel)` — today `netcup/default` (prd), `netcup/faces` (prd), `protopi` (dev).
+F2. Health probe per instance: `/health` 200 **and** a real WS upgrade (an HTTP 200 alone is exactly how the broken route passed for weeks). Probe on a timer + on connect failure.
+F3. Resolver: `(org, channel) → healthy instance`, one authority used by every protocol. Hub server-side resolves once and hands the client a single endpoint; the client never picks.
+F4. Failover flips the lease when the holder is unhealthy, and **surfaces plainly that channel state did not move** — no silent partial recovery.
+F5. Single-writer safety: never hand two instances the same `(org, channel)` concurrently. The lease is the mutex; write it down, don't infer it.
+F6. Replaces `daf64d23`'s ordering stopgap and the client-side `sessionStorage` host pick.
+F7. Explicitly OUT of scope: state replication / volume handoff. Failover restores service, not sessions.
+
 ## 6. Risks
 - **Shared home server.** protopi runs Home Assistant and n8n. Memory-cap the container; never take a port already bound.
 - **Live co-agent in `minion_hub`.** Another session is committing there. All hub work must happen in a **git worktree**, not the shared tree.
 - **Production DDL.** `.env.local` points at the live Supabase; C1 is production schema. List pending migrations first, apply deliberately.
 - **`minion-1` is currently broken**, so MINION's PRD path is already degraded — C3 is a prerequisite for honestly claiming "MINION can switch DEV/PRD".
-- ⛔ **netcup service inventory unverified** — SSH to netcup timed out twice during spec authoring. Confirm the real service/port mapping before repointing MINION-prd and creating PINONITE-prd.
+- **netcup inventory now verified** (§2.2b): two services, one host, same digest, 1/1 each. Reachable as `niko@152.53.91.108`; the tailnet name/IP hung — use the public IP for CI and manual work.
+- **Failover cannot carry state.** WP-F restores service, not WhatsApp sessions. Say so in the UI; a silent partial recovery is worse than an honest error.
+- **A 200 on `/health` proves nothing about WS.** The Cloudflare route served `{"ok":true}` while never carrying an upgrade. Every health check in WP-B/WP-F must test the upgrade itself.
 
 ## 7. Done means
 - protopi serves `:dev` and survives a reboot; `/health` 200 **and** a real WS upgrade.
 - Pushing to gateway `DEV` redeploys protopi with no human action; pushing to `main` still redeploys netcup.
 - MINION and PINONITE show a DEV|PRD toggle that actually switches the live connection; FACES shows none and cannot reach DEV even by hand-crafting a request.
 - A gateway newer than the frontend fails CI; a frontend newer than the gateway does not.
+- `(org, channel)` resolves server-side to exactly one healthy instance, all protocols follow it, and killing that instance flips the lease without a human touching anything.
