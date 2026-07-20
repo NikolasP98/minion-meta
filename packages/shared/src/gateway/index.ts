@@ -1,6 +1,7 @@
 export * from './types.js';
 export * from './traceparent.js';
 export * from './protocol.js';
+export * from './version.js';
 export * from './connection.js';
 export * from './client.js';
 export * from './connect-params.js';
