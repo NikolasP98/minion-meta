@@ -39,7 +39,7 @@ export const messages = pgTable(
     metadata: jsonb('metadata').notNull().default({}),
   },
   (t) => ({
-    clientIdUnique: uniqueIndex('messages_client_id_uniq').on(t.clientId),
+    orgClientIdUnique: uniqueIndex('messages_org_client_id_uniq').on(t.orgId, t.clientId),
     orgChatIdx: index('messages_org_chat_idx').on(t.orgId, t.channel, t.chatId, t.occurredAt),
     orgTimeIdx: index('messages_org_time_idx').on(t.orgId, t.occurredAt),
     orgAgentIdx: index('messages_org_agent_idx').on(t.orgId, t.agentId),
