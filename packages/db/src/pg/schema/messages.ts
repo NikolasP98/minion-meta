@@ -43,6 +43,5 @@ export const messages = pgTable(
     orgChatIdx: index('messages_org_chat_idx').on(t.orgId, t.channel, t.chatId, t.occurredAt),
     orgTimeIdx: index('messages_org_time_idx').on(t.orgId, t.occurredAt),
     orgAgentIdx: index('messages_org_agent_idx').on(t.orgId, t.agentId),
-    messageIdIdx: index('messages_message_id_idx').on(t.messageId),
   }),
 );
