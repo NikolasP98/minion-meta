@@ -686,6 +686,29 @@ the retrieval transaction; telemetry failure must never delay or fail search. No
 telemetry table is added until the separate review fixes retention, access, and
 redaction policy.
 
+### 10.2 ANN indexes under constrained storage
+
+Embeddings are canonical data; HNSW and IVFFlat indexes are optional acceleration
+structures. The current production storage ceiling requires exact cosine scans for
+the unified knowledge corpus and the legacy CRM conversation corpus until capacity is
+raised or a smaller measured representation is migrated safely. Lexical FTS and
+trigram indexes remain enabled.
+
+The forward storage-guard migration runs after both ANN creator migrations and drops
+only `knowledge_chunks_embedding_hnsw` and
+`crm_conversation_chunks_embedding_ivfflat`. The same capacity repair removes the
+unused global `messages_message_id_idx`; org-scoped client and provider idempotency
+indexes remain mandatory. It also removes `agent_memories_embedding_hnsw`, which the
+current composite relevance, recency, and importance ranking cannot use. Ordinary
+ledger-backed production and fresh empty replays are safe. A populated restore with a missing or rewound
+`hub_migrations` ledger is exceptional: reconcile or restore that ledger (or omit the
+two ANN creator statements) before replay, because the expensive historical index
+builds could exhaust storage before the guard migration is reached.
+
+Reintroducing ANN requires a measured capacity plan, index build headroom, retrieval
+latency baselines, and post-build validity checks. It must not delete or rewrite
+canonical embeddings merely to satisfy a provider storage limit.
+
 ## 11. Acceptance criteria for the first implementation slice
 
 1. Production schema contains canonical source/document/chunk/membership tables with
