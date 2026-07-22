@@ -712,6 +712,21 @@ Reintroducing ANN requires a measured capacity plan, index build headroom, retri
 latency baselines, and post-build validity checks. It must not delete or rewrite
 canonical embeddings merely to satisfy a provider storage limit.
 
+On 2026-07-22, an online restoration attempt provided the sizing evidence the first
+estimate lacked. The 61,737-row canonical corpus began at 1,477,774,483 database
+bytes; `CREATE INDEX CONCURRENTLY` exhausted the provider disk near 47%, leaving a
+240,377,856-byte invalid index and temporarily re-enabling the provider's read-only
+guard. The invalid accelerator was dropped concurrently through a recovery session,
+returning the database to 1,477,774,483 bytes, read-write, with all canonical rows and
+embeddings intact. Do not retry from a plan name or billing confirmation alone. The
+provider dashboard must show at least 1.5 GiB measured free disk, and the operator
+preflight must also require at least 2.5 times the live projected HNSW size. Failed
+builds must remove only the invalid accelerator created by that operator run.
+
+Filtered HNSW retrieval uses pgvector 0.8+ strict iterative scanning in addition to
+the bounded `ef_search`, so post-ANN organization, source, module, field-level, kind,
+and metadata filters do not silently starve Focused Brain recall.
+
 ## 11. Acceptance criteria for the first implementation slice
 
 1. Production schema contains canonical source/document/chunk/membership tables with
