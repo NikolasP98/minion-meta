@@ -156,6 +156,46 @@ Sources carry `name`, `connector`, `external_key`, `config`, `status`, `sync_mod
 `cadence`, `watermark`, `last_synced_at`, `last_error`, and timestamps. Secrets remain
 outside row metadata and are resolved server-side.
 
+### 4.2.1 Default organization sources
+
+The Master Brain is useful only if it reflects the organization without requiring a
+user to manually add every Hub module. Each org therefore discovers the following
+first-class sources by default whenever the underlying module exists:
+
+| Source | Canonical scope | Representative records |
+|---|---|---|
+| Stock | Inventory and movement state | items, warehouses, bins, entries, consumption, accruals, components |
+| CRM | Customer relationship knowledge | contacts, identities, tags, activities, lifecycle and conversation analysis |
+| Socials | Published and paid social performance | assets, posts, post/ad insights, campaign attribution |
+| Finances | Commercial and accounting facts | clients, products, invoices, invoice lines, payments |
+| Schedules | Availability and appointments | resources, schedules, event types, bookings, reminders |
+| Org chart | People, roles, and reporting structure | org members, parties, agent parties, roles and assignments |
+| Projects | Planned and active work | projects, tasks, templates, milestones/timesheets where present |
+| Memberships | Subscription/customer membership state | plans, cycles, member subscriptions |
+| Point of sale | Store transactions | shifts, tickets, ticket lines and payments |
+| Sales | Orders outside the POS flow | sales orders and their current commercial state |
+| Support | Customer support work | support issues and their status/history |
+| Workflows | Organization-authored automation | workflow definitions and safe public configuration |
+| Agents and memories | Organization agent knowledge | agent records and non-secret agent memories |
+
+This list is a floor, not a closed enum. A new user-facing org module must register a
+safe normalizer when it is introduced so it becomes discoverable by the Master Brain.
+Focused brains remain opt-in references to any subset of these sources.
+
+“All org data” does **not** mean indiscriminate database serialization. Connector
+normalizers must exclude credentials, access/refresh tokens, encrypted secrets,
+password or session material, provider configuration secrets, raw background-job
+payloads, backup/repair tables, and high-volume audit/telemetry that has no durable
+knowledge value. Personally identifying business data may be indexed inside its org,
+but brain access and field-level policy still apply at query time.
+
+Each business record has a stable document identity (`<domain>:<entity>:<id>`), a
+deterministic text representation, safe structured metadata, and a source revision
+derived from its latest upstream update. Refresh is content-hash driven: unchanged
+documents and chunks keep their existing embeddings; changed records replace only
+their changed chunks; deleted upstream records receive tombstones. A daily reconcile
+repairs missed events, while module mutations may enqueue a bounded source refresh.
+
 ### 4.3 Normalized documents
 
 A connector emits documents with a stable `external_id` and:
@@ -285,6 +325,142 @@ database transactions.
 The existing CRM vectorizer remains temporarily as a compatibility consumer, then its
 search endpoint delegates to the Master/CRM brain before the old tables are retired.
 
+### 6.1 Source-specific document units
+
+A connector must choose the smallest stable unit that preserves meaning without
+turning append-only activity into unbounded rewrites. There is no universal
+record-to-document mapping.
+
+| Source shape | Document identity and contents | Why |
+|---|---|---|
+| WhatsApp/chat | `(account, chat, calendar-month)` transcript segment | Bounds re-hash/re-embed work and keeps history inserts from renumbering the lifetime conversation |
+| CRM contact | One contact with identities, safe attributes, tags, lifecycle and recent aggregate signals | An entity is the retrieval unit; derived per-message caches are not copied |
+| Invoice | Invoice header plus its line items and payments | Users ask about the commercial document, not detached rows |
+| POS ticket | Ticket header plus lines and tenders | Preserves the transaction as one cited fact |
+| Stock entry | Entry header plus movement lines | Preserves a coherent inventory event |
+| Social post | Post plus all current metrics and attribution | Avoids one document per metric |
+| Paid ad telemetry | One ad per bounded reporting window with a compact series/aggregate | Avoids one document per ad-day while retaining trend evidence |
+| Project | Project summary; tasks/timesheets may be child sections when independently useful | Preserves project context and supports task-specific search |
+| Schedules | Resource/event-type entities and one booking per appointment | Bookings are independently actionable facts |
+| Roles/org chart | One department/role/member/agent relationship entity | Preserves attribution and reporting context |
+
+Parent documents use stable child ordering and child-native IDs in chunk keys. A new
+line or metric must not renumber unrelated chunks. High-volume telemetry is summarized
+before embedding; exact raw facts remain queryable through lexical/native retrieval.
+
+Business scanning uses an index-served cursor per table:
+`{domain, tableIndex, lastPrimaryKey}`. It never re-sorts a full `UNION ALL` for every
+page. Deletion reconciliation compares one materialized upstream-ID pass against the
+source documents and tombstones missing IDs once per completed domain scan.
+
+### 6.2 Conversation representations
+
+The initial role-tagged monthly transcript is the exact evidence layer. The target
+conversation representation adds, without deleting raw evidence:
+
+1. a deterministic monthly transcript chunk set;
+2. an LLM-distilled conversation/month summary embedded as `kind=summary`;
+3. selected signal bursts embedded as `kind=burst`; and
+4. citations back to the source message IDs and time span.
+
+Burst extraction follows the Cerebras principle: group consecutive same-author turns,
+prepend the conversation topic, and keep sufficiently substantial/high-information
+runs. Rarity, reactions, and source-native engagement may select bursts, but no single
+threshold is copied blindly across WhatsApp and Slack. The exact thresholds are tuned
+on Minion's labeled retrieval set.
+
+Summary generation is versioned (`normalizer_version`, prompt/model version) and
+idempotent. A summary failure leaves raw chunks searchable. Changed raw segments
+invalidate only their own summary/bursts.
+
+### 6.3 Small-model enrichment and execution settings
+
+Raw normalization, lexical indexing, embeddings, and retrieval do not require an LLM.
+When a connector adds per-segment question/summary/resolution extraction or a bounded
+reranker, that high-volume enrichment must use an explicitly configured **small,
+fast model**. Frontier models used for architecture review are never the default for
+per-chunk work.
+
+Enrichment configuration is organization-scoped and separates two independent
+choices:
+
+1. `harness`: the server-registered execution adapter (`claude-code`, `codex`,
+   `drone`, `pi`, or a validated custom adapter ID); and
+2. `model`: a provider/model identifier supported by that harness.
+
+Examples include a small Codex-compatible profile, Claude with a Haiku-class model,
+or Drone/Pi using an allowlisted OpenRouter small-model identifier. These are
+capability examples, not permanent hard-coded model names: the Hub validates the
+selected harness/model pair against the installed runtime and model catalog. A custom
+OpenRouter identifier is accepted only by adapters that declare OpenRouter support.
+Provider credentials remain server-side and are never stored in the public settings
+payload. An organization may never provide an executable path, shell command, or
+arbitrary adapter implementation. Adapter binaries and custom adapter IDs are
+registered by platform operators in deploy-time server configuration.
+
+Enrichment executes on the organization's linked Gateway worker, not in the Hub's
+Vercel runtime. The Hub asks the active build-channel Gateway for its registered
+harness/model capabilities, caches the health response briefly, and rejects or marks
+unsupported selections degraded. A stale capability cache never authorizes a new
+adapter. The worker invokes the selected adapter in single-shot structured-completion
+mode with no tools, filesystem, subprocess, or source-controlled network access; its
+only permitted egress is the configured model provider. Model output must validate
+against the connector's versioned JSON schema before it can enter the corpus.
+
+The Hub exposes this configuration as a Brains subpage under `/brains/settings`.
+The global Settings navigation owns the gear icon; the existing
+Template navigation uses a template-specific icon. Only organization owners/admins
+may mutate enrichment settings. Read access may expose the effective non-secret
+configuration and health to authorized operators.
+
+The enrichment job is separate from raw ingest and embedding jobs. It is:
+
+- content-addressed and cached by source content hash plus prompt/model version;
+- batched and concurrency/rate limited per organization;
+- idempotent, retryable, and poison-item isolated;
+- cost- and token-budget bounded;
+- optional, so failure never removes raw FTS/vector evidence; and
+- observable by harness, model, prompt version, latency, token use, failures, and
+  fallback state.
+
+Server-side model catalogs—not a free-form client field—enforce compatible adapters,
+an allowlist, and a maximum input/output price per million tokens. The organization
+may select only catalog entries within the platform's small-model ceiling. Each org
+has an enforced daily token budget; exhaustion pauses enrichment, marks the affected
+source degraded with an actionable reason, and never drops raw work. A platform kill
+switch can disable all LLM enrichment independently of raw ingest/search. Provider
+catalog entries declare whether organization or platform credentials pay for usage;
+credential material is resolved only inside the Gateway worker.
+
+Distillation and query-time reranking have different latency profiles. Settings may
+inherit one default small model while permitting separately validated role overrides
+for `distillation` and `reranking`. Queue draining is round-robin across organizations
+with per-org concurrency so a large backfill cannot starve smaller tenants.
+
+Conversation enrichment runs once per meaningful monthly segment, not once per raw
+chunk. The connector's versioned schema extracts source-appropriate topics, requests,
+complaints, commitments, outcomes, and named entities; it does not force engineering
+thread question/resolution semantics onto customer chat. Segments below a configurable
+minimum-information/token threshold skip LLM distillation and retain raw evidence.
+Derived summaries and bursts are tagged as untrusted-source derivatives so downstream
+synthesis fences them from instructions. Prompt injection or schema failure poison-
+isolates only that enrichment item.
+
+The default configuration selects a small-model profile. Changing harness or model
+creates a new enrichment version and queues only affected summaries/bursts; it does
+not rewrite raw documents or mix incompatible embedding vector dimensions. New
+summary/burst chunks carry the enrichment version in their stable key; activating the
+new version and superseding prior derived chunks occurs atomically so two versions of
+the same derived fact are never co-retrievable.
+
+During the Phase B compatibility backfill, raw monthly chat chunks may retain vectors
+so semantic search remains available before distillation exists. Once the derived
+summary/burst pipeline reaches measured recall parity, raw chat transcripts remain in
+FTS and as citation evidence but leave the primary vector candidate set, matching the
+Cerebras pattern of embedding distilled representations rather than entire raw
+transcripts. This transition is versioned and evaluation-gated, not a blind destructive
+migration.
+
 ## 7. Retrieval pipeline
 
 ### 7.1 Scope resolution
@@ -331,6 +507,77 @@ Gateway/MCP primitives remain narrow and stable:
 
 The `/brains` web experience may run planner → parallel executor → synthesizer, but
 retrieval itself is LLM-independent and returns evidence with citations.
+
+### 7.5 Search-query semantics and result presentation
+
+The Hub search box submits the user's natural-language query unchanged, plus optional
+source/kind/metadata filters. Retrieval then:
+
+1. embeds the query for semantic vector candidates;
+2. parses it with Postgres `websearch_to_tsquery('simple', query)` for lexical
+   candidates;
+3. for short entity-like terms, retrieves a bounded indexed `pg_trgm` candidate set so
+   one-edit spellings such as `krispy` can reach corpus `KRISPI` without depending on
+   vector top-k recall;
+4. identifies exact normalized token/phrase overlap so a literal entity lookup cannot
+   be outranked by semantically loose vector-only evidence;
+5. fuses the independent candidate ranks, applies source weight and bounded recency,
+   deduplicates, and enforces source/document diversity;
+6. expands neighboring chunks only after ranking for downstream agent context; and
+7. returns a query-centered excerpt for the human Search tab.
+
+Reciprocal-rank fusion is an ordering signal, not a calibrated probability. The UI
+must label it as relevance/rank and must not turn it into a “match percentage.” A
+result card shows the source, document, match basis, date, and concise excerpt around
+the lexical match when present. Full neighboring evidence remains available to agents
+and an explicit detail disclosure, not as the default card body.
+
+### 7.6 Recall, reranking, and synthesis
+
+Filtered approximate-nearest-neighbor search must not starve small Focused Brains.
+Vector transactions set a bounded HNSW candidate breadth (`hnsw.ef_search=200`, tuned
+from evaluation) before applying org/brain/source filters. The service records vector,
+lexical, and post-policy candidate counts; “candidates existed but all were rejected”
+is a distinct empty result with a diagnostic, never an invitation to reintroduce noisy
+legacy hits.
+
+Deterministic fusion is always available. The optional second stage sends at most the
+best 20 fused candidates to a small reranker, scores relevance on a 0–10 rubric, and
+keeps at most 10. Reranker failure returns the deterministic order. A synthesizer may
+answer over the retained evidence, but it must cite source/document/chunk identities
+and may not claim facts absent from evidence.
+
+Short entity-like queries use anchored lexical/fuzzy evidence. Multi-token questions
+may be semantic. Recency is capped as a boost to already-relevant evidence; it cannot
+make an irrelevant chunk eligible. Postgres uses the `simple` text-search dictionary
+intentionally so Spanish function words such as `como` remain indexable.
+
+Single-token trigram candidate retrieval is deferred because the current corpus schema
+has neither the `pg_trgm` extension nor a trigram index; adding `similarity()` or
+`word_similarity()` now would force an unbounded chunk-text scan. The enabling
+migration must first install `pg_trgm` and add a GIN `gin_trgm_ops` index over
+`lower(knowledge_chunks.chunk_text)` (or a normalized token projection). Only then may
+the retriever run a bounded, org/brain/source-filtered word-similarity query and fuse
+its top candidates through the same relevance policy. Until that indexed migration is
+reviewed and deployed, fuzzy spelling such as `krispy` → `KRISPI` remains a policy over
+lexical/vector candidates rather than a separate corpus scan.
+
+### 7.7 Authorization at retrieval time
+
+RLS and brain visibility are necessary but insufficient for an all-source Master
+Brain. Every source declares `requiredModule`; WhatsApp/customer conversations require
+CRM access. Browser and Gateway principals carry their effective visible modules.
+Retrieval fails closed for classified sources absent from that set.
+
+Source and chunk metadata also carry sensitivity/ownership tiers. Until per-chunk
+field-level and owner predicates are implemented, a principal with masked or
+owner-scoped access must not receive an unrestricted source through Brain search; the
+safe interim is to omit that source. The principal's searchable-module set therefore
+excludes every module whose capability is owner-scoped, and source
+`requiredFieldLevel` must not exceed the principal's effective level for its
+`requiredModule`. CRM, finance, schedules, and WhatsApp sources require field level 1.
+Unclassified legacy chunks are not a fallback for scoped non-owner/admin principals.
+Focused Brain membership never broadens access.
 
 ## 8. `/brains` UX
 
@@ -384,12 +631,29 @@ All UI uses shared Hub primitives, Paraglide strings, semantic tokens, and passe
 2. Add rarity/recency scoring, RRF, dedupe, diversity caps, neighbor expansion.
 3. Route `brain_search` and CRM conversation search through the unified service.
 
-### Phase D — richer normalization and more connectors
+### Phase D — all Hub business sources
 
-1. Add LLM conversation distillation and signal-burst chunks.
-2. Migrate module refs, notes, URLs, uploads, and agent memories.
-3. Add Slack/code/document/custom connector packages.
-4. Retire duplicate vector tables after parity and data verification.
+1. Discover the default Stock, CRM, Socials, Finances, Schedules, Org chart, Projects,
+   Sales, POS, Memberships, Support, Operations, Email, and Pulse sources.
+2. Backfill parent-aggregated, deterministic business documents with per-table cursors.
+3. Apply source-module authorization and safe reviewed field projections.
+4. Show every discovered/indexed source and its real health/counts in Master Brain.
+
+Rollout order is mandatory: deploy the new monthly/parent-aware worker code first;
+apply source/RLS/settings migrations; apply legacy-document tombstones only when an
+immediate explicit reconcile/backfill drain is ready; then verify source timestamps,
+document/chunk counts, missing embeddings, and representative searches. The daily cron
+is repair coverage, not the migration trigger.
+
+### Phase E — richer normalization and external connectors
+
+1. Add organization-scoped Brains enrichment settings with independently selectable
+   harness and compatible small model.
+2. Add LLM conversation distillation and signal-burst chunks through the versioned,
+   cached enrichment queue.
+3. Migrate module refs, notes, URLs, uploads, and agent memories.
+4. Add Slack/code/document/custom connector packages.
+5. Retire duplicate vector tables after parity and data verification.
 
 ## 10. Operational requirements
 
@@ -403,6 +667,25 @@ All UI uses shared Hub primitives, Paraglide strings, semantic tokens, and passe
   new embedding column or explicit versioned rebuild, never mixed vectors.
 - Query logs record brain, source filters, retrievers, timings, chosen evidence IDs,
   and citations without logging secrets.
+
+### 10.1 Deferred persisted query log
+
+Persisted retrieval telemetry is intentionally deferred from the first implementation
+slice pending a schema, privacy, and retention review. A future org-scoped
+`brain_query_logs` table should record:
+
+- `org_id`, `brain_id`, request class, and a non-reversible requester identifier hash;
+- query hash and policy version, with raw or redacted query text only by explicit
+  opt-in;
+- source/kind/metadata filters, retriever timings and candidate counts;
+- deterministic empty reason and warnings, selected evidence IDs, and citation IDs;
+- creation and expiry timestamps for enforced retention.
+
+The table must use forced org RLS and must not contain chunk bodies, expanded evidence,
+credentials, or other secrets. Writes should be asynchronous and best-effort outside
+the retrieval transaction; telemetry failure must never delay or fail search. No
+telemetry table is added until the separate review fixes retention, access, and
+redaction policy.
 
 ## 11. Acceptance criteria for the first implementation slice
 
@@ -420,6 +703,19 @@ All UI uses shared Hub primitives, Paraglide strings, semantic tokens, and passe
 8. Legacy brain search continues to work during migration.
 9. Focused tests, `bun run check`, `bun run lint:design`, and `bun run lint:tokens` pass.
 10. The deployed `/brains` UI is visually verified with authenticated real data.
+11. Every default Hub business source appears in each Master Brain; populated sources
+    have indexed documents and zero unexplained pending embeddings after the drain.
+12. Literal/fuzzy query fixtures (`krispy` → corpus `KRISPI`) retain only anchored
+    evidence, while `como` produces a query-centered excerpt rather than a lifetime
+    transcript dump.
+13. Monthly conversation segmentation, parent-child business aggregation, per-table
+    cursor progression, and source-module denial all have regression tests.
+14. `/brains/settings` persists an org-scoped harness and compatible small-model
+    selection, rejects invalid pairs, exposes no credentials, and limits mutation to
+    owners/admins.
+15. Any per-segment LLM enrichment is content-hash cached, versioned, independently
+    retryable, and cannot make raw search unavailable when the configured harness or
+    model fails.
 
 ## 12. Explicit non-goals for the first slice
 
