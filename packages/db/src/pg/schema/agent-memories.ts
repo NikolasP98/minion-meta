@@ -25,7 +25,9 @@ import {
  * RLS (org isolation) is added in the hand-written companion migration
  * `<ts>_agent_memories_rls.sql` (role app_ledger + app.current_org_id GUC),
  * mirroring `messages`. Drizzle does not manage roles/policies, the `vector`
- * extension, or the HNSW index — those live in the companion SQL.
+ * extension, or optional ANN accelerators — those live in companion SQL. The
+ * service remains correct with an exact vector scan when an ANN index is
+ * intentionally omitted under a storage quota.
  */
 export const agentMemories = pgTable(
   'agent_memories',

@@ -79,7 +79,8 @@ The existing Brains subsystem already provides valuable foundations:
 
 - org-scoped RLS through `withOrgCore`;
 - `brains`, `brain_documents`, `brain_chunks`, and `brain_access`;
-- HNSW cosine search over 1,536-dimensional `text-embedding-3-small` vectors;
+- cosine search over 1,536-dimensional `text-embedding-3-small` vectors, with
+  HNSW as an optional acceleration layer;
 - durable `brain_ingest` background jobs;
 - note, URL, upload, and three `module_ref` renderers;
 - per-brain Hub and Gateway search APIs.
@@ -270,8 +271,9 @@ kind text, seq int, chunk_text text, context_prefix text, content_hash text,
 embedding vector(1536), embedding_model text, search_vector tsvector,
 occurred_at timestamptz, metadata jsonb, created_at, updated_at`
 
-Indexes: HNSW cosine, GIN `search_vector`, `(org_id, source_id, document_id)`, and
-source recency.
+Indexes: GIN `search_vector`, `(org_id, source_id, document_id)`, and source
+recency. HNSW cosine is an optional accelerator; exact cosine scans remain the
+correct fallback when storage policy disables ANN.
 
 ### `brain_sources`
 
@@ -534,11 +536,12 @@ and an explicit detail disclosure, not as the default card body.
 
 ### 7.6 Recall, reranking, and synthesis
 
-Filtered approximate-nearest-neighbor search must not starve small Focused Brains.
-Vector transactions set a bounded HNSW candidate breadth (`hnsw.ef_search=200`, tuned
-from evaluation) before applying org/brain/source filters. The service records vector,
-lexical, and post-policy candidate counts; “candidates existed but all were rejected”
-is a distinct empty result with a diagnostic, never an invitation to reintroduce noisy
+Filtered vector search must not starve small Focused Brains. When HNSW is installed,
+vector transactions set a bounded ANN candidate breadth (`hnsw.ef_search=200`, tuned
+from evaluation) before applying org/brain/source filters. Without HNSW, the same
+distance and policy filters run as an exact scan. The service records vector, lexical,
+and post-policy candidate counts; “candidates existed but all were rejected” is a
+distinct empty result with a diagnostic, never an invitation to reintroduce noisy
 legacy hits.
 
 Deterministic fusion is always available. The optional second stage sends at most the
