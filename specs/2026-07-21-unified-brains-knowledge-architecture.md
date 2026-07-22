@@ -552,15 +552,14 @@ may be semantic. Recency is capped as a boost to already-relevant evidence; it c
 make an irrelevant chunk eligible. Postgres uses the `simple` text-search dictionary
 intentionally so Spanish function words such as `como` remain indexable.
 
-Single-token trigram candidate retrieval is deferred because the current corpus schema
-has neither the `pg_trgm` extension nor a trigram index; adding `similarity()` or
-`word_similarity()` now would force an unbounded chunk-text scan. The enabling
-migration must first install `pg_trgm` and add a GIN `gin_trgm_ops` index over
-`lower(knowledge_chunks.chunk_text)` (or a normalized token projection). Only then may
-the retriever run a bounded, org/brain/source-filtered word-similarity query and fuse
-its top candidates through the same relevance policy. Until that indexed migration is
-reviewed and deployed, fuzzy spelling such as `krispy` → `KRISPI` remains a policy over
-lexical/vector candidates rather than a separate corpus scan.
+Single-token trigram retrieval uses the reviewed `pg_trgm` migration and a GIN
+`gin_trgm_ops` index whose expression exactly matches
+`lower(knowledge_chunks.chunk_text)`. The query uses the indexed `%>` word-similarity
+operator, applies the same org/brain/source membership, module, field-level, kind, and
+metadata filters as the vector and FTS lanes, and caps candidates before fusion.
+Trigram similarity only supplies candidates: the deterministic exact/edit-distance
+policy remains the eligibility authority, so a loose trigram neighbor cannot become
+evidence by score alone.
 
 ### 7.7 Authorization at retrieval time
 
