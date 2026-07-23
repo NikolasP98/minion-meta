@@ -9,6 +9,12 @@ import {
   type BrainVectorPointPayloadV1,
 } from './contract.js';
 
+function sparseArray<T>(length: number): T[] {
+  const values: T[] = [];
+  values.length = length;
+  return values;
+}
+
 function validRequest() {
   return {
     contractVersion: BRAIN_VECTOR_CONTRACT_VERSION,
@@ -54,6 +60,15 @@ describe('brain-vector contract', () => {
     expect(isBrainVectorSearchRequestV1(request)).toBe(false);
   });
 
+  it('rejects sparse request vectors', () => {
+    expect(
+      isBrainVectorSearchRequestV1({
+        ...validRequest(),
+        vector: sparseArray(BRAIN_VECTOR_DIMENSIONS),
+      }),
+    ).toBe(false);
+  });
+
   it.each([0, 201, 1.5])('rejects an invalid limit of %s', (limit) => {
     expect(isBrainVectorSearchRequestV1({ ...validRequest(), limit })).toBe(false);
   });
@@ -73,6 +88,12 @@ describe('brain-vector contract', () => {
           ...request.filters,
           sourceIds: Array.from({ length: 513 }, (_, index) => `source-${index}`),
         },
+      }),
+    ).toBe(false);
+    expect(
+      isBrainVectorSearchRequestV1({
+        ...request,
+        filters: { ...request.filters, sourceIds: sparseArray(1) },
       }),
     ).toBe(false);
   });
@@ -121,6 +142,12 @@ describe('brain-vector contract', () => {
     const request = validRequest();
     expect(
       isBrainVectorSearchRequestV1({ ...request, filters: { ...request.filters, kinds: 123 } }),
+    ).toBe(false);
+    expect(
+      isBrainVectorSearchRequestV1({
+        ...request,
+        filters: { ...request.filters, kinds: sparseArray(1) },
+      }),
     ).toBe(false);
     expect(
       isBrainVectorSearchRequestV1({
@@ -177,6 +204,12 @@ describe('brain-vector contract', () => {
     expect(
       isBrainVectorSearchResponseV1({ ...response, generation: 'other_generation' }, request),
     ).toBe(false);
+    expect(
+      isBrainVectorSearchResponseV1(
+        { ...response, candidates: sparseArray(request.limit) },
+        request,
+      ),
+    ).toBe(false);
   });
 
   it('validates upsert vectors and identity invariants', () => {
@@ -195,6 +228,9 @@ describe('brain-vector contract', () => {
     expect(isBrainVectorOutboxClaimV1({ ...claim, orgId: 'different-org' })).toBe(false);
     expect(isBrainVectorOutboxClaimV1({ ...claim, generation: 'different_generation' })).toBe(false);
     expect(isBrainVectorOutboxClaimV1({ ...claim, vector: [0] })).toBe(false);
+    expect(
+      isBrainVectorOutboxClaimV1({ ...claim, vector: sparseArray(BRAIN_VECTOR_DIMENSIONS) }),
+    ).toBe(false);
     const nonFiniteVector = [...claim.vector];
     nonFiniteVector[0] = Number.POSITIVE_INFINITY;
     expect(isBrainVectorOutboxClaimV1({ ...claim, vector: nonFiniteVector })).toBe(false);

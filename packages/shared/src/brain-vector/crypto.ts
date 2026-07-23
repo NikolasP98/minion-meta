@@ -33,7 +33,12 @@ async function sha256(value: Uint8Array): Promise<Uint8Array> {
  * Unicode code-point, and UTF-8 byte ordering identical across implementations.
  */
 export function canonicalizeBrainVectorSourceIds(sourceIds: readonly string[]): string[] {
-  if (sourceIds.some((sourceId) => !BRAIN_VECTOR_SOURCE_ID_PATTERN.test(sourceId))) {
+  if (
+    Array.from(sourceIds).some(
+      (sourceId) =>
+        typeof sourceId !== 'string' || !BRAIN_VECTOR_SOURCE_ID_PATTERN.test(sourceId),
+    )
+  ) {
     throw new Error(
       'source IDs must use only ASCII letters, digits, dot, underscore, colon, or hyphen (1-128 chars)',
     );

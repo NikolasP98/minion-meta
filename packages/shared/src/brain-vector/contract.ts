@@ -191,7 +191,7 @@ function isFiniteVector(value: unknown): value is number[] {
   return (
     Array.isArray(value) &&
     value.length === BRAIN_VECTOR_DIMENSIONS &&
-    value.every(Number.isFinite)
+    Array.from(value).every(Number.isFinite)
   );
 }
 
@@ -219,7 +219,7 @@ export function isBrainVectorSearchRequestV1(value: unknown): value is BrainVect
     filters?.kinds === undefined ||
     (Array.isArray(filters.kinds) &&
       filters.kinds.length <= BRAIN_VECTOR_MAX_KINDS &&
-      filters.kinds.every(
+      Array.from(filters.kinds).every(
         (kind) =>
           typeof kind === 'string' &&
           kind.length > 0 &&
@@ -230,7 +230,7 @@ export function isBrainVectorSearchRequestV1(value: unknown): value is BrainVect
       ? Array.isArray(filters.sourceIds) &&
         filters.sourceIds.length >= 1 &&
         filters.sourceIds.length <= BRAIN_VECTOR_MAX_SOURCE_IDS &&
-        filters.sourceIds.every(isSourceId)
+        Array.from(filters.sourceIds).every(isSourceId)
       : filters?.scopeMode === 'org_all' && filters.sourceIds === undefined;
   return (
     candidate.contractVersion === BRAIN_VECTOR_CONTRACT_VERSION &&
@@ -273,7 +273,7 @@ export function isBrainVectorSearchResponseV1(
     Array.isArray(candidate.candidates) &&
     candidate.candidates.length <= request.limit &&
     candidate.candidates.length <= BRAIN_VECTOR_MAX_CANDIDATES &&
-    candidate.candidates.every(isBrainVectorCandidateV1)
+    Array.from(candidate.candidates).every(isBrainVectorCandidateV1)
   );
 }
 
