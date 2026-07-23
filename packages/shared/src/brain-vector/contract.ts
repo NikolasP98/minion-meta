@@ -111,6 +111,8 @@ export interface BrainVectorErrorResponseV1 {
 }
 
 export interface BrainVectorPointPayloadV1 {
+  /** Canonical Supabase knowledge_chunks.id used for RLS rehydration. */
+  chunk_id: string;
   org_id: string;
   source_id: string;
   document_id: string;
