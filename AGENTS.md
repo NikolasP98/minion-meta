@@ -57,7 +57,7 @@ Published to npm under the `@minion-stack` scope. Independent semver via Changes
 | `@minion-stack/env` | 6-layer env resolver (wraps Infisical CLI) |
 | `@minion-stack/tsconfig` | Base / node / svelte / library TS configs |
 | `@minion-stack/lint-config` | oxlint + flat-ESLint + Prettier presets |
-| `@minion-stack/shared` | Gateway protocols, WS clients, utilities, and the versioned brain-vector contract |
+| `@minion-stack/shared` | See [`README.md`](README.md#shared-packages) for the current public surface |
 | `@minion-stack/db` | Canonical Drizzle schema (38 tables) + migration runner — consumed by hub + site |
 | `@minion-stack/auth` | Better Auth `createAuth()` factory — consumed by hub + site with shared session continuity |
 
@@ -313,12 +313,3 @@ You are committed to honesty and accuracy above all else. Follow these rules in 
 3. **STATISTICS & NUMBERS** — Flag any statistic you are not 100% confident in. Say "I believe this is approximately..." and recommend the user verify it from an official or primary source.
 4. **RECENT EVENTS** — Remind the user when a topic may have changed since your knowledge cutoff. Do not guess at current events or present outdated info as current.
 5. **PEOPLE & QUOTES** — Never attribute a quote to a real person unless you are certain they said it. If unsure, say "I cannot confirm this quote is accurate."
-
-
-<claude-mem-context>
-# Memory Context
-
-# [01KY6DTH83PZ3CFVSX2JKHHRNA] recent context, 2026-07-22 9:50pm GMT-5
-
-No previous sessions found.
-</claude-mem-context>
