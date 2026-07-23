@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   brainVectorContentFingerprint,
+  brainVectorPointId,
   brainVectorSourceScopeHash,
   canonicalizeBrainVectorSourceIds,
 } from './crypto.js';
@@ -39,6 +40,22 @@ describe('brain-vector crypto contract', () => {
         generation: 'openai_te3s_1536_g1',
       }),
     ).resolves.toBe('hmac-sha256:v1:huYmtzmlJ6XYRgPOuJEnCMOd3IRyOmqUKHdca3q3h6w');
+  });
+
+  it('matches the cross-repo point-id fixture', async () => {
+    await expect(
+      brainVectorPointId({
+        orgId: 'org_01hubtest',
+        chunkId: '018f87f4-e934-7a21-98b6-4f6b8d3898dd',
+        generation: 'openai_te3s_1536_g1',
+      }),
+    ).resolves.toBe('d7cb8de1-05f3-822a-b514-aa419dca59de');
+  });
+
+  it('rejects empty point-id inputs', async () => {
+    await expect(
+      brainVectorPointId({ orgId: '', chunkId: 'chunk', generation: 'generation' }),
+    ).rejects.toThrow('orgId must be non-empty');
   });
 
   it('rejects a short fingerprint key', async () => {

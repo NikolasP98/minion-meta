@@ -29,7 +29,7 @@ async function sha256(value: Uint8Array): Promise<Uint8Array> {
 export function canonicalizeBrainVectorSourceIds(sourceIds: readonly string[]): string[] {
   if (sourceIds.some((sourceId) => !BRAIN_VECTOR_SOURCE_ID_PATTERN.test(sourceId))) {
     throw new Error(
-      'source IDs must use only ASCII letters, digits, dot, underscore, colon, or hyphen',
+      'source IDs must use only ASCII letters, digits, dot, underscore, colon, or hyphen (1-128 chars)',
     );
   }
   return [...new Set(sourceIds)].sort((left, right) =>
@@ -45,6 +45,33 @@ export async function brainVectorSourceScopeHash(sourceIds: readonly string[]): 
   const canonical = canonicalizeBrainVectorSourceIds(sourceIds);
   const digest = await sha256(canonicalJson(['minion-source-scope-v1', ...canonical]));
   return `sha256:v1:${bytesToBase64Url(digest)}`;
+}
+
+/**
+ * Deterministic Qdrant point ID for one chunk in one generation.
+ * Canonical input is JSON `["minion-point-id-v1", orgId, chunkId, generation]`
+ * hashed with SHA-256; the first 16 bytes are formatted as a UUIDv8.
+ */
+export async function brainVectorPointId(input: {
+  orgId: string;
+  chunkId: string;
+  generation: string;
+}): Promise<string> {
+  for (const [field, value] of [
+    ['orgId', input.orgId],
+    ['chunkId', input.chunkId],
+    ['generation', input.generation],
+  ] as const) {
+    if (value.length === 0) throw new Error(`${field} must be non-empty`);
+  }
+  const digest = await sha256(
+    canonicalJson(['minion-point-id-v1', input.orgId, input.chunkId, input.generation]),
+  );
+  const bytes = digest.slice(0, 16);
+  bytes[6] = (bytes[6]! & 0x0f) | 0x80;
+  bytes[8] = (bytes[8]! & 0x3f) | 0x80;
+  const hex = [...bytes].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
 }
 
 /**
