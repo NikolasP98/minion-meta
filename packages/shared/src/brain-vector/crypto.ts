@@ -14,8 +14,58 @@ function bytesToBase64Url(bytes: Uint8Array): string {
   return btoa(binary).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/u, '');
 }
 
-function canonicalJson(parts: readonly string[]): Uint8Array {
-  return encoder.encode(JSON.stringify(parts));
+function canonicalJsonString(value: string): string {
+  let result = '"';
+  for (let index = 0; index < value.length; index += 1) {
+    const codeUnit = value.charCodeAt(index);
+    if (codeUnit === 0x22) {
+      result += '\\"';
+    } else if (codeUnit === 0x5c) {
+      result += '\\\\';
+    } else if (codeUnit === 0x08) {
+      result += '\\b';
+    } else if (codeUnit === 0x09) {
+      result += '\\t';
+    } else if (codeUnit === 0x0a) {
+      result += '\\n';
+    } else if (codeUnit === 0x0c) {
+      result += '\\f';
+    } else if (codeUnit === 0x0d) {
+      result += '\\r';
+    } else if (codeUnit <= 0x1f) {
+      result += `\\u${codeUnit.toString(16).padStart(4, '0')}`;
+    } else if (codeUnit >= 0xd800 && codeUnit <= 0xdbff) {
+      const lowSurrogate = value.charCodeAt(index + 1);
+      if (!Number.isInteger(lowSurrogate) || lowSurrogate < 0xdc00 || lowSurrogate > 0xdfff) {
+        throw new Error('canonical hash parts must contain well-formed Unicode');
+      }
+      result += value[index]! + value[index + 1]!;
+      index += 1;
+    } else if (codeUnit >= 0xdc00 && codeUnit <= 0xdfff) {
+      throw new Error('canonical hash parts must contain well-formed Unicode');
+    } else {
+      result += value[index]!;
+    }
+  }
+  return `${result}"`;
+}
+
+/**
+ * Frozen v1 hash input encoding: a UTF-8 JSON string array without whitespace.
+ * Non-ASCII code points are emitted directly, JSON short escapes are preferred,
+ * other controls use lowercase `\u00xx`, and unpaired surrogates are rejected.
+ */
+export function canonicalizeBrainVectorHashInputV1(parts: readonly string[]): Uint8Array {
+  if (!Array.isArray(parts)) throw new Error('canonical hash parts must be an array');
+  const encoded: string[] = [];
+  for (let index = 0; index < parts.length; index += 1) {
+    const part = parts[index];
+    if (!Object.hasOwn(parts, index) || typeof part !== 'string') {
+      throw new Error('canonical hash parts must be strings');
+    }
+    encoded.push(canonicalJsonString(part));
+  }
+  return encoder.encode(`[${encoded.join(',')}]`);
 }
 
 function toArrayBuffer(bytes: Uint8Array): ArrayBuffer {
@@ -54,7 +104,9 @@ export function canonicalizeBrainVectorSourceIds(sourceIds: readonly string[]): 
  */
 export async function brainVectorSourceScopeHash(sourceIds: readonly string[]): Promise<string> {
   const canonical = canonicalizeBrainVectorSourceIds(sourceIds);
-  const digest = await sha256(canonicalJson(['minion-source-scope-v1', ...canonical]));
+  const digest = await sha256(
+    canonicalizeBrainVectorHashInputV1(['minion-source-scope-v1', ...canonical]),
+  );
   return `sha256:v1:${bytesToBase64Url(digest)}`;
 }
 
@@ -109,7 +161,12 @@ export async function brainVectorPointId(input: {
     if (value.length === 0) throw new Error(`${field} must be non-empty`);
   }
   const digest = await sha256(
-    canonicalJson(['minion-point-id-v1', input.orgId, input.chunkId, input.generation]),
+    canonicalizeBrainVectorHashInputV1([
+      'minion-point-id-v1',
+      input.orgId,
+      input.chunkId,
+      input.generation,
+    ]),
   );
   const bytes = digest.slice(0, 16);
   bytes[6] = (bytes[6]! & 0x0f) | 0x80;
@@ -148,7 +205,7 @@ export async function brainVectorContentFingerprint(input: {
     'HMAC',
     key,
     toArrayBuffer(
-      canonicalJson([
+      canonicalizeBrainVectorHashInputV1([
         'minion-content-fingerprint-v1',
         input.chunkId,
         input.contentHash,
