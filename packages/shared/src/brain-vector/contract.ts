@@ -188,11 +188,11 @@ function isNonEmptyString(value: unknown): value is string {
 }
 
 function isFiniteVector(value: unknown): value is number[] {
-  return (
-    Array.isArray(value) &&
-    value.length === BRAIN_VECTOR_DIMENSIONS &&
-    Array.from(value).every(Number.isFinite)
-  );
+  if (!Array.isArray(value) || value.length !== BRAIN_VECTOR_DIMENSIONS) return false;
+  for (let index = 0; index < BRAIN_VECTOR_DIMENSIONS; index += 1) {
+    if (!Object.hasOwn(value, index) || !Number.isFinite(value[index])) return false;
+  }
+  return true;
 }
 
 function isBrainVectorCandidateV1(value: unknown): value is BrainVectorCandidateV1 {
