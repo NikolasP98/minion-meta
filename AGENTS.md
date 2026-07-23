@@ -71,7 +71,7 @@ Published to npm under the `@minion-stack` scope. Independent semver via Changes
 | `@minion-stack/env` | 6-layer env resolver (wraps Infisical CLI) |
 | `@minion-stack/tsconfig` | Base / node / svelte / library TS configs |
 | `@minion-stack/lint-config` | oxlint + flat-ESLint + Prettier presets |
-| `@minion-stack/shared` | See [`README.md`](README.md#shared-packages) for the current public surface |
+| `@minion-stack/shared` | See [`README.md`](README.md#shared-packages) for the current public surface; gateway surfaces are consumed by hub, site, and paperclip |
 | `@minion-stack/db` | Canonical Drizzle schema (38 tables) + migration runner — consumed by hub + site |
 | `@minion-stack/auth` | Better Auth `createAuth()` factory — consumed by hub + site with shared session continuity |
 
