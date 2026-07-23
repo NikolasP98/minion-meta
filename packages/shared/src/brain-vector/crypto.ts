@@ -1,4 +1,10 @@
-import { BRAIN_VECTOR_SOURCE_ID_PATTERN } from './contract.js';
+import {
+  BRAIN_VECTOR_SOURCE_ID_PATTERN,
+  isBrainVectorSearchRequestV1,
+  type BrainVectorBoundSearchScopeV1,
+  type BrainVectorSearchCapabilityV1,
+  type BrainVectorSearchRequestV1,
+} from './contract.js';
 
 const encoder = new TextEncoder();
 
@@ -45,6 +51,39 @@ export async function brainVectorSourceScopeHash(sourceIds: readonly string[]): 
   const canonical = canonicalizeBrainVectorSourceIds(sourceIds);
   const digest = await sha256(canonicalJson(['minion-source-scope-v1', ...canonical]));
   return `sha256:v1:${bytesToBase64Url(digest)}`;
+}
+
+export async function bindBrainVectorSearchScopeV1(
+  capability: BrainVectorSearchCapabilityV1,
+  request: BrainVectorSearchRequestV1,
+): Promise<BrainVectorBoundSearchScopeV1> {
+  if (!isBrainVectorSearchRequestV1(request)) throw new Error('invalid brain-vector search request');
+  if (typeof capability.org_id !== 'string' || capability.org_id.length === 0) {
+    throw new Error('capability org_id must be non-empty');
+  }
+  if (capability.generation !== request.generation) {
+    throw new Error('request generation does not match capability');
+  }
+  if (capability.source_scope_mode !== request.filters.scopeMode) {
+    throw new Error('request source scope mode does not match capability');
+  }
+  if (request.filters.scopeMode === 'org_all') {
+    if ('source_scope_hash' in capability) {
+      throw new Error('org_all capability must omit source_scope_hash');
+    }
+    return { orgId: capability.org_id, scopeMode: 'org_all' };
+  }
+  if (
+    capability.source_scope_mode !== 'source_list' ||
+    typeof capability.source_scope_hash !== 'string'
+  ) {
+    throw new Error('source_list capability must include source_scope_hash');
+  }
+  const sourceIds = canonicalizeBrainVectorSourceIds(request.filters.sourceIds);
+  if ((await brainVectorSourceScopeHash(sourceIds)) !== capability.source_scope_hash) {
+    throw new Error('request source IDs do not match capability');
+  }
+  return { orgId: capability.org_id, scopeMode: 'source_list', sourceIds };
 }
 
 /**
