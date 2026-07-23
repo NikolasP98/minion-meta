@@ -14,6 +14,12 @@ import {
 
 const FIXTURE_KEY = new Uint8Array(Array.from({ length: 32 }, (_, index) => index));
 
+function sparseArray<T>(length: number): T[] {
+  const values: T[] = [];
+  values.length = length;
+  return values;
+}
+
 describe('brain-vector crypto contract', () => {
   it('sorts and de-duplicates source ids using code-point order', () => {
     expect(canonicalizeBrainVectorSourceIds(['source-z', 'source-a', 'source-z'])).toEqual([
@@ -27,6 +33,9 @@ describe('brain-vector crypto contract', () => {
       'source IDs must use only ASCII',
     );
     expect(() => canonicalizeBrainVectorSourceIds(['source-💡'])).toThrow(
+      'source IDs must use only ASCII',
+    );
+    expect(() => canonicalizeBrainVectorSourceIds(sparseArray<string>(1))).toThrow(
       'source IDs must use only ASCII',
     );
   });
