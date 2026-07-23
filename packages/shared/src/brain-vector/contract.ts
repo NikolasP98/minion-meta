@@ -4,7 +4,34 @@ export const BRAIN_VECTOR_DIMENSIONS = 1536 as const;
 export const BRAIN_VECTOR_MAX_CANDIDATES = 200 as const;
 export const BRAIN_VECTOR_MAX_SOURCE_IDS = 512 as const;
 export const BRAIN_VECTOR_MAX_KINDS = 32 as const;
-export const BRAIN_VECTOR_SOURCE_ID_PATTERN = /^[A-Za-z0-9._:-]+$/u;
+export const BRAIN_VECTOR_MAX_KIND_LENGTH = 64 as const;
+export const BRAIN_VECTOR_SOURCE_ID_PATTERN = /^[A-Za-z0-9._:-]{1,128}$/u;
+export const BRAIN_VECTOR_GENERATION_PATTERN = /^[a-z0-9_]{1,64}$/u;
+export const BRAIN_VECTOR_COLLECTION_PREFIX = 'minion_brains_v1' as const;
+
+/** JWS `alg` for capability tokens. Verifiers MUST reject any other algorithm. */
+export const BRAIN_VECTOR_CAPABILITY_ALG = 'EdDSA' as const;
+/** Only Ed25519 keys may sign or verify v1 capabilities. */
+export const BRAIN_VECTOR_CAPABILITY_CURVE = 'Ed25519' as const;
+
+export interface BrainVectorCapabilityHeaderV1 {
+  alg: typeof BRAIN_VECTOR_CAPABILITY_ALG;
+  typ: 'JWT';
+  kid: string;
+}
+
+/**
+ * Frozen v1 Qdrant collection name: `minion_brains_v1__<generation>`.
+ * One collection per embedding generation; org isolation lives in point payloads.
+ */
+export function brainVectorCollectionName(generation: string): string {
+  if (!BRAIN_VECTOR_GENERATION_PATTERN.test(generation)) {
+    throw new Error(
+      'generation must be 1-64 lowercase ASCII letters, digits, or underscores',
+    );
+  }
+  return `${BRAIN_VECTOR_COLLECTION_PREFIX}__${generation}`;
+}
 
 export type BrainVectorContractVersion = typeof BRAIN_VECTOR_CONTRACT_VERSION;
 export type BrainVectorPayloadSchemaVersion = typeof BRAIN_VECTOR_PAYLOAD_SCHEMA_VERSION;
@@ -96,15 +123,18 @@ export interface BrainVectorPointPayloadV1 {
   payload_schema: BrainVectorPayloadSchemaVersion;
 }
 
-export interface BrainVectorOutboxClaimV1 {
+interface BrainVectorOutboxClaimBaseV1 {
   chunkId: string;
   orgId: string;
   generation: string;
   revision: number;
-  operation: 'upsert' | 'delete';
-  vector: number[] | null;
-  payload: BrainVectorPointPayloadV1 | null;
 }
+
+export type BrainVectorOutboxClaimV1 = BrainVectorOutboxClaimBaseV1 &
+  (
+    | { operation: 'upsert'; vector: number[]; payload: BrainVectorPointPayloadV1 }
+    | { operation: 'delete'; vector: null; payload: null }
+  );
 
 export interface BrainVectorOutboxAckV1 {
   chunkId: string;
@@ -141,7 +171,12 @@ export function isBrainVectorSearchRequestV1(value: unknown): value is BrainVect
     filters?.kinds === undefined ||
     (Array.isArray(filters.kinds) &&
       filters.kinds.length <= BRAIN_VECTOR_MAX_KINDS &&
-      filters.kinds.every((kind) => typeof kind === 'string' && kind.length > 0));
+      filters.kinds.every(
+        (kind) =>
+          typeof kind === 'string' &&
+          kind.length > 0 &&
+          kind.length <= BRAIN_VECTOR_MAX_KIND_LENGTH,
+      ));
   const validScope =
     filters?.scopeMode === 'source_list'
       ? Array.isArray(filters.sourceIds) &&
@@ -152,7 +187,7 @@ export function isBrainVectorSearchRequestV1(value: unknown): value is BrainVect
   return (
     candidate.contractVersion === BRAIN_VECTOR_CONTRACT_VERSION &&
     typeof candidate.generation === 'string' &&
-    candidate.generation.length > 0 &&
+    BRAIN_VECTOR_GENERATION_PATTERN.test(candidate.generation) &&
     Array.isArray(candidate.vector) &&
     candidate.vector.length === BRAIN_VECTOR_DIMENSIONS &&
     candidate.vector.every(Number.isFinite) &&

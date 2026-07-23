@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   BRAIN_VECTOR_CONTRACT_VERSION,
   BRAIN_VECTOR_DIMENSIONS,
+  brainVectorCollectionName,
   isBrainVectorSearchRequestV1,
 } from './contract.js';
 
@@ -62,6 +63,33 @@ describe('brain-vector contract', () => {
       isBrainVectorSearchRequestV1({
         ...request,
         filters: { scopeMode: 'org_all', sourceIds: [] },
+      }),
+    ).toBe(false);
+  });
+
+  it('matches the cross-repo collection-name fixture and rejects unsafe generations', () => {
+    expect(brainVectorCollectionName('openai_te3s_1536_g1')).toBe(
+      'minion_brains_v1__openai_te3s_1536_g1',
+    );
+    expect(() => brainVectorCollectionName('Bad-Generation')).toThrow('generation must be');
+    expect(() => brainVectorCollectionName('a'.repeat(65))).toThrow('generation must be');
+  });
+
+  it('rejects overlong generation, source id, and kind strings', () => {
+    const request = validRequest();
+    expect(
+      isBrainVectorSearchRequestV1({ ...request, generation: 'g'.repeat(65) }),
+    ).toBe(false);
+    expect(
+      isBrainVectorSearchRequestV1({
+        ...request,
+        filters: { ...request.filters, sourceIds: ['s'.repeat(129)] },
+      }),
+    ).toBe(false);
+    expect(
+      isBrainVectorSearchRequestV1({
+        ...request,
+        filters: { ...request.filters, kinds: ['k'.repeat(65)] },
       }),
     ).toBe(false);
   });
