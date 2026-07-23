@@ -70,6 +70,12 @@ export type BrainVectorSearchFiltersV1 = BrainVectorSearchFilterBaseV1 &
     | { scopeMode: 'org_all'; sourceIds?: never }
   );
 
+export type BrainVectorBoundSearchScopeV1 = { orgId: string } &
+  (
+    | { scopeMode: 'source_list'; sourceIds: string[] }
+    | { scopeMode: 'org_all'; sourceIds?: never }
+  );
+
 export interface BrainVectorSearchRequestV1 {
   contractVersion: BrainVectorContractVersion;
   generation: string;
@@ -145,10 +151,27 @@ export interface BrainVectorOutboxAckV1 {
 }
 
 function isUtcInstant(value: unknown): value is string {
+  if (typeof value !== 'string') return false;
+  const match =
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d{1,9})?Z$/u.exec(value);
+  if (!match) return false;
+  const [, yearText, monthText, dayText, hourText, minuteText, secondText] = match;
+  const year = Number(yearText);
+  const month = Number(monthText);
+  const day = Number(dayText);
+  const hour = Number(hourText);
+  const minute = Number(minuteText);
+  const second = Number(secondText);
+  const leapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  const daysInMonth = [31, leapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   return (
-    typeof value === 'string' &&
-    /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?Z$/u.test(value) &&
-    Number.isFinite(Date.parse(value))
+    month >= 1 &&
+    month <= 12 &&
+    day >= 1 &&
+    day <= daysInMonth[month - 1]! &&
+    hour <= 23 &&
+    minute <= 59 &&
+    second <= 59
   );
 }
 
@@ -160,10 +183,33 @@ function isSourceId(value: unknown): value is string {
   return typeof value === 'string' && BRAIN_VECTOR_SOURCE_ID_PATTERN.test(value);
 }
 
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === 'string' && value.length > 0;
+}
+
+function isFiniteVector(value: unknown): value is number[] {
+  return (
+    Array.isArray(value) &&
+    value.length === BRAIN_VECTOR_DIMENSIONS &&
+    value.every(Number.isFinite)
+  );
+}
+
+function isBrainVectorCandidateV1(value: unknown): value is BrainVectorCandidateV1 {
+  if (!value || typeof value !== 'object') return false;
+  const candidate = value as Partial<BrainVectorCandidateV1>;
+  return (
+    isNonEmptyString(candidate.chunkId) &&
+    typeof candidate.score === 'number' &&
+    Number.isFinite(candidate.score) &&
+    isNonEmptyString(candidate.indexedFingerprint)
+  );
+}
+
 /**
- * Validate the public v1 request boundary. The server MUST also bind it to the
- * capability: scopeMode must equal source_scope_mode, and source_list requests
- * must recompute brainVectorSourceScopeHash(sourceIds) and compare it to the claim.
+ * Validate the public v1 request boundary. The server MUST pass the request and
+ * verified capability through bindBrainVectorSearchScopeV1. Every Qdrant query
+ * MUST filter org_id to the returned orgId and apply its returned source scope.
  */
 export function isBrainVectorSearchRequestV1(value: unknown): value is BrainVectorSearchRequestV1 {
   if (!value || typeof value !== 'object') return false;
@@ -190,9 +236,7 @@ export function isBrainVectorSearchRequestV1(value: unknown): value is BrainVect
     candidate.contractVersion === BRAIN_VECTOR_CONTRACT_VERSION &&
     typeof candidate.generation === 'string' &&
     BRAIN_VECTOR_GENERATION_PATTERN.test(candidate.generation) &&
-    Array.isArray(candidate.vector) &&
-    candidate.vector.length === BRAIN_VECTOR_DIMENSIONS &&
-    candidate.vector.every(Number.isFinite) &&
+    isFiniteVector(candidate.vector) &&
     typeof candidate.limit === 'number' &&
     Number.isInteger(candidate.limit) &&
     candidate.limit > 0 &&
@@ -202,5 +246,68 @@ export function isBrainVectorSearchRequestV1(value: unknown): value is BrainVect
     validKinds &&
     isOptionalUtcInstant(filters.occurredAfter) &&
     isOptionalUtcInstant(filters.occurredBefore)
+  );
+}
+
+export function isBrainVectorSearchResponseV1(
+  value: unknown,
+  request: Pick<BrainVectorSearchRequestV1, 'generation' | 'limit'>,
+): value is BrainVectorSearchResponseV1 {
+  if (!value || typeof value !== 'object') return false;
+  if (
+    !BRAIN_VECTOR_GENERATION_PATTERN.test(request.generation) ||
+    !Number.isInteger(request.limit) ||
+    request.limit <= 0 ||
+    request.limit > BRAIN_VECTOR_MAX_CANDIDATES
+  ) {
+    return false;
+  }
+  const candidate = value as Partial<BrainVectorSearchResponseV1>;
+  return (
+    candidate.contractVersion === BRAIN_VECTOR_CONTRACT_VERSION &&
+    candidate.generation === request.generation &&
+    candidate.collection === brainVectorCollectionName(request.generation) &&
+    typeof candidate.tookMs === 'number' &&
+    Number.isFinite(candidate.tookMs) &&
+    candidate.tookMs >= 0 &&
+    Array.isArray(candidate.candidates) &&
+    candidate.candidates.length <= request.limit &&
+    candidate.candidates.length <= BRAIN_VECTOR_MAX_CANDIDATES &&
+    candidate.candidates.every(isBrainVectorCandidateV1)
+  );
+}
+
+export function isBrainVectorOutboxClaimV1(value: unknown): value is BrainVectorOutboxClaimV1 {
+  if (!value || typeof value !== 'object') return false;
+  const candidate = value as Partial<BrainVectorOutboxClaimV1>;
+  if (
+    !isNonEmptyString(candidate.chunkId) ||
+    !isNonEmptyString(candidate.orgId) ||
+    typeof candidate.generation !== 'string' ||
+    !BRAIN_VECTOR_GENERATION_PATTERN.test(candidate.generation) ||
+    typeof candidate.revision !== 'number' ||
+    !Number.isInteger(candidate.revision) ||
+    candidate.revision < 0
+  ) {
+    return false;
+  }
+  if (candidate.operation === 'delete') {
+    return candidate.vector === null && candidate.payload === null;
+  }
+  if (candidate.operation !== 'upsert' || !isFiniteVector(candidate.vector)) return false;
+  const payload = candidate.payload as Partial<BrainVectorPointPayloadV1> | null | undefined;
+  return (
+    !!payload &&
+    payload.chunk_id === candidate.chunkId &&
+    payload.org_id === candidate.orgId &&
+    payload.embedding_generation === candidate.generation &&
+    payload.payload_schema === BRAIN_VECTOR_PAYLOAD_SCHEMA_VERSION &&
+    isSourceId(payload.source_id) &&
+    isNonEmptyString(payload.document_id) &&
+    isNonEmptyString(payload.kind) &&
+    payload.kind.length <= BRAIN_VECTOR_MAX_KIND_LENGTH &&
+    (payload.occurred_at === null || isUtcInstant(payload.occurred_at)) &&
+    isNonEmptyString(payload.content_fingerprint) &&
+    isNonEmptyString(payload.embedding_model)
   );
 }

@@ -1,10 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import {
+  bindBrainVectorSearchScopeV1,
   brainVectorContentFingerprint,
   brainVectorPointId,
   brainVectorSourceScopeHash,
   canonicalizeBrainVectorSourceIds,
 } from './crypto.js';
+import {
+  BRAIN_VECTOR_CONTRACT_VERSION,
+  BRAIN_VECTOR_DIMENSIONS,
+  type BrainVectorSearchCapabilityV1,
+} from './contract.js';
 
 const FIXTURE_KEY = new Uint8Array(Array.from({ length: 32 }, (_, index) => index));
 
@@ -29,6 +35,47 @@ describe('brain-vector crypto contract', () => {
     await expect(
       brainVectorSourceScopeHash(['7f-source', '1a-source', '7f-source']),
     ).resolves.toBe('sha256:v1:gemxrtsXdAz07R5K44ohdNWe4xD_Otb7vHicOD_Bn3g');
+  });
+
+  it('binds organization and source filters to the verified capability', async () => {
+    const capability: BrainVectorSearchCapabilityV1 = {
+      iss: 'minion-hub',
+      aud: 'minion-brain-vector',
+      sub: 'user-1',
+      org_id: 'org-1',
+      brain_id: 'brain-1',
+      generation: 'openai_te3s_1536_g1',
+      op: 'search',
+      jti: 'capability-1',
+      iat: 1,
+      exp: 2,
+      source_scope_mode: 'source_list',
+      source_scope_hash: await brainVectorSourceScopeHash(['source-b', 'source-a']),
+    };
+    const request = {
+      contractVersion: BRAIN_VECTOR_CONTRACT_VERSION,
+      generation: capability.generation,
+      vector: Array.from({ length: BRAIN_VECTOR_DIMENSIONS }, () => 0),
+      limit: 20,
+      filters: {
+        scopeMode: 'source_list' as const,
+        sourceIds: ['source-b', 'source-a', 'source-b'],
+      },
+    };
+    await expect(bindBrainVectorSearchScopeV1(capability, request)).resolves.toEqual({
+      orgId: 'org-1',
+      scopeMode: 'source_list',
+      sourceIds: ['source-a', 'source-b'],
+    });
+    await expect(
+      bindBrainVectorSearchScopeV1({ ...capability, org_id: '' }, request),
+    ).rejects.toThrow('org_id must be non-empty');
+    await expect(
+      bindBrainVectorSearchScopeV1(
+        { ...capability, source_scope_hash: await brainVectorSourceScopeHash(['source-c']) },
+        request,
+      ),
+    ).rejects.toThrow('source IDs do not match capability');
   });
 
   it('matches the cross-repo content-fingerprint fixture', async () => {
