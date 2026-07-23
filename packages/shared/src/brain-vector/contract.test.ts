@@ -4,6 +4,7 @@ import {
   BRAIN_VECTOR_DIMENSIONS,
   brainVectorCollectionName,
   isBrainVectorSearchRequestV1,
+  type BrainVectorPointPayloadV1,
 } from './contract.js';
 
 function validRequest() {
@@ -17,6 +18,22 @@ function validRequest() {
 }
 
 describe('brain-vector contract', () => {
+  it('carries the canonical chunk id separately from the opaque Qdrant point id', () => {
+    const payload: BrainVectorPointPayloadV1 = {
+      chunk_id: '018f87f4-e934-7a21-98b6-4f6b8d3898dd',
+      org_id: 'org-1',
+      source_id: 'source-1',
+      document_id: 'document-1',
+      kind: 'message',
+      occurred_at: null,
+      content_fingerprint: 'hmac-sha256:v1:fixture',
+      embedding_model: 'text-embedding-3-small',
+      embedding_generation: 'openai_te3s_1536_g1',
+      payload_schema: 1,
+    };
+    expect(payload.chunk_id).toBe('018f87f4-e934-7a21-98b6-4f6b8d3898dd');
+  });
+
   it('accepts a bounded v1 request', () => {
     expect(isBrainVectorSearchRequestV1(validRequest())).toBe(true);
   });
