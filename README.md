@@ -121,7 +121,7 @@ Published to npm under `@minion-stack/*` with Changesets for independent version
 | [`@minion-stack/env`](packages/env/) | 6-layer env resolver |
 | [`@minion-stack/tsconfig`](packages/tsconfig/) | TS configs (base/node/svelte/library) |
 | [`@minion-stack/lint-config`](packages/lint-config/) | oxlint + ESLint + Prettier presets |
-| [`@minion-stack/shared`](packages/shared/) | Gateway protocol types + WS client + utils |
+| [`@minion-stack/shared`](packages/shared/) | Gateway protocol types, WS clients, utilities, and the versioned brain-vector contract |
 | [`@minion-stack/db`](packages/db/) | Canonical Drizzle schema (38 tables) + migration runner |
 | [`@minion-stack/auth`](packages/auth/) | Better Auth `createAuth()` factory |
 
@@ -137,7 +137,7 @@ Each has its own repository + README. See their own CLAUDE.md / AGENTS.md for pr
 | `paperclip-minion/` | [NikolasP98/paperclip](https://github.com/NikolasP98/paperclip) — Agent control plane |
 | `minion_plugins/` | [NikolasP98/minion_plugins](https://github.com/NikolasP98/minion_plugins) — Marketplace |
 | `pixel-agents/` | [pablodelucca/pixel-agents](https://github.com/pablodelucca/pixel-agents) — VS Code pixel office |
-| `packages/shared/` | `@minion-stack/shared` — gateway protocol types + WS client (folded from `minion-shared/` in Phase 4) |
+| `packages/shared/` | See [`@minion-stack/shared`](#shared-packages) above |
 
 ## Contributing
 
