@@ -329,51 +329,51 @@ You are committed to honesty and accuracy above all else. Follow these rules in 
 <claude-mem-context>
 # Memory Context
 
-# [MINION] recent context, 2026-07-14 8:22pm GMT-5
+# [MINION] recent context, 2026-07-25 5:38pm GMT-5
 
 Legend: 🎯session 🔴bugfix 🟣feature 🔄refactor ✅change 🔵discovery ⚖️decision 🚨security_alert 🔐security_note
 Format: ID TIME TYPE TITLE
 Fetch details: get_observations([IDs]) | Search: mem-search skill
 
-Stats: 25 obs (8,604t read) | 114,619t work | 92% savings
+Stats: 25 obs (10,843t read) | 97,866t work | 89% savings
 
-### Jul 11, 2026
-S6178 Live browser test and demonstration of bug triage kanban process with multi-stage execution policy and HITL approval gates (Jul 11, 1:16 AM)
-S6179 Enable comprehensive password authentication for Minion Hub: password-based login for OAuth-only users (username OR email), password reset via Resend, username/password management in /account page. End goal: set username+password on nikolas.pinon98@gmail.com (Google OAuth-only) and re-login with both variants. (Jul 11, 1:37 AM)
-S6180 Enable comprehensive password authentication for Minion Hub: password-based login for OAuth-only users (username OR email), password reset via Resend email, username/password management in /account page. End goal: set username+password on nikolas.pinon98@gmail.com (Google OAuth-only) and re-login with both username and email variants. (Jul 11, 4:13 PM)
-S6183 Login UI Refinement: Username Field Email Validation and Password Dot Aesthetics (Jul 11, 4:18 PM)
-S6184 Login UI Polish: Email Validation for Username Input and Improved Password Dot Aesthetics (Jul 11, 4:45 PM)
-S6181 Password Authentication Feature Security Hardening and E2E Verification (Jul 11, 4:45 PM)
-S6182 Password Authentication Feature Security Hardening and E2E Verification (Jul 11, 4:46 PM)
-S6186 Deploy password dots styling and username login to production (Jul 11, 4:47 PM)
-S6185 Login UI Polish: Email Validation and Password Dot Aesthetics (Jul 11, 5:13 PM)
-S6189 Deploy password/username authentication updates to production hub.minion-ai.org (Jul 11, 9:02 PM)
-### Jul 14, 2026
-29472 8:13p 🟣 Transparent HTML injection proxy for Figma capture script
-29474 " 🔵 Figma capture script successfully loaded but page content still empty
-29475 " 🔵 Page successfully rendering with authentication working through proxy
-29479 " 🔵 Agent pool recovery after sustained exhaustion
-29473 8:14p 🔵 Agent pool exhaustion pattern after message dispatch
-29477 8:15p 🟣 Successful Figma design capture from authenticated localhost SvelteKit app
-29480 8:16p 🔵 SvelteKit preview server terminated with Vercel Insights missing
-29482 " ✅ Switched minion_hub from preview to dev mode
-29478 " ✅ Figma capture frame annotated with Minion route and viewport metadata
-29481 8:17p ✅ Figma screenshot export validated for captured home route
-29485 " ✅ Visual verification of Minion Hub home route capture in base64 format
-29489 " 🔵 Error 500 page captured showing Internal Error with Retry action
-29483 " 🔵 MINION agent pool capacity and recovery characteristics
-29484 8:18p 🔵 Multiple concurrent Vite server instances causing port conflicts
-29486 " ✅ Vite dev server started on port 5175 after cleanup of preview servers
-29487 " ✅ Reclaimed port 5173 for dev server after process cleanup
-29488 " 🔵 Figma capture recorded error state instead of home route content
-29491 8:19p ✅ Switched from dev mode to preview mode after startup failures
-29493 " 🔵 Preview server startup reveals cache and gateway configuration gaps
-29490 " 🔵 Upstream SvelteKit server crash caused proxy connection failures and 500 error
-29492 " 🔵 SvelteKit development server on port 5173 completely stopped
-29495 " 🔵 Server lifecycle leak with port 5173 double-bound across IPv4 and IPv6
-29494 " ✅ Vite preview server started on port 5173 as replacement for crashed dev server
-29496 8:21p 🔵 Dev server successfully started on port 5175 after auto-increment from conflicts
-29497 " 🔵 MINION development environment startup and coordination patterns
+### Jul 24, 2026
+S6657 Push committed chat feature changes to origin/dev; resolve branch divergence and conflicts (Jul 24, 12:45 AM)
+### Jul 25, 2026
+S6659 Push committed chat features to origin/dev; resolve branch divergence and concurrent working directory conflicts from multi-agent shared tree (Jul 25, 12:05 AM)
+S6660 Catalog cleanup execution and verification - UUID SKU system, merges, standardization, bug fixes (Jul 25, 12:05 AM)
+S6658 Push committed chat feature changes (scrollable tables, ref pill-chips, popover alignment) to origin/dev; handle branch divergence and merge conflicts (Jul 25, 12:05 AM)
+S6661 Memory checkpoint after catalog cleanup execution - update memory files to reflect production application and extract reusable pattern (Jul 25, 1:06 PM)
+S6662 Status check after catalog cleanup execution - what remains to implement (Jul 25, 1:08 PM)
+S6663 Investigation of what remains to implement after catalog cleanup and diagnosis of production 500 errors (Jul 25, 1:15 PM)
+33253 1:16p 🔴 All catalog and POS endpoints serving successfully with new schema
+33254 " 🔴 Sellables API returns full taxonomy and new schema fields in production payload
+33255 " 🔵 Broken brain-hybrid-retrieval module isolated to co-agent refactor work
+33256 " 🔵 Co-agent authentication work in-flight modifying org resolution and hooks
+33257 1:20p 🟣 Module availability guard centralized in hooks for routing simplification
+33258 " 🔵 app_modules table exists in production but empty for test organization
+33259 " 🔵 No cache backend configured - listModuleStates cache falls back to uncached reads
+S6664 500 error diagnosis and fix after catalog cleanup - posTickets.surcharges schema-database mismatch (Jul 25, 1:21 PM)
+33260 1:21p 🔵 Unguarded await pattern recognized from previous /en/channels layout 500 bug
+33261 1:22p 🔴 Hook hazard pattern and auth-500 triangulation technique documented in memory
+33262 " 🔵 AJ surcharge regression documented as self-inflicted open issue
+33263 " 🔵 POS server loads modified by co-agent work, not catalog cleanup
+33264 1:23p 🔄 POS routes refactored to use hook-populated module states snapshot
+33265 " 🔵 All production organizations have valid kind values - fail-closed behavior won't trigger
+33267 " 🔴 pos_settings.surcharges column populated with card fee data from cleanup script
+33268 1:25p ✅ Temporary error-to-file logger installed in handleError for remote debugging
+33269 " 🔴 500 error root cause identified: pos_tickets.surcharges column missing from database
+33270 " 🔵 Schema defines surcharges on both posSettings and posTickets but migration only added to one table
+33271 1:26p 🔴 Stray posTickets.surcharges column removed from schema to match database
+33272 " 🟣 POS schema column guard test added to prevent schema-migration mismatch bugs
+33274 1:27p 🟣 Systematic schema drift check script created to detect Drizzle-database mismatches
+33275 1:28p 🔵 Missing tables are uncommitted co-agent work with pending migration
+33276 " 🔴 Fix verified: listTickets query succeeds without surcharges column, fails with it
+S6665 Memory system updates documenting third occurrence of schema-database mismatch bug and prevention tools (Jul 25, 1:29 PM)
+33278 1:36p 🔵 Local branch 1 ahead, 15 behind origin/dev before scoped commit
+33279 " 🔵 One unpushed commit (C4 architecture explorer) plus uncommitted catalog cleanup changes
+S6666 Apply pending fin_statement_imports migration from co-agent (Jul 25, 1:36 PM)
+33280 1:40p ✅ Staged 27 catalog cleanup files for scoped commit
 
-Access 115k tokens of past work via get_observations([IDs]) or mem-search skill.
+Access 98k tokens of past work via get_observations([IDs]) or mem-search skill.
 </claude-mem-context>
