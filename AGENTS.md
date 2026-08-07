@@ -10,7 +10,7 @@ This is the **Minion meta-repo** — a self-hosted personal AI assistant platfor
 | `minion_hub/` | Web dashboard for gateway management | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `dev` | `CLAUDE.md` |
 | `minion_site/` | Marketing site + members dashboard | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `master` | `CLAUDE.md` |
 | `minion_plugins/` | Claude Code plugin marketplace | — | `main` | — |
-| `docs/` | Agent registry, profiles, docs, sprints | YAML + Markdown | `main` | `CLAUDE.md` |
+| `Minion Docs/` | Agent registry, profiles, docs, sprints (was `docs/`; renamed by Synology Drive sync 2026-08-05) | YAML + Markdown | `main` | `CLAUDE.md` |
 | `paperclip-minion/` | Control plane for AI-agent companies | pnpm, Express, React + Vite, Drizzle + PGlite | `minion-integration` | `AGENTS.md` |
 | `pixel-agents/` | VS Code extension — pixel art office for Claude agents | npm, esbuild, React webview | `main` | `CLAUDE.md` |
 | `ai-studio/` | Research/product studio (AI course workspace) | Docs only | — | `CLAUDE.md` |
@@ -199,7 +199,7 @@ bun run check        # Type-check
 ```
 
 
-### docs/ — Agent Registry + Project Docs
+### Minion Docs/ — Agent Registry + Project Docs
 
 Contains 1,350+ agent definitions across 5 scopes (voltagent, gsd, custom, superpowers, community), deployment profiles, architecture docs, competitive research, and sprint plans.
 
@@ -220,7 +220,7 @@ Paperclip is a control plane for AI-agent companies. Currently on `minion-integr
 **Server**: Express REST API + orchestration services (`server/`).
 **UI**: React + Vite board UI (`ui/`).
 **CLI**: `cli/` — Paperclip CLI tool.
-**Docs**: Mintlify-powered docs (`docs/`).
+**Docs**: Mintlify-powered docs — tracked in the docs project (`Minion Docs/paperclip/`), not in this repo.
 **Tests**: Vitest + Playwright E2E + Promptfoo evals.
 
 ```bash
@@ -251,7 +251,7 @@ Research workspace for an AI course. Docs-only — no production code. Uses the 
 |---|---|
 | `00_START_HERE.md` | Entry point for A3 retention research (March 2026) |
 | `A3_*.md`, `RETENTION_*.md`, `KPI_*.md` | One-time retention benchmark research artifacts |
-| `DOCS/` | Symlink to `~/Documents/VAULT/MINION` |
+| `Minion Docs/` | The docs project (own git repo) — formerly the `DOCS` symlink → `~/Documents/VAULT/MINION`; moved here by Synology Drive sync 2026-08-05. Per-project doc trees live at `Minion Docs/minion_site/` and `Minion Docs/paperclip/` |
 | `agents/` | Empty dir with `.claude/settings.local.json` |
 | `.env` | API keys (Anthropic, OpenRouter, GitHub PAT, gateway token) |
 | `mascot.png` | Project mascot image |
@@ -290,7 +290,7 @@ When sending work to a subproject, always include:
 | Gateway protocol (frame types, events) | `packages/shared/` → `minion_hub/` + `minion_site/` + `paperclip-minion/` (minion_gateway adapter) |
 | Channel extension (new/modify) | `minion/extensions/<channel>/` + `minion/src/channels/` |
 | DB schema change | `minion_hub/src/server/db/schema/` → `minion_site/src/server/db/` (shared DB) |
-| Agent definition format | `docs/agents/` → `minion_hub/` (marketplace) → `minion/` (runtime) |
+| Agent definition format | `Minion Docs/agents/` → `minion_hub/` (marketplace) → `minion/` (runtime) |
 | Auth changes | `minion_hub/src/lib/auth/` ↔ `minion_site/src/lib/auth/` (shared Better Auth) |
 | Workshop/canvas | `minion_hub/src/lib/workshop/` + `minion_hub/src/lib/components/workshop/` |
 | Pixel office | `pixel-agents/src/` (extension) + `pixel-agents/webview-ui/src/` (React) |
