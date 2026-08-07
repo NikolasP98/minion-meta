@@ -307,6 +307,17 @@ When sending work to a subproject, always include:
 - **Git workflow**: Feature branches → dev/DEV → main/master. Use worktrees for isolation. Never commit directly to main.
 - **Multi-agent safety**: Don't touch git stash, worktrees, or switch branches unless explicitly asked. Scope commits to your changes only.
 
+## Browser automation
+
+- Use the `browser-harness` skill for every web interaction. Never launch visible Chromium or use `hyprctl dispatch workspace`, `focuswindow`, `grim`, `wtype`, or `ydotool` for browser inspection unless the user explicitly requests foreground control.
+- The invisible single-agent default is the dedicated headless Chromium at `BU_CDP_URL=http://127.0.0.1:9223`. Run `browser-harness-session background` if it is unavailable; do not fall back to the user's interactive browser.
+- The default local daemon is single-owner. When browser work is concurrent, when the user may need to watch or intervene, or when login is likely, start one isolated Browser Use cloud browser per agent with `browser-harness-session watch minion-<short-unique-task>`. Give the user the printed `LIVE_URL`; never open it automatically.
+- Use the same unique `BU_NAME` prefix on every Browser Harness call for that task. Never share a `BU_NAME`, tab, browser process, or default daemon between concurrent agents. Isolation is per browser, not merely per tab or tab group.
+- At a login, MFA, consent, or ambiguous account gate, pause browser actions, keep the named browser alive, and ask the user to intervene through its `LIVE_URL`. Continue in the same session after the user confirms.
+- Ask before stopping a cloud browser because its live intervention session will end; stop an approved session with `browser-harness-session stop <name>`. Treat live URLs as private ephemeral access links and never commit them.
+- Lightpanda is an explicit opt-in accelerator for DOM-first, screenshot-independent flows only. It is not the default or a drop-in replacement for Chromium: verify the target workflow first, and fall back to isolated Chromium for visual checks, unsupported Web APIs, complex authentication, or user intervention.
+- To redirect an already-running agent, run `browser-harness-session redirect <unique-name>` and send the resulting instruction to that agent. Existing sessions do not automatically reload changed instructions.
+
 ## Environment
 
 Key variables (see `.env.example` in each project):
