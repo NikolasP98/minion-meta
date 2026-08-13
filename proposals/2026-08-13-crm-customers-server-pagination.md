@@ -1,7 +1,7 @@
 ---
 id: 2026-08-13-crm-customers-server-pagination
 title: Wire DataTable server mode for /crm/customers
-status: draft
+status: approved
 created: 2026-08-13
 updated: 2026-08-13
 repos: [minion_hub]
@@ -19,7 +19,7 @@ and memory-heavy. A server-pagination spec already exists
 ## Definition of done
 
 - DataTable on /crm/customers uses server mode (page/size/sort/filter params hit the API).
-- Initial payload ≤ 1 page of rows; sorting on the ICP-fit column stays server-side.
+- Initial payload â¤ 1 page of rows; sorting on the ICP-fit column stays server-side.
 - Existing spec's acceptance criteria pass.
 
 ## Out of scope
