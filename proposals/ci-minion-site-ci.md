@@ -1,7 +1,7 @@
 ---
 id: ci-minion-site-ci
 title: CI red — CI on minion-site master
-status: in-spec
+status: closed
 created: 2026-08-13
 updated: 2026-08-13
 repos: []
@@ -54,3 +54,5 @@ check-and-build	UNKNOWN STEP	2026-08-02T21:24:10.5480933Z [command]/usr/bin/git 
 check-and-build	UNKNOWN STEP	2026-08-02T21:24:10.5967895Z Cleaning up orphan processes
 check-and-build	UNKNOWN STEP	2026-08-02T21:24:10.6377093Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
+
+**Closed 2026-08-13:** definition of done met — latest completed run on the deploy branch is green (fixes merged via minion-ai #211/#212 and minion-site #10).

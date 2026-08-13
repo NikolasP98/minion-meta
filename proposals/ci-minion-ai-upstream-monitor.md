@@ -1,7 +1,7 @@
 ---
 id: ci-minion-ai-upstream-monitor
 title: CI red — Upstream Monitor on minion-ai main
-status: draft
+status: closed
 created: 2026-08-13
 updated: 2026-08-13
 repos: []
@@ -36,3 +36,5 @@ check-upstream	Detect new upstream commits	2026-08-13T17:07:14.5321306Z ##[endgr
 check-upstream	Detect new upstream commits	2026-08-13T17:07:14.5490033Z ##[error]Unable to process file command 'output' successfully.
 check-upstream	Detect new upstream commits	2026-08-13T17:07:14.5500472Z ##[error]Invalid format '0'
 ```
+
+**Closed 2026-08-13:** definition of done met — latest completed run on the deploy branch is green (fixes merged via minion-ai #211/#212 and minion-site #10).
