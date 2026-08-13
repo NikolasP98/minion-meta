@@ -8,7 +8,7 @@ import { parseFrontmatter, STAGES, STATUSES } from './spec-frontmatter.mjs';
 const specs = [];
 const errors = [];
 for (const name of readdirSync('specs')
-	.filter((f) => f.endsWith('.md') && f !== 'TEMPLATE.md')
+	.filter((f) => f.endsWith('.md') && f !== 'TEMPLATE.md' && !f.endsWith('.review.md'))
 	.sort()) {
 	const parsed = parseFrontmatter(readFileSync(`specs/${name}`, 'utf8'));
 	if (!parsed) {
