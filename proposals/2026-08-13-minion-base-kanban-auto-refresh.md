@@ -1,10 +1,11 @@
 ---
 id: 2026-08-13-minion-base-kanban-auto-refresh
 title: Kanban board auto-refresh on a 5-minute visible-tab interval
-status: approved
+status: in-spec
 created: 2026-08-13
 updated: 2026-08-13
 repos: [minion-base]
+spawned_spec: 2026-08-13-minion-base-kanban-auto-refresh-spec
 ---
 
 # Kanban board auto-refresh on a 5-minute visible-tab interval
