@@ -2,7 +2,7 @@
 id: 2026-08-13-minion-base-kanban-auto-refresh-spec
 title: "minion-base /kanban — visible-tab auto-refresh + live refreshed-ago label"
 stage: spec
-status: draft
+status: approved
 pass: 2
 created: 2026-08-13
 updated: 2026-08-13
