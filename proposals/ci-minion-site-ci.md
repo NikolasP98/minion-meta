@@ -1,10 +1,11 @@
 ---
 id: ci-minion-site-ci
 title: CI red — CI on minion-site master
-status: approved
+status: in-spec
 created: 2026-08-13
 updated: 2026-08-13
 repos: []
+spawned_spec: 2026-08-13-ci-minion-site-ci-spec
 ---
 
 # CI red — CI on NikolasP98/minion-site@master
