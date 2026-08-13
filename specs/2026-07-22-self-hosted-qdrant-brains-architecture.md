@@ -1,3 +1,14 @@
+---
+id: 2026-07-22-self-hosted-qdrant-brains-architecture
+title: Self-hosted Qdrant for Unified Brains
+stage: spec
+status: draft
+pass: 1
+created: 2026-07-22
+updated: 2026-07-30
+repos: [minion]
+---
+
 # Self-hosted Qdrant for Unified Brains
 
 **Date:** 2026-07-22  

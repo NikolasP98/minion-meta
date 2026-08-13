@@ -1,3 +1,14 @@
+---
+id: 2026-05-24-unified-user-identities-p3-wiring-plan
+title: P3 Live-Turn Credential Wiring — Implementation Plan
+stage: spec
+status: unknown
+pass: 1
+created: 2026-05-24
+updated: 2026-05-24
+repos: [minion-meta]
+---
+
 # P3 Live-Turn Credential Wiring — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development or superpowers:executing-plans to implement this task-by-task. Steps use checkbox (`- [ ]`) syntax. **This plan edits the LIVE agent-turn path — every task ends green (tsgo + targeted vitest) and commits atomically. Do not deploy to netcup until the prerequisite below is satisfied and the E2E (Task 8) passes locally.**

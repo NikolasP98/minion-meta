@@ -1,3 +1,14 @@
+---
+id: 2026-07-22-personal-org-differentiation-spec
+title: Personal Org Differentiation — Spec (v2)
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-22
+updated: 2026-07-30
+repos: [minion-meta]
+---
+
 # Personal Org Differentiation — Spec (v2)
 
 Date: 2026-07-22

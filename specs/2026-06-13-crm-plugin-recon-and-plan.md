@@ -1,3 +1,14 @@
+---
+id: 2026-06-13-crm-plugin-recon-and-plan
+title: CRM Plugin — Recon + Implementation Plan (v2)
+stage: done
+status: shipped
+pass: 1
+created: 2026-06-13
+updated: 2026-06-13
+repos: [minion_hub]
+---
+
 # CRM Plugin — Recon + Implementation Plan (v2)
 
 **Date:** 2026-06-13 (v2 rewrite after design review + new requirements)

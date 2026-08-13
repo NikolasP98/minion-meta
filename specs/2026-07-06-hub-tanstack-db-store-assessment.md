@@ -1,3 +1,14 @@
+---
+id: 2026-07-06-hub-tanstack-db-store-assessment
+title: "Hub — TanStack DB + Store fit assessment: WAIT / SKIP"
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-06
+updated: 2026-07-15
+repos: [minion_hub]
+---
+
 # Hub — TanStack DB + Store fit assessment: WAIT / SKIP
 
 **Date:** 2026-07-06

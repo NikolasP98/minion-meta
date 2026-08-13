@@ -1,3 +1,14 @@
+---
+id: 2026-07-17-ig-ad-attribution-spec
+title: IG Ad Attribution — Spec (2026-07-17)
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-17
+updated: 2026-07-19
+repos: [minion-meta]
+---
+
 # IG Ad Attribution — Spec (2026-07-17)
 
 Link every Instagram DM lead to the ad/campaign (or organic origin) that drove it, to measure true ad performance. One canonical schema across **both** collection surfaces: retroactive **backfill** (heuristic) and going-forward **webhook** (exact). Backfill must be shape-identical to what the webhook populates.

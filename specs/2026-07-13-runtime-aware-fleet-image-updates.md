@@ -1,3 +1,14 @@
+---
+id: 2026-07-13-runtime-aware-fleet-image-updates
+title: Runtime-Aware Fleet and Swarm Image Updates
+stage: done
+status: shipped
+pass: 1
+created: 2026-07-13
+updated: 2026-07-13
+repos: [minion-meta]
+---
+
 # Runtime-Aware Fleet and Swarm Image Updates
 
 **Date:** 2026-07-13  

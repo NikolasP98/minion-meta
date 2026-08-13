@@ -1,3 +1,14 @@
+---
+id: 2026-06-26-gateway-config-db-migration-plan
+title: "Gateway Config: `gateway.json` → DB Migration Plan"
+stage: done
+status: shipped
+pass: 1
+created: 2026-06-26
+updated: 2026-06-27
+repos: [minion]
+---
+
 # Gateway Config: `gateway.json` → DB Migration Plan
 
 **Date:** 2026-06-26

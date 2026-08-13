@@ -1,3 +1,14 @@
+---
+id: 2026-07-19-pos-stock-split-implementation-spec
+title: "POS ⇄ Stock Split — Implementation Spec (tasks #10–#13)"
+stage: dev
+status: implementing
+pass: 1
+created: 2026-07-19
+updated: 2026-07-30
+repos: [minion_hub]
+---
+
 # POS ⇄ Stock Split — Implementation Spec (tasks #10–#13)
 
 **Date:** 2026-07-19 · **Status:** SPEC → implementing · **Branch:** hub `dev`

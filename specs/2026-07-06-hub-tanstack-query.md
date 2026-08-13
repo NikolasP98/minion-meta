@@ -1,3 +1,14 @@
+---
+id: 2026-07-06-hub-tanstack-query
+title: Hub — TanStack Query adoption (mutations + out-of-load client reads)
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-06
+updated: 2026-07-15
+repos: [minion_hub]
+---
+
 # Hub — TanStack Query adoption (mutations + out-of-load client reads)
 
 **Date:** 2026-07-06

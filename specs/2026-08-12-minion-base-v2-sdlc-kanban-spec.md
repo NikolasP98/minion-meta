@@ -1,3 +1,14 @@
+---
+id: 2026-08-12-minion-base-v2-sdlc-kanban-spec
+title: minion-base v2 — SDLC Kanban, Practices Codex, Agentic-Dev Research
+stage: dev
+status: implementing
+pass: 1
+created: 2026-08-12
+updated: 2026-08-12
+repos: [minion-base]
+---
+
 # minion-base v2 — SDLC Kanban, Practices Codex, Agentic-Dev Research
 
 **Date:** 2026-08-12 · **Repo:** `NikolasP98/minion-base` (private, `main` → Vercel → base.minion-ai.org) · **Status:** implementing

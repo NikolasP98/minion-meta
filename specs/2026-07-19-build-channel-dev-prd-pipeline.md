@@ -1,3 +1,14 @@
+---
+id: 2026-07-19-build-channel-dev-prd-pipeline
+title: "Build channels (DEV/PRD): protopi dev gateway, dual-channel CI, build picker, version-compat gate"
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-19
+updated: 2026-07-19
+repos: [minion]
+---
+
 # Build channels (DEV/PRD): protopi dev gateway, dual-channel CI, build picker, version-compat gate
 
 Date: 2026-07-19

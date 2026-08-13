@@ -1,3 +1,14 @@
+---
+id: 2026-07-10-gateway-update-rollout-runbook
+title: Gateway Update System — Rollout Runbook (Task 10)
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-10
+updated: 2026-07-10
+repos: [minion]
+---
+
 # Gateway Update System — Rollout Runbook (Task 10)
 
 **Date:** 2026-07-10 · **Spec:** `specs/2026-07-10-gateway-update-system.md` · **Code:** gw DEV `c3c3a868b`, hub dev `e462761f` (both reviewed & approved, nothing pushed)

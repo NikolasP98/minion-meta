@@ -1,3 +1,14 @@
+---
+id: 2026-08-12-minion-factory-agent-pipeline-spec
+title: minion-factory — Containerized Agent Development Pipeline on Netcup
+stage: dev
+status: implementing
+pass: 1
+created: 2026-08-12
+updated: 2026-08-12
+repos: [minion-factory]
+---
+
 # minion-factory — Containerized Agent Development Pipeline on Netcup
 
 **Date:** 2026-08-12 · **Repo:** `NikolasP98/minion-factory` (new, private) · **Runs on:** Netcup box (Docker) · **Status:** implementing

@@ -1,3 +1,14 @@
+---
+id: 2026-07-22-hub-routing-simplification-spec
+title: Hub Routing Simplification — Spec (v2)
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-22
+updated: 2026-07-30
+repos: [minion_hub]
+---
+
 # Hub Routing Simplification — Spec (v2)
 
 Date: 2026-07-22

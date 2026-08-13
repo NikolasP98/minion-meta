@@ -1,3 +1,14 @@
+---
+id: 2026-05-29-flow-testrun-prod
+title: Flow "Test Run" in prod — implementation spec (2026-05-29)
+stage: spec
+status: unknown
+pass: 1
+created: 2026-05-29
+updated: 2026-05-30
+repos: [minion-meta]
+---
+
 # Flow "Test Run" in prod — implementation spec (2026-05-29)
 
 Context: the hub "Test Run" fails in prod with `Could not reach flow runner at

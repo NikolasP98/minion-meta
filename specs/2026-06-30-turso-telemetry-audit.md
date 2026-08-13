@@ -1,3 +1,14 @@
+---
+id: 2026-06-30-turso-telemetry-audit
+title: Turso → "telemetry only" audit + `/api/jobs/tick` cron handoff
+stage: spec
+status: unknown
+pass: 1
+created: 2026-06-30
+updated: 2026-06-30
+repos: [minion-meta]
+---
+
 # Turso → "telemetry only" audit + `/api/jobs/tick` cron handoff
 
 **Date:** 2026-06-30

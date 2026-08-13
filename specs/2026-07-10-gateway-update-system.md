@@ -1,3 +1,14 @@
+---
+id: 2026-07-10-gateway-update-system
+title: Gateway Update System — Design Spec
+stage: spec
+status: approved
+pass: 1
+created: 2026-07-10
+updated: 2026-07-10
+repos: [minion]
+---
+
 # Gateway Update System — Design Spec
 
 **Date:** 2026-07-10

@@ -1,3 +1,14 @@
+---
+id: 2026-06-14-plugin-ui-cdn-caching-design
+title: Plugin UI — CDN + Caching Design
+stage: done
+status: shipped
+pass: 1
+created: 2026-06-14
+updated: 2026-06-15
+repos: [minion-meta]
+---
+
 # Plugin UI — CDN + Caching Design
 
 **Date:** 2026-06-14

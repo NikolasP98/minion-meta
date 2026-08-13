@@ -1,3 +1,14 @@
+---
+id: 2026-07-05-meta-post-thumbnail-mirroring
+title: Meta Post Thumbnail Mirroring → B2 blob storage
+stage: spec
+status: approved
+pass: 1
+created: 2026-07-05
+updated: 2026-07-15
+repos: [minion_hub]
+---
+
 # Meta Post Thumbnail Mirroring → B2 blob storage
 
 **Status:** APPROVED — v2 2026-07-05 (provider-agnostic storage + caching added per review; open questions resolved by owner judgment)

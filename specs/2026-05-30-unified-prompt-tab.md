@@ -1,3 +1,14 @@
+---
+id: 2026-05-30-unified-prompt-tab
+title: Unified Prompt Tab — UX Council Design Spec
+stage: spec
+status: unknown
+pass: 1
+created: 2026-05-30
+updated: 2026-05-30
+repos: [minion-meta]
+---
+
 # Unified Prompt Tab — UX Council Design Spec
 
 **Date:** 2026-05-30

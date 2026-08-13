@@ -1,3 +1,14 @@
+---
+id: 2026-07-17-pulse-slice1-plan
+title: Pulse Slice 1 Implementation Plan
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-17
+updated: 2026-07-17
+repos: [minion-meta]
+---
+
 # Pulse Slice 1 Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

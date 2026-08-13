@@ -1,3 +1,14 @@
+---
+id: 2026-05-27-whatsapp-qr-pairing
+title: WhatsApp QR Pairing — Hub feature + the 515 relink issue
+stage: done
+status: shipped
+pass: 1
+created: 2026-05-27
+updated: 2026-05-28
+repos: [minion]
+---
+
 # WhatsApp QR Pairing — Hub feature + the 515 relink issue
 
 **Date:** 2026-05-27

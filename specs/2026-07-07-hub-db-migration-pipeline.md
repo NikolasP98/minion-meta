@@ -1,3 +1,14 @@
+---
+id: 2026-07-07-hub-db-migration-pipeline
+title: Hub DB migration pipeline — automate the manual psql workflow
+stage: done
+status: shipped
+pass: 1
+created: 2026-07-07
+updated: 2026-07-07
+repos: [minion_hub]
+---
+
 # Hub DB migration pipeline — automate the manual psql workflow
 
 **Date:** 2026-07-07 · **Scope:** `minion_hub` Supabase (Postgres) migrations · **Status:** built + validated against prod

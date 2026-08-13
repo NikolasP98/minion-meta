@@ -1,3 +1,14 @@
+---
+id: 2026-06-13-plugin-sdk-recon-and-improvement-report
+title: Plugin SDK Recon & Improvement Report
+stage: spec
+status: unknown
+pass: 1
+created: 2026-06-13
+updated: 2026-06-16
+repos: [minion-meta]
+---
+
 # Plugin SDK Recon & Improvement Report
 
 **Date:** 2026-06-13

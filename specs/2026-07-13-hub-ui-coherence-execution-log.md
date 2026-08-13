@@ -1,3 +1,14 @@
+---
+id: 2026-07-13-hub-ui-coherence-execution-log
+title: Minion Hub UI Coherence — Execution Log
+stage: done
+status: shipped
+pass: 1
+created: 2026-07-13
+updated: 2026-07-14
+repos: [minion_hub]
+---
+
 # Minion Hub UI Coherence — Execution Log
 
 **Date:** 2026-07-13

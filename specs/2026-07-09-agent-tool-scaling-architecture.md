@@ -1,3 +1,14 @@
+---
+id: 2026-07-09-agent-tool-scaling-architecture
+title: Agent Tool Architecture v2 — JIT + RBAC + SDK — Implementation Spec
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-09
+updated: 2026-07-10
+repos: [minion-meta]
+---
+
 # Agent Tool Architecture v2 — JIT + RBAC + SDK — Implementation Spec
 
 **Date:** 2026-07-09 (v2, supersedes the v1 draft in this file)

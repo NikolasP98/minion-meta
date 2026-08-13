@@ -1,3 +1,14 @@
+---
+id: 2026-08-13-minion-factory-staged-harness-spec
+title: minion-factory v2 — Staged Runs with Per-Stage Harness/Model Pickers
+stage: dev
+status: implementing
+pass: 1
+created: 2026-08-13
+updated: 2026-08-13
+repos: [minion-factory]
+---
+
 # minion-factory v2 — Staged Runs with Per-Stage Harness/Model Pickers
 
 **Date:** 2026-08-13 · **Extends:** `2026-08-12-minion-factory-agent-pipeline-spec.md` · **Status:** implementing
