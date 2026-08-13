@@ -1,3 +1,14 @@
+---
+id: 2026-07-25-faces-catalog-cleanup-report
+title: FACES catalog cleanup — findings report
+stage: done
+status: shipped
+pass: 1
+created: 2026-07-25
+updated: 2026-07-30
+repos: [minion-meta]
+---
+
 # FACES catalog cleanup — findings report
 
 **Date:** 2026-07-25 · **Org:** `21e0601b-f632-43fd-8414-d644af4271f4`

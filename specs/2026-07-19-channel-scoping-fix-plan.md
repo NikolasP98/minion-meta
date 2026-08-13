@@ -1,3 +1,14 @@
+---
+id: 2026-07-19-channel-scoping-fix-plan
+title: Channel Scoping Fix — sequenced plan
+stage: spec
+status: draft
+pass: 1
+created: 2026-07-19
+updated: 2026-07-19
+repos: [minion]
+---
+
 # Channel Scoping Fix — sequenced plan
 
 **Date:** 2026-07-19

@@ -1,3 +1,14 @@
+---
+id: 2026-05-25-auth-supabase-phase1-oauth-users-plan
+title: Phase 1a — Supabase Google OAuth IdP + Canonical User/Identity Tables Implementation Plan
+stage: spec
+status: unknown
+pass: 1
+created: 2026-05-25
+updated: 2026-05-25
+repos: [minion-base]
+---
+
 # Phase 1a — Supabase Google OAuth IdP + Canonical User/Identity Tables Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

@@ -1,3 +1,14 @@
+---
+id: 2026-07-17-dashboard-kpi-popover-2step-spec
+title: Dashboard KPI Popover — 2-Step (hover → click) Design Spec
+stage: spec
+status: draft
+pass: 1
+created: 2026-07-17
+updated: 2026-07-17
+repos: [minion-meta]
+---
+
 # Dashboard KPI Popover — 2-Step (hover → click) Design Spec
 
 **Date:** 2026-07-17 · **Status:** DESIGN (implement after the reliability KpiRow refactor lands) · **Scope:** minion_hub dashboards

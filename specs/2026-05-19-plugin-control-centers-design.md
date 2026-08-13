@@ -1,3 +1,14 @@
+---
+id: 2026-05-19-plugin-control-centers-design
+title: Plugin Control Centers — Design
+stage: spec
+status: approved
+pass: 1
+created: 2026-05-19
+updated: 2026-05-20
+repos: [minion-meta]
+---
+
 # Plugin Control Centers — Design
 
 **Date:** 2026-05-19

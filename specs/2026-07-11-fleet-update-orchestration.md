@@ -1,3 +1,14 @@
+---
+id: 2026-07-11-fleet-update-orchestration
+title: Fleet Update Orchestration — drain-aware sequential rollout
+stage: spec
+status: approved
+pass: 1
+created: 2026-07-11
+updated: 2026-07-15
+repos: [minion-meta]
+---
+
 # Fleet Update Orchestration — drain-aware sequential rollout
 
 **Date:** 2026-07-11

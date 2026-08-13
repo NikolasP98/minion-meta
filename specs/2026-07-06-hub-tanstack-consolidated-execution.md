@@ -1,3 +1,14 @@
+---
+id: 2026-07-06-hub-tanstack-consolidated-execution
+title: Hub — TanStack consolidated execution plan (Virtual + Query + Pacer + AI-cleanup)
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-06
+updated: 2026-07-15
+repos: [minion_hub]
+---
+
 # Hub — TanStack consolidated execution plan (Virtual + Query + Pacer + AI-cleanup)
 
 **Date:** 2026-07-06 · **Repo:** `minion_hub/` (SvelteKit 2, Svelte 5 runes, Bun, branch `dev`)

@@ -1,3 +1,14 @@
+---
+id: 2026-07-06-hub-tanstack-ai-assessment
+title: "Hub — TanStack AI fit assessment: DO NOT ADOPT (+ the real work it surfaced)"
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-06
+updated: 2026-07-15
+repos: [minion_hub]
+---
+
 # Hub — TanStack AI fit assessment: DO NOT ADOPT (+ the real work it surfaced)
 
 **Date:** 2026-07-06

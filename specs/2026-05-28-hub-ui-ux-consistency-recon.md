@@ -1,3 +1,14 @@
+---
+id: 2026-05-28-hub-ui-ux-consistency-recon
+title: Hub UI/UX Consistency Recon — 2026-05-28
+stage: spec
+status: unknown
+pass: 1
+created: 2026-05-28
+updated: 2026-05-28
+repos: [minion_hub]
+---
+
 # Hub UI/UX Consistency Recon — 2026-05-28
 
 Multi-specialist UX audit of `minion_hub/` (SvelteKit 2 + Svelte 5 + Tailwind 4, dark, 55+ routes). Two parallel Explore agents mapped the design system and interaction patterns; five UX specialists analyzed in parallel; a PM aggregator synthesized.

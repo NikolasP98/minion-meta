@@ -1,3 +1,14 @@
+---
+id: 2026-07-25-nats-jetstream-event-plane-implementation-spec
+title: NATS JetStream event plane — implementation and production rollout
+stage: spec
+status: approved
+pass: 1
+created: 2026-07-25
+updated: 2026-07-30
+repos: [minion]
+---
+
 # NATS JetStream event plane — implementation and production rollout
 
 **Date:** 2026-07-25  

@@ -1,3 +1,14 @@
+---
+id: 2026-05-22-gateway-turn-recovery
+title: Gateway Turn Recovery
+stage: spec
+status: draft
+pass: 1
+created: 2026-05-22
+updated: 2026-05-28
+repos: [minion]
+---
+
 # Gateway Turn Recovery
 
 **Status:** Draft → ready for implementation

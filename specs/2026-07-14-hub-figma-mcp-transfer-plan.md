@@ -1,3 +1,14 @@
+---
+id: 2026-07-14-hub-figma-mcp-transfer-plan
+title: Hub → Figma MCP transfer execution plan (2026-07-14)
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-14
+updated: 2026-07-15
+repos: [minion_hub]
+---
+
 # Hub → Figma MCP transfer execution plan (2026-07-14)
 
 Continues `specs/2026-07-13-hub-figma-screen-coverage-ledger.md`. Goal: transfer the full

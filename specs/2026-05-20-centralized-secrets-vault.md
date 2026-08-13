@@ -1,3 +1,14 @@
+---
+id: 2026-05-20-centralized-secrets-vault
+title: Centralized Secrets Vault Implementation Plan
+stage: spec
+status: unknown
+pass: 1
+created: 2026-05-20
+updated: 2026-05-20
+repos: [minion-meta]
+---
+
 # Centralized Secrets Vault Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

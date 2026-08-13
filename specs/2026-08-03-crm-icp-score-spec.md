@@ -1,3 +1,14 @@
+---
+id: 2026-08-03-crm-icp-score-spec
+title: CRM — Per-Org Ideal Customer Profile (ICP) Score
+stage: spec
+status: draft
+pass: 1
+created: 2026-08-03
+updated: 2026-08-03
+repos: [minion_hub]
+---
+
 # CRM — Per-Org Ideal Customer Profile (ICP) Score
 
 **Date:** 2026-08-03

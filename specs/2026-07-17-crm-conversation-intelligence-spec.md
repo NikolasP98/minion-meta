@@ -1,3 +1,14 @@
+---
+id: 2026-07-17-crm-conversation-intelligence-spec
+title: CRM Conversation Intelligence — Spec & Parallel Execution Plan
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-17
+updated: 2026-07-19
+repos: [minion_hub]
+---
+
 # CRM Conversation Intelligence — Spec & Parallel Execution Plan
 
 **Date:** 2026-07-17

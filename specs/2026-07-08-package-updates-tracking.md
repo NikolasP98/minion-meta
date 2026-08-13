@@ -1,3 +1,14 @@
+---
+id: 2026-07-08-package-updates-tracking
+title: Package Update Campaign — Tracking Table
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-08
+updated: 2026-07-15
+repos: [minion-meta]
+---
+
 # Package Update Campaign — Tracking Table
 
 **Started:** 2026-07-08 · **Repos:** `minion_hub/` (Bun/SvelteKit), `minion/` (pnpm gateway monorepo)

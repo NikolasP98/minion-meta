@@ -1,3 +1,14 @@
+---
+id: 2026-07-13-hub-ui-coherence-implementation-spec
+title: Minion Hub UI Coherence Implementation Spec
+stage: done
+status: shipped
+pass: 1
+created: 2026-07-13
+updated: 2026-07-14
+repos: [minion_hub]
+---
+
 # Minion Hub UI Coherence Implementation Spec
 
 **Date:** 2026-07-13

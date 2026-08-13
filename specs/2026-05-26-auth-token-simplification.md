@@ -1,3 +1,14 @@
+---
+id: 2026-05-26-auth-token-simplification
+title: Auth & Token Validation — Simplification Report
+stage: spec
+status: unknown
+pass: 1
+created: 2026-05-26
+updated: 2026-05-28
+repos: [minion-meta]
+---
+
 # Auth & Token Validation — Simplification Report
 
 **Date:** 2026-05-26

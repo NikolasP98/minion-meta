@@ -1,3 +1,14 @@
+---
+id: 2026-05-22-document-ingestion
+title: Document Ingestion Spec
+stage: spec
+status: review
+pass: 1
+created: 2026-05-22
+updated: 2026-05-28
+repos: [minion-meta]
+---
+
 # Document Ingestion Spec
 
 **Author**: nikolas (drafted by Claude)

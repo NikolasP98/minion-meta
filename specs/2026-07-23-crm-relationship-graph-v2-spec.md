@@ -1,3 +1,14 @@
+---
+id: 2026-07-23-crm-relationship-graph-v2-spec
+title: CRM Relationship Graph v2 — Real Relationships (Spec v2)
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-23
+updated: 2026-07-30
+repos: [minion_hub]
+---
+
 # CRM Relationship Graph v2 — Real Relationships (Spec v2)
 
 Date: 2026-07-23

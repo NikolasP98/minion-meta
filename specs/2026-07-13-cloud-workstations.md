@@ -1,3 +1,14 @@
+---
+id: 2026-07-13-cloud-workstations
+title: Reproducible Cloud Workstations
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-13
+updated: 2026-07-14
+repos: [minion-meta]
+---
+
 # Reproducible Cloud Workstations
 
 **Status:** Implemented and live-validated on exe.dev

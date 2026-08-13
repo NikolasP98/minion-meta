@@ -1,3 +1,14 @@
+---
+id: 2026-07-05-instagram-login-integration
+title: Instagram API with Instagram Login — Implementation Blueprint
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-05
+updated: 2026-07-15
+repos: [minion-meta]
+---
+
 # Instagram API with Instagram Login — Implementation Blueprint
 
 Status: DESIGN (no code written). Grounds a second, independent Meta auth family

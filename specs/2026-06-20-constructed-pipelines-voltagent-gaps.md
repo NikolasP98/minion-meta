@@ -1,3 +1,14 @@
+---
+id: 2026-06-20-constructed-pipelines-voltagent-gaps
+title: Constructed Pipelines — Closing Minion's Dead-Ends (VoltAgent gap analysis)
+stage: spec
+status: draft
+pass: 1
+created: 2026-06-20
+updated: 2026-06-21
+repos: [minion-meta]
+---
+
 # Constructed Pipelines — Closing Minion's Dead-Ends (VoltAgent gap analysis)
 
 **Status:** draft · **Date:** 2026-06-20 · **Author:** orchestrator recon

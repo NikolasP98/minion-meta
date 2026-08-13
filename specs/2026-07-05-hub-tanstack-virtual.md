@@ -1,3 +1,14 @@
+---
+id: 2026-07-05-hub-tanstack-virtual
+title: Hub — TanStack Virtual adoption (list/table/grid virtualization)
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-05
+updated: 2026-07-15
+repos: [minion_hub]
+---
+
 # Hub — TanStack Virtual adoption (list/table/grid virtualization)
 
 **Date:** 2026-07-05
