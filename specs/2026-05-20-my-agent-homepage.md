@@ -2,10 +2,10 @@
 id: 2026-05-20-my-agent-homepage
 title: /my-agent Homepage — Design
 stage: spec
-status: review
+status: shipped
 pass: 1
 created: 2026-05-20
-updated: 2026-05-20
+updated: 2026-08-13
 repos: [minion-meta]
 ---
 

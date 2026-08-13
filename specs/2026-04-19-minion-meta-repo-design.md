@@ -2,10 +2,10 @@
 id: 2026-04-19-minion-meta-repo-design
 title: Minion Meta-Repo — Design Spec
 stage: spec
-status: approved
+status: shipped
 pass: 1
 created: 2026-04-19
-updated: 2026-05-20
+updated: 2026-08-13
 repos: [minion-meta]
 ---
 

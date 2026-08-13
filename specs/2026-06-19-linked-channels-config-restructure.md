@@ -2,10 +2,10 @@
 id: 2026-06-19-linked-channels-config-restructure
 title: Linked-Channel Configuration Restructure
 stage: spec
-status: draft
+status: rejected
 pass: 1
 created: 2026-06-19
-updated: 2026-06-19
+updated: 2026-08-13
 repos: [minion]
 ---
 
