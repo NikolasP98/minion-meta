@@ -2,10 +2,10 @@
 id: 2026-04-21-triage-executor-adapter-design
 title: Triage + Executor Adapter Architecture
 stage: spec
-status: approved
+status: superseded
 pass: 1
 created: 2026-04-21
-updated: 2026-04-21
+updated: 2026-08-13
 repos: [minion-meta]
 ---
 

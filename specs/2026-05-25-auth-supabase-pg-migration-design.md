@@ -2,10 +2,10 @@
 id: 2026-05-25-auth-supabase-pg-migration-design
 title: Auth → Supabase Cloud + PG-First Data Migration
 stage: spec
-status: approved
+status: shipped
 pass: 1
 created: 2026-05-25
-updated: 2026-05-25
+updated: 2026-08-13
 repos: [minion-base]
 ---
 

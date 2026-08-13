@@ -2,10 +2,10 @@
 id: 2026-08-03-crm-relationship-graph-v2-port-spec
 title: CRM Relationship Graph v2 — Port to `master` (branch slice 4/5)
 stage: spec
-status: draft
+status: shipped
 pass: 1
 created: 2026-08-03
-updated: 2026-08-03
+updated: 2026-08-13
 repos: [minion_hub]
 ---
 

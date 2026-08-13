@@ -2,10 +2,10 @@
 id: 2026-06-14-workforce-org-company-bridge-design
 title: Workforce ↔ Gateway Org Bridge — Design
 stage: spec
-status: draft
+status: shipped
 pass: 1
 created: 2026-06-14
-updated: 2026-06-14
+updated: 2026-08-13
 repos: [minion-meta]
 ---
 
