@@ -2,10 +2,10 @@
 id: 2026-07-11-universal-projects-module
 title: Universal Projects Module — Portfolio → Project → Pipeline
 stage: spec
-status: approved
+status: shipped
 pass: 1
 created: 2026-07-11
-updated: 2026-07-11
+updated: 2026-08-13
 repos: [minion-meta]
 ---
 

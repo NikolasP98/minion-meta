@@ -2,10 +2,10 @@
 id: 2026-05-22-gateway-turn-recovery
 title: Gateway Turn Recovery
 stage: spec
-status: draft
+status: shipped
 pass: 1
 created: 2026-05-22
-updated: 2026-05-28
+updated: 2026-08-13
 repos: [minion]
 ---
 
