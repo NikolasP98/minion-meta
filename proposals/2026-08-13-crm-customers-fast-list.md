@@ -1,10 +1,11 @@
 ---
 id: 2026-08-13-crm-customers-fast-list
 title: Make the CRM customer list fast for large orgs
-status: draft
+status: review
 created: 2026-08-13
 updated: 2026-08-13
 repos: [minion_hub]
+duplicate_candidate: 2026-08-13-crm-customers-server-pagination
 ---
 
 # Make the CRM customer list fast for large orgs
