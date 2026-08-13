@@ -3,11 +3,11 @@ id: 2026-08-13-ci-minion-site-ci-spec
 title: "CI red — keep minion-site@master green (env registry, local parity, red-visibility)"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-13
 updated: 2026-08-13
 proposal: ci-minion-site-ci
-verdict: pending
+verdict: approved
 repos: [minion_site]
 type: infra
 ---
@@ -15,7 +15,7 @@ type: infra
 # CI red — keep `NikolasP98/minion-site@master` green
 
 **Owner surface:** `minion_site` — `.github/workflows/ci.yml`, `git-hooks/pre-push`,
-`.env.example`, `package.json`
+`.env.example`, `package.json`, `scripts/check-public-env.mjs`, `CLAUDE.md`
 **Target repo:** `NikolasP98/minion-site` (private, default branch `master`; the meta-repo
 does not check this subproject out — see §1)
 **Decision required by the proposal ("the fix may be code, CI config, or retiring the
@@ -198,8 +198,9 @@ this one drifted for 3.5 months. The third import to be added will drift it agai
   - use the value from `.env.example` when it is non-empty (so the real, already-public
     Supabase project URL keeps being used),
   - otherwise synthesize `ci-placeholder-<lowercased-name>`.
-  - Emit one `NAME=value` line per var and echo the resolved **names** (never values) to the
-    log so a future failure is one glance to diagnose.
+  - Emit one `NAME=value` line per var into `$GITHUB_ENV`, and separately echo one
+    `public env: <NAME>` line per var (name only, never the value) to the step's stdout so a
+    future failure is one glance to diagnose.
 - Add `scripts/check-public-env.mjs`: parse every `import { … } from '$env/static/public'`
   in `src/`, collect the imported identifiers, and exit 1 listing any that `.env.example`
   does not declare. Message must name the file, the identifier, and the fix
@@ -234,7 +235,7 @@ rg -n 'PUBLIC_SUPABASE_ANON_KEY' .github/workflows/ci.yml   # zero matches
 # 4. The derived env is actually applied — the CI log lists the names it exported
 gh run view <run-id> -R NikolasP98/minion-site --log \
   | grep -E 'public env: PUBLIC_SUPABASE_URL' 
-gh run view <run-id> -R NikolasP98/minion-site --log | grep -vq 'ci-placeholder-anon-key'  # values not echoed
+gh run view <run-id> -R NikolasP98/minion-site --log | grep -vq 'ci-placeholder-public_supabase_anon_key'  # values not echoed
 
 # 5. Nothing regressed
 bun run check && bun run build
@@ -305,8 +306,9 @@ bun run ci:local; test $? -ne 0
 bun run ci:local 2>&1 | grep -q '__fmt_probe.ts'
 rm src/lib/__fmt_probe.ts
 
-# postinstall is inert outside a work tree
-mkdir -p /tmp/notgit && cd /tmp/notgit && npm pack /tmp/ms >/dev/null 2>&1 || true   # must not hang/fail CI
+# postinstall is inert outside a work tree (npm pack does not run postinstall, so exercise it directly)
+rm -rf /tmp/notgit && cp -r /tmp/ms /tmp/notgit && rm -rf /tmp/notgit/.git
+cd /tmp/notgit && bun install --frozen-lockfile   # must not fail: postinstall no-ops without a .git dir
 ```
 
 **Estimate:** 4–5 h.
@@ -377,6 +379,11 @@ be a required check, so it must be a notification the repo itself emits.
 - Add the mirror: on a green `master` run, if an open `ci-red` issue exists, comment the
   green run URL and close it. A signal that never clears gets muted.
 - Keep it inside `ci.yml` — a separate workflow file is a fourth thing to keep in sync.
+- Add a `workflow_dispatch` trigger with one input, `force_fail` (boolean, default `false`).
+  When `true`, `check-and-build` fails deterministically (e.g. a step that runs
+  `exit 1` gated on the input) before its normal work. This is the only way to exercise
+  `notify-red` without actually breaking `master`'s real CI — see the DoD below and the
+  ⚠️ note on removing/keeping it.
 - Document in `CLAUDE.md`: an open `ci-red` issue means **do not merge to master**. That is
   the enforcement A1 leaves us with, and it should be written down rather than assumed.
 
@@ -530,15 +537,20 @@ bun install --frozen-lockfile && bun run ci:local     # exit 0
 test "$(git config --get core.hooksPath)" = "git-hooks"
 
 # 4. Regression proof — the reported failure class cannot come back silently.
-#    On a scratch branch: add a real import of an undeclared PUBLIC_ var, push, observe CI
-#    fail at `check:env` with the variable name in the message (NOT at svelte-check with
-#    "has no exported member"), then delete the branch.
+#    On a scratch branch: add a real import of an undeclared PUBLIC_ var, push, open a PR
+#    (S3 scopes ci.yml's push trigger to [master, main, dev] — an arbitrary branch push
+#    alone will not fire it; a PR targeting dev/master does, via the pull_request trigger),
+#    observe CI fail at `check:env` with the variable name in the message (NOT at
+#    svelte-check with "has no exported member"), then close the PR and delete the branch.
 git checkout -b ci-probe/undeclared-public-env
 printf "import { PUBLIC_PROBE_ONLY } from '\$env/static/public';\nexport const p = PUBLIC_PROBE_ONLY;\n" > src/lib/__ci_probe.ts
 git add -A && git commit -m "test: CI probe — undeclared public env (revert)" && git push -u origin HEAD
+gh pr create -R NikolasP98/minion-site --base dev --head ci-probe/undeclared-public-env \
+  --title "test: CI probe (revert)" --body "Regression proof for check:env — closes without merge."
 gh run watch -R NikolasP98/minion-site "$(gh run list -R NikolasP98/minion-site -b ci-probe/undeclared-public-env -L1 --json databaseId --jq '.[0].databaseId')"
 gh run view <probe-run-id> -R NikolasP98/minion-site --log | grep -q 'PUBLIC_PROBE_ONLY'
 gh run view <probe-run-id> -R NikolasP98/minion-site --log | grep -vq 'has no exported member'
+gh pr close -R NikolasP98/minion-site ci-probe/undeclared-public-env
 git push origin --delete ci-probe/undeclared-public-env && git checkout master && git branch -D ci-probe/undeclared-public-env
 
 # 5. Visibility proof — a red master surfaces (S4 DoD's workflow_dispatch sequence),
