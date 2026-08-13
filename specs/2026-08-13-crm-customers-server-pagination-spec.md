@@ -3,11 +3,11 @@ id: 2026-08-13-crm-customers-server-pagination-spec
 title: "CRM Customers — DataTable server mode (pagination, sort, filter, ICP-safe)"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-13
 updated: 2026-08-13
 proposal: 2026-08-13-crm-customers-server-pagination
-verdict: pending
+verdict: approved
 repos: [minion_hub]
 type: feature
 ---
@@ -98,6 +98,7 @@ test -f src/lib/components/data-table/DataTable.svelte
 rg -n 'contacts\s*[,:}]' src/routes/api/crm/contacts/+server.ts   # confirms response key
 rg -l 'DataTable' src/routes | tee /tmp/datatable-consumers.txt    # expect ~11 files
 rg -n 'pg_advisory_xact_lock|BEGIN|transaction' scripts/db-migrate.ts
+rg -n "_funnel'" src/lib/crm/crm-funnel.ts   # enumerates the _funnel value domain S2's truth table must cover
 ```
 
 ---
@@ -169,6 +170,8 @@ predicate. This is the slice that actually makes a page of rows sufficient.
 bun run vitest run src/server/services/crm-funnel-parity.test.ts
 #   truth-table test: for every combination of (_funnel value × inbound>0 × booked × purchased),
 #   the SQL CASE result == effectiveFunnelStage()/financeFloorStage() TS result. No skips.
+#   The _funnel value domain is closed and finite — it is whatever Slice 0's
+#   `rg "_funnel'" src/lib/crm/crm-funnel.ts` enumerates, not open-ended free text.
 bun run vitest run src/server/services/crm-contacts.test.ts
 #   awaitingReply / buyerOnly / minIcp / maxIcp each return the same contact_id SET as the
 #   current client-side predicate applied to the full fixture roster (set equality, not order)
@@ -190,8 +193,10 @@ bun run check
 - Decorate **only the returned page**: finance columns via the cached `contactFinanceMap(ctx)`,
   and `matchingAutoTagIds` evaluated over the ≤ 500 page rows instead of the roster.
 - Meta (custom-field) column discovery: replace the full-roster `collectMetaKeys` scan with
-  `select distinct jsonb_object_keys(custom_fields)` (cached `'10m'`), exposed on the page
-  load. Keys are near-static.
+  `select distinct jsonb_object_keys(custom_fields)` (cached `'10m'`), exported as
+  `getMetaKeys(ctx)` from `crm-contacts.service.ts`. S3 only adds and tests the helper — S5
+  is the slice that calls it from `+page.server.ts` and puts it on the page load. Keys are
+  near-static.
 - `fields=id` lean variant returning only ids for the current filters (feeds S6's
   "select all N matching"), capped at `ROSTER_CAP`.
 - RBAC/masking unchanged: `shouldMaskSensitive` applies to page rows exactly as today; the
@@ -209,6 +214,9 @@ bun run vitest run src/routes/api/crm/contacts    # incl.:
 #   - limit>500 is clamped to 500; default is 100
 #   - ?fields=id returns ids only, no PII fields present in any element
 #   - masked principal: no masked field leaks; no key starting with '_' ending 'Claim'
+rg -n 'export (async )?function getMetaKeys' src/server/services/crm-contacts.service.ts
+bun run vitest run src/server/services/crm-contacts.test.ts
+#   - getMetaKeys returns the distinct custom_fields keys on the fixture roster (set equality)
 bun run check
 curl -s "$HUB/api/crm/contacts?limit=100" -H "$AUTH" | wc -c    # < 300000 bytes
 curl -s "$HUB/api/crm/contacts?limit=100" -H "$AUTH" | jq -e '.total|type=="number"'
@@ -251,8 +259,12 @@ bun run vitest run src/lib/components/data-table       # existing client-mode te
 #   new: server mode does not re-sort/re-filter rows (feed unsorted rows, assert DOM order == input order)
 #   new: pager label/pages derive from server.total, not rows.length
 #   new: search/sort/page/filter changes each fire onQuery exactly once with the expected payload
-git diff --name-only origin/master...HEAD | grep -v '^src/lib/components/data-table/' \
-  | grep '\.svelte$' && echo "FAIL: server mode must not require consumer edits" && exit 1
+git diff --name-only <sha-before-S4-commits>..HEAD -- '*.svelte' \
+  | grep -v '^src/lib/components/data-table/' \
+  && echo "FAIL: server mode must not require consumer edits" && exit 1
+#   ⚠️ scope this to S4's own commit range, not `origin/master...HEAD` — per A4 the shared
+#   branch may carry concurrent T2/U5 commits that legitimately touch other .svelte files;
+#   diffing against origin/master would false-fail on their unrelated changes.
 bun run check && bun run lint:tokens
 DESIGN_LINT_BASE_REF=origin/master bun run lint:design    # explicit base ref is mandatory
 ```
