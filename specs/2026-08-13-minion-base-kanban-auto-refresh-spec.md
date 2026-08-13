@@ -3,11 +3,11 @@ id: 2026-08-13-minion-base-kanban-auto-refresh-spec
 title: "minion-base /kanban — visible-tab auto-refresh + live refreshed-ago label"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-13
 updated: 2026-08-13
 proposal: 2026-08-13-minion-base-kanban-auto-refresh
-verdict: pending
+verdict: approved
 repos: [minion-base]
 type: feature
 ---
@@ -150,6 +150,24 @@ warning. **The label's clock is a `$state` value initialised to `data.fetchedAt`
 first client paint both render the zero-age string; the display tick moves it from there. No
 `browser` guard around the markup, no `{#if mounted}` flicker.
 
+### D6 — A cache-coalesced refresh must not trigger a busy-retry loop
+
+Under D1, a `refresh()` can resolve successfully without `lastFetchedAt()` advancing — D2's
+60 s shared cache served a coalesced response. S2's schedule formula, `max(0, intervalMs -
+(now() - lastFetchedAt()))`, then computes ~0 for the *next* delay too, because the elapsed
+time already exceeds `intervalMs` (that is what made the timer fire in the first place). The
+controller retries almost immediately, and if that retry also lands on the still-warm cache it
+retries again, busy-looping in a tight cycle until the shared cache entry expires. That is
+exactly the fetch-storm A1 exists to prevent — self-inflicted by the scheduler, not by a
+client. No bullet in S2's original test list exercised this path even though D1 explicitly
+names it as an expected outcome, not an edge case.
+
+**Fix: floor the retry delay.** Export `MIN_RETRY_MS = 60_000` (matches D2's `s-maxage=60`)
+alongside `REFRESH_INTERVAL_MS`. When a `refresh()` settles without `lastFetchedAt()` having
+advanced past the value it held before the call, schedule the next attempt at
+`max(MIN_RETRY_MS, intervalMs - (now() - lastFetchedAt()))` rather than the un-floored formula.
+Folded into S2's required behaviour and test list below.
+
 ## 3. Approach
 
 Three vertical slices, each ~4–8 focused hours, each landing independently green and leaving
@@ -246,6 +264,7 @@ while hidden, and never after you leave the route.
 
   ```ts
   export const REFRESH_INTERVAL_MS = 5 * 60 * 1000;
+  export const MIN_RETRY_MS = 60 * 1000;   // floors the D6 retry — matches D2's s-maxage=60
 
   export interface RefreshDeps {
     intervalMs: number;
@@ -267,7 +286,7 @@ while hidden, and never after you leave the route.
   ```
 
   Required behaviour:
-  - Schedules with `setTimeout`, not `setInterval`: the next fire is
+  - Schedules with `setTimeout`, not `setInterval`: the next fire is normally
     `max(0, intervalMs - (now() - lastFetchedAt()))`, re-derived after every refresh. A fixed
     `setInterval` drifts past a slow fan-out and cannot express D3.
   - `onVisibilityChange()` → hidden: `cancel` the pending timer and hold no timer at all.
@@ -275,9 +294,15 @@ while hidden, and never after you leave the route.
     due) or schedule the remainder.
   - **In-flight guard:** never call `refresh()` while a previous `refresh()` is unsettled;
     the next timer is scheduled from the settle, not from the call.
+  - **Non-advancing refresh floor (D6):** if `refresh()` settles but `lastFetchedAt()` did not
+    advance past the value it held before the call — a cache-coalesced response — the next
+    attempt is scheduled at `max(MIN_RETRY_MS, intervalMs - (now() - lastFetchedAt()))`, not the
+    un-floored formula. Without this, a single coalesced hit computes a ~0 delay and busy-loops
+    until the shared cache entry expires.
   - **Failure is non-fatal:** a rejected `refresh()` is caught, does not advance anything, and
-    schedules the next attempt normally. The board stays up with an ageing label — which is the
-    correct signal — rather than freezing the timer.
+    schedules the next attempt normally (subject to the D6 floor above, same as a coalesced
+    success — from the scheduler's view both are "settled without advancing"). The board stays
+    up with an ageing label — which is the correct signal — rather than freezing the timer.
   - `stop()` cancels the pending timer and makes every subsequent callback a no-op, including
     one already queued from an in-flight refresh.
 
@@ -301,6 +326,8 @@ bun test src/lib/refresh/controller.test.ts
 #   - hidden → visible with age <  intervalMs  → no immediate refresh; fires at the remainder
 #   - refresh() unsettled when the next deadline passes → no second concurrent call
 #   - refresh() rejects                        → no throw escapes; next attempt still scheduled
+#   - refresh() resolves but lastFetchedAt() does not advance (cache-coalesced hit, D6) →
+#     next timer floored at MIN_RETRY_MS, not scheduled at ~0
 #   - stop() then advance 10× intervalMs       → 0 further refresh(); 0 pending timers
 #   - stop() while a refresh() is in flight; then resolve it → no timer scheduled after stop
 rg -n '\$effect' src/routes/kanban/+page.svelte                 # the wiring effect exists
@@ -409,8 +436,8 @@ format, no shared auth — it is a standalone read-only SvelteKit app over the G
 Scope guard for the PR:
 
 ```bash
-git diff --name-only origin/main...HEAD | rg -v '^(src/|DESIGN\.md$)' && \
-  echo "FAIL: change escaped the minion-base app surface" && exit 1
+out="$(git diff --name-only origin/main...HEAD | rg -v '^(src/|DESIGN\.md$)')"
+[ -z "$out" ] || { echo "FAIL: change escaped the minion-base app surface"; echo "$out"; exit 1; }
 ```
 
 ### 🚨 A1 — the refresh spends a shared GitHub rate limit
@@ -504,9 +531,9 @@ curl -s -u "minion:$DASH_PASSWORD" "$BASE/kanban/__data.json" | rg -o 'fetchedAt
 
 # 3. The cache no longer swallows a refresh (D2, the proposal's flagged risk)
 #    Two loads ~90 s apart must report different production times:
-A=$(curl -s -u … "$BASE/kanban/__data.json" | jq '.. | .fetchedAt? // empty' | head -1)
+A=$(curl -s -u "minion:$DASH_PASSWORD" "$BASE/kanban/__data.json" | jq '.. | .fetchedAt? // empty' | head -1)
 sleep 90
-B=$(curl -s -u … "$BASE/kanban/__data.json" | jq '.. | .fetchedAt? // empty' | head -1)
+B=$(curl -s -u "minion:$DASH_PASSWORD" "$BASE/kanban/__data.json" | jq '.. | .fetchedAt? // empty' | head -1)
 [ "$B" -gt "$A" ] || { echo "FAIL: cached response served past the 60s window"; exit 1; }
 
 # 4. No leaks
