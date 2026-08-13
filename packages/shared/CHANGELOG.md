@@ -1,5 +1,11 @@
 # @minion-stack/shared
 
+## 0.10.0
+
+### Minor Changes
+
+- 0cf342c: Add the versioned Unified Brains vector-search contract for frozen Qdrant naming, deterministic IDs and fingerprints, fail-closed source-scope binding, Ed25519 capability shapes, bounded 1536-dimensional search, and worker outbox messages without changing existing gateway protocols.
+
 ## 0.9.0
 
 ### Minor Changes
