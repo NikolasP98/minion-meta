@@ -1,3 +1,14 @@
+---
+id: 2026-07-12-agent-memory-and-chat-response-tree
+title: Agent Memory Routing and Chat Response Trees
+stage: spec
+status: draft
+pass: 1
+created: 2026-07-12
+updated: 2026-07-15
+repos: [minion-meta]
+---
+
 # Agent Memory Routing and Chat Response Trees
 
 **Date:** 2026-07-12  

@@ -1,3 +1,14 @@
+---
+id: 2026-07-10-per-org-volume-tenancy
+title: Per-Org Volume Tenancy — Horizontal Scale Design
+stage: done
+status: shipped
+pass: 1
+created: 2026-07-10
+updated: 2026-07-15
+repos: [minion-meta]
+---
+
 # Per-Org Volume Tenancy — Horizontal Scale Design
 
 **Date:** 2026-07-10

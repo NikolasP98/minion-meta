@@ -1,3 +1,14 @@
+---
+id: 2026-07-13-hub-ui-coherence-audit
+title: Minion Hub UI Coherence Audit
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-13
+updated: 2026-07-14
+repos: [minion_hub]
+---
+
 # Minion Hub UI Coherence Audit
 
 **Date:** 2026-07-13

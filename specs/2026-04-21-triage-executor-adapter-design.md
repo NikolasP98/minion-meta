@@ -1,3 +1,14 @@
+---
+id: 2026-04-21-triage-executor-adapter-design
+title: Triage + Executor Adapter Architecture
+stage: spec
+status: approved
+pass: 1
+created: 2026-04-21
+updated: 2026-04-21
+repos: [minion-meta]
+---
+
 # Triage + Executor Adapter Architecture
 
 **Date:** 2026-04-21

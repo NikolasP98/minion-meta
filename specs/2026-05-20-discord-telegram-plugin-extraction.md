@@ -1,3 +1,14 @@
+---
+id: 2026-05-20-discord-telegram-plugin-extraction
+title: Discord + Telegram Plugin Extraction — Design
+stage: spec
+status: review
+pass: 1
+created: 2026-05-20
+updated: 2026-05-20
+repos: [minion]
+---
+
 # Discord + Telegram Plugin Extraction — Design
 
 **Date:** 2026-05-20

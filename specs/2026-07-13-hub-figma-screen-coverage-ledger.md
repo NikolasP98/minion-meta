@@ -1,3 +1,14 @@
+---
+id: 2026-07-13-hub-figma-screen-coverage-ledger
+title: Minion Hub Figma Phase 0 capture manifest
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-13
+updated: 2026-07-14
+repos: [minion_hub]
+---
+
 # Minion Hub Figma Phase 0 capture manifest
 
 Authoritative source: `/home/nikolas/Documents/CODE/MINION/minion_hub` on local branch `dev`

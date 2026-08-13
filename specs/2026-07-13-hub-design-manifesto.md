@@ -1,3 +1,14 @@
+---
+id: 2026-07-13-hub-design-manifesto
+title: Minion Hub Design Manifesto
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-13
+updated: 2026-07-14
+repos: [minion_hub]
+---
+
 # Minion Hub Design Manifesto
 
 **Design direction:** a living operations room—calm under load, dense without noise, expressive without becoming theatrical.

@@ -1,3 +1,14 @@
+---
+id: 2026-07-21-unified-brains-knowledge-architecture
+title: Unified Brains Knowledge Architecture
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-21
+updated: 2026-07-22
+repos: [minion]
+---
+
 # Unified Brains Knowledge Architecture
 
 **Date:** 2026-07-21  

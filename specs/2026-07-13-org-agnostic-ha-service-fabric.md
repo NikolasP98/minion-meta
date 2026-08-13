@@ -1,3 +1,14 @@
+---
+id: 2026-07-13-org-agnostic-ha-service-fabric
+title: Org-Agnostic Minion Service Fabric
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-13
+updated: 2026-07-15
+repos: [minion-meta]
+---
+
 # Org-Agnostic Minion Service Fabric
 
 **Date:** 2026-07-13  

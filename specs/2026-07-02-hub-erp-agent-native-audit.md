@@ -1,3 +1,14 @@
+---
+id: 2026-07-02-hub-erp-agent-native-audit
+title: Minion Hub — ERP + Agent-Native Audit & Improvement Roadmap
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-02
+updated: 2026-07-02
+repos: [minion_hub]
+---
+
 # Minion Hub — ERP + Agent-Native Audit & Improvement Roadmap
 
 **Date:** 2026-07-02

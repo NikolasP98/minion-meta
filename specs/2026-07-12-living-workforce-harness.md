@@ -1,3 +1,14 @@
+---
+id: 2026-07-12-living-workforce-harness
+title: Living Workforce Harness — Governed Stage-Task Delivery
+stage: done
+status: shipped
+pass: 1
+created: 2026-07-12
+updated: 2026-07-13
+repos: [minion-meta]
+---
+
 # Living Workforce Harness — Governed Stage-Task Delivery
 
 **Date:** 2026-07-12  

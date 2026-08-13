@@ -1,3 +1,14 @@
+---
+id: 2026-07-17-hub-performance-optimization-plan
+title: Hub Performance Optimization Plan — 2026-07-17
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-17
+updated: 2026-07-17
+repos: [minion_hub]
+---
+
 # Hub Performance Optimization Plan — 2026-07-17
 
 Goal: make navigation snappy. Today a nav = blank CSR shell → ~1 MB eager JS boot → `__data.json` → PG work behind tiny pools. Both sides measured (agents audited server loads + built client chunks); numbers below are from the live build/prod.

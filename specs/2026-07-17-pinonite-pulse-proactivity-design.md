@@ -1,3 +1,14 @@
+---
+id: 2026-07-17-pinonite-pulse-proactivity-design
+title: Pulse — Proactive Spine (PINONITE personal org)
+stage: spec
+status: approved
+pass: 1
+created: 2026-07-17
+updated: 2026-07-17
+repos: [minion-meta]
+---
+
 # Pulse — Proactive Spine (PINONITE personal org)
 
 **Date:** 2026-07-17

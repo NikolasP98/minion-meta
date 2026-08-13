@@ -1,3 +1,14 @@
+---
+id: 2026-07-15-ui-design-governance-hardening
+title: UI Design Governance Hardening — Findings + Proposals
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-15
+updated: 2026-07-15
+repos: [minion-meta]
+---
+
 # UI Design Governance Hardening — Findings + Proposals
 
 Date: 2026-07-15. Companion to `specs/2026-07-13-hub-ui-coherence-implementation-spec.md` (which stays the normative authority). This document records a full source audit of the token system, enforcement gates, and hub UI patterns, the governance fixes shipped with it, and proposed net-new manifest items for the UI-coherence program to adopt.

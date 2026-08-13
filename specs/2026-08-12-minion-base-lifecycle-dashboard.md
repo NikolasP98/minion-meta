@@ -1,3 +1,14 @@
+---
+id: 2026-08-12-minion-base-lifecycle-dashboard
+title: minion-base — Development Lifecycle Dashboard
+stage: spec
+status: unknown
+pass: 1
+created: 2026-08-12
+updated: 2026-08-12
+repos: [minion-base]
+---
+
 # minion-base — Development Lifecycle Dashboard
 
 **Status: SHIPPED 2026-08-12** · Repo: `NikolasP98/minion-base` (private) · Dir: `minion_base/` · Prod: https://base.minion-ai.org (Vercel project `minion-base`)

@@ -1,3 +1,14 @@
+---
+id: 2026-06-15-shared-account-identities-design
+title: Shared Accounts & User→Identities — Design Spec
+stage: spec
+status: review
+pass: 1
+created: 2026-06-15
+updated: 2026-06-15
+repos: [minion-meta]
+---
+
 # Shared Accounts & User→Identities — Design Spec
 
 **Date:** 2026-06-15

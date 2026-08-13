@@ -1,3 +1,14 @@
+---
+id: 2026-08-03-crm-customers-server-pagination-spec
+title: CRM Customers List — Server-Side Pagination & Search
+stage: spec
+status: draft
+pass: 1
+created: 2026-08-03
+updated: 2026-08-03
+repos: [minion_hub]
+---
+
 # CRM Customers List — Server-Side Pagination & Search
 
 **Date:** 2026-08-03

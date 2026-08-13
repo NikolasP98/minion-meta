@@ -1,3 +1,14 @@
+---
+id: 2026-07-05-hub-hotkeys-expansion
+title: Hub Hotkeys Expansion — Spec & Plan
+stage: done
+status: shipped
+pass: 1
+created: 2026-07-05
+updated: 2026-07-15
+repos: [minion_hub]
+---
+
 # Hub Hotkeys Expansion — Spec & Plan
 
 **Date:** 2026-07-05 · **Status:** ✅ SHIPPED to `dev` @ `6e4bb202` (2026-07-06; T1 `04eee80a`, T2 `7c4491e0`, T3 `a0f1fa15`; merged dev green 0/0, browser-QA'd — see §8) · **Repo:** `minion_hub/`

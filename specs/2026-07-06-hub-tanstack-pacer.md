@@ -1,3 +1,14 @@
+---
+id: 2026-07-06-hub-tanstack-pacer
+title: Hub — TanStack Pacer adoption (debounce/throttle/rate-limit standardization)
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-06
+updated: 2026-07-15
+repos: [minion_hub]
+---
+
 # Hub — TanStack Pacer adoption (debounce/throttle/rate-limit standardization)
 
 **Date:** 2026-07-06

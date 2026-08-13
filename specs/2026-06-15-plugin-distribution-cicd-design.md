@@ -1,3 +1,14 @@
+---
+id: 2026-06-15-plugin-distribution-cicd-design
+title: Plugin Distribution, Compatibility & CI/CD — Design Spec
+stage: spec
+status: review
+pass: 1
+created: 2026-06-15
+updated: 2026-06-15
+repos: [minion-meta]
+---
+
 # Plugin Distribution, Compatibility & CI/CD — Design Spec
 
 **Date:** 2026-06-15

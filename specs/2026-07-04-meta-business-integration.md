@@ -1,3 +1,14 @@
+---
+id: 2026-07-04-meta-business-integration
+title: Meta Business Integration — Ads module, insights, CRM import (end-to-end)
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-04
+updated: 2026-07-15
+repos: [minion-meta]
+---
+
 # Meta Business Integration — Ads module, insights, CRM import (end-to-end)
 
 **Date:** 2026-07-04 · **Supersedes:** the earlier `meta-insights-ads-pull` draft

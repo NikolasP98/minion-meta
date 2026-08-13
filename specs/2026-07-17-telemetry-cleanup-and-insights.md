@@ -1,3 +1,14 @@
+---
+id: 2026-07-17-telemetry-cleanup-and-insights
+title: Telemetry Cleanup, Monitoring Redesign & Reliability Insights
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-17
+updated: 2026-07-17
+repos: [minion-meta]
+---
+
 # Telemetry Cleanup, Monitoring Redesign & Reliability Insights
 
 **Date:** 2026-07-17 · **Author:** orchestrator + 3 recon subagents (gateway-telemetry, posthog/sentry, insights-UX) · **Scope:** hub Turso `unified_events`, gateway emit pipeline, PostHog/Sentry division of labor, new `/reliability` Insights tab.

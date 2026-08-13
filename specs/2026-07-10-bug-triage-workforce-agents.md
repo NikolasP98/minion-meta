@@ -1,3 +1,14 @@
+---
+id: 2026-07-10-bug-triage-workforce-agents
+title: Bug-Triage Workforce Agents — Design Spec
+stage: spec
+status: approved
+pass: 1
+created: 2026-07-10
+updated: 2026-07-10
+repos: [minion-meta]
+---
+
 # Bug-Triage Workforce Agents — Design Spec
 
 **Date**: 2026-07-10

@@ -1,3 +1,14 @@
+---
+id: 2026-07-19-item-spine-composition-slice1-spec
+title: Item Spine — Composition Graph + Cost Rollup (Slice 1)
+stage: spec
+status: draft
+pass: 1
+created: 2026-07-19
+updated: 2026-07-19
+repos: [minion_hub]
+---
+
 # Item Spine — Composition Graph + Cost Rollup (Slice 1)
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development or superpowers:executing-plans to implement task-by-task. Steps use checkbox (`- [ ]`) syntax.

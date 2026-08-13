@@ -1,3 +1,14 @@
+---
+id: 2026-08-07-projects-github-repos-and-factory-gates-spec
+title: Projects ⇄ GitHub Repos + Software-Factory Gates
+stage: spec
+status: unknown
+pass: 1
+created: 2026-08-07
+updated: 2026-08-07
+repos: [minion_hub]
+---
+
 # Projects ⇄ GitHub Repos + Software-Factory Gates
 
 Status: SPEC — implementation starts at §8 phasing.

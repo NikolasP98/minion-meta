@@ -1,3 +1,14 @@
+---
+id: 2026-07-20-whatsapp-sync-status-spec
+title: WhatsApp history-sync visibility — spec + plan
+stage: spec
+status: draft
+pass: 1
+created: 2026-07-20
+updated: 2026-07-19
+repos: [minion]
+---
+
 # WhatsApp history-sync visibility — spec + plan
 
 **Date:** 2026-07-20
