@@ -19,7 +19,7 @@ and memory-heavy. A server-pagination spec already exists
 ## Definition of done
 
 - DataTable on /crm/customers uses server mode (page/size/sort/filter params hit the API).
-- Initial payload â¤ 1 page of rows; sorting on the ICP-fit column stays server-side.
+- Initial payload ≤ 1 page of rows; sorting on the ICP-fit column stays server-side.
 - Existing spec's acceptance criteria pass.
 
 ## Out of scope
