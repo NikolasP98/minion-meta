@@ -3,11 +3,11 @@ id: 2026-08-17-pkg-dev-crypto-failopen-spec
 title: "@minion-stack/db crypto — fail closed instead of silently sealing under the source-visible dev key"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-pkg-dev-crypto-failopen
-verdict: pending
+verdict: approved
 repos: [minion-meta, minion_hub, minion_site]
 tags: [security, logic, test]
 type: fix
@@ -231,9 +231,10 @@ error string.
   open dev-key ciphertext without the same opt-in. Say so in the doc comment — and see the ⚠️ A3
   consequence for existing local DBs.
 - **Fix the existing suite in this slice.** `src/crypto.test.ts` gets
-  `process.env.ENCRYPTION_KEY = 'test-key-do-not-use-in-prod'` at the top, matching its sibling.
-  Show it red first (G3): run it once *before* fixing it and paste the failure into the PR — that
-  run is the cheapest possible proof that the old code was on the fallback all along.
+  `process.env.ENCRYPTION_KEY = 'test-key-do-not-use-in-prod'` before its first crypto call,
+  matching its sibling. For G3, add the no-key regression case first and run it against the old
+  implementation; paste that targeted failure into the PR. The existing roundtrip suite is not a
+  valid red-state proof because it passes under the old fallback by design.
 - Update the file header comment: the "Dev-only fallback — never used in production" line is now
   false-by-comment-and-true-by-code; make the code the documentation.
 - **Do not touch the layout block** (`scryptSync(raw,'minion-hub-salt',32)`, `hex(encrypted||authTag)`,
@@ -249,7 +250,8 @@ sets the key — change nothing if it passes).
 
 ```bash
 cd packages/db && pnpm vitest run
-#   red-state first (G3): every case below shown failing before the fix lands.
+#   red-state first (G3): the no-key/no-opt-in throw case is shown failing against the old code.
+#   Compatibility cases below may already pass and are regression anchors, not red-state claims.
 #   Each env case MUST use vi.resetModules() + await import('./crypto.js') — cachedKey is
 #   module-level, so a second case in the same file otherwise asserts the first case's key.
 #   - ENCRYPTION_KEY set, NODE_ENV unset        → sealSecret() roundtrips  (mode 'configured')
@@ -283,10 +285,12 @@ exists at rest before S3 turns reads into errors.
 **Do:**
 
 - **Export `assertCryptoKeyConfigured(): void`** (a thin `cryptoKeyMode()` call, discarding the
-  result) plus `cryptoKeyMode()` itself from `./crypto` — and re-export both from `src/index.ts` and
-  `src/pg/schema/index.ts` alongside the existing `sealSecret`/`openSecret` re-exports, so consumers
-  reach them by the same import path they already use. Document in one line: *call this once at app
-  startup so a missing key is a boot failure, not a runtime surprise.* S3 is what calls it.
+  result) plus `cryptoKeyMode()` itself from `./crypto`. Add all four crypto exports
+  (`sealSecret`, `openSecret`, and the two new symbols) to `src/index.ts`; add the two new symbols to
+  `src/pg/schema/index.ts` alongside its existing `sealSecret`/`openSecret` re-exports. The direct
+  `@minion-stack/db/crypto` subpath already exposes exports from `src/crypto.ts`. Document in one
+  line: *call this once at app startup so a missing key is a boot failure, not a runtime surprise.*
+  S3 is what calls it.
 - **Changeset** (`.changeset/<name>.md`, `"@minion-stack/db": minor` — the package is 0.x, so a
   behavior break is `minor` by this repo's convention; see `.changeset/db-drop-dead-turso-schema.md`
   for the house prose style). The body must state, in the consumer's terms: *what now throws*, *the
@@ -300,17 +304,19 @@ exists at rest before S3 turns reads into errors.
   defaults layer: a default-on opt-in is the original bug with extra steps. If `packages/db` gains a
   README (it has none today), one paragraph there; otherwise the changeset + the file header carry
   the contract.
-- **Anti-recurrence guard test.** Read `src/crypto.ts` from disk in a test and assert (a) the string
-  `minion-hub-dev-key` appears exactly once, (b) it is not reachable in a branch that mentions
-  neither `MINION_ALLOW_DEV_CRYPTO_KEY` nor `NODE_ENV`, and (c) no *other* file under `packages/db/src/`
-  calls `scryptSync`. Fail with a message pointing at `cryptoKeyMode()`. A grep in a spec is a
-  one-time check; a grep in a test is a permanent one.
+- **Anti-recurrence guard test.** Read the package source from disk in a test and assert (a) the
+  string `minion-hub-dev-key` appears exactly once in `src/crypto.ts`, and (b) no *other* file under
+  `packages/db/src/` calls `scryptSync`. Fail with a message pointing at `cryptoKeyMode()`. The env
+  matrix is the executable proof that the literal is gated by both the opt-in and the production
+  refusal; a source-text test cannot reliably prove control-flow reachability.
 - **At-rest audit (⚠️ A3, the part a reviewer will ask for).** Enumerate the columns sealed by this
   module (from `packages/db/src/schema/` + `src/pg/schema/`: at minimum `servers.token`/`token_iv`
   and the `user_identities` secret columns — confirm the full list by grepping for the `*_iv`
-  companion column convention) and, for every non-production database reachable to the implementer,
-  count non-null ciphertext rows. Then, for each, test-decrypt a sample under the *dev* key and under
-  the environment's configured key. Report counts in the PR. This is read-only and no row is
+  companion column convention) and, for every database reachable to the implementer that A1 shows
+  was used by a process capable of taking the fallback path, count non-null ciphertext rows. This
+  includes a production-named database if its process ran with missing or non-production
+  `NODE_ENV`. Then, for each, test-decrypt a sample under the *dev* key and under the environment's
+  configured key without logging plaintext. Report counts in the PR. This is read-only and no row is
   modified — **remediating anything found is out of scope** (§5) and becomes its own proposal, but
   S3 cannot be sequenced safely without the number.
 - If the audit is impossible for a given database (no access), say which one and why in the PR
@@ -358,11 +364,14 @@ description so nobody helpfully runs `pnpm update` in a consumer repo.
 `2026-08-13-crm-customers-server-pagination-spec` reports hub's `origin/dev` was deleted, so trust
 the remote over the table):**
 
-1. **Set `ENCRYPTION_KEY` in every environment that lacks one** — Vercel preview *and* production
-   scopes for both apps, any self-hosted/Docker staging, and CI. This is a secrets-console change,
-   not a code change; record which scopes were already set versus newly set (this is also A1's
-   answer). Use the same value per shared-DB group — hub and site share a database and must derive
-   the same key or they cannot read each other's rows.
+1. **Classify each environment from A1/A3 before changing secrets.** If its database has no
+   dev-key ciphertext, set `ENCRYPTION_KEY` if absent — Vercel preview *and* production scopes for
+   both apps, any self-hosted/Docker staging, and CI. If its database does contain dev-key
+   ciphertext, do not set a real key or deploy the bumped consumer yet; step 5 defines the only
+   compatible temporary mode if an early deployment is separately authorized. Record which scopes were already set,
+   newly set, or held on the compatibility state. Use the same mode and, when configured, the same
+   key per shared-DB group — hub and site share a database and must derive the same key or they
+   cannot read each other's rows.
 2. **Only where a real key genuinely cannot be provisioned** (a throwaway CI job with no secret
    access, a local `.env.example`), set `MINION_ALLOW_DEV_CRYPTO_KEY=1` explicitly and add a comment
    saying why. Prefer a per-environment random `ENCRYPTION_KEY` over the opt-in wherever the
@@ -373,11 +382,12 @@ the remote over the table):**
 4. **Then** bump `@minion-stack/db` in both repos, run each repo's full check + test, and deploy a
    preview first. Watch for the S1 `console.warn` in preview logs: **its presence means an
    environment is still on the dev key** — that warning line is the acceptance signal for step 1.
-5. If S2's at-rest audit found dev-key ciphertext in a database these apps read, do **not** proceed
-   past step 4 for that environment. Rows sealed under the dev key stop being readable the moment a
-   real `ENCRYPTION_KEY` is set (GCM auth failure — the loud kind). That is key rotation, explicitly
-   out of scope (§5): file the proposal, keep the opt-in set for that environment, and land steps
-   1–4 everywhere else. ⚠️ A3.
+5. If S2's at-rest audit found dev-key ciphertext in a database these apps read, do **not** set
+   `ENCRYPTION_KEY` or deploy the bumped consumer there. File the rotation proposal and keep the
+   currently deployed consumer unchanged. If a separate decision authorizes deploying this package
+   before rotation, the only compatible temporary configuration is `ENCRYPTION_KEY` unset plus
+   `MINION_ALLOW_DEV_CRYPTO_KEY=1`; setting both does not help because the configured key takes
+   precedence. Land steps 1–4 everywhere else. ⚠️ A3.
 
 **Files:** `minion_hub/.env.example`, `minion_site/.env.example`, each repo's server boot/hooks file,
 each repo's `package.json` (`@minion-stack/db` version) + lockfile, and any CI workflow that boots
@@ -425,7 +435,7 @@ runtime contract, so the blast radius is real and is the reason S3 exists.
 | Surface | Impact | Mitigation / evidence |
 |---|---|---|
 | `@minion-stack/db` consumers (`minion_hub`, `minion_site`) | **Real, intended, breaking at runtime.** Any environment without `ENCRYPTION_KEY` and without the opt-in stops sealing/opening secrets | S3 lands env + boot assertion **before** the dependency bump; the S1 `console.warn` is the pre-flight detector; changeset states it explicitly |
-| Shared hub↔site database | **None from this change** — no DDL, no column, no layout change. But both apps must derive the **same** key or they cannot read each other's rows | S3 step 1 sets one `ENCRYPTION_KEY` per shared-DB group; roundtrip case in S1's matrix anchors the layout |
+| Shared hub↔site database | **No structural or byte-layout change**, but rollout mode is coupled: both apps must derive the **same** key or they cannot read each other's rows | S3 step 1 assigns one mode and, when configured, one `ENCRYPTION_KEY` per shared-DB group; roundtrip case in S1's matrix anchors the layout |
 | `packages/auth` | **None** — depends on `@minion-stack/db` but never imports crypto (verified: `grep -rn 'sealSecret\|ENCRYPTION_KEY' packages/auth/src` → zero hits) | re-run the grep at PR time |
 | Other meta packages, `langgraph-server/`, `ops/`, `scripts/`, `supabase/` | **None** — verified in this checkout: no hit for `sealSecret`/`openSecret`/`ENCRYPTION_KEY` outside `packages/db/` | re-run the repo-wide grep at PR time |
 | `minion/` gateway | **None expected** — the "sole key holder" decision (`2026-05-24-unified-user-identities-design`, reaffirmed in `-p3-wiring-plan` Option B) says `ENCRYPTION_KEY` is deliberately never shipped to the gateway, so it cannot be on this path | grep the gateway repo in S0; if it *does* import `@minion-stack/db/crypto`, that is a finding worth its own proposal — do not quietly widen S3 |
@@ -458,10 +468,12 @@ If any environment already wrote secrets under `minion-hub-dev-key`, then settin
 `ENCRYPTION_KEY` there makes those rows fail GCM authentication on read — loudly. This spec does not
 create that problem (it exists the moment anyone sets a key today) and, per the proposal, does not
 fix it: **key rotation is out of scope**. What this spec adds is the audit (S2) that tells you
-whether it applies before S3 turns it into an incident, and the opt-in as a temporary ramp for any
-environment where it does. If the audit finds affected rows, the honest sequence is: keep
-`MINION_ALLOW_DEV_CRYPTO_KEY=1` in that environment, land everything else, and file the rotation
-proposal with the row counts attached.
+whether it applies before S3 turns it into an incident, and an opt-in that can serve as a temporary
+ramp if deployment before rotation is separately authorized. If the audit finds affected rows, the
+safe default is to leave that consumer unbumped, land everywhere else, and file the rotation
+proposal with the row counts attached. The temporary compatibility mode, if authorized, is
+`ENCRYPTION_KEY` unset plus `MINION_ALLOW_DEV_CRYPTO_KEY=1`; the opt-in cannot select the dev key
+while a real key is present.
 
 ### ⚠️ A4 — availability trade, stated once, plainly
 
@@ -541,7 +553,7 @@ cd ../minion_site    && env -u ENCRYPTION_KEY -u MINION_ALLOW_DEV_CRYPTO_KEY bun
 
 **Ship gate:** §6 all green; the proposal's DoD checked clause by clause (opt-in required — step 2
 case 2; `sealSecret()` throws otherwise — step 2 case 1; both paths tested — S1's matrix); the S1
-red-state run pasted (proving the old suite ran on the dev key); A1's environment inventory and
+targeted no-key red-state failure pasted (proving the old implementation failed open); A1's environment inventory and
 A3's at-rest audit counts pasted, including any environment that could not be checked; step 3's
 cross-version ciphertext compatibility confirmed; and — per §4b's `security` rule — a **human**
 approval on the record, because a green command list is evidence, not a decision.
