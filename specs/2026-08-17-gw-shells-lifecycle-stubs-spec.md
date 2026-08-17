@@ -2,12 +2,12 @@
 id: 2026-08-17-gw-shells-lifecycle-stubs-spec
 title: "Shells — finish the two lifecycle stubs: shells.update persists, and invoke wakes an archived shell"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-gw-shells-lifecycle-stubs
-verdict: pending
+verdict: approved
 repos: [minion]
 tags: [logic, security, test]
 type: fix
@@ -16,11 +16,13 @@ type: fix
 # Shells — finish the two lifecycle stubs
 
 **Owner surface:** `minion` (gateway, branch `DEV`) — `src/gateway/server-methods/shells.ts` and
-`src/shells/`. Every behavior change in this spec lands in those two directories.
+`src/shells/`. Runtime behavior changes in the implementation branch land in those two directories;
+the repository's required `proposals/` handoff entries are the only permitted supporting files.
 
-**Read-only surfaces this spec deliberately does not touch:**
+**Read-only surfaces under the implementation branch:**
 
-- `@minion-stack/shared` (`packages/shared/src/gateway/shells.ts` in this meta-repo) — the wire
+- `@minion-stack/shared` (`packages/shared/src/gateway/shells.ts` in this meta-repo) — under the
+  implementation branch, the wire
   contract for **both** stubs **already exists and is complete**. Nothing needs to be added; §1
   quotes it. Changing a published npm package to fix a server-side stub would drag hub, site and
   paperclip through a release train for no wire-level gain.
@@ -115,15 +117,15 @@ repo, and they define the target shape precisely enough that the implementer sho
 | Contract fact | Location | Consequence for this spec |
 |---|---|---|
 | `update: 'shells.update'` — *"mutate name / archiveIdleMs / backupCadence / etc."* | `:35` | The method name is fixed |
-| `ShellsUpdateParams { shellId, patch: Partial<Pick<ShellSummary,'displayName'\|'archiveIdleMs'\|'backupCadence'\|'backupTarget'>> }` | `:331-340` | **Exactly four mutable fields.** Anything else in `patch` is a rejection, not a merge (S1) |
+| `ShellsUpdateParams { shellId, patch: Partial<Pick<ShellSummary,'displayName'\|'archiveIdleMs'\|'backupCadence'\|'backupTarget'>> }` | `:331-340` | **Exactly four contractual patch keys.** Per-status validation may reject a listed key; anything outside the four is a rejection, not a merge (S1) |
 | *"Server validates which fields are mutable per status"* | `:331` | The per-status mutability matrix is required by the contract, not an embellishment |
 | `ShellsUpdateResponse = ShellSummary` | `:341` | Returns the **fresh, persisted** summary — not `{ok:true}` |
 | `ShellSummary.orgId` — *"Caller-side handlers must scope access to this value"* | `:130` | Org-ownership enforcement is contractual (S1, `security`) |
 | `ShellsInvokeParams.wakeIfArchived?: boolean` — *"Force-wake if archived. Default true."* | `:245` | Default-true wake is the promise `manager.ts:271` breaks (S3) |
-| `shells.wake` + `ShellsWakeParams{shellId, backupId?}` / `ShellsWakeResponse{shellId, status, restoringFromBackupId}` | `:30,274-284` | A wake RPC already exists in the vocabulary; invoke-wake must **share its implementation**, not fork one (S2) |
+| `shells.wake` + `ShellsWakeParams{shellId, backupId?}` / `ShellsWakeResponse{shellId, status, restoringFromBackupId}` | `:30,274-284` | A wake RPC already exists and its response is asynchronous (`status` is documented as `provisioning` until re-register). Manual wake and invoke-wake share one coordinator, but only invoke waits for restoration (S2–S3) |
 | `ShellOnlinePayload.resumedFromArchive: boolean` | `:393-400` | The event for "came back from archive" exists — emit it, don't invent one |
 | `ShellErrorReason` includes `restore_failed`, `provision_failed` | `:116-122` | Failure vocabulary exists — map onto it |
-| `ShellErrorPayload.remediation: 'restart'\|'wake'\|'destroy'\|'wait'\|null` | `:415` | `'wake'` is already the remediation hint for the typed wake-required error (S3) |
+| `ResponseFrame.error {code,message,details?,retryable?}`; `ShellErrorPayload.remediation: 'restart'\|'wake'\|'destroy'\|'wait'\|null` | `gateway/types.ts:12-18`; `shells.ts:415` | RPC failures use the generic error envelope. `remediation` is defined for the `shell.error` **event**, not automatically for RPC errors; S0 must identify existing gateway error-code/detail conventions before S3 fixes a shape |
 | Bridge dispatches `'shells.restore'` with `{remotePath}`, *"gateway calls this after wake"* | `packages/shells-bridge/src/bridge.ts:215-217,332` | The VM half exists; the gateway calls it **after register, before forwarding any invoke** |
 | `restore()` = `rclone cat <remotePath> \| tar xzf - -C <workDir>` | `packages/shells-bridge/src/backup.ts:69-84` | Restore is a bridge-local operation; the gateway supplies one string |
 
@@ -175,14 +177,20 @@ rg -n "backupTarget|b2://|MINION_SHELLS|BACKUP" src/shells/ .env.example 2>/dev/
 
 # i. Does anything call shells.update today? (release-note input, not a blocker)
 rg -n "shells\.update" .  # in gw; then the same grep in minion_hub if a checkout is available
+
+# j. Existing RPC error codes/details and shell.online emission (prevents inventing wire semantics)
+rg -n "INVALID_PARAMS|NOT_IMPLEMENTED|UNAVAILABLE|retryable|remediation" src/gateway/ src/shells/
+rg -n "SHELLS_EVENTS\.online|shell\.online|resumedFromArchive" src/gateway/ src/shells/
 ```
 
-**Six answers, each one sentence, written into the PR description:** (1) does a durable per-shell
+**Eight answers, each one sentence, written into the PR description:** (1) does a durable per-shell
 store with an update path exist — yes/no; (2) is `shells.wake` implemented, a stub, or absent;
 (3) what does the provision path do that wake must reuse verbatim (argv builder, tags, digest-pinned
 image, org-default policy); (4) which schedulers must be reconciled on update (idle timer,
 backup cadence); (5) which B2 bucket backups land in, and whether it is the public-read bucket from
-the ⚠️ A4 audit; (6) does any client call `shells.update` today.
+the ⚠️ A4 audit; (6) does any client call `shells.update` today; (7) which existing error codes and
+`details` shape sibling handlers use for invalid state, busy and timeout; (8) when the current
+register path marks a shell online and emits `shell.online`.
 
 **If (1) is "no durable store exists"** — stop and take **branch R** (§2R) instead of S1–S3, and say
 so in the PR. Building a persistence layer for shells is a different spec with a different blast
@@ -192,7 +200,7 @@ radius, and it is not what "finish the stub" was approved for.
 
 ```
 S0 (recon) ─▶ S1 (shells.update actually persists: mutability matrix + org scoping + scheduler reconcile)
-                 ├─▶ S2 (one wakeShell(): quota → create → register → restore → online, single-flight)
+                 ├─▶ S2 (one wake coordinator: quota → create → register → restore → online, single-flight)
                  │        └─▶ S3 (invoke on archived: wake-or-typed-error; the throw at manager.ts:271 dies)
                  └─ S1 and S2 are independent; S3 depends on S2
 ```
@@ -288,20 +296,23 @@ git diff --name-only <base>...HEAD | rg -v '^(src/shells/|src/gateway/server-met
 
 ---
 
-### S2 — One `wakeShell()`: quota → verify backup → create → register → restore → online
+### S2 — One wake coordinator: verify backup → quota → create → register → restore → online
 
 **Tags:** `logic`, `test` · **Estimate:** 6–8 h
 
-**Goal:** a single gateway-side function that takes an `archived` shell to `online` with its state
-restored, used by **both** the `shells.wake` RPC and (in S3) `manager.invoke()`. Concurrent callers
-create exactly one VM.
+**Goal:** one gateway-side coordinator takes an `archived` shell to `online` with its state restored
+and is used by **both** the `shells.wake` RPC and (in S3) `manager.invoke()`. It exposes the
+contractual start result (`ShellsWakeResponse`, normally `provisioning`) and one shared completion
+promise; the RPC returns the former while invoke awaits the latter. Concurrent callers create
+exactly one VM.
 
 **Do:**
 
 - **One implementation, two callers.** If S0 (c) found a `shells.wake` handler, extract its body
-  into `wakeShell(shellId, {backupId?})` in `src/shells/`; if wake is also a stub, write
-  `wakeShell()` first and make the RPC a thin wrapper. Two wake code paths that drift is the failure
-  mode this slice exists to prevent.
+  into a coordinator in `src/shells/`; if wake is also a stub, write the coordinator first and make
+  the RPC a thin start wrapper. Do not make the RPC await `online`: its published response explicitly
+  permits `provisioning`. S3 awaits the same coordinator's completion promise before forwarding an
+  invoke. Two wake code paths that drift is the failure mode this slice exists to prevent.
 - **Order matters — check before you create:**
   1. **Resolve the backup first.** `backupId` if given, else the latest for the shell; then confirm
      it *exists at the remote* before touching the provider. Waking with no restorable backup
@@ -320,18 +331,22 @@ create exactly one VM.
   5. **Call `shells.restore` with `{remotePath}`** and await `{ok:true}` — the bridge's contract says
      it expects to be *"mid-startup with workDir already empty"*, so this must complete **before**
      any invoke is forwarded (S3 depends on this ordering).
-  6. **Flip to `online` and emit `shell.online` with `resumedFromArchive: true`.** The field exists
-     for exactly this; emitting `false` from the wake path is a lie that hub graphs will inherit.
+  6. **Flip to `online` and emit `shell.online` with `resumedFromArchive: true` only after restore.**
+     S0 (j) must identify and suppress any current register-time transition/event for a waking shell;
+     registration means the bridge is reachable, not that restored state is ready. The field exists
+     for exactly this; emitting `false` or emitting before restore would let consumers invoke too early.
 - **Single-flight per `shellId`, and make it a real guard.** Two concurrent wakes (or an invoke plus
   a hub "Wake" click) must produce **one** provider `create`. A duplicate create burns a slot from a
   50-VM ceiling, orphans a VM nothing will ever reap, and puts two bridges on one `shellId`. An
   in-process promise map is the minimum; note in the PR that it is per-gateway-process, which is
   sufficient today because the swarm runs **one replica per org**
-  (`netcup-gateway-swarm-deploy`: *"one replica each (single-writer invariant)"*) — and add a
+  (`2026-07-13-minion-gateway-swarm-cutover`: one replica per organization) — and add a
   `TODO(handoff):` naming the store-level lease that a multi-replica gateway would need.
-- **Idempotent by status:** `online` → return current summary, no-op; `provisioning` → join the
-  in-flight wake rather than starting a second; `error` → typed error with the existing
-  `remediation` hint; `archived` → wake.
+- **Status handling must preserve the RPC contract.** `archived` starts or joins a wake;
+  `provisioning` joins only when the coordinator has an identified in-flight wake. For `online`,
+  unrelated provisioning, and `error`, preserve the existing sibling-handler behavior found by S0
+  rather than returning a `ShellSummary` where `ShellsWakeResponse` is required. Any failure uses
+  the existing error-envelope conventions identified by S0 (j).
 - **Every failure leaves a consistent record.** Create fails → `error` + `provision_failed`; restore
   fails → `error` + `restore_failed` (and the PR states whether the created VM is torn down or left
   for manual inspection — either is defensible, silence is not). Never leave a shell stuck in
@@ -353,13 +368,17 @@ pnpm vitest run src/shells
 #   - archived + a valid backup → create called ONCE, restore called ONCE with the resolved
 #         remotePath, status ends 'online', shell.online emitted with resumedFromArchive:true
 #   - restore is called AFTER register and BEFORE the promise resolves (assert call ORDER)
-#   - TWO concurrent wakeShell() on the same shellId → provider create called EXACTLY ONCE,
-#         both callers resolve to the same result                                  ← single-flight
+#   - TWO concurrent wake starts on the same shellId → provider create called EXACTLY ONCE,
+#         both callers share one completion result                                 ← single-flight
+#   - shells.wake returns the contractual start response with restoringFromBackupId and does not
+#         redefine the RPC as a synchronous wait for status 'online'
 #   - no backup exists → typed error, status still 'archived', provider create NEVER called
 #   - quota exceeded → typed error naming the dimension, provider create NEVER called
 #   - create rejects → status 'error' + reason 'provision_failed'
 #   - restore rejects → status 'error' + reason 'restore_failed'
-#   - wake on 'online' → no-op, no provider call; wake on 'provisioning' → joins, one create total
+#   - wake on 'provisioning' with a matching in-flight wake → joins, one create total
+#   - online/error/unrelated-provisioning statuses preserve the handler's existing typed behavior
+#         and never return a shape other than ShellsWakeResponse on success
 #   - the image passed to create is the digest persisted on the record, not a mutable tag
 #   - the idle timer is (re)armed after a successful wake
 pnpm vitest run test/ci/ && pnpm tsgo && pnpm check
@@ -369,7 +388,7 @@ git diff --name-only <base>...HEAD | rg -v '^(src/shells/|src/gateway/server-met
 
 ---
 
-### S3 — `invoke()` on an archived shell: wake it, or return the typed wake-required error
+### S3 — `invoke()` on an archived shell: wake it, or return a stable wake-required failure
 
 **Tags:** `logic`, `test` · **Estimate:** 5–7 h · **Depends on S2**
 
@@ -378,17 +397,19 @@ git diff --name-only <base>...HEAD | rg -v '^(src/shells/|src/gateway/server-met
 
 **Do:**
 
-- **`wakeIfArchived !== false` (the default):** call S2's `wakeShell()`, then forward the invoke.
+- **`wakeIfArchived !== false` (the default):** join S2's wake completion, then forward the invoke.
   The caller gets the normal `ShellsInvokeResponse {runId, startedAt}`; deltas stream as usual once
   the harness is up.
-- **`wakeIfArchived === false`:** return a **typed** wake-required error carrying
-  `remediation: 'wake'` (the vocabulary at `shells.ts:415`). Not a thrown `Error`, not a generic
-  `UNAVAILABLE` — a client must be able to branch on it and offer a "Wake" button.
+- **`wakeIfArchived === false`:** return a stable wake-required failure through the existing
+  `ResponseFrame.error` envelope. Reuse the sibling-handler code and `details` convention found by
+  S0 (j); include `remediation: 'wake'` in `details` only if that convention supports structured
+  remediation. Do not infer an RPC schema from `ShellErrorPayload`, which is an event payload. It
+  must not escape as a thrown/unhandled `Error`, and a client must be able to branch on its code.
 - **Bound the hold, and bound the queue.** Cold restore is 60–180s (`2026-05-20-shells-golden-agents`
   Q2), which is longer than a typical RPC patience window. Two rules: (a) a hard deadline on holding
   the invoke, after which the caller gets a typed timeout error while the wake continues (or is
   explicitly abandoned — say which in the PR); (b) a **cap on invokes queued behind one wake** —
-  excess callers get a typed busy/wake-in-progress error rather than accumulating unbounded promises
+  excess callers get a stable existing busy/wake-in-progress error rather than accumulating unbounded promises
   on a gateway that also serves every channel. State both numbers and their justification in the PR.
 - **A disconnected caller must not strand the wake, and a completed wake must not strand a run.** If
   the requesting WS connection drops mid-wake, the wake either completes and the shell stays online,
@@ -417,7 +438,8 @@ cd minion
 pnpm vitest run src/shells
 #   - invoke on an archived shell (default params) → wakeShell called once, invoke forwarded
 #         AFTER restore resolves, caller gets {runId, startedAt}         ← the proposal's DoD
-#   - invoke with wakeIfArchived:false on an archived shell → TYPED error with remediation 'wake';
+#   - invoke with wakeIfArchived:false on an archived shell → stable existing error code and,
+#         where supported by the existing error-details convention, remediation 'wake';
 #         wakeShell NEVER called; the call does not THROW past the handler
 #   - THREE concurrent invokes on one archived shell → ONE wake, one provider create,
 #         and held invokes released within maxConcurrentRuns
@@ -444,15 +466,17 @@ bad, and it is not what the proposal's "removed/marked experimental" needs to me
 
 Branch R, in full (≈3 h, tags `docs`, `logic`):
 
-1. Replace the bare `UNAVAILABLE` with a **typed `NOT_IMPLEMENTED`** carrying a message that names
-   this spec id, so a client sees "unimplemented, tracked" rather than "temporarily unavailable".
-2. Same for the archived-invoke path: a typed wake-required error (S3's error, without S2's wake) —
-   the throw dies either way. **This half is mandatory even under R**, because a raw throw on a
+1. Replace the bare `UNAVAILABLE` with the existing not-implemented error code found by S0 (j),
+   carrying a message that names this spec id. Do not coin `NOT_IMPLEMENTED` unless that exact code
+   already exists in sibling handlers.
+2. Same for the archived-invoke path: S3's stable wake-required error-envelope response, without
+   S2's wake — the throw dies either way. **This half is mandatory even under R**, because a raw throw on a
    documented default-true path is the actual defect.
 3. Add `@experimental` doc comments on `SHELLS_METHODS.update`, `shells.wake` and `wakeIfArchived`
    in `packages/shared/src/gateway/shells.ts` — the **one** authorized meta-repo edit under R, and
    the reason R must be declared before implementation starts (§4).
-4. File a `proposals/` entry for the store work with the S0 evidence, and flip this spec's status.
+4. File a `proposals/` entry for the store work with the S0 evidence. Artifact status changes remain
+   the reconciler/human gate's responsibility, not an implementation side effect.
 
 R is a fallback for a fact S0 might discover, not an option to prefer. If S0 finds a store, R is off
 the table.
@@ -473,7 +497,7 @@ absence is the point: the whole fix fits inside the gateway.
 | `minion_site`, `paperclip-minion`, `minion_plugins`, `pixel-agents`, `Minion Docs/` | **None.** No frame type, event, or protocol field added or changed ⇒ no consumer coordination | §5; AGENTS.md's "Gateway protocol" row does not fire |
 | **exe.dev account (real money, hard ceilings)** | **⚠️ ALERT — wake creates real VMs.** Slots (50), pooled 2 vCPU / 8 GB, disk, monthly Shelley allowance and 200 GB egress are all account-level and shared with the two **live org-default workstations** (`mn-1bc8d28279-ws-01`, `mn-8e60ff7eda-ws-01`) | S2 checks quota **before** create and single-flights wake so a burst cannot multiply VMs; §6 verification uses a throwaway shell and destroys it, and never touches the two live defaults |
 | **Backblaze B2 (restore reads the archive)** | **⚠️ ALERT, security, pre-existing — see A4.** Restore pulls the full workstation state down from B2 (egress, and possibly a big object). Separately, operator memory `backblaze-b2-bucket-audit` records ★★★ *"BUCKET IS PUBLIC-READ, OPEN"* for the B2 bucket it audited. **Whether shell backups share that bucket is unknown from here** | S0 (h) must answer it. If shell state shares the public-read bucket, **stop and report** — that is a data-exposure finding about workstation state, far bigger than this spec, and this spec must not widen it. S1's `backupTarget` rule (bucket + own-prefix allowlist) is written to avoid adding any new exposure either way |
-| Gateway prod deploy (`DEV` → `:dev`; `main` → `:prd` → swarm rollout) | **Normal path, no special coupling.** No migration, no config change, no new env var expected | `netcup-gateway-swarm-deploy`; if a new env var *is* needed for the backupTarget allowlist, it must be listed in the PR and added to `.env.example` — an unset var must fail closed, not disable the check |
+| Gateway prod deploy (`DEV` → `:dev`; `main` → `:prd` → swarm rollout) | **Normal path, no special coupling.** No migration, no config change, no new env var expected | `2026-07-13-minion-gateway-swarm-cutover`; if a new env var *is* needed for the backupTarget allowlist, it must be listed in the PR and added to `.env.example` — an unset var must fail closed, not disable the check |
 
 ### ⚠️ A1 — `shells.wake` may itself be a stub
 
@@ -524,6 +548,9 @@ different stub to fill the slice with.
 4. **Shell backups share the public-read B2 bucket** (⚠️ A4) ⇒ stop and report before shipping S2.
 5. **Waking requires a schema/store migration of existing shell records** ⇒ stop; migration of live
    workstation records is not authorized here.
+6. **The existing gateway error envelope has no stable codes/details capable of distinguishing
+   wake-required, busy and timeout outcomes** ⇒ stop and request a wire-contract decision; do not
+   invent ad hoc codes in one handler while `@minion-stack/shared` is out of scope.
 
 ## 5. Out of scope (explicit)
 
@@ -592,11 +619,13 @@ rg -n "throw" src/shells/manager.ts | rg -i archiv   # → ZERO
 #    h) archive it again, then invoke with wakeIfArchived:false
 #         → a TYPED wake-required error with remediation 'wake'; NO VM created;
 #           ssh exe.dev ls --json unchanged.
-#    i) shells.update { displayName:"renamed-<ts>", backupCadence:"weekly", archiveIdleMs:null }
+#    i) shells.update { shellId:"<test-shell>", patch:{ displayName:"renamed-<ts>",
+#         backupCadence:"weekly", archiveIdleMs:null } }
 #         → returns the fresh ShellSummary; a follow-up shells.get shows all three persisted;
 #           the auto-archive timer is disarmed (the shell does NOT archive itself after the old
 #           idle window) and the backup job is on the weekly cadence.
-#    j) shells.update { patch:{ status:"online" } }  and  { patch:{ orgId:"<other-org>" } }
+#    j) shells.update { shellId:"<test-shell>", patch:{ status:"online" } }  and
+#         { shellId:"<test-shell>", patch:{ orgId:"<other-org>" } }
 #         → typed INVALID_PARAMS both times; shells.get is byte-identical.     ← mass-assignment
 #    k) shells.update on a shell id belonging to ANOTHER org (use a second org's shell id from
 #       the store, do not mutate it)
