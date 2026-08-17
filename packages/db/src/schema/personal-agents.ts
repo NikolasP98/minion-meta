@@ -12,13 +12,41 @@ export const personalAgents = sqliteTable(
       .references(() => user.id, { onDelete: 'cascade' }),
     agentId: text('agent_id').notNull(),
     serverId: text('server_id').references(() => servers.id, { onDelete: 'set null' }),
+    /**
+     * @deprecated Slated for removal in @minion-stack/db v0.3.0 (Phase 2b
+     * consolidation). Display name now lives in the gateway config at
+     * `agents.list[].identity.name`. The 0012 migration drops this column —
+     * apply it together with the v0.3.0 release. Until then, callers may
+     * write an empty string as a placeholder; readers should ignore it.
+     */
     displayName: text('display_name').notNull(),
+    /**
+     * @deprecated Slated for removal in @minion-stack/db v0.3.0 (Phase 3c).
+     * Conversation name now lives in gateway config at
+     * `agents.list[].personality.conversationName`. The 0013 migration drops
+     * this column — apply it together with the v0.3.0 release.
+     */
     conversationName: text('conversation_name'),
     avatarUrl: text('avatar_url'),
+    /**
+     * @deprecated Slated for removal in @minion-stack/db v0.3.0 (Phase 3c).
+     * Personality preset now lives in gateway config at
+     * `agents.list[].personality.preset`. Dropped by the 0013 migration.
+     */
     personalityPreset: text('personality_preset', {
       enum: ['professional', 'casual', 'creative', 'technical'],
     }),
+    /**
+     * @deprecated Slated for removal in @minion-stack/db v0.3.0 (Phase 3c).
+     * Personality text now lives in gateway config at
+     * `agents.list[].personality.text`. Dropped by the 0013 migration.
+     */
     personalityText: text('personality_text'),
+    /**
+     * @deprecated Slated for removal in @minion-stack/db v0.3.0 (Phase 3c).
+     * Personality configured flag now lives in gateway config at
+     * `agents.list[].personality.configured`. Dropped by the 0013 migration.
+     */
     personalityConfigured: integer('personality_configured', { mode: 'boolean' })
       .notNull()
       .default(false),

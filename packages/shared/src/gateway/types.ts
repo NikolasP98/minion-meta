@@ -97,13 +97,32 @@ export interface HelloOk {
   };
 }
 
+export interface AgentIdentity {
+  name?: string;
+  theme?: string;
+  emoji?: string;
+  avatar?: string;
+  avatarUrl?: string;
+}
+
 export interface Agent {
   id: string;
+  /**
+   * Legacy long-form name from `agents.list[].name`. May be a marketing/full
+   * label like "PANIK - Your Personal Assistant". Prefer `identity.name` for
+   * UI labels — fall back to this, then to `id`.
+   *
+   * @deprecated Use `identity.name` via the `agentDisplayName()` helper.
+   */
   name?: string;
   emoji?: string;
   description?: string;
   model?: string;
   status?: string;
+  /** Short display identity from `agents.list[].identity` (gateway-side). */
+  identity?: AgentIdentity;
+  /** True when this agent is a per-user personal agent. */
+  isPersonal?: boolean;
 }
 
 export interface Session {
