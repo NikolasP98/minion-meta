@@ -36,7 +36,7 @@ test('contract is valid JSON and declares every required foundation family', asy
 
 test('every theme is a complete, resolvable semantic mode', async () => {
   const contract = await readContract();
-  assert.equal(Object.keys(contract.themes).length, 16);
+  assert.equal(Object.keys(contract.themes).length, 18);
   for (const [themeId, theme] of Object.entries(contract.themes)) {
     assert.ok(['light', 'dark'].includes(theme.mode), `${themeId}: mode`);
     assert.ok(contract.radiusScales[theme.radiusScale], `${themeId}: radiusScale`);
