@@ -3,7 +3,7 @@ id: ci-minion_hub-ci
 title: CI red — CI on minion_hub master
 status: draft
 created: 2026-08-14
-updated: 2026-08-16
+updated: 2026-08-17
 repos: []
 ---
 
@@ -19,7 +19,7 @@ green, or the workflow is deliberately removed/disabled with rationale.
 ## Latest failure
 
 - run: https://github.com/NikolasP98/minion_hub/actions/runs/31843974800
-- checked: 2026-08-16
+- checked: 2026-08-17
 
 ```
 check-and-build	UNKNOWN STEP	2026-08-14T21:49:11.2988823Z   PUBLIC_POSTHOG_HOST: https://posthog.invalid
