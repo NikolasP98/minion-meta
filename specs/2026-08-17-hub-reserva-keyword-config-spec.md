@@ -2,12 +2,12 @@
 id: 2026-08-17-hub-reserva-keyword-config-spec
 title: "CRM deposit classification — one rule module, then an org-configurable keyword set (no triplicated '%reserva%')"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-hub-reserva-keyword-config
-verdict: pending
+verdict: approved
 repos: [minion_hub]
 tags: [logic, test]
 type: fix
@@ -306,9 +306,12 @@ bit-identical. **Zero DDL** — `crm_settings` already exists (verified, §1).
 - Add `resolveDepositRule(ctx): Promise<DepositRule>` to the **CRM settings layer** (extend the
   existing `crm_settings` reader found in S0 — *not* inside `crm-deposit-rule.ts`, which stays
   pure and DB-free, and *not* a second query). It is the single place that:
-  - **Normalizes**: trim, lowercase, drop empties, dedupe, preserve order. Caps (20 keywords ×
-    40 chars) are enforced here too, not only on write — a row written before the cap existed, or by
-    `psql`, must not be able to produce a 500-term `OR` chain.
+  - Uses separate read and write boundaries. The read boundary accepts a type-correct legacy array
+    beyond today's write caps, then **normalizes**: trim, lowercase, drop empties, dedupe, preserve
+    order, truncate each keyword and the label to 40 characters, and keep the first 20 keywords.
+    Non-string members or the wrong object shape are malformed and take the fail-soft path below.
+    The write schema remains strict and rejects over-cap input rather than truncating it. This makes
+    the stated hand-written-row behavior deterministic without weakening the API contract.
   - **Fails soft on read.** A malformed/legacy `value.deposit` blob logs a warning and falls back to
     `DEFAULT_DEPOSIT_RULE`; it does **not** throw. Rationale, stated in the code comment: these three
     services back analytics pages, and a single bad settings row must not 500 the whole CRM. Strict
@@ -363,8 +366,11 @@ retroactively fix, and nobody can reintroduce a fourth hardcoded copy without a 
 
 **Do:**
 - **Write path** on the existing CRM settings endpoint found in S0 (`/api/crm/settings` or
-  equivalent). Strict zod on write — unknown keys rejected, caps enforced, `updatedAt` stamped
-  server-side. `/api/crm` is already covered by `API_WRITE_PREFIXES`
+  equivalent). The request contract for this operation is
+  `{ deposit: { keywords: string[]; label?: string } }`; clients cannot supply `updatedAt`.
+  Strict zod on the `deposit` object — unknown deposit keys rejected, caps enforced, `updatedAt`
+  stamped server-side. Preserve any other top-level settings keys rather than rejecting them as
+  though this operation owned the whole settings document. `/api/crm` is already covered by `API_WRITE_PREFIXES`
   (`2026-08-03-crm-icp-score-spec` §2), so the central write gate applies with no new registration —
   **confirm** that in S0 rather than assuming it.
 - **Merge, never replace, the jsonb.** `crm_settings.value` also holds `disabled_channels`
@@ -376,8 +382,9 @@ retroactively fix, and nobody can reintroduce a fourth hardcoded copy without a 
 - **Staleness disclosure (⚠️ A3).** If S0 confirmed the similarity rule feeds `crm_win_embeddings`
   (`bought`, `snippet`), then a keyword change does not retro-fix stored rows — and reclassifying
   history is the proposal's explicit out-of-scope. So: on a successful rule change, log at `warn`
-  with the org id and return a `staleDerived: true` flag (plus the count of `crm_win_embeddings`
-  rows whose `built_at < deposit.updatedAt`) in the response body, and leave a
+  with the org id and return `staleDerivedCount`, the count of `crm_win_embeddings` rows whose
+  `built_at < deposit.updatedAt`, plus `staleDerived: staleDerivedCount > 0` in the response body,
+  and leave a
   `TODO(handoff): keyword changes do not rebuild crm_win_embeddings.bought — see
   2026-08-17-hub-reserva-keyword-config-spec §5` at the write site **and** append the same sentence
   to the source proposal. If S0 shows the existing rebuild job is idempotent and cheap to trigger,
@@ -401,8 +408,8 @@ retroactively fix, and nobody can reintroduce a fourth hardcoded copy without a 
 ```bash
 bun run vitest run src/server/services/crm- src/routes/api
 #   - PUT deposit config on a row that already has disabled_channels → BOTH keys present afterwards
-#   - PUT { keywords: ['x'.repeat(80)] } → 400, row unchanged
-#   - PUT { keywords: [...21 items] } → 400, row unchanged
+#   - PUT { deposit: { keywords: ['x'.repeat(80)] } } → 400, row unchanged
+#   - PUT { deposit: { keywords: [...21 items] } } → 400, row unchanged
 #   - PUT { deposit: { keywords: ['ok'], surprise: 1 } } → 400 (unknown key), row unchanged
 #   - PUT valid → 200, updatedAt stamped server-side, and the very next resolveDepositRule()
 #     returns the new rule (no stale in-process cache)
@@ -447,7 +454,7 @@ definition/tooling** — and only the last one carries a real (non-blocking) ale
 | `minion_site` (shares the DB with hub) | **None.** No DDL; an additive jsonb key inside a table site does not read. No column, table or type touched | `git diff --name-only <base>...HEAD \| grep -qE '(supabase/migrations/\|db/schema/)' && exit 1` in both repos |
 | `@minion-stack/db` (canonical schema) | **None** — no schema edit ⇒ no version bump, no changeset | same guard |
 | `@minion-stack/crm-sdk` | **None** — it writes leads + DNI identity to the party spine and contains no deposit logic. Verified in this checkout: `grep -rin 'reserva' packages ops scripts supabase langgraph-server` → **zero hits** | re-run that grep at PR time |
-| `@minion-stack/shared` / gateway WS frames | **None** — server-side services + one existing REST endpoint; no frame type, no new API contract (the settings endpoint gains a key in an already-freeform jsonb body) | `rg -n 'depositMatchSql\|DepositRule' src/lib/ src/routes/` → expect zero outside the settings route |
+| `@minion-stack/shared` / gateway WS frames | **No shared-package or WS change.** The existing settings REST endpoint does gain an additive request key and response fields, so S0 must locate and test any typed in-repo consumers before S3 changes it. | `rg -n '/api/crm/settings|staleDerived' src/` and update/assert every typed consumer found; expect no shared-frame edit |
 | `minion/` gateway CRM tools | **Alert, not a dependency** — see ⚠️ A2 | grep in Slice 0 + §6 |
 | `paperclip-minion`, `pixel-agents`, `minion_plugins`, `Minion Docs/` | **None** | — |
 
@@ -503,7 +510,8 @@ does not exist.
   `2026-08-17-sdlc-phase-gates-scoring-spec` §4b. Consequence stated plainly: after S3 an operator
   still needs an API call to change the rule. That is a deliberate scope line — the editor belongs
   with the ICP definition editor already planned for that page (`2026-08-03-crm-icp-score-spec` §8.2)
-  and should be one form, not two. Per the AGENTS.md ledger rule, S3 files it as a proposal.
+  and should be one form, not two. Because it is explicitly excluded rather than a partial
+  implementation, it does not create an implementation handoff item in this spec.
 - **A real data model for deposits.** The correct long-run fix is a boolean/enum on the invoice line
   (`fin_invoice_items.is_deposit`, set at ingest by the provider adapter) rather than a substring
   match on free text. That is DDL plus an ingest change plus a backfill — a different, larger spec.
@@ -533,7 +541,7 @@ bun run vitest run                              # full suite green; no new skips
                                                 #   ← the proposal's "existing tests green"
 git diff --name-only <base>...HEAD | grep -E '\.svelte$'              && echo "FAIL: UI out of scope" && exit 1
 git diff --name-only <base>...HEAD | grep -E '(supabase/migrations|db/schema)' && echo "FAIL: no DDL" && exit 1
-git -C ../ diff --name-only <base>...HEAD | grep -E '^supabase/migrations' && echo "FAIL: no DDL (meta)" && exit 1
+git -C .. diff --name-only <meta-base>...HEAD | grep -E '^supabase/migrations' && echo "FAIL: no DDL (meta)" && exit 1
 
 # 2. The proposal's DoD, literally
 rg -n -i 'reserva' src/server/ --glob '!*.test.ts' --glob '!crm-deposit-rule.ts'   # → zero hits
@@ -546,7 +554,8 @@ rg -n 'depositMatchSql|notDepositMatchSql|resolveDepositRule' \
 rg -n -i 'reserva' ~/work/minion/src ~/work/paperclip-minion ~/work/packages
 
 # 4. Behavior, on a real dev org (the whole spec in one pass)
-#    a. baseline: no crm_settings.deposit key
+#    a. seed/choose a fixture with one invoice-item description containing "reserva", then record
+#       the baseline with no crm_settings.deposit key
 curl -s "$HUB/api/crm/contacts/$C/finance" -H "$AUTH" | jq '{revenue,invoices}'   # record
 curl -s "$HUB/api/crm/contacts/$C/journey"  -H "$AUTH" | jq '[.[] | select(.kind=="milestone")]'
 #    b. set the org's rule to a vocabulary the data does NOT use
