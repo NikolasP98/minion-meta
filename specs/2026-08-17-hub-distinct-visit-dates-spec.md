@@ -3,12 +3,12 @@ id: 2026-08-17-hub-distinct-visit-dates-spec
 title: "CRM funnel — count distinct visit dates on the party spine so Loyal auto-advances"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-hub-distinct-visit-dates
-verdict: pending
-repos: [minion_hub]
+verdict: changes_requested
+repos: [minion_hub, minion-meta]
 tags: [logic, test]
 type: fix
 ---
@@ -99,7 +99,8 @@ wearing one sentence, and every one of them is capable of promoting the wrong co
   to it (⚠️ A3).
 - **Which timezone.** Both source columns are `timestamptz`. "Distinct dates" is meaningless
   without a zone, and the choice is not cosmetic: two appointments on one Lima evening bucket as
-  **two** distinct dates in UTC and **one** in `America/Lima`. UTC bucketing therefore promotes
+  **two** distinct dates in UTC and **one** in `America/Lima` when the events straddle UTC
+  midnight. UTC bucketing therefore promotes
   single-day double-appointments to Loyal (⚠️ A2).
 - **Who else reads the answer.** `2026-08-13-crm-customers-server-pagination-spec` S2 (approved)
   ports the funnel derivation into SQL for the roster. If Loyal depends on a number only the
@@ -189,7 +190,8 @@ sed -n '1,140p' 'src/routes/api/crm/contacts/[id]/funnel/analyze/+server.ts'
 #            (b) is there already a threshold literal (>= 2? >= 3?) — if so, THAT is the criterion;
 #                this spec does not invent one
 #            (c) does it write `_funnel` unconditionally or only on change?                (A5)
-#            (d) does it respect `lifecycle_override` / a manual `_funnel` value?          (A6)
+#            (d) does it respect the explicit `lifecycle_override` pin, and is there any
+#                separate provenance that marks a stored `_funnel` value as manual?       (A6)
 
 # 3. The existing party-spine finance join — extend it, do not fork it       ← claim 3
 rg -n -B10 -A40 'fin_invoices' src/server/services/crm-finance.service.ts
@@ -261,7 +263,8 @@ returning `0` at the end of this slice. That separation is deliberate: it makes 
 statement about *counting*, which S2 can then trust when it changes *behavior*.
 
 **Do:**
-- Create `src/server/services/crm-visits.ts` — pure, no DB access, alongside the `crm-scoring.ts` /
+- Create `src/server/services/crm-visits.ts` — side-effect-free and without DB execution,
+  alongside the `crm-scoring.ts` /
   `crm-deposit-rule.ts` precedent. Exports:
   - `type VisitSource = 'invoice' | 'booking'` and
     `type VisitDate = { date: string; source: VisitSource }` (`date` = `YYYY-MM-DD`).
@@ -285,7 +288,10 @@ statement about *counting*, which S2 can then trust when it changes *behavior*.
     `visitDateSql(issued_at, tz)`.
   - **Bookings** — union **both** nullable paths (`sched_bookings.party_id = <contact party>` **or**
     `sched_bookings.crm_contact_id = <contact id>`) because S0's counts will show both are
-    populated in practice. Predicates: status ∈ the attended set S0 enumerated (⚠️ *exclude*
+    populated in practice. Predicates: status ∈ an attended set confirmed from an authoritative
+    scheduling status definition in code/docs (S0's database enumeration discovers values but
+    does not prove attendance semantics). If no status unambiguously means attended, stop for the
+    product decision flagged in A1 rather than treating `accepted` as attended. *Exclude*
     cancelled/rejected/no-show — an intent is not a visit) **and** `start_time <= now()` (a booking
     next Tuesday is not a visit). Count `visitDateSql(start_time, tz)`.
   - Dedupe across both in SQL: `select count(distinct d) from ( … union all … ) t` — not
@@ -300,14 +306,14 @@ statement about *counting*, which S2 can then trust when it changes *behavior*.
 `src/server/services/crm-finance.service.ts`, `src/server/services/crm-visits.test.ts` (new),
 `src/server/services/crm-finance.service.test.ts`.
 
-**Definition of done (machine-checkable):**
+**Verification criteria (automated):**
 ```bash
 bun run vitest run src/server/services/crm-visits src/server/services/crm-finance
 #   red-state first (G3): each case shown failing before the implementation lands
 #   - COUNT: a contact seeded with 2 invoices on DIFFERENT days → 2      ← the proposal's DoD clause 1
 #   - DEDUPE: 2 invoices on the SAME day → 1; an invoice AND a booking on the same day → 1
 #   - CROSS-SOURCE: 1 invoice on day A + 1 booking on day B → 2
-#   - TZ (A2): two events at 20:00 and 22:00 the same America/Lima day (i.e. spanning UTC midnight)
+#   - TZ (A2): two events at 18:00 and 20:00 the same America/Lima day (spanning UTC midnight)
 #     → 1, NOT 2. This single assertion is why the tz is explicit.
 #   - EXCLUDED: null issued_at → not counted; a void/cancelled invoice status → not counted;
 #     a cancelled/no-show booking → not counted; a booking with start_time in the FUTURE → not counted
@@ -340,10 +346,9 @@ provably, and without demoting or overwriting anything a human set.
   `contactVisitDates` — resolved **once per call**, not per row, not inside a loop). Remove S1's
   `TODO(handoff):`.
 - **Make the Loyal decision deterministic** (⚠️ A7). Per S0's reading of the analyze endpoint:
-  - If a threshold rule already exists there, keep its number and only unblock its input. Lift a
-    bare literal into a named `const LOYAL_MIN_VISIT_DATES` beside the funnel logic with a comment
-    stating it is a product default, not a law. **Do not invent a different threshold**; the
-    proposal's DoD says "2+ dates", which is the floor the test seeds.
+  - Set the criterion to the proposal's explicit floor:
+    `LOYAL_MIN_VISIT_DATES = 2`. If S0 finds a different existing threshold, stop and reconcile
+    that product contradiction rather than preserving one value while testing another.
   - If the decision is currently the *model's* (the count is only injected into the prompt), add a
     deterministic floor **after** the model's answer: `visitDates >= LOYAL_MIN_VISIT_DATES` ⇒ at
     least `loyal`. Rationale, to be written into the code comment: a deterministic input deserves a
@@ -353,9 +358,10 @@ provably, and without demoting or overwriting anything a human set.
 - **Three safety rules, each with its own test:**
   1. **Forward only.** Auto-advance never demotes. A contact stored as `loyal` whose invoice was
      later voided is not silently pushed back to `customer` by this path.
-  2. **Never overwrite a human.** A manual `_funnel` value or a `lifecycle_override` wins over
-     auto-detection. (`crm_contacts.lifecycle_override` exists — verified §1 — and the proposal's
-     own framing is that manual override is today's *only* path to Loyal; it must keep working.)
+  2. **Never overwrite the explicit manual pin.** A non-null `lifecycle_override` wins over
+     auto-detection. Do not call an arbitrary stored `_funnel` value "manual": the verified schema
+     has no provenance that distinguishes a human-written `_funnel` from an automatic write. If
+     S0 finds such provenance, add its exact rule and a test before implementation.
   3. **Write only on change.** If the computed stage equals the stored one, issue **no** write.
      This is one guard clause and it directly bounds ⚠️ A5's blast radius — without it, turning
      auto-advance on turns a rarely-exercised unsafe read-modify-write into a per-analyze one.
@@ -367,7 +373,7 @@ provably, and without demoting or overwriting anything a human set.
 (the threshold constant / floor, if that is where the derivation lives),
 `src/server/services/crm-contacts.test.ts`, the analyze route's test file (create if absent).
 
-**Definition of done (machine-checkable):**
+**Verification criteria (automated):**
 ```bash
 bun run vitest run src/server/services/crm-contacts src/routes/api/crm/contacts
 #   red-state first (G3)
@@ -378,7 +384,7 @@ bun run vitest run src/server/services/crm-contacts src/routes/api/crm/contacts
 #   - NO LIVE LLM anywhere in the suite: the model client is stubbed; the stage assertion passes
 #     with the stub returning garbage AND with it throwing        ← A7, the deterministic floor
 #   - forward-only: stored 'loyal' + 0 current visit dates → stays 'loyal' (no demotion write)
-#   - manual wins: lifecycle_override / manually-set _funnel is not overwritten by auto-detection
+#   - manual wins: lifecycle_override is not overwritten by auto-detection
 #   - write-only-on-change: stage already 'loyal' → ZERO update statements (assert on the stubbed
 #     driver, not on the returned value)                           ← bounds A5
 rg -n 'STUB|return 0' src/server/services/crm-contacts.service.ts   # → no stub at the visit-count site
@@ -402,12 +408,10 @@ an N+1; and nobody can re-stub a signal without a red test.
     landed): add `distinct_visit_dates` to the finance CTE and the Loyal branch to the CASE, then
     extend the existing truth table with the visit-count axis so the SQL and TS answers are proven
     equal for every combination. The parity test is the deliverable, not the CASE.
-  - *They do not exist yet*: leave the seam and the note — a `TODO(handoff):` at the funnel
-    derivation naming this spec plus an append to
-    `proposals/2026-08-13-crm-customers-server-pagination.md` (or the spec's own body if that is
-    the live convention) stating that the SQL derivation must include the visit-count axis. Then
-    say plainly in the PR that the roster is visit-blind until that spec lands, and that the two
-    surfaces disagree in the interim. **Disclose it; do not quietly ship a half-consistent funnel.**
+  - *They do not exist yet*: S3 is blocked on the pagination spec's S2. Record the two ledger
+    entries required by AGENTS.md, but do not pass this spec's ship gate while the roster and
+    per-contact derivations disagree. This spec's stated goal is cross-consumer consistency, so a
+    disclosed inconsistency is not an alternative definition of done.
 - **Anti-recurrence guard.** A test that reads `crm-contacts.service.ts` (and the other CRM
   services) and fails if a funnel/visit signal function body is a constant return — i.e. the
   `STUB` shape this spec deletes — with a failure message pointing at `contactVisitDates`. The
@@ -434,14 +438,12 @@ only if pagination S2 landed and it exists), `src/server/services/crm-visits.tes
 `proposals/2026-08-17-hub-distinct-visit-dates.md` and, if the seam is deferred,
 `proposals/2026-08-13-crm-customers-server-pagination.md` (handoff appends, in the meta-repo).
 
-**Definition of done (machine-checkable):**
+**Verification criteria (automated except the explicitly manual mutation check and EXPLAIN review):**
 ```bash
 bun run vitest run src/server/services/crm-
 #   - PARITY (path 1): the truth table now includes the visit-count axis and the SQL funnel_stage
 #     result == effectiveFunnelStage()/financeFloorStage() TS result for every combination of
 #     (_funnel value × inbound>0 × booked × purchased × visitDates 0/1/2). No skips.
-#     (path 2): the parity file is untouched and BOTH handoff records exist — assert the TODO
-#     is present and the proposal file contains the matching sentence.
 #   - GUARD: re-stubbing the visit count to `return 0` makes the suite fail (verify by doing it
 #     once locally, then reverting — state in the PR that you did)
 #   - RESILIENCE: org with no sched_* rows → 0, no throw; org with no fin_* rows → 0, no throw
@@ -459,7 +461,7 @@ rg -n 'TODO\(handoff\)' src/server/services/crm-*.ts src/lib/crm/crm-funnel.ts
 
 | File | Slices | Nature |
 |---|---|---|
-| `src/server/services/crm-visits.ts` | S1 | **new** — pure: `VisitDate`, `countDistinctVisitDates`, `visitDateSql`, the resolved bucketing timezone. No DB. |
+| `src/server/services/crm-visits.ts` | S1 | **new** — side-effect-free helpers: `VisitDate`, `countDistinctVisitDates`, `visitDateSql`, and the resolved bucketing timezone; no DB execution. |
 | `src/server/services/crm-finance.service.ts` | S1 | additive batched `distinctVisitDates` on the **existing** party-spine query / `ContactFinance` — one query for N contacts |
 | `src/server/services/crm-contacts.service.ts` | S2, S3 | stub → real count; `funnel_stage` CASE gains the Loyal branch (S3, if the CASE exists). **Not** the `_funnel` writer — see A5 |
 | `src/routes/api/crm/contacts/[id]/funnel/analyze/+server.ts` | S2 | deterministic Loyal floor; forward-only, manual-wins, write-only-on-change guards |
@@ -475,7 +477,7 @@ All `src/` paths relative to `minion_hub/`. **No `.svelte` file is edited in any
 **Zero DDL in either repo**: every column this spec reads already exists (verified §1), and the
 CRM/finance/scheduling migrations live in **minion-meta** (`supabase/migrations/`, verified here),
 so the "no migration" guard in §6 runs against both checkouts. The only meta-repo edits are
-proposal-ledger appends (`docs`-class), which is why `repos:` stays `[minion_hub]`.
+proposal-ledger appends (`docs`-class), so `repos:` names both `minion_hub` and `minion-meta`.
 
 ## 4. Cross-repo impact
 
@@ -498,8 +500,11 @@ The two sources are not equally trustworthy and neither is self-describing:
 - **Bookings** carry `status` (default `'accepted'`) and a `start_time` that may be in the future.
   Counting a cancelled, rejected, no-showed or not-yet-happened booking as a visit is the fastest
   way to promote exactly the wrong contact — a serial no-show becomes "Loyal". S0 enumerates the
-  real status domain from the dev DB (`select status, count(*) …`) and S1 names the attended set in
-  a `const`; **do not guess the vocabulary from the schema default.**
+  real status domain from the dev DB (`select status, count(*) …`), then confirms semantics from
+  an authoritative scheduling status definition before S1 names the attended set in a `const`.
+  Observed values alone do not prove attendance. If the system records intent but no completed/
+  attended state, a human must decide whether past `accepted` bookings count; implementation is
+  blocked until that decision is recorded. **Do not guess from the schema default.**
 - **Invoices** have a nullable `issued_at` (verified §1) and a `status` whose void/cancelled values
   must be excluded. A null date must be *excluded*, never coerced to `now()` or the epoch.
 - **Deposits.** `2026-08-17-hub-reserva-keyword-config-spec` establishes that a deposit line is
@@ -514,8 +519,8 @@ The two sources are not equally trustworthy and neither is self-describing:
 
 Both `fin_invoices.issued_at` and `sched_bookings.start_time` are `timestamptz`. Bucketing in UTC
 (the default anyone reaches for, and what a bare `::date` or `date_trunc('day', …)` gives you)
-splits a single Lima evening across two calendar days: an appointment at 20:00 and another at
-22:00 on the same local day are `01:00` and `03:00` UTC *the next day* — so a one-day
+splits a single Lima evening across two calendar days: an appointment at 18:00 and another at
+20:00 on the same local day are `23:00` UTC and `01:00` UTC *the next day* — so a one-day
 double-appointment reads as **2 distinct visits** and the contact is promoted to Loyal on the
 strength of a single visit. Verified in this checkout: **no org timezone column exists** in any
 migration; the only stored timezones are `sched_resources.timezone` / `sched_schedules.timezone`,
@@ -587,8 +592,9 @@ express Loyal as a **floor** (`visitDates >= N ⇒ at least loyal`) and let the 
 record a *suggestion*, so the stage tracks reality without a demotion write. If the floor
 mechanism does not exist, S2's forward-only + manual-wins + write-only-on-change rules are the
 compensating controls, and the permanence is a deliberate, documented trade — not an oversight.
-Either way, **auto-detection must never overwrite a value a human set**: manual override is the
-proposal's stated *only* current path to Loyal, and it has to keep working after this ships.
+Either way, **auto-detection must never overwrite `lifecycle_override`**, the verified explicit
+manual pin. A stored `_funnel` value has no verified provenance and must not be described or tested
+as human-authored unless S0 finds a separate marker.
 
 ### ⚠️ A7 — an LLM cannot be the gate on a deterministic number
 
@@ -691,14 +697,13 @@ curl -s "$HUB/api/crm/contacts/$C" -H "$AUTH" | jq '.custom_fields._funnel'   # 
 #    d. add a FUTURE-dated booking and a CANCELLED booking → the count does not change  (A1)
 #    e. re-run analyze with the stage already 'loyal' → no write (check updated_at is unchanged
 #       on crm_contacts, and that a sibling reserved key such as _icp is intact)          (A5)
-#    f. set the contact's stage manually to something else → analyze does not overwrite it (A6)
-#    g. the tz assertion, live: two events at 20:00 and 22:00 local on ONE day → count 1  (A2)
+#    f. set lifecycle_override to another stage → analyze does not overwrite it (A6)
+#    g. the tz assertion, live: two events at 18:00 and 20:00 local on ONE day → count 1  (A2)
 
 # 5. Roster consistency (A4)
 curl -s "$HUB/api/crm/contacts?funnelStage=loyal&limit=5" -H "$AUTH" | jq '.total, [.contacts[].id]'
-#    Either this set matches the per-contact derivation for the same org (parity landed), or the
-#    PR states explicitly that the roster is visit-blind until the pagination spec's S2 lands and
-#    both handoff records exist.
+#    This set must match the per-contact derivation for the same org. If pagination S2 has not
+#    landed, record the handoff and keep this spec blocked; disclosure alone does not pass.
 
 # 6. Perf (A9) — paste the plan and the timing in the PR
 #    explain analyze the batched visit-date count for a 100-contact page on the largest dev org.
