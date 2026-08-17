@@ -1,11 +1,11 @@
 ---
 id: 2026-08-14-pos-payment-methods-config-spec
 title: POS configurable payment methods + settings UI
-stage: dev
-status: approved
+stage: done
+status: shipped
 pass: 1
 created: 2026-08-14
-updated: 2026-08-14
+updated: 2026-08-17
 repos: [minion_hub]
 type: feature
 ---

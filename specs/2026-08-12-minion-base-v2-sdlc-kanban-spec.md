@@ -1,11 +1,11 @@
 ---
 id: 2026-08-12-minion-base-v2-sdlc-kanban-spec
 title: minion-base v2 — SDLC Kanban, Practices Codex, Agentic-Dev Research
-stage: dev
-status: implementing
+stage: done
+status: shipped
 pass: 1
 created: 2026-08-12
-updated: 2026-08-12
+updated: 2026-08-17
 repos: [minion-base]
 ---
 

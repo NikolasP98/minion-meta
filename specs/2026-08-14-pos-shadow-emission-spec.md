@@ -1,11 +1,11 @@
 ---
 id: 2026-08-14-pos-shadow-emission-spec
 title: POS shadow emission — serie allocation + ticket→SUNAT-beta wiring
-stage: dev
-status: approved
+stage: done
+status: shipped
 pass: 1
 created: 2026-08-14
-updated: 2026-08-14
+updated: 2026-08-17
 repos: [minion_hub]
 type: feature
 ---
