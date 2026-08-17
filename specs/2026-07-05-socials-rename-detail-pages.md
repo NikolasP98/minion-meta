@@ -1,11 +1,11 @@
 ---
 id: 2026-07-05-socials-rename-detail-pages
 title: /ads → /socials rename + Posts/Campaigns detail pages + ad-level previews
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 1
 created: 2026-07-05
-updated: 2026-07-15
+updated: 2026-08-17
 repos: [minion_hub]
 ---
 

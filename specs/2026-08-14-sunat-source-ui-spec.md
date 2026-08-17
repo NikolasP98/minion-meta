@@ -1,11 +1,11 @@
 ---
 id: 2026-08-14-sunat-source-ui-spec
 title: SUNAT (SIRE) source card in /finances settings
-stage: dev
-status: approved
+stage: done
+status: shipped
 pass: 1
 created: 2026-08-14
-updated: 2026-08-14
+updated: 2026-08-17
 repos: [minion_hub]
 type: feature
 ---

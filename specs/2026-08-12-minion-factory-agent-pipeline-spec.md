@@ -1,11 +1,11 @@
 ---
 id: 2026-08-12-minion-factory-agent-pipeline-spec
 title: minion-factory — Containerized Agent Development Pipeline on Netcup
-stage: dev
-status: implementing
+stage: done
+status: shipped
 pass: 1
 created: 2026-08-12
-updated: 2026-08-12
+updated: 2026-08-17
 repos: [minion-factory]
 ---
 

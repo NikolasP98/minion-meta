@@ -1,11 +1,11 @@
 ---
 id: 2026-08-14-purchases-rce-module-spec
 title: Purchases module — SIRE RCE backfill, open/closed locking, minion-side CRUD
-stage: dev
-status: approved
+stage: done
+status: shipped
 pass: 1
 created: 2026-08-14
-updated: 2026-08-14
+updated: 2026-08-17
 repos: [minion_hub]
 type: feature
 ---
