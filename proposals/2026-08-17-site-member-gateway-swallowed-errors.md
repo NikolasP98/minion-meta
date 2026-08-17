@@ -1,7 +1,8 @@
 ---
 id: 2026-08-17-site-member-gateway-swallowed-errors
 title: Member dashboard gateway failures silently swallowed (3 empty catches)
-status: draft
+status: in-spec
+spawned_spec: 2026-08-17-site-member-gateway-swallowed-errors-spec
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion_site]
