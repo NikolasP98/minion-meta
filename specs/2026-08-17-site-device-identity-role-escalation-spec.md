@@ -3,11 +3,11 @@ id: 2026-08-17-site-device-identity-role-escalation-spec
 title: "device-identity/sign — sign the caller's real grant, never the body's role/scopes"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-site-device-identity-role-escalation
-verdict: pending
+verdict: changes_requested
 repos: [minion_site]
 tags: [security, logic, test]
 type: fix
@@ -73,8 +73,10 @@ site's sign endpoint is the **only** thing standing between a logged-in member a
 admin-signed credential for their whole organization. Today that thing is a session check, which
 proves *who* the caller is and then ignores it.
 
-The fix is one sentence long and three slices wide: **the values that get signed must come from a
-server-side lookup of the caller, never from the request body.**
+The fix is one sentence long and three slices wide: **authorization-sensitive signed values
+(`role`, `scopes`, and tenant/key selection) must come from server-side caller context, never from
+the request body; `signedAtMs` must come from the server clock.** Handshake inputs such as
+`clientId`, `clientMode`, `token`, and `nonce` may remain request/challenge-derived and signed.
 
 The three slices exist because of a coupling that is easy to miss and that would break the
 members dashboard if missed — §2 opens with it.
@@ -87,21 +89,22 @@ on disk here, only the meta-repo's own `langgraph-server` port of the crypto). E
 line number and symbol below is carried from the proposal (written today, so strong), from
 `.planning/phases/05-db-extraction/05-02-SUMMARY.md` (names the two site files), and from
 `specs/ws-duplication-audit.md` (names the client). Treat them as leads, not fact. Slice 0 turns
-them into fact; if something moved, correct §3 of this spec in the same commit rather than
-implementing against a different file in silence.
+them into fact; if something moved, correct §3 through a separate scoped meta-repo change linked
+from the site PR rather than implementing against a different file in silence.
 
 Five carried claims are load-bearing:
 
 1. **The endpoint reads `role`/`scopes` from the POST body and passes them straight to the
    signer** (the proposal, `+server.ts:24-27`). If a clamp has landed since, this spec collapses
    to S3's regression tests — say so in the PR and cut scope; do not implement a second clamp.
-2. **The caller's real role is available server-side.** Two candidate sources exist in
+2. **The caller's real role is available server-side.** Three candidate sources exist in
    `@minion-stack/db`: `profiles.role` (`['user','admin']`, the Supabase-canonical identity) and
    Better Auth's `user.role` (`['user','admin']`), plus a per-org `member.role` from the Better
    Auth organization plugin (`packages/db/src/pg/schema/auth.ts:96-120`). **Which one the site's
-   `locals` already carries is a Slice 0 question**, and the answer decides whether the grant is
-   global or per-organization. Prefer whatever `hooks.server.ts` already resolves — do not add a
-   second identity lookup path.
+   `locals` already carries is a Slice 0 question**, but choosing global identity versus
+   per-organization membership changes the authorization model. Before implementation, a human
+   security owner must name the canonical source and tenant semantics here. Reuse an existing
+   `locals` value only if it is that approved source; do not add a parallel identity path.
 3. **The site's browser client sends a hardcoded role/scopes pair today.** Its value is unknown
    from here; the sibling backend client in this checkout uses `role: 'operator'`,
    `scopes: ['operator.admin']` (`langgraph-server/src/gateway/client.ts:38-39`). Slice 0 **must**
@@ -144,7 +147,9 @@ test -f vitest.config.ts && rg -n 'include' vitest.config.ts
 ```
 
 Record the actuals in the PR description — in particular **the exact role/scopes string the
-members dashboard requests today**. Nothing in Slice 0 changes files.
+members dashboard requests today**. Nothing in Slice 0 changes files. **Implementation is blocked
+until the canonical role source, tenant semantics, exact `MAX_GRANT` mapping, and authoritative
+scope vocabulary are written into this spec.** Recon supplies evidence; it must not invent policy.
 
 ## 2. Approach — three vertical slices
 
@@ -164,11 +169,12 @@ member sees an opaque connect failure instead of a working dashboard. That is wh
   the returned values verbatim. After S2 the client stops asserting a role at all, which is what
   actually kills this bug class rather than papering over it.
 
-S1 alone closes the escalation and is safe to ship on its own **provided ⚠️ A3's baseline check
-passes** (the default grant must cover what the current client asks for; if it doesn't, S1 and S2
-ship together or every member loses the dashboard). S1 satisfies the proposal's DoD literally. S2
-and S3 are hardening: S2 removes the client's ability to ask, S3 makes a future regression fail a
-test instead of shipping.
+S1 alone closes the escalation only after the human-approved grant mapping is recorded, and is
+safe to ship on its own **provided ⚠️ A3's compatibility check passes**. If the approved default
+grant does not cover the current client ask, S1 and S2 must ship together with a compatible
+server-selected grant or every member loses the dashboard. S1 satisfies the proposal's DoD
+literally. S2 and S3 are hardening: S2 removes the client's ability to ask, S3 makes a future
+regression fail a test instead of shipping.
 
 If the wave must cut scope, cut after S1 or after S2 — and then the AGENTS.md **open-items ledger**
 rule applies: a `TODO(handoff):` at the exact site plus an append to the source proposal naming
@@ -180,14 +186,15 @@ what is still unguarded.
 
 **Tags:** `security`, `logic`, `test` · **Estimate:** 5–7 h
 
-**Goal:** no value that ends up inside the signed payload originates in the request body. A
-non-admin asking for `admin` gets a 403 and no signature.
+**Goal:** no authorization-sensitive signed value (`role`, `scopes`, or tenant/key choice)
+originates in the request body, and `signedAtMs` originates from the server clock. A non-admin
+asking for `admin` gets a 403 and no signature.
 
 **Do:**
 
 - Add a small pure policy module, `src/server/services/device-grant.ts`:
   ```ts
-  export type AppRole = 'user' | 'admin';              // ← exact enum from Slice 0, not guessed
+  export type AppRole = 'user' | 'admin';              // ← import/derive from the canonical source where possible
   export interface DeviceGrant { role: string; scopes: string[] }
 
   /** Maximum device credential each app role may ever be issued. Deny-by-default:
@@ -202,14 +209,18 @@ non-admin asking for `admin` gets a 403 and no signature.
   Rules, in order: unknown/absent `callerRole` ⇒ `no_grant` (fail closed, **not** the `user`
   default). No `requested` ⇒ the caller's `MAX_GRANT` entry. `requested.role` ≠ max role, or
   `requested.scopes` ⊄ max scopes ⇒ `grant_exceeded` with the max echoed back so a legitimate
-  client can retry correctly. Otherwise the intersection, with scopes deduped and order-normalized
+  client can retry correctly. Otherwise use the requested subset; an omitted role defaults to the
+  maximum role and omitted scopes default to the maximum scopes. Dedupe and order-normalize scopes
   (the payload joins them with `,`, so order is signed — normalize on both sides or S2's contract
   test will flap).
 - In `+server.ts`: resolve `callerRole` from the session/locals source Slice 0 identified — never
   from the body, never from a header. On `ok: false` return **403** with
   `{ error, code, max }` and **no signature field**. On `ok: true` sign
   `buildDeviceAuthPayload({ …, role: grant.role, scopes: grant.scopes, … })` and return the
-  effective `{ role, scopes, signedAtMs, deviceId, publicKey, signature }`.
+  effective `{ role, scopes, signedAtMs, deviceId, publicKey, signature }`. Preserve and document
+  existing response fields needed by the handshake. S2 must retain `clientId`, `clientMode`,
+  `token`, and `nonce` from their existing request/challenge sources rather than assume this
+  endpoint newly returns them.
 - `signedAtMs` comes from the **server clock** (`Date.now()`), not the body — same "don't trust the
   body" rule, and the response already carries it back for S2 to use. If Slice 0 shows the body
   supplies it today, this is a one-line change and belongs in this slice.
@@ -242,7 +253,8 @@ bun x vitest run src/server/services/device-grant.test.ts src/routes/api/device-
 #   - scopes order/dupes in the request do not change the signed string (normalization)
 rg -n 'body\.role|body\.scopes|json\.role|json\.scopes|requested\.(role|scopes)' \
    src/routes/api/device-identity/sign/+server.ts src/server/services/device-identity.service.ts
-#   → the ONLY permitted hits are inside the resolveGrant() call arguments; zero hits reaching the signer
+#   → request-derived role/scopes may appear only as resolveGrant() requests; manually verify no
+#      policy bypass reaches the signer (a textual hit count alone is not proof)
 bun run check          # 0 errors / 0 warnings
 ```
 
@@ -266,9 +278,11 @@ structurally impossible by deriving the `connect` params from the sign response.
   `console.error` (no silent `.catch(() => {})`, no reconnect storm against a decision that will not
   change on retry). Keep this to the sign path only — the file's other empty catches belong to
   proposal `2026-08-17-site-member-gateway-swallowed-errors` and are **out of scope** here (§5).
-- Add a contract test that pins the coupling: given a mocked sign response, the params the client
+- Add a contract test that pins the coupling: given a mocked sign response and challenge, the params the client
   hands to `connect` must reproduce, field for field, the payload string the server signed —
-  assert by rebuilding `buildDeviceAuthPayload` from the params and verifying the signature.
+  assert by rebuilding `buildDeviceAuthPayload` from the params and verifying the signature. The
+  fixture must assert every canonical field: version, deviceId, clientId, clientMode, role,
+  ordered scopes, signedAtMs, token, and optional nonce.
 
 **Files:** `src/lib/services/member-gateway.svelte.ts`,
 `src/lib/services/member-gateway.test.ts` (new; `.svelte.ts` modules are plain TS — no component
@@ -297,11 +311,11 @@ sibling hole in the same endpoint if Slice 0 found it.
 
 **Do:**
 
-- **Exhaustiveness:** `MAX_GRANT` is typed `Record<AppRole, DeviceGrant>`, so adding a role to the
-  app's role enum without deciding its device grant fails `bun run check`. Add the matching runtime
-  test (every enum member has an entry; no entry grants a scope absent from the documented scope
-  list) — a compile error and a red test are both cheap, and the compile error is the one that
-  catches a schema-side enum change in `@minion-stack/db`.
+- **Exhaustiveness:** `MAX_GRANT` is typed `Record<AppRole, DeviceGrant>`. This is exhaustive only
+  if `AppRole` is imported or derived from the canonical role type; a copied union cannot catch a
+  schema-side enum change. Add a runtime role list from the same canonical source and test every
+  member has an entry. Validate scopes against the authoritative vocabulary named in Slice 0; do
+  not create a second undocumented list solely for the test.
 - **Tenant binding (conditional on Slice 0, assumption 4):** the `device_identities` row is chosen
   by tenant. If that tenant is read from the request body or a client-settable header, resolve it
   from the session's active organization instead — signing with another tenant's key is the same
@@ -324,8 +338,7 @@ sibling hole in the same endpoint if Slice 0 found it.
 ```bash
 bun x vitest run src/server/services/device-grant.test.ts src/routes/api/device-identity/sign/sign.test.ts
 #   - every member of the app role enum has a MAX_GRANT entry (runtime table test)
-#   - adding a dummy role to AppRole without a MAX_GRANT entry makes `bun run check` go red
-#         (negative probe: add, confirm red, revert — paste both outputs in the PR)
+#   - a source-controlled type-test fixture proves a missing AppRole entry fails type-checking
 #   - a body-supplied tenantId/organizationId for a DIFFERENT tenant is ignored: the signature
 #         verifies against the SESSION tenant's public key, never the requested one
 #   - JSON.stringify(response) does not match /privateKeyPem|BEGIN PRIVATE KEY/ for 200 and 403
@@ -408,11 +421,12 @@ Either way, **do not change the gateway in this spec** (§5).
 
 The single production risk. If `MAX_GRANT.user` is narrower than what
 `member-gateway.svelte.ts` requests today, then on S1's merge every non-admin member gets a 403 and
-the members area stops connecting. Slice 0 records the exact current ask; set the baseline to at
-least that, and treat "the members dashboard runs with `operator` / `operator.admin`" as a genuine
-finding for a **follow-up proposal** to narrow it — narrowing is a gateway-side scope question, not
-this spec's (§5). Preserve the members area first; the escalation this spec closes is the *delta*
-between a member's baseline and admin, and that delta closes either way.
+the members area stops connecting. Slice 0 records the exact current ask, but current behavior is
+compatibility evidence rather than authority to grant it. The human security owner must approve
+the baseline after checking gateway scope semantics. If the approved baseline is narrower, S1 and
+S2 need a coordinated compatible client flow; if preserving the current broad baseline is the
+explicit decision, file a follow-up proposal to narrow it. Do not silently convert a potentially
+overprivileged client request into policy.
 
 ## 5. Out of scope (explicit)
 
@@ -432,7 +446,7 @@ between a member's baseline and admin, and that delta closes either way.
 - **Key rotation / device revocation** for `device_identities`.
 - **The other empty catches in `member-gateway.svelte.ts`** (lines 236/254/322) — owned by proposal
   `2026-08-17-site-member-gateway-swallowed-errors`. S2 touches only the sign path; scope the commit
-  narrowly and expect to rebase.
+  narrowly and account for overlapping work before implementation.
 - **UI work.** No `.svelte` file is edited, no error surface is designed, so the `ui` tag and its
   governance gates (`lint:design` / `lint:tokens`, the ui-design-governance skill) do **not** apply
   per `2026-08-17-sdlc-phase-gates-scoring-spec` §4b. Rendering a friendly "your account can't do
@@ -497,4 +511,5 @@ curl -s -X POST "$SITE/api/device-identity/sign" -H "cookie: $MEMBER" \
    `minion_hub` proposal id.
 5. ⚠️ A2's reading of `minion/src/gateway/auth/device-auth.ts` summarized in one line.
 6. ⚠️ A3's recorded current client ask reconciled against the shipped `MAX_GRANT`.
-7. Slice 0's actuals reconciled against §3 — any correction committed to this spec in the same PR.
+7. Slice 0's actuals reconciled against §3. Because the site and meta-repo are independent,
+   corrections require a separate scoped meta-repo change linked from the site PR.
