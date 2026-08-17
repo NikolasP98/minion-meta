@@ -1,7 +1,8 @@
 ---
 id: 2026-08-17-factory-compose-tailnet-hardcode
 title: docker-compose hardcodes the Netcup tailnet IP, breaking any-host setup
-status: approved
+status: in-spec
+spawned_spec: 2026-08-17-factory-compose-tailnet-hardcode-spec
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion-factory]
