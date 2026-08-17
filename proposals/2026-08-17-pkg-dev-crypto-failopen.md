@@ -1,7 +1,8 @@
 ---
 id: 2026-08-17-pkg-dev-crypto-failopen
 title: Dev crypto key silently activates outside exact NODE_ENV=production
-status: approved
+status: in-spec
+spawned_spec: 2026-08-17-pkg-dev-crypto-failopen-spec
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion-meta]
