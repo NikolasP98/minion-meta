@@ -3,11 +3,11 @@ id: 2026-08-17-hub-updatesellable-silent-drop-spec
 title: "updateSellable — apply or refuse kind/trackStock/uom edits (no silent 200 no-op)"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-hub-updatesellable-silent-drop
-verdict: pending
+verdict: approved
 repos: [minion_hub]
 tags: [logic, test]
 type: fix
@@ -102,7 +102,9 @@ rg -n 'kind' src/server/services/pos.service.ts | rg -n 'stk_items|finProductId|
 rg -n 'SellableInput|SellableUpdate' src/ --type ts        # where the input type lives; who else uses it
 rg -rn 'sellables' src/routes/api --files-with-matches     # the PATCH route path
 rg -n 'PosError' src/server/services/pos.service.ts | head
-rg -n 'PosError|catch' src/routes/api/**/sellables/**      # → confirm PosError maps to 400, not 500
+rg -n 'PosError|catch' src/routes/api -g '**/sellables/**'  # → confirm PosError maps to 400, not 500
+#   (use rg's own -g glob, not a shell **; without `shopt -s globstar` bash passes the literal
+#   string through and rg errors on a nonexistent path)
 rg -n 'createItem|updateItem' src/server/services/stock.service.ts | head
 rg -n 'uom|unitOfMeasure' src/server/db/schema/*.ts | rg -i 'item'   # uom column name + table
 rg -n 'stk_ledger|stk_bins|ledger|movement' src/server/db/schema/*.ts | head  # movement tables for S2/S3
@@ -118,12 +120,18 @@ Record the actuals in the PR description. Nothing else in Slice 0 changes files.
 S0 (recon) ─▶ S1 (honest 400) ─▶ S2 (apply the safe transitions) ─▶ S3 (destructive policy + drift guard)
 ```
 
-Strictly sequential — each slice edits the same function. **S1 alone already satisfies the
-proposal's minimum DoD** ("or a changed value returns 400") and is safe to ship on its own; S2+S3
-satisfy the preferred branch ("the fields apply"). If the pilot wave needs to cut scope, cut after
-S1 or after S2 — but then the AGENTS.md **open-items ledger** rule applies: a `TODO(handoff):`
+Strictly sequential — each slice edits the same function. **S1 alone stops the silent drop** —
+every changed `kind`/`trackStock`/`uom` value either no-ops correctly or refuses with a typed 400,
+so no operator edit is lost silently — and is safe to ship on its own. S1 does **not** yet satisfy
+the proposal's DoD sentence *literally*: "test asserts a kind/uom patch is reflected in
+`getSellableRow()`" requires a patch that actually *applies*, and S1 refuses every real kind/uom
+change (that's the point of S1). The reflected-patch assertion first becomes true in S2 (see §6
+step 2, and S2's DoD's `trackStock:true` case). S2+S3 satisfy the preferred branch ("the fields
+apply") and the DoD's literal wording in full. If the pilot wave needs to cut scope, cut after S1
+or after S2 — but then the AGENTS.md **open-items ledger** rule applies: a `TODO(handoff):`
 comment at the refusal site plus an append to the source proposal saying which transitions are
-still refused and why.
+still refused and why, **and**, if cutting after S1, a note that the proposal's literal DoD
+sentence is not yet met (only its safety property is).
 
 ---
 
@@ -155,7 +163,12 @@ a typed code. Zero behavior change for price/name/category edits.
   does not touch the wizard.
 - Confirm/repair the route's `PosError` → **400** mapping (assumption 3). If other endpoints share
   that handler, only widen the mapping for `PosError`; leave unknown errors as 500.
-- `TODO(handoff):` at each refusal site pointing at S2/S3 of this spec, removed by those slices.
+- `TODO(handoff):` at the `trackStock` and `uom` refusal sites only, pointing at S2/S3 of this spec —
+  those two are genuinely deferred work and the markers are removed as each slice lands. **Not** at
+  the `kind_derived` site: `kind` is derived by design (assumption 1) and is never a directly
+  settable field in any slice, including S3 — refusing a direct `kind` write is the permanent,
+  correct behavior, not deferred work, so it gets a plain explanatory comment instead of a
+  `TODO(handoff)` that would never have a slice to remove it.
 
 **Files:** `src/server/services/pos.service.ts`, the sellables PATCH `+server.ts` (only if the
 error mapping needs repair), `src/server/services/pos.sellables.test.ts`.
@@ -245,11 +258,17 @@ act on, and leave behind a test that fails if `create` and `update` ever diverge
   stocked `Unidad` *is* a 15 mL vial — historical ledger and bin quantities are recorded in the
   stock UOM and are **not** rewritten, so renaming the unit retroactively falsifies every past
   movement. Conversion (`units_per_stock_uom`) is that spec's job, not this one.
-- Anti-recurrence guard: a test that enumerates the `SellableInput`/`SellableUpdate` field list and
-  asserts every field is either present in `updateSellable`'s `.set()`, handled by
-  `syncSellableItem`, or listed in an explicit `INTENTIONALLY_IGNORED` const. A newly added field
-  that is silently dropped fails this test. This is the generalization of the bug and the reason it
-  is worth a slice.
+- Anti-recurrence guard: every field of `SellableInput`/`SellableUpdate` is either present in
+  `updateSellable`'s `.set()`, handled by `syncSellableItem`, or listed in an explicit
+  `INTENTIONALLY_IGNORED` const, and a newly added field that is silently dropped fails this check.
+  **How** depends on what Slice 0's `rg 'SellableInput|SellableUpdate'` finds: if it's a runtime
+  schema (zod/valibot), write it as a vitest case that reads the schema's own keys at runtime,
+  exactly as below. If it's a plain compile-time-only TS type (the likelier case — nothing found so
+  far in this codebase's POS/stock services suggests zod-backed inputs), runtime key introspection
+  is impossible (TS types are erased); use a **compile-time** coverage check instead — e.g.
+  `type _AssertNoUnhandledField = Record<Exclude<keyof SellableUpdate, typeof HANDLED_FIELDS[number] | typeof INTENTIONALLY_IGNORED[number]>, never>` —
+  that fails `bun run check` (not vitest) when a field is added and left unclassified. Whichever
+  form applies, this is the generalization of the bug and the reason it is worth a slice.
 - Remove the last S1 `TODO(handoff):` markers. If any transition is still unsupported at this
   point, it stays as a `TODO(handoff):` **and** an appended entry on the source proposal.
 
@@ -262,10 +281,12 @@ bun run vitest run src/server/services/pos.sellables.test.ts
 #   - untrack a pristine tracked sellable → getSellableRow().kind == 'service', item unlinked
 #   - untrack an item WITH a movement → PosError 'stock_untrack_has_history'; row + item unchanged
 #   - uom change on an item WITH a movement → PosError 'uom_locked_has_history'; ledger untouched
-#   - field-coverage guard: adding a dummy field to the input type without handling it fails the test
-#     (assert by construction — the const list is compared to the type's keys)
+#   - field-coverage guard, runtime-schema case: adding a dummy field to the input schema without
+#     handling it fails this vitest case (const list compared to the schema's own keys)
 bun run vitest run                                     # whole hub suite green, no skips added
 bun run check
+#   - field-coverage guard, plain-TS-type case (see "Do"): the compile-time coverage type is what
+#     fails here — check must go red when a dummy field is added and left unclassified, green after
 rg -n 'TODO\(handoff\)' src/server/services/pos.service.ts   # only for genuinely deferred work
 ```
 
