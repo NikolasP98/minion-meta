@@ -2,22 +2,23 @@
 id: 2026-08-17-factory-agent-cli-unpinned-spec
 title: "minion-factory agent image — pin the harness toolchain so the JSON parser contract stops floating"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-factory-agent-cli-unpinned
-verdict: pending
-repos: [minion-factory]
+verdict: approved
+repos: [minion-factory, minion-meta]
 tags: [deps, infra]
 type: fix
 ---
 
 # Pin the agent image's harness toolchain
 
-**Owner surface:** `minion-factory` (`NikolasP98/minion-factory`, private, default branch `main`) —
-`agent/Dockerfile`, the five `agent/*.sh` scripts, `scripts/`, `README.md`,
-`playbooks/minion-factory.md`. No other repo has a file in this spec.
+**Owner surface:** implementation is in `minion-factory` (`NikolasP98/minion-factory`, private, default
+branch `main`) — `agent/Dockerfile`, the five `agent/*.sh` scripts, `scripts/`, `README.md`, and
+`playbooks/minion-factory.md`. The only `minion-meta` artifact is the separate runner-image follow-up
+proposal required by the open-items ledger (§5); it is coordination work, not part of S1 or S2.
 
 **Design ancestors:**
 [`2026-08-12-minion-factory-agent-pipeline-spec`](2026-08-12-minion-factory-agent-pipeline-spec.md) §"Image"
@@ -174,8 +175,9 @@ edits, and `self-update.sh` silently drifts the day someone adds a fourth build 
 **D2 — pin to the versions the production box is running today, not to `latest`, and not to `stable`.**
 The pin must be a *provable no-op* on production: the box has been running some specific set for weeks and
 the pipeline works with it. Pinning to today's registry `latest` would silently upgrade production inside a
-"pin the versions" PR — and per fact 4 could hand a pnpm-10 workspace pnpm 11. So S1 freezes reality, and the
-*first exercise of S2's procedure* is the deliberate bump to `stable`. **Fallback if the box values cannot be
+"pin the versions" PR — and per fact 4 could hand a pnpm-10 workspace pnpm 11. So S1 freezes reality. A
+subsequent, separately reviewed PR may use S2's procedure for the first deliberate bump; S1 and S2 themselves
+must not change the selected harness versions. **Fallback if the box values cannot be
 read** (no SSH, image rebuilt in the meantime): pin to `@anthropic-ai/claude-code@<stable dist-tag>`,
 `pnpm@10.x` matching `minion-meta`'s `packageManager`, and codex/bun at their current `latest`; in that case
 S1 is a behaviour change and **must not be deployed before S2's contract check is green** — say which path
@@ -244,7 +246,7 @@ diff /tmp/a.json /tmp/b.json          # → NO DIFF ← "two builds produce iden
 #   falsifiable proxy for "different days". A literal two-day rerun is a calendar wait, not a check —
 #   if the PR sits long enough, rerun it and paste both dates (⚠️ A3 bounds what this proves).
 
-# The assertion actually asserts (deliberately wrong pin must FAIL the build, not install something else):
+# Overrides are exact, and an unavailable pin fails the build rather than falling back:
 docker build --no-cache --build-arg PNPM_VERSION=10.15.0 -t fx-c -f agent/Dockerfile . \
   && docker run --rm --entrypoint bash fx-c -lc 'pnpm --version'      # → 10.15.0, manifest agrees
 docker build --no-cache --build-arg CODEX_VERSION=0.0.0-nope -f agent/Dockerfile . ; echo "exit=$?"
@@ -268,7 +270,8 @@ table — not an unnoticed side effect of a rebuild. Every run log records which
 
 **Do:**
 
-- **`scripts/check-agent-contract.sh` (new).** Takes an image tag (default `minion-factory-agent`), exits
+- **`scripts/check-agent-contract.sh` (new).** Takes an image tag (default `minion-factory-agent`), runs the
+  probes in that image, exits
   non-zero on the first violation, prints one line per assertion. Three tiers, each skippable by flag and
   each announcing loudly when skipped — a skipped tier must never read as a pass:
   - *manifest*: `/etc/factory-toolchain.json` exists and matches the `ARG` defaults in `agent/Dockerfile`
@@ -277,7 +280,9 @@ table — not an unnoticed side effect of a rebuild. Every run log records which
     `--dangerously-skip-permissions`, `--model`, `--max-turns`, `--output-format`, `--append-system-prompt`,
     `--resume`, `--session-id`; `codex exec --help` contains `--dangerously-bypass-approvals-and-sandbox`,
     `-m`, `-c`. Source the list from §1's table; a missing flag is a hard fail.
-  - *live envelope, needs a credential (⚠️ A2)*: one `claude -p 'reply with the single word ok'
+  - *live envelope, needs a credential (⚠️ A2)*: forward exactly one supported host credential
+    (`CLAUDE_CODE_OAUTH_TOKEN` preferred, otherwise `ANTHROPIC_API_KEY`) into the probe container without
+    printing it, then run one `claude -p 'reply with the single word ok'
     --dangerously-skip-permissions --model haiku --max-turns 1 --output-format json` turn, asserting with
     `jq -e` that `.is_error` is a boolean, `.subtype` a string, `.result` a string, `.num_turns` a number and
     `.total_cost_usd` a number. Then a `--session-id <fresh-uuid>` turn followed by a `--resume <same-uuid>`
@@ -287,9 +292,12 @@ table — not an unnoticed side effect of a rebuild. Every run log records which
     it** — it is not reliably forceable, and a flaky gate gets disabled. Print it loudly enough that the human
     running a bump reads it, and say in the README that the `subtype` enum is a changelog-read item, not an
     automated one.
-- **`scripts/bump-agent-toolchain.sh` (new).** Read-only by default: prints, per package, the pinned value
-  from `agent/Dockerfile` vs the registry's `stable`/`latest` dist-tags vs bun's latest release tag, plus each
-  project's release/changelog URL taken from `npm view <pkg> repository.url` (do not hardcode URLs — they rot).
+- **`scripts/bump-agent-toolchain.sh` (new).** Read-only by default: prints, for each npm package, the pinned
+  value from `agent/Dockerfile` vs every available `stable`/`latest` dist-tag (printing `unavailable` when a
+  tag is absent), and prints the Bun pin vs GitHub's latest Bun release tag. For the three npm packages,
+  derive the repository/release URL from `npm view <pkg> repository.url`; for Bun, derive it from the
+  `html_url` returned by the GitHub latest-release response already used to obtain the tag. Do not hardcode
+  project URLs.
   `--set <name>=<version>` rewrites exactly that one `ARG` default and nothing else, **after verifying the
   version exists on the registry** (⚠️ A4), then prints the remaining steps rather than doing them. It must
   never build, never deploy, never commit, never touch `.env`.
@@ -326,7 +334,7 @@ grep -c 'factory-toolchain' agent/run.sh agent/spec.sh agent/chat.sh agent/recon
 git diff --stat main -- agent/run.sh agent/spec.sh agent/chat.sh agent/reconcile.sh agent/unstick.sh
 #   → 5 files, +1/-0 each. Any other line changed in a parser script is out of scope for this slice.
 grep -qi 'bump' README.md && grep -q 'agent/Dockerfile' playbooks/minion-factory.md   # → both hit
-grep -cE 'https://github\.com/(anthropics|openai|oven-sh)' scripts/bump-agent-toolchain.sh  # → 0 (no hardcoded URLs)
+grep -cE 'https://github\.com/(anthropics|openai|oven-sh)' scripts/bump-agent-toolchain.sh  # → 0 (no hardcoded project URLs)
 
 # --- Tier B: Docker, no credential ---
 ./scripts/bump-agent-toolchain.sh                       # → prints pinned vs stable vs latest, exits 0
@@ -339,9 +347,10 @@ docker build --no-cache --build-arg CLAUDE_CODE_VERSION=<an older release> -t fx
 ./scripts/check-agent-contract.sh fx-old                # → non-zero on the manifest-vs-Dockerfile assertion
 
 # --- Tier C: Docker + a live Claude credential (⚠️ A2 — human/box-run, costs a few cents) ---
-CLAUDE_CODE_OAUTH_TOKEN=… ./scripts/check-agent-contract.sh     # → all tiers pass, envelope fields typed
-#   Run this once against the S1 pin (expected: green, since it is what production runs) and once against
-#   the D2 first-bump candidate. Paste both outputs; that pair IS the demonstration that the procedure works.
+CLAUDE_CODE_OAUTH_TOKEN=… ./scripts/check-agent-contract.sh     # → credential is forwarded to the
+                                                                #   probe container; all tiers pass
+#   Run this once against the S1 pin (expected: green, since it is what production runs). For the first
+#   separately reviewed bump PR, run it again against that PR's candidate and paste both outputs.
 ```
 
 ---
@@ -356,15 +365,18 @@ CLAUDE_CODE_OAUTH_TOKEN=… ./scripts/check-agent-contract.sh     # → all tier
 | `agent/run.sh`, `spec.sh`, `chat.sh`, `reconcile.sh`, `unstick.sh` | S2 | **one** echo line each; the parser logic is untouched |
 | `README.md` | S2 | "Agent toolchain" section: why pinned, how to bump, monthly obligation |
 | `playbooks/minion-factory.md` | S2 | one binding bullet: pins change only via the procedure |
+| `proposals/2026-08-17-factory-runner-dependency-locking.md` (`minion-meta`) | prerequisite ledger item | records the explicitly deferred `runner/Dockerfile` finding; no implementation in this spec |
 
 **Zero runner TypeScript. Zero compose/deploy/setup changes. Zero `.svelte` files. No secret value is added
 to any committed file** — `/etc/factory-toolchain.json` holds version strings only.
 
 ## 4. Cross-repo impact
 
-Checked against AGENTS.md "Cross-Project Impact Zones": **no row matches** — no gateway protocol, no DB
-schema, no agent-definition format, no auth, no UI. But the blast radius is not one repo, because this image
-is the execution environment of the whole SDLC pipeline. That is why D2 exists.
+Checked against AGENTS.md "Cross-Project Impact Zones": **no functional row matches** — no gateway protocol,
+DB schema, agent-definition format, auth, or UI. The AGENTS.md open-items ledger does apply: the deferred
+runner-image finding requires the `minion-meta` proposal named in §3 before implementation starts. The runtime
+blast radius is also broader than one repo because this image is the execution environment of the whole SDLC
+pipeline. That is why D2 exists.
 
 | Surface | Impact | Mitigation / evidence |
 |---|---|---|
@@ -426,8 +438,9 @@ monitor here.
   grows a scheduler, that is a new proposal.
 - **`runner/Dockerfile`'s `npm install --omit=dev` beside a committed `runner/package-lock.json`, and its
   `npx tsx` entrypoint** (§1 fact 5). Same class, different image, different failure mode (the runner does not
-  parse model output). **Do not fix it here — file it as a proposal in `minion-meta/proposals/` instead**, per
-  the AGENTS.md open-items ledger clause. It is a one-line change and it deserves its own DoD.
+  parse model output). **Do not fix it here. Before implementation starts, create
+  `minion-meta/proposals/2026-08-17-factory-runner-dependency-locking.md` with the finding and its own DoD**, per
+  the AGENTS.md open-items ledger clause.
 - **Pinning `node:22-bookworm-slim` by digest, the apt packages, or the gh-CLI apt repo.** Necessary for
   byte-reproducible images (⚠️ A3), irrelevant to the parsed JSON contract, and it carries a real maintenance
   cost (a digest pin that nobody rotates silently freezes security updates). Separate decision, separate
@@ -489,7 +502,8 @@ git diff --exit-code                                        # → clean (a repor
 §6 step 1; bump procedure noted — the README section; two builds identical — the `diff` in §6 step 1); Slice 0's
 drift measurement pasted (box versions vs a cold unpinned build), or an explicit statement that no drift was
 observed; S1's no-op diff against the box pasted as empty **or** the D2-fallback path declared with its reason;
-the negative controls pasted (a bogus `--build-arg` fails the build; `check-agent-contract.sh` fails on a
-deliberately stale image) — a check that has never been seen to fail is not known to work; **and it is stated
+the negative controls pasted (a nonexistent-version `--build-arg` fails the build;
+`check-agent-contract.sh` fails on a deliberately stale image) — a check that has never been seen to fail is
+not known to work; **and it is stated
 explicitly which DoD tiers were run, on what host, by whom** (⚠️ A1, ⚠️ A2). The `runner/Dockerfile` finding
-(§1 fact 5) is filed as a `minion-meta` proposal before this spec is called done.
+(§1 fact 5) exists at the exact `minion-meta` proposal path named in §3 before implementation starts.
