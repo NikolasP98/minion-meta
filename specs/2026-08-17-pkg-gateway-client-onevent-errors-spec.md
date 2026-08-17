@@ -2,12 +2,12 @@
 id: 2026-08-17-pkg-gateway-client-onevent-errors-spec
 title: "@minion-stack/shared GatewayClient — consumer onEvent failures are reported, never discarded"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-pkg-gateway-client-onevent-errors
-verdict: pending
+verdict: approved
 repos: [minion-meta]
 tags: [logic, test, docs, infra]
 type: fix
@@ -78,8 +78,9 @@ The proposal's line reference is exact. Reading that one line closely turns a on
 into a two-failure-mode fix, and the second mode is worse than the reported one:
 
 1. **An async handler's rejection is swallowed.** `onEvent` is typed `void | Promise<void>`. When a
-   consumer's handler is `async` (all three known consumers drive Svelte state and awaited work from
-   it), any rejection lands in `.catch(() => {})` and disappears. This is the reported bug: a UI whose
+   consumer's handler is `async`, any rejection lands in `.catch(() => {})` and disappears. The two
+   browser consumers are described as driving Svelte state and awaited work; the absent paperclip
+   adapter's exact handler shape remains a Slice 0 question. This is the reported bug: a UI whose
    event handler throws on every `chat.message` frame looks like a UI that is merely not updating.
 2. **A synchronous throw does not even reach that `catch` — it escapes.** JavaScript evaluates the
    argument `this.opts.onEvent?.(frame)` *before* `Promise.resolve` is called, so a synchronous throw
@@ -96,13 +97,14 @@ into a two-failure-mode fix, and the second mode is worse than the reported one:
 
 | Line | Code | What is lost |
 |---|---|---|
-| `client.ts:296` | `void this.connect().catch(() => {});` inside `scheduleReconnect()` | every failed reconnect attempt. On a reconnect, `sendConnect`'s own catch (`:280-285`) rejects the `connect()` promise, and *this* is the only place that promise is handled — so auth failure, protocol mismatch, and a dead gateway all reconnect-loop in total silence, up to the 15 s backoff cap, forever |
-| `client.ts:240-242` | `on('error', () => { /* close handler fires next */ });` | the only place a transport-level error object is delivered. The comment is right that `close` fires next and no *control-flow* action is needed — but `close` carries a code, not a cause. `ECONNREFUSED`, a TLS failure, and a 401 upgrade rejection are distinguishable here and nowhere else |
+| `client.ts:296` | `void this.connect().catch(() => {});` inside `scheduleReconnect()` | every failed reconnect attempt. On a reconnect, `sendConnect`'s own catch (`:280-285`) rejects the `connect()` promise, and *this* is the only place that promise is handled. Failures that also close an established socket can schedule the next attempt and repeat silently; a constructor failure has no socket close to schedule another attempt, but its terminal rejection is still discarded here |
+| `client.ts:240-242` | `on('error', () => { /* close handler fires next */ });` | the runtime-supplied socket error value. The comment is right that `close` fires next and no *control-flow* action is needed, but its code/reason need not preserve the diagnostic value supplied by `error`; the exact value differs between Node `ws` and browsers |
 
-**The failure this fix converts.** Today: a consumer handler bug (or a reconnect that never succeeds)
-produces a clean console and a UI that looks idle. After: every such failure is reported exactly once,
-through a hook the consumer can own, with a `console.error` fallback when it does not — so "nothing is
-happening" and "something is broken" stop being the same observation.
+**The failure this fix converts.** Today: a consumer handler bug (or a reconnect attempt that fails)
+can produce a clean console and a UI that looks idle. After: every in-scope handler, reconnect-attempt,
+and socket error is reported exactly once through a hook the consumer can own, with a `console.error`
+fallback when it does not — so "nothing is happening" and "something is broken" stop being the same
+observation.
 
 ## 1. Assumptions and what Slice 0 must settle
 
@@ -186,8 +188,9 @@ call sites rather than a second error-reporting shape.
 **Goal:** after this slice, a consumer `onEvent` handler that fails — synchronously or asynchronously —
 produces exactly one report, and never escapes into the WebSocket event dispatch. When the consumer
 supplies `onEventError`, that hook receives it; when it does not, `console.error` does. No other
-behavior of `handleMessage` changes: events are still dispatched fire-and-forget, in arrival order,
-with no awaiting and no buffering.
+behavior of `handleMessage` changes: handlers are still invoked fire-and-forget in frame-arrival order,
+with no awaiting and no buffering. Because async handlers remain concurrent, their completion and
+error-report order is not guaranteed.
 
 **Do:**
 
@@ -247,8 +250,9 @@ with no awaiting and no buffering.
   but the default path must not turn a handler bug into a content leak. This is a fallback-only rule;
   it is not a claim that the hook is safe to log wholesale, and S3's docs say so.
 
-- **Do not await, buffer, retry, or reorder.** `void` stays. The dispatch remains fire-and-forget and
-  in arrival order. Anything else is the proposal's excluded "event replay" wearing a different hat.
+- **Do not await, buffer, retry, or reorder.** `void` stays. Handler invocation remains
+  fire-and-forget and in frame-arrival order; async completion and error-report order remain
+  unconstrained. Anything else is the proposal's excluded "event replay" wearing a different hat.
 
 - **Do not change `onEvent`'s signature, `EventFrame`, or any frame type.** This is not a protocol
   change (§4), and keeping it out of `types.ts` is what makes that true.
@@ -289,7 +293,8 @@ cd packages/shared && pnpm run test
 #   - onEvent omitted entirely → no report, no throw (optional handler still optional)
 #   - connect.challenge frame with a throwing onEvent → onEvent NOT invoked at all (handshake path
 #         unchanged; the anti-regression anchor for §1 trap (a))
-#   - two failing events in a row → exactly two reports, one per event, in arrival order
+#   - two SYNCHRONOUSLY failing events in a row → exactly two reports, one per event, in arrival order
+#         (async handler completion/report order is deliberately unconstrained)
 pnpm run typecheck && pnpm run build && pnpm run lint
 cd ../.. && pnpm run typecheck-all && pnpm run lint-all
 rg -n 'catch\(\(\) *=> *\{\}\)' packages/shared/src/gateway/client.ts   # → the :263 hit is GONE (:296 remains until S2)
@@ -303,10 +308,10 @@ rg -n 'onEventError' packages/shared/src/gateway/client.ts             # → the
 **Tags:** `logic`, `test` · **Estimate:** 4–6 h · **Scope note:** deliberate extension beyond the
 proposal's literal text — see §4 ⚠️ A4 before starting.
 
-**Goal:** a reconnect that keeps failing, and a transport error that carries a cause, both become
-observable. After this slice `rg 'catch\(\(\) *=> *\{\}\)'` over `client.ts` returns nothing, and the
-client has no remaining silent failure path except the one deliberate, threat-modelled discard at
-`:249` (§5).
+**Goal:** a reconnect attempt that fails, and a socket `error` event, both become observable. After
+this slice the two bare empty promise catches at the original `:263` and `:296` sites are gone. The
+only remaining silent catches are the threat-modelled malformed-frame discard and the documented
+never-throw wrapper around consumer-owned reporting hooks (§5).
 
 **Do:**
 
@@ -316,12 +321,15 @@ client has no remaining silent failure path except the one deliberate, threat-mo
   /** Called when an auto-reconnect attempt fails. Default when omitted: console.error. MUST NOT throw. */
   onReconnectError?: (err: unknown, attempt: { delayMs: number }) => void;
   ```
-  Route it through the same private reporter shape as S1 (share the never-throw wrapper; do not
-  duplicate two subtly different `try`/`catch` idioms in one file). **Do not change reconnect
+  Capture `delay` in the timer closure and pass that exact scheduled delay as `attempt.delayMs`.
+  Route the rejection through the same private reporter shape as S1 (share the never-throw wrapper;
+  do not duplicate subtly different hook-containment idioms in one file). **Do not change reconnect
   control flow**: the backoff curve (800 ms × 1.7, capped 15 s), the `closed` guard, and the
   `onReconnectScheduled` callback all stay exactly as they are — §5.
-- **`client.ts:240-242` — the socket `error` event.** Deliver the error object instead of discarding
-  it. Reuse the existing `onClose`-adjacent contract rather than inventing a third hook shape: add
+- **`client.ts:240-242` — the socket `error` event.** Deliver the value supplied by the runtime's
+  socket `error` callback instead of discarding it (an `Error` under Node `ws`; typically an `Event`
+  in browsers). Reuse the existing `onClose`-adjacent contract rather than inventing a third hook
+  shape: add
   `onSocketError?: (err: unknown) => void`, defaulting to `console.error`. **Keep the existing
   comment's substance** — `close` still fires next and still drives all control flow; this handler
   gains *reporting* only, and must not close, reconnect, reject `helloReject`, or flush `pending`.
@@ -331,7 +339,8 @@ client has no remaining silent failure path except the one deliberate, threat-mo
   after a reconnect would otherwise report against the live client. Add the fence, matching its
   siblings — this is a correctness detail of the *new* reporting path, not an unrelated refactor.
 - **Decide the reconnect noise question explicitly, and write the decision in the code.** A gateway
-  that is down for an hour yields a reconnect failure roughly every 15 s ⇒ ~240 console lines. This
+  whose reconnect attempts fail immediately can yield a failure roughly every 15 s at the cap
+  (about 240 lines/hour); connect timeouts or other delayed failures reduce that rate. This
   spec ships **no dedupe** (see ⚠️ A2 for why: dedupe hides the healthy→failing transition, adds
   cross-call state to a library that currently has none, and the consumer that most needs quiet — the
   site — is already building its own collapsing sink in
@@ -351,13 +360,16 @@ cd packages/shared && pnpm run test
 #       → with onReconnectError supplied: hook called once with (err, { delayMs }); console.error NOT called
 #   - the existing 'schedules reconnect with exponential backoff' case still passes UNEDITED,
 #       and reconnectDelays is still [800, ~1360]                       ← backoff untouched (§5)
-#   - ws emits 'error' → onSocketError called once with the error; console.error fallback when absent
+#   - ws emits 'error' → onSocketError called once with the exact emitted value
+#       → when absent, console.error called once with a message naming the socket error and that value
 #   - ws emits 'error' on a STALE socket (generation already advanced) → NOT reported (fence holds)
 #   - ws 'error' does NOT close the socket, does NOT flush pending, does NOT schedule a reconnect
 #       (assert via a pending request still unsettled and no new socket constructed)
 #   - onReconnectError / onSocketError that throw → nothing escapes; no unhandled rejection
-rg -n 'catch\(\(\) *=> *\{\}\)|catch\s*\{\s*\}' packages/shared/src/gateway/client.ts
-#   → ZERO hits, except the ONE commented never-throw wrapper in the private reporter
+rg -n 'catch\(\(\) *=> *\{\}\)' packages/shared/src/gateway/client.ts
+#   → ZERO hits (the original promise swallows at :263 and :296 are gone)
+rg -n 'catch\s*\{' packages/shared/src/gateway/client.ts
+#   → exactly TWO intentional sites: malformed-frame discard and the commented never-throw hook wrapper
 rg -n 'backoffMs\s*=\s*Math.min\(this.backoffMs \* 1.7, 15000\)' packages/shared/src/gateway/client.ts  # → still there
 rg -n 'setTimeout|setInterval' packages/shared/src/gateway/client.ts | wc -l   # → unchanged vs pre-S2 (no new timers)
 pnpm run typecheck && pnpm run build && pnpm run lint
@@ -386,9 +398,10 @@ that this client now talks when it used to be quiet, and what the hook is for. C
 - **JSDoc is the documentation surface — deliberately, not by omission.** `packages/shared` has **no
   `README.md`** (verified: the file does not exist, though `package.json` `files` lists one — an
   observation for §5, not this slice's job). So the contract lives on the options themselves: each new
-  hook documents (a) the default behavior when omitted, (b) that it must not throw, (c) that the
-  fallback logs the event name only and that a consumer logging the whole frame is choosing to log
-  payload content. Consumers read these through their editor; that is the realistic delivery channel.
+  hook documents (a) the default behavior when omitted, (b) that it must not throw, and (c) what
+  context the fallback logs. `onEventError` additionally documents that its fallback logs the event
+  name only and that a consumer logging the whole frame is choosing to log payload content. Consumers
+  read these through their editor; that is the realistic delivery channel.
 - **Consumer handoff — the deliverable that is not a file in this package.** Per AGENTS.md's
   open-items ledger, file **one proposal** in `proposals/` covering the three consumers: each should
   (i) bump `@minion-stack/shared` and (ii) decide whether to pass `onEventError` into its own error
@@ -399,7 +412,8 @@ that this client now talks when it used to be quiet, and what the hook is for. C
 - **Do not bump any consumer.** This spec publishes; it does not upgrade a consumer. Say so in the PR
   description so nobody helpfully runs an update in hub or site before the handoff lands. Note also
   that publishing takes **two merges to main** (feature PR with the changeset → the automated
-  "Version Packages" PR → npm), so consumers cannot bump the same day.
+  "Version Packages" PR → npm), so a consumer bump must wait until the version-package merge has
+  actually published the release.
 
 **Files:** `.changeset/<generated-name>.md` (new),
 `packages/shared/src/gateway/client.ts` (JSDoc on the new options + one `TODO(handoff):` line pointing
@@ -500,7 +514,7 @@ silent evaporation of the same two lines.
 ## 5. Out of scope (explicit)
 
 - **Event replay** — the proposal's own exclusion. No buffering, no redelivery, no
-  at-least-once semantics, no ordering guarantee beyond what arrival order already gives.
+  at-least-once semantics, and no ordering guarantee beyond frame-arrival invocation order.
 - **Awaiting `onEvent` / backpressure.** The dispatch stays fire-and-forget and `void`. Making the
   client await handlers would change delivery semantics for three consumers and is a separate design.
 - **Retry, backoff, or reconnect-policy changes.** The 800 ms × 1.7 → 15 s curve, the `closed` guard,
@@ -563,7 +577,7 @@ const ws = new Mock();
 let logged = [];
 const realErr = console.error; console.error = (...a) => { logged.push(a); };
 const c1 = new GatewayClient({
-  url: 'ws://x', WebSocketImpl: () => ws, onChallenge: async () => ({}),
+  url: 'ws://x', WebSocketImpl: function MockImpl() { return ws; }, onChallenge: async () => ({}),
   onEvent: async () => { throw new Error('handler exploded'); },
 });
 c1.connect().catch(() => {});
@@ -577,7 +591,7 @@ console.log('no payload leak:', !JSON.stringify(logged).includes('PAYLOAD-CANARY
 // --- b) SYNCHRONOUS throw does not escape the WS dispatch (the half :263 never covered)
 const ws2 = new Mock(); const seen = [];
 const c2 = new GatewayClient({
-  url: 'ws://x', WebSocketImpl: () => ws2, onChallenge: async () => ({}),
+  url: 'ws://x', WebSocketImpl: function MockImpl() { return ws2; }, onChallenge: async () => ({}),
   onEvent: () => { throw new Error('sync boom'); },
   onEventError: (e, f) => seen.push([f.event, e.message]),
 });
@@ -592,10 +606,11 @@ console.log('hook got it:',    JSON.stringify(seen) === '[[\"chat.message\",\"sy
 #    Expected on old code: 'fallback fired: false' (nothing logged), and step 3(b) escapes.
 #    That side-by-side IS the evidence the reported bug existed and is gone.
 
-# 5. S2, against a real-ish failure: run the client with autoReconnect:true and a WebSocketImpl that
-#    throws on the second construction; advance past the 800 ms backoff and confirm exactly one
-#    reconnect report (console.error, or onReconnectError when supplied) and that the third attempt
-#    still fires at ~1360 ms — reporting added, timing untouched.
+# 5. S2, against a real-ish failure: run the client with autoReconnect:true; let the second socket
+#    close before hello so that connect() rejects and the close lifecycle schedules another attempt.
+#    Confirm exactly one reconnect report (console.error, or onReconnectError when supplied) and that
+#    the third attempt fires at ~1360 ms — reporting added, timing untouched. Separately cover a
+#    WebSocketImpl constructor rejection and require one report without inventing a subsequent retry.
 
 # 6. Realistic integration (optional, where the repos exist — ⚠️ A1): in a hub or site dev session,
 #    pack this build (`pnpm pack`), install it into the consumer, deliberately throw from the
