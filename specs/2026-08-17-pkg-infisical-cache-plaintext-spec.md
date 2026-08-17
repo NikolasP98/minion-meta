@@ -3,11 +3,11 @@ id: 2026-08-17-pkg-infisical-cache-plaintext-spec
 title: "@minion-stack/env — stop leaving the gateway vault master key in a plaintext cache file"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-pkg-infisical-cache-plaintext
-verdict: pending
+verdict: approved
 repos: [minion-meta]
 tags: [security, infra, logic, test]
 type: fix
@@ -174,6 +174,9 @@ existing plaintext file is gone, and a single process still shells out to `infis
   migrate the contents** — re-persisting known-exposed material is the opposite of the fix. Deletion
   is fully recoverable (the next fetch refills the memo), which is what the AGENTS.md
   destructive-cleanup rule asks you to confirm before removing anything.
+  This purge is a security cleanup, not a cache read: it runs before mode/no-cache handling even
+  when `MINION_ENV_CACHE=off` or `noCache:true`. In those modes no cache content is read or written,
+  but a recognized legacy plaintext file is still removed and reported.
 - **Add the mode switch now, so S2 has nothing to redesign.** `MINION_ENV_CACHE`, parsed as a strict
   allowlist (trimmed, lowercased): `off` | `memory` | `disk`. Anything unrecognized → `memory` **plus
   a warning naming the bad value**; never fall through to `disk` on a typo. In S1 `disk` behaves as
@@ -184,6 +187,11 @@ existing plaintext file is gone, and a single process still shells out to `infis
   `InfisicalFetchOptions`; when present, only those keys are stored (memo now, file in S2).
   `hierarchy.ts` passes its `NARROWED_KEYS` set. This is the fix for §0 fact 2 and it must survive
   into S2 — the sealed file should still contain one entry, not the whole legacy dump.
+- **Make cache identity cover every input that can change the result.** The cache key must include
+  the normalized Infisical domain (including an explicit sentinel for the CLI default) and the
+  sorted, deduplicated `cacheKeys` allowlist, in addition to project and environment. Otherwise a
+  hit fetched from one domain or allowlist can be returned for another. Do not place secret values
+  in the cache key.
 - **Do not let narrowing silence the migration warning.** `hierarchy.ts:70-77` builds its "stale
   Infisical keys" warning from `Object.keys(core.env)`. Once the cache holds only the allowlisted
   subset, a cache hit would make that warning vanish and reappear at random. Carry key **names** (not
@@ -225,7 +233,10 @@ cd packages/env && pnpm vitest run
 #     stderr warning is emitted, and its contents are never returned to the caller
 #   - cacheKeys:['MINION_SECRETS_KEY'] → a later hit returns only that key, and keyNames still lists
 #     the legacy names, so hierarchy's stale-key warning fires identically on hit and on miss
-#   - noCache:true → unchanged (no read, no write, spawn every time)
+#   - noCache:true → no cache-content read/write and spawn every time; a recognized legacy plaintext
+#     file is still purged as the security cleanup defined above
+#   - different domain or cacheKeys inputs never share a memo entry; reordered/duplicated cacheKeys do
+#     share one entry after canonicalization
 pnpm vitest run src/hierarchy.master-key-only.test.ts    # untouched sibling still green
 cd ../.. && pnpm run typecheck-all && pnpm run lint-all
 rg -n 'writeFileSync' packages/env/src/                  # → ZERO hits after S1
@@ -246,9 +257,14 @@ on disk is AES-256-GCM ciphertext bound to this machine and this user, written a
 - **Key ladder, in order, first hit wins:**
   1. `MINION_ENV_CACHE_KEY` — base64, 32 bytes, operator-supplied (this is the hook for an OS keyring
      or a password manager exported at shell init). Reject a wrong-length or non-base64 value with a
-     named error rather than silently deriving something else.
+     named error rather than silently deriving something else. Validation must be strict (alphabet,
+     padding, and canonical round-trip), because `Buffer.from(value, 'base64')` alone accepts malformed
+     input.
   2. A machine-local key file `<cacheDir()>/cache.key` — 32 random bytes from `crypto.randomBytes`,
-     created on demand, written by the same atomic+`0600` primitive as the cache, never logged.
+     created on demand and never logged. Creation must be concurrency-safe: create the final key path
+     with `flag:'wx'` and mode `0600`; on `EEXIST`, discard the candidate and read the winning file.
+     Do not use last-writer-wins rename for the key, because concurrent processes could encrypt with
+     different keys. Enforce `0600` on an existing valid key file before use.
 - **Derive, don't use raw.** `crypto.hkdfSync('sha256', keyMaterial, salt, info, 32)` (present in Node
   22, no new dependency) where `info` is a version string and `salt` is stable **binding material**:
   `/etc/machine-id` if readable, else `os.hostname()`, mixed with `os.userInfo().uid`. Store a short
@@ -262,7 +278,7 @@ on disk is AES-256-GCM ciphertext bound to this machine and this user, written a
   missing key file → return `null`, refetch, and (once per process) warn that the cache was discarded
   and why *categorically* ("bound to a different machine" / "corrupt or tampered"). Never delete a
   file you could not authenticate beyond the one legacy-plaintext case S1 already handles — an
-  unreadable file is evidence.
+  unreadable file is evidence. “Discarded” here means ignored as a cache entry, not deleted from disk.
 - **Write atomically and enforce the mode.** `writeFileSync(tmp, data, { mode: 0o600, flag: 'wx' })`
   where `tmp` = `<path>.<pid>.<counter>.tmp`, then `fs.renameSync(tmp, path)`. Rename is atomic within
   a directory and carries the tmp file's `0600` onto the destination — which is precisely what fixes
@@ -298,6 +314,8 @@ cd packages/env && pnpm vitest run
 #   - the cache dir is chmod'd 0700 when it pre-exists as 0755
 #   - MINION_ENV_CACHE_KEY set to a valid 32-byte b64 → used in preference to the key file, and NO
 #     cache.key is created; a 16-byte or non-base64 value → named error, no silent fallback
+#   - two processes racing to create cache.key converge on the same 32-byte key; the losing candidate
+#     is not used and both can open the resulting cache
 #   - TTL still honored across processes (write, fake-advance 301s, fresh module, → miss)
 #   - two interleaved writes (write A, write B, both complete) leave a file that opens cleanly and
 #     contains B — never a truncated/unparseable file
@@ -339,7 +357,10 @@ down in the operator's terms (the proposal's second DoD clause, which applies to
   active cache mode, whether a legacy plaintext cache was found and removed, and whether the config
   dir mode is looser than `0700`. **Warnings column only — do not add or change an exit code**;
   `doctor` already returns 3/1/0 and scripts depend on that. A changeset for `@minion-stack/cli`
-  (`patch`) covers this.
+  (`patch`) covers this. `cacheStatus()` must perform the same once-per-process cache initialization
+  (including legacy purge) without fetching secrets, and `doctor` must call it before rendering the
+  `(meta)` row. That makes `legacyRemoved` truthful for this doctor run even when no subproject is
+  cloned.
 - **Root `.env.example`**: `MINION_ENV_CACHE` (with the three values and "off = never cache, use on
   CI and shared machines") and `MINION_ENV_CACHE_KEY` (optional, base64 32 bytes). **Nothing in
   `.env.defaults`** — a committed default here would pin every machine to one mode.
@@ -400,7 +421,7 @@ dependency graph is unusually narrow — verified, not assumed:
 | Surface | Impact | Mitigation / evidence |
 |---|---|---|
 | `@minion-stack/cli` (same repo, `workspace:*`) | **Real but contained** — every `minion dev/build/test/check/run/sync-env/doctor` call resolves env through this cache | Same PR chain, same release; S3 adds the `doctor` probe so an operator can see the mode; sequential `fanout` covered by S1's memo |
-| Operators' machines with `minion` installed globally | **Behavior change on upgrade**: the legacy plaintext cache is deleted on first run and a new sealed one is created | Deletion is recoverable (refetch); one stderr warning explains it; changeset states it |
+| Operators' machines with `minion` installed globally | **Behavior change on upgrade**: the legacy plaintext cache is deleted on first run; a new sealed one is created only when disk mode is active and a successful fetch supplies cacheable data | Deletion is recoverable (refetch); one stderr warning explains it; changeset states it |
 | Deployed boxes (Netcup gateway, factory) | **Unknown until S0** — if they source `MINION_SECRETS_KEY` from a deploy-written `.env` rather than `minion sync-env`, impact is zero | S0 item 3 settles it. If they *do* use the CLI, S2 is mandatory before the release, not optional (⚠️ A1) |
 | Public npm `@minion-stack/env` | Third-party consumers (none known, but the package is public) get changed cache semantics | Changeset prose + the `minor`/`major` rule in S3 |
 | `minion/` gateway | **No code change.** It consumes `MINION_SECRETS_KEY` from its environment; it does not import this package (verify in S0 — the repo is checked out but out of this spec's scope) | If the grep finds an import, that is a finding for its own proposal — do not widen this spec |
@@ -482,7 +503,8 @@ mkdir -p "$XDG_CONFIG_HOME/minion" && printf '{"minion-core|dev":{"env":{"X":"%s
   "$SENTINEL" "$(date +%s)000" > "$XDG_CONFIG_HOME/minion/infisical-cache.json"
 chmod 644 "$XDG_CONFIG_HOME/minion/infisical-cache.json"     # the mode bug, staged deliberately
 
-# 1. Any command that resolves env purges it and reseals
+# 1. Any command that resolves env purges it and reseals (requires working Infisical CLI/auth and a
+#    successful minion-core fetch for the reseal assertions below)
 node packages/cli/dist/cli.js doctor                          # → stderr warning: legacy plaintext cache removed
 grep -rlF "$SENTINEL" "$XDG_CONFIG_HOME" && echo "FAIL: plaintext survived" && exit 1   # → no match
 stat -c '%a' "$XDG_CONFIG_HOME/minion/infisical-cache.json"   # → 600 (NOT the 644 we staged)
