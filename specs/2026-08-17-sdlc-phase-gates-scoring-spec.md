@@ -88,6 +88,52 @@ reviewed_commit: abc1234
 ```
 Board renders the chip (green ≥7, amber 5–6.9, red <5) on every card in every column. History = git history of the sidecar. No numbers in the DB.
 
+## 4b. Work-type tags & routing (the classification layer the gates run on)
+
+User intent (verbatim, 2026-08-17): "changes to the UI should be compared against the ui governance, but logic/bugs shouldnt. This should be caught and routed … What happens if a detected merge only addresses documentation? … If a ui+logic slice was addressed, would we route to 2 agents or a single agent with access to more tools/skills? … loop engineering dependent on what was triaged at the start. Where does triage take place?"
+
+### Taxonomy — small, composable, enum-validated
+
+`tags: [ui, logic, data, infra, docs, test, security, perf, deps]` — multi-select frontmatter on proposals and **per-slice** on specs (the slice is the routable unit, not the spec); on PRs they are **GitHub labels**. The validator (maintenance-lane slice 1) enforces the enum.
+
+### Derivation — deterministic first, model second
+
+1. **Path rules are the authority** for anything with a diff: a committed `routing.yml` per repo maps globs → tags (`**/*.svelte`, `app.css`, `tokens` → ui · `src/server/**`, `src/lib/**/*.ts` → logic · `supabase/migrations/**` → data · `.github/**`, `deploy/**` → infra · `**/*.md`, `docs/**` → docs · `**/*.test.ts` → test · `package.json` deps → deps). GitHub's native **labeler action already exists in the gateway repo** (just resurrected in PR #214) — this is its config, not new machinery.
+2. **Classifier fallback** only where there is no diff yet (proposal intake) or paths are ambiguous; its output is a tag *proposal* the G1/G2 gate confirms.
+3. **Declared vs derived mismatch is itself a finding**: a spec slice tagged `docs` whose PR diff touches `src/` blocks at G4 with "tag mismatch" — this is the cheap catch for scope creep and for agents mislabeling to get the lighter lane.
+
+### Routing consequences — tags compose the loop, they don't pick between agents
+
+**One agent per slice, capabilities injected by tag — never two agents on one slice.** Splitting a coherent ui+logic slice across agents recreates the context-loss handoff (same reasoning that kept test-writing out of a separate phase). Instead:
+- **Split at planning time, not execution time**: G2 scores slices higher when they fall on tag boundaries; the planner is instructed to prefer a `ui` slice + a `logic` slice where the seam is natural, and a single multi-tag slice where it isn't.
+- **Review fans out, dev doesn't**: G4 review is read-only and parallelizes safely — a multi-tag slice gets one reviewer *per facet* (ui-governance lens, logic lens, security lens), diverse lenses catching what one generalist misses.
+
+Per-tag loop composition (selfTest fragments + injected skills + rubric axes):
+
+| Tag | Dev loop gains | Gate additions |
+|---|---|---|
+| `ui` | ui-design-governance skill; `lint:design && lint:tokens` in selfTest | G4 empirical check (screenshot/curl preview); governance rubric axis; debt ratchet may only decrease |
+| `logic` | red-state TDD (G3) mandatory | integrity-lint axis; no governance checks (the user's exact point — don't waste the loop on them) |
+| `data` | migration + consuming code in same PR rule | schema-drift check (the `pos_tickets.surcharges` failure class); reversibility note required |
+| `docs` | **light lane**: skip red-state and build gates | **verify, don't ignore**: a docs-verifier agent checks changed claims against the code they describe (file paths exist, commands run, flag names real) + link check. Cheap, catches the worst docs failure — confidently wrong instructions |
+| `infra` | workflow lint (actionlint) in selfTest | the `secrets`-in-`if` class; runner-label sanity |
+| `security` | fail-closed rubric | score can *warn* but never auto-pass — human gate mandatory regardless of score |
+| `test` | — | mutation spot-check: invert the subject logic, the new test must fail |
+| `perf` | — | before/after measurement required in PR body |
+| `deps` | lockfile-consistency gate (exists in gw `test/ci/`) | changelog/breaking-change scan |
+
+### Where triage happens — at every artifact birth, re-checked at every boundary
+
+| Trigger | What runs |
+|---|---|
+| Proposal created (chat, monitor S-C, handoff sweep S-A, CI-watch S-D) | classifier proposes tags → G1 confirms |
+| Spec pass-1 written | planner assigns per-slice tags → G2 validates tags against slice bodies |
+| PR opened / synchronized | path rules derive labels (authoritative); mismatch vs declared → G4 finding |
+| Merge to integration branch | merge-scan (S-B) uses derived tags to pick its rubrics |
+| G0 sweep | retro-tags legacy/untagged items so the whole board becomes routable |
+
+Triage is therefore not a phase — it's a **property computed at birth and re-derived from evidence at each gate**, which is what keeps it from drifting the way statuses did.
+
 ## 5. Slices
 
 | # | Slice | Repos | Notes |
@@ -99,6 +145,9 @@ Board renders the chip (green ≥7, amber 5–6.9, red <5) on every card in ever
 | 5 | G4 output formalized into sidecar format | minion-factory | |
 | 6 | Upstream-monitor threshold + noise rules | minion | One workflow edit |
 | 7 | Board: override-with-reason flow + amber `possibly_shipped` verify chip | minion-base | |
+| 8 | Tag taxonomy: frontmatter enum + `routing.yml` path rules per repo + labeler configs | minion-meta, fleet | §4b |
+| 9 | Tag-composed loops: selfTest fragments + skill injection + per-facet G4 reviewers | minion-factory | §4b |
+| 10 | Docs-verifier light lane | minion-factory | §4b — verify, don't ignore |
 
 **Out of scope:** replacing human gates (all three stay); scoring historical/done specs; LLM-judge scoring of merged code (thermonuclear already covers post-PR); any DB schema for scores; a separate test-writing board column (decided against, §3-G3).
 
