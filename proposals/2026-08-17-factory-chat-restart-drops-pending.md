@@ -1,7 +1,7 @@
 ---
 id: 2026-08-17-factory-chat-restart-drops-pending
 title: Runner restart marks never-dispatched chat messages as errored
-status: draft
+status: approved
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion-factory]

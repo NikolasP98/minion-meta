@@ -1,7 +1,7 @@
 ---
 id: 2026-08-17-gw-whatsapp-cloud-template-fallback
 title: WhatsApp Cloud: auto-fallback to template when the 24h window is closed
-status: draft
+status: approved
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion]

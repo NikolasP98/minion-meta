@@ -24,3 +24,7 @@ After re-key: eq(servers.tenantId, ctx.tenantId) in the update + cross-tenant-up
 ## Out of scope
 
 Doing this before the re-key migration (would break on old keys).
+
+## Gate note 2026-08-18
+
+PARKED-BLOCKED: waits on the Turso re-key migration; fixing before it would break on old keys. Re-triage when the migration lands.

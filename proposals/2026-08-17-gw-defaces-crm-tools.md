@@ -1,7 +1,7 @@
 ---
 id: 2026-08-17-gw-defaces-crm-tools
 title: De-FACES the builtin CRM tools (crm_search + crm_insight ship clinic identity to every org)
-status: draft
+status: approved
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion]

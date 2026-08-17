@@ -24,3 +24,7 @@ tgz committed alongside package.json/bun.lock when the redesign lands (owner's c
 ## Out of scope
 
 The redesign content itself (owner's active lane).
+
+## Gate note 2026-08-18
+
+PARKED: belongs to the in-flight site redesign (owner lane); commit the tgz with that work.
