@@ -150,7 +150,7 @@ describe('createWorkforceClient', () => {
     await expect(client.request({ method: 'GET', path: '/api/x' })).rejects.toBe(boom);
   });
 
-  it('does not leak request body, identity headers, or URL into the thrown error', async () => {
+  it('does not leak request body, identity headers, URL, or query string into the thrown error', async () => {
     const fetch = vi.fn(async () => new Response('<html>oops</html>', {
       status: 502,
       headers: { 'content-type': 'text/html' },
@@ -161,11 +161,18 @@ describe('createWorkforceClient', () => {
       headers: { 'x-hub-identity': 'secret-jwt' },
     });
     const err = await client
-      .request({ method: 'POST', path: '/api/x', body: { secret: 'request-payload' } })
+      .request({
+        method: 'POST',
+        path: '/api/x',
+        body: { secret: 'request-payload' },
+        query: { token: 'query-secret' },
+      })
       .catch((e) => e as WorkforceApiError);
     const serialized = JSON.stringify(Object.getOwnPropertyNames(err).map((k) => [k, (err as unknown as Record<string, unknown>)[k]]));
     expect(serialized).not.toContain('secret-jwt');
     expect(serialized).not.toContain('request-payload');
     expect(serialized).not.toContain('http://x/api/x');
+    expect(serialized).not.toContain('query-secret');
+    expect(serialized).not.toContain('token=query-secret');
   });
 });
