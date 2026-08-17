@@ -38,7 +38,10 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		...(fm.merged_into ? { merged_into: fm.merged_into } : {}),
 		...(fm.possibly_reopens ? { possibly_reopens: fm.possibly_reopens } : {}),
 		...(fm.duplicate_candidate ? { duplicate_candidate: fm.duplicate_candidate } : {}),
-		...(fm.spawned_spec ? { spawned_spec: fm.spawned_spec } : {})
+		...(fm.spawned_spec ? { spawned_spec: fm.spawned_spec } : {}),
+		...(fm.tags ? { tags: fm.tags } : {}),
+		...(fm.value ? { value: fm.value } : {}),
+		...(fm.source ? { source: fm.source } : {})
 	});
 }
 
