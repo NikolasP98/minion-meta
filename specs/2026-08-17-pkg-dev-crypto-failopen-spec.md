@@ -2,7 +2,7 @@
 id: 2026-08-17-pkg-dev-crypto-failopen-spec
 title: "@minion-stack/db crypto — fail closed instead of silently sealing under the source-visible dev key"
 stage: spec
-status: draft
+status: approved
 pass: 2
 created: 2026-08-17
 updated: 2026-08-17
