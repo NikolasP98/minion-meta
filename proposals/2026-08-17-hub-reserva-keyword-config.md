@@ -1,7 +1,7 @@
 ---
 id: 2026-08-17-hub-reserva-keyword-config
 title: Extract the triplicated 'reserva' keyword into one org-configurable rule
-status: draft
+status: approved
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion_hub]

@@ -1,7 +1,7 @@
 ---
 id: 2026-08-17-hub-brain-org-all-scope
 title: brain-vector org_all scope: implement or narrow the type
-status: draft
+status: approved
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion_hub]

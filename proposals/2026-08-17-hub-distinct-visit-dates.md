@@ -1,7 +1,7 @@
 ---
 id: 2026-08-17-hub-distinct-visit-dates
 title: Wire distinctVisitDates so the Loyal funnel stage can auto-advance
-status: draft
+status: approved
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion_hub]

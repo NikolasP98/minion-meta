@@ -1,7 +1,7 @@
 ---
 id: 2026-08-17-gw-nostr-dispatch-pipeline
 title: Nostr channel bypasses the shared reply-dispatch pipeline via optional chaining
-status: draft
+status: approved
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion]
