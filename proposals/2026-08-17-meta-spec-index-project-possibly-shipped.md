@@ -1,10 +1,11 @@
 ---
 id: 2026-08-17-meta-spec-index-project-possibly-shipped
 title: spec-index.mjs drops possibly_shipped/evidence/link_review — G0 amber chip never renders
-status: draft
+status: review
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion-meta, minion-base]
+duplicate_candidate: 2026-08-17-base-kanban-possibly-shipped-surface
 ---
 
 # spec-index.mjs drops possibly_shipped/evidence/link_review
@@ -36,3 +37,18 @@ minion-base board (spec §7 in the same phase-gates spec) renders the amber
 
 **Out of scope:** changing G0's write side (already correct, minion-factory); any
 new board columns; scoring already-done specs.
+
+## Reconciliation note 2026-08-17
+
+Overlaps `2026-08-17-base-kanban-possibly-shipped-surface`: both target the same
+end-to-end gap (G0's `possibly_shipped`/`evidence`/`link_review` invisible on the
+minion-base board), but that proposal's "Out of scope" claims minion-meta "already
+emit[s] and project[s] the three fields" — checked against `scripts/spec-index.mjs`
+on this branch and that is not the case (only `id, title, stage, status, pass,
+created, updated, repos, revises, supersedes, proposal, verdict, pr, type, tags`
+are projected; `possibly_shipped`/`evidence`/`link_review` are still absent, matching
+this proposal's own finding). That proposal's board-side DoD (SpecFile type fields,
+one-click confirm/reject write-back mechanics via the existing PR/commit path) is
+more detailed than this one's. Flagged rather than merged because picking a canonical
+here means resolving that factual conflict, not just concatenating text — left for a
+human to reconcile.
