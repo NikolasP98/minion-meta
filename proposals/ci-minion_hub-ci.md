@@ -1,7 +1,7 @@
 ---
 id: ci-minion_hub-ci
 title: CI red — CI on minion_hub master
-status: draft
+status: closed
 created: 2026-08-14
 updated: 2026-08-17
 repos: []
@@ -53,3 +53,7 @@ check-and-build	UNKNOWN STEP	2026-08-14T21:49:13.0494211Z [command]/usr/bin/git 
 check-and-build	UNKNOWN STEP	2026-08-14T21:49:13.0885019Z Cleaning up orphan processes
 check-and-build	UNKNOWN STEP	2026-08-14T21:49:13.1176616Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
+
+## Gate note 2026-08-18
+
+Cause fixed: hub master green since PR #104 (prettier pass). Manual close; auto-close-on-green is gates-spec G0 scope.

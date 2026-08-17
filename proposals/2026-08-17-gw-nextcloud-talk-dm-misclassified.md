@@ -1,7 +1,7 @@
 ---
 id: 2026-08-17-gw-nextcloud-talk-dm-misclassified
 title: Nextcloud Talk: every webhook message is classified as group chat
-status: draft
+status: approved
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion]
