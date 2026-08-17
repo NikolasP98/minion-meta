@@ -3,11 +3,11 @@ id: 2026-08-17-gw-nostr-dispatch-pipeline-spec
 title: "Nostr — route replies through the shared buffered block dispatcher (delete the optional-call bypass)"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-gw-nostr-dispatch-pipeline
-verdict: pending
+verdict: approved
 repos: [minion]
 tags: [logic, test]
 type: fix
@@ -22,7 +22,7 @@ and the extension's own docs.
 extension can reach the shared dispatcher, following the precedent set for discord and telegram
 (`2026-05-20-discord-telegram-plugin-extraction` D-2-lite / T-2-lite added
 "channel runtime surface" re-export blocks to `src/plugin-sdk/index.ts`). This is a **new public SDK
-surface consumed by 45+ extensions** — §4 treats it as an alert, not a footnote.
+surface available to 45+ extensions** — §4 treats it as an alert, not a footnote.
 **Consumer surface (read, production code never edited here):** `minion/src/web/auto-reply/monitor/`
 (`process-message.ts` — the caller that gives `dispatchReplyWithBufferedBlockDispatcher` its meaning,
 per `2026-05-24-unified-user-identities-p3-wiring-plan` §Step 1) and `minion/src/channels/`. Per
@@ -82,18 +82,18 @@ and they fail differently:
    product. §3 enumerates the hypothesis and S0 confirms each row.
 
 **What the user loses today.** Unknown, and that is itself the finding — see ⚠️ A3. If the optional
-call currently resolves, nostr replies but in one unbuffered lump: long answers arrive as a wall,
-code blocks may be split mid-fence, and nothing about the turn reaches the message ledger or the
-reliability surfaces that every other channel populates. If it currently resolves to `undefined`, the
-nostr channel is dead on arrival and nobody has noticed, because it fails without a sound. S0's first
-job is to say which of those two sentences is true, in the PR, before any code changes.
+call currently resolves, nostr replies without the shared buffering/block-dispatch behavior named by
+the proposal. Any additional ledger, hook, reliability, or session effects remain hypotheses until S0
+checks §3; they must not be claimed as current losses without evidence. If the call currently resolves
+to `undefined`, the inbound message is silently dropped. S0's first job is to establish which behavior
+is current, in the PR, before any code changes.
 
 **Why nostr makes this harder than it looks — and why S2 is not "swap the call".** A published nostr
 event is **signed, immutable, and unretractable**: there is no edit and no reliable delete. Channels
 whose dispatcher mode streams-then-edits (the pattern telegram-style channels use) cannot be copied
 here. Every additional block the dispatcher emits becomes an additional permanent, signed,
 relay-broadcast event; a retry becomes a **visible duplicate the user cannot be spared**. So the fix
-must select an explicit dispatcher mode for an append-only, no-edit, exactly-once transport (§2 S2)
+must select an explicit dispatcher mode for an append-only, no-edit transport (§2 S2)
 rather than accepting whatever default the sibling channel happened to use.
 
 ## 1. Assumptions, and the four questions that decide the shape of S2
@@ -168,7 +168,7 @@ rg -n 'handleInboundMessage\?\.|onMessage\?\.|dispatch\w*\?\.' extensions/
 `handleInboundMessage` is bound to and who supplies it; (2) B1 or B2; (3) does nostr reply today —
 yes / no / unproven; (4) can the dispatcher contract be satisfied from nostr's inbound event without
 editing core — yes/no; (5) how many other extensions carry the same optional-call bypass. If (4) is
-**no**, stop before writing S2 and return the spec: the blast radius has changed from "one extension"
+**no**, stop before implementing S1–S3 and return the spec: the blast radius has changed from "one extension"
 to "the shared inbound contract", which is a human scope decision, not an implementation detail.
 
 ## 2. Approach — three vertical slices
@@ -264,7 +264,7 @@ rg -n ': *any|as unknown as|@ts-nocheck' extensions/nostr/src/channel.ts    # �
 
 **Goal:** nostr's inbound DM takes the same reply-dispatch path as every other channel — buffering and
 block dispatch included — with an explicitly chosen dispatcher mode appropriate to an append-only,
-no-edit, exactly-once transport. Which branch you are in is S0 (b)'s answer; **record it in the PR**.
+no-edit transport. Which branch you are in is S0 (b)'s answer; **record it in the PR**.
 
 **Branch B1 — the dispatcher is already reachable from extensions (best case).** A peer extension
 channel already calls it. Mirror that call: same import path, same payload construction shape, same
@@ -290,10 +290,11 @@ to `src/plugin-sdk/`, following the precedent in `2026-05-20-discord-telegram-pl
   the call site with a comment naming the transport constraint; if it does not offer one, the buffering
   boundary nostr gets is whatever block dispatch emits, and that must be stated in the PR (and in the
   docs, S3) rather than discovered by a user.
-- **Exactly-once publish per block.** Every emitted block becomes a permanent signed event on public
-  relays. A duplicate is not a log line — it is a visible, uneditable double-message. If the dispatcher
-  can re-emit a block (retry, reconnect, error path), the nostr send adapter must dedupe before
-  signing. Test it (below).
+- **One local publish attempt per dispatcher emission.** Every emitted block becomes a signed event,
+  so the adapter must not invoke its existing publish path twice for one emission. Preserve the
+  extension's current relay retry/reconnect semantics; cross-attempt or relay-level exactly-once
+  delivery and a new deduplication store are out of scope. Test the local one-emission/one-call
+  invariant below.
 - **Adapt on the nostr side, never on the dispatcher side.** If nostr's transport cannot satisfy the
   dispatcher's send contract (chunk size limits, encryption per event, relay ack semantics), write the
   adapter inside `extensions/nostr/`. Editing `src/web/auto-reply/monitor/` or the dispatcher itself is
@@ -318,10 +319,10 @@ cd minion
 pnpm vitest run extensions/nostr
 #   - an inbound DM reaches dispatchReplyWithBufferedBlockDispatcher exactly once, with a payload
 #     the dispatcher accepts (assert on the injected/stubbed dispatcher)
-#   - a multi-block reply produces >1 published nostr event, each a complete block
-#         (no split code fence, no partial block) — this is the buffering nostr did not have
+#   - a multi-block reply produces >1 published nostr event whose decrypted contents equal the
+#         ordered blocks emitted by the real dispatcher
 #   - a single-block reply produces exactly 1 published event  (no gratuitous fragmentation)
-#   - a re-emitted/duplicate block from the dispatcher → exactly 1 signed publish  (exactly-once)
+#   - each dispatcher emission invokes the existing nostr publish path exactly once
 #   - every event published on the DM path is encrypted per the extension's DM scheme — ZERO plaintext
 #   - a relay publish failure mid-reply → logged at error, no throw escaping the channel,
 #     no partial-state corruption on the next inbound message
@@ -337,7 +338,7 @@ git diff <base>...HEAD -- src/web/auto-reply/        # → EMPTY (editing the di
 
 ### S3 — The DM round-trip integration test, the docs, and the ledger
 
-**Tags:** `test`, `logic` · **Estimate:** 5–7 h
+**Tags:** `test`, `logic`, `docs` · **Estimate:** 5–7 h
 
 **Goal:** the proposal's definition of done, literally: *"integration test round-trips a nostr DM
 through the shared pipeline"* — with a fake relay, not a live one. Plus the docs stop describing a
@@ -347,7 +348,7 @@ than absorbed.
 **Do:**
 
 - **A fake relay, in-process. No network, no public relay, no live keys.** The test must be
-  deterministic and runnable in CI offline. Stand up an in-memory transport that accepts signed events
+  deterministic and runnable in CI without external network access. Stand up an in-memory transport that accepts signed events
   and can inject an inbound encrypted DM, with a fixed test keypair. Assert the full arc: inbound DM
   event → decrypt → channel → **the real dispatcher** → the agent runner (stubbed at its boundary, so
   the test proves the *pipeline wiring*, not model output) → buffered blocks → published outbound
@@ -395,7 +396,7 @@ pnpm vitest run extensions/nostr             # includes the round-trip integrati
 #   - inbound encrypted DM → outbound encrypted reply, decrypted by the test key, content asserted
 #   - the REAL dispatchReplyWithBufferedBlockDispatcher is traversed (spied, not stubbed out)
 #   - a long reply arrives as multiple complete blocks; a short one as exactly one
-#   - the test performs ZERO outbound network I/O (no real relay, no DNS, no public keys)
+#   - the test performs ZERO external network I/O (no real relay or DNS; an in-process/loopback fake is allowed)
 pnpm test && pnpm tsgo && pnpm check          # full unit suite + typecheck + lint/format
 rg -n 'wss://|relay\.(damus|nostr)' extensions/nostr/src --glob '*.test.ts'   # → ZERO (no public relay in tests)
 rg -n 'TODO\(handoff\)' extensions/nostr/src                                  # → ZERO, or each has a proposals/ entry
@@ -434,7 +435,7 @@ extension (new/modify) → `minion/extensions/<channel>/` + `minion/src/channels
 | Surface | Impact | Mitigation / evidence |
 |---|---|---|
 | `minion/extensions/nostr/` | **The fix.** All behavior changes live here | S1–S3 |
-| `minion/src/plugin-sdk/index.ts` | **⚠️ ALERT, branch B2 only — unavoidable if the dispatcher is core-only.** A new symbol on the surface consumed by **45+ extensions**. Additive re-export of an existing symbol: no existing export moves, renames, or changes signature, so no extension can break | S2 B2 constraints; S2 DoD asserts additions-only, one file; precedent: `2026-05-20-discord-telegram-plugin-extraction` D-2-lite/T-2-lite did exactly this for discord and telegram |
+| `minion/src/plugin-sdk/index.ts` | **⚠️ ALERT, branch B2 only — unavoidable if the dispatcher is core-only.** A new symbol on the surface available to **45+ extensions**. Additive re-export of an existing symbol: no existing export moves, renames, or changes signature, so existing extension imports remain compatible | S2 B2 constraints; S2 DoD asserts additions-only, one file; precedent: `2026-05-20-discord-telegram-plugin-extraction` D-2-lite/T-2-lite added channel bridge re-exports, though it did not export this dispatcher |
 | `minion/src/web/auto-reply/monitor/` (the dispatcher, `process-message.ts`) | **None — read-only.** Nostr adapts to the contract; the contract does not adapt to nostr. Editing it is a **finding and a stop condition** | S2 DoD: `git diff -- src/web/auto-reply/` → EMPTY |
 | `minion/src/channels/` | **None.** Nostr is an extension-registered channel (`api.registerChannel()`), not a core `channels/impl/` channel | S0 (d) confirms; S3 DoD's changed-file check enforces |
 | `minion` message ledger / reliability events / sessions | **Behavior changes without these files changing — and that is a *visible* change elsewhere.** If §3's rows confirm, nostr traffic begins appearing on surfaces where it was invisible. Desired, but somebody will notice | S3 requires the sentence in the PR **and** a check that no session-key/thread-ownership derivation forks existing nostr conversations at deploy; a fork is a stop condition |
@@ -442,7 +443,7 @@ extension (new/modify) → `minion/extensions/<channel>/` + `minion/src/channels
 | `@minion-stack/shared` (frames, events, WS protocol) | **None.** No frame type, event type, or protocol field added or changed | §5 excludes it; if the fix appears to need one, that is a spec bug — raise it |
 | `minion_site`, `paperclip-minion`, `minion_plugins`, `pixel-agents`, `Minion Docs/` | **None.** No protocol change ⇒ no consumer change | AGENTS.md's "Gateway protocol" row does not apply |
 | Other channel extensions (signal, matrix, irc, tlon, …) | **None from this diff.** But the same optional-call bypass may exist elsewhere | S0 (f) greps; S3 files **one** proposal and fixes nothing outside nostr (§5) |
-| Nostr relays (external, third-party, public) | **A multi-block reply publishes more signed events than today** — permanent, public, unretractable | S2's explicit no-edit mode + exactly-once publish + single-block-stays-single; S3 forbids any test touching a public relay |
+| Nostr relays (external, third-party, potentially public) | **A multi-block reply may publish more signed events than today**; relay retention and deletion behavior are outside this fix | S2's explicit no-edit mode + one local publish call per emission + single-block-stays-single; S3 forbids any test touching a public relay |
 
 ### ⚠️ A1 — the binding is unidentified
 
@@ -452,7 +453,7 @@ three are fixable by S1's "required and typed" rule, which is why S1 is written 
 actually was — "loosely-typed" is the proposal's word, and a spec that repeats it without resolving it
 has not done its job.
 
-### ⚠️ A2 — B2 puts a new symbol in front of 45+ extensions
+### ⚠️ A2 — B2 puts a new symbol on the SDK surface available to 45+ extensions
 
 If the dispatcher is core-only, this one-extension bug fix necessarily widens the plugin SDK. That is
 the correct call (the alternative — nostr reaching into core internals past the SDK — is worse and is
@@ -498,6 +499,9 @@ bug to fill the slice with.
 - **Relay retry, backoff, reconnection, or delivery-confirmation policy.** Preserve today's publish
   semantics exactly. Retry against an unretractable, duplicate-visible transport is its own design
   problem and is *easier* to add later against the seam S1/S2 build.
+- **Cross-attempt or relay-level exactly-once delivery and new deduplication state.** This fix enforces
+  only one call to the existing publish path per dispatcher emission; it does not redefine relay
+  delivery guarantees.
 - **Any change to `@minion-stack/shared`, the gateway WS frame protocol, or `InboundMessage`'s shape.**
   No new field, no new event, no consumer coordination.
 - **Backfilling historical nostr messages into the ledger, or reclassifying past sessions.** The fix is
