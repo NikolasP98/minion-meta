@@ -2,7 +2,7 @@
 id: 2026-08-17-base-deploy-status-branch-filter-spec
 title: "minion-base board — CI status scoped to each repo's deploy branch, and absence is not health"
 stage: spec
-status: draft
+status: approved
 pass: 2
 created: 2026-08-17
 updated: 2026-08-17
