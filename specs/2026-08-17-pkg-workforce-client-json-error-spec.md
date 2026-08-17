@@ -2,20 +2,21 @@
 id: 2026-08-17-pkg-workforce-client-json-error-spec
 title: "@minion-stack/workforce-client — non-JSON responses must raise WorkforceApiError, not a raw SyntaxError"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-pkg-workforce-client-json-error
-verdict: pending
+verdict: approved
 repos: [minion-meta]
-tags: [logic, test, docs]
+tags: [logic, test, docs, infra]
 type: fix
 ---
 
 # Non-JSON responses must raise `WorkforceApiError`
 
-**Owner surface:** `minion-meta` — `packages/workforce-client/src/client.ts` (one function, `request()`),
+**Owner surface:** `minion-meta` — `packages/workforce-client/src/client.ts` (the `request()` transport
+path and its exported error contract),
 its transport test file, the package README, and a changeset. **Consumer surface (not edited here):**
 `minion_hub`, which imports this package in `src/lib/server/workforce-fetch.ts` to proxy
 company-scoped requests; the HTML-502 pages the proposal names are produced by the gateway proxy
@@ -30,7 +31,7 @@ the HTML comes from). [`2026-07-12-living-workforce-harness`](2026-07-12-living-
 lists the same four repos as the workforce blast radius.
 
 **Gate conventions:** [`2026-08-17-sdlc-phase-gates-scoring-spec`](2026-08-17-sdlc-phase-gates-scoring-spec.md)
-§4b — slices below are tagged `logic` / `test` / `docs`. Red-state TDD is mandatory (the failing test is
+§4b — slices below are tagged `logic` / `test` / `docs` / `infra`. Red-state TDD is mandatory (the failing test is
 written and shown failing before the fix). **No UI governance applies**: zero `.svelte` files, zero token
 or design lint, in any slice.
 
@@ -153,9 +154,10 @@ than the bug being fixed.
 
 **Tags:** `logic`, `test` · **Estimate:** 5–7 h
 
-**Goal:** `request()` has exactly two outcomes for any response the transport delivers — it returns
-parsed JSON, or it throws `WorkforceApiError`. `SyntaxError` never escapes. `status` is always present
-on the error. Existing JSON behavior, including empty-body `null`, is byte-identical.
+**Goal:** once `request()` receives an HTTP response and successfully reads its body, it has exactly
+two outcomes — it returns parsed JSON, or it throws `WorkforceApiError`. A `SyntaxError` from parsing
+never escapes, and `status` is always present on that error. Fetch and body-read failures still
+propagate as-is. Existing JSON behavior, including empty-body `null`, is unchanged.
 
 **Do:**
 
@@ -203,8 +205,10 @@ on the error. Existing JSON behavior, including empty-body `null`, is byte-ident
   `Cannot read properties of undefined` three frames away. The proposal's DoD ("non-JSON yields
   `WorkforceApiError(status,{raw})`") is not restricted to `!res.ok`, so this is in scope, not scope
   creep. The status carried is the real one (`200`), which is precisely the diagnostic the caller needs.
-- **Bound the `raw` field.** Truncate at **2048 characters** (a small exported constant, not a magic
-  number), appending a `… [truncated N of M chars]` marker and setting `truncated: true`. A proxy error
+- **Bound the `raw` field.** Cap the final `raw` string at **2048 JavaScript string code units total**, including an
+  appended `… [truncated N of M chars]` marker (use a small exported constant, not a magic number),
+  and set `truncated: true`. Preserve the full text when it is at or below the cap and set
+  `truncated: false`. A proxy error
   page can be tens of KiB; this object gets logged, serialized, and — per ⚠️ A1 — possibly forwarded.
   Body shape: `{ raw: string; contentType: string | null; truncated: boolean }`. That is a superset of
   the proposal's `{raw}`, so the DoD is met literally.
@@ -219,12 +223,14 @@ on the error. Existing JSON behavior, including empty-body `null`, is byte-ident
 - **Let transport rejections keep propagating.** `opts.fetch()` rejecting (DNS, ECONNREFUSED, abort) and
   `res.text()` rejecting (truncated/aborted body) are *not* HTTP responses and must not be laundered
   into `WorkforceApiError`, which promises a meaningful `status`. The boundary this slice establishes,
-  and which the README states in S2: **a delivered HTTP response becomes a value or a
-  `WorkforceApiError`; a failure to obtain one propagates as-is.** Do not add a `try` around
+  and which the README states in S2: **a successfully read HTTP response becomes a value or a
+  `WorkforceApiError`; a failure to fetch or read one propagates as-is.** Do not add a `try` around
   `opts.fetch()`.
-- **Never let key material or request bodies into the error.** `raw` is the *response* text only. Do not
-  add the request body, the `headers` option (it carries the identity JWT), or the URL's query string to
-  the error object.
+- **Do not copy request material into the error.** `raw` is the *response* text only. Do not add the
+  request body, the `headers` option (it carries the identity JWT), or the URL/query string as error
+  fields or metadata. An upstream may itself echo request data in its response; preventing that is a
+  server-side concern and is not a property this client can guarantee while the proposal requires
+  carrying `{ raw }`.
 - **Red-state first (G3).** Write the non-JSON test, run it against the current implementation, and
   confirm it fails with `SyntaxError` — paste that output into the PR. The existing suite is not a valid
   red-state proof: all 25 files pass today by construction.
@@ -253,11 +259,14 @@ cd packages/workforce-client && pnpm run test
 #   - 200 + '{"ok":true}'  → resolves to { ok: true }                     (happy path unchanged)
 #   - 204 + empty body     → resolves to null                            (Promise<void> endpoints)
 #   - 500 + empty body     → WorkforceApiError, .status 500, .bodyKind 'empty', .body === null
-#   - 502 + a 50_000-char HTML body → .body.raw.length <= 2048 + marker, .body.truncated === true
+#   - 502 + a 50_000-char HTML body → .body.raw.length <= 2048, ends with the truncation marker,
+#       and .body.truncated === true
+#   - 502 + a non-JSON body of exactly 2048 characters → body preserved, .body.truncated === false
 #   - 502 + non-JSON → .body.contentType === 'text/html' (metadata recorded, not used to decide)
 #   - opts.fetch rejecting with new TypeError('fetch failed')
 #       → rejects with THAT TypeError, not a WorkforceApiError            (boundary held)
-#   - the thrown error contains neither the request body nor the opts.headers identity JWT
+#   - with a response body unrelated to the request, the thrown error has no own fields containing
+#       the request body, opts.headers identity JWT, URL, or query string
 pnpm run typecheck && pnpm run build
 cd ../.. && pnpm run typecheck-all && pnpm run lint-all
 rg -n 'JSON.parse' packages/workforce-client/src/client.ts   # → exactly ONE hit, inside a try block
@@ -311,8 +320,8 @@ index convention resolves to; do **not** edit `proposals/index.json`, the genera
 
 ```bash
 cd /home/agent/work
-ls .changeset/*.md | xargs grep -l 'workforce-client'        # → the new changeset exists
-rg -n 'minor' .changeset/<name>.md                            # → minor, not patch
+test -f .changeset/<name>.md                                  # → the named new changeset exists
+rg -n '^"@minion-stack/workforce-client": minor$' .changeset/<name>.md  # → minor, not patch
 rg -n 'createMinion WorkforceClient' packages/workforce-client/README.md   # → ZERO hits (samples fixed)
 rg -n 'bodyKind' packages/workforce-client/README.md          # → the error contract is documented
 rg -n 'TODO\(handoff\)' packages/workforce-client/src/client.ts            # → exactly one, at the 'text' throw
