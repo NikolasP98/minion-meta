@@ -1,7 +1,8 @@
 ---
 id: 2026-08-17-hub-personal-agent-entrypoint-test
 title: Direct unit test for loadPersonalAgentForUser (untested layout-load entry point)
-status: approved
+status: in-spec
+spawned_spec: 2026-08-17-hub-personal-agent-entrypoint-test-spec
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion_hub]
