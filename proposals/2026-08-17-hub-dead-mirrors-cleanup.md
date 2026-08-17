@@ -1,9 +1,10 @@
 ---
 id: 2026-08-17-hub-dead-mirrors-cleanup
 title: Delete satisfied-TODO dead mirrors: local secrets.ts + workspace-membership schema
-status: approved
+status: in-spec
 created: 2026-08-17
 updated: 2026-08-17
+spawned_spec: 2026-08-17-hub-dead-mirrors-cleanup-spec
 repos: [minion_hub]
 tags: [logic, unwired]
 value: 5
