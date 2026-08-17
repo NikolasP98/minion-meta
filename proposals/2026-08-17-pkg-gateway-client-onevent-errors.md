@@ -1,7 +1,8 @@
 ---
 id: 2026-08-17-pkg-gateway-client-onevent-errors
 title: GatewayClient discards exceptions thrown in consumer onEvent handlers
-status: approved
+status: in-spec
+spawned_spec: 2026-08-17-pkg-gateway-client-onevent-errors-spec
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion-meta]
