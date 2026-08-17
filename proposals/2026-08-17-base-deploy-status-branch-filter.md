@@ -1,7 +1,8 @@
 ---
 id: 2026-08-17-base-deploy-status-branch-filter
 title: Board CI-green status computed across ALL branches, not the deploy branch
-status: approved
+status: in-spec
+spawned_spec: 2026-08-17-base-deploy-status-branch-filter-spec
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion-base]
