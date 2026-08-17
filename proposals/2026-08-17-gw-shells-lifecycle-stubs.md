@@ -1,7 +1,8 @@
 ---
 id: 2026-08-17-gw-shells-lifecycle-stubs
 title: Finish (or explicitly retire) the shells lifecycle stubs: shells.update + wake-from-archive
-status: approved
+status: in-spec
+spawned_spec: 2026-08-17-gw-shells-lifecycle-stubs-spec
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion]
