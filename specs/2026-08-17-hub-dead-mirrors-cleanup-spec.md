@@ -3,11 +3,11 @@ id: 2026-08-17-hub-dead-mirrors-cleanup-spec
 title: "Delete two satisfied-TODO dead mirrors in hub — prove equivalence before deleting, not after"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-hub-dead-mirrors-cleanup
-verdict: pending
+verdict: approved
 repos: [minion_hub]
 tags: [logic, data, test]
 type: fix
@@ -91,10 +91,9 @@ reviewer can run without reading the diff.
 
 ## 1. Discovery contract (run first, applies to both slices)
 
-`minion_hub` is a separate git repo and is **not** checked out inside the meta-repo (`.gitignore`
-excludes every subproject), so the paths and the "4 importers" count below come from the proposal, not
-from this author's inspection. The implementer's first act in each slice is to re-derive them. Every
-command runs from the `minion_hub/` root on branch `dev`.
+`minion_hub` is a separate git repo and may not be present in every meta-repo checkout (`.gitignore`
+excludes every subproject), so the implementer must re-derive the paths and the proposal's "4
+importers" count. Every command runs from the `minion_hub/` root on branch `dev`.
 
 ```bash
 # 0.1 — the two mirrors exist where the proposal says
@@ -110,10 +109,9 @@ ls node_modules/@minion-stack/db/dist/schema/workspace-membership.d.ts
 rg -n --no-heading "types/secrets|from ['\"]\\\$lib/types/secrets" src/
 rg -n --no-heading "db/schema/workspace-membership|workspaceMembership|workspace_membership" src/ drizzle* supabase/ 2>/dev/null
 
-# 0.4 — baseline the checkers BEFORE touching anything (hub may carry pre-existing errors;
-#        the DoD is "no NEW errors", which needs a number to compare against)
-bun run check  2>&1 | tee /tmp/hub-check-before.txt
-bun run test   2>&1 | tee /tmp/hub-test-before.txt
+# 0.4 — establish a green baseline before touching anything
+bun run check
+bun run test
 ```
 
 **If 0.2 fails** (either package resolves below the version that contains the canonical file), stop:
@@ -158,7 +156,7 @@ Classify every local symbol into one of four buckets and act accordingly:
 | **Local-only** (exists nowhere in shared) | Decide by nature: a **hub view-model** type (UI row state, form state, sort keys) moves into the file that uses it or a hub-owned `src/lib/types/secrets-view.ts` — it was never protocol and never belonged in a mirror. A genuine **protocol** type means the shared package is the one that is incomplete: **stop, file a proposal to promote it to `packages/shared`**, and leave this slice blocked. Do **not** hand-add protocol types to `packages/shared` under this spec — that is a publish + version-bump loop across two repos and it is not what was approved |
 
 The audit table itself is a deliverable: paste it into the PR body. A reviewer must be able to see that
-"deleted a file" was actually "checked 20 symbols, 20 matched".
+"deleted a file" was actually "checked all 18 canonical exports and every local export".
 
 ### 2.2 The import swap, and the one runtime trap
 
@@ -196,18 +194,15 @@ Rules for the swap:
 ```bash
 test ! -f src/lib/types/secrets.ts                                        # file gone
 rg -c "lib/types/secrets" src/ ; test $? -eq 1                            # rg exit 1 == zero matches
-bun run check 2>&1 | tee /tmp/hub-check-after.txt                         # svelte-check
-#   error count in /tmp/hub-check-after.txt <= count in /tmp/hub-check-before.txt   (no NEW errors)
+bun run check                                                             # exits 0 (svelte-check)
 bun run build                                                             # exits 0
 bun run test                                                              # exits 0, includes the new guard
 ```
 
-Plus one non-grep check that closes the bundle trap: after `bun run build`, confirm no client chunk
-gained a WS/Node import —
-`rg -l "require\(['\"](ws|node:)" .svelte-kit/output/client/ 2>/dev/null` returns nothing (adjust the
-output path to the hub's adapter layout if it differs; the assertion is "client bundle has no new
-Node-only import", and the honest fallback if the path differs is a before/after `du -sh` plus a manual
-chunk inspection noted in the PR).
+Plus one non-grep check that closes the bundle trap: after `bun run build`, confirm
+`rg -l "(from|require\()['\"](ws|node:)" .svelte-kit/output/client/ 2>/dev/null` returns nothing. If
+the adapter uses a different client-output directory, locate it from the build output and run the same
+scan there; absence of a known path is not a passing result.
 
 ### 2.5 The guard (red-state first, per §4b `logic` routing)
 
@@ -226,14 +221,18 @@ this same file rather than adding a second one.
 
 **Tags:** `data`, `test` · **Size:** ~5–8 focused hours (the migration-safety proof is the work)
 
-### 3.1 Establish which branch you are in — the only real decision in this slice
+### 3.1 Prove schema equivalence and preserve migration ownership
 
 `@minion-stack/db` already declares this table (`packages/db/src/schema/workspace-membership.ts`:
 composite PK `(user_id, paperclip_company_id)`, `role` defaulting to `'admin'`, `created_at`, plus
 `idx_workspace_membership_user`, with FK `user_id → user.id ON DELETE CASCADE`). The hub's local copy is
-a duplicate declaration of the **same physical table** in the **same shared database**. The question is
-not "is the type redundant" — it is "**who owns the migration for `workspace_membership` after the local
-declaration is gone**". Answer it with:
+intended to be a duplicate declaration of the **same physical table** in the **same shared database**.
+Before editing it, compare the local and package declarations field by field: table name, column names
+and modes, nullability, defaults, primary key, index, and foreign-key target and delete action. Record
+the comparison in the PR body. Any mismatch is a hard stop because replacing the declaration could
+create migration churn or a type-level behavior change.
+
+Then establish how the hub loads its schema:
 
 ```bash
 cat drizzle.config.ts                              # what does `schema:` point at? local dir, package, or both?
@@ -242,23 +241,14 @@ ls drizzle/ migrations/ 2>/dev/null                # is there a local migration 
 rg -rn "workspace_membership" drizzle/ migrations/ supabase/ 2>/dev/null
 ```
 
-- **Branch A — hub's `drizzle.config.ts` points only at `src/server/db/schema/`.** Deleting the file
-  removes the table from the hub's generated schema. Required: also remove its export line from
-  `src/server/db/schema/index.ts`, and prove the generator does not emit a drop (3.2). Because the table
-  then has **no** declaration in the hub's own migration source, leave a
-  `TODO(handoff): workspace_membership is declared only in @minion-stack/db/schema — hub no longer
-  generates migrations for it; see specs/2026-08-17-hub-dead-mirrors-cleanup-spec.md §3.1 Branch A` at
-  the barrel site, and file the matching `proposals/` entry per AGENTS.md's open-items ledger. This is
-  an ownership handoff, not a defect, but an undocumented one is a defect.
-- **Branch B — the hub genuinely needs the table in its generated schema** (config globs the local dir
-  and the hub owns this table's migrations). Then the barrel re-exports from the package instead:
-  `export { workspaceMembership } from '@minion-stack/db/schema'` — and you must check for a **second**
-  hazard: the package's declaration references the package's own `user` table
-  (`./auth/index.js`), so pulling it into the hub's schema graph can drag in a duplicate `user`
-  declaration and produce migration churn on a table this spec must not touch. If 3.2's diff is not
-  empty under Branch B, **prefer Branch A** and document the handoff.
-
-Do not guess the branch. The `drizzle.config.ts` read decides it in under a minute.
+The required end state is that the hub barrel re-exports the canonical declaration:
+`export { workspaceMembership } from '@minion-stack/db/schema'`. This preserves the table in the hub's
+schema graph while removing the local mirror, and satisfies the proposal's requirement to retarget to
+`@minion-stack/db`. The package declaration references its own canonical `user` table, so §3.2 must
+also prove that the re-export does not introduce duplicate-table or unrelated auth-schema churn. If the
+hub's Drizzle configuration does not discover the package re-export, or generation produces any diff,
+stop: silently removing the table from the hub's migration graph is not an allowed fallback and needs a
+separate human decision about migration ownership.
 
 ### 3.2 The migration-safety proof (the §4b schema-drift check, non-negotiable)
 
@@ -269,7 +259,7 @@ git status --porcelain drizzle/ migrations/          # MUST still be clean — n
 ```
 
 If a migration file *is* produced, open it. Any occurrence of `DROP TABLE`, `drop table`, or
-`workspace_membership` is a **hard stop**: revert, switch branch (A↔B), and re-run. The table holds 3
+`workspace_membership` is a **hard stop**: revert the slice and report the blocker. The table holds 3
 live production rows per `2026-06-30-turso-telemetry-audit` and is explicitly under a "no destructive
 drop" ruling from `2026-06-14-workforce-org-company-bridge-design`.
 
@@ -293,8 +283,8 @@ rg -n "workspace_membership"  src/            # raw SQL / sql`` templates / stri
 rg -n "workspace-membership"  src/            # module specifier
 ```
 
-Every hit must resolve to one of: the file being deleted, the barrel line being removed, or an import of
-`@minion-stack/db` (which is the desired end state and stays). A hit anywhere else — a service, a route,
+Every hit must resolve to one of: the file being deleted, the barrel line being re-pointed, or an import
+of `@minion-stack/db` (which is the desired end state and stays). A hit anywhere else — a service, a route,
 a `+page.server.ts` — means the premise "zero real callers" is wrong; retarget that caller to
 `@minion-stack/db` (root or `./schema` specifier) rather than deleting out from under it, and say so in
 the PR body.
@@ -302,15 +292,10 @@ the PR body.
 ### 3.4 Files to touch
 
 - **Delete:** `src/server/db/schema/workspace-membership.ts`
-- **Modify:** `src/server/db/schema/index.ts` — drop the export (Branch A) or re-point it at
-  `@minion-stack/db/schema` (Branch B)
-- **Modify (Branch A only):** the barrel gains the `TODO(handoff)` comment from 3.1
+- **Modify:** `src/server/db/schema/index.ts` — re-point the export at `@minion-stack/db/schema`
 - **Modify:** `src/lib/no-dead-mirrors.test.ts` — extend the guard with the second file
 - **Must NOT appear in the diff:** anything under `drizzle/`, `migrations/`, `supabase/`, or any `.sql`
   file. This is itself a reviewable check: `git diff --name-only main... | rg "\.sql$|^(drizzle|migrations|supabase)/"` returns nothing.
-- **Create (Branch A only):** `proposals/<date>-hub-workspace-membership-migration-ownership.md` in the
-  **meta-repo** — the ledger entry. This is a documentation artifact, not an implementation change, and
-  it is the one file this work writes outside `minion_hub`.
 
 ### 3.5 Definition of done (machine-checkable)
 
@@ -319,7 +304,7 @@ test ! -f src/server/db/schema/workspace-membership.ts
 rg -c "db/schema/workspace-membership" src/ ; test $? -eq 1
 bunx drizzle-kit generate && git status --porcelain drizzle/ migrations/   # empty output
 git diff --name-only | rg "\.sql$|^(drizzle|migrations|supabase)/" ; test $? -eq 1
-bun run check   # error count <= /tmp/hub-check-before.txt baseline
+bun run check   # exits 0
 bun run build   # exits 0
 bun run test    # exits 0, guard covers both files
 ```
@@ -330,18 +315,13 @@ bun run test    # exits 0, guard covers both files
 
 | Surface | Impact | Mitigation / alert |
 |---|---|---|
-| `minion_hub` | The only repo with code changes | Both slices are import-graph-only; DoD forbids `.sql` and forbids new svelte-check errors |
+| `minion_hub` | The only repo with code changes | Source ownership changes only; DoD forbids `.sql`, migration drift, and check failures |
 | `packages/shared` (minion-meta) | **None if the audit comes back clean.** If §2.1 finds a genuine local-only *protocol* type, shared is incomplete | **Alert, do not absorb.** Promoting a type to `@minion-stack/shared` means a changeset → "Version Packages" PR → npm publish → hub dep bump. That is a multi-repo release loop and is **out of scope**: stop the slice, file a proposal, leave `src/lib/types/secrets.ts` in place until it lands. Partial deletion is worse than no deletion |
 | `packages/db` (minion-meta) | None. The canonical declaration already exists and is already exported; this spec only stops the hub from duplicating it | — |
 | `minion_site` | Shares the database with the hub (AGENTS.md → *DB schema change* impact zone). **No schema change occurs**, so no impact — but this is exactly why §3.2's empty-diff proof is mandatory: a stray generated migration would hit site's data too | Empty-diff proof; `db:push` prohibited |
 | `paperclip-minion` | `workspace_membership.paperclip_company_id` is the hub↔Paperclip tenancy bridge (`2026-06-14-workforce-org-company-bridge-design`), and the package docstring names the JWT `companyId` claim as a consumer. The **table and its data are untouched**, so the bridge is unaffected | No action. Flagged so a reviewer seeing "paperclip" in the deleted file does not assume the bridge moved |
 | Gateway protocol (`minion/`) | None. The `secrets.*` RPC method names and payload shapes are unchanged — the hub stops reading them from a stale copy and starts reading them from the published one | The wire-format equivalence is what §2.1's audit certifies; if the audit finds a mismatch, that mismatch was **already** a live hub/gateway disagreement, and is a finding worth its own proposal |
-| `minion-meta` (this repo) | At most one new `proposals/` file (Branch A ledger entry). No package or code change | — |
-
-**The one unavoidable alert:** under Branch A, the hub stops generating migrations for a table that
-still exists and still holds rows. Nothing breaks today — the table is live and read via
-`@minion-stack/db` — but the *ownership* of its future migrations moves to the db package without a
-mechanical enforcement. That is why the ledger entry in §3.4 is a DoD item and not a nicety.
+| `minion-meta` (this repo) | None. The canonical package sources are verification inputs only | — |
 
 ---
 
@@ -366,7 +346,7 @@ mechanical enforcement. That is why the ledger entry in §3.4 is a DoD item and 
 
 ## 6. End-to-end verification
 
-Run from `minion_hub/` on the feature branch, after both slices, with a clean working tree:
+Run from `minion_hub/` on the feature branch, after both slices:
 
 ```bash
 # 1. Both mirrors are gone and nothing references them
@@ -374,7 +354,7 @@ test ! -f src/lib/types/secrets.ts && test ! -f src/server/db/schema/workspace-m
 rg "lib/types/secrets|db/schema/workspace-membership" src/ ; test $? -eq 1
 
 # 2. Types still resolve — from the published packages now
-bun run check            # error count <= /tmp/hub-check-before.txt baseline captured in §1
+bun run check            # exits 0
 bun run build            # exits 0
 bun run test             # exits 0; no-dead-mirrors.test.ts green
 
@@ -388,9 +368,10 @@ git diff --name-only main... | rg "\.sql$|^(drizzle|migrations|supabase)/" ; tes
 (a) the Security → secrets page lists secrets with their probe status pills and a probe action still
 round-trips — this exercises the retargeted `secrets.*` types against the real gateway, which is the only
 proof that the swapped types match the wire and not just each other;
-(b) the workspace/company selection path still resolves a `companyId` (per
-`2026-06-14-workforce-org-company-bridge-design`, an org with a `workspace_membership` row must not land
-on `/workforce/welcome`) — this proves the schema deletion did not disturb the table or its readers.
+(b) query the same non-production database before and after the change and confirm the
+`workspace_membership` row count and a representative row are unchanged. The cited workforce design
+explicitly says the active-org flow no longer depends on this table, so navigation through that flow
+would not verify preservation of the table or its rows.
 
 If (a) or (b) regresses, the cleanup was not equivalence-preserving and the correct response is to revert,
 not to patch forward — every change in this spec is designed to be `git revert`-safe precisely so that
