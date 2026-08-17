@@ -1,7 +1,8 @@
 ---
 id: 2026-08-17-factory-providers-put-harness-check
 title: PUT /providers accepts provider names no harness implements
-status: approved
+status: in-spec
+spawned_spec: 2026-08-17-factory-providers-put-harness-check-spec
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion-factory]
