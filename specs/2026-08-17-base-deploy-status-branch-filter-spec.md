@@ -3,11 +3,11 @@ id: 2026-08-17-base-deploy-status-branch-filter-spec
 title: "minion-base board — CI status scoped to each repo's deploy branch, and absence is not health"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-base-deploy-status-branch-filter
-verdict: pending
+verdict: approved
 repos: [minion-base]
 tags: [logic, ui, test]
 type: fix
@@ -89,9 +89,10 @@ that was green yesterday and is red today. A branch-filtered page now contains o
 runs, but a "most recent **success** run" lookup still finds yesterday's green and still paints the
 repo healthy. The branch filter narrowed the lie; it did not remove it.
 
-Health must therefore come from the **latest completed run on the branch**, not from the latest
-success in the page. See D5 — it is the half of this fix that the proposal implies but does not
-spell out, and skipping it means shipping a change that passes review and still fails its own DoD.
+Completed health must therefore come from the **latest determinate completed run on the branch**,
+not from the latest success in the page; a newer active run reports `running`. See D5 — it is the
+half of this fix that the proposal implies but does not spell out, and skipping it means shipping a
+change that passes review and still fails its own DoD.
 
 ### The third thing: after this fix, some repos will legitimately have *no* data
 
@@ -116,8 +117,9 @@ file path, function name, and config field below is a lead reconstructed from th
 `file:line` citation and from the two ancestor specs — not verified fact.** The only line quoted
 from the real source is the proposal's: `src/lib/server/github.ts:168`.
 
-Five carried claims are load-bearing. Slice 0 turns each into a recorded fact, and any that comes
-back false is corrected in this spec's §4 table **in the same commit** as the implementation:
+Five carried claims are load-bearing. Slice 0 turns each into a recorded fact. If any comes back
+false, stop before implementation and update this spec (and its approval) in the meta-repo; do not
+silently reinterpret the work in the minion-base implementation PR:
 
 1. **There are exactly three `actions/runs` fetches**, all in `src/lib/server/github.ts`. The
    proposal counted them. If there are two, or four, or one helper called three times, the shape of
@@ -246,11 +248,9 @@ the Deployment bug, one column over — correct-but-thin beats rich-but-ambiguou
 to the Testing column properly means fetching per-PR check runs keyed to the PR cards, which is a
 **new status source** and explicitly out of scope (§6).
 
-⚠️ **This is an interpretation with a visible product consequence, flagged for the review pass to
-overrule.** If the reviewer wants PR CI kept in Testing, the correct shape is: leave the Testing
-fetch branch-less, tag every run it returns with its `head_branch`, render that branch on the card,
-and file a follow-up for per-PR check runs. Say so at G2 and this spec's §3 S1 drops to two filtered
-fetches — do not make that call during implementation.
+**Pass-2 decision:** retain this literal reading of the approved DoD. All three existing fetches are
+branch-scoped. Restoring PR-specific CI to Testing requires a separately approved status source and
+is out of scope; implementation must not reopen this decision.
 
 ### D4 — Absence is not health (the fail-closed rubric)
 
@@ -260,9 +260,9 @@ Status derivation returns a **closed enum** with no default-to-green anywhere:
 export type BranchCiStatus =
   | 'passing'    // latest completed, non-PR run on the branch concluded success
   | 'failing'    // ...concluded failure | timed_out | startup_failure | action_required
-  | 'running'    // latest run on the branch is queued | in_progress | waiting | requested | pending
+  | 'running'    // newest usable signal is queued | in_progress | waiting | requested | pending
   | 'no-runs'    // the branch-filtered fetch succeeded and returned zero usable runs   ← NEW
-  | 'unknown';   // fetch failed, or every run in the page has an indeterminate conclusion
+  | 'unknown';   // fetch failed, or every usable run in the page is indeterminate
 ```
 
 Three rules, each of which is a way this goes wrong if left implicit:
@@ -280,16 +280,18 @@ Three rules, each of which is a way this goes wrong if left implicit:
    `unknown` — never `passing`. Enumerate every documented conclusion value explicitly; a
    `default:` arm that returns anything green-ish is a slice failure.
 
-### D5 — Health is the **latest** completed run; "last success" is a separate fact
+### D5 — Current status and "last success" are separate facts
 
 The two facts the board conflates today:
 
 | Fact | Derivation | Renders as |
 |---|---|---|
-| **Branch health** | the **first** run in the branch-filtered, non-PR-event list whose conclusion is determinate | the red/green/amber badge |
+| **Current branch status** | scan the branch-filtered, non-PR-event list newest-first, skipping completed runs with indeterminate conclusions; the first active run yields `running`, and the first determinate completed run yields `passing` or `failing` | the red/green/amber badge |
 | **Last successful deploy** | the first run in the same list with `conclusion === 'success'` | the Deployment column's marker (what is live) |
 
-They are equal on a healthy branch and divergent exactly when it matters. `latestDeterminate.failure`
+An active run takes precedence over an older completed result, so a branch currently building is
+`running`, not yesterday's `passing`. Otherwise the two facts are equal on a healthy branch and
+divergent exactly when it matters. `latestDeterminate.failure`
 + `lastSuccess = yesterday` is the state the proposal's DoD sentence describes, and only this split
 renders it correctly: **badge red, deployment marker still pointing at yesterday's green run.** That
 is both true and useful.
@@ -356,7 +358,10 @@ green it cannot justify.
   ): { status: BranchCiStatus; latest: WorkflowRunLike | null; lastSuccess: WorkflowRunLike | null };
   ```
 
-  Implements D4's enum and D5's split. Drops `pull_request` / `pull_request_target` events (D2).
+  Implements D4's enum and D5's split. `latest` is the run that determined `status` after the D5
+  scan (or `null` for `no-runs`/`unknown`), not merely array position zero. Fetch failures are mapped
+  to `unknown` by the caller because an array-only pure function cannot distinguish a failed fetch
+  from a successful empty response. Drops `pull_request` / `pull_request_target` events (D2).
   Defensively re-checks `head_branch === branch` and drops mismatches — the API is trusted, but a
   one-line assertion here is what makes the function testable in isolation and catches a
   mis-encoded query returning the wrong ref's runs.
@@ -369,11 +374,12 @@ green it cannot justify.
   `ci-status.ts`** — that grep is in the DoD.
 - Route `no-runs` and `unknown` to whatever neutral/warn badge exists today (S2 gives them their own
   treatment). The one hard rule for this slice: **neither may reach the green path.**
-- **Red state first (G3, mandatory for `logic`).** Before the fix, write the failing test: a fixture
-  list containing a `success` run with `head_branch: 'feature/x'` and a `failure` run with
-  `head_branch: 'main'`; assert `deriveBranchCi(runs, 'main').status === 'failing'`. Run it against
-  the current derivation logic, paste the failure into the PR. That is the proposal's DoD sentence
-  as an executable statement.
+- **Red state first (G3, mandatory for `logic`).** Before implementing `deriveBranchCi`, add its
+  signature/stub and write the failing test: a fixture list containing a `success` run with
+  `head_branch: 'feature/x'` and a `failure` run with `head_branch: 'main'`; assert
+  `deriveBranchCi(runs, 'main').status === 'failing'`. Run the targeted test and paste its assertion
+  failure (not merely a missing-module or compile error) into the PR. That is the proposal's DoD
+  sentence as an executable statement.
 
 **Files:** `src/lib/server/github.ts`, `src/lib/server/ci-status.ts` (new),
 `src/lib/server/ci-status.test.ts` (new), the two/three consumer load functions located in Slice 0
@@ -389,6 +395,7 @@ bun test src/lib/server/ci-status.test.ts
 #   - red on 'feature/x'  + green on 'main', query 'main'  → passing   ← the "vice versa" half
 #   - success yesterday + failure today, both on 'main'    → status failing, lastSuccess = yesterday (D5)
 #   - only in_progress on 'main'                           → running   (NOT passing — conclusion is null)
+#   - in_progress today + success yesterday on 'main'      → running, lastSuccess = yesterday (D5)
 #   - empty array                                          → no-runs   (NOT passing, NOT unknown)  (D4)
 #   - every run cancelled / skipped / neutral / stale      → unknown   (NOT passing)               (D4)
 #   - success run with event 'pull_request' + head_branch 'main' (fork PR) → dropped; result no-runs (D2)
@@ -442,14 +449,15 @@ shows no CI data says *why* instead of showing nothing.
    from v1. Semantic tokens only — `--text-dim`, existing spacing and type scale from
    `src/lib/design/tokens.css`. No raw hex, no raw px, no new token (a token addition is a
    DESIGN.md-governed decision and needs PR justification).
-5. **Correct the ancestor spec's derivation table.** `2026-08-12-minion-base-v2-sdlc-kanban-spec` §1
-   describes Testing as "latest workflow runs" with no branch scope — the line this spec's D3
-   changes. ⚠️ Reconciling it is a **human call at the gate, deliberately not made here**; this spec
-   edits no other spec file. Noted as N2 in §5.
+5. **Record the ancestor documentation drift for meta-repo follow-up.** The shipped
+   `2026-08-12-minion-base-v2-sdlc-kanban-spec` §1 describes Testing as "latest workflow runs" with
+   no branch scope. Pass 2 settles the behavior in D3; the implementation PR does not edit the
+   meta-repo. Noted as N2 in §5.
 
 **Files:** the repo registry module (located in Slice 0; expected `src/lib/data/repos.ts` or
-`src/lib/server/repos.ts`), `src/lib/server/repos.test.ts` (new), `scripts/check-branches.mjs` (new,
-optional per step 3), the card/badge component that renders CI status (located in Slice 0),
+`src/lib/server/repos.ts`), `src/lib/server/repos.test.ts` (new), optionally
+`scripts/check-branches.mjs` and the corresponding `package.json` script (if step 3 uses a Bun
+script rather than the documented `gh` loop), the card/badge component that renders CI status,
 `src/routes/kanban/+page.svelte`, `DESIGN.md` (only if a genuinely new idiom needs documenting).
 
 **Definition of done (machine-checkable):**
@@ -457,13 +465,14 @@ optional per step 3), the card/badge component that renders CI status (located i
 ```bash
 cd minion_base
 bun test                                        # S1 suite + the new config suite, all green
-bun run check:branches                          # every configured branch resolves 200, exact case
-#   (or the equivalent gh loop — paste the full output in the PR either way)
-rg -n '#[0-9a-fA-F]{3,8}|[0-9]+px' src/routes/kanban/+page.svelte   # → 0 matches
+bun run check:branches                          # if the script form was chosen
+#   Otherwise run the documented equivalent gh loop; either form must prove every configured
+#   branch resolves 200 with exact case, and its full output is pasted in the PR.
+git diff -U0 origin/main...HEAD -- '*.svelte' | rg '^\+.*(#[0-9a-fA-F]{3,8}|[0-9]+px)' # → 0 matches
 git diff --stat -- src/lib/design/tokens.css    # → empty (a token add needs PR justification)
 rg -in 'toLowerCase\(\)|toUpperCase\(\)' src/lib/server/github.ts src/lib/**/repos*  # → 0 matches
 rg -n "'main'\s*\|\||\?\?\s*'main'" src/lib/     # → 0 matches (no default-branch fallback)
-bun run lint:design                             # debt EXACTLY 0 — the ui-tagged ratchet, §4b
+bun run lint:design                             # passes; debt is unchanged or decreases
 bunx svelte-check                               # 0 errors / 0 warnings
 bun run build
 ```
@@ -492,7 +501,7 @@ basic auth — supply `minion:$DASH_PASSWORD`), pasted into the PR:
 | kanban + dashboard load functions (Slice 0) | S1 | call the helper with `repo.branch`; ad-hoc `conclusion` comparisons removed |
 | repo registry module (Slice 0) | S2 | corrected branch values, exact case; no fallbacks |
 | `src/lib/server/repos.test.ts` | S2 | **new** — offline shape + stale-value guard |
-| `scripts/check-branches.mjs` | S2 | **new**, optional — online exact-case branch existence check |
+| `scripts/check-branches.mjs`, `package.json` | S2 | **optional** — online exact-case branch check and script entry; omit when using the documented `gh` loop |
 | CI badge / card component (Slice 0), `src/routes/kanban/+page.svelte` | S2 | branch label + distinct `no-runs` treatment; semantic tokens only |
 | `DESIGN.md` | S2 | only if a new idiom genuinely needs documenting |
 
@@ -519,7 +528,7 @@ standalone read-only SvelteKit app over the GitHub REST API: no DB, no gateway W
 Scope guard for the PR:
 
 ```bash
-out="$(git diff --name-only origin/main...HEAD | rg -v '^(src/|scripts/|DESIGN\.md$)')"
+out="$(git diff --name-only origin/main...HEAD | rg -v '^(src/|scripts/|DESIGN\.md$|package\.json$)')"
 [ -z "$out" ] || { echo "FAIL: change escaped the minion-base app surface"; echo "$out"; exit 1; }
 ```
 
@@ -570,12 +579,12 @@ this spec had to reconstruct every path from prose (§1). **Not fixed here** —
 outside the minion-base checkout and its own proposal's frontmatter. Worth a one-line follow-up, now
 twice-observed.
 
-### ⚠️ N2 — the v2 spec's derivation table needs a one-line correction after approval
+### ⚠️ N2 — the v2 spec's derivation table needs a one-line documentation follow-up
 
 `2026-08-12-minion-base-v2-sdlc-kanban-spec` §1 (`status: shipped`) describes the Testing column as
 "latest workflow runs" with no branch scope, and Deployment as using a deploy branch it never
-constrains the query to. D3 changes the first and D5 sharpens the second. Reconciling those lines is
-a human call, deliberately not made here.
+constrains the query to. D3 changes the first and D5 sharpens the second. Pass 2 has settled the
+behavior; update the ancestor in a separately scoped meta-repo documentation change.
 
 ## 6. Out of scope (explicit)
 
@@ -620,7 +629,7 @@ cd minion_base
 
 # 1. Gates (v2 spec §4 chain, plus the runner the auto-refresh spec introduced)
 bun test                                   # ci-status + repos suites green
-bun run lint:design                         # debt EXACTLY 0 (ui-tagged ratchet may only decrease)
+bun run lint:design                         # passes; design debt is unchanged or decreases
 bunx svelte-check                           # 0 errors / 0 warnings
 bun run build
 
@@ -636,7 +645,7 @@ bun run dev &
 #    capture outbound GitHub URLs (temporary console.log in fetchWorkflowRuns, or a proxy):
 curl -s -u "minion:$DASH_PASSWORD" http://localhost:5173/kanban > /dev/null
 #    → every logged actions/runs URL carries branch=<the repo's configured branch>, URL-encoded
-#    → 3 fetches, 3 branch params, 0 unfiltered
+#    → every observed actions/runs fetch has a branch param, 0 unfiltered; record the call count
 
 # 4. Live agreement, per tracked repo — the acceptance table for the PR
 for r in <owner/name ...>; do
@@ -657,9 +666,8 @@ done
 #    → that card reads "<branch> · no runs"; it is NOT green and NOT "unreachable". Revert.
 ```
 
-**Ship gate:** §7 blocks 1–6 green; the S1 G3 red-state failure pasted (green-PR/red-deploy asserted
-against the *old* derivation); Slice 0's `configured vs actual` branch table pasted with every
+**Ship gate:** §7 blocks 1–6 green; the S1 G3 assertion failure pasted (green-PR/red-deploy asserted
+against the pre-implementation stub); Slice 0's `configured vs actual` branch table pasted with every
 correction made in S2; 🚨 A1's before/after badge table pasted with a failing-run URL beside every
-flip; ⚠️ A3's question about the CI-watch monitor's data source answered in the PR; D1's deliberate
-type-error proof stated; and — because D3 is an interpretation with a visible product consequence —
-an explicit reviewer decision on the Testing column recorded at the gate, not assumed.
+flip; ⚠️ A3's question about the CI-watch monitor's data source answered in the PR; and D1's
+deliberate type-error proof stated. D3's Testing-column decision is already settled by pass 2.
