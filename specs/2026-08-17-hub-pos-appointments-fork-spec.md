@@ -2,13 +2,13 @@
 id: 2026-08-17-hub-pos-appointments-fork-spec
 title: "Collapse the /pos/appointments fork into one bookings view — extract the component, don't delete the route"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-hub-pos-appointments-fork
-verdict: pending
-repos: [minion_hub]
+verdict: approved
+repos: [minion_hub, minion-meta]
 tags: [ui, logic, test]
 type: fix
 ---
@@ -17,11 +17,13 @@ type: fix
 
 **Owner surface:** `minion_hub` on branch `dev` — `src/routes/(app)/pos/appointments/*`,
 `src/routes/(app)/scheduling/bookings/*`, a new shared view under
-`src/lib/components/scheduling/`, a shared server loader under `src/server/` (or
-`src/lib/server/`, whichever the hub already uses), plus the four *discoverability* surfaces that
-name these routes: `src/lib/routes/route-design-manifest.ts`,
-`src/lib/routes/route-design-validation.ts`, `src/lib/routes/route-design-contracts.test.ts`, and
-`src/lib/state/features/assistant-context.ts`.
+`src/lib/components/scheduling/`, a shared server loader under the server-only convention discovered
+in §1, and every route-discoverability surface found by §1.3/§5.2. Known surfaces are
+`src/lib/routes/route-design-manifest.ts`, `src/lib/routes/route-design-validation.ts`,
+`src/lib/routes/route-design-contracts.test.ts`, `src/lib/state/features/assistant-context.ts`, the
+availability manifest or equivalent gate, `src/lib/routes/route-access-registry.ts`, and
+`src/lib/components/layout/sections.ts`. Most are verification-only on the view branch. A redirect or
+archetype correction also conditionally updates the meta-repo Figma coverage ledger named in §5.1.
 
 **Design ancestors (read before starting):**
 [`2026-07-22-hub-routing-simplification-spec`](2026-07-22-hub-routing-simplification-spec.md) — §R1
@@ -78,10 +80,10 @@ redirect" as if they were interchangeable. They are not, and the difference is n
 | | Thin filtered view | Redirect |
 |---|---|---|
 | RBAC | `/pos/appointments` keeps its own `route-access-registry` entry | The user is thrown at `/scheduling/bookings` and must satisfy **scheduling's** policy. A POS-only operator who can see appointments today gets a denial tomorrow |
-| Availability | The composite `requires: ['pos','scheduling']` entry keeps working | An org with `pos` enabled and `scheduling` disabled follows the redirect into a **403** (§R4: disabled scheduling bookings deny with 403, not 404) — a dead link inside its own POS nav |
+| Availability | The composite `requires: ['pos','scheduling']` entry keeps working | The composite gate must run before the redirect so an ineligible org receives its existing denial instead of being sent into `/scheduling/bookings`; the POS nav must not retain a dead link |
 | Shell | The page stays under `(app)/pos/+layout.svelte` — POS section nav, and the stock/scheduling availability that `pos/+layout.server.ts` hands the POS UI | The POS shell is lost mid-flow; the operator lands in a different module's chrome |
 | Route contract | Both stay `screen`; counts do **not** move; archetype may need reclassification | `/pos/appointments` becomes a `RedirectDesignMeta`: screens −1, redirects +1, plus bucket and section-comment edits |
-| Proposal's own DoD | "both routes smoke-tested" is naturally satisfied | Only satisfiable as "asserts a 302 to the right target" |
+| Proposal's own DoD | "both routes smoke-tested" is naturally satisfied | Satisfied by asserting the specified 307 and its target/query contract |
 
 So: **the thin filtered view is the default and this spec is written for it.** The redirect branch is
 permitted only if Slice 1's audit proves *all three* of (a) zero POS-only affordances on the fork,
@@ -184,8 +186,9 @@ pins **today's** behaviour so Slices 2–3 can prove they changed nothing:
    of every preset filter the POS side applies;
 3. asserts each route's `route-design-manifest.ts` entry (`kind`, `archetype`, `scroll`,
    `accessPolicyId`) and its `route-access-registry.ts` policy id;
-4. asserts the availability entry for `/pos/appointments` still requires **both** `pos` and
-   `scheduling` (skip with an explicit `it.skip` + `TODO(handoff)` comment if 1.4 showed no manifest).
+4. asserts that the actual availability gate discovered in §1.4 still requires **both** `pos` and
+   `scheduling`. If no testable gate can be identified, Slice 1 is blocked; do not skip this core
+   preservation assertion.
 
 Red-state proof (§4b, `logic`): before writing assertions, land one deliberately wrong expectation,
 capture the failing output in the PR body, then correct it. A characterization suite that has never
@@ -235,19 +238,17 @@ strictly better (one page, one component) rather than half-forked.
 ```ts
 type BookingsViewProps = {
   data: BookingsViewData;                 // exactly what the shared loader returns (§3.2)
-  capabilities: {                          // every divergent affordance from the §2.1 matrix
-    createBooking: boolean;
-    reschedule: boolean;
-    cancel: boolean;
-    createSalesOrder: boolean;             // the §R6 /sales leak — a prop, so POS can be false
-    chargeToPos: boolean;                  // POS-only today; false for /scheduling/bookings
-  };
+  capabilities: BookingCapabilities;       // keys derive from divergent affordances in §2.1
   presetFilters?: Partial<BookingFilters>; // applied on mount
   lockedFilters?: Array<keyof BookingFilters>; // rendered read-only, not hidden
   columns?: BookingColumnId[];             // default = today's scheduling column set
   labelNamespace?: 'scheduling' | 'pos';   // i18n key prefix ONLY
 };
 ```
+
+`BookingCapabilities` contains exactly the behavior switches justified by the matrix. Likely examples
+are `createBooking`, `reschedule`, `cancel`, `createSalesOrder`, and `chargeToPos`, but names or
+capabilities absent from the audited pages must not be invented merely to match this example.
 
 **The iron rule that makes this reviewable:** `BookingsView.svelte` contains **zero** branches on
 which route rendered it. Behaviour comes from `capabilities` / `presetFilters` / `columns`;
@@ -259,16 +260,17 @@ rg -n "pos|appointment" src/lib/components/scheduling/BookingsView.svelte \
 ```
 
 **`src/routes/(app)/scheduling/bookings/+page.svelte`** becomes a wrapper: import the component, pass
-`data`, pass the capability set that reproduces today's page exactly (including
-`createSalesOrder: true` — the §R6 leak is preserved verbatim; fixing it here would be an unrequested
+`data`, pass the capability set that reproduces today's page exactly (including the current scheduling
+value for `createSalesOrder` if that capability exists — the §R6 leak is preserved verbatim; fixing it here would be an unrequested
 behaviour change owned by the personal-org spec).
 
 ### 3.2 The server half
 
 Extract the scheduling `+page.server.ts` load body into
 `src/server/scheduling/load-bookings-view.ts` (match the hub's existing server-module convention found
-in 1.5) exporting `loadBookingsView(event, opts)` where `opts` carries the same preset/window/limit
-knobs the props contract exposes. `scheduling/bookings/+page.server.ts` shrinks to a call plus its
+in 1.5) exporting `loadBookingsView(event, opts)` where `opts` carries only the server-side
+preset/window/limit knobs identified by the §2.1 data audit. Client-only presentation props do not
+belong in loader options. `scheduling/bookings/+page.server.ts` shrinks to a call plus its
 existing `actions`. **Form actions stay on their routes** — SvelteKit resolves actions per route, and
 per routing-simplification §R2 actions execute before page loads re-run; moving them is out of scope.
 
@@ -359,8 +361,8 @@ test $(wc -l < "src/routes/(app)/pos/appointments/+page.svelte") -lt 100
 rg -c "bookings|booking" "src/routes/(app)/pos/appointments/+page.svelte"     # single-digit (wrapper props only)
 git diff --name-only | rg "\.sql$|db/schema/|pos\.service\.ts|route-access-registry" ; test $? -eq 1
 bun run check
-bun run vitest run              # characterization suite green, with ONLY its POS-load assertions
-                                # updated if §2.1 documented an intentional normalization
+bun run vitest run              # characterization suite remains green without changing its pinned
+                                # pre-collapse behavior assertions
 bun run lint:design && bun run lint:tokens        # debt ≤ baseline
 bun run build
 ```
@@ -379,9 +381,9 @@ git diff --stat <base>...HEAD -- "src/routes/(app)/pos/appointments" \
 Replace §4.1–§4.4 with: `pos/appointments/+page.server.ts` reduced to
 `throw redirect(307, '/scheduling/bookings?...preset')`, `+page.svelte` **deleted**, and *additionally*:
 
-- the availability entry for `/pos/appointments` must be evaluated **before** the redirect fires, or an
-  org with `scheduling` disabled follows a POS nav link into a 403 (§R4). Add a characterization test
-  for exactly that org shape;
+- the actual availability gate for `/pos/appointments` must be evaluated **before** the redirect
+  fires. Add a characterization test proving a `scheduling`-disabled org receives the same denial it
+  received before the refactor and is not redirected to `/scheduling/bookings`;
 - the `route-design-manifest.ts` entry converts from `ScreenDesignMeta` to
   `RedirectDesignMeta { target, preserveQuery }` — this is what moves the counts in Slice 4 (§5);
 - the POS section nav entry must be re-pointed or removed (`src/lib/components/layout/sections.ts`),
@@ -436,8 +438,9 @@ Extend the Slice 1 characterization file (do not add a second suite) with a **po
 3. both routes' manifest entries still exist with their (possibly corrected) archetypes;
 4. the shared component is imported by exactly two route files:
    `rg -l "components/scheduling/BookingsView" src/routes/ | wc -l` → `2`;
-5. on the redirect branch instead: `/pos/appointments` returns a 307 to the expected target with the
-   preset query preserved, and denies correctly for a `scheduling`-disabled org.
+5. on the redirect branch instead: an eligible request to `/pos/appointments` returns a 307 to the
+   expected target with the preset query preserved; a `scheduling`-disabled org is not redirected and
+   receives its characterized pre-change denial.
 
 ### 5.4 Definition of done
 
@@ -457,14 +460,14 @@ bun run lint:design && bun run lint:tokens                  # debt ≤ baseline
 
 | Surface | Impact | Mitigation / alert |
 |---|---|---|
-| `minion_hub` | The only repo with code changes | Everything above. Branch `dev`; feature branch off it |
+| `minion_hub` | The only repo with runtime code changes | Everything above. Branch `dev`; feature branch off it |
 | **Concurrent hub specs on POS** | `2026-08-17-hub-updatesellable-silent-drop`, `2026-08-17-hub-igv-rate-from-org-config`, `2026-08-14-pos-shadow-emission`, `2026-08-14-pos-payment-methods-config` are all in flight against `src/server/services/pos.service.ts` | **This spec must not touch `pos.service.ts` at all** — it works at the route/component layer. That is enforced in §4.3's diff check. Expect to rebase `src/routes/(app)/pos/**` anyway; keep commits narrow |
 | **Concurrent hub specs on scheduling** | `2026-08-17-hub-reserva-keyword-config` touches booking-*deposit* classification in finance/journey services, not the bookings list | No file overlap expected. Verify with `git diff --name-only` before merge; if it lands first, rebase |
 | `packages/ui`, `packages/design-tokens` (minion-meta) | **None expected.** The extraction reuses existing primitives | **Alert, do not absorb.** If the shared view genuinely needs a primitive that does not exist (Chip/Tag and Avatar are named gaps in the governance skill), hand-roll minimally *inside the hub*, note it, and file a proposal. Adding to `@minion-stack/ui` is a changeset → Version-Packages PR → npm publish → hub dep bump loop, and is out of scope |
 | `minion` (gateway) | The `hub_pages` MCP tool reads `GET /api/gateway/pages`, serialized from `assistant-context.ts` | §5.2. No gateway code changes; the gateway serves whatever the hub declares. On the redirect branch, agents holding a cached `/pos/appointments` deep link get a 307 — acceptable, but say it in the PR |
 | `minion_site` | Shares the database with the hub. **No schema change occurs** | §3.4/§4.3 forbid `.sql` and `src/server/db/schema/**` in the diff. If either appears, the slice failed its own definition |
 | `paperclip-minion` | None. No protocol, adapter, or tenancy surface is touched | — |
-| `minion-meta` (this repo) | `specs/2026-07-13-hub-figma-screen-coverage-ledger.md` records one line per route and goes stale on an archetype correction or a screen→redirect conversion | Update that line in the same PR (meta-repo side), or the ledger silently misstates coverage. This is the only meta-repo file this work should touch |
+| `minion-meta` (this repo) | `specs/2026-07-13-hub-figma-screen-coverage-ledger.md` records one line per route and goes stale on an archetype correction or a screen→redirect conversion | Update that line as a coordinated meta-repo change, or the ledger silently misstates coverage. Absent an open-item proposal required below, this is the only implementation-time meta-repo file this work should touch |
 
 **Open-items ledger (AGENTS.md).** Anything left unwired — a capability the matrix could not
 reconcile, a filter that had to stay hardcoded, a skipped characterization assertion — needs both a
