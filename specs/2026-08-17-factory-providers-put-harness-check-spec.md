@@ -2,12 +2,12 @@
 id: 2026-08-17-factory-providers-put-harness-check-spec
 title: "PUT /providers — reject provider names no harness implements"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-factory-providers-put-harness-check
-verdict: pending
+verdict: approved
 repos: [minion-factory]
 tags: [logic]
 type: fix
@@ -199,7 +199,9 @@ rejection says what is allowed.
 - **`runner/src/providers.ts` — make the harness set the module's stated contract.**
   - `export const HARNESSES = ['claude', 'codex'] as const;` and `export type Harness = (typeof HARNESSES)[number];`
     with a comment naming the two shell `case` blocks that define truth (`agent/run.sh:53`,
-    `agent/spec.sh:39`) and pointing at the drift test S2 adds. This is the single source of truth;
+    `agent/spec.sh:39`) and pointing at the drift test S2 adds. This is the runner's single
+    TypeScript source of truth; the executable shell dispatch tables remain independent
+    implementations whose equality is enforced by S2's drift test.
     `index.ts:44`'s duplicate Set is deleted in the same slice.
   - Retype `DEFAULTS` as `Record<Harness, ProviderConfig>` so dropping an arm here is a **type
     error**, and state the invariant `resolveTier` already relies on: *provider name = harness id.*
@@ -207,7 +209,9 @@ rejection says what is allowed.
     one function, both boundaries, encoding: body is a non-null non-array object; **the key set is
     exactly `HARNESSES`** (unknown name → ``unknown provider '<name>' — no harness implements it;
     allowed: claude, codex``; missing name → ``provider '<name>' is required; the registry must cover
-    every harness: claude, codex``); every level in `LEVELS` present with a non-empty string `model`;
+    every harness: claude, codex``). If both unknown and missing keys exist, report the first
+    unknown key in `Object.keys(cfg)` order; otherwise tests and UI output depend on an unspecified
+    validation order. Every level in `LEVELS` must be present with a non-empty string `model`;
     `effort`, when present, is a string. Preserve the existing message wording for the level/model
     and effort cases (`${name}.${lvl}.model required`, `${name}.${lvl}.effort must be a string`) —
     they are already surfaced verbatim by the base UI.
@@ -243,6 +247,8 @@ rejection says what is allowed.
 
 **Definition of done (machine-checkable):**
 
+Run the following block in Bash (it uses arrays and here-strings).
+
 ```bash
 cd runner && npm install
 npx tsc --noEmit -p tsconfig.json      # → clean (also typechecks the new test file)
@@ -251,12 +257,18 @@ grep -rn 'new Set(\[.\?claude' src/    # → 0 hits: the duplicate harness set i
 grep -c 'a-z0-9-]{1,30}' src/index.ts  # → 0: the shape-only regex is gone
 
 # --- Red-state proof (tag `logic` ⇒ G3 mandatory) ---
-git stash && npm test; echo "red-state exit=$?"   # → NON-ZERO, failure names the unknown-provider case
-git stash pop
-#   paste that exit code in the PR: it proves the test tests the fix, not the framework
+# Preserve the test-only commit before implementing S1; verify it in a disposable clone.
+S1_TEST_COMMIT=<test-only-commit>; T=$(mktemp -d)
+git clone -q . "$T/factory" && git -C "$T/factory" checkout -q "$S1_TEST_COMMIT"
+(cd "$T/factory/runner" && npm install && npm test); rc=$?
+test "$rc" -ne 0                         # failure names the unknown-provider case
+rm -rf "$T"
+# Paste S1_TEST_COMMIT and the non-zero exit in the PR. `git stash` is not a valid substitute:
+# it can hide the new test with the implementation and produce a meaningless green run.
 
 # --- HTTP proof: the proposal's DoD sentence, end to end (no docker needed) ---
-export D=$(mktemp -d) && FACTORY_DATA=$D FACTORY_SECRET=t FACTORY_AUTOMERGE=0 PORT=3399 npm start &
+D=$(mktemp -d)
+FACTORY_DATA="$D" FACTORY_SECRET=t FACTORY_AUTOMERGE=0 PORT=3399 npm start & pid=$!
 sleep 2; A=(-H 'authorization: Bearer t' -H 'content-type: application/json')
 ok='{"claude":{"hi":{"model":"opus"},"med":{"model":"sonnet"},"low":{"model":"haiku"}},"codex":{"hi":{"model":"sol","effort":"high"},"med":{"model":"terra","effort":""},"low":{"model":"luna","effort":"low"}}}'
 curl -s -o /dev/null -w '%{http_code}\n' -X PUT "${A[@]}" -d "{\"providers\":$ok}" localhost:3399/providers          # → 200  (base's exact payload shape, incl. effort:"")
@@ -264,7 +276,7 @@ curl -s -X PUT "${A[@]}" -d "{\"providers\":$(jq -c '. + {gemini:.claude}' <<<"$
 curl -s -X PUT "${A[@]}" -d "{\"providers\":$(jq -c 'del(.codex)' <<<"$ok")}" localhost:3399/providers               # → 400, "codex is required"
 jq -r 'keys|join(",")' "$D/providers.json"                                                                           # → claude,codex (rejects wrote nothing)
 curl -s -X POST "${A[@]}" -d '{"repoId":"minion-base","task":"probe only, never runs","stages":{"develop":{"harness":"gemini","model":"x"}}}' localhost:3399/runs  # → 400 (legacy shape, unchanged behavior)
-kill %1; rm -rf "$D"
+kill "$pid"; wait "$pid" 2>/dev/null || true; rm -rf "$D"
 ```
 
 ---
@@ -319,31 +331,35 @@ to the shells without adding it to the registry (or vice versa), a test says so.
 
 **Definition of done (machine-checkable):**
 
+Run the following block in Bash.
+
 ```bash
 cd runner && npx tsc --noEmit -p tsconfig.json && npm test        # → clean, all pass
 cd .. && bash -n agent/run.sh agent/spec.sh agent/reconcile.sh agent/chat.sh   # → clean (unmodified)
 git diff --name-only origin/main | grep -c '^agent/'              # → 0: no shell file was touched
 
-# --- Red-state proofs (two, both required) ---
-cd runner && git stash && npm test; echo "red-state exit=$?"      # → non-zero; git stash pop
-# The drift guard actually guards — add a fake arm to the shell and watch it fail:
-sed -i 's/^\t\tcodex)/\t\tgemini) echo fake;;\n\t\tcodex)/' ../agent/run.sh && npm test; echo "drift exit=$?"  # → NON-ZERO
-git checkout ../agent/run.sh && npm test                          # → green again
-# And it fails closed when it cannot parse:
-sed -i 's/case "${harness}" in/case "${h}" in/' ../agent/run.sh && npm test 2>&1 | grep -qi 'could not verify'; echo "failclosed=$?"  # → 0
-git checkout ../agent/run.sh
+# --- Red-state proof (required) ---
+# Preserve the S2 test-only commit before implementation, as required by G3.
+S2_TEST_COMMIT=<test-only-commit>; T=$(mktemp -d)
+git clone -q . "$T/factory" && git -C "$T/factory" checkout -q "$S2_TEST_COMMIT"
+(cd "$T/factory/runner" && npm install && npm test); rc=$?
+test "$rc" -ne 0                         # failure names stale-registry or dispatch behavior
+rm -rf "$T"
+# The committed drift test must exercise its parser against fixtures for all three cases: matching
+# arms pass; an added `gemini` arm fails set equality; an unparseable case block throws a `could not
+# verify` error. This proves the guard deterministically without temporarily editing tracked files.
 
 # --- Stale-file tolerance: the case S1 alone does not cover ---
-export D=$(mktemp -d)
+D=$(mktemp -d)
 jq -n '{claude:{hi:{model:"opus"},med:{model:"sonnet"},low:{model:"haiku"}},gemini:{hi:{model:"x"},med:{model:"x"},low:{model:"x"}}}' > "$D/providers.json"
-FACTORY_DATA=$D FACTORY_SECRET=t FACTORY_AUTOMERGE=0 PORT=3399 npm start 2>&1 | tee /tmp/boot.log &
+FACTORY_DATA="$D" FACTORY_SECRET=t FACTORY_AUTOMERGE=0 PORT=3399 npm start > /tmp/boot.log 2>&1 & pid=$!
 sleep 2
 curl -s -H 'authorization: Bearer t' localhost:3399/providers | jq -r '.providers|keys|join(",")'  # → claude,codex (NOT gemini)
 grep -c 'invalid .*providers.json' /tmp/boot.log                                                    # → ≥1, the operator is told
 curl -s -H 'authorization: Bearer t' -H 'content-type: application/json' \
   -d '{"repoId":"minion-base","task":"probe only, never runs","stages":{"develop":{"provider":"gemini","level":"hi"}}}' \
   -X POST localhost:3399/runs                                                                       # → 400 ← the core failure chain, severed
-kill %1; rm -rf "$D"
+kill "$pid"; wait "$pid" 2>/dev/null || true; rm -rf "$D"
 
 grep -n 'npm test' src/repos.ts                                   # → 1 hit, inside minion-factory.selfTest
 ```
@@ -392,9 +408,10 @@ decoration. Slice 0 checks this with the boot log line (`[runner] repos loaded f
 `repos.ts:75`). If that line is present, **say so in the PR** and update the mounted file's
 `minion-factory.selfTest` on the box in the same deploy; do not silently rely on the built-in.
 
-### ⚠️ A2 — the drift guard reads shell scripts with a regex
+### ⚠️ A2 — the drift guard reads shell scripts with a narrow parser
 
-`harness-drift.test.ts` parses `case` arms out of bash. Reformatting `run.sh` can break it. That is
+`harness-drift.test.ts` parses `case` arms out of bash (regular expressions are acceptable).
+Reformatting `run.sh` can break it. That is
 an accepted, deliberate cost: it fails **closed** (a parse miss throws, §S2 DoD proves it), so the
 worst case is a loud false alarm that a human resolves in a minute — never a silent pass. The
 alternative (a generated manifest the shells read) is a bigger change than the bug warrants.
@@ -417,7 +434,7 @@ the allowed set — a fail-loud regression, which is the intended trade against 
   string — the runner never hardcodes model names."* Only the harness set is closed. A wrong model
   fails at the CLI with a clear provider-side error, and `provider_outage()` (`run.sh:42-49`) already
   classifies it.
-- **Re-validating runs already queued** with a bogus harness in their persisted `stages` (⚠️ A3 row).
+- **Re-validating runs already queued** with a bogus harness in their persisted `stages` (§4 queued-runs row).
 - **`saveProviders` merge semantics / partial PUT / PATCH.** Wholesale write stays; exact-set
   validation is what makes it safe.
 - **The chat-restart pending-message bug** (`index.ts:412`) — same file, separate approved proposal
@@ -432,22 +449,27 @@ the allowed set — a fail-loud regression, which is the intended trade against 
 ## 6. End-to-end verification
 
 Run with S1 + S2 merged to `main` in `minion-factory` and deployed.
+Run this block in Bash (it uses arrays, here-strings, and process substitution).
 
 ```bash
-export A=(-H "Authorization: Bearer $FACTORY_SECRET" -H 'content-type: application/json')
-export U=http://100.80.222.29:3210
+A=(-H "Authorization: Bearer $FACTORY_SECRET" -H 'content-type: application/json')
+U=http://100.80.222.29:3210
 
 # 1. The proposal's DoD, against the real runner
+baseline=$(cat /tmp/providers.before)
 curl -s -o /dev/null -w '%{http_code}\n' -X PUT "${A[@]}" $U/providers \
-  -d '{"providers":{"claude":{"hi":{"model":"opus"},"med":{"model":"sonnet"},"low":{"model":"haiku"}},"codex":{"hi":{"model":"sol","effort":"high"},"med":{"model":"terra","effort":"medium"},"low":{"model":"luna","effort":"low"}}}}'   # → 200
+  -d "$(jq -c '{providers}' <<<"$baseline")"   # → 200; round-trips the captured live tiers without changing them
 curl -s -X PUT "${A[@]}" $U/providers -d '{"providers":{"gemini":{"hi":{"model":"x"},"med":{"model":"x"},"low":{"model":"x"}}}}' | jq -r .error   # → 400, names gemini AND claude,codex
 curl -sf -H "Authorization: Bearer $FACTORY_SECRET" $U/providers | jq -r '.providers|keys|join(",")'  # → claude,codex — unchanged by the rejected write
 diff <(jq -S . /tmp/providers.before) <(curl -sf -H "Authorization: Bearer $FACTORY_SECRET" $U/providers | jq -S '{providers,levels}')  # → no diff vs the Slice 0 baseline
 
 # 2. The failure chain is severed at config time — no container, no branch, no husk PR
+before_runs=$(curl -sf "${A[@]}" "$U/runs" | jq '.runs | length')
+before_prs=$(gh pr list --repo NikolasP98/minion-base --search 'head:factory/' --state open --json headRefName | jq length)
 curl -s -X POST "${A[@]}" $U/runs -d '{"repoId":"minion-base","task":"this must never reach a container","stages":{"develop":{"provider":"gemini","level":"hi"}}}' | jq -r .error   # → 400
-curl -sf "${A[@]}" $U/runs | jq '[.runs[]|select(.title|test("never reach"))]|length'   # → 0 (nothing queued)
-gh pr list --repo NikolasP98/minion-base --search 'head:factory/' --state open --json headRefName | jq length   # → unchanged vs before step 2
+after_runs=$(curl -sf "${A[@]}" "$U/runs" | jq '.runs | length')
+after_prs=$(gh pr list --repo NikolasP98/minion-base --search 'head:factory/' --state open --json headRefName | jq length)
+test "$before_runs" = "$after_runs" && test "$before_prs" = "$after_prs"   # rejected request queued nothing and opened no PR
 
 # 3. Real runs still work — the narrowing broke nothing
 factory run minion-base "no-op smoke: touch nothing, report the repo name" --dev claude:sonnet --no-review   # → 201, run proceeds
@@ -467,7 +489,8 @@ ssh netcup 'cd /opt/factory && docker compose logs runner 2>&1 | grep "repos loa
 
 **Ship gate:** §6 steps 1–5 green; the proposal's DoD checked clause by clause (*"PUT validates names
 against the harness set"* — step 1 · *"bogus name returns 400"* — steps 1 and 2); **both red-state
-exit codes pasted** (S1's, and S2's fake-arm drift proof + fail-closed proof) per §4b's `logic` rule
+commit hashes and exit codes pasted** (S1 and S2), with the drift parser's matching, mismatch, and
+fail-closed fixture cases green, per §4b's `logic` rule
 that G3 is mandatory; Slice 0's `providers.before` keys pasted and matching step 1's post-state; and
 ⚠️ A1 answered explicitly in the PR — *"built-ins are live"* or *"the mounted repos.json was updated,
 here is the diff"*. A green command list is evidence; the A1 answer is the one thing a human must
