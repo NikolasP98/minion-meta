@@ -3,11 +3,11 @@ id: 2026-08-17-gw-msteams-large-upload-spec
 title: "MS Teams attachments — route >4MB through a Graph resumable upload session (chunked PUT with resume, expiry and cancel)"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-gw-msteams-large-upload
-verdict: pending
+verdict: changes_requested
 repos: [minion]
 tags: [logic, test]
 type: fix
@@ -153,11 +153,9 @@ S0 (recon) ─▶ S1 (threshold routing + createUploadSession + happy-path chunk
                         └─▶ S3 (wire it to the real send path, honest errors, docs, ledger)
 ```
 
-**S1 alone is a partial fix and must be labelled as one.** It makes >4MB uploads *work* on a healthy
-network; a chunk failure at 90% still loses the whole transfer. That is strictly better than today
-(where the same file has no path at all), so S1 may ship alone **only if** its failure mode is an
-explicit error and a cancelled session — never a silent partial file. S1 + S2 are the fix; say which
-you shipped in the PR rather than letting "resumable upload" imply the resume actually exists.
+**S1 alone is a partial implementation, not a shippable fix.** It makes >4MB uploads *work* on a
+healthy network, but cancellation and recovery are S2 and caller-safe behavior is S3. S1–S3 ship
+together; do not let "resumable upload" imply that resume, cleanup, and caller behavior are optional.
 
 ---
 
@@ -190,9 +188,9 @@ path was taken. Under the cap, behavior is byte-identical to today.
   export const CHUNK_BYTES = 5_242_880;
   ```
 
-- **Route on size, at one place, with the boundary written down.** `> SIMPLE_UPLOAD_MAX_BYTES` →
+- **Route on size, in one place, with the boundary written down.** `> SIMPLE_UPLOAD_MAX_BYTES` →
   session path; `<=` → the existing simple PUT, unchanged. Do not "simplify" this to always-resumable:
-  a small attachment would grow from one request to three (create, put, and the item read), and the
+  a small attachment would grow from one request to at least two (create plus one or more chunk PUTs), and the
   simple path is the common case by a wide margin.
 - **`createUploadSession`.** `POST` to the drive item's `:/createUploadSession` with a body carrying
   `item: { "@microsoft.graph.conflictBehavior": ... }`. **Do not hardcode `replace`** — pick the value
@@ -286,13 +284,14 @@ nothing logs a credential.
 - **`404` on the upload URL means the session is gone** (expired or cancelled). Treat it as terminal for
   that session. Re-creating the session and restarting from byte zero is permitted **at most once**, and
   only if the file is still in hand; guard it with its own constant so it cannot silently become a loop.
-  Also check `expirationDateTime` before starting a long transfer and log a warning if the remaining
-  window is implausibly short — a clear log line beats a mystifying `404` at 80%.
+  Also reject an already-expired session before the first chunk. Do not introduce an undefined
+  "implausibly short" warning threshold; runtime expiry is handled by the same `404` recovery rule.
 - **Cancel on give-up.** `DELETE uploadUrl` on permanent failure or caller abort, best-effort: wrap it
   so a failing cancel never masks the original error. Leaving sessions dangling accumulates partial
   files in the user's drive, which is a mess someone else has to find.
-- **Honour an `AbortSignal`** if the extension's client already threads one (S0 (d)); if it does not,
-  do not invent one — note it and move on (§5).
+- **Accept an optional `AbortSignal` in the transfer module** and stop/cancel when it fires. Thread a
+  caller-owned signal into it only if the existing send path already has one; this keeps the module's
+  abort behavior testable without inventing a new caller/config surface.
 - **Type the failure.** The caller must be able to distinguish "too large for the destination",
   "permission denied", "network gave up", and "session expired" — S3 turns these into user-facing text.
   A single `Error('upload failed')` forces S3 to string-match, which is how error handling rots.
@@ -305,7 +304,8 @@ nothing logs a credential.
   200MB file is 40 chunks; that is a fine debug trace and an unacceptable info-level one.
 
 **Files:** `extensions/msteams/src/upload-session.ts` (retry/resume/cancel + the error type),
-`extensions/msteams/src/upload-session.test.ts` (the matrix below). No new file outside the extension.
+`extensions/msteams/src/upload-session.test.ts` (the matrix below), and the S1 session-creation module
+and test wherever the one allowed session re-creation is coordinated. No file outside the extension.
 
 **Definition of done (machine-checkable):**
 
@@ -357,8 +357,11 @@ promising a 4MB world, and every remaining open end is in the ledger.
 - **Keep an upper bound, deliberately.** Resumable upload does not mean unbounded: the gateway buffers
   the file (⚠️ A2) and Teams/SharePoint impose their own per-file and per-tenant caps. Introduce
   `MAX_UPLOAD_BYTES` as a named constant with a stated rationale, reject above it *before* creating a
-  session, and make the rejection message name the actual limit. Do not source it from a new env var or
-  config surface (§5) — a constant with a comment is the right size here.
+  session, and make the rejection message name the configured limit. Its value must be no greater than
+  the current documented destination limit. Because this is also a gateway heap/concurrency policy,
+  the spec cannot derive a safe value from the absent checkout: a human must select and record the
+  byte value before implementation (flagged below). Do not source it from a new env var or config
+  surface (§5) — a constant with a comment is the scoped mechanism.
 - **Docs.** Update the extension's README (or, if there is none, the `upload-session.ts` file header —
   do not create a docs surface this spec did not scope) with one short section: the two paths and the
   size that routes between them, the chunk size and why it is a multiple of 320 KiB, the fact that the
@@ -385,10 +388,10 @@ pnpm tsgo && pnpm check
 #   the three caller cases above, plus:
 #   - a file above MAX_UPLOAD_BYTES → rejected BEFORE any createUploadSession call,
 #         and the message contains the actual limit
-git diff --name-only <base>...HEAD | rg -v '^extensions/msteams/|\.test\.ts$|^proposals/.*\.md$'  # → EMPTY
+git diff --name-only <base>...HEAD | rg -v '^extensions/msteams/'  # → EMPTY in the minion repo
 git diff --name-only <base>...HEAD | rg '\.svelte$'   && echo "FAIL: UI out of scope"                    && exit 1
 git diff --name-only <base>...HEAD | rg 'index\.json' && echo "FAIL: generators own index.json"          && exit 1
-git diff --name-only <base>...HEAD | rg '^src/(?!.*\.test\.ts)' && echo "FAIL: caller edited — a finding" && exit 1
+git diff --name-only <base>...HEAD | rg '^src/' | rg -v '\.test\.ts$' && echo "FAIL: caller edited — a finding" && exit 1
 rg -n '4 ?MB' extensions/msteams --glob '!*.test.ts'  # → only in docs describing the ROUTING threshold,
                                                       #   never as a ceiling on what can be sent
 ```
@@ -403,6 +406,11 @@ rg -n '4 ?MB' extensions/msteams --glob '!*.test.ts'  # → only in docs describ
 | `1 B … 4,000,000 B` | Simple `PUT /content` | Today's behavior, byte-identical. One request. |
 | `4,000,001 B … MAX_UPLOAD_BYTES` | `createUploadSession` + chunked PUT | **The fix.** Chunks of 5 MiB (16 × 320 KiB), sequential, last chunk short. |
 | `> MAX_UPLOAD_BYTES` | Rejected before any network call | Typed error naming the real limit (S3). The gateway buffers the file; unbounded is not a feature. |
+
+**Human decision required before dev:** set `MAX_UPLOAD_BYTES` to an explicit byte value after checking
+the destination's current limit and choosing an acceptable per-upload heap bound for the gateway.
+Until that value is recorded in this spec (and the routing table can be evaluated numerically), G2
+remains `changes_requested`.
 
 The `4,000,000` boundary is the **conservative** reading of Graph's documented "4 MB" simple-upload cap
 (the other reading is `4,194,304`). Erring low routes a handful of files through the session path
@@ -444,7 +452,7 @@ extension (new/modify) → `minion/extensions/<channel>/` + `minion/src/channels
 | `minion_hub`, `minion_site`, `paperclip-minion` | **None.** No protocol change ⇒ no consumer change | AGENTS.md's "Gateway protocol" row does not apply |
 | Other channel extensions (slack, discord, telegram, whatsapp, …) | **None from this diff.** Each has its own upload ceiling and its own API; a shared abstraction is not justified by one instance | §6 excludes the sweep; if S0 (f) finds an identical TODO elsewhere, **file a proposal, fix nothing** |
 | Gateway process memory | ⚠️ **A2 — real and unavoidable in this spec.** A 200MB attachment is 200MB of heap while it transfers, and concurrent sends multiply it. Today that memory is never allocated because the upload simply fails | `MAX_UPLOAD_BYTES` (S3) bounds it deliberately rather than by accident; streaming is a ledger item, not a silent omission |
-| Microsoft Graph / SharePoint (external) | **More requests per large file**: 1 create + ⌈size/5 MiB⌉ PUTs + retries, versus 1 failed request today. Files land in the destination drive and consume tenant storage | Sequential chunks (no fan-out), bounded retries with `Retry-After` honoured, `429` respected — S2. This is the intended cost of the feature |
+| Microsoft Graph / SharePoint (external) | **More requests per large file**: 1 create + ⌈size/5 MiB⌉ PUTs + status/retry/cancel requests when needed, versus 1 failed request today. Files land in the destination drive and consume tenant storage | Sequential chunks (no fan-out), bounded retries with `Retry-After` honoured, `429` respected — S2. This is the intended cost of the feature |
 | `Minion Docs/`, `minion_plugins`, `pixel-agents` | **None** | No dependency on this extension |
 
 ### ⚠️ A1 — the proposal's named API may not exist on the path that matters
@@ -516,8 +524,8 @@ cd minion
 
 # 1. Gates (logic/test/docs-tagged: no design or token lint — §6)
 pnpm install && pnpm build
-pnpm test && pnpm tsgo && pnpm check       # msteams suite: 148-test baseline + the new cases, all green
-git diff --name-only <base>...HEAD          # → extensions/msteams/** , *.test.ts, proposals/*.md only
+pnpm test && pnpm tsgo && pnpm check       # msteams's prior 148-test baseline plus new cases, all green
+git diff --name-only <base>...HEAD          # → extensions/msteams/** only in the minion repo
 
 # 2. Live: the reported symptom, gone
 #    Configure the msteams channel, start the gateway (pnpm gateway:watch), then:
@@ -534,7 +542,8 @@ git diff --name-only <base>...HEAD          # → extensions/msteams/** , *.test
 #           and a restart at that offset, not at byte zero.                 ← S2, proven live
 #    e) Revoke or corrupt the upload URL mid-transfer (or wait past expirationDateTime)
 #         → the send fails with a typed, human-readable error; NO broken attachment card is posted;
-#           the log shows one DELETE (cancel) and no orphaned partial file in the drive.
+#           the log shows one best-effort DELETE attempt. If the URL is already invalid, cleanup is
+#           service-owned; no completed or user-visible partial item remains in the drive.
 #    f) Attempt a file above MAX_UPLOAD_BYTES
 #         → rejected before any network call, with a message naming the real limit.
 #    g) grep the run's logs for the upload URL's token and for 'Bearer'
@@ -550,5 +559,5 @@ git diff --name-only <base>...HEAD          # → extensions/msteams/** , *.test
 the S1 red-state failure pasted into the PR, proving the old code failed the way the proposal reported;
 S0's four answers recorded (A1 drive-vs-consent, A2 input type, the client/token source, the existing
 size guard); §4's constant verifications recorded, each as one line, including any that came back
-different; and, if only S1 shipped, an explicit statement that resume is not yet implemented and what
-a mid-transfer failure does today — the proposal does **not** get closed on a happy path.
+different; and the human-selected `MAX_UPLOAD_BYTES` recorded before dev. S1–S3 must ship together;
+the proposal does **not** get closed on a happy path.
