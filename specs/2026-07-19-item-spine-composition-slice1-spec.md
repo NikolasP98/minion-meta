@@ -1,11 +1,11 @@
 ---
 id: 2026-07-19-item-spine-composition-slice1-spec
 title: Item Spine — Composition Graph + Cost Rollup (Slice 1)
-stage: spec
-status: draft
+stage: done
+status: shipped
 pass: 1
 created: 2026-07-19
-updated: 2026-07-19
+updated: 2026-08-17
 repos: [minion_hub]
 ---
 

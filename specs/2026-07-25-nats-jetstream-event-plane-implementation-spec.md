@@ -1193,3 +1193,7 @@ read-only root filesystem prevented writing a configured PID file under
 was rerun, the immutable Swarm config key was advanced to v2, and the
 deployment then passed. Historical failed tasks remain visible in Swarm task
 history; the current task is healthy.
+
+## Triage 2026-08-17
+
+WP-0 dark broker SHIPPED (deploy/swarm/messaging, b53db2fe); WP-1..7 (shared queue pkg, hub outbox/bg-runtime cutover, scheduler, gateway ledger) NOT STARTED — remaining scope is the app cutover.

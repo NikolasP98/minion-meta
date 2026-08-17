@@ -71,3 +71,7 @@ Consumers: `reliability/+page.svelte` (KPI row, post-refactor via `KpiRow`), `cr
 1. Does the sparkline stay pinned in the click/formula layer, or does clicking swap visuals→formula entirely? (Recommend: keep a compact sparkline header so formula has context.)
 2. Mobile/touch: no hover — tap = open the formula popover directly (single step). Confirm the touch affordance.
 3. Should the shared `KpiPopover` live in `@minion-stack/ui` (cross-repo) or stay hub-local for v1? (Recommend hub-local first, promote if `minion_site` needs it.)
+
+## Triage 2026-08-17
+
+Reliability shipped a SIMPLIFIED 2-step popover that diverges from the governance contract (no Zag Popover dismissal, no shared KpiPopover primitive); CRM consumer unmigrated. Remaining scope = consistency/polish (value ~4).

@@ -1,11 +1,11 @@
 ---
 id: 2026-07-19-channel-wizard-intent-modes
 title: Channel Setup Wizard — intent modes
-stage: spec
-status: draft
+stage: done
+status: shipped
 pass: 1
 created: 2026-07-19
-updated: 2026-07-19
+updated: 2026-08-17
 repos: [minion]
 ---
 

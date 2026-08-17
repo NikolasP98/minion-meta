@@ -1,11 +1,11 @@
 ---
 id: 2026-07-11-ws-failover-eager-reconnect
 title: "Hub WS failover: make-before-break cutover + eager reconnect"
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 1
 created: 2026-07-11
-updated: 2026-07-15
+updated: 2026-08-17
 repos: [minion-meta]
 ---
 

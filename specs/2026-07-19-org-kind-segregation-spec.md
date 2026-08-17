@@ -1,11 +1,11 @@
 ---
 id: 2026-07-19-org-kind-segregation-spec
 title: Org Kind Segregation — business vs personal
-stage: spec
-status: draft
+stage: done
+status: shipped
 pass: 1
 created: 2026-07-19
-updated: 2026-07-19
+updated: 2026-08-17
 repos: [minion-meta]
 ---
 

@@ -5,11 +5,12 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-13
-updated: 2026-08-13
+updated: 2026-08-17
 proposal: 2026-08-13-crm-customers-server-pagination
 verdict: approved
 repos: [minion_hub]
 type: feature
+supersedes: 2026-08-03-crm-customers-server-pagination-spec
 ---
 
 # CRM Customers — DataTable server mode

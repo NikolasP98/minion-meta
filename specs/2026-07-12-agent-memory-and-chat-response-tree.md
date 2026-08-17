@@ -474,3 +474,7 @@ re-enabling the branch-aware path restores full selection semantics.
 - The model context for either branch contains only that branch's ancestors.
 - Legacy clients and transcripts continue to function, and both features can be
   rolled back without deleting user conversation or memory data.
+
+## Triage 2026-08-17
+
+P0 incident fix + client response-tree projection SHIPPED (workspace.ts resolveStateDir; hub response-tree.ts). P1 gateway BranchRecord/.branches.jsonl/chat.branch NOT built — Edit + durable branches still open (value ~6).
