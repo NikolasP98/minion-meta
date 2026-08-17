@@ -25,6 +25,13 @@ export interface GatewayClientOptions {
   onChallenge: (nonce: string) => Promise<Record<string, unknown>>;
   /** Called for every inbound event frame except connect.challenge. */
   onEvent?: (frame: EventFrame) => void | Promise<void>;
+  /**
+   * Called when the `onEvent` handler above throws or rejects.
+   * Default when omitted: `console.error` with the event NAME (never the payload — see below).
+   * Pass `() => {}` to opt into silence explicitly; the client never discards these errors by default.
+   * MUST NOT throw: it is invoked from a catch on a fire-and-forget promise.
+   */
+  onEventError?: (err: unknown, frame: EventFrame) => void;
   /** Called when the socket opens (before challenge handshake completes). */
   onOpen?: () => void;
   /** Called when the socket closes. */
@@ -239,6 +246,8 @@ export class GatewayClient {
 
     on('error', () => {
       // close handler fires next — no action needed here.
+      // TODO(handoff): this discards the runtime-supplied socket error value; carried forward
+      // as S2 in proposals/2026-08-17-gateway-client-lifecycle-swallows-handoff.md.
     });
   }
 
@@ -260,11 +269,30 @@ export class GatewayClient {
         }
         return;
       }
-      void Promise.resolve(this.opts.onEvent?.(frame as unknown as EventFrame)).catch(() => {});
+      // The handler may throw synchronously OR return a rejecting promise; both are reported once.
+      try {
+        void Promise.resolve(this.opts.onEvent?.(frame as unknown as EventFrame))
+          .catch((err) => this.reportEventError(err, frame as unknown as EventFrame));
+      } catch (err) {
+        this.reportEventError(err, frame as unknown as EventFrame);
+      }
       return;
     }
 
     handleResponseFrame(frame, this.pending);
+  }
+
+  private reportEventError(err: unknown, frame: EventFrame): void {
+    const hook = this.opts.onEventError;
+    if (!hook) {
+      console.error(`[GatewayClient] onEvent handler failed for event '${frame?.event ?? 'unknown'}':`, err);
+      return;
+    }
+    try {
+      hook(err, frame);
+    } catch {
+      // A broken reporter must not become an unhandled rejection — this catch's silence is deliberate.
+    }
   }
 
   private async sendConnect(nonce: string): Promise<void> {
@@ -293,6 +321,8 @@ export class GatewayClient {
     this.opts.onReconnectScheduled?.(delay);
     this.reconnectTimer = setTimeout(() => {
       this.reconnectTimer = null;
+      // TODO(handoff): this discards every failed reconnect attempt; carried forward as S2 in
+      // proposals/2026-08-17-gateway-client-lifecycle-swallows-handoff.md.
       void this.connect().catch(() => {});
     }, delay);
   }

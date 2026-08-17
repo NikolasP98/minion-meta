@@ -279,4 +279,179 @@ describe('GatewayClient', () => {
     expect(reconnectDelays.length).toBeGreaterThanOrEqual(2);
     expect(reconnectDelays[1]).toBeCloseTo(1360, -1);
   });
+
+  describe('onEvent handler failures are reported, never discarded', () => {
+    it('async onEvent that rejects, no onEventError supplied → console.error fallback fires once', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const thrown = new Error('handler exploded');
+      const client = makeClient(mockWs, { onEvent: async () => { throw thrown; } });
+      await performConnect(client, mockWs);
+
+      mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'agent.status', payload: {} }));
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+      const [first, second] = consoleErrorSpy.mock.calls[0]!;
+      expect(String(first)).toContain('[GatewayClient]');
+      expect(String(first)).toContain('agent.status');
+      expect(second).toBe(thrown);
+    });
+
+    it('sync-throwing onEvent, no onEventError → does not escape, console.error fires once', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const client = makeClient(mockWs, {
+        onEvent: () => { throw new Error('sync boom'); },
+      });
+      await performConnect(client, mockWs);
+
+      expect(() => {
+        mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'chat.message', payload: {} }));
+      }).not.toThrow();
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('async rejection with onEventError supplied → hook called, console.error not called', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const thrown = new Error('handler exploded');
+      const seen: Array<[unknown, unknown]> = [];
+      const client = makeClient(mockWs, {
+        onEvent: async () => { throw thrown; },
+        onEventError: (err, frame) => { seen.push([err, frame.event]); },
+      });
+      await performConnect(client, mockWs);
+
+      mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'chat.message', payload: {} }));
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(seen).toEqual([[thrown, 'chat.message']]);
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+
+    it('sync throw with onEventError supplied → hook called, console.error not called', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const thrown = new Error('sync boom');
+      const seen: Array<[unknown, unknown]> = [];
+      const client = makeClient(mockWs, {
+        onEvent: () => { throw thrown; },
+        onEventError: (err, frame) => { seen.push([err, frame.event]); },
+      });
+      await performConnect(client, mockWs);
+
+      mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'chat.message', payload: {} }));
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(seen).toEqual([[thrown, 'chat.message']]);
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+
+    it('onEventError that itself throws → does not escape, no unhandled rejection, console.error not called', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const client = makeClient(mockWs, {
+        onEvent: () => { throw new Error('sync boom'); },
+        onEventError: () => { throw new Error('reporter also broken'); },
+      });
+      await performConnect(client, mockWs);
+
+      expect(() => {
+        mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'chat.message', payload: {} }));
+      }).not.toThrow();
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+
+    it('fallback console.error output does not contain the event payload', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const client = makeClient(mockWs, { onEvent: () => { throw new Error('sync boom'); } });
+      await performConnect(client, mockWs);
+
+      mockWs.__simulateMessage(
+        JSON.stringify({ type: 'event', event: 'chat.message', payload: { secret: 'PAYLOAD-CANARY' } }),
+      );
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(JSON.stringify(consoleErrorSpy.mock.calls)).not.toContain('PAYLOAD-CANARY');
+    });
+
+    it('non-throwing onEvent → console.error not called, handler received the frame (happy path intact)', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const received: unknown[] = [];
+      const client = makeClient(mockWs, { onEvent: (frame) => { received.push(frame); } });
+      await performConnect(client, mockWs);
+
+      mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'agent.status', payload: { ok: true } }));
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+      expect(received).toHaveLength(1);
+    });
+
+    it('onEvent omitted entirely → no report, no throw (optional handler still optional)', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const client = makeClient(mockWs);
+      await performConnect(client, mockWs);
+
+      expect(() => {
+        mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'agent.status', payload: {} }));
+      }).not.toThrow();
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+
+    it('connect.challenge frame with a throwing onEvent → onEvent not invoked (handshake path unchanged)', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const onEvent = vi.fn(() => { throw new Error('should never run'); });
+      const client = makeClient(mockWs, { onEvent });
+      const connectPromise = client.connect();
+      mockWs.__simulateOpen();
+      mockWs.__simulateMessage(
+        JSON.stringify({ type: 'event', event: 'connect.challenge', payload: { nonce: 'test-nonce' } }),
+      );
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(onEvent).not.toHaveBeenCalled();
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+      // Drain the handshake so the client doesn't leave a dangling connect() promise.
+      const connectMsg = mockWs.sentMessages.find((m) => {
+        try { return (JSON.parse(m) as { method?: string }).method === 'connect'; } catch { return false; }
+      });
+      if (connectMsg) {
+        const req = JSON.parse(connectMsg) as { id: string };
+        mockWs.__simulateMessage(
+          JSON.stringify({ type: 'res', id: req.id, ok: true, payload: { type: 'hello-ok' } }),
+        );
+      }
+      await connectPromise;
+    });
+
+    it('two synchronously failing events in a row → exactly two reports, one per event, in arrival order', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const client = makeClient(mockWs, {
+        onEvent: () => { throw new Error('boom'); },
+      });
+      await performConnect(client, mockWs);
+
+      mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'event.one', payload: {} }));
+      mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'event.two', payload: {} }));
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(2);
+      expect(String(consoleErrorSpy.mock.calls[0]![0])).toContain('event.one');
+      expect(String(consoleErrorSpy.mock.calls[1]![0])).toContain('event.two');
+    });
+  });
 });
