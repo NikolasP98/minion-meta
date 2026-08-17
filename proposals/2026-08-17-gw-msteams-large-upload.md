@@ -1,7 +1,8 @@
 ---
 id: 2026-08-17-gw-msteams-large-upload
 title: MS Teams uploads >4MB fail — resumable upload session never implemented
-status: approved
+status: in-spec
+spawned_spec: 2026-08-17-gw-msteams-large-upload-spec
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion]
