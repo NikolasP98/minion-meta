@@ -2,12 +2,12 @@
 id: 2026-08-17-gw-whatsapp-cloud-template-fallback-spec
 title: "WhatsApp Cloud — catch the 24h window-closed error and fall back to an approved template (opt-in, at-most-once)"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-gw-whatsapp-cloud-template-fallback
-verdict: pending
+verdict: approved
 repos: [minion]
 tags: [logic, test]
 type: feature
@@ -32,7 +32,7 @@ registered imperatively by the plugin (`api.registerChannel()`), and operator me
 gateway changes"* for the original build. Any need to edit `src/channels/` is a finding (§4).
 
 **Gate conventions:** [`2026-08-17-sdlc-phase-gates-scoring-spec`](2026-08-17-sdlc-phase-gates-scoring-spec.md)
-§4b — slices are tagged `logic` / `test`. Red-state TDD (G3) is mandatory: the mocked-131047 test is written
+§4b — slices are tagged `logic` / `test`. Red-state TDD (G3) is mandatory: the mocked-window-code test is written
 and shown failing against today's code before the fallback lands. **No UI governance applies** — zero
 `.svelte` files, zero `lint:design`, zero `lint:tokens`, in any slice (template management UI is the
 proposal's own exclusion, §5).
@@ -122,9 +122,10 @@ Five load-bearing unknowns, all settled by S0:
    **`131047`** ("Re-engagement message" — *"more than 24 hours have passed since the customer last replied to
    this number"*). **I am fairly but not fully confident of that number, and the legacy On-Premises code
    `470` is a different, older surface.** This spec therefore does **not** authorize hardcoding a remembered
-   constant: S0 verifies against Meta's current Cloud API error reference **and** a captured real error body
-   (§6 step 3 produces one), and S2 makes the matched set **config-overridable** so a Meta-side change does
-   not require a gateway release. Codes that must **not** match: `131026` (message undeliverable / recipient
+   constant: S0 verifies against Meta's current Cloud API error reference and records the source URL; the
+   captured real error body required by the ship gate is produced by §6 step 3. The shipped matched set is
+   the verified set, not operator-configurable: allowing arbitrary codes would contradict precise detection
+   and could turn an auth or rate-limit failure into a billed send. Codes that must **not** match: `131026` (message undeliverable / recipient
    cannot receive), `131051` (unsupported message type), `190` (token expired), `4`/`80007` (rate limits).
 3. **Where is the reply actually sent from?** ⚠️ A3. The wrapper must sit on the whatsapp-cloud send path
    (`api.ts` / `adapter.ts`), not in `graph-client.ts` (shared, §4) and not in `channels/shared.ts` (the
@@ -181,8 +182,10 @@ rg -n 'TODO|FIXME|Phase 3' extensions/meta-graph/src
 ```
 
 Then, **outside the repo**, resolve A2: read Meta's current Cloud API error-code reference for the
-re-engagement / window-closed error on the pinned Graph version, and record the exact `code`, the
-`error_data.details` wording, and whether a distinct `error_subcode` accompanies it.
+re-engagement / window-closed error on the pinned Graph version, and record the exact `code`, documented
+`error_data.details` wording, whether a distinct `error_subcode` accompanies it, and the source URL. If the
+authoritative reference does not establish a numeric code, stop and return the spec rather than shipping a
+remembered or message-matched classifier; §6 step 3 later validates the documented code against a real body.
 
 **Six answers that must be written into the PR description**, one sentence each: (1) branch **A** or **B**
 for the error typing; (2) the verified window-closed code(s), with the reference URL and, if available, a
@@ -289,15 +292,15 @@ is closed — and a gateway with no such declaration behaves **exactly as it doe
               "languageCode": "es",         // Meta requires an exact approved language tag
               "components": []              // optional; shape mirrors sendWhatsAppTemplate's existing param
             },
-            "minIntervalMinutes": 1440,     // at-most-once guard (S3); default 24h
-            "errorCodes": [131047],         // OPTIONAL override; empty/absent ⇒ the verified default (A2)
-            "includeMessageExcerpt": false  // DEFAULT off — see S3's excerpt rules
+            "minIntervalMinutes": 1440      // at-most-once guard (S3); default 24h
           }
         }
       }
     }
   }
   ```
+
+  The matched error code(s) are verified in S0 and fixed in code; they are not account configuration.
 
 - **Respect the four config/lifecycle gotchas that crash-looped prod before** (operator memory
   `meta-graph-channels`, "FOUR CONFIG/LIFECYCLE GOTCHAS"):
@@ -338,13 +341,11 @@ cd minion
 npx vitest run --project extensions extensions/meta-graph
 #   config.test.ts:
 #   - absent `windowClosedFallback`            → resolved config disabled; ZERO behavior change
-#   - `enabled: true` + full template          → resolved, with defaults applied
-#         (minIntervalMinutes 1440, includeMessageExcerpt false, errorCodes = the verified default)
+#   - `enabled: true` + full template          → resolved, with minIntervalMinutes defaulted to 1440
 #   - `enabled: true` + missing template.name  → exactly one startup `error` naming account+field,
 #                                                and the account resolves to DISABLED (never sends)
 #   - `enabled: true` + missing languageCode   → same
 #   - per-account isolation: account A enabled, account B absent → B unaffected
-#   - `errorCodes: []` or absent               → the verified default set, not an empty set
 pnpm tsgo && pnpm check
 rg -n 'whatsappCloud' extensions/meta-graph/src            # → ZERO (gotcha 1: hyphenated id only)
 rg -n 'channels\.meta\b' extensions/meta-graph/src         # → ZERO (gotcha 2)
@@ -377,7 +378,7 @@ about the send path is unchanged; and the original message's non-delivery is vis
   reply call site, not inside a shared low-level helper), so a future outbound call type does not inherit
   billed-template behavior by accident.
 - **Classify narrowly.** Fall back **only** when the thrown value is a `GraphApiError` whose numeric `code` is
-  in the resolved `errorCodes` set. Never on: a network error or timeout, a 5xx, an unparseable body
+  in the S0-verified, code-owned window-closed set. Never on: a network error or timeout, a 5xx, an unparseable body
   (`code: undefined`), `131026`, `131051`, `190`, or a rate-limit code. **Never string-match** Meta's message
   text — it is localized and Meta-owned. A near-miss must be logged at `warn` with the observed code so an
   unexpected-but-related code is discoverable from logs instead of guessed at in code.
@@ -387,21 +388,23 @@ about the send path is unchanged; and the original message's non-delivery is vis
 - **At most once, and never a retry of a retry.** (a) The template send is attempted **once**; if it fails,
   log at `error` and stop — no second classification pass, no recursion. (b) A process-local guard keyed by
   `(accountId, recipient)` with `minIntervalMinutes` TTL suppresses repeats — so an N-block reply after a
-  quiet day yields **one** notification, not N (⚠️ A6). Bound the guard (TTL + max entries) so it cannot grow
-  without limit. **State honesty:** this guard is in-memory and resets on gateway restart; a persistent
+  quiet day yields **one** notification, not N (⚠️ A6). The check-and-reserve operation must be synchronous
+  and reserve the key **before** awaiting the template request, so concurrent failing blocks cannot race into
+  multiple sends. Purge expired entries before enforcing a maximum size; if the guard is still at capacity,
+  fail closed by suppressing the fallback and logging once — never evict an unexpired reservation, which
+  would invalidate the at-most-once guarantee. A failed template attempt keeps its reservation until TTL.
+  **State honesty:** this guard is in-memory and resets on gateway restart; a persistent
   dedupe store is out of scope (§5) and needs a `TODO(handoff):` + a `proposals/` entry (S4).
 - **Do not pretend the original was delivered.** The wrapper's return value must tell the caller the free-form
   send **failed** and a notification was sent instead — a distinct outcome from success. Do not swallow the
   original error into a success value; whatever the send path returns today for a failure must still be
   returned or rethrown after the fallback. If S0 shows the caller has no way to express "not delivered", that
   is a `TODO(handoff):` plus a `proposals/` entry (S4), **not** a silent success.
-- **The excerpt rule (default: no excerpt).** Only if `includeMessageExcerpt: true` **and** the configured
-  template declares a body parameter may an excerpt of the original be passed as a template parameter, and
-  then it must be sanitized for Meta's documented template-parameter restrictions — **no newlines, no tabs, no
-  more than four consecutive spaces**, plus a hard length cap (S0 verifies the exact current restrictions
-  alongside A2). Unsanitized parameters are rejected by Meta, which would turn the fallback into a *second*
-  failure. Default off means the shipped default cannot leak conversation content into a differently-billed,
-  differently-audited message type.
+- **Never inject the original message.** The fallback passes only the configured template components;
+  it does not synthesize, append, or replace a body parameter with an excerpt of the failed free-form send.
+  This keeps the outcome honest and avoids inventing an unverifiable parameter-mapping contract. Operators
+  may configure fixed components already supported by `sendWhatsAppTemplate`; dynamic excerpt mapping is out
+  of scope (§5).
 - **Reuse the one token path.** The template send resolves its access token through the same
   `resolveAccessToken()` → `secrets.getScoped("meta_access_token", "whatsapp-cloud:<accountId>")` chain as the
   text send (⚠️ A4). No second credential path, no env-var shortcut.
@@ -432,11 +435,11 @@ npx vitest run --project extensions extensions/meta-graph
 #   - the template send ITSELF rejects with the window-closed code → logged at error, NOT retried
 #         (no recursion, no second fallback)
 #   - N sends to the same recipient inside minIntervalMinutes → exactly ONE template send  (⚠️ A6)
+#   - N concurrent sends to the same recipient → exactly ONE template send (atomic pre-await reservation)
 #   - a send to a DIFFERENT recipient in the same window → its own single template send
+#   - guard at capacity with only unexpired entries → fallback suppressed; ZERO eviction/extra template send
 #   - reaction / read-receipt / typing sends failing with the window-closed code → NOT called
-#   - includeMessageExcerpt=false (default) → no message text appears in the template payload
-#   - includeMessageExcerpt=true → the parameter contains no \n, no \t, no >4 consecutive spaces,
-#         and is length-capped
+#   - no message text appears in the template payload; configured components pass through unchanged
 #   - the happy path (graphSend resolves) → sendWhatsAppTemplate NOT called; return value unchanged
 pnpm tsgo && pnpm check
 rg -n 'sendWhatsAppTemplate' extensions/meta-graph/src/channels/whatsapp-cloud   # → wrapper call site exists
@@ -476,8 +479,8 @@ knows the feature exists and what it does **not** do, and every open end is writ
   with one short section: what the 24h customer-service window is; the exact config block; that it is
   **off by default and costs money when on**; that the template is a **re-engagement notification, not
   delivery of the original message**; that the at-most-once guard is in-memory and resets on restart; and
-  that the template must already be **approved by Meta** for the account's WABA before `enabled: true` does
-  anything but log errors.
+  that the template must already be **approved by Meta** for the account's WABA or each fallback attempt will
+  fail and log an error.
 - **Ledger sweep before closing (AGENTS.md "Open-items ledger").** Every open end gets both a
   `TODO(handoff): <what, why, pointer>` at the exact site **and** a `proposals/` entry (new file, or an
   append to the matching open one). Expected entries:
@@ -520,9 +523,9 @@ cd minion && git diff --name-only <base>...HEAD | rg '\.svelte$' \
 |---|---|
 | Does the customer receive the original message? | **No.** They receive the configured, pre-approved re-engagement notification. Templates cannot carry arbitrary text |
 | Is the original message retried later? | **No.** Out of scope (§5); S4 files the proposal |
-| Does anything happen if the operator configures nothing? | **No.** Byte-for-byte today's behavior, plus a clearer failure log |
+| Does anything happen if the operator configures nothing? | **No template is sent.** Send/failure semantics remain today's behavior, with a clearer failure log |
 | How many templates can one agent reply cause? | **One**, per recipient per `minIntervalMinutes` (default 24h) — process-local guard |
-| Which errors trigger it? | Only the verified window-closed code(s) (⚠️ A2), config-overridable. Never timeouts, 5xx, unparseable bodies, `131026`, `131051`, `190`, rate limits |
+| Which errors trigger it? | Only the S0-verified window-closed code(s) (⚠️ A2), fixed in code. Never timeouts, 5xx, unparseable bodies, `131026`, `131051`, `190`, rate limits |
 | Does it cost money? | **Yes** — template messages outside the window are billed, and marketing-category templates are subject to per-user limits. Hence opt-in, default off |
 | Can a bad config make it send the wrong thing? | It can send the wrong *approved* template (operator's choice). It can never invent one: a missing name/language disables the account's fallback at startup |
 
@@ -556,10 +559,10 @@ safe, and it is why S1 is a separate slice with its own back-compat assertion ra
 ### ⚠️ A2 — the error code is remembered, not verified
 
 I expect **`131047`** ("Re-engagement message"). **I am not fully certain**, and `470` is the older
-On-Premises code for the same condition, not the Cloud API one. This spec deliberately (a) requires S0 to
-verify against Meta's current error reference **and** a captured body, and (b) makes the matched set
-config-overridable. Hardcoding a remembered constant with no override would be the single most likely way for
-this feature to ship broken *and* undiagnosable — a fallback that never fires looks exactly like today.
+On-Premises code for the same condition, not the Cloud API one. This spec requires S0 to verify against
+Meta's current error reference and §6 to confirm it against a captured body before shipping. The matched set
+is deliberately not configurable: a stale code must fail closed and be corrected in reviewed code rather
+than let an arbitrary operator value trigger billed sends.
 
 ### ⚠️ A3 — the wrapper's placement is load-bearing
 
@@ -597,6 +600,8 @@ filed follow-on, not a silent gap.
   reopens, no "send on next inbound". S4 files the proposal; this diff does not build it.
 - **Persistent at-most-once state.** The guard is in-memory and resets on restart. A store (SQLite, the
   ledger, a KV) is a follow-on with its own schema and migration questions.
+- **Dynamic excerpts or parameter mapping from the failed original.** The fallback sends only configured
+  template components and never copies free-form message content into them.
 - **Proactive window tracking.** No tracking of last-inbound timestamps to predict closure, no pre-emptive
   template selection. This fix is **reactive**: it catches the error Meta returns.
 - **Any change to `graphSend`'s behavior**, its signature, its success path, or *when* it throws. S1 changes
@@ -649,8 +654,8 @@ npx vitest run --project extensions extensions/meta-graph     # memory: from ROO
 #    c) Leave `windowClosedFallback.enabled: false`. Trigger an outbound free-form message to that
 #         recipient (hub reply, or the agent).
 #         → expect: the send fails; the log names the Graph code.
-#         ← RECORD THAT CODE. It is the ⚠️ A2 verification. If it is not in the shipped default set,
-#           fix the default (or the config) before enabling — a fallback that never fires is invisible.
+#         ← RECORD THAT CODE. It is the ⚠️ A2 live confirmation. If it differs from the S0-documented set,
+#           stop and reconcile the authoritative reference and captured body; do not enable or override it.
 #    d) Set `enabled: true` + the approved template, restart/hot-reload the channel, repeat (c).
 #         → the approved template arrives on the test handset; the log says the fallback fired and names
 #           the matched code and template; the original send is still reported as NOT delivered.
