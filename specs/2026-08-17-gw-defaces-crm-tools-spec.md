@@ -3,11 +3,11 @@ id: 2026-08-17-gw-defaces-crm-tools-spec
 title: "Builtin CRM tools — de-FACES the descriptions (business name, locale patterns and examples from org config)"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-gw-defaces-crm-tools
-verdict: pending
+verdict: approved
 repos: [minion]
 tags: [logic, test]
 type: fix
@@ -254,7 +254,7 @@ trusted later.
     `idLabel` is the national-ID noun ("DNI" in Peru, absent generically); `examples` is the
     org's own vocabulary for what it sells.
   - `const DEFAULT_CRM_PROFILE: CrmProfile` — **generic**: no business name, `subjectNoun: 'customer'`,
-    no `idLabel`, no `examples`, and `phonePattern: LOCALE_PATTERNS.PE` (see the compat note below).
+    no `idLabel`, no `examples`, and no locale or phone pattern.
     A doc-comment states that this is the zero-config shape and that anything tenant-specific belongs
     in config, never here.
   - `const LOCALE_PATTERNS: Record<string, RegExp>` — a small named table; `PE` holds **today's exact
@@ -267,13 +267,15 @@ trusted later.
     "undefined". That is a test, not a hope.
 - Rewrite both factories (and any third tool S0 found) to accept an optional `profile: CrmProfile`
   argument defaulting to `DEFAULT_CRM_PROFILE`, and to call the renderer. Delete every inline string.
-- **Behavior stays put.** If S0 (2b) showed the regex is executed against the query, it now reads
-  `profile.phonePattern ?? LOCALE_PATTERNS.PE` — same pattern, same call, same result. Do **not**
+- **Behavior stays put.** If S0 (2b) showed the regex is executed against the query, the matcher now
+  reads `profile.phonePattern ?? LEGACY_DEFAULT_PHONE_PATTERN`, where the legacy constant is the
+  exact PE pattern and is not part of the rendered default profile. This preserves zero-config query
+  behavior without putting Peruvian locale text back into the generic description. Do **not**
   change the matcher, the payload, or the hub endpoint in this slice or any other (proposal §Out of
   scope). Compile the pattern **once per tool construction**, never per row or per match.
 - De-FACE the `.meta.ts` `display` description to a generic one-liner; run `pnpm generate:tools`;
-  **verify `_gen/_display.generated.ts` actually regenerated** (claim 3) and hand-fix it if the
-  script does not write it — then say so in the PR so S3 can decide whether the script needs fixing.
+  **verify `_gen/_display.generated.ts` actually regenerated** (claim 3). If the script does not
+  write it, fix the generator in S1 and regenerate; generated output is never hand-edited.
 - **The parity fixture lives outside `src/agents/tools/`.** The proposal's DoD grep is written
   without exclusions, so the pre-change FACES description — which we must keep, as the only proof
   that a configured profile reproduces today's text byte-for-byte — goes in
@@ -295,7 +297,7 @@ pnpm vitest run src/agents/tools/knowledge/crm-profile.test.ts test/crm-tool-des
 #   red-state first (G3): each case shown failing before the fix lands
 #   - GENERIC DEFAULT: renderCrmSearchDescription(DEFAULT_CRM_PROFILE) and the insight twin contain
 #     none of /faces|sculptor|patient|clinic|DNI/i  ← the proposal's "zero clinic-specific text"
-#   - PARITY: rendering the FACES profile literal (defined in the fixture file, not in src/) is
+#   - PARITY: rendering the FACES profile literal (defined in the test file, not in src/) is
 #     byte-equal to test/fixtures/crm-tool-descriptions.faces.txt, captured from the PRE-change code
 #   - DEGRADATION: a profile with only { subjectNoun, subjectNounPlural } renders with no 'undefined',
 #     no empty '()' and no double space (assert with /undefined|\(\s*\)|\s{2}/ over the output)
@@ -306,7 +308,7 @@ pnpm vitest run src/agents/tools/knowledge/crm-profile.test.ts test/crm-tool-des
 pnpm tsgo                                        # clean vs the recorded baseline; no new errors
 pnpm check                                       # oxlint + oxfmt clean
 rg -n -i 'faces sculptors' src/                  # → ZERO hits, no exclusions  ← the proposal's DoD grep
-rg -n -i 'patient|clinic' src/agents/tools/      # → zero, or only inside a locale/preset comment
+rg -n -i 'faces sculptors' src/agents/tools/     # → zero; generic noun examples may remain in tests/comments
 git diff --name-only <base>...HEAD | grep -E '_gen/' # → present: codegen ran (or a PR note says why not)
 ```
 
@@ -331,16 +333,17 @@ with one validation boundary and a default that leaves a zero-config gateway exa
     profiles?: Record<string /* orgId */, CrmProfileConfig>   // per-org override, multi-tenant
   }
   // CrmProfileConfig = { businessName?: string; subjectNoun?: string; subjectNounPlural?: string;
-  //                      idLabel?: string; locale?: string; phonePattern?: string; examples?: string[] }
+  //                      idLabel?: string; locale?: keyof typeof LOCALE_PATTERNS; examples?: string[] }
   ```
   Caps enforced in the schema, not downstream: `businessName` ≤ 80 chars, nouns ≤ 40, `idLabel` ≤ 16,
-  `examples` ≤ 12 entries × ≤ 60 chars, `phonePattern` ≤ 200 chars. `locale` selects a
-  `LOCALE_PATTERNS` key; `phonePattern` is the raw escape hatch and is `.refine()`d to **compile** at
-  config-parse time (⚠️ A3). Rejecting a bad pattern at parse time is the same discipline the
-  prompt-sections content scanner already applies to operator text (§1).
+  `examples` ≤ 12 entries × ≤ 60 chars. `locale` is an enum of the shipped
+  `LOCALE_PATTERNS` keys. There is no operator-supplied raw-regex escape hatch: the proposal requires
+  locale patterns, and accepting arbitrary regex would add an avoidable ReDoS surface (⚠️ A3).
 - Add `resolveCrmProfile(cfg, orgId?): CrmProfile` in the **config/resolution layer** — not inside
   `crm-profile.ts`, which stays pure and config-free. Precedence: `crm.profiles[orgId]` →
-  `crm.defaultProfile` → `DEFAULT_CRM_PROFILE`. It is the single place that merges, normalises
+  `crm.defaultProfile` → `DEFAULT_CRM_PROFILE`. Resolution is a **field-wise merge** in that order
+  (org fields override default-profile fields, which override generic defaults), so a sparse org
+  override does not discard the gateway defaults. It is the single place that normalises
   (trim, drop empties, dedupe examples, preserve order) and resolves `locale` → `RegExp`.
   - **Fails soft, always.** A malformed block that somehow reaches runtime (hand-edited json,
     hot-reload race) logs once at `warn` and returns `DEFAULT_CRM_PROFILE`. It must **never throw**:
@@ -371,11 +374,11 @@ pnpm vitest run src/config/schema-parity.test.ts src/config/<config>.test.ts \
 #     byte-equal to it   ← zero-regression proof for the org that has the text today
 #   - NO CONFIG: absent `crm` block → identical output to S1's default (assert against the S1 test)
 #   - PRECEDENCE: profiles[orgId] beats defaultProfile beats DEFAULT_CRM_PROFILE (3 explicit cases)
-#   - locale: 'PE' → phonePattern === LOCALE_PATTERNS.PE; locale: 'XX' (unknown) → falls back and warns
-#   - phonePattern: '([' (uncompilable) → REJECTED at schema parse with a named error
+#   - locale: 'PE' → phonePattern === LOCALE_PATTERNS.PE; locale: 'XX' → REJECTED by the schema
+#   - an unknown locale injected past the schema → default profile + one warning, never a throw
 #   - a malformed block injected past the schema → resolveCrmProfile returns the default, logs warn,
 #     does NOT throw (assert with expect(...).not.toThrow())
-#   - resolveCrmProfile is synchronous: its return type is not a Promise (// @ts-expect-error on await)
+#   - resolveCrmProfile is synchronous: a compile-time assertion assigns its result to `CrmProfile`
 pnpm tsgo && pnpm check
 git diff --name-only <base>...HEAD | grep -E 'supabase/migrations|drizzle' && echo "FAIL: no DDL" && exit 1
 rg -n -i 'faces sculptors' src/                  # → still zero
@@ -383,12 +386,12 @@ rg -n -i 'faces sculptors' src/                  # → still zero
 
 ---
 
-### S3 — The other copies, regex safety, and the anti-recurrence guard
+### S3 — The other copies, locale safety, and the anti-recurrence guard
 
 **Tags:** `logic`, `test` · **Estimate:** 4–6 h
 
-**Goal:** every surface that republishes a tool description carries generic text; an operator cannot
-make the gateway slow or crash with a pattern; and a fourth hardcode cannot land without a red test.
+**Goal:** every surface that republishes a tool description carries generic text; config cannot
+introduce an arbitrary regex; and a fourth tenant hardcode cannot land without a red test.
 
 **Do:**
 - **Sweep the republishers found in S0 (3).** For each of `_gen/_display.generated.ts` (or whatever
@@ -400,19 +403,17 @@ make the gateway slow or crash with a pattern; and a fourth hardcode cannot land
   selection. State the resolution explicitly in the PR: either the index keys per profile, or it
   deliberately indexes the generic description. Do not leave this undecided.
   If `_display.generated.ts` turns out not to be regenerated by `pnpm generate:tools` (claim 3),
-  either fix the script here or leave a `TODO(handoff):` at the script naming the gap.
-- **Regex safety (⚠️ A3).** Compile each profile's pattern **once** at resolution and reuse the
-  `RegExp` for the tool's lifetime; never build a `RegExp` inside a matching loop. Add a bounded-time
-  test: a pathological config pattern plus a 200-char query completes under a fixed budget (assert
-  elapsed ms against a generous constant, e.g. < 250 ms, so the test is not flaky on CI but still
-  fails a true catastrophic backtrack). If the timing test proves fragile in this runner, replace it
-  with a static rejection of nested unbounded quantifiers in the schema `.refine()` and say so.
+  fix the script here and regenerate it; do not defer a generator defect while claiming codegen clean.
+- **Locale safety (⚠️ A3).** Resolve only enum-validated, code-owned locale presets and reuse the
+  selected `RegExp` for the tool's lifetime; never build one inside a matching loop. Tests prove every
+  configured locale maps to its named preset and that no config field accepts an arbitrary pattern.
 - **Anti-recurrence guard.** A test that reads the source of `src/agents/tools/**` (excluding
-  `_gen/`, which is generated, and the locale-preset table) and fails when a tenant-identity
-  denylist matches: `/faces\s*sculptors/i`, `/\bDNI\b/`, `/patient/i`, and a literal `51` inside a
-  phone-shaped regex. Failure message points at `crm-profile.ts` and at this spec id. The proposal's
-  grep is a one-time check; this makes it permanent. Keep the denylist small and commented — a guard
-  nobody understands gets deleted at the first false positive.
+  `_gen/`, which is generated, the test files, and the named legacy locale-preset declaration) and
+  fails on the exact pre-change tenant identifiers and clinic procedure literals recorded by S0.
+  It must include `/faces\s*sculptors/i`; do not ban generic words such as `patient` or `DNI`, which
+  are valid configured vocabulary and would make the source-scanning test fail on its own fixtures
+  or documentation. Failure message points at `crm-profile.ts` and this spec id. The proposal's grep
+  is a one-time check; this makes the tenant-specific portion permanent and avoids false positives.
 - **`crm_query` and any third tool** (⚠️ A5, claim 2): if S0 found the same class of text there,
   it is covered by the same renderer here. If S0 found a `%reserva%`-style deposit keyword in these
   tools (the inbound handoff from `2026-08-17-hub-reserva-keyword-config-spec` §4 ⚠️ A2), **do not
@@ -425,7 +426,7 @@ make the gateway slow or crash with a pattern; and a fourth hardcode cannot land
 
 **Files:** `src/agents/tools/_gen/*` (regenerated), the MCP export / `tools.status` path and the JIT
 `tool-index.ts` if S0 shows they exist, `scripts/generate-tool-registry.ts` (only if claim 3 proves
-the script is incomplete), `src/agents/tools/knowledge/crm-profile.test.ts` (guard + timing),
+the script is incomplete), `src/agents/tools/knowledge/crm-profile.test.ts` (guard + locale validation),
 the config resolver, `proposals/2026-08-17-gw-defaces-crm-tools.md` (handoff appends, meta-repo).
 
 **Definition of done (machine-checkable):**
@@ -436,7 +437,7 @@ pnpm vitest run src/agents/tools/knowledge/crm-profile.test.ts test/crm-tool-des
 #   - guard test: adding `const X = 'Faces Sculptors patient CRM'` to crm-search-tool.ts makes the
 #     suite fail (verify by doing it once locally, then reverting — state in the PR that you did)
 #   - the tool-index / MCP text for crm_search matches none of /faces|sculptor|patient|clinic|DNI/i
-#   - pathological pattern + 200-char query completes inside the budget (or: schema rejects it)
+#   - every accepted locale resolves to a code-owned preset; arbitrary regex config is rejected
 pnpm tsgo && pnpm check
 rg -n -i 'faces sculptors' src/ extensions/ scripts/ test/ \
    --glob '!test/fixtures/crm-tool-descriptions.faces.txt'
@@ -457,14 +458,14 @@ rg -n 'TODO\(handoff\)' src/agents/tools/ src/config/    # → only genuinely de
 | `src/agents/tools/knowledge/crm-insight-tool.ts` | S1, S2 | same |
 | third knowledge tool (`crm-query-tool.ts`?, path from S0) | S1, S2 | same, **only if** S0 finds the same text |
 | `src/agents/tools/knowledge/*.meta.ts` | S1 | `display` description → generic one-liner |
-| `src/agents/tools/_gen/*` | S1, S3 | regenerated by `pnpm generate:tools`; never hand-edited (unless claim 3 proves the script skips `_display.generated.ts`) |
+| `src/agents/tools/_gen/*` | S1, S3 | regenerated by `pnpm generate:tools`; never hand-edited |
 | `src/config/zod-schema.*.ts` + `src/config/types.*.ts` | S2 | the `crm.defaultProfile` / `crm.profiles` block, both sides |
 | `src/config/schema-parity.test.ts` | S2 | parity for the new block |
 | config resolver module (path from S0) | S2, S3 | `resolveCrmProfile(cfg, orgId?)` — sync, fail-soft, compile-once |
 | `src/agents/pi-tools/pi-tools.ts` | S2 | pass the resolved profile into the CRM tool factories |
 | MCP export / `tools.status` / `tool-index.ts` | S3 | verify generic text; decide and record the shared-cache resolution |
 | `scripts/generate-tool-registry.ts` | S3 | **only if** `_display.generated.ts` is proven unwritten |
-| `src/agents/tools/knowledge/crm-profile.test.ts` | S1, S2, S3 | rendering, degradation, precedence, fail-soft, timing, guard |
+| `src/agents/tools/knowledge/crm-profile.test.ts` | S1, S2, S3 | rendering, degradation, precedence, fail-soft, locale validation, guard |
 | `test/fixtures/crm-tool-descriptions.faces.txt` + `test/crm-tool-descriptions.test.ts` | S1, S2 | the pre-change golden text and the parity test — **outside** `src/agents/tools/` on purpose |
 | `proposals/2026-08-17-gw-defaces-crm-tools.md` (meta-repo) | S2, S3 | handoff appends (A1 orgId gap, A5 findings) |
 
@@ -481,7 +482,7 @@ carries a real (non-blocking) alert.
 | Surface | Impact | Mitigation / evidence |
 |---|---|---|
 | `@minion-stack/shared` / gateway WS frames | **None.** No frame type, no protocol field. Verified in this checkout: `grep -rniI 'ToolStatusEntry\|tools\.status\|memorySync\|crm_search\|crm_insight' packages langgraph-server ops scripts` → **zero hits** | re-run that grep at PR time; if S0 finds a typed config mirror in `packages/`, it joins S2's file list and needs a changeset |
-| `minion_hub` `/config` editor + `/capabilities` | **Text-only.** A new optional `crm` config block appears in the config surface and the tool cards show the generic description. Additive; nothing breaks if the hub renders the schema generically | S0 (5) records whether the hub has a typed mirror of the gateway config schema; if it does, note it in the PR — it is a follow-up, not a blocker, because the block is optional |
+| `minion_hub` `/config` editor + `/capabilities` | **Conditional compatibility impact.** A new optional `crm` block is additive only if the hub passes through unknown gateway config keys | S0 records whether the hub validates or reconstructs gateway config. If it would reject/drop `crm`, update its typed mirror in this work (and add `minion_hub` to `repos`) or stop and re-spec; a required transport fix is not a follow-up |
 | External **MCP clients** (`tools/list`) | **Visible behavior change** if these tools are `mcpExport` — third-party clients see a different description string. This is the fix working as intended, and it *removes* a tenant-name disclosure | S0 (3) records `mcpExport`; state the before/after strings in the PR |
 | `minion_hub` `/api/gateway/insight` | **None.** The request payload and endpoint are untouched — the proposal's own out-of-scope | assert in S1's DoD: no diff in the request-building code path |
 | `minion_site`, `paperclip-minion`, `pixel-agents`, `minion_plugins` | **None** — no shared type, no protocol, no DB | — |
@@ -519,17 +520,13 @@ the index per profile) rather than leaving it to whoever warms the cache first. 
 layer never shipped (`2026-07-09-agent-tool-scaling-architecture` is `status: unknown`), drop that
 bullet and say so — do not defend against a layer that does not exist.
 
-### ⚠️ A3 — an operator-supplied regex runs on the hot path
+### ⚠️ A3 — locale patterns run on the hot path
 
-`phonePattern` is a config string that becomes a `RegExp` used per turn. Three failure modes, three
-structural mitigations: (a) **uncompilable** → rejected at Zod parse time with a named error, so a
-bad `config.patch` fails at write, not at turn 10,000; (b) **catastrophic backtracking** → compile
-once per resolution, cap the pattern at 200 chars, and gate with the S3 timing test (or a static
-refusal of nested unbounded quantifiers); (c) **malformed block reaching runtime anyway** (hand-edited
-`gateway.json`, hot-reload race) → `resolveCrmProfile` logs and returns the default, never throws.
-This mirrors the prompt-sections precedent verified in §1: operator text is validated at **write**
-time, and the render path stays unbreakable. Prefer `locale: 'PE'` over a raw pattern in every
-example and in the docs — the escape hatch should look like an escape hatch.
+`locale` selects a code-owned `RegExp`; config never supplies regex source. Unknown locales are
+rejected at the Zod boundary, while a malformed value injected past validation makes
+`resolveCrmProfile` warn once and return the default. The selected preset is resolved once and reused
+for the tool lifetime. This keeps the render path unbreakable without introducing operator-controlled
+regular-expression execution.
 
 ### ⚠️ A4 — tool text sits in the prompt's cached prefix
 
@@ -562,8 +559,9 @@ about what a deposit is would be worse than today's single wrong answer.
   payload, the matcher algorithm and the result shape are untouched. Parameterising *where the phone
   pattern comes from* is in scope (the DoD names locale patterns); changing *how phone matching
   works* — libphonenumber, multi-locale fallback, fuzzy matching — is not.
-- **Flipping the default locale away from Peru.** `DEFAULT_CRM_PROFILE.phonePattern` stays
-  `LOCALE_PATTERNS.PE` so a zero-config gateway behaves exactly as today. Stated plainly as a
+- **Flipping the executable matcher default away from Peru.** `LEGACY_DEFAULT_PHONE_PATTERN` stays
+  `LOCALE_PATTERNS.PE` if S0 proves the regex affects query behavior, so a zero-config gateway behaves
+  exactly as today. It is not rendered as part of `DEFAULT_CRM_PROFILE`. Stated plainly as a
   residual: a non-Peruvian org that never configures a profile still gets Peruvian *phone matching*,
   though it no longer gets clinic *text*. Changing the default changes behavior for every existing
   org, so it needs its own proposal — and S3 leaves a `TODO(handoff):` at the default naming it.
@@ -628,7 +626,7 @@ minion gateway rpc tools.status | jq '.tools[] | select(.name=="crm_search") | .
 #       de-FACED description does not stop the model from using the tool.
 #    e. restore the FACES profile on the FACES-facing instance and diff its rendered description
 #       against test/fixtures/crm-tool-descriptions.faces.txt → byte-equal  ← zero-regression proof
-#    f. patch a deliberately broken profile ({"phonePattern":"(["}) → config.patch REJECTS it and the
+#    f. patch a deliberately broken profile ({"locale":"XX"}) → config.patch REJECTS it and the
 #       running gateway keeps serving the previous profile (assert both).
 
 # 4. Republisher sweep (⚠️ A2) — every surface that shows a description
