@@ -1,9 +1,10 @@
 ---
 id: 2026-08-17-hub-pos-appointments-fork
 title: Collapse /pos/appointments (732-line fork) into /scheduling/bookings
-status: approved
+status: in-spec
 created: 2026-08-17
 updated: 2026-08-17
+spawned_spec: 2026-08-17-hub-pos-appointments-fork-spec
 repos: [minion_hub]
 tags: [ui, logic, duplication]
 value: 7
