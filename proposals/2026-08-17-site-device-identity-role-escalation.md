@@ -1,10 +1,11 @@
 ---
 id: 2026-08-17-site-device-identity-role-escalation
 title: Device-identity sign endpoint lets any member self-assign role/scopes
-status: approved
+status: in-spec
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion_site]
+spawned_spec: 2026-08-17-site-device-identity-role-escalation-spec
 tags: [logic, security]
 value: 9
 effort: S
