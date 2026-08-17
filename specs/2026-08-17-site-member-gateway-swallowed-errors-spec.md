@@ -2,12 +2,12 @@
 id: 2026-08-17-site-member-gateway-swallowed-errors-spec
 title: "member-gateway — every gateway rejection is reported; no empty catches"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-site-member-gateway-swallowed-errors
-verdict: pending
+verdict: approved
 repos: [minion_site]
 tags: [logic, test, ui]
 type: fix
@@ -75,9 +75,9 @@ empty session list and concludes there is nothing there; the console is clean, s
 outage from an empty account. That is the whole bug: **the failure and the empty-success case are
 rendered identically and logged identically (not at all).**
 
-**Scope of the fix, in one sentence:** every promise the module does not await must end in a sink
-that logs, and the state that sink records must be readable by the UI — after which "the dashboard is
-empty" and "the dashboard is broken" are different observable facts.
+**Scope of the fix, in one sentence:** every promise the module starts without returning or awaiting
+must end in a sink that logs, and the state that sink records must be readable by the UI — after
+which "the dashboard is empty" and "the dashboard is broken" are different observable facts.
 
 ## 1. Assumptions — Slice 0 is mandatory
 
@@ -163,7 +163,9 @@ something to render. Doing S3 first would mean inventing state in a component.
 **Tags:** `logic`, `test` · **Estimate:** 4–6 h
 
 **Goal:** after this slice, `rg 'catch\(\(\) *=> *\{\}\)'` over the file returns nothing, and every
-rejection listed in §0's table reaches `console.error` exactly once with the operation name attached.
+rejection at an in-scope fire-and-forget call site reaches `console.error` exactly once with the
+operation name attached. A promise returned to an upstream caller may continue to reject to that
+caller; it must not also be logged here unless this module deliberately consumes it.
 
 **Do:**
 
@@ -190,7 +192,8 @@ rejection listed in §0's table reaches `console.error` exactly once with the op
   ```
   `reportGatewayError` logs `console.error('[member-gateway] <op> failed:', error)` — the **Error
   object**, not `String(err)`, so devtools keeps the stack — then calls `onFailure` inside its own
-  `try`/`catch` so a broken observer cannot silence the log. `toError` covers the non-`Error`
+  `try`/`catch` so a broken observer cannot turn the sink into a rejection. The observer exception
+  is not logged as a second gateway failure. `toError` covers the non-`Error`
   rejection values a `catch` can legally receive (string, `undefined`, a `Response`, a plain object)
   — thrown non-Errors are exactly where naive `err.message` handling produces `undefined` and
   re-hides the failure.
@@ -200,10 +203,11 @@ rejection listed in §0's table reaches `console.error` exactly once with the op
   sites, and rethrowing converts a silent failure into an unhandled rejection, which is a different
   bug, not a fix.
 - **Sweep the rest of the module, don't stop at three.** Slice 0's second grep exists for this: a
-  bare `catch {}`, a `.then(ok)` with no rejection arm, or a `void somePromise()` loses errors just
-  as completely as `.catch(() => {})`. Route each through the same sink. If one is a genuine
-  deliberate ignore, it gets a one-line comment saying why — an unexplained silence is what this
-  spec exists to remove.
+  bare `catch {}`, or a fire-and-forget `.then(ok)` / `void somePromise()` with no rejection arm,
+  loses errors just as completely as `.catch(() => {})`. Route each consumed or fire-and-forget
+  rejection through the same sink. Do not add a catch to a promise the module returns for its
+  caller to handle. If one is a genuine deliberate ignore, it gets a one-line comment saying why —
+  an unexplained silence is what this spec exists to remove.
 - **Wrap the module's own `onEvent` body in `try`/`catch` → sink.** Verified reason, not
   speculation: `packages/shared/src/gateway/client.ts:263` is
   `void Promise.resolve(this.opts.onEvent?.(frame)).catch(() => {})` — the shared client swallows
@@ -252,31 +256,35 @@ member's dashboard currently degraded, and since when?" without parsing console 
 
 - **Add a classifier to `gateway-errors.ts`** (pure, still no runes):
   ```ts
-  export type GatewayFailureKind = 'transport' | 'timeout' | 'server' | 'unknown';
+  export type GatewayFailureKind = 'transport' | 'timeout' | 'unknown';
   export function classifyGatewayError(err: Error, connected: boolean): GatewayFailureKind;
   ```
   `transport` = the socket is the problem (`not connected`, `closed (…)`, `disconnected`, or
-  `connected === false`); `timeout` = the `request '<m>' timed out after` shape; `server` = a message
-  matching none of the shared client's own strings **while the socket is connected** — i.e. it came
-  from a `res` frame with `ok: false` (`protocol.ts:57`) and is the gateway talking; `unknown` = the
-  residue.
-  **State the weakness in a comment, in the code:** this classifies by matching message strings the
+  `connected === false`); `timeout` = the `request '<m>' timed out after` shape; `unknown` = every
+  other error while connected. In particular, do **not** label an unmatched message `server`:
+  `GatewayClient` rejects both server responses and unrelated consumer/runtime failures as bare
+  `Error` instances, so provenance is not recoverable from this value.
+  **State the limitation in a comment, in the code:** this classifies by matching message strings the
   shared client happens to produce today, which is why `connected` — state the site actually owns —
-  is a parameter and takes precedence over any string match. Add
-  `TODO(handoff): classification is string-shaped because @minion-stack/shared throws bare Errors;
-  typed gateway errors belong upstream — see proposals/2026-08-17-pkg-gateway-client-onevent-errors.md`
-  at the function, per the open-items ledger.
+  is a parameter and takes precedence over any string match. This is a documented boundary, not an
+  unwired promise of typed errors; adding typed error classes upstream is outside this fix.
 - **Expose reactive state from `member-gateway.svelte.ts`** — rune `$state`, shaped so a component
-  can render it without further logic. Suggested minimum:
-  `{ degraded: boolean; kind: GatewayFailureKind | null; op: string | null; message: string | null; since: number | null; count: number }`.
-  Set on every sink call; cleared on the next success of the same `op` (a poll that succeeds is proof
-  the outage ended — do not clear on reconnect alone, which proves only that a socket opened).
-  Export it as a getter or a `$derived` snapshot, not a mutable object handed to callers.
-- **Collapse consecutive duplicates in the log, never the first one.** The invariant, which is also
+  can render it without further logic. Track active failures by stable `op`; each entry has at least
+  `{ kind, message, since, count }`, and expose a read-only aggregate with
+  `{ degraded, kind, op, message, since, count }` for presentation. Set/update only the failing
+  operation's entry and clear only that entry on the next success of the same `op`. The aggregate
+  remains degraded while any other operation still has an active failure; choose the most recently
+  failed active operation for its scalar presentation fields. A poll success is proof that the poll
+  recovered, not that a still-failing chat/session operation recovered. Do not clear on reconnect
+  alone, which proves only that a socket opened. Export a getter or `$derived` snapshot, not the
+  mutable per-operation store.
+- **Collapse per-operation duplicates in the log, never the first one.** The invariant, which is also
   the proposal's DoD: **the first failure after a healthy→failing transition is always logged**, and
-  a change of `op` or `kind` is always logged. Repeats of an identical `(op, kind, message)` bump
-  `count` and stay quiet until recovery, which then logs one `console.info` "recovered after N
-  failures". This is a logging policy, not a retry policy — see §5.
+  the first active failure for another `op` is always logged. Repeats of an identical
+  `(op, kind, message)` bump that operation's `count` and stay quiet until that operation recovers;
+  a changed `kind` or `message` for the same active operation is logged and becomes its current
+  failure. Each operation's recovery logs one `console.info` "recovered after N failures". This is
+  a logging policy, not a retry policy — see §5.
 - **Do not add retry, backoff, or reconnect behavior of any kind.** `GatewayClient` already owns
   reconnection (`autoReconnect`, `client.ts:288-298`); the proposal excludes retry/backoff design.
   If Slice 0 shows the poll stacks overlapping requests during an outage, the *only* permitted change
@@ -294,13 +302,13 @@ bun x vitest run src/lib/services/gateway-errors.test.ts
 #   - classify(new Error('closed (1006): '), true)                    → 'transport'
 #   - classify(new Error('not connected'), false)                     → 'transport'
 #   - classify(new Error("request 'sessions.list' timed out after 15000ms"), true) → 'timeout'
-#   - classify(new Error('agent is not running'), true)               → 'server'
+#   - classify(new Error('agent is not running'), true)               → 'unknown'
 #   - classify(new Error('agent is not running'), false)              → 'transport'
 #         ← connected=false OUTRANKS the string match; the anti-regression anchor
 #   - dedupe: 5 identical (op,kind,message) failures → 1 console.error, count === 5
 #   - the 2nd of two failures differing only in `op` IS logged (transition always logged)
-#   - success after failures → state cleared, exactly one 'recovered' info line
-rg -n 'TODO\(handoff\)' src/lib/services/gateway-errors.ts    # → the typed-errors handoff, present
+#   - success for one failed op clears only that op; another active op keeps degraded === true
+#   - final active op success → state cleared, exactly one recovery info line for that op
 rg -n 'setTimeout|setInterval|backoff|retry' src/lib/services/gateway-errors.ts   # → ZERO hits
 #     (proof the sink stayed a sink and did not grow a retry policy — §5)
 bun run check
@@ -327,14 +335,15 @@ without opening devtools. "Empty" and "failed" stop looking the same.
   `.planning/phases/04-fold-minion-shared/04-03-SUMMARY.md:31-33`). Rendered only when
   `degraded === true`.
 - **Tokens, not values.** Status colors come from the full triple —
-  `--color-warning-{fg,surface,border}` for `transport`/`timeout` (transient, the client is
-  reconnecting) and `--color-danger-{fg,surface,border}` for `server`/`unknown`. Type via `.t-body` /
+  `--color-warning-{fg,surface,border}` for `transport`/`timeout` (transient connection failures)
+  and `--color-danger-{fg,surface,border}` for `unknown`. Type via `.t-body` /
   `.t-caption`; spacing from the `--space-*` scale (remember `--space-5/7/9/10/11/16` do not exist).
   No hex, no Tailwind palette utility, no arbitrary size, no numeric z-index.
 - **Copy goes through Paraglide.** The site ships EN/ES (AGENTS.md → `minion_site` "Paraglide i18n").
   Hardcoded English in a `.svelte` file is a defect here. Two messages, both plain-language and
-  free of `kind` jargon: one transient ("Reconnecting to your assistant…"), one hard ("We can't reach
-  your assistant right now."). The raw `message` belongs in the console, **not** on screen — a
+  free of `kind` jargon: one transient ("Your assistant connection is temporarily unavailable."),
+  one hard ("We can't reach your assistant right now."). The raw `message` belongs in the console,
+  **not** on screen — a
   gateway error string can carry internal method names.
 - **Do not block the UI.** No modal, no full-page error state, no route guard. The rest of the
   dashboard keeps working with whatever data it already has.
@@ -367,7 +376,7 @@ All paths relative to the root of `NikolasP98/minion-site`.
 
 | File | Slices | Nature |
 |---|---|---|
-| `src/lib/services/gateway-errors.ts` | S1, S2 | **new** — plain TS (no runes): `toError`, `reportGatewayError` (never throws), `classifyGatewayError`, dedupe policy, one `TODO(handoff)` |
+| `src/lib/services/gateway-errors.ts` | S1, S2 | **new** — plain TS (no runes): `toError`, `reportGatewayError` (never throws), `classifyGatewayError`, dedupe helpers/policy |
 | `src/lib/services/gateway-errors.test.ts` | S1, S2 | **new** — the sink matrix, the classification table, the dedupe/transition invariants |
 | `src/lib/services/member-gateway.svelte.ts` | S1, S2 | the three empty catches → the sink; every other silent path swept; `onEvent` body wrapped; reactive `degraded/kind/op/since/count` state |
 | members shell / existing status indicator (`.svelte`, path from Slice 0) | S3 | renders `degraded` with status-token triples; non-blocking |
@@ -387,7 +396,7 @@ changes. Two alerts are unavoidable and one is a scheduling hazard inside this s
 |---|---|---|
 | `@minion-stack/shared` (`GatewayClient`, protocol helpers) | **None.** Consumer-side only: the site catches rejections the client already throws. No new export, no signature change, **no changeset** | Verified against `packages/shared/src/gateway/client.ts` + `protocol.ts` in this checkout; §0's table cites exact lines |
 | `@minion-stack/shared` internal swallows (`client.ts:263`, `client.ts:296`) | **Out of reach from the site — ⚠️ A1** | S1 wraps the site's own `onEvent` body so nothing of the site's is lost there; the upstream fix is proposal `2026-08-17-pkg-gateway-client-onevent-errors` |
-| `minion_hub/src/lib/services/gateway.svelte.ts` | **No code change here — ⚠️ A2.** Hub runs a 920-LOC sibling of this client with the same handshake | Grep at the G2 gate; mirrored proposal if it matches. Do not widen this spec |
+| `minion_hub/src/lib/services/gateway.svelte.ts` | **No code change here — ⚠️ A2.** Hub runs a 920-LOC sibling of this client with the same handshake | Grep at the G2 gate and record the result; do not widen this spec |
 | `minion_site` — device-identity spec, same file, same wave | **Real collision — ⚠️ A3** | Sequencing rule below |
 | `@minion-stack/db`, `@minion-stack/auth`, shared hub↔site DB | **None** — no query, no schema, no session handling touched | zero files under `src/server/`, `src/lib/server/` |
 | `paperclip-minion`, `minion/` gateway, `pixel-agents`, `minion_plugins` | **None** — different processes, different clients; none imports site code | — |
@@ -417,10 +426,9 @@ rejections, hub operators are debugging blind for the same reason. Required at t
 rg -n 'catch\(\(\) *=> *\{\}\)|catch\s*\{\s*\}' minion_hub/src/lib/services/gateway.svelte.ts
 ```
 
-If it matches, **file a mirrored proposal against `minion_hub`** (same DoD wording,
-`repos: [minion_hub]`) before this PR merges. If it does not, say so in the PR with the output — a
-recorded negative is worth as much as the finding here, because it stops the next reader repeating
-the check.
+If it matches, record the finding and proposed owner in the PR; creating a separate hub proposal is
+follow-up work outside this site's ship gate. If it does not, say so in the PR with the output — a
+recorded negative stops the next reader repeating the check.
 
 ### ⚠️ A3 — `2026-08-17-site-device-identity-role-escalation-spec` edits this same file this same day
 
@@ -454,11 +462,10 @@ better, but not required by any DoD above, and not a reason to slip the slice.
   duplicate-collapsing is a *logging* policy and its DoD greps for `setTimeout|setInterval|retry`
   returning zero to prove the line was not crossed. The single permitted exception — an
   in-flight re-entrancy guard on the poll — is named in S2 and is not a schedule change.
-- **Typed error classes in `@minion-stack/shared`.** The right long-term fix for S2's string-shaped
-  classification, and a different repo's PR. Recorded as a `TODO(handoff)` plus an append to
-  `2026-08-17-pkg-gateway-client-onevent-errors`.
+- **Typed error classes in `@minion-stack/shared`.** They would allow finer provenance than S2's
+  deliberately coarse `unknown` classification, but are not required to stop swallowed errors.
 - **The two upstream swallows** (`client.ts:263`, `:296`) — ⚠️ A1.
-- **The hub's copy of this client** — ⚠️ A2: mirrored proposal, `repos: [minion_hub]`.
+- **The hub's copy of this client** — ⚠️ A2: record the audit result; remediation is separate.
 - **The device-identity sign path** — ⚠️ A3, owned by
   `2026-08-17-site-device-identity-role-escalation-spec`.
 - **Remote telemetry.** No Sentry, no PostHog event, no server-side error log for these failures.
@@ -495,29 +502,32 @@ git diff --name-only <base>...HEAD -- src/lib/services | grep -E '\.svelte$' \
 git diff --name-only <base>...HEAD | grep -E '^(supabase/migrations|src/routes/api)/' \
   && echo "FAIL: DDL or API routes are out of scope" && exit 1
 
-# 2. Nothing is swallowed anymore (the proposal's headline, statically)
-rg -n 'catch\(\(\) *=> *\{\}\)|catch\s*\{\s*\}' src/lib/services/    # → ZERO hits
+# 2. Nothing is swallowed anymore in the owner module (the proposal's headline, statically)
+rg -n 'catch\(\(\) *=> *\{\}\)|catch\s*\{\s*\}' src/lib/services/member-gateway.svelte.ts
+# → ZERO hits. Empty catches elsewhere in services are explicitly outside this spec (§5).
 
 # 3. THE PROPOSAL'S PROBE — kill the WS mid-poll, observe errors. Two members' worth of nothing
 #    beforehand is the control.
-#    a. bun dev; log in as a member; open the members dashboard; open devtools console; confirm
-#       sessions/chat load and the console is CLEAN.
-#    b. Kill the gateway (stop the gateway process / container) while the dashboard sits idle.
-#    c. Within one poll period (30 s per ws-duplication-audit §Consumer 2, confirmed in Slice 0):
-#         → console shows '[member-gateway] poll failed:' with a 'closed (…)' or 'not connected'
+#    a. Against a dev/mock gateway, delay a sessions.list response so a poll request is observably
+#       in flight; log in as a member, open the dashboard and devtools, and first confirm normal
+#       sessions/chat load with a clean console.
+#    b. During the delayed poll, stop that gateway process/container. Do not run this on production.
+#    c. As soon as the socket closes (without waiting for another poll period):
+#         → console shows '[member-gateway] poll failed:' with a 'closed (…)' Error
 #           Error and an expandable stack                                  ← S1 / proposal DoD
 #         → the degraded strip appears with the transient (warning) styling ← S3
 #         → the SECOND and THIRD failing polls do NOT add new console lines ← S2 dedupe
 #    d. Send a chat message while the gateway is down
 #         → exactly one new '[member-gateway] chat failed:' line (different op ⇒ always logged)
-#    e. Restart the gateway; wait for GatewayClient's reconnect
-#         → one 'recovered after N failures' info line, the strip disappears, sessions repopulate
+#    e. Restart the gateway; wait for GatewayClient's reconnect and the next successful poll
+#         → one poll recovery info line; the strip disappears only if no other op remains failed;
+#           sessions repopulate
 #    f. Screenshot (c) and (e) for the PR — via the browser-harness skill, verification only.
 #
-# 4. Server-side failure, not just transport: point the site at a gateway that answers
-#    sessions.list with { ok:false, error:{ message:'…' } } (or temporarily revoke the session's
-#    access). Expect kind 'server', the DANGER styling, and the gateway's own message in the
-#    console — the row of §0's table that motivated the whole spec.
+# 4. Server-side failure, not just transport: use a dev/mock gateway that answers sessions.list
+#    with { ok:false, error:{ message:'agent is not running' } }. Expect kind 'unknown', DANGER
+#    styling, and that message in the console. The client exposes no typed provenance, so this spec
+#    deliberately does not claim it can distinguish this response from another connected failure.
 #
 # 5. Pre/post proof for the PR: repeat step 3(b–c) on the pre-fix commit. Expected: zero console
 #    output, no visible change, empty-looking dashboard. That side-by-side IS the evidence.
@@ -529,9 +539,10 @@ rg -n 'catch\(\(\) *=> *\{\}\)|catch\s*\{\s*\}' src/lib/services/    # → ZERO 
 2. The proposal's DoD checked clause by clause: `console.error` present (step 2 + 3c), surfaced state
    present (3c/3e), killing the WS mid-poll produces observable errors (step 3).
 3. S1's red-state failure output pasted in the PR (G3).
-4. ⚠️ A2 resolved: the hub grep run, with either the mirrored proposal id or the recorded negative.
+4. ⚠️ A2 checked: the hub grep output and any finding are recorded in the PR; a hub proposal is not
+   a gate on this site fix.
 5. ⚠️ A3 resolved: the device-identity spec's status named, and the rebase order stated.
-6. ⚠️ A1's remaining gap (the upstream reconnect swallow) stated as a known limitation, with the
-   `TODO(handoff)` and the proposal append in place.
+6. ⚠️ A1's remaining gap (the upstream reconnect swallow) stated as a known limitation and linked
+   to the existing upstream proposal for owner triage; it does not block this consumer-side fix.
 7. Slice 0's actuals reconciled against §3. Because the site and the meta-repo are independent repos,
    corrections to this spec are a separate scoped meta-repo change linked from the site PR.
