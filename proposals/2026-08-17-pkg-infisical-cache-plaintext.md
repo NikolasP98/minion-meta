@@ -1,7 +1,8 @@
 ---
 id: 2026-08-17-pkg-infisical-cache-plaintext
 title: Infisical secret cache stored plaintext on disk (0600 only)
-status: approved
+status: in-spec
+spawned_spec: 2026-08-17-pkg-infisical-cache-plaintext-spec
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion-meta]
