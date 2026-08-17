@@ -36,7 +36,8 @@ for (const name of readdirSync('specs')
 		...(fm.proposal ? { proposal: fm.proposal } : {}),
 		...(fm.verdict ? { verdict: fm.verdict } : {}),
 		...(fm.pr ? { pr: fm.pr } : {}),
-		...(fm.type ? { type: fm.type } : {})
+		...(fm.type ? { type: fm.type } : {}),
+		...(fm.tags ? { tags: fm.tags } : {})
 	});
 }
 

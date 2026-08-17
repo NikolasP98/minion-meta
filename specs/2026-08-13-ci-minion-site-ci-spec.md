@@ -9,6 +9,7 @@ updated: 2026-08-13
 proposal: ci-minion-site-ci
 verdict: approved
 repos: [minion_site]
+tags: [infra]
 type: infra
 ---
 
