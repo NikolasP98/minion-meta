@@ -2,12 +2,12 @@
 id: 2026-08-17-gw-nextcloud-talk-dm-misclassified-spec
 title: "Nextcloud Talk — derive isGroupChat from the conversation type (stop classifying every DM as a group)"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-gw-nextcloud-talk-dm-misclassified
-verdict: pending
+verdict: approved
 repos: [minion]
 tags: [logic, test]
 type: fix
@@ -15,9 +15,10 @@ type: fix
 
 # Nextcloud Talk — derive `isGroupChat` from the conversation type
 
-**Owner surface:** `minion` (gateway) — `extensions/nextcloud-talk/src/` only: the inbound mapping
-function `payloadToInboundMessage`, a new pure room-kind classifier module, its tests, and the
-extension's own docs. **Consumer surface (read, never edited here):** `minion/src/channels/` and
+**Production owner surface:** `minion` (gateway) — `extensions/nextcloud-talk/src/` only: the inbound
+mapping function `payloadToInboundMessage`, a new pure room-kind classifier module, its tests, and
+the extension's own docs. A downstream `*.test.ts` may also change for the behavioral proof in S3.
+**Consumer surface (read, production code never edited here):** `minion/src/channels/` and
 `minion/src/dispatch/` — the mention-gate and group auto-reply policy that read `isGroupChat`. Per
 AGENTS.md "Cross-Project Impact Zones", a channel-extension change touches
 `minion/extensions/<channel>/` + `minion/src/channels/`; this spec asserts the second half is
@@ -146,11 +147,11 @@ deserves a reviewer's attention, not a shrug.
 
 ```
 S0 (recon) ─▶ S1 (pure classifier + injected provider; the proposal's DoD, literally)
-                 └─▶ S2 (the real room-kind source: B1 thread-through | B2 lookup+cache | B3 fail-closed+ledger)
+                 └─▶ S2 (the real room-kind source: B1 thread-through | B2 lookup+cache | B3 stop)
                         └─▶ S3 (downstream behavioral proof, comment/doc truth, ledger)
 ```
 
-**S1 is behaviorally inert on its own.** It makes the decision *derived* and *tested*, but with no
+**S1 is behaviorally inert in production on its own.** It makes the decision *derived* and *tested*, but with no
 real source of room kind wired in it resolves "unknown" for every message and therefore still yields
 `isGroupChat: true`. That is intentional — it keeps the pure logic reviewable in isolation — but it
 means **S1 must not be merged as "the fix" and must not close the proposal.** S1 + S2 together are
@@ -178,37 +179,40 @@ code in this slice.
    *  VERIFY these against the deployed Talk version before shipping (see the note below):
    *    1 = one-to-one · 4 = changelog · 5 = former one-to-one · 6 = note-to-self
    *  Group-shaped types (2 = group, 3 = public) are deliberately absent — see resolveIsGroupChat. */
-  const DM_ROOM_TYPES = new Set([1, 4, 5, 6]);
+  // Populate only with constants verified during S0 against the supported/deployed Talk version.
+  const DM_ROOM_TYPES = new Set([1]);
 
-  export type RoomKindInput = number | string | null | undefined;
+  export type RoomKindInput = unknown;
 
   /** True unless the conversation is *known* to be 1:1-shaped. Unknown ⇒ group (fail-closed). */
   export function resolveIsGroupChat(rawType: RoomKindInput): boolean {
-    if (rawType === null || rawType === undefined || rawType === '') return true;
+    if (typeof rawType !== 'number' && typeof rawType !== 'string') return true;
+    if (typeof rawType === 'string' && !/^\d+$/.test(rawType)) return true;
     const n = Number(rawType);                       // OCS may serialize ints as strings
     if (!Number.isInteger(n)) return true;
     return !DM_ROOM_TYPES.has(n);
   }
   ```
 
-- **Allow-list the DM types; never allow-list the group types.** The direction matters more than the
-  numbers. I am confident that `1` is one-to-one, `2` is group and `3` is public; I am **less certain**
-  of `4`/`5`/`6` (changelog / former-one-to-one / note-to-self) and the implementer must check them
-  against the deployed Talk version's documentation or source rather than take them from this spec.
+- **Allow-list only verified DM types; never allow-list the group types.** The direction matters more
+  than the numbers. S0 must verify the numeric constants against the supported/deployed Talk version
+  and record the authoritative documentation or source reference in the PR. Constants `4`/`5`/`6`
+  are candidates, not requirements; omit any constant that cannot be verified.
   The allow-list direction is what makes that uncertainty *safe*: if `6` turns out to be something
   else, a note-to-self room is merely treated as a group and the bot stays quiet until mentioned —
   harmless. Get the direction backwards (deny-list `2` and `3`, DM by default) and the same
   uncertainty spams a room full of humans. Add a test asserting `2` and `3` → `true` so nobody
   "simplifies" the polarity later.
-- **Coerce numeric strings, and only numeric strings.** OCS endpoints have a history of serializing
+- **Coerce unsigned decimal strings, and only those strings.** OCS endpoints may serialize
   integers as strings; treating `'1'` as unknown would leave the reported bug in place for a
-  deployment whose API does exactly that. `Number('1') === 1` handles it; `Number.isInteger` rejects
-  `'abc'`, `NaN`, `1.5`, `Infinity`, `[]`, `{}`. Do **not** reach for `parseInt` — it accepts `'1abc'`.
+  deployment whose API does exactly that. Reject booleans, arrays, objects, whitespace, signs,
+  decimals, `NaN`, and `Infinity` before coercion. Do **not** reach for `parseInt` — it accepts
+  `'1abc'`.
 - **Introduce a provider seam, do not call the network here.**
 
   ```ts
   /** Resolves a conversation token to its Talk room type. Returns null when unknown —
-   *  never throws, never blocks message delivery. S2 supplies the real implementation. */
+   *  never throws; S2 bounds any I/O wait. */
   export type RoomTypeProvider = (token: string) => Promise<RoomKindInput>;
   ```
 
@@ -230,9 +234,11 @@ code in this slice.
 - **Do not change `InboundMessage`'s type or add a field.** `isGroupChat` already exists; this slice
   sets it correctly. If the work appears to need a new inbound field, stop — that would cross into
   `@minion-stack/shared` and the gateway protocol, which §5 excludes.
-- **Red-state first (G3).** Write the one-to-one fixture test, run it against the current hardcoded
-  `true`, and paste the failure (`expected false, received true`) into the PR. The existing suite
-  cannot serve as red-state proof: it passes today by construction.
+- **Red-state first (G3).** Before changing the mapper signature or adding the provider, write a
+  one-to-one fixture against the current callable mapper and assert `isGroupChat === false`; run it
+  against the hardcoded `true` and paste that observed failure into the PR. Then adapt the same test
+  to the selected provider/resolved-value seam. Do not prescribe the runner's exact error text. The
+  existing suite cannot serve as red-state proof because it passes today by construction.
 
 **Files:** `extensions/nextcloud-talk/src/room-kind.ts` (new),
 `extensions/nextcloud-talk/src/room-kind.test.ts` (new),
@@ -250,10 +256,10 @@ pnpm --filter <ext-pkg-from-S0> test    # or the repo's extension-test invocatio
 #   - resolveIsGroupChat(1) === false                 ← one-to-one, the reported bug
 #   - resolveIsGroupChat(2) === true                  ← group
 #   - resolveIsGroupChat(3) === true                  ← public (a 2-member public room is still a group)
-#   - resolveIsGroupChat(4|5|6) === false             ← changelog / former-1:1 / note-to-self
+#   - every additional S0-verified DM constant → false; every unverified constant → true
 #   - resolveIsGroupChat('1') === false               ← OCS string-int, must not fall through to unknown
 #   - resolveIsGroupChat('2') === true
-#   - each of: undefined, null, '', 'abc', NaN, 0, 99, 1.5, Infinity, [], {} → true   ← fail-closed
+#   - each of: undefined, null, '', ' ', 'abc', true, false, NaN, 0, 99, 1.5, Infinity, [], {} → true
 #   monitor.test.ts:
 #   - payloadToInboundMessage(<one-to-one webhook fixture>, stubProvider→1).isGroupChat === false
 #         ← the proposal's DoD sentence, literally
@@ -270,10 +276,11 @@ rg -n 'target\.name|participants?\.length|participantCount' extensions/nextcloud
 
 ### S2 — The real room-kind source: thread it through, or look it up and cache it
 
-**Tags:** `logic`, `test` · **Estimate:** B1 3–4 h · B2 5–7 h · B3 4–5 h
+**Tags:** `logic`, `test` · **Estimate:** B1 3–4 h · B2 5–7 h
 
-**Goal:** the provider from S1 returns the true conversation type in production, cheaply, without ever
-delaying or dropping a message. Which branch you are in is S0 (b)'s answer; **record it in the PR**.
+**Goal:** the provider from S1 returns the true conversation type in production, cheaply, without
+dropping a message. B1 adds no wait; B2 may delay mapping only up to its explicit lookup timeout.
+Which branch you are in is S0 (b)'s answer; **record it in the PR**.
 
 **Branch B1 — the type is already in hand (best case).** The monitor already lists or fetches rooms
 and the response carries `type` per room. Thread that value to the mapper; the "provider" collapses to
@@ -299,26 +306,24 @@ existing credentials:
   per message.
 - **Bounded.** Cap the cache (default **500** entries, evict oldest-inserted) so a monitor watching
   many rooms cannot grow it without limit for the lifetime of the process.
-- **Never throw, never block delivery, never spam the log.** Any failure — non-2xx, network reject,
+- **Bound the lookup.** Use the existing client's timeout facility, or an abort signal, with a named
+  timeout constant. A request that never settles must resolve to `null` after that bound and clear
+  its single-flight entry; do not introduce a second retry policy.
+- **Never throw, never drop delivery, never spam the log.** Any failure — non-2xx, network reject,
   malformed body, missing `type` — resolves to `null`, which S1 turns into `isGroupChat: true`, and the
   message is delivered normally. Log at `warn` **at most once per token per failure-TTL**; a channel
   that logs per message during an outage is its own incident.
 
-**Branch B3 — no credential path exists (bot shared-secret only).** ⚠️ A4. Then **do not add a new
-auth or config surface in this spec** — a Talk API credential is a feature with its own review
-surface, and smuggling it into a bug fix is exactly the scope creep the gates exist to catch. Instead:
-land S1's seam with a provider that returns `null` unconditionally, keep the fail-closed `true`, and
-pay the ledger cost properly — a `TODO(handoff):` at the provider site and a new proposal in
-`proposals/` for the credentialed lookup, per AGENTS.md's open-items rule. Then say plainly in the PR
-that **the user-visible symptom is not fixed yet** and that the proposal should stay open. Do not close
-a proposal on a seam.
+**Branch B3 — no credential path exists (bot shared-secret only).** ⚠️ A4. This is a **stop
+condition**, not an implementation branch: S1 alone does not satisfy the proposal's definition of
+done and must not be merged or represented as the fix. Report the evidence and return the spec for a
+human decision on a separately scoped credential/config capability. Do not create that capability,
+a placeholder provider, a TODO, or a follow-up proposal as part of this spec.
 
 **Files:** `extensions/nextcloud-talk/src/room-kind.ts` (B1: no change, or the local-map read · B2:
 the resolver + cache, or a sibling `room-info.ts` if that reads better),
 `extensions/nextcloud-talk/src/monitor.ts` (construct/inject the real provider),
-`extensions/nextcloud-talk/src/*.test.ts` (the branch's test matrix). B3 additionally:
-`proposals/2026-08-17-gw-nextcloud-talk-room-info-credentials.md` (new; **do not** edit
-`proposals/index.json` — the generator owns it) and the one `TODO(handoff):` line.
+`extensions/nextcloud-talk/src/*.test.ts` (the selected branch's test matrix).
 
 **Definition of done (machine-checkable):**
 
@@ -335,14 +340,12 @@ pnpm --filter <ext-pkg> test
 #             → isGroupChat true AND the message is still delivered AND nothing throws
 #       - a failure then a retry inside the failure TTL → 0 extra fetches; after it expires → 1
 #       - a success then a message after the success TTL → 1 extra fetch        (TTL respected)
+#       - a never-settling request → null within the configured timeout; message continues;
+#         the next call can retry (single-flight entry was cleared)
 #       - CAP+50 distinct tokens → cache size <= CAP                           (bounded)
 #       - 10 failures for one token inside the failure TTL → exactly 1 warn log (no log storm)
 #       - the resolver logs/attaches no credential or Authorization header value anywhere
-#   B3: - the provider makes no HTTP call and resolves null; isGroupChat stays true
-#       - one warn (or debug) log states that room-kind resolution is unavailable, once per process
 pnpm tsgo && pnpm check
-rg -n 'TODO\(handoff\)' extensions/nextcloud-talk/src   # B3 only → exactly one, at the provider site
-ls ../proposals/ | rg 'nextcloud-talk-room-info'        # B3 only → the handoff proposal exists
 ```
 
 ---
@@ -368,20 +371,20 @@ extension's docs stop describing the old lie.
 - **Do not edit the gate to make the test pass.** If the gate needs changing for these to hold, that is
   a **finding, not a chore** — the fix is supposed to be upstream of it. Stop and report it (§4).
 - **⚠️ A2 resolution, written down.** State in the PR whether any session-key or thread-ownership
-  derivation reads `isGroupChat` (S0 (d)). If it does, and existing Talk DM sessions would fork on
-  deploy, that is a user-visible consequence and needs a deliberate call recorded in the PR — accept
-  the fork with a stated reason, or file the continuity work as its own proposal. Do not let a
-  session-continuity change ride along unmentioned inside a mention-gating fix.
+  derivation reads `isGroupChat` (S0 (d)). If it does and existing Talk DM sessions would fork on
+  deploy, stop and return the spec for a human scope decision before implementation. This spec does
+  not authorize accepting a continuity break or adding migration work.
 - **Docs.** Update the extension's README / docs (whatever exists — S0 lists it) with one short
   paragraph: how the conversation kind is determined, that unknown resolves to group deliberately, and
   under B2 the two cache TTLs and the operational consequence (a room's kind may be up to 15 min
   stale, which is fine because the classification is stable). If the extension has no README, add the
   paragraph as a file-header comment in `room-kind.ts` instead of creating a docs surface this spec did
   not scope.
-- **Ledger sweep before closing.** Per AGENTS.md, any remaining open end — B3's missing credential
-  path, an unverified Talk type constant, a room kind that could not be resolved in the target
-  deployment — gets both a `TODO(handoff): <what, why, pointer>` at the site and a proposal entry. If
-  there are none, say "no open items" in the PR explicitly rather than leaving it to inference.
+- **Ledger sweep before closing.** Per AGENTS.md, any remaining in-scope implementation open end gets
+  both a `TODO(handoff): <what, why, pointer>` at the site and a proposal entry. B3 and A2 are stop
+  conditions handled before implementation, not acceptable open ends in a completed fix. An
+  unverified optional room type stays fail-closed and is omitted from the allow-list; that is defined
+  behavior, not an open implementation. If there are no open ends, say "no open items" in the PR.
 - **If S0 found the same hardcoded-`isGroupChat` pattern in another extension**, file a proposal for it
   and do **not** fix it here (§5). This bug class rarely appears exactly once, and a sweep bundled into
   this PR would make the diff unreviewable.
@@ -397,9 +400,9 @@ and `proposals/*.md` the sweep produces.
 cd minion
 pnpm test                        # full unit suite, including the four gate cases above
 pnpm tsgo && pnpm check
-git diff --name-only <base>...HEAD | rg -v '^extensions/nextcloud-talk/|\.test\.ts$|^README|\.md$' # → EMPTY
+git diff --name-only <base>...HEAD | rg -v '^(extensions/nextcloud-talk/|src/.+\.test\.ts$|proposals/.+\.md$)' # → EMPTY
 git diff --name-only <base>...HEAD | rg '\.svelte$'  && echo "FAIL: UI out of scope"      && exit 1
-git diff --name-only <base>...HEAD | rg '^src/(?!.*\.test\.ts)' && echo "FAIL: gate edited — that is a finding" && exit 1
+git diff --name-only <base>...HEAD | rg '^src/' | rg -v '\.test\.ts$' && echo "FAIL: gate edited — that is a finding" && exit 1
 rg -n 'isGroupChat' extensions/nextcloud-talk/src --glob '!*.test.ts'   # → derived only; no literal
 ```
 
@@ -412,15 +415,15 @@ rg -n 'isGroupChat' extensions/nextcloud-talk/src --glob '!*.test.ts'   # → de
 | `1` one-to-one | `false` | The reported bug. DM semantics: no mention required. |
 | `2` group | `true` | Unchanged. |
 | `3` public | `true` | Unchanged — a public room with two members is still a group. |
-| `4` changelog | `false` | 1:1-shaped, bot-only. |
-| `5` former one-to-one | `false` | Still 1:1-shaped after the peer is deleted. |
-| `6` note-to-self | `false` | 1:1-shaped. |
+| `4` changelog | `false` only if verified; otherwise `true` | Candidate 1:1-shaped type; fail closed if unsupported or unverified. |
+| `5` former one-to-one | `false` only if verified; otherwise `true` | Candidate 1:1-shaped type; fail closed if unsupported or unverified. |
+| `6` note-to-self | `false` only if verified; otherwise `true` | Candidate 1:1-shaped type; fail closed if unsupported or unverified. |
 | anything else, missing, unparseable, lookup failed | **`true`** | **Fail-closed.** Unknown must never mean "auto-reply to everyone". |
 
-Numeric constants for `4`/`5`/`6` are **stated with less confidence than `1`/`2`/`3`** and must be
-verified against the deployed Talk version (§2 S1). The allow-list direction is what makes that
-uncertainty safe: a mis-numbered DM type degrades to "stays quiet until mentioned", never to "spams a
-group".
+Numeric constants for `4`/`5`/`6` are candidates and must be verified against the supported/deployed
+Talk version (§2 S1) before inclusion. An unverified constant is omitted and therefore resolves to
+group semantics. The allow-list direction makes uncertainty safe: an unknown DM-shaped room stays
+quiet until mentioned rather than causing replies in a group.
 
 ## 4. Cross-repo impact
 
@@ -431,11 +434,11 @@ extension (new/modify) → `minion/extensions/<channel>/` + `minion/src/channels
 |---|---|---|
 | `minion/extensions/nextcloud-talk/` | **The fix.** All production code changes live here | S1–S3 |
 | `minion/src/channels/`, `minion/src/dispatch/` (mention-gate, auto-reply policy) | **Behavior changes without these files changing** — that is the point. A DM now takes the ungated path it should always have taken | S3 asserts the four gate outcomes, including the group-unchanged guard. **Editing these files (outside a `*.test.ts`) is a finding**, enforced by S3's `git diff` check |
-| `minion` sessions / `extensions/thread-ownership` | **⚠️ A2 — possible, unverified.** If session identity derives from `isGroupChat`, existing Talk DMs fork onto new sessions at deploy and users lose continuity | S0 (d) greps for it in ≤ 5 min; S3 requires the answer in the PR. If yes → a recorded decision, not a silent side effect |
+| `minion` sessions / `extensions/thread-ownership` | **⚠️ A2 — possible, unverified.** If session identity derives from `isGroupChat`, existing Talk DMs fork onto new sessions at deploy and users lose continuity | S0 (d) greps for it in ≤ 5 min; S3 requires the answer in the PR. If yes and continuity changes → stop for a human scope decision |
 | `@minion-stack/shared` (frames, events, WS protocol) | **None.** No frame type, event, or protocol field is added or changed; `isGroupChat` is an existing inbound field being set correctly | §5 excludes it; S1 explicitly forbids new inbound fields |
 | `minion_hub`, `minion_site`, `paperclip-minion` | **None.** No protocol change ⇒ no consumer change. Hub may *display* session metadata influenced by the flag, but read-only and with no contract change | AGENTS.md's "Gateway protocol" row does not apply |
 | Other channel extensions (telegram, discord, slack, matrix, …) | **None from this diff.** But the same hardcoded-flag pattern may exist elsewhere | S0 (e) reads them for the house pattern; S3 files a proposal if it spots the same bug, and fixes nothing outside Talk (§5) |
-| Nextcloud Talk server (external) | Under B2 only: **one extra authenticated OCS request per room per 15 min** | Long success TTL + single-flight + bounded cache (S2). Under B1/B3: zero extra requests |
+| Nextcloud Talk server (external) | Under B2 only: **one extra authenticated OCS request per room per 15 min** | Long success TTL + single-flight + bounded cache (S2). Under B1: zero extra requests; B3 does not ship |
 | `Minion Docs/`, `minion_plugins`, `pixel-agents` | **None** | No dependency on this extension |
 
 ### ⚠️ A1 — the proposal's first option may be a dead end
@@ -467,10 +470,10 @@ bug to fill the slice with.
 
 ### ⚠️ A4 — a bot-secret-only extension may be structurally unable to know
 
-If S0 (b) lands on branch B3, the honest outcome of this spec is a tested seam, a fail-closed default,
-and a filed follow-up — **not** a fixed symptom. That is a legitimate result and must be reported as
-such. Adding a Talk API credential surface to close the gap faster would be a feature wearing a bug
-fix's frontmatter.
+If S0 (b) lands on B3, stop: this spec has no implementable path that satisfies its definition of
+done. Report the evidence for a human to decide whether to authorize a separately scoped credential
+surface. A tested seam with an always-unknown provider is not a completed fix and must not ship under
+this spec.
 
 ## 5. Out of scope (explicit)
 
@@ -480,7 +483,8 @@ fix's frontmatter.
   *input* to those policies. Altering the policies is a different proposal with a different blast
   radius; needing to touch them here is a finding (§4).
 - **Adding a Nextcloud credential or config surface** (app password, API user, OAuth) if none exists —
-  ⚠️ A4. Use credentials the extension already has, or land B3 and file the proposal.
+  ⚠️ A4. Use credentials the extension already has; otherwise B3 stops this spec for a human scope
+  decision.
 - **Any change to `InboundMessage`, `@minion-stack/shared`, or the gateway WS frame protocol.** No new
   field, no new event, no consumer coordination. If the fix seems to need one, that is a spec bug —
   raise it.
@@ -513,7 +517,6 @@ git diff --name-only <base>...HEAD    # → extensions/nextcloud-talk/** , *.tes
 #    Configure the Talk channel, start the gateway (pnpm gateway:watch), then:
 #    a) In a 1:1 conversation with the bot, send "hello" with NO mention
 #         → the bot replies.                                    ← the bug, fixed
-#         → the log line for that inbound shows isGroupChat=false (add it at debug if absent)
 #    b) In a group conversation, send "hello" with NO mention
 #         → the bot stays silent.                               ← the regression guard
 #    c) In the same group, send "@bot hello"
@@ -525,11 +528,11 @@ git diff --name-only <base>...HEAD    # → extensions/nextcloud-talk/** , *.tes
 #    f) Branch B2 only: break the room-info path (wrong URL / revoked credential) and send a DM
 #         → the message is still delivered and answered as a group (mention required),
 #           ONE warn is logged, and nothing throws or drops.     ← fail-closed, proven live
-#    g) Branch B3 only: confirm (a) still requires a mention, and that the PR says so plainly.
 
 # 3. Conversation continuity (⚠️ A2)
 #    Before deploying, note the session id for an existing Talk DM; after deploying, send a message
-#    in that same DM and confirm the session id is unchanged — or that a fork was a recorded decision.
+#    in that same DM and confirm the session id is unchanged. If it changes, do not ship; return for
+#    the A2 human scope decision.
 ```
 
 **Ship gate:** §6 steps 1–3 green; the proposal's DoD checked clause by clause
@@ -537,5 +540,4 @@ git diff --name-only <base>...HEAD    # → extensions/nextcloud-talk/** , *.tes
 `rg 'isGroupChat:\s*true'` returns nothing; a one-to-one fixture asserts `isGroupChat === false` —
 S1's `monitor.test.ts` case); the S1 red-state failure pasted into the PR, proving the old code failed
 the way the proposal reported; S0's three answers recorded (A1 discriminator, S2 branch, A2 readers)
-including any "unverified"; and, if branch B3 applied, an explicit statement that the symptom remains
-open plus the linked handoff proposal — the proposal does **not** get closed on a seam.
+including any "unverified". B3 is a stop condition and cannot pass this ship gate.
