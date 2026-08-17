@@ -1,7 +1,8 @@
 ---
 id: 2026-08-17-pkg-workforce-client-json-error
 title: workforce-client throws raw SyntaxError on non-JSON (proxy 502) responses
-status: approved
+status: in-spec
+spawned_spec: 2026-08-17-pkg-workforce-client-json-error-spec
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion-meta]
