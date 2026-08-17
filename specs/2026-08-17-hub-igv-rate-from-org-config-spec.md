@@ -3,11 +3,11 @@ id: 2026-08-17-hub-igv-rate-from-org-config-spec
 title: "SUNAT emission — thread the org's configured IGV rate (no module-level 0.18)"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-hub-igv-rate-from-org-config
-verdict: pending
+verdict: approved
 repos: [minion_hub]
 tags: [logic, test]
 type: fix
@@ -16,8 +16,9 @@ type: fix
 # SUNAT emission — thread the org's configured IGV rate
 
 **Owner surface:** `minion_hub` — `src/server/finance/emission/` (`ubl.ts`, `types.ts`,
-`summary.ts`, `index.ts`), `src/server/services/pos-emission.service.ts`, the emission unit tests
-and the three live-beta scripts
+`summary.ts`, `index.ts`), `src/server/services/pos-emission.service.ts`,
+`src/server/services/finance.service.ts` or a new `src/server/finance/tax.ts` (S2's
+`resolveIgvRate` boundary — see §3), the emission unit tests and the three live-beta scripts
 **Design ancestors:** [`2026-08-14-sunat-emission-beta-spec`](2026-08-14-sunat-emission-beta-spec.md)
 (created `emission/`, defines `EmissionInvoice` and states "totals/IGV are DERIVED (18%, inclusive
 prices), never passed in" — this spec revises exactly that sentence),
@@ -198,7 +199,11 @@ bun run vitest run src/server/finance/emission
 #   - cbc:Percent in the emitted XML == igvRate * 100 for each of {0.18, 0.10, 0.08}
 #   - omitting igvRate is a TYPE error (assert via a // @ts-expect-error line in the test file)
 bun run check                                   # 0 errors / 0 warnings — proves every script/caller was updated
-rg -n 'IGV_RATE|0\.18' src/server/finance/emission/     # → zero hits (constant is gone from the library)
+rg -n 'IGV_RATE|0\.18' src/server/finance/emission/ --glob '!*.test.ts'   # → zero hits (constant is gone
+                                                         #   from the library; the --glob exclusion is load-
+                                                         #   bearing — this slice's own golden-parity test
+                                                         #   necessarily writes `igvRate: 0.18` literally, so
+                                                         #   without it this check fails against its own DoD)
 rg -c 'igvRate' src/server/finance/emission/types.ts    # → the field exists
 ```
 
@@ -370,7 +375,8 @@ So `resolveIgvRate` **throws** on 0 rather than emitting one, and the exonerated
 shape is explicitly out of scope (§5). Consequence to state plainly: an org that has (or later sets)
 `taxRate = 0` will get a hard `invalid_tax_rate` error at emission time instead of a silently wrong
 document. In shadow mode that surfaces as a `pos_emissions` row with `status='error'` and never
-blocks checkout (per `2026-08-14-pos-shadow-emission-spec` §4) — verify that claim in S2 and, if any
+blocks checkout (per `2026-08-14-pos-shadow-emission-spec` §3 "Never block checkout" and §4's
+build→sign→send→parse→update-row-to-accepted/rejected/error task) — verify that claim in S2 and, if any
 path lets an emission error propagate into the cashier's request, fix *that* here; it would make an
 honest error worse than the silent bug.
 
