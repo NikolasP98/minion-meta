@@ -3,11 +3,11 @@ id: 2026-08-17-factory-compose-tailnet-hardcode-spec
 title: "minion-factory compose — parameterize the tailnet bind so setup.sh's any-Docker-host promise is true"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-factory-compose-tailnet-hardcode
-verdict: pending
+verdict: approved
 repos: [minion-factory]
 tags: [infra, security]
 type: fix
@@ -147,11 +147,11 @@ S0 (recon) ─▶ S1 (compose interpolation + the .env plumbing that survives a 
 
 S1 satisfies the proposal's DoD sentence literally and is a **zero-resolved-change** edit on Netcup.
 S2 is what makes the proposal's *problem statement* go away, and it is the slice that needs a second
-Docker host to verify. They are split because S1 is mergeable and revertable on its own, verifiable
-without any host at all, while S2 changes the setup path and touches the exposure boundary. Merging
-S1 alone is a safe resting state; if S2 cannot be verified (⚠️ A1), the AGENTS.md **open-items ledger**
-rule applies — a `TODO(handoff):` in `setup.sh` at the `docker compose up` line plus an appended entry
-on the source proposal.
+Docker host to verify. They are split for review and rollback clarity: S1 is verifiable without any
+host at all, while S2 changes the setup path and touches the exposure boundary. They are
+implementation slices, not independent ship units: **S1 and S2 must merge together.** S1 alone both
+leaves the any-host promise false and makes the exposure boundary operator-controlled without the S2
+guard, so it is not a safe resting state.
 
 **Both slices edit deploy/CI-adjacent config, which `playbooks/generic.md` tells factory agents never
 to touch "unless the task says so". The task says so:** `docker-compose.yml`, `setup.sh`, `deploy.sh`
@@ -227,26 +227,22 @@ and the resulting bind is loopback or a real tailnet address — never the publi
 
 **Do:**
 
-- **`setup.sh` resolves the bind before starting anything.** Order: an already-exported
-  `FACTORY_TAILNET_IP` wins; else `tailscale ip -4 2>/dev/null | head -1`; else `127.0.0.1`. Write the
-  resolved value into the generated `.env`. Print which branch was taken and why — an operator who
-  gets loopback because `tailscale` was missing must be told, not left to discover it from a refused
-  connection.
+- **`setup.sh` resolves the bind before starting anything.** Order: a non-empty, already-exported
+  `FACTORY_TAILNET_IP` wins; else the single existing `FACTORY_TAILNET_IP=` assignment in `.env`;
+  else `tailscale ip -4 2>/dev/null | head -1`; else `127.0.0.1`. Read the existing assignment as
+  data; do not source `.env`. Reject an explicitly exported empty value, an empty existing assignment,
+  or duplicate assignments rather than silently falling through to the compose default. Write the
+  resolved value into a newly generated `.env`, or append it only when an existing `.env` has no
+  assignment. Print which branch was taken and why — an operator who gets loopback because
+  `tailscale` was missing must be told, not left to discover it from a refused connection.
 - **Append-if-missing on an existing `.env`.** `setup.sh:11` only writes `.env` when it is absent, so
   an already-installed host would never receive the new variable. Add an idempotent append for
   `FACTORY_TAILNET_IP` (and nothing else) that leaves every existing line, including all secrets,
   untouched. Re-running `setup.sh` twice must produce the same file.
 - **Refuse a wildcard bind.** If the resolved or supplied value is `0.0.0.0` (or empty, or `::`),
   exit non-zero with a message naming the risk: the runner listens on all interfaces inside the
-  container, so this would publish the API to the internet behind nothing but the bearer check.
-  Provide one documented escape hatch, `FACTORY_ALLOW_PUBLIC_BIND=1`, so the refusal is a guard rather
-  than a wall. This is the one addition beyond the proposal's literal DoD; it exists because S1 turns
-  a hardcoded safe value into an operator-supplied one, and shipping that without a floor would trade
-  a portability bug for an exposure bug.
-- **Pre-flight the port.** Before `docker compose up`, check that `<resolved-ip>:3210` and
-  `127.0.0.1:3211` are free (`ss -ltn` / `nc -z`, whichever is present; skip the check silently if
-  neither is). A named "port already in use" message beats a compose stack trace. Advisory only —
-  do not block on an inconclusive probe.
+  container, so this would publish the API to the internet behind nothing but the bearer check. There
+  is no escape hatch: the ancestor's "never public" policy is explicitly unchanged by this spec.
 - **Fix the health check and the printed instructions.** `setup.sh:38` currently probes
   `127.0.0.1:3211` then `localhost:3210`; make it probe the resolved bind and report a real failure
   instead of `|| true` swallowing it. Print the base URL and the exact `export FACTORY_URL=...` line
@@ -274,13 +270,14 @@ git clone https://github.com/NikolasP98/minion-factory /opt/factory && cd /opt/f
 ./setup.sh                                               # → exits 0  ← the proposal's problem, gone
 grep '^FACTORY_TAILNET_IP=' .env                         # → 127.0.0.1
 curl -sf http://127.0.0.1:3210/health                    # → 200
-docker compose ps --format '{{.Ports}}'                  # → no 0.0.0.0 anywhere
+docker compose ps --format '{{.Ports}}' | grep -c '0\.0\.0\.0:3210' # → 0 (Caddy may bind 80/443 publicly)
 
 # Guard + idempotence:
 FACTORY_TAILNET_IP=0.0.0.0 ./setup.sh                    # → non-zero exit, message names the exposure
-FACTORY_TAILNET_IP=0.0.0.0 FACTORY_ALLOW_PUBLIC_BIND=1 ./setup.sh   # → proceeds (documented escape)
 cp .env /tmp/env.1 && ./setup.sh && diff /tmp/env.1 .env # → no diff (idempotent, secrets preserved)
 sed -i '/^FACTORY_TAILNET_IP=/d' .env && ./setup.sh && grep -c '^FACTORY_TAILNET_IP=' .env  # → 1
+FACTORY_TAILNET_IP= ./setup.sh                    # → non-zero; empty override is not defaulted
+printf 'FACTORY_TAILNET_IP=127.0.0.1\n' >> .env && ./setup.sh # → non-zero; duplicates are ambiguous
 ```
 
 ---
@@ -292,7 +289,7 @@ sed -i '/^FACTORY_TAILNET_IP=/d' .env && ./setup.sh && grep -c '^FACTORY_TAILNET
 | `docker-compose.yml` | S1 | one `ports:` line → `${FACTORY_TAILNET_IP:-100.80.222.29}`; comment names the variable and the never-`0.0.0.0` rule |
 | `deploy.sh` | S1, S2 | `.env` heredoc gains the variable (it is erased otherwise); health curl stops hardcoding the box |
 | `.env.example` | S1 | document `FACTORY_TAILNET_IP` **and** `FACTORY_PUBLIC_IP` (the latter was never documented) |
-| `setup.sh` | S2 | detect → write → append-if-missing; refuse wildcard binds; port pre-flight; real health probe; print `FACTORY_URL` |
+| `setup.sh` | S2 | preserve existing value or detect → write/append-if-missing; refuse wildcard/empty/duplicate binds; real health probe; print `FACTORY_URL` |
 | `README.md` | S2 | setup section states both variables and the no-Tailscale path |
 
 **Zero application code. Zero runner/agent source. Zero `.svelte` files. No secret value is added to
@@ -335,9 +332,8 @@ sufficient. Do not report the proposal as fixed on the strength of a `config` gr
 
 Before this spec, the runner could only ever bind one hardcoded private address. After S1, whatever is
 in `.env` is what gets published, and the process inside the container listens on all interfaces
-(`runner/src/index.ts:388`). S2's refusal of `0.0.0.0`/empty/`::` is the floor, and it is why S2 should
-not be deferred indefinitely if S1 ships alone. If S1 merges without S2, the `TODO(handoff):` required
-by §2 must name this specifically — not just "setup.sh not updated".
+(`runner/src/index.ts:388`). S2's refusal of `0.0.0.0`/empty/`::` is the floor. This is why §2 and the
+ship gate require S1 and S2 to merge together rather than allowing S1 to ship alone.
 
 ## 5. Out of scope (explicit)
 
@@ -380,14 +376,15 @@ curl -sf http://127.0.0.1:3210/health        # → 200
 curl -s  http://127.0.0.1:3210/runs          # → 401/503 (bearer still fail-closed — unchanged)
 docker compose ps --format '{{.Ports}}' | grep -c '0\.0\.0\.0:3210' # → 0
 
-# 2. Fresh host WITH tailscale — the detection path
+# 2. Separate fresh clone on a host WITH tailscale — the detection path
 tailscale ip -4                              # note the address
 ./setup.sh && grep '^FACTORY_TAILNET_IP=' .env    # → that same address
 curl -sf http://$(tailscale ip -4 | head -1):3210/health   # → 200
 
 # 3. Explicit override, from the environment and from .env (the proposal's DoD, both routes)
 FACTORY_TAILNET_IP=10.9.8.7 docker compose config | grep '10\.9\.8\.7'
-printf 'FACTORY_TAILNET_IP=10.9.8.7\n' >> .env && docker compose config | grep '10\.9\.8\.7'
+sed -i 's/^FACTORY_TAILNET_IP=.*/FACTORY_TAILNET_IP=10.9.8.7/' .env
+docker compose config | grep '10\.9\.8\.7'
 
 # 4. Guard holds
 FACTORY_TAILNET_IP=0.0.0.0 ./setup.sh        # → refuses, names the exposure, exits non-zero
@@ -406,4 +403,5 @@ interpolation present — S1 Tier A; `docker compose config` shows the override 
 S1's red-state `0` pasted (proving the override was inert before the change); the Netcup
 `docker compose config` diff pasted as empty; **and it is stated explicitly which DoD tiers were run,
 on what host, by whom** (⚠️ A1). Per §4b's `security` rule for S2, a human approval is on the record —
-a green command list is evidence, not a decision.
+a green command list is evidence, not a decision. S1 and S2 are merged in the same PR; neither is
+reported shipped independently.
