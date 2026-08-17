@@ -2,12 +2,12 @@
 id: 2026-08-17-factory-chat-restart-drops-pending-spec
 title: "minion-factory chat queue — a distinct dispatched state so a runner restart stops eating never-started user messages"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-17
 updated: 2026-08-17
 proposal: 2026-08-17-factory-chat-restart-drops-pending
-verdict: pending
+verdict: approved
 repos: [minion-base, minion-factory]
 tags: [logic, data]
 type: fix
@@ -275,10 +275,9 @@ bun run lint:design | tail -1
 #   → design-lint debt count must be <= the count on `main` before this PR. Paste both numbers.
 
 # Behaviour proof without a runner (the predicate is the whole slice):
-node --input-type=module -e "
-  const S = new Set(['pending','dispatched']);
+bun -e "import { isInFlight } from './src/lib/factory-chat.ts';
   const rows=[{status:'done'},{status:'dispatched'}];
-  if (!rows.some(m=>S.has(m.status))) { console.error('FAIL'); process.exit(1); }
+  if (!rows.some(isInFlight)) { console.error('FAIL'); process.exit(1); }
   console.log('in-flight detected');"                                    # → 'in-flight detected'
 ```
 
@@ -323,11 +322,11 @@ by a test that fails on today's code.
   - Export `recoverChats()`: read `docker ps --filter name=factory-chat- --format '{{.Names}}'`
     **synchronously** (`execFileSync`, so recovery completes before `enqueueChat()` runs — an async probe
     would race the pump into re-dispatching a row that has a live container). **If the probe itself
-    fails**, do not guess: log loudly, error only the rows that are `dispatched` (they are interrupted
-    either way), and leave every `pending` row untouched rather than re-dispatching into a possible name
-    collision. The log line must say which path was taken — `docker probe ok` or `docker probe FAILED,
-    conservative recovery` — because the two produce different row counts and an operator reading the
-    logs must not have to infer which happened.
+    fails**, do not guess or mutate message rows: log `docker probe FAILED, chat dispatch disabled` and
+    make `recoverChats()` return `false`. Boot must skip `enqueueChat()` in that case, leaving both
+    `pending` and `dispatched` untouched until a successful restart/retry can classify them. Either status
+    can have a live container during the pre-D1 crash window, so erroring or dispatching either class
+    without Docker reality can discard work or collide on a container name.
   - `live` handling in S2: `docker kill factory-chat-<id>` for each, then error the row (S3 replaces this
     branch — see the required `TODO(handoff)` in §5). Killing is not optional: leaving the container
     running lets it push meta commits attributed to a turn the DB says failed, and lets a later
@@ -338,9 +337,10 @@ by a test that fails on today's code.
   - `queued`: no write at all. Log the count — `[runner] chat recovery: N interrupted, M still queued` is
     the operator-visible proof the fix works.
 - `runner/src/index.ts`:
-  - Line 411: delete the blanket `UPDATE`. Replace with `recoverChats();` followed by `enqueueChat();`
-    (§1b fact 2 — without the second call the survivors never run). Keep `adoptOrphans()` and `enqueue()`
-    exactly as they are; runs recovery is not in scope.
+  - Line 411: delete the blanket `UPDATE`. Replace it with
+    `if (recoverChats()) enqueueChat();` (§1b fact 2 — survivors must run after successful recovery, while
+    a failed Docker probe must leave dispatch disabled). Keep `adoptOrphans()` and `enqueue()` exactly as
+    they are; runs recovery is not in scope.
   - Lines 344-346: the busy check becomes
     `SELECT 1 FROM messages WHERE chat_id = ? AND status IN ('pending','dispatched')` (§1b fact 3). The
     `409 previous turn still processing` semantics are unchanged — that is the point.
@@ -363,10 +363,10 @@ by a test that fails on today's code.
     and that the assistant row appears in none of them.
   - One integration test over the **real schema**: set `process.env.FACTORY_DATA` to `mkdtempSync()`, then
     `const { db } = await import('./db.js')` — a **dynamic** import, because a static one hoists above the
-    env assignment and would open `/data`. Insert three chats each with a `pending` user message, run the
-    recovery writes with an empty live set, then assert exactly one row moved to `error`… i.e. assert the
-    real invariant: **rows the plan called `queued` still read `pending` afterwards**. This is the test
-    that fails on today's code (today all three become `error`).
+    env assignment and would open `/data`. Insert one `dispatched` user row, one `pending` user row, and
+    one assistant row; apply the recovery plan with an empty live set. Assert that only the dispatched
+    user row moved to `error`, the queued user row remains `pending`, and the assistant row is untouched.
+    This fails against today's blanket boot update because it errors the queued user row too.
 
 **Files:** `runner/src/chat-recovery.ts` (new), `runner/src/chat-recovery.test.ts` (new),
 `runner/src/queue.ts`, `runner/src/index.ts`, `runner/src/db.ts`, `runner/src/repos.ts`,
@@ -378,19 +378,19 @@ by a test that fails on today's code.
 cd /tmp/fx/runner && npm install
 
 # --- Red state FIRST (logic lane, G3). On the pre-fix tree: ---
-git stash && npm test ; echo "exit=$?"     # → non-zero: the queued-survives test fails. Paste it.
-git stash pop
+# After adding the test but before changing production code:
+npm test ; echo "exit=$?"                  # → non-zero: the queued-survives test fails. Paste it.
 
 # --- Tier A: no Docker, no credential ---
 npm test                                                        # → all pass, exit 0
 npx tsc --noEmit -p tsconfig.json                               # → clean
 grep -c "status = 'pending'" src/index.ts                       # → 0  (boot blanket UPDATE is gone)
 grep -c "IN ('pending','dispatched')" src/index.ts              # → 1  (busy check widened)
-grep -c 'recoverChats\|enqueueChat' src/index.ts                # → 2  (both boot calls present)
+grep -n 'if (recoverChats()) enqueueChat()' src/index.ts         # → 1  (dispatch is recovery-gated)
 grep -c "'dispatched'" src/db.ts src/queue.ts                   # → >=1 each
 grep -c '^import' src/chat-recovery.ts                          # → 0  (purity: the testability guarantee)
 grep -c 'message_count' src/chat-recovery.ts src/queue.ts       # → 0 in chat-recovery.ts; unchanged count in queue.ts (D4)
-grep -n 'TODO(handoff)' src/queue.ts                            # → 1, on the S2 kill branch (§5)
+grep -n 'TODO(handoff)' src/queue.ts                            # → 2: S2 kill branch + resume hazard (§5)
 node -e "require('fs').readFileSync('package.json','utf8').includes('\"test\"')||process.exit(1)"   # → package.json has a test script
 
 # The busy-check regression that would otherwise be invisible (fact 3):
@@ -451,15 +451,15 @@ its reply is delivered, and the concurrency slot is accounted for. Exactly what 
 cd /tmp/fx/runner
 
 # --- Red state FIRST: the decision table on the pre-S3 tree ---
-git stash && npm test ; echo "exit=$?"      # → non-zero: decideAdoptedOutcome tests fail (fn absent)
-git stash pop
+# After adding the decision-table test but before its implementation:
+npm test ; echo "exit=$?"                   # → non-zero: decideAdoptedOutcome is absent. Paste it.
 
 # --- Tier A: no Docker ---
 npm test && npx tsc --noEmit -p tsconfig.json           # → green
 grep -c 'docker.*kill.*factory-chat' src/queue.ts       # → 0  (the kill branch is gone)
 grep -c "'wait'" src/queue.ts                           # → 1  (docker wait, adopted turns)
 grep -c 'finishChatTurn' src/queue.ts                   # → 3  (definition + close handler + adoption)
-grep -c 'TODO(handoff)' src/queue.ts                    # → 0  (S2's ledger entry is discharged)
+grep -c 'TODO(handoff)' src/queue.ts                    # → 1  (kill item discharged; resume item remains)
 grep -c 'chatActive.delete' src/queue.ts                # → 3  (pumpChat catch, close handler, adoption)
 git diff main -- src/queue.ts | grep -cE '^\+.*message_count'   # → 0 new message_count writers (D4)
 
@@ -494,8 +494,9 @@ sleep 90 && curl -sf $FACTORY_URL/chat/$CID -H "Authorization: Bearer $FACTORY_S
 
 Not touched, deliberately: `agent/chat.sh` (the container contract is unchanged — same env, same
 `/out/reply.md`), `docker-compose.yml`, `Caddyfile`, `cli/factory` (it has no chat subcommand),
-`minion-base/src/lib/server/factory.ts`, and every `.md` outside a one-line note. If the implementer finds
-themselves editing `agent/chat.sh`, the design has drifted — stop and re-read §2 D1.
+`minion-base/src/lib/server/factory.ts`, and documentation except the ledger proposals required by §5.
+If the implementer finds themselves editing `agent/chat.sh`, the design has drifted — stop and re-read
+§2 D1.
 
 ### 3b. Data-lane note: migration and reversibility
 
@@ -572,7 +573,9 @@ Two items, both to be written down **as part of the slice that creates them**, n
    in `minion-meta`, filed before S2 merges, describing the reproduction (kill a chat container mid-turn,
    then post again to the same chat) and the two candidate fixes (bump `message_count` on any turn that
    reached the harness, or make `chat.sh` fall back from `--session-id` to `--resume` on an
-   already-exists error). Do **not** fix it inside this spec.
+   already-exists error). Also add an exact-site `TODO(handoff)` beside the existing chat failure path
+   that leaves `message_count` unchanged, pointing to that proposal; S3 must preserve it unless it fixes
+   the hazard. Do **not** fix the hazard inside this spec.
 
 ## 6. End-to-end verification
 
@@ -634,4 +637,5 @@ curl -sf -XPOST $FACTORY_URL/pipeline/reconcile -H "Authorization: Bearer $FACTO
 `dispatched` and `pending` coexisting in production; the step-1 line showing the backlogged turn producing
 a real reply; `bun run lint:design` debt numbers before/after for S1; **the box checked for
 `/data/repos.json`** and the answer stated either way (§4); and both §5 ledger items discharged — the
-`TODO(handoff)` deleted by S3, or the two named `minion-meta` proposals existing before S2 merges.
+kill-branch `TODO(handoff)` deleted by S3 (or its named proposal exists if S3 is cut), and the session-resume
+proposal plus its exact-site `TODO(handoff)` both exist before S2 merges.
