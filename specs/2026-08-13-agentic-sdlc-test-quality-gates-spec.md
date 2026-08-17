@@ -8,6 +8,7 @@ created: 2026-08-13
 updated: 2026-08-13
 repos: [minion, minion_hub, minion-meta, minion-factory]
 verdict: pending
+tags: [infra, test]
 type: infra
 ---
 
