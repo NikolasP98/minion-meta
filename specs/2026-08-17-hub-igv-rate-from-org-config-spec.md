@@ -2,7 +2,7 @@
 id: 2026-08-17-hub-igv-rate-from-org-config-spec
 title: "SUNAT emission — thread the org's configured IGV rate (no module-level 0.18)"
 stage: spec
-status: draft
+status: approved
 pass: 2
 created: 2026-08-17
 updated: 2026-08-17
