@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import {
   sealSecret,
   openSecret,
@@ -7,6 +7,10 @@ import {
   encryptToken,
   decryptToken,
 } from "./crypto.js";
+
+beforeAll(() => {
+  process.env.ENCRYPTION_KEY = "test-key-do-not-use-in-prod";
+});
 
 describe("canonical crypto", () => {
   it("seal/open roundtrips", () => {
