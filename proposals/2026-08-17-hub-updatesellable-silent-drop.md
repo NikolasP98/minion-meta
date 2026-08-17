@@ -1,7 +1,7 @@
 ---
 id: 2026-08-17-hub-updatesellable-silent-drop
 title: updateSellable silently drops kind/trackStock/uom edits (200 OK no-op)
-status: draft
+status: approved
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion_hub]

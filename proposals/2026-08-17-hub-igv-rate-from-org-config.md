@@ -1,7 +1,7 @@
 ---
 id: 2026-08-17-hub-igv-rate-from-org-config
 title: SUNAT emission hardcodes 18% IGV — read the org's configured tax rate
-status: draft
+status: approved
 created: 2026-08-17
 updated: 2026-08-17
 repos: [minion_hub]
