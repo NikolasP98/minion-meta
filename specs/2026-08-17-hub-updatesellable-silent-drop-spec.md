@@ -2,7 +2,7 @@
 id: 2026-08-17-hub-updatesellable-silent-drop-spec
 title: "updateSellable — apply or refuse kind/trackStock/uom edits (no silent 200 no-op)"
 stage: spec
-status: draft
+status: approved
 pass: 2
 created: 2026-08-17
 updated: 2026-08-17
