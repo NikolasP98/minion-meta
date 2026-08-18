@@ -1,11 +1,12 @@
 ---
 id: 2026-08-17-meta-spec-index-project-possibly-shipped
 title: spec-index.mjs drops possibly_shipped/evidence/link_review — G0 amber chip never renders
-status: review
+status: merged
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 repos: [minion-meta, minion-base]
 duplicate_candidate: 2026-08-17-base-kanban-possibly-shipped-surface
+merged_into: 2026-08-17-base-kanban-possibly-shipped-surface
 ---
 
 # spec-index.mjs drops possibly_shipped/evidence/link_review
@@ -52,3 +53,15 @@ one-click confirm/reject write-back mechanics via the existing PR/commit path) i
 more detailed than this one's. Flagged rather than merged because picking a canonical
 here means resolving that factual conflict, not just concatenating text — left for a
 human to reconcile.
+
+## Resolution 2026-08-18
+
+The overlap resolved itself: `2026-08-17-base-kanban-possibly-shipped-surface` spawned
+`2026-08-18-base-kanban-possibly-shipped-surface-spec.md`, whose Slice 1 is this exact
+DoD (`scripts/spec-index.mjs` projects `possibly_shipped`/`evidence`/`link_review`,
+`specs/TEMPLATE.md` documents them). Shipped as part of
+`2026-08-17-sdlc-phase-gates-scoring-spec.md` §3 G0 Slice 1 (this run) since the field
+projection is a genuine minion-meta-side prerequisite for G0's writes to reach the
+board at all, and the sibling spec's own Slice 1 instructions call for closing this
+proposal that way. `merged_into` points at the surviving proposal per its own
+reasoning above — it already owns the spawned spec.

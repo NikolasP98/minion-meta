@@ -34,6 +34,18 @@ Flat scalars and string arrays only — no nesting (the parser is deliberately t
 | `verdict` | no | latest review roll-up: `pending` `approved` `changes_requested` `rejected`. Full review text lives in a sidecar `<id>.review.md` or the PR thread, never inline |
 | `pr` | no | PR number when the spec is gated via GitHub — a pointer; PR state stays the canon |
 | `type` | no | `feature` `fix` `infra` `decision` `research` (default `feature`) |
+| `possibly_shipped` | no | evidence URL — written by minion-factory's G0 backward-staleness reconciler (`2026-08-17-sdlc-phase-gates-scoring-spec.md` §3 G0) on a medium-confidence shipment match; the board renders an amber "verify" chip until a human confirms or rejects |
+| `evidence` | no | evidence URL — written by G0 on a high-confidence shipment flip (alongside `stage: done, status: shipped`), or copied from `possibly_shipped` once a human confirms it |
+| `link_review` | no | free-text note — written by G0 when a `supersedes`/`revises` link looks ambiguous and needs a human read; projected to the board same as `possibly_shipped` |
+| `reconcile_ignore` | no | `true` once a human rejects a G0 `possibly_shipped` flag — read directly from this file by minion-factory's `agent/reconcile.sh` so the sweep doesn't re-flag it; never projected into `specs/index.json` (no board consumer) |
+
+`scripts/spec-index.mjs` also runs non-blocking link-hygiene checks on `supersedes` (a
+dangling reference — pointing at a spec id that doesn't exist — is a hard error; a
+`supersedes` target not marked `status: superseded`, or a `superseded` spec nothing
+links back to, is a warning printed on regen, not a commit blocker). Document any new
+ad-hoc frontmatter field here when you add one — this table exists because
+`possibly_shipped`/`evidence`/`link_review` were written by G0 for weeks before anyone
+projected or documented them (`2026-08-17-meta-spec-index-project-possibly-shipped.md`).
 
 ## Body convention
 
