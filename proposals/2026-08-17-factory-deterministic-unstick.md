@@ -1,9 +1,9 @@
 ---
 id: 2026-08-17-factory-deterministic-unstick
 title: Deterministic unstick handlers for known failure classes
-status: draft
+status: approved
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 repos: [minion-factory]
 tags: [logic, infra]
 source: audit-2026-08-17
