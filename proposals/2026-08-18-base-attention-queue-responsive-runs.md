@@ -1,9 +1,10 @@
 ---
 id: 2026-08-18-base-attention-queue-responsive-runs
 title: Base UI-004/011 — mobile attention queue, focused stages, responsive runs
-status: approved
+status: in-spec
 created: 2026-08-18
 updated: 2026-08-18
+spawned_spec: 2026-08-18-base-attention-queue-responsive-runs-spec
 repos: [minion-base]
 tags: [ui, logic]
 source: ux-plan-2026-08-18
