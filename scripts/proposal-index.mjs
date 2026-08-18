@@ -11,6 +11,7 @@ export const P_STATUSES = [
 	'in-spec',    // spec pipeline has picked it up
 	'done',       // shipped end to end
 	'rejected',
+	'retired',
 	'merged',     // merged into another proposal (see merged_into)
 	'closed'
 ];
@@ -28,6 +29,9 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		if (!fm[key]) errors.push(`${name}: missing required field "${key}"`);
 	}
 	if (fm.status && !P_STATUSES.includes(fm.status)) errors.push(`${name}: invalid status "${fm.status}"`);
+	// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).
+	if (fm.status === 'retired' && !(fm.retired_reason && fm.retired_reason.length >= 20))
+		errors.push(`${name}: status "retired" requires retired_reason (>=20 chars)`);
 	proposals.push({
 		id: fm.id,
 		title: fm.title,
