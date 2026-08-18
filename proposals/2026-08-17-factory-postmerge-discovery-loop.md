@@ -1,9 +1,9 @@
 ---
 id: 2026-08-17-factory-postmerge-discovery-loop
 title: Post-merge discovery loop — merged-PR intake, scan, verified proposals
-status: draft
+status: approved
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 repos: [minion-factory]
 tags: [logic, infra]
 source: audit-2026-08-17
