@@ -1,9 +1,9 @@
 ---
 id: 2026-08-17-factory-orchestration-tests
 title: Factory first-party test suite — queue, lifecycle, automerge, classification
-status: draft
+status: approved
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 repos: [minion-factory]
 tags: [test]
 source: audit-2026-08-17
