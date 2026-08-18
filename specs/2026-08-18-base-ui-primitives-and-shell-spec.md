@@ -1,8 +1,8 @@
 ---
 id: 2026-08-18-base-ui-primitives-and-shell-spec
 title: Base UI-002/003 — interaction primitives + mobile shell
-stage: spec
-status: approved
+stage: deploy
+status: flag-ready
 pass: 2
 created: 2026-08-18
 updated: 2026-08-18
@@ -12,6 +12,12 @@ repos: [minion-base]
 tags: [ui, logic, test, docs]
 relationship: extends
 related: [2026-08-18-minion-base-mobile-hitl-ux-plan, 2026-08-18-base-workdetail-summary-first]
+merge_sha: 0513acb1440daeb8cc5cb5be6e28f9c1a6714203
+merged_pr: https://github.com/NikolasP98/minion-base/pull/25
+merged_at: 2026-08-18T15:58:40-05:00
+release_flag: PUBLIC_WORK_DETAIL_V2
+release_state: off
+evidence: https://github.com/NikolasP98/minion-base/commit/0513acb1440daeb8cc5cb5be6e28f9c1a6714203
 ---
 
 # Base UI-002/003 — interaction primitives + mobile shell
