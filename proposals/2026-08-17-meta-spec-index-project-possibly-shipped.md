@@ -1,9 +1,10 @@
 ---
 id: 2026-08-17-meta-spec-index-project-possibly-shipped
 title: spec-index.mjs drops possibly_shipped/evidence/link_review — G0 amber chip never renders
-status: approved
+status: in-spec
 created: 2026-08-17
 updated: 2026-08-18
+spawned_spec: 2026-08-18-meta-spec-index-project-possibly-shipped-spec
 repos: [minion-meta]
 duplicate_candidate: 2026-08-17-base-kanban-possibly-shipped-surface
 tags: [logic]
