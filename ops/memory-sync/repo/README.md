@@ -38,7 +38,8 @@ scripts/memory-sync.sh        ← commit-all → pull --rebase → push
 - Never write secrets, raw credentials, or unrelated transcript bulk here.
   `.gitignore` blocks `*.env` and key-shaped files as a backstop — it is not
   a substitute for not writing secrets in the first place.
-- Sync via `scripts/memory-sync.sh` (installed at `~/.local/bin/memory-sync`),
+- Sync via `scripts/memory-sync.sh` (installed at `~/.local/bin/memory-sync`,
+  with the clone at `~/.minion-agent-memory` by default),
   not ad hoc `git push`. On a rebase conflict in a `.md` file the repo's
   `.gitattributes` union-merges both sides (append-biased): memory loss is
   worse than duplication, and de-duplication is the index's job, not the

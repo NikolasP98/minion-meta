@@ -23,8 +23,9 @@ created 2026-08-17, default branch `main`) and its root already contains
 `MINION/`, `README.md`, `.gitattributes`, and `scripts/memory-sync.sh`.
 Operator memory (`/memory/MINION/sdlc-board-triage-and-phase-gates.md`,
 "CLOUD MEMORY LIVE" / "THREE-TIER AGENT MEMORY LIVE") independently confirms
-Slice 1 — and slices 2–5 (hooks, factory read path, nightly bulk sync) —
-are already live on the primary machine. The stale bootstrap doc has been
+Slices 1–4 are live on the primary machine, with Netcup as the interim bulk
+target. Slice 5 remains blocked on the user's creation of a dedicated B2 bucket
+and scoped app key, exactly as recorded in `FACTORY_SPEC.md` §§1 and 4. The stale bootstrap doc has been
 removed from this branch; it described creating a repo that exists and,
 followed as written, would have failed at step 1 or duplicated the live
 `MINION/` tree at step 2.
@@ -75,7 +76,8 @@ hardening proposal, not a bug report against something broken today.
 
 ## Out of scope
 
-Slices 2–5 of the spec are already live per operator memory — no further
-proposal needed for them here. Any *changes* to the live hook wiring,
-factory prompt injection, or the B2/rclone bulk job belong in their own
-proposal against the current state of those systems, not this one.
+Slices 2–4 of the spec are already live per operator memory. Slice 5 remains
+blocked on the user's dedicated B2 bucket and scoped app key and is not closed
+by this proposal. Any *changes* to the live hook wiring, factory prompt
+injection, or the interim rclone bulk job belong in their own proposal against
+the current state of those systems, not this one.

@@ -20,7 +20,9 @@
 #   memory-sync         # same as `push` (the default full sync).
 #
 # Env:
-#   MEMORY_SYNC_DIR           path to the minion-agent-memory clone (default ~/minion-agent-memory)
+#   MEMORY_SYNC_DIR           path to the minion-agent-memory clone (preferred override)
+#   MEMORY_REPO_DIR           legacy path override used by the live installation
+#                             (default ~/.minion-agent-memory)
 #   MEMORY_SYNC_ROOTS         comma-separated list of directories (relative to
 #                             MEMORY_SYNC_DIR) that push is allowed to stage
 #                             (default "MINION"). Nothing outside these
@@ -48,12 +50,28 @@
 set -euo pipefail
 
 MODE="${1:-push}"
-REPO_DIR="${MEMORY_SYNC_DIR:-$HOME/minion-agent-memory}"
+REPO_DIR="${MEMORY_SYNC_DIR:-${MEMORY_REPO_DIR:-$HOME/.minion-agent-memory}}"
 IFS=',' read -ra MEMORY_ROOTS <<<"${MEMORY_SYNC_ROOTS:-MINION}"
 PULL_TIMEOUT="${MEMORY_SYNC_PULL_TIMEOUT:-2}"
 PUSH_TIMEOUT="${MEMORY_SYNC_PUSH_TIMEOUT:-5}"
 
 log() { echo "memory-sync: $*" >&2; }
+
+is_allowed_path() {
+	local path="$1"
+	local root
+	for root in "${MEMORY_ROOTS[@]}"; do
+		[[ "$path" == "$root" || "$path" == "$root/"* ]] && return 0
+	done
+	return 1
+}
+
+for root in "${MEMORY_ROOTS[@]}"; do
+	if [[ -z "$root" || "$root" == /* || "$root" == "." || "$root" == ".." || "$root" == ../* || "$root" == */../* || "$root" == */.. ]]; then
+		log "invalid MEMORY_SYNC_ROOTS entry '$root' (expected a relative memory directory)"
+		exit 2
+	fi
+done
 
 if [[ ! -d "$REPO_DIR/.git" ]]; then
 	log "no clone at $REPO_DIR — nothing to sync (no-op)"
@@ -86,6 +104,16 @@ push)
 	for root in "${MEMORY_ROOTS[@]}"; do
 		[[ -d "$root" ]] && git add -- "$root"
 	done
+
+	# `git commit` consumes the whole index, including entries staged before
+	# this hook ran. Enforce the boundary on the resulting index, not merely
+	# on this script's `git add`, so a pre-staged root file cannot hitchhike.
+	while IFS= read -r staged_path; do
+		if ! is_allowed_path "$staged_path"; then
+			log "refusing to commit staged path outside MEMORY_SYNC_ROOTS: $staged_path"
+			exit 1
+		fi
+	done < <(git diff --cached --name-only --diff-filter=ACDMRTUXB)
 
 	if ! git diff --cached --quiet; then
 		git commit --quiet -m "memory-sync: $(hostname)-$(date -u +%Y%m%dT%H%M%SZ)"

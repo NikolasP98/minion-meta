@@ -36,6 +36,24 @@ git -C "$WORK/clone" config user.email test@example.com
 git -C "$WORK/clone" config user.name test
 git -C "$WORK/clone" checkout --quiet main
 
+# --- pre-staged out-of-root entries must fail closed before commit/push ---
+echo "API_SECRET=should-not-sync" >"$WORK/clone/operator-secrets.txt"
+git -C "$WORK/clone" add operator-secrets.txt
+echo "- first edit" >>"$WORK/clone/MINION/MEMORY.md"
+
+if MEMORY_SYNC_DIR="$WORK/clone" bash "$SYNC_SCRIPT" push >"$WORK/prestaged.log" 2>&1; then
+	fail "sync accepted a pre-staged path outside the memory roots"
+fi
+git --git-dir="$WORK/origin.git" show main:MINION/MEMORY.md | grep -q 'first edit' \
+	&& fail "memory edit reached remote despite pre-staged boundary violation"
+git --git-dir="$WORK/origin.git" cat-file -e main:operator-secrets.txt 2>/dev/null \
+	&& fail "pre-staged out-of-root file reached remote"
+pass "pre-staged out-of-root file fails closed and remote remains unchanged"
+
+git -C "$WORK/clone" reset --quiet
+rm "$WORK/clone/operator-secrets.txt"
+git -C "$WORK/clone" checkout --quiet -- MINION/MEMORY.md
+
 # --- plant: a legitimate memory edit, plus everything that must NOT sync ---
 echo "- new topic" >>"$WORK/clone/MINION/MEMORY.md"
 echo "operator scratch notes" >"$WORK/clone/operator-notes.txt" # repo-root file, outside memory roots
@@ -45,7 +63,9 @@ echo "PROD_TOKEN=x" >"$WORK/clone/prod.env"     # credential-shaped, *.env
 echo "SECRET=y" >"$WORK/clone/secrets.env"      # credential-shaped, *.env
 echo "not a real key" >"$WORK/clone/MINION/id_rsa" # credential-shaped, inside an allowed root
 
-MEMORY_SYNC_DIR="$WORK/clone" MEMORY_SYNC_PUSH_TIMEOUT=5 bash "$SYNC_SCRIPT" push >"$WORK/sync.log" 2>&1 \
+# Exercise the live installation's no-env contract: ~/.minion-agent-memory.
+mv "$WORK/clone" "$WORK/.minion-agent-memory"
+HOME="$WORK" MEMORY_SYNC_PUSH_TIMEOUT=5 bash "$SYNC_SCRIPT" push >"$WORK/sync.log" 2>&1 \
 	|| fail "sync script exited non-zero: $(cat "$WORK/sync.log")"
 
 # --- verify: inspect what actually landed on the remote, not the local tree ---
@@ -61,6 +81,7 @@ echo "$FILES" | grep -q '^secrets\.env$' && fail "credential-shaped *.env at rep
 echo "$FILES" | grep -q '^MINION/id_rsa$' && fail "credential-shaped file inside an allowed root was synced"
 
 pass "MINION/MEMORY.md edit synced"
+pass "no-env live layout (~/.minion-agent-memory) remains compatible"
 pass "operator-notes.txt (repo root, outside memory roots) never synced"
 pass ".claude-mem/ (bulk store tier) never synced"
 pass "prod.env / secrets.env (credential-shaped *.env) never synced"
