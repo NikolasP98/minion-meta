@@ -22,6 +22,9 @@ for (const name of readdirSync('specs')
 	if (fm.stage && !STAGES.includes(fm.stage)) errors.push(`${name}: invalid stage "${fm.stage}"`);
 	if (fm.status && !STATUSES.includes(fm.status))
 		errors.push(`${name}: invalid status "${fm.status}"`);
+	// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).
+	if (fm.status === 'retired' && !(fm.retired_reason && fm.retired_reason.length >= 20))
+		errors.push(`${name}: status "retired" requires retired_reason (>=20 chars)`);
 	specs.push({
 		id: fm.id,
 		title: fm.title,
