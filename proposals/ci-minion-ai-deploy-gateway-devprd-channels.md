@@ -1,11 +1,12 @@
 ---
 id: ci-minion-ai-deploy-gateway-devprd-channels
 title: CI red — Deploy Gateway (DEV/PRD channels) on minion-ai main
-status: approved
+status: in-spec
 created: 2026-08-18
 updated: 2026-08-18
 repos: [minion-ai]
 tags: [infra]
+spawned_spec: 2026-08-18-ci-minion-ai-deploy-gateway-devprd-channels-spec
 ---
 
 # CI red — Deploy Gateway (DEV/PRD channels) on NikolasP98/minion-ai@main
