@@ -1,6 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { projectSpec, checkLinkHygiene } from './spec-index.mjs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { serializeFrontmatter } from './spec-frontmatter.mjs';
+import { projectSpec, checkLinkHygiene, reconcileLinkHygiene, applyLinkHygiene, runIndex } from './spec-index.mjs';
 
 const baseFm = {
 	id: 'x',
@@ -92,4 +96,194 @@ test('checkLinkHygiene treats pass 1 (default) as exempt from the lineage check'
 	const specs = [{ id: 'first-pass', status: 'draft' }];
 	const { warnings } = checkLinkHygiene(specs);
 	assert.equal(warnings.length, 0);
+});
+
+// --- reconcileLinkHygiene: auto-fix vs. flag ---
+
+test('reconcileLinkHygiene auto-fixes an unambiguous supersedes-target status', () => {
+	const specs = [
+		{ id: 'new-spec', status: 'approved', supersedes: 'old-spec' },
+		{ id: 'old-spec', status: 'approved' }
+	];
+	const { fixes, flags } = reconcileLinkHygiene(specs);
+	assert.equal(fixes.length, 1);
+	assert.deepEqual(fixes[0], {
+		id: 'old-spec',
+		field: 'status',
+		value: 'superseded',
+		reason: 'auto-set by G0 link hygiene: "new-spec" declares supersedes: old-spec'
+	});
+	assert.equal(flags.length, 0);
+});
+
+test('reconcileLinkHygiene flags (does not fix) an orphaned superseded spec', () => {
+	const specs = [{ id: 'lone-spec', status: 'superseded' }];
+	const { fixes, flags } = reconcileLinkHygiene(specs);
+	assert.equal(fixes.length, 0);
+	assert.equal(flags.length, 1);
+	assert.equal(flags[0].id, 'lone-spec');
+	assert.match(flags[0].reason, /no other spec's "supersedes" links back/);
+});
+
+test('reconcileLinkHygiene flags (does not fix) a pass>1 spec with no lineage link', () => {
+	const specs = [{ id: 'orphan-pass2', status: 'approved', pass: 2 }];
+	const { fixes, flags } = reconcileLinkHygiene(specs);
+	assert.equal(fixes.length, 0);
+	assert.equal(flags.length, 1);
+	assert.equal(flags[0].id, 'orphan-pass2');
+	assert.match(flags[0].reason, /pass 2/);
+});
+
+test('reconcileLinkHygiene is a no-op for a clean, bidirectionally-linked corpus', () => {
+	const specs = [
+		{ id: 'new-spec', status: 'approved', supersedes: 'old-spec' },
+		{ id: 'old-spec', status: 'superseded' }
+	];
+	const { fixes, flags } = reconcileLinkHygiene(specs);
+	assert.equal(fixes.length, 0);
+	assert.equal(flags.length, 0);
+});
+
+// --- applyLinkHygiene: in-memory frontmatter mutation ---
+
+test('applyLinkHygiene mutates the fixed field and bumps updated', () => {
+	const fmById = new Map([
+		['old-spec', { id: 'old-spec', status: 'approved', updated: '2026-08-01' }]
+	]);
+	const reconcile = {
+		fixes: [{ id: 'old-spec', field: 'status', value: 'superseded', reason: 'x' }],
+		flags: []
+	};
+	const changed = applyLinkHygiene(fmById, reconcile, '2026-08-18');
+	assert.deepEqual([...changed], ['old-spec']);
+	assert.equal(fmById.get('old-spec').status, 'superseded');
+	assert.equal(fmById.get('old-spec').updated, '2026-08-18');
+});
+
+test('applyLinkHygiene writes link_review for a flagged spec and bumps updated', () => {
+	const fmById = new Map([['lone-spec', { id: 'lone-spec', status: 'superseded', updated: '2026-08-01' }]]);
+	const reconcile = { fixes: [], flags: [{ id: 'lone-spec', reason: 'needs a human read' }] };
+	const changed = applyLinkHygiene(fmById, reconcile, '2026-08-18');
+	assert.deepEqual([...changed], ['lone-spec']);
+	assert.equal(fmById.get('lone-spec').link_review, 'needs a human read');
+	assert.equal(fmById.get('lone-spec').updated, '2026-08-18');
+});
+
+test('applyLinkHygiene never overwrites an existing link_review', () => {
+	const fmById = new Map([
+		['lone-spec', { id: 'lone-spec', status: 'superseded', link_review: 'already reviewed by a human', updated: '2026-08-01' }]
+	]);
+	const reconcile = { fixes: [], flags: [{ id: 'lone-spec', reason: 'new G0 text' }] };
+	const changed = applyLinkHygiene(fmById, reconcile, '2026-08-18');
+	assert.equal(changed.size, 0);
+	assert.equal(fmById.get('lone-spec').link_review, 'already reviewed by a human');
+	assert.equal(fmById.get('lone-spec').updated, '2026-08-01');
+});
+
+test('applyLinkHygiene is idempotent — a fix already applied produces no further change', () => {
+	const fmById = new Map([['old-spec', { id: 'old-spec', status: 'superseded', updated: '2026-08-01' }]]);
+	const reconcile = { fixes: [{ id: 'old-spec', field: 'status', value: 'superseded', reason: 'x' }], flags: [] };
+	const changed = applyLinkHygiene(fmById, reconcile, '2026-08-18');
+	assert.equal(changed.size, 0);
+	assert.equal(fmById.get('old-spec').updated, '2026-08-01');
+});
+
+// --- runIndex: end-to-end frontmatter + index.json mutation on disk ---
+
+function withFixtureSpecs(files, run) {
+	const dir = mkdtempSync(join(tmpdir(), 'spec-index-test-'));
+	for (const [name, fm] of Object.entries(files)) {
+		writeFileSync(join(dir, name), serializeFrontmatter(fm) + `\n# ${fm.title ?? fm.id}\n`);
+	}
+	try {
+		run(dir);
+	} finally {
+		rmSync(dir, { recursive: true, force: true });
+	}
+}
+
+function readFm(dir, name) {
+	const src = readFileSync(join(dir, name), 'utf8');
+	const end = src.indexOf('\n---\n', 4);
+	const fm = {};
+	for (const line of src.slice(4, end).split('\n')) {
+		const m = line.match(/^([a-zA-Z][\w-]*):\s*(.*)$/);
+		if (m) fm[m[1]] = m[2].replace(/^"|"$/g, '');
+	}
+	return fm;
+}
+
+test('runIndex persists an unambiguous supersedes-target auto-fix to disk and to index.json', () => {
+	withFixtureSpecs(
+		{
+			'2026-08-18-new-spec.md': {
+				id: '2026-08-18-new-spec',
+				title: 'New',
+				stage: 'spec',
+				status: 'approved',
+				pass: 1,
+				created: '2026-08-18',
+				supersedes: '2026-08-01-old-spec'
+			},
+			'2026-08-01-old-spec.md': {
+				id: '2026-08-01-old-spec',
+				title: 'Old',
+				stage: 'spec',
+				status: 'approved',
+				pass: 1,
+				created: '2026-08-01'
+			}
+		},
+		(dir) => {
+			runIndex(dir);
+			assert.equal(readFm(dir, '2026-08-01-old-spec.md').status, 'superseded');
+			const index = JSON.parse(readFileSync(join(dir, 'index.json'), 'utf8'));
+			const old = index.specs.find((s) => s.id === '2026-08-01-old-spec');
+			assert.equal(old.status, 'superseded');
+		}
+	);
+});
+
+test('runIndex persists link_review for an ambiguous pass>1 spec to disk and to index.json', () => {
+	withFixtureSpecs(
+		{
+			'2026-08-18-orphan-pass2.md': {
+				id: '2026-08-18-orphan-pass2',
+				title: 'Orphan pass 2',
+				stage: 'spec',
+				status: 'approved',
+				pass: 2,
+				created: '2026-08-18'
+			}
+		},
+		(dir) => {
+			runIndex(dir);
+			const fm = readFm(dir, '2026-08-18-orphan-pass2.md');
+			assert.match(fm.link_review, /pass 2/);
+			const index = JSON.parse(readFileSync(join(dir, 'index.json'), 'utf8'));
+			const entry = index.specs.find((s) => s.id === '2026-08-18-orphan-pass2');
+			assert.match(entry.link_review, /pass 2/);
+		}
+	);
+});
+
+test('runIndex leaves an already-clean spec file untouched (no rewrite)', () => {
+	withFixtureSpecs(
+		{
+			'2026-08-18-clean.md': {
+				id: '2026-08-18-clean',
+				title: 'Clean',
+				stage: 'spec',
+				status: 'draft',
+				pass: 1,
+				created: '2026-08-18'
+			}
+		},
+		(dir) => {
+			const before = readFileSync(join(dir, '2026-08-18-clean.md'), 'utf8');
+			runIndex(dir);
+			const after = readFileSync(join(dir, '2026-08-18-clean.md'), 'utf8');
+			assert.equal(before, after);
+		}
+	);
 });
