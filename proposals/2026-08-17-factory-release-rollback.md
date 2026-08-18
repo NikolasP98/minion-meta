@@ -1,9 +1,9 @@
 ---
 id: 2026-08-17-factory-release-rollback
 title: Factory release safety — pre-deploy gate, backups, rollback for self-update
-status: draft
+status: approved
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 repos: [minion-factory]
 tags: [infra]
 source: audit-2026-08-17
