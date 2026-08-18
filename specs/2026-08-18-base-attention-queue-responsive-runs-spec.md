@@ -2,18 +2,32 @@
 id: 2026-08-18-base-attention-queue-responsive-runs-spec
 title: Base UI-004/011 — mobile attention queue, focused stages, responsive runs
 stage: spec
-status: approved
-pass: 2
+status: review
+pass: 3
 created: 2026-08-18
 updated: 2026-08-18
 proposal: 2026-08-18-base-attention-queue-responsive-runs
-verdict: approved
+verdict: revision-required
 repos: [minion-base]
 relationship: depends-on
 related: [2026-08-18-minion-base-mobile-hitl-ux-plan, 2026-08-18-base-ui-primitives-and-shell-spec, 2026-08-18-base-workdetail-summary-first-spec]
 ---
 
 # Base UI-004/011 — mobile attention queue, focused stages, responsive runs
+
+## Revision required after Slice 1 recon
+
+Implementation is stopped under the fail-loud classifier invariant below. The current board loader
+exposes lifecycle states and timestamps, but it does not expose authoritative `decision_required`,
+`blocked`, or `risk` facts for the actual proposal, spec, issue, PR, run, and deployment card set.
+Those missing facts precede stale, running, and completed in the required classifier, so a lossless
+six-group projection cannot be built from the current contract.
+
+The rejected implementation mapped the missing facts to `null` and reused whole-board refresh age
+as item staleness. That made every real record `unclassified` and did not implement this outcome.
+Slice 1 must not be scheduled again until a revision identifies authoritative source fields for
+every predicate and the item-level stale boundary, or changes the product grouping contract. No
+heuristic mapping is approved by this spec.
 
 ## 0. Product
 
