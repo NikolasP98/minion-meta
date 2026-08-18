@@ -2,12 +2,12 @@
 id: 2026-08-18-factory-deterministic-unstick-spec
 title: "Known unstick classes bypass the facilitator LLM; it stays advisory-only on a scoped credential"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-18
 updated: 2026-08-18
 proposal: 2026-08-17-factory-deterministic-unstick
-verdict: pending
+verdict: approved
 repos: [minion-factory]
 tags: [logic, infra]
 type: infra
@@ -18,8 +18,10 @@ type: infra
 **Owner surface:** `minion-factory` (`NikolasP98/minion-factory`, private, default branch `main`) —
 `scripts/unstick-cron.sh` (rewritten: host-side deterministic classifier + direct remedies + conditional
 facilitator spawn), `agent/unstick.sh` (trimmed to an advisory-only facilitator with no detection loop
-and no cancel/requeue capability), `runner/src/index.ts` (new scoped read-only credential in the auth
+and no cancel/requeue capability), `runner/src/index.ts` (new scoped run-read/monitor-report credential in the auth
 middleware), `deploy.sh` + `setup.sh` (secret generation/heredoc), `README.md` (short operational note).
+New `test/fixtures/unstick-runs.json`, `test/fixtures/unstick-queue-wedged.json`, and their bounded log
+fixtures provide the shell dry-run inputs.
 No other repo has a file in this spec.
 
 **Live baseline reviewed:** `minion-factory/main` commit `b630f8f2` (2026-08-18T03:08:27Z). Re-read all
@@ -31,7 +33,8 @@ excerpts quoted below if concurrent factory specs have already landed changes to
 - [`2026-08-12-minion-factory-agent-pipeline-spec`](2026-08-12-minion-factory-agent-pipeline-spec.md)
   established the runner/agent-container split this spec works inside.
 - [`2026-08-18-factory-release-rollback-spec`](2026-08-18-factory-release-rollback-spec.md) — same repo,
-  same box, disjoint files (`scripts/self-update.sh` vs. this spec's `scripts/unstick-cron.sh`). Its
+  same box, disjoint functional files (`scripts/self-update.sh` vs. this spec's
+  `scripts/unstick-cron.sh`), with a documentation collision in `README.md`. Its
   house rules apply verbatim here: **no new `.env` variable may be hand-added on the box** — anything
   the runner or a cron script reads from `/opt/factory/.env` must live in `deploy.sh`'s heredoc, because
   `deploy.sh` rewrites the file wholesale. It also established the **Tier A (no Docker/box needed) /
@@ -39,15 +42,22 @@ excerpts quoted below if concurrent factory specs have already landed changes to
   `command -v <bin>` preflight for a host dependency that may not be installed (there: `sqlite3`; here:
   `jq`).
 - [`2026-08-18-factory-orchestration-tests-spec`](2026-08-18-factory-orchestration-tests-spec.md) —
-  disjoint files (`runner/src/*.test.ts` vs. this spec's shell scripts and `runner/src/index.ts`'s auth
-  middleware). Established the "Slice 0 recon/collision gate" convention reused below given how many
-  factory specs are landing on `main` concurrently.
+  overlaps `runner/src/index.ts`, `agent/unstick.sh`, and `README.md`: its Slice 4 extracts the manual
+  requeue route into `runner/src/requeue.ts`, while its Slice 5 adds shell checks and documentation.
+  This spec owns only the auth-middleware edit in `index.ts` and consumes the requeue route's existing
+  HTTP behavior; preserve the extracted implementation and keep `agent/unstick.sh` in the shared shell
+  gate. It also established the "Slice 0 recon/collision gate" convention reused below.
 - [`2026-08-18-factory-workitem-handoff-schema-spec`](2026-08-18-factory-workitem-handoff-schema-spec.md)
-  also touches `runner/src/index.ts`, but a different region (`fetchMetaFile()` dedup, the
-  `/runs/:id/requeue` INSERT's `spec_sha`/`spec_tags` columns — already present at this spec's baseline,
-  confirmed live, not something this spec touches). This spec's only `index.ts` edit is the auth
-  middleware block (lines ~37-45 at baseline). If that sibling's `index.ts` edits land first, rebase
-  this spec's middleware diff around them; do not revert its unrelated changes.
+  also touches `runner/src/index.ts`: its Slice 1 changes the requeue implementation and its Slice 6
+  changes `/hooks/monitor` from GitHub-Issue creation to a typed-proposal upsert. Both are consumed by
+  this spec but neither contract changes here: requeue retains its 201/404/409 outcomes, and monitor
+  retains `source`/`title`/`fingerprint`/`detail` intake plus dedupe. This spec's only `index.ts` edit is
+  the auth middleware block (lines ~37-45 at baseline). If that sibling lands first, rebase around all
+  of its changes and do not restore the baseline route bodies.
+- [`2026-08-17-factory-compose-tailnet-hardcode-spec`](2026-08-17-factory-compose-tailnet-hardcode-spec.md)
+  overlaps `deploy.sh`, `setup.sh`, and `README.md`. Preserve its `FACTORY_TAILNET_IP` detection,
+  wildcard refusal, health-check behavior, and documentation while adding the independent unstick
+  credential; neither spec may restore the baseline heredocs wholesale.
 - [`2026-08-17-factory-token-budget-governance-spec`](2026-08-17-factory-token-budget-governance-spec.md)
   §S2 states *"the unstick cron must treat a budget-paused queue as healthy (check the flag via
   `/budget`)"*. **Verified NOT implemented at this baseline** — `grep -rn 'FACTORY_DAILY_BUDGET_USD\|cost_usd' runner/src`
@@ -66,12 +76,16 @@ currently receives in full (confirmed below, §1). The mandate quoted in that fi
 *"consider setting up a cron job that runs every 1h or so that unblocks stagnant runs. It should run an
 agent with a sole objective of facilitating whatever stopped the runs."* This spec does not undo that
 mandate — the facilitator still runs and still has a sole objective — it narrows *when* it runs and
-*what it can do* once running, per the audit finding this spec's proposal encodes. No semantic-memory
-MCP tool call was available in this session; the sqlite FTS query
-`SELECT title,subtitle,substr(text,1,300) FROM observations_fts WHERE observations_fts MATCH 'unstick facilitator requeue'`
-was not run because the read-only db path in this session's tool guidance
-(`/home/agent/.claude-mem/claude-mem.db`) does not exist in this sandbox; the markdown-tier memory
-above already supplied the load-bearing facts and is cited.
+*what it can do* once running, per the audit finding this spec's proposal encodes. The same memory
+topic also records **"runner ADOPTS surviving containers on restart"**; therefore the Class C
+`runner restarted mid-run` row below means only the residual case where no live container and no
+`result.json` survived, not a replacement for `adoptOrphans()`. The read-only SQLite FTS query against
+`/home/agent/.claude-mem/claude-mem.db` returned the observations **"Factory runner current architecture
+surveyed"** and **"Runner service queue management and Express API implementation completed"**; they
+confirm the runner/queue/auth shape but add no newer constraint. No semantic-memory MCP tool was
+available in this session. `/memory/MINION/piping-gates-masks-exit-code.md` is also binding for the
+verification commands: dry-run and box smoke output is redirected and inspected only after the real
+command status succeeds; no `script | tee/tail` pipeline is accepted as gate evidence.
 
 ---
 
@@ -130,9 +144,10 @@ Two independent hardenings, both required by the proposal's one DoD paragraph:
    already proven live, and adds a signature table (below) mapping each `error`-class `note` (and, for
    one ambiguous case, a log-tail grep reusing `agent/run.sh`'s own `provider_outage()` pattern
    byte-for-byte) to "known → call the primitive directly" or "unknown → queue for the facilitator."
-2. **Narrow the facilitator to advisory-only on a new scoped credential**, `FACTORY_UNSTICK_SECRET`,
-   permitted by the runner's auth middleware for exactly `GET /runs`, `GET /runs/:id`,
-   `GET /runs/:id/log`, and `POST /hooks/monitor` — nothing that mutates a run. The facilitator is
+2. **Narrow the facilitator to advisory-only on a new run-read/monitor-report credential**,
+   `FACTORY_UNSTICK_SECRET`, permitted by the runner's auth middleware for exactly `GET /runs`,
+   `GET /runs/:id`, `GET /runs/:id/log`, and `POST /hooks/monitor` — it can create or refresh a
+   monitor artifact, but cannot mutate a run. The facilitator is
    spawned only when the cron's classifier has an unmatched run left over (the common-case hourly tick
    becomes zero-LLM-cost when nothing is stuck, and non-zero-but-known hits are now zero-LLM-cost too).
 
@@ -142,7 +157,7 @@ Two independent hardenings, both required by the proposal's one DoD paragraph:
 |---|---|---|---|
 | A — running past `timeout+20m` | (no note check needed) | `POST /runs/:id/cancel` then `POST /runs/:id/requeue` | `unstick-timeout-<id>` |
 | B — queue wedged | (no note check needed) | none — `POST /hooks/monitor` only (matches the current prompt's own rule 5, which already takes no other action) | `unstick-queue-wedged` |
-| C — orphan | `note == 'runner restarted mid-run'` (exact; `adoptOrphans()` in `queue.ts:401-403` sets this literal string) | `POST /runs/:id/requeue` | `unstick-orphan-<id>` |
+| C — unrecoverable restart residue | `note == 'runner restarted mid-run'` (exact; `adoptOrphans()` in `queue.ts:401-403` sets this literal only when no live container and no `result.json` can be adopted) | `POST /runs/:id/requeue` | `unstick-orphan-<id>` |
 | C — clone/resume/push transient | `note` matches `^clone failed \(3 tries\)$` OR `^resume fetch failed \(network\):` OR `^push failed` (all three are literal substrings emitted by `agent/run.sh`, lines 119/133/153/300/478 at baseline) | `POST /runs/:id/requeue` | `unstick-transient-<id>` |
 | C — provider outage, evidenced | `note` matches `made no changes \(rc=` **and** `GET /runs/:id/log?n=60` matches `agent/run.sh`'s `provider_outage()` regex (line 70: `rate[ _-]?limit\|usage limit\|quota\|credit balance\|insufficient\|overloaded\|exhausted\|429\|401\|unauthorized\|invalid.?api.?key\|login\|billing`, case-insensitive) | `POST /runs/:id/requeue` | `unstick-outage-<id>` |
 | C — everything else, incl. `resume checkout failed` | no match | queue for the facilitator (advisory only) | filed by the facilitator: `unstick-unknown-<id>` |
@@ -183,7 +198,7 @@ implement the stale excerpts.
 
 ## 4. Slices
 
-### Slice 1 — scoped read-only credential for the facilitator (3-5h, tag `infra`)
+### Slice 1 — scoped run-read/monitor-report credential for the facilitator (3-5h, tag `infra`)
 
 **Files:** `runner/src/index.ts`, `deploy.sh`, `setup.sh`, `README.md`.
 
@@ -199,21 +214,36 @@ implement the stale excerpts.
   `FACTORY_UNSTICK_SECRET=$FACTORY_UNSTICK_SECRET` to the `.env` heredoc (`deploy.sh:28-41`). Do the
   same in `setup.sh`'s first-run `.env` heredoc (`setup.sh:18-26`) with a freshly generated value. Never
   derive it from `FACTORY_SECRET` or `FACTORY_HOOK_SECRET` — it must be an independent value so revoking
-  one credential class doesn't require touching another.
-- `README.md`: one line documenting the new env var and what it scopes (mirror the existing
-  `FACTORY_HOOK_SECRET` doc comment style at `index.ts:27-29`).
+  one credential class doesn't require touching another. Enforce mode 600 on every deploy, including
+  when the cache file already exists, and fail if `FACTORY_UNSTICK_SECRET` equals
+  `FACTORY_SECRET` or any configured `FACTORY_HOOK_SECRET`.
+- The same deploy edit must close the pre-existing heredoc hole for `FACTORY_HOOK_SECRET`, because the
+  required deploy would otherwise erase the live CI-webhook credential. On first use, migrate the
+  existing non-empty value from the target's `/opt/factory/.env` into a local mode-600
+  `~/.config/minion/factory-hook-secret` cache without printing it; if neither cache nor remote value
+  exists, fail before rewriting the remote `.env` and tell the operator to establish the CI-shared
+  value. Thereafter read the cache and write `FACTORY_HOOK_SECRET=$FACTORY_HOOK_SECRET` in the heredoc.
+  `setup.sh` generates an independent hook secret on a fresh host and prints only the path/instruction
+  for configuring CI consumers, not the value. This is required non-regression wiring, not a new hook
+  capability.
+- `README.md`: a short note documenting both scoped credentials, their allowed routes, and the
+  first-deploy hook-secret preservation requirement (mirror the existing `FACTORY_HOOK_SECRET` doc
+  comment style at `index.ts:27-29`).
 
 **DoD (Tier A — no Docker/box needed):**
 
 ```bash
 cd runner && npm ci
 T=$(mktemp -d)
+trap 'kill "${pid:-}" 2>/dev/null || true; rm -rf "$T"' EXIT
 FACTORY_DATA="$T/data" FACTORY_RUNS_DIR="$T/runs" PORT=3299 \
   FACTORY_SECRET=admin-x FACTORY_HOOK_SECRET=hook-y FACTORY_UNSTICK_SECRET=unstick-z \
   npm start & pid=$!
 sleep 1
 u() { curl -s -o /dev/null -w '%{http_code}' -H "Authorization: Bearer unstick-z" "$@"; }
 [ "$(u http://127.0.0.1:3299/runs)" = 200 ]
+[ "$(u http://127.0.0.1:3299/runs/does-not-exist)" = 404 ]
+[ "$(u http://127.0.0.1:3299/runs/does-not-exist/log)" = 404 ]
 [ "$(u -X POST -H 'content-type: application/json' -d '{"source":"t","title":"t"}' http://127.0.0.1:3299/hooks/monitor)" != 401 ]
 [ "$(u -X POST http://127.0.0.1:3299/runs/does-not-exist/requeue)" = 401 ]
 [ "$(u -X POST http://127.0.0.1:3299/runs/does-not-exist/cancel)" = 401 ]
@@ -223,7 +253,9 @@ u() { curl -s -o /dev/null -w '%{http_code}' -H "Authorization: Bearer unstick-z
 [ "$(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: Bearer admin-x" http://127.0.0.1:3299/providers)" = 200 ]
 [ "$(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: Bearer hook-y" -X POST http://127.0.0.1:3299/pipeline/reconcile)" != 401 ]
 kill $pid
+pid=
 grep -n 'FACTORY_UNSTICK_SECRET' deploy.sh setup.sh
+grep -n 'FACTORY_HOOK_SECRET' deploy.sh setup.sh
 ```
 
 ### Slice 2 — deterministic classifier + direct remedies on the host cron (6-8h, tag `logic`)
@@ -231,54 +263,73 @@ grep -n 'FACTORY_UNSTICK_SECRET' deploy.sh setup.sh
 **Files:** `scripts/unstick-cron.sh` (rewritten), `README.md`.
 
 - Rewrite `scripts/unstick-cron.sh` from a `docker run` wrapper into the classifier itself: bash, reads
-  `FACTORY_SECRET`/`FACTORY_RUN_TIMEOUT` from `/opt/factory/.env` via the existing `envval()` pattern,
-  calls the runner over `127.0.0.1:3211` directly with `curl` (no container for this part — it is
-  box-trusted code, same tier as `self-update.sh`).
+  `FACTORY_SECRET`/`FACTORY_UNSTICK_SECRET`/`FACTORY_RUN_TIMEOUT` from `/opt/factory/.env` via the
+  existing `envval()` pattern, calls the runner over `127.0.0.1:3211` directly with `curl` (no
+  container for this part — it is box-trusted code, same tier as `self-update.sh`). A missing admin
+  secret is fatal before detection. A missing scoped secret must not fall back to passing the admin
+  secret into the container: deterministic remedies may continue, but if unmatched ids remain, POST
+  one admin-authenticated monitor event (`unstick-credential-missing`) and skip the facilitator spawn.
+  This makes the merge-to-deploy interval fail loud while preserving the no-admin-secret-in-container
+  property.
 - Preflight: `command -v jq >/dev/null 2>&1 || { echo "[unstick] jq required — apt-get install -y jq"; exit 1; }`
   (mirrors the `sqlite3` preflight precedent in `self-update.sh`'s sibling spec).
 - Relocate the exact 3-class jq filter currently embedded in `agent/unstick.sh` (the `stuck=$(jq ...)`
   block) byte-for-byte — do not re-derive the age arithmetic or the requeue-descendant union from
   scratch; a transcription bug in the timeout/wedge/no-descendant boundaries is an availability bug.
-- For Class A hits: `curl -X POST .../runs/$id/cancel` then `curl -X POST .../runs/$id/requeue`;
-  treat requeue's `409` as success-no-op (already remedied by a human or a prior tick), any other
-  non-2xx as a failure to log.
+- Every `/hooks/monitor` call in this spec must send all fields required by the live endpoint:
+  non-empty `source:"unstick"` and `title`, plus the documented `fingerprint` and bounded `detail`.
+  Omitting `title` returns 400 and is not a successful event. Treat either 200 (deduped) or 201 (new
+  artifact, if the workitem-handoff monitor rewrite has landed) as success; more generally accept any
+  2xx so the two compatible endpoint implementations can land in either order.
+- For Class A hits: `curl -X POST .../runs/$id/cancel` then `curl -X POST .../runs/$id/requeue`.
+  If cancel returns 2xx, POST the `unstick-timeout-<id>` monitor event after the requeue attempt, with
+  both response outcomes in `detail` and an explicit completed/partial result; this records the cancel
+  action even when requeue fails. A requeue 409 is success-no-op **only** when its response says
+  `already requeued as <id>`; the endpoint also uses 409 for an ineligible current status, which is a
+  failure and must not be reported as remedied. Any other non-2xx is a failure to log.
 - For Class B: skip run-level action entirely; POST one `/hooks/monitor` event
-  (`source:"unstick", fingerprint:"unstick-queue-wedged"`) — the endpoint's own dedupe means repeat
-  ticks don't spam.
+  (`source:"unstick", title:"Factory queue wedged", fingerprint:"unstick-queue-wedged"`) — the
+  endpoint's own dedupe means repeat ticks don't spam.
 - For each Class C hit, evaluate `.note` against the signature table in §2 in order; the
   provider-outage sub-case additionally fetches `GET /runs/$id/log?n=60` and greps it with the
   regex quoted in §2 (copy the pattern text verbatim from `agent/run.sh`'s `provider_outage()` into a
   comment in both files cross-referencing the other — this is deliberate duplication across the
   host/container trust boundary, not a shared-module refactor).
-- Any matched Class C hit: `curl -X POST .../runs/$id/requeue` (409 → no-op as above); on success POST
-  the matching `/hooks/monitor` fingerprint from §2's table with `detail` = the matched `note` (or log
-  excerpt for the outage case).
+- Any matched Class C hit: `curl -X POST .../runs/$id/requeue`; apply the same narrow 409 rule as
+  Class A. On 201, POST the matching `/hooks/monitor` fingerprint from §2's table with `detail` = the
+  matched `note` (or a bounded log excerpt for the outage case). A verified already-requeued 409 is
+  logged as a no-op and does not claim a new deterministic action or emit a new action event.
 - Unmatched Class C hits accumulate into a JSON array of run ids. If, after processing every hit, that
   array is empty: exit 0 — **no container is spawned**. This is the common-case fast path.
 - If non-empty: hand off to Slice 3's facilitator (see there for the exact invocation).
-- Every non-2xx/non-409 response from any `curl` call is logged to stdout (the cron's output is already
-  captured by the box's cron mailer/journal per existing convention) and does not abort the rest of the
-  loop — one bad run must not block remedying the others.
+- Every unexpected response from any `curl` call, including a status-mismatch 409 or a failed monitor
+  POST, is logged with method, path, status, and a bounded response body (never an Authorization
+  header). It does not abort the rest of the loop — one bad run must not block remedying the others.
 
 **DoD (Tier A — fixture-driven, no live runner or box needed):**
 
-Author a fixture `/runs`-shaped JSON array covering: one Class A row, one Class B state (queued row +
-zero running rows), one orphan-note error row, one clone-failed-note error row, one
-`resume checkout failed`-note error row (must land in the *unmatched* bucket), and one
-`made no changes (rc=...)`-note error row paired with two log-tail fixtures — one containing a
-`quota` string (must match) and one containing an unrelated stack trace (must NOT match, must land
-unmatched). Extract the jq classification and signature-matching logic into a mode the script can run
-against a local fixture file and a stub `curl` (a shell function shadowing `curl` that reads from the
-fixture directory instead of the network) so this table is exercised without Docker or the box:
+Author **two** `/runs`-shaped fixture snapshots because Class B requires zero running rows and therefore
+cannot coexist with a Class A `running` row in the same detector input. The primary snapshot contains
+six rows: one Class A row, one restart-residue error row, one clone-failed error row, one
+`resume checkout failed` error row (unmatched), and two `made no changes (rc=...)` error rows whose
+log tails respectively contain `quota` (matched) and an unrelated stack trace (unmatched). The second
+snapshot contains one old queued row and zero running rows, proving Class B. Extract the jq
+classification and signature-matching logic into a mode the script can run against local fixture files
+and a stub `curl` (a shell function shadowing `curl` that reads from the fixture directory instead of
+the network) so this table is exercised without Docker or the box:
 
 ```bash
 bash -n scripts/unstick-cron.sh
-FACTORY_UNSTICK_FIXTURE=test/fixtures/unstick-runs.json scripts/unstick-cron.sh --dry-run \
-  | tee /tmp/unstick-dry-run.log
+FACTORY_UNSTICK_FIXTURE=test/fixtures/unstick-runs.json \
+  scripts/unstick-cron.sh --dry-run > /tmp/unstick-dry-run.log
+FACTORY_UNSTICK_FIXTURE=test/fixtures/unstick-queue-wedged.json \
+  scripts/unstick-cron.sh --dry-run > /tmp/unstick-queue-dry-run.log
+cat /tmp/unstick-dry-run.log /tmp/unstick-queue-dry-run.log
 grep -q 'class=A' /tmp/unstick-dry-run.log
-grep -q 'class=B' /tmp/unstick-dry-run.log
+grep -q 'class=B' /tmp/unstick-queue-dry-run.log
 grep -q 'unmatched.*resume checkout failed' /tmp/unstick-dry-run.log
-grep -c 'unmatched' /tmp/unstick-dry-run.log   # == 1 (only the checkout-failed + unrelated-log rows)
+test "$(grep -c 'unmatched' /tmp/unstick-dry-run.log)" -eq 2
+# ^ exactly the checkout-failed row and the unrelated-log provider row
 ```
 
 (The `--dry-run` / `FACTORY_UNSTICK_FIXTURE` flags are new, script-local test hooks — not a new `.env`
@@ -293,13 +344,16 @@ variable, so they don't trigger the deploy.sh heredoc rule; they're absent in th
   call. It fetches each of those runs and their log tails via `GET`, using `FACTORY_UNSTICK_SECRET`
   (not `FACTORY_SECRET` — the container never receives the admin secret again).
 - Rewrite the prompt's API section to list only `GET /runs/ID`, `GET /runs/ID/log?n=200`, and
-  `POST /hooks/monitor` — delete the `cancel` and `requeue` lines entirely. The rules section becomes:
+  `POST /hooks/monitor` with required `source`, `title`, `fingerprint`, and `detail` — delete the
+  `cancel` and `requeue` lines entirely. The rules section becomes:
   diagnose each run from its log tail, then **always** file exactly one `/hooks/monitor` event per run
   (fingerprint `unstick-unknown-<runId>`) describing the diagnosis and a recommendation for a human —
   never claim to have requeued or canceled anything, because the credential physically cannot do either
   (a 401 would prove that, but the prompt should not tempt a wasted turn attempting it). Keep the
-  existing `UNTRUSTED-DATA` fencing and the injection rule (`unstick-injection-<runId>` fingerprint)
-  unchanged — that hardening is orthogonal to this spec and still needed.
+  existing `UNTRUSTED-DATA` fencing and injection handling. For a detected injection attempt, file
+  exactly one `unstick-injection-<runId>` event **instead of** the normal `unstick-unknown-<runId>`
+  event; never file both for one run. This preserves the hardening without contradicting the one-event
+  cap.
 - `scripts/unstick-cron.sh`'s spawn call (the tail that used to be the whole script) drops
   `FACTORY_SECRET` from the container's env entirely and passes `FACTORY_UNSTICK_SECRET` plus the
   unmatched id list instead. `CLAUDE_CODE_OAUTH_TOKEN` and `--network host` are unchanged (the
@@ -309,11 +363,11 @@ variable, so they don't trigger the deploy.sh heredoc rule; they're absent in th
 
 ```bash
 bash -n agent/unstick.sh scripts/unstick-cron.sh
-grep -c '/runs/.*requeue\|/runs/.*cancel' agent/unstick.sh   # == 0
-grep -n 'FACTORY_SECRET=' scripts/unstick-cron.sh | grep -v FACTORY_UNSTICK_SECRET
-# ^ the facilitator docker-run block must reference ONLY FACTORY_UNSTICK_SECRET, never FACTORY_SECRET
+test "$(grep -c '/runs/.*requeue\|/runs/.*cancel' agent/unstick.sh || true)" -eq 0
+test "$(grep -c -- '-e.*FACTORY_SECRET=' scripts/unstick-cron.sh || true)" -eq 0
+# ^ host-side logic still uses FACTORY_SECRET; only container env arguments are forbidden
 grep -n 'FACTORY_UNSTICK_SECRET' agent/unstick.sh scripts/unstick-cron.sh
-grep -c 'unstick-unknown-' agent/unstick.sh   # >= 1
+test "$(grep -c 'unstick-unknown-' agent/unstick.sh)" -ge 1
 ```
 
 Tier B (needs the box, or any host with the built agent image + a reachable runner): queue one
@@ -321,7 +375,8 @@ deliberately-unfixable run (a task with an intentionally broken repo target, or 
 `error` row whose note doesn't match §2's table), run the cron manually, and confirm exactly one
 `unstick-unknown-<id>` monitor event lands and no `/runs/:id/requeue` or `/runs/:id/cancel` call
 succeeds from inside the container (attempt one manually inside the running container with the
-mounted `FACTORY_UNSTICK_SECRET` and confirm `401`).
+injected `FACTORY_UNSTICK_SECRET` and confirm `401`). For an injection fixture, the one event is
+`unstick-injection-<id>` instead of `unstick-unknown-<id>`.
 
 ### Slice 4 — deploy wiring + operator verification (2-4h, tag `infra`)
 
@@ -334,21 +389,26 @@ separately because its DoD is box-side and gated on an actual deploy).
 ssh netcup 'command -v jq >/dev/null || { sudo apt-get update -qq && sudo apt-get install -y jq; }'
 ssh netcup 'crontab -l | grep "17 \* \* \* \*.*unstick-cron.sh"'   # path unchanged — no crontab edit needed
 # after the next self-update tick or a manual deploy.sh run:
-ssh netcup 'grep -c FACTORY_UNSTICK_SECRET /opt/factory/.env'      # == 1
-ssh netcup 'sudo -u agent-owner-or-self /opt/factory/scripts/unstick-cron.sh' 2>&1 | tail -40
+test "$(ssh netcup 'grep -c ^FACTORY_UNSTICK_SECRET= /opt/factory/.env')" -eq 1
+test "$(ssh netcup 'grep -c ^FACTORY_HOOK_SECRET= /opt/factory/.env')" -eq 1
+tier_b_log=$(mktemp)
+if ! ssh netcup 'cd /opt/factory && ./scripts/unstick-cron.sh' >"$tier_b_log" 2>&1; then
+  tail -40 "$tier_b_log"
+  rm -f "$tier_b_log"
+  exit 1
+fi
+tail -40 "$tier_b_log"
+rm -f "$tier_b_log"
 ```
 
 Confirm the manual run's log shows the fast-path (`nothing stagnant`, or a mix of `class=A/B/C` lines)
 and, if any Class C hits existed at run time, that each one resolved to either a direct requeue+monitor
 event or a facilitator spawn — never a silent drop.
 
-**Pre-existing gap observed, out of scope:** `FACTORY_HOOK_SECRET` itself is referenced by
-`runner/src/index.ts` but is **absent from `deploy.sh`'s heredoc** at this baseline — it must have been
-hand-added to the box `.env` in a prior session, which the box's own conventions (§ design ancestors)
-say does not survive the next `deploy.sh` run. This spec does not fix that adjacent defect (it isn't
-this spec's file, and touching it isn't needed for `FACTORY_UNSTICK_SECRET` to work) — flagged here so
-the next `deploy.sh` run doesn't silently break the CI-webhook reconcile trigger; worth its own one-line
-follow-up proposal.
+Before that deploy, verify `~/.config/minion/factory-hook-secret` was populated from the existing box
+value without rotation, and prove one existing CI caller can still authenticate to
+`POST /pipeline/reconcile`. The deploy must abort before rewriting `.env` if it cannot preserve that
+shared value.
 
 ## 5. Cross-project impact and ordering
 
@@ -359,11 +419,11 @@ runner, its box cron, and the facilitator container image content (not the image
 
 | Surface | Impact / ordering |
 |---|---|
-| `runner/src/index.ts` auth middleware | Slice 1 must land and deploy before Slice 3's facilitator spawn passes `FACTORY_UNSTICK_SECRET` — a facilitator run against a pre-Slice-1 runner would 401 on every call including `/hooks/monitor`, silently producing zero output. Sequence: 1 → 2 → 3 → 4. |
-| Workitem-handoff-schema spec | Shares `runner/src/index.ts`; disjoint region (see collisions above). Whichever lands first, the other rebases around it without reverting. |
+| `runner/src/index.ts` auth middleware | Slice 1 must land and deploy before enabling Slice 3's facilitator spawn with `FACTORY_UNSTICK_SECRET` — a facilitator run against a pre-Slice-1 runner would 401 on every call including `/hooks/monitor`. The script must propagate/log that failure, never call it success. Sequence: 1 → 2 → 3 → 4; the missing-secret guard covers the brief self-update/deploy gap. |
+| Workitem-handoff-schema spec | Shares `runner/src/index.ts`; this spec's auth edit is in a disjoint region, but it consumes that sibling's requeue and monitor contracts (see collisions above). Whichever lands first, the other rebases around it without reverting. |
 | Token-budget-governance spec (approved, not yet built) | Its Class-B budget-pause carve-out does not exist yet in code (verified, §0 baseline). **Alert:** when that spec's `GET /budget` ships, Class B's "queued, nothing running, >15m" check in this spec's `scripts/unstick-cron.sh` will need a follow-up: skip filing `unstick-queue-wedged` when `/budget` reports a budget pause. Not built here — that spec doesn't exist in code yet, so there is nothing to integrate against. |
 | `agent/run.sh`'s `provider_outage()` regex | This spec duplicates that pattern into `scripts/unstick-cron.sh` by value, not by reference (cross-boundary bash duplication, commented both ways). A future change to one must update the other by hand; no shared-module mechanism exists for bash across the host/container split, and inventing one is disproportionate to a 12-token regex. |
-| Deploy/self-update | `scripts/unstick-cron.sh`'s content changes ship via the existing self-update tick (git pull + `reset --hard`) exactly like any other tracked file — no new deploy step. Only the new `.env` var needs a `deploy.sh`-driven (or manual, box-side, before the next real deploy) write. |
+| Deploy/self-update | `scripts/unstick-cron.sh`'s content changes ship via the existing self-update tick (git pull + `reset --hard`) exactly like any other tracked file. Run `deploy.sh` promptly to install the scoped secret and preserve `FACTORY_HOOK_SECRET`; until then the new cron fails loud with `unstick-credential-missing` for unmatched rows and never passes the admin secret into a facilitator. Do not hand-edit `.env`. |
 
 ## 6. Explicitly out of scope
 
@@ -374,8 +434,6 @@ runner, its box cron, and the facilitator container image content (not the image
   explicitly out of scope.
 - Wiring `/budget` into Class B (token-budget-governance spec's own DoD line) — that spec's `/budget`
   endpoint does not exist in code yet; nothing to wire against (see §5 alert).
-- Fixing `FACTORY_HOOK_SECRET`'s absence from `deploy.sh`'s heredoc (§4 Slice 4 note) — pre-existing,
-  unrelated file region, not required for this spec's credential to work.
 - Any change to `agent/Dockerfile`, `docker-compose.yml`, or the crontab entry's schedule/path — none
   are needed; the facilitator entrypoint path and the cron's invocation path are both unchanged.
 - Retrying `resume checkout failed` automatically (§2) — deliberately routed to the facilitator instead.
@@ -397,8 +455,9 @@ Then, in order:
    `FACTORY_UNSTICK_SECRET` opens exactly `GET /runs`, `GET /runs/:id`, `GET /runs/:id/log`,
    `POST /hooks/monitor`, and nothing else; `FACTORY_SECRET`/`FACTORY_HOOK_SECRET` behavior is
    unchanged (regression-checked).
-2. Slice 2's fixture-driven dry run (§4 Slice 2 DoD) correctly classifies all six fixture rows,
-   including routing `resume checkout failed` to the unmatched bucket rather than auto-requeuing it.
+2. Slice 2's fixture-driven dry runs (§4 Slice 2 DoD) correctly classify all seven scenarios across
+   two snapshots, including a queue wedge that has no running row and exactly two unmatched Class C
+   cases (`resume checkout failed` and the unrelated-log provider candidate).
 3. Slice 3's static checks (§4 Slice 3 DoD) confirm the facilitator's docker-run invocation never
    references `FACTORY_SECRET`, and `agent/unstick.sh` contains no `/requeue` or `/cancel` calls.
 4. On the box (Tier B, after a real deploy): a manual `scripts/unstick-cron.sh` run against live data
