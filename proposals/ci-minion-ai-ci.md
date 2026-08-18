@@ -1,9 +1,10 @@
 ---
 id: ci-minion-ai-ci
 title: CI red — CI on minion-ai DEV
-status: approved
+status: in-spec
 created: 2026-08-18
 updated: 2026-08-18
+spawned_spec: 2026-08-18-ci-minion-ai-ci-spec
 repos: [minion-ai]
 tags: [test, logic]
 ---
