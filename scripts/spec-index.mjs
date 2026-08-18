@@ -44,6 +44,15 @@ export function projectSpec(fm) {
 // decides auto-fix vs. flag. Only a dangling `supersedes` reference (points at a
 // spec id that doesn't exist) is a hard error: that's an unambiguous data bug, not
 // a hygiene judgment call.
+// TODO(handoff): checkLinkHygiene only detects and returns warnings — it never persists
+// `link_review`, never auto-repairs an unambiguous revises/supersedes pair, and nothing
+// in this repo closes a CI-watch proposal once its watched workflow goes green. All
+// three are G0-sweep responsibilities that live in minion-factory's `agent/reconcile.sh`,
+// not in this lint script, and this run's harness contract scopes it to a minion-meta-only
+// checkout with no push/PR access to minion-factory. minion-factory PR #2 (the G0
+// backward-staleness reconciler) is open and human-escalated on a design disagreement;
+// see proposals/2026-08-18-factory-g0-ci-watch-auto-close.md for the verified, ready-to-
+// apply CI-watch auto-close patch a minion-factory-scoped run (or a human) should apply.
 export function checkLinkHygiene(specs) {
 	const byId = new Map(specs.map((s) => [s.id, s]));
 	const errors = [];

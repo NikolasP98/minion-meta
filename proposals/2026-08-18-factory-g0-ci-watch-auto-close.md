@@ -112,10 +112,12 @@ thresholds (separate slice, `2026-08-17-sdlc-phase-gates-scoring-spec.md` §5 sl
 
 **Handoff note:** this proposal is the required artifact for an open end this run
 (`factory/8af03178`) could not close directly — its harness contract scopes it to a
-single `minion-meta` checkout with no push/PR access to any other repo, so there is no
-in-repo file in minion-meta where an in-code `TODO(handoff)` comment would sit at the
-actual missing-implementation site (`minion-factory`'s `agent/reconcile.sh`). This
-proposal, now carrying a verified, ready-to-apply patch rather than only a problem
-description, is the maximum-complete substitute reachable from this sandbox. A
-minion-factory-scoped run (or a human) should apply the patch above, dry-run it against
-a fixture proposal, and merge.
+single `minion-meta` checkout with no push/PR access to any other repo, so the actual
+missing-implementation site (`minion-factory`'s `agent/reconcile.sh`) has no file in this
+checkout to carry an in-code `TODO(handoff)` comment. The closest reachable analog —
+`scripts/spec-index.mjs`'s `checkLinkHygiene` (the minion-meta-side half of the same G0
+gap: detection without persistence) — now carries a `TODO(handoff)` pointing back to this
+proposal, per the repo playbook's two-artifact requirement. This proposal, carrying a
+verified, ready-to-apply patch rather than only a problem description, is the
+maximum-complete substitute reachable from this sandbox. A minion-factory-scoped run (or
+a human) should apply the patch above, dry-run it against a fixture proposal, and merge.
