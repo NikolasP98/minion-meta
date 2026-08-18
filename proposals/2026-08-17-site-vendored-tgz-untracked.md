@@ -1,9 +1,9 @@
 ---
 id: 2026-08-17-site-vendored-tgz-untracked
 title: Vendored design-tokens tgz untracked — fresh clone bun install fails on dev
-status: draft
+status: approved
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 repos: [minion_site]
 tags: [deps, infra]
 value: 6
