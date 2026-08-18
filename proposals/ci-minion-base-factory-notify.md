@@ -18,7 +18,7 @@ green, or the workflow is deliberately removed/disabled with rationale.
 
 ## Latest failure
 
-- run: https://github.com/NikolasP98/minion-base/actions/runs/32171119250
+- run: https://github.com/NikolasP98/minion-base/actions/runs/32190438508
 - checked: 2026-08-18
 
 ```
