@@ -36,6 +36,9 @@ Flat scalars and string arrays only — no nesting (the parser is deliberately t
 | `type` | no | `feature` `fix` `infra` `decision` `research` (default `feature`) |
 | `relationship` | no | spec-intake classification vs existing artifacts: `new` `extends` `merges-drafts` `supersedes` `depends-on` `conflicts-with` `already-satisfied`. The spec agent RECOMMENDS; lifecycle changes are applied by the resolver/human, never unilaterally |
 | `related` | no | ids the `relationship` refers to (specs or proposals), with a one-line reason each in the body |
+| `possibly_shipped` | no | G0 medium-confidence shipment signal; copied unchanged into the committed read model. Writer contract: `2026-08-17-sdlc-phase-gates-scoring-spec` §3 G0 |
+| `evidence` | no | G0 evidence summary supporting `possibly_shipped`; copied unchanged into the committed read model. Writer contract: `2026-08-17-sdlc-phase-gates-scoring-spec` §3 G0 |
+| `link_review` | no | G0 link-review signal for ambiguous or incomplete shipment links; copied unchanged into the committed read model. Writer contract: `2026-08-17-sdlc-phase-gates-scoring-spec` §3 G0 |
 
 ## Body convention
 
