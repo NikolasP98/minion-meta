@@ -1,7 +1,7 @@
 ---
 id: ci-minion-meta-claude-code-review
 title: CI red — Claude Code Review on minion-meta dev
-status: draft
+status: closed
 created: 2026-08-18
 updated: 2026-08-18
 repos: []
@@ -53,3 +53,7 @@ claude-review	UNKNOWN STEP	2026-07-14T02:34:58.0771426Z [command]/usr/bin/git su
 claude-review	UNKNOWN STEP	2026-07-14T02:34:58.1135491Z Cleaning up orphan processes
 claude-review	UNKNOWN STEP	2026-07-14T02:34:58.1413120Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
+
+---
+
+**Triage 2026-08-18:** Closed — the claude-code-review workflow was deliberately retired 2026-08-17 alongside the thermonuclear workflow; review runs in-pipeline now. Stale history of a deleted workflow; no CI to fix.

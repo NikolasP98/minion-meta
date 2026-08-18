@@ -17,6 +17,20 @@ export const STATUSES = [
 	'unknown'
 ];
 
+function parseScalar(raw) {
+	if (raw.startsWith('"') && raw.endsWith('"')) {
+		try {
+			return JSON.parse(raw);
+		} catch {
+			// Preserve the validator's historical tolerance for hand-written values
+			// that are quoted but are not valid JSON strings.
+			return raw.slice(1, -1);
+		}
+	}
+	if (raw.startsWith("'") && raw.endsWith("'")) return raw.slice(1, -1).replace(/''/g, "'");
+	return raw;
+}
+
 export function parseFrontmatter(src) {
 	if (!src.startsWith('---\n')) return null;
 	const end = src.indexOf('\n---\n', 4);
@@ -35,9 +49,7 @@ export function parseFrontmatter(src) {
 				.filter(Boolean);
 		} else if (/^\d+$/.test(raw)) {
 			fm[key] = Number(raw);
-		} else {
-			fm[key] = raw.replace(/^["']|["']$/g, '');
-		}
+		} else fm[key] = parseScalar(raw);
 	}
 	return { fm, body };
 }
@@ -51,7 +63,8 @@ export function serializeFrontmatter(fm) {
 		} else if (typeof value === 'number') {
 			lines.push(`${key}: ${value}`);
 		} else {
-			lines.push(`${key}: ${/[:#\[\]{}]/.test(value) ? `"${String(value).replace(/"/g, '\\"')}"` : value}`);
+			const scalar = String(value);
+			lines.push(`${key}: ${/[:#\[\]{}"\\]/.test(scalar) ? JSON.stringify(scalar) : scalar}`);
 		}
 	}
 	lines.push('---', '');

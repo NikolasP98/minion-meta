@@ -2,7 +2,7 @@
 id: 2026-08-13-ci-minion-site-ci-spec
 title: CI red — keep minion-site@master green (env registry, local parity, red-visibility)
 stage: spec
-status: draft
+status: done
 pass: 2
 created: 2026-08-13
 updated: 2026-08-18

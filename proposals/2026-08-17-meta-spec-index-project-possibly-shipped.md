@@ -4,9 +4,10 @@ title: spec-index.mjs drops possibly_shipped/evidence/link_review — G0 amber c
 status: merged
 created: 2026-08-17
 updated: 2026-08-18
-repos: [minion-meta, minion-base]
+repos: [minion-meta]
 duplicate_candidate: 2026-08-17-base-kanban-possibly-shipped-surface
 merged_into: 2026-08-17-base-kanban-possibly-shipped-surface
+tags: [logic]
 ---
 
 # spec-index.mjs drops possibly_shipped/evidence/link_review

@@ -2,7 +2,7 @@
 id: 2026-08-17-gw-defaces-crm-tools-spec
 title: Builtin CRM tools — de-FACES the descriptions (business name, locale patterns and examples from org config)
 stage: spec
-status: draft
+status: approved
 pass: 2
 created: 2026-08-17
 updated: 2026-08-18

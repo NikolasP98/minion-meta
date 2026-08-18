@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { serializeFrontmatter } from './spec-frontmatter.mjs';
+import { parseFrontmatter, serializeFrontmatter } from './spec-frontmatter.mjs';
 import { projectSpec, checkLinkHygiene, reconcileLinkHygiene, applyLinkHygiene, runIndex } from './spec-index.mjs';
 
 const baseFm = {
@@ -31,6 +31,20 @@ test('projectSpec omits possibly_shipped/evidence/link_review keys entirely when
 	assert.equal('possibly_shipped' in entry, false);
 	assert.equal('evidence' in entry, false);
 	assert.equal('link_review' in entry, false);
+});
+
+test('quoted scalar with embedded quotes round-trips without escape growth', () => {
+	const expected = 'pass 2 has neither "revises" nor "supersedes"';
+	const first = serializeFrontmatter({ id: 'quoted', link_review: expected });
+	const parsed = parseFrontmatter(`${first}\n# Quoted\n`);
+	assert.ok(parsed);
+	assert.equal(parsed.fm.link_review, expected);
+
+	const second = serializeFrontmatter(parsed.fm);
+	assert.equal(second, first);
+	const reparsed = parseFrontmatter(`${second}\n# Quoted\n`);
+	assert.ok(reparsed);
+	assert.equal(reparsed.fm.link_review, expected);
 });
 
 test('projectSpec never projects reconcile_ignore — no consumer reads it from index.json', () => {

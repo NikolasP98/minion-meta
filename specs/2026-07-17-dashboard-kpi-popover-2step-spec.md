@@ -2,11 +2,12 @@
 id: 2026-07-17-dashboard-kpi-popover-2step-spec
 title: Dashboard KPI Popover — 2-Step (hover → click) Design Spec
 stage: spec
-status: draft
+status: retired
 pass: 1
 created: 2026-07-17
-updated: 2026-07-17
+updated: 2026-08-18
 repos: [minion-meta]
+retired_reason: "2026-08-17 triage found ~55% already shipped and the remaining hover-popover design diverges from hub UI governance; re-propose aligned with the design contract if still wanted."
 ---
 
 # Dashboard KPI Popover — 2-Step (hover → click) Design Spec

@@ -38,6 +38,8 @@ Flat scalars and string arrays only — no nesting (the parser is deliberately t
 | `evidence` | no | evidence URL — written by G0 on a high-confidence shipment flip (alongside `stage: done, status: shipped`), or copied from `possibly_shipped` once a human confirms it |
 | `link_review` | no | free-text note — written by G0 when a `supersedes`/`revises` link looks ambiguous and needs a human read; projected to the board same as `possibly_shipped` |
 | `reconcile_ignore` | no | `true` once a human rejects a G0 `possibly_shipped` flag — read directly from this file by minion-factory's `agent/reconcile.sh` so the sweep doesn't re-flag it; never projected into `specs/index.json` (no board consumer) |
+| `relationship` | no | spec-intake classification vs existing artifacts: `new` `extends` `merges-drafts` `supersedes` `depends-on` `conflicts-with` `already-satisfied`. The spec agent RECOMMENDS; lifecycle changes are applied by the resolver/human, never unilaterally |
+| `related` | no | ids the `relationship` refers to (specs or proposals), with a one-line reason each in the body |
 
 `scripts/spec-index.mjs` also runs non-blocking link-hygiene checks on `supersedes` (a
 dangling reference — pointing at a spec id that doesn't exist — is a hard error; a
@@ -55,3 +57,10 @@ Keep the existing house style: `# Title`, then `## 0. Product` (what and why, in
 words), numbered sections, explicit **out-of-scope**, and an end-to-end verification step the
 implementer can run. Slices sized "junior dev, 4–8 focused hours" with a machine-checkable
 definition of done.
+
+**AS-IS → TO-BE → DELTA (required):** AS-IS = current verified technical
+behavior (code anchors, existing tests, constraints, known unknowns). TO-BE =
+target behavior with invariants, compatibility requirements, and what must
+remain unchanged. DELTA = the numbered transitions, each mapped to a slice and
+to the test/evidence that proves it. A slice that doesn't trace to a DELTA
+entry is scope creep; a DELTA entry with no proving test is an open end.

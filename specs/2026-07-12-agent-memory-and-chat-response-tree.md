@@ -2,11 +2,12 @@
 id: 2026-07-12-agent-memory-and-chat-response-tree
 title: Agent Memory Routing and Chat Response Trees
 stage: spec
-status: draft
+status: retired
 pass: 1
 created: 2026-07-12
-updated: 2026-07-15
+updated: 2026-08-18
 repos: [minion-meta]
+retired_reason: "P0 half shipped in July 2026; the remainder sat unclaimed 34d and predates the personal-agent and gateway-config architecture changes; re-propose against current architecture."
 ---
 
 # Agent Memory Routing and Chat Response Trees

@@ -1,13 +1,14 @@
 ---
 id: 2026-08-17-factory-durable-state-outbox
 title: Factory durable state — transition guards, leases, transactional outbox
-status: approved
+status: in-spec
 created: 2026-08-17
 updated: 2026-08-18
 repos: [minion-factory]
 tags: [logic, infra]
 source: audit-2026-08-17
 value: high
+spawned_spec: 2026-08-18-factory-durable-state-outbox-spec
 ---
 
 # Durable state machine + outbox for run side effects

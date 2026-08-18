@@ -1,7 +1,7 @@
 ---
 id: ci-minion-meta-thermonuclear-code-review
 title: CI red — Thermonuclear Code Review on minion-meta dev
-status: draft
+status: closed
 created: 2026-08-18
 updated: 2026-08-18
 repos: []
@@ -63,3 +63,7 @@ thermonuclear-review	UNKNOWN STEP	2026-07-14T02:34:57.8928893Z ##[warning]Node.j
 **Fix direction:** Check the workflow step that populates the token before the curl command—verify the GitHub App credentials are valid, the token endpoint is reachable, and the curl headers are correctly formatted. Remove `|| true` temporarily to expose the real error.
 
 **File:** The workflow definition for `thermonuclear-review` (likely `.github/workflows/thermonuclear-code-review.yml` or similar, matching the untracked proposal file).
+
+---
+
+**Triage 2026-08-18:** Closed — the Thermonuclear Code Review workflow was deliberately retired 2026-08-17 and its logic folded into the factory's in-pipeline cross-provider review stage. The red run is stale history of a deleted workflow; there is no CI to fix.
