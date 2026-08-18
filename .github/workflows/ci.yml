@@ -1,7 +1,8 @@
 # .github/workflows/ci.yml
 # Meta-repo CI — gates every PR against dev (the integration branch) and main.
-# Runs lint-all, typecheck-all, build-all, test-all, changeset:status, and the
-# specs/ hardening gate (scripts/spec-index.mjs --check).
+# Runs lint-all, typecheck-all, build-all, test-all, changeset:status, the
+# specs/ hardening gate's own fixture self-test (scripts/*.test.mjs), and the
+# specs/ hardening gate itself (scripts/spec-index.mjs --check).
 name: CI
 
 on:
@@ -44,6 +45,9 @@ jobs:
 
       - name: Test
         run: pnpm run test-all
+
+      - name: Spec index gate self-test
+        run: pnpm run test:scripts
 
       - name: Spec index check
         run: node scripts/spec-index.mjs --check
