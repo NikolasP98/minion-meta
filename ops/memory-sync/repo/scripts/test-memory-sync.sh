@@ -54,8 +54,23 @@ git -C "$WORK/clone" reset --quiet
 rm "$WORK/clone/operator-secrets.txt"
 git -C "$WORK/clone" checkout --quiet -- MINION/MEMORY.md
 
+# --- already-committed out-of-root entries must also fail before push ---
+echo "API_SECRET=already-committed" >"$WORK/clone/operator-secrets.txt"
+git -C "$WORK/clone" add operator-secrets.txt
+git -C "$WORK/clone" commit --quiet -m "plant out-of-root commit"
+
+if MEMORY_SYNC_DIR="$WORK/clone" bash "$SYNC_SCRIPT" push >"$WORK/committed.log" 2>&1; then
+	fail "sync accepted an already-committed path outside the memory roots"
+fi
+git --git-dir="$WORK/origin.git" cat-file -e main:operator-secrets.txt 2>/dev/null \
+	&& fail "already-committed out-of-root file reached remote"
+pass "already-committed out-of-root file fails closed and remains absent remotely"
+
+git -C "$WORK/clone" reset --hard --quiet origin/main
+
 # --- plant: a legitimate memory edit, plus everything that must NOT sync ---
-echo "- new topic" >>"$WORK/clone/MINION/MEMORY.md"
+SYNC_MARKER="memory-sync-marker-20260818"
+echo "- $SYNC_MARKER" >>"$WORK/clone/MINION/MEMORY.md"
 echo "operator scratch notes" >"$WORK/clone/operator-notes.txt" # repo-root file, outside memory roots
 mkdir -p "$WORK/clone/.claude-mem"
 echo "not really sqlite" >"$WORK/clone/.claude-mem/claude-mem.db" # bulk-store tier
@@ -74,6 +89,8 @@ git -C "$WORK/origin.git" push --quiet "$WORK/check.git" main
 FILES="$(git --git-dir="$WORK/check.git" ls-tree -r --name-only main)"
 
 echo "$FILES" | grep -q '^MINION/MEMORY.md$' || fail "expected memory edit did not sync"
+git --git-dir="$WORK/check.git" show main:MINION/MEMORY.md | grep -q -- "- $SYNC_MARKER" \
+	|| fail "memory edit marker did not reach remote"
 echo "$FILES" | grep -q '^operator-notes.txt$' && fail "repo-root file outside memory roots was synced"
 echo "$FILES" | grep -q '^\.claude-mem/' && fail "bulk-store tier was synced"
 echo "$FILES" | grep -q '^prod\.env$' && fail "credential-shaped *.env at repo root was synced"

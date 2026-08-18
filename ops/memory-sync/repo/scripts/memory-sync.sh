@@ -130,6 +130,17 @@ push)
 		exit 1
 	fi
 
+	# The index check above protects this hook's new commit, but an earlier local
+	# commit may already contain an out-of-root path. Validate the complete range
+	# that push would publish after rebasing, and leave rejected commits local for
+	# a human to handle.
+	while IFS= read -r outgoing_path; do
+		if ! is_allowed_path "$outgoing_path"; then
+			log "refusing to push committed path outside MEMORY_SYNC_ROOTS: $outgoing_path"
+			exit 1
+		fi
+	done < <(git diff --name-only --diff-filter=ACDMRTUXB "origin/$BRANCH..HEAD")
+
 	if ! timeout "$PUSH_TIMEOUT" git push --quiet origin "$BRANCH" 2>/dev/null; then
 		log "push failed (offline, or a race with another writer) — will retry next sync"
 		exit 0
