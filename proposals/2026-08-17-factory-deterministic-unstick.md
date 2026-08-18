@@ -1,13 +1,14 @@
 ---
 id: 2026-08-17-factory-deterministic-unstick
 title: Deterministic unstick handlers for known failure classes
-status: approved
+status: in-spec
 created: 2026-08-17
 updated: 2026-08-18
 repos: [minion-factory]
 tags: [logic, infra]
 source: audit-2026-08-17
 value: medium
+spawned_spec: 2026-08-18-factory-deterministic-unstick-spec
 ---
 
 # Known failures should not need an LLM
