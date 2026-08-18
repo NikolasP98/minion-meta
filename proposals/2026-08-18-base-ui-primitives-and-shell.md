@@ -1,9 +1,10 @@
 ---
 id: 2026-08-18-base-ui-primitives-and-shell
 title: Base UI-002/003 — interaction primitives + mobile shell
-status: approved
+status: in-spec
 created: 2026-08-18
 updated: 2026-08-18
+spawned_spec: 2026-08-18-base-ui-primitives-and-shell-spec
 repos: [minion-base]
 tags: [ui, logic]
 source: ux-plan-2026-08-18
