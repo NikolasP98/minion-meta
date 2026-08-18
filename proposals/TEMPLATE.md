@@ -31,3 +31,11 @@ conversations (or written by hand). Run `node scripts/proposal-index.mjs` after 
 Self-contained: problem in the user's words, motivation, sketch (Mermaid welcome),
 explicit **out-of-scope**, and a testable definition of done. Ambiguity here is the
 top failure cause downstream — freeze requirements at this boundary.
+
+**AS-IS → TO-BE → DELTA (required):** state the current OBSERVABLE behavior
+(with a reproduction or code/data anchor and evidence for the claim), the
+desired observable behavior (plus invariants that must NOT change), and the
+delta — the exact transitions between them. At proposal fidelity this is
+user/product behavior; the spec deepens it to verified technical behavior.
+A proposal whose AS-IS cannot be evidenced is a hypothesis, not a proposal —
+say so explicitly.
