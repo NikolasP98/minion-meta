@@ -1,9 +1,9 @@
 ---
 id: 2026-08-17-hub-updateserver-tenant-scope
 title: Add DB-level tenant scope to updateServer (blocked on Turso re-key migration)
-status: draft
+status: approved
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 repos: [minion_hub]
 tags: [logic, security, edge-case]
 value: 5
@@ -28,3 +28,7 @@ Doing this before the re-key migration (would break on old keys).
 ## Gate note 2026-08-18
 
 PARKED-BLOCKED: waits on the Turso re-key migration; fixing before it would break on old keys. Re-triage when the migration lands.
+
+---
+
+**Gate decision 2026-08-18 (delegated):** Approved — live tenant-scoping gap; security tag keeps the merge human.

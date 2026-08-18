@@ -1,9 +1,9 @@
 ---
 id: 2026-08-17-factory-capability-separation
 title: Factory capability separation — per-run scoped GitHub credentials
-status: draft
+status: approved
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 repos: [minion-factory]
 tags: [security, infra]
 source: audit-2026-08-17
@@ -24,3 +24,7 @@ separate credentials for (a) target-code pushes, (b) meta lifecycle commits,
 principal, never caller-supplied.
 
 **Out of scope:** seccomp/egress hardening (separate proposal if pursued).
+
+---
+
+**Gate decision 2026-08-18 (delegated):** Approved for SPEC (M4 planning — GitHub App tokens). Merge human-gated.
