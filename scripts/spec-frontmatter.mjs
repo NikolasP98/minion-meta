@@ -12,6 +12,8 @@ export const STATUSES = [
 	'superseded',
 	'rejected',
 	'parked',
+	'retired',
+	'done',
 	'unknown'
 ];
 
