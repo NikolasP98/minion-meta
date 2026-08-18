@@ -42,7 +42,9 @@ Flat scalars and string arrays only — no nesting (the parser is deliberately t
 `scripts/spec-index.mjs` also runs non-blocking link-hygiene checks on `supersedes` (a
 dangling reference — pointing at a spec id that doesn't exist — is a hard error; a
 `supersedes` target not marked `status: superseded`, or a `superseded` spec nothing
-links back to, is a warning printed on regen, not a commit blocker). Document any new
+links back to, is a warning printed on regen, not a commit blocker) and on `pass` (a
+`pass > 1` spec with neither `revises` nor `supersedes` set is a warning — it has no
+lineage link back to what it revised). Document any new
 ad-hoc frontmatter field here when you add one — this table exists because
 `possibly_shipped`/`evidence`/`link_review` were written by G0 for weeks before anyone
 projected or documented them (`2026-08-17-meta-spec-index-project-possibly-shipped.md`).

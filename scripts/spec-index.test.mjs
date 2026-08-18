@@ -69,3 +69,27 @@ test('checkLinkHygiene is clean for a correctly bidirectionally-linked pair', ()
 	assert.equal(errors.length, 0);
 	assert.equal(warnings.length, 0);
 });
+
+test('checkLinkHygiene warns (non-fatal) on a pass>1 spec with neither revises nor supersedes', () => {
+	const specs = [{ id: 'orphan-pass2', status: 'approved', pass: 2 }];
+	const { errors, warnings } = checkLinkHygiene(specs);
+	assert.equal(errors.length, 0);
+	assert.equal(warnings.length, 1);
+	assert.match(warnings[0], /orphan-pass2/);
+	assert.match(warnings[0], /pass 2/);
+});
+
+test('checkLinkHygiene is clean for a pass>1 spec that sets revises', () => {
+	const specs = [
+		{ id: 'pass2-spec', status: 'approved', pass: 2, revises: 'pass1-spec' },
+		{ id: 'pass1-spec', status: 'superseded', supersedes: undefined }
+	];
+	const { warnings } = checkLinkHygiene(specs);
+	assert.equal(warnings.filter((w) => w.includes('pass2-spec')).length, 0);
+});
+
+test('checkLinkHygiene treats pass 1 (default) as exempt from the lineage check', () => {
+	const specs = [{ id: 'first-pass', status: 'draft' }];
+	const { warnings } = checkLinkHygiene(specs);
+	assert.equal(warnings.length, 0);
+});

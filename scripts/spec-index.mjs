@@ -37,11 +37,13 @@ export function projectSpec(fm) {
 
 // Link-hygiene checks for G0 (2026-08-17-sdlc-phase-gates-scoring-spec.md §3 G0:
 // "a superseded spec whose successor doesn't link back ... gets auto-fixed or
-// flagged"). Non-fatal by design: `supersedes` links predate this check by weeks
-// (35 pass>1 specs revised in place, 5 pre-template specs marked `superseded` with
-// no successor) and the sweep — not this validator — decides auto-fix vs. flag.
-// Only a dangling `supersedes` reference (points at a spec id that doesn't exist)
-// is a hard error: that's an unambiguous data bug, not a hygiene judgment call.
+// flagged" AND "a `pass > 1` spec without `revises`/`supersedes` ... gets auto-fixed
+// or flagged"). Non-fatal by design: these links predate this check by weeks (many
+// pass>1 specs revised in place without a `revises` pointer, 5 pre-template specs
+// marked `superseded` with no successor) and the sweep — not this validator —
+// decides auto-fix vs. flag. Only a dangling `supersedes` reference (points at a
+// spec id that doesn't exist) is a hard error: that's an unambiguous data bug, not
+// a hygiene judgment call.
 export function checkLinkHygiene(specs) {
 	const byId = new Map(specs.map((s) => [s.id, s]));
 	const errors = [];
@@ -63,6 +65,10 @@ export function checkLinkHygiene(specs) {
 	for (const s of specs) {
 		if (s.status === 'superseded' && !supersededTargets.has(s.id))
 			warnings.push(`${s.id}: status "superseded" but no other spec's "supersedes" links back to it`);
+	}
+	for (const s of specs) {
+		if ((s.pass ?? 1) > 1 && !s.revises && !s.supersedes)
+			warnings.push(`${s.id}: pass ${s.pass} but has neither "revises" nor "supersedes" — missing lineage link`);
 	}
 	return { errors, warnings };
 }
