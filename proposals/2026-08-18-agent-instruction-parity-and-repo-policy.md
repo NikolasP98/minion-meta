@@ -1,9 +1,10 @@
 ---
 id: 2026-08-18-agent-instruction-parity-and-repo-policy
 title: Provider-neutral agent instructions + machine-readable repo policy registry
-status: approved
+status: in-spec
 created: 2026-08-18
 updated: 2026-08-18
+spawned_spec: 2026-08-18-agent-instruction-parity-and-repo-policy-spec
 repos: [minion-meta]
 tags: [docs, logic]
 source: audit-2026-08-18
