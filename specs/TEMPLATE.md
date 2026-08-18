@@ -34,6 +34,8 @@ Flat scalars and string arrays only — no nesting (the parser is deliberately t
 | `verdict` | no | latest review roll-up: `pending` `approved` `changes_requested` `rejected`. Full review text lives in a sidecar `<id>.review.md` or the PR thread, never inline |
 | `pr` | no | PR number when the spec is gated via GitHub — a pointer; PR state stays the canon |
 | `type` | no | `feature` `fix` `infra` `decision` `research` (default `feature`) |
+| `relationship` | no | spec-intake classification vs existing artifacts: `new` `extends` `merges-drafts` `supersedes` `depends-on` `conflicts-with` `already-satisfied`. The spec agent RECOMMENDS; lifecycle changes are applied by the resolver/human, never unilaterally |
+| `related` | no | ids the `relationship` refers to (specs or proposals), with a one-line reason each in the body |
 
 ## Body convention
 
@@ -41,3 +43,10 @@ Keep the existing house style: `# Title`, then `## 0. Product` (what and why, in
 words), numbered sections, explicit **out-of-scope**, and an end-to-end verification step the
 implementer can run. Slices sized "junior dev, 4–8 focused hours" with a machine-checkable
 definition of done.
+
+**AS-IS → TO-BE → DELTA (required):** AS-IS = current verified technical
+behavior (code anchors, existing tests, constraints, known unknowns). TO-BE =
+target behavior with invariants, compatibility requirements, and what must
+remain unchanged. DELTA = the numbered transitions, each mapped to a slice and
+to the test/evidence that proves it. A slice that doesn't trace to a DELTA
+entry is scope creep; a DELTA entry with no proving test is an open end.
