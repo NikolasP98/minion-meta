@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { buildArtifact, readPolicy, validatePolicy } from './repo-policy.mjs';
+import Ajv2020 from 'ajv/dist/2020.js';
+import { buildArtifact, effectiveRequiredChecks, readPolicy, validatePolicy } from './repo-policy.mjs';
 
 const policy = readPolicy();
 assert.deepEqual(validatePolicy(policy), []);
@@ -28,6 +29,9 @@ assert.match(errorFor((value) => { value.repositories[0].commands.build = ''; })
 assert.match(errorFor((value) => { value.repositories[0].commands.build = 'pnpm build && deploy'; }), /minion-meta.*commands.build/);
 assert.match(errorFor((value) => { value.repositories[0].requiredChecks = [{ name: '', appId: 0 }]; }), /requiredChecks\[0\].name/);
 assert.match(errorFor((value) => { value.repositories[1].aliases.push('meta'); }), /collides with minion-meta/);
+assert.match(errorFor((value) => { value.repositories[0].aliases = {}; }), /minion-meta.*aliases: must be an array/);
+assert.match(errorFor((value) => { value.repositories[0].aliases = null; }), /minion-meta.*aliases: must be an array/);
+assert.match(errorFor((value) => { value.repositories = [null]; }), /row-0\]: must be an object/);
 
 const extension = {
   schemaVersion: 1,
@@ -45,6 +49,36 @@ reordered.repositories.reverse();
 for (const row of reordered.repositories) { row.aliases.reverse(); row.requiredChecks.reverse(); }
 const reorderedKeys = JSON.parse(JSON.stringify(reordered, (key, value) => value && typeof value === 'object' && !Array.isArray(value) ? Object.fromEntries(Object.entries(value).reverse()) : value));
 assert.equal(buildArtifact(policy).contentHash, buildArtifact(reorderedKeys).contentHash, 'set/key order changed the canonical hash');
+
+const schema = JSON.parse(readFileSync(new URL('../repo-policy.schema.json', import.meta.url), 'utf8'));
+const validateSchema = new Ajv2020({ allErrors: true, strict: true }).compile(schema);
+assert.equal(validateSchema(policy), true, JSON.stringify(validateSchema.errors));
+assert.equal(validateSchema(buildArtifact(policy)), true, JSON.stringify(validateSchema.errors));
+assert.equal(validateSchema(extension), true, JSON.stringify(validateSchema.errors));
+for (const mutate of [
+  (value) => { value.repositories[0].commands.build = ''; },
+  (value) => { value.repositories[0].commands.build = 'pnpm build && deploy'; },
+  (value) => { value.repositories[0].checkout = '/tmp/repo'; },
+  (value) => { value.repositories[0].checkout = '../repo'; }
+]) {
+  const invalid = clone(policy);
+  mutate(invalid);
+  assert.equal(validateSchema(invalid), false, 'schema negative fixture unexpectedly passed');
+}
+
+const classicOnly = effectiveRequiredChecks(
+  { checks: [{ context: 'verify', app_id: 15368 }] },
+  [],
+  'dev',
+  'main'
+);
+assert.deepEqual(classicOnly, [{ name: 'verify', appId: 15368 }]);
+const rulesetFixtures = [
+  { enforcement: 'disabled', target: 'branch', rules: [{ type: 'required_status_checks', parameters: { required_status_checks: [{ context: 'disabled', integration_id: 1 }] } }] },
+  { enforcement: 'active', target: 'branch', conditions: { ref_name: { include: ['refs/heads/main'], exclude: [] } }, rules: [{ type: 'required_status_checks', parameters: { required_status_checks: [{ context: 'other-branch', integration_id: 2 }] } }] },
+  { enforcement: 'active', target: 'branch', conditions: { ref_name: { include: ['refs/heads/dev'], exclude: [] } }, rules: [{ type: 'required_status_checks', parameters: { required_status_checks: [{ context: 'verify', integration_id: 15368 }] } }] }
+];
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, rulesetFixtures, 'dev', 'main'), [{ name: 'verify', appId: 15368 }]);
 
 const temp = mkdtempSync(join(tmpdir(), 'repo-policy-test-'));
 try {

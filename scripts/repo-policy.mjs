@@ -5,6 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import Ajv2020 from 'ajv/dist/2020.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const policyPath = resolve(root, 'repo-policy.yaml');
@@ -47,8 +48,9 @@ export function validatePolicy(policy, { fleet = true, canonicalRows = [] } = {}
   if (policy.schemaVersion !== 1) errors.push('$.schemaVersion: must equal 1');
   if (!Array.isArray(policy.repositories)) return [...errors, '$.repositories: must be an array'];
   if (fleet && !sameMembers(policy.repositories.map((row) => row?.id), fleetIds)) errors.push(`$.repositories: canonical ids must be exactly ${fleetIds.join(', ')}`);
-  const canonicalIds = new Set(canonicalRows.map((row) => row.id));
-  const canonicalNames = new Set(canonicalRows.flatMap((row) => [row.id, ...row.aliases]));
+  const validCanonicalRows = canonicalRows.filter((row) => row && typeof row.id === 'string' && Array.isArray(row.aliases));
+  const canonicalIds = new Set(validCanonicalRows.map((row) => row.id));
+  const canonicalNames = new Set(validCanonicalRows.flatMap((row) => [row.id, ...row.aliases]));
   const names = new Map();
   policy.repositories.forEach((row, index) => {
     const fallback = `row-${index}`;
@@ -94,7 +96,8 @@ export function validatePolicy(policy, { fleet = true, canonicalRows = [] } = {}
     }
   });
   if (fleet) {
-    const byName = new Map(policy.repositories.flatMap((row) => [row.id, ...row.aliases].map((name) => [name, row.id])));
+    const validRows = policy.repositories.filter((row) => row && typeof row.id === 'string' && Array.isArray(row.aliases));
+    const byName = new Map(validRows.flatMap((row) => [row.id, ...row.aliases].map((name) => [name, row.id])));
     for (const [key, id] of Object.entries(cliMappings)) if (byName.get(key) !== id) errors.push(`$.repositories: CLI mapping ${key} must resolve to ${id}`);
   }
   return errors;
@@ -146,13 +149,32 @@ function ghPages(endpoint) {
   return pages.flat();
 }
 
-function graphQlPolicy(remote) {
-  const [owner, name] = remote.split('/');
-  const query = 'query($owner:String!,$name:String!){repository(owner:$owner,name:$name){branchProtectionRules(first:100){nodes{pattern requiresStatusChecks requiredStatusCheckContexts}} rulesets(first:100){nodes{name enforcement rules(first:100){nodes{type parameters{... on RequiredStatusChecksParameters{requiredStatusChecks{context integrationId}}}}}}}}}';
-  const result = ghJson(['graphql', '-f', `owner=${owner}`, '-f', `name=${name}`, '-f', `query=${query}`]).data.repository;
-  const classic = result.branchProtectionRules.nodes.flatMap((rule) => rule.requiredStatusCheckContexts.map((context) => ({ name: context, appId: null })));
-  const rulesets = result.rulesets.nodes.flatMap((ruleset) => ruleset.rules.nodes.filter((rule) => rule.type === 'REQUIRED_STATUS_CHECKS').flatMap((rule) => rule.parameters.requiredStatusChecks.map((check) => ({ name: check.context, appId: check.integrationId }))));
-  return [...classic, ...rulesets];
+function refPatternMatches(pattern, branch, defaultBranch) {
+  const normalized = pattern === '~DEFAULT_BRANCH' ? defaultBranch : pattern.replace(/^refs\/heads\//, '');
+  const escaped = normalized.replace(/[.+^${}()|[\]\\]/g, '\\$&').replaceAll('*', '.*').replaceAll('?', '.');
+  return new RegExp(`^${escaped}$`).test(branch);
+}
+
+function rulesetApplies(ruleset, branch, defaultBranch) {
+  if (ruleset.enforcement !== 'active') return false;
+  const target = ruleset.target;
+  if (target && target !== 'branch') return false;
+  const ref = ruleset.conditions?.ref_name;
+  if (!ref) return true;
+  if ((ref.exclude ?? []).some((pattern) => refPatternMatches(pattern, branch, defaultBranch))) return false;
+  return (ref.include ?? []).length === 0 || ref.include.some((pattern) => refPatternMatches(pattern, branch, defaultBranch));
+}
+
+export function effectiveRequiredChecks(classic, rulesets, branch, defaultBranch) {
+  const checks = [...(classic?.checks ?? []).map((check) => ({ name: check.context, appId: check.app_id }))];
+  for (const ruleset of rulesets.filter((candidate) => rulesetApplies(candidate, branch, defaultBranch))) {
+    for (const rule of ruleset.rules ?? []) {
+      if (rule.type !== 'required_status_checks') continue;
+      for (const check of rule.parameters?.required_status_checks ?? []) checks.push({ name: check.context, appId: check.integration_id });
+    }
+  }
+  const identities = new Map(checks.map((check) => [`${check.name}\0${check.appId}`, check]));
+  return [...identities.values()].sort((a, b) => a.name.localeCompare(b.name) || a.appId - b.appId);
 }
 
 function liveRemoteState(policy) {
@@ -160,15 +182,24 @@ function liveRemoteState(policy) {
   for (const row of policy.repositories) {
     const branches = ghPages(`repos/${row.remote}/branches?per_page=100`).map((branch) => branch.name);
     let rules;
+    let classic;
     try { rules = ghJson([`repos/${row.remote}/rulesets?includes_parents=true`]); }
-    catch {
-      try { state[row.remote] = { branches, policyAccessible: true, requiredChecks: graphQlPolicy(row.remote) }; }
-      catch { state[row.remote] = { branches, policyAccessible: false, requiredChecks: [] }; }
+    catch { state[row.remote] = { branches, policyAccessible: false, requiredChecks: [] }; continue; }
+    try { classic = ghJson([`repos/${row.remote}/branches/${encodeURIComponent(row.prBase)}/protection/required_status_checks`]); }
+    catch (error) {
+      const stderr = error?.stderr?.toString() ?? '';
+      if (stderr.includes('404')) classic = { checks: [] };
+      else { state[row.remote] = { branches, policyAccessible: false, requiredChecks: [] }; continue; }
+    }
+    if ((classic.contexts ?? []).length > (classic.checks ?? []).length) {
+      state[row.remote] = { branches, policyAccessible: false, requiredChecks: [] };
       continue;
     }
+    let repository;
+    try { repository = ghJson([`repos/${row.remote}`]); }
+    catch { state[row.remote] = { branches, policyAccessible: false, requiredChecks: [] }; continue; }
     const ruleDetails = rules.map((rule) => ghJson([`repos/${row.remote}/rulesets/${rule.id}`]));
-    const requiredChecks = ruleDetails.flatMap((rule) => (rule.rules ?? []).filter((item) => item.type === 'required_status_checks').flatMap((item) => item.parameters?.required_status_checks ?? []).map((check) => ({ name: check.context, appId: check.integration_id })));
-    state[row.remote] = { branches, policyAccessible: true, requiredChecks };
+    state[row.remote] = { branches, policyAccessible: true, requiredChecks: effectiveRequiredChecks(classic, ruleDetails, row.prBase, repository.default_branch) };
   }
   return state;
 }
@@ -179,8 +210,13 @@ export function run(argv = process.argv.slice(2)) {
   const errors = validatePolicy(policy);
   if (errors.length) { fail(errors); return; }
   if (command === 'validate') {
-    if (readFileSync(resolve(root, 'repo-policy.schema.json'), 'utf8').trim() === '') fail(['repo-policy.schema.json: must not be empty']);
-    else console.log(`valid repository policy (${policy.repositories.length} rows)`);
+    try {
+      const schema = JSON.parse(readFileSync(resolve(root, 'repo-policy.schema.json'), 'utf8'));
+      const validate = new Ajv2020({ allErrors: true, strict: true }).compile(schema);
+      const documents = [['repo-policy.yaml', policy], ['generated/repo-policy.json', JSON.parse(readFileSync(generatedPath, 'utf8'))]];
+      const schemaErrors = documents.flatMap(([name, document]) => validate(document) ? [] : validate.errors.map((error) => `${name}${error.instancePath}: ${error.message}`));
+      if (schemaErrors.length) fail(schemaErrors); else console.log(`valid repository policy (${policy.repositories.length} rows)`);
+    } catch (error) { fail([`repo-policy.schema.json: ${error.message}`]); }
   } else if (command === 'generate') {
     const text = artifactText(policy);
     if (args.includes('--check')) {
