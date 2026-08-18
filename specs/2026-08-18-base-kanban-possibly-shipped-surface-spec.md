@@ -1,21 +1,21 @@
 ---
 id: 2026-08-18-base-kanban-possibly-shipped-surface-spec
-title: minion-base kanban renders and acts on G0's possibly_shipped verification flags
+title: minion-base kanban renders G0 warnings and acts on possibly_shipped flags
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-18
 updated: 2026-08-18
 proposal: 2026-08-17-base-kanban-possibly-shipped-surface
-verdict: pending
+verdict: approved
 repos: [minion-base, minion-factory, minion-meta]
-tags: [ui, logic]
+tags: [ui, logic, docs, test]
 type: feature
 ---
 
-# minion-base kanban renders and acts on G0's possibly_shipped verification flags
+# minion-base kanban renders G0 warnings and acts on possibly_shipped flags
 
-**Owner surfaces:** three repos, none of them this one's own checkout:
+**Owner surfaces:** two external repos plus this meta-repo checkout:
 `minion-base` (`NikolasP98/minion-base`, private, `main` → Vercel → base.minion-ai.org),
 `minion-factory` (the orchestrator that owns `agent/reconcile.sh`, the `/lifecycle/:kind/:id`
 write endpoint, and the GitHub-contents-API commit path), and `minion-meta` (this repo,
@@ -40,17 +40,15 @@ still-open ⚠️ N1 (minion-base absent from AGENTS.md's Project Map) and 🚨-
 (proposal, `status: review`, not yet approved) — filed independently by a minion-factory dev
 agent and flags exactly the gap §1 below re-derives from first principles. It explicitly declines
 to pick a canonical between itself and this spec's source proposal, "left for a human to
-reconcile." This spec resolves that by absorbing its DoD into Slice 1 (§3) rather than leaving two
-specs to converge later; a human still needs to close or supersede that proposal by hand (§6, N1)
-— this document does not edit it.
+reconcile." This spec resolves that by absorbing its DoD into Slice 1 (§3) and requiring the
+sibling proposal to be marked `merged` into this spec's source proposal when Slice 1 lands.
 
 **Gate conventions:**
 [`2026-08-17-sdlc-phase-gates-scoring-spec`](2026-08-17-sdlc-phase-gates-scoring-spec.md) §4b —
-Slice 1 is `logic` only (script + doc, no UI). Slice 2 is `logic` (backend endpoint + sweep
-change). Slice 3 is `ui`+`logic` — per §4b's routing rule ("split at planning time... a `ui` slice
-+ a `logic` slice where the seam is natural"), the type-and-plumbing half and the rendering half
-are still one slice here because they are one Svelte component and one fetch call; splitting them
-would recreate the context-loss handoff §4b warns against for a change this size. `ui-design-
+Slice 1 is `logic`+`docs`+`test` (projector, schema documentation, fixture test). Slice 2 is
+`logic`+`test` (backend endpoint, sweep change, regression coverage). Slice 3 is `ui`+`logic`+
+`test`; its server contract is already isolated in Slice 2, while the remaining type, render, and
+response-driven local update share one Svelte consumer and should land together. `ui-design-
 governance` does **not** apply to minion-base — its own governance is `DESIGN.md` +
 `src/lib/design/tokens.css` + `bun run lint:design`, no `lint:tokens` script, same carve-out the
 branch-filter spec made.
@@ -110,8 +108,9 @@ $ grep -n 'possibly_shipped\|evidence\|link_review' scripts/spec-index.mjs scrip
 repos, revises, supersedes, proposal, verdict, pr, type, tags` — the three G0 fields are absent
 from the conditional-spread block. `specs/TEMPLATE.md`'s field table also does not document
 `possibly_shipped`, `evidence`, `link_review`, or `reconcile_ignore` at all; G0 writes them as
-undocumented ad-hoc frontmatter. No spec currently in this repo carries any of the three fields
-(`grep -rl` across `specs/*.md` returns nothing) — consistent with `git log` here showing only
+undocumented ad-hoc frontmatter. No spec frontmatter currently carries any of the three fields
+(`rg -n '^(possibly_shipped|evidence|link_review):' specs/*.md` returns no matches) — consistent
+with `git log` here showing only
 `reconcile: proposal sweep [factory]` commits (the proposal-dedup reconciler) and zero `reconcile:
 spec sweep` commits (G0's own commit prefix per the phase-gates spec §3), i.e. G0 has not yet
 found a medium-confidence match in this repo, so the gap has not yet been observed in production —
@@ -127,9 +126,8 @@ trusting either proposal's prose, and this spec is written from the answer, not 
 **Decision:** `repos:` includes `minion-meta` and `minion-factory` alongside `minion-base`. Slice 1
 (§3) closes the meta-side gap as a prerequisite — without it, Slices 2 and 3 are unverifiable: the
 board cannot render a field `specs/index.json` never contains, no matter how correct its Svelte is.
-Slice 1's DoD is written to satisfy `2026-08-17-meta-spec-index-project-possibly-shipped`'s DoD
-verbatim (§6 N1 records the human follow-up this spec cannot perform itself: closing or
-superseding that proposal once Slice 1 ships).
+Slice 1's DoD satisfies `2026-08-17-meta-spec-index-project-possibly-shipped`'s DoD and closes its
+duplicate lifecycle state in the same meta-repo slice.
 
 ## 2. Assumptions carried into slices below — and why Slice 0 exists in each repo
 
@@ -143,16 +141,19 @@ proposal citations, ancestor specs, and the `sdlc-board-triage-and-phase-gates` 
 inline) — **not verified fact**. Each slice below opens with a short, uncounted recon step that
 turns its carried claims into recorded facts before implementation, following the precedent
 `2026-08-17-base-deploy-status-branch-filter-spec` §1 set for exactly this situation. If recon
-contradicts an assumption, stop and update this spec before implementing — do not silently
-reinterpret the work in the PR.
+contradicts a behavioral or data-contract assumption, stop and update this spec before
+implementing; path or component-name drift may be recorded in the PR and followed without a spec
+revision.
 
-Five carried claims are load-bearing:
+Four carried claims are load-bearing:
 
 1. **The write-back path is `POST /lifecycle/:kind/:id {status, reason, by}`** on minion-factory,
    already used by the board for proposal/spec approve-reject actions (`sdlc-board-triage-and-
    phase-gates` memory, "LIFECYCLE TOOLS" entry: "writes meta frontmatter via contents API, audit =
    commit message w/ actor+reason"). This is the "same PR/commit path the board already uses for
-   other spec mutations" the proposal's DoD requires — not a new mechanism.
+   other spec mutations" the proposal's DoD requires — not a new mechanism. The proposal does not
+   require a PR when this existing path writes a reviewed commit directly; recon records the
+   actual target branch and commit mechanism.
 2. **Terminal-state writes require a ≥20-char `reason`** (same memory entry: "terminal states
    REQUIRE ≥20-char justification (verified live)"). §4 D1 applies this to both dispositions this
    spec adds, on the reasoning that overriding an automated flag is the same stakes as a terminal
@@ -163,14 +164,11 @@ Five carried claims are load-bearing:
    (phase-gates spec §3 G0: "flip frontmatter (`stage: done, status: shipped`...)"). This is a
    second, independent inconsistency from §1's — between G0's write convention and the lifecycle
    endpoint's accepted values — and §4 D2 resolves it explicitly rather than guessing silently.
-4. **minion-base already has a reason-prompt UI** for existing approve/reject lifecycle actions
-   (implied by claim 2 being "verified live" on the board) that Slice 3 reuses rather than building
-   new.
-5. **minion-base optimistically patches its own fetched `index.json`/store on a lifecycle action**
-   before the next server refresh (memory: factory's runner "now patches BOTH [the source .md and
-   index.json]... mirrors base setStatus" — i.e. base already has a `setStatus`-shaped local-mirror
-   update it performs after a successful lifecycle call). Slice 3 extends this existing mirror
-   update rather than introducing a new one.
+4. **minion-base has an existing lifecycle-action UI and local update path**, but the cited memory
+   does not prove that it includes a reusable reason dialog or an optimistic `SpecFile` patch.
+   Slice 0 locates the actual components and response shape. Slice 3 reuses them when present;
+   otherwise it adds the smallest implementation consistent with minion-base's `DESIGN.md` and
+   existing primitives. This uncertainty changes file selection, not required behavior.
 
 ### Slice 0 — recon (≤ 30 min per repo, prepended to each slice below, not counted in estimates)
 
@@ -178,7 +176,7 @@ Five carried claims are load-bearing:
 # minion-meta (this repo — already partially done above; re-run against the branch HEAD at
 # implementation time in case this spec's own claims have drifted):
 grep -n 'possibly_shipped\|evidence\|link_review\|reconcile_ignore' scripts/*.mjs specs/TEMPLATE.md
-grep -rl 'possibly_shipped\|link_review' specs/*.md   # expect: none, or a short list to test against
+rg -n '^(possibly_shipped|evidence|link_review):' specs/*.md # expect: none, or a short list to test against
 
 # minion-factory (wherever it's checked out):
 cd minion-factory
@@ -192,8 +190,9 @@ grep -rn 'index.json' agent/ server/ 2>/dev/null                         # confi
 cd minion_base
 grep -n 'SpecFile' -r src/lib/                                           # locate the type
 test -f src/routes/kanban/+page.svelte && grep -n 'possibly_shipped\|amber\|verify' src/routes/kanban/+page.svelte
-grep -rln 'setStatus\|lifecycleAction\|factoryFetch' src/lib/            # locate the existing mutation + optimistic-mirror pattern (claim 5)
-grep -rln 'reason' src/lib/components/ | grep -i 'modal\|prompt\|dialog' # locate the reason-prompt UI (claim 4)
+grep -rln 'setStatus\|lifecycleAction\|factoryFetch\|/lifecycle/' src/    # locate mutation, response, and local-update paths
+grep -rln 'reason' src/lib/components/ src/routes/ 2>/dev/null | grep -i 'modal\|prompt\|dialog' # locate reusable reason UI, if any
+rg -n 'FACTORY_URL|FACTORY_SECRET|\[\.\.\.path\]' src/routes/ src/lib/server/ # confirm the server-only proxy/auth boundary
 ```
 
 Paste each repo's output into its slice's PR. Where a claim is contradicted, the slice's "Do"
@@ -201,7 +200,7 @@ list is a starting point, not a spec to follow blindly past the contradiction.
 
 ## 3. Slice 1 — minion-meta: project the three fields (closes the sibling proposal too)
 
-**Tags:** `logic` · **Estimate:** 3–4 h · **Repo:** minion-meta
+**Tags:** `logic`, `docs`, `test` · **Estimate:** 4–6 h · **Repo:** minion-meta
 
 **Goal:** `specs/index.json` carries `possibly_shipped`, `evidence`, `link_review` for any spec
 whose frontmatter has them, using the same pattern already used for `revises`/`supersedes`/
@@ -229,38 +228,46 @@ whose frontmatter has them, using the same pattern already used for `revises`/`s
   the generated object; a spec fixture without it produces no key (not `null`, not `""` — absent,
   matching the existing fields' behavior); `reconcile_ignore` on a fixture produces **no** key in
   the output.
+- Mark `proposals/2026-08-17-meta-spec-index-project-possibly-shipped.md` as `status: merged`, set
+  `merged_into: 2026-08-17-base-kanban-possibly-shipped-surface`, update its date, and regenerate
+  `proposals/index.json`. The source proposal is canonical because it already owns this spawned
+  spec; leaving the sibling in `review` would keep a duplicate Proposal card alive after its DoD
+  ships.
 
-**Files:** `scripts/spec-index.mjs`, `specs/TEMPLATE.md`, a new or extended test file (locate the
-existing test setup for `scripts/` in Slice 0 recon — if none exists, a minimal `node --test`
-script following this repo's existing script conventions is sufficient; no new test framework
-dependency).
+**Files:** `scripts/spec-index.mjs`, `specs/TEMPLATE.md`,
+`proposals/2026-08-17-meta-spec-index-project-possibly-shipped.md`, `specs/index.json`,
+`proposals/index.json`, and a new or extended test file (locate the existing test setup for
+`scripts/` in Slice 0 recon — if none exists, a minimal `node --test` script following this repo's
+existing script conventions is sufficient; no new test framework dependency).
 
 **Definition of done (machine-checkable):**
 
 ```bash
 # Fixture proof — create a throwaway spec with possibly_shipped set, run the indexer, inspect, remove:
 cp specs/TEMPLATE.md specs/_tmp-possibly-shipped-fixture.md
-# edit the copy's frontmatter: id/created as required, plus:
+# edit the copy's frontmatter: set id: _tmp-possibly-shipped-fixture and a valid created date, plus:
 #   possibly_shipped: "https://github.com/example/pr/1"
 #   evidence: "https://github.com/example/pr/2"
 #   link_review: "ambiguous supersedes link, needs human read"
 node scripts/spec-index.mjs
-grep -A4 '"_tmp-possibly-shipped-fixture"' specs/index.json
-#   → possibly_shipped/evidence/link_review keys present with the fixture's values
+node -e "const x=require('./specs/index.json').specs.find(s=>s.id==='_tmp-possibly-shipped-fixture'); if(!x||!x.possibly_shipped||!x.evidence||!x.link_review||'reconcile_ignore' in x) process.exit(1)"
 rm specs/_tmp-possibly-shipped-fixture.md
 node scripts/spec-index.mjs   # regenerate clean — fixture gone from index.json too
+node -e "if(require('./specs/index.json').specs.some(s=>s.id==='_tmp-possibly-shipped-fixture')) process.exit(1)"
 
 grep -n 'possibly_shipped\|evidence\|link_review\|reconcile_ignore' specs/TEMPLATE.md
 #   → 4 new rows present, each marked optional
 
 node --test <the new/extended test file>   # or this repo's existing test command — green
+node scripts/proposal-index.mjs
+node -e "const p=require('./proposals/index.json').proposals.find(p=>p.id==='2026-08-17-meta-spec-index-project-possibly-shipped'); if(!p||p.status!=='merged'||p.merged_into!=='2026-08-17-base-kanban-possibly-shipped-surface') process.exit(1)"
 
-git diff --stat -- specs/index.json   # after the fixture round-trip: empty (no fixture residue committed)
+test -z "$(git diff --name-only -- specs/index.json)" # no fixture residue in committed output
 ```
 
 ## 4. Slice 2 — minion-factory: disposal endpoint + G0 skip check
 
-**Tags:** `logic` · **Estimate:** 5–7 h · **Repo:** minion-factory
+**Tags:** `logic`, `test` · **Estimate:** 5–7 h · **Repo:** minion-factory
 
 **Goal:** a human action on the board can durably confirm-shipped or reject a `possibly_shipped`
 flag, through the existing commit-audited write path, and a rejected spec is not re-flagged by the
@@ -269,18 +276,31 @@ next G0 sweep.
 ### D1 — Extend, don't replace, the existing lifecycle endpoint
 
 Add an optional `disposition: 'confirm-shipped' | 'reject'` field to the existing
-`POST /lifecycle/spec/:id` body, alongside (not instead of) the current `status`/`reason`/`by`
-handling recon confirms in Slice 0. `disposition` is orthogonal to a plain `status` transition:
+`POST /lifecycle/spec/:id` body, alongside the current `status`/`reason`/`by` handling recon
+confirms in Slice 0. A request supplies exactly one of `status` or `disposition`; reject a request
+that supplies both. `disposition` is valid only for `kind=spec` and only while the target spec has
+a non-empty `possibly_shipped` value; a stale or inapplicable request returns `409` and creates no
+commit. Either disposition also returns `409` while `link_review` is present: confirm-shipped
+would remove the spec from the active board and G0 scan, while reject would set
+`reconcile_ignore: true` and prevent G0 from revisiting the unresolved link. These preconditions
+prevent the new operation from becoming an alternate arbitrary "mark shipped" API or hiding a
+pending link review.
 
 - **`confirm-shipped`** — writes `stage: done`, and `status: shipped` per §2 claim 3's resolution
-  (D2 below), plus `updated: <today>`; **deletes** `possibly_shipped`, `evidence`, `link_review`
-  keys from the frontmatter entirely (not empty-string — TEMPLATE.md's flat-YAML parser treats a
-  present-but-empty key differently from absent, per `spec-frontmatter.mjs`'s serializer skipping
-  `null`/`undefined`/`''`).
-- **`reject`** — writes `reconcile_ignore: true`; deletes the same three keys; **does not** touch
-  `stage`/`status`. `reason` is still required and ≥20 chars (§2 claim 2) — rejecting a flag is an
-  assertion that the sweep was wrong, which is exactly the kind of claim the terminal-state
-  justification rule exists for, even though `stage`/`status` themselves don't move.
+  (D2 below), plus `updated: <today>`; copies the `possibly_shipped` URL into `evidence` when
+  `evidence` is absent, then deletes `possibly_shipped` entirely (not an empty string).
+- **`reject`** — writes `reconcile_ignore: true`, deletes `possibly_shipped`, and **does not** touch
+  `stage`/`status`, `evidence`, or `link_review`. `reason` is still required and ≥20 chars (§2
+  claim 2) — rejecting a flag is an assertion that the sweep was wrong, which is exactly the kind
+  of claim the terminal-state justification rule exists for, even though `stage`/`status`
+  themselves do not move.
+
+`link_review` is a separate link-hygiene warning, not shipment evidence. Neither shipment
+disposition clears or interprets it. A link-only warning is visible in Slice 3 but has no
+confirm-shipped/reject controls in this spec; resolving the underlying `revises`/`supersedes`
+relationship remains G0's existing link-hygiene workflow. This follows the source proposal's own
+description of the fields and avoids marking a spec shipped merely because its links are
+ambiguous.
 
 Both dispositions commit via the existing contents-API path with the existing audit format
 (`reconcile: spec sweep` is G0's own commit prefix; use a distinct one for human disposals, e.g.
@@ -289,6 +309,8 @@ automated flips from human ones later). Both also perform the existing dual-writ
 Slice 0 (patch the raw `.md` **and** `specs/index.json` in the same commit) — the same fix
 `sdlc-board-triage-and-phase-gates` memory records was already needed once ("latent loop fixed:
 runner lifecycle `transition()` patched only the md while every sweep reads index.json").
+The success response returns the canonical updated spec projection so minion-base updates its
+local card from committed state rather than duplicating mutation rules client-side.
 
 ### D2 — Resolve the `shipped` vs `done` status-value split (§2 claim 3)
 
@@ -327,39 +349,49 @@ the lifecycle endpoint (extend it; do not introduce a new test runner).
 ```bash
 cd minion-factory
 
-# D1/D2 — confirm-shipped and reject both round-trip against a scratch spec in a scratch branch/PR
-#   (do not run against a real active spec's id):
+# D1/D2 — first cover the transitions with the existing endpoint test harness and a mocked
+# Contents API. If a non-production scratch target exists, also round-trip scratch specs there;
+# never exercise these destructive transitions against a real active spec:
 curl -s -X POST "$FACTORY_URL/lifecycle/spec/<scratch-id>" \
   -H 'content-type: application/json' \
   -d '{"disposition":"confirm-shipped","reason":"<>=20 char test reason for confirm>","by":"spec-recon-test"}'
-#   → commit created; scratch spec's .md now has stage: done, status: shipped, no possibly_shipped/
-#     evidence/link_review keys; specs/index.json in the same commit reflects the same
+#   → commit created; scratch spec's .md now has stage: done, status: shipped, no
+#     possibly_shipped key; evidence equals its prior value or the former possibly_shipped URL;
+#     any link_review is unchanged; specs/index.json in the same commit reflects the same
 
 curl -s -X POST "$FACTORY_URL/lifecycle/spec/<scratch-id-2>" \
   -H 'content-type: application/json' \
   -d '{"disposition":"reject","reason":"<>=20 char test reason for reject>","by":"spec-recon-test"}'
-#   → commit created; scratch spec's .md has reconcile_ignore: true, no possibly_shipped/evidence/
-#     link_review keys, stage/status UNCHANGED from before the call; index.json updated in the same commit
+#   → commit created; scratch spec's .md has reconcile_ignore: true, no possibly_shipped key;
+#     stage/status/evidence/link_review are UNCHANGED; index.json updated in the same commit
 
 curl -s -X POST "$FACTORY_URL/lifecycle/spec/<scratch-id-3>" \
   -H 'content-type: application/json' \
-  -d '{"disposition":"reject","reason":"too short"}'
+  -d '{"disposition":"reject","reason":"too short","by":"spec-recon-test"}'
 #   → rejected (400), same ≥20-char rule as existing terminal transitions; no commit created
 
-# D3 — the G0 skip, proven against a fixture the sweep would otherwise flag:
-#   construct a spec fixture with reconcile_ignore: true that also matches G0's shipment-evidence
-#   heuristic (same shape as a spec it would normally flag); run agent/reconcile.sh against it
-#   → the fixture is left untouched (no possibly_shipped written, no commit); remove the fixture
+curl -s -X POST "$FACTORY_URL/lifecycle/spec/<scratch-id-without-flag>" \
+  -H 'content-type: application/json' \
+  -d '{"disposition":"confirm-shipped","reason":"<>=20 char stale request reason>","by":"spec-recon-test"}'
+#   → rejected (409); no commit created
 
-<existing lifecycle test command>   # extended suite green
+# Existing status behavior remains compatible, and status+disposition together are rejected (400).
+# Confirm-shipped and reject requests against a fixture that also has link_review are rejected
+# (409), preserve every field, and create no commit.
+
+# D3 — in the existing mocked/test harness, run the same medium-confidence candidate twice:
+#   without reconcile_ignore → possibly_shipped is proposed/written
+#   with reconcile_ignore: true → fixture remains byte-identical and no commit call is made
+
+<existing lifecycle test command>   # extended suite covers all cases above and is green
 ```
 
 ## 5. Slice 3 — minion-base: SpecFile type, amber render, one-click dispose
 
-**Tags:** `ui`, `logic` · **Estimate:** 6–8 h · **Repo:** minion-base
+**Tags:** `ui`, `logic`, `test` · **Estimate:** 6–8 h · **Repo:** minion-base
 
-**Goal:** the kanban board is where a human sees and disposes of a `possibly_shipped`/`link_review`
-flag — matching the proposal's DoD sentence for sentence.
+**Goal:** the kanban board is where a human sees both reconciliation warnings and disposes of a
+`possibly_shipped` flag without conflating it with a `link_review` warning.
 
 **Do:**
 
@@ -367,31 +399,41 @@ flag — matching the proposal's DoD sentence for sentence.
   `possibly_shipped?: string`, `evidence?: string`, `link_review?: string` — string types matching
   `specs/index.json`'s shape (Slice 1), not booleans; the value is the evidence URL or review note
   itself, not just a flag.
-- In the Spec-column card (and the kanban's card-detail route, if `possibly_shipped`/`link_review`
-  should surface there too — recon locates it; the v3 lifecycle-dashboard memory names
-  `/kanban/[kind]/[...ref]` as the detail-page pattern), render an amber state when either field is
-  present: a `--warn`-token badge (existing token per minion-base's `tokens.css`, §"Gate
-  conventions" above — no raw hex, no new token) showing the evidence URL as a link or the
-  link-review note as text. A card with `link_review` but no `possibly_shipped` still gets the
-  amber treatment — the proposal's DoD names both fields as amber triggers, not only
-  `possibly_shipped`.
-- Add the one-click disposal action (kebab-menu entry, consistent with the existing
-  `KebabMenu.svelte` pattern on other stage columns per the 2026-08-13 kebab-menus memory, unless
-  Slice 0 recon finds amber cards use a different existing action surface) offering **confirm
-  shipped** and **reject**, each opening the existing reason-prompt UI (§2 claim 4) with its
-  ≥20-char minimum, then calling `POST /lifecycle/spec/:id` with the matching `disposition` (Slice
-  2). On success, apply the existing optimistic local-mirror update (§2 claim 5's `setStatus`-
-  shaped pattern) so the amber state clears immediately without waiting for the next 5-minute
-  auto-refresh (`2026-08-13-minion-base-kanban-auto-refresh-spec`).
+- In every existing surface that renders a spec card or spec detail, render an amber state when
+  either warning is present: a `--warn`-token badge (existing token per minion-base's
+  `tokens.css`, §"Gate conventions" above — no raw hex, no new token). Show `possibly_shipped` and
+  `evidence` values as links only after parsing them as `http:` or `https:` URLs; otherwise render
+  them as text. Show `link_review` as text. A card with `link_review` but no `possibly_shipped`
+  still gets the amber treatment.
+- Add the disposal action to the card's existing action surface (use the existing
+  `KebabMenu.svelte` pattern unless recon finds a more specific card-action primitive). Offer
+  **confirm shipped** and **reject** only when `possibly_shipped` is present; when `link_review`
+  also exists, disable both dispositions with an explanation until the link warning is resolved.
+  Each available action opens the
+  reusable reason UI found in recon, or the smallest design-governed dialog if none exists,
+  enforces the ≥20-character minimum, then calls `POST /lifecycle/spec/:id` with the matching
+  `disposition` (Slice 2). A link-only warning is read-only in this slice.
+- Send the request through minion-base's existing server-only factory proxy. If that proxy uses a
+  method/path allowlist or validates response bodies, extend it narrowly for
+  `POST /lifecycle/spec/:id` and the canonical updated-spec response. `FACTORY_SECRET` must remain
+  server-only and must never enter page data, browser JavaScript, logs, or an error message.
+  This preserves the shipped boundary recorded in
+  `/memory/MINION/minion-factory-agent-pipeline.md` ("Base = the interface"; lifecycle gates use
+  the GitHub-contents write path).
+- On success, replace the local spec with the endpoint's canonical returned projection so the
+  amber shipment flag clears immediately without waiting for the next 5-minute auto-refresh
+  (`2026-08-13-minion-base-kanban-auto-refresh-spec`). Do not predict the server mutation in the
+  client. If `link_review` remains, the card remains amber after the shipment flag clears.
 - On a failed disposal call (network error, 400 from the ≥20-char check, etc.), the card stays
   amber and the UI surfaces the error — no silent no-op, no optimistic clear on failure.
 
-**Files:** the `SpecFile` type module (Slice 0), the kanban card component(s) (Slice 0; expected
-`src/routes/kanban/+page.svelte` and/or a card sub-component), the kebab-menu / reason-prompt
-components (Slice 0, reused not rewritten), a new or extended test for the amber-render logic if
-minion-base's `bun test` runner covers component logic (per the auto-refresh spec's precedent of
-introducing `bun test` for pure-function DoDs — if the amber-trigger logic is extracted as a pure
-`isPossiblyShipped(spec): boolean`-shaped helper, test that in isolation).
+**Files:** the `SpecFile` type module (Slice 0), every existing spec-card/detail renderer found in
+recon, the existing action/reason components or one minimal reason dialog if none exists, the
+server proxy only if its allowlist/validation requires a change, and a new or extended test for
+the warning/action predicates and response-driven local update. Keep the
+predicates pure where practical so Bun's existing runner can cover: either field triggers amber;
+only `possibly_shipped` enables shipment dispositions; `link_review` blocks both dispositions;
+a failed request leaves local state unchanged.
 
 **Definition of done (machine-checkable):**
 
@@ -402,8 +444,9 @@ bunx svelte-check                           # 0 errors / 0 warnings — proves t
 bun run lint:design                         # passes; debt unchanged or decreases (amber uses --warn, no new token)
 bun run build
 
-rg -n 'possibly_shipped' src/lib/           # SpecFile type hit + card-render hit + disposal-call hit — not just one
-git diff -U0 origin/main...HEAD -- '*.svelte' | rg '^\+.*(#[0-9a-fA-F]{3,8}|[0-9]+px)'  # → 0 (semantic tokens only)
+rg -n 'possibly_shipped|link_review' src/    # type + every card/detail render + disposal call
+# Existing/new proxy tests assert the browser request carries no FACTORY_SECRET and that upstream
+# non-2xx status/body are relayed as a safe user-visible error without clearing local state.
 ```
 
 Plus one browser probe (`browser-harness` skill, headless Chromium, basic-auth `minion:$DASH_PASSWORD`),
@@ -414,12 +457,17 @@ pasted into the PR:
   open /kanban → the card renders amber with the evidence URL visible
 - click confirm-shipped, enter a >=20-char reason, submit → card leaves the Spec column (now
   stage: done) within the page, no manual refresh; verify the commit landed in minion-meta
-- seed a second scratch spec with link_review (no possibly_shipped) → confirm it also renders
-  amber
+- seed a second scratch spec with link_review (no possibly_shipped) → confirm it renders amber,
+  shows the note, and offers no confirm-shipped/reject actions
+- seed a third scratch spec with both fields → confirm both dispositions are disabled with the
+  link-review explanation
 - click reject with a <20-char reason → submission is blocked client-side or server-rejects (400);
   card stays amber
-- click reject with a valid reason → amber clears, spec stays in its prior column; verify
-  reconcile_ignore: true landed on the spec in minion-meta and NOT stage/status
+- click reject with a valid reason → the shipment warning clears and the spec stays in its prior
+  column; verify reconcile_ignore: true landed on the spec in minion-meta and NOT stage/status;
+  (this fixture has no link_review, because unresolved link warnings block both dispositions)
+- remove the scratch specs through the same controlled meta-repo commit path and verify they no
+  longer appear on the board
 ```
 
 ## 6. Cross-repo impact
@@ -439,39 +487,29 @@ a bespoke table instead of forcing a fit:
 | The 30-min auto-approve/auto-promote sweep (`sdlc-board-triage-and-phase-gates` memory: "APPROVAL=PROMOTION... AUTO-APPROVE machine-sourced drafts") | **None to proposals** (that sweep only touches proposal-kind items, cap 3/sweep, excludes security/data tags) — but see 🚨 A1 | A1 |
 | The double-pass auto-merge rule (two consecutive review PASSes) | **None** — operates on PRs, not on spec frontmatter disposal | — |
 | `specs/TEMPLATE.md` consumers (`spec-retrofit.mjs`, any other script reading the field table for validation) | **Additive only** — four new optional rows, no enum/required-field change, `spec-index.mjs`'s existing `errors.push` required-field loop (`id, title, stage, status, created`) is untouched | Slice 1 DoD |
-| `2026-08-17-meta-spec-index-project-possibly-shipped` (sibling proposal, `status: review`) | **Superseded in substance, not in file** — Slice 1 fulfills its DoD verbatim | N1 below; this spec does not edit that proposal |
+| `2026-08-17-meta-spec-index-project-possibly-shipped` (sibling proposal, `status: review`) | **Merged into the canonical source proposal** so the duplicate card does not remain active | Slice 1 updates the proposal and committed proposal index |
 
 Scope guard, run in each repo's PR:
 
 ```bash
 # minion-meta
-out="$(git diff --name-only origin/main...HEAD | rg -v '^(scripts/spec-index\.mjs|specs/TEMPLATE\.md|specs/index\.json|.*\.test\.(mjs|js)$)')"
+out="$(git diff --name-only origin/dev...HEAD | rg -v '^(scripts/spec-index\.mjs|specs/TEMPLATE\.md|specs/index\.json|proposals/2026-08-17-meta-spec-index-project-possibly-shipped\.md|proposals/index\.json|.*\.test\.(mjs|js|ts)$)')"
 [ -z "$out" ] || { echo "FAIL: change escaped Slice 1's surface"; echo "$out"; exit 1; }
 ```
 
-### 🚨 A1 — the disposal path must stay human-only, or the whole design collapses
+### 🚨 A1 — the disposal path must not be wired into automation; `by` is not authorization
 
 The phase-gates spec's design principle #3 is explicit: "Gates block buttons, not people... a
 below-threshold score disables the board's promote button... the human can override with a
 recorded reason." `possibly_shipped` exists *because* G0 is not confident enough to auto-flip.
-Slice 2's endpoint must never be callable by the 30-min sweep, a cron, or any non-human `by` value
-— it is reachable only from the kebab-menu action Slice 3 adds, gated by the same reason-prompt UI
-every other terminal lifecycle action already uses. This is not a new constraint the slices above
-violate; it's flagged because a future "let's also auto-confirm high-confidence-adjacent flags"
-proposal would be exactly the regression the original G0 design (medium confidence → human gate,
-by design, not a shortcut) was built to prevent. Nothing in Slices 1–3 does this today; the alert
-is here so it isn't done later without noticing the tension.
-
-### ⚠️ N1 — two follow-ups this spec cannot perform itself
-
-1. **Close or supersede `proposals/2026-08-17-meta-spec-index-project-possibly-shipped.md`** once
-   Slice 1 ships — its DoD is satisfied but the file itself is untouched (the planner pass's
-   instructions for *this* spec forbid editing any file besides this one and this proposal's
-   frontmatter). Flag for whichever human or auto-triage pass next reviews that proposal.
-2. **minion-base and minion-factory are still absent from AGENTS.md's Project Map** — twice-
-   observed now (`2026-08-13-minion-base-kanban-auto-refresh-spec` §5, `2026-08-17-base-deploy-
-   status-branch-filter-spec` §5, and here). Worth a one-line follow-up in a separately scoped
-   meta-repo documentation change; not done here for the same reason as N1.1.
+Slice 2's endpoint remains behind the factory's existing privileged authentication, and Slice 3
+reaches it through the existing authenticated minion-base server proxy. The client-supplied `by`
+field is audit metadata, **not** proof that a human initiated the call, so the implementation must
+not treat a particular `by` string as an authorization boundary. This slice wires no sweep, cron,
+or CI caller to `disposition`; the negative grep in §8 proves that automation has not been added.
+Cryptographically proving a browser gesture would require a new actor/session contract and is out
+of scope. The enforceable guarantee here is authenticated, reasoned, commit-audited mutation plus
+no automated caller — consistent with the G0 design's medium-confidence human gate.
 
 ## 7. Out of scope (explicit)
 
@@ -486,13 +524,9 @@ Carried from the proposal:
 
 Added by this spec:
 
-- **A `link_review` disposal UI beyond the shared amber+confirm/reject action.** The proposal names
-  `link_review` only as a render trigger ("showing the evidence URL/link-review note"); this spec
-  routes its disposal through the same two-button flow as `possibly_shipped` rather than inventing
-  a third disposition, on the reasoning that both fields mean "a human must look at this before the
-  sweep can trust it again" and a spec could in principle carry both at once. If a future review
-  finds `link_review` needs a distinct disposal semantic (e.g. "which of the two links is correct"
-  rather than confirm/reject), that is a new proposal, not a silent reinterpretation here.
+- **A `link_review` disposal UI.** This spec makes the warning visible but does not invent a
+  shipment disposition for link ambiguity. A future action must define how the corrected
+  `revises`/`supersedes` relation is selected and written; it cannot reuse confirm-shipped/reject.
 - **Batch disposal / bulk-confirm across multiple amber cards.** One card, one action, per the
   proposal's "one-click action" singular framing.
 - **Scoring or re-scoring `possibly_shipped` confidence on the board side.** The board renders and
@@ -501,9 +535,9 @@ Added by this spec:
   `specs/index.json`; it has no board consumer.
 - **Retrying a failed disposal automatically, or queuing offline disposals.** A failed call surfaces
   an error and leaves the card amber (§5); no retry/backoff logic is added.
-- **Editing `proposals/2026-08-17-meta-spec-index-project-possibly-shipped.md` or any other file**
-  outside this spec and the source proposal's frontmatter — this planning pass's own constraint,
-  restated because N1.1 depends on a human doing it separately.
+- **Editing AGENTS.md to add minion-base/minion-factory to the Project Map.** The omission is a
+  known orchestration-documentation gap, but it does not change this feature's contracts or
+  implementation.
 - **`ui-design-governance`, `lint:tokens`, `packages/design-tokens/contract.json`.** Wrong repo —
   minion-base's governance is `DESIGN.md` + `src/lib/design/tokens.css` + `bun run lint:design`.
 
@@ -512,35 +546,43 @@ Added by this spec:
 Run with Slices 1–3 merged in their three respective repos.
 
 ```bash
-# 1. minion-meta: the field exists and round-trips (Slice 1 DoD, re-run post-merge)
-cd minion-meta && node scripts/spec-index.mjs && grep -c 'possibly_shipped' specs/index.json || true
+# 1. minion-meta: the fixture test proves projection and the committed index is canonical
+cd minion-meta
+node --test <the Slice 1 test file>
+node scripts/spec-index.mjs
+test -z "$(git diff --name-only -- specs/index.json)"
+node scripts/proposal-index.mjs
+node -e "const p=require('./proposals/index.json').proposals.find(p=>p.id==='2026-08-17-meta-spec-index-project-possibly-shipped'); if(!p||p.status!=='merged'||p.merged_into!=='2026-08-17-base-kanban-possibly-shipped-surface') process.exit(1)"
 
-# 2. minion-factory: G0 produces a real medium-confidence flag (not a fixture) and it reaches minion-meta
-cd minion-factory && ./agent/reconcile.sh   # or the scheduled invocation, per whatever recon found
-#    → if a real medium-confidence match exists this cycle, the target spec's .md in minion-meta
-#      gains possibly_shipped; if none exists, fall back to the scratch-spec fixture from Slice 2's
-#      DoD and note in the PR that no live match was available at verification time
+# 2. minion-factory: an isolated fixture that satisfies G0's medium-confidence heuristic gains
+# possibly_shipped, while the same fixture with reconcile_ignore: true remains byte-identical.
+# Run through the existing mocked/test harness; do not run the production sweep merely to create
+# evidence. Both cases are required assertions in the Slice 2 suite.
+cd minion-factory && <existing lifecycle/reconcile test command>
 
 # 3. minion-meta: the sweep's commit round-trips through the indexer (this may already be automatic
 #    via a post-commit hook or CI step — recon confirms which)
-cd minion-meta && node scripts/spec-index.mjs && git diff --stat specs/index.json
+cd minion-meta && node scripts/spec-index.mjs
+test -z "$(git diff --name-only -- specs/index.json)"
 
 # 4. minion-base: the flag is visible and actionable end to end
 #    (browser-harness, basic auth) open /kanban → the flagged spec's card is amber, evidence
 #    visible → confirm-shipped with a valid reason → card moves to the done column, no manual
 #    refresh, and minion-meta's specs/*.md for that spec now shows stage: done, status: shipped,
-#    no possibly_shipped/evidence/link_review keys, and specs/index.json agrees
+#    no possibly_shipped key, evidence preserved from the confirmed URL, link_review unchanged,
+#    and specs/index.json agrees
 
 # 5. The human-gate guarantee (🚨 A1), proven negative
-#    confirm no automated path (30-min sweep, cron, CI) ever calls POST /lifecycle/spec/:id with a
-#    disposition field — grep minion-factory's sweep/cron code for 'disposition' → 0 matches outside
-#    the route handler and its tests
+#    confirm no automated path (sweep, cron, CI) calls the lifecycle endpoint with a disposition
+#    field. Limit the search to executable automation directories and fail on any hit; route/UI/test
+#    declarations are intentionally outside this grep.
+test -z "$(rg -l 'disposition' agent/ scripts/ .github/ 2>/dev/null || true)"
 ```
 
-**Ship gate:** §8 steps 1–5 all green or explicitly explained (step 2's live-match fallback noted);
-Slice 1's fixture round-trip pasted; Slice 2's confirm-shipped and reject curl transcripts pasted,
-including the rejected-short-reason 400; Slice 3's five-point browser probe pasted; the D2 decision
-(whether `shipped` was added to the transition table, or the table was already generic) stated
-plainly; N1's two follow-ups logged (as a `TODO(handoff)` at the relevant site in each repo per
-AGENTS.md's open-items ledger, plus a proposal for N1.2 if not already filed) since this spec's own
-constraints prevent performing them here.
+**Ship gate:** §8 steps 1–5 are green; Slice 1's fixture round-trip is pasted; Slice 2's automated
+confirm-shipped, reject, stale-409, both link-review-409 cases,
+mixed-status/disposition-400, and
+short-reason-400 cases are
+green; Slice 3's browser probe is pasted; the duplicate proposal is `merged` in the committed
+proposal index; and the D2 decision (whether `shipped` was added to the transition table, or the
+table was already generic) is stated plainly.
