@@ -1,14 +1,28 @@
 ---
 spec: 2026-08-18-base-kanban-possibly-shipped-surface-spec
 pass: 2
-verdict: approved
+verdict: changes_requested
 reviewer: factory-review
 created: 2026-08-18
 ---
 
 # Pass 2 review
 
-- Set `status: approved`, `pass: 2`, and `verdict: approved` because all correctness issues were resolvable from the source proposal, current scripts, related specs, and operator memory without a human product decision.
+## Review correction 2026-08-18
+
+- Returned the spec to `status: review` with `verdict: changes_requested` because its Slice 1
+  remains projector-first while the verified factory writer does not exist.
+- The dependency must be reordered producer first, followed by projection and consumption, or the
+  latter two must land atomically under one approved cross-repo contract.
+- The open minion-base PR #13 is blocked from merge until that canonical replacement contract is
+  approved; this spec must not be promoted by the development sweep in its current form.
+
+## Superseded approval rationale
+
+- The earlier review set `status: approved`, `pass: 2`, and `verdict: approved` because it treated
+  all correctness issues as resolvable from the source proposal, current scripts, related specs,
+  and operator memory without a human product decision. The correction above supersedes that
+  conclusion after verifying the producer is absent.
 - Retitled the spec to distinguish rendering all G0 warnings from acting specifically on `possibly_shipped` flags.
 - Corrected the owner-surface description because minion-meta is the current checkout, while only minion-base and minion-factory are external.
 - Expanded the spec and slice tags to include `docs` and `test`, matching the phase-gates spec's authoritative path-derived routing contract.
@@ -41,4 +55,5 @@ created: 2026-08-18
 
 ## Human flags
 
-None.
+Producer field semantics, ownership, and projection/consumer atomicity require a new approved
+cross-repo plan before implementation or merge.
