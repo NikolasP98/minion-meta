@@ -53,11 +53,3 @@ claude-review	UNKNOWN STEP	2026-07-14T02:34:58.0771426Z [command]/usr/bin/git su
 claude-review	UNKNOWN STEP	2026-07-14T02:34:58.1135491Z Cleaning up orphan processes
 claude-review	UNKNOWN STEP	2026-07-14T02:34:58.1413120Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
-
-## Diagnosis (auto)
-
-**Root cause:** Hidden above this log tail—logs shown are post-job cleanup only (curl token deletion, git cleanup). The actual failure occurred before the "Post job cleanup" phase.
-
-**File:line:** None visible.
-
-**Fix direction:** Review the full workflow logs from earlier in the run to find the actual error message. This tail only shows successful cleanup after the job already failed.

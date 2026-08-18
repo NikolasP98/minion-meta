@@ -53,11 +53,3 @@ checks (bun, test, pnpm baml:generate && pnpm canvas:a2ui:bundle && bunx vitest 
 checks (bun, test, pnpm baml:generate && pnpm canvas:a2ui:bundle && bunx vitest run --project=unit)	UNKNOWN STEP	2026-08-17T12:49:06.4006816Z Cleaning up orphan processes
 checks (bun, test, pnpm baml:generate && pnpm canvas:a2ui:bundle && bunx vitest run --project=unit)	UNKNOWN STEP	2026-08-17T12:49:06.4530159Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830, actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
-
-## Diagnosis (auto)
-
-**Root cause**: One of the three pipelined commands failed (likely `pnpm baml:generate`, `pnpm canvas:a2ui:bundle`, or `bunx vitest run --project=unit`), but the actual error message is not in this log tail—only the generic Node ChildProcess exit.
-
-**File:line**: Not visible; the error output was truncated before the stack trace.
-
-**Fix direction**: Retrieve the full CI log output (search for the first non-zero exit or error message before the "ChildProcess.emit" line). That will show which command failed and why. Start by checking if `pnpm baml:generate` succeeded; if not, fix the BAML schema generation first.
