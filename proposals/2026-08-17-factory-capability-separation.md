@@ -1,9 +1,10 @@
 ---
 id: 2026-08-17-factory-capability-separation
 title: Factory capability separation — per-run scoped GitHub credentials
-status: approved
+status: in-spec
 created: 2026-08-17
 updated: 2026-08-18
+spawned_spec: 2026-08-18-factory-capability-separation-spec
 repos: [minion-factory]
 tags: [security, infra]
 source: audit-2026-08-17
