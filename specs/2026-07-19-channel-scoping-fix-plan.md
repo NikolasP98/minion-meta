@@ -2,11 +2,13 @@
 id: 2026-07-19-channel-scoping-fix-plan
 title: Channel Scoping Fix — sequenced plan
 stage: spec
-status: draft
+status: approved
 pass: 1
 created: 2026-07-19
-updated: 2026-07-19
+updated: 2026-08-18
 repos: [minion]
+verdict: approved
+tags: [security, logic]
 ---
 
 # Channel Scoping Fix — sequenced plan
@@ -116,3 +118,7 @@ P3 before P0/P1 = every channel disappears for everyone. P3 before P0 alone = ev
 
 - Gmail/Google shared inboxes — already fixed and verified.
 - Turning `channels.tenant_id` into a multi-org relation (an account belonging to 2+ orgs). The config shape supports `orgIds: string[]`, so it's expressible later without another migration.
+
+---
+
+**Triage 2026-08-18:** PUMPED — highest-value stale item (org-scope fail-opens confirmed live in prod). Approved for dev now that the gateway joins the factory fleet (safe self-test gate: pnpm check + vitest test/ci). Security tag keeps the merge human.

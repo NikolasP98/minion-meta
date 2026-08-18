@@ -5,7 +5,7 @@ stage: spec
 status: draft
 pass: 1
 created: 2026-08-03
-updated: 2026-08-03
+updated: 2026-08-18
 repos: [minion_hub]
 ---
 
@@ -317,3 +317,7 @@ deleted `origin/dev`). U5 touches `.svelte` files, so the explicit base ref is m
 7. Zero DDL. Any index is a separate, measured follow-up.
 8. Tick is registered in `SYSTEM_AUTOMATIONS` as `unscheduled` until a crontab line
    exists — never claimed as `netcup` while unscheduled.
+
+---
+
+**Triage 2026-08-18:** KEPT (draft) — still wanted, but blocked by 2026-08-13-crm-customers-server-pagination-spec (server-sorted column prerequisite; its two pilot PRs #105/#106 closed unshipped — a fresh dev run was requeued). Approve for dev only after pagination merges.
