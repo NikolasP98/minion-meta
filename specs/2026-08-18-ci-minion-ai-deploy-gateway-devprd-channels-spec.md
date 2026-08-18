@@ -2,12 +2,12 @@
 id: 2026-08-18-ci-minion-ai-deploy-gateway-devprd-channels-spec
 title: CI deploy gateway DEV/PRD channels — serialize and retry Swarm contention
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-18
 updated: 2026-08-18
 proposal: ci-minion-ai-deploy-gateway-devprd-channels
-verdict: pending
+verdict: approved
 repos: [minion]
 relationship: extends
 related: [2026-07-19-build-channel-dev-prd-pipeline, 2026-07-13-runtime-aware-fleet-image-updates, 2026-07-13-minion-gateway-swarm-cutover]
@@ -27,9 +27,10 @@ The proposal reports:
 
 The workflow is still the intended production delivery path, so this spec recommends fixing it,
 not retiring it. A valid release must wait a bounded amount of time for the production controller,
-then either deploy the exact `:prd` artifact or fail with an actionable contention diagnostic. It
-must not weaken the host mutex, overlap two single-writer gateway replacements, silently accept a
-failed SSH command, or change which branch/tag reaches DEV or PRD.
+then either deploy the immutable digest resolved from `:prd` by the successful controller attempt
+or fail with an actionable contention diagnostic. It must not weaken the host mutex, overlap two
+single-writer gateway replacements, silently accept a failed SSH command, or change which
+branch/tag reaches DEV or PRD.
 
 ## 1. Relationship recommendation
 
@@ -62,43 +63,66 @@ DEV/PRD workflow failure, so they are not relationship targets for this narrowly
    /opt/minion-swarm/update-controller.sh update
    ```
 
-   The controller printed `another fleet update is already running` and returned exit code `4`;
-   the job failed before producing a successful artifact-identity summary. The captured run log in
-   the proposal is the current-run evidence.
-2. The deployed controller contract is `deploy/swarm/update-controller.sh
+   The controller printed `update-controller: another fleet update is already running`, and the
+   step ended with exit code `4`. Those are not the same status: at failing SHA
+   `f27e9bf79f4239f98a57c0d1b3530dce23f52eee`, `update-controller.sh` sends every `die` path,
+   including busy, through `exit 1`; the workflow's `ssh ... | tee` pipeline reports `tee` success,
+   then `jq -e` receives an empty status file and exits `4`. Therefore controller code `4` is not a
+   valid busy classifier. The proposal log plus the workflow/controller source fetched through the
+   GitHub API on 2026-08-18 are the evidence.
+2. The failure was a proven overlap, not a hypothetical one. Successful deploy run `32088985189`
+   held the update step from `01:40:12Z` through `01:47:24Z`; run `32089416217` started its same
+   step at `01:47:13Z`, eleven seconds before the first released the lock. Both deploy runs executed
+   the default-branch workflow at the same reported SHA after two adjacent Docker Release runs.
+3. The deployed controller contract is `deploy/swarm/update-controller.sh
    <resolve|status|update>` and uses `flock` to serialize sequential, stop-first service updates.
    It resolves a mutable channel tag to an immutable digest and records structured status. These
    behaviors are anchored in `2026-07-13-runtime-aware-fleet-image-updates.md` §§5–6 and
    `2026-07-13-minion-gateway-swarm-cutover.md` §§Workload model/Reliability controls.
-3. The established release mapping is `DEV` → `:dev` and `main` → `:prd`; the `prd` branch does not
+4. The established release mapping is `DEV` → `:dev` and `main` → `:prd`; the `prd` branch does not
    deploy. This is a hard operational constraint from
    `/memory/MINION/netcup-gateway-swarm-deploy.md` ("2026-07-19 release run") and the target state in
    `2026-07-19-build-channel-dev-prd-pipeline.md` WP-B.
-4. Existing specifications identify `.github/workflows/deploy-production.yml` as the workflow that
-   deploys the `main` production channel. The target `minion` checkout is absent from this planning
-   workspace, so the implementer must resolve the failing run's `path` and `head_sha` through the
-   GitHub Actions API before editing. If run `32089416217` does not identify that exact file at the
-   expected `main` revision, Slice 0 stops and updates the implementation evidence; it must not
-   guess a replacement path.
-5. The current step treats controller contention as an immediate terminal failure. No evidence in
-   the proposal shows a bounded retry, wait message, or job-level channel concurrency guard.
-6. Test execution must stay narrow: `/memory/MINION/gw-no-full-test-suite.md` says the full gateway
+5. GitHub run metadata identifies `.github/workflows/deploy-production.yml` as the exact workflow
+   path and the SHA above as its execution revision. The target `minion` checkout is absent from this
+   planning workspace, so Slice 0 must re-fetch that file and revision through the GitHub API before
+   editing rather than infer them from a local checkout.
+6. A second authorized writer exists: `.github/workflows/swarm-rollout.yml` invokes the same
+   production controller and already owns repository-wide concurrency group
+   `swarm-rollout-production-minion` with `cancel-in-progress: false`. A new group used only by
+   `deploy-production.yml` would not prevent cross-workflow contention. The production Swarm job in
+   this workflow must join that exact existing group; the rollout workflow itself need not change.
+7. The current production registry has only `prd-netcup` enabled for `prd`; the two historical dead
+   targets are disabled and filtered by the matrix builder. This verifies that the proposal's
+   workflow-level green DoD is attainable without registry cleanup, consistent with
+   `/memory/MINION/netcup-gateway-swarm-deploy.md`'s later `enabled:false` correction.
+8. The current step treats controller contention as an immediate terminal failure. No bounded
+   retry or shared concurrency guard exists in `deploy-production.yml`.
+9. Test execution must stay narrow: `/memory/MINION/gw-no-full-test-suite.md` says the full gateway
    suite crashes the box; `/memory/MINION/test-suite-recon-2026-08-10.md` establishes
    `pnpm vitest run test/ci/` as the safe gateway gate. This workflow-only change does not justify a
    full product suite.
 
 ### 2.2 TO-BE — target behavior and invariants
 
-1. Deploy runs for the same repository and channel are serialized in GitHub Actions with a stable
-   channel-specific concurrency group and `cancel-in-progress: false`. A newer production release
-   must not cancel an active production rollout.
-2. The PRD Swarm step retries **only** controller exit code `4`, using a documented fixed interval
-   and a total timeout bounded below the job timeout. Attempt count, elapsed wait, and the terminal
-   reason are visible in the log and step summary.
+1. Every `prd-netcup` Swarm deploy job is serialized with both sibling deploy runs and
+   `.github/workflows/swarm-rollout.yml` by using the existing repository-wide concurrency group
+   `swarm-rollout-production-minion` and `cancel-in-progress: false`. Non-Swarm jobs retain a stable
+   per-channel/per-target group so DEV and PRD do not become one global queue. A newer production
+   release must not cancel an active rollout; GitHub may retain only the newest pending member of a
+   concurrency group, which is acceptable because the mutable channel tag represents the newest
+   channel release. This replacement behavior and the repository-wide scope of group names are the
+   documented [GitHub Actions concurrency contract](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency).
+2. The PRD Swarm step retries **only** the proven busy signature: SSH exits `1` and captured stderr
+   contains the exact line `update-controller: another fleet update is already running`. It uses
+   20 maximum attempts with 30 seconds between nonterminal attempts (at most 19 sleeps / 570
+   seconds, plus command runtime). Attempt count, elapsed wait, and terminal reason are visible in
+   the log and step summary.
 3. Exit code `0` proceeds to validate the controller JSON and requires
-   `.lastUpdate.state` to be `completed` or `current`. Any nonzero code other than `4`, malformed
-   JSON, terminal controller state, SSH error, or timeout fails the job without being hidden by
-   `tee` or another pipeline process.
+   `.lastUpdate.state` to be `completed` or `current`. Any nonzero result that does not match the
+   exact busy signature, malformed JSON, terminal controller state, SSH error, or timeout fails the
+   job without being hidden by `tee`, `jq`, or another pipeline process. Exit `1` with any other
+   stderr is not retried because all controller `die` paths share that status.
 4. Every retry invokes the same host, state directory, controller path, source image, and deploy
    target as the original step. CI does not inspect or delete the host lock, run two updates in
    parallel, alter `update-controller.sh`, or bypass its rollback and health checks.
@@ -117,9 +141,9 @@ DEV/PRD workflow failure, so they are not relationship targets for this narrowly
 
 | # | Transition | Slice | Proving test/evidence |
 |---|---|---|---|
-| D1 | Resolve the exact workflow file/revision and capture the existing branch, image, target, controller, shell, and timeout contract before editing. | S0 | GitHub API/run metadata plus the machine-readable baseline assertions in S0 all pass. |
-| D2 | Serialize deploy runs per channel without cancelling the active run. | S1 | Static YAML assertion finds a channel-specific `concurrency.group` and literal `cancel-in-progress: false`; `actionlint` passes. |
-| D3 | Replace fail-fast-on-4 with a bounded retry loop that preserves the SSH exit code across output capture and retries no other failure. | S1 | Deterministic shell harness returns success for `4,4,0`, immediate failure for `255`, and timeout failure for repeated `4`; `shellcheck`/`actionlint` pass. |
+| D1 | Resolve the exact workflow file/revision and capture the existing branch, image, target, controller, and shell contract before editing. | S0 | GitHub API/run metadata plus the machine-readable baseline assertions in S0 all pass. |
+| D2 | Serialize the Swarm job with every writer of the same controller without cancelling the active run. | S1 | Static YAML assertion proves the Swarm matrix path uses exact group `swarm-rollout-production-minion`, matching `swarm-rollout.yml`, with literal `cancel-in-progress: false`; non-Swarm jobs use a per-channel/per-target group; `actionlint` passes. |
+| D3 | Replace masked-busy failure with a bounded retry loop that separately captures stdout, stderr, and SSH status and retries only the exact busy signature. | S1 | Deterministic shell harness succeeds for two `(1,busy-line)` results then `0`, immediately preserves `1` with other stderr and `255`, and times out after 20 busy results; `shellcheck`/`actionlint` pass. |
 | D4 | Preserve the exact DEV/PRD mapping and production target/controller arguments. | S1 | Before/after semantic assertions compare branch filters, image tags, host/server selector, state directory, and controller path; only orchestration keys/block differ. |
 | D5 | Validate successful controller JSON and emit contention/result evidence without accepting malformed or terminal output. | S1 | Harness fixtures cover `current`, `completed`, malformed JSON, and a terminal non-success state; only the first two return zero. |
 | D6 | Prove the repaired production path on `main`. | S2 | Latest completed named workflow run for `main` is green; job summary records attempts and immutable artifact identity; live service inspection matches the resolved digest and remains 1/1 healthy. |
@@ -138,25 +162,28 @@ production CI.
 
 **Work:**
 
-1. Read run `32089416217` through the GitHub Actions API/CLI and record `workflow_id`, workflow
+1. Read runs `32089416217` and `32088985189` through the GitHub Actions API/CLI and record
+   `workflow_id`, workflow
    `path`, `head_branch`, `head_sha`, conclusion, failed job/step, and exit code. Check out/read the
    file at that exact SHA without switching the shared worktree.
 2. Confirm the expected file is `.github/workflows/deploy-production.yml`. If the run names another
    path, use the run-reported path as S1's sole file and record the discrepancy in the PR; do not
    touch both.
 3. Machine-assert the current main/DEV triggers, `:prd`/`:dev` values, `prd-netcup` selector, SSH
-   target, `/opt/minion-swarm` state directory, `/opt/minion-swarm/update-controller.sh update`, job
-   timeout, and any existing workflow/job concurrency. Record the exact values in the PR body.
-4. Confirm exit `4` is still the controller's documented busy result at the deployed revision. Do
-   not edit or deploy the host script. If the meaning is ambiguous or changed, stop for human review.
-5. Choose named constants in the workflow shell for retry interval and maximum attempts so their
-   product is positive and less than the remaining job timeout. Recommended starting policy:
-   30-second interval, 20 attempts (at most 10 minutes); adjust only from observed normal rollout
-   duration and document the arithmetic.
+   target, `/opt/minion-swarm` state directory, `/opt/minion-swarm/update-controller.sh update`, and
+   existing workflow/job concurrency. Record the exact values in the PR body.
+4. Read the controller at the run SHA and prove the busy line exits `1`; prove the workflow pipeline
+   masks SSH failure and that `jq` produced the observed step exit `4`. Read
+   `.github/workflows/swarm-rollout.yml` and prove it invokes the same controller under concurrency
+   group `swarm-rollout-production-minion`. Do not edit or deploy either file.
+5. Use named shell constants `MAX_ATTEMPTS=20` and `RETRY_INTERVAL_SECONDS=30`. Sleep only between
+   attempts, never after attempt 20, so the fixed wait budget is at most 570 seconds; the existing
+   controller has its own 420-second convergence bound per successful invocation.
 
 **Machine-checkable definition of done:** a saved PR comment/body contains all run identity fields
-and baseline values; a read-only assertion command exits `0` for every invariant above; the failing
-log proves controller exit `4`; and S1 has exactly one resolved workflow path. No file changed.
+and baseline values; a read-only assertion command exits `0` for every invariant above; source and
+run evidence prove controller busy exit `1`, pipeline masking, `jq` exit `4`, the actual overlap, and
+the shared Swarm concurrency contract; and S1 has exactly one resolved workflow path. No file changed.
 
 ### Slice 1 — Make the workflow contention-safe
 
@@ -168,34 +195,50 @@ different single workflow path, in which case that one path replaces it.
 
 **Work:**
 
-1. Add workflow/job concurrency scoped to repository plus resolved channel/branch. Use
-   `cancel-in-progress: false`; do not combine DEV and PRD into one global queue when the current
-   workflow handles both.
-2. In the existing Swarm update step, run SSH under Bash with explicit exit capture. If output is
-   piped through `tee`, capture the SSH command's status (for example Bash `PIPESTATUS[0]`) before
-   any other command. Never use a pipeline whose last command can turn a failed deploy green; this
-   follows `/memory/MINION/MEMORY.md`'s "piped gates lie" constraint.
-3. On exit `4`, log `busy`, attempt number, elapsed/remaining wait, then sleep and retry within the
-   fixed bound. On `0`, stop retrying. On every other code, fail immediately and include the code
-   without printing secrets or the remote environment.
+1. Add job-level concurrency to the matrix deploy job. For
+   `matrix.server.deployment_kind == 'swarm'`, the group must be the literal existing controller
+   group `swarm-rollout-production-minion`; otherwise use a stable group derived from channel and
+   server id. Use `cancel-in-progress: false`. This serializes the two observed deploy runs and Hub's
+   dedicated Swarm rollout path without editing the sibling workflow or combining DEV and PRD into
+   one global queue. The intended expression shape is:
+
+   ```yaml
+   concurrency:
+     group: ${{ matrix.server.deployment_kind == 'swarm' && 'swarm-rollout-production-minion' || format('deploy-gateway-{0}-{1}', matrix.server.channel, matrix.server.id) }}
+     cancel-in-progress: false
+   ```
+2. In the existing Swarm update step, run SSH under Bash with explicit, separate stdout/stderr files
+   and capture its status before printing or parsing either file. Do not pipe the gate through
+   `tee`; emit captured stderr after the status is safe. Never let a consumer turn a failed deploy
+   green; this follows `/memory/MINION/MEMORY.md`'s ★★★ "piped gates lie" constraint.
+3. On SSH exit `1`, retry only if the current attempt's stderr contains the exact busy line. Log
+   `busy`, attempt number, elapsed/remaining wait, then sleep only when another attempt remains. On
+   `0`, stop retrying. On `1` with other stderr or every other code, fail immediately with the
+   original code and sanitized diagnostic; do not print secrets or the remote environment. Before
+   every terminal failure, append attempts, elapsed wait, and the sanitized terminal reason to
+   `$GITHUB_STEP_SUMMARY` so failed runs retain actionable evidence.
 4. Write each attempt to a separate temporary output or atomically replace the final status file so
    a previous busy/error response cannot be mistaken for the successful controller JSON.
-5. After `0`, retain or strengthen the existing `jq -e` acceptance rule: only `completed` or
-   `current` passes. Append attempts, wait duration, target/revision/version, and sanitized service
-   state to `$GITHUB_STEP_SUMMARY`.
+5. After `0`, retain the existing `jq -e` acceptance rule: only `completed` or `current` passes.
+   Append attempts, wait duration, target/revision/version, and sanitized service state to
+   `$GITHUB_STEP_SUMMARY`.
 6. Keep the current branch filters, target matrix/selector, credentials, host, image tag, state
    directory, controller command, artifact validation, and downstream health checks unchanged.
 7. Exercise the shell block with a deterministic local fake `ssh` placed first on `PATH` (or an
-   equivalent isolated harness) for sequences `4,4,0`, `255`, and all-`4`, with sleep stubbed to zero.
-   Feed success/malformed/terminal JSON fixtures through the exact validation expression. This is
-   test execution only; do not commit a harness or fixture.
+   equivalent isolated harness) for: two `(exit 1, exact busy stderr)` attempts then success;
+   `(exit 1, different controller stderr)`; exit `255`; and 20 exact-busy results, with sleep stubbed
+   to zero. Feed success/malformed/terminal JSON fixtures through the exact validation expression.
+   This is test execution only; do not commit a harness or fixture.
 
 **Machine-checkable definition of done:**
 
 - `actionlint <resolved-workflow-path>` exits `0`.
 - `shellcheck` on the extracted Bash step exits `0` with no new suppression.
-- The fake-command cases produce respectively: three calls and exit `0`; one call and exit `255`;
-  exactly the configured maximum calls and nonzero timeout exit.
+- The fake-command cases produce respectively: three calls and exit `0`; one call preserving exit
+  `1` for a non-busy controller error; one call preserving exit `255`; exactly 20 busy calls, 19
+  sleeps, and a nonzero timeout exit.
+- Success and terminal-failure harness cases both produce a summary containing attempts, elapsed
+  wait, and result/reason without secret or environment values.
 - JSON fixtures for `current` and `completed` pass; malformed JSON and any other state fail.
 - A semantic before/after check proves the branch/tag map and remote target/controller arguments are
   unchanged.
@@ -233,16 +276,19 @@ probes pass; and the repository diff remains one workflow file.
 | Surface | Impact | Mitigation / alert |
 |---|---|---|
 | `minion` (`NikolasP98/minion-ai`) | One deployment workflow changes its scheduling and busy handling. | Human approval and merge remain mandatory because this is production infra; S0 freezes all target and channel values; S1 limits the diff to one workflow. |
-| Netcup Swarm/controller | No code or configuration change. CI may wait and invoke the same controller again after exit `4`. | The controller's `flock` remains authoritative; bounded retry never removes/bypasses the lock; only exit `4` is retried; post-run digest, replica, rollback, HTTP, and WS checks are required. |
+| Netcup Swarm/controller | No code or configuration change. CI may wait and invoke the same controller again after the exact busy signature. | The controller's `flock` remains authoritative; bounded retry never removes/bypasses the lock; no other exit-1 failure is retried; post-run digest, replica, rollback, HTTP, and WS checks are required. |
+| Hub-triggered `.github/workflows/swarm-rollout.yml` | It is an independent writer of the same controller and already uses `swarm-rollout-production-minion`; no file change is required there. | The production matrix job joins that exact repository-wide group, preventing deploy-vs-Hub rollout overlap; its expected-digest validation remains unchanged. |
 | DEV gateway on protopi | Scheduling may share workflow structure, but its plain-Docker target and `:dev` artifact must not change. | Channel-specific concurrency and semantic before/after assertions prevent PRD contention logic from remapping DEV or sending it through the Swarm controller. |
 | `@minion-stack/shared`, `minion_hub`, `minion_site`, `paperclip-minion` | None: no gateway frame, event, handshake, client, UI, adapter, auth, or database contract changes. | Explicit no-diff assertion for these repos; no cross-project protocol rollout is needed under the AGENTS.md impact table. |
 | Gateway channel extensions | None: deployment channel means release lane, not Telegram/WhatsApp/etc. extension behavior. | Do not touch `extensions/` or `src/channels/`; post-deploy WS/channel health is observation only. |
-| GitHub runner capacity | Same-channel runs may queue for up to the configured workflow bound instead of failing immediately. | Use channel-specific groups, keep `cancel-in-progress: false`, expose wait duration, and keep the total retry window below job timeout. This is the unavoidable intended operational impact. |
+| GitHub runner capacity | Same-target runs may queue instead of failing immediately; GitHub retains at most one pending member per concurrency group. | Keep `cancel-in-progress: false`, document that a newer pending channel release may replace an older pending one, expose wait duration, and bound retry wait to 570 seconds. |
 
 ## 5. Explicit out of scope
 
 - Editing `deploy/swarm/update-controller.sh`, its lock implementation, state directory, or host
   installation.
+- Editing `.github/workflows/swarm-rollout.yml`; its existing concurrency group is consumed as a
+  contract by the changed deploy job.
 - Removing, stealing, inspecting internals of, or force-unlocking a live controller lock.
 - Changing deployment hosts, server-registry entries, SSH users/keys, environments, secrets,
   approval rules, Docker credentials, image repository, or service names.
@@ -268,9 +314,10 @@ assuming it if the run metadata differs.
 # Static and deterministic checks (pre-merge)
 actionlint "$WORKFLOW_PATH"
 shellcheck /tmp/minion-deploy-swarm-step.sh
-./tmp-or-equivalent-retry-harness 4,4,0 --expect-calls 3 --expect-exit 0
-./tmp-or-equivalent-retry-harness 255 --expect-calls 1 --expect-exit 255
-./tmp-or-equivalent-retry-harness 4,4,4 --max-attempts 3 --expect-calls 3 --expect-nonzero
+./tmp-or-equivalent-retry-harness busy,busy,success --expect-calls 3 --expect-exit 0
+./tmp-or-equivalent-retry-harness controller-error --expect-calls 1 --expect-exit 1
+./tmp-or-equivalent-retry-harness ssh-255 --expect-calls 1 --expect-exit 255
+./tmp-or-equivalent-retry-harness busy --repeat 20 --expect-calls 20 --expect-sleeps 19 --expect-nonzero
 jq -e '.lastUpdate.state == "completed" or .lastUpdate.state == "current"' fixture-current.json
 jq -e '.lastUpdate.state == "completed" or .lastUpdate.state == "current"' fixture-completed.json
 ! jq -e '.lastUpdate.state == "completed" or .lastUpdate.state == "current"' fixture-failed.json
