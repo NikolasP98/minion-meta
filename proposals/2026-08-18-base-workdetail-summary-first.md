@@ -1,9 +1,10 @@
 ---
 id: 2026-08-18-base-workdetail-summary-first
 title: Base UI-005/006/007 — issue route, WorkDetail adapter, summary-first detail
-status: approved
+status: in-spec
 created: 2026-08-18
 updated: 2026-08-18
+spawned_spec: 2026-08-18-base-workdetail-summary-first-spec
 repos: [minion-base]
 tags: [ui, logic]
 source: ux-plan-2026-08-18
