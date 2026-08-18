@@ -1,230 +1,116 @@
 ---
 id: 2026-08-18-meta-spec-index-project-possibly-shipped-spec
-title: Project G0 reconciliation metadata into the committed spec index
+title: Establish G0 reconciliation contracts before projecting them
 stage: spec
-status: approved
+status: review
 pass: 2
 created: 2026-08-18
 updated: 2026-08-18
 proposal: 2026-08-17-meta-spec-index-project-possibly-shipped
-verdict: approved
-repos: [minion-meta]
-relationship: extends
+verdict: changes_requested
+repos: [minion-factory, minion-meta, minion-base]
+relationship: depends-on
 related: [2026-08-17-sdlc-phase-gates-scoring-spec, 2026-08-18-base-kanban-possibly-shipped-surface-spec]
 ---
 
-# Project G0 reconciliation metadata into the committed spec index
+# Establish G0 reconciliation contracts before projecting them
 
 ## 0. Product
 
-The G0 backward-staleness reconciler already records medium-confidence shipment and link-review
-signals in raw spec frontmatter, but the committed projection consumed by the board drops those
-signals. This spec closes the remaining minion-meta data-contract gap without changing G0's
-classification or the downstream board interaction.
+The requested amber shipment-review flow is not live. The current factory writer does not emit
+`possibly_shipped`, `evidence`, or `link_review`, and the proposed board consumer is not merged.
+Projecting those fields in minion-meta first would therefore publish a dead contract and falsely
+document it as operational.
 
-Quoted from the approved proposal:
-
-> `scripts/spec-index.mjs` (this repo, `dev` branch) only projects a fixed field list into
-> `specs/index.json`:
->
-> ```
-> id, title, stage, status, pass, created, updated, repos, revises, supersedes,
-> proposal, verdict, pr, type, tags
-> ```
->
-> `possibly_shipped`, `evidence`, and `link_review` are absent. Since the
-> minion-base board reads only the generated `index.json` (not raw markdown), these
-> fields are invisible downstream no matter how correctly G0 sets them — the amber
-> chip in spec §7 (board slice, minion-base) has nothing to render.
-
-The proposal's delegated gate decision supersedes its earlier cross-repo wording for planning
-purposes: it reports the base surface shipped in base PR #13, and this spec owns only the
-outstanding minion-meta projector work.
+This artifact has returned to spec review. No implementation slice may start until an approved
+cross-repo plan defines the producer, projection, and consumer in dependency order.
 
 ## 1. Relationship recommendation
 
-**Recommended classification: `extends`.** The proposal implements a missing projection step in
-an existing G0 design; it does not replace or retire either related artifact.
+**Recommended classification: `depends-on`.** The minion-meta projection depends on both a real
+minion-factory producer contract and a compatible minion-base consumer contract. The prior
+`extends` classification incorrectly treated those dependencies as shipped.
 
-- `2026-08-17-sdlc-phase-gates-scoring-spec` — extends its §3 G0 write contract by making the three
-  reconciliation fields available in the committed read model consumed downstream.
-- `2026-08-18-base-kanban-possibly-shipped-surface-spec` — complements the board consumer reported
-  shipped by the delegated gate decision; that related spec's frontmatter still says
-  `status: approved`. Although that spec also assigned its Slice 1 to this projector, the later
-  gate decision split the still-open minion-meta work into this independently executable spec.
-  For the overlapping projector work, this spec is authoritative; the related spec remains the
-  authority for its minion-base and minion-factory behavior only. Its extra proposal-lifecycle and
-  `reconcile_ignore` documentation work is not inherited by this narrower gate-approved scope.
-
-The delegated gate decision is the overlap resolution. No further lifecycle edit to either
-related artifact is part of this spec.
+- `2026-08-17-sdlc-phase-gates-scoring-spec` describes the intended G0 behavior, but its named
+  writer behavior is not present on the verified factory revision.
+- `2026-08-18-base-kanban-possibly-shipped-surface-spec` remains an unmerged consumer plan, not a
+  shipped compatibility guarantee.
 
 ## 2. AS-IS → TO-BE → DELTA
 
-### AS-IS — verified current behavior
+### AS-IS — verified repository state
 
-- `scripts/spec-index.mjs` parses every non-template, non-review `specs/*.md` file through
-  `scripts/spec-frontmatter.mjs`, validates required lifecycle fields, and constructs a fixed
-  projection before writing `specs/index.json`.
-- The projection at `scripts/spec-index.mjs`'s `specs.push({...})` includes conditional spreads for
-  `revises`, `supersedes`, `proposal`, `verdict`, `pr`, `type`, and `tags`. It has no projection for
-  `possibly_shipped`, `evidence`, or `link_review`.
-- `specs/TEMPLATE.md` says `specs/index.json` is the committed machine-readable source used by the
-  base board, but its frontmatter table does not document the three G0 fields.
-- There is no test covering `scripts/spec-index.mjs`; the root `package.json` has no script-level
-  unit-test command. Current verification is a direct `node scripts/spec-index.mjs` run, which
-  rewrites the committed index.
-- `2026-08-17-sdlc-phase-gates-scoring-spec` §3 defines G0 as the writer of
-  `possibly_shipped`, `evidence`, and `link_review`. The approved pass-2 base consumer spec defines
-  these values as optional fields and requires absent values to remain absent rather than being
-  serialized as empty placeholders.
-- Operator memory `/memory/MINION/sdlc-board-triage-and-phase-gates.md` states that the board's Spec
-  column is sourced from the committed `specs/index.json`. That decision makes projection coverage
-  a required compatibility boundary, not merely a documentation concern.
+- `NikolasP98/minion-factory@a45b225b:agent/reconcile.sh:122-179` reconciles proposals only.
+  Repository-wide search on current factory `main` finds no `possibly_shipped` or `link_review`
+  writer.
+- `scripts/spec-index.mjs` does not project `possibly_shipped`, `evidence`, or `link_review`, and
+  `specs/TEMPLATE.md` does not define them. That is correct while no live writer/consumer contract
+  exists.
+- `NikolasP98/minion-base` PR #13 is open, with no merge commit or `mergedAt`. Verified current
+  `main` (`ccc5db78`) contains no `possibly_shipped` or `link_review` consumer.
+- The earlier delegated gate record claiming the base surface was shipped was false. Both
+  compatibility premises named by the previous spec's stop gate are contradicted.
 
-### TO-BE — target behavior and invariants
+### TO-BE — desired contract and invariants
 
-- When a parsed spec has a non-empty `possibly_shipped`, `evidence`, or `link_review` frontmatter
-  value, `scripts/spec-index.mjs` copies that value unchanged to the corresponding index entry.
-  `specs/TEMPLATE.md` defines all three as optional scalar strings; this slice does not add new
-  parser-level type validation.
-- When any of those fields is absent or parses as an empty string, the generated entry omits the
-  key, matching the existing conditional-spread convention; the generator must not emit `null` or
-  an empty string.
-- Except for those three additive keys on entries whose source frontmatter contains them, all
-  existing projected values, validation, sorting, file selection, and JSON formatting remain
-  behaviorally compatible.
-- The template documents each new optional read-model field and identifies G0 as its writer.
-- A hermetic Node test proves present and absent behavior without reading or rewriting the real
-  `specs/index.json`.
-- The checked-in `specs/index.json` is regenerated once from real repository inputs after the
-  implementation. It must contain no synthetic fixture entry.
+- One approved cross-repo spec defines exact field names, scalar shapes, lifecycle semantics, and
+  ownership for the factory writer, meta projection, and base consumer.
+- The writer and consumer exist before, or land atomically with, the projection. No template may
+  identify a nonexistent writer and no projected field may be operationally dead.
+- Each slice re-verifies prerequisite commit/PR state immediately before implementation. A false
+  prerequisite stops execution and returns the artifact to review.
 
-### DELTA — transitions, slices, and proof
+### DELTA — reordered slices
 
-1. **D1 / Slice 1:** extend the fixed projector with the three optional fields. **Proof:** the
-   hermetic fixture test asserts exact preserved values for all three keys and asserts their
-   absence on a second fixture.
-2. **D2 / Slice 1:** document the optional fields as part of the spec frontmatter/read-model
-   contract. **Proof:** a test assertion or explicit `rg` check finds all three rows in
-   `specs/TEMPLATE.md`, each marked optional and tied to G0.
-3. **D3 / Slice 1:** regenerate the production index with the updated generator while preserving
-   all unrelated projection conventions. **Proof:** `node scripts/spec-index.mjs` succeeds, a
-   raw-frontmatter-to-index assertion checks every real occurrence of the three fields, an
-   assertion excludes fixture ids, and the hermetic test remains green after regeneration.
+1. **Slice 0 — compatibility recon and approval gate:** verify factory `main`, base `main`, and PR
+   state; record exact revisions and approve one cross-repo field/lifecycle contract. This slice
+   changes planning artifacts only.
+2. **Slice 1 — producer contract:** implement and test the approved G0 writer in minion-factory.
+   Do not touch minion-meta or minion-base. The producer must demonstrate emitted fixtures for
+   every approved field and absence on non-matches.
+3. **Slice 2 — committed projection:** only after Slice 1 is merged, project and document the
+   approved fields in minion-meta with hermetic present/absent tests and regenerate the index.
+4. **Slice 3 — consumer contract:** land the compatible minion-base type, rendering, and human
+   disposition flow. Slice 2 and Slice 3 may instead be made atomic if the approved plan requires
+   that no projected-but-unconsumed interval exist.
 
-Every transition belongs to Slice 1; work not tracing to D1–D3 is outside this spec.
+The original projector-only Slice 1 is withdrawn. It must not be rerun until this reordered plan
+passes review, and then only the newly approved Slice 1 is eligible for implementation.
 
-## 3. Approach — vertical slices
+## 3. Slice 0 definition of done
 
-### Slice 1 — project, document, and prove the G0 fields
+- Record immutable factory and base revisions plus the current status of every prerequisite PR.
+- Cite code anchors proving the current writer and consumer behavior.
+- Resolve whether projection and consumption must land atomically.
+- Define exact field values, clearing rules, retry/idempotency behavior, and the human decision
+  path.
+- Receive pass-2 approval with no unresolved cross-repo premise.
 
-**Estimate:** 4–6 focused hours. **Repo:** `minion-meta`. **Tags:** `logic`, `docs`, `test`.
+## 4. Cross-repo impact and stop gates
 
-This is one vertical slice because it delivers the complete producer-to-committed-read-model
-contract: implementation, schema documentation, isolated regression coverage, and generation of
-the real artifact.
-
-**Exact files to touch:**
-
-- `scripts/spec-index.mjs` — add conditional projections for `possibly_shipped`, `evidence`, and
-  `link_review` beside the existing optional-field spreads.
-- `scripts/spec-index.test.mjs` — new `node:test` regression test. Create a temporary working tree,
-  copy `scripts/spec-index.mjs` and `scripts/spec-frontmatter.mjs`, write minimal valid fixture
-  specs under its `specs/`, execute the copied indexer with the temporary directory as `cwd`, and
-  assert the temporary `specs/index.json` contents. Clean up through test teardown.
-- `specs/TEMPLATE.md` — add optional-field rows for the three projected G0 fields, including their
-  value meaning and a pointer to `2026-08-17-sdlc-phase-gates-scoring-spec` §3 G0.
-- `specs/index.json` — regenerate from repository source after implementation; do not hand-edit.
-
-Do not refactor the parser or export new production APIs merely to enable the test. The temporary
-working-directory test exercises the same command operators use and prevents fixture residue in
-the committed index. The current root CI does not invoke this script or test, and adding CI wiring
-is outside this slice.
-
-**Machine-checkable definition of done:**
-
-```bash
-node --test scripts/spec-index.test.mjs
-node scripts/spec-index.mjs
-node --input-type=module - <<'NODE'
-import { readFileSync, readdirSync } from 'node:fs';
-import { parseFrontmatter } from './scripts/spec-frontmatter.mjs';
-const { specs } = JSON.parse(readFileSync('specs/index.json', 'utf8'));
-const byId = new Map(specs.map((spec) => [spec.id, spec]));
-for (const name of readdirSync('specs').filter((name) => name.endsWith('.md') && name !== 'TEMPLATE.md' && !name.endsWith('.review.md'))) {
-  const { fm } = parseFrontmatter(readFileSync(`specs/${name}`, 'utf8'));
-  const indexed = byId.get(fm.id);
-  if (!indexed) throw new Error(`missing index entry for ${fm.id}`);
-  for (const key of ['possibly_shipped', 'evidence', 'link_review']) {
-    if (fm[key] ? indexed[key] !== fm[key] : key in indexed) throw new Error(`${fm.id}: ${key} projection mismatch`);
-  }
-}
-if (specs.some((spec) => spec.id.startsWith('_tmp-possibly-shipped'))) throw new Error('fixture residue');
-NODE
-rg -n '^\| `(?:possibly_shipped|evidence|link_review)` \| no \|' specs/TEMPLATE.md
-```
-
-The test must additionally fail if any of these regressions is introduced:
-
-- one or more of the three populated fixture values is missing or altered;
-- an absent field is emitted as a key, including as `null` or `""`;
-- an unrelated optional fixture field such as `verdict` stops projecting;
-- the fixture is written to the repository's real `specs/index.json`.
-
-## 4. Cross-repo impact assessment
-
-| Surface | Impact | Mitigation / alert |
+| Surface | Required transition | Hard gate |
 |---|---|---|
-| `minion-meta` | Owns the source frontmatter contract and committed projection. | Hermetic regression coverage plus a clean real regeneration makes the contract reviewable. |
-| `minion-base` | Read-only downstream consumer receives three additional optional keys. | The delegated gate decision reports the compatible consumer shipped in base PR #13. Do not modify or re-verify base code in this slice; stop and return to spec review if implementation evidence contradicts that compatibility premise. |
-| `minion-factory` | Existing G0 writer becomes visible through the index. | No writer change. Preserve values without normalization so the writer remains authoritative. The template defines these values as scalar strings; stop and return to spec review if real writer output violates that contract. |
-| Other gateway, hub, site, docs, paperclip, and pixel-agent surfaces | No protocol, database, auth, agent-format, workshop, or pixel-office contract changes. | No action required under AGENTS.md's Cross-Project Impact Zones. |
+| `minion-factory` | Add the real G0 writer and tests in Slice 1. | Stop if verified `main` differs from Slice 0 evidence or the field contract is not approved. |
+| `minion-meta` | Project only the merged writer contract in Slice 2. | Stop if Slice 1 is not merged or the consumer cannot accept the exact shape. |
+| `minion-base` | Consume and act on the projected contract in Slice 3. | Stop if its prerequisite PR is open, stale, or incompatible. |
 
-The change is additive and does not enter any named gateway-protocol, database-schema, auth,
-agent-definition, workshop, pixel-office, or Paperclip-adapter impact zone.
+## 5. Out of scope for this review-fix branch
 
-## 5. Out of scope
+- Implementing factory writer behavior, meta projection, or base UI/backend behavior.
+- Treating an open PR, an approved spec, or a delegated assertion as shipped evidence.
+- Adding speculative frontmatter fields to `specs/TEMPLATE.md` or `specs/index.json`.
+- Starting Slice 2 or Slice 3.
 
-- Changing `agent/reconcile.sh`, G0 confidence scoring, evidence discovery, or its write-side field
-  values in `minion-factory`.
-- Changing minion-base rendering, action controls, lifecycle endpoints, write-back behavior, or
-  deploying/re-verifying base PR #13.
-- Adding `reconcile_ignore` or any other field to `specs/index.json`.
-- Adding new board columns or rescoring specs already marked done.
-- Generalizing `spec-index.mjs` into a schema-driven projector, changing frontmatter parsing, or
-  introducing a test framework dependency.
-- Editing either `specs/index.json` or `proposals/index.json` during this planning pass. The former
-  is an implementation output; the latter is outside this spec's implementation scope.
-
-## 6. End-to-end verification
-
-After Slice 1 is implemented, run from the `minion-meta` repository root:
+## 6. Verification for the corrected planning state
 
 ```bash
-node --test scripts/spec-index.test.mjs
 node scripts/spec-index.mjs
-node --input-type=module - <<'NODE'
-import { readFileSync, readdirSync } from 'node:fs';
-import { parseFrontmatter } from './scripts/spec-frontmatter.mjs';
-const { specs } = JSON.parse(readFileSync('specs/index.json', 'utf8'));
-const byId = new Map(specs.map((spec) => [spec.id, spec]));
-for (const name of readdirSync('specs').filter((name) => name.endsWith('.md') && name !== 'TEMPLATE.md' && !name.endsWith('.review.md'))) {
-  const { fm } = parseFrontmatter(readFileSync(`specs/${name}`, 'utf8'));
-  const indexed = byId.get(fm.id);
-  if (!indexed) throw new Error(`missing index entry for ${fm.id}`);
-  for (const key of ['possibly_shipped', 'evidence', 'link_review']) {
-    if (fm[key] ? indexed[key] !== fm[key] : key in indexed) throw new Error(`${fm.id}: ${key} projection mismatch`);
-  }
-}
-if (specs.some((spec) => spec.id.startsWith('_tmp-possibly-shipped'))) throw new Error('fixture residue');
-NODE
-rg -n '^\| `(?:possibly_shipped|evidence|link_review)` \| no \|' specs/TEMPLATE.md
+node scripts/proposal-index.mjs
+git diff --check
+rg -n 'status: review|verdict: changes_requested' \
+  specs/2026-08-18-meta-spec-index-project-possibly-shipped-spec.md
+! rg -n 'possibly_shipped|link_review' scripts/spec-index.mjs specs/TEMPLATE.md
 ```
 
-Pass means the hermetic present/absent fixtures reach only their isolated generated index with
-exact values and existing optional projections intact; the repository generator accepts the
-complete real corpus; every real occurrence of the three fields has exact index parity; the
-committed output contains no fixture residue; and no cross-repo mutation was needed. The
-committed `specs/index.json` diff remains required review evidence for source-derived changes to
-other entries that occurred between regenerations.
+Passing these checks proves only that the invalid projector implementation was removed and the
+artifact returned to review. It does not approve or implement the reordered slices.

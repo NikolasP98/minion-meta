@@ -1,7 +1,7 @@
 ---
 id: 2026-08-17-meta-spec-index-project-possibly-shipped
 title: spec-index.mjs drops possibly_shipped/evidence/link_review — G0 amber chip never renders
-status: in-spec
+status: review
 created: 2026-08-17
 updated: 2026-08-18
 spawned_spec: 2026-08-18-meta-spec-index-project-possibly-shipped-spec
@@ -57,4 +57,9 @@ human to reconcile.
 
 ---
 
-**Gate decision 2026-08-18 (delegated):** Reconciler dup-flag resolved: the duplicate candidate covered the BASE surface (shipped via base PR #13); this proposal's meta-side scope (spec-index.mjs emitting possibly_shipped/evidence/link_review) is NOT covered and stands. Approved, scoped to minion-meta only.
+**Corrected gate record 2026-08-18:** The delegated decision was invalid. Verified
+`minion-factory@a45b225b` does not emit `possibly_shipped`, `evidence`, or `link_review`, and
+`minion-base` PR #13 is open rather than shipped; current base `main` (`ccc5db78`) contains no
+consumer for `possibly_shipped` or `link_review`. The projector-only scope crossed its explicit
+stop gate. This proposal returns to review and must be reordered behind an approved producer
+contract and a merged (or atomic) consumer contract. It is not approved for implementation.
