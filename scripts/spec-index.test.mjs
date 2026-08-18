@@ -6,10 +6,15 @@
 // isolated repro of the failure mode it guards against.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { cpSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { parseFrontmatter } from './spec-frontmatter.mjs';
 import {
 	missingRequiredHeadings,
 	findScalarArrayViolations,
+	findScalarStringViolations,
 	checkHeadingBaselineRatchet,
 	checkSupersedeBaselineRatchet
 } from './spec-index.mjs';
@@ -159,6 +164,16 @@ body
 	assert.deepEqual(findScalarArrayViolations(fm), []);
 });
 
+test('M2: a numeric title is rejected as a non-string scalar', () => {
+	const { fm } = parseFrontmatter(`---\nid: fixture\ntitle: 123\n---\n\nbody\n`);
+	assert.deepEqual(findScalarStringViolations(fm), ['title']);
+});
+
+test('M3: headings inside a raw HTML block do not count', () => {
+	const body = `<div>\n## 0. Product\n## Out of scope\n## Verification\n</div>\n`;
+	assert.equal(missingRequiredHeadings(body).length, 3);
+});
+
 test('M2: adding a brand-new id to an existing heading baseline is rejected', () => {
 	const base = { 'existing-spec': 'aaa' };
 	const current = { 'existing-spec': 'aaa', 'new-spec': 'bbb' };
@@ -193,4 +208,45 @@ test('M2: removing an id from the supersede baseline is allowed', () => {
 	const base = ['legacy-a', 'legacy-b'];
 	const current = ['legacy-a'];
 	assert.deepEqual(checkSupersedeBaselineRatchet(base, current), []);
+});
+
+function makeCliFixture() {
+	const root = mkdtempSync(join(tmpdir(), 'spec-index-cli-'));
+	mkdirSync(join(root, 'scripts'));
+	mkdirSync(join(root, 'specs'));
+	for (const name of ['spec-index.mjs', 'spec-frontmatter.mjs'])
+		cpSync(new URL(name, import.meta.url), join(root, 'scripts', name));
+	const spec = `---\nid: fixture\ntitle: Fixture\nstage: spec\nstatus: draft\npass: 1\ncreated: 2026-08-18\nupdated: 2026-08-18\nrepos: [minion-meta]\n---\n\n# Fixture\n`;
+	writeFileSync(join(root, 'specs', 'fixture.md'), spec);
+	execFileSync('git', ['init', '-q'], { cwd: root });
+	execFileSync('git', ['add', '.'], { cwd: root });
+	execFileSync('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-qm', 'base'], { cwd: root });
+	return root;
+}
+
+test('M1 integration: bootstrap baseline is checked against the base corpus when its file was absent', () => {
+	const root = makeCliFixture();
+	writeFileSync(join(root, 'scripts', 'spec-heading-lint-baseline.json'), '{}\n');
+	writeFileSync(join(root, 'scripts', 'spec-supersede-baseline.json'), '[]\n');
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	const baseline = JSON.parse(readFileSync(join(root, 'scripts', 'spec-heading-lint-baseline.json'), 'utf8'));
+	baseline['new-spec'] = 'not-a-base-body-hash';
+	writeFileSync(join(root, 'scripts', 'spec-heading-lint-baseline.json'), `${JSON.stringify(baseline)}\n`);
+	execFileSync('git', ['add', '.'], { cwd: root });
+	execFileSync('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-qm', 'head'], { cwd: root });
+	const result = spawnSync('node', ['scripts/spec-index.mjs', '--check'], { cwd: root, encoding: 'utf8', env: { PATH: process.env.PATH } });
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /new id "new-spec" added/);
+});
+
+test('M1 integration: push-style check with no GITHUB_BASE_REF still compares against HEAD^', () => {
+	const root = makeCliFixture();
+	writeFileSync(join(root, 'scripts', 'spec-heading-lint-baseline.json'), '{"new-spec":"bad"}\n');
+	writeFileSync(join(root, 'scripts', 'spec-supersede-baseline.json'), '[]\n');
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	execFileSync('git', ['add', '.'], { cwd: root });
+	execFileSync('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-qm', 'head'], { cwd: root });
+	const result = spawnSync('node', ['scripts/spec-index.mjs', '--check'], { cwd: root, encoding: 'utf8', env: { PATH: process.env.PATH } });
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /new id "new-spec" added/);
 });

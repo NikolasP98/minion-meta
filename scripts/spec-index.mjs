@@ -14,9 +14,9 @@
 // integrity (bidirectional — every status:superseded spec needs an incoming
 // supersedes link, not just the forward direction), required-heading lint
 // (run against the body with fenced code, HTML comments, and unclosed fences
-// stripped by a stateful scanner — see stripFencedCodeAndComments — so example
+// stripped by a stateful scanner — see stripNonDocumentMarkdown — so example
 // headings or hidden text never satisfy the gate), a one-way-ratchet check on
-// both baseline exception files against the PR base revision (see below), and
+// both baseline exception files against a prior spec corpus (see below), and
 // a staleness check that specs/index.json matches what's on disk. It never
 // writes — CI should stay read-only.
 //
@@ -33,10 +33,9 @@
 // Both baseline files are meant as one-way ratchets: a PR may only shrink them
 // (delete an id, or in practice fix a spec's headings so it no longer needs
 // the exemption), never grow them or rewrite an existing hash. --check
-// enforces this by diffing each baseline file against the content it had at
-// `git merge-base HEAD origin/$GITHUB_BASE_REF` (only set for PR runs — see
-// resolveMergeBaseSha/readFileAtRev below). Local/non-PR runs skip this one
-// check since there is no PR base to diff against.
+// enforces this against the comparison commit's spec corpus, even when the
+// baseline files did not exist there. PRs use their merge base; push/local
+// checks use the event's before SHA or HEAD^.
 //
 // Run from repo root: node scripts/spec-index.mjs [--check]
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -79,21 +78,46 @@ const TYPES = ['feature', 'fix', 'infra', 'decision', 'research'];
 //     both cases a "same-length closer" regex misses).
 // A backtick fence opener is invalid (and left as ordinary text) if its info
 // string itself contains a backtick, per CommonMark.
-export function stripFencedCodeAndComments(bodyText) {
+export function stripNonDocumentMarkdown(bodyText) {
 	const withoutComments = bodyText.replace(/<!--[\s\S]*?(?:-->|$)/g, '');
 	const lines = withoutComments.split('\n');
 	const out = [];
 	let fence = null; // { char: '`' | '~', len: number }
+	let htmlBlock = null; // null, a closing regexp, or 'blank-line'
 	for (const line of lines) {
 		if (fence) {
 			const closer = line.match(/^ {0,3}(`{3,}|~{3,})[ \t]*$/);
 			if (closer && closer[1][0] === fence.char && closer[1].length >= fence.len) fence = null;
 			continue; // every line inside the fence, including its closer, is dropped
 		}
+		if (htmlBlock) {
+			if (htmlBlock === 'blank-line') {
+				if (/^\s*$/.test(line)) htmlBlock = null;
+			} else if (htmlBlock.test(line)) {
+				htmlBlock = null;
+			}
+			continue;
+		}
 		const opener = line.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
 		const isValidOpener = opener && !(opener[1][0] === '`' && opener[2].includes('`'));
 		if (isValidOpener) {
 			fence = { char: opener[1][0], len: opener[1].length };
+			continue;
+		}
+		// CommonMark HTML blocks are raw content: Markdown headings inside them
+		// are literal text, not document sections. Cover the terminating block
+		// forms and the block-tag form used by containers such as <div>.
+		const htmlStart = line.match(/^ {0,3}<(?:(script|pre|style|textarea)(?:\s|>|$)|([A-Za-z][A-Za-z0-9-]*)(?:\s|\/?>|$)|\/([A-Za-z][A-Za-z0-9-]*)\s*>)/i);
+		if (/^ {0,3}<\?/.test(line)) htmlBlock = /\?>/;
+		else if (/^ {0,3}<!\[CDATA\[/.test(line)) htmlBlock = /\]\]>/;
+		else if (/^ {0,3}<![A-Z]/.test(line)) htmlBlock = />/;
+		else if (htmlStart) {
+			const rawTag = htmlStart[1];
+			if (rawTag) htmlBlock = new RegExp(`<\\/${rawTag}\\s*>`, 'i');
+			else htmlBlock = 'blank-line';
+		}
+		if (htmlBlock) {
+			if (htmlBlock !== 'blank-line' && htmlBlock.test(line)) htmlBlock = null;
 			continue;
 		}
 		out.push(line);
@@ -108,7 +132,8 @@ export function stripFencedCodeAndComments(bodyText) {
 // sentence that merely contains the keyword (no colon, not actually a label)
 // does not count; prose that merely mentions "out of scope" or "verification"
 // mid-paragraph doesn't either. Checked against the body with fenced code,
-// HTML comments, and unclosed fences stripped (stripFencedCodeAndComments),
+// HTML comments, raw HTML blocks, and unclosed fences stripped
+// (stripNonDocumentMarkdown),
 // so example/hidden headings never count.
 export const REQUIRED_HEADINGS = [
 	{ label: '"## 0. Product" section', re: /^##\s*0\.\s*Product/m },
@@ -123,7 +148,7 @@ export const REQUIRED_HEADINGS = [
 ];
 // Returns the labels of any required sections missing from `body`.
 export function missingRequiredHeadings(body) {
-	const scanned = stripFencedCodeAndComments(body);
+	const scanned = stripNonDocumentMarkdown(body);
 	return REQUIRED_HEADINGS.filter(({ re }) => !re.test(scanned)).map(({ label }) => label);
 }
 // TODO(handoff): 115 pre-existing specs are grandfathered here and never get
@@ -164,15 +189,18 @@ export function findScalarArrayViolations(fm) {
 	return SCALAR_FIELDS.filter((key) => Array.isArray(fm[key]));
 }
 
-// Resolves the commit where the current branch diverged from its PR base, so
-// the baseline ratchet check (below) can diff against pre-PR content.
-// GITHUB_BASE_REF is only set by GitHub Actions on pull_request runs — local
-// runs and push-triggered runs return null (nothing to ratchet against, so
-// the check is skipped rather than guessing a base).
-export function resolveMergeBaseSha(env = process.env) {
+export function findScalarStringViolations(fm) {
+	return SCALAR_FIELDS.filter(
+		(key) => key !== 'pass' && key !== 'pr' && fm[key] !== undefined && typeof fm[key] !== 'string'
+	);
+}
+
+// Resolves the corpus that baseline exceptions must have existed in already.
+// PR checks use the merge base. Push checks prefer the event's before SHA;
+// local checks use HEAD^, which also makes the CLI fail closed in fixtures.
+export function resolveComparisonSha(env = process.env) {
 	const baseRef = env.GITHUB_BASE_REF;
-	if (!baseRef) return null;
-	for (const ref of [`origin/${baseRef}`, baseRef]) {
+	if (baseRef) for (const ref of [`origin/${baseRef}`, baseRef]) {
 		try {
 			execFileSync('git', ['rev-parse', '--verify', ref], { stdio: 'ignore' });
 			return execFileSync('git', ['merge-base', 'HEAD', ref], {
@@ -183,7 +211,20 @@ export function resolveMergeBaseSha(env = process.env) {
 			// try the next candidate ref
 		}
 	}
-	return undefined; // PR run, but the base ref couldn't be resolved — misconfiguration
+	if (baseRef) return undefined; // PR run, but the base ref couldn't be resolved
+	const before = env.GITHUB_EVENT_BEFORE;
+	if (before && !/^0+$/.test(before)) {
+		try {
+			return execFileSync('git', ['rev-parse', '--verify', `${before}^{commit}`], { encoding: 'utf8' }).trim();
+		} catch {
+			return undefined;
+		}
+	}
+	try {
+		return execFileSync('git', ['rev-parse', '--verify', 'HEAD^'], { encoding: 'utf8' }).trim();
+	} catch {
+		return null; // initial commit: there is no older corpus to grandfather
+	}
 }
 export function readFileAtRev(rev, path) {
 	try {
@@ -224,6 +265,29 @@ export function checkSupersedeBaselineRatchet(baseArr, currentArr) {
 		);
 }
 
+export function readSpecCorpusAtRev(rev) {
+	const names = execFileSync('git', ['ls-tree', '-r', '--name-only', rev, '--', 'specs'], {
+		encoding: 'utf8'
+	})
+		.split('\n')
+		.filter((name) => name.endsWith('.md') && !name.endsWith('/TEMPLATE.md') && !name.endsWith('.review.md'));
+	return names.flatMap((name) => {
+		const parsed = parseFrontmatter(readFileAtRev(rev, name) ?? '');
+		return parsed?.fm.id ? [{ fm: parsed.fm, body: parsed.body }] : [];
+	});
+}
+
+export function baselineEligibilityFromCorpus(corpus) {
+	const headings = {};
+	const supersedeTargets = new Set(corpus.map(({ fm }) => fm.supersedes).filter(Boolean));
+	const supersedes = [];
+	for (const { fm, body } of corpus) {
+		if (missingRequiredHeadings(body).length > 0) headings[fm.id] = sha256(body);
+		if (fm.status === 'superseded' && !supersedeTargets.has(fm.id)) supersedes.push(fm.id);
+	}
+	return { headings, supersedes };
+}
+
 function main() {
 	const check = process.argv.includes('--check');
 	const headingBaseline =
@@ -255,6 +319,9 @@ function main() {
 		}
 		for (const key of findScalarArrayViolations(fm)) {
 			errors.push(`${name}: "${key}" must be a scalar value, not an array (got [${fm[key].join(', ')}])`);
+		}
+		for (const key of findScalarStringViolations(fm)) {
+			errors.push(`${name}: "${key}" must be a string, got ${typeof fm[key]}`);
 		}
 		if (fm.pass !== undefined && !(Number.isInteger(fm.pass) && fm.pass >= 1))
 			errors.push(`${name}: "pass" must be a positive integer, got "${fm.pass}"`);
@@ -359,25 +426,18 @@ function main() {
 			}
 		}
 
-		// One-way ratchet: neither baseline file may grow or change relative to
-		// the PR base. Skipped outside PR runs (resolveMergeBaseSha returns null)
-		// since there is no PR base to diff against there.
-		const mergeBaseSha = resolveMergeBaseSha();
-		if (mergeBaseSha === undefined) {
+		// One-way ratchet: every exception must describe unchanged debt from the
+		// comparison corpus. Deriving eligibility from specs (not the older
+		// baseline files) closes both bootstrap and push-event fail-open paths.
+		const comparisonSha = resolveComparisonSha();
+		if (comparisonSha === undefined) {
 			errors.push(
-				`cannot resolve base ref "${process.env.GITHUB_BASE_REF}" to check the baseline ratchets (needs fetch-depth: 0)`
+				`cannot resolve comparison revision to check the baseline ratchets (needs fetch-depth: 0)`
 			);
-		} else if (mergeBaseSha !== null) {
-			const baseHeadingRaw = readFileAtRev(mergeBaseSha, HEADING_BASELINE_PATH);
-			if (baseHeadingRaw !== null) {
-				errors.push(...checkHeadingBaselineRatchet(JSON.parse(baseHeadingRaw), headingBaseline));
-			}
-			const baseSupersedeRaw = readFileAtRev(mergeBaseSha, SUPERSEDE_BASELINE_PATH);
-			if (baseSupersedeRaw !== null) {
-				errors.push(
-					...checkSupersedeBaselineRatchet(JSON.parse(baseSupersedeRaw), [...supersedeBaseline])
-				);
-			}
+		} else if (comparisonSha !== null) {
+			const eligible = baselineEligibilityFromCorpus(readSpecCorpusAtRev(comparisonSha));
+			errors.push(...checkHeadingBaselineRatchet(eligible.headings, headingBaseline));
+			errors.push(...checkSupersedeBaselineRatchet(eligible.supersedes, [...supersedeBaseline]));
 		}
 	}
 
