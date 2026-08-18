@@ -190,11 +190,39 @@ function ghPages(endpoint) {
   return pages.flat();
 }
 
+function fnmatchPattern(pattern) {
+  let expression = '';
+  for (let index = 0; index < pattern.length; index += 1) {
+    const character = pattern[index];
+    if (character === '*') {
+      if (pattern[index + 1] === '*') {
+        while (pattern[index + 1] === '*') index += 1;
+        if (pattern[index + 1] === '/') {
+          expression += '(?:.*/)?';
+          index += 1;
+        } else expression += '.*';
+      } else expression += '[^/]*';
+    } else if (character === '?') expression += '[^/]';
+    else if (character === '[') {
+      const closing = pattern.indexOf(']', index + 1);
+      if (closing === -1) expression += '\\[';
+      else {
+        let contents = pattern.slice(index + 1, closing);
+        if (contents.startsWith('!')) contents = `^${contents.slice(1)}`;
+        else if (contents.startsWith('^')) contents = `\\${contents}`;
+        expression += `(?!/)[${contents.replaceAll('\\', '\\\\')}]`;
+        index = closing;
+      }
+    } else if ('\\.^$+{}()|'.includes(character)) expression += `\\${character}`;
+    else expression += character;
+  }
+  return new RegExp(`^${expression}$`);
+}
+
 function refPatternMatches(pattern, branch, defaultBranch) {
   if (pattern === '~ALL') return true;
   const normalized = pattern === '~DEFAULT_BRANCH' ? defaultBranch : pattern.replace(/^refs\/heads\//, '');
-  const escaped = normalized.replace(/[.+^${}()|[\]\\]/g, '\\$&').replaceAll('*', '.*').replaceAll('?', '.');
-  return new RegExp(`^${escaped}$`).test(branch);
+  return fnmatchPattern(normalized).test(branch);
 }
 
 function rulesetApplies(ruleset, branch, defaultBranch) {

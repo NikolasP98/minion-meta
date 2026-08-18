@@ -86,6 +86,21 @@ assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [{ ...allBranchesRule, 
 assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [{ ...allBranchesRule, enforcement: 'disabled' }], 'dev', 'main'), []);
 assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [{ ...allBranchesRule, conditions: { ref_name: { include: ['refs/heads/main'], exclude: [] } } }], 'dev', 'main'), []);
 
+function requiredCheckRule(pattern, name, exclude = []) {
+  return {
+    enforcement: 'active', target: 'branch',
+    conditions: { ref_name: { include: [pattern], exclude } },
+    rules: [{ type: 'required_status_checks', parameters: { required_status_checks: [{ context: name, integration_id: 4 }] } }]
+  };
+}
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/[0-9]', 'character-set')], 'release/1', 'main'), [{ name: 'character-set', appId: 4 }]);
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/*', 'single-level')], 'release/a/b', 'main'), []);
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/**', 'recursive')], 'release/a/b', 'main'), [{ name: 'recursive', appId: 4 }]);
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/**/candidate', 'recursive-zero-level')], 'release/candidate', 'main'), [{ name: 'recursive-zero-level', appId: 4 }]);
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/?', 'single-character')], 'release/1', 'main'), [{ name: 'single-character', appId: 4 }]);
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/?', 'single-character')], 'release/12', 'main'), []);
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/**', 'excluded', ['refs/heads/release/private/**'])], 'release/private/1', 'main'), []);
+
 const temp = mkdtempSync(join(tmpdir(), 'repo-policy-test-'));
 try {
   const goodState = Object.fromEntries(policy.repositories.map((row) => [row.remote, { policyAccessible: true, branches: [...new Set(Object.values(row.branches))], requiredChecks: row.requiredChecks }]));
