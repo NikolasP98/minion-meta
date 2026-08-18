@@ -2,18 +2,36 @@
 # memory-sync — keeps a local clone of minion-agent-memory in sync with origin.
 # Installed at ~/.local/bin/memory-sync (copy or symlink this file there).
 #
+# TODO(handoff): this staged copy has hardened the file/secret boundary
+# (allowlist staging, split pull/push timeouts) beyond what is live today
+# in NikolasP98/minion-agent-memory's scripts/memory-sync.sh. Not yet
+# applied there — that's a human/interactive action, not a factory run
+# (single-writer rule). Tracked in
+# proposals/2026-08-18-memory-sync-repo-bootstrap.md.
+#
 # Usage:
 #   memory-sync pull   # fast-forward only, short timeout, offline-safe no-op.
 #                       # For hooks that must never block a session (e.g. Claude
 #                       # Code SessionStart) — never rewrites local history.
-#   memory-sync push   # commit-all -> pull --rebase --autostash -> push.
-#                       # For hooks that run at the end of a session (e.g.
+#   memory-sync push   # commit -> pull --rebase --autostash -> push. Only the
+#                       # allowlisted memory roots are staged (see below). For
+#                       # hooks that run at the end of a session (e.g.
 #                       # Stop/PreCompact) where a local write-back exists.
 #   memory-sync         # same as `push` (the default full sync).
 #
 # Env:
-#   MEMORY_SYNC_DIR      path to the minion-agent-memory clone (default ~/minion-agent-memory)
-#   MEMORY_SYNC_TIMEOUT  seconds for network ops (default 5)
+#   MEMORY_SYNC_DIR           path to the minion-agent-memory clone (default ~/minion-agent-memory)
+#   MEMORY_SYNC_ROOTS         comma-separated list of directories (relative to
+#                             MEMORY_SYNC_DIR) that push is allowed to stage
+#                             (default "MINION"). Nothing outside these
+#                             directories is ever added, committed, or pushed —
+#                             this is the spec's secret/file boundary: sync
+#                             must never add new files outside the memory dirs.
+#                             Repo infra (README.md, scripts/, .gitattributes,
+#                             .gitignore) is intentionally excluded; those are
+#                             edited and pushed by a human, not by the hook.
+#   MEMORY_SYNC_PULL_TIMEOUT  seconds for the SessionStart-safe pull path (default 2)
+#   MEMORY_SYNC_PUSH_TIMEOUT  seconds for the end-of-session push path (default 5)
 #
 # Conflict policy: *.md conflicts during the rebase are resolved by the
 # `mdunion` merge driver declared in .gitattributes (union of both sides,
@@ -31,7 +49,9 @@ set -euo pipefail
 
 MODE="${1:-push}"
 REPO_DIR="${MEMORY_SYNC_DIR:-$HOME/minion-agent-memory}"
-TIMEOUT="${MEMORY_SYNC_TIMEOUT:-5}"
+IFS=',' read -ra MEMORY_ROOTS <<<"${MEMORY_SYNC_ROOTS:-MINION}"
+PULL_TIMEOUT="${MEMORY_SYNC_PULL_TIMEOUT:-2}"
+PUSH_TIMEOUT="${MEMORY_SYNC_PUSH_TIMEOUT:-5}"
 
 log() { echo "memory-sync: $*" >&2; }
 
@@ -48,30 +68,41 @@ git config --local merge.mdunion.driver 'git merge-file --union %A %O %B'
 
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 
-if ! timeout "$TIMEOUT" git fetch --quiet origin "$BRANCH" 2>/dev/null; then
-	log "offline or origin unreachable — no-op"
-	exit 0
-fi
-
 case "$MODE" in
 pull)
-	if ! timeout "$TIMEOUT" git merge --ff-only "origin/$BRANCH" --quiet 2>/dev/null; then
+	if ! timeout "$PULL_TIMEOUT" git fetch --quiet origin "$BRANCH" 2>/dev/null; then
+		log "offline or origin unreachable — no-op"
+		exit 0
+	fi
+	if ! timeout "$PULL_TIMEOUT" git merge --ff-only "origin/$BRANCH" --quiet 2>/dev/null; then
 		log "pull: not fast-forwardable locally, leaving as-is (run 'memory-sync push' to reconcile)"
 	fi
 	;;
 push)
-	if [[ -n "$(git status --porcelain)" ]]; then
-		git add -A
+	# Stage ONLY the allowlisted memory roots — never `git add -A`. This is
+	# the spec's file/secret boundary: an operator-notes.txt at the repo
+	# root, a stray *.env, or the claude-mem bulk store must never be swept
+	# into a sync commit just because it happens to sit in the worktree.
+	for root in "${MEMORY_ROOTS[@]}"; do
+		[[ -d "$root" ]] && git add -- "$root"
+	done
+
+	if ! git diff --cached --quiet; then
 		git commit --quiet -m "memory-sync: $(hostname)-$(date -u +%Y%m%dT%H%M%SZ)"
 	fi
 
-	if ! timeout "$TIMEOUT" git rebase --autostash "origin/$BRANCH" --quiet 2>/dev/null; then
+	if ! timeout "$PUSH_TIMEOUT" git fetch --quiet origin "$BRANCH" 2>/dev/null; then
+		log "offline or origin unreachable — no-op"
+		exit 0
+	fi
+
+	if ! timeout "$PUSH_TIMEOUT" git rebase --autostash "origin/$BRANCH" --quiet 2>/dev/null; then
 		log "rebase hit an unresolved conflict outside the union driver's reach — aborting rebase, needs a human"
 		git rebase --abort 2>/dev/null || true
 		exit 1
 	fi
 
-	if ! timeout "$TIMEOUT" git push --quiet origin "$BRANCH" 2>/dev/null; then
+	if ! timeout "$PUSH_TIMEOUT" git push --quiet origin "$BRANCH" 2>/dev/null; then
 		log "push failed (offline, or a race with another writer) — will retry next sync"
 		exit 0
 	fi

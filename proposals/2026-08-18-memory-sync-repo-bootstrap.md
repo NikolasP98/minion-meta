@@ -1,6 +1,6 @@
 ---
 id: 2026-08-18-memory-sync-repo-bootstrap
-title: Bootstrap the private minion-agent-memory repo (Slice 1 manual step)
+title: "Reconcile minion-agent-memory Slice 1 staging with the already-live repo"
 status: draft
 created: 2026-08-18
 updated: 2026-08-18
@@ -10,41 +10,72 @@ source: factory-run-a0315a16
 value: medium
 ---
 
-# minion-agent-memory doesn't exist yet — someone has to create it
+# minion-agent-memory already exists — this branch's original premise was stale
 
-`specs/2026-08-17-cloud-agent-memory-sync-spec.md` Slice 1 ("Create private
+Factory run `a0315a16` originally staged this proposal (and a now-deleted
+`ops/memory-sync/BOOTSTRAP.md`) on the assumption that
+`specs/2026-08-17-cloud-agent-memory-sync-spec.md` Slice 1 ("create private
 repo, initial push of the MINION memory dir, README contract,
-`memory-sync.sh`") is explicitly scoped in the spec's own slice table as
-"manual/interactive (done by orchestrator)" — not something a headless
-factory dev-agent run should do, because it means creating a brand-new
-persistent private GitHub repo and choosing what real curated memory content
-(currently only mounted read-only at `/memory/MINION/` inside factory
-containers) to publish into it. That's a hard-to-reverse, external-system
-action; it belongs in front of a human, not inside an unattended run.
+`memory-sync.sh`") had not happened yet. That assumption was false: a
+cross-provider review of this branch verified with `gh repo view
+NikolasP98/minion-agent-memory` that the repo already exists (private,
+created 2026-08-17, default branch `main`) and its root already contains
+`MINION/`, `README.md`, `.gitattributes`, and `scripts/memory-sync.sh`.
+Operator memory (`/memory/MINION/sdlc-board-triage-and-phase-gates.md`,
+"CLOUD MEMORY LIVE" / "THREE-TIER AGENT MEMORY LIVE") independently confirms
+Slice 1 — and slices 2–5 (hooks, factory read path, nightly bulk sync) —
+are already live on the primary machine. The stale bootstrap doc has been
+removed from this branch; it described creating a repo that exists and,
+followed as written, would have failed at step 1 or duplicated the live
+`MINION/` tree at step 2.
 
-Factory run `a0315a16` (2026-08-18) implemented everything that IS safe to
-build headlessly: the seed content for the new repo (README consumer
-contract, `.gitattributes` union-merge policy for `.md` conflicts,
-`.gitignore` secret backstop, `scripts/memory-sync.sh`) staged at
-`ops/memory-sync/repo/` in this meta-repo, plus the exact manual bootstrap
-steps at `ops/memory-sync/BOOTSTRAP.md`. It deliberately did NOT create the
-GitHub repo, did NOT copy any real memory content anywhere, and did NOT run
-`git push` against anything outside this branch.
+## What this proposal is now
+
+Not a bootstrap — a proposed **update** to the live repo's tooling, for an
+interactive session to apply (never a factory run; writing to
+`minion-agent-memory` is single-writer/interactive by the spec's own rule,
+§3 in `FACTORY_SPEC.md`). This branch's `ops/memory-sync/repo/` staging
+diverged from what actually shipped and has two fixes worth carrying over:
+
+1. **`scripts/memory-sync.sh` — file/secret boundary.** The live script
+   (`scripts/memory-sync.sh` in `minion-agent-memory`) stages the push
+   commit with `git add -A` and there is no root `.gitignore` in the live
+   repo at all. That means any file an operator happens to leave in the
+   clone — a scratch note, a stray `*.env`, the claude-mem bulk store if it
+   were ever mounted alongside — can be swept into a sync commit and
+   pushed. The spec's invariant is explicit: "sync NEVER adds new files
+   outside the memory dirs" (`FACTORY_SPEC.md` §2). This branch's staged
+   script instead stages an explicit allowlist of memory-root directories
+   (`MEMORY_SYNC_ROOTS`, default `MINION`) and its `.gitignore` blocks
+   `*.env` (not just `.env`/`.env.*`) plus key-shaped filenames. See
+   `ops/memory-sync/repo/scripts/test-memory-sync.sh` for an isolated
+   (no-network) integration test proving root files, a bulk-store
+   directory, and credential-shaped filenames never reach the remote.
+2. **Pull timeout.** The spec sets a 2-second SessionStart pull timeout
+   (`FACTORY_SPEC.md` §2). The staged script now defaults
+   `MEMORY_SYNC_PULL_TIMEOUT=2` and separates it from a longer
+   `MEMORY_SYNC_PUSH_TIMEOUT` (default 5) for the end-of-session path,
+   which has no such bound in the spec.
+
+The live script is simpler (`MEMORY_REPO_DIR`, no allowlist, no
+`.gitignore`) and has been running without incident, so this is a
+hardening proposal, not a bug report against something broken today.
 
 ## Definition of done
 
-- `gh repo create NikolasP98/minion-agent-memory --private` run by a human.
-- `ops/memory-sync/repo/` contents pushed as its initial commit, plus a real
-  copy of the local `MINION/` memory dir (per `ops/memory-sync/BOOTSTRAP.md`
-  steps 1–2).
-- `memory-sync` installed at `~/.local/bin/memory-sync` and smoke-tested
-  (step 4 of the bootstrap doc) on the primary machine.
-- This proposal flips to `done`; `ops/memory-sync/BOOTSTRAP.md`'s
-  `TODO(handoff)` comment is removed in the same pass.
+- A human reviews `ops/memory-sync/repo/scripts/memory-sync.sh` and
+  `ops/memory-sync/repo/.gitignore` in this branch against the live
+  `minion-agent-memory` repo and decides whether to adopt the allowlist +
+  timeout split (in whole or in part).
+- If adopted: pushed to `minion-agent-memory` directly (not via this
+  meta-repo), `~/.local/bin/memory-sync` re-tested per the live repo's own
+  README, and this proposal flips to `done`.
+- If not adopted: this proposal flips to `closed` with a one-line reason
+  (e.g. "live script's simplicity is intentional, boundary risk accepted").
 
 ## Out of scope
 
-Slices 2–5 of the spec (hook wiring on the local machine, factory
-`spec.sh`/`run.sh` memory-index injection in `minion-factory`, the
-claude-mem bulk B2/rclone job, and the B2 bucket/key user action) — each
-gets its own proposal/spec pass once this bootstrap exists.
+Slices 2–5 of the spec are already live per operator memory — no further
+proposal needed for them here. Any *changes* to the live hook wiring,
+factory prompt injection, or the B2/rclone bulk job belong in their own
+proposal against the current state of those systems, not this one.
