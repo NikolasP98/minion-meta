@@ -2,12 +2,12 @@
 id: 2026-08-18-base-workdetail-summary-first-spec
 title: Base UI-005/006/007 — issue route, WorkDetail adapter, summary-first detail
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-18
 updated: 2026-08-18
 proposal: 2026-08-18-base-workdetail-summary-first
-verdict: pending
+verdict: approved
 repos: [minion-base]
 relationship: depends-on
 related: [2026-08-18-minion-base-mobile-hitl-ux-plan, 2026-08-18-base-ui-primitives-and-shell]
@@ -32,8 +32,9 @@ Quoted from the approved proposal:
 > deep-link anchors.
 
 The product outcome is a mobile detail page whose first viewport identifies the exact work
-revision, the decision being requested, its consequence, readiness, and blockers. Raw source and
-history remain available, but never displace the decision summary.
+revision when supplied (or explicitly says it is unavailable), the decision being requested, its
+consequence, readiness, and blockers. Raw source and history remain available, but never displace
+the decision summary.
 
 ## 1. Relationship recommendation
 
@@ -41,14 +42,15 @@ Classification: **depends-on**.
 
 - `2026-08-18-minion-base-mobile-hitl-ux-plan` — the approved plan of record defines UI-005,
   UI-006, UI-007 and the Decision → Risk → Proof → Detail → History hierarchy implemented here.
-- `2026-08-18-base-ui-primitives-and-shell` — this package consumes its `Status`, `RiskMark`,
-  `IntegrityMark`, `CopyableHash`, and `Disclosure` primitives plus sticky/safe-area shell tokens;
-  implementation must wait until those exports and contracts exist.
+- `2026-08-18-base-ui-primitives-and-shell` is currently an approved proposal, not a spec in this
+  checkout. This package consumes its proposed `Status`, `RiskMark`, `IntegrityMark`,
+  `CopyableHash`, and `Disclosure` primitives plus sticky/safe-area shell tokens; implementation
+  must wait until those exports and contracts exist and Slice 0 confirms their actual names.
 
-`specs/index.json` and `proposals/index.json` contain no other artifact with the same combination
-of internal issue routing, Availability-typed work normalization, and summary-first work detail.
-The adjacent `2026-08-18-base-attention-queue-responsive-runs` proposal changes list/runs
-surfaces and routes cards into detail, but does not own the detail contract or layout.
+No other located artifact owns the same combination of internal issue routing,
+Availability-typed work normalization, and summary-first work detail. The adjacent
+`2026-08-18-base-attention-queue-responsive-runs` proposal changes list/runs surfaces and routes
+cards into detail, but does not own the detail contract or layout.
 
 ## 2. AS-IS → TO-BE → DELTA
 
@@ -86,48 +88,67 @@ Before Slice 1, run and attach the output of:
 rg -n "href=.*github|html_url|issue" src/routes/kanban src/lib
 rg -n "type Detail|interface Detail|metaFileFull|review|body|markdown" src/routes/kanban src/lib
 rg -n "applyTransition|approved_queue_pending|revision_conflict|indexSynced" src
+rg -n "type .*Kind|kind:|'proposal'|'spec'|'run'|'ci'|'issue'|href=" src/routes/kanban src/lib
+test ! -f AGENTS.md || sed -n '1,240p' AGENTS.md
+test ! -f CLAUDE.md || sed -n '1,240p' CLAUDE.md
 ```
 
 If the generic route, data loader, or revision contract differs behaviorally from these anchors,
 stop and revise this spec. Pure file renames may be recorded in the PR with the replacement path.
+The recon record must enumerate the finite set of board-card kinds that are intended to open a
+work-detail page and identify any external-only artifact links; that recorded set is the source of
+truth for the all-kinds adapter and route tests below.
 
 ### TO-BE — target behavior and invariants
 
-1. Every supported board card kind opens an internal `/kanban/...` detail page. Issues use the
-   canonical, encoded route `/kanban/issue/:owner/:repo/:number`; “View source ↗” is a distinct
-   external link. Unknown/malformed issue refs return 404, not a partly populated page.
+1. Every board-card kind identified by Slice 0 as a work-detail kind opens an internal
+   `/kanban/...` detail page; intentionally external-only artifact links are recorded and are not
+   silently reclassified. Issues use the canonical, segment-encoded route
+   `/kanban/issue/:owner/:repo/:number`; “View source ↗” is a distinct external link.
+   Unknown/malformed issue refs return 404, not a partly populated page.
 2. Server loaders normalize source-specific records into a discriminated `WorkDetail` union.
    Optional evidence-bearing fields use `Availability<T>` with explicit `available`, `missing`,
    or `unsupported` states; `undefined`, empty strings, or fabricated defaults never masquerade
    as evidence.
 3. Legacy/incomplete records remain renderable and show `EVIDENCE INCOMPLETE`. Absence is named
    per field; unavailable readiness cannot render as a zero score, “green,” or “ready.”
-4. All kinds render in this order: sticky `IdentityStrip`; `DecisionBrief`; `ReadinessBand` with
-   vetoes before scores; blockers; proof/detail/history disclosures. Failed review is expanded by
-   default; otherwise raw body, history, and lineage start collapsed.
-5. The first 390×844 viewport communicates identity, requested decision, consequence, revision,
-   readiness/unknown state, and blocker presence without horizontal page scrolling. State is
-   label + shape + color, never color alone; interactive targets are at least 44×44 on coarse
-   pointers.
+4. All kinds render in this DOM order: sticky `IdentityStrip`; `DecisionBrief`; `ReadinessBand`
+   with explicit vetoes before source-supplied scores; blockers; proof/detail/history disclosures;
+   and the safe-area-aware `DecisionDock`. The failed-review evidence disclosure is expanded by
+   default; otherwise raw body, history, and lineage start collapsed. If review evidence and the
+   raw document share one disclosure in the existing renderer, that combined disclosure is the
+   one expanded for a failed review.
+5. For the bounded mobile fixture defined in the test matrix, the first 390×844 viewport
+   communicates identity, requested decision, consequence, revision or explicit revision
+   unavailability, readiness/unknown state, and blocker presence without horizontal page
+   scrolling. State is label + shape + color, never color alone; interactive targets are at least
+   44×44 on coarse pointers. Full blocker text remains above disclosures but need not fit in the
+   first viewport.
 6. Deep links `#decision`, `#readiness`, `#blockers`, `#document`, `#history`, and `#lineage` land
    on stable section IDs with sticky-header scroll offset and keyboard focusable headings.
-7. Existing gate semantics, auth, source fetches, cache policy, UTF-8 decoding, lineage, and
-   GitHub blob-SHA revision binding remain unchanged. This package adds no mutation endpoint.
-8. The implementation sits behind `PUBLIC_WORK_DETAIL_V2`; off means current detail behavior and
-   URLs remain functional. The internal issue URL may ship while flagged layout is off, but must
-   render a complete current-style detail rather than redirect externally.
+7. Existing gate semantics, auth, existing-source fetch behavior, cache policy, UTF-8 decoding,
+   lineage, and GitHub blob-SHA revision binding remain unchanged; the only additive fetch is the
+   single-issue read in Slice 1. A source that has no immutable revision token renders revision as
+   unavailable rather than substituting an issue number, branch, timestamp, or other mutable
+   label. This package adds no mutation endpoint.
+8. The implementation sits behind `PUBLIC_WORK_DETAIL_V2`, parsed centrally as enabled only when
+   its exact string value is `1`; unset, empty, `0`, and every other value are off. Off means
+   current detail behavior and URLs remain functional. The internal issue URL may ship while the
+   flagged layout is off, but must render a complete current-style detail rather than redirect
+   externally.
 
 ### DELTA — transitions, slices, and proof
 
 1. External-only issue navigation → canonical internal issue detail and separate source link.
    **Slice 1.** Proved by route-loader unit tests and Playwright card-to-detail/source-link tests.
 2. Source-specific/generic optional fields → exhaustive `WorkDetail` + `Availability<T>` adapters.
-   **Slice 2.** Proved by adapter fixtures for every kind and every availability state.
-3. Body-first generic rendering → reusable summary-first shell and stable anchors.
+   **Slice 2.** Proved by the fixed 20-case adapter matrix covering every recon-enumerated kind
+   and every availability state across the suite.
+3. Body-first generic rendering → reusable summary-first shell, `DecisionDock`, and stable anchors.
    **Slice 3.** Proved by component tests, axe, mobile Playwright assertions, and snapshots.
-4. Kind-specific detail drift → every supported kind rendered through the adapter/shell, with
-   failed-review and legacy fallbacks. **Slice 4.** Proved by the 20-case fixture matrix and an
-   all-kinds route test.
+4. Kind-specific detail drift → every recon-enumerated work-detail kind rendered through the
+   adapter/shell, with failed-review and legacy fallbacks. **Slice 4.** Proved by the 20-case
+   fixture matrix and an all-kinds route test.
 5. Individually passing pieces → production-equivalent end-to-end decision journey with the flag
    both on and off. **Slice 5.** Proved by the end-to-end verification in §8.
 
@@ -139,7 +160,9 @@ precondition, not an implementation slice.
 ### Slice 1 — internal issue detail from card to source (4–6 h)
 
 Implement an issue page using the existing generic detail route rather than a parallel page
-family. Parse exactly three path segments after `issue`, validate `number` as a positive integer,
+family. Parse exactly three decoded path segments after `issue`, validate the original `number`
+segment against `^[1-9][0-9]*$` before numeric conversion, and segment-encode owner/repo when
+constructing links. Reject an extra, empty, or malformed segment rather than truncating it. Then
 load the issue through the existing authenticated GitHub server client, and retain repository,
 triage state, lineage, and canonical GitHub URL. Change issue-card primary navigation to the
 internal URL and add a separately named external source link on detail.
@@ -157,19 +180,23 @@ Machine-checkable DoD:
 
 - A fixture issue card points to `/kanban/issue/acme/widget/42`, navigation returns 200 and shows
   `acme/widget#42`; the source link has the fixture GitHub URL and external-link accessible name.
-- `/kanban/issue/acme/widget/not-a-number` and missing issues return 404.
-- Proposal, spec, run, and CI card routes remain internal and pass existing tests.
+- Zero, negative, non-decimal, missing, extra-segment, and nonexistent issue refs return 404.
+- Every recon-enumerated pre-existing work-detail card kind remains internal and passes its
+  existing tests.
 - `bunx svelte-kit sync && bun run check` exits 0.
 
 ### Slice 2 — typed WorkDetail normalization (5–8 h)
 
 Add a UI-facing domain contract independent of GitHub/meta/factory response shapes. Define
 `Availability<T>` as an exhaustive discriminated union and `WorkDetail` as a union discriminated
-by every currently supported card kind. Centralize adapters; do not spread fallback inference
-through Svelte components. Preserve the raw source URL and immutable revision identity. Where a
-source cannot supply a field, return `unsupported` with a stable reason code; where it should but
-does not, return `missing`. Compute readiness only from supplied evidence, with vetoes represented
-separately from scores.
+by every work-detail kind enumerated in Slice 0. Centralize adapters; do not spread fallback
+inference through Svelte components. Preserve the raw source URL and immutable revision identity
+when supplied. Where a source contract cannot supply a field, return `unsupported` with a stable
+reason code; where the contract can supply it but the record does not, return `missing` with a
+stable reason code. Record the closed reason-code sets and source-to-field mapping in the adapter
+test table. Transport readiness scores only when the source explicitly supplies them; a
+deterministic mapping of an explicit failed-review or blocker state to a veto is allowed only when
+the adapter retains the source field/provenance. Never synthesize a numeric readiness score.
 
 Files to touch:
 
@@ -184,8 +211,11 @@ Machine-checkable DoD:
 
 - Type checking enforces exhaustive handling of all `WorkDetail['kind']` and
   `Availability['state']` members; no `any`, `@ts-ignore`, or cast-to-invent-data is introduced.
-- Tests cover every kind, all three availability states, blocker-veto precedence, failed-review
-  detection, issue lineage, and exact preservation of blob SHA/source URL.
+- The committed 20-case fixture table names the kind, source fields, expected availability states,
+  and coverage purpose of each case; tests cover every recon-enumerated kind, all three
+  availability states across the suite, explicit blocker-veto precedence, failed-review
+  detection, issue lineage, exact preservation of supplied blob SHA/source URL, and an issue with
+  unavailable revision.
 - A grep assertion finds no presentation-layer fallback such as `readiness || 0` or a default
   “ready” label for unavailable evidence.
 - `bun test src/lib/work-detail/adapters.test.ts && bun run check` exits 0.
@@ -195,13 +225,17 @@ Machine-checkable DoD:
 Build small components over `WorkDetail` and the UI-002 primitives. DOM order is the hierarchy,
 not CSS reordering. `ReadinessBand` lists vetoes first and never converts unavailable scores to
 zero. Blockers remain visible above disclosures. Use semantic headings/regions, anchor IDs, and
-`scroll-margin` tokens. Failed review alone opens the document/review disclosure initially.
+`scroll-margin` tokens. Failed review alone opens its evidence disclosure initially. Add a
+`DecisionDock` that reuses the existing revision-bound gate UI for actionable kinds and otherwise
+shows no invented action; its sticky positioning must consume the dependency's safe-area token
+and must not obscure anchored content.
 
 Files to touch:
 
 - `src/lib/components/work-detail/IdentityStrip.svelte` (new)
 - `src/lib/components/work-detail/DecisionBrief.svelte` (new)
 - `src/lib/components/work-detail/ReadinessBand.svelte` (new)
+- `src/lib/components/work-detail/DecisionDock.svelte` (new)
 - `src/lib/components/work-detail/WorkDetailShell.svelte` (new)
 - `src/lib/components/work-detail/WorkDetailShell.test.ts` (new)
 - `src/lib/design/tokens.css`
@@ -212,19 +246,20 @@ Machine-checkable DoD:
 - Component tests assert DOM order, all six IDs, veto-before-score ordering, incomplete banner,
   and failed-review disclosure state.
 - At 390×844 the fixture's identity, decision, consequence, revision, readiness state, and blocker
-  indicator are present in the initial viewport; `document.documentElement.scrollWidth` is no
-  greater than `clientWidth` at 320, 390, and 430 px.
+  indicator are present in the initial viewport; revision may be an explicit unavailable state.
+  `document.documentElement.scrollWidth` is no greater than `clientWidth` at 320, 390, and 430 px,
+  and the dock does not cover the focused anchor or final disclosure content.
 - axe reports no serious/critical violations; keyboard deep links focus the target heading; no
   consequence text is available only through a tooltip.
 - `bun run lint:design && bun run check` exits 0.
 
 ### Slice 4 — all kinds, legacy evidence, and gate preservation (5–8 h)
 
-Route every supported card kind through its adapter and the shared shell. Place the existing
-revision-bound gate UI in the decision region without changing its state machine or endpoint.
+Route every recon-enumerated work-detail card kind through its adapter and the shared shell. Place
+the existing revision-bound gate UI in `DecisionDock` without changing its state machine or endpoint.
 Render existing lineage/history/raw markdown through disclosures. With
-`PUBLIC_WORK_DETAIL_V2` false, retain current rendering; with it true, use the new shell. Do not
-duplicate gate logic into work-detail components.
+`PUBLIC_WORK_DETAIL_V2` off under the exact parser in invariant 8, retain current rendering; with
+the exact value `1`, use the new shell. Do not duplicate gate logic into work-detail components.
 
 Files to touch:
 
@@ -237,13 +272,15 @@ Files to touch:
 
 Machine-checkable DoD:
 
-- A parameterized test opens one fixture for every card kind and finds an identity strip,
-  decision brief, readiness/unknown state, source link, and revision identity.
+- A parameterized test opens one fixture for every recon-enumerated work-detail card kind and
+  finds an identity strip, decision brief, readiness/unknown state, source link or explicit source
+  unavailability, and revision identity or explicit revision unavailability.
 - All legacy fixtures render `EVIDENCE INCOMPLETE` with explicit missing/unsupported fields and no
   invented score.
 - Existing tests for 409 conflict, 202 `approved_queue_pending`, durable result receipt,
   `indexSynced`, and stale-action freezing pass unchanged or with selector-only updates.
-- Flag-off route screenshots/semantic assertions match the current behavior baseline.
+- Flag-off route screenshots/semantic assertions match the current behavior baseline for unset,
+  `0`, and a non-`1` value; the exact value `1` selects the new shell.
 
 ### Slice 5 — integrated verification and flag-ready release (4–6 h)
 
@@ -262,8 +299,9 @@ Machine-checkable DoD:
 - The §8 command sequence passes from a clean install with the flag off and on.
 - Visual fixtures at 320, 390, 768, 1280, and 1920 px are reviewed; no page-level horizontal
   overflow, clipped decision copy, or hidden blocker exists.
-- Flag rollback requires only setting `PUBLIC_WORK_DETAIL_V2=0`; no data migration or cleanup is
-  required.
+- Flag rollback requires setting `PUBLIC_WORK_DETAIL_V2=0` or unsetting it and restarting or
+  redeploying the application as required by the recon-confirmed SvelteKit env import; no code
+  rollback, data migration, or cleanup is required.
 
 ## 4. Cross-repo impact assessment
 
@@ -277,6 +315,9 @@ Target repo: `minion-base` only.
   permitted here.
 - **GitHub:** existing authenticated read client only. Issue source is fetched server-side; tokens
   never enter page data. UTF-8 contents decoding remains byte-safe per operator memory.
+- **minion-base deployment/config:** document `PUBLIC_WORK_DETAIL_V2`'s exact `1` opt-in and the
+  restart/redeploy needed by the selected SvelteKit env import; no secret or external contract is
+  added.
 - **Hub/site/gateway/paperclip/pixel-agents:** no gateway protocol, shared package, database,
   authentication, or agent-format change; no impact expected under AGENTS.md's Cross-Project
   Impact Zones.
@@ -294,7 +335,8 @@ stale evidence presented as current.
 - UI-010 durable/live event timeline.
 - Factory/meta schema, index projection, reconciler, lifecycle, or queue changes.
 - Database/storage additions, card drag-and-drop, desktop navigation redesign, or public auth.
-- Automatic approval/merge, inferred readiness, inferred blockers, or evidence synthesis.
+- Automatic approval/merge, heuristic or probabilistic readiness/blocker inference, or evidence
+  synthesis. Lossless deterministic normalization of an explicit source state is permitted by §3.
 - Editing the related plan/proposals/specs or resolving their lifecycle relationship.
 
 ## 6. Risks and mitigations
@@ -304,7 +346,8 @@ stale evidence presented as current.
 - **Adapter becomes a second domain authority:** `WorkDetail` is presentation normalization only;
   source status, revision, and evidence values remain authoritative and losslessly traceable.
 - **Unknown rendered as safe:** union exhaustiveness and fixtures forbid boolean/default coercion;
-  vetoes and unavailable fields have independent representations.
+  vetoes and unavailable fields have independent representations, and issues without a source
+  revision render revision unavailable.
 - **Gate regression during layout move:** gate code is reused, its revision SHA is preserved, and
   UI-001 outcome tests are mandatory Slice 4 gates.
 - **Sticky content obscures anchors/mobile content:** safe-area/sticky tokens from the dependency
@@ -319,12 +362,12 @@ stale evidence presented as current.
 | Complete spec/proposal | Summary precedes raw body; exact blob SHA shown | Adapter + component test |
 | Legacy item | `EVIDENCE INCOMPLETE`; named gaps; no zero/green fallback | Fixture test |
 | Failed review | Veto before score; review/document disclosure expanded | Component + Playwright |
-| Blocked item | Blocker visible above disclosures in first viewport | Mobile Playwright |
+| Blocked item | Blocker indicator is in the first viewport; full blocker is above disclosures | Mobile Playwright |
 | Issue card | Internal route opens; separate source link opens GitHub | Route + Playwright |
 | Invalid issue ref | 404 without partial evidence | Loader test |
 | Stale action | Existing frozen 409 conflict/reload experience | Gate regression test |
 | Approved but queue pending | Existing persistent 202 partial outcome | Gate regression test |
-| Flag off | Existing detail remains usable; issue route does not external-redirect | Playwright |
+| Flag off/unset/invalid | Existing detail remains usable; issue route does not external-redirect | Playwright |
 | Deep link | Target heading visible/focused below sticky strip | Accessibility test |
 
 ## 8. End-to-end verification
@@ -338,9 +381,15 @@ bun test
 bun run check
 bun run lint:design
 bun run build
+env -u PUBLIC_WORK_DETAIL_V2 bun run test:e2e --grep "work detail"
 PUBLIC_WORK_DETAIL_V2=0 bun run test:e2e --grep "work detail"
+PUBLIC_WORK_DETAIL_V2=invalid bun run test:e2e --grep "work detail"
 PUBLIC_WORK_DETAIL_V2=1 bun run test:e2e --grep "work detail"
 ```
+
+Each flag-mode invocation must start an independent test server (and rebuild first if Slice 0
+finds the selected SvelteKit public-env import is build-time) so a previous process or build cannot
+make the flag matrix pass accidentally.
 
 The E2E suite must start at `/kanban`, open an issue card internally, verify the separate source
 link, then open complete, legacy, failed-review, blocked, and stale-revision fixtures. At 390×844
