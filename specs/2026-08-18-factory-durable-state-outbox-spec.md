@@ -3,11 +3,11 @@ id: 2026-08-18-factory-durable-state-outbox-spec
 title: "Durable state — transactional outbox for postFinish side effects, guarded lifecycle edges, append-only event log"
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-18
 updated: 2026-08-18
 proposal: 2026-08-17-factory-durable-state-outbox
-verdict: pending
+verdict: changes_requested
 repos: [minion-factory]
 tags: [logic, infra]
 type: infra
@@ -16,8 +16,9 @@ type: infra
 # Durable state machine + outbox for run side effects
 
 **Owner surface:** `minion-factory` (`NikolasP98/minion-factory`, private, default branch `main`) —
-`runner/src/db.ts`, `runner/src/queue.ts`, `runner/src/lifecycle.ts`, `runner/src/index.ts`, new
-`runner/src/events.ts` (+ `runner/src/events.test.ts`), new `runner/src/queue.test.ts` /
+`runner/src/db.ts`, `runner/src/github.ts`, `runner/src/queue.ts`, `runner/src/lifecycle.ts`,
+`runner/src/index.ts`, new `runner/src/events.ts` (+ `runner/src/events.test.ts`), new
+`runner/src/queue.test.ts` /
 `runner/src/lifecycle.test.ts` additions, `README.md` (short operator note). No other repo has a file
 in this spec — this is entirely internal runner-process durability, no new env var, no deploy.sh/
 setup.sh/docker-compose change, no exposed route surface change.
@@ -45,16 +46,15 @@ specs have already landed changes to the same lines.
 - [`2026-08-18-factory-workitem-handoff-schema-spec`](2026-08-18-factory-workitem-handoff-schema-spec.md)
   (approved, not yet built) touches three of this spec's files with **disjoint logic in each**:
   - Its Slice 3 changes `queueDevForSpec()`'s repo-resolution (`REPO_ALIASES` `.find(Boolean)` →
-    fail-loud multi-repo routing). This spec never edits `queueDevForSpec()`'s body — Slice 3 below
-    only wraps the *existing* call in an idempotent outbox job. Whichever lands first, the other
-    calls the function as it stands; no revert either way.
+    fail-loud multi-repo routing). This spec adds a strict, discriminated-result path for outbox use;
+    it must share the sibling's routing implementation rather than restore `.find(Boolean)` or copy
+    a second resolver. Preserve the existing fail-soft wrapper for sweep/route callers.
   - Its Slice 5 ("WorkItem-aware factory consumers") edits `promoteSweep()`/`specSweep()` in
     `lifecycle.ts` — the risk-tag gating that decides *which* proposals/specs may auto-approve. This
     spec's Slice 4 edits `transition()` — the function those sweeps *call* — adding a source-status
-    check that runs **before** the existing target-status check. It does not touch the sweeps'
-    calling code or their tag logic; `promoteSweep`/`specSweep` still call
-    `transition(kind, id, 'approved', ...)` from `draft`/`review`, which stays legal under this
-    spec's edge table (see §2). No conflict either order.
+    check after the existing request/target validation but before the PUT. It does not touch the
+    sweeps' calling code or tag logic. Whether their `draft`/`review → approved` calls remain legal
+    is part of the human edge-table decision in §8; do not assume it before approval.
   - Its Slice 6 replaces `/hooks/monitor`'s GitHub-issue creation with a typed-proposal upsert. This
     spec's `auto_fix` and `outbox-dead` handlers (§3) call that route over HTTP with the same
     `{source,title,fingerprint,url,detail}` body the route already documents — a contract, not an
@@ -64,14 +64,16 @@ specs have already landed changes to the same lines.
   this spec's boot-sequence edit lands, near `adoptOrphans()`/`startAutoMergeSweep()`). Disjoint
   regions of the same file; land in either order.
 - [`2026-08-18-factory-postmerge-discovery-loop-spec`](2026-08-18-factory-postmerge-discovery-loop-spec.md)
-  (**draft, pass 1, not yet approved** — written same day) explicitly names this proposal in its own
+  (**approved, pass 2, not yet built at this baseline**) explicitly names this proposal in its own
   collision notes: *"Proposal `2026-08-17-factory-durable-state-outbox` ... is the general fix for
   `postFinish()` being fire-and-forget. This spec does not duplicate that work ... When the general
   outbox lands, its retryable-job drain should absorb the 'enqueue discovery run' step; that is a
   follow-up, not blocking this slice."* This spec reciprocates: `outbox_jobs.job_type` is a free-text
-  column (§1), not a closed enum, specifically so a future `enqueue_discovery_run` job type can be
+  column (Slice 2), not a closed enum, specifically so a future `enqueue_discovery_run` job type can be
   added without a schema migration. Building that integration now is out of scope (§5) — the sibling
-  spec is unapproved and its `runner/src/discovery.ts`/`webhook.ts` do not exist in code yet.
+  spec is approved but unbuilt and its `runner/src/discovery.ts`/`webhook.ts` do not exist in code
+  yet. If it lands first, preserve its `discovery` run kind, `merge_event_id`, boot enqueue, and
+  specialized level-triggered retry while applying this spec.
 
 **Operator-memory constraints:**
 [`/memory/MINION/sdlc-board-triage-and-phase-gates.md`](/memory/MINION/sdlc-board-triage-and-phase-gates.md),
@@ -85,13 +87,16 @@ for stale refile) that §3's outbox-job claim reuses. `/memory/MINION/factory/20
 is a **hard constraint on test design**: any test that inserts a `queued` run and calls `enqueue()`
 triggers `pump() → start() → spawn('docker', ...)`, and there is no `docker` binary in the agent
 sandbox — the resulting `ENOENT` is an *unhandled async `'error'` event with no listener*, which
-crashes the whole test process, not just the assertion. This spec's tests never call `enqueue()`,
-`start()`, or `finish()` end-to-end; §1 and §3 extract the CAS/enqueue logic into small synchronous
-functions precisely so they're unit-testable without touching `spawn()` (see each slice's DoD).
+crashes the whole test process, not just the assertion. This spec's tests never call `enqueue()` or
+a real `spawn('docker', ...)`; Slices 1–3 extract synchronous state helpers and inject/fake the child
+process only for the async-error regression test (see each slice's DoD).
 `/memory/MINION/minion-factory-agent-pipeline.md`, "★★★concurrent meta writers race pushes": the
 existing `transition()` already uses the GitHub Contents API's `sha:` field as an application-level
 CAS against concurrent meta edits — this spec does not change that mechanism, only adds a
-source-status check that runs against the *same* fetched snapshot (§2).
+source-status check that runs against the *same* fetched snapshot (§2). The required read-only
+SQLite FTS searches for `durable OR outbox OR postFinish OR lifecycle` and
+`factory AND (sqlite OR restart OR queue OR transaction)` returned no factory-specific observation
+that supersedes these file-backed constraints; no semantic-memory MCP was available in this session.
 
 ---
 
@@ -122,6 +127,11 @@ void postFinish(id).catch((e) => console.warn(`[runner] postFinish ${id}: ${Stri
 
 `postFinish()` (`queue.ts:212-311`) is a single async function that, depending on the freshly-written
 row, does up to three GitHub-touching things in sequence, entirely in memory:
+
+The proposal also names head-SHA stamping, but the live baseline has already moved that into
+`finish()` itself: `result.headSha` is synchronously written as review attestation in the terminal
+`UPDATE` (`queue.ts:188-191`). It is therefore covered by the atomic finish transaction, not by a
+fourth outbox job. Reintroducing a PR-head fetch would contradict the audit's reviewed-SHA rule.
 
 1. **Husk-PR-close** (lines 216-232): if `(status === 'error' || status === 'failed') && pr_url`,
    fetch the PR's file count; if zero, POST a close comment then PATCH the PR closed.
@@ -178,11 +188,14 @@ only audit trail is the GitHub commit message.
 
 Three independent hardenings, matching the proposal's one DoD paragraph line-for-line:
 
-1. **Append-only event log + CAS-guarded run-status writes** (§3, Slice 1) — every `runs.status`
-   mutation (`start`, `finish`, `cancel`, `adoptOrphans`' error fallback) goes through a small guarded
-   helper that (a) only writes if the row is still in an expected prior state and (b) appends one row
-   to a new `lifecycle_events` table. `lifecycle_events` is genuinely append-only: no `UPDATE` or
-   `DELETE` statement anywhere in the codebase ever touches it (grep-checkable, see DoD).
+1. **Append-only event log + CAS-guarded run-status writes** (§3, Slice 1) — every runtime
+   `runs` creation and status mutation (`queued` insert, `start`, `finish`, `cancel`, spawn failure,
+   and `adoptOrphans`' error fallback) commits with exactly one row in a new `lifecycle_events`
+   table. Status helpers compare an exact expected state and, for terminalization, require
+   `finished_at IS NULL`; this makes `canceled` a real terminal state after `finish()` records the
+   container outcome instead of allowing repeated `canceled → canceled` writes. Each status update
+   and its event are one synchronous SQLite transaction. `lifecycle_events` is append-only: no
+   `UPDATE` or `DELETE` statement anywhere in the codebase touches it (grep-checkable, see DoD).
 2. **Transactional outbox for `postFinish()`'s three side effects** (§3, Slices 2-3) — `finish()`
    enqueues one `outbox_jobs` row per applicable side effect, in the *same* `db.transaction()` as the
    status `UPDATE`, so a crash either loses both (row stays non-terminal, `adoptOrphans` or a future
@@ -190,19 +203,21 @@ Three independent hardenings, matching the proposal's one DoD paragraph line-for
    in-between state). A drain worker claims jobs with a CAS `UPDATE ... WHERE status = 'pending'`,
    runs them with per-job-type idempotency (husk-close checks the PR isn't already closed before
    acting; auto-fix checks no run already has `requeue_of = <this run>` before inserting; spec-promote
-   reuses `queueDevForSpec()`'s existing dedupe verbatim), retries on failure with backoff, and dies
-   to a monitor event after 5 attempts. The worker runs at boot (after `adoptOrphans()`, so it also
-   reclaims any job stuck `processing` from a mid-job crash) and on a 5-minute interval, so restart
-   survival is structural, not best-effort.
+   uses a strict variant of `queueDevForSpec()` that distinguishes an idempotent no-op from transient
+   GitHub failure), retries on failure with backoff, and uses an expiring processing lease so a stuck
+   claim is reclaimable without waiting for another process restart. Unknown job types and
+   null/failed GitHub responses are failures, never successful no-ops. After 5 failed attempts the
+   job becomes `dead`; dead-letter monitor delivery is itself retried until recorded. The worker
+   runs at boot and on a 5-minute interval, so restart survival is structural.
 3. **Explicit source→target lifecycle edges** (§3, Slice 4) — `transition()` reads the current status
-   from the same file-content fetch it already performs (no extra API call) and refuses the write if
-   that status is in a small `TERMINAL` set per kind (`proposal`: `rejected`/`retired`/`closed`;
-   `spec`: `retired`/`superseded`/`done`). This is a conservative "terminal states are sinks" model
-   rather than hand-authoring every legal edge for every historical status value
-   (`shipped`/`implementing`/`parked`/`unknown` all remain non-terminal and behave exactly as today);
-   see §5 for why a fuller state machine is not attempted here. Both existing autonomous callers
-   (`promoteSweep`/`specSweep`, which only ever transition `draft`/`review` → `approved`) are
-   unaffected — neither status is terminal.
+   from the same file-content fetch it already performs (no extra API call), looks up that exact
+   source in a `Record<kind, Record<source, Set<target>>>`, and refuses missing source states or
+   absent edges. A terminal-state deny-list is not an edge table: it would leave
+   `shipped`/`implementing`/`parked`/`unknown` permissive and therefore fail the approved proposal's
+   definition of done. The repository does not currently define which transitions from
+   `approved`, `in-spec`, `implementing`, `shipped`, `parked`, or `unknown` are legal, so the exact
+   table is a human policy decision recorded in §8. Slice 4 is blocked until that table is supplied;
+   Slices 1–3 are not.
 
 ## 3. Slice 0 — recon and collision gate (prepend to Slice 1)
 
@@ -228,13 +243,15 @@ do not implement the stale excerpts quoted above.
 ### Slice 1 — append-only event log + CAS-guarded run-status writes (4-6h, tag `logic`)
 
 **Files:** `runner/src/db.ts`, new `runner/src/events.ts` + `runner/src/events.test.ts`,
-`runner/src/queue.ts`.
+`runner/src/queue.ts`, `runner/src/index.ts`, `runner/src/lifecycle.ts`, and `runner/src/requeue.ts`
+if the orchestration-tests sibling has landed.
 
 - `db.ts`: add
 
   ```sql
   CREATE TABLE IF NOT EXISTS lifecycle_events (
   	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	event_key TEXT NOT NULL UNIQUE, -- deterministic transition/commit identity
   	entity_type TEXT NOT NULL,   -- 'run' | 'proposal' | 'spec'
   	entity_id TEXT NOT NULL,
   	from_status TEXT,
@@ -247,77 +264,84 @@ do not implement the stale excerpts quoted above.
   ```
 
   Export a `LifecycleEvent` type mirroring the columns.
-- New `events.ts` exports `recordEvent(entityType, entityId, fromStatus, toStatus, actor, reason?)`
-  — one `INSERT`, nothing else. Pure, synchronous, no GitHub/network access. This is the **only**
-  place any code writes to `lifecycle_events`; no other file gets an `UPDATE`/`DELETE` against it.
-- `queue.ts`: extract two small exported CAS helpers so the guard logic is unit-testable without
+- New `events.ts` exports
+  `recordEvent(eventKey, entityType, entityId, fromStatus, toStatus, actor, reason?)` — one
+  `INSERT OR IGNORE`; on `changes === 0`, select the existing row and throw unless every immutable
+  field matches (idempotent replay, never silent key collision). `event_key` is
+  `run:<run-id>:created` for creation,
+  `run:<run-id>:<from>:<to>` for run transitions, and `github:<commit-sha>` for proposal/spec
+  transitions. It prevents a retry from duplicating the same immutable fact without permitting any
+  event mutation. This is the **only** place any code writes to `lifecycle_events`; no other file
+  gets an `UPDATE`/`DELETE` against it.
+- `queue.ts`: extract small exported CAS transactions so the guard logic is unit-testable without
   spawning docker (memory constraint, §"Operator-memory constraints" above):
 
   ```ts
-  // Returns true iff this call transitioned the row queued -> running.
+  // Returns true iff this transaction moved queued -> running and appended
+  // the corresponding event.
   export function claimQueuedRun(id: string): boolean {
-  	const res = db
-  		.prepare("UPDATE runs SET status = 'running', started_at = ? WHERE id = ? AND status = 'queued'")
-  		.run(new Date().toISOString(), id);
-  	return res.changes === 1;
+	return claimQueuedRunTx(id); // one db.transaction: exact-state UPDATE + recordEvent
   }
 
-  // Returns the PRIOR status iff this call moved the row to a terminal status
-  // for the first time; null if the row was already terminal (double-finish
-  // guard) or missing.
-  export function claimFinishRun(id: string, fields: {
-  	status: string; branch: string | null; prUrl: string | null;
-  	specId: string | null; headSha: string | null; exitCode: number; note: string | null;
-  }): string | null {
-  	const before = db.prepare('SELECT status FROM runs WHERE id = ?').get(id) as { status: string } | undefined;
-  	if (!before) return null;
-  	const res = db
-  		.prepare(
-  			`UPDATE runs SET status = ?, branch = COALESCE(?, branch), pr_url = ?, spec_id = COALESCE(?, spec_id),
-  			 head_sha = ?, exit_code = ?, note = ?, finished_at = ?
-  			 WHERE id = ? AND status NOT IN ('passed', 'failed', 'error')`
-  		)
-  		.run(fields.status, fields.branch, fields.prUrl, fields.specId, fields.headSha, fields.exitCode, fields.note, new Date().toISOString(), id);
-  	return res.changes === 1 ? before.status : null;
-  }
+  // Slice 1 exports the terminal transaction; Slice 2 extends the same
+  // transaction body with outbox inserts. Its inner UPDATE must be:
+  // WHERE id = ? AND status = ? AND finished_at IS NULL, where the expected
+  // source is the status read inside that same synchronous transaction and is
+  // restricted to running|canceled. It classifies the target from that source,
+  // exitCode, and result inside the transaction, then appends the event and jobs.
+  export function finishRun(id: string, exitCode: number, result: FinishResult): Run | null;
   ```
 
-  `WHERE status NOT IN ('passed','failed','error')` deliberately accepts a prior status of either
-  `running` **or** `canceled` — `finish()` must still be able to write a container's outcome onto a
-  row the operator canceled mid-run while the container was still exiting (this is the *existing*
-  `current?.status === 'canceled' ? 'canceled' : ...` precedence in `finish()`, preserved unchanged;
-  see below). It only refuses a row that has already been scored once.
+  The exact-source predicate deliberately accepts `running` **or** `canceled`: `finish()` must still
+  record a container outcome on a row canceled while the container was exiting, while preserving
+  `canceled` as the target. `finished_at IS NULL` is essential: without it, a second finish call can
+  perform another `canceled → canceled` update and append another event because `canceled` is not in
+  the pass-1 SQL's `NOT IN ('passed','failed','error')` list.
 - `start()` calls `claimQueuedRun(run.id)` first; if `false`, `console.warn` and `return` before
   `mkdirSync`/`spawn` (nothing to clean up — the row was claimed by something else, or canceled,
-  before this call). On success, `recordEvent('run', run.id, 'queued', 'running', 'system')`.
-- `finish()` keeps its existing pre-read of `current.status` to compute the target `status` value
-  (the canceled-precedence ternary is unchanged), then calls `claimFinishRun(id, fields)` instead of
-  the raw `UPDATE`. If it returns `null`, log a warning and return — **do not** proceed to Slice 2's
-  outbox enqueue or any further processing; this run was already finished by another call path. If it
-  returns the prior status string, `recordEvent('run', id, prior, fields.status, 'system')`.
-- `cancel()` keeps its existing guarded `UPDATE ... WHERE status IN ('queued','running')`; on
-  `res.changes === 1`, read the row's prior status from the same `UPDATE`'s pre-image (a `SELECT`
-  immediately before the `UPDATE`, since `better-sqlite3`'s `.run()` doesn't return old values) and
-  `recordEvent('run', id, prior, 'canceled', 'system')`.
+  before this call). The helper writes the event inside the same transaction; callers must not append
+  it afterward.
+- `finish()` parses `result.json` as today, then calls `finishRun(id, exitCode, result)`. That
+  transaction reads the current state and computes canceled precedence itself; there
+  is no stale pre-read outside the transaction. A `null` result logs and returns without pumping the
+  outbox.
+- `cancel()` becomes one transaction: select an exact `queued|running` source, update with
+  `WHERE id = ? AND status = <that source> AND finished_at IS NULL`, and append the event. A separate
+  pre-read followed by an `IN (...)` update is not sufficient because the recorded `from_status`
+  could differ from the row actually updated.
 - `adoptOrphans()`'s "no container, no result.json" fallback (`queue.ts:400-403`) keeps its guarded
-  `UPDATE ... WHERE status = 'running'` and adds `recordEvent('run', id, 'running', 'error', 'system',
-  'runner restarted mid-run')` on success.
+  `running → error` condition but performs the update and event append in one transaction.
+- Audit **every runtime `INSERT INTO runs` call site** in `queue.ts`, `index.ts`, `lifecycle.ts`, and
+  `requeue.ts` if the orchestration-tests sibling has landed. Each insert and its
+  `null → queued` event use one transaction. Direct SQL fixture inserts in tests are exempt.
+- Attach a one-shot `error` listener to each spawned child. Node reports a missing `docker` binary as
+  an asynchronous child-process `error`, not a synchronous throw; route that path through the same
+  terminal transaction. The subsequent `close` callback may also fire and must be harmless because
+  the finish CAS has already won. This follows
+  `/memory/MINION/factory/2026-08-18-75dc674e.md`.
 
 **DoD (Tier A — no docker/box needed):**
 
 ```bash
 cd runner && npx tsc --noEmit
-FACTORY_DATA=$(mktemp -d) node --import tsx --test src/events.test.ts
+TEST_ROOT=$(mktemp -d)
+FACTORY_DATA="$TEST_ROOT/data" FACTORY_RUNS_DIR="$TEST_ROOT/runs" FACTORY_CONCURRENCY=0 \
+  node --import tsx --test src/events.test.ts
 ```
 
 `events.test.ts` must, against a fresh temp `FACTORY_DATA` sqlite file (no docker, no `enqueue()`,
 no `start()`/`finish()` call):
 - insert a `runs` row with `status='queued'`, call `claimQueuedRun(id)` twice — first call `true` and
   row status becomes `running`; second call `false` (already running);
-- call `claimFinishRun(id, {status:'passed', ...})` — returns `'running'` (the prior status), row now
-  `passed`; call it again with the same id — returns `null` (already terminal);
-- call `recordEvent('run', id, 'queued', 'running', 'system')` then query `lifecycle_events` for that
+- call `finishRun(id, 0, {testExit:0, ...})` — returns the terminal row, now `passed`; call it
+  again with the same id — returns `null` and appends no second event;
+- repeat from a `canceled`, unfinished row: first finish preserves `canceled` and sets `finished_at`;
+  the second returns `null` (proves the pass-1 double-finish hole is closed);
+- call `recordEvent('fixture:event', 'run', id, 'queued', 'running', 'system')` twice then query `lifecycle_events` for that
   `entity_id` — exactly one row, fields match;
+- exercise each runtime run-creation helper and assert exactly one `null → queued` event;
+- simulate the asynchronous spawn-error path and assert exactly one terminal event with no process
+  crash;
 - `grep -rn "DELETE FROM lifecycle_events\|UPDATE lifecycle_events" runner/src` returns nothing
   (append-only invariant, grep-checkable per §2).
 
@@ -336,11 +360,13 @@ no `start()`/`finish()` call):
   	status TEXT NOT NULL DEFAULT 'pending',   -- pending | processing | done | dead
   	attempts INTEGER NOT NULL DEFAULT 0,
   	next_attempt_at TEXT NOT NULL,
+	lease_until TEXT,
   	last_error TEXT,
+	dead_reported_at TEXT,
   	created_at TEXT NOT NULL,
   	updated_at TEXT NOT NULL
   );
-  CREATE INDEX IF NOT EXISTS idx_outbox_jobs_claim ON outbox_jobs(status, next_attempt_at, created_at, seq);
+  CREATE INDEX IF NOT EXISTS idx_outbox_jobs_claim ON outbox_jobs(status, next_attempt_at, lease_until, created_at, seq);
   ```
 
   `job_type` is deliberately a free-text column, not a SQL `CHECK`-constrained enum — see the
@@ -349,16 +375,14 @@ no `start()`/`finish()` call):
   IGNORE` on this primary key means re-running the enqueue step (e.g. a hypothetical future
   double-call) can never create a duplicate job for the same `(job_type, run_id)` pair.
 - `queue.ts`: replace the bare `void postFinish(id).catch(...)` at the end of `finish()` with a
-  single `db.transaction()` that does the status write (Slice 1's `claimFinishRun`, inlined into the
+  single `db.transaction()` that does the status write (Slice 1's `finishRun`, inlined into the
   transaction body — `better-sqlite3` transactions wrap plain synchronous statement calls, not a
   separate connection) **and** the outbox inserts as one atomic commit:
 
   ```ts
-  const finishAndEnqueue = db.transaction((id: string, fields: FinishFields) => {
-  	const prior = claimFinishRunInner(id, fields); // same SQL as Slice 1's claimFinishRun, no re-wrapping in its own transaction
-  	if (prior === null) return null;
-  	recordEventInner('run', id, prior, fields.status, 'system');
-  	const row = db.prepare('SELECT * FROM runs WHERE id = ?').get(id) as Run;
+  const finishAndEnqueue = db.transaction((id: string, exitCode: number, result: FinishResult) => {
+	const row = finishRunInner(id, exitCode, result); // exact-source + finished_at guard; inserts event
+	if (row === null) return null;
   	const now = new Date().toISOString();
   	const insertJob = (jobType: string, seq: number) =>
   		db.prepare(
@@ -374,12 +398,15 @@ no `start()`/`finish()` call):
 
   The gating conditions are copied **verbatim** from the current `postFinish()` `if`s (§1) — this
   slice changes *when* the decision to act is durably recorded, not the decision itself. `seq`
-  disambiguates ordering when both `husk_close` and `auto_fix` are inserted for the same run in the
-  same transaction (identical `created_at` timestamp): the claim query in Slice 3 orders by
-  `(created_at, seq)`, so `husk_close` always drains before `auto_fix` for one run — preserving
-  today's in-sequence behavior where the husk check runs before the auto-fix PR re-fetch (a PR the
-  husk step just closed must be seen as closed by the auto-fix step, not raced).
-- `finish()` becomes: compute `fields` as today, call `const row = finishAndEnqueue(id, fields)`; if
+  defines an actual per-run prerequisite when both `husk_close` and `auto_fix` are inserted: Slice
+  3's claim query may claim a job only when no lower-`seq` job for that `run_id` remains non-`done`.
+  Ordering by `(created_at, seq)` alone is insufficient: after `husk_close` fails into a future
+  backoff, it would immediately allow `auto_fix` to run. If a prerequisite becomes `dead`, mark its
+  remaining dependents `dead` with `last_error='blocked by <job-id>'` and report each through the
+  dead-letter path; never leave them pending forever. This preserves today's in-sequence behavior
+  and makes permanent blocking visible.
+- `finish()` becomes: parse the result as today, call
+  `const row = finishAndEnqueue(id, exitCode, result)`; if
   `row` is truthy, call the (still-named) `pumpOutbox()` (Slice 3) to drain immediately — matching
   today's "fire it right after finishing" latency, now with the durability the transaction provides
   even if `pumpOutbox()` itself never gets to run before a crash (§3's boot reconciliation covers
@@ -391,7 +418,9 @@ no `start()`/`finish()` call):
 
 ```bash
 cd runner && npx tsc --noEmit
-FACTORY_DATA=$(mktemp -d) node --import tsx --test src/queue.test.ts
+TEST_ROOT=$(mktemp -d)
+FACTORY_DATA="$TEST_ROOT/data" FACTORY_RUNS_DIR="$TEST_ROOT/runs" FACTORY_CONCURRENCY=0 \
+  node --import tsx --test src/queue.test.ts
 ```
 
 New assertions in `queue.test.ts` (still no `enqueue()`/`start()`/docker — insert rows directly and
@@ -401,101 +430,81 @@ call the exported transaction function):
 - a `spec`-kind row transitioned to `passed` with a `spec_id` yields exactly one
   `spec_promote:<id>` row;
 - calling the transaction function a second time for the same already-terminal row inserts **zero**
-  additional rows (idempotent no-op, both via `claimFinishRun`'s terminal guard returning `null` and
+  additional rows (idempotent no-op, both via `finishRun`'s terminal guard returning `null` and
   via `INSERT OR IGNORE` as a second line of defense);
 - a `dev`-kind row transitioned to `passed` (no failure) yields zero `outbox_jobs` rows.
+- install a temporary SQLite trigger that raises before `outbox_jobs` insert, call
+  `finishAndEnqueue()`, and assert the exception rolls back the terminal status **and** lifecycle
+  event; this directly proves atomicity rather than inferring it from a successful final state.
 
 ### Slice 3 — drain worker + idempotent job handlers + boot reconciliation (6-8h, tag `logic`)
 
 **Files:** `runner/src/queue.ts`, `runner/src/index.ts`.
 
-- `queue.ts`: claim/drain loop, reusing the `monitor_events` atomic-reservation idiom (cited in
-  operator memory above) for the claim itself:
-
-  ```ts
-  const OUTBOX_BACKOFF_S = [60, 300, 900, 1800, 3600]; // 1m,5m,15m,30m,60m
-  const OUTBOX_MAX_ATTEMPTS = 5;
-  let outboxDraining = false;
-
-  export function pumpOutbox() {
-  	if (outboxDraining) return;
-  	outboxDraining = true;
-  	void drainOutbox().finally(() => { outboxDraining = false; });
-  }
-
-  function claimNextOutboxJob(): OutboxJob | undefined {
-  	const now = new Date().toISOString();
-  	const row = db
-  		.prepare("SELECT * FROM outbox_jobs WHERE status = 'pending' AND next_attempt_at <= ? ORDER BY created_at, seq LIMIT 1")
-  		.get(now) as OutboxJob | undefined;
-  	if (!row) return undefined;
-  	const res = db.prepare("UPDATE outbox_jobs SET status = 'processing', updated_at = ? WHERE id = ? AND status = 'pending'").run(now, row.id);
-  	return res.changes === 1 ? row : claimNextOutboxJob(); // lost the claim race; try the next one
-  }
-
-  async function drainOutbox() {
-  	for (;;) {
-  		const job = claimNextOutboxJob();
-  		if (!job) return;
-  		try {
-  			await runOutboxJob(job); // husk_close | auto_fix | spec_promote | unknown-type no-op
-  			db.prepare("UPDATE outbox_jobs SET status = 'done', updated_at = ? WHERE id = ?").run(new Date().toISOString(), job.id);
-  		} catch (e) {
-  			const attempts = job.attempts + 1;
-  			const now = new Date().toISOString();
-  			if (attempts >= OUTBOX_MAX_ATTEMPTS) {
-  				db.prepare("UPDATE outbox_jobs SET status = 'dead', attempts = ?, last_error = ?, updated_at = ? WHERE id = ?")
-  					.run(attempts, String(e).slice(0, 500), now, job.id);
-  				await fetch(`http://127.0.0.1:${process.env.PORT ?? 3210}/hooks/monitor`, {
-  					method: 'POST',
-  					headers: { 'content-type': 'application/json', authorization: `Bearer ${process.env.FACTORY_SECRET ?? ''}` },
-  					body: JSON.stringify({
-  						source: 'outbox', title: `outbox job dead: ${job.job_type} for run ${job.run_id}`,
-  						fingerprint: `outbox-dead-${job.id}`, detail: String(e).slice(0, 2000)
-  					})
-  				}).catch(() => undefined);
-  			} else {
-  				const delay = OUTBOX_BACKOFF_S[attempts - 1] ?? 3600;
-  				db.prepare("UPDATE outbox_jobs SET status = 'pending', attempts = ?, last_error = ?, next_attempt_at = ?, updated_at = ? WHERE id = ?")
-  					.run(attempts, String(e).slice(0, 500), new Date(Date.now() + delay * 1000).toISOString(), now, job.id);
-  			}
-  		}
-  	}
-  }
-  ```
+- `queue.ts`: add a claim/drain loop, reusing the `monitor_events` atomic-reservation idiom cited in
+  operator memory. `OUTBOX_MAX_ATTEMPTS = 5`, backoff is 1m/5m/15m/30m/60m, and one in-process
+  `outboxDraining` flag prevents overlapping local drains.
+  - Before each claim, atomically reset `processing` rows whose `lease_until <= now` to `pending`.
+    Claims set `status='processing'`, `lease_until=now+2m`, and `updated_at` with
+    `WHERE id=? AND status='pending'`; all handler network calls use a timeout shorter than the
+    lease. This implements the proposal title's lease requirement and recovers a hung/crashed claim
+    on an ordinary interval tick, not boot only.
+  - The candidate query requires `next_attempt_at <= now` and no lower-`seq` job for the same
+    `run_id` whose status is not `done`. It orders by `(created_at, seq)`. A lost claim race loops;
+    do not recurse without a bound.
+  - Success updates `processing → done` with `lease_until=NULL`. Failure increments `attempts`,
+    clears the lease, stores a bounded error, and either returns to `pending` at the next backoff or
+    becomes `dead` at attempt 5. All completion/failure writes guard `status='processing'`.
+  - When a job becomes dead, atomically mark later nonterminal jobs for that run dead as
+    `blocked by <job-id>`. `reportDeadJobs()` selects `dead_reported_at IS NULL`, POSTs the existing
+    `outbox-dead-<job-id>` monitor fingerprint, requires an HTTP 2xx response, and only then sets
+    `dead_reported_at`. Failure leaves it null for the next interval. A swallowed monitor failure
+    would silently discard the only operator signal and is forbidden.
+  - `runOutboxJob()` has an exhaustive `switch`; an unknown free-text `job_type` throws. Free text
+    permits schema evolution, not silent success on version skew or a typo.
 
 - Job handlers, each taking a `run_id`, re-fetching the row fresh (mirrors today's `postFinish()`
   pattern of reading the row inside the handler rather than trusting a stale closure):
-  - `runHuskClose(runId)`: fetch the run; if no `pr_url`, return (nothing to do — the row may have
-    changed since enqueue, though nothing currently un-sets `pr_url`). `GET` the PR; **if
+  - `runHuskClose(runId)`: fetch the run; a missing run or missing `pr_url` is an invariant failure,
+    not success, because the enqueue predicate guaranteed both. `GET` the PR; **if
     `pr.state === 'closed'`, return — already done, idempotent no-op** (this is the retry-safety
     check the current inline code doesn't need but a retried job does). Otherwise `GET` the file
-    count; if non-zero, return (not actually a husk — was true at enqueue time, may have gained
+    count; if non-zero, return (not actually a husk — it may have gained
     commits since, e.g. a manual push). If zero, POST the comment then PATCH closed — same two calls
     as today.
   - `runAutoFix(runId)`: fetch the run; **if a row with `requeue_of = runId` already exists, return
     — already handled by a previous attempt of this job (or a manual requeue)**, reusing the existing
     `requeue_of` column and its established idempotency meaning rather than inventing a second
-    marker. Otherwise: fetch the PR, check it's open+unmerged+no active run on the branch (unchanged
+    marker. A missing run/branch/PR URL is an invariant failure. Otherwise: fetch the PR, check it's
+    open+unmerged+no active run on the branch (unchanged
     from today), compute `attempts` from the terminal-run count on the branch (unchanged), and either
     file the `autofix-<branch>` monitor event or `INSERT` the escalated fix run with `requeue_of =
-    runId` — identical body to today's inline code.
-  - `runSpecPromote(runId)`: fetch the run for its `spec_id`, call the existing `queueDevForSpec()`
-    unchanged — it is already idempotent (§1), this handler is a thin durable trigger for it.
-- `index.ts`: right after `adoptOrphans()`, add boot-time reclaim of any job a prior process crashed
-  mid-execution on (status stuck `processing` forever otherwise):
+    runId`. The monitor POST is no longer `.catch(() => undefined)`: require 2xx or throw so the job
+    retries. The queued replacement run insert and its `null → queued` lifecycle event are one
+    transaction; boot's existing `enqueue()` recovers a crash after that commit.
+  - `runSpecPromote(runId)`: require a run and `spec_id`, then call a strict queue-dev path that
+    returns a discriminated `queued | already_satisfied` outcome and throws for GitHub/API,
+    parse/config, or filesystem failure. Preserve the current fail-soft `queueDevForSpec()` wrapper
+    for its existing sweep/route callers; the outbox handler must not interpret today's ambiguous
+    `null` (which can mean transient fetch failure) as success.
+- `github.ts`: add strict variants used by outbox handlers that throw on network errors and non-2xx
+  responses. The existing `gh()`/`fetchMetaFile()` intentionally collapse failure to `null`; using
+  those directly would let the drain mark a lost side effect `done`.
+- `index.ts`: right after `adoptOrphans()`, start the worker. Lease reconciliation belongs inside
+  every pump, so boot does not need an unguarded reset of every `processing` row:
 
   ```ts
-  db.prepare("UPDATE outbox_jobs SET status = 'pending', updated_at = ? WHERE status = 'processing'").run(new Date().toISOString());
   pumpOutbox();
-  setInterval(pumpOutbox, 5 * 60_000).unref(); // catches backoff'd retries; claim query is idempotent so frequent calls are free when the queue is empty
+  setInterval(pumpOutbox, 5 * 60_000).unref();
   ```
 
 **DoD (Tier A — fixture-driven, no docker/box, mocked `fetch`):**
 
 ```bash
 cd runner && npx tsc --noEmit
-FACTORY_DATA=$(mktemp -d) node --import tsx --test src/queue.test.ts
+TEST_ROOT=$(mktemp -d)
+FACTORY_DATA="$TEST_ROOT/data" FACTORY_RUNS_DIR="$TEST_ROOT/runs" FACTORY_CONCURRENCY=0 \
+  node --import tsx --test src/queue.test.ts
 ```
 
 Assertions, using a stub `global.fetch` (no real GitHub calls) that returns canned responses keyed by
@@ -507,77 +516,93 @@ URL/method:
 - a `pending` `auto_fix` job where a `requeue_of`-tagged row already exists in `runs` drains to `done`
   making **zero** GitHub calls;
 - a job whose handler always throws is claimed, fails 5 times (simulate by directly setting
-  `attempts=4` before the 5th drain), ends `status='dead'`, and the stub records exactly one
-  `/hooks/monitor` POST with `fingerprint` starting `outbox-dead-`;
-- a job left `status='processing'` before the boot-reclaim statement runs, then reclaimed, is
-  drainable again (simulates a crash mid-job).
+  `attempts=4` before the 5th drain), ends `status='dead'`; a failed monitor response leaves
+  `dead_reported_at` null and a later successful response sets it, using the same fingerprint;
+- a job left `processing` with an expired lease is reclaimed and drainable on an ordinary pump;
+  one with an unexpired lease is not reclaimed;
+- a lower-sequence job in backoff prevents its higher-sequence sibling from being claimed; when the
+  lower job becomes dead, the sibling becomes dead/blocked and is reported rather than stranded;
+- `gh()`-equivalent nulls, rejected/non-2xx fetches, and an unknown `job_type` all retry/dead-letter;
+  none drain to `done`;
+- `spec_promote` distinguishes `already_satisfied` (done) from transient source fetch failure
+  (retry), and an auto-fix monitor 500 retries instead of being swallowed.
 
 ### Slice 4 — explicit lifecycle source→target edges (3-5h, tag `logic`)
 
 **Files:** `runner/src/lifecycle.ts`, `runner/src/lifecycle.test.ts`, `README.md`.
 
-- Add, alongside `TRANSITIONS`:
+- **Blocked on the human decision in §8.** Replace target-only `TRANSITIONS` with an explicit edge
+  table whose values are approved there; do not implement the illustrative keys below until every
+  set is decided. This does not expand the target API: proposal targets remain
+  `approved|rejected|retired|closed`, and spec targets remain
+  `approved|retired|superseded|done`.
 
   ```ts
-  // Terminal states are sinks: once a proposal/spec reaches one of these via
-  // THIS tool, no further transition() call may move it — reviving a closed/
-  // retired/superseded/done item is a deliberate re-authoring act (edit the
-  // file directly, or file a fresh proposal), never a silent status flip.
-  // Non-terminal legacy values (shipped, implementing, parked, unknown, and
-  // this kind's own draft/review/approved/in-spec) are left exactly as
-  // permissive as today — a full state machine for every historical status
-  // string is not attempted here (see spec §5 out-of-scope).
-  const TERMINAL: Record<string, Set<string>> = {
-  	proposal: new Set(['rejected', 'retired', 'closed']),
-  	spec: new Set(['retired', 'superseded', 'done'])
+  const EDGES: Record<'proposal' | 'spec', Record<string, ReadonlySet<string>>> = {
+	proposal: {
+		// draft: new Set([...]), review: new Set([...]), approved: ...,
+		// in-spec: ..., rejected: new Set(), retired: new Set(), closed: new Set()
+	},
+	spec: {
+		// draft: new Set([...]), review: new Set([...]), approved: ...,
+		// implementing: ..., shipped: ..., parked: ..., unknown: ...,
+		// rejected: new Set(), retired: new Set(), superseded: new Set(), done: new Set()
+	}
   };
   ```
 
 - In `transition()`, after fetching `file`/decoding `body` (existing code, ~line 59) and before the
   PUT, extract the current status from the same body via the existing `parseFrontmatter()` helper
   (`github.ts`, already imported project-wide — add the import to `lifecycle.ts`, which currently
-  parses `status:`/`updated:` with ad-hoc regexes instead of this shared parser) and refuse if it's
-  terminal:
+  parses `status:`/`updated:` with ad-hoc regexes instead of this shared parser). Missing/non-string
+  source status and a source absent from `EDGES[kind]` fail closed with 409; a target absent from the
+  source's set also returns 409. Keep the existing target validation/reason validation first so
+  malformed requests still return their current 400/422 without a GitHub call.
 
   ```ts
   const currentStatus = parseFrontmatter(body).status;
-  if (typeof currentStatus === 'string' && TERMINAL[kind]?.has(currentStatus)) {
-  	return { ok: false, status: 409, error: `${kind} ${id} is already terminal (${currentStatus}) — this tool cannot revive it` };
+  if (typeof currentStatus !== 'string' || !EDGES[kind][currentStatus]?.has(status)) {
+	return { ok: false, status: 409, error: `illegal ${kind} transition: ${String(currentStatus)} -> ${status}` };
   }
   ```
 
   This runs against the exact snapshot the PUT's `sha:` guard also covers — no extra GitHub call, no
   new race window.
-- On a successful PUT (existing `if (!put?.commit?.sha) return ...` guard already present), call
-  Slice 1's `recordEvent('proposal'|'spec', id, currentStatus, status, by, cleanReason ||
-  undefined)` — this is the "lifecycle" half of the append-only event log the proposal's DoD asks for,
-  independent of the GitHub commit message that was already the only audit trail.
+- Immediately after a successful markdown PUT (existing `if (!put?.commit?.sha) return ...` guard
+  already present), and before the best-effort index patch, call
+  Slice 1's `recordEvent('github:<commit-sha>', 'proposal'|'spec', id, currentStatus, status, by,
+  cleanReason || undefined)`. The GitHub commit remains canonical because SQLite cannot transact
+  atomically with the Contents API. The deterministic commit key makes retries idempotent, but a
+  process crash after the remote PUT and before the local insert can still omit the SQLite
+  projection; do not describe this projection as byte-complete history without a separate
+  reconciliation mechanism.
 - `README.md`: short paragraph documenting `outbox_jobs`/`lifecycle_events` for operator debugging —
   e.g. `sqlite3 /data/factory.db "SELECT * FROM outbox_jobs WHERE status != 'done'"` to see stuck
   side effects, and `"SELECT * FROM lifecycle_events WHERE entity_id = '<id>' ORDER BY created_at"`
-  to see a run's or a proposal/spec's full history — mirroring the existing scoped-credential doc
-  comment style already in `index.ts`.
+  to see locally recorded history — mirroring the existing scoped-credential doc comment style
+  already in `index.ts`. State explicitly that GitHub commit history is canonical for proposal/spec
+  transitions and pre-deploy events are not backfilled.
 
 **DoD (Tier A):**
 
 ```bash
 cd runner && npx tsc --noEmit
-FACTORY_DATA=$(mktemp -d) node --import tsx --test src/lifecycle.test.ts
+TEST_ROOT=$(mktemp -d)
+FACTORY_DATA="$TEST_ROOT/data" FACTORY_RUNS_DIR="$TEST_ROOT/runs" FACTORY_CONCURRENCY=0 \
+  node --import tsx --test src/lifecycle.test.ts
 ```
 
-Using a stubbed `gh()` (no real GitHub calls — same technique the existing code's testability
-requires regardless of this spec):
-- a proposal file stubbed with `status: closed` in its frontmatter: `transition('proposal', id,
-  'approved', ..., 'test')` returns `{ ok: false, status: 409 }`; the stub records **zero** PUT calls
-  (refused before the write, not after);
-- a proposal file stubbed with `status: draft`: `transition('proposal', id, 'approved', undefined,
-  'auto-triage')` returns `{ ok: true }` — unchanged from today, proves `promoteSweep`'s call shape
-  still works;
-- a spec file stubbed with `status: done`: `transition('spec', id, 'retired', 'superseded by X...',
-  'test')` returns `{ ok: false, status: 409 }` (terminal states refuse **every** target, not just
-  `approved`);
+Using a stubbed `global.fetch` consumed by the real `gh()` helper (no real GitHub calls):
+- table-drive **every approved edge and every source state** from the human-approved table; each
+  approved edge succeeds and representative absent edges return 409 with zero PUTs;
+- specifically cover both autonomous call shapes, `proposal draft → approved` and
+  `spec draft|review → approved`, if and only if the approved table retains them;
+- missing, empty, and unrecognized source statuses return 409 with zero PUTs rather than inheriting
+  today's permissiveness;
+- each sink state in the approved table refuses every target;
 - after a successful stubbed transition, `lifecycle_events` has exactly one new row with
-  `entity_type='spec'`, matching `from_status`/`to_status`.
+  `event_key='github:<commit-sha>'`, `entity_type='spec'`, and matching
+  `from_status`/`to_status`; replaying the same commit key does not duplicate it.
 
 ## 5. Cross-project impact and ordering
 
@@ -589,11 +614,11 @@ action required (per `/memory/MINION/minion-factory-agent-pipeline.md`'s "box is
 
 | Surface | Impact / ordering |
 |---|---|
-| Slices 1→2→3 | Strict order: Slice 3's job handlers assume Slice 2's `outbox_jobs` rows exist with the exact `job_type`/`seq` values Slice 2 inserts; Slice 2's transaction assumes Slice 1's `claimFinishRun` semantics. Slice 4 is independent of 1-3 (different function, `transition()` vs. `finish()`) and may land before or after them. |
-| `workitem-handoff-schema-spec` (approved, unbuilt) | Shares `queue.ts` (Slice 3's `spec_promote` handler calls `queueDevForSpec()`, which that spec's Slice 3 will change internally) and `lifecycle.ts` (Slice 5 there vs. Slice 4 here — disjoint functions, see collision notes above). Land in either order; neither reverts the other. |
+| Slices 1→2→3 | Strict order: Slice 3's job handlers assume Slice 2's `outbox_jobs` rows exist with the exact `job_type`/`seq` values Slice 2 inserts; Slice 2 extends Slice 1's `finishRun` transaction semantics. Slice 4 is code-independent but policy-blocked by §8. |
+| `workitem-handoff-schema-spec` (approved, unbuilt) | Shares `queue.ts` (Slice 3's strict spec-promote path must preserve that spec's fail-loud multi-repo routing) and `lifecycle.ts` (Slice 5 there vs. Slice 4 here — different functions). Its run-insertion changes must also use Slice 1's creation-event transaction if it lands first. |
 | `deterministic-unstick-spec` (approved, unbuilt) | Shares `index.ts` (its auth-middleware edit vs. this spec's boot-sequence `pumpOutbox()` call) — disjoint regions. Its facilitator container also calls `/hooks/monitor` with the `FACTORY_UNSTICK_SECRET`; this spec's `outbox-dead-*` monitor call always uses the admin `FACTORY_SECRET` (it runs in-process, not in a container), so no credential overlap. |
-| `postmerge-discovery-loop-spec` (**draft, unapproved**) | Its own text defers absorbing its "enqueue discovery run" step into this spec's outbox as a documented follow-up once this lands. **Not built here** — that spec's `webhook.ts`/`discovery.ts` don't exist yet; `outbox_jobs.job_type` is left as free text specifically so that follow-up doesn't need a migration when it happens. |
-| `orchestration-tests-spec` (approved, unbuilt) | This spec's `*.test.ts` files use the exact `node --import tsx --test` invocation that spec establishes as `npm test`, so they're covered by its CI workflow automatically once both have landed, in either order. |
+| `postmerge-discovery-loop-spec` (**approved, unbuilt**) | It currently owns a specialized durable discovery-run transaction and level-triggered retry. Preserve those mechanisms if it lands first; absorbing them into `outbox_jobs` remains a follow-up. Its new `discovery` run insert must append the creation event once Slice 1 exists. |
+| `orchestration-tests-spec` (approved, unbuilt) | This spec's `*.test.ts` files use the exact `node --import tsx --test` invocation that spec establishes as `npm test`. If its `requeue.ts` extraction lands first, include that file in the creation-event audit and preserve its `recordFinish()` characterization by delegating to `finishAndEnqueue()`. |
 
 ## 6. Explicitly out of scope
 
@@ -610,13 +635,8 @@ action required (per `/memory/MINION/minion-factory-agent-pipeline.md`'s "box is
   `workitem-handoff-schema-spec` Slice 3.
 - Changing what `/hooks/monitor` does internally (GitHub issue vs. typed-proposal upsert) — owned by
   `workitem-handoff-schema-spec` Slice 6; this spec only calls the route's existing HTTP contract.
-- A full hand-authored state machine covering every historical status value
-  (`shipped`/`implementing`/`parked`/`unknown`/etc.) — §2/§4's `TERMINAL`-sink model closes the
-  concrete hole the proposal describes (reviving a closed/done item) without claiming to model every
-  legal business transition for values this tool doesn't currently touch.
 - Absorbing the postmerge-discovery-loop spec's future "enqueue discovery run" step into the outbox
-  — that spec is unapproved and its source files don't exist; `job_type` is left extensible for when
-  it does (§5).
+  — that spec is approved but unbuilt; `job_type` is left extensible for a later integration (§5).
 - Byte-exact transactionality across two separate GitHub API calls within one job (e.g. `husk_close`'s
   comment-POST-then-PATCH-close): GitHub has no multi-call transaction primitive. The idempotency
   check (§ Slice 3: skip entirely if the PR is already closed) bounds the damage of a crash between
@@ -625,10 +645,14 @@ action required (per `/memory/MINION/minion-factory-agent-pipeline.md`'s "box is
 - Retrofitting `lifecycle_events` history for runs/proposals/specs that transitioned **before** this
   spec ships — the log starts recording from deploy time forward, matching every other append-only
   log in this codebase (e.g. `monitor_events`, GitHub commit history itself).
+- Making the local proposal/spec event projection atomic with the GitHub Contents API. No shared
+  transaction exists across SQLite and GitHub; GitHub commit history remains canonical. A separate
+  commit-history reconciler would be required to close the post-PUT/pre-insert crash window.
 
 ## 7. End-to-end acceptance
 
-From a clean clone of the merge commit, no docker/box needed for any of this (pure logic + sqlite):
+Full acceptance is blocked until §8 is resolved and encoded in Slice 4. From a clean clone of the
+eventual merge commit, no docker/box is needed (pure logic + SQLite + mocked HTTP):
 
 ```bash
 cd runner && npm ci && npx tsc --noEmit
@@ -639,25 +663,43 @@ grep -rn "DELETE FROM lifecycle_events\|UPDATE lifecycle_events" src   # expect:
 
 Then, in order:
 
-1. Slice 1's tests confirm `claimQueuedRun`/`claimFinishRun` are true CAS guards (second call on an
-   already-transitioned row is a no-op) and `recordEvent` appends exactly one row per call.
+1. Slice 1's tests confirm creation, `claimQueuedRun`, `finishRun`, cancel, spawn failure, and orphan
+   fallback use exact-state transactions; second terminalization is a no-op even for canceled runs;
+   each successful state change has exactly one append-only event.
 2. Slice 2's tests confirm `finish()`'s status write and its outbox enqueue commit as one atomic
-   `db.transaction()` — a terminal run always has exactly the right `outbox_jobs` rows for its
+   `db.transaction()` — the forced-insert-failure test rolls back status/event/jobs, a terminal run
+   has exactly the right `outbox_jobs` rows for its
    `(kind, status, pr_url, branch, spec_id)` combination, and re-running the same transaction on an
    already-terminal row inserts nothing new.
-3. Slice 3's tests confirm every job type is retry-safe (re-draining a `done`-equivalent state makes
-   no duplicate GitHub calls), dies to a monitor event after 5 attempts, and a job artificially stuck
-   `processing` is reclaimed by the boot-time statement and drains normally afterward.
-4. Slice 4's tests confirm a terminal-status proposal/spec refuses **every** transition target (not
-   just re-approval) with `409`, a non-terminal one behaves exactly as before, and a successful
-   transition appends one `lifecycle_events` row.
+3. Slice 3's tests confirm every known job type is retry-safe, transient/null/non-2xx responses and
+   unknown types never become `done`, expired leases reclaim on any pump, lower-sequence
+   prerequisites cannot be bypassed during backoff, and dead/dependency-blocked jobs keep retrying
+   monitor delivery until `dead_reported_at` is set.
+4. Slice 4's table-driven tests confirm every human-approved edge and source state, reject absent
+   edges and unknown/missing sources with 409, and append a commit-keyed local projection after a
+   successful GitHub transition.
 5. Diff review confirms the proposal's four DoD clauses each map to a concrete, tested mechanism:
-   retryable idempotent-keyed jobs (Slice 2-3) drained by a restart-surviving worker (Slice 3's boot
-   reclaim + interval) · explicit source→target table (Slice 4's `TERMINAL` check) · append-only
-   event log (Slice 1/2/4's `lifecycle_events`, grep-verified no mutation) · CAS guards on status
-   flips (Slice 1's `WHERE status = ...`/`WHERE status NOT IN (...)` guards plus Slice 2's outbox
-   `INSERT OR IGNORE` idempotency keys and Slice 3's `WHERE status = 'pending'` claim).
+   retryable idempotent-keyed jobs (Slices 2–3) drained by a lease-based restart-surviving worker ·
+   explicit source→target table (Slice 4's `EDGES`) · append-only event log (Slices 1/2/4,
+   grep-verified no mutation, with GitHub canonical for cross-system lifecycle history) · CAS
+   guards on status flips (exact source plus `finished_at IS NULL`) and job claims.
 
 Only then does a runner restart at any point in a run's lifecycle — mid-container, mid-`postFinish`,
 mid-outbox-job — lose zero husk cleanups, zero auto-fix escalations, and zero spec→dev promotions,
 closing the exact defect `queue.ts:193`'s fire-and-forget call represented.
+
+## 8. Human decision required
+
+Approve the exact source→target edge sets for both lifecycle kinds. At minimum, decide the legal
+targets, from the existing per-kind target allowlists, for every source value currently present in
+repository artifacts or accepted by the workflow:
+
+- proposal: `draft`, `review`, `approved`, `in-spec`, `rejected`, `retired`, `closed`, `done`;
+- spec: `draft`, `review`, `approved`, `implementing`, `shipped`, `parked`, `unknown`, `rejected`,
+  `retired`, `superseded`, `done`.
+
+The known autonomous calls require `proposal draft → approved` and `spec draft|review → approved`
+unless policy intentionally retires those automations. Terminal sinks can be represented by empty
+sets. The reviewer cannot infer whether approved/in-progress/historical states may be retired,
+closed, superseded, completed, or revived without inventing lifecycle policy. Until this table is
+approved, the proposal's explicit-edge definition of done is unmet and Slice 4 must not ship.
