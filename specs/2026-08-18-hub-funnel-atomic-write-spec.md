@@ -2,7 +2,7 @@
 id: 2026-08-18-hub-funnel-atomic-write-spec
 title: "Make crm_contacts.custom_fields writes atomic — jsonb_set instead of read-modify-write"
 stage: spec
-status: draft
+status: approved
 pass: 2
 created: 2026-08-18
 updated: 2026-08-18
