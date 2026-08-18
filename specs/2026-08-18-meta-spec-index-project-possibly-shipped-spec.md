@@ -2,12 +2,12 @@
 id: 2026-08-18-meta-spec-index-project-possibly-shipped-spec
 title: Project G0 reconciliation metadata into the committed spec index
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-18
 updated: 2026-08-18
 proposal: 2026-08-17-meta-spec-index-project-possibly-shipped
-verdict: pending
+verdict: approved
 repos: [minion-meta]
 relationship: extends
 related: [2026-08-17-sdlc-phase-gates-scoring-spec, 2026-08-18-base-kanban-possibly-shipped-surface-spec]
@@ -38,8 +38,8 @@ Quoted from the approved proposal:
 > chip in spec §7 (board slice, minion-base) has nothing to render.
 
 The proposal's delegated gate decision supersedes its earlier cross-repo wording for planning
-purposes: the base surface shipped in base PR #13, and this spec owns only the outstanding
-minion-meta projector work.
+purposes: it reports the base surface shipped in base PR #13, and this spec owns only the
+outstanding minion-meta projector work.
 
 ## 1. Relationship recommendation
 
@@ -48,11 +48,16 @@ an existing G0 design; it does not replace or retire either related artifact.
 
 - `2026-08-17-sdlc-phase-gates-scoring-spec` — extends its §3 G0 write contract by making the three
   reconciliation fields available in the committed read model consumed downstream.
-- `2026-08-18-base-kanban-possibly-shipped-surface-spec` — complements its shipped board consumer;
-  that spec also described this projector as a cross-repo prerequisite, but the delegated gate
-  split the still-open minion-meta work into this independently executable spec.
+- `2026-08-18-base-kanban-possibly-shipped-surface-spec` — complements the board consumer reported
+  shipped by the delegated gate decision; that related spec's frontmatter still says
+  `status: approved`. Although that spec also assigned its Slice 1 to this projector, the later
+  gate decision split the still-open minion-meta work into this independently executable spec.
+  For the overlapping projector work, this spec is authoritative; the related spec remains the
+  authority for its minion-base and minion-factory behavior only. Its extra proposal-lifecycle and
+  `reconcile_ignore` documentation work is not inherited by this narrower gate-approved scope.
 
-No resolver action on either related artifact is part of this spec.
+The delegated gate decision is the overlap resolution. No further lifecycle edit to either
+related artifact is part of this spec.
 
 ## 2. AS-IS → TO-BE → DELTA
 
@@ -79,12 +84,16 @@ No resolver action on either related artifact is part of this spec.
 
 ### TO-BE — target behavior and invariants
 
-- When a parsed spec has a truthy `possibly_shipped`, `evidence`, or `link_review` frontmatter
+- When a parsed spec has a non-empty `possibly_shipped`, `evidence`, or `link_review` frontmatter
   value, `scripts/spec-index.mjs` copies that value unchanged to the corresponding index entry.
-- When any of those fields is absent or falsy, the generated entry omits the key, matching the
-  existing conditional-spread convention; the generator must not emit `null` or an empty string.
-- All existing projected fields, validation, sorting, file selection, and JSON formatting remain
-  byte-for-byte behaviorally compatible.
+  `specs/TEMPLATE.md` defines all three as optional scalar strings; this slice does not add new
+  parser-level type validation.
+- When any of those fields is absent or parses as an empty string, the generated entry omits the
+  key, matching the existing conditional-spread convention; the generator must not emit `null` or
+  an empty string.
+- Except for those three additive keys on entries whose source frontmatter contains them, all
+  existing projected values, validation, sorting, file selection, and JSON formatting remain
+  behaviorally compatible.
 - The template documents each new optional read-model field and identifies G0 as its writer.
 - A hermetic Node test proves present and absent behavior without reading or rewriting the real
   `specs/index.json`.
@@ -100,9 +109,9 @@ No resolver action on either related artifact is part of this spec.
    contract. **Proof:** a test assertion or explicit `rg` check finds all three rows in
    `specs/TEMPLATE.md`, each marked optional and tied to G0.
 3. **D3 / Slice 1:** regenerate the production index with the updated generator while preserving
-   all unrelated entries and index conventions. **Proof:** `node scripts/spec-index.mjs` succeeds,
-   a JSON assertion confirms the new spec entry and absence of fixture ids, and the hermetic test
-   remains green after regeneration.
+   all unrelated projection conventions. **Proof:** `node scripts/spec-index.mjs` succeeds, a
+   raw-frontmatter-to-index assertion checks every real occurrence of the three fields, an
+   assertion excludes fixture ids, and the hermetic test remains green after regeneration.
 
 Every transition belongs to Slice 1; work not tracing to D1–D3 is outside this spec.
 
@@ -129,19 +138,29 @@ the real artifact.
 - `specs/index.json` — regenerate from repository source after implementation; do not hand-edit.
 
 Do not refactor the parser or export new production APIs merely to enable the test. The temporary
-working-directory test exercises the command exactly as operators and CI do and prevents fixture
-residue in the committed index.
+working-directory test exercises the same command operators use and prevents fixture residue in
+the committed index. The current root CI does not invoke this script or test, and adding CI wiring
+is outside this slice.
 
 **Machine-checkable definition of done:**
 
 ```bash
 node --test scripts/spec-index.test.mjs
 node scripts/spec-index.mjs
-node - <<'NODE'
-const { readFileSync } = require('node:fs');
+node --input-type=module - <<'NODE'
+import { readFileSync, readdirSync } from 'node:fs';
+import { parseFrontmatter } from './scripts/spec-frontmatter.mjs';
 const { specs } = JSON.parse(readFileSync('specs/index.json', 'utf8'));
-if (!specs.some((spec) => spec.id === '2026-08-18-meta-spec-index-project-possibly-shipped-spec')) process.exit(1);
-if (specs.some((spec) => spec.id.startsWith('_tmp-possibly-shipped'))) process.exit(1);
+const byId = new Map(specs.map((spec) => [spec.id, spec]));
+for (const name of readdirSync('specs').filter((name) => name.endsWith('.md') && name !== 'TEMPLATE.md' && !name.endsWith('.review.md'))) {
+  const { fm } = parseFrontmatter(readFileSync(`specs/${name}`, 'utf8'));
+  const indexed = byId.get(fm.id);
+  if (!indexed) throw new Error(`missing index entry for ${fm.id}`);
+  for (const key of ['possibly_shipped', 'evidence', 'link_review']) {
+    if (fm[key] ? indexed[key] !== fm[key] : key in indexed) throw new Error(`${fm.id}: ${key} projection mismatch`);
+  }
+}
+if (specs.some((spec) => spec.id.startsWith('_tmp-possibly-shipped'))) throw new Error('fixture residue');
 NODE
 rg -n '^\| `(?:possibly_shipped|evidence|link_review)` \| no \|' specs/TEMPLATE.md
 ```
@@ -158,8 +177,8 @@ The test must additionally fail if any of these regressions is introduced:
 | Surface | Impact | Mitigation / alert |
 |---|---|---|
 | `minion-meta` | Owns the source frontmatter contract and committed projection. | Hermetic regression coverage plus a clean real regeneration makes the contract reviewable. |
-| `minion-base` | Read-only downstream consumer receives three additional optional keys. | Additive JSON fields are backward-compatible. Base PR #13 is reported shipped by the approved proposal's gate decision; do not modify or re-verify base code in this slice. Alert if current base types reject unknown JSON keys at runtime, though existing plain JSON parsing is expected to tolerate them. |
-| `minion-factory` | Existing G0 writer becomes visible through the index. | No writer change. Preserve values without normalization so the writer remains authoritative. Alert if implementation discovers non-scalar values, because the template permits only flat scalars/string arrays and this spec assumes these three are scalar strings. |
+| `minion-base` | Read-only downstream consumer receives three additional optional keys. | The delegated gate decision reports the compatible consumer shipped in base PR #13. Do not modify or re-verify base code in this slice; stop and return to spec review if implementation evidence contradicts that compatibility premise. |
+| `minion-factory` | Existing G0 writer becomes visible through the index. | No writer change. Preserve values without normalization so the writer remains authoritative. The template defines these values as scalar strings; stop and return to spec review if real writer output violates that contract. |
 | Other gateway, hub, site, docs, paperclip, and pixel-agent surfaces | No protocol, database, auth, agent-format, workshop, or pixel-office contract changes. | No action required under AGENTS.md's Cross-Project Impact Zones. |
 
 The change is additive and does not enter any named gateway-protocol, database-schema, auth,
@@ -185,43 +204,27 @@ After Slice 1 is implemented, run from the `minion-meta` repository root:
 ```bash
 node --test scripts/spec-index.test.mjs
 node scripts/spec-index.mjs
-node - <<'NODE'
-const { mkdtempSync, cpSync, mkdirSync, writeFileSync, readFileSync, rmSync } = require('node:fs');
-const { tmpdir } = require('node:os');
-const { join } = require('node:path');
-const { spawnSync } = require('node:child_process');
-const root = process.cwd();
-const dir = mkdtempSync(join(tmpdir(), 'minion-spec-index-e2e-'));
-try {
-  mkdirSync(join(dir, 'scripts'));
-  mkdirSync(join(dir, 'specs'));
-  cpSync(join(root, 'scripts/spec-index.mjs'), join(dir, 'scripts/spec-index.mjs'));
-  cpSync(join(root, 'scripts/spec-frontmatter.mjs'), join(dir, 'scripts/spec-frontmatter.mjs'));
-  writeFileSync(join(dir, 'specs/example.md'), `---
-id: example
-title: Example
-stage: spec
-status: draft
-created: 2026-08-18
-possibly_shipped: https://example.invalid/pr/1
-evidence: https://example.invalid/check/1
-link_review: inspect ambiguous supersedes link
----
-`);
-  const run = spawnSync(process.execPath, ['scripts/spec-index.mjs'], { cwd: dir, encoding: 'utf8' });
-  if (run.status !== 0) throw new Error(run.stderr || run.stdout);
-  const item = JSON.parse(readFileSync(join(dir, 'specs/index.json'), 'utf8')).specs[0];
+node --input-type=module - <<'NODE'
+import { readFileSync, readdirSync } from 'node:fs';
+import { parseFrontmatter } from './scripts/spec-frontmatter.mjs';
+const { specs } = JSON.parse(readFileSync('specs/index.json', 'utf8'));
+const byId = new Map(specs.map((spec) => [spec.id, spec]));
+for (const name of readdirSync('specs').filter((name) => name.endsWith('.md') && name !== 'TEMPLATE.md' && !name.endsWith('.review.md'))) {
+  const { fm } = parseFrontmatter(readFileSync(`specs/${name}`, 'utf8'));
+  const indexed = byId.get(fm.id);
+  if (!indexed) throw new Error(`missing index entry for ${fm.id}`);
   for (const key of ['possibly_shipped', 'evidence', 'link_review']) {
-    if (!item[key]) throw new Error(`missing ${key}`);
+    if (fm[key] ? indexed[key] !== fm[key] : key in indexed) throw new Error(`${fm.id}: ${key} projection mismatch`);
   }
-} finally {
-  rmSync(dir, { recursive: true, force: true });
 }
+if (specs.some((spec) => spec.id.startsWith('_tmp-possibly-shipped'))) throw new Error('fixture residue');
 NODE
-node -e "const {specs}=require('./specs/index.json'); if(specs.some(s=>s.id.startsWith('_tmp-possibly-shipped'))) process.exit(1)"
+rg -n '^\| `(?:possibly_shipped|evidence|link_review)` \| no \|' specs/TEMPLATE.md
 ```
 
-Pass means the isolated raw-frontmatter input reaches an isolated generated index with all three
-values intact, the repository generator accepts the complete real corpus, the committed output
-contains no fixture residue, and no cross-repo mutation was needed.
-
+Pass means the hermetic present/absent fixtures reach only their isolated generated index with
+exact values and existing optional projections intact; the repository generator accepts the
+complete real corpus; every real occurrence of the three fields has exact index parity; the
+committed output contains no fixture residue; and no cross-repo mutation was needed. The
+committed `specs/index.json` diff remains required review evidence for source-derived changes to
+other entries that occurred between regenerations.
