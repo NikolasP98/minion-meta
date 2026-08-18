@@ -102,7 +102,12 @@ push)
 	# root, a stray *.env, or the claude-mem bulk store must never be swept
 	# into a sync commit just because it happens to sit in the worktree.
 	for root in "${MEMORY_ROOTS[@]}"; do
-		[[ -d "$root" ]] && git add -- "$root"
+		# `git add -A` stages tracked deletions as well as additions/edits. A
+		# deleted final file also removes the directory, so include roots that
+		# still have tracked paths even when they no longer exist on disk.
+		if [[ -d "$root" ]] || [[ -n "$(git ls-files -- "$root")" ]]; then
+			git add -A -- "$root"
+		fi
 	done
 
 	# `git commit` consumes the whole index, including entries staged before
@@ -131,15 +136,16 @@ push)
 	fi
 
 	# The index check above protects this hook's new commit, but an earlier local
-	# commit may already contain an out-of-root path. Validate the complete range
-	# that push would publish after rebasing, and leave rejected commits local for
-	# a human to handle.
-	while IFS= read -r outgoing_path; do
+	# commit may already contain an out-of-root path. Inspect every outgoing
+	# commit against every parent (`-m` includes merge parents), rather than only
+	# comparing the endpoint trees: an add followed by a delete must not smuggle
+	# a historical blob into the remote. Leave rejected commits local for a human.
+	while IFS= read -r -d '' outgoing_path; do
 		if ! is_allowed_path "$outgoing_path"; then
 			log "refusing to push committed path outside MEMORY_SYNC_ROOTS: $outgoing_path"
 			exit 1
 		fi
-	done < <(git diff --name-only --diff-filter=ACDMRTUXB "origin/$BRANCH..HEAD")
+	done < <(git log -m --format= --name-only -z --diff-filter=ACDMRTUXB "origin/$BRANCH..HEAD")
 
 	if ! timeout "$PUSH_TIMEOUT" git push --quiet origin "$BRANCH" 2>/dev/null; then
 		log "push failed (offline, or a race with another writer) — will retry next sync"

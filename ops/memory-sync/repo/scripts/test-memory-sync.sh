@@ -68,6 +68,23 @@ pass "already-committed out-of-root file fails closed and remains absent remotel
 
 git -C "$WORK/clone" reset --hard --quiet origin/main
 
+# --- history-only out-of-root entries (add then delete) must fail before push ---
+echo "API_SECRET=historical" >"$WORK/clone/operator-secrets.txt"
+git -C "$WORK/clone" add operator-secrets.txt
+git -C "$WORK/clone" commit --quiet -m "plant historical out-of-root file"
+git -C "$WORK/clone" rm --quiet operator-secrets.txt
+git -C "$WORK/clone" commit --quiet -m "delete historical out-of-root file"
+
+if MEMORY_SYNC_DIR="$WORK/clone" bash "$SYNC_SCRIPT" push >"$WORK/historical.log" 2>&1; then
+	fail "sync accepted add-then-delete history outside the memory roots"
+fi
+if git --git-dir="$WORK/origin.git" rev-list main -- operator-secrets.txt | grep -q .; then
+	fail "history-only out-of-root file reached remote"
+fi
+pass "add-then-delete out-of-root history fails closed and remains absent remotely"
+
+git -C "$WORK/clone" reset --hard --quiet origin/main
+
 # --- plant: a legitimate memory edit, plus everything that must NOT sync ---
 SYNC_MARKER="memory-sync-marker-20260818"
 echo "- $SYNC_MARKER" >>"$WORK/clone/MINION/MEMORY.md"
@@ -103,4 +120,13 @@ pass "operator-notes.txt (repo root, outside memory roots) never synced"
 pass ".claude-mem/ (bulk store tier) never synced"
 pass "prod.env / secrets.env (credential-shaped *.env) never synced"
 pass "MINION/id_rsa (credential-shaped, inside an allowed root) never synced"
+
+# --- deleting the last file removes an opted-in root remotely ---
+rm "$WORK/.minion-agent-memory/MINION/MEMORY.md"
+HOME="$WORK" MEMORY_SYNC_PUSH_TIMEOUT=5 bash "$SYNC_SCRIPT" push >"$WORK/delete-root.log" 2>&1 \
+	|| fail "root deletion sync exited non-zero: $(cat "$WORK/delete-root.log")"
+if git --git-dir="$WORK/origin.git" cat-file -e main:MINION/MEMORY.md 2>/dev/null; then
+	fail "deletion of the final file in an opted-in root did not reach remote"
+fi
+pass "deletion of an entire opted-in memory root synced"
 echo "all memory-sync boundary checks passed"
