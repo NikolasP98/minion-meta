@@ -1,7 +1,8 @@
 ---
 id: 2026-08-17-factory-workitem-handoff-schema
 title: Typed WorkItem + signed handoff bundle across factory stages
-status: approved
+status: in-spec
+spawned_spec: 2026-08-18-factory-workitem-handoff-schema-spec
 created: 2026-08-17
 updated: 2026-08-18
 repos: [minion-factory]
