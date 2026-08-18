@@ -1,9 +1,10 @@
 ---
 id: 2026-08-18-factory-orchestration-round7
 title: Repo-slice fan-out, slice continuation, scenario profiles, merge resolver
-status: approved
+status: in-spec
 created: 2026-08-18
 updated: 2026-08-18
+spawned_spec: 2026-08-18-factory-orchestration-round7-spec
 repos: [minion-factory]
 tags: [logic]
 source: audit-2026-08-18
