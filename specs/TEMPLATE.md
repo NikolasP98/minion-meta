@@ -41,3 +41,9 @@ Keep the existing house style: `# Title`, then `## 0. Product` (what and why, in
 words), numbered sections, explicit **out-of-scope**, and an end-to-end verification step the
 implementer can run. Slices sized "junior dev, 4–8 focused hours" with a machine-checkable
 definition of done.
+
+`scripts/spec-index.mjs --check` (the meta CI gate) enforces the three required sections above
+by heading/keyword lint, plus date formats, `repos` ids, and `revises`/`supersedes` link
+integrity (a `supersedes` target must exist and carry `status: superseded` — one-way links are
+a CI failure). Specs that predate this check are grandfathered in
+`scripts/spec-heading-lint-baseline.json`; every new or hand-edited spec must comply.

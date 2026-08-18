@@ -1,6 +1,7 @@
 # .github/workflows/ci.yml
 # Meta-repo CI — gates every PR against main.
-# Runs lint-all, typecheck-all, build-all, test-all, and changeset:status.
+# Runs lint-all, typecheck-all, build-all, test-all, changeset:status, and the
+# specs/ hardening gate (scripts/spec-index.mjs --check).
 name: CI
 
 on:
@@ -43,6 +44,9 @@ jobs:
 
       - name: Test
         run: pnpm run test-all
+
+      - name: Spec index check
+        run: node scripts/spec-index.mjs --check
 
       - name: Changesets status (PR only)
         if: github.event_name == 'pull_request'
