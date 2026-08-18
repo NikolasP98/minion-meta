@@ -85,6 +85,36 @@ pass "add-then-delete out-of-root history fails closed and remains absent remote
 
 git -C "$WORK/clone" reset --hard --quiet origin/main
 
+# --- a branch advance after validation must not change the object being pushed ---
+echo "- validated before race" >>"$WORK/clone/MINION/MEMORY.md"
+REAL_TIMEOUT="$(command -v timeout)"
+export REAL_TIMEOUT
+export MEMORY_SYNC_RACE_CLONE="$WORK/clone"
+timeout() {
+	local duration="$1"
+	shift
+	if [[ "${1:-}" == git && "${2:-}" == push && -n "${MEMORY_SYNC_RACE_CLONE:-}" ]]; then
+		echo "API_SECRET=raced-after-validation" >"$MEMORY_SYNC_RACE_CLONE/operator-secrets.txt"
+		git -C "$MEMORY_SYNC_RACE_CLONE" add operator-secrets.txt
+		git -C "$MEMORY_SYNC_RACE_CLONE" commit --quiet -m "race branch after validation"
+		unset MEMORY_SYNC_RACE_CLONE
+	fi
+	"$REAL_TIMEOUT" "$duration" "$@"
+}
+export -f timeout
+
+MEMORY_SYNC_DIR="$WORK/clone" bash "$SYNC_SCRIPT" push >"$WORK/race.log" 2>&1 \
+	|| fail "race-safe sync exited non-zero: $(cat "$WORK/race.log")"
+git --git-dir="$WORK/origin.git" show main:MINION/MEMORY.md | grep -q 'validated before race' \
+	|| fail "validated commit did not reach remote during branch race"
+git --git-dir="$WORK/origin.git" cat-file -e main:operator-secrets.txt 2>/dev/null \
+	&& fail "post-validation out-of-root branch advance reached remote"
+pass "push is bound to the validated commit during a local branch race"
+
+unset -f timeout
+unset MEMORY_SYNC_RACE_CLONE
+git -C "$WORK/clone" reset --hard --quiet origin/main
+
 # --- plant: a legitimate memory edit, plus everything that must NOT sync ---
 SYNC_MARKER="memory-sync-marker-20260818"
 echo "- $SYNC_MARKER" >>"$WORK/clone/MINION/MEMORY.md"
@@ -121,12 +151,25 @@ pass ".claude-mem/ (bulk store tier) never synced"
 pass "prod.env / secrets.env (credential-shaped *.env) never synced"
 pass "MINION/id_rsa (credential-shaped, inside an allowed root) never synced"
 
+# --- non-ASCII filenames remain valid allowed memory paths ---
+echo "# café topic" >"$WORK/.minion-agent-memory/MINION/café.md"
+HOME="$WORK" MEMORY_SYNC_PUSH_TIMEOUT=5 bash "$SYNC_SCRIPT" push >"$WORK/non-ascii.log" 2>&1 \
+	|| fail "non-ASCII path sync exited non-zero: $(cat "$WORK/non-ascii.log")"
+git --git-dir="$WORK/origin.git" show "main:MINION/café.md" | grep -q '^# café topic$' \
+	|| fail "non-ASCII memory filename did not reach remote"
+pass "non-ASCII memory filename synced"
+
 # --- deleting the last file removes an opted-in root remotely ---
-rm "$WORK/.minion-agent-memory/MINION/MEMORY.md"
+mv "$WORK/.minion-agent-memory/MINION" "$WORK/deleted-MINION"
+[[ ! -d "$WORK/.minion-agent-memory/MINION" ]] \
+	|| fail "deletion fixture left the opted-in memory root present"
 HOME="$WORK" MEMORY_SYNC_PUSH_TIMEOUT=5 bash "$SYNC_SCRIPT" push >"$WORK/delete-root.log" 2>&1 \
 	|| fail "root deletion sync exited non-zero: $(cat "$WORK/delete-root.log")"
 if git --git-dir="$WORK/origin.git" cat-file -e main:MINION/MEMORY.md 2>/dev/null; then
 	fail "deletion of the final file in an opted-in root did not reach remote"
+fi
+if git --git-dir="$WORK/origin.git" ls-tree -r --name-only main -- MINION | grep -q .; then
+	fail "deleted opted-in memory root still has remote paths"
 fi
 pass "deletion of an entire opted-in memory root synced"
 echo "all memory-sync boundary checks passed"

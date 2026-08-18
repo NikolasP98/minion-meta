@@ -113,12 +113,12 @@ push)
 	# `git commit` consumes the whole index, including entries staged before
 	# this hook ran. Enforce the boundary on the resulting index, not merely
 	# on this script's `git add`, so a pre-staged root file cannot hitchhike.
-	while IFS= read -r staged_path; do
+	while IFS= read -r -d '' staged_path; do
 		if ! is_allowed_path "$staged_path"; then
 			log "refusing to commit staged path outside MEMORY_SYNC_ROOTS: $staged_path"
 			exit 1
 		fi
-	done < <(git diff --cached --name-only --diff-filter=ACDMRTUXB)
+	done < <(git diff --cached --name-only -z --diff-filter=ACDMRTUXB)
 
 	if ! git diff --cached --quiet; then
 		git commit --quiet -m "memory-sync: $(hostname)-$(date -u +%Y%m%dT%H%M%SZ)"
@@ -140,14 +140,18 @@ push)
 	# commit against every parent (`-m` includes merge parents), rather than only
 	# comparing the endpoint trees: an add followed by a delete must not smuggle
 	# a historical blob into the remote. Leave rejected commits local for a human.
+	validated_head="$(git rev-parse HEAD)"
 	while IFS= read -r -d '' outgoing_path; do
 		if ! is_allowed_path "$outgoing_path"; then
 			log "refusing to push committed path outside MEMORY_SYNC_ROOTS: $outgoing_path"
 			exit 1
 		fi
-	done < <(git log -m --format= --name-only -z --diff-filter=ACDMRTUXB "origin/$BRANCH..HEAD")
+	done < <(git log -m --format= --name-only -z --diff-filter=ACDMRTUXB "origin/$BRANCH..$validated_head")
 
-	if ! timeout "$PUSH_TIMEOUT" git push --quiet origin "$BRANCH" 2>/dev/null; then
+	# Push the exact object that passed validation. Another local writer may move
+	# the checked-out branch after the scan, but that later commit must wait for
+	# the next sync and its own allowlist validation.
+	if ! timeout "$PUSH_TIMEOUT" git push --quiet origin "$validated_head:refs/heads/$BRANCH" 2>/dev/null; then
 		log "push failed (offline, or a race with another writer) — will retry next sync"
 		exit 0
 	fi
