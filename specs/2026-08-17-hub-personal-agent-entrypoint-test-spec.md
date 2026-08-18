@@ -1,6 +1,6 @@
 ---
 id: 2026-08-17-hub-personal-agent-entrypoint-test-spec
-title: "Direct unit tests for loadPersonalAgentForUser — cover the 401 guard and delegation path"
+title: Direct unit tests for loadPersonalAgentForUser — cover the 401 guard and delegation path
 stage: spec
 status: approved
 pass: 2
@@ -11,6 +11,7 @@ verdict: approved
 repos: [minion_hub]
 tags: [test]
 type: fix
+link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # Direct unit tests for `loadPersonalAgentForUser`

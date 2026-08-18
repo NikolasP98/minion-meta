@@ -1,16 +1,17 @@
 ---
 id: 2026-08-17-hub-updatesellable-silent-drop-spec
-title: "updateSellable — apply or refuse kind/trackStock/uom edits (no silent 200 no-op)"
+title: updateSellable — apply or refuse kind/trackStock/uom edits (no silent 200 no-op)
 stage: spec
 status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 proposal: 2026-08-17-hub-updatesellable-silent-drop
 verdict: approved
 repos: [minion_hub]
 tags: [logic, test]
 type: fix
+link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # updateSellable — apply or refuse kind/trackStock/uom edits

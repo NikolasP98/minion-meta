@@ -1,16 +1,17 @@
 ---
 id: 2026-08-17-hub-brain-org-all-scope-spec
-title: "brain-vector org_all — make the unimplemented scope unrepresentable at the hub request boundary"
+title: brain-vector org_all — make the unimplemented scope unrepresentable at the hub request boundary
 stage: spec
 status: draft
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 proposal: 2026-08-17-hub-brain-org-all-scope
 verdict: approved
 repos: [minion_hub]
 tags: [logic, security, test]
 type: fix
+link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # brain-vector `org_all` — narrow the hub, keep the frozen contract

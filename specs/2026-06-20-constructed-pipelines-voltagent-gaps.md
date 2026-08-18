@@ -5,8 +5,9 @@ stage: spec
 status: superseded
 pass: 1
 created: 2026-06-20
-updated: 2026-08-13
+updated: 2026-08-18
 repos: [minion-meta]
+link_review: "status \"superseded\" but no other spec's \"supersedes\" links back to it — confirm the successor (it should add supersedes: 2026-06-20-constructed-pipelines-voltagent-gaps), or correct this status if it was set in error"
 ---
 
 # Constructed Pipelines — Closing Minion's Dead-Ends (VoltAgent gap analysis)

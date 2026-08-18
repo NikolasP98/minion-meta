@@ -1,16 +1,17 @@
 ---
 id: 2026-08-17-gw-defaces-crm-tools-spec
-title: "Builtin CRM tools — de-FACES the descriptions (business name, locale patterns and examples from org config)"
+title: Builtin CRM tools — de-FACES the descriptions (business name, locale patterns and examples from org config)
 stage: spec
 status: draft
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 proposal: 2026-08-17-gw-defaces-crm-tools
 verdict: approved
 repos: [minion]
 tags: [logic, test]
 type: fix
+link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # Builtin CRM tools — de-FACES the descriptions

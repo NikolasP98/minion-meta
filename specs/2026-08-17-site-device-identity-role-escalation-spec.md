@@ -1,16 +1,17 @@
 ---
 id: 2026-08-17-site-device-identity-role-escalation-spec
-title: "device-identity/sign — sign the caller's real grant, never the body's role/scopes"
+title: device-identity/sign — sign the caller's real grant, never the body's role/scopes
 stage: spec
 status: draft
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 proposal: 2026-08-17-site-device-identity-role-escalation
 verdict: changes_requested
 repos: [minion_site]
 tags: [security, logic, test]
 type: fix
+link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # `device-identity/sign` — sign the caller's real grant

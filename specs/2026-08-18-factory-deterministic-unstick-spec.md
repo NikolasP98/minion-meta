@@ -1,6 +1,6 @@
 ---
 id: 2026-08-18-factory-deterministic-unstick-spec
-title: "Known unstick classes bypass the facilitator LLM; it stays advisory-only on a scoped credential"
+title: Known unstick classes bypass the facilitator LLM; it stays advisory-only on a scoped credential
 stage: spec
 status: approved
 pass: 2
@@ -11,6 +11,7 @@ verdict: approved
 repos: [minion-factory]
 tags: [logic, infra]
 type: infra
+link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # Deterministic unstick handlers for known failure classes

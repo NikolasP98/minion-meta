@@ -1,16 +1,17 @@
 ---
 id: 2026-08-17-hub-dead-mirrors-cleanup-spec
-title: "Delete two satisfied-TODO dead mirrors in hub — prove equivalence before deleting, not after"
+title: Delete two satisfied-TODO dead mirrors in hub — prove equivalence before deleting, not after
 stage: spec
 status: draft
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 proposal: 2026-08-17-hub-dead-mirrors-cleanup
 verdict: approved
 repos: [minion_hub]
 tags: [logic, data, test]
 type: fix
+link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # Delete two satisfied-TODO dead mirrors in hub

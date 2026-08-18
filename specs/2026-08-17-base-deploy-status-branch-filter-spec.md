@@ -1,16 +1,17 @@
 ---
 id: 2026-08-17-base-deploy-status-branch-filter-spec
-title: "minion-base board — CI status scoped to each repo's deploy branch, and absence is not health"
+title: minion-base board — CI status scoped to each repo's deploy branch, and absence is not health
 stage: spec
 status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 proposal: 2026-08-17-base-deploy-status-branch-filter
 verdict: approved
 repos: [minion-base]
 tags: [logic, ui, test]
 type: fix
+link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # minion-base board — CI status scoped to each repo's deploy branch
