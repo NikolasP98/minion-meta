@@ -110,7 +110,7 @@ export function stripNonDocumentMarkdown(bodyText) {
 		const htmlStart = line.match(/^ {0,3}<(?:(script|pre|style|textarea)(?:\s|>|$)|([A-Za-z][A-Za-z0-9-]*)(?:\s|\/?>|$)|\/([A-Za-z][A-Za-z0-9-]*)\s*>)/i);
 		if (/^ {0,3}<\?/.test(line)) htmlBlock = /\?>/;
 		else if (/^ {0,3}<!\[CDATA\[/.test(line)) htmlBlock = /\]\]>/;
-		else if (/^ {0,3}<![A-Z]/.test(line)) htmlBlock = />/;
+		else if (/^ {0,3}<![A-Z]/i.test(line)) htmlBlock = />/;
 		else if (htmlStart) {
 			const rawTag = htmlStart[1];
 			if (rawTag) htmlBlock = new RegExp(`<\\/${rawTag}\\s*>`, 'i');
@@ -136,7 +136,7 @@ export function stripNonDocumentMarkdown(bodyText) {
 // (stripNonDocumentMarkdown),
 // so example/hidden headings never count.
 export const REQUIRED_HEADINGS = [
-	{ label: '"## 0. Product" section', re: /^##\s*0\.\s*Product/m },
+	{ label: '"## 0. Product" section', re: /^##[ \t]*0\.[ \t]*Product[ \t]*(?:#+[ \t]*)?$/m },
 	{
 		label: 'an out-of-scope section (a heading or a **Out of scope:** label)',
 		re: /^#{2,4}[ \t]+.*out.of.scope|^\*\*[^*\n]*out.of.scope[^*\n]*:\*\*/im
@@ -220,6 +220,7 @@ export function resolveComparisonSha(env = process.env) {
 			return undefined;
 		}
 	}
+	if (env.GITHUB_EVENT_NAME === 'push') return undefined;
 	try {
 		return execFileSync('git', ['rev-parse', '--verify', 'HEAD^'], { encoding: 'utf8' }).trim();
 	} catch {
@@ -403,6 +404,10 @@ function main() {
 					);
 			}
 			if (fm.supersedes) {
+				if (fm.supersedes === fm.id) {
+					errors.push(`${fm.id}: cannot supersede itself`);
+					continue;
+				}
 				const target = fmById.get(fm.supersedes);
 				if (!target) errors.push(`${fm.id}: supersedes unknown spec "${fm.supersedes}"`);
 				else if (target.status !== 'superseded')

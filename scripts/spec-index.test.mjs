@@ -7,6 +7,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { cpSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -174,6 +175,16 @@ test('M3: headings inside a raw HTML block do not count', () => {
 	assert.equal(missingRequiredHeadings(body).length, 3);
 });
 
+test('M3: headings inside a lowercase multiline HTML declaration do not count', () => {
+	const body = `<!doctype\n## 0. Product\n## Out of scope\n## Verification\n>\n`;
+	assert.equal(missingRequiredHeadings(body).length, 3);
+});
+
+test('L1: a Product-prefix heading does not satisfy the Product section', () => {
+	const body = `## 0. Production notes\n\n## Out of scope\n\n## Verification\n`;
+	assert.deepEqual(missingRequiredHeadings(body), ['"## 0. Product" section']);
+});
+
 test('M2: adding a brand-new id to an existing heading baseline is rejected', () => {
 	const base = { 'existing-spec': 'aaa' };
 	const current = { 'existing-spec': 'aaa', 'new-spec': 'bbb' };
@@ -249,4 +260,53 @@ test('M1 integration: push-style check with no GITHUB_BASE_REF still compares ag
 	const result = spawnSync('node', ['scripts/spec-index.mjs', '--check'], { cwd: root, encoding: 'utf8', env: { PATH: process.env.PATH } });
 	assert.equal(result.status, 1);
 	assert.match(result.stderr, /new id "new-spec" added/);
+});
+
+test('M1 integration: a three-commit push compares baselines with the pre-push SHA', () => {
+	const root = makeCliFixture();
+	const before = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
+	const body = `# New malformed spec\n`;
+	const spec = `---\nid: new-spec\ntitle: New spec\nstage: spec\nstatus: draft\npass: 1\ncreated: 2026-08-18\nupdated: 2026-08-18\nrepos: [minion-meta]\n---\n\n${body}`;
+	writeFileSync(join(root, 'specs', 'new-spec.md'), spec);
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	execFileSync('git', ['add', '.'], { cwd: root });
+	execFileSync('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-qm', 'add malformed spec'], { cwd: root });
+	const hash = createHash('sha256').update(body).digest('hex');
+	writeFileSync(join(root, 'scripts', 'spec-heading-lint-baseline.json'), `${JSON.stringify({ 'new-spec': hash })}\n`);
+	writeFileSync(join(root, 'scripts', 'spec-supersede-baseline.json'), '[]\n');
+	execFileSync('git', ['add', '.'], { cwd: root });
+	execFileSync('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-qm', 'grandfather malformed spec'], { cwd: root });
+	const result = spawnSync('node', ['scripts/spec-index.mjs', '--check'], {
+		cwd: root,
+		encoding: 'utf8',
+		env: { PATH: process.env.PATH, GITHUB_EVENT_NAME: 'push', GITHUB_EVENT_BEFORE: before }
+	});
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /new id "new-spec" added/);
+});
+
+test('M2 integration: a spec cannot supersede itself', () => {
+	const root = makeCliFixture();
+	const spec = `---\nid: fixture\ntitle: Fixture\nstage: spec\nstatus: superseded\npass: 1\ncreated: 2026-08-18\nupdated: 2026-08-18\nrepos: [minion-meta]\nsupersedes: fixture\n---\n\n${VALID_BODY}`;
+	writeFileSync(join(root, 'specs', 'fixture.md'), spec);
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	const result = spawnSync('node', ['scripts/spec-index.mjs', '--check'], {
+		cwd: root,
+		encoding: 'utf8',
+		env: { PATH: process.env.PATH }
+	});
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /cannot supersede itself/);
+});
+
+test('M1 integration: a push event without a before SHA fails closed', () => {
+	const root = makeCliFixture();
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	const result = spawnSync('node', ['scripts/spec-index.mjs', '--check'], {
+		cwd: root,
+		encoding: 'utf8',
+		env: { PATH: process.env.PATH, GITHUB_EVENT_NAME: 'push' }
+	});
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /cannot resolve comparison revision/);
 });

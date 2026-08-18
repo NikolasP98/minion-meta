@@ -20,7 +20,7 @@ existing corpus; both are deliberate but leave real follow-up work:
 ## 1. Heading-lint baseline (115 specs)
 
 `--check` now requires `## 0. Product`, an out-of-scope section, and a
-verification section (per `specs/TEMPLATE.md`). 115 of 190 existing specs
+verification section (per `specs/TEMPLATE.md`). 115 of the 155 existing specs
 predate this convention and were grandfathered into
 `scripts/spec-heading-lint-baseline.json` so CI doesn't go red on day one. Every
 *new* or *hand-edited* spec is checked; the baseline is a one-way ratchet only

@@ -51,6 +51,8 @@ jobs:
 
       - name: Spec index check
         run: node scripts/spec-index.mjs --check
+        env:
+          GITHUB_EVENT_BEFORE: ${{ github.event.before }}
 
       - name: Changesets status (PR only)
         if: github.event_name == 'pull_request'
