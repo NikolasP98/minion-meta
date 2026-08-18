@@ -1,7 +1,7 @@
 ---
 id: 2026-08-18-factory-orchestration-round7
 title: Repo-slice fan-out, slice continuation, scenario profiles, merge resolver
-status: draft
+status: approved
 created: 2026-08-18
 updated: 2026-08-18
 repos: [minion-factory]
