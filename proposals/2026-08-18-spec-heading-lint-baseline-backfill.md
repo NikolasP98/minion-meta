@@ -48,6 +48,35 @@ a `pass > 1` presence rule once the backlog is cleared. Don't add the rule to
 `--check` before the backlog is cleared — it would just be red CI with no
 signal.
 
+## 3. Reverse-supersedes baseline (5 specs)
+
+`--check` now requires every `status: superseded` spec to be named by some
+other spec's `supersedes` field (bidirectional link integrity, closing the
+one-way-link gap this proposal originally left open). Five specs were marked
+`superseded` before that convention existed and have no successor anywhere in
+the corpus, so they're grandfathered in `scripts/spec-supersede-baseline.json`
+rather than failing CI:
+
+- `2026-04-21-triage-executor-adapter-design` — Triage + Executor Adapter Architecture
+- `2026-05-20-shells-golden-agents` — Shells — Golden Agents on exe.dev VMs
+- `2026-06-15-plugin-distribution-cicd-design` — Plugin Distribution, Compatibility & CI/CD — Design Spec
+- `2026-06-20-constructed-pipelines-voltagent-gaps` — Constructed Pipelines — Closing Minion's Dead-Ends (VoltAgent gap analysis)
+- `2026-07-10-gateway-update-system` — Gateway Update System — Design Spec
+
+All five were flipped to `superseded` on 2026-08-13 by out-of-band bookkeeping
+(bulk status cleanup), not by a spec that names them via `supersedes` — so
+there is no traceable successor to link back to.
+
+**Ask:** for each id, find or write the spec that actually replaced it (check
+`updated: 2026-08-13` sibling specs and commit history around that date first,
+before writing a fresh successor) and add the missing `supersedes` link on
+that successor's frontmatter. If a given spec was simply retired rather than
+replaced by a successor, change its `status` from `superseded` to `retired`
+(with a `retired_reason`, per the lifecycle-tools mandate `spec-index.mjs`
+already enforces) instead of leaving it in this baseline. Remove each id from
+`scripts/spec-supersede-baseline.json` as it's resolved — the file should
+shrink to empty.
+
 ## Out of scope
 
 Fixing the 115 files or the 34 files here — this proposal is the ledger entry,

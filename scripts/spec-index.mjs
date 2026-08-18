@@ -1,15 +1,19 @@
 // Regenerates specs/index.json from spec frontmatter. Committed output — the
 // minion-base dashboard fetches this ONE file instead of parsing 100+ specs.
-// Doubles as the lint gate: exits 1 if any spec lacks frontmatter or uses an
-// invalid stage/status.
+// Doubles as the lint gate: exits 1 if any spec lacks frontmatter (every
+// required field from specs/TEMPLATE.md — id, title, stage, status, pass,
+// created, updated, repos), uses an invalid stage/status, has a non-integer
+// `pass` or empty `repos`, or has an `id` that doesn't match its filename or
+// collides with another spec's `id` (the stable join key).
 //
 // --check runs the full hardening gate (meta CI, see .github/workflows/ci.yml
-// and specs/2026-08-17-maintenance-lane-monitors-spec.md §2): date formats,
-// repo ids, revises/supersedes link integrity (bidirectional — every
-// status:superseded spec needs an incoming supersedes link, not just the
-// forward direction), required-heading lint, and a staleness check that
-// specs/index.json matches what's on disk. It never writes — CI should stay
-// read-only.
+// and specs/2026-08-17-maintenance-lane-monitors-spec.md §2): calendar-valid
+// date formats, repo ids, verdict/type enums, revises/supersedes link
+// integrity (bidirectional — every status:superseded spec needs an incoming
+// supersedes link, not just the forward direction), required-heading lint
+// (run against the body with fenced code stripped, so example headings in a
+// code sample don't count), and a staleness check that specs/index.json
+// matches what's on disk. It never writes — CI should stay read-only.
 //
 // Heading lint is grandfathered by CONTENT, not just id: entries in
 // scripts/spec-heading-lint-baseline.json are `id -> sha256(body)`. A spec
@@ -39,12 +43,28 @@ export const ALLOWED_REPOS = [
 ];
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+// Rejects calendar-invalid values that still match the YYYY-MM-DD shape
+// (e.g. "2026-99-99" or "2026-02-30") by round-tripping through Date.UTC.
+function isValidISODate(value) {
+	if (!DATE_RE.test(value)) return false;
+	const [y, m, d] = value.split('-').map(Number);
+	const dt = new Date(Date.UTC(y, m - 1, d));
+	return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d;
+}
+// specs/TEMPLATE.md's documented enums for the two optional review/roll-up fields.
+const VERDICTS = ['pending', 'approved', 'changes_requested', 'rejected'];
+const TYPES = ['feature', 'fix', 'infra', 'decision', 'research'];
+// Fenced code blocks (```...``` or ~~~...~~~) are example text, not document
+// structure — a heading-shaped line inside a fence must not satisfy the
+// required-heading lint below.
+const FENCE_RE = /^ {0,3}(`{3,}|~{3,})[^\n]*\n[\s\S]*?^ {0,3}\1[ \t]*$/gm;
 // Anchored to actual Markdown structure — either a "##"-"####" heading whose
 // text contains the keyword, or a "**Label:**"-style bold line-start (the
 // house style several specs use instead of a dedicated heading, e.g.
 // "**Out of scope:** ..." or "**E2E verification:** ..."). Prose that merely
 // mentions "out of scope" or "verification" mid-paragraph — not at a heading
-// or bold-label position — does not count.
+// or bold-label position — does not count. Checked against the body with
+// fenced code stripped, so example headings in a code sample don't count.
 const REQUIRED_HEADINGS = [
 	{ label: '"## 0. Product" section', re: /^##\s*0\.\s*Product/m },
 	{
@@ -93,36 +113,53 @@ for (const name of readdirSync('specs')
 		continue;
 	}
 	const { fm, body } = parsed;
-	for (const key of ['id', 'title', 'stage', 'status', 'created']) {
-		if (!fm[key]) errors.push(`${name}: missing required field "${key}"`);
+	for (const key of ['id', 'title', 'stage', 'status', 'created', 'pass', 'updated', 'repos']) {
+		if (fm[key] === undefined || fm[key] === null || fm[key] === '')
+			errors.push(`${name}: missing required field "${key}"`);
 	}
+	if (fm.pass !== undefined && !(Number.isInteger(fm.pass) && fm.pass >= 1))
+		errors.push(`${name}: "pass" must be a positive integer, got "${fm.pass}"`);
+	if (fm.repos !== undefined && (!Array.isArray(fm.repos) || fm.repos.length === 0))
+		errors.push(`${name}: "repos" must be a non-empty array of repo ids`);
 	if (fm.stage && !STAGES.includes(fm.stage)) errors.push(`${name}: invalid stage "${fm.stage}"`);
 	if (fm.status && !STATUSES.includes(fm.status))
 		errors.push(`${name}: invalid status "${fm.status}"`);
 	// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).
 	if (fm.status === 'retired' && !(fm.retired_reason && fm.retired_reason.length >= 20))
 		errors.push(`${name}: status "retired" requires retired_reason (>=20 chars)`);
+	// id is the stable join key (specs/TEMPLATE.md) — it must match the filename
+	// and be unique, or link resolution silently picks whichever file loaded last.
+	const idFromFilename = name.slice(0, -3);
+	if (fm.id && fm.id !== idFromFilename)
+		errors.push(`${name}: "id" ("${fm.id}") must match filename ("${idFromFilename}")`);
+	if (fm.id) {
+		if (fmById.has(fm.id)) errors.push(`${name}: duplicate id "${fm.id}" (already used by another spec)`);
+		else fmById.set(fm.id, fm);
+	}
 
 	if (check) {
 		for (const key of ['created', 'updated']) {
-			if (fm[key] && !DATE_RE.test(fm[key]))
-				errors.push(`${name}: "${key}" is not an ISO date (YYYY-MM-DD): "${fm[key]}"`);
+			if (fm[key] && !isValidISODate(fm[key]))
+				errors.push(`${name}: "${key}" is not a valid ISO calendar date (YYYY-MM-DD): "${fm[key]}"`);
 		}
 		for (const repo of fm.repos ?? []) {
 			if (!ALLOWED_REPOS.includes(repo))
 				errors.push(`${name}: unknown repo id "${repo}" in "repos" (allowed: ${ALLOWED_REPOS.join(', ')})`);
 		}
+		if (fm.verdict && !VERDICTS.includes(fm.verdict))
+			errors.push(`${name}: invalid verdict "${fm.verdict}" (allowed: ${VERDICTS.join(', ')})`);
+		if (fm.type && !TYPES.includes(fm.type))
+			errors.push(`${name}: invalid type "${fm.type}" (allowed: ${TYPES.join(', ')})`);
 		if (fm.id) {
 			const stillGrandfathered = headingBaseline[fm.id] === sha256(body);
 			if (!stillGrandfathered) {
+				const bodyForHeadingCheck = body.replace(FENCE_RE, '');
 				for (const { label, re } of REQUIRED_HEADINGS) {
-					if (!re.test(body)) errors.push(`${name}: missing ${label}`);
+					if (!re.test(bodyForHeadingCheck)) errors.push(`${name}: missing ${label}`);
 				}
 			}
 		}
 	}
-
-	if (fm.id) fmById.set(fm.id, fm);
 	specs.push({
 		id: fm.id,
 		title: fm.title,
