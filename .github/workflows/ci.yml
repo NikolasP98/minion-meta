@@ -32,6 +32,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Validate repository policy
+        run: pnpm run repo-policy:validate && pnpm run repo-policy:test
+
       - name: Build all packages
         run: pnpm run build-all
 

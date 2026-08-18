@@ -2,8 +2,8 @@
 
 This is the Slice 0 evidence lock for
 `2026-08-18-agent-instruction-parity-and-repo-policy-spec`. It was collected read-only from GitHub
-on 2026-08-18 UTC. Slice 1 is **blocked** by the hub branch-policy contradiction described below;
-no registry values have been authored from guesses.
+on 2026-08-18 UTC. The Hub policy owner decision and the authoritative empty-check evidence obtained
+during review-fix are recorded below; the resulting Slice 1 registry contains no guessed policy.
 
 ## Reproduction commands
 
@@ -20,27 +20,32 @@ gh api repos/OWNER/REPO/branches/BRANCH/protection
 gh api 'repos/OWNER/REPO/rulesets?includes_parents=true'
 gh api repos/OWNER/REPO/commits/SHA/check-runs?per_page=100
 gh api 'repos/OWNER/REPO/pulls?state=all&per_page=100'
+gh api graphql -f owner=OWNER -f name=REPO -f query='query($owner:String!,$name:String!){repository(owner:$owner,name:$name){branchProtectionRules(first:100){nodes{pattern requiresStatusChecks requiredStatusCheckContexts}} rulesets(first:100){nodes{name enforcement rules(first:100){nodes{type parameters{... on RequiredStatusChecksParameters{requiredStatusChecks{context integrationId}}}}}}}}}'
 ```
 
 For content anchors, the `contents` response's `sha` is recorded below. For branch anchors, the full
-commit SHA is recorded. A `404 Branch not protected`, `required_status_checks: null`, or GitHub's
-private-repository `403 Upgrade to GitHub Pro ... to enable this feature` response is recorded as an
-empty enforceable required-check set; the latter says the account cannot enable the feature. Recent
-check runs are supporting observations, not substitutes for protection/ruleset configuration.
+commit SHA is recorded. A `404 Branch not protected` plus an accessible empty ruleset response, an
+accessible `required_status_checks: null`, or an owner-authenticated GraphQL
+`branchProtectionRules.nodes: []` plus `rulesets.nodes: []` is proof of an empty required-check set. A REST `403` is recorded
+only as inaccessible and is never itself treated as empty. For the four private repositories affected
+by that REST response, the authenticated account is repository owner `NikolasP98` and the GraphQL
+query above returned empty nodes for both surfaces. Recent check runs are supporting observations, not substitutes for
+protection/ruleset configuration. The Slice 1 remote verifier fails closed whenever its policy surface
+is inaccessible rather than converting that condition to `requiredChecks: []`.
 
 ## Fleet evidence
 
 | Canonical id | Remote and observed source head | Branch-role evidence | Package/command anchor | Deployment/workflow anchor | Required checks on planned PR base |
 |---|---|---|---|---|---|
 | `minion-meta` | `NikolasP98/minion-meta`; `dev` at `d5c5d6999505423dc456644cabddcf896072d22a`; remote default `main`; heads `dev`, `main` exist | planned development/PR base `dev`; default/release `main` | `package.json` at `dev`; pnpm 10.15; install `pnpm install`; `dev` unsupported; build/test/check/typecheck projections are `pnpm run build-all`, `pnpm run test-all`, `pnpm run lint-all`, `pnpm run typecheck-all` | `.github/workflows/ci.yml` is PR/push `main`; `.github/workflows/release.yml` is push `main` | empty: `dev` returns `404 Branch not protected`; no repository rulesets; no check runs on the observed head |
-| `minion` | `NikolasP98/minion-ai`; `DEV` at `02df8953a920217a2ddede63109d036f23057c29`; remote default `main`; heads `DEV`, `main`, `prd` exist | development/PR base `DEV`; default/release `main`; `prd` is a deployment channel branch, not the package release branch | `package.json` at `DEV`; pnpm 10.29.3; `pnpm install`, `pnpm dev`, `pnpm build`, `pnpm test`, `pnpm check`, `pnpm tsgo` | Docker Release pushes `DEV` and `main`; Deploy Gateway maps `DEV` to dev and `main` to prd; npm publish is a separate release workflow | empty enforceable set: protection and ruleset APIs return the private-repository plan `403`; recent Actions checks use app id `15368` but are not configured as required by an accessible rule |
-| `minion_hub` | `NikolasP98/minion_hub`; `master` at `7fdc291f88f87c5448a72240af8c8891346d1bff`; remote default `master`; `master` exists and `dev` does not | **blocked**: current remote/default and 66 of the latest 100 PRs use `master`, but instructions and CI still name `dev` | `package.json` at `master`; Bun lockfile; `bun install`, `bun run dev`, `bun run build`, `bun run test`, `bun run check`; no separate typecheck script | `.github/workflows/ci.yml` still triggers PR/push on `[dev, master]`; deployment is Vercel and no repository deployment workflow establishes an additional branch role | empty: `master` protection has PR reviews but `required_status_checks: null`; no rulesets. Recent checks include `test` and `check-and-build`, app id `15368`, but neither is required by protection |
-| `minion_site` | `NikolasP98/minion-site`; `dev` at `c2285b6b0be6d65dd7f10b9c2c86620f8ed5d5ae`; remote default `master`; heads `dev`, `master` exist | development/PR base `dev`; default/release `master`; recent PRs include 6 to `dev` and 10 to `master` | `package.json` at `dev`; Bun lockfile; `bun install`, `bun run dev`, `bun run build`, `bun run test`, `bun run check`; typecheck is represented by `bun run check` | CI triggers only `master`/`main`, not `dev`; Factory Notify exists; Vercel deployment configuration is external to the repository | empty enforceable set: protection and ruleset APIs return the private-repository plan `403`; recent `dev` checks are Vercel Preview Comments (app id `8329`) and `poke` (`15368`) |
+| `minion` | `NikolasP98/minion-ai`; `DEV` at `02df8953a920217a2ddede63109d036f23057c29`; remote default `main`; heads `DEV`, `main`, `prd` exist | development/PR base `DEV`; default/release `main`; `prd` is a deployment channel branch, not the package release branch | `package.json` at `DEV`; pnpm 10.29.3; `pnpm install`, `pnpm dev`, `pnpm build`, `pnpm test`, `pnpm check`, `pnpm tsgo` | Docker Release pushes `DEV` and `main`; Deploy Gateway maps `DEV` to dev and `main` to prd; npm publish is a separate release workflow | empty: REST policy surfaces return plan `403`, while the owner-authenticated GraphQL branch-protection query returns `nodes: []`; recent Actions checks use app id `15368` but are not required |
+| `minion_hub` | `NikolasP98/minion_hub`; `master` at `7fdc291f88f87c5448a72240af8c8891346d1bff`; remote default `master`; `master` exists and `dev` does not | owner decision: development/default/release/PR base are all `master`; the instruction and dual CI trigger references to deleted `dev` are stale inputs for the later parity slice | `package.json` at `master`; Bun lockfile; `bun install`, `bun run dev`, `bun run build`, `bun run test`, `bun run check`; no separate typecheck script | `.github/workflows/ci.yml` triggers PR/push on `[dev, master]`; deployment is Vercel and current promotion practice lands on `master` | empty: `master` protection has PR reviews but `required_status_checks: null`; no rulesets. Recent checks include `test` and `check-and-build`, app id `15368`, but neither is required by protection |
+| `minion_site` | `NikolasP98/minion-site`; `dev` at `c2285b6b0be6d65dd7f10b9c2c86620f8ed5d5ae`; remote default `master`; heads `dev`, `master` exist | development/PR base `dev`; default/release `master`; recent PRs include 6 to `dev` and 10 to `master` | `package.json` at `dev`; Bun lockfile; `bun install`, `bun run dev`, `bun run build`, `bun run test`, `bun run check`; typecheck is represented by `bun run check` | CI triggers only `master`/`main`, not `dev`; Factory Notify exists; Vercel deployment configuration is external to the repository | empty: REST policy surfaces return plan `403`, while the owner-authenticated GraphQL branch-protection query returns `nodes: []`; recent `dev` checks are Vercel Preview Comments (app id `8329`) and `poke` (`15368`) |
 | `minion_plugins` | `NikolasP98/minion_plugins`; `main` at `0029b79eadc45d99e742e0d9e1a490d332e9097d`; remote default/head `main` | development/default/release/PR base `main` | no root `package.json` or package-manager lockfile; all command fields unsupported (`null`) | no GitHub Actions workflows | empty: protection requires reviews but has `required_status_checks: null`; no rulesets or recent checks |
 | `paperclip` | `NikolasP98/paperclip`; `minion-integration` at `2abd5f7d5c63f8850f6aee989675c0b93e2bd865`; remote default `master`; heads `minion-integration`, `master` exist | development/PR base `minion-integration`; default/release `master`; two observed PRs use `minion-integration` | `package.json` at `minion-integration`; pnpm 9.15.4; `pnpm install`, `pnpm dev`, `pnpm build`, `pnpm test:run`, `pnpm typecheck`; check maps to typecheck | `.github/workflows/pr.yml` triggers only PRs to `master`; release workflows are anchored under `.github/workflows/release*.yml` | empty: `minion-integration` returns `404 Branch not protected`; no rulesets or recent checks |
 | `pixel-agents` | `pablodelucca/pixel-agents`; `main` at `3537e140c2094761beae748592aeb92ece8edfdd`; remote default/head `main` | development/default/release/PR base `main` | `package.json` and `package-lock.json` at `main`; `npm install`, `npm run watch`, `npm run build`, `npm test`, `npm run lint`, `npm run check-types` | CI is PR/push `main`; Publish Extension requires a release commit on `main` | `Required Checks`, GitHub Actions app id `15368`; ruleset `13461083` applies to default/main/dev and names that exact context/integration id |
-| `minion-factory` | `NikolasP98/minion-factory`; `main` at `a45b225b476db9efffd481dff6bd962be457b549`; remote default/head `main` | development/default/release/PR base `main` | no root package; `runner/package.json` and lockfile; install `npm install`; dev `npm run start`, test `npm test`, typecheck/check `npm run typecheck`; build unsupported | `.github/workflows/ci.yml` was absent at the anchored commit despite the workflow API listing an active `ci` workflow, so its dynamic/current source must be rechecked after the branch head moves; production deploy is host-managed | empty enforceable set: protection and ruleset APIs return the private-repository plan `403`; no recent checks on the anchored head |
-| `minion-base` | `NikolasP98/minion-base`; `main` at `ccc5db78cd7f07ee832ab5cfe04c3b78ad01c4e9`; remote default/head `main` | development/default/release/PR base `main` | `package.json` and Bun lockfile; `bun install`, `bun run dev`, `bun run build`, `bun test`, `bun run check`; check doubles as typecheck | Factory Notify triggers push `main`; deployment is Vercel and its configuration is external to the repository | empty enforceable set: protection and ruleset APIs return the private-repository plan `403`; recent `poke` check uses app id `15368` but is not configured as required by an accessible rule |
+| `minion-factory` | `NikolasP98/minion-factory`; `main` at `a45b225b476db9efffd481dff6bd962be457b549`; remote default/head `main` | development/default/release/PR base `main` | no root package; `runner/package.json` and lockfile; install `npm install`; dev `npm run start`, test `npm test`, typecheck/check `npm run typecheck`; build unsupported | workflow API lists active `ci` at `.github/workflows/ci.yml`, while contents at the anchored commit returns 404; production deploy is host-managed and no additional branch role is declared | empty: REST policy surfaces return plan `403`, while the owner-authenticated GraphQL branch-protection query returns `nodes: []`; no recent checks on the anchored head |
+| `minion-base` | `NikolasP98/minion-base`; `main` at `ccc5db78cd7f07ee832ab5cfe04c3b78ad01c4e9`; remote default/head `main` | development/default/release/PR base `main` | `package.json` and Bun lockfile; `bun install`, `bun run dev`, `bun run build`, `bun test`, `bun run check`; check doubles as typecheck | Factory Notify triggers push `main`; deployment is Vercel and its configuration is external to the repository | empty: REST policy surfaces return plan `403`, while the owner-authenticated GraphQL branch-protection query returns `nodes: []`; recent `poke` check uses app id `15368` but is not required |
 
 The intended six legacy CLI projections, to be asserted after the blocker is resolved, are
 `minion→minion`, `hub→minion_hub`, `site→minion_site`, `paperclip→paperclip`,
@@ -81,18 +86,11 @@ For comparison, meta's already-correct pair at `dev` is `AGENTS.md` blob
    concern remains a checker requirement for later slices, not a current content finding in this
    anchored set.
 
-## Blocking owner decision
+## Owner decision
 
-The approved spec says to stop when hub prose, remote default/heads, workflow triggers, and actual
-promotion practice disagree. They do. The branch-policy owner must choose and record one of these
-facts before Slice 1 can encode `minion_hub`:
-
-- `master` is now the single development/default/release/PR-base branch, and stale `dev` references
-  in the instruction and CI trigger will be removed in the later hub slice; or
-- `dev` remains the intended development/PR-base branch and must first be restored with an explicit
-  promotion contract to `master`.
-
-The first option matches the current remote and recent practice, but selecting it here would violate
-the spec's no-guess rule. External Vercel branch settings for hub, site, and Base should be attached
-to the owner decision as deployment evidence. Until then, Slice 0's no-unresolved-contradiction DoD
-and therefore Slice 1 are intentionally not claimed complete.
+The branch-policy owner chose the observable current Hub contract: `master` is the single
+development/default/release/PR-base branch. This agrees with the owner-controlled default branch,
+the sole live remote head, current factory routing, and 66 of the latest 100 PR bases. The deleted
+`dev` branch is not restored. The stale `dev` clauses in Hub instructions and the redundant CI trigger
+are recorded contradiction locations for the later Hub parity slice; they do not redefine Slice 1's
+registry. No contradiction remains in the nine rows encoded by `repo-policy.yaml`.
