@@ -30,10 +30,35 @@ export type WorkforceClientOptions = {
   headers?: Record<string, string>;
 };
 
+export type WorkforceErrorBodyKind = 'json' | 'text' | 'empty';
+
+/** Max length, in JS string code units, of the `raw` field on a non-JSON error body (including the truncation marker). */
+export const WORKFORCE_ERROR_RAW_LIMIT = 2048;
+
 export class WorkforceApiError extends Error {
-  constructor(public status: number, public body: unknown) {
+  constructor(
+    public status: number,
+    public body: unknown,
+    /** How `body` was derived. 'text' ⇒ the response was not JSON; `body` is `{ raw, contentType, truncated }`. */
+    public readonly bodyKind: WorkforceErrorBodyKind = 'json',
+  ) {
     super(`paperclip ${status}`);
   }
+}
+
+function nonJsonBody(text: string, contentType: string | null): { raw: string; contentType: string | null; truncated: boolean } {
+  const total = text.length;
+  if (total <= WORKFORCE_ERROR_RAW_LIMIT) {
+    return { raw: text, contentType, truncated: false };
+  }
+  // Fixed-point: the marker embeds `keep`, whose digit count can shift the marker's own length.
+  let keep = WORKFORCE_ERROR_RAW_LIMIT;
+  let marker = '';
+  for (let i = 0; i < 3; i++) {
+    marker = `… [truncated ${keep} of ${total} chars]`;
+    keep = WORKFORCE_ERROR_RAW_LIMIT - marker.length;
+  }
+  return { raw: text.slice(0, keep) + marker, contentType, truncated: true };
 }
 
 export type RequestArgs = {
@@ -94,8 +119,18 @@ export function createWorkforceClient(opts: WorkforceClientOptions): WorkforceCl
         body: body !== undefined ? JSON.stringify(body) : undefined,
       });
       const text = await res.text();
-      const payload = text ? JSON.parse(text) : null;
-      if (!res.ok) throw new WorkforceApiError(res.status, payload);
+      if (!text) {
+        if (!res.ok) throw new WorkforceApiError(res.status, null, 'empty');
+        return null as T;
+      }
+      let payload: unknown;
+      try {
+        payload = JSON.parse(text);
+      } catch {
+        // Not JSON: a proxy 502 HTML page, a CDN interstitial, a login redirect body.
+        throw new WorkforceApiError(res.status, nonJsonBody(text, res.headers.get('content-type')), 'text');
+      }
+      if (!res.ok) throw new WorkforceApiError(res.status, payload, 'json');
       return payload as T;
     },
   };
