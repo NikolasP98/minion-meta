@@ -1,9 +1,10 @@
 ---
 id: 2026-08-17-hub-updateserver-tenant-scope
 title: Add DB-level tenant scope to updateServer (blocked on Turso re-key migration)
-status: approved
+status: in-spec
 created: 2026-08-17
 updated: 2026-08-18
+spawned_spec: 2026-08-18-hub-updateserver-tenant-scope-spec
 repos: [minion_hub]
 tags: [logic, security, edge-case]
 value: 5
