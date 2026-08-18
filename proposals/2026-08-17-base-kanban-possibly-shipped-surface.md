@@ -1,9 +1,10 @@
 ---
 id: 2026-08-17-base-kanban-possibly-shipped-surface
 title: minion-base kanban never renders/acts on G0's possibly_shipped verification flags
-status: approved
+status: in-spec
 created: 2026-08-17
 updated: 2026-08-18
+spawned_spec: 2026-08-18-base-kanban-possibly-shipped-surface-spec
 repos: [minion-base]
 tags: [board, ux]
 value: 5
