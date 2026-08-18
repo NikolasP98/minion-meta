@@ -1,7 +1,8 @@
 ---
 id: 2026-08-17-factory-worker-containment
 title: Worker containment — isolated read-only review, pinned images, no repo-code with shared creds
-status: approved
+status: in-spec
+spawned_spec: 2026-08-18-factory-worker-containment-spec
 created: 2026-08-17
 updated: 2026-08-18
 repos: [minion-factory]
