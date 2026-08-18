@@ -95,11 +95,13 @@ function requiredCheckRule(pattern, name, exclude = []) {
 }
 assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/[0-9]', 'character-set')], 'release/1', 'main'), [{ name: 'character-set', appId: 4 }]);
 assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/*', 'single-level')], 'release/a/b', 'main'), []);
-assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/**', 'recursive')], 'release/a/b', 'main'), [{ name: 'recursive', appId: 4 }]);
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/**', 'terminal-stars')], 'release/a/b', 'main'), []);
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/**/*', 'recursive')], 'release/a/b', 'main'), [{ name: 'recursive', appId: 4 }]);
 assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/**/candidate', 'recursive-zero-level')], 'release/candidate', 'main'), [{ name: 'recursive-zero-level', appId: 4 }]);
 assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/?', 'single-character')], 'release/1', 'main'), [{ name: 'single-character', appId: 4 }]);
 assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/?', 'single-character')], 'release/12', 'main'), []);
-assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('refs/heads/release/**', 'excluded', ['refs/heads/release/private/**'])], 'release/private/1', 'main'), []);
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('~ALL', 'terminal-exclude', ['refs/heads/release/**'])], 'release/a/b', 'main'), [{ name: 'terminal-exclude', appId: 4 }]);
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [requiredCheckRule('~ALL', 'recursive-exclude', ['refs/heads/release/**/*'])], 'release/a/b', 'main'), []);
 
 const temp = mkdtempSync(join(tmpdir(), 'repo-policy-test-'));
 try {

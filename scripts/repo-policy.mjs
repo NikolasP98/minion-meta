@@ -200,7 +200,7 @@ function fnmatchPattern(pattern) {
         if (pattern[index + 1] === '/') {
           expression += '(?:.*/)?';
           index += 1;
-        } else expression += '.*';
+        } else expression += '[^/]*';
       } else expression += '[^/]*';
     } else if (character === '?') expression += '[^/]';
     else if (character === '[') {
