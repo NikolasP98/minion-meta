@@ -2,14 +2,14 @@
 id: 2026-08-18-hub-updateserver-tenant-scope-spec
 title: Add DB-level tenant scope to hub updateServer after Turso re-key
 stage: spec
-status: draft
-pass: 1
+status: parked
+pass: 2
 created: 2026-08-18
 updated: 2026-08-18
 proposal: 2026-08-17-hub-updateserver-tenant-scope
-verdict: pending
+verdict: approved
 repos: [minion_hub]
-relationship: depends-on
+relationship: extends
 related: [2026-05-25-auth-supabase-pg-migration-design]
 ---
 
@@ -27,9 +27,13 @@ re-key compatibility gate in Slice 1 passes; this spec does not authorize the re
 
 ### Relationship recommendation
 
-- `2026-05-25-auth-supabase-pg-migration-design` — **depends-on**: that shipped design owns the broader
-  auth/data cutover and re-key sequencing; this spec adds the narrow `updateServer` defense only after
-  the active Turso `servers.tenant_id` values are proven compatible with `TenantContext.tenantId`.
+- `2026-05-25-auth-supabase-pg-migration-design` — **extends**: that artifact records the broader
+  Supabase/PG migration direction, while this spec hardens the still-live Turso `updateServer`
+  mutation during the transition. Its `status: shipped` frontmatter is not evidence that the
+  `servers` re-key prerequisite completed: the body remains a design with a future Turso-retirement
+  phase and does not define this mutation or its compatibility proof. Execution therefore remains
+  parked on the concrete re-key completion record and the audits defined below, not merely on that
+  related spec's lifecycle status.
 
 Searches of `specs/index.json` and `proposals/index.json` found no other artifact with the same
 `updateServer` surface or cross-tenant-update DoD. This recommendation does not merge, retire, or edit
@@ -62,26 +66,36 @@ the related artifact.
 1. `updateServer(ctx, serverId, patch)` updates a row only when both `servers.id = serverId` and
    `servers.tenantId = ctx.tenantId` are true in the same database statement.
 2. A cross-tenant id has the same externally observable result as an unknown id under the service's
-   existing return/error contract; it performs zero writes and reveals no owner or tenant metadata.
+   existing return/error contract (same return value, or same error type/message); it performs zero
+   writes and reveals no owner or tenant metadata. If a route reaches and maps that service result,
+   its status and response body also remain identical to the route's existing unknown-id response;
+   a route that denies the request in its independent ownership check retains its characterized
+   pre-change denial contract.
 3. A same-tenant update retains its current patch semantics, returned value, timestamps, and caller
    behavior. The existing route-level IDOR check remains as an independent layer.
 4. No schema, migration, re-key, token, gateway protocol, UI, or authorization-policy change is part
    of this implementation.
-5. The change may ship only after a non-production compatibility fixture/probe proves that every
-   server row used by the test environment has the same canonical tenant-id format supplied in
-   `TenantContext.tenantId`; production migration evidence must be attached to the PR before merge.
+5. The change may ship only after a read-only audit proves that every current Turso
+   `servers.tenant_id` is non-null and exactly equals one current canonical Supabase
+   `organizations.id`, which is the identifier supplied as `TenantContext.tenantId`. Because the
+   databases are physically separate, the audit must read each source separately and compare exact
+   values in application memory; it must not claim a cross-database SQL join. Rehearse the audit in
+   non-production, then attach the production result and concrete re-key completion record to the PR
+   before merge. Source: `/memory/MINION/hub-two-database-split.md` (the databases cannot be joined;
+   matching canonical ids may be correlated in application code).
 
 ### DELTA — transitions, slices, and proof
 
 1. **Establish re-key readiness and freeze the service contract** → Slice 1 → a focused baseline test
-   records same-tenant/unknown-id behavior, and the compatibility query returns zero mismatched or
-   unmapped server rows in the selected non-production database; production migration evidence is a
-   human merge gate.
+   records same-tenant/unknown-id behavior, and the two-source compatibility audit returns zero null
+   or unmatched Turso server tenant ids in non-production and production; the production result and
+   re-key completion record are a human merge gate.
 2. **Add tenant identity to the atomic update predicate** → Slice 2 → the focused service test proves
    same-tenant success, cross-tenant denial with zero mutation, and unknown-id parity while inspecting
    or exercising the generated `WHERE id AND tenant_id` behavior.
-3. **Verify callers and the full hub remain compatible** → Slice 2 → caller-focused tests plus hub
-   check, focused test, full test, and build commands exit zero.
+3. **Verify the public caller contract, when an existing route test owns it, and the full hub remain
+   compatible** → Slice 2 → the applicable route test plus hub check, focused test, full test, and
+   build commands exit zero.
 
 ## 2. Approach — vertical slices
 
@@ -89,8 +103,9 @@ the related artifact.
 
 **Size:** ~4–6 focused hours · **Tags:** `security`, `data`, `test`
 
-Work from a `minion_hub` feature worktree based on the current `master` branch (the repo memory notes
-that the old `dev` branch was deleted). First read that checkout's `CLAUDE.md` or `AGENTS.md`.
+Work from a `minion_hub` feature worktree based on the current `master` branch (the old `dev` branch
+was deleted). First read that checkout's `CLAUDE.md` or `AGENTS.md`. Source:
+`/memory/MINION/hub-deploy-workflow.md` (2026-07-30 update).
 
 #### Exact files to touch
 
@@ -106,23 +121,28 @@ that the old `dev` branch was deleted). First read that checkout's `CLAUDE.md` o
    the active implementation and document the current not-found/return contract in the test name.
 2. Add/retain baseline tests for same-tenant success and unknown id. The test fixture must contain two
    tenants and one server per tenant with distinct ids.
-3. Against the selected non-production Turso/libSQL database, run a read-only compatibility query that
-   joins or compares the environment's canonical organization identifiers to
-   `servers.tenant_id`. The exact query follows the post-re-key schema discovered in step 1. It must
-   report: total server rows, null tenant ids, unmapped tenant ids, and duplicate/ambiguous mappings.
-   All three error counts must be zero. Do not mutate data to make the probe pass.
-4. Attach the re-key migration id, apply evidence, rollback/recovery note, and the equivalent
-   production read-only audit result to the PR. Because this is security/data-tagged work, human
-   approval and merge gates remain mandatory.
+3. Rehearse the compatibility audit against the selected non-production environment using read-only
+   access: fetch `id` and `tenant_id` for every Turso `servers` row; separately fetch canonical
+   Supabase `organizations.id` values; compare the exact string values in application memory. Report
+   `turso_server_rows`, `null_tenant_ids`, and `unmatched_tenant_ids`; both error counts must be zero.
+   Multiple servers with the same tenant id are valid and must not be reported as duplicates. Record
+   the exact executable command and output in the PR. Do not mutate either database to make the audit
+   pass. Source: `/memory/MINION/hub-two-database-split.md`.
+4. Run the same read-only audit against production and attach its output, the concrete re-key
+   migration/deployment identifier and apply evidence, and its rollback/recovery note to the PR. If
+   the re-key was not represented by a database migration, attach the deployment or change record
+   that performed it; a planning-spec status alone is insufficient. Because this is
+   security/data-tagged work, human approval and merge gates remain mandatory.
 
 #### Definition of done
 
 ```bash
 rg -n "function updateServer|const updateServer|updateServer\(" src/server src/routes
-bun run test -- src/server/services/server.service.test.ts
-# repository-specific read-only re-key audit command: exits 0 and prints
-# null_tenant_ids=0 unmapped_tenant_ids=0 ambiguous_mappings=0
-git diff --name-only | rg '(^|/)(migrations|drizzle|supabase)/|\.sql$' ; test $? -eq 1
+server_service_test=${SERVER_SERVICE_TEST:-src/server/services/server.service.test.ts}
+test -f "$server_service_test" && bun run test -- "$server_service_test"
+# exact two-source, read-only audit command recorded in the PR: exits 0 and prints
+# turso_server_rows=<n> null_tenant_ids=0 unmatched_tenant_ids=0
+migration_status=$(git status --porcelain -- ':(glob)**/*.sql' ':(glob)**/migrations/**' ':(glob)**/drizzle/**' ':(glob)**/supabase/**') && test -z "$migration_status"
 ```
 
 If the service moved, the predicate is already tenant-scoped, the current tenant keys differ, or the
@@ -147,8 +167,8 @@ spec.
    `eq(servers.tenantId, ctx.tenantId)` using `and(...)`. Preserve the existing update payload,
    timestamp handling, returning clause, and not-found behavior.
 2. Add a cross-tenant regression test: call `updateServer` with tenant A's context and tenant B's
-   server id; assert the service returns/throws exactly like an unknown id and tenant B's persisted row
-   is byte-for-byte unchanged. Also assert tenant A can update its own row.
+   server id; assert the service returns/throws exactly like an unknown id and tenant B's full
+   persisted row is deep-equal before and after the call. Also assert tenant A can update its own row.
 3. Keep the caller-level ownership check. Add a query-shape assertion only if the existing test harness
    mocks Drizzle rather than running SQLite; it must prove both `id` and `tenant_id` participate in the
    mutation predicate, not merely that a helper was called.
@@ -157,11 +177,12 @@ spec.
 
 ```bash
 rg -n "and\(|servers\.tenantId|servers\.id" src/server/services/server.service.ts
-bun run test -- src/server/services/server.service.test.ts
+server_service_test=${SERVER_SERVICE_TEST:-src/server/services/server.service.test.ts}
+test -f "$server_service_test" && bun run test -- "$server_service_test"
 bun run check
 bun run test
 bun run build
-git diff --name-only | rg '(^|/)(migrations|drizzle|supabase)/|\.sql$' ; test $? -eq 1
+migration_status=$(git status --porcelain -- ':(glob)**/*.sql' ':(glob)**/migrations/**' ':(glob)**/drizzle/**' ':(glob)**/supabase/**') && test -z "$migration_status"
 ```
 
 The focused test must explicitly report green cases for same-tenant update, cross-tenant denial with
@@ -172,7 +193,7 @@ zero mutation, and unknown-id parity. These checks are the machine-readable acce
 | Surface | Impact | Mitigation / alert |
 |---|---|---|
 | `minion_hub` | Only target repo; service predicate and focused tests change | Preserve call-site check and public contract; run full hub gates |
-| `minion-meta` / `@minion-stack/db` | Schema is a read-only verification input; no package or migration change | Any schema/re-key need blocks this spec and returns to the prerequisite artifact |
+| `minion-meta` / `@minion-stack/db` | Installed Turso schema is a read-only verification input; no package or migration change | Any schema/re-key need blocks this spec and returns to a prerequisite migration/change artifact |
 | `minion_site` | Shares hub data surfaces, but no schema or auth contract changes | No files to change; absence of SQL/migration diff is mandatory |
 | `minion` gateway | Reads/authenticates server tokens, but no token, row shape, or protocol changes | Existing valid rows must continue to update; re-key audit prevents legacy-key denial |
 | `paperclip-minion` | No adapter or gateway-protocol change | No action |
@@ -193,24 +214,30 @@ test deliberately makes it impossible.
 
 ## 5. End-to-end verification
 
-After both slices, in an isolated non-production environment seeded with tenant A/server A and tenant
-B/server B:
+Run the functional checks in an isolated non-production environment seeded with tenant A/server A
+and tenant B/server B; the separate production step below is read-only:
 
 1. Authenticate as tenant A through the normal server-update route and update server A; assert the API
    response retains its current success shape and the row changed.
-2. Invoke the same route/service contract for server B while tenant A is active; assert the existing
-   not-found response, no tenant metadata disclosure, and an unchanged server B row.
-3. Repeat with an unknown id and prove its status/body matches step 2.
+2. Invoke the normal route for server B while tenant A is active; assert the existing route-level
+   denial status/body characterized before the change, no tenant metadata disclosure, and an
+   unchanged server B row. This preserves the independent caller check but does not by itself prove
+   the service predicate executed.
+3. In the service integration test, call `updateServer` directly with tenant A's context and server
+   B's id, then with an unknown id; prove identical service outcomes and zero mutation of server B.
 4. Re-read both rows directly and confirm only server A changed.
-5. Run:
+5. Run the exact two-source read-only audit command recorded by Slice 1 against non-production, then
+   production; both runs must print `null_tenant_ids=0 unmatched_tenant_ids=0`.
+6. Run:
 
 ```bash
 bun run check
-bun run test -- src/server/services/server.service.test.ts
+server_service_test=${SERVER_SERVICE_TEST:-src/server/services/server.service.test.ts}
+test -f "$server_service_test" && bun run test -- "$server_service_test"
 bun run test
 bun run build
 ```
 
-Attach the command output, read-only compatibility audit, migration id, and human security/data review
-to the PR. Deployment proceeds through the hub's normal branch-triggered pipeline only after the
-re-key evidence and human merge gate are satisfied.
+Attach the command output, both read-only compatibility audits, the concrete re-key change record,
+and human security/data review to the PR. Deployment proceeds through the hub's normal
+branch-triggered pipeline only after the re-key evidence and human merge gate are satisfied.
