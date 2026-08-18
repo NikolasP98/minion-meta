@@ -2,18 +2,24 @@
 id: 2026-08-18-base-kanban-possibly-shipped-surface-spec
 title: minion-base kanban renders G0 warnings and acts on possibly_shipped flags
 stage: spec
-status: approved
+status: review
 pass: 2
 created: 2026-08-18
 updated: 2026-08-18
 proposal: 2026-08-17-base-kanban-possibly-shipped-surface
-verdict: approved
+verdict: changes_requested
 repos: [minion-base, minion-factory, minion-meta]
 tags: [ui, logic, docs, test]
 type: feature
 ---
 
 # minion-base kanban renders G0 warnings and acts on possibly_shipped flags
+
+**Implementation and merge stop (2026-08-18):** This overlapping plan is not dev-eligible. The
+verified factory writer does not emit the proposed reconciliation fields, so producer ownership
+and field semantics must be approved before the projection and consumer slices run. The open
+minion-base PR #13 must not merge until one canonical cross-repo contract replaces this ordering;
+projection and consumption must then land after the producer or atomically with it.
 
 **Owner surfaces:** two external repos plus this meta-repo checkout:
 `minion-base` (`NikolasP98/minion-base`, private, `main` → Vercel → base.minion-ai.org),
