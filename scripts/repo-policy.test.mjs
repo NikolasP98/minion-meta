@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import Ajv2020 from 'ajv/dist/2020.js';
-import { buildArtifact, effectiveRequiredChecks, readPolicy, validatePolicy } from './repo-policy.mjs';
+import { buildArtifact, effectiveRequiredChecks, readPolicy, validatePolicy, validateRemoteState } from './repo-policy.mjs';
 
 const policy = readPolicy();
 assert.deepEqual(validatePolicy(policy), []);
@@ -80,9 +80,16 @@ const rulesetFixtures = [
 ];
 assert.deepEqual(effectiveRequiredChecks({ checks: [] }, rulesetFixtures, 'dev', 'main'), [{ name: 'verify', appId: 15368 }]);
 
+const allBranchesRule = { enforcement: 'active', target: 'branch', conditions: { ref_name: { include: ['~ALL'], exclude: [] } }, rules: [{ type: 'required_status_checks', parameters: { required_status_checks: [{ context: 'all-branches', integration_id: 3 }] } }] };
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [allBranchesRule], 'dev', 'main'), [{ name: 'all-branches', appId: 3 }]);
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [{ ...allBranchesRule, conditions: { ref_name: { include: ['~ALL'], exclude: ['refs/heads/dev'] } } }], 'dev', 'main'), []);
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [{ ...allBranchesRule, enforcement: 'disabled' }], 'dev', 'main'), []);
+assert.deepEqual(effectiveRequiredChecks({ checks: [] }, [{ ...allBranchesRule, conditions: { ref_name: { include: ['refs/heads/main'], exclude: [] } } }], 'dev', 'main'), []);
+
 const temp = mkdtempSync(join(tmpdir(), 'repo-policy-test-'));
 try {
   const goodState = Object.fromEntries(policy.repositories.map((row) => [row.remote, { policyAccessible: true, branches: [...new Set(Object.values(row.branches))], requiredChecks: row.requiredChecks }]));
+  assert.deepEqual(validateRemoteState(policy, goodState), []);
   const fixture = join(temp, 'remote.json');
   writeFileSync(fixture, JSON.stringify(goodState));
   let result = spawnSync(process.execPath, ['scripts/repo-policy.mjs', 'verify-remote', '--fixture', fixture], { encoding: 'utf8' });
@@ -101,6 +108,21 @@ try {
   result = spawnSync(process.execPath, ['scripts/repo-policy.mjs', 'verify-remote', '--fixture', fixture], { encoding: 'utf8' });
   assert.notEqual(result.status, 0);
   assert.match(result.stderr, /pixel-agents.*requiredChecks: remote identities do not match policy/);
+
+  for (const [mutate, diagnostic] of [
+    [(value) => { value['NikolasP98/minion-site'].branches = 'xxdevxxmasterxx'; }, /minion-site\.branches: must be an array/],
+    [(value) => { value['NikolasP98/minion-site'].branches = ['dev', 'dev']; }, /minion-site\.branches\[1\]: duplicate branch name/],
+    [(value) => { delete value['NikolasP98/minion-site'].policyAccessible; }, /minion-site\.policyAccessible: is required/],
+    [(value) => { value['NikolasP98/minion-site'].requiredChecks = [{ name: '', appId: '15368' }]; }, /minion-site\.requiredChecks\[0\]\.name: must be non-empty/],
+    [(value) => { value['NikolasP98/minion-site'].unexpected = true; }, /minion-site\.unexpected: unknown field/]
+  ]) {
+    const malformed = clone(goodState);
+    mutate(malformed);
+    writeFileSync(fixture, JSON.stringify(malformed));
+    result = spawnSync(process.execPath, ['scripts/repo-policy.mjs', 'verify-remote', '--fixture', fixture], { encoding: 'utf8' });
+    assert.notEqual(result.status, 0, 'malformed remote fixture unexpectedly passed');
+    assert.match(result.stderr, diagnostic);
+  }
 } finally { rmSync(temp, { recursive: true, force: true }); }
 
 console.log('repo policy tests passed');

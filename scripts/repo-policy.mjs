@@ -19,6 +19,7 @@ const managers = new Set(['pnpm', 'bun', 'npm', 'none']);
 const safeCommand = /^[A-Za-z0-9_./:@+-]+(?: [A-Za-z0-9_./:@=+-]+)*$/;
 const namePattern = /^[a-z0-9][a-z0-9_-]*$/;
 const remotePattern = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/;
+const invalidBranchPattern = /[\u0000-\u0020\u007f~^:?*[\\]/;
 
 export function readPolicy(path = policyPath) {
   try {
@@ -140,6 +141,46 @@ function checkRemoteState(policy, state) {
   return errors;
 }
 
+function validBranchName(value) {
+  return typeof value === 'string' && value.length > 0 && value !== '@' && !value.startsWith('-') && !value.startsWith('.') && !value.endsWith('.') && !value.endsWith('/') && !value.includes('..') && !value.includes('@{') && !value.includes('//') && !invalidBranchPattern.test(value) && value.split('/').every((part) => part && !part.startsWith('.') && !part.endsWith('.lock'));
+}
+
+export function validateRemoteState(policy, state) {
+  const errors = [];
+  const remotes = new Set(policy.repositories.map((row) => row.remote));
+  if (!state || typeof state !== 'object' || Array.isArray(state)) return ['$: must be an object'];
+  for (const remote of remotes) if (!(remote in state)) errors.push(`$.${remote}: is required`);
+  for (const [remoteName, remote] of Object.entries(state)) {
+    const path = `$.${remoteName}`;
+    if (!remotes.has(remoteName)) { errors.push(`${path}: unknown field`); continue; }
+    if (!keysExactly(remote, ['branches', 'policyAccessible', 'requiredChecks'], path, errors)) continue;
+    if (!Array.isArray(remote.branches)) errors.push(`${path}.branches: must be an array`);
+    else {
+      const branches = new Set();
+      remote.branches.forEach((branch, index) => {
+        if (!validBranchName(branch)) errors.push(`${path}.branches[${index}]: must be a valid branch name`);
+        else if (branches.has(branch)) errors.push(`${path}.branches[${index}]: duplicate branch name`);
+        branches.add(branch);
+      });
+    }
+    if (typeof remote.policyAccessible !== 'boolean') errors.push(`${path}.policyAccessible: must be a boolean`);
+    if (!Array.isArray(remote.requiredChecks)) errors.push(`${path}.requiredChecks: must be an array`);
+    else {
+      const identities = new Set();
+      remote.requiredChecks.forEach((check, index) => {
+        const checkPath = `${path}.requiredChecks[${index}]`;
+        if (!keysExactly(check, ['name', 'appId'], checkPath, errors)) return;
+        if (typeof check.name !== 'string' || check.name.trim() === '') errors.push(`${checkPath}.name: must be non-empty`);
+        if (!Number.isInteger(check.appId) || check.appId <= 0) errors.push(`${checkPath}.appId: must be a positive integer`);
+        const identity = `${check.name}\0${check.appId}`;
+        if (identities.has(identity)) errors.push(`${checkPath}: duplicate check identity`);
+        identities.add(identity);
+      });
+    }
+  }
+  return errors;
+}
+
 function ghJson(args) {
   return JSON.parse(execFileSync('gh', ['api', ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }));
 }
@@ -150,6 +191,7 @@ function ghPages(endpoint) {
 }
 
 function refPatternMatches(pattern, branch, defaultBranch) {
+  if (pattern === '~ALL') return true;
   const normalized = pattern === '~DEFAULT_BRANCH' ? defaultBranch : pattern.replace(/^refs\/heads\//, '');
   const escaped = normalized.replace(/[.+^${}()|[\]\\]/g, '\\$&').replaceAll('*', '.*').replaceAll('?', '.');
   return new RegExp(`^${escaped}$`).test(branch);
@@ -230,6 +272,8 @@ export function run(argv = process.argv.slice(2)) {
   } else if (command === 'verify-remote') {
     const fixtureIndex = args.indexOf('--fixture');
     const state = fixtureIndex >= 0 ? JSON.parse(readFileSync(resolve(process.cwd(), args[fixtureIndex + 1]), 'utf8')) : liveRemoteState(policy);
+    const fixtureErrors = fixtureIndex >= 0 ? validateRemoteState(policy, state) : [];
+    if (fixtureErrors.length) { fail(fixtureErrors); return; }
     const drift = checkRemoteState(policy, state);
     if (drift.length) fail(drift); else console.log(`remote policy verified (${policy.repositories.length} rows)`);
   } else fail([`usage: repo-policy.mjs validate | generate [--check] | show <id-or-alias> | verify-remote [--fixture path]`]);
