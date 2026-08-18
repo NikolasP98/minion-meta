@@ -40,10 +40,7 @@ for (const name of readdirSync('specs')
 		...(fm.verdict ? { verdict: fm.verdict } : {}),
 		...(fm.pr ? { pr: fm.pr } : {}),
 		...(fm.type ? { type: fm.type } : {}),
-		...(fm.tags ? { tags: fm.tags } : {}),
-		...(fm.possibly_shipped ? { possibly_shipped: fm.possibly_shipped } : {}),
-		...(fm.evidence ? { evidence: fm.evidence } : {}),
-		...(fm.link_review ? { link_review: fm.link_review } : {})
+		...(fm.tags ? { tags: fm.tags } : {})
 	});
 }
 
