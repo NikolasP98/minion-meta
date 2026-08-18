@@ -1,14 +1,14 @@
 # .github/workflows/ci.yml
-# Meta-repo CI — gates every PR against main.
+# Meta-repo CI — gates every PR against dev (the integration branch) and main.
 # Runs lint-all, typecheck-all, build-all, test-all, changeset:status, and the
 # specs/ hardening gate (scripts/spec-index.mjs --check).
 name: CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [dev, main]
   push:
-    branches: [main]
+    branches: [dev, main]
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
