@@ -1,11 +1,12 @@
 ---
 id: 2026-08-17-meta-spec-index-project-possibly-shipped
 title: spec-index.mjs drops possibly_shipped/evidence/link_review — G0 amber chip never renders
-status: review
+status: approved
 created: 2026-08-17
-updated: 2026-08-17
-repos: [minion-meta, minion-base]
+updated: 2026-08-18
+repos: [minion-meta]
 duplicate_candidate: 2026-08-17-base-kanban-possibly-shipped-surface
+tags: [logic]
 ---
 
 # spec-index.mjs drops possibly_shipped/evidence/link_review
@@ -52,3 +53,7 @@ one-click confirm/reject write-back mechanics via the existing PR/commit path) i
 more detailed than this one's. Flagged rather than merged because picking a canonical
 here means resolving that factual conflict, not just concatenating text — left for a
 human to reconcile.
+
+---
+
+**Gate decision 2026-08-18 (delegated):** Reconciler dup-flag resolved: the duplicate candidate covered the BASE surface (shipped via base PR #13); this proposal's meta-side scope (spec-index.mjs emitting possibly_shipped/evidence/link_review) is NOT covered and stands. Approved, scoped to minion-meta only.

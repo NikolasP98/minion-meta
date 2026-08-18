@@ -1,9 +1,9 @@
 ---
 id: 2026-08-17-factory-memory-governance
 title: Factory memory governance — quarantined write-back, provenance, snapshots
-status: draft
+status: approved
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 repos: [minion-factory]
 tags: [security, infra]
 source: audit-2026-08-17
@@ -27,3 +27,7 @@ files — enforce read-side labeling in prompts).
 
 **Out of scope:** unified retrieval service ranking (follow-up once
 quarantine exists).
+
+---
+
+**Gate decision 2026-08-18 (delegated):** Approved for SPEC (M8 planning — quarantine model can be designed now). Merge human-gated.
