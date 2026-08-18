@@ -1,9 +1,10 @@
 ---
 id: 2026-08-17-hub-funnel-atomic-write
 title: Make CRM _funnel write atomic (read-modify-write loses concurrent custom-field edits)
-status: approved
+status: in-spec
 created: 2026-08-17
 updated: 2026-08-18
+spawned_spec: 2026-08-18-hub-funnel-atomic-write-spec
 repos: [minion_hub]
 tags: [logic, data, edge-case]
 value: 7
