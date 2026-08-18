@@ -1,0 +1,17 @@
+# Backstop only — the write rule is "never put secrets in memory" (README.md).
+# This blocks accidental commits of actual credential files, not memory prose
+# that happens to discuss tokens/secrets conceptually (e.g. a topic file named
+# "auth-token-simplification.md" is fine; an actual *.pem is not).
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+id_ecdsa*
+*_credentials.json
+*credentials.json
+.aws/
+.ssh/
