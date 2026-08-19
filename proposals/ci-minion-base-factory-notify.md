@@ -3,7 +3,7 @@ id: ci-minion-base-factory-notify
 title: CI red — Factory Notify on minion-base main
 status: draft
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-19
 repos: []
 ---
 
@@ -19,7 +19,7 @@ green, or the workflow is deliberately removed/disabled with rationale.
 ## Latest failure
 
 - run: https://github.com/NikolasP98/minion-base/actions/runs/32190438508
-- checked: 2026-08-18
+- checked: 2026-08-19
 
 ```
 
