@@ -6,8 +6,11 @@
 // `pass` or an empty `repos` on anything but a plan-of-record, has a scalar
 // field written with array syntax (e.g.
 // `title: [A, B]` — the flat-YAML parser accepts bracket syntax for any key,
-// so this must be rejected explicitly), or has an `id` that doesn't match its
-// filename or collides with another spec's `id` (the stable join key).
+// so this must be rejected explicitly), has one of the three array fields
+// (`repos`, `tags`, `related`) written as a bare scalar (e.g. `tags: infra` —
+// bracket syntax is optional in the parser, so this must be rejected too), or
+// has an `id` that doesn't match its filename or collides with another spec's
+// `id` (the stable join key).
 //
 // --check runs the full hardening gate (meta CI, see .github/workflows/ci.yml
 // and specs/2026-08-17-maintenance-lane-monitors-spec.md §2): calendar-valid
@@ -214,6 +217,35 @@ export function findScalarStringViolations(fm) {
 	);
 }
 
+// The mirror of SCALAR_FIELDS: the three documented collection fields, all of
+// which are string arrays (specs/TEMPLATE.md). Bracket syntax is OPTIONAL in
+// the flat-YAML parser, so `tags: infra` or `related: another-spec` parses to a
+// plain string, sails past the presence-only required-field check, and — for
+// `tags` — gets republished into specs/index.json as a scalar where consumers
+// expect a list. findScalarArrayViolations() is the opposite direction (an
+// array supplied for a scalar field) and cannot catch this.
+export const ARRAY_FIELDS = ['repos', 'tags', 'related'];
+
+// Returns one message fragment per array field that is not a string array.
+// Absent fields (and the empty-string parse of a valueless `key:` line) are
+// skipped — the required-field check owns those, and reporting both would
+// double up on one line.
+export function findArrayFieldViolations(fm) {
+	const errors = [];
+	for (const key of ARRAY_FIELDS) {
+		const value = fm[key];
+		if (value === undefined || value === null || value === '') continue;
+		if (!Array.isArray(value)) {
+			errors.push(`"${key}" must be an array of strings, got ${typeof value} ("${value}")`);
+			continue;
+		}
+		const badTypes = [...new Set(value.filter((entry) => typeof entry !== 'string').map((entry) => typeof entry))];
+		if (badTypes.length)
+			errors.push(`"${key}" must contain only strings (found ${badTypes.sort().join(', ')})`);
+	}
+	return errors;
+}
+
 // Resolves the corpora that baseline exceptions must have existed in already.
 // PR checks use the merge base. Push checks prefer the event's before SHA.
 // Local checks use EVERY parent of HEAD, not just the first: on a merge commit
@@ -389,12 +421,11 @@ function main() {
 		}
 		if (fm.pass !== undefined && !(Number.isInteger(fm.pass) && fm.pass >= 1))
 			errors.push(`${name}: "pass" must be a positive integer, got "${fm.pass}"`);
+		for (const message of findArrayFieldViolations(fm)) errors.push(`${name}: ${message}`);
 		// `repos: []` is the documented shape for a plan-of-record (`type: decision`)
 		// that no repo implements directly — milestone specs cite it instead. Every
 		// other spec must name at least one target repo.
-		if (fm.repos !== undefined && !Array.isArray(fm.repos))
-			errors.push(`${name}: "repos" must be an array of repo ids`);
-		else if (Array.isArray(fm.repos) && fm.repos.length === 0 && fm.type !== 'decision')
+		if (Array.isArray(fm.repos) && fm.repos.length === 0 && fm.type !== 'decision')
 			errors.push(
 				`${name}: "repos" is empty — only a plan-of-record ("type: decision") may declare no target repo`
 			);

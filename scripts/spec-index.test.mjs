@@ -16,6 +16,7 @@ import {
 	missingRequiredHeadings,
 	findScalarArrayViolations,
 	findScalarStringViolations,
+	findArrayFieldViolations,
 	checkHeadingBaselineRatchet,
 	checkSupersedeBaselineRatchet
 } from './spec-index.mjs';
@@ -163,6 +164,63 @@ body
 `;
 	const { fm } = parseFrontmatter(src);
 	assert.deepEqual(findScalarArrayViolations(fm), []);
+});
+
+test('M1: a bare scalar in an array field is rejected (bracket syntax is optional)', () => {
+	const src = `---
+id: fixture
+title: Fixture
+stage: spec
+status: draft
+pass: 1
+created: 2026-08-18
+updated: 2026-08-18
+repos: [minion-meta]
+tags: infra
+related: another-spec
+---
+
+body
+`;
+	const { fm } = parseFrontmatter(src);
+	assert.equal(typeof fm.tags, 'string', 'parser leaves an unbracketed value a scalar');
+	assert.deepEqual(findArrayFieldViolations(fm), [
+		'"tags" must be an array of strings, got string ("infra")',
+		'"related" must be an array of strings, got string ("another-spec")'
+	]);
+});
+
+test('M1: bracketed array fields produce no violation', () => {
+	const src = `---
+id: fixture
+title: Fixture
+stage: spec
+status: draft
+pass: 1
+created: 2026-08-18
+updated: 2026-08-18
+repos: [minion-meta]
+tags: [infra, test]
+related: [another-spec]
+---
+
+body
+`;
+	assert.deepEqual(findArrayFieldViolations(parseFrontmatter(src).fm), []);
+});
+
+// The flat-YAML parser only ever yields string elements, so this guards the
+// exported helper against non-parser callers (index.json consumers, retrofit
+// tooling) rather than a shape the CLI can currently produce.
+test('M1: non-string elements inside an array field are rejected', () => {
+	assert.deepEqual(findArrayFieldViolations({ tags: ['infra', 7, null] }), [
+		'"tags" must contain only strings (found number, object)'
+	]);
+});
+
+test('M1: absent and valueless array fields are left to the required-field check', () => {
+	assert.deepEqual(findArrayFieldViolations({}), []);
+	assert.deepEqual(findArrayFieldViolations({ repos: '' }), []);
 });
 
 test('M2: a numeric title is rejected as a non-string scalar', () => {
@@ -379,6 +437,35 @@ test('M4: an undocumented `relationship` value is rejected', () => {
 	const result = runCheck(root);
 	assert.equal(result.status, 1);
 	assert.match(result.stderr, /invalid relationship "kind-of-related"/);
+});
+
+// Both directions matter: the generator must refuse to publish the malformed
+// value, and --check must stay red even if the spec lands with a stale index
+// (which is how it would reach CI — the generator never wrote it).
+for (const [field, value] of [
+	['tags', 'infra'],
+	['related', 'some-other-spec']
+]) {
+	test(`M4: a scalar \`${field}\` is rejected by the generator and by --check`, () => {
+		const root = makeCleanFixture();
+		writeSpec(root, 'fixture', `${field}: ${value}\n`, VALID_BODY);
+		const generated = spawnSync('node', ['scripts/spec-index.mjs'], { cwd: root, encoding: 'utf8' });
+		assert.equal(generated.status, 1);
+		assert.match(generated.stderr, new RegExp(`"${field}" must be an array of strings`));
+		gitCommit(root, `scalar ${field}`);
+		const result = runCheck(root);
+		assert.equal(result.status, 1);
+		assert.match(result.stderr, new RegExp(`"${field}" must be an array of strings`));
+	});
+}
+
+test('M4: array-form `tags` and `related` pass --check', () => {
+	const root = makeCleanFixture();
+	writeSpec(root, 'fixture', 'tags: [infra, test]\nrelated: [some-other-spec]\n', VALID_BODY);
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	gitCommit(root, 'array tags and related');
+	const result = runCheck(root);
+	assert.equal(result.status, 0, result.stderr);
 });
 
 test('M4: `verdict: revision-required` is accepted (base-authored value)', () => {

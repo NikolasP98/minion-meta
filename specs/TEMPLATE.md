@@ -38,6 +38,11 @@ Flat scalars and string arrays only — no nesting (the parser is deliberately t
 | `release_flag` / `release_state` | no | release gate and current state; disabled flags use `stage: deploy`, `status: flag-ready` |
 | `relationship` | no | spec-intake classification vs existing artifacts: `new` `extends` `merges-drafts` `supersedes` `depends-on` `conflicts-with` `already-satisfied`. The spec agent RECOMMENDS; lifecycle changes are applied by the resolver/human, never unilaterally |
 | `related` | no | ids the `relationship` refers to (specs or proposals), with a one-line reason each in the body |
+| `tags` | no | free-form routing/classification labels, e.g. `[logic, test]`; `security` and `data` keep human gates at approval AND merge |
+
+`repos`, `tags`, and `related` are the only array fields — always bracket syntax, always
+strings (`tags: infra` is a scalar and fails the gate). Everything else is a scalar; bracket
+syntax on a scalar field fails the gate too.
 
 ## Body convention
 
@@ -54,7 +59,7 @@ to the test/evidence that proves it. A slice that doesn't trace to a DELTA
 entry is scope creep; a DELTA entry with no proving test is an open end.
 
 `scripts/spec-index.mjs --check` (the meta CI gate) enforces the `## 0. Product`, out-of-scope,
-and verification sections by heading/keyword lint, plus date formats, `repos` ids, and
+and verification sections by heading/keyword lint, plus date formats, field shapes, `repos` ids, and
 `revises`/`supersedes` link integrity (a `supersedes` target must exist and carry
 `status: superseded` — one-way links are a CI failure). Specs that predate this check are
 grandfathered in `scripts/spec-heading-lint-baseline.json`; every new or hand-edited spec must
