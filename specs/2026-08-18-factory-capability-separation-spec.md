@@ -2,10 +2,10 @@
 id: 2026-08-18-factory-capability-separation-spec
 title: Factory capability separation — purpose-separated GitHub Apps, run-bound grants, and server-derived actors
 stage: spec
-status: draft
+status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-19
 proposal: 2026-08-17-factory-capability-separation
 verdict: approved
 repos: [minion-factory, minion-base]

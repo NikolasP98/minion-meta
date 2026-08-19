@@ -2,10 +2,10 @@
 id: 2026-08-18-hub-updateserver-tenant-scope-spec
 title: Add DB-level tenant scope to hub updateServer after Turso re-key
 stage: spec
-status: parked
+status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-19
 proposal: 2026-08-17-hub-updateserver-tenant-scope
 verdict: approved
 repos: [minion_hub]

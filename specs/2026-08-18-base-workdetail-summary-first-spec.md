@@ -1,8 +1,8 @@
 ---
 id: 2026-08-18-base-workdetail-summary-first-spec
 title: Base UI-005/006/007 — issue route, WorkDetail adapter, summary-first detail
-stage: spec
-status: approved
+stage: deploy
+status: flag-ready
 pass: 2
 created: 2026-08-18
 updated: 2026-08-18
@@ -11,6 +11,12 @@ verdict: approved
 repos: [minion-base]
 relationship: depends-on
 related: [2026-08-18-minion-base-mobile-hitl-ux-plan, 2026-08-18-base-ui-primitives-and-shell]
+merge_sha: 805886e0052710b5ced07d63185b97836bae3d5c
+merged_pr: https://github.com/NikolasP98/minion-base/pull/28
+merged_at: 2026-08-18T16:58:03-05:00
+release_flag: PUBLIC_WORK_DETAIL_V2
+release_state: off
+evidence: https://github.com/NikolasP98/minion-base/commit/805886e0052710b5ced07d63185b97836bae3d5c
 ---
 
 # Base UI-005/006/007 — issue route, WorkDetail adapter, summary-first detail
