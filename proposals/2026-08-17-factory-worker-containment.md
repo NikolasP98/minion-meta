@@ -1,9 +1,10 @@
 ---
 id: 2026-08-17-factory-worker-containment
 title: Worker containment — isolated read-only review, pinned images, no repo-code with shared creds
-status: draft
+status: in-spec
+spawned_spec: 2026-08-18-factory-worker-containment-spec
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 repos: [minion-factory]
 tags: [security, infra]
 source: audit-2026-08-17
@@ -27,3 +28,7 @@ review cases.
 
 **Out of scope:** rootless Docker / socket-proxy redesign (own proposal if
 pursued); GitHub App per-run tokens (covered by capability-separation).
+
+---
+
+**Gate decision 2026-08-18 (delegated):** Approved for SPEC (M4 planning). Implementation ordering per the roadmap: after manifest; merge stays human-gated.

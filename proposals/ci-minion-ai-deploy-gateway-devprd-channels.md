@@ -1,10 +1,12 @@
 ---
 id: ci-minion-ai-deploy-gateway-devprd-channels
 title: CI red — Deploy Gateway (DEV/PRD channels) on minion-ai main
-status: draft
+status: in-spec
 created: 2026-08-18
 updated: 2026-08-18
-repos: []
+repos: [minion-ai]
+tags: [infra]
+spawned_spec: 2026-08-18-ci-minion-ai-deploy-gateway-devprd-channels-spec
 ---
 
 # CI red — Deploy Gateway (DEV/PRD channels) on NikolasP98/minion-ai@main
@@ -58,3 +60,7 @@ Deploy to prd-netcup	Update Swarm fleet to immutable prd digest	2026-08-18T01:47
 **Fix direction:** Add a wait-with-timeout loop in the GitHub Actions workflow before invoking `update-controller.sh` to check if an update is already in flight and defer/retry, or implement a lock-check in the remote script to report blocking state earlier.
 
 No file:line fix needed — this is an orchestration issue in `.github/workflows/` (the deploy-to-prd job).
+
+---
+
+**Triage 2026-08-18:** Approved for diagnosis — infra tag keeps the merge human. The deploy workflow touches production channels (DEV→:dev, main→:prd swarm); the spec must diagnose from workflow logs and may conclude a config fix or a deliberate retire, but the dev run must NOT modify deploy targets beyond the workflow file itself.

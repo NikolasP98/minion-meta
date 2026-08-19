@@ -1,13 +1,14 @@
 ---
 id: 2026-08-18-factory-topic-capability-manifest
 title: Topic taxonomy + immutable execution manifest (policy resolver)
-status: draft
+status: in-spec
 created: 2026-08-18
 updated: 2026-08-18
 repos: [minion-factory, minion-meta]
 tags: [logic, infra]
 source: audit-2026-08-18
 value: high
+spawned_spec: 2026-08-18-factory-topic-capability-manifest-spec
 ---
 
 # Tags are inputs to a versioned policy resolver, never direct grants

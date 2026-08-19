@@ -2,11 +2,12 @@
 id: 2026-07-25-nats-jetstream-event-plane-implementation-spec
 title: NATS JetStream event plane — implementation and production rollout
 stage: spec
-status: approved
+status: retired
 pass: 1
 created: 2026-07-25
-updated: 2026-07-30
+updated: 2026-08-18
 repos: [minion]
+retired_reason: "Parked at 2026-08-18 board triage: WP-0 infra shipped (~10%); the remaining plan predates current architecture and the gateway has had no factory dev lane; re-propose when event-plane work resumes."
 ---
 
 # NATS JetStream event plane — implementation and production rollout
