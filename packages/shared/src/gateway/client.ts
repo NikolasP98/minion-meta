@@ -36,6 +36,21 @@ export interface GatewayClientOptions {
   // TODO(handoff): hub, site and paperclip still run the console.error default and are
   // unbumped; adoption tracked in proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md
   onEventError?: (err: unknown, frame: EventFrame) => void | Promise<void>;
+  /**
+   * Called when an auto-reconnect attempt fails (the rejection from that attempt's `connect()`).
+   * Default when omitted: `console.error`. `attempt.delayMs` is the exact scheduled delay already
+   * passed to `onReconnectScheduled` for that attempt.
+   * SHOULD NOT throw or reject: a reporter that fails either way is contained silently and never
+   * escapes as an unhandled rejection — same discipline as `onEventError`.
+   */
+  onReconnectError?: (err: unknown, attempt: { delayMs: number }) => void | Promise<void>;
+  /**
+   * Called on a socket 'error' event (an `Error` under Node's `ws`, typically an `Event` in
+   * browsers). Default when omitted: `console.error`. Reporting only — `close` still drives all
+   * lifecycle control flow; see the comment at the `error` listener in `wireEvents()`.
+   * SHOULD NOT throw or reject: contained silently, same discipline as `onEventError`.
+   */
+  onSocketError?: (err: unknown) => void | Promise<void>;
   /** Called when the socket opens (before challenge handshake completes). */
   onOpen?: () => void;
   /** Called when the socket closes. */
@@ -248,10 +263,10 @@ export class GatewayClient {
       }
     });
 
-    on('error', () => {
-      // close handler fires next — no action needed here.
-      // TODO(handoff): this discards the runtime-supplied socket error value; carried forward
-      // as S2 in proposals/2026-08-17-gateway-client-lifecycle-swallows-handoff.md.
+    on('error', (err: unknown) => {
+      if (this.generation !== gen) return;
+      // close handler fires next — no control-flow action here; reporting only.
+      this.reportSocketError(err);
     });
   }
 
@@ -292,14 +307,37 @@ export class GatewayClient {
       console.error(`[GatewayClient] onEvent handler failed for event '${frame?.event ?? 'unknown'}':`, err);
       return;
     }
+    this.containHook(() => hook(err, frame));
+  }
+
+  private reportReconnectError(err: unknown, attempt: { delayMs: number }): void {
+    const hook = this.opts.onReconnectError;
+    if (!hook) {
+      console.error('[GatewayClient] reconnect attempt failed:', err);
+      return;
+    }
+    this.containHook(() => hook(err, attempt));
+  }
+
+  private reportSocketError(err: unknown): void {
+    const hook = this.opts.onSocketError;
+    if (!hook) {
+      console.error('[GatewayClient] socket error:', err);
+      return;
+    }
+    this.containHook(() => hook(err));
+  }
+
+  /**
+   * Shared never-throw containment for a lifecycle-error reporter hook: a sync throw lands in the
+   * catch below, a rejection in the .catch. Both arms are silent by design — a failed reporter has
+   * no second reporter to escalate to, and must never become an unhandled rejection.
+   */
+  private containHook(invoke: () => void | Promise<void>): void {
     try {
-      // The reporter may be async: a sync throw lands in the catch below, a rejection in the .catch.
-      // Both arms are silent by design — a failed reporter has no second reporter to escalate to.
-      void Promise.resolve(hook(err, frame)).catch(() => {
-        // A rejecting reporter must not become an unhandled rejection — this silence is deliberate.
-      });
+      void Promise.resolve(invoke()).catch(() => {});
     } catch {
-      // A throwing reporter must not escape the event dispatch — this catch's silence is deliberate.
+      // A throwing reporter must not escape the caller — this catch's silence is deliberate.
     }
   }
 
@@ -329,9 +367,7 @@ export class GatewayClient {
     this.opts.onReconnectScheduled?.(delay);
     this.reconnectTimer = setTimeout(() => {
       this.reconnectTimer = null;
-      // TODO(handoff): this discards every failed reconnect attempt; carried forward as S2 in
-      // proposals/2026-08-17-gateway-client-lifecycle-swallows-handoff.md.
-      void this.connect().catch(() => {});
+      void this.connect().catch((err) => this.reportReconnectError(err, { delayMs: delay }));
     }, delay);
   }
 }
