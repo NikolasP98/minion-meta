@@ -427,6 +427,10 @@ function main() {
 				errors.push(`${name}: invalid verdict "${fm.verdict}" (allowed: ${VERDICTS.join(', ')})`);
 			if (fm.type && !TYPES.includes(fm.type))
 				errors.push(`${name}: invalid type "${fm.type}" (allowed: ${TYPES.join(', ')})`);
+			// TODO(handoff): `related` ids are not resolved. Unlike revises/supersedes
+			// they may name a PROPOSAL as well as a spec, so link integrity needs the
+			// proposal corpus too — see
+			// proposals/2026-08-18-spec-heading-lint-baseline-backfill.md §4.
 			if (fm.relationship && !RELATIONSHIPS.includes(fm.relationship))
 				errors.push(
 					`${name}: invalid relationship "${fm.relationship}" (allowed: ${RELATIONSHIPS.join(', ')})`

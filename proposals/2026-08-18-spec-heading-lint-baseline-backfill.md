@@ -79,6 +79,19 @@ already enforces) instead of leaving it in this baseline. Remove each id from
 `scripts/spec-supersede-baseline.json` as it's resolved — the file should
 shrink to empty.
 
+## 4. `related` ids are not resolved
+
+`--check` validates the `relationship` enum (added 2026-08-19 when the `dev`
+merge brought the field in) but does NOT check that the ids in `related` exist.
+`revises`/`supersedes` resolve against the spec corpus alone; `related` may
+name a proposal as well as a spec, so resolving it needs `proposals/` loaded
+too — a cross-corpus join `spec-index.mjs` does not do today.
+
+**Ask:** decide where the join lives (a shared loader used by both
+`spec-index.mjs` and `proposal-index.mjs`, or a third `link-check` script that
+reads both committed index.json files), then require every `related` id to
+resolve. Marked `TODO(handoff)` at the enum check in `scripts/spec-index.mjs`.
+
 ## Out of scope
 
 Fixing the 127 files or the 51 files here — this proposal is the ledger entry,
