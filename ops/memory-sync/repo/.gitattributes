@@ -1,6 +1,11 @@
 # Append-biased union merge for memory topic files: on a rebase/merge conflict,
 # keep BOTH sides instead of picking one — memory loss is worse than duplication,
-# and de-duplication is the MEMORY.md index's job, not git's. Driver command is
-# registered locally by scripts/memory-sync.sh (git does not trust driver commands
-# from a cloned .gitattributes for arbitrary-code-execution reasons).
-*.md merge=mdunion
+# and de-duplication is the MEMORY.md index's job, not git's.
+#
+# `union` is one of git's BUILT-IN low-level merge drivers, so it needs no
+# `merge.<name>.driver` config and works in a fresh clone with zero setup —
+# including for someone who runs a plain `git pull --rebase` without ever
+# invoking scripts/memory-sync.sh. Do NOT replace it with a custom driver name:
+# git silently ignores an unregistered driver and falls back to a normal
+# three-way merge, which reintroduces exactly the conflict this line prevents.
+*.md merge=union

@@ -3,9 +3,9 @@
 # Installed at ~/.local/bin/memory-sync (copy or symlink this file there).
 #
 # TODO(handoff): this staged copy has hardened the file/secret boundary
-# (allowlist staging, split pull/push timeouts) beyond what is live today
-# in NikolasP98/minion-agent-memory's scripts/memory-sync.sh. Not yet
-# applied there — that's a human/interactive action, not a factory run
+# (allowlist staging, a root .gitignore, split pull/push timeouts) beyond
+# what is live today in NikolasP98/minion-agent-memory's
+# scripts/memory-sync.sh. Not yet applied there — that's a human/interactive action, not a factory run
 # (single-writer rule). Tracked in
 # proposals/2026-08-18-memory-sync-repo-bootstrap.md.
 #
@@ -35,12 +35,12 @@
 #   MEMORY_SYNC_PULL_TIMEOUT  seconds for the SessionStart-safe pull path (default 2)
 #   MEMORY_SYNC_PUSH_TIMEOUT  seconds for the end-of-session push path (default 5)
 #
-# Conflict policy: *.md conflicts during the rebase are resolved by the
-# `mdunion` merge driver declared in .gitattributes (union of both sides,
-# append-biased — memory loss is worse than duplication). That driver's
-# COMMAND is repo-local config (git will not execute a driver command that
-# merely came from a cloned .gitattributes), so this script registers it
-# idempotently on every run.
+# Conflict policy: *.md conflicts during the rebase are resolved by git's
+# BUILT-IN `union` merge driver declared in .gitattributes (union of both
+# sides, append-biased — memory loss is worse than duplication; dedupe is the
+# index's job). `union` needs no `merge.<name>.driver` config, so it also
+# protects a plain `git pull --rebase` run by a human who never invokes this
+# script. This script therefore registers nothing.
 #
 # This script is intentionally soft-fail on anything network-related: a
 # session or hook calling it must never hang or abort because memory-sync
@@ -79,10 +79,6 @@ if [[ ! -d "$REPO_DIR/.git" ]]; then
 fi
 
 cd "$REPO_DIR"
-
-# Idempotent local registration of the union merge driver named in .gitattributes.
-git config --local merge.mdunion.name "append-biased union merge for memory .md files"
-git config --local merge.mdunion.driver 'git merge-file --union %A %O %B'
 
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
 

@@ -25,7 +25,8 @@ git -C "$WORK/seed" config user.name test
 mkdir -p "$WORK/seed/MINION"
 echo "# index" >"$WORK/seed/MINION/MEMORY.md"
 cp "$SELF_DIR/../.gitignore" "$WORK/seed/.gitignore"
-git -C "$WORK/seed" add MINION .gitignore
+cp "$SELF_DIR/../.gitattributes" "$WORK/seed/.gitattributes"
+git -C "$WORK/seed" add MINION .gitignore .gitattributes
 git -C "$WORK/seed" commit --quiet -m seed
 git -C "$WORK/seed" branch -M main
 git -C "$WORK/seed" remote add origin "$WORK/origin.git"
@@ -113,6 +114,34 @@ pass "push is bound to the validated commit during a local branch race"
 
 unset -f timeout
 unset MEMORY_SYNC_RACE_CLONE
+git -C "$WORK/clone" reset --hard --quiet origin/main
+
+# --- concurrent divergent edits to one memory file union-merge during rebase ---
+# The clone has NO local merge-driver config (nothing registers one), so this
+# proves .gitattributes' BUILT-IN `union` driver carries the append-biased
+# conflict policy on its own. A custom driver name would conflict here instead.
+git -C "$WORK/clone" config --get-regexp '^merge\.' >"$WORK/merge-config.txt" 2>/dev/null || true
+[[ -s "$WORK/merge-config.txt" ]] && fail "clone already has merge-driver config; union test would not prove anything"
+
+# Earlier cases already advanced origin/main; catch the seed up before it acts
+# as the "other machine" writing concurrently.
+git -C "$WORK/seed" fetch --quiet origin main
+git -C "$WORK/seed" reset --hard --quiet FETCH_HEAD
+
+echo "- remote-side memory line" >>"$WORK/seed/MINION/MEMORY.md"
+git -C "$WORK/seed" commit --quiet -am "remote-side memory edit"
+git -C "$WORK/seed" push --quiet origin main
+
+echo "- local-side memory line" >>"$WORK/clone/MINION/MEMORY.md"
+MEMORY_SYNC_DIR="$WORK/clone" bash "$SYNC_SCRIPT" push >"$WORK/union.log" 2>&1 \
+	|| fail "divergent-edit sync exited non-zero: $(cat "$WORK/union.log")"
+
+REMOTE_INDEX="$(git --git-dir="$WORK/origin.git" show main:MINION/MEMORY.md)"
+grep -q -- "- remote-side memory line" <<<"$REMOTE_INDEX" || fail "union merge dropped the remote-side memory line"
+grep -q -- "- local-side memory line" <<<"$REMOTE_INDEX" || fail "union merge dropped the local-side memory line"
+grep -q '^<<<<<<<' <<<"$REMOTE_INDEX" && fail "conflict markers were committed — union driver did not apply"
+pass "divergent memory edits union-merge (both sides kept) with no local merge config"
+
 git -C "$WORK/clone" reset --hard --quiet origin/main
 
 # --- plant: a legitimate memory edit, plus everything that must NOT sync ---

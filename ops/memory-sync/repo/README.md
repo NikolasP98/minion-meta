@@ -16,7 +16,7 @@ MINION/                       ← mirrors ~/.claude/projects/<slug>/memory/ on t
   MEMORY.md                   ← index, always read first
   *.md                        ← topic files
 <other-project-slug>/...      ← same pattern per project dir that opts in
-scripts/memory-sync.sh        ← commit-all → pull --rebase → push
+scripts/memory-sync.sh        ← stage memory roots → commit → pull --rebase → push
 ```
 
 ## Read order (consumer contract)
@@ -29,28 +29,41 @@ scripts/memory-sync.sh        ← commit-all → pull --rebase → push
 
 ## Write rules
 
-- **Single-writer discipline.** Only interactive sessions (Claude Code /
-  Codex sessions run by a human) write memory here. Automated factory
-  dev-agent runs are **read-only** against this repo — an open end they hit
-  becomes a proposal in the consuming repo's `proposals/` dir instead of a
-  memory write, per that repo's handoff-ledger convention. This keeps a
-  single credential/trust domain writing curated memory.
+- **Interactive sessions own curated memory.** Only Claude Code / Codex
+  sessions run by a human write the topic files and `MEMORY.md` index here,
+  via `scripts/memory-sync.sh`. That keeps one credential/trust domain
+  writing the content other agents treat as authoritative.
+- **Factory agents are a separate, lower-trust lane.** They read this repo;
+  their only write-back is a per-run `MEMORY_NOTE.md` observation that lands
+  under `<project>/factory/`, never in the curated topic files or the index.
+  Those notes are agent-authored evidence, not operator policy — read them
+  as such, and fold anything durable into a topic file from an interactive
+  session. `specs/2026-08-18-factory-memory-governance-spec.md` in
+  `minion-meta` governs that lane (quarantined candidate area, separate
+  credential, schema/secret/injection validation, human promotion, pinned
+  per-run snapshot); until it lands, treat `factory/` as unreviewed.
+  Anything a factory run needs *fixed* stays a proposal in the consuming
+  repo's `proposals/` dir, per that repo's handoff-ledger convention.
 - Never write secrets, raw credentials, or unrelated transcript bulk here.
   `.gitignore` blocks `*.env` and key-shaped files as a backstop — it is not
   a substitute for not writing secrets in the first place.
 - Sync via `scripts/memory-sync.sh` (installed at `~/.local/bin/memory-sync`,
-  with the clone at `~/.minion-agent-memory` by default),
-  not ad hoc `git push`. On a rebase conflict in a `.md` file the repo's
+  with the clone at `~/.minion-agent-memory` by default), not ad hoc
+  `git push`. On a rebase conflict in a `.md` file the repo's
   `.gitattributes` union-merges both sides (append-biased): memory loss is
   worse than duplication, and de-duplication is the index's job, not the
-  sync script's.
+  sync script's. That is git's built-in `union` driver, so it also protects
+  a human who runs a plain `git pull --rebase` without the script.
 
 ## Consumers
 
-- **Claude Code** (this machine): SessionStart hook pulls (fast-forward
+- **Claude Code** (primary machine): SessionStart hook pulls (fast-forward
   only, short timeout, offline-safe no-op); Stop/PreCompact auto-save flow
   pushes.
 - **Codex**: same script wired into `~/.codex/hooks.json` lifecycle hooks.
-- **Factory spec/dev containers**: fetch `MINION/MEMORY.md` (and cited topic
-  files) read-only via the GitHub contents API — see
-  `specs/2026-08-17-cloud-agent-memory-sync-spec.md` §3 in `minion-meta`.
+- **Factory spec/dev containers**: a box-side clone of this repo is mounted
+  read-only into each agent container (`/memory`), alongside a read-only-by-
+  contract mirror of the claude-mem bulk store; agents read `MINION/MEMORY.md`
+  first and then the cited topic files. See
+  `specs/2026-08-17-cloud-agent-memory-sync-spec.md` §3 and
+  `specs/2026-08-18-factory-memory-governance-spec.md` in `minion-meta`.
