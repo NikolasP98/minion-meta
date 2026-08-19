@@ -1,9 +1,10 @@
 ---
 id: 2026-08-17-gateway-client-lifecycle-swallows-handoff
 title: "GatewayClient: report the reconnect-failure and socket-error swallows (S2 of the onEvent-errors spec)"
-status: approved
+status: in-spec
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-19
+spawned_spec: 2026-08-19-gateway-client-lifecycle-swallows-handoff-spec
 repos: [minion-meta]
 tags: [logic, test]
 value: 3
