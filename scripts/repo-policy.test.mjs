@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -32,6 +33,10 @@ assert.match(errorFor((value) => { value.repositories[1].aliases.push('meta'); }
 assert.match(errorFor((value) => { value.repositories[0].aliases = {}; }), /minion-meta.*aliases: must be an array/);
 assert.match(errorFor((value) => { value.repositories[0].aliases = null; }), /minion-meta.*aliases: must be an array/);
 assert.match(errorFor((value) => { value.repositories = [null]; }), /row-0\]: must be an object/);
+assert.match(errorFor((value) => { value.repositories.pop(); }), /canonical ids must be exactly/);
+assert.match(errorFor((value) => { value.repositories.push(clone(value.repositories[0])); }), /canonical ids must be exactly/);
+assert.match(errorFor((value) => { value.repositories.find((row) => row.id === 'minion_hub').aliases = []; }), /CLI mapping hub must resolve to minion_hub/);
+assert.match(errorFor((value) => { value.repositories.find((row) => row.id === 'minion_site').aliases = ['website']; }), /CLI mapping site must resolve to minion_site/);
 
 const extension = {
   schemaVersion: 1,
@@ -43,12 +48,29 @@ const extension = {
 };
 assert.deepEqual(validatePolicy(extension, { fleet: false, canonicalRows: policy.repositories }), []);
 assert.match(errorFor((value) => { value.repositories = [clone(policy.repositories[0])]; }, { fleet: false, canonicalRows: policy.repositories }), /cannot override canonical|collides with canonical/);
+assert.match(
+  errorFor((value) => { value.repositories = [{ ...clone(extension.repositories[0]), aliases: ['hub'] }]; }, { fleet: false, canonicalRows: policy.repositories }),
+  /aliases: 'hub' collides with canonical fleet policy/
+);
 
 const reordered = clone(policy);
 reordered.repositories.reverse();
 for (const row of reordered.repositories) { row.aliases.reverse(); row.requiredChecks.reverse(); }
 const reorderedKeys = JSON.parse(JSON.stringify(reordered, (key, value) => value && typeof value === 'object' && !Array.isArray(value) ? Object.fromEntries(Object.entries(value).reverse()) : value));
 assert.equal(buildArtifact(policy).contentHash, buildArtifact(reorderedKeys).contentHash, 'set/key order changed the canonical hash');
+
+// The hash is over the canonical body with contentHash omitted — never self-referential.
+const artifact = buildArtifact(policy);
+const { contentHash, ...artifactBody } = artifact;
+assert.equal(createHash('sha256').update(JSON.stringify(artifactBody)).digest('hex'), contentHash);
+
+// The checked-in artifact is exactly what `generate` writes, and that comparison is drift-sensitive.
+const generatedText = readFileSync(new URL('../generated/repo-policy.json', import.meta.url), 'utf8');
+assert.equal(generatedText, `${JSON.stringify(artifact, null, 2)}\n`, 'generated/repo-policy.json is stale; run node scripts/repo-policy.mjs generate');
+const drifted = clone(policy);
+drifted.repositories[0].branches.development = 'trunk';
+assert.notEqual(buildArtifact(drifted).contentHash, contentHash, 'a policy change did not change the canonical hash');
+assert.notEqual(`${JSON.stringify(buildArtifact(drifted), null, 2)}\n`, generatedText);
 
 const schema = JSON.parse(readFileSync(new URL('../repo-policy.schema.json', import.meta.url), 'utf8'));
 const validateSchema = new Ajv2020({ allErrors: true, strict: true }).compile(schema);
