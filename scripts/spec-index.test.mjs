@@ -310,3 +310,130 @@ test('M1 integration: a push event without a before SHA fails closed', () => {
 	assert.equal(result.status, 1);
 	assert.match(result.stderr, /cannot resolve comparison revision/);
 });
+
+const GIT_ID = ['-c', 'user.name=Test', '-c', 'user.email=test@example.invalid'];
+const git = (root, ...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' });
+const gitCommit = (root, message) => {
+	git(root, 'add', '.');
+	git(root, ...GIT_ID, 'commit', '-qm', message);
+};
+const specSource = (id, extraFrontmatter, body) =>
+	`---\nid: ${id}\ntitle: ${id}\nstage: spec\nstatus: draft\npass: 1\ncreated: 2026-08-18\nupdated: 2026-08-18\nrepos: [minion-meta]\n${extraFrontmatter}---\n\n${body}`;
+const writeSpec = (root, id, extraFrontmatter, body) =>
+	writeFileSync(join(root, 'specs', `${id}.md`), specSource(id, extraFrontmatter, body));
+// The baseline hashes the parsed body, not the raw file — derive it the same way.
+const bodyHash = (id, extraFrontmatter, body) =>
+	createHash('sha256').update(parseFrontmatter(specSource(id, extraFrontmatter, body)).body).digest('hex');
+const runCheck = (root, env = {}) =>
+	spawnSync('node', ['scripts/spec-index.mjs', '--check'], {
+		cwd: root,
+		encoding: 'utf8',
+		env: { PATH: process.env.PATH, ...env }
+	});
+
+// A fixture whose only spec is well-formed, so nothing but the case under test
+// can turn the gate red.
+function makeCleanFixture() {
+	const root = makeCliFixture();
+	writeSpec(root, 'fixture', '', VALID_BODY);
+	writeFileSync(join(root, 'scripts', 'spec-heading-lint-baseline.json'), '{}\n');
+	writeFileSync(join(root, 'scripts', 'spec-supersede-baseline.json'), '[]\n');
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	gitCommit(root, 'clean base');
+	return root;
+}
+
+test('M4: a clean fixture passes --check (control for the cases below)', () => {
+	const result = runCheck(makeCleanFixture());
+	assert.equal(result.status, 0, result.stderr);
+});
+
+test('M4: an empty `repos` is rejected unless the spec is a plan-of-record', () => {
+	const root = makeCleanFixture();
+	writeFileSync(
+		join(root, 'specs', 'fixture.md'),
+		specSource('fixture', '', VALID_BODY).replace('repos: [minion-meta]', 'repos: []')
+	);
+	const generated = spawnSync('node', ['scripts/spec-index.mjs'], { cwd: root, encoding: 'utf8' });
+	assert.equal(generated.status, 1);
+	assert.match(generated.stderr, /"repos" is empty/);
+});
+
+test('M4: a plan-of-record (type: decision) may declare `repos: []`', () => {
+	const root = makeCleanFixture();
+	writeFileSync(
+		join(root, 'specs', 'fixture.md'),
+		specSource('fixture', 'type: decision\n', VALID_BODY).replace('repos: [minion-meta]', 'repos: []')
+	);
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	gitCommit(root, 'plan of record');
+	const result = runCheck(root);
+	assert.equal(result.status, 0, result.stderr);
+});
+
+test('M4: an undocumented `relationship` value is rejected', () => {
+	const root = makeCleanFixture();
+	writeSpec(root, 'fixture', 'relationship: kind-of-related\n', VALID_BODY);
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	gitCommit(root, 'bad relationship');
+	const result = runCheck(root);
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /invalid relationship "kind-of-related"/);
+});
+
+test('M4: `verdict: revision-required` is accepted (base-authored value)', () => {
+	const root = makeCleanFixture();
+	writeSpec(root, 'fixture', 'verdict: revision-required\n', VALID_BODY);
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	gitCommit(root, 'revision required');
+	const result = runCheck(root);
+	assert.equal(result.status, 0, result.stderr);
+});
+
+// Builds: base -> (feature on the starting branch, debt on `base-branch`) -> merge.
+// The merge commit itself carries the baseline entry, which is exactly the shape
+// of "merge the base branch in and grandfather the debt it brought along".
+function makeMergeFixture() {
+	const root = makeCleanFixture();
+	const startBranch = git(root, 'rev-parse', '--abbrev-ref', 'HEAD').trim();
+	git(root, 'checkout', '-q', '-b', 'base-branch');
+	writeSpec(root, 'debt-spec', '', '# Debt spec\n');
+	gitCommit(root, 'debt arrives on the base branch');
+	git(root, 'checkout', '-q', startBranch);
+	writeSpec(root, 'feature-spec', '', VALID_BODY);
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	gitCommit(root, 'feature work');
+	git(root, ...GIT_ID, 'merge', '--no-ff', '--no-commit', '-q', 'base-branch');
+	return root;
+}
+
+test('M4: debt merged in from the base branch may be grandfathered in the merge commit', () => {
+	const root = makeMergeFixture();
+	writeFileSync(
+		join(root, 'scripts', 'spec-heading-lint-baseline.json'),
+		`${JSON.stringify({ 'debt-spec': bodyHash('debt-spec', '', '# Debt spec\n') })}\n`
+	);
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	gitCommit(root, 'merge base branch');
+	const result = runCheck(root);
+	assert.equal(result.status, 0, result.stderr);
+});
+
+test('M4: a merge commit still cannot grandfather debt it introduces itself', () => {
+	const root = makeMergeFixture();
+	const freshBody = '# Fresh debt\n';
+	writeSpec(root, 'fresh-debt', '', freshBody);
+	writeFileSync(
+		join(root, 'scripts', 'spec-heading-lint-baseline.json'),
+		`${JSON.stringify({
+			'debt-spec': bodyHash('debt-spec', '', '# Debt spec\n'),
+			'fresh-debt': bodyHash('fresh-debt', '', freshBody)
+		})}\n`
+	);
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	gitCommit(root, 'merge base branch and sneak in new debt');
+	const result = runCheck(root);
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /new id "fresh-debt" added/);
+	assert.doesNotMatch(result.stderr, /new id "debt-spec" added/);
+});

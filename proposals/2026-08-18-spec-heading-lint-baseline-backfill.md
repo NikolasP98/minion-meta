@@ -1,9 +1,9 @@
 ---
 id: 2026-08-18-spec-heading-lint-baseline-backfill
-title: Backfill required headings on 115 grandfathered specs; decide whether pass>1 without revises/supersedes should hard-block
+title: Backfill required headings on 127 grandfathered specs; decide whether pass>1 without revises/supersedes should hard-block
 status: draft
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-19
 repos: [minion-meta]
 spawned_spec: 2026-08-17-maintenance-lane-monitors-spec
 tags: [infra, hygiene]
@@ -17,33 +17,35 @@ Filed while implementing slice 1 of `2026-08-17-maintenance-lane-monitors-spec.m
 scoping decisions were made to land the hardening without breaking CI on the
 existing corpus; both are deliberate but leave real follow-up work:
 
-## 1. Heading-lint baseline (115 specs)
+## 1. Heading-lint baseline (127 specs)
 
 `--check` now requires `## 0. Product`, an out-of-scope section, and a
-verification section (per `specs/TEMPLATE.md`). 115 of the 155 existing specs
+verification section (per `specs/TEMPLATE.md`). 127 of the 178 existing specs
 predate this convention and were grandfathered into
-`scripts/spec-heading-lint-baseline.json` so CI doesn't go red on day one. Every
+`scripts/spec-heading-lint-baseline.json` so CI doesn't go red on day one (115
+when this proposal was filed; the 2026-08-19 merge of `dev` brought 12 more).
+Every
 *new* or *hand-edited* spec is checked; the baseline is a one-way ratchet only
 in the sense that nothing currently shrinks it automatically.
 
 **Ask:** a sweep (agent or scripted) that reads each baselined spec, adds the
 missing section(s) (can be a short "not applicable" stub for old design docs),
 and removes the id from the baseline file once fixed — shrinking it toward
-zero over time. Low urgency; do in batches, not one PR of 115 files.
+zero over time. Low urgency; do in batches, not one PR of 127 files.
 
 ## 2. `pass > 1` without `revises`/`supersedes` — not blocked
 
 `2026-08-17-sdlc-phase-gates-scoring-spec.md` (row: "Pass-1/pass-2 spec pair
 with no supersedes link either direction") already names this exact gap and
 assigns the fix to the G0 reconciler ("auto-fixed or flagged"), not to
-`spec-index.mjs`. Today 34 specs have `pass: 2` with neither field set — hard-blocking
-on that in `--check` would fail CI immediately for all 34, so this hardening
+`spec-index.mjs`. Today 51 specs have `pass > 1` with neither field set — hard-blocking
+on that in `--check` would fail CI immediately for all 51, so this hardening
 pass left it unchecked (only *presence-implies-consistency* is checked: if
 `revises`/`supersedes` *is* set, the target must exist and be consistent).
 
 **Ask:** when G0 reconciler work (S-A/S-B of this spec, or the phase-gates
 spec) lands, decide whether it should also *write* `revises`/`supersedes`
-onto those 34 files (closing this proposal), or whether `--check` should gain
+onto those 51 files (closing this proposal), or whether `--check` should gain
 a `pass > 1` presence rule once the backlog is cleared. Don't add the rule to
 `--check` before the backlog is cleared — it would just be red CI with no
 signal.
@@ -79,5 +81,5 @@ shrink to empty.
 
 ## Out of scope
 
-Fixing the 115 files or the 34 files here — this proposal is the ledger entry,
+Fixing the 127 files or the 51 files here — this proposal is the ledger entry,
 not the fix.

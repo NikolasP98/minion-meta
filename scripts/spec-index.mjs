@@ -163,7 +163,7 @@ export function missingRequiredHeadings(body) {
 	const scanned = stripNonDocumentMarkdown(body);
 	return REQUIRED_HEADINGS.filter(({ re }) => !re.test(scanned)).map(({ label }) => label);
 }
-// TODO(handoff): 115 pre-existing specs are grandfathered here and never get
+// TODO(handoff): 127 pre-existing specs are grandfathered here and never get
 // checked again while their body is unchanged (hash-ratcheted — see header
 // comment). Shrink the baseline over time (backfill headings, remove the id)
 // — see proposals/2026-08-18-spec-heading-lint-baseline-backfill.md.
@@ -470,7 +470,7 @@ function main() {
 		// hardening pass exists to catch).
 		//
 		// TODO(handoff): this only checks consistency *when* revises/supersedes is
-		// set. It does not require pass>1 specs to set either — 34 specs violate
+		// set. It does not require pass>1 specs to set either — 51 specs violate
 		// that today (see 2026-08-17-sdlc-phase-gates-scoring-spec.md, assigned to
 		// the G0 reconciler). Add a presence rule here once that backlog is
 		// cleared — see proposals/2026-08-18-spec-heading-lint-baseline-backfill.md.
