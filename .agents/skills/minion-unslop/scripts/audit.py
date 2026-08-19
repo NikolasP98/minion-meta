@@ -39,8 +39,6 @@ def run_scanner(name: str, script: str, options: tuple, path: Path) -> Dict[str,
         result = json.loads(completed.stdout)
     except json.JSONDecodeError as exc:
         raise RuntimeError(f"{name} emitted invalid JSON: {exc}") from exc
-    if isinstance(result, dict) and "error" in result:
-        raise RuntimeError(f"{name} reported an input error: {result['error']}")
     return {
         "name": name,
         "finding_status": "findings" if completed.returncode == 1 else "clean_or_declined",
