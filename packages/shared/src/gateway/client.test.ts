@@ -367,6 +367,38 @@ describe('GatewayClient', () => {
       expect(consoleErrorSpy).not.toHaveBeenCalled();
     });
 
+    it('onEventError that rejects (async reporter) → contained, no unhandled rejection, console.error not called', async () => {
+      // Real timers on purpose: Node only runs its unhandled-rejection sweep at a real macrotask
+      // boundary, which faked setTimeout never reaches. performConnect() clears every timer it
+      // arms, so this test leaves nothing pending behind.
+      vi.useRealTimers();
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const unhandled: unknown[] = [];
+      const onUnhandled = (reason: unknown) => { unhandled.push(reason); };
+      process.on('unhandledRejection', onUnhandled);
+      try {
+        const client = makeClient(mockWs, {
+          onEvent: () => { throw new Error('sync boom'); },
+          onEventError: async () => { throw new Error('async reporter broken'); },
+        });
+        await performConnect(client, mockWs);
+
+        expect(() => {
+          mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'chat.message', payload: {} }));
+        }).not.toThrow();
+
+        // Two macrotask boundaries — Node emits unhandledRejection between them if one escaped.
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        expect(unhandled).toEqual([]);
+        // Fallback behavior for a failed reporter is deliberate silence — there is no second reporter.
+        expect(consoleErrorSpy).not.toHaveBeenCalled();
+      } finally {
+        process.off('unhandledRejection', onUnhandled);
+      }
+    });
+
     it('fallback console.error output does not contain the event payload', async () => {
       const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       const client = makeClient(mockWs, { onEvent: () => { throw new Error('sync boom'); } });

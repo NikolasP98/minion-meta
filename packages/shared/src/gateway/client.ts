@@ -29,9 +29,13 @@ export interface GatewayClientOptions {
    * Called when the `onEvent` handler above throws or rejects.
    * Default when omitted: `console.error` with the event NAME (never the payload — see below).
    * Pass `() => {}` to opt into silence explicitly; the client never discards these errors by default.
-   * MUST NOT throw: it is invoked from a catch on a fire-and-forget promise.
+   * SHOULD NOT throw or reject: it is invoked from a catch on a fire-and-forget promise. A reporter
+   * that fails either way is contained silently (a failed reporter has no second reporter to call)
+   * and never escapes as an unhandled rejection.
    */
-  onEventError?: (err: unknown, frame: EventFrame) => void;
+  // TODO(handoff): hub, site and paperclip still run the console.error default and are
+  // unbumped; adoption tracked in proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md
+  onEventError?: (err: unknown, frame: EventFrame) => void | Promise<void>;
   /** Called when the socket opens (before challenge handshake completes). */
   onOpen?: () => void;
   /** Called when the socket closes. */
@@ -289,9 +293,13 @@ export class GatewayClient {
       return;
     }
     try {
-      hook(err, frame);
+      // The reporter may be async: a sync throw lands in the catch below, a rejection in the .catch.
+      // Both arms are silent by design — a failed reporter has no second reporter to escalate to.
+      void Promise.resolve(hook(err, frame)).catch(() => {
+        // A rejecting reporter must not become an unhandled rejection — this silence is deliberate.
+      });
     } catch {
-      // A broken reporter must not become an unhandled rejection — this catch's silence is deliberate.
+      // A throwing reporter must not escape the event dispatch — this catch's silence is deliberate.
     }
   }
 
