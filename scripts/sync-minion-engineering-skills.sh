@@ -22,7 +22,7 @@ done
 # and advisory-audit skills with interactive agents.
 mkdir -p "$FACTORY_SKILLS"
 for skill in "${FACTORY_SHARED[@]}"; do
-	rm -rf "$FACTORY_SKILLS/$skill"
+	rm -rf "${FACTORY_SKILLS:?}/$skill"
 	cp -a "$PLUGIN/skills/$skill" "$FACTORY_SKILLS/$skill"
 done
 cp "$PLUGIN/THIRD_PARTY_NOTICES.md" "$FACTORY_SKILLS/THIRD_PARTY_NOTICES.md"

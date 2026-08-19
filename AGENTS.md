@@ -33,7 +33,7 @@ Use these when the user asks about prior-session context, durable memory, projec
 
 ## Curated Engineering Skills
 
-The canonical interactive bundle lives in `minion_plugins/plugins/minion-engineering/`. Run `scripts/sync-minion-engineering-skills.sh` after updating it to install the project-local skills for Claude, Cursor, and Codex and to copy the advisory prose auditor into `minion_factory/agent/skills/`. Local project instructions always win; the prose auditor is advisory and has no rewrite, verdict, or merge authority.
+The canonical interactive bundle lives in `minion_plugins/plugins/minion-engineering/`. Run `scripts/sync-minion-engineering-skills.sh` after updating it to install the project-local skills for Claude, Cursor, and Codex and to copy the shared writing skill and advisory prose auditor into `minion_factory/agent/skills/`. Local project instructions always win; the prose auditor is advisory and has no rewrite, verdict, or merge authority.
 
 ### Core commands
 
