@@ -1,13 +1,13 @@
 # .github/workflows/ci.yml
-# Meta-repo CI — gates every PR against main.
+# Meta-repo CI — gates every PR against main or dev.
 # Runs lint-all, typecheck-all, build-all, test-all, and changeset:status.
 name: CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, dev]
   push:
-    branches: [main]
+    branches: [main, dev]
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -31,6 +31,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Validate repository policy
+        run: pnpm run repo-policy:validate && pnpm run repo-policy:test
 
       - name: Build all packages
         run: pnpm run build-all
