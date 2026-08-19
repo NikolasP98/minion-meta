@@ -1,6 +1,6 @@
 ---
 id: 2026-08-18-site-vendored-tgz-untracked-spec
-title: Vendored design-tokens tgz untracked — verify the shipped fix and close
+title: "Vendored design-tokens tgz untracked — verify the shipped fix and close"
 stage: spec
 status: approved
 pass: 2
@@ -11,7 +11,6 @@ verdict: approved
 repos: [minion_site]
 tags: [deps, infra]
 type: infra
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # Vendored design-tokens tgz untracked

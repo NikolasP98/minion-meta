@@ -1,16 +1,15 @@
 ---
 id: 2026-08-13-minion-base-kanban-auto-refresh-spec
-title: minion-base /kanban — visible-tab auto-refresh + live refreshed-ago label
+title: "minion-base /kanban — visible-tab auto-refresh + live refreshed-ago label"
 stage: spec
 status: shipped
 pass: 2
 created: 2026-08-13
-updated: 2026-08-18
+updated: 2026-08-13
 proposal: 2026-08-13-minion-base-kanban-auto-refresh
 verdict: approved
 repos: [minion-base]
 type: feature
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # minion-base /kanban — visible-tab auto-refresh + live refreshed-ago label

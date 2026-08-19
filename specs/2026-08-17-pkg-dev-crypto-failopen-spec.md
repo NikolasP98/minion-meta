@@ -1,17 +1,16 @@
 ---
 id: 2026-08-17-pkg-dev-crypto-failopen-spec
-title: @minion-stack/db crypto — fail closed instead of silently sealing under the source-visible dev key
+title: "@minion-stack/db crypto — fail closed instead of silently sealing under the source-visible dev key"
 stage: spec
 status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-17
 proposal: 2026-08-17-pkg-dev-crypto-failopen
 verdict: approved
 repos: [minion-meta, minion_hub, minion_site]
 tags: [security, logic, test]
 type: fix
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # Fail closed on the dev crypto key

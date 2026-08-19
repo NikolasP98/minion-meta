@@ -1,17 +1,16 @@
 ---
 id: 2026-08-17-hub-igv-rate-from-org-config-spec
-title: SUNAT emission — thread the org's configured IGV rate (no module-level 0.18)
+title: "SUNAT emission — thread the org's configured IGV rate (no module-level 0.18)"
 stage: spec
 status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-17
 proposal: 2026-08-17-hub-igv-rate-from-org-config
 verdict: approved
 repos: [minion_hub]
 tags: [logic, test]
 type: fix
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # SUNAT emission — thread the org's configured IGV rate

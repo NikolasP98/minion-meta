@@ -11,7 +11,6 @@ proposal: 2026-08-18-agent-instruction-parity-and-repo-policy
 verdict: approved
 relationship: depends-on
 related: [2026-08-18-sdlc-transformation-roadmap, 2026-08-18-factory-orchestration-round7-spec, 2026-04-19-minion-meta-repo-design]
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # Provider-neutral agent instructions and canonical repository policy

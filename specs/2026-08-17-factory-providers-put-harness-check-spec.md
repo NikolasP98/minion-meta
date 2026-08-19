@@ -1,17 +1,16 @@
 ---
 id: 2026-08-17-factory-providers-put-harness-check-spec
-title: PUT /providers — reject provider names no harness implements
+title: "PUT /providers — reject provider names no harness implements"
 stage: spec
 status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-17
 proposal: 2026-08-17-factory-providers-put-harness-check
 verdict: approved
 repos: [minion-factory]
 tags: [logic]
 type: fix
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # PUT /providers — reject provider names no harness implements

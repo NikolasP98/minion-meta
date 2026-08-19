@@ -5,9 +5,8 @@ stage: spec
 status: superseded
 pass: 1
 created: 2026-07-10
-updated: 2026-08-18
+updated: 2026-08-13
 repos: [minion]
-link_review: "status \"superseded\" but no other spec's \"supersedes\" links back to it — confirm the successor (it should add supersedes: 2026-07-10-gateway-update-system), or correct this status if it was set in error"
 ---
 
 # Gateway Update System — Design Spec

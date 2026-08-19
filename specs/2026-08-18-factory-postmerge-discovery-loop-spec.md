@@ -1,6 +1,6 @@
 ---
 id: 2026-08-18-factory-postmerge-discovery-loop-spec
-title: Post-merge discovery loop — signed merge intake, deterministic scan, LLM synthesis, verified rescan
+title: "Post-merge discovery loop — signed merge intake, deterministic scan, LLM synthesis, verified rescan"
 stage: spec
 status: approved
 pass: 2
@@ -11,7 +11,6 @@ verdict: approved
 repos: [minion-factory]
 tags: [logic, infra]
 type: infra
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # Post-merge discovery loop

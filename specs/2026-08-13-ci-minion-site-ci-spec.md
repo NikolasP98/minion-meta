@@ -1,6 +1,6 @@
 ---
 id: 2026-08-13-ci-minion-site-ci-spec
-title: CI red — keep minion-site@master green (env registry, local parity, red-visibility)
+title: "CI red — keep minion-site@master green (env registry, local parity, red-visibility)"
 stage: spec
 status: done
 pass: 2
@@ -11,7 +11,6 @@ verdict: approved
 repos: [minion_site]
 tags: [infra]
 type: infra
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # CI red — keep `NikolasP98/minion-site@master` green

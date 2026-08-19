@@ -11,7 +11,6 @@ verdict: approved
 repos: [minion]
 relationship: extends
 related: [2026-07-19-build-channel-dev-prd-pipeline, 2026-07-13-runtime-aware-fleet-image-updates, 2026-07-13-minion-gateway-swarm-cutover]
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # CI deploy gateway DEV/PRD channels — serialize and retry Swarm contention

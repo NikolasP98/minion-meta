@@ -1,6 +1,6 @@
 ---
 id: 2026-08-17-gw-nostr-dispatch-pipeline-spec
-title: Nostr — route replies through the shared buffered block dispatcher (delete the optional-call bypass)
+title: "Nostr — route replies through the shared buffered block dispatcher (delete the optional-call bypass)"
 stage: spec
 status: approved
 pass: 2
@@ -11,7 +11,6 @@ verdict: approved
 repos: [minion]
 tags: [logic, test]
 type: fix
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # Nostr — route replies through the shared buffered block dispatcher

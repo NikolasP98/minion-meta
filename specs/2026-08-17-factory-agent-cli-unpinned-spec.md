@@ -1,17 +1,16 @@
 ---
 id: 2026-08-17-factory-agent-cli-unpinned-spec
-title: minion-factory agent image — pin the harness toolchain so the JSON parser contract stops floating
+title: "minion-factory agent image — pin the harness toolchain so the JSON parser contract stops floating"
 stage: spec
 status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-17
 proposal: 2026-08-17-factory-agent-cli-unpinned
 verdict: approved
 repos: [minion-factory, minion-meta]
 tags: [deps, infra]
 type: fix
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # Pin the agent image's harness toolchain

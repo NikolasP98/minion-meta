@@ -1,6 +1,6 @@
 ---
 id: 2026-08-18-factory-orchestration-tests-spec
-title: First-party Node 22 test suite for runner orchestration policy and SQLite lineage
+title: "First-party Node 22 test suite for runner orchestration policy and SQLite lineage"
 stage: spec
 status: approved
 pass: 2
@@ -11,7 +11,6 @@ verdict: approved
 repos: [minion-factory]
 tags: [test]
 type: infra
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # First-party tests for runner orchestration

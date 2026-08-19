@@ -5,9 +5,8 @@ stage: spec
 status: superseded
 pass: 1
 created: 2026-05-20
-updated: 2026-08-18
+updated: 2026-08-13
 repos: [minion-meta]
-link_review: "status \"superseded\" but no other spec's \"supersedes\" links back to it — confirm the successor (it should add supersedes: 2026-05-20-shells-golden-agents), or correct this status if it was set in error"
 ---
 
 # Shells — Golden Agents on exe.dev VMs

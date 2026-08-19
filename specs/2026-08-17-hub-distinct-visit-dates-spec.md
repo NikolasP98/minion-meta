@@ -1,17 +1,16 @@
 ---
 id: 2026-08-17-hub-distinct-visit-dates-spec
-title: CRM funnel — count distinct visit dates on the party spine so Loyal auto-advances
+title: "CRM funnel — count distinct visit dates on the party spine so Loyal auto-advances"
 stage: spec
 status: draft
 pass: 2
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-17
 proposal: 2026-08-17-hub-distinct-visit-dates
 verdict: changes_requested
 repos: [minion_hub, minion-meta]
 tags: [logic, test]
 type: fix
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # CRM funnel — count distinct visit dates on the party spine

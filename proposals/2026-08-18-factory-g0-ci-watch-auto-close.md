@@ -3,7 +3,7 @@ id: 2026-08-18-factory-g0-ci-watch-auto-close
 title: G0 reconciler should auto-close CI-watch proposals once the watched workflow goes green
 status: draft
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-19
 repos: [minion-factory]
 source: factory-run-8af03178
 ---
@@ -15,10 +15,11 @@ one slice: the spec-sweep (walk active specs, flip frontmatter on shipped eviden
 exists on minion-factory branch `factory/449b2bf2-gates-g0-backward-staleness-reco`, open
 as **PR #2**, human-escalated on a design disagreement per operator memory — **not yet
 merged to main**, correcting this proposal's earlier claim that it was "already built"),
-link hygiene (shipped in minion-meta — see `factory/8af03178`, `scripts/spec-index.mjs`'s
-`checkLinkHygiene`, now covering both the `supersedes` case and, as of this run's
-review-fix round, the `pass > 1` without `revises`/`supersedes` case), and **CI-watch
-proposal auto-close**:
+link hygiene (**not shipped** — the minion-meta attempt on `factory/8af03178` was
+withdrawn on 2026-08-19 together with the rest of that branch's projector-only scope; see
+`specs/2026-08-18-meta-spec-index-project-possibly-shipped-spec.md`, which reorders G0 as
+Slice 0 contract recon → Slice 1 producer → Slice 2 projection → Slice 3 consumer), and
+**CI-watch proposal auto-close**:
 
 > Source hygiene (small, do with G0): ... CI-watch proposals auto-close when the watched
 > workflow goes green again (reconciler checks).
@@ -106,18 +107,20 @@ filename.
 
 **Out of scope:** the spec-sweep and link-hygiene pieces (spec-sweep = PR #2, awaiting
 human resolution of its design disagreement, unrelated to this patch and not a
-dependency of it; link-hygiene shipped in minion-meta this run); upstream-monitor noise
-thresholds (separate slice, `2026-08-17-sdlc-phase-gates-scoring-spec.md` §5 slice 6,
-`minion` repo).
+dependency of it; link hygiene is blocked behind the reordered G0 contract plan in
+`specs/2026-08-18-meta-spec-index-project-possibly-shipped-spec.md`); upstream-monitor
+noise thresholds (separate slice, `2026-08-17-sdlc-phase-gates-scoring-spec.md` §5 slice
+6, `minion` repo). This patch depends on none of them: it touches only CI-watch
+proposals, whose `status`/`closed_reason` fields already exist and already have a
+consumer (`scripts/proposal-index.mjs` → the board).
 
 **Handoff note:** this proposal is the required artifact for an open end this run
 (`factory/8af03178`) could not close directly — its harness contract scopes it to a
 single `minion-meta` checkout with no push/PR access to any other repo, so the actual
 missing-implementation site (`minion-factory`'s `agent/reconcile.sh`) has no file in this
-checkout to carry an in-code `TODO(handoff)` comment. The closest reachable analog —
-`scripts/spec-index.mjs`'s `checkLinkHygiene` (the minion-meta-side half of the same G0
-gap: detection without persistence) — now carries a `TODO(handoff)` pointing back to this
-proposal, per the repo playbook's two-artifact requirement. This proposal, carrying a
-verified, ready-to-apply patch rather than only a problem description, is the
-maximum-complete substitute reachable from this sandbox. A minion-factory-scoped run (or
-a human) should apply the patch above, dry-run it against a fixture proposal, and merge.
+checkout to carry an in-code `TODO(handoff)` comment, and after the 2026-08-19 withdrawal
+of that branch's minion-meta changes there is no in-repo code site left to mark either.
+This proposal, carrying a verified, ready-to-apply patch rather than only a problem
+description, is the maximum-complete substitute reachable from this sandbox. A
+minion-factory-scoped run (or a human) should apply the patch above, dry-run it against a
+fixture proposal, and merge.

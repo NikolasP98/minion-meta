@@ -11,7 +11,6 @@ verdict: approved
 repos: [minion]
 relationship: depends-on
 related: [2026-08-13-agentic-sdlc-test-quality-gates-spec]
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # CI red — make the minion gateway DEV correctness matrix honestly green

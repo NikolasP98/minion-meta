@@ -11,7 +11,6 @@ proposal: 2026-08-17-factory-workitem-handoff-schema
 verdict: approved
 tags: [logic, infra]
 type: infra
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # Typed WorkItem fields + commit-pinned, structured handoffs

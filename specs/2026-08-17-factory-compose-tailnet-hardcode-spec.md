@@ -1,17 +1,16 @@
 ---
 id: 2026-08-17-factory-compose-tailnet-hardcode-spec
-title: minion-factory compose — parameterize the tailnet bind so setup.sh's any-Docker-host promise is true
+title: "minion-factory compose — parameterize the tailnet bind so setup.sh's any-Docker-host promise is true"
 stage: spec
 status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-17
 proposal: 2026-08-17-factory-compose-tailnet-hardcode
 verdict: approved
 repos: [minion-factory]
 tags: [infra, security]
 type: fix
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # Parameterize the factory runner's tailnet bind

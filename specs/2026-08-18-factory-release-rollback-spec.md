@@ -1,6 +1,6 @@
 ---
 id: 2026-08-18-factory-release-rollback-spec
-title: self-update.sh safety net — CI gate, image retention, DB snapshot, health-verified rollback
+title: "self-update.sh safety net — CI gate, image retention, DB snapshot, health-verified rollback"
 stage: spec
 status: approved
 pass: 2
@@ -11,7 +11,6 @@ verdict: approved
 repos: [minion-factory]
 tags: [infra]
 type: fix
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # self-update.sh safety net

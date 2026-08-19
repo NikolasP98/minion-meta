@@ -1,17 +1,16 @@
 ---
 id: 2026-08-17-gw-whatsapp-cloud-template-fallback-spec
-title: WhatsApp Cloud — catch the 24h window-closed error and fall back to an approved template (opt-in, at-most-once)
+title: "WhatsApp Cloud — catch the 24h window-closed error and fall back to an approved template (opt-in, at-most-once)"
 stage: spec
 status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-17
 proposal: 2026-08-17-gw-whatsapp-cloud-template-fallback
 verdict: approved
 repos: [minion]
 tags: [logic, test]
 type: feature
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # WhatsApp Cloud — auto-fallback to an approved template when the 24h window is closed

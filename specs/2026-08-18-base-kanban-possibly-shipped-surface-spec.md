@@ -11,7 +11,6 @@ verdict: changes_requested
 repos: [minion-base, minion-factory, minion-meta]
 tags: [ui, logic, docs, test]
 type: feature
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # minion-base kanban renders G0 warnings and acts on possibly_shipped flags

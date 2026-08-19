@@ -1,6 +1,6 @@
 ---
 id: 2026-08-18-factory-durable-state-outbox-spec
-title: Durable state — transactional outbox for postFinish side effects, guarded lifecycle edges, append-only event log
+title: "Durable state — transactional outbox for postFinish side effects, guarded lifecycle edges, append-only event log"
 stage: spec
 status: draft
 pass: 2
@@ -11,7 +11,6 @@ verdict: changes_requested
 repos: [minion-factory]
 tags: [logic, infra]
 type: infra
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # Durable state machine + outbox for run side effects

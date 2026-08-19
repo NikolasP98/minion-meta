@@ -1,17 +1,16 @@
 ---
 id: 2026-08-17-hub-pos-appointments-fork-spec
-title: Collapse the /pos/appointments fork into one bookings view — extract the component, don't delete the route
+title: "Collapse the /pos/appointments fork into one bookings view — extract the component, don't delete the route"
 stage: spec
 status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-17
 proposal: 2026-08-17-hub-pos-appointments-fork
 verdict: approved
 repos: [minion_hub, minion-meta]
 tags: [ui, logic, test]
 type: fix
-link_review: "pass 2 but has neither \"revises\" nor \"supersedes\" — no predecessor could be determined automatically; add revises: <pass-1 spec id> if a separate predecessor spec exists, or supersedes if this replaces a different spec"
 ---
 
 # Collapse the `/pos/appointments` fork into one bookings view
