@@ -22,6 +22,9 @@ for (const name of readdirSync('specs')
 	if (fm.stage && !STAGES.includes(fm.stage)) errors.push(`${name}: invalid stage "${fm.stage}"`);
 	if (fm.status && !STATUSES.includes(fm.status))
 		errors.push(`${name}: invalid status "${fm.status}"`);
+	// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).
+	if (fm.status === 'retired' && !(fm.retired_reason && fm.retired_reason.length >= 20))
+		errors.push(`${name}: status "retired" requires retired_reason (>=20 chars)`);
 	specs.push({
 		id: fm.id,
 		title: fm.title,
@@ -37,7 +40,13 @@ for (const name of readdirSync('specs')
 		...(fm.verdict ? { verdict: fm.verdict } : {}),
 		...(fm.pr ? { pr: fm.pr } : {}),
 		...(fm.type ? { type: fm.type } : {}),
-		...(fm.tags ? { tags: fm.tags } : {})
+		...(fm.tags ? { tags: fm.tags } : {}),
+		...(fm.merge_sha ? { merge_sha: fm.merge_sha } : {}),
+		...(fm.merged_pr ? { merged_pr: fm.merged_pr } : {}),
+		...(fm.merged_at ? { merged_at: fm.merged_at } : {}),
+		...(fm.release_flag ? { release_flag: fm.release_flag } : {}),
+		...(fm.release_state ? { release_state: fm.release_state } : {}),
+		...(fm.evidence ? { evidence: fm.evidence } : {})
 	});
 }
 

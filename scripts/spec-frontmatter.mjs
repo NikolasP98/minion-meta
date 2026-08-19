@@ -8,10 +8,14 @@ export const STATUSES = [
 	'review',
 	'approved',
 	'implementing',
+	'merged',
+	'flag-ready',
 	'shipped',
 	'superseded',
 	'rejected',
 	'parked',
+	'retired',
+	'done',
 	'unknown'
 ];
 

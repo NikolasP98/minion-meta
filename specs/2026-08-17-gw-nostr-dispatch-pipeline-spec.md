@@ -2,10 +2,10 @@
 id: 2026-08-17-gw-nostr-dispatch-pipeline-spec
 title: "Nostr — route replies through the shared buffered block dispatcher (delete the optional-call bypass)"
 stage: spec
-status: draft
+status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 proposal: 2026-08-17-gw-nostr-dispatch-pipeline
 verdict: approved
 repos: [minion]

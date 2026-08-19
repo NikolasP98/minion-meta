@@ -1,16 +1,20 @@
 ---
 id: 2026-08-17-base-deploy-status-branch-filter-spec
 title: "minion-base board — CI status scoped to each repo's deploy branch, and absence is not health"
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-18
 proposal: 2026-08-17-base-deploy-status-branch-filter
 verdict: approved
 repos: [minion-base]
 tags: [logic, ui, test]
 type: fix
+merge_sha: 9669306cee1b10f4bab2e48c59e71e5fc0dc8bc2
+merged_pr: https://github.com/NikolasP98/minion-base/pull/11
+merged_at: 2026-08-17T07:58:31-05:00
+evidence: https://github.com/NikolasP98/minion-base/commit/9669306cee1b10f4bab2e48c59e71e5fc0dc8bc2
 ---
 
 # minion-base board — CI status scoped to each repo's deploy branch

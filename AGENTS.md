@@ -6,7 +6,7 @@ This is the **Minion meta-repo** — a self-hosted personal AI assistant platfor
 
 | Directory | What | Stack | Git Branch | Own Instructions |
 |---|---|---|---|---|
-| `minion/` | Core gateway + CLI (pnpm monorepo) | pnpm 10.x, Node 22+, TS, tsdown | `DEV` | `.dmux-hooks/CLAUDE.md` |
+| `minion/` | Core gateway + CLI (pnpm monorepo) | pnpm 10.x, Node 22+, TS, tsdown | `DEV` | `AGENTS.md` |
 | `minion_hub/` | Web dashboard for gateway management | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `dev` | `CLAUDE.md` |
 | `minion_site/` | Marketing site + members dashboard | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `master` | `CLAUDE.md` |
 | `minion_plugins/` | Claude Code plugin marketplace | — | `main` | — |
@@ -270,6 +270,26 @@ Research workspace for an AI course. Docs-only — no production code. Uses the 
 | minion_site/ | `bun dev` | `bun run build` | — | `bun run check` |
 | paperclip-minion/ | `pnpm dev` | `pnpm build` | `pnpm test:run` | `pnpm typecheck` |
 
+## SDLC Contract (normative)
+
+Every product-building agent follows ONE lifecycle — the factory automates it,
+humans and ad-hoc agents follow the same states by hand:
+
+```
+proposal (proposals/*.md) → spec (specs/*.md, 2-pass review) → dev (slice-scoped
+branch + draft PR + self-test + independent review) → merge (human for anything
+non-trivial) → deploy (branch-triggered) → post-merge verification
+```
+
+- State lives in frontmatter (`status`, `verdict`) committed to minion-meta —
+  never only in chat, memory, or a dashboard.
+- Skipping a stage requires saying so in the artifact you DID produce (e.g. a
+  hotfix PR body must name the spec it bypassed and why).
+- Every spec and proposal states AS-IS (current observable behavior, with
+  anchors/evidence), TO-BE (desired observable behavior + invariants), and the
+  DELTA (exact transitions, tests proving each) — see the templates.
+- Security/data-tagged work always keeps human gates at approval AND merge.
+
 ## Orchestration Guide
 
 ### Dispatching Subagents
@@ -338,54 +358,3 @@ You are committed to honesty and accuracy above all else. Follow these rules in 
 5. **PEOPLE & QUOTES** — Never attribute a quote to a real person unless you are certain they said it. If unsure, say "I cannot confirm this quote is accurate."
 
 
-<claude-mem-context>
-# Memory Context
-
-# [MINION] recent context, 2026-07-25 5:38pm GMT-5
-
-Legend: 🎯session 🔴bugfix 🟣feature 🔄refactor ✅change 🔵discovery ⚖️decision 🚨security_alert 🔐security_note
-Format: ID TIME TYPE TITLE
-Fetch details: get_observations([IDs]) | Search: mem-search skill
-
-Stats: 25 obs (10,843t read) | 97,866t work | 89% savings
-
-### Jul 24, 2026
-S6657 Push committed chat feature changes to origin/dev; resolve branch divergence and conflicts (Jul 24, 12:45 AM)
-### Jul 25, 2026
-S6659 Push committed chat features to origin/dev; resolve branch divergence and concurrent working directory conflicts from multi-agent shared tree (Jul 25, 12:05 AM)
-S6660 Catalog cleanup execution and verification - UUID SKU system, merges, standardization, bug fixes (Jul 25, 12:05 AM)
-S6658 Push committed chat feature changes (scrollable tables, ref pill-chips, popover alignment) to origin/dev; handle branch divergence and merge conflicts (Jul 25, 12:05 AM)
-S6661 Memory checkpoint after catalog cleanup execution - update memory files to reflect production application and extract reusable pattern (Jul 25, 1:06 PM)
-S6662 Status check after catalog cleanup execution - what remains to implement (Jul 25, 1:08 PM)
-S6663 Investigation of what remains to implement after catalog cleanup and diagnosis of production 500 errors (Jul 25, 1:15 PM)
-33253 1:16p 🔴 All catalog and POS endpoints serving successfully with new schema
-33254 " 🔴 Sellables API returns full taxonomy and new schema fields in production payload
-33255 " 🔵 Broken brain-hybrid-retrieval module isolated to co-agent refactor work
-33256 " 🔵 Co-agent authentication work in-flight modifying org resolution and hooks
-33257 1:20p 🟣 Module availability guard centralized in hooks for routing simplification
-33258 " 🔵 app_modules table exists in production but empty for test organization
-33259 " 🔵 No cache backend configured - listModuleStates cache falls back to uncached reads
-S6664 500 error diagnosis and fix after catalog cleanup - posTickets.surcharges schema-database mismatch (Jul 25, 1:21 PM)
-33260 1:21p 🔵 Unguarded await pattern recognized from previous /en/channels layout 500 bug
-33261 1:22p 🔴 Hook hazard pattern and auth-500 triangulation technique documented in memory
-33262 " 🔵 AJ surcharge regression documented as self-inflicted open issue
-33263 " 🔵 POS server loads modified by co-agent work, not catalog cleanup
-33264 1:23p 🔄 POS routes refactored to use hook-populated module states snapshot
-33265 " 🔵 All production organizations have valid kind values - fail-closed behavior won't trigger
-33267 " 🔴 pos_settings.surcharges column populated with card fee data from cleanup script
-33268 1:25p ✅ Temporary error-to-file logger installed in handleError for remote debugging
-33269 " 🔴 500 error root cause identified: pos_tickets.surcharges column missing from database
-33270 " 🔵 Schema defines surcharges on both posSettings and posTickets but migration only added to one table
-33271 1:26p 🔴 Stray posTickets.surcharges column removed from schema to match database
-33272 " 🟣 POS schema column guard test added to prevent schema-migration mismatch bugs
-33274 1:27p 🟣 Systematic schema drift check script created to detect Drizzle-database mismatches
-33275 1:28p 🔵 Missing tables are uncommitted co-agent work with pending migration
-33276 " 🔴 Fix verified: listTickets query succeeds without surcharges column, fails with it
-S6665 Memory system updates documenting third occurrence of schema-database mismatch bug and prevention tools (Jul 25, 1:29 PM)
-33278 1:36p 🔵 Local branch 1 ahead, 15 behind origin/dev before scoped commit
-33279 " 🔵 One unpushed commit (C4 architecture explorer) plus uncommitted catalog cleanup changes
-S6666 Apply pending fin_statement_imports migration from co-agent (Jul 25, 1:36 PM)
-33280 1:40p ✅ Staged 27 catalog cleanup files for scoped commit
-
-Access 98k tokens of past work via get_observations([IDs]) or mem-search skill.
-</claude-mem-context>
