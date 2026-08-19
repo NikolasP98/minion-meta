@@ -4,11 +4,15 @@ set -euo pipefail
 
 ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 PLUGIN="$ROOT/minion_plugins/plugins/minion-engineering"
-FACTORY_SKILLS="$ROOT/minion_factory/agent/skills"
+FACTORY="$ROOT/minion_factory"
+FACTORY_CHECK="$FACTORY/scripts/check-agent-skills.py"
+FACTORY_SKILLS="$FACTORY/agent/skills"
 SKILLS=(minion-engineering minion-technical-writing minion-unslop)
 FACTORY_SHARED=(minion-technical-writing minion-unslop)
 
 [ -d "$PLUGIN/skills" ] || { echo "missing plugin: $PLUGIN" >&2; exit 1; }
+[ -d "$FACTORY" ] || { echo "missing subproject: $FACTORY" >&2; exit 1; }
+[ -f "$FACTORY_CHECK" ] || { echo "missing factory checker: $FACTORY_CHECK" >&2; exit 1; }
 for skill in "${SKILLS[@]}"; do
 	[ -f "$PLUGIN/skills/$skill/SKILL.md" ] || { echo "missing skill: $skill" >&2; exit 1; }
 	cmp "$PLUGIN/THIRD_PARTY_NOTICES.md" "$PLUGIN/skills/$skill/THIRD_PARTY_NOTICES.md"
@@ -42,5 +46,5 @@ for skill in "${FACTORY_SHARED[@]}"; do
 	diff -qr "$PLUGIN/skills/$skill" "$FACTORY_SKILLS/$skill"
 done
 cmp "$PLUGIN/THIRD_PARTY_NOTICES.md" "$FACTORY_SKILLS/THIRD_PARTY_NOTICES.md"
-python3 "$ROOT/minion_factory/scripts/check-agent-skills.py"
+python3 "$FACTORY_CHECK"
 echo "synced MINION engineering skills for Claude, Cursor, Codex, and Factory"

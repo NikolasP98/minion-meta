@@ -11,12 +11,20 @@ Before proposing a rewrite, extract and protect:
 
 Absolute spans must remain exact. Semantic claims may be rephrased only when strength, direction, scope, and conditions remain identical. Preserve approximations as approximations and both ends of every range. Preserve every list item unless deletion is the explicit task.
 
-Use:
+Resolve these scripts relative to this skill's loaded directory, never relative to the working directory:
 
 ```bash
-python3 scripts/extract_constraints.py original.md > constraints.json
-python3 scripts/validate_preservation.py original.md proposed.md constraints.json
-python3 scripts/diff_check.py original.md proposed.md
+if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
+  skill="$CLAUDE_PLUGIN_ROOT/skills/minion-unslop"
+else
+  root=$PWD
+  until [ -d "$root/.agents/skills/minion-unslop" ] || [ "$root" = / ]; do root=$(dirname "$root"); done
+  skill="$root/.agents/skills/minion-unslop"
+fi
+[ -d "$skill/scripts" ] || { echo "minion-unslop scripts not found" >&2; exit 2; }
+python3 "$skill/scripts/extract_constraints.py" original.md > constraints.json
+python3 "$skill/scripts/validate_preservation.py" original.md proposed.md constraints.json
+python3 "$skill/scripts/diff_check.py" original.md proposed.md
 ```
 
 For legal, medical, scientific, safety, or security text, run `validate_preservation.py --strict` if supported by the vendored command interface and manually re-read every negation, limit, condition, attribution, and relationship. Tool success is necessary evidence, not semantic proof.
