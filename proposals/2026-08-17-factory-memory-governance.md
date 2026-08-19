@@ -1,9 +1,10 @@
 ---
 id: 2026-08-17-factory-memory-governance
 title: Factory memory governance — quarantined write-back, provenance, snapshots
-status: approved
+status: in-spec
 created: 2026-08-17
 updated: 2026-08-18
+spawned_spec: 2026-08-18-factory-memory-governance-spec
 repos: [minion-factory]
 tags: [security, infra]
 source: audit-2026-08-17

@@ -1,12 +1,12 @@
 ---
 id: 2026-08-17-meta-spec-index-project-possibly-shipped
 title: spec-index.mjs drops possibly_shipped/evidence/link_review — G0 amber chip never renders
-status: merged
+status: review
 created: 2026-08-17
 updated: 2026-08-18
+spawned_spec: 2026-08-18-meta-spec-index-project-possibly-shipped-spec
 repos: [minion-meta]
 duplicate_candidate: 2026-08-17-base-kanban-possibly-shipped-surface
-merged_into: 2026-08-17-base-kanban-possibly-shipped-surface
 tags: [logic]
 ---
 
@@ -55,14 +55,11 @@ more detailed than this one's. Flagged rather than merged because picking a cano
 here means resolving that factual conflict, not just concatenating text — left for a
 human to reconcile.
 
-## Resolution 2026-08-18
+---
 
-The overlap resolved itself: `2026-08-17-base-kanban-possibly-shipped-surface` spawned
-`2026-08-18-base-kanban-possibly-shipped-surface-spec.md`, whose Slice 1 is this exact
-DoD (`scripts/spec-index.mjs` projects `possibly_shipped`/`evidence`/`link_review`,
-`specs/TEMPLATE.md` documents them). Shipped as part of
-`2026-08-17-sdlc-phase-gates-scoring-spec.md` §3 G0 Slice 1 (this run) since the field
-projection is a genuine minion-meta-side prerequisite for G0's writes to reach the
-board at all, and the sibling spec's own Slice 1 instructions call for closing this
-proposal that way. `merged_into` points at the surviving proposal per its own
-reasoning above — it already owns the spawned spec.
+**Corrected gate record 2026-08-18:** The delegated decision was invalid. Verified
+`minion-factory@a45b225b` does not emit `possibly_shipped`, `evidence`, or `link_review`, and
+`minion-base` PR #13 is open rather than shipped; current base `main` (`ccc5db78`) contains no
+consumer for `possibly_shipped` or `link_review`. The projector-only scope crossed its explicit
+stop gate. This proposal returns to review and must be reordered behind an approved producer
+contract and a merged (or atomic) consumer contract. It is not approved for implementation.

@@ -26,6 +26,11 @@ export function projectSpec(fm) {
 		...(fm.pr ? { pr: fm.pr } : {}),
 		...(fm.type ? { type: fm.type } : {}),
 		...(fm.tags ? { tags: fm.tags } : {}),
+		...(fm.merge_sha ? { merge_sha: fm.merge_sha } : {}),
+		...(fm.merged_pr ? { merged_pr: fm.merged_pr } : {}),
+		...(fm.merged_at ? { merged_at: fm.merged_at } : {}),
+		...(fm.release_flag ? { release_flag: fm.release_flag } : {}),
+		...(fm.release_state ? { release_state: fm.release_state } : {}),
 		// Written by minion-factory's G0 backward-staleness reconciler
 		// (2026-08-17-sdlc-phase-gates-scoring-spec.md §3 G0); the board renders
 		// possibly_shipped/link_review as an amber "verify" chip.

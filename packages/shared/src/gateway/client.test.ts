@@ -52,6 +52,10 @@ class MockWebSocket {
     this.readyState = MockWebSocket.CLOSED;
     this.__emit('close', code, reason);
   }
+
+  __simulateError(err: unknown): void {
+    this.__emit('error', err);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -84,6 +88,13 @@ function makeClient(
 // ---------------------------------------------------------------------------
 // Helper: perform the full connect handshake synchronously with fake timers
 // ---------------------------------------------------------------------------
+// Flushes the microtask queue. `connect()` returns a `new Promise` from inside an async function,
+// which needs an extra microtask tick for promise-adoption beyond whatever ticks the event itself
+// takes to settle — a single `await Promise.resolve()` is not always enough headroom.
+async function flushMicrotasks(times = 5): Promise<void> {
+  for (let i = 0; i < times; i++) await Promise.resolve();
+}
+
 async function performConnect(client: GatewayClient, mockWs: MockWebSocket): Promise<unknown> {
   const connectPromise = client.connect();
   // Simulate open + challenge
@@ -269,14 +280,574 @@ describe('GatewayClient', () => {
     if (connectMsg2) {
       const req2 = JSON.parse(connectMsg2) as { id: string };
       ws2.__simulateMessage(JSON.stringify({ type: 'res', id: req2.id, ok: true, payload: { type: 'hello-ok' } }));
-      await Promise.resolve();
+      // The success path resolves through request<T>()'s inner Promise, then sendConnect()'s own
+      // await, then the async connect()'s Promise-adoption tick — give it enough headroom before
+      // asserting the backoffMs reset landed.
+      await flushMicrotasks();
     }
 
-    // --- Trigger close again → backoff should be ~1360ms (800 * 1.7) ---
+    // --- Trigger close again → the second connect() SUCCEEDED (hello-ok above), and sendConnect()
+    // resets backoffMs to 800 on every successful handshake, so the next scheduled delay is 800
+    // again, not the pre-reset 1360. Only CONSECUTIVE failed reconnects advance the delay.
     ws2.__simulateClose(1006, 'gone again');
 
-    // The second reconnect delay should be 1360 (800 * 1.7)
-    expect(reconnectDelays.length).toBeGreaterThanOrEqual(2);
+    expect(reconnectDelays).toEqual([800, 800]);
+  });
+
+  it('consecutive failed reconnects (no successful handshake in between) advance the backoff to ~1360ms', async () => {
+    const ws1 = new MockWebSocket();
+    const ws2 = new MockWebSocket();
+    const instances = [ws1, ws2];
+    let instanceIdx = 0;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const MultiImpl = function (_url: string, ..._args: unknown[]): any {
+      return instances[instanceIdx++];
+    };
+
+    const reconnectDelays: number[] = [];
+    const reconnectErrors: unknown[] = [];
+    const client = new GatewayClient({
+      url: 'ws://mock-host/gateway',
+      onChallenge: async (_nonce) => ({ token: 'x' }),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      WebSocketImpl: MultiImpl as any,
+      autoReconnect: true,
+      connectTimeoutMs: 999_999,
+      requestTimeoutMs: 999_999,
+      onReconnectScheduled: (delay) => { reconnectDelays.push(delay); },
+      onReconnectError: (err) => { reconnectErrors.push(err); },
+    });
+
+    await performConnect(client, ws1);
+    ws1.__simulateClose(1006, 'gone');
+    expect(reconnectDelays).toEqual([800]);
+
+    vi.advanceTimersByTime(800);
+    await Promise.resolve();
+    await Promise.resolve();
+
+    // ws2 (the reconnect attempt) closes BEFORE hello completes — that attempt failed.
+    ws2.__simulateClose(1006, 'gone before hello');
+    await Promise.resolve();
+    await Promise.resolve();
+
+    // Exactly one report for the failed attempt, and the next delay advances (~1360ms),
+    // since no successful handshake happened in between to reset backoffMs.
+    expect(reconnectErrors).toHaveLength(1);
+    expect(reconnectDelays).toHaveLength(2);
+    expect(reconnectDelays[0]).toBe(800);
     expect(reconnectDelays[1]).toBeCloseTo(1360, -1);
+  });
+
+  describe('onEvent handler failures are reported, never discarded', () => {
+    it('async onEvent that rejects, no onEventError supplied → console.error fallback fires once', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const thrown = new Error('handler exploded');
+      const client = makeClient(mockWs, { onEvent: async () => { throw thrown; } });
+      await performConnect(client, mockWs);
+
+      mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'agent.status', payload: {} }));
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+      const [first, second] = consoleErrorSpy.mock.calls[0]!;
+      expect(String(first)).toContain('[GatewayClient]');
+      expect(String(first)).toContain('agent.status');
+      expect(second).toBe(thrown);
+    });
+
+    it('sync-throwing onEvent, no onEventError → does not escape, console.error fires once', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const client = makeClient(mockWs, {
+        onEvent: () => { throw new Error('sync boom'); },
+      });
+      await performConnect(client, mockWs);
+
+      expect(() => {
+        mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'chat.message', payload: {} }));
+      }).not.toThrow();
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('async rejection with onEventError supplied → hook called, console.error not called', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const thrown = new Error('handler exploded');
+      const seen: Array<[unknown, unknown]> = [];
+      const client = makeClient(mockWs, {
+        onEvent: async () => { throw thrown; },
+        onEventError: (err, frame) => { seen.push([err, frame.event]); },
+      });
+      await performConnect(client, mockWs);
+
+      mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'chat.message', payload: {} }));
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(seen).toEqual([[thrown, 'chat.message']]);
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+
+    it('sync throw with onEventError supplied → hook called, console.error not called', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const thrown = new Error('sync boom');
+      const seen: Array<[unknown, unknown]> = [];
+      const client = makeClient(mockWs, {
+        onEvent: () => { throw thrown; },
+        onEventError: (err, frame) => { seen.push([err, frame.event]); },
+      });
+      await performConnect(client, mockWs);
+
+      mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'chat.message', payload: {} }));
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(seen).toEqual([[thrown, 'chat.message']]);
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+
+    it('onEventError that itself throws → does not escape, no unhandled rejection, console.error not called', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const client = makeClient(mockWs, {
+        onEvent: () => { throw new Error('sync boom'); },
+        onEventError: () => { throw new Error('reporter also broken'); },
+      });
+      await performConnect(client, mockWs);
+
+      expect(() => {
+        mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'chat.message', payload: {} }));
+      }).not.toThrow();
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+
+    it('onEventError that rejects (async reporter) → contained, no unhandled rejection, console.error not called', async () => {
+      // Real timers on purpose: Node only runs its unhandled-rejection sweep at a real macrotask
+      // boundary, which faked setTimeout never reaches. performConnect() clears every timer it
+      // arms, so this test leaves nothing pending behind.
+      vi.useRealTimers();
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const unhandled: unknown[] = [];
+      const onUnhandled = (reason: unknown) => { unhandled.push(reason); };
+      process.on('unhandledRejection', onUnhandled);
+      try {
+        const client = makeClient(mockWs, {
+          onEvent: () => { throw new Error('sync boom'); },
+          onEventError: async () => { throw new Error('async reporter broken'); },
+        });
+        await performConnect(client, mockWs);
+
+        expect(() => {
+          mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'chat.message', payload: {} }));
+        }).not.toThrow();
+
+        // Two macrotask boundaries — Node emits unhandledRejection between them if one escaped.
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        expect(unhandled).toEqual([]);
+        // Fallback behavior for a failed reporter is deliberate silence — there is no second reporter.
+        expect(consoleErrorSpy).not.toHaveBeenCalled();
+      } finally {
+        process.off('unhandledRejection', onUnhandled);
+      }
+    });
+
+    it('fallback console.error output does not contain the event payload', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const client = makeClient(mockWs, { onEvent: () => { throw new Error('sync boom'); } });
+      await performConnect(client, mockWs);
+
+      mockWs.__simulateMessage(
+        JSON.stringify({ type: 'event', event: 'chat.message', payload: { secret: 'PAYLOAD-CANARY' } }),
+      );
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(JSON.stringify(consoleErrorSpy.mock.calls)).not.toContain('PAYLOAD-CANARY');
+    });
+
+    it('non-throwing onEvent → console.error not called, handler received the frame (happy path intact)', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const received: unknown[] = [];
+      const client = makeClient(mockWs, { onEvent: (frame) => { received.push(frame); } });
+      await performConnect(client, mockWs);
+
+      mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'agent.status', payload: { ok: true } }));
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+      expect(received).toHaveLength(1);
+    });
+
+    it('onEvent omitted entirely → no report, no throw (optional handler still optional)', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const client = makeClient(mockWs);
+      await performConnect(client, mockWs);
+
+      expect(() => {
+        mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'agent.status', payload: {} }));
+      }).not.toThrow();
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+
+    it('connect.challenge frame with a throwing onEvent → onEvent not invoked (handshake path unchanged)', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const onEvent = vi.fn(() => { throw new Error('should never run'); });
+      const client = makeClient(mockWs, { onEvent });
+      const connectPromise = client.connect();
+      mockWs.__simulateOpen();
+      mockWs.__simulateMessage(
+        JSON.stringify({ type: 'event', event: 'connect.challenge', payload: { nonce: 'test-nonce' } }),
+      );
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(onEvent).not.toHaveBeenCalled();
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+      // Drain the handshake so the client doesn't leave a dangling connect() promise.
+      const connectMsg = mockWs.sentMessages.find((m) => {
+        try { return (JSON.parse(m) as { method?: string }).method === 'connect'; } catch { return false; }
+      });
+      if (connectMsg) {
+        const req = JSON.parse(connectMsg) as { id: string };
+        mockWs.__simulateMessage(
+          JSON.stringify({ type: 'res', id: req.id, ok: true, payload: { type: 'hello-ok' } }),
+        );
+      }
+      await connectPromise;
+    });
+
+    it('two synchronously failing events in a row → exactly two reports, one per event, in arrival order', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const client = makeClient(mockWs, {
+        onEvent: () => { throw new Error('boom'); },
+      });
+      await performConnect(client, mockWs);
+
+      mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'event.one', payload: {} }));
+      mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'event.two', payload: {} }));
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(2);
+      expect(String(consoleErrorSpy.mock.calls[0]![0])).toContain('event.one');
+      expect(String(consoleErrorSpy.mock.calls[1]![0])).toContain('event.two');
+    });
+  });
+
+  describe('reconnect-attempt failures are reported, never discarded', () => {
+    function makeThrowingReconnectImpl(ws1: MockWebSocket, err: Error) {
+      let calls = 0;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const impl = function (_url: string, ..._args: unknown[]): any {
+        calls++;
+        if (calls === 1) return ws1;
+        throw err;
+      };
+      return { impl, callCount: () => calls };
+    }
+
+    it('reconnect attempt whose connect() rejects → onReconnectError called once with (err, { delayMs }); console.error not called', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const ws1 = new MockWebSocket();
+      const thrown = new Error('ws construction failed');
+      const { impl, callCount } = makeThrowingReconnectImpl(ws1, thrown);
+
+      const reconnectDelays: number[] = [];
+      const reconnectErrors: Array<[unknown, { delayMs: number }]> = [];
+      const client = new GatewayClient({
+        url: 'ws://mock-host/gateway',
+        onChallenge: async (_nonce) => ({ token: 'x' }),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        WebSocketImpl: impl as any,
+        autoReconnect: true,
+        connectTimeoutMs: 999_999,
+        requestTimeoutMs: 999_999,
+        onReconnectScheduled: (delay) => { reconnectDelays.push(delay); },
+        onReconnectError: (err, attempt) => { reconnectErrors.push([err, attempt]); },
+      });
+
+      await performConnect(client, ws1);
+      ws1.__simulateClose(1006, 'gone');
+      expect(reconnectDelays).toEqual([800]);
+
+      vi.advanceTimersByTime(800);
+      await flushMicrotasks();
+
+      expect(reconnectErrors).toEqual([[thrown, { delayMs: 800 }]]);
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+      // Reporting-only: no further retry invented beyond the two connect() attempts made so far.
+      expect(callCount()).toBe(2);
+    });
+
+    it('reconnect attempt whose connect() rejects, no onReconnectError supplied → console.error fires once, retains the exact Error, no throw escapes', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const ws1 = new MockWebSocket();
+      const thrown = new Error('ws construction failed');
+      const { impl, callCount } = makeThrowingReconnectImpl(ws1, thrown);
+
+      const client = new GatewayClient({
+        url: 'ws://mock-host/gateway',
+        onChallenge: async (_nonce) => ({ token: 'x' }),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        WebSocketImpl: impl as any,
+        autoReconnect: true,
+        connectTimeoutMs: 999_999,
+        requestTimeoutMs: 999_999,
+      });
+
+      await performConnect(client, ws1);
+      ws1.__simulateClose(1006, 'gone');
+
+      expect(() => {
+        vi.advanceTimersByTime(800);
+      }).not.toThrow();
+      await flushMicrotasks();
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+      const [first, second] = consoleErrorSpy.mock.calls[0]!;
+      expect(String(first)).toContain('[GatewayClient]');
+      expect(String(first).toLowerCase()).toContain('reconnect');
+      expect(second).toBe(thrown);
+      expect(callCount()).toBe(2);
+    });
+
+    it('onReconnectError that throws → contained, no unhandled rejection, console.error not called', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const ws1 = new MockWebSocket();
+      const thrown = new Error('ws construction failed');
+      const { impl } = makeThrowingReconnectImpl(ws1, thrown);
+
+      const client = new GatewayClient({
+        url: 'ws://mock-host/gateway',
+        onChallenge: async (_nonce) => ({ token: 'x' }),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        WebSocketImpl: impl as any,
+        autoReconnect: true,
+        connectTimeoutMs: 999_999,
+        requestTimeoutMs: 999_999,
+        onReconnectError: () => { throw new Error('reporter also broken'); },
+      });
+
+      await performConnect(client, ws1);
+      ws1.__simulateClose(1006, 'gone');
+
+      expect(() => {
+        vi.advanceTimersByTime(800);
+      }).not.toThrow();
+      await flushMicrotasks();
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+
+    it('onReconnectError that rejects (async reporter) → contained, no unhandled rejection, console.error not called', async () => {
+      vi.useRealTimers();
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const unhandled: unknown[] = [];
+      const onUnhandled = (reason: unknown) => { unhandled.push(reason); };
+      process.on('unhandledRejection', onUnhandled);
+      try {
+        const ws1 = new MockWebSocket();
+        const thrown = new Error('ws construction failed');
+        const { impl } = makeThrowingReconnectImpl(ws1, thrown);
+
+        const client = new GatewayClient({
+          url: 'ws://mock-host/gateway',
+          onChallenge: async (_nonce) => ({ token: 'x' }),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          WebSocketImpl: impl as any,
+          autoReconnect: true,
+          connectTimeoutMs: 999_999,
+          requestTimeoutMs: 999_999,
+          onReconnectError: async () => { throw new Error('async reporter broken'); },
+        });
+
+        await performConnect(client, ws1);
+        ws1.__simulateClose(1006, 'gone');
+
+        // Real macrotask boundaries: fake timers never reach Node's unhandled-rejection sweep.
+        await new Promise((resolve) => setTimeout(resolve, 850));
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        expect(unhandled).toEqual([]);
+        expect(consoleErrorSpy).not.toHaveBeenCalled();
+      } finally {
+        process.off('unhandledRejection', onUnhandled);
+      }
+    });
+  });
+
+  describe('socket "error" events are reported, never silently discarded', () => {
+    it('ws emits "error" → onSocketError called once with the exact emitted value', async () => {
+      const emitted = new Error('socket boom');
+      const seen: unknown[] = [];
+      const client = makeClient(mockWs, { onSocketError: (err) => { seen.push(err); } });
+      await performConnect(client, mockWs);
+
+      mockWs.__simulateError(emitted);
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(seen).toEqual([emitted]);
+    });
+
+    it('ws emits "error" without onSocketError → console.error fires once naming the socket error, carries the exact value', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const emitted = new Error('socket boom');
+      const client = makeClient(mockWs);
+      await performConnect(client, mockWs);
+
+      mockWs.__simulateError(emitted);
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+      const [first, second] = consoleErrorSpy.mock.calls[0]!;
+      expect(String(first)).toContain('[GatewayClient]');
+      expect(String(first).toLowerCase()).toContain('socket');
+      expect(second).toBe(emitted);
+    });
+
+    it('ws emits "error" on a stale socket (generation already advanced by a newer connect()) → not reported', async () => {
+      const ws1 = new MockWebSocket();
+      const ws2 = new MockWebSocket();
+      const instances = [ws1, ws2];
+      let instanceIdx = 0;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const MultiImpl = function (_url: string, ..._args: unknown[]): any {
+        return instances[instanceIdx++];
+      };
+
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const seen: unknown[] = [];
+      const client = new GatewayClient({
+        url: 'ws://mock-host/gateway',
+        onChallenge: async (_nonce) => ({ token: 'x' }),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        WebSocketImpl: MultiImpl as any,
+        connectTimeoutMs: 999_999,
+        requestTimeoutMs: 999_999,
+        onSocketError: (err) => { seen.push(err); },
+      });
+
+      await performConnect(client, ws1);
+
+      // Start a second connect() directly (not via reconnect) — generation advances, ws1 is stale.
+      const secondConnectPromise = client.connect();
+      ws1.__simulateError(new Error('stale socket error'));
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(seen).toEqual([]);
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+      // Drain the second connect() so it doesn't leave a dangling promise behind.
+      ws2.__simulateOpen();
+      ws2.__simulateMessage(
+        JSON.stringify({ type: 'event', event: 'connect.challenge', payload: { nonce: 'n2' } }),
+      );
+      await Promise.resolve();
+      await Promise.resolve();
+      const connectMsg2 = ws2.sentMessages.find((m) => {
+        try { return (JSON.parse(m) as { method?: string }).method === 'connect'; } catch { return false; }
+      });
+      if (connectMsg2) {
+        const req2 = JSON.parse(connectMsg2) as { id: string };
+        ws2.__simulateMessage(
+          JSON.stringify({ type: 'res', id: req2.id, ok: true, payload: { type: 'hello-ok' } }),
+        );
+      }
+      await secondConnectPromise;
+    });
+
+    it('ws "error" does not close the socket, flush pending requests, or schedule a reconnect', async () => {
+      let implCalls = 0;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const CountingImpl = function (_url: string, ..._args: unknown[]): any {
+        implCalls++;
+        return mockWs;
+      };
+      const client = new GatewayClient({
+        url: 'ws://mock-host/gateway',
+        onChallenge: async (_nonce) => ({ token: 'x' }),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        WebSocketImpl: CountingImpl as any,
+        autoReconnect: true,
+        connectTimeoutMs: 999_999,
+        requestTimeoutMs: 999_999,
+      });
+      await performConnect(client, mockWs);
+      expect(implCalls).toBe(1);
+
+      const reqPromise = client.request<unknown>('pending.method');
+      let settled = false;
+      reqPromise.then(() => { settled = true; }, () => { settled = true; });
+
+      mockWs.__simulateError(new Error('boom'));
+      await Promise.resolve();
+      await Promise.resolve();
+
+      // Not closed, not flushed: the pending request is still unsettled and the socket still OPEN.
+      expect(settled).toBe(false);
+      expect(mockWs.readyState).toBe(MockWebSocket.OPEN);
+
+      // Not a reconnect trigger: advancing well past the backoff cap constructs no new socket.
+      vi.advanceTimersByTime(20_000);
+      await Promise.resolve();
+      await Promise.resolve();
+      expect(implCalls).toBe(1);
+    });
+
+    it('onSocketError that throws → contained, no unhandled rejection, console.error not called', async () => {
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const client = makeClient(mockWs, { onSocketError: () => { throw new Error('reporter also broken'); } });
+      await performConnect(client, mockWs);
+
+      expect(() => {
+        mockWs.__simulateError(new Error('boom'));
+      }).not.toThrow();
+      await Promise.resolve();
+      await Promise.resolve();
+
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+    });
+
+    it('onSocketError that rejects (async reporter) → contained, no unhandled rejection, console.error not called', async () => {
+      vi.useRealTimers();
+      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const unhandled: unknown[] = [];
+      const onUnhandled = (reason: unknown) => { unhandled.push(reason); };
+      process.on('unhandledRejection', onUnhandled);
+      try {
+        const client = makeClient(mockWs, {
+          onSocketError: async () => { throw new Error('async reporter broken'); },
+        });
+        await performConnect(client, mockWs);
+
+        expect(() => {
+          mockWs.__simulateError(new Error('boom'));
+        }).not.toThrow();
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        await new Promise((resolve) => setTimeout(resolve, 0));
+
+        expect(unhandled).toEqual([]);
+        expect(consoleErrorSpy).not.toHaveBeenCalled();
+      } finally {
+        process.off('unhandledRejection', onUnhandled);
+      }
+    });
   });
 });
