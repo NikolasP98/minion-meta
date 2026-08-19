@@ -111,8 +111,11 @@ dependency of it; link hygiene is blocked behind the reordered G0 contract plan 
 `specs/2026-08-18-meta-spec-index-project-possibly-shipped-spec.md`); upstream-monitor
 noise thresholds (separate slice, `2026-08-17-sdlc-phase-gates-scoring-spec.md` §5 slice
 6, `minion` repo). This patch depends on none of them: it touches only CI-watch
-proposals, whose `status`/`closed_reason` fields already exist and already have a
-consumer (`scripts/proposal-index.mjs` → the board).
+proposals, and it writes no new contract — `closed` is already a valid
+`P_STATUSES` value in `scripts/proposal-index.mjs`, already projected into
+`proposals/index.json` and already rendered by the board. `closed_reason` stays an
+in-file human-readable note, unprojected, exactly like the existing
+`retired_reason`.
 
 **Handoff note:** this proposal is the required artifact for an open end this run
 (`factory/8af03178`) could not close directly — its harness contract scopes it to a
