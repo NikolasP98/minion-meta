@@ -3,14 +3,16 @@
 // Doubles as the lint gate: exits 1 if any spec lacks frontmatter (every
 // required field from specs/TEMPLATE.md — id, title, stage, status, pass,
 // created, updated, repos), uses an invalid stage/status, has a non-integer
-// `pass` or empty `repos`, has a scalar field written with array syntax (e.g.
+// `pass` or an empty `repos` on anything but a plan-of-record, has a scalar
+// field written with array syntax (e.g.
 // `title: [A, B]` — the flat-YAML parser accepts bracket syntax for any key,
 // so this must be rejected explicitly), or has an `id` that doesn't match its
 // filename or collides with another spec's `id` (the stable join key).
 //
 // --check runs the full hardening gate (meta CI, see .github/workflows/ci.yml
 // and specs/2026-08-17-maintenance-lane-monitors-spec.md §2): calendar-valid
-// date formats, repo ids, verdict/type enums, revises/supersedes link
+// date formats, repo ids, verdict/type/relationship enums,
+// revises/supersedes link
 // integrity (bidirectional — every status:superseded spec needs an incoming
 // supersedes link, not just the forward direction), required-heading lint
 // (run against the body with fenced code, HTML comments, and unclosed fences
@@ -33,9 +35,9 @@
 // Both baseline files are meant as one-way ratchets: a PR may only shrink them
 // (delete an id, or in practice fix a spec's headings so it no longer needs
 // the exemption), never grow them or rewrite an existing hash. --check
-// enforces this against the comparison commit's spec corpus, even when the
-// baseline files did not exist there. PRs use their merge base; push/local
-// checks use the event's before SHA or HEAD^.
+// enforces this against the comparison corpus, even when the baseline files did
+// not exist there. PRs use their merge base; pushes use the event's before SHA;
+// local runs use every parent of HEAD (both sides of a merge commit).
 //
 // Run from repo root: node scripts/spec-index.mjs [--check]
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -65,8 +67,18 @@ function isValidISODate(value) {
 	return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d;
 }
 // specs/TEMPLATE.md's documented enums for the two optional review/roll-up fields.
-const VERDICTS = ['pending', 'approved', 'changes_requested', 'rejected'];
+const VERDICTS = ['pending', 'approved', 'changes_requested', 'rejected', 'revision-required'];
 const TYPES = ['feature', 'fix', 'infra', 'decision', 'research'];
+// specs/TEMPLATE.md's spec-intake classification enum.
+const RELATIONSHIPS = [
+	'new',
+	'extends',
+	'merges-drafts',
+	'supersedes',
+	'depends-on',
+	'conflicts-with',
+	'already-satisfied'
+];
 
 // Strips text that is not real document structure, so a heading-shaped line
 // inside it can never satisfy the required-heading lint below:
@@ -164,11 +176,11 @@ const OUT_PATH = 'specs/index.json';
 
 const sha256 = (text) => createHash('sha256').update(text).digest('hex');
 
-// Every documented frontmatter field except the two array fields (`repos`,
-// `tags`) is a scalar. The flat-YAML parser (spec-frontmatter.mjs) accepts
-// bracket syntax for ANY key, so without this check `title: [A, B]` silently
-// parses to an array, passes the presence-only required-field check below,
-// and gets published into specs/index.json unchanged.
+// Every documented frontmatter field except the three array fields (`repos`,
+// `tags`, `related`) is a scalar. The flat-YAML parser (spec-frontmatter.mjs)
+// accepts bracket syntax for ANY key, so without this check `title: [A, B]`
+// silently parses to an array, passes the presence-only required-field check
+// below, and gets published into specs/index.json unchanged.
 export const SCALAR_FIELDS = [
 	'id',
 	'title',
@@ -183,7 +195,14 @@ export const SCALAR_FIELDS = [
 	'verdict',
 	'pr',
 	'type',
-	'retired_reason'
+	'retired_reason',
+	'relationship',
+	'merge_sha',
+	'merged_pr',
+	'merged_at',
+	'release_flag',
+	'release_state',
+	'evidence'
 ];
 export function findScalarArrayViolations(fm) {
 	return SCALAR_FIELDS.filter((key) => Array.isArray(fm[key]));
@@ -195,18 +214,25 @@ export function findScalarStringViolations(fm) {
 	);
 }
 
-// Resolves the corpus that baseline exceptions must have existed in already.
-// PR checks use the merge base. Push checks prefer the event's before SHA;
-// local checks use HEAD^, which also makes the CLI fail closed in fixtures.
-export function resolveComparisonSha(env = process.env) {
+// Resolves the corpora that baseline exceptions must have existed in already.
+// PR checks use the merge base. Push checks prefer the event's before SHA.
+// Local checks use EVERY parent of HEAD, not just the first: on a merge commit
+// both sides are prior corpora, so debt that arrived with the merged-in base
+// branch is legitimately grandfathered — using `HEAD^` alone would reject it.
+// A revision list also makes the CLI fail closed in fixtures.
+// Returns an array of revisions, `undefined` when the comparison cannot be
+// resolved (fail closed), or `null` when there is genuinely no older corpus.
+export function resolveComparisonRevs(env = process.env) {
 	const baseRef = env.GITHUB_BASE_REF;
 	if (baseRef) for (const ref of [`origin/${baseRef}`, baseRef]) {
 		try {
 			execFileSync('git', ['rev-parse', '--verify', ref], { stdio: 'ignore' });
-			return execFileSync('git', ['merge-base', 'HEAD', ref], {
-				encoding: 'utf8',
-				stdio: ['ignore', 'pipe', 'ignore']
-			}).trim();
+			return [
+				execFileSync('git', ['merge-base', 'HEAD', ref], {
+					encoding: 'utf8',
+					stdio: ['ignore', 'pipe', 'ignore']
+				}).trim()
+			];
 		} catch {
 			// try the next candidate ref
 		}
@@ -215,17 +241,29 @@ export function resolveComparisonSha(env = process.env) {
 	const before = env.GITHUB_EVENT_BEFORE;
 	if (before && !/^0+$/.test(before)) {
 		try {
-			return execFileSync('git', ['rev-parse', '--verify', `${before}^{commit}`], { encoding: 'utf8' }).trim();
+			return [
+				execFileSync('git', ['rev-parse', '--verify', `${before}^{commit}`], { encoding: 'utf8' }).trim()
+			];
 		} catch {
 			return undefined;
 		}
 	}
 	if (env.GITHUB_EVENT_NAME === 'push') return undefined;
+	let parents;
 	try {
-		return execFileSync('git', ['rev-parse', '--verify', 'HEAD^'], { encoding: 'utf8' }).trim();
+		// no `--verify`: it demands exactly one revision and `HEAD^@` yields 0..n
+		parents = execFileSync('git', ['rev-parse', 'HEAD^@'], {
+			encoding: 'utf8',
+			stdio: ['ignore', 'pipe', 'ignore']
+		})
+			.split('\n')
+			.map((line) => line.trim())
+			.filter(Boolean);
 	} catch {
-		return null; // initial commit: there is no older corpus to grandfather
+		return undefined; // not a git checkout, or HEAD is unreadable — fail closed
 	}
+	// no parents: initial commit, so there is no older corpus to grandfather
+	return parents.length > 0 ? parents : null;
 }
 export function readFileAtRev(rev, path) {
 	try {
@@ -242,14 +280,22 @@ export function readFileAtRev(rev, path) {
 // a new id or rewrite an existing hash — that would let a PR grandfather a
 // spec that fails the very lint the baseline is meant to grandfather OLD
 // specs out of.
-export function checkHeadingBaselineRatchet(baseObj, currentObj) {
+// `base` is either a plain `id -> hash` object (one prior corpus) or a
+// `Map<id, Set<hash>>` (the union across several prior corpora — a merge commit
+// has one per parent, and the same spec may have a different body on each side).
+function toAllowedHashes(base) {
+	if (base instanceof Map) return base;
+	return new Map(Object.entries(base).map(([id, hash]) => [id, new Set([hash])]));
+}
+export function checkHeadingBaselineRatchet(base, currentObj) {
+	const allowed = toAllowedHashes(base);
 	const errors = [];
 	for (const [id, hash] of Object.entries(currentObj)) {
-		if (!(id in baseObj))
+		if (!allowed.has(id))
 			errors.push(
 				`${HEADING_BASELINE_PATH}: new id "${id}" added to baseline — it is a one-way ratchet, only removals are allowed in a PR`
 			);
-		else if (baseObj[id] !== hash)
+		else if (!allowed.get(id).has(hash))
 			errors.push(
 				`${HEADING_BASELINE_PATH}: hash for "${id}" changed — it is a one-way ratchet, only removals are allowed in a PR`
 			);
@@ -289,6 +335,23 @@ export function baselineEligibilityFromCorpus(corpus) {
 	return { headings, supersedes };
 }
 
+// Union of what each prior corpus would grandfather. An exception is legitimate
+// if it describes unchanged debt on ANY side of the comparison (both parents of
+// a merge commit are prior corpora).
+export function baselineEligibilityFromRevs(revs) {
+	const headings = new Map();
+	const supersedes = new Set();
+	for (const rev of revs) {
+		const eligible = baselineEligibilityFromCorpus(readSpecCorpusAtRev(rev));
+		for (const [id, hash] of Object.entries(eligible.headings)) {
+			if (!headings.has(id)) headings.set(id, new Set());
+			headings.get(id).add(hash);
+		}
+		for (const id of eligible.supersedes) supersedes.add(id);
+	}
+	return { headings, supersedes: [...supersedes] };
+}
+
 function main() {
 	const check = process.argv.includes('--check');
 	const headingBaseline =
@@ -326,8 +389,15 @@ function main() {
 		}
 		if (fm.pass !== undefined && !(Number.isInteger(fm.pass) && fm.pass >= 1))
 			errors.push(`${name}: "pass" must be a positive integer, got "${fm.pass}"`);
-		if (fm.repos !== undefined && (!Array.isArray(fm.repos) || fm.repos.length === 0))
-			errors.push(`${name}: "repos" must be a non-empty array of repo ids`);
+		// `repos: []` is the documented shape for a plan-of-record (`type: decision`)
+		// that no repo implements directly — milestone specs cite it instead. Every
+		// other spec must name at least one target repo.
+		if (fm.repos !== undefined && !Array.isArray(fm.repos))
+			errors.push(`${name}: "repos" must be an array of repo ids`);
+		else if (Array.isArray(fm.repos) && fm.repos.length === 0 && fm.type !== 'decision')
+			errors.push(
+				`${name}: "repos" is empty — only a plan-of-record ("type: decision") may declare no target repo`
+			);
 		if (fm.stage && !STAGES.includes(fm.stage)) errors.push(`${name}: invalid stage "${fm.stage}"`);
 		if (fm.status && !STATUSES.includes(fm.status))
 			errors.push(`${name}: invalid status "${fm.status}"`);
@@ -357,6 +427,10 @@ function main() {
 				errors.push(`${name}: invalid verdict "${fm.verdict}" (allowed: ${VERDICTS.join(', ')})`);
 			if (fm.type && !TYPES.includes(fm.type))
 				errors.push(`${name}: invalid type "${fm.type}" (allowed: ${TYPES.join(', ')})`);
+			if (fm.relationship && !RELATIONSHIPS.includes(fm.relationship))
+				errors.push(
+					`${name}: invalid relationship "${fm.relationship}" (allowed: ${RELATIONSHIPS.join(', ')})`
+				);
 			if (fm.id) {
 				const stillGrandfathered = headingBaseline[fm.id] === sha256(body);
 				if (!stillGrandfathered) {
@@ -379,7 +453,13 @@ function main() {
 			...(fm.verdict ? { verdict: fm.verdict } : {}),
 			...(fm.pr ? { pr: fm.pr } : {}),
 			...(fm.type ? { type: fm.type } : {}),
-			...(fm.tags ? { tags: fm.tags } : {})
+			...(fm.tags ? { tags: fm.tags } : {}),
+			...(fm.merge_sha ? { merge_sha: fm.merge_sha } : {}),
+			...(fm.merged_pr ? { merged_pr: fm.merged_pr } : {}),
+			...(fm.merged_at ? { merged_at: fm.merged_at } : {}),
+			...(fm.release_flag ? { release_flag: fm.release_flag } : {}),
+			...(fm.release_state ? { release_state: fm.release_state } : {}),
+			...(fm.evidence ? { evidence: fm.evidence } : {})
 		});
 	}
 
@@ -434,13 +514,13 @@ function main() {
 		// One-way ratchet: every exception must describe unchanged debt from the
 		// comparison corpus. Deriving eligibility from specs (not the older
 		// baseline files) closes both bootstrap and push-event fail-open paths.
-		const comparisonSha = resolveComparisonSha();
-		if (comparisonSha === undefined) {
+		const comparisonRevs = resolveComparisonRevs();
+		if (comparisonRevs === undefined) {
 			errors.push(
 				`cannot resolve comparison revision to check the baseline ratchets (needs fetch-depth: 0)`
 			);
-		} else if (comparisonSha !== null) {
-			const eligible = baselineEligibilityFromCorpus(readSpecCorpusAtRev(comparisonSha));
+		} else if (comparisonRevs !== null) {
+			const eligible = baselineEligibilityFromRevs(comparisonRevs);
 			errors.push(...checkHeadingBaselineRatchet(eligible.headings, headingBaseline));
 			errors.push(...checkSupersedeBaselineRatchet(eligible.supersedes, [...supersedeBaseline]));
 		}

@@ -1,13 +1,14 @@
 ---
 id: 2026-08-17-factory-postmerge-discovery-loop
 title: Post-merge discovery loop — merged-PR intake, scan, verified proposals
-status: approved
+status: in-spec
 created: 2026-08-17
 updated: 2026-08-18
 repos: [minion-factory]
 tags: [logic, infra]
 source: audit-2026-08-17
 value: high
+spawned_spec: 2026-08-18-factory-postmerge-discovery-loop-spec
 ---
 
 # The pipeline ends at merge; the SDLC does not

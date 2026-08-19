@@ -1,10 +1,12 @@
 ---
 id: ci-minion-ai-ci
 title: CI red — CI on minion-ai DEV
-status: draft
+status: in-spec
 created: 2026-08-18
 updated: 2026-08-18
-repos: []
+spawned_spec: 2026-08-18-ci-minion-ai-ci-spec
+repos: [minion-ai]
+tags: [test, logic]
 ---
 
 # CI red — CI on NikolasP98/minion-ai@DEV
@@ -53,3 +55,7 @@ checks (bun, test, pnpm baml:generate && pnpm canvas:a2ui:bundle && bunx vitest 
 checks (bun, test, pnpm baml:generate && pnpm canvas:a2ui:bundle && bunx vitest run --project=unit)	UNKNOWN STEP	2026-08-17T12:49:06.4006816Z Cleaning up orphan processes
 checks (bun, test, pnpm baml:generate && pnpm canvas:a2ui:bundle && bunx vitest run --project=unit)	UNKNOWN STEP	2026-08-17T12:49:06.4530159Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830, actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
+
+---
+
+**Triage 2026-08-18:** Approved — gateway just joined the factory dev fleet (safe gate: pnpm check + vitest test/ci). Known context: the bun unit job carries ~193 clustered pre-existing failures (see test-suite recon 2026-08-10); the spec should decide whether to fix the cluster roots or quarantine honestly, never blanket-skip. NEVER run the full gw suite.

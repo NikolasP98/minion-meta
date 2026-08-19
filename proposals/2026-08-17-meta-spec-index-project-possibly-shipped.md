@@ -3,9 +3,11 @@ id: 2026-08-17-meta-spec-index-project-possibly-shipped
 title: spec-index.mjs drops possibly_shipped/evidence/link_review — G0 amber chip never renders
 status: review
 created: 2026-08-17
-updated: 2026-08-17
-repos: [minion-meta, minion-base]
+updated: 2026-08-18
+spawned_spec: 2026-08-18-meta-spec-index-project-possibly-shipped-spec
+repos: [minion-meta]
 duplicate_candidate: 2026-08-17-base-kanban-possibly-shipped-surface
+tags: [logic]
 ---
 
 # spec-index.mjs drops possibly_shipped/evidence/link_review
@@ -52,3 +54,12 @@ one-click confirm/reject write-back mechanics via the existing PR/commit path) i
 more detailed than this one's. Flagged rather than merged because picking a canonical
 here means resolving that factual conflict, not just concatenating text — left for a
 human to reconcile.
+
+---
+
+**Corrected gate record 2026-08-18:** The delegated decision was invalid. Verified
+`minion-factory@a45b225b` does not emit `possibly_shipped`, `evidence`, or `link_review`, and
+`minion-base` PR #13 is open rather than shipped; current base `main` (`ccc5db78`) contains no
+consumer for `possibly_shipped` or `link_review`. The projector-only scope crossed its explicit
+stop gate. This proposal returns to review and must be reordered behind an approved producer
+contract and a merged (or atomic) consumer contract. It is not approved for implementation.
