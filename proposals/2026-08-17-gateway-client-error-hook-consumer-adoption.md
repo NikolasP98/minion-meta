@@ -1,9 +1,10 @@
 ---
 id: 2026-08-17-gateway-client-error-hook-consumer-adoption
 title: "Adopt the GatewayClient onEventError hook in hub, site and paperclip (S3 consumer handoff)"
-status: approved
+status: in-spec
 created: 2026-08-17
 updated: 2026-08-19
+spawned_spec: 2026-08-19-gateway-client-error-hook-consumer-adoption-spec
 repos: [minion_hub, minion_site, paperclip-minion]
 tags: [logic, docs]
 value: 3
