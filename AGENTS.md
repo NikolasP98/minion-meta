@@ -31,6 +31,10 @@ This repo carries Codex parity artifacts under `codex/` so Codex can use the sam
 
 Use these when the user asks about prior-session context, durable memory, project wake-up context, or lessons learned. Do not save secrets, raw credentials, or unrelated transcript bulk into memory.
 
+## Curated Engineering Skills
+
+The canonical interactive bundle lives in `minion_plugins/plugins/minion-engineering/`. Run `scripts/sync-minion-engineering-skills.sh` after updating it to install the project-local skills for Claude, Cursor, and Codex and to copy the advisory prose auditor into `minion_factory/agent/skills/`. Local project instructions always win; the prose auditor is advisory and has no rewrite, verdict, or merge authority.
+
 ### Core commands
 
 | Command | Use |
