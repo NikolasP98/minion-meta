@@ -2,10 +2,10 @@
 id: 2026-08-17-pkg-gateway-client-onevent-errors-spec
 title: "@minion-stack/shared GatewayClient — consumer onEvent failures are reported, never discarded"
 stage: spec
-status: approved
+status: merged
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 proposal: 2026-08-17-pkg-gateway-client-onevent-errors
 verdict: approved
 repos: [minion-meta]
