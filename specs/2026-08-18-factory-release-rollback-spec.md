@@ -11,7 +11,8 @@ verdict: approved
 repos: [minion-factory]
 tags: [infra]
 type: fix
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/37
+reconcile_ignore: true
+reconcile_ignore_reason: "Flag evidence was S1/S2 merges only — S3 rollback control flow verified ABSENT on main (no failure_reason path, no health poll, no previous-tag rollback). Implementation in flight by orchestrator."
 ---
 
 # self-update.sh safety net
