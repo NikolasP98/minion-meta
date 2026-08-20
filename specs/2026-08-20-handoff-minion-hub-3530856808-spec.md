@@ -2,12 +2,12 @@
 id: 2026-08-20-handoff-minion-hub-3530856808-spec
 title: "Wire crm-funnel.concurrent.integration.test.ts into a real CI gate (close the funnel atomic-write handoff marker)"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-20
 updated: 2026-08-20
 proposal: handoff-minion-hub-3530856808
-verdict: pending
+verdict: approved
 repos: [minion_hub]
 relationship: extends
 related: [2026-08-18-hub-funnel-atomic-write-spec, 2026-08-17-hub-funnel-atomic-write]
@@ -19,7 +19,7 @@ type: fix
 
 **Owner surface:** `minion_hub` — `.github/workflows/ci.yml` (a new Postgres job), a new CI-only
 schema fixture file (path decided in Slice 1), `src/server/services/crm-funnel.concurrent.integration.test.ts`
-(marker removal + docstring correction only — no test-logic change).
+(marker removal + docstring/guard-message correction only — no test-logic change).
 
 ## 1. Relationship recommendation
 
@@ -76,13 +76,13 @@ in Slice 0 whether master has moved before implementing)
 - `crm-funnel.concurrent.integration.test.ts` exists, is well-formed, gates on
   `describe.runIf(Boolean(databaseUrl))` where `databaseUrl = process.env.SUPABASE_DB_URL`, and
   additionally throws loudly if `REQUIRE_CRM_FUNNEL_CONCURRENT_POSTGRES` is set without a URL
-  (the repo's established "loud-skip" convention, matching
+  (the repo's established required-database guard convention, matching
   `crm-contacts.sql.integration.test.ts` and `crm-funnel-parity.sql.integration.test.ts`).
 - The file's own docstring (lines 9–19) states it deliberately does **not** self-seed a throwaway
   schema like its two siblings, because its assertions run through the real `withOrgCore` path
-  (`with-org-core.ts:38`) and therefore need real, pre-existing `organizations` and
-  `crm_activities` rows/tables with real RLS in force — the whole point being to prove the fix
-  under the actual RLS/role machinery, not a mocked or bypassed one.
+  (`with-org-core.ts:38`) and therefore need a real, pre-existing `organizations` row plus the
+  `crm_activities` table, with real RLS in force on the CRM tables — the whole point being to prove
+  the fix under the actual RLS/role machinery, not a mocked or bypassed one.
 - `.github/workflows/ci.yml`'s only Postgres-backed job (`crm-deposit-rule-postgres`) spins up a
   bare `postgres:15` service container and runs exactly two integration files by name; adding a
   file to the repo does **not** automatically add it to that job (confirmed by reading the job's
@@ -134,25 +134,31 @@ in Slice 0 whether master has moved before implementing)
 
 - A new CI job runs `crm-funnel.concurrent.integration.test.ts` against a bare-container Postgres
   seeded with a **CI-only, non-prod** fixture that recreates the exact real shape the suite
-  depends on: an `organizations` table with (at minimum) the `id` column the suite reads, a
-  `crm_activities` table matching `pg-crm-schema.ts` byte-for-byte, a `crm_contacts` table
-  matching `pg-crm-schema.ts`, the `app_ledger` role, and RLS policies on `crm_contacts` and
-  `crm_activities` that are **verified equivalent to prod** (not merely inferred from the
-  `_org_guc` naming convention) before being trusted as a stand-in for real RLS.
+  depends on: an `organizations` table with the Slice-0-verified `id` definition and at least one
+  deterministic seed row (the suite executes `select id::text from organizations limit 1`),
+  `crm_activities` and `crm_contacts` tables structurally matching their `pg-crm-schema.ts`
+  definitions, the `app_ledger` role, and RLS policies on both CRM tables that are **verified
+  equivalent to prod** (not merely inferred from the `_org_guc` naming convention) before being
+  trusted as a stand-in for real RLS.
 - The fixture is never a `supabase/migrations/*.sql` file and is never applied to a real
   Supabase project — it exists solely as a CI/test-only artifact so a bug in it can never reach
   prod schema.
-- `describe.runIf(Boolean(databaseUrl))` continues to loud-skip locally when no database is
-  configured (invariant: local `bun run vitest run` behavior is unchanged) — only the new CI job
-  sets `SUPABASE_DB_URL` + `REQUIRE_CRM_FUNNEL_CONCURRENT_POSTGRES=1`.
+- `describe.runIf(Boolean(databaseUrl))` continues to skip locally when no database is configured
+  (invariant: local `bun run vitest run` behavior is unchanged), while the existing guard still
+  fails loudly when `REQUIRE_CRM_FUNNEL_CONCURRENT_POSTGRES=1` is set without a URL. Only the new
+  CI job sets both `SUPABASE_DB_URL` and the requirement flag.
 - The suite's own docstring (lines 9–19) is corrected once it is wired into CI — it currently
   states it "CANNOT run against the bare `postgres:` service container," which becomes false; a
   stale comment making a false claim about the file's own execution environment is exactly the
   class of bug this spec exists to prevent, so it must not survive the fix that disproves it.
-- The `TODO(handoff):` marker (lines 21–31) is removed **only** once the new CI job has actually
-  executed this file (not merely been defined) and reported the three concurrency cases green in
-  a real GitHub Actions run — matching the "a test that is green because it never ran" lesson
-  this exact proposal is downstream of.
+- The requirement-guard error text is corrected at the same time: it currently says the suite
+  needs a "FULL-SCHEMA database ... not the bare CI service," which also becomes false. The guard
+  behavior remains unchanged; only its now-stale diagnostic changes.
+- The `TODO(handoff):` marker (lines 21–31) is removed only after an initial GitHub Actions run of
+  the new job reports all three concurrency cases executed and green. The marker-removal commit is
+  then pushed and the final PR head must itself rerun green, so the merge evidence covers the exact
+  revision that no longer carries the marker — matching the "a test that is green because it never
+  ran" lesson this exact proposal is downstream of.
 - **Invariant — no prod schema change.** Zero DDL against the real Supabase project. The CI
   fixture's existence must not be mistaken for a migration; Slice 1's file lives outside
   `supabase/migrations/`.
@@ -162,36 +168,38 @@ in Slice 0 whether master has moved before implementing)
   `withOrgCore`. The fixture must not "solve" the CI gap by adding a mock — that would silently
   regress this file to the same weaker guarantee its two self-seeding siblings already provide,
   defeating the reason this file was written as a separate, harder case in the first place.
-- **Invariant — a broken fixture must fail loud, not pass empty.** If the RLS policy the fixture
-  installs is wrong (e.g. missing `force row level security`, wrong predicate), the suite must
-  fail (rows leak or the lock/queue behavior changes), not silently pass — Slice 2's DoD includes
-  a negative-control run proving this.
+- **Invariant — a broken fixture must fail loud, not pass empty.** The fixture pre-check must
+  assert both catalog configuration (`relrowsecurity`, `relforcerowsecurity`, expected policy
+  roles/commands/predicates) and cross-org behavior under `app_ledger`. A behavioral query alone
+  cannot detect missing `FORCE ROW LEVEL SECURITY`, because `app_ledger` is not the table owner.
 
 ### DELTA — numbered transitions, each mapped to a slice and its proving test
 
-1. The real (Slice-0-verified) DDL and RLS policy text for `crm_contacts`, `crm_activities`, and
-   the minimal `organizations` shape this suite needs are established as fact, not inference →
+1. The real (Slice-0-verified) DDL and RLS policy text for `crm_contacts` and `crm_activities`,
+   plus the `organizations.id` definition this suite needs, are established as fact, not inference →
    **Slice 0** → recorded verbatim in the PR description with their source (prod `pg_policies`/
    `information_schema` query results, or an equivalent authoritative source); stop-ship if
-   unobtainable (see §4 human dependency).
-2. A CI-only schema fixture recreating that verified shape (tables + `app_ledger` role + RLS
-   policies + grants) is committed outside `supabase/migrations/` → **Slice 1** → `psql` (or the
-   job's Postgres client) applies it cleanly against a fresh `postgres:15` container with zero
-   errors; a negative-control query proves RLS is actually enforced (cross-org row is invisible
-   under `app_ledger` + a foreign `app.current_org_id`).
-3. A new (or extended) CI job applies the fixture and runs
+   unobtainable (see §5 A1).
+2. A CI-only schema fixture recreating that verified shape (tables + deterministic organization
+   seed row + `app_ledger` role + RLS policies + grants) is committed outside
+   `supabase/migrations/` → **Slice 1** → `psql -v ON_ERROR_STOP=1` applies it cleanly against a
+   fresh `postgres:15` container; catalog assertions prove RLS is enabled and forced with the
+   expected policies, and a transaction-scoped negative control proves cross-org CRM rows are
+   invisible under `app_ledger` + a foreign `app.current_org_id`.
+3. A new, separate CI job applies the fixture and runs
    `crm-funnel.concurrent.integration.test.ts` with `REQUIRE_CRM_FUNNEL_CONCURRENT_POSTGRES=1` →
    **Slice 2** → the job appears in a real GitHub Actions run against this spec's PR and all
-   three `it(...)` cases in the file report passed, not skipped (assert via the job's log or the
-   uploaded vitest JSON report, per the "job logs stay BlobNotFound" gotcha in operator memory —
-   use the artifact, not the raw log).
-4. The suite's docstring no longer claims it cannot run in CI; the `TODO(handoff):` marker is
-   removed → **Slice 2** → `rg -n 'TODO\(handoff\)' src/server/services/crm-funnel.concurrent.integration.test.ts`
-   returns no match, and `rg -n 'CANNOT run against the bare' src/server/services/crm-funnel.concurrent.integration.test.ts`
-   returns no match, in the same commit that made the CI run true.
-5. `bun run vitest run` (full local suite, no `SUPABASE_DB_URL`) is unchanged — this file still
-   loud-skips locally exactly as before → **Slice 2** → regression assertion in the PR (`bun run
-   vitest run` output shows the suite's three cases as skipped, same as pre-spec).
+   three `it(...)` cases in the file report passed, not skipped in an uploaded vitest JSON report
+   (per the "job logs stay BlobNotFound" gotcha in operator memory, the durable artifact is the
+   evidence rather than a raw-log-only assertion).
+4. After the first successful CI execution, the suite's docstring and guard diagnostic no longer
+   claim it cannot run on a bare CI Postgres, and the `TODO(handoff):` marker is removed →
+   **Slice 2** → all stale-text `rg` checks below return no match, and the final PR-head Actions
+   run is green with its own uploaded report.
+5. `bun run vitest run` (full local suite, explicitly empty `SUPABASE_DB_URL`) is unchanged — this
+   file still skips locally exactly as before → **Slice 2** → regression assertion in the PR
+   (`SUPABASE_DB_URL= REQUIRE_CRM_FUNNEL_CONCURRENT_POSTGRES= bun run vitest run` shows the suite's
+   three cases skipped, same as pre-spec).
 
 ## 3. Approach — two vertical slices, with a human-dependent recon gate before either
 
@@ -222,11 +230,19 @@ real RLS policy text for `crm_contacts`/`crm_activities` is not checked into the
   read access runs and pastes into the PR:
   ```sql
   select tablename, policyname, permissive, roles, cmd, qual, with_check
-  from pg_policies where tablename in ('crm_contacts', 'crm_activities', 'organizations');
+  from pg_policies where tablename in ('crm_contacts', 'crm_activities');
+  select relname, relrowsecurity, relforcerowsecurity
+  from pg_class where relname in ('crm_contacts', 'crm_activities');
   select grantee, table_name, privilege_type from information_schema.role_table_grants
-  where table_name in ('crm_contacts', 'crm_activities', 'organizations') and grantee = 'app_ledger';
-  \d organizations   -- or the equivalent information_schema query for its full column list
+  where table_name in ('crm_contacts', 'crm_activities') and grantee = 'app_ledger';
+  select column_name, data_type, udt_name, is_nullable, column_default
+  from information_schema.columns
+  where table_name = 'organizations' and column_name = 'id';
   ```
+  If any verified policy expression references a helper function, table, or role beyond the four
+  fixture objects already named, inventory that dependency before S1. Include it only when it is a
+  test-only prerequisite with no production impact; otherwise stop for a spec revision rather than
+  silently broadening the fixture.
 - Or a scoped, explicitly-provisioned read-only credential is handed to the implementing agent
   for this recon step only (never committed, never logged) — a decision for whoever runs the dev
   stage, not this spec.
@@ -246,24 +262,29 @@ with what was found instead of shipping an unverified fixture.
 
 **Do:**
 - Add a new SQL file **outside** `supabase/migrations/` — e.g.
-  `supabase/ci-fixtures/crm-funnel-concurrent.sql` — containing, in order: `create role if not
-  exists app_ledger;` (the bare container starts as an empty cluster — no role exists yet, unlike
-  a real Supabase project), `create table organizations (...)` (Slice-0-verified minimal shape),
-  `create table crm_contacts (...)` and `create table crm_activities (...)` (full shape from
-  `pg-crm-schema.ts`, FK `crm_activities.contact_id → crm_contacts.id`), then `enable row level
-  security` + `force row level security` + the Slice-0-verified policy text (not the
-  `_org_guc`-convention guess) on both tables, then the matching `grant select, insert, update,
-  delete on ... to app_ledger`.
+  `supabase/ci-fixtures/crm-funnel-concurrent.sql` — containing, in order: an idempotent `DO` block
+  that creates `app_ledger` only when absent (`CREATE ROLE IF NOT EXISTS` is not valid PostgreSQL
+  syntax); `create table organizations (...)` with the Slice-0-verified `id` definition and one
+  deterministic seed row; `create table crm_contacts (...)` and `create table crm_activities (...)`
+  structurally matching `pg-crm-schema.ts` (including defaults, nullability, indexes, and the FK
+  `crm_activities.contact_id → crm_contacts.id`); then `enable row level security` + `force row
+  level security` + the Slice-0-verified policy text (not the `_org_guc`-convention guess) on both
+  CRM tables; and finally the matching grants to `app_ledger`.
+- End the fixture with catalog assertions whose literal expected rows come from Slice 0. Applying
+  the fixture must raise if either CRM table lacks enabled/forced RLS or if the actual `pg_policies`
+  roles, commands, predicates, or `with_check` expressions differ from those expected rows. This
+  makes the catalog requirement executable rather than a review comment.
 - Head the file with a comment stating plainly: this is a CI-only synthetic reproduction of a
   subset of prod schema, sourced from a Slice-0 recon dated to this PR; it is not a migration, is
   never applied to a real project, and must be re-verified against prod if this suite starts
   failing for no code reason (schema drift is a known risk — see `hub-supabase-schema-not-reproducible`
   operator memory).
-- Add one throwaway test/step (can live in Slice 2's job as a pre-check, or as a `psql` assertion
-  script) that proves the RLS policy is actually enforced under the fixture: as `app_ledger` with
-  `app.current_org_id` set to org A, a row inserted under org B must not be visible. This is the
-  negative control DELTA #2's proof requires — without it, a fixture that silently grants
-  `bypassrls`-equivalent access would make the CI job pass for the wrong reason.
+- Add a pre-check in Slice 2's job that first asserts the two CRM tables' catalog flags and policy
+  assertions by applying the fixture, then proves behavior: inside one explicit transaction, act as `app_ledger`, set
+  `app.current_org_id` to org A, insert an org-A contact and activity, switch the GUC to org B, and
+  raise an error if either row remains visible. The explicit transaction is required because
+  `set_config(..., true)` is transaction-local; separate autocommit statements would reset the GUC
+  immediately and make the check invalid. This is DELTA #2's negative control.
 
 **Files:** `supabase/ci-fixtures/crm-funnel-concurrent.sql` (new).
 
@@ -271,15 +292,30 @@ with what was found instead of shipping an unverified fixture.
 ```bash
 docker run --rm -d --name ci-fixture-check -e POSTGRES_PASSWORD=postgres -p 55432:5432 postgres:15
 until pg_isready -h localhost -p 55432; do sleep 1; done
-psql "postgresql://postgres:postgres@localhost:55432/postgres" -f supabase/ci-fixtures/crm-funnel-concurrent.sql
+psql -v ON_ERROR_STOP=1 "postgresql://postgres:postgres@localhost:55432/postgres" \
+  -f supabase/ci-fixtures/crm-funnel-concurrent.sql
 #   must exit 0 with no errors
-psql "postgresql://postgres:postgres@localhost:55432/postgres" <<'SQL'
-  -- negative control: org B must not see org A's row via app_ledger + RLS
-  set role app_ledger;
-  select set_config('app.current_org_id', 'org-a', true);
-  insert into crm_contacts (id, org_id, source, custom_fields) values (gen_random_uuid(), 'org-a', 'manual', '{}');
-  select set_config('app.current_org_id', 'org-b', true);
-  select count(*) from crm_contacts where org_id = 'org-a';  -- must be 0
+psql -v ON_ERROR_STOP=1 "postgresql://postgres:postgres@localhost:55432/postgres" <<'SQL'
+  -- The fixture application above already asserted the RLS catalog snapshot.
+  begin;
+  set local role app_ledger;
+  select set_config('app.current_org_id', '00000000-0000-0000-0000-000000000001', true);
+  insert into crm_contacts (id, org_id, source, custom_fields)
+  values ('00000000-0000-0000-0000-000000000010',
+          '00000000-0000-0000-0000-000000000001', 'manual', '{}');
+  insert into crm_activities (id, org_id, contact_id, kind)
+  values ('00000000-0000-0000-0000-000000000011',
+          '00000000-0000-0000-0000-000000000001',
+          '00000000-0000-0000-0000-000000000010', 'manual');
+  select set_config('app.current_org_id', '00000000-0000-0000-0000-000000000002', true);
+  do $$
+  begin
+    if exists (select 1 from crm_contacts where id = '00000000-0000-0000-0000-000000000010')
+       or exists (select 1 from crm_activities where id = '00000000-0000-0000-0000-000000000011') then
+      raise exception 'cross-org CRM rows are visible under app_ledger';
+    end if;
+  end $$;
+  rollback;
 SQL
 docker rm -f ci-fixture-check
 ```
@@ -293,43 +329,60 @@ docker rm -f ci-fixture-check
 **Goal:** DELTA #3, #4, #5.
 
 **Do:**
-- Add a new job to `.github/workflows/ci.yml` (or a new step in `crm-deposit-rule-postgres` — a
-  **separate** job is safer given the memory warning that `SUPABASE_DB_URL` is also read by other
+- Add a new, separate job to `.github/workflows/ci.yml`. Isolation is required given the memory
+  warning that `SUPABASE_DB_URL` is also read by other
   `*.sql.integration.test.ts`/`*.service.test.ts` files expecting the full prod schema, which this
-  fixture deliberately does not fully provide; an isolated job scopes the blast radius to exactly
-  this one file, matching the existing job's own comment rationale for staying narrow).
+  fixture deliberately does not fully provide; the separate job scopes the blast radius to exactly
+  this one file, matching the existing job's own comment rationale for staying narrow
+  (`/memory/MINION/factory/2026-08-20-8e4341e7.md`).
 - The job: spin up a bare `postgres:15` service container (same pattern as
-  `crm-deposit-rule-postgres`), apply Slice 1's fixture via `psql` before the test step, then run
-  `bunx vitest run --retry=2 src/server/services/crm-funnel.concurrent.integration.test.ts` with
-  `SUPABASE_DB_URL` pointed at the container and `REQUIRE_CRM_FUNNEL_CONCURRENT_POSTGRES: '1'`.
-- Correct the file's own docstring (lines 9–19) to describe the new CI job by name instead of
-  claiming the suite cannot run in CI.
-- Remove the `TODO(handoff):` block (lines 21–31) only after a real GitHub Actions run on this
-  spec's own PR shows the new job green with all three cases executed (not skipped) — paste the
-  run URL and the vitest summary into the PR description as the DELTA #3 proof.
+  `crm-deposit-rule-postgres`), apply Slice 1's fixture via `psql -v ON_ERROR_STOP=1`, run the
+  catalog/behavior pre-check from Slice 1, then run this single test file with `SUPABASE_DB_URL`
+  pointed at the container and `REQUIRE_CRM_FUNNEL_CONCURRENT_POSTGRES: '1'`. Emit a vitest JSON
+  report, assert `3` passed and `0` skipped from that report, and upload it with
+  `actions/upload-artifact` under `if: always()` so pass/fail evidence survives raw-log expiry.
+- Correct the file's own docstring (lines 9–19) and the requirement-guard error message to describe
+  the new CI fixture/job instead of claiming the suite needs a full-schema database and cannot run
+  on the bare CI service. Do not change the guard condition or any test logic.
+- Keep the `TODO(handoff):` block for the first pushed run. After that run's uploaded JSON report
+  shows three passed and zero skipped, remove the block, push the marker-removal commit, and require
+  the final PR-head run to produce the same green report. Paste the final run URL and artifact name
+  into the PR description as DELTA #3/#4 proof.
 - Do not touch `crm-contacts.service.ts`, `crm-journey.service.ts`, or any other production
   source file — this slice is CI/test-infra and one file's comments only.
 
 **Files:** `.github/workflows/ci.yml`,
-`src/server/services/crm-funnel.concurrent.integration.test.ts` (docstring + marker removal
-only).
+`src/server/services/crm-funnel.concurrent.integration.test.ts` (docstring/guard-message
+correction + marker removal only).
 
 **Definition of done (machine-checkable):**
 ```bash
 # Locally, simulate the new job:
 docker run --rm -d --name funnel-concurrent-ci -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=crm_funnel_concurrent_test -p 55433:5432 postgres:15
 until pg_isready -h localhost -p 55433; do sleep 1; done
-psql "postgresql://postgres:postgres@localhost:55433/crm_funnel_concurrent_test" -f supabase/ci-fixtures/crm-funnel-concurrent.sql
+psql -v ON_ERROR_STOP=1 "postgresql://postgres:postgres@localhost:55433/crm_funnel_concurrent_test" \
+  -f supabase/ci-fixtures/crm-funnel-concurrent.sql
 SUPABASE_DB_URL=postgresql://postgres:postgres@localhost:55433/crm_funnel_concurrent_test \
 REQUIRE_CRM_FUNNEL_CONCURRENT_POSTGRES=1 \
   bunx vitest run --retry=2 src/server/services/crm-funnel.concurrent.integration.test.ts
 #   3 passed, 0 skipped
+
+# In Actions, produce and validate the durable evidence before uploading it.
+mkdir -p test-results
+SUPABASE_DB_URL=postgresql://postgres:postgres@localhost:55433/crm_funnel_concurrent_test \
+REQUIRE_CRM_FUNNEL_CONCURRENT_POSTGRES=1 \
+  bunx vitest run --retry=2 --reporter=json --outputFile=test-results/crm-funnel-concurrent.json \
+    src/server/services/crm-funnel.concurrent.integration.test.ts
+jq -e '.numPassedTests == 3 and .numFailedTests == 0 and .numPendingTests == 0' \
+  test-results/crm-funnel-concurrent.json
 docker rm -f funnel-concurrent-ci
 
 bun run check
-bun run vitest run                              # full local suite unchanged: this file skips (loud-skip), no new failures
+SUPABASE_DB_URL= REQUIRE_CRM_FUNNEL_CONCURRENT_POSTGRES= bun run vitest run
+# full local suite unchanged: this file skips, no new failures
 ! rg -n 'TODO\(handoff\)' src/server/services/crm-funnel.concurrent.integration.test.ts
 ! rg -n 'CANNOT run against the bare' src/server/services/crm-funnel.concurrent.integration.test.ts
+! rg -n 'needs a FULL-SCHEMA database' src/server/services/crm-funnel.concurrent.integration.test.ts
 git diff --name-only <base>...HEAD -- src/server/services/crm-contacts.service.ts src/server/services/crm-journey.service.ts
 #   must be empty — this spec touches no atomic-write logic
 ```
@@ -340,7 +393,7 @@ git diff --name-only <base>...HEAD -- src/server/services/crm-contacts.service.t
 |---|---|---|
 | `supabase/ci-fixtures/crm-funnel-concurrent.sql` | S1 | new — CI-only synthetic schema, never a migration |
 | `.github/workflows/ci.yml` | S2 | new Postgres-backed job |
-| `src/server/services/crm-funnel.concurrent.integration.test.ts` | S2 | docstring correction + marker removal only, no test-logic change |
+| `src/server/services/crm-funnel.concurrent.integration.test.ts` | S2 | docstring/guard-message correction + marker removal only, no test-logic change |
 
 All paths relative to `minion_hub/`. No `supabase/migrations/*.sql` file is added or edited —
 the CI fixture is deliberately outside that directory so it can never be mistaken for, or
@@ -400,32 +453,40 @@ cd minion_hub
 
 # 1. Gates
 bun run check
-bun run vitest run                              # local suite unchanged; this file loud-skips
+SUPABASE_DB_URL= REQUIRE_CRM_FUNNEL_CONCURRENT_POSTGRES= bun run vitest run
+# local suite unchanged; this file skips
 
 # 2. The new CI job, simulated locally exactly as it runs in Actions
 docker run --rm -d --name e2e-funnel-concurrent -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=crm_funnel_concurrent_test -p 55434:5432 postgres:15
 until pg_isready -h localhost -p 55434; do sleep 1; done
-psql "postgresql://postgres:postgres@localhost:55434/crm_funnel_concurrent_test" -f supabase/ci-fixtures/crm-funnel-concurrent.sql
+psql -v ON_ERROR_STOP=1 "postgresql://postgres:postgres@localhost:55434/crm_funnel_concurrent_test" \
+  -f supabase/ci-fixtures/crm-funnel-concurrent.sql
+mkdir -p test-results
 SUPABASE_DB_URL=postgresql://postgres:postgres@localhost:55434/crm_funnel_concurrent_test \
 REQUIRE_CRM_FUNNEL_CONCURRENT_POSTGRES=1 \
-  bunx vitest run --retry=2 src/server/services/crm-funnel.concurrent.integration.test.ts
+  bunx vitest run --retry=2 --reporter=json --outputFile=test-results/crm-funnel-concurrent.json \
+    src/server/services/crm-funnel.concurrent.integration.test.ts
+jq -e '.numPassedTests == 3 and .numFailedTests == 0 and .numPendingTests == 0' \
+  test-results/crm-funnel-concurrent.json
 docker rm -f e2e-funnel-concurrent
 
-# 3. Marker + docstring closed
-rg -n 'TODO\(handoff\)' src/server/services/crm-funnel.concurrent.integration.test.ts   # expect no match
+# 3. Marker + stale execution claims closed
+! rg -n 'TODO\(handoff\)' src/server/services/crm-funnel.concurrent.integration.test.ts
+! rg -n 'CANNOT run against the bare|needs a FULL-SCHEMA database' \
+  src/server/services/crm-funnel.concurrent.integration.test.ts
 
 # 4. No production write-path file touched
 git diff --name-only <base>...HEAD -- src/server/services/crm-contacts.service.ts \
   src/server/services/crm-journey.service.ts src/server/services/crm-relationship.service.ts   # expect empty
 
 # 5. Real GitHub Actions confirmation (not just local Docker)
-#    Push the branch, open the PR, and paste the Actions run URL + the new job's vitest summary
-#    (3 passed, 0 skipped) into the PR description — this is the actual DELTA #3 proof; the local
-#    Docker simulation above is a pre-flight, not a substitute for it.
+#    First push the job while the marker remains. After its artifact proves 3 passed / 0 skipped,
+#    remove the marker and stale text, push again, and paste the FINAL PR-head Actions run URL plus
+#    artifact name into the PR description. Local Docker is a pre-flight, not a substitute.
 ```
 
-**Ship gate:** §7 all green, the new job visibly green on a real GitHub Actions run (URL pasted
-in the PR, not asserted from local Docker alone), the marker and stale docstring both removed in
-the same commit that made the CI run true, A1's human-dependency resolved and recorded (who
-supplied the RLS policy text, from where), and A2's residual drift risk acknowledged in the PR
-rather than silently accepted.
+**Ship gate:** §7 all green; the final marker-free PR head is green in a real GitHub Actions run
+whose URL and uploaded JSON artifact name are pasted in the PR; the artifact says three passed,
+zero failed, zero skipped; A1's human dependency is resolved and recorded (who supplied the RLS
+policy text, from where); and A2's residual drift risk is acknowledged in the PR rather than
+silently accepted.
