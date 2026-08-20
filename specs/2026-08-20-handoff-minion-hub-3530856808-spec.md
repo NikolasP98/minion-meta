@@ -21,6 +21,26 @@ type: fix
 schema fixture file (path decided in Slice 1), `src/server/services/crm-funnel.concurrent.integration.test.ts`
 (marker removal + docstring/guard-message correction only — no test-logic change).
 
+## 0. Product
+
+Quoted verbatim from the source proposal
+([`handoff-minion-hub-3530856808`](../proposals/handoff-minion-hub-3530856808.md)):
+
+> Filed automatically by the factory handoff-ledger sweep: this file carries a
+> `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
+> into the spec pipeline to resolve the open end below.
+>
+> - `NikolasP98/minion_hub@master src/server/services/crm-funnel.concurrent.integration.test.ts:21` —
+>   the spec's central concurrency claim is therefore proven by a
+>
+> **Definition of done:** the marker's open end is resolved and the
+> `TODO(handoff):` comment removed; the sweep closes this proposal
+> automatically once the file carries no more markers.
+
+The open end is that the concurrency proof this marker points at never executes in CI: the test
+skips without a Postgres URL, so the funnel atomic-write claim rests on a file nothing runs. This
+spec resolves it by giving that test a real CI gate, then removing the marker.
+
 ## 1. Relationship recommendation
 
 **Recommended classification: `extends`.**

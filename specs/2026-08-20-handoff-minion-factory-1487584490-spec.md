@@ -61,7 +61,7 @@ not merely by file, when concurrent factory work relocates or changes unstick lo
 SQLite FTS database was absent at `/home/agent/.claude-mem/claude-mem.db`, and no semantic
 memory-search MCP tool was exposed in this review session; neither limitation leaves a decision gap.
 
-## 0. Problem (from the approved proposal, quoting the live `TODO(handoff)` marker)
+## 0. Product
 
 > `NikolasP98/minion-factory@main scripts/unstick-cron.sh:110` — there is no CROSS-TICK cap on
 > requeuing a persistently-failing lineage.
@@ -383,7 +383,7 @@ Blast radius is a single host-side cron script inside `minion-factory`, running 
 - Any change to `agent/unstick.sh`, the facilitator's Docker invocation, or its credential scope —
   untouched by this spec.
 
-## 9. End-to-end acceptance
+## 9. End-to-end verification
 
 From a clean clone of the merge commit:
 

@@ -16,7 +16,7 @@ type: fix
 
 # Remove the `onEventError` `TODO(handoff)` marker in `packages/shared/src/gateway/client.ts`
 
-## 0. Problem
+## 0. Product
 
 Quoting the proposal (`proposals/handoff-minion-meta-3518589653.md`), filed by the factory
 handoff-ledger sweep against a real `TODO(handoff):` comment in repository source:

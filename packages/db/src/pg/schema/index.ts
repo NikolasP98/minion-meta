@@ -10,7 +10,8 @@ export type {
   MappedProfile,
   MappedIdentity,
 } from '../identity-mapper.js';
-export { sealSecret, openSecret } from '../crypto.js';
+export { sealSecret, openSecret, cryptoKeyMode, assertCryptoKeyConfigured } from '../crypto.js';
+export type { CryptoKeyMode } from '../crypto.js';
 export { gateway, userGateway } from './gateway.js';
 export { messages } from './messages.js';
 // App tables migrated off Turso (telemetry/app split) — see

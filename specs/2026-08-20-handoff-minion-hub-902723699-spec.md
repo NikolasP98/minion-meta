@@ -25,7 +25,7 @@ standalone artifact because the factory closed S1 as the whole spec rather than 
 
 ---
 
-## 0. Problem (quoted from the approved proposal)
+## 0. Product
 
 > `NikolasP98/minion_hub@master src/server/services/pos.service.ts:1393` — apply the safe
 > trackStock transitions (false→true)
