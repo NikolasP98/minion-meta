@@ -1,10 +1,11 @@
 ---
 id: ci-minion-ai-install-smoke
 title: CI red — Install Smoke on minion-ai DEV
-status: draft
+status: closed
 created: 2026-08-19
-updated: 2026-08-19
+updated: 2026-08-20
 repos: []
+closed_reason: "Workflow healed: latest run on its watch branch is green post-billing-fix (verified 2026-08-20); red was the Actions billing outage, not code."
 ---
 
 # CI red — Install Smoke on NikolasP98/minion-ai@DEV
@@ -18,8 +19,8 @@ green, or the workflow is deliberately removed/disabled with rationale.
 
 ## Latest failure
 
-- run: https://github.com/NikolasP98/minion-ai/actions/runs/32302967492
-- checked: 2026-08-19
+- run: https://github.com/NikolasP98/minion-ai/actions/runs/32314500535
+- checked: 2026-08-20
 
 ```
 

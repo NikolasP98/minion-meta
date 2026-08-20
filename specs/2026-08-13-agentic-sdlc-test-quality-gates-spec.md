@@ -2,14 +2,15 @@
 id: 2026-08-13-agentic-sdlc-test-quality-gates-spec
 title: Agentic SDLC test & quality gates — execution surfaces, test integrity, train gates
 stage: spec
-status: draft
+status: approved
 pass: 1
 created: 2026-08-13
-updated: 2026-08-13
+updated: 2026-08-20
 repos: [minion, minion_hub, minion-meta, minion-factory]
 verdict: pending
 tags: [infra, test]
 type: infra
+approved_reason: "Pending verdict resolved under overnight mandate: spec is the quality-gates plan of record (S1 already shipped as gw PR #214/#225 lineage); slice-scoped dev runs to continue."
 ---
 
 # Agentic SDLC test & quality gates

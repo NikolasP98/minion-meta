@@ -2,15 +2,16 @@
 id: 2026-08-18-factory-deterministic-unstick-spec
 title: "Known unstick classes bypass the facilitator LLM; it stays advisory-only on a scoped credential"
 stage: spec
-status: approved
+status: done
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: 2026-08-17-factory-deterministic-unstick
 verdict: approved
 repos: [minion-factory]
 tags: [logic, infra]
 type: infra
+done_reason: "S1 merged to main via PR #18 (2026-08-19); zero-diff continuation run 04163c9f confirms no remaining unimplemented slices."
 ---
 
 # Deterministic unstick handlers for known failure classes

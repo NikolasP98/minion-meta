@@ -2,15 +2,16 @@
 id: 2026-08-17-gw-nextcloud-talk-dm-misclassified-spec
 title: "Nextcloud Talk — derive isGroupChat from the conversation type (stop classifying every DM as a group)"
 stage: spec
-status: approved
+status: done
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 proposal: 2026-08-17-gw-nextcloud-talk-dm-misclassified
 verdict: approved
 repos: [minion]
 tags: [logic, test]
 type: fix
+done_reason: "Implementation verified already present on DEV — resume run 88e4fb84 produced zero diff; PR #218 closed superseded."
 ---
 
 # Nextcloud Talk — derive `isGroupChat` from the conversation type

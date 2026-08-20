@@ -2,11 +2,12 @@
 id: 2026-08-03-crm-icp-score-spec
 title: CRM — Per-Org Ideal Customer Profile (ICP) Score
 stage: spec
-status: draft
+status: approved
 pass: 1
 created: 2026-08-03
-updated: 2026-08-18
+updated: 2026-08-20
 repos: [minion_hub]
+approved_reason: "Unblocked: pagination dependency shipped (hub #128/#134). Hand-written spec; dev+review gates carry verification."
 ---
 
 # CRM — Per-Org Ideal Customer Profile (ICP) Score

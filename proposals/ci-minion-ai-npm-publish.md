@@ -1,10 +1,11 @@
 ---
 id: ci-minion-ai-npm-publish
 title: CI red — npm publish on minion-ai DEV
-status: draft
+status: closed
 created: 2026-08-19
-updated: 2026-08-19
+updated: 2026-08-20
 repos: []
+closed_reason: "Workflow healed: latest run on its watch branch is green post-billing-fix (verified 2026-08-20); red was the Actions billing outage, not code."
 ---
 
 # CI red — npm publish on NikolasP98/minion-ai@DEV
@@ -18,8 +19,8 @@ green, or the workflow is deliberately removed/disabled with rationale.
 
 ## Latest failure
 
-- run: https://github.com/NikolasP98/minion-ai/actions/runs/32302967540
-- checked: 2026-08-19
+- run: https://github.com/NikolasP98/minion-ai/actions/runs/32314500546
+- checked: 2026-08-20
 
 ```
 
