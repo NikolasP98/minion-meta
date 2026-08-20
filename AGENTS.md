@@ -290,6 +290,32 @@ non-trivial) → deploy (branch-triggered) → post-merge verification
   DELTA (exact transitions, tests proving each) — see the templates.
 - Security/data-tagged work always keeps human gates at approval AND merge.
 
+### Work-type tags & routing
+
+`routing.yml` (root, JSON-compatible YAML) is machine truth for the work-type
+taxonomy: `ui logic data infra docs test security perf deps`. Tags are a
+multi-select on `proposals/*.md` and `specs/*.md` frontmatter — and per-slice in
+a spec's slice table, because the slice is the routable unit.
+
+- **Path rules are the authority for anything with a diff.** `routing.yml` maps
+  globs → tags per fleet repo; `node scripts/routing.mjs tags <repo-id> <path…>`
+  derives the tag set for changed files (union across files, canonical order).
+- `security` and `perf` are **declared, never derived** — intent is not a location.
+- `generated/labeler/<repo-id>.yml` is the generated `actions/labeler@v5` config
+  for each fleet repo; copy it into `<repo>/.github/labeler.yml`. Never edit it —
+  edit `routing.yml` and run `pnpm run routing:generate`.
+- Tags compose the loop, they don't pick between agents: **one agent per slice**,
+  capabilities injected by tag (ui → `ui-design-governance` + `lint:design`/`lint:tokens`;
+  logic → red-state TDD; docs → light lane but a docs-verifier still checks the
+  claims; security → human gate regardless of score). Review fans out per facet.
+- A declared-vs-derived mismatch (a slice tagged `docs` whose diff touches `src/`)
+  is itself a finding — it is the cheap catch for scope creep.
+- After editing `routing.yml`: `pnpm run routing:generate && pnpm run routing:validate`
+  and commit the regenerated artifacts. `legacyTags` is a shrinking debt ledger —
+  the validator fails if an entry is no longer used by any card.
+
+Design spec: [`specs/2026-08-17-sdlc-phase-gates-scoring-spec.md`](specs/2026-08-17-sdlc-phase-gates-scoring-spec.md) §4b.
+
 ## Orchestration Guide
 
 ### Dispatching Subagents

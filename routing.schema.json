@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://minion.ai/schemas/routing-v1.json",
+  "title": "Minion work-type tag taxonomy and path routing",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "tags", "legacyTags", "shared", "repositories"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "contentHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "tags": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "derived", "description"],
+        "properties": {
+          "id": { "$ref": "#/$defs/tagId" },
+          "derived": { "type": "boolean" },
+          "description": { "type": "string", "minLength": 10 }
+        }
+      }
+    },
+    "legacyTags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "reason"],
+        "properties": {
+          "id": { "$ref": "#/$defs/tagId" },
+          "reason": { "type": "string", "minLength": 20 }
+        }
+      }
+    },
+    "shared": { "$ref": "#/$defs/rules" },
+    "repositories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "rules"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
+          "rules": { "$ref": "#/$defs/rules" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "tagId": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "glob": { "type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9_.@+*?/-]+$" },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["tags", "paths"],
+        "properties": {
+          "tags": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/tagId" } },
+          "paths": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/glob" } }
+        }
+      }
+    }
+  }
+}

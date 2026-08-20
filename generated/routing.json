@@ -1,0 +1,538 @@
+{
+  "contentHash": "8fd397a044ee268fff8d9572ae683172a800b5de869a59882b67c05506fbf0e8",
+  "legacyTags": [
+    {
+      "id": "board",
+      "reason": "Pre-taxonomy topic tag on a minion-base board proposal. Retag as ui/logic when that proposal is re-triaged."
+    },
+    {
+      "id": "crm",
+      "reason": "Pre-taxonomy product-area tag on a hub CRM spec. Product area is not a work type; retag as logic/data on the next pass."
+    },
+    {
+      "id": "duplication",
+      "reason": "Handoff-sweep finding class (duplicated implementation). Retag as logic when the proposals are re-triaged."
+    },
+    {
+      "id": "edge-case",
+      "reason": "Handoff-sweep finding class (unhandled edge case). Retag as logic/test when the proposals are re-triaged."
+    },
+    {
+      "id": "handoff-sweep",
+      "reason": "Source marker written by the factory handoff-ledger sweep; belongs in the `source` field, not the routing taxonomy. Remove once the sweep emits `source: handoff-sweep`."
+    },
+    {
+      "id": "hardcoded",
+      "reason": "Handoff-sweep finding class (hardcoded value). Retag as logic/infra when the proposals are re-triaged."
+    },
+    {
+      "id": "todo",
+      "reason": "Handoff-sweep finding class (bare TODO marker). Retag as logic when the proposals are re-triaged."
+    },
+    {
+      "id": "unwired",
+      "reason": "Handoff-sweep finding class (implementation not wired to a caller). Retag as logic when the proposals are re-triaged."
+    },
+    {
+      "id": "ux",
+      "reason": "Pre-taxonomy topic tag on a minion-base board proposal. Retag as ui when that proposal is re-triaged."
+    }
+  ],
+  "repositories": [
+    {
+      "id": "minion",
+      "rules": [
+        {
+          "paths": [
+            "ui/**",
+            "**/*.svelte"
+          ],
+          "tags": [
+            "ui"
+          ]
+        },
+        {
+          "paths": [
+            "src/**",
+            "extensions/**",
+            "packages/*/src/**",
+            "apps/**"
+          ],
+          "tags": [
+            "logic"
+          ]
+        },
+        {
+          "paths": [
+            "src/db/**",
+            "**/migrations/**"
+          ],
+          "tags": [
+            "data"
+          ]
+        },
+        {
+          "paths": [
+            "fly*.toml",
+            "scripts/**",
+            "hooks/**"
+          ],
+          "tags": [
+            "infra"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minion_hub",
+      "rules": [
+        {
+          "paths": [
+            "**/*.svelte",
+            "src/app.css",
+            "src/lib/components/**",
+            "src/lib/styles/**",
+            "static/**",
+            "packages/design-tokens/**"
+          ],
+          "tags": [
+            "ui"
+          ]
+        },
+        {
+          "paths": [
+            "src/lib/**/*.ts",
+            "src/routes/**/*.ts",
+            "src/server/**",
+            "src/hooks.*.ts"
+          ],
+          "tags": [
+            "logic"
+          ]
+        },
+        {
+          "paths": [
+            "src/server/db/schema/**",
+            "src/server/db/migrations/**",
+            "supabase/migrations/**",
+            "drizzle/**",
+            "drizzle.config.ts"
+          ],
+          "tags": [
+            "data"
+          ]
+        },
+        {
+          "paths": [
+            "vercel.json",
+            "svelte.config.js",
+            "vite.config.ts"
+          ],
+          "tags": [
+            "infra"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minion_plugins",
+      "rules": [
+        {
+          "paths": [
+            "plugins/**",
+            "scripts/**"
+          ],
+          "tags": [
+            "logic"
+          ]
+        },
+        {
+          "paths": [
+            ".claude-plugin/**",
+            "marketplace.json"
+          ],
+          "tags": [
+            "infra"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minion_site",
+      "rules": [
+        {
+          "paths": [
+            "**/*.svelte",
+            "src/app.css",
+            "src/lib/components/**",
+            "src/lib/styles/**",
+            "static/**",
+            "messages/**"
+          ],
+          "tags": [
+            "ui"
+          ]
+        },
+        {
+          "paths": [
+            "src/lib/**/*.ts",
+            "src/routes/**/*.ts",
+            "src/server/**",
+            "src/hooks.*.ts"
+          ],
+          "tags": [
+            "logic"
+          ]
+        },
+        {
+          "paths": [
+            "src/server/db/**",
+            "drizzle/**",
+            "drizzle.config.ts"
+          ],
+          "tags": [
+            "data"
+          ]
+        },
+        {
+          "paths": [
+            "vercel.json",
+            "svelte.config.js",
+            "vite.config.ts",
+            "project.inlang/**"
+          ],
+          "tags": [
+            "infra"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minion-base",
+      "rules": [
+        {
+          "paths": [
+            "**/*.svelte",
+            "src/app.css",
+            "src/lib/components/**",
+            "static/**"
+          ],
+          "tags": [
+            "ui"
+          ]
+        },
+        {
+          "paths": [
+            "src/lib/**/*.ts",
+            "src/routes/**/*.ts",
+            "src/server/**",
+            "src/hooks.*.ts"
+          ],
+          "tags": [
+            "logic"
+          ]
+        },
+        {
+          "paths": [
+            "src/server/db/**",
+            "drizzle/**"
+          ],
+          "tags": [
+            "data"
+          ]
+        },
+        {
+          "paths": [
+            "vercel.json",
+            "svelte.config.js",
+            "vite.config.ts"
+          ],
+          "tags": [
+            "infra"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minion-factory",
+      "rules": [
+        {
+          "paths": [
+            "ui/**"
+          ],
+          "tags": [
+            "ui"
+          ]
+        },
+        {
+          "paths": [
+            "agent/**",
+            "runner/**",
+            "scripts/**",
+            "src/**"
+          ],
+          "tags": [
+            "logic"
+          ]
+        },
+        {
+          "paths": [
+            "systemd/**",
+            "*.service",
+            "Caddyfile"
+          ],
+          "tags": [
+            "infra"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "minion-meta",
+      "rules": [
+        {
+          "paths": [
+            "packages/ui/**",
+            "packages/design-tokens/**"
+          ],
+          "tags": [
+            "ui"
+          ]
+        },
+        {
+          "paths": [
+            "packages/*/src/**",
+            "scripts/**/*.mjs",
+            "scripts/**/*.py",
+            "langgraph-server/**"
+          ],
+          "tags": [
+            "logic"
+          ]
+        },
+        {
+          "paths": [
+            "packages/db/**",
+            "supabase/**",
+            "drizzle.config.ts"
+          ],
+          "tags": [
+            "data"
+          ]
+        },
+        {
+          "paths": [
+            "ops/**",
+            "repo-policy.yaml",
+            "repo-policy.schema.json",
+            "routing.yml",
+            "routing.schema.json",
+            "generated/**",
+            "minion.json"
+          ],
+          "tags": [
+            "infra"
+          ]
+        },
+        {
+          "paths": [
+            "specs/**",
+            "proposals/**",
+            ".planning/**"
+          ],
+          "tags": [
+            "docs"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "paperclip",
+      "rules": [
+        {
+          "paths": [
+            "ui/**",
+            "**/*.tsx",
+            "**/*.css"
+          ],
+          "tags": [
+            "ui"
+          ]
+        },
+        {
+          "paths": [
+            "server/**",
+            "cli/**",
+            "packages/*/src/**"
+          ],
+          "tags": [
+            "logic"
+          ]
+        },
+        {
+          "paths": [
+            "packages/db/**",
+            "**/migrations/**"
+          ],
+          "tags": [
+            "data"
+          ]
+        },
+        {
+          "paths": [
+            "vite.config.ts",
+            "playwright.config.ts"
+          ],
+          "tags": [
+            "infra"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pixel-agents",
+      "rules": [
+        {
+          "paths": [
+            "webview-ui/**",
+            "media/**",
+            "assets/**"
+          ],
+          "tags": [
+            "ui"
+          ]
+        },
+        {
+          "paths": [
+            "src/**"
+          ],
+          "tags": [
+            "logic"
+          ]
+        },
+        {
+          "paths": [
+            "esbuild.js",
+            "scripts/**",
+            ".vscodeignore"
+          ],
+          "tags": [
+            "infra"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 1,
+  "shared": [
+    {
+      "paths": [
+        "**/*.md",
+        "**/*.mdx",
+        "docs/**",
+        "README*",
+        "AGENTS.md",
+        "CLAUDE.md"
+      ],
+      "tags": [
+        "docs"
+      ]
+    },
+    {
+      "paths": [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/*.test.js",
+        "**/*.test.mjs",
+        "**/*.spec.ts",
+        "**/*.spec.tsx",
+        "**/*.spec.js",
+        "test/**",
+        "tests/**",
+        "e2e/**",
+        "**/__tests__/**",
+        "**/fixtures/**"
+      ],
+      "tags": [
+        "test"
+      ]
+    },
+    {
+      "paths": [
+        "package.json",
+        "**/package.json",
+        "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
+        "bun.lock",
+        "bun.lockb",
+        "package-lock.json",
+        "**/requirements.txt"
+      ],
+      "tags": [
+        "deps"
+      ]
+    },
+    {
+      "paths": [
+        ".github/**",
+        "Dockerfile",
+        "Dockerfile.*",
+        "**/Dockerfile",
+        "docker-compose*.yml",
+        "docker/**",
+        "deploy/**",
+        ".changeset/**"
+      ],
+      "tags": [
+        "infra"
+      ]
+    }
+  ],
+  "tags": [
+    {
+      "derived": true,
+      "description": "Rendered surface: components, markup, styles, design tokens, icons, charts.",
+      "id": "ui"
+    },
+    {
+      "derived": true,
+      "description": "Behavior: server/app/runtime code that is not a rendered surface.",
+      "id": "logic"
+    },
+    {
+      "derived": true,
+      "description": "Persistent shape: schema, migrations, seeds, ORM models.",
+      "id": "data"
+    },
+    {
+      "derived": true,
+      "description": "Build, CI, deploy, containers, runner configuration.",
+      "id": "infra"
+    },
+    {
+      "derived": true,
+      "description": "Prose about the system: markdown, specs, proposals, doc trees.",
+      "id": "docs"
+    },
+    {
+      "derived": true,
+      "description": "Test code and fixtures — the verification tier, not the subject.",
+      "id": "test"
+    },
+    {
+      "derived": false,
+      "description": "Authn/authz, tenancy scoping, secrets, exposure. Declared, never inferred from a path.",
+      "id": "security"
+    },
+    {
+      "derived": false,
+      "description": "Latency, throughput, cost. Declared, never inferred from a path.",
+      "id": "perf"
+    },
+    {
+      "derived": true,
+      "description": "Dependency manifests and lockfiles.",
+      "id": "deps"
+    }
+  ]
+}

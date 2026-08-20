@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+
+  "tags": [
+    { "id": "ui",       "derived": true,  "description": "Rendered surface: components, markup, styles, design tokens, icons, charts." },
+    { "id": "logic",    "derived": true,  "description": "Behavior: server/app/runtime code that is not a rendered surface." },
+    { "id": "data",     "derived": true,  "description": "Persistent shape: schema, migrations, seeds, ORM models." },
+    { "id": "infra",    "derived": true,  "description": "Build, CI, deploy, containers, runner configuration." },
+    { "id": "docs",     "derived": true,  "description": "Prose about the system: markdown, specs, proposals, doc trees." },
+    { "id": "test",     "derived": true,  "description": "Test code and fixtures — the verification tier, not the subject." },
+    { "id": "security", "derived": false, "description": "Authn/authz, tenancy scoping, secrets, exposure. Declared, never inferred from a path." },
+    { "id": "perf",     "derived": false, "description": "Latency, throughput, cost. Declared, never inferred from a path." },
+    { "id": "deps",     "derived": true,  "description": "Dependency manifests and lockfiles." }
+  ],
+
+  "legacyTags": [
+    { "id": "handoff-sweep", "reason": "Source marker written by the factory handoff-ledger sweep; belongs in the `source` field, not the routing taxonomy. Remove once the sweep emits `source: handoff-sweep`." },
+    { "id": "edge-case",     "reason": "Handoff-sweep finding class (unhandled edge case). Retag as logic/test when the proposals are re-triaged." },
+    { "id": "unwired",       "reason": "Handoff-sweep finding class (implementation not wired to a caller). Retag as logic when the proposals are re-triaged." },
+    { "id": "hardcoded",     "reason": "Handoff-sweep finding class (hardcoded value). Retag as logic/infra when the proposals are re-triaged." },
+    { "id": "todo",          "reason": "Handoff-sweep finding class (bare TODO marker). Retag as logic when the proposals are re-triaged." },
+    { "id": "duplication",   "reason": "Handoff-sweep finding class (duplicated implementation). Retag as logic when the proposals are re-triaged." },
+    { "id": "board",         "reason": "Pre-taxonomy topic tag on a minion-base board proposal. Retag as ui/logic when that proposal is re-triaged." },
+    { "id": "ux",            "reason": "Pre-taxonomy topic tag on a minion-base board proposal. Retag as ui when that proposal is re-triaged." },
+    { "id": "crm",           "reason": "Pre-taxonomy product-area tag on a hub CRM spec. Product area is not a work type; retag as logic/data on the next pass." }
+  ],
+
+  "shared": [
+    { "tags": ["docs"], "paths": ["**/*.md", "**/*.mdx", "docs/**", "README*", "AGENTS.md", "CLAUDE.md"] },
+    { "tags": ["test"], "paths": ["**/*.test.ts", "**/*.test.tsx", "**/*.test.js", "**/*.test.mjs", "**/*.spec.ts", "**/*.spec.tsx", "**/*.spec.js", "test/**", "tests/**", "e2e/**", "**/__tests__/**", "**/fixtures/**"] },
+    { "tags": ["deps"], "paths": ["package.json", "**/package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "bun.lock", "bun.lockb", "package-lock.json", "**/requirements.txt"] },
+    { "tags": ["infra"], "paths": [".github/**", "Dockerfile", "Dockerfile.*", "**/Dockerfile", "docker-compose*.yml", "docker/**", "deploy/**", ".changeset/**"] }
+  ],
+
+  "repositories": [
+    {
+      "id": "minion-meta",
+      "rules": [
+        { "tags": ["ui"], "paths": ["packages/ui/**", "packages/design-tokens/**"] },
+        { "tags": ["logic"], "paths": ["packages/*/src/**", "scripts/**/*.mjs", "scripts/**/*.py", "langgraph-server/**"] },
+        { "tags": ["data"], "paths": ["packages/db/**", "supabase/**", "drizzle.config.ts"] },
+        { "tags": ["infra"], "paths": ["ops/**", "repo-policy.yaml", "repo-policy.schema.json", "routing.yml", "routing.schema.json", "generated/**", "minion.json"] },
+        { "tags": ["docs"], "paths": ["specs/**", "proposals/**", ".planning/**"] }
+      ]
+    },
+    {
+      "id": "minion",
+      "rules": [
+        { "tags": ["ui"], "paths": ["ui/**", "**/*.svelte"] },
+        { "tags": ["logic"], "paths": ["src/**", "extensions/**", "packages/*/src/**", "apps/**"] },
+        { "tags": ["data"], "paths": ["src/db/**", "**/migrations/**"] },
+        { "tags": ["infra"], "paths": ["fly*.toml", "scripts/**", "hooks/**"] }
+      ]
+    },
+    {
+      "id": "minion_hub",
+      "rules": [
+        { "tags": ["ui"], "paths": ["**/*.svelte", "src/app.css", "src/lib/components/**", "src/lib/styles/**", "static/**", "packages/design-tokens/**"] },
+        { "tags": ["logic"], "paths": ["src/lib/**/*.ts", "src/routes/**/*.ts", "src/server/**", "src/hooks.*.ts"] },
+        { "tags": ["data"], "paths": ["src/server/db/schema/**", "src/server/db/migrations/**", "supabase/migrations/**", "drizzle/**", "drizzle.config.ts"] },
+        { "tags": ["infra"], "paths": ["vercel.json", "svelte.config.js", "vite.config.ts"] }
+      ]
+    },
+    {
+      "id": "minion_site",
+      "rules": [
+        { "tags": ["ui"], "paths": ["**/*.svelte", "src/app.css", "src/lib/components/**", "src/lib/styles/**", "static/**", "messages/**"] },
+        { "tags": ["logic"], "paths": ["src/lib/**/*.ts", "src/routes/**/*.ts", "src/server/**", "src/hooks.*.ts"] },
+        { "tags": ["data"], "paths": ["src/server/db/**", "drizzle/**", "drizzle.config.ts"] },
+        { "tags": ["infra"], "paths": ["vercel.json", "svelte.config.js", "vite.config.ts", "project.inlang/**"] }
+      ]
+    },
+    {
+      "id": "minion_plugins",
+      "rules": [
+        { "tags": ["logic"], "paths": ["plugins/**", "scripts/**"] },
+        { "tags": ["infra"], "paths": [".claude-plugin/**", "marketplace.json"] }
+      ]
+    },
+    {
+      "id": "paperclip",
+      "rules": [
+        { "tags": ["ui"], "paths": ["ui/**", "**/*.tsx", "**/*.css"] },
+        { "tags": ["logic"], "paths": ["server/**", "cli/**", "packages/*/src/**"] },
+        { "tags": ["data"], "paths": ["packages/db/**", "**/migrations/**"] },
+        { "tags": ["infra"], "paths": ["vite.config.ts", "playwright.config.ts"] }
+      ]
+    },
+    {
+      "id": "pixel-agents",
+      "rules": [
+        { "tags": ["ui"], "paths": ["webview-ui/**", "media/**", "assets/**"] },
+        { "tags": ["logic"], "paths": ["src/**"] },
+        { "tags": ["infra"], "paths": ["esbuild.js", "scripts/**", ".vscodeignore"] }
+      ]
+    },
+    {
+      "id": "minion-factory",
+      "rules": [
+        { "tags": ["ui"], "paths": ["ui/**"] },
+        { "tags": ["logic"], "paths": ["agent/**", "runner/**", "scripts/**", "src/**"] },
+        { "tags": ["infra"], "paths": ["systemd/**", "*.service", "Caddyfile"] }
+      ]
+    },
+    {
+      "id": "minion-base",
+      "rules": [
+        { "tags": ["ui"], "paths": ["**/*.svelte", "src/app.css", "src/lib/components/**", "static/**"] },
+        { "tags": ["logic"], "paths": ["src/lib/**/*.ts", "src/routes/**/*.ts", "src/server/**", "src/hooks.*.ts"] },
+        { "tags": ["data"], "paths": ["src/server/db/**", "drizzle/**"] },
+        { "tags": ["infra"], "paths": ["vercel.json", "svelte.config.js", "vite.config.ts"] }
+      ]
+    }
+  ]
+}

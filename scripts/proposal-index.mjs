@@ -3,6 +3,11 @@
 // Run from repo root: node scripts/proposal-index.mjs
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { parseFrontmatter } from './spec-frontmatter.mjs';
+import { allowedTags, canonicalTags, readRouting } from './routing.mjs';
+
+// routing.yml is the tag enum's single source of truth (node scripts/routing.mjs validate).
+const routing = readRouting();
+const legalTags = allowedTags(routing);
 
 export const P_STATUSES = [
 	'draft',      // being shaped in chat
@@ -32,6 +37,13 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 	// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).
 	if (fm.status === 'retired' && !(fm.retired_reason && fm.retired_reason.length >= 20))
 		errors.push(`${name}: status "retired" requires retired_reason (>=20 chars)`);
+	// Work-type tags route the dev loop and the gates — an unknown tag is an unroutable card.
+	if (fm.tags !== undefined && !Array.isArray(fm.tags))
+		errors.push(`${name}: tags must be a bracketed array (e.g. tags: [logic, test])`);
+	else
+		for (const tag of fm.tags ?? [])
+			if (!legalTags.has(tag))
+				errors.push(`${name}: unknown tag "${tag}" — use one of ${canonicalTags(routing).join(', ')}`);
 	proposals.push({
 		id: fm.id,
 		title: fm.title,

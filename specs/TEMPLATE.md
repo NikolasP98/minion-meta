@@ -34,6 +34,7 @@ Flat scalars and string arrays only — no nesting (the parser is deliberately t
 | `verdict` | no | latest review roll-up: `pending` `approved` `changes_requested` `rejected`. Full review text lives in a sidecar `<id>.review.md` or the PR thread, never inline |
 | `pr` | no | PR number when the spec is gated via GitHub — a pointer; PR state stays the canon |
 | `type` | no | `feature` `fix` `infra` `decision` `research` (default `feature`) |
+| `tags` | no | work types, multi-select from `routing.yml`: `ui` `logic` `data` `infra` `docs` `test` `security` `perf` `deps`. They compose the dev loop and the gate rubrics (ui → design governance, logic → red-state TDD, docs → light lane, security → human gate regardless of score). Validated by `scripts/routing.mjs`; a slice-level tag list belongs in the slice table |
 | `merge_sha` / `merged_pr` / `merged_at` | no | controller-owned merge evidence; a verified merge moves work out of executable `stage: spec` |
 | `release_flag` / `release_state` | no | release gate and current state; disabled flags use `stage: deploy`, `status: flag-ready` |
 | `relationship` | no | spec-intake classification vs existing artifacts: `new` `extends` `merges-drafts` `supersedes` `depends-on` `conflicts-with` `already-satisfied`. The spec agent RECOMMENDS; lifecycle changes are applied by the resolver/human, never unilaterally |

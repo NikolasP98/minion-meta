@@ -25,6 +25,7 @@ conversations (or written by hand). Run `node scripts/proposal-index.mjs` after 
 | `possibly_reopens` | no | closed proposal id this may be a revival of (reconciler + human decide) |
 | `duplicate_candidate` | no | proposal id the reconciler suspects is the same idea |
 | `spawned_spec` | no | spec id once the spec stage picks this up |
+| `tags` | no | work types, multi-select from `routing.yml`: `ui` `logic` `data` `infra` `docs` `test` `security` `perf` `deps`. The classifier proposes them at intake, the G1 gate confirms them, and `scripts/routing.mjs tags` re-derives them from the diff once one exists |
 
 ## Body convention
 
