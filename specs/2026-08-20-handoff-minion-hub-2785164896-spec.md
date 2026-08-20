@@ -1,8 +1,8 @@
 ---
 id: 2026-08-20-handoff-minion-hub-2785164896-spec
 title: "Handoff marker crm-finance.service.ts:12 — complete the finance side of the org-configurable deposit rule"
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-20
 updated: 2026-08-20
@@ -13,7 +13,8 @@ relationship: extends
 related: [2026-08-17-hub-reserva-keyword-config-spec]
 type: fix
 tags: [logic, test, handoff-sweep]
-possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/145
+evidence: https://github.com/NikolasP98/minion_hub/pull/145
+shipped_reason: "Verified shipped: PR minion_hub#145 (crm-finance handoff) merged to master 2026-08-20, Vercel deployed."
 ---
 
 # Complete the finance side of the org-configurable deposit rule
