@@ -83,7 +83,7 @@ No implementation work remains. The operator or closure automation must:
 3. If any check fails, stop closure and return the card for re-specification. Do not silently
    broaden this spec into CI or meta-repo work.
 
-## 3. Definition of done
+## 3. Verification (definition of done)
 
 Run these read-only checks from any environment with authenticated `gh` access:
 

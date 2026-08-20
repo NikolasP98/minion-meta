@@ -30,7 +30,7 @@ in Slice 0 because `minion_hub/` is not present in this meta-repo checkout.
 [`2026-08-17-sdlc-phase-gates-scoring-spec`](2026-08-17-sdlc-phase-gates-scoring-spec.md) §4b
 requires a mutation spot-check. No UI file is in scope.
 
-## 0. Product contract
+## 0. Product
 
 The approved proposal requires direct tests for two behaviors:
 
