@@ -11,6 +11,7 @@ verdict: approved
 repos: [minion_hub, minion-meta]
 tags: [ui, logic, test]
 type: fix
+possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/135
 ---
 
 # Collapse the `/pos/appointments` fork into one bookings view
