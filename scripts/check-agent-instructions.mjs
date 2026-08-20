@@ -332,16 +332,51 @@ function readIfFile(path) {
 }
 
 /**
+ * The CommonMark shape of a code fence line: at most three leading spaces — four, or a leading
+ * tab, is an indented code block instead — then a run of at least three backticks or tildes, then
+ * the rest of the line: an info string on an opener, whitespace only on a closer.
+ */
+const fenceLinePattern = /^ {0,3}(`{3,}|~{3,})(.*)$/;
+
+/** The opening run of a fence line, or null when the line does not open a fenced code block. */
+function fenceOpener(line) {
+  const match = fenceLinePattern.exec(line);
+  if (match === null) return null;
+  const [, run, info] = match;
+  // A backtick fence's info string may not contain a backtick, so a line like ```foo``` renders as
+  // inline code rather than opening a block — the Markdown after it stays live.
+  if (run[0] === '`' && info.includes('`')) return null;
+  return run;
+}
+
+/** True when `line` closes a fence opened by `opener`: same character, at least as long, no info. */
+function closesFence(line, opener) {
+  const match = fenceLinePattern.exec(line);
+  if (match === null) return false;
+  const [, run, rest] = match;
+  return run[0] === opener[0] && run.length >= opener.length && rest.trim() === '';
+}
+
+/**
  * Markdown lines with fenced code blocks blanked out — command examples in fences are
  * documentation, not policy. Fenced lines are blanked rather than dropped so removing them can
- * never splice two paragraphs into one construct.
+ * never splice two paragraphs into one construct. Only fences a renderer would honour open a
+ * block: a pseudo-fence must not blank the rest of the document, because every link below it is
+ * still rendered as a link.
  */
 function proseLines(text) {
   const lines = [];
-  let fenced = false;
+  let opener = null;
   for (const line of text.split('\n')) {
-    if (/^\s*(```|~~~)/.test(line)) { fenced = !fenced; lines.push(''); continue; }
-    lines.push(fenced ? '' : line);
+    if (opener === null) {
+      const run = fenceOpener(line);
+      if (run === null) { lines.push(line); continue; }
+      opener = run;
+      lines.push('');
+      continue;
+    }
+    if (closesFence(line, opener)) opener = null;
+    lines.push('');
   }
   return lines;
 }

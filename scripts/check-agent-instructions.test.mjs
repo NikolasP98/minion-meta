@@ -194,6 +194,26 @@ try {
   assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
   reset();
 
+  // A pseudo-fence must not switch link checking off for the rest of the document. A line indented
+  // four spaces is an indented code block, and a backtick line whose info string contains a
+  // backtick is inline code — a renderer shows the links below both, so the checker must see them.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\n    ```\n\nSee [gone](./missing.md).\n')));
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\n```foo```\n\nSee [gone](./missing.md).\n')));
+  // Controls: a real fence still hides its contents, and only its contents — a fence opened with up
+  // to three spaces of indentation, closed only by a run of its own character that is at least as
+  // long and carries no info string, after which the document is live Markdown again.
+  writeAgents(goodAgents('\n```md\n[x](./gone.md)\n``` js\n[y](./gone.md)\n```\n\nSee [ok](./LINKED.md).\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  writeAgents(goodAgents('\n   ```\n   [x](./gone.md)\n   ```\n\n~~~\n```\n[y](./gone.md)\n~~~\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  writeAgents(goodAgents('\n````md\n```\n[x](./gone.md)\n````\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  // …and a broken link after a closed fence is reported, so the blanking really does stop there.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\n```md\n[x](./gone.md)\n```\n\nSee [gone](./missing.md).\n')));
+
   // A link may wrap onto the next line, and an image inside link text is a second real destination.
   failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
     writeAgents(goodAgents('\nSee [the guide](\n./missing.md) for details.\n')));
