@@ -47,6 +47,15 @@ export function cryptoKeyMode(): CryptoKeyMode {
   return "dev-fallback";
 }
 
+/**
+ * Call this ONCE at app startup so a missing key is a boot failure, not a
+ * runtime surprise on the first user who connects an OAuth account. Throws the
+ * same named errors as {@link cryptoKeyMode}; returns nothing on success.
+ */
+export function assertCryptoKeyConfigured(): void {
+  cryptoKeyMode();
+}
+
 let cachedKey: Buffer | null = null;
 let warnedDevFallback = false;
 
@@ -61,6 +70,15 @@ function key(): Buffer {
           "source-visible development key. Never set this in a deployed environment.",
       );
     }
+    // TODO(handoff): the at-rest audit this branch calls for (spec
+    // 2026-08-17-pkg-dev-crypto-failopen-spec S2 / ⚠️ A3 — count rows already
+    // sealed under this dev key, per sealed column) could NOT be run in the
+    // implementing environment: no database is reachable from the meta-repo
+    // checkout (no TURSO_DB_URL / SUPABASE_DB_URL / local .db file), and
+    // minion_hub/minion_site are not checked out. Until it runs, treat the
+    // dev-key exposure as UNKNOWN, not zero — S3 (consumer bump) must not be
+    // sequenced on an assumption. Column inventory + the exact procedure:
+    // proposals/2026-08-20-dev-key-at-rest-audit.md
     cachedKey = scryptSync("minion-hub-dev-key", "minion-hub-salt", 32);
     return cachedKey;
   }
