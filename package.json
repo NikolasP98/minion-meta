@@ -25,8 +25,10 @@
     "lint-all": "pnpm -r --parallel --if-present run lint",
     "test-all": "pnpm -r --parallel --if-present run test",
     "test:scripts": "node --test scripts/*.test.mjs",
-    "repo-policy:validate": "node scripts/repo-policy.mjs validate && node scripts/repo-policy.mjs generate --check",
-    "repo-policy:test": "node scripts/repo-policy.test.mjs",
+    "repo-policy:validate": "node scripts/repo-policy.mjs validate && node scripts/repo-policy.mjs generate --check && node scripts/check-agent-instructions.mjs",
+    "repo-policy:test": "node scripts/repo-policy.test.mjs --parity && node scripts/check-agent-instructions.test.mjs",
+    "instructions:check": "node scripts/check-agent-instructions.mjs",
+    "instructions:test": "node scripts/check-agent-instructions.test.mjs",
     "repo-policy:generate": "node scripts/repo-policy.mjs generate",
     "repo-policy:verify-remote": "node scripts/repo-policy.mjs verify-remote",
     "ci": "pnpm run build-all && pnpm run typecheck-all && pnpm run lint-all && pnpm run test-all && pnpm run test:scripts && pnpm run repo-policy:validate && pnpm run repo-policy:test && pnpm run changeset:status"

@@ -4,16 +4,40 @@ This is the **Minion meta-repo** — a self-hosted personal AI assistant platfor
 
 ## Project Map
 
-| Directory | What | Stack | Git Branch | Own Instructions |
-|---|---|---|---|---|
-| `minion/` | Core gateway + CLI (pnpm monorepo) | pnpm 10.x, Node 22+, TS, tsdown | `DEV` | `AGENTS.md` |
-| `minion_hub/` | Web dashboard for gateway management | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `dev` | `CLAUDE.md` |
-| `minion_site/` | Marketing site + members dashboard | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `master` | `CLAUDE.md` |
-| `minion_plugins/` | Claude Code plugin marketplace | — | `main` | — |
-| `Minion Docs/` | Agent registry, profiles, docs, sprints (was `docs/`; renamed by Synology Drive sync 2026-08-05) | YAML + Markdown | `main` | `CLAUDE.md` |
-| `paperclip-minion/` | Control plane for AI-agent companies | pnpm, Express, React + Vite, Drizzle + PGlite | `minion-integration` | `AGENTS.md` |
-| `pixel-agents/` | VS Code extension — pixel art office for Claude agents | npm, esbuild, React webview | `main` | `CLAUDE.md` |
-| `ai-studio/` | Research/product studio (AI course workspace) | Docs only | — | `CLAUDE.md` |
+Directories, package managers, branch roles, and commands are **projections of `repo-policy.yaml`**,
+the canonical fleet registry. Never hand-edit a value inside a `repo-policy:*` block: change the
+registry, run `node scripts/repo-policy.mjs generate`, then `node scripts/check-agent-instructions.mjs`.
+
+<!-- repo-policy:project-map -->
+| Repo id | CLI id | Directory | Package manager | Development branch | PR base |
+|---|---|---|---|---|---|
+| `minion` | `minion` | `minion/` | `pnpm` | `DEV` | `DEV` |
+| `minion_hub` | `hub` | `minion_hub/` | `bun` | `master` | `master` |
+| `minion_plugins` | `plugins` | `minion_plugins/` | `none` | `main` | `main` |
+| `minion_site` | `site` | `minion_site/` | `bun` | `dev` | `dev` |
+| `paperclip` | `paperclip` | `paperclip-minion/` | `pnpm` | `minion-integration` | `minion-integration` |
+| `pixel-agents` | `pixel-agents` | `pixel-agents/` | `npm` | `main` | `main` |
+<!-- /repo-policy:project-map -->
+
+`minion-meta` (this repo), `minion-factory`, and `minion-base` are fleet rows too — they are just
+not CLI-registered subprojects of this checkout. Read any row with
+`node scripts/repo-policy.mjs show <id-or-alias>`.
+
+What each subproject is, and where its own instructions live:
+
+| Directory | What | Stack | Own Instructions |
+|---|---|---|---|
+| `minion/` | Core gateway + CLI (pnpm monorepo) | pnpm 10.x, Node 22+, TS, tsdown | `AGENTS.md` |
+| `minion_hub/` | Web dashboard for gateway management | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `CLAUDE.md` |
+| `minion_site/` | Marketing site + members dashboard | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `CLAUDE.md` |
+| `minion_plugins/` | Claude Code plugin marketplace | — | — |
+| `Minion Docs/` | Agent registry, profiles, docs, sprints (was `docs/`; renamed by Synology Drive sync 2026-08-05) | YAML + Markdown | `CLAUDE.md` |
+| `paperclip-minion/` | Control plane for AI-agent companies | pnpm, Express, React + Vite, Drizzle + PGlite | `AGENTS.md` |
+| `pixel-agents/` | VS Code extension — pixel art office for Claude agents | npm, esbuild, React webview | `CLAUDE.md` |
+| `ai-studio/` | Research/product studio (AI course workspace) | Docs only | `CLAUDE.md` |
+
+`Minion Docs/` and `ai-studio/` are documentation trees, not CLI-registered development
+repositories; they carry no registry row.
 
 **Always read the sub-project's CLAUDE.md or AGENTS.md before working in it.**
 
@@ -267,12 +291,22 @@ Research workspace for an AI course. Docs-only — no production code. Uses the 
 
 ## Commands Quick Reference
 
-| Project | Dev | Build | Test | Check |
-|---|---|---|---|---|
-| minion/ | `pnpm dev` | `pnpm build` | `pnpm test` | `pnpm check` |
-| minion_hub/ | `bun run dev` | `bun run build` | `bun run test` | `bun run check` |
-| minion_site/ | `bun dev` | `bun run build` | — | `bun run check` |
-| paperclip-minion/ | `pnpm dev` | `pnpm build` | `pnpm test:run` | `pnpm typecheck` |
+Run these from the subproject directory, or through the CLI (`minion dev|build|test|check <id>`),
+which applies the 6-layer env merge first. `—` means the repository declares no such command.
+
+<!-- repo-policy:commands -->
+| Repo id | Install | Dev | Build | Test | Check | Typecheck |
+|---|---|---|---|---|---|---|
+| `minion` | `pnpm install` | `pnpm dev` | `pnpm build` | `pnpm test` | `pnpm check` | `pnpm tsgo` |
+| `minion_hub` | `bun install` | `bun run dev` | `bun run build` | `bun run test` | `bun run check` | — |
+| `minion_plugins` | — | — | — | — | — | — |
+| `minion_site` | `bun install` | `bun dev` | `bun run build` | `bun run test` | `bun run check` | `bun run check` |
+| `paperclip` | `pnpm install` | `pnpm dev` | `pnpm build` | `pnpm test:run` | `pnpm typecheck` | `pnpm typecheck` |
+| `pixel-agents` | `npm install` | `npm run watch` | `npm run build` | `npm test` | `npm run lint` | `npm run check-types` |
+<!-- /repo-policy:commands -->
+
+Meta-repo fan-out scripts (`build-all`, `typecheck-all`, `lint-all`, `test-all`) are listed under
+CI & Release Automation above.
 
 ## SDLC Contract (normative)
 
@@ -322,9 +356,9 @@ When sending work to a subproject, always include:
 - **TypeScript** strict mode everywhere. Avoid `any`. Never add `@ts-nocheck`.
 - **Svelte 5 only** (hub + site): runes, snippets (`Snippet` type for children), `onclick={}` syntax. No legacy Svelte 4 patterns.
 - **Formatting**: minion/ uses oxlint + oxfmt. SvelteKit projects use svelte-check.
-- **Package managers**: pnpm for the meta-repo root, `minion/`, and `paperclip-minion/`. Bun for SvelteKit projects (`minion_hub/`, `minion_site/`). npm for `pixel-agents/`. Don't mix within a subproject.
+- **Package managers**: one per subproject, as declared in the Project Map block above (registry field `packageManager`); the meta-repo root itself is pnpm. Don't mix within a subproject.
 - **Naming**: "Minion" for product/docs headings; `minion` for CLI/package/paths.
-- **Git workflow**: Feature branches → dev/DEV → main/master. Use worktrees for isolation. Never commit directly to main.
+- **Git workflow**: feature branch → that repository's registry `PR base` → its release branch. Per-repo branch roles are in the Project Map block above (`node scripts/repo-policy.mjs show <id-or-alias>` prints the full row) — never restate them from memory. Use worktrees for isolation. Never commit directly to a default or release branch.
 - **Multi-agent safety**: Don't touch git stash, worktrees, or switch branches unless explicitly asked. Scope commits to your changes only.
 - **Open-items ledger (agent handoff)**: finishing a task while leaving ANY open end — unwired implementation, known bug, hardcoded value, missing edge-case handling, skipped/weak test — requires documenting it TWICE before you stop: (1) an in-code `TODO(handoff): <what, why, pointer>` comment at the exact site, and (2) a proposal in the meta-repo `proposals/` (new file or append to the matching open one). Undocumented open ends are defects, not shortcuts — the maintenance pipeline (base.minion-ai.org) consumes this ledger; what is not written down never gets fixed.
 
