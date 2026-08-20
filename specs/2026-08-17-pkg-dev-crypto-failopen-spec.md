@@ -5,12 +5,13 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 proposal: 2026-08-17-pkg-dev-crypto-failopen
 verdict: approved
 repos: [minion-meta, minion_hub, minion_site]
 tags: [security, logic, test]
 type: fix
+possibly_shipped: https://github.com/NikolasP98/minion-meta/pull/97
 ---
 
 # Fail closed on the dev crypto key
