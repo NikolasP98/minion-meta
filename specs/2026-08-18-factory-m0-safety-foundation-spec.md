@@ -12,6 +12,7 @@ tags: [test, logic]
 verdict: approved
 relationship: depends-on
 related: [2026-08-18-sdlc-transformation-roadmap]
+possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/21
 ---
 
 # M0 — safety freeze and regression foundation
