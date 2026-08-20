@@ -332,12 +332,41 @@ test('M2: removing an id from the supersede baseline is allowed', () => {
 	assert.deepEqual(checkSupersedeBaselineRatchet(base, current), []);
 });
 
+// Minimal, schema-valid topics.json — enough canonical topics to cover every
+// tag/alias this test file exercises (D1's classifier-coverage rule requires
+// every CLASSIFIER_TOPICS_V1 entry too). `grandfatheredSpecIds` starts empty;
+// individual tests add an id when they need the slice-topics exemption.
+const FIXTURE_TOPICS = {
+	policyVersion: 1,
+	sliceTopicValidation: { grandfatheredSpecIds: [] },
+	topics: [
+		{ name: 'docs', aliases: [], riskTier: 'low', autoMergeEligible: true, description: 'x' },
+		{ name: 'test', aliases: [], riskTier: 'low', autoMergeEligible: true, description: 'x' },
+		{ name: 'deps', aliases: [], riskTier: 'low', autoMergeEligible: true, description: 'x' },
+		{ name: 'logic', aliases: [], riskTier: 'unclassified', autoMergeEligible: false, description: 'x' },
+		{ name: 'infra', aliases: [], riskTier: 'high', autoMergeEligible: false, description: 'x' },
+		{ name: 'auth', aliases: [], riskTier: 'high', autoMergeEligible: false, description: 'x' },
+		{ name: 'data', aliases: [], riskTier: 'high', autoMergeEligible: false, description: 'x' },
+		{ name: 'migrations', aliases: ['migration'], riskTier: 'high', autoMergeEligible: false, description: 'x' },
+		{ name: 'ui', aliases: [], riskTier: 'unclassified', autoMergeEligible: false, description: 'x' },
+		{ name: 'unclassified', aliases: [], riskTier: 'unclassified', autoMergeEligible: false, description: 'x' }
+	]
+};
+
+function writeFixtureTopics(root, overrides = {}) {
+	writeFileSync(
+		join(root, 'specs', 'topics.json'),
+		JSON.stringify({ ...FIXTURE_TOPICS, ...overrides }, null, '\t') + '\n'
+	);
+}
+
 function makeCliFixture() {
 	const root = mkdtempSync(join(tmpdir(), 'spec-index-cli-'));
 	mkdirSync(join(root, 'scripts'));
 	mkdirSync(join(root, 'specs'));
-	for (const name of ['spec-index.mjs', 'spec-frontmatter.mjs'])
+	for (const name of ['spec-index.mjs', 'spec-frontmatter.mjs', 'topics.mjs'])
 		cpSync(new URL(name, import.meta.url), join(root, 'scripts', name));
+	writeFixtureTopics(root);
 	const spec = `---\nid: fixture\ntitle: Fixture\nstage: spec\nstatus: draft\npass: 1\ncreated: 2026-08-18\nupdated: 2026-08-18\nrepos: [minion-meta]\n---\n\n# Fixture\n`;
 	writeFileSync(join(root, 'specs', 'fixture.md'), spec);
 	execFileSync('git', ['init', '-q'], { cwd: root });
@@ -730,4 +759,93 @@ test('G0: the two new fields are covered by the projection contract', () => {
 		assert.ok(OPTIONAL_INDEX_FIELDS.includes(key), `${key} in OPTIONAL_INDEX_FIELDS`);
 	}
 	assert.doesNotThrow(() => assertProjectionCoverage());
+});
+
+// 2026-08-18-factory-topic-capability-manifest-spec Slice 1, D2/D9.
+
+test('T-UNKNOWN-META: an unresolvable tag fails the generator, naming file and tag', () => {
+	const root = makeCleanFixture();
+	writeSpec(root, 'fixture', 'tags: [nonsense]\n', VALID_BODY);
+	const generated = spawnSync('node', ['scripts/spec-index.mjs'], { cwd: root, encoding: 'utf8' });
+	assert.equal(generated.status, 1);
+	assert.match(generated.stderr, /fixture\.md: unknown topic "nonsense"/);
+});
+
+test('T-UNKNOWN-META: an alias tag is projected as its canonical name', () => {
+	const root = makeCleanFixture();
+	writeSpec(root, 'fixture', 'tags: [migration]\n', VALID_BODY);
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	const index = JSON.parse(readFileSync(join(root, 'specs', 'index.json'), 'utf8'));
+	assert.deepEqual(index.specs.find((s) => s.id === 'fixture').tags, ['migrations']);
+});
+
+const sliceBody = (topicsLine) => `# Title
+
+## 0. Product
+
+Why this exists.
+
+### Slice 1 — do the thing
+
+${topicsLine === null ? '' : `**Topics:** ${topicsLine}\n\n`}Do it.
+
+## Out of scope
+
+Not doing X.
+
+## Verification
+
+Run the thing.
+`;
+
+test('T-SLICE-TOPICS: a slice with a canonical Topics line passes --check', () => {
+	const root = makeCleanFixture();
+	writeSpec(root, 'fixture', '', sliceBody('`infra`, `test`'));
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	gitCommit(root, 'slice topics ok');
+	const result = runCheck(root);
+	assert.equal(result.status, 0, result.stderr);
+});
+
+test('T-SLICE-TOPICS: a slice heading with no Topics line fails, naming the file and slice', () => {
+	const root = makeCleanFixture();
+	writeSpec(root, 'fixture', '', sliceBody(null));
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	gitCommit(root, 'slice missing topics');
+	const result = runCheck(root);
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /fixture\.md: "Slice 1 — do the thing" has no \*\*Topics:\*\* line/);
+});
+
+test('T-SLICE-TOPICS: a slice Topics line with an unknown topic fails, naming file, slice, and topic', () => {
+	const root = makeCleanFixture();
+	writeSpec(root, 'fixture', '', sliceBody('`infra`, `nonsense`'));
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	gitCommit(root, 'slice unknown topic');
+	const result = runCheck(root);
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /fixture\.md: "Slice 1 — do the thing" lists unknown topic "nonsense"/);
+});
+
+test('T-SLICE-TOPICS: an id in grandfatheredSpecIds is exempt even with no Topics line', () => {
+	const root = makeCleanFixture();
+	writeSpec(root, 'fixture', '', sliceBody(null));
+	writeFixtureTopics(root, { sliceTopicValidation: { grandfatheredSpecIds: ['fixture'] } });
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	gitCommit(root, 'grandfathered slice exemption');
+	const result = runCheck(root);
+	assert.equal(result.status, 0, result.stderr);
+});
+
+test('T-SLICE-TOPICS: an unlisted id with a backdated `created` is still not exempt', () => {
+	const root = makeCleanFixture();
+	writeFileSync(
+		join(root, 'specs', 'fixture.md'),
+		specSource('fixture', '', sliceBody(null)).replace('created: 2026-08-18', 'created: 2020-01-01')
+	);
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	gitCommit(root, 'backdated unlisted spec still checked');
+	const result = runCheck(root);
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /fixture\.md: "Slice 1 — do the thing" has no \*\*Topics:\*\* line/);
 });

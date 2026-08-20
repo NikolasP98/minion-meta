@@ -54,6 +54,7 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { parseFrontmatter, STAGES, STATUSES } from './spec-frontmatter.mjs';
+import { loadTopics, resolveTag } from './topics.mjs';
 
 export const ALLOWED_REPOS = [
 	'minion',
@@ -168,6 +169,52 @@ export const REQUIRED_HEADINGS = [
 		re: /^#{2,4}[ \t]+.*\b(?:verification|verify)\b|^\*\*[^*\n]*\b(?:verification|verify)\b[^*\n]*:\*\*/im
 	}
 ];
+// Per-slice topic lint (2026-08-18-factory-topic-capability-manifest-spec
+// Slice 1, Design decision 8): every `### Slice ...` heading must be followed
+// (before the next heading) by a `**Topics:** \`a\`, \`b\`` line whose every
+// entry resolves through specs/topics.json to a CANONICAL name — aliases are
+// for frontmatter tags, not slice annotations, so an alias here is an error
+// naming the canonical replacement. Exemption is by EXACT spec id
+// (topics.json's sliceTopicValidation.grandfatheredSpecIds), never by date, so
+// a backdated new spec cannot evade the check. Runs on the stripped body so a
+// slice heading inside a code fence or comment doesn't demand a topics line.
+// Returns one message fragment per violation.
+export function findSliceTopicViolations(body, topics) {
+	const lines = stripNonDocumentMarkdown(body).split('\n');
+	const errors = [];
+	for (let i = 0; i < lines.length; i++) {
+		const slice = lines[i].match(/^###[ \t]+(Slice\b[^#\n]*?)[ \t]*(?:#+[ \t]*)?$/);
+		if (!slice) continue;
+		let topicsLine = null;
+		for (let j = i + 1; j < lines.length && !/^#{1,3}[ \t]/.test(lines[j]); j++) {
+			const m = lines[j].match(/^\*\*Topics:\*\*[ \t]*(.*)$/);
+			if (m) {
+				topicsLine = m[1];
+				break;
+			}
+		}
+		if (topicsLine === null) {
+			errors.push(`"${slice[1]}" has no **Topics:** line (see specs/topics.json)`);
+			continue;
+		}
+		const entries = topicsLine
+			.split(',')
+			.map((s) => s.trim().replace(/^`|`$/g, '').trim())
+			.filter(Boolean);
+		if (!entries.length) {
+			errors.push(`"${slice[1]}" has an empty **Topics:** line (see specs/topics.json)`);
+			continue;
+		}
+		for (const entry of entries) {
+			const resolved = resolveTag(entry, topics);
+			if (!resolved) errors.push(`"${slice[1]}" lists unknown topic "${entry}" (see specs/topics.json)`);
+			else if (resolved.canonical !== entry)
+				errors.push(`"${slice[1]}" lists alias "${entry}" — use canonical "${resolved.canonical}"`);
+		}
+	}
+	return errors;
+}
+
 // Returns the labels of any required sections missing from `body`.
 export function missingRequiredHeadings(body) {
 	const scanned = stripNonDocumentMarkdown(body);
@@ -530,6 +577,17 @@ function main() {
 	const errors = [];
 	const fmById = new Map();
 
+	// The topic taxonomy is itself a gated input: an invalid specs/topics.json
+	// fails this build with its own message rather than crashing mid-loop, and
+	// tag checks are skipped (the build is already red — no fail-open).
+	let topics = null;
+	try {
+		topics = loadTopics();
+	} catch (e) {
+		errors.push(String(e instanceof Error ? e.message : e));
+	}
+	const grandfathered = new Set(topics?.grandfatheredSpecIds ?? []);
+
 	for (const name of readdirSync('specs')
 		.filter((f) => f.endsWith('.md') && f !== 'TEMPLATE.md' && !f.endsWith('.review.md'))
 		.sort()) {
@@ -575,6 +633,19 @@ function main() {
 			else fmById.set(fm.id, fm);
 		}
 
+		// Tags must resolve through the taxonomy (D2), and the index publishes the
+		// CANONICAL name, never the raw string — `perms` in frontmatter is
+		// published as `permissions`. Unknown tags fail the build naming file+tag.
+		if (topics && Array.isArray(fm.tags)) {
+			const canonicalTags = [];
+			for (const tag of fm.tags) {
+				const resolved = resolveTag(tag, topics);
+				if (!resolved) errors.push(`${name}: unknown topic "${tag}" (see specs/topics.json)`);
+				else if (!canonicalTags.includes(resolved.canonical)) canonicalTags.push(resolved.canonical);
+			}
+			fm.tags = canonicalTags;
+		}
+
 		if (check) {
 			for (const key of ['created', 'updated']) {
 				if (fm[key] && !isValidISODate(fm[key]))
@@ -601,6 +672,11 @@ function main() {
 				if (!stillGrandfathered) {
 					for (const label of missingRequiredHeadings(body)) errors.push(`${name}: missing ${label}`);
 				}
+			}
+			// Per-slice **Topics:** lint — exempt only by exact id in topics.json's
+			// grandfathered list (Design decision 8), never by created date.
+			if (topics && fm.id && !grandfathered.has(fm.id)) {
+				for (const message of findSliceTopicViolations(body, topics)) errors.push(`${name}: ${message}`);
 			}
 		}
 		specs.push(projectSpec(fm));

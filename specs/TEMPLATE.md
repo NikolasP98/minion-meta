@@ -41,7 +41,7 @@ Flat scalars and string arrays only — no nesting (the parser is deliberately t
 | `reconcile_ignore` | no | `true` = G0 must skip this spec (written by a human `reject` disposition); read from spec markdown by the factory sweep only — deliberately NOT projected into `specs/index.json` |
 | `relationship` | no | spec-intake classification vs existing artifacts: `new` `extends` `merges-drafts` `supersedes` `depends-on` `conflicts-with` `already-satisfied`. The spec agent RECOMMENDS; lifecycle changes are applied by the resolver/human, never unilaterally |
 | `related` | no | ids the `relationship` refers to (specs or proposals), with a one-line reason each in the body |
-| `tags` | no | free-form routing/classification labels, e.g. `[logic, test]`; `security` and `data` keep human gates at approval AND merge |
+| `tags` | no | routing/classification labels, e.g. `[logic, test]`; every value must resolve (as a canonical name or an alias) via `specs/topics.json` — `scripts/spec-index.mjs` rejects an unknown tag, naming the file and tag; `security` and `data` keep human gates at approval AND merge |
 
 `repos`, `tags`, and `related` are the only array fields — always bracket syntax, always
 strings (`tags: infra` is a scalar and fails the gate). Everything else is a scalar; bracket
@@ -67,3 +67,10 @@ and verification sections by heading/keyword lint, plus date formats, field shap
 `status: superseded` — one-way links are a CI failure). Specs that predate this check are
 grandfathered in `scripts/spec-heading-lint-baseline.json`; every new or hand-edited spec must
 comply. The AS-IS → TO-BE → DELTA convention above is a review expectation, not a lint rule.
+
+**Per-slice topics (required):** every `### Slice ...` heading must be followed, before the next
+heading, by a `**Topics:** \`topic-a\`, \`topic-b\`` line whose entries each resolve to a
+*canonical* name in `specs/topics.json` (an alias there is a lint error naming the canonical
+replacement). `scripts/spec-index.mjs --check` enforces this for every spec id not in
+`specs/topics.json`'s `sliceTopicValidation.grandfatheredSpecIds` — that exemption list is by
+exact id only, never by `created` date, so a new spec cannot backdate its way out of the check.
