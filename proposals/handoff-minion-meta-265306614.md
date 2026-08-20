@@ -1,12 +1,13 @@
 ---
 id: handoff-minion-meta-265306614
 title: Handoff marker — specs/2026-08-19-gateway-client-error-hook-consumer-adoption-spec.md (minion-meta)
-status: review
+status: closed
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-gateway-client-lifecycle-swallows-handoff
+closed_reason: "Marker lives in spec prose, not code; sweep should exclude specs/."
 ---
 
 # Handoff marker — specs/2026-08-19-gateway-client-error-hook-consumer-adoption-spec.md
