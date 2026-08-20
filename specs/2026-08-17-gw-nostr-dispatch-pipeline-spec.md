@@ -11,6 +11,7 @@ verdict: approved
 repos: [minion]
 tags: [logic, test]
 type: fix
+possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/229
 ---
 
 # Nostr — route replies through the shared buffered block dispatcher
