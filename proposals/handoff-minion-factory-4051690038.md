@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-factory-4051690038
 title: Handoff marker — runner/src/discovery.test.ts (minion-factory)
-status: draft
+status: closed
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-factory]
 tags: [handoff-sweep]
+closed_reason: "Self-referential: discovery.test.ts contains the sweep pattern as test fixture, not real debt."
 ---
 
 # Handoff marker — runner/src/discovery.test.ts
