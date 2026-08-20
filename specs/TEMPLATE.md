@@ -36,6 +36,9 @@ Flat scalars and string arrays only — no nesting (the parser is deliberately t
 | `type` | no | `feature` `fix` `infra` `decision` `research` (default `feature`) |
 | `merge_sha` / `merged_pr` / `merged_at` / `evidence` | no | controller-owned merge evidence; a verified merge moves work out of executable `stage: spec` |
 | `release_flag` / `release_state` | no | release gate and current state; disabled flags use `stage: deploy`, `status: flag-ready` |
+| `possibly_shipped` | no | evidence URL for a medium-confidence shipment match, written by minion-factory's G0 backward-staleness sweep (`2026-08-17-sdlc-phase-gates-scoring-spec` §3); rendered as an amber warning on the board; cleared only by a human confirm-shipped/reject disposition |
+| `link_review` | no | G0 note about an ambiguous `revises`/`supersedes` link; blocks shipment dispositions until resolved |
+| `reconcile_ignore` | no | `true` = G0 must skip this spec (written by a human `reject` disposition); read from spec markdown by the factory sweep only — deliberately NOT projected into `specs/index.json` |
 | `relationship` | no | spec-intake classification vs existing artifacts: `new` `extends` `merges-drafts` `supersedes` `depends-on` `conflicts-with` `already-satisfied`. The spec agent RECOMMENDS; lifecycle changes are applied by the resolver/human, never unilaterally |
 | `related` | no | ids the `relationship` refers to (specs or proposals), with a one-line reason each in the body |
 | `tags` | no | free-form routing/classification labels, e.g. `[logic, test]`; `security` and `data` keep human gates at approval AND merge |

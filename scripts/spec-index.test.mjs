@@ -684,3 +684,50 @@ test('M4: a merge commit still cannot grandfather debt it introduces itself', ()
 	assert.match(result.stderr, /new id "fresh-debt" added/);
 	assert.doesNotMatch(result.stderr, /new id "debt-spec" added/);
 });
+
+// Slice 1 of 2026-08-18-base-kanban-possibly-shipped-surface-spec: the three G0
+// reconciliation fields project into specs/index.json exactly like the existing
+// optional scalars, and reconcile_ignore (factory-only, no board consumer) never
+// does.
+const G0_BASE_FM = {
+	id: 'g0-fixture',
+	title: 'fixture',
+	stage: 'spec',
+	status: 'approved',
+	pass: 2,
+	created: '2026-08-20',
+	updated: '2026-08-20',
+	repos: ['minion-base']
+};
+
+test('G0: possibly_shipped / evidence / link_review project when present', () => {
+	const spec = projectSpec({
+		...G0_BASE_FM,
+		possibly_shipped: 'https://github.com/x/y/pull/1',
+		evidence: 'https://github.com/x/y/pull/2',
+		link_review: 'ambiguous supersedes target'
+	});
+	assert.equal(spec.possibly_shipped, 'https://github.com/x/y/pull/1');
+	assert.equal(spec.evidence, 'https://github.com/x/y/pull/2');
+	assert.equal(spec.link_review, 'ambiguous supersedes target');
+});
+
+test('G0: absent warning fields produce no key (not null, not empty string)', () => {
+	const spec = projectSpec({ ...G0_BASE_FM });
+	for (const key of ['possibly_shipped', 'evidence', 'link_review']) {
+		assert.equal(Object.hasOwn(spec, key), false, `${key} must be absent`);
+	}
+});
+
+test('G0: reconcile_ignore never projects into the index', () => {
+	const spec = projectSpec({ ...G0_BASE_FM, reconcile_ignore: true });
+	assert.equal(Object.hasOwn(spec, 'reconcile_ignore'), false);
+});
+
+test('G0: the two new fields are covered by the projection contract', () => {
+	for (const key of ['possibly_shipped', 'link_review']) {
+		assert.ok(SCALAR_FIELDS.includes(key), `${key} in SCALAR_FIELDS`);
+		assert.ok(OPTIONAL_INDEX_FIELDS.includes(key), `${key} in OPTIONAL_INDEX_FIELDS`);
+	}
+	assert.doesNotThrow(() => assertProjectionCoverage());
+});
