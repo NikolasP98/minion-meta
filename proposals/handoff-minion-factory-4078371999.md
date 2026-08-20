@@ -34,8 +34,8 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-20
 
-The `:269` marker names its own parent: `2026-08-17-factory-memory-governance` (in-spec —
-quarantined write-back/provenance work, S2 already ran per memory `factory/2026-08-20-446c6963`).
-Not merged (canonical is in-spec, off-limits to edit); status held at `review` so a human
-confirms both markers (`:37` D4 canonical-PUT hole included) are covered by that spec's
-remaining slices rather than orphaned.
+Confirmed same idea as `2026-08-17-factory-memory-governance` (in-spec) — the :269 marker
+names that spec's Slice 2 explicitly. The :37 marker ("this direct canonical PUT is the D4
+hole — worker writes shared...") reads as the same governance gap (worker/write-back
+containment) at a different call site. Not merged (canonical is in-spec, off-limits to
+edit); status held at `review` for a human to confirm scope.

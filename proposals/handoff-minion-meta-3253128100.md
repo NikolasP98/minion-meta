@@ -34,8 +34,11 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-20
 
-The marker's file is the spec document spawned by `2026-08-17-factory-postmerge-discovery-loop`
-(in-spec — id note: this handoff proposal's own filename/title cite `2026-08-18-...` but the
-actual proposal id in `proposals/` is `2026-08-17-factory-postmerge-discovery-loop`; the spec
-id matches `2026-08-18-factory-postmerge-discovery-loop-spec` exactly). Not merged (canonical
-is in-spec, off-limits to edit); status held at `review`.
+Likely a scanner false positive, not a real outstanding marker: both quoted lines are the
+spec's own worked *examples* of what a `TODO(handoff):` string looks like, written to specify
+the discovery-loop's test fixtures and acceptance script (§ "Table-driven `scanCompare`
+tests" and a manual-verification step describing "a literal `// TODO(handoff): <something>,
+see spec Y` line"), not an unresolved marker anywhere in this repo's real source. Leaving
+`duplicate_candidate`/`status: review` as the sweep set them (self-referential to this
+proposal's own spec) since there is no genuine duplicate to merge into or reject authority in
+this sweep's mandate — flagged here for a human to close if confirmed noise.

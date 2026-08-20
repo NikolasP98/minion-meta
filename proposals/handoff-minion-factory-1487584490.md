@@ -32,7 +32,8 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-20
 
-Likely the same idea as `2026-08-17-factory-deterministic-unstick` (in-spec — deterministic
-unstick handlers for known failure classes, including requeue). Not merged (canonical is
-in-spec, off-limits to edit); status held at `review` for a human to confirm this requeue-cap
-edge case is inside that spec's scope.
+Same idea as `2026-08-17-factory-deterministic-unstick` (in-spec) — same script
+(`unstick-cron.sh`), same theme (deterministic handling of a known, recurring failure class
+rather than escalating every retry to the facilitator agent). Reads as an edge-case surfaced
+while implementing that spec's requeue path. Not merged (canonical is in-spec, off-limits to
+edit); status held at `review` for a human to confirm scope.

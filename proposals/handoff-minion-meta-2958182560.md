@@ -32,6 +32,15 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-20
 
-The marker's own text names its parent spec directly: `2026-08-17-factory-chat-restart-drops-pending-spec`,
-spawned by the in-spec proposal of the same id. Not merged (canonical is in-spec, off-limits
-to edit); status held at `review` so a human closes this once S3 ships.
+Self-referential: this is the spec's own §5 guidance for the `TODO(handoff)` comment S2 must
+plant in `minion-factory`'s `src/queue.ts` (not a marker in this repo's own code). Same idea
+as `2026-08-17-factory-chat-restart-drops-pending`; not merged (canonical is in-spec,
+off-limits to edit); status held at `review`.
+
+Factual note for the human reviewer: the spec's §5 also says that if S3 is cut, a
+`minion-meta` proposal must exist at `proposals/2026-08-17-factory-chat-adopt-surviving-turns.md`
+before S2 merges — no such proposal exists in this directory as of 2026-08-20. Whether that
+means S3 already landed in the same PR chain, or S2 hasn't merged yet, or the required ledger
+proposal is missing, is a spec-compliance question outside this sweep's dedup/revival
+mandate — flagged for a human or the G0/postmerge-discovery sweep to check against
+`minion-factory`'s actual `src/queue.ts`.

@@ -36,3 +36,14 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-factory/blob/main/agent/lib/handoff.test.sh#L115
 - `NikolasP98/minion-factory@main agent/lib/handoff.test.sh:138` — legacy encoding path'
   https://github.com/NikolasP98/minion-factory/blob/main/agent/lib/handoff.test.sh#L138
+
+## Reconciliation note 2026-08-20
+
+Likely a scanner false positive, not a real outstanding marker: every quoted "marker" ends in
+a stray single-quote (`'`), the tell of a bash string-literal test fixture rather than a real
+shell comment — this is the handoff-ledger sweep's own test file
+(`agent/lib/handoff.test.sh`), exercising the same `TODO(handoff):` detection the sweep uses
+on itself. Same pattern as `handoff-minion-factory-4051690038`
+(`runner/src/discovery.test.ts`) and `handoff-minion-factory-2943307277`
+(`agent/lib/handoff.sh`). No genuine duplicate to merge into; no authority in this sweep's
+mandate to reject — flagged for a human, and worth excluding `*.test.sh` from the scan.

@@ -34,7 +34,17 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-20
 
-The marker's file is the spec document spawned BY `2026-08-17-gateway-client-lifecycle-swallows-handoff`
-(in-spec) — the TODO(handoff) markers are the spec's own §2 S2 text describing not-yet-shipped
-work, not a new finding. Not merged (canonical is in-spec, off-limits to edit); status held
-at `review` so a human closes this once S2 ships and the spec's own markers are removed.
+Self-referential: this file IS the spec `2026-08-17-gateway-client-lifecycle-swallows-handoff`
+spawned, and its AS-IS section quotes the same TODO(handoff) comments as evidence — not a
+second, independent occurrence. Same idea as that proposal; not merged (canonical is
+in-spec, off-limits to edit); status held at `review`.
+
+Factual note for the human reviewer: `packages/shared/src/gateway/client.ts` on this
+checkout (`dev`) no longer contains the quoted TODO(handoff) comments at the socket-error and
+reconnect-timer sites — `reportSocketError`/`reportReconnectError` and the
+`onSocketError`/`onReconnectError` hooks already exist with the never-throw containment the
+spec describes as S2's goal. The spec's own AS-IS text ("S2 has not shipped ... do not exist
+yet") may be stale relative to current `dev`; this looks like the same possibly-shipped
+pattern flagged in `2026-08-17-meta-spec-index-project-possibly-shipped` and
+`2026-08-17-base-kanban-possibly-shipped-surface`, but confirming/flipping G0 state is out of
+this sweep's scope (dedup/revival only) — left for a human or the G0 sweep.
