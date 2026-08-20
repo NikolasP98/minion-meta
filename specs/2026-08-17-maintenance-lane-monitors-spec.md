@@ -10,6 +10,7 @@ repos: [minion-meta, minion-factory, minion, minion_hub]
 verdict: approved
 tags: [infra]
 type: infra
+possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/122
 ---
 
 # Maintenance lane — monitor-triggered pipeline intake
