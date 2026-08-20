@@ -11,6 +11,7 @@ verdict: approved
 repos: [minion]
 relationship: depends-on
 related: [2026-08-13-agentic-sdlc-test-quality-gates-spec]
+possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/227
 ---
 
 # CI red — make the minion gateway DEV correctness matrix honestly green
