@@ -2,10 +2,10 @@
 id: 2026-08-18-base-workdetail-summary-first-spec
 title: Base UI-005/006/007 — issue route, WorkDetail adapter, summary-first detail
 stage: deploy
-status: flag-ready
+status: done
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: 2026-08-18-base-workdetail-summary-first
 verdict: approved
 repos: [minion-base]
@@ -17,6 +17,7 @@ merged_at: 2026-08-18T16:58:03-05:00
 release_flag: PUBLIC_WORK_DETAIL_V2
 release_state: off
 evidence: https://github.com/NikolasP98/minion-base/commit/805886e0052710b5ced07d63185b97836bae3d5c
+done_reason: "PUBLIC_WORK_DETAIL_V2=1 activated in production 2026-08-20: unit 286/286, svelte-check clean, spec e2e battery green in all flag combos, Vercel deploy READY."
 ---
 
 # Base UI-005/006/007 — issue route, WorkDetail adapter, summary-first detail
