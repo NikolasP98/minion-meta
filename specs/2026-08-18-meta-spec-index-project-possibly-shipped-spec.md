@@ -5,12 +5,13 @@ stage: spec
 status: review
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: 2026-08-17-meta-spec-index-project-possibly-shipped
 verdict: changes_requested
 repos: [minion-factory, minion-meta, minion-base]
 relationship: depends-on
 related: [2026-08-17-sdlc-phase-gates-scoring-spec, 2026-08-18-base-kanban-possibly-shipped-surface-spec]
+possibly_shipped: https://github.com/NikolasP98/minion-meta/pull/43
 ---
 
 # Establish G0 reconciliation contracts before projecting them
