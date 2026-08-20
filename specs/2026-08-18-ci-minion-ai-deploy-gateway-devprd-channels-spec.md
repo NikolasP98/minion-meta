@@ -5,12 +5,13 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: ci-minion-ai-deploy-gateway-devprd-channels
 verdict: approved
 repos: [minion]
 relationship: extends
 related: [2026-07-19-build-channel-dev-prd-pipeline, 2026-07-13-runtime-aware-fleet-image-updates, 2026-07-13-minion-gateway-swarm-cutover]
+possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/224
 ---
 
 # CI deploy gateway DEV/PRD channels — serialize and retry Swarm contention
