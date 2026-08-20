@@ -4,7 +4,7 @@ Typed client for the Minion Workforce control plane HTTP API. Used by minion_hub
 proxy authenticated, company-scoped requests to a headless workforce backend.
 
 ```ts
-import { createWorkforceClient } from '@minion-stack/workforce-client';
+import { createWorkforceClient, WorkforceApiError } from '@minion-stack/workforce-client';
 
 const client = createWorkforceClient({
   baseUrl: 'http://paperclip:3200',
