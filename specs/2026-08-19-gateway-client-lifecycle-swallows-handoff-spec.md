@@ -1,8 +1,8 @@
 ---
 id: 2026-08-19-gateway-client-lifecycle-swallows-handoff-spec
 title: "GatewayClient — close the reconnect-failure and socket-error swallows (S2 of the onEvent-errors spec)"
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-19
 updated: 2026-08-20
@@ -13,7 +13,8 @@ relationship: extends
 related: [2026-08-17-pkg-gateway-client-onevent-errors-spec, 2026-08-17-site-member-gateway-swallowed-errors-spec, 2026-08-17-gateway-client-error-hook-consumer-adoption]
 type: fix
 tags: [logic, test, docs, infra]
-possibly_shipped: https://github.com/NikolasP98/minion-meta/pull/89
+evidence: https://github.com/NikolasP98/minion-meta/pull/89
+shipped_reason: "Verified shipped: meta PR #89 merged to dev 2026-08-20 (lifecycle-swallows handoff fix)."
 ---
 
 # `GatewayClient` — close the reconnect-failure and socket-error swallows
