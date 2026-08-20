@@ -2,10 +2,10 @@
 id: 2026-08-18-factory-m0-safety-foundation-spec
 title: M0 — safety freeze and regression foundation
 stage: spec
-status: approved
+status: implementing
 pass: 1
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 repos: [minion-factory]
 type: infra
 tags: [test, logic]

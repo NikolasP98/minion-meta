@@ -2,7 +2,7 @@
 id: 2026-08-18-factory-topic-capability-manifest-spec
 title: Topic taxonomy + immutable execution manifest (policy resolver)
 stage: spec
-status: approved
+status: implementing
 pass: 2
 created: 2026-08-18
 updated: 2026-08-20

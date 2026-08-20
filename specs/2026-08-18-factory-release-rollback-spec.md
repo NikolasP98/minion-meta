@@ -2,7 +2,7 @@
 id: 2026-08-18-factory-release-rollback-spec
 title: "self-update.sh safety net — CI gate, image retention, DB snapshot, health-verified rollback"
 stage: spec
-status: approved
+status: implementing
 pass: 2
 created: 2026-08-18
 updated: 2026-08-20
