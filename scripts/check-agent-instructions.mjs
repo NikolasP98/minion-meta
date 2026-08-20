@@ -23,15 +23,13 @@ export const NULL_CELL = '—';
 const projectMapHeader = ['Repo id', 'CLI id', 'Directory', 'Package manager', 'Development branch', 'PR base'];
 const commandKeys = ['install', 'dev', 'build', 'test', 'check', 'typecheck'];
 const commandsHeader = ['Repo id', 'Install', 'Dev', 'Build', 'Test', 'Check', 'Typecheck'];
-// The CLI executes these four and carries `typecheck` as data; it has no `install` command.
-const cliCommandKeys = ['dev', 'build', 'test', 'check', 'typecheck'];
+// The CLI's minion.json registry projects the same six command keys as the AGENTS.md commands
+// block — `install` included, so a subproject can be bootstrapped from registry metadata alone.
+const cliCommandKeys = commandKeys;
 const memoryBlockPattern = /^<claude-mem-context\b/i;
 const headingPattern = /^#{1,6}\s+\S/;
 const includePattern = /^@[^\s@]\S*$/;
-// CommonMark inline link openers — `[label](`. The destination itself is not regex-matched: a bounded
-// regex cannot represent arbitrarily deep balanced parentheses (e.g. `./missing(a(b)c).md`), so
-// `readDestination` below scans it by hand, tracking paren depth one character at a time.
-const linkOpenerPattern = /\[[^\]]*\]\(/g;
+const referenceDefOpenerPattern = /^ {0,3}\[/;
 const escapePattern = /\\([!-\/:-@[-`{-~])/g;
 const separatorPattern = /^:?-+:?$/;
 const whitespacePattern = /\s/;
@@ -72,6 +70,37 @@ function readDestination(line, start) {
   }
   if (depth !== 0) return null;
   return { raw, end: i };
+}
+
+/**
+ * Scan a CommonMark link label starting at `line[start]`, which must be `[`. Labels may nest
+ * brackets to any depth (e.g. `[outer [inner]]`) — like `readDestination`, this is hand-scanned
+ * because a bounded regex cannot represent arbitrarily deep balance. Returns the label text
+ * (brackets stripped) and the index just past the closing `]`, or null if unterminated.
+ */
+function readLabel(line, start) {
+  if (line[start] !== '[') return null;
+  let depth = 0;
+  let i = start;
+  let raw = '';
+  while (i < line.length) {
+    const char = line[i];
+    if (char === '\\' && i + 1 < line.length) { raw += char + line[i + 1]; i += 2; continue; }
+    if (char === '[') { depth++; raw += char; i++; continue; }
+    if (char === ']') {
+      depth--; raw += char; i++;
+      if (depth === 0) return { raw: raw.slice(1, -1), end: i };
+      continue;
+    }
+    raw += char;
+    i++;
+  }
+  return null;
+}
+
+/** Case-fold and collapse whitespace in a reference label, matching CommonMark label matching. */
+function normalizeLabel(label) {
+  return label.trim().replace(/\s+/g, ' ').toLowerCase();
 }
 
 /** Skip an optional CommonMark link title, then require the closing ')'. Returns the index just past it, or null. */
@@ -121,27 +150,69 @@ function decodeTarget(target) {
 }
 
 /**
+ * CommonMark link reference definitions: `[label]: destination "title"`, up to 3 leading spaces of
+ * indent, title ignored. Returns a map from normalized label to raw (un-decoded) destination text.
+ */
+function referenceDefinitions(lines) {
+  const defs = new Map();
+  for (const line of lines) {
+    if (!referenceDefOpenerPattern.test(line)) continue;
+    const trimmed = line.replace(referenceDefOpenerPattern, '[');
+    const label = readLabel(trimmed, 0);
+    if (label === null || trimmed[label.end] !== ':') continue;
+    let i = label.end + 1;
+    while (i < trimmed.length && whitespacePattern.test(trimmed[i])) i++;
+    const destination = readDestination(trimmed, i);
+    if (destination === null) continue;
+    defs.set(normalizeLabel(label.raw), destination.raw);
+  }
+  return defs;
+}
+
+function pushTarget(targets, raw) {
+  const unescaped = raw.replace(escapePattern, '$1').trim();
+  const target = unescaped.split('#')[0].trim();
+  if (target === '' || target.startsWith('//') || /^[a-z][a-z0-9+.-]*:/i.test(target)) return;
+  targets.push(decodeTarget(target));
+}
+
+/**
  * Local link destinations, normalized: backslash escapes resolved, percent-escapes decoded, the
  * fragment dropped, surrounding whitespace trimmed. Absolute URLs and protocol-relative links are
- * skipped — only paths this checkout can resolve are returned.
+ * skipped — only paths this checkout can resolve are returned. Handles inline links (including
+ * labels with balanced nested brackets, e.g. `[outer [inner]](./x.md)`) and full reference-style
+ * links (`[text][label]` resolved against a `[label]: destination` definition anywhere in the doc).
  */
 function linkTargets(lines) {
   const targets = [];
+  const defs = referenceDefinitions(lines);
   for (const line of lines) {
-    linkOpenerPattern.lastIndex = 0;
-    let opener;
-    while ((opener = linkOpenerPattern.exec(line))) {
-      let destStart = linkOpenerPattern.lastIndex;
-      while (destStart < line.length && (line[destStart] === ' ' || line[destStart] === '\t')) destStart++;
-      const destination = readDestination(line, destStart);
-      if (destination === null) continue;
-      const closeIndex = readTitleAndClose(line, destination.end);
-      if (closeIndex === null) continue;
-      linkOpenerPattern.lastIndex = closeIndex;
-      const raw = destination.raw.replace(escapePattern, '$1').trim();
-      const target = raw.split('#')[0].trim();
-      if (target === '' || target.startsWith('//') || /^[a-z][a-z0-9+.-]*:/i.test(target)) continue;
-      targets.push(decodeTarget(target));
+    let i = 0;
+    while (i < line.length) {
+      if (line[i] !== '[') { i++; continue; }
+      const label = readLabel(line, i);
+      if (label === null) { i++; continue; }
+      let nextIndex = label.end;
+      if (line[label.end] === '(') {
+        let destStart = label.end + 1;
+        while (destStart < line.length && (line[destStart] === ' ' || line[destStart] === '\t')) destStart++;
+        const destination = readDestination(line, destStart);
+        if (destination !== null) {
+          const closeIndex = readTitleAndClose(line, destination.end);
+          if (closeIndex !== null) {
+            pushTarget(targets, destination.raw);
+            nextIndex = closeIndex;
+          }
+        }
+      } else if (line[label.end] === '[') {
+        const refLabel = readLabel(line, label.end);
+        if (refLabel !== null) {
+          const key = normalizeLabel(refLabel.raw === '' ? label.raw : refLabel.raw);
+          if (defs.has(key)) pushTarget(targets, defs.get(key));
+          nextIndex = refLabel.end;
+        }
+      }
+      i = nextIndex > i ? nextIndex : i + 1;
     }
   }
   return targets;
