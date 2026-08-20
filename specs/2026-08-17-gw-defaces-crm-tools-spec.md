@@ -11,6 +11,7 @@ verdict: approved
 repos: [minion]
 tags: [logic, test]
 type: fix
+possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/219
 ---
 
 # Builtin CRM tools — de-FACES the descriptions
