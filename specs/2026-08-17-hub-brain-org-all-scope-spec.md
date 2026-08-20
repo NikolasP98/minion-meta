@@ -2,7 +2,7 @@
 id: 2026-08-17-hub-brain-org-all-scope-spec
 title: "brain-vector org_all — make the unimplemented scope unrepresentable at the hub request boundary"
 stage: spec
-status: approved
+status: implementing
 pass: 2
 created: 2026-08-17
 updated: 2026-08-20
