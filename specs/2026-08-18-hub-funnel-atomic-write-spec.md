@@ -1,8 +1,8 @@
 ---
 id: 2026-08-18-hub-funnel-atomic-write-spec
 title: "Make crm_contacts.custom_fields writes atomic — jsonb_set instead of read-modify-write"
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-18
 updated: 2026-08-20
@@ -11,7 +11,8 @@ verdict: approved
 repos: [minion_hub]
 tags: [logic, test]
 type: fix
-possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/125
+evidence: https://github.com/NikolasP98/minion_hub/pull/125
+shipped_reason: "Verified shipped: hub PR #125 (funnel atomic write) merged to master 2026-08-20 after conflict-resolution run, CI green, Vercel deployed."
 ---
 
 # Make `crm_contacts.custom_fields` writes atomic
