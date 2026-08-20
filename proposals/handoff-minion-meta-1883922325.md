@@ -31,7 +31,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L176
 - `NikolasP98/minion-meta@dev scripts/spec-index.mjs:181` — 5 legacy superseded specs have no known successor in the
   https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L181
-- `NikolasP98/minion-meta@dev scripts/spec-index.mjs:583` — related ids are not resolved. Unlike revises/supersedes
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L583
-- `NikolasP98/minion-meta@dev scripts/spec-index.mjs:607` — this only checks consistency *when* revises/supersedes is
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L607
+- `NikolasP98/minion-meta@dev scripts/spec-index.mjs:591` — related ids are not resolved. Unlike revises/supersedes
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L591
+- `NikolasP98/minion-meta@dev scripts/spec-index.mjs:615` — this only checks consistency *when* revises/supersedes is
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L615
