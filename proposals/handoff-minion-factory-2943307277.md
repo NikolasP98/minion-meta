@@ -30,3 +30,15 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-factory/blob/main/agent/lib/handoff.sh#L43
 - `NikolasP98/minion-factory@main agent/lib/handoff.sh:46` — }")"
   https://github.com/NikolasP98/minion-factory/blob/main/agent/lib/handoff.sh#L46
+
+## Reconciliation note 2026-08-20
+
+Likely a scanner false positive, not a real outstanding marker: both quoted "markers" are
+unreadable shell syntax fragments (git pathspec `-- . ':!proposals'`, a bare `}")"`
+close-quote), not English TODO text — this is `agent/lib/handoff.sh`, the handoff-ledger
+scanner's own implementation, most likely matching its own `TODO(handoff):` detection code
+(e.g. a `git diff`/`grep` invocation that references the marker pattern as a string) rather
+than an actual comment. Same self-scanning pattern as `handoff-minion-factory-3991934595`
+(`agent/lib/handoff.test.sh`) and `handoff-minion-factory-4051690038`
+(`runner/src/discovery.test.ts`). No genuine duplicate to merge into; no authority in this
+sweep's mandate to reject — flagged for a human to verify against the real file.

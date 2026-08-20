@@ -34,9 +34,8 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-20
 
-Same target site (`pos.service.ts` updateSellable, lines 1262-1338 per that proposal's
-Problem) as `2026-08-17-hub-updatesellable-silent-drop` (in-spec — updateSellable silently
-drops kind/trackStock/uom edits); operator memory `factory/2026-08-20-eafcc91e.md` confirms
-S0+S1 already merged (hub PR #120), so these two markers read as the S2 leftover (safe-
-transition application) of that same slice. Not merged (canonical is in-spec, off-limits to
-edit); status held at `review` for a human to confirm.
+Confirmed same idea as `2026-08-17-hub-updatesellable-silent-drop` (in-spec) — its Problem
+cites this exact file/function (`pos.service.ts:1262-1338`, `updateSellable`/`.set()` never
+reading `kind`/`trackStock`/`uom`); both markers here (:1393 trackStock, :1407 uom) are the
+same gap. Not merged (canonical is in-spec, off-limits to edit); status held at `review` for
+a human to confirm scope.

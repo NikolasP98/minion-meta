@@ -32,8 +32,10 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-20
 
-Possible same idea as `2026-08-17-gw-defaces-crm-tools` (in-spec, same repo — de-FACES
-the builtin CRM tool descriptions), but the marker's file (`src/agents/minion-tools.ts`)
-differs from that proposal's named target (`src/agents/tools/knowledge/crm-search-tool.ts`
-+ `crm-insight-tool.ts`), so this may be a third site the in-spec work doesn't cover.
-Not merged — status held at `review` for a human to confirm scope against the spec.
+Same idea as `2026-08-17-gw-defaces-crm-tools` (in-spec) — "built-in profile" for the CRM
+tools matches that proposal's Problem (`crm-search-tool.ts`/`crm-insight-tool.ts` hardcode
+`Faces Sculptors` identity into a generic builtin tool). Named file differs
+(`minion-tools.ts` vs the two tool files the canonical cites), same caveat as other
+handoff/canonical file mismatches this sweep — likely a consolidation or re-export site, not
+a different bug. Not merged (canonical is in-spec, off-limits to edit); status held at
+`review` for a human to confirm scope.

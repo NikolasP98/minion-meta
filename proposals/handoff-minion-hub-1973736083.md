@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-1973736083
 title: Handoff marker — src/server/services/pos-emission-mapping.ts (minion_hub)
-status: review
+status: closed
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-hub]
@@ -38,3 +38,7 @@ hardcodes 18% IGV instead of reading the org's configured tax rate); the marker'
 Not merged (canonical is in-spec, off-limits to edit; also the named target file differs —
 that proposal's Problem cites `src/server/finance/emission/ubl.ts`, not
 `pos-emission-mapping.ts`); status held at `review` for a human to confirm scope.
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-08-20; the sweep closed this proposal.

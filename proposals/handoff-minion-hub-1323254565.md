@@ -32,8 +32,11 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-20
 
-The marker names its own parent: `2026-08-17-hub-reserva-keyword-config` (in-spec — extract
-the triplicated 'reserva' keyword into one org-configurable rule, explicitly names
-`crm-similarity.service.ts:55` in its Problem statement). Not merged (canonical is in-spec,
-off-limits to edit); status held at `review` so a human confirms this file's S2 slice is
-still pending in that spec rather than orphaned.
+Confirmed same idea as `2026-08-17-hub-reserva-keyword-config` (in-spec) — its Problem cites
+this exact file (`crm-similarity.service.ts:55`, line drift from :55 only) among the three
+triplicated 'reserva' sites; the marker itself names the spec. Sibling markers for the other
+two sites filed separately (`handoff-minion-hub-2131866440` for crm-journey.service.ts,
+`handoff-minion-hub-2785164896` for crm-finance.service.ts) — not merged into each other
+since each is a distinct call site the same spec's S2 must touch. Not merged into the
+canonical (in-spec, off-limits to edit); status held at `review` for a human to confirm
+scope.

@@ -32,7 +32,11 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-20
 
-Same pattern as `handoff-minion-hub-1323254565` (crm-similarity) and
-`handoff-minion-hub-2131866440` (crm-journey) — all three markers point back to
-`2026-08-17-hub-reserva-keyword-config` (in-spec), which names `crm-finance.service.ts:9`
-directly. Not merged (canonical is in-spec, off-limits to edit); status held at `review`.
+Confirmed same idea as `2026-08-17-hub-reserva-keyword-config` (in-spec) — its Problem cites
+this exact file (`crm-finance.service.ts:9`, close to this marker's :12) among the three
+triplicated 'reserva' sites; the marker itself names the spec. Sibling markers for the other
+two sites filed separately (`handoff-minion-hub-1323254565` for crm-similarity.service.ts,
+`handoff-minion-hub-2131866440` for crm-journey.service.ts) — not merged into each other
+since each is a distinct call site the same spec's S2 must touch. Not merged into the
+canonical (in-spec, off-limits to edit); status held at `review` for a human to confirm
+scope.
