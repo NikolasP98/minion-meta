@@ -131,8 +131,11 @@ export function validateRouting(routing, { fleetIds = readFleetIds() } = {}) {
   const errors = [];
   if (!keysExactly(routing, topKeys, '$', errors)) return errors;
   if (routing.schemaVersion !== 1) errors.push('$.schemaVersion: must equal 1');
-  if (typeof routing.sliceTagsRequiredFrom !== 'string' || !datePattern.test(routing.sliceTagsRequiredFrom))
-    errors.push('$.sliceTagsRequiredFrom: must be an ISO date (YYYY-MM-DD) — the day per-slice tags became mandatory');
+  // Calendar validity, not just the digit shape: `sliceTagsRequiredFrom` is compared
+  // lexicographically against every spec's `created`, so an impossible date like 2026-13-01 sorts
+  // above every real one and would silently exempt the whole corpus from the gate.
+  if (typeof routing.sliceTagsRequiredFrom !== 'string' || !isIsoDate(routing.sliceTagsRequiredFrom))
+    errors.push('$.sliceTagsRequiredFrom: must be a real ISO date (YYYY-MM-DD) — the day per-slice tags became mandatory');
 
   const tagIds = [];
   const derivable = new Set();
@@ -192,6 +195,10 @@ export function allowedTags(routing) {
 export function sliceTagsRequired(routing, fm) {
   if (!fm) return false;
   if (sliceTagsExemptStatuses.has(fm.status)) return false;
+  // The cutoff is compared lexicographically, so an impossible date (2026-13-01) would sort above
+  // every real `created` and exempt the entire corpus. `validate` rejects it, but spec-index.mjs
+  // reads routing.yml without running the schema check — fail closed here too, not just there.
+  if (!isIsoDate(routing?.sliceTagsRequiredFrom)) return true;
   // A `created` that is not a real ISO date cannot prove the spec predates the cutoff — fail
   // closed (require slice_tags) rather than let a malformed value read as an exemption.
   if (!isIsoDate(fm.created)) return true;
@@ -257,7 +264,15 @@ export function validateSliceTags(routing, fm, body) {
   // The spec's own tag list is the union of its slices' — a disagreement means one of them lies
   // about what the work is, and the gates would pick the wrong lane either way.
   if (slices.length && !parseErrors.length) {
-    const declared = Array.isArray(fm.tags) ? fm.tags.filter((tag) => canonicalSet.has(tag)) : [];
+    const all = Array.isArray(fm.tags) ? fm.tags : [];
+    // "Exactly the union" (specs/TEMPLATE.md) means canonical values only. A legacy value next to
+    // the union publishes a second, non-routable classification of the same card, so it is
+    // tolerated only on the grandfathered specs the cutoff already exempts — never on new work,
+    // where it would let the ledger grow under cover of the union check.
+    const legacy = all.filter((tag) => !canonicalSet.has(tag));
+    if (legacy.length && sliceTagsRequired(routing, fm))
+      errors.push(`tags: ${legacy.join(', ')} is not a work type — a spec that carries slice_tags declares exactly their union (${canonical.filter((tag) => union.has(tag)).join(', ')}); keep the legacy value on the proposal it came from`);
+    const declared = all.filter((tag) => canonicalSet.has(tag));
     const missing = canonical.filter((tag) => union.has(tag) && !declared.includes(tag));
     const extra = declared.filter((tag) => !union.has(tag));
     if (missing.length) errors.push(`tags: missing ${missing.join(', ')} — the spec's tags must be the union of its slice_tags (${canonical.filter((tag) => union.has(tag)).join(', ')})`);

@@ -12,7 +12,7 @@ repos: [minion_hub]
 relationship: extends
 related: [2026-08-17-hub-reserva-keyword-config-spec]
 type: fix
-tags: [logic, test, handoff-sweep]
+tags: [logic, test]
 slice_tags: [1:logic+test]
 ---
 

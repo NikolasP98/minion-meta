@@ -72,8 +72,16 @@ assert.match(errorFor((value) => { value.shared[0].paths = ['src/**test/**']; })
 assert.match(errorFor((value) => { value.shared[0].paths = ['src/[a-z].ts']; }), /unsupported glob character/);
 assert.match(errorFor((value) => { value.shared[0].paths = []; }), /paths: must be a non-empty array/);
 assert.match(errorFor((value) => { value.shared[0].paths.push(value.shared[0].paths[0]); }), /duplicate glob/);
-assert.match(errorFor((value) => { delete value.sliceTagsRequiredFrom; }), /sliceTagsRequiredFrom: must be an ISO date/);
-assert.match(errorFor((value) => { value.sliceTagsRequiredFrom = 'tomorrow'; }), /sliceTagsRequiredFrom: must be an ISO date/);
+assert.match(errorFor((value) => { delete value.sliceTagsRequiredFrom; }), /sliceTagsRequiredFrom: must be a real ISO date/);
+assert.match(errorFor((value) => { value.sliceTagsRequiredFrom = 'tomorrow'; }), /sliceTagsRequiredFrom: must be a real ISO date/);
+// A digit-shaped impossible date sorts above every real `created`, exempting the whole corpus from
+// the gate — the same fail-open class already closed for a spec's own `created`, on the cutoff side.
+for (const impossible of ['2026-13-01', '2026-02-30', '0000-00-00']) {
+  assert.match(errorFor((value) => { value.sliceTagsRequiredFrom = impossible; }), /sliceTagsRequiredFrom: must be a real ISO date/, impossible);
+  const exempting = clone(routing);
+  exempting.sliceTagsRequiredFrom = impossible;
+  assert.match(validateSliceTags(exempting, { id: 'x', title: 'X', stage: 'spec', status: 'approved', created: '2026-12-31', tags: ['logic'] }, '').join('\n'), /missing slice_tags/, `${impossible} must not exempt a current spec`);
+}
 assert.match(errorFor((value) => { value.repositories.pop(); }), /ids must be exactly the repo-policy fleet/);
 assert.match(errorFor((value) => { value.repositories[0].id = 'minion-metaa'; }), /ids must be exactly the repo-policy fleet/);
 assert.match(errorFor((value) => { delete value.repositories[0].rules; }), /minion-meta\].rules: is required/);
@@ -259,7 +267,7 @@ assert.equal(sliceTagsRequired(routing, specFm({ created: 'today', status: 'supe
 
 // Unknown, legacy, duplicate, out-of-order and malformed slice tags all fail.
 assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic+wat'] }), /slice_tags\[0\]: unknown tag "wat"/);
-assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic+crm'] }), /slice_tags\[0\]: unknown tag "crm"/, 'legacy tags may not tag a slice');
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic+handoff-sweep'] }), /slice_tags\[0\]: unknown tag "handoff-sweep"/, 'legacy tags may not tag a slice');
 assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic+logic'] }), /duplicate tag "logic"/);
 assert.match(sliceErrors({ tags: ['ui', 'logic'], slice_tags: ['1:logic+ui'] }), /tags must be in canonical order \(ui\+logic\)/);
 assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['logic'] }), /malformed entry "logic"/);
@@ -274,8 +282,14 @@ assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['2:logic', '1:logic'] }
 assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic', '2:ui'] }), /tags: missing ui/);
 assert.match(sliceErrors({ tags: ['logic', 'data'], slice_tags: ['1:logic'] }), /tags: data is declared on the spec but on no slice/);
 assert.match(sliceErrors({ slice_tags: ['1:logic'] }), /tags: missing logic/);
-// A legacy spec-level tag is tolerated next to a canonical union (the ledger may only shrink).
-assert.deepEqual(validateSliceTags(routing, specFm({ tags: ['logic', 'crm'], slice_tags: ['1:logic'] }), ''), []);
+// A legacy spec-level tag survives only where the cutoff already grandfathers the spec. On a spec
+// that must carry slice_tags it is a second, non-routable classification of the same card and fails
+// — otherwise the union check would let the legacy ledger grow on new work.
+assert.deepEqual(validateSliceTags(routing, specFm({ created: '2026-01-01', tags: ['logic', 'handoff-sweep'], slice_tags: ['1:logic'] }), ''), []);
+assert.match(sliceErrors({ tags: ['logic', 'handoff-sweep'], slice_tags: ['1:logic'] }), /tags: handoff-sweep is not a work type — a spec that carries slice_tags declares exactly their union \(logic\)/);
+assert.match(sliceErrors({ tags: ['logic', 'handoff-sweep', 'crm'], slice_tags: ['1:logic'] }), /tags: handoff-sweep, crm is not a work type/);
+// The two checks are independent: a legacy extra does not mask a genuinely missing canonical tag.
+assert.match(sliceErrors({ tags: ['logic', 'handoff-sweep'], slice_tags: ['1:logic', '2:ui'] }), /tags: missing ui/);
 
 // House-format slice tables are machine-readable: the row count must match the tag list.
 const table = '## 5. Slices\n\n| # | Slice | Repos |\n|---|---|---|\n| 1 | A | minion |\n| 2 | B | minion |\n';

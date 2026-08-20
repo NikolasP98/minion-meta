@@ -9,7 +9,7 @@ updated: 2026-08-20
 proposal: handoff-minion-hub-3998033254
 verdict: approved
 repos: [minion_hub]
-tags: [handoff-sweep, crm, logic, test]
+tags: [logic, test]
 slice_tags: [1:logic+test, 2:logic]
 type: fix
 relationship: extends
