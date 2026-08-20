@@ -15,7 +15,11 @@ export interface InfisicalFetchOptions {
 	env?: string; // dev / prod — default 'dev'
 	noCache?: boolean;
 	ttlMs?: number;
-	/** Only these keys are persisted to the cache; the value returned to this call is unaffected. */
+	/**
+	 * Only these keys are persisted to the cache; the value returned to this call is unaffected.
+	 * `[]` persists none (not "no allowlist" — that's `undefined`). The two are distinct cache
+	 * identities and never share a memo entry.
+	 */
 	cacheKeys?: string[];
 }
 

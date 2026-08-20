@@ -54,17 +54,22 @@ export function resolveCacheMode(): CacheMode {
 	return 'memory';
 }
 
-/** Canonical cache identity — every input that can change the fetch result must be part of the key. */
+/**
+ * Canonical cache identity — every input that can change the fetch result must be part of the key.
+ * Encodes a structured tuple (never delimiter-joined strings) so no combination of inputs — including
+ * values that contain the delimiter, or that look like a sentinel — can collide. `null` marks "absent"
+ * for domain and cacheKeys; it is never a legal value for either after normalization, so it can't be
+ * spoofed by a real input (e.g. domain `__default__`, or an allowlist that happens to be empty).
+ */
 export function buildCacheKey(
 	projectSlug: string,
 	envTier: string,
 	domain: string | undefined,
 	cacheKeys: string[] | undefined,
 ): string {
-	const domainPart = domain && domain.trim() ? domain.trim().toLowerCase() : '__default__';
-	const keysPart =
-		cacheKeys && cacheKeys.length > 0 ? [...new Set(cacheKeys)].sort().join(',') : '__all__';
-	return `${projectSlug}|${envTier}|${domainPart}|${keysPart}`;
+	const domainPart = domain && domain.trim() ? domain.trim().toLowerCase() : null;
+	const keysPart = cacheKeys === undefined ? null : [...new Set(cacheKeys)].sort();
+	return JSON.stringify([projectSlug, envTier, domainPart, keysPart]);
 }
 
 /** True for the legacy on-disk shape: top-level keys mapping to `{ env, fetchedAt, ttlMs }`. */
@@ -119,6 +124,8 @@ export function purgeLegacyCacheOnce(): void {
 	);
 }
 
+/** Returns fresh copies of the cached `env`/`keyNames` — never the memo's own references — so a
+ *  caller mutating its result can't corrupt what later calls read back. */
 export function readCache(key: string): { env: Record<string, string>; keyNames: string[] } | null {
 	const entry = memo.get(key);
 	if (!entry) return null;
@@ -126,13 +133,16 @@ export function readCache(key: string): { env: Record<string, string>; keyNames:
 		memo.delete(key);
 		return null;
 	}
-	return { env: entry.env, keyNames: entry.keyNames };
+	return { env: { ...entry.env }, keyNames: [...entry.keyNames] };
 }
 
 /**
- * Store a fetch result in the memo. When `cacheKeys` is given, only those keys are retained in
- * `env` — `keyNames` still carries every name the fetch returned, so a cache hit doesn't silence
- * the caller's "stale keys outside the allowlist" warning.
+ * Store a fetch result in the memo. `cacheKeys === undefined` means no allowlist — the full `env` is
+ * retained. `cacheKeys` present (including `[]`) means "only these keys persist" — an empty array
+ * therefore persists nothing, not everything. `keyNames` still carries every name the fetch returned,
+ * so a cache hit doesn't silence the caller's "stale keys outside the allowlist" warning.
+ * Stores and returns copies of `env`/`keyNames`, never the caller's own references, so mutating the
+ * object passed in (or a previously returned cache hit) can't corrupt the memo.
  */
 export function writeCache(
 	key: string,
@@ -142,10 +152,10 @@ export function writeCache(
 	cacheKeys?: string[],
 ): void {
 	const stored =
-		cacheKeys && cacheKeys.length > 0
-			? Object.fromEntries(Object.entries(env).filter(([k]) => cacheKeys.includes(k)))
-			: env;
-	memo.set(key, { env: stored, keyNames, fetchedAt: Date.now(), ttlMs });
+		cacheKeys === undefined
+			? { ...env }
+			: Object.fromEntries(Object.entries(env).filter(([k]) => cacheKeys.includes(k)));
+	memo.set(key, { env: stored, keyNames: [...keyNames], fetchedAt: Date.now(), ttlMs });
 }
 
 /** Test-only: clear the process memo and legacy-purge flag so state doesn't bleed across test cases. */

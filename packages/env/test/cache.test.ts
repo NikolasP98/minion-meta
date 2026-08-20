@@ -84,6 +84,30 @@ describe('cache.ts', () => {
 			const narrowed = buildCacheKey('minion-core', 'dev', undefined, ['MINION_SECRETS_KEY']);
 			expect(all).not.toBe(narrowed);
 		});
+
+		it('an empty allowlist differs from no allowlist', () => {
+			const noAllowlist = buildCacheKey('minion-core', 'dev', undefined, undefined);
+			const emptyAllowlist = buildCacheKey('minion-core', 'dev', undefined, []);
+			expect(noAllowlist).not.toBe(emptyAllowlist);
+		});
+
+		it('does not collide across a delimiter embedded in a project/env value', () => {
+			const a = buildCacheKey('a|b', 'c', undefined, undefined);
+			const b = buildCacheKey('a', 'b|c', undefined, undefined);
+			expect(a).not.toBe(b);
+		});
+
+		it('does not collide across a comma embedded in a cacheKeys entry vs. two separate entries', () => {
+			const a = buildCacheKey('p', 'dev', undefined, ['A,B']);
+			const b = buildCacheKey('p', 'dev', undefined, ['A', 'B']);
+			expect(a).not.toBe(b);
+		});
+
+		it('a literal domain matching the default sentinel does not collide with an absent domain', () => {
+			const absent = buildCacheKey('p', 'dev', undefined, undefined);
+			const literal = buildCacheKey('p', 'dev', '__default__', undefined);
+			expect(absent).not.toBe(literal);
+		});
 	});
 
 	describe('readCache / writeCache (process-lifetime memo)', () => {
@@ -111,6 +135,28 @@ describe('cache.ts', () => {
 		it('cacheKeys narrows what is stored, independent of what keyNames records', () => {
 			writeCache('k', { A: '1', B: '2' }, 300_000, ['A', 'B'], ['A']);
 			expect(readCache('k')).toEqual({ env: { A: '1' }, keyNames: ['A', 'B'] });
+		});
+
+		it('an empty cacheKeys allowlist stores nothing, not everything', () => {
+			writeCache('k', { A: '1', B: '2' }, 300_000, ['A', 'B'], []);
+			expect(readCache('k')).toEqual({ env: {}, keyNames: ['A', 'B'] });
+		});
+
+		it('mutating the object passed to writeCache does not corrupt the memo', () => {
+			const env = { A: '1' };
+			writeCache('k', env, 300_000, ['A']);
+			env.A = 'mutated';
+			expect(readCache('k')).toEqual({ env: { A: '1' }, keyNames: ['A'] });
+		});
+
+		it('mutating a value returned from readCache does not corrupt the memo', () => {
+			writeCache('k', { A: '1' }, 300_000, ['A']);
+			const first = readCache('k');
+			if (first) {
+				first.env.A = 'mutated';
+				first.keyNames.push('INJECTED');
+			}
+			expect(readCache('k')).toEqual({ env: { A: '1' }, keyNames: ['A'] });
 		});
 	});
 

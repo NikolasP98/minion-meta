@@ -202,6 +202,20 @@ describe('fetchInfisicalSecrets', () => {
 		expect(spawnSyncMock).not.toHaveBeenCalled();
 	});
 
+	it('cacheKeys: [] stores and returns no cached values, and never shares identity with no allowlist', async () => {
+		mockExit(0, 'A=1\nB=2\n');
+		await fetchInfisicalSecrets('minion-core', { cacheKeys: [] });
+		spawnSyncMock.mockReset();
+		const hit = await fetchInfisicalSecrets('minion-core', { cacheKeys: [] });
+		expect(hit.env).toEqual({});
+		expect(spawnSyncMock).not.toHaveBeenCalled(); // still served from its own (empty) memo entry
+
+		mockExit(0, 'A=1\nB=2\n');
+		const noAllowlist = await fetchInfisicalSecrets('minion-core');
+		expect(spawnSyncMock).toHaveBeenCalledTimes(1); // distinct cache identity from cacheKeys: []
+		expect(noAllowlist.env).toEqual({ A: '1', B: '2' });
+	});
+
 	it('different domain or cacheKeys inputs never share a cache entry', async () => {
 		mockExit(0, 'X=1\n');
 		await fetchInfisicalSecrets('minion-core', { domain: 'https://a.example' });
