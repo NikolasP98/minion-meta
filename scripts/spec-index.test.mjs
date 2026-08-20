@@ -19,6 +19,7 @@ import {
 	findArrayFieldViolations,
 	checkHeadingBaselineRatchet,
 	checkSupersedeBaselineRatchet,
+	findSupersedeCycles,
 	assertProjectionCoverage,
 	projectSpec,
 	SCALAR_FIELDS,
@@ -280,6 +281,21 @@ test('L2: the documented verification labels still satisfy the requirement', () 
 	}
 });
 
+test('M1: findSupersedeCycles finds two-node and longer rings, and ignores chains', () => {
+	const graph = (edges) =>
+		new Map(Object.entries(edges).map(([id, supersedes]) => [id, { id, supersedes }]));
+	// a → b → a
+	assert.deepEqual(findSupersedeCycles(graph({ a: 'b', b: 'a' })), [['a', 'b']]);
+	// c → a → b → c, reported from its smallest id
+	assert.deepEqual(findSupersedeCycles(graph({ a: 'b', b: 'c', c: 'a' })), [['a', 'b', 'c']]);
+	// self-edge is still a cycle
+	assert.deepEqual(findSupersedeCycles(graph({ a: 'a' })), [['a']]);
+	// a terminating chain (a → b → c, c supersedes nothing) is not a cycle
+	assert.deepEqual(findSupersedeCycles(graph({ a: 'b', b: 'c', c: undefined })), []);
+	// a link into a spec outside the corpus is an unknown-target error, not a cycle
+	assert.deepEqual(findSupersedeCycles(graph({ a: 'missing' })), []);
+});
+
 test('M2: adding a brand-new id to an existing heading baseline is rejected', () => {
 	const base = { 'existing-spec': 'aaa' };
 	const current = { 'existing-spec': 'aaa', 'new-spec': 'bbb' };
@@ -392,6 +408,39 @@ test('M2 integration: a spec cannot supersede itself', () => {
 	});
 	assert.equal(result.status, 1);
 	assert.match(result.stderr, /cannot supersede itself/);
+});
+
+test('M1 integration: two specs superseding each other are rejected as a cycle', () => {
+	const root = makeCliFixture();
+	const spec = (id, supersedes) =>
+		`---\nid: ${id}\ntitle: ${id}\nstage: spec\nstatus: superseded\npass: 1\ncreated: 2026-08-18\nupdated: 2026-08-18\nrepos: [minion-meta]\nsupersedes: ${supersedes}\n---\n\n${VALID_BODY}`;
+	writeFileSync(join(root, 'specs', 'fixture.md'), spec('fixture', 'fixture-b'));
+	writeFileSync(join(root, 'specs', 'fixture-b.md'), spec('fixture-b', 'fixture'));
+	// Both directions of the pairwise link integrity pass hold here: each spec
+	// names a real superseded target, and each is named by an incoming link.
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	const result = spawnSync('node', ['scripts/spec-index.mjs', '--check'], {
+		cwd: root,
+		encoding: 'utf8',
+		env: { PATH: process.env.PATH }
+	});
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /supersedes cycle has no terminal successor: fixture → fixture-b → fixture/);
+});
+
+test('M1 integration: a real supersede chain with a terminal successor still passes', () => {
+	const root = makeCliFixture();
+	const spec = (id, status, supersedes) =>
+		`---\nid: ${id}\ntitle: ${id}\nstage: spec\nstatus: ${status}\npass: 1\ncreated: 2026-08-18\nupdated: 2026-08-18\nrepos: [minion-meta]${supersedes ? `\nsupersedes: ${supersedes}` : ''}\n---\n\n${VALID_BODY}`;
+	writeFileSync(join(root, 'specs', 'fixture.md'), spec('fixture', 'superseded', undefined));
+	writeFileSync(join(root, 'specs', 'fixture-b.md'), spec('fixture-b', 'approved', 'fixture'));
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	const result = spawnSync('node', ['scripts/spec-index.mjs', '--check'], {
+		cwd: root,
+		encoding: 'utf8',
+		env: { PATH: process.env.PATH }
+	});
+	assert.equal(result.status, 0, result.stderr);
 });
 
 test('M1 integration: a push event without a before SHA fails closed', () => {

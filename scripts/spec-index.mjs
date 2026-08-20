@@ -431,6 +431,40 @@ export function checkSupersedeBaselineRatchet(baseArr, currentArr) {
 		);
 }
 
+// Cycle detection over the directed `supersedes` graph. Each spec declares at
+// most one successor, so the graph is functional: a DFS that walks the single
+// out-edge per node and tracks the current path finds every cycle exactly
+// once. A cycle (`a` supersedes `b`, `b` supersedes `a` — or any longer ring)
+// satisfies both the forward status check and the reverse incoming-link check
+// while leaving the lineage with no terminal successor, which is the stable
+// replacement contract specs/TEMPLATE.md documents for `supersedes`.
+// Returns each cycle as an array of ids rotated to start at its smallest id,
+// so error text is deterministic regardless of iteration order.
+export function findSupersedeCycles(fmById) {
+	const cycles = [];
+	const state = new Map(); // id -> 'visiting' | 'done'
+	for (const startId of fmById.keys()) {
+		if (state.has(startId)) continue;
+		const path = [];
+		const indexInPath = new Map();
+		let id = startId;
+		while (id !== undefined && !state.has(id)) {
+			if (indexInPath.has(id)) {
+				const cycle = path.slice(indexInPath.get(id));
+				const pivot = cycle.indexOf([...cycle].sort()[0]);
+				cycles.push([...cycle.slice(pivot), ...cycle.slice(0, pivot)]);
+				break;
+			}
+			indexInPath.set(id, path.length);
+			path.push(id);
+			const next = fmById.get(id)?.supersedes;
+			id = next !== undefined && fmById.has(next) ? next : undefined;
+		}
+		for (const visited of path) state.set(visited, 'done');
+	}
+	return cycles;
+}
+
 export function readSpecCorpusAtRev(rev) {
 	const names = execFileSync('git', ['ls-tree', '-r', '--name-only', rev, '--', 'specs'], {
 		encoding: 'utf8'
@@ -575,6 +609,20 @@ function main() {
 		// that today (see 2026-08-17-sdlc-phase-gates-scoring-spec.md, assigned to
 		// the G0 reconciler). Add a presence rule here once that backlog is
 		// cleared — see proposals/2026-08-18-spec-heading-lint-baseline-backfill.md.
+
+		// Reject cycles first: every node in a ring is reported once here, and the
+		// per-spec forward checks below skip those ids so a cycle produces one
+		// diagnosis instead of a pile of derived ones.
+		const cycles = findSupersedeCycles(fmById);
+		const cyclicIds = new Set(cycles.flat());
+		for (const cycle of cycles) {
+			errors.push(
+				cycle.length === 1
+					? `${cycle[0]}: cannot supersede itself`
+					: `supersedes cycle has no terminal successor: ${[...cycle, cycle[0]].join(' → ')}`
+			);
+		}
+
 		for (const fm of fmById.values()) {
 			if (fm.revises) {
 				const target = fmById.get(fm.revises);
@@ -585,10 +633,7 @@ function main() {
 					);
 			}
 			if (fm.supersedes) {
-				if (fm.supersedes === fm.id) {
-					errors.push(`${fm.id}: cannot supersede itself`);
-					continue;
-				}
+				if (cyclicIds.has(fm.id)) continue;
 				const target = fmById.get(fm.supersedes);
 				if (!target) errors.push(`${fm.id}: supersedes unknown spec "${fm.supersedes}"`);
 				else if (target.status !== 'superseded')
@@ -605,7 +650,12 @@ function main() {
 			[...fmById.values()].filter((fm) => fm.supersedes).map((fm) => fm.supersedes)
 		);
 		for (const fm of fmById.values()) {
-			if (fm.status === 'superseded' && !supersedeTargets.has(fm.id) && !supersedeBaseline.has(fm.id)) {
+			if (
+				fm.status === 'superseded' &&
+				!cyclicIds.has(fm.id) &&
+				!supersedeTargets.has(fm.id) &&
+				!supersedeBaseline.has(fm.id)
+			) {
 				errors.push(
 					`${fm.id}: status "superseded" but no spec declares supersedes: "${fm.id}" (no incoming successor link)`
 				);
