@@ -46,6 +46,15 @@ const sliceTagsEntryPattern = /^(\d+):([a-z0-9+-]+)$/;
 // A spec nobody will execute is not routable work; everything else must carry slice tags.
 const sliceTagsExemptStatuses = new Set(['superseded', 'rejected', 'retired', 'parked']);
 
+// Format AND calendar validity — `datePattern` alone accepts 2026-13-45. A frontmatter `created`
+// that fails this is not a real date, so nothing that reads it as one may treat it as an exemption.
+export function isIsoDate(value) {
+  if (typeof value !== 'string' || !datePattern.test(value)) return false;
+  const [year, month, day] = value.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+}
+
 export function readRouting(path = routingPath) {
   try {
     return JSON.parse(readFileSync(path, 'utf8'));
@@ -181,8 +190,11 @@ export function allowedTags(routing) {
 // validated here — an unknown or missing slice tag is an unroutable slice, not a style nit.
 
 export function sliceTagsRequired(routing, fm) {
-  if (!fm || typeof fm.created !== 'string' || !datePattern.test(fm.created)) return false;
+  if (!fm) return false;
   if (sliceTagsExemptStatuses.has(fm.status)) return false;
+  // A `created` that is not a real ISO date cannot prove the spec predates the cutoff — fail
+  // closed (require slice_tags) rather than let a malformed value read as an exemption.
+  if (!isIsoDate(fm.created)) return true;
   return fm.created >= routing.sliceTagsRequiredFrom;
 }
 

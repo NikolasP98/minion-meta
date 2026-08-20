@@ -17,6 +17,7 @@ import {
   generatedFiles,
   globToRegExp,
   globsByTag,
+  isIsoDate,
   labelerBlocks,
   labelerText,
   labelerWorkflowGaps,
@@ -239,6 +240,23 @@ assert.equal(sliceTagsRequired(routing, specFm({ created: '2026-08-17' })), fals
 assert.equal(sliceTagsRequired(routing, specFm({ status: 'superseded' })), false);
 assert.deepEqual(validateSliceTags(routing, specFm({ created: '2026-01-01', tags: ['logic'] }), ''), []);
 
+// isIsoDate: format AND calendar validity, not just the digit-shape.
+assert.equal(isIsoDate('2026-08-20'), true);
+assert.equal(isIsoDate('2026-02-29'), false, '2026 is not a leap year');
+assert.equal(isIsoDate('2024-02-29'), true, '2024 is a leap year');
+assert.equal(isIsoDate('2026-13-01'), false, 'month 13 does not exist');
+assert.equal(isIsoDate('2026-08-32'), false, 'day 32 does not exist');
+assert.equal(isIsoDate('today'), false);
+assert.equal(isIsoDate(undefined), false);
+
+// A malformed `created` must fail CLOSED (slice_tags still required), never read as an exemption —
+// the bug this closes: any truthy, non-ISO `created` silently skipped the cutoff.
+assert.equal(sliceTagsRequired(routing, specFm({ created: 'today' })), true);
+assert.equal(sliceTagsRequired(routing, specFm({ created: '2026-13-45' })), true);
+assert.equal(sliceTagsRequired(routing, specFm({ created: undefined })), true);
+// ...unless the status is itself exempt — malformed dates on abandoned work still don't matter.
+assert.equal(sliceTagsRequired(routing, specFm({ created: 'today', status: 'superseded' })), false);
+
 // Unknown, legacy, duplicate, out-of-order and malformed slice tags all fail.
 assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic+wat'] }), /slice_tags\[0\]: unknown tag "wat"/);
 assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic+crm'] }), /slice_tags\[0\]: unknown tag "crm"/, 'legacy tags may not tag a slice');
@@ -374,6 +392,15 @@ try {
   const sameDayMissing = runIndex('spec-index.mjs');
   assert.equal(sameDayMissing.status, 1);
   assert.match(sameDayMissing.stderr, /missing slice_tags/);
+
+  // Regression: a nonempty, non-ISO `created` (e.g. hand-authored "today") used to fail OPEN —
+  // sliceTagsRequired read it as an exemption and the spec passed with no slice_tags at all.
+  // It must now be rejected outright, and still be treated as needing slice_tags.
+  writeFileSync(join(indexRoot, 'specs/a.md'), sliced.replace('slice_tags: [1:logic, 2:ui]\n', '').replace('created: 2026-08-21', 'created: today'));
+  const malformedCreated = runIndex('spec-index.mjs');
+  assert.equal(malformedCreated.status, 1);
+  assert.match(malformedCreated.stderr, /created "today" is not a valid ISO date/);
+  assert.match(malformedCreated.stderr, /missing slice_tags/);
 
   writeFileSync(join(indexRoot, 'specs/a.md'), good);
   writeFileSync(join(indexRoot, 'proposals/a.md'), '---\nid: a\ntitle: A\nstatus: draft\ncreated: 2026-08-20\ntags: [ui, nonsense]\n---\n\nbody\n');

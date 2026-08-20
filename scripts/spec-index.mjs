@@ -4,7 +4,7 @@
 // invalid stage/status. Run from repo root: node scripts/spec-index.mjs
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { parseFrontmatter, STAGES, STATUSES } from './spec-frontmatter.mjs';
-import { allowedTags, canonicalTags, readRouting, validateSliceTags } from './routing.mjs';
+import { allowedTags, canonicalTags, isIsoDate, readRouting, validateSliceTags } from './routing.mjs';
 
 // routing.yml is the tag enum's single source of truth (node scripts/routing.mjs validate).
 const routing = readRouting();
@@ -24,6 +24,10 @@ for (const name of readdirSync('specs')
 	for (const key of ['id', 'title', 'stage', 'status', 'created']) {
 		if (!fm[key]) errors.push(`${name}: missing required field "${key}"`);
 	}
+	// A truthy-but-malformed created (e.g. "today") must not silently exempt the spec from the
+	// slice_tags cutoff below — reject it here rather than let it fail open.
+	if (fm.created !== undefined && fm.created !== null && !isIsoDate(fm.created))
+		errors.push(`${name}: created "${fm.created}" is not a valid ISO date (YYYY-MM-DD)`);
 	if (fm.stage && !STAGES.includes(fm.stage)) errors.push(`${name}: invalid stage "${fm.stage}"`);
 	if (fm.status && !STATUSES.includes(fm.status))
 		errors.push(`${name}: invalid status "${fm.status}"`);
