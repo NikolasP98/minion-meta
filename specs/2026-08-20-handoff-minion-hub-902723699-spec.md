@@ -12,6 +12,7 @@ repos: [minion_hub]
 relationship: extends
 related: [2026-08-17-hub-updatesellable-silent-drop-spec, 2026-08-17-hub-updatesellable-silent-drop]
 tags: [logic, test]
+slice_tags: [1:logic+test, 2:logic+test]
 type: fix
 ---
 

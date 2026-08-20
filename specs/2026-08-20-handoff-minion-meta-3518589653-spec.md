@@ -11,6 +11,8 @@ proposal: handoff-minion-meta-3518589653
 verdict: approved
 relationship: depends-on
 related: [2026-08-19-gateway-client-error-hook-consumer-adoption-spec, 2026-08-17-gateway-client-error-hook-consumer-adoption, 2026-08-17-pkg-gateway-client-onevent-errors-spec]
+tags: [infra, docs]
+slice_tags: [1:infra, 2:docs]
 type: fix
 ---
 

@@ -43,10 +43,16 @@ that slice deliberately left, so they are written down rather than assumed.
   in spec frontmatter, validated by `scripts/spec-index.mjs` and `routing:validate`
   (unknown/legacy/duplicate/out-of-order tags, gaps in the 1..N numbering, disagreement
   with the spec-level `tags` union, and a row-count mismatch against a
-  `| # | Slice | … |` table all fail). Required for specs created on or after
-  `routing.yml`'s `sliceTagsRequiredFrom` (2026-08-21); the ~56 executable specs written
-  before it are exempt until they are retro-tagged. One `TODO(handoff):` marker remains,
-  in `scripts/routing.mjs`, for the 8 uninstalled repos.
+  `| # | Slice | … |` table all fail). `sliceTagsRequiredFrom` was fixed from a
+  future date (2026-08-21, one day after this taxonomy actually landed) to the
+  taxonomy's real landing day (2026-08-20) — a future cutoff exempted same-day work
+  from the gate it was meant to enforce, and three executable
+  `specs/2026-08-20-handoff-*-spec.md` files landed without `slice_tags` under that
+  bug; they are now retro-tagged and the cutoff no longer has a same-day gap.
+  Required for specs created on or after `sliceTagsRequiredFrom`; the ~56 executable
+  specs written before it (2026-07-19 through 2026-08-19) remain exempt until they
+  are retro-tagged. One `TODO(handoff):` marker remains, in `scripts/routing.mjs`,
+  for the 8 uninstalled repos.
 
 ## TO-BE
 
@@ -62,9 +68,9 @@ that slice deliberately left, so they are written down rather than assumed.
    tags; the handoff sweep writes `source: handoff-sweep`, freeing that legacy entry.
 4. `legacyTags` shrinks to empty as the ~30 legacy cards are retagged during their
    next triage pass; the validator already fails on an entry that has gone unused.
-5. `sliceTagsRequiredFrom` moves back to the taxonomy's start once the pre-existing
-   executable specs are retro-tagged, and a declared-vs-derived mismatch (slice tags vs
-   the PR's labels) becomes a G4 finding.
+5. `sliceTagsRequiredFrom` moves back further, to the taxonomy's design date
+   (2026-08-17), once the ~56 pre-2026-08-20 executable specs are retro-tagged, and a
+   declared-vs-derived mismatch (slice tags vs the PR's labels) becomes a G4 finding.
 
 ## DELTA
 
@@ -74,7 +80,7 @@ that slice deliberately left, so they are written down rather than assumed.
 | 2 | Schedule `routing:verify-remote` | it is green for 9/9 repos |
 | 3 | Factory consumes `generated/routing.json`; sweep writes `source` | a handoff proposal with no `handoff-sweep` tag |
 | 4 | Retag legacy cards, delete allowlist entries | `pnpm run routing:validate` fails on an unused entry |
-| 5 | Retro-tag pre-2026-08-21 executable specs, then move `sliceTagsRequiredFrom` back | `routing:validate` stays green with the earlier date |
+| 5 | Retro-tag pre-2026-08-20 executable specs, then move `sliceTagsRequiredFrom` back to 2026-08-17 | `routing:validate` stays green with the earlier date |
 | 6 | G4 compares a slice's declared tags with its PR's derived labels | a `docs`-tagged slice touching `src/` is rejected |
 
 ## Rollout note (the gate that can break another repo's bot)

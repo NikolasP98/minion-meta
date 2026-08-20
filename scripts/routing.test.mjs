@@ -232,7 +232,7 @@ assert.deepEqual(validateSliceTags(routing, specFm({ tags: ['ui', 'logic'], slic
 assert.deepEqual(validateSliceTags(routing, specFm({ tags: ['logic', 'security'], slice_tags: ['1:logic+security'] }), ''), []);
 
 // Missing: the failure the enum gate exists to catch — a routable spec with no slice tags.
-assert.match(sliceErrors({ tags: ['logic'] }), /missing slice_tags — specs created on or after 2026-08-21/);
+assert.match(sliceErrors({ tags: ['logic'] }), new RegExp(`missing slice_tags — specs created on or after ${routing.sliceTagsRequiredFrom}`));
 assert.equal(sliceTagsRequired(routing, specFm({})), true);
 // Grandfathered and abandoned specs stay exempt so the gate does not rewrite history.
 assert.equal(sliceTagsRequired(routing, specFm({ created: '2026-08-17' })), false);
@@ -324,7 +324,7 @@ const indexRoot = mkdtempSync(join(tmpdir(), 'routing-index-'));
 try {
   mkdirSync(join(indexRoot, 'specs'));
   mkdirSync(join(indexRoot, 'proposals'));
-  const good = '---\nid: a\ntitle: A\nstage: spec\nstatus: draft\ncreated: 2026-08-20\ntags: [logic, test]\n---\n\nbody\n';
+  const good = '---\nid: a\ntitle: A\nstage: spec\nstatus: draft\ncreated: 2026-08-19\ntags: [logic, test]\n---\n\nbody\n';
   writeFileSync(join(indexRoot, 'specs/a.md'), good);
   writeFileSync(join(indexRoot, 'proposals/a.md'), '---\nid: a\ntitle: A\nstatus: draft\ncreated: 2026-08-20\ntags: [ui]\n---\n\nbody\n');
   const runIndex = (name) => spawnSync(process.execPath, [resolve(`scripts/${name}`)], { cwd: indexRoot, encoding: 'utf8' });
@@ -367,6 +367,13 @@ try {
   // A spec predating the taxonomy stays valid without them.
   writeFileSync(join(indexRoot, 'specs/a.md'), sliced.replace('slice_tags: [1:logic, 2:ui]\n', '').replace('created: 2026-08-21', 'created: 2026-08-19'));
   assert.equal(runIndex('spec-index.mjs').status, 0);
+  // A spec created ON sliceTagsRequiredFrom itself is NOT exempt — the cutoff must be the
+  // taxonomy's actual landing day, not a future date that lets same-day work slip through.
+  assert.equal(routing.sliceTagsRequiredFrom, '2026-08-20', 'cutoff must not exempt work written the day this taxonomy lands');
+  writeFileSync(join(indexRoot, 'specs/a.md'), sliced.replace('slice_tags: [1:logic, 2:ui]\n', '').replace('created: 2026-08-21', 'created: 2026-08-20'));
+  const sameDayMissing = runIndex('spec-index.mjs');
+  assert.equal(sameDayMissing.status, 1);
+  assert.match(sameDayMissing.stderr, /missing slice_tags/);
 
   writeFileSync(join(indexRoot, 'specs/a.md'), good);
   writeFileSync(join(indexRoot, 'proposals/a.md'), '---\nid: a\ntitle: A\nstatus: draft\ncreated: 2026-08-20\ntags: [ui, nonsense]\n---\n\nbody\n');
