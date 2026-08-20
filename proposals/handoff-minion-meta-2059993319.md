@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-meta-2059993319
 title: Handoff marker — packages/workforce-client/src/client.ts (minion-meta)
-status: review
+status: merged
+merged_into: 2026-08-17-hub-workforce-error-body-leak
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-meta]
@@ -29,3 +30,13 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-meta@dev packages/workforce-client/src/client.ts:131` — body.raw carries an upstream error page (hostnames, upstream paths);
   https://github.com/NikolasP98/minion-meta/blob/dev/packages/workforce-client/src/client.ts#L131
+
+## Reconciliation note 2026-08-20
+
+Certain duplicate, merged: the full comment at `packages/workforce-client/src/client.ts:130-134`
+names its own target verbatim — "see proposals/2026-08-17-hub-workforce-error-body-leak.md" —
+and that draft proposal's AS-IS/TO-BE/DELTA already fully cover this exact finding (hub must not
+forward `body.raw`'s upstream hostnames/paths to the browser). `2026-08-17-hub-workforce-error-body-leak`
+is `status: draft` (touchable, not yet approved/in-spec), and this marker adds no fact beyond
+what that proposal already records, so nothing was appended to it — merging here just retires the
+duplicate filing rather than leaving two open trackers for one finding.

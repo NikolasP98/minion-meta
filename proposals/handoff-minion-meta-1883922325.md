@@ -35,3 +35,11 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L591
 - `NikolasP98/minion-meta@dev scripts/spec-index.mjs:615` — this only checks consistency *when* revises/supersedes is
   https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L615
+
+## Reconciliation note 2026-08-20
+
+Confirmed same idea as `2026-08-18-spec-heading-lint-baseline-backfill` (approved) — all four
+comments name it explicitly (`see proposals/2026-08-18-spec-heading-lint-baseline-backfill.md`,
+one with a `§4` pinpoint). Not merged into the canonical (approved, off-limits to edit); status
+held at `review` for a human to confirm scope, same disposition as the `hub-reserva-keyword-config`
+sibling markers.
