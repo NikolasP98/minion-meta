@@ -4,7 +4,7 @@
 // invalid stage/status. Run from repo root: node scripts/spec-index.mjs
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { parseFrontmatter, STAGES, STATUSES } from './spec-frontmatter.mjs';
-import { allowedTags, canonicalTags, readRouting } from './routing.mjs';
+import { allowedTags, canonicalTags, readRouting, validateSliceTags } from './routing.mjs';
 
 // routing.yml is the tag enum's single source of truth (node scripts/routing.mjs validate).
 const routing = readRouting();
@@ -30,9 +30,6 @@ for (const name of readdirSync('specs')
 	// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).
 	if (fm.status === 'retired' && !(fm.retired_reason && fm.retired_reason.length >= 20))
 		errors.push(`${name}: status "retired" requires retired_reason (>=20 chars)`);
-	// TODO(handoff): only the spec-level tag list is validated; §4b of the phase-gates spec puts
-	// tags per SLICE (the routable unit), which lives in the body table and is unparsed.
-	// Tracked in proposals/2026-08-20-tag-routing-fleet-rollout.md.
 	// Work-type tags route the dev loop and the gates — an unknown tag is an unroutable card.
 	if (fm.tags !== undefined && !Array.isArray(fm.tags))
 		errors.push(`${name}: tags must be a bracketed array (e.g. tags: [logic, test])`);
@@ -40,6 +37,9 @@ for (const name of readdirSync('specs')
 		for (const tag of fm.tags ?? [])
 			if (!legalTags.has(tag))
 				errors.push(`${name}: unknown tag "${tag}" — use one of ${canonicalTags(routing).join(', ')}`);
+	// The slice is the routable unit (§4b): a one-slice dev run selects its checks and reviewers
+	// from the slice's tags, so an unknown or absent slice tag is a misrouted run, not a nit.
+	for (const error of validateSliceTags(routing, fm, parsed.body)) errors.push(`${name}: ${error}`);
 	specs.push({
 		id: fm.id,
 		title: fm.title,
@@ -56,6 +56,7 @@ for (const name of readdirSync('specs')
 		...(fm.pr ? { pr: fm.pr } : {}),
 		...(fm.type ? { type: fm.type } : {}),
 		...(fm.tags ? { tags: fm.tags } : {}),
+		...(fm.slice_tags ? { slice_tags: fm.slice_tags } : {}),
 		...(fm.merge_sha ? { merge_sha: fm.merge_sha } : {}),
 		...(fm.merged_pr ? { merged_pr: fm.merged_pr } : {}),
 		...(fm.merged_at ? { merged_at: fm.merged_at } : {}),

@@ -295,15 +295,26 @@ non-trivial) → deploy (branch-triggered) → post-merge verification
 `routing.yml` (root, JSON-compatible YAML) is machine truth for the work-type
 taxonomy: `ui logic data infra docs test security perf deps`. Tags are a
 multi-select on `proposals/*.md` and `specs/*.md` frontmatter — and per-slice in
-a spec's slice table, because the slice is the routable unit.
+a spec's `slice_tags`, because the slice is the routable unit.
 
 - **Path rules are the authority for anything with a diff.** `routing.yml` maps
   globs → tags per fleet repo; `node scripts/routing.mjs tags <repo-id> <path…>`
   derives the tag set for changed files (union across files, canonical order).
 - `security` and `perf` are **declared, never derived** — intent is not a location.
-- `generated/labeler/<repo-id>.yml` is the generated `actions/labeler@v5` config
-  for each fleet repo; copy it into `<repo>/.github/labeler.yml`. Never edit it —
-  edit `routing.yml` and run `pnpm run routing:generate`.
+- **A spec declares `slice_tags: [1:logic+test, 2:ui]`** — one entry per slice, in
+  slice order, canonical tags only, and the spec's own `tags` must be their union.
+  `scripts/spec-index.mjs` and `pnpm run routing:validate` both reject an unknown,
+  malformed, out-of-order or (for specs created from `sliceTagsRequiredFrom` on)
+  missing slice tag list.
+- `generated/labeler/<repo-id>.yml` + `.workflow.yml` are the generated
+  `actions/labeler@v5` config and workflow for each fleet repo. minion-meta runs its
+  own pair from `.github/` (installed and drift-gated, not an inert copy). Every other
+  repo needs the work-type blocks pasted into its `.github/labeler.yml` — repos that
+  already label by topic (the gateway labels every channel) keep their own entries —
+  plus a workflow that runs `actions/labeler` on pull requests with
+  `pull-requests: write`. `pnpm run routing:verify-remote` reports, per repo, which
+  half is missing. Never edit the generated files — edit `routing.yml` and run
+  `pnpm run routing:generate`.
 - Tags compose the loop, they don't pick between agents: **one agent per slice**,
   capabilities injected by tag (ui → `ui-design-governance` + `lint:design`/`lint:tokens`;
   logic → red-state TDD; docs → light lane but a docs-verifier still checks the

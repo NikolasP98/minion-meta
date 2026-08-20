@@ -6,20 +6,32 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import {
+  LABELER_CONFIG_PATH,
+  LABELER_WORKFLOW_PATH,
   allowedTags,
   buildArtifact,
   canonicalTags,
   checkCorpus,
+  checkLabelerState,
+  checkSliceTags,
   generatedFiles,
   globToRegExp,
   globsByTag,
+  labelerBlocks,
   labelerText,
+  labelerWorkflowGaps,
+  labelerWorkflowText,
+  parseSliceTags,
   readFleetIds,
+  readFleetRows,
   readRouting,
   rulesFor,
+  sliceTableRowCount,
+  sliceTagsRequired,
   tagsForPath,
   tagsForPaths,
-  validateRouting
+  validateRouting,
+  validateSliceTags
 } from './routing.mjs';
 
 const routing = readRouting();
@@ -59,6 +71,8 @@ assert.match(errorFor((value) => { value.shared[0].paths = ['src/**test/**']; })
 assert.match(errorFor((value) => { value.shared[0].paths = ['src/[a-z].ts']; }), /unsupported glob character/);
 assert.match(errorFor((value) => { value.shared[0].paths = []; }), /paths: must be a non-empty array/);
 assert.match(errorFor((value) => { value.shared[0].paths.push(value.shared[0].paths[0]); }), /duplicate glob/);
+assert.match(errorFor((value) => { delete value.sliceTagsRequiredFrom; }), /sliceTagsRequiredFrom: must be an ISO date/);
+assert.match(errorFor((value) => { value.sliceTagsRequiredFrom = 'tomorrow'; }), /sliceTagsRequiredFrom: must be an ISO date/);
 assert.match(errorFor((value) => { value.repositories.pop(); }), /ids must be exactly the repo-policy fleet/);
 assert.match(errorFor((value) => { value.repositories[0].id = 'minion-metaa'; }), /ids must be exactly the repo-policy fleet/);
 assert.match(errorFor((value) => { delete value.repositories[0].rules; }), /minion-meta\].rules: is required/);
@@ -129,6 +143,132 @@ for (const row of routing.repositories) {
   assert.equal(emitted.has('security'), false);
 }
 
+
+// --- the installed labeler pair (minion-meta consumes its own output) ---------
+// Generating a config proves nothing; these assert the files a PR actually runs on.
+const installedConfig = readFileSync(resolve(LABELER_CONFIG_PATH), 'utf8');
+const installedWorkflow = readFileSync(resolve(LABELER_WORKFLOW_PATH), 'utf8');
+assert.equal(installedConfig, labelerText(routing, 'minion-meta'), '.github/labeler.yml drifted from routing.yml');
+assert.equal(installedWorkflow, labelerWorkflowText(routing, 'minion-meta'), '.github/workflows/labeler.yml drifted from routing.yml');
+assert.match(installedWorkflow, /^on:\n  pull_request_target:\n    types: \[opened, synchronize, reopened, ready_for_review\]$/m);
+assert.match(installedWorkflow, /^  pull-requests: write$/m, 'labeler cannot label without pull-requests: write');
+assert.match(installedWorkflow, /uses: actions\/labeler@v5/);
+assert(installedWorkflow.includes(`configuration-path: ${LABELER_CONFIG_PATH}`));
+assert.match(installedWorkflow, /runs-on: ubuntu-latest/, 'a self-hosted labeler queues forever and labels nothing');
+assert.match(installedWorkflow, new RegExp(`for tag in ${canonicalTags(routing).join(' ')}; do`), 'the label vocabulary must come from routing.yml');
+// A `secrets` reference inside an `if` silently invalidates a workflow file — keep them in env.
+assert.equal(/^\s*if:.*secrets\./m.test(installedWorkflow), false);
+
+// Replay a representative PR: parse the INSTALLED config back into globs and check that the
+// labels GitHub would apply equal the tags our own gates derive for the same changed files.
+function labelsFromInstalledConfig(text, paths) {
+  const byTag = new Map();
+  let current = null;
+  for (const line of text.split('\n')) {
+    const header = line.match(/^([a-z][a-z0-9-]*):$/);
+    if (header) { current = header[1]; byTag.set(current, []); continue; }
+    const glob = line.match(/^\s+- "(.+)"$/);
+    if (glob && current) byTag.get(current).push(glob[1]);
+  }
+  return canonicalTags(routing).filter((tag) => (byTag.get(tag) ?? []).some((glob) => paths.some((path) => globToRegExp(glob).test(path))));
+}
+for (const paths of [
+  ['scripts/routing.mjs', 'routing.yml', 'AGENTS.md', 'scripts/routing.test.mjs'],
+  ['packages/db/schema.ts'],
+  ['specs/2026-08-17-sdlc-phase-gates-scoring-spec.md'],
+  ['package.json', '.github/workflows/ci.yml']
+]) {
+  assert.deepEqual(labelsFromInstalledConfig(installedConfig, paths), tagsForPaths(routing, 'minion-meta', paths), `installed labeler config disagrees for ${paths.join(', ')}`);
+}
+
+// --- fleet installation state -------------------------------------------------
+const fleetRemotes = new Map(readFleetRows().map((row) => [row.id, row.remote]));
+for (const row of routing.repositories) assert(fleetRemotes.get(row.id), `${row.id} has no remote in repo-policy.yaml`);
+const installedState = Object.fromEntries(routing.repositories.map((row) => [row.id, {
+  [LABELER_CONFIG_PATH]: labelerText(routing, row.id),
+  [LABELER_WORKFLOW_PATH]: labelerWorkflowText(routing, row.id)
+}]));
+assert.deepEqual(checkLabelerState(routing, installedState), []);
+const missingState = clone(installedState);
+missingState['minion_hub'][LABELER_CONFIG_PATH] = null;
+assert.match(checkLabelerState(routing, missingState).join('\n'), /minion_hub: \.github\/labeler\.yml is not installed/);
+// One repo's config in another repo is not an install — the globs differ per repo.
+const swappedState = clone(installedState);
+swappedState['minion'][LABELER_CONFIG_PATH] = labelerText(routing, 'minion_hub');
+assert.match(checkLabelerState(routing, swappedState).join('\n'), /minion: \.github\/labeler\.yml is missing the generated work-type blocks/);
+
+// A repo that already labels by topic keeps its own entries: the work-type blocks are pasted
+// in, and its bigger workflow satisfies the contract without being byte-identical to ours.
+// (This is the gateway's real shape — channel labels + an app-token labeler + a size step.)
+const coexistingState = clone(installedState);
+coexistingState['minion'][LABELER_CONFIG_PATH] = `"channel: discord":\n  - changed-files:\n      - any-glob-to-any-file:\n          - "extensions/discord/**"\n${labelerBlocks(routing, 'minion')}`;
+coexistingState['minion'][LABELER_WORKFLOW_PATH] = [
+  'name: Labeler', 'on:', '  pull_request_target:', '    types: [opened, synchronize, reopened]',
+  '  issues:', '    types: [opened]', 'permissions: {}', 'jobs:', '  label:', '    permissions:',
+  '      contents: read', '      pull-requests: write', '    runs-on: ubuntu-latest', '    steps:',
+  '      - uses: actions/labeler@8558fd74291d67161a8a78ce36a881fa63b766a9 # v5', '        with:',
+  `          configuration-path: ${LABELER_CONFIG_PATH}`, '          sync-labels: true', ''
+].join('\n');
+assert.deepEqual(checkLabelerState(routing, coexistingState), []);
+
+// The workflow contract: each clause is load-bearing, so each absence is its own finding.
+assert.deepEqual(labelerWorkflowGaps(labelerWorkflowText(routing, 'minion-meta')), []);
+const gapState = clone(installedState);
+gapState['minion_site'][LABELER_WORKFLOW_PATH] = 'name: Labeler\non:\n  push:\n    branches: [main]\n';
+assert.match(checkLabelerState(routing, gapState).join('\n'), /minion_site: .*labels nothing — it never runs actions\/labeler/);
+assert.match(checkLabelerState(routing, gapState).join('\n'), /labels nothing — it does not trigger on pull requests/);
+assert.match(checkLabelerState(routing, gapState).join('\n'), /labels nothing — it lacks pull-requests: write/);
+const noConfigPath = clone(installedState);
+noConfigPath['minion_plugins'][LABELER_WORKFLOW_PATH] = labelerWorkflowText(routing, 'minion_plugins').replace(`configuration-path: ${LABELER_CONFIG_PATH}`, 'configuration-path: .github/other.yml');
+assert.match(checkLabelerState(routing, noConfigPath).join('\n'), /does not point at \.github\/labeler\.yml/);
+
+// --- per-slice tags -----------------------------------------------------------
+const specFm = (extra) => ({ id: 'x', title: 'X', stage: 'spec', status: 'approved', created: '2026-08-21', ...extra });
+const sliceErrors = (extra, body = '') => validateSliceTags(routing, specFm(extra), body).join('\n');
+
+assert.deepEqual(parseSliceTags(['1:logic+test']).slices, [{ index: 0, number: 1, tags: ['logic', 'test'] }]);
+assert.deepEqual(validateSliceTags(routing, specFm({ tags: ['ui', 'logic'], slice_tags: ['1:ui', '2:logic'] }), ''), []);
+// security/perf are declared, not derived — but they are legal slice tags.
+assert.deepEqual(validateSliceTags(routing, specFm({ tags: ['logic', 'security'], slice_tags: ['1:logic+security'] }), ''), []);
+
+// Missing: the failure the enum gate exists to catch — a routable spec with no slice tags.
+assert.match(sliceErrors({ tags: ['logic'] }), /missing slice_tags — specs created on or after 2026-08-21/);
+assert.equal(sliceTagsRequired(routing, specFm({})), true);
+// Grandfathered and abandoned specs stay exempt so the gate does not rewrite history.
+assert.equal(sliceTagsRequired(routing, specFm({ created: '2026-08-17' })), false);
+assert.equal(sliceTagsRequired(routing, specFm({ status: 'superseded' })), false);
+assert.deepEqual(validateSliceTags(routing, specFm({ created: '2026-01-01', tags: ['logic'] }), ''), []);
+
+// Unknown, legacy, duplicate, out-of-order and malformed slice tags all fail.
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic+wat'] }), /slice_tags\[0\]: unknown tag "wat"/);
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic+crm'] }), /slice_tags\[0\]: unknown tag "crm"/, 'legacy tags may not tag a slice');
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic+logic'] }), /duplicate tag "logic"/);
+assert.match(sliceErrors({ tags: ['ui', 'logic'], slice_tags: ['1:logic+ui'] }), /tags must be in canonical order \(ui\+logic\)/);
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['logic'] }), /malformed entry "logic"/);
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: '1:logic' }), /slice_tags: must be a bracketed array/);
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: [] }), /must list at least one slice/);
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:'] }), /malformed entry "1:"/);
+// Slice numbers are the join key to the spec body — gaps, duplicates and reordering are errors.
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic', '3:logic'] }), /expected 2, got 3/);
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic', '1:logic'] }), /expected 2, got 1/);
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['2:logic', '1:logic'] }), /expected 1, got 2/);
+// Declared-vs-declared: the spec's tags must be exactly the union of its slices'.
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic', '2:ui'] }), /tags: missing ui/);
+assert.match(sliceErrors({ tags: ['logic', 'data'], slice_tags: ['1:logic'] }), /tags: data is declared on the spec but on no slice/);
+assert.match(sliceErrors({ slice_tags: ['1:logic'] }), /tags: missing logic/);
+// A legacy spec-level tag is tolerated next to a canonical union (the ledger may only shrink).
+assert.deepEqual(validateSliceTags(routing, specFm({ tags: ['logic', 'crm'], slice_tags: ['1:logic'] }), ''), []);
+
+// House-format slice tables are machine-readable: the row count must match the tag list.
+const table = '## 5. Slices\n\n| # | Slice | Repos |\n|---|---|---|\n| 1 | A | minion |\n| 2 | B | minion |\n';
+assert.equal(sliceTableRowCount(table), 2);
+assert.equal(sliceTableRowCount('no table here'), null);
+assert.deepEqual(validateSliceTags(routing, specFm({ tags: ['logic'], slice_tags: ['1:logic', '2:logic'] }), table), []);
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic'] }, table), /declares 1 slice\(s\) but the slice table lists 2 row\(s\)/);
+
+// The committed corpus obeys all of the above.
+assert.deepEqual(checkSliceTags(routing), []);
+
 // --- corpus gate --------------------------------------------------------------
 assert.deepEqual(checkCorpus(routing), [], 'committed specs/proposals must only use legal tags');
 
@@ -155,6 +295,23 @@ assert.equal(cli('tags', 'minion_hub', 'src/app.css', 'src/server/x.ts').stdout.
 assert.deepEqual(JSON.parse(cli('tags', 'minion_hub', 'src/app.css', '--json').stdout).tags, ['ui']);
 assert.equal(cli('tags', 'minion_hub').status, 1);
 assert.equal(cli('tags', 'nope', 'a.ts').status, 1);
+const fixtureDir = mkdtempSync(join(tmpdir(), 'routing-remote-'));
+try {
+  const current = join(fixtureDir, 'current.json');
+  writeFileSync(current, JSON.stringify(Object.fromEntries(routing.repositories.map((row) => [row.id, {
+    [LABELER_CONFIG_PATH]: labelerText(routing, row.id),
+    [LABELER_WORKFLOW_PATH]: labelerWorkflowText(routing, row.id)
+  }]))));
+  assert.equal(cli('verify-remote', '--fixture', current).status, 0);
+  const absent = join(fixtureDir, 'absent.json');
+  writeFileSync(absent, JSON.stringify(Object.fromEntries(routing.repositories.map((row) => [row.id, { [LABELER_CONFIG_PATH]: null, [LABELER_WORKFLOW_PATH]: null }]))));
+  const missing = cli('verify-remote', '--fixture', absent);
+  assert.equal(missing.status, 1);
+  assert.match(missing.stderr, /is not installed/);
+  assert.equal(cli('verify-remote', '--fixture', join(fixtureDir, 'nope.json')).status, 1);
+} finally {
+  rmSync(fixtureDir, { recursive: true, force: true });
+}
 assert.equal(cli('show', 'minion-meta').status, 0);
 assert.equal(cli('show', 'nope').status, 1);
 assert.equal(cli('nonsense').status, 1);
@@ -183,6 +340,33 @@ try {
   const scalar = runIndex('spec-index.mjs');
   assert.equal(scalar.status, 1);
   assert.match(scalar.stderr, /tags must be a bracketed array/);
+
+  // Per-slice tags: the routable unit. A spec written under the taxonomy must carry them,
+  // and spec-index.mjs is where that becomes a red gate rather than a convention.
+  const sliced = '---\nid: a\ntitle: A\nstage: spec\nstatus: approved\ncreated: 2026-08-21\ntags: [ui, logic]\nslice_tags: [1:logic, 2:ui]\n---\n\nbody\n';
+  writeFileSync(join(indexRoot, 'specs/a.md'), sliced);
+  assert.equal(runIndex('spec-index.mjs').status, 0);
+  assert.deepEqual(JSON.parse(readFileSync(join(indexRoot, 'specs/index.json'), 'utf8')).specs[0].slice_tags, ['1:logic', '2:ui'], 'the board/factory route from index.json, so slice tags must ship in it');
+
+  for (const [mutation, expected] of [
+    ['slice_tags: [1:logic, 2:wat]', /unknown tag "wat"/],
+    ['slice_tags: [1:logic, 3:ui]', /expected 2, got 3/],
+    ['slice_tags: [1:logic, 2:logic+ui]', /canonical order/],
+    ['slice_tags: logic', /slice_tags: must be a bracketed array/]
+  ]) {
+    writeFileSync(join(indexRoot, 'specs/a.md'), sliced.replace('slice_tags: [1:logic, 2:ui]', mutation));
+    const rejectedSlice = runIndex('spec-index.mjs');
+    assert.equal(rejectedSlice.status, 1, `${mutation} was accepted`);
+    assert.match(rejectedSlice.stderr, expected);
+  }
+  // Omitting them entirely is the same failure, not a silent pass.
+  writeFileSync(join(indexRoot, 'specs/a.md'), sliced.replace('slice_tags: [1:logic, 2:ui]\n', ''));
+  const missingSlices = runIndex('spec-index.mjs');
+  assert.equal(missingSlices.status, 1);
+  assert.match(missingSlices.stderr, /missing slice_tags/);
+  // A spec predating the taxonomy stays valid without them.
+  writeFileSync(join(indexRoot, 'specs/a.md'), sliced.replace('slice_tags: [1:logic, 2:ui]\n', '').replace('created: 2026-08-21', 'created: 2026-08-19'));
+  assert.equal(runIndex('spec-index.mjs').status, 0);
 
   writeFileSync(join(indexRoot, 'specs/a.md'), good);
   writeFileSync(join(indexRoot, 'proposals/a.md'), '---\nid: a\ntitle: A\nstatus: draft\ncreated: 2026-08-20\ntags: [ui, nonsense]\n---\n\nbody\n');

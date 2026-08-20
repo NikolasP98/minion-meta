@@ -4,9 +4,10 @@
   "title": "Minion work-type tag taxonomy and path routing",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schemaVersion", "tags", "legacyTags", "shared", "repositories"],
+  "required": ["schemaVersion", "sliceTagsRequiredFrom", "tags", "legacyTags", "shared", "repositories"],
   "properties": {
     "schemaVersion": { "const": 1 },
+    "sliceTagsRequiredFrom": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
     "contentHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
     "tags": {
       "type": "array",

@@ -5,10 +5,11 @@ stage: spec
 status: approved
 pass: 1
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 repos: [minion-meta, minion-factory, minion-base]
 verdict: approved
-tags: [infra]
+tags: [ui, logic, infra, docs, test]
+slice_tags: [1:logic, 2:ui+logic, 3:ui+logic, 4:logic, 5:logic, 6:infra, 7:ui+logic, 8:logic+infra+docs+test, 9:logic, 10:logic]
 type: infra
 ---
 
