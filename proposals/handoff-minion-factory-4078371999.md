@@ -1,12 +1,13 @@
 ---
 id: handoff-minion-factory-4078371999
 title: Handoff marker — agent/run.sh (minion-factory)
-status: review
+status: closed
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-factory]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-factory-memory-governance
+closed_reason: "Both markers already tracked by escalated items: D4 worker-writes-shared = worker-containment (issue 73, PR 30); run.sh:269 = memory-governance S2 (PR 35 escalated)."
 ---
 
 # Handoff marker — agent/run.sh
