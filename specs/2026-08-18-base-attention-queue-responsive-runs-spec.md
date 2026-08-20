@@ -3,11 +3,11 @@ id: 2026-08-18-base-attention-queue-responsive-runs-spec
 title: Base UI-004/011 — mobile attention queue, focused stages, responsive runs
 stage: spec
 status: review
-pass: 4
+pass: 5
 created: 2026-08-18
 updated: 2026-08-20
 proposal: 2026-08-18-base-attention-queue-responsive-runs
-verdict: pending
+verdict: approved
 repos: [minion-base]
 relationship: depends-on
 related: [2026-08-18-minion-base-mobile-hitl-ux-plan, 2026-08-18-base-ui-primitives-and-shell-spec, 2026-08-18-base-workdetail-summary-first-spec]
@@ -416,7 +416,12 @@ that cannot be run-scoped do the same.
     grammar `^[\w.-]{1,150}$` (`SPEC_ID` / `SPEC_ID_MAX`, the same bound `factoryPathAllowed`
     enforces — a narrower local bound would reject ids the transport accepts, which is the exact
     failure mode `src/lib/spec-warning.ts` documents), and only when that id is present in the
-    authenticated Factory run listing. It calls only the fixed upstream `runs/<id>/log` route, with
+    authenticated **full run-history listing — the same source the Factory view renders, terminal
+    `passed|failed|error|canceled` runs included, NOT the `pending|queued|running` active subset**
+    (a completed run's log is exactly what a human audits after the fact; membership against the
+    active-only listing would deny every terminal run the Runs surface itself displays). The
+    history listing carries the same availability discrimination as `ActiveRunListing` — membership
+    can only be asserted or denied when the listing answered. It calls only the fixed upstream `runs/<id>/log` route, with
     the line count fixed **server-side**; a client-supplied line or byte bound is rejected.
 
     **The byte ceiling is enforced while reading, not after.** `factoryFetch` cannot deliver it: it
@@ -686,7 +691,9 @@ view and selectively inspect its logs without downloading every run's history.
   `factoryFetchBounded`, asserted by a test that the endpoint never calls `factoryFetch` for log
   reads — states truncation to the user, and maps timeout, not-found, and upstream failure —
   including the 503 `unconfigured` and 502 `unreachable` synthesized responses — to non-secret
-  error responses. Membership is checked against `loadActiveRunListing`; an unavailable listing
+  error responses. Membership is checked against the full authenticated run-history listing (the Factory
+  view's own source, terminal runs included — a `completed` run's log read succeeds, proved by a
+  fixture); an unavailable listing
   answers with an explicit “cannot verify this run right now” error rather than serving or denying
   on a guess.
 - Browser request counts prove no log request before expansion, one request on first expansion,
