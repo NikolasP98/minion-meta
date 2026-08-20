@@ -10,6 +10,7 @@ repos: [minion-factory]
 verdict: approved
 tags: [infra]
 type: infra
+possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/43
 ---
 
 # Factory token/budget governance
