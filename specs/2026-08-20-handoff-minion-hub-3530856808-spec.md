@@ -15,6 +15,7 @@ tags: [infra, test, data]
 type: fix
 done_reason: "Zero-diff dev run confirms the open end is already resolved on base (sibling merges covered it); husk PR closed."
 approved_reason: "Reopening: my zero-diff done-flip was wrong — PR #150 recon proves Slices 1-2 remain (CI gate for the concurrency test needs REAL prod RLS DDL, stop-ship until provided)."
+possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/150
 ---
 
 # Wire `crm-funnel.concurrent.integration.test.ts` into a real CI gate
