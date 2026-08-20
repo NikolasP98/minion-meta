@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2785164896
 title: Handoff marker — src/server/services/crm-finance.service.ts (minion_hub)
-status: approved
+status: in-spec
+spawned_spec: 2026-08-20-handoff-minion-hub-2785164896-spec
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-hub]
