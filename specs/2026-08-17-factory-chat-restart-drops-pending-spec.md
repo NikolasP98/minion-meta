@@ -11,6 +11,7 @@ verdict: approved
 repos: [minion-base, minion-factory]
 tags: [logic, data]
 type: fix
+possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/46
 ---
 
 # A distinct `dispatched` state for factory chat turns
