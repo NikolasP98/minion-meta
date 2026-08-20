@@ -13,6 +13,7 @@ relationship: extends
 related: [2026-08-18-hub-funnel-atomic-write-spec, 2026-08-17-hub-funnel-atomic-write]
 tags: [infra, test, data]
 type: fix
+slice_tags: [1:data+infra, 2:infra+test]
 ---
 
 # Wire `crm-funnel.concurrent.integration.test.ts` into a real CI gate

@@ -13,6 +13,7 @@ relationship: extends
 related: [2026-08-18-factory-deterministic-unstick-spec, 2026-08-17-factory-deterministic-unstick, 2026-08-18-factory-controller-completion-invariants]
 type: fix
 tags: [infra, logic]
+slice_tags: [1:logic, 2:logic+infra]
 ---
 
 # Cross-tick requeue cap for a persistently-failing unstick-cron lineage

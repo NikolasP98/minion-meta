@@ -13,6 +13,7 @@ relationship: extends
 related: [2026-08-17-hub-reserva-keyword-config-spec]
 type: fix
 tags: [logic, test, handoff-sweep]
+slice_tags: [1:logic+test]
 ---
 
 # Handoff marker `crm-similarity.service.ts:55` — resolve the rule per call in `buildWinIndex`
