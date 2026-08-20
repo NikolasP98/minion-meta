@@ -307,13 +307,20 @@ a spec's `slice_tags`, because the slice is the routable unit.
   malformed, out-of-order or (for specs created from `sliceTagsRequiredFrom` on)
   missing slice tag list.
 - `generated/labeler/<repo-id>.yml` + `.workflow.yml` are the generated
-  `actions/labeler@v5` config and workflow for each fleet repo. minion-meta runs its
-  own pair from `.github/` (installed and drift-gated, not an inert copy). Every other
-  repo needs the work-type blocks pasted into its `.github/labeler.yml` — repos that
-  already label by topic (the gateway labels every channel) keep their own entries —
-  plus a workflow that runs `actions/labeler` on pull requests with
-  `pull-requests: write`. `pnpm run routing:verify-remote` reports, per repo, which
-  half is missing. Never edit the generated files — edit `routing.yml` and run
+  `actions/labeler@v5` config and workflow for each fleet repo, and they are **installed**:
+  minion-meta runs its own pair from `.github/`, and every other repo we can commit to
+  carries the work-type blocks on its configured PR base. Repos that already label by
+  topic keep their own entries (the gateway's 45 channel/app/extension labels sit above
+  the generated marker) and keep their own workflow where it already runs
+  `actions/labeler` on pull requests with `pull-requests: write`. A repo label that has
+  the **same name** as a work-type tag must be folded into `routing.yml` rather than
+  left beside the block: two top-level keys is a duplicate YAML mapping key, and
+  `actions/labeler` then applies nothing at all. `pnpm run routing:verify-remote`
+  (needs a `gh` token, so it is not in per-PR CI) is the standing absence/drift gate and
+  checks exactly that. `pixel-agents` is the one repo we cannot install into — a
+  third-party upstream — so it declares `externalUpstream` in `routing.yml` and the gate
+  reports it as blocked; that declaration is a shrinking ledger and fails once the pair
+  lands upstream. Never edit the generated files — edit `routing.yml` and run
   `pnpm run routing:generate`.
 - Tags compose the loop, they don't pick between agents: **one agent per slice**,
   capabilities injected by tag (ui → `ui-design-governance` + `lint:design`/`lint:tokens`;

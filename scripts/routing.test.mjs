@@ -14,6 +14,8 @@ import {
   checkCorpus,
   checkLabelerState,
   checkSliceTags,
+  duplicateLabelerKeys,
+  externalUpstreamNotes,
   generatedFiles,
   globToRegExp,
   globsByTag,
@@ -193,11 +195,25 @@ for (const paths of [
 // --- fleet installation state -------------------------------------------------
 const fleetRemotes = new Map(readFleetRows().map((row) => [row.id, row.remote]));
 for (const row of routing.repositories) assert(fleetRemotes.get(row.id), `${row.id} has no remote in repo-policy.yaml`);
-const installedState = Object.fromEntries(routing.repositories.map((row) => [row.id, {
-  [LABELER_CONFIG_PATH]: labelerText(routing, row.id),
-  [LABELER_WORKFLOW_PATH]: labelerWorkflowText(routing, row.id)
-}]));
+const pairFor = (id) => ({ [LABELER_CONFIG_PATH]: labelerText(routing, id), [LABELER_WORKFLOW_PATH]: labelerWorkflowText(routing, id) });
+const absentPair = { [LABELER_CONFIG_PATH]: null, [LABELER_WORKFLOW_PATH]: null };
+// The one repo we cannot commit to is declared in routing.yml, so the gate can tell "blocked on a
+// third party" from "nobody did it yet" — and the reason travels with the machine truth.
+const externalUpstreamIds = routing.repositories.filter((row) => typeof row.externalUpstream === 'string').map((row) => row.id);
+assert.deepEqual(externalUpstreamIds, ['pixel-agents'], 'only the third-party upstream may claim the exemption');
+const installedState = Object.fromEntries(routing.repositories.map((row) => [row.id, externalUpstreamIds.includes(row.id) ? absentPair : pairFor(row.id)]));
 assert.deepEqual(checkLabelerState(routing, installedState), []);
+assert.match(externalUpstreamNotes(routing, installedState).join('\n'), /^pixel-agents: BLOCKED, not installed — .*no push access/, 'a blocked repo is reported, never silently skipped');
+// ...and the declaration is a shrinking ledger like legacyTags: once the pair lands upstream, the
+// exemption is the finding.
+const upstreamInstalled = clone(installedState);
+upstreamInstalled['pixel-agents'] = pairFor('pixel-agents');
+assert.match(checkLabelerState(routing, upstreamInstalled).join('\n'), /pixel-agents: the labeler pair is installed upstream — delete its externalUpstream declaration/);
+assert.deepEqual(externalUpstreamNotes(routing, upstreamInstalled), []);
+// An exemption is per-repo: it does not excuse any other repo from the same check.
+const upstreamOnly = Object.fromEntries(routing.repositories.map((row) => [row.id, absentPair]));
+assert.equal(checkLabelerState(routing, upstreamOnly).some((error) => error.startsWith('pixel-agents:')), false);
+assert.equal(checkLabelerState(routing, upstreamOnly).length, (routing.repositories.length - 1) * 2);
 const missingState = clone(installedState);
 missingState['minion_hub'][LABELER_CONFIG_PATH] = null;
 assert.match(checkLabelerState(routing, missingState).join('\n'), /minion_hub: \.github\/labeler\.yml is not installed/);
@@ -219,6 +235,20 @@ coexistingState['minion'][LABELER_WORKFLOW_PATH] = [
   `          configuration-path: ${LABELER_CONFIG_PATH}`, '          sync-labels: true', ''
 ].join('\n');
 assert.deepEqual(checkLabelerState(routing, coexistingState), []);
+
+// ...but only while the two vocabularies are disjoint. The gateway's real config already had a
+// topic label called `docs`, and YAML rejects a duplicate mapping key, so appending the block made
+// actions/labeler parse nothing at all. Coexistence is a claim the gate has to check.
+const collidingState = clone(installedState);
+collidingState['minion'][LABELER_CONFIG_PATH] = `"docs":\n  - changed-files:\n      - any-glob-to-any-file:\n          - "docs.acp.md"\n${labelerBlocks(routing, 'minion')}`;
+assert.deepEqual(duplicateLabelerKeys(routing, 'minion', collidingState['minion'][LABELER_CONFIG_PATH]), ['docs']);
+assert.match(checkLabelerState(routing, collidingState).join('\n'), /minion: \.github\/labeler\.yml declares "docs" twice/);
+// A quoted topic label whose name merely CONTAINS a tag id is a different key and must not trip it.
+assert.deepEqual(duplicateLabelerKeys(routing, 'minion', `"docs: channels":\n  - changed-files:\n${labelerBlocks(routing, 'minion')}`), []);
+// Neither may a tag id appearing as a glob or a nested key.
+assert.deepEqual(duplicateLabelerKeys(routing, 'minion', `${labelerBlocks(routing, 'minion')}"topic":\n  - changed-files:\n      - any-glob-to-any-file:\n          - "docs/**"\n`), []);
+// The real gateway config, as installed, is collision-free — that is what makes the paste legal.
+assert.deepEqual(duplicateLabelerKeys(routing, 'minion', coexistingState['minion'][LABELER_CONFIG_PATH]), []);
 
 // The workflow contract: each clause is load-bearing, so each absence is its own finding.
 assert.deepEqual(labelerWorkflowGaps(labelerWorkflowText(routing, 'minion-meta')), []);
@@ -337,13 +367,12 @@ assert.equal(cli('tags', 'nope', 'a.ts').status, 1);
 const fixtureDir = mkdtempSync(join(tmpdir(), 'routing-remote-'));
 try {
   const current = join(fixtureDir, 'current.json');
-  writeFileSync(current, JSON.stringify(Object.fromEntries(routing.repositories.map((row) => [row.id, {
-    [LABELER_CONFIG_PATH]: labelerText(routing, row.id),
-    [LABELER_WORKFLOW_PATH]: labelerWorkflowText(routing, row.id)
-  }]))));
-  assert.equal(cli('verify-remote', '--fixture', current).status, 0);
+  writeFileSync(current, JSON.stringify(installedState));
+  const green = cli('verify-remote', '--fixture', current);
+  assert.equal(green.status, 0);
+  assert.match(green.stdout, /pixel-agents: BLOCKED, not installed/, 'the CLI prints what it could not verify');
   const absent = join(fixtureDir, 'absent.json');
-  writeFileSync(absent, JSON.stringify(Object.fromEntries(routing.repositories.map((row) => [row.id, { [LABELER_CONFIG_PATH]: null, [LABELER_WORKFLOW_PATH]: null }]))));
+  writeFileSync(absent, JSON.stringify(upstreamOnly));
   const missing = cli('verify-remote', '--fixture', absent);
   assert.equal(missing.status, 1);
   assert.match(missing.stderr, /is not installed/);

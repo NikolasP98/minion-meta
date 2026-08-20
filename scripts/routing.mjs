@@ -175,7 +175,13 @@ export function validateRouting(routing, { fleetIds = readFleetIds() } = {}) {
     if (!sameMembers(ids.filter((id) => typeof id === 'string'), fleetIds)) errors.push(`$.repositories: ids must be exactly the repo-policy fleet (${[...fleetIds].sort().join(', ')})`);
     routing.repositories.forEach((row, index) => {
       const path = `$.repositories[${typeof row?.id === 'string' ? row.id : `row-${index}`}]`;
-      if (!keysExactly(row, ['id', 'rules'], path, errors)) return;
+      const expected = 'externalUpstream' in row ? ['id', 'rules', 'externalUpstream'] : ['id', 'rules'];
+      if (!keysExactly(row, expected, path, errors)) return;
+      if ('externalUpstream' in row) {
+        if (row.id === selfRepoId) errors.push(`${path}.externalUpstream: this repo is the checkout the artifacts are generated in, so it is never upstream-owned`);
+        if (typeof row.externalUpstream !== 'string' || row.externalUpstream.trim().length < 40)
+          errors.push(`${path}.externalUpstream: must name the upstream and why we cannot commit to it (>=40 chars)`);
+      }
       validateRules(row.rules, derivable, `${path}.rules`, errors);
     });
   }
@@ -335,12 +341,11 @@ export function globsByTag(routing, repoId) {
     .map((tag) => [tag, [...byTag.get(tag)].sort()]);
 }
 
-// TODO(handoff): installed in minion-meta only (`.github/labeler.yml` + `.github/workflows/labeler.yml`,
-// drift-gated by `generate --check`). The other 8 fleet repos are separate git repos with no checkout
-// here: paste `generated/labeler/<id>.yml` into each repo's config (the gateway already labels
-// channels — keep its entries) and copy `<id>.workflow.yml` where no labeler workflow exists, then
-// confirm with `node scripts/routing.mjs verify-remote`.
-// Tracked in proposals/2026-08-20-tag-routing-fleet-rollout.md.
+// The generated pair is installed in every fleet repo we can commit to: minion-meta consumes its
+// own output from this checkout, and the other repos were written over the GitHub contents API on
+// their configured PR base (the gateway kept its `channel: *` topic labels and its own workflow —
+// only the work-type blocks were appended). `verify-remote` is the standing drift/absence gate.
+// The one exception is declared, not implied: see `externalUpstream` in routing.yml.
 function generatedHeader(repoId, target) {
   return [
     '# GENERATED FILE — do not edit.',
@@ -507,11 +512,22 @@ function ghFileText(remote, path, ref) {
   }
 }
 
+function localFileText(path) {
+  try { return readFileSync(path, 'utf8'); } catch { return null; }
+}
+
 export function liveLabelerState(routing, rows = readFleetRows()) {
   const state = {};
   for (const row of routing.repositories) {
     const fleet = rows.find((candidate) => candidate.id === row.id);
     if (!fleet) continue;
+    if (row.id === selfRepoId) {
+      // This repo is the checkout the artifacts are generated in, so its installed pair is on disk
+      // and `generate --check` is its drift gate. Polling its PR base instead would report every
+      // routing.yml change as an uninstalled fleet repo for as long as the branch is unmerged.
+      state[row.id] = { [LABELER_CONFIG_PATH]: localFileText(installedLabelerConfig), [LABELER_WORKFLOW_PATH]: localFileText(installedLabelerWorkflow) };
+      continue;
+    }
     state[row.id] = {
       [LABELER_CONFIG_PATH]: ghFileText(fleet.remote, LABELER_CONFIG_PATH, fleet.prBase),
       [LABELER_WORKFLOW_PATH]: ghFileText(fleet.remote, LABELER_WORKFLOW_PATH, fleet.prBase)
@@ -532,18 +548,52 @@ export function labelerWorkflowGaps(text) {
   return gaps;
 }
 
+// An `externalUpstream` repo is installed by nobody here: its PRs are merged by a third party, so
+// the blocks can only land in a PR that maintainer accepts. Reported, never silently skipped — and
+// like `legacyTags` the declaration is a shrinking ledger, so it fails once the pair IS installed.
+export function externalUpstreamNotes(routing, state) {
+  return routing.repositories
+    .filter((row) => typeof row.externalUpstream === 'string' && labelerGaps(routing, row, state[row.id]).length > 0)
+    .map((row) => `${row.id}: BLOCKED, not installed — ${row.externalUpstream}`);
+}
+
+// Pasting the block in next to a repo's own labels only works while the two vocabularies are
+// disjoint. The gateway already had a topic label literally called `docs`, and a second top-level
+// `docs:` is a duplicate YAML mapping key — js-yaml (what actions/labeler parses with) rejects the
+// document, so the labeler applies NOTHING, silently, on every PR. The fix is to fold the repo's
+// globs into routing.yml so one generated key covers both, never to ship two keys.
+export function duplicateLabelerKeys(routing, repoId, config) {
+  const generated = new Set(labelerBlocks(routing, repoId).split('\n').filter((line) => /^[a-z][a-z0-9-]*:$/.test(line)).map((line) => line.slice(0, -1)));
+  const counts = new Map();
+  for (const line of config.split('\n')) {
+    // Top-level keys only, quoted ("channel: discord":) or bare (ui:).
+    const match = line.match(/^"?([^"#\s][^"]*?)"?:\s*$/);
+    if (match && generated.has(match[1])) counts.set(match[1], (counts.get(match[1]) ?? 0) + 1);
+  }
+  return [...counts].filter(([, count]) => count > 1).map(([key]) => key);
+}
+
+function labelerGaps(routing, row, installed) {
+  const errors = [];
+  if (!installed) return [`${row.id}: no remote state observed`];
+  const config = installed[LABELER_CONFIG_PATH];
+  if (config === null || config === undefined) errors.push(`${row.id}: ${LABELER_CONFIG_PATH} is not installed — copy generated/labeler/${row.id}.yml into the repo`);
+  else if (!config.includes(labelerBlocks(routing, row.id)))
+    errors.push(`${row.id}: ${LABELER_CONFIG_PATH} is missing the generated work-type blocks — paste generated/labeler/${row.id}.yml in verbatim (repo-specific labels stay)`);
+  else for (const key of duplicateLabelerKeys(routing, row.id, config))
+    errors.push(`${row.id}: ${LABELER_CONFIG_PATH} declares "${key}" twice — a repo label collides with the generated work-type key, and a duplicate YAML mapping key makes actions/labeler apply nothing; fold that repo's globs into routing.yml instead`);
+  const workflow = installed[LABELER_WORKFLOW_PATH];
+  if (workflow === null || workflow === undefined) errors.push(`${row.id}: ${LABELER_WORKFLOW_PATH} is not installed — copy generated/labeler/${row.id}.workflow.yml into the repo`);
+  else for (const gap of labelerWorkflowGaps(workflow)) errors.push(`${row.id}: ${LABELER_WORKFLOW_PATH} labels nothing — ${gap}`);
+  return errors;
+}
+
 export function checkLabelerState(routing, state) {
   const errors = [];
   for (const row of routing.repositories) {
-    const installed = state[row.id];
-    if (!installed) { errors.push(`${row.id}: no remote state observed`); continue; }
-    const config = installed[LABELER_CONFIG_PATH];
-    if (config === null || config === undefined) errors.push(`${row.id}: ${LABELER_CONFIG_PATH} is not installed — copy generated/labeler/${row.id}.yml into the repo`);
-    else if (!config.includes(labelerBlocks(routing, row.id)))
-      errors.push(`${row.id}: ${LABELER_CONFIG_PATH} is missing the generated work-type blocks — paste generated/labeler/${row.id}.yml in verbatim (repo-specific labels stay)`);
-    const workflow = installed[LABELER_WORKFLOW_PATH];
-    if (workflow === null || workflow === undefined) errors.push(`${row.id}: ${LABELER_WORKFLOW_PATH} is not installed — copy generated/labeler/${row.id}.workflow.yml into the repo`);
-    else for (const gap of labelerWorkflowGaps(workflow)) errors.push(`${row.id}: ${LABELER_WORKFLOW_PATH} labels nothing — ${gap}`);
+    const gaps = labelerGaps(routing, row, state[row.id]);
+    if (typeof row.externalUpstream !== 'string') { errors.push(...gaps); continue; }
+    if (gaps.length === 0) errors.push(`${row.id}: the labeler pair is installed upstream — delete its externalUpstream declaration from routing.yml`);
   }
   return errors;
 }
@@ -608,6 +658,7 @@ export function run(argv = process.argv.slice(2)) {
     const fixtureIndex = args.indexOf('--fixture');
     try {
       const state = fixtureIndex >= 0 ? JSON.parse(readFileSync(resolve(process.cwd(), args[fixtureIndex + 1]), 'utf8')) : liveLabelerState(routing);
+      for (const note of externalUpstreamNotes(routing, state)) console.log(note);
       const drift = checkLabelerState(routing, state);
       if (drift.length) fail(drift);
       else console.log(`labeler files installed and current in ${routing.repositories.length} repos`);
