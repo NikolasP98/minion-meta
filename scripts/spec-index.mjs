@@ -212,7 +212,13 @@ export const SCALAR_FIELDS = [
 	'merged_at',
 	'release_flag',
 	'release_state',
-	'evidence'
+	'evidence',
+	// G0 reconciliation warnings (2026-08-18-base-kanban-possibly-shipped-surface-spec
+	// Slice 1): written by minion-factory's backward-staleness sweep, rendered by the
+	// board. `reconcile_ignore` is deliberately NOT here — it is read from spec
+	// markdown by the factory sweep only and has no board consumer.
+	'possibly_shipped',
+	'link_review'
 ];
 export function findScalarArrayViolations(fm) {
 	return SCALAR_FIELDS.filter((key) => Array.isArray(fm[key]));
@@ -291,7 +297,9 @@ export const OPTIONAL_INDEX_FIELDS = [
 	'merged_at',
 	'release_flag',
 	'release_state',
-	'evidence'
+	'evidence',
+	'possibly_shipped',
+	'link_review'
 ];
 
 // Throws if any validated frontmatter field is neither required nor optional
