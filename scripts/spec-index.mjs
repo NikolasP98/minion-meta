@@ -35,6 +35,13 @@
 // the corpus) live in scripts/spec-supersede-baseline.json — see
 // proposals/2026-08-18-spec-heading-lint-baseline-backfill.md for the backfill ask.
 //
+// The published projection is a declared contract, not an ad-hoc object
+// literal: REQUIRED_INDEX_FIELDS + OPTIONAL_INDEX_FIELDS must cover every field
+// the gate validates (SCALAR_FIELDS + ARRAY_FIELDS), and
+// assertProjectionCoverage() throws on every run if they don't. A field that is
+// validated but never copied into specs/index.json is invisible to the board
+// even though its frontmatter is correct.
+//
 // Both baseline files are meant as one-way ratchets: a PR may only shrink them
 // (delete an id, or in practice fix a spec's headings so it no longer needs
 // the exemption), never grow them or rewrite an existing hash. --check
@@ -246,6 +253,86 @@ export function findArrayFieldViolations(fm) {
 	return errors;
 }
 
+// The published projection. specs/TEMPLATE.md defines specs/index.json as the
+// ONE file the board reads instead of parsing every spec, so a field this
+// script VALIDATES but never copies is invisible to every consumer of the
+// artifact — the frontmatter can be correct and the published truth still
+// missing it (that is how `relationship`/`related`/`retired_reason` went
+// unpublished). These two lists are therefore the contract: together they must
+// cover SCALAR_FIELDS + ARRAY_FIELDS exactly, and assertProjectionCoverage()
+// (called on every run, plus a fixture in scripts/spec-index.test.mjs) fails
+// loudly when a newly validated field is added to neither.
+export const REQUIRED_INDEX_FIELDS = [
+	'id',
+	'title',
+	'stage',
+	'status',
+	'pass',
+	'created',
+	'updated',
+	'repos'
+];
+// Copied through verbatim when present, in this order. Absent/empty values are
+// dropped so the artifact stays small (an empty array is a present value and
+// is kept, matching the previous `tags` behaviour).
+export const OPTIONAL_INDEX_FIELDS = [
+	'revises',
+	'supersedes',
+	'proposal',
+	'verdict',
+	'pr',
+	'type',
+	'retired_reason',
+	'tags',
+	'relationship',
+	'related',
+	'merge_sha',
+	'merged_pr',
+	'merged_at',
+	'release_flag',
+	'release_state',
+	'evidence'
+];
+
+// Throws if any validated frontmatter field is neither required nor optional
+// in the projection, or if the projection claims a field nothing validates.
+// The two lists are parameters so the fixtures can prove both directions fail.
+export function assertProjectionCoverage(
+	validatedFields = [...SCALAR_FIELDS, ...ARRAY_FIELDS],
+	projectedFields = [...REQUIRED_INDEX_FIELDS, ...OPTIONAL_INDEX_FIELDS]
+) {
+	const validated = new Set(validatedFields);
+	const projected = new Set(projectedFields);
+	const dropped = [...validated].filter((key) => !projected.has(key));
+	const unknown = [...projected].filter((key) => !validated.has(key));
+	if (dropped.length || unknown.length) {
+		const parts = [];
+		if (dropped.length)
+			parts.push(`validated but never published to ${OUT_PATH}: ${dropped.join(', ')}`);
+		if (unknown.length) parts.push(`published but never validated: ${unknown.join(', ')}`);
+		throw new Error(`spec index projection is incomplete — ${parts.join('; ')}`);
+	}
+}
+
+// Builds one specs/index.json entry from parsed frontmatter.
+export function projectSpec(fm) {
+	const spec = {
+		id: fm.id,
+		title: fm.title,
+		stage: fm.stage,
+		status: fm.status,
+		pass: fm.pass ?? 1,
+		created: fm.created,
+		updated: fm.updated ?? fm.created,
+		repos: fm.repos ?? []
+	};
+	for (const key of OPTIONAL_INDEX_FIELDS) {
+		if (!fm[key]) continue;
+		spec[key] = fm[key];
+	}
+	return spec;
+}
+
 // Resolves the corpora that baseline exceptions must have existed in already.
 // PR checks use the merge base. Push checks prefer the event's before SHA.
 // Local checks use EVERY parent of HEAD, not just the first: on a merge commit
@@ -385,6 +472,7 @@ export function baselineEligibilityFromRevs(revs) {
 }
 
 function main() {
+	assertProjectionCoverage();
 	const check = process.argv.includes('--check');
 	const headingBaseline =
 		check && existsSync(HEADING_BASELINE_PATH)
@@ -473,29 +561,7 @@ function main() {
 				}
 			}
 		}
-		specs.push({
-			id: fm.id,
-			title: fm.title,
-			stage: fm.stage,
-			status: fm.status,
-			pass: fm.pass ?? 1,
-			created: fm.created,
-			updated: fm.updated ?? fm.created,
-			repos: fm.repos ?? [],
-			...(fm.revises ? { revises: fm.revises } : {}),
-			...(fm.supersedes ? { supersedes: fm.supersedes } : {}),
-			...(fm.proposal ? { proposal: fm.proposal } : {}),
-			...(fm.verdict ? { verdict: fm.verdict } : {}),
-			...(fm.pr ? { pr: fm.pr } : {}),
-			...(fm.type ? { type: fm.type } : {}),
-			...(fm.tags ? { tags: fm.tags } : {}),
-			...(fm.merge_sha ? { merge_sha: fm.merge_sha } : {}),
-			...(fm.merged_pr ? { merged_pr: fm.merged_pr } : {}),
-			...(fm.merged_at ? { merged_at: fm.merged_at } : {}),
-			...(fm.release_flag ? { release_flag: fm.release_flag } : {}),
-			...(fm.release_state ? { release_state: fm.release_state } : {}),
-			...(fm.evidence ? { evidence: fm.evidence } : {})
-		});
+		specs.push(projectSpec(fm));
 	}
 
 	if (check) {

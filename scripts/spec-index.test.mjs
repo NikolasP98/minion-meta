@@ -18,7 +18,13 @@ import {
 	findScalarStringViolations,
 	findArrayFieldViolations,
 	checkHeadingBaselineRatchet,
-	checkSupersedeBaselineRatchet
+	checkSupersedeBaselineRatchet,
+	assertProjectionCoverage,
+	projectSpec,
+	SCALAR_FIELDS,
+	ARRAY_FIELDS,
+	REQUIRED_INDEX_FIELDS,
+	OPTIONAL_INDEX_FIELDS
 } from './spec-index.mjs';
 
 // A body with all three required sections present in real (heading) form —
@@ -369,6 +375,67 @@ test('M1 integration: a push event without a before SHA fails closed', () => {
 	assert.match(result.stderr, /cannot resolve comparison revision/);
 });
 
+// specs/index.json is the one file the board reads, so a field the gate
+// validates must also survive into the artifact. This is the standing guard:
+// it goes red the moment a new field is added to SCALAR_FIELDS/ARRAY_FIELDS
+// without being projected (how relationship/related/retired_reason were lost).
+test('M1: every validated frontmatter field is published to specs/index.json', () => {
+	assert.doesNotThrow(() => assertProjectionCoverage());
+	const projected = new Set([...REQUIRED_INDEX_FIELDS, ...OPTIONAL_INDEX_FIELDS]);
+	for (const key of [...SCALAR_FIELDS, ...ARRAY_FIELDS])
+		assert.ok(projected.has(key), `"${key}" is validated but never published to specs/index.json`);
+});
+
+test('M1: a validated field missing from the projection is rejected', () => {
+	assert.throws(
+		() => assertProjectionCoverage(['id', 'relationship'], ['id']),
+		/validated but never published to specs\/index\.json: relationship/
+	);
+});
+
+test('M1: a projected field nothing validates is rejected', () => {
+	assert.throws(
+		() => assertProjectionCoverage(['id'], ['id', 'invented']),
+		/published but never validated: invented/
+	);
+});
+
+test('M1: projectSpec preserves relationship, related and retired_reason', () => {
+	const spec = projectSpec({
+		id: 'x',
+		title: 'X',
+		stage: 'spec',
+		status: 'draft',
+		pass: 1,
+		created: '2026-08-18',
+		updated: '2026-08-18',
+		repos: ['minion-meta'],
+		relationship: 'depends-on',
+		related: ['a-spec', 'b-spec'],
+		retired_reason: 'superseded by the consolidated plan of record'
+	});
+	assert.equal(spec.relationship, 'depends-on');
+	assert.deepEqual(spec.related, ['a-spec', 'b-spec']);
+	assert.equal(spec.retired_reason, 'superseded by the consolidated plan of record');
+});
+
+test('M1: projectSpec omits absent optional fields', () => {
+	const spec = projectSpec({
+		id: 'x',
+		title: 'X',
+		stage: 'spec',
+		status: 'draft',
+		created: '2026-08-18',
+		repos: ['minion-meta']
+	});
+	assert.equal('relationship' in spec, false);
+	assert.equal('related' in spec, false);
+	assert.equal('retired_reason' in spec, false);
+	// updated defaults to created, pass to 1 — unchanged projection behaviour.
+	assert.equal(spec.updated, '2026-08-18');
+	assert.equal(spec.pass, 1);
+});
+
 const GIT_ID = ['-c', 'user.name=Test', '-c', 'user.email=test@example.invalid'];
 const git = (root, ...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' });
 const gitCommit = (root, message) => {
@@ -464,6 +531,19 @@ test('M4: array-form `tags` and `related` pass --check', () => {
 	writeSpec(root, 'fixture', 'tags: [infra, test]\nrelated: [some-other-spec]\n', VALID_BODY);
 	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
 	gitCommit(root, 'array tags and related');
+	const result = runCheck(root);
+	assert.equal(result.status, 0, result.stderr);
+});
+
+test('M4: the generated index preserves relationship and related', () => {
+	const root = makeCleanFixture();
+	writeSpec(root, 'fixture', 'relationship: depends-on\nrelated: [some-other-spec]\n', VALID_BODY);
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	const index = JSON.parse(readFileSync(join(root, 'specs', 'index.json'), 'utf8'));
+	const entry = index.specs.find((spec) => spec.id === 'fixture');
+	assert.equal(entry.relationship, 'depends-on');
+	assert.deepEqual(entry.related, ['some-other-spec']);
+	gitCommit(root, 'relationship and related');
 	const result = runCheck(root);
 	assert.equal(result.status, 0, result.stderr);
 });
