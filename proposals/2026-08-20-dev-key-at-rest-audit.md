@@ -1,7 +1,8 @@
 ---
 id: 2026-08-20-dev-key-at-rest-audit
 title: Count what is already sealed under the source-visible dev crypto key
-status: draft
+status: closed
+closed_reason: "Audit executed against hub prod (shared DB) 2026-08-20 — results appended; zero dev-key rows, S3 unblocked; key-divergence finding filed to intake"
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-meta, minion_hub, minion_site]
@@ -92,3 +93,22 @@ A written report (PR comment or a `specs/`-adjacent note) containing: the A1 env
 a count per column per database; the sample-decrypt outcome per database; and an explicit list
 of unchecked databases with the reason. A report that omits an environment silently does not
 satisfy this — an unverified environment is an unknown, not a zero.
+
+
+## Audit results (executed 2026-08-20, hub prod Supabase — the shared hub+site DB)
+
+Per sealed column (non-null ciphertext rows; sample test-decrypted under dev key, hub prod key, site prod key):
+
+| column | rows | sample verdicts |
+|---|---|---|
+| gateway.token_ciphertext | 5 | 2×SITE-KEY, 3×NEITHER (unknown/rotated key) |
+| gateway_signing_keys.private_ciphertext | 1 | PROD(hub) |
+| meta_assets.page_token_ciphertext | 1 | PROD(hub) |
+| meta_connections.token_ciphertext | 2 | PROD(hub) ×2 |
+| user_identities.secret_ciphertext | 8 | PROD(hub) ×3 sampled |
+| channels.credentials_ciphertext | column absent in prod | — |
+| server_provision_configs.api_key_ciphertext | column absent in prod | — |
+
+**Zero rows sealed under `minion-hub-dev-key`** — the A3 dev-key fear is clear; S3 (consumer fail-closed wiring + dependency bump) is unblocked.
+
+**New finding (filed to factory intake): hub and site carry DIFFERENT `ENCRYPTION_KEY` values against the SAME shared database.** 2 of 5 `gateway.token_ciphertext` rows decrypt only under site's key (hub reads fail), 3 decrypt under neither current key (orphaned — likely a rotated earlier key). Shared-DB sealed columns require ONE key (the shared Better-Auth/DB contract) or per-writer key registries; today's split silently partitions readability.
