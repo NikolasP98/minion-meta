@@ -2,15 +2,16 @@
 id: 2026-08-17-hub-personal-agent-entrypoint-test-spec
 title: "Direct unit tests for loadPersonalAgentForUser — cover the 401 guard and delegation path"
 stage: spec
-status: approved
+status: done
 pass: 2
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: 2026-08-17-hub-personal-agent-entrypoint-test
 verdict: approved
 repos: [minion_hub]
 tags: [test]
 type: fix
+done_reason: "Zero-diff dev run confirms the open end is already resolved on base (sibling merges covered it); husk PR closed."
 ---
 
 # Direct unit tests for `loadPersonalAgentForUser`
