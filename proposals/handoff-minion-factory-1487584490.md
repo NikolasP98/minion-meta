@@ -1,12 +1,13 @@
 ---
 id: handoff-minion-factory-1487584490
 title: Handoff marker — scripts/unstick-cron.sh (minion-factory)
-status: review
+status: approved
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-factory]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-factory-deterministic-unstick
+approved_reason: "Real remaining open end: no cross-tick requeue cap in unstick-cron.sh — survives the deterministic-unstick spec flip; this is the follow-up."
 ---
 
 # Handoff marker — scripts/unstick-cron.sh
