@@ -1,15 +1,15 @@
 ---
-id: handoff-minion-meta-781446196
-title: Handoff marker — packages/env/src/cache.ts (minion-meta)
+id: handoff-minion-meta-2988591151
+title: Handoff marker — packages/db/src/crypto.ts (minion-meta)
 status: review
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-meta]
 tags: [handoff-sweep]
-duplicate_candidate: 2026-08-17-pkg-infisical-cache-plaintext
+duplicate_candidate: 2026-08-20-dev-key-at-rest-audit
 ---
 
-# Handoff marker — packages/env/src/cache.ts
+# Handoff marker — packages/db/src/crypto.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -27,5 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-08-20)
 
-- `NikolasP98/minion-meta@dev packages/env/src/cache.ts:32` — 'disk' currently degrades to 'memory' with a warning — S2
-  https://github.com/NikolasP98/minion-meta/blob/dev/packages/env/src/cache.ts#L32
+- `NikolasP98/minion-meta@dev packages/db/src/crypto.ts:73` — the at-rest audit this branch calls for (spec
+  https://github.com/NikolasP98/minion-meta/blob/dev/packages/db/src/crypto.ts#L73
+- `NikolasP98/minion-meta@dev packages/db/src/crypto.ts:83` — S3 of the same spec is UNLANDED — minion_hub and
+  https://github.com/NikolasP98/minion-meta/blob/dev/packages/db/src/crypto.ts#L83

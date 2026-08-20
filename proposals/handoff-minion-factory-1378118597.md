@@ -27,15 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-08-20)
 
-- `NikolasP98/minion-factory@main runner/src/queue.ts:934` — a turn that fails AFTER claude --session-id <uuid> created the session leaves chats.message_count unchanged, so the NEXT turn sends FACTORY_CHAT_RESUME=0 and re-runs --session-id against a uuid that already exists on the persistent $HOME (/opt/factory/chat-home). Pre-existing; spec 2026-08-17-facto
-  https://github.com/NikolasP98/minion-factory/blob/main/runner/src/queue.ts#L934
-- `NikolasP98/minion-factory@main runner/src/queue.ts:1026` — S3 of 2026-08-17-factory-chat-restart-drops-pending-spec replaces this kill with docker-wait adoption (parity with adoptOrphans, queue.ts adoptOrphans()) — until then a live container's completed work is discarded.
-  https://github.com/NikolasP98/minion-factory/blob/main/runner/src/queue.ts#L1026
-
-## Reconciliation note 2026-08-20
-
-Same idea as `2026-08-17-factory-chat-restart-drops-pending` (in-spec) — the `:1026` marker
-names that spec's Slice 3 explicitly, and the `:934` marker documents the same pre-existing
-chat-resume/session-id gap in the same file that spec's problem statement targets. Not merged
-(canonical is in-spec, off-limits to edit); status set to `review` for a human to confirm
-scope.
+- `NikolasP98/minion-factory@main runner/src/queue.ts:944` — a turn that fails AFTER claude --session-id <uuid> created the session leaves chats.message_count unchanged, so the NEXT turn sends FACTORY_CHAT_RESUME=0 and re-runs --session-id against a uuid that already exists on the persistent $HOME (/opt/factory/chat-home). Pre-existing; spec 2026-08-17-facto
+  https://github.com/NikolasP98/minion-factory/blob/main/runner/src/queue.ts#L944
+- `NikolasP98/minion-factory@main runner/src/queue.ts:1036` — S3 of 2026-08-17-factory-chat-restart-drops-pending-spec replaces this kill with docker-wait adoption (parity with adoptOrphans, queue.ts adoptOrphans()) — until then a live container's completed work is discarded.
+  https://github.com/NikolasP98/minion-factory/blob/main/runner/src/queue.ts#L1036

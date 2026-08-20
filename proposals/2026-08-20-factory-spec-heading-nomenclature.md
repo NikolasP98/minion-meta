@@ -138,3 +138,14 @@ the same heading lines.
 **DELTA 2 (the generator) is still open and is the reason this proposal stays filed** —
 without it the next handoff-sweep spec re-reds `dev` and the next merging agent pays
 this cost again.
+
+## Merged: ci-minion-meta-ci (auto CI-watch filing, 2026-08-20)
+
+The factory CI-watch auto-filed a separate proposal for the same red build
+(run https://github.com/NikolasP98/minion-meta/actions/runs/32384791538, checked
+2026-08-20) against the identical eight-error signature quoted above. One fact from
+that filing is not otherwise recorded here: the same failing run also reported
+`specs/index.json is stale — run node scripts/spec-index.mjs and commit the result`,
+i.e. the index needs regenerating after DELTA 1's heading backfill lands, not just the
+heading fix itself. Folded in here as the richer, evidenced writeup; the CI-watch stub
+is kept as a tombstone (`status: merged`, `merged_into` this id).
