@@ -1,13 +1,14 @@
 ---
 id: handoff-minion-hub-3998033254
 title: Handoff marker — src/server/services/crm-contacts.service.ts (minion_hub)
-status: approved
+status: in-spec
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-hub]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-13-crm-customers-server-pagination
 approved_reason: "Real service-file marker (crm-contacts)."
+spawned_spec: 2026-08-20-handoff-minion-hub-3998033254-spec
 ---
 
 # Handoff marker — src/server/services/crm-contacts.service.ts
