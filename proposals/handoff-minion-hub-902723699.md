@@ -1,12 +1,13 @@
 ---
 id: handoff-minion-hub-902723699
 title: Handoff marker — src/server/services/pos.service.ts (minion_hub)
-status: review
+status: approved
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-hub]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-hub-updatesellable-silent-drop
+approved_reason: "Real service-file marker; dedupe candidate noted, spec pass will reconcile against shipped updatesellable work."
 ---
 
 # Handoff marker — src/server/services/pos.service.ts
