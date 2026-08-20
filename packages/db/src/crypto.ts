@@ -79,6 +79,15 @@ function key(): Buffer {
     // dev-key exposure as UNKNOWN, not zero — S3 (consumer bump) must not be
     // sequenced on an assumption. Column inventory + the exact procedure:
     // proposals/2026-08-20-dev-key-at-rest-audit.md
+    //
+    // TODO(handoff): S3 of the same spec is UNLANDED — minion_hub and
+    // minion_site have neither the boot-time assertCryptoKeyConfigured() call
+    // nor a bumped @minion-stack/db, because neither repo is checked out in the
+    // meta-repo workspace (⚠️ A2). Until S3 lands, this package's stricter
+    // contract is inert for the two apps that consume it. Do NOT run
+    // `pnpm update @minion-stack/db` in either consumer before the environment
+    // work in the spec's S3 steps 1–4 is done and verified — the bump PR is the
+    // real deploy of this fix. Ledger entry: proposals/2026-08-17-pkg-dev-crypto-failopen.md
     cachedKey = scryptSync("minion-hub-dev-key", "minion-hub-salt", 32);
     return cachedKey;
   }
