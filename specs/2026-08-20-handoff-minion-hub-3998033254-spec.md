@@ -13,6 +13,7 @@ tags: [handoff-sweep, crm]
 type: fix
 relationship: extends
 related: [2026-08-13-crm-customers-server-pagination-spec]
+possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/143
 ---
 
 # CRM contacts handoff — party-spine DNI search and pagination filter wiring
