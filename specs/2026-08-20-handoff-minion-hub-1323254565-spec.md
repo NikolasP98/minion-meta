@@ -2,7 +2,7 @@
 id: 2026-08-20-handoff-minion-hub-1323254565-spec
 title: "Handoff marker crm-similarity.service.ts:55 — resolve the deposit/procedure rule per call in buildWinIndex"
 stage: spec
-status: approved
+status: done
 pass: 2
 created: 2026-08-20
 updated: 2026-08-20
@@ -13,6 +13,7 @@ relationship: extends
 related: [2026-08-17-hub-reserva-keyword-config-spec]
 type: fix
 tags: [logic, test, handoff-sweep]
+done_reason: "Zero-diff dev run confirms the open end is already resolved on base (sibling merges covered it); husk PR closed."
 ---
 
 # Handoff marker `crm-similarity.service.ts:55` — resolve the rule per call in `buildWinIndex`
