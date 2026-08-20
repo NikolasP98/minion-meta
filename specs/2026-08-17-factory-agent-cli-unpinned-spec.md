@@ -5,12 +5,13 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 proposal: 2026-08-17-factory-agent-cli-unpinned
 verdict: approved
 repos: [minion-factory, minion-meta]
 tags: [deps, infra]
 type: fix
+possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/47
 ---
 
 # Pin the agent image's harness toolchain
