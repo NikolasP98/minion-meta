@@ -28,13 +28,69 @@ const cliCommandKeys = ['dev', 'build', 'test', 'check', 'typecheck'];
 const memoryBlockPattern = /^<claude-mem-context\b/i;
 const headingPattern = /^#{1,6}\s+\S/;
 const includePattern = /^@[^\s@]\S*$/;
-// CommonMark inline links. The destination is either `<...>` — which may hold spaces — or a run of
-// non-whitespace characters with balanced parentheses; either form may carry an optional title, and
-// both admit backslash-escaped ASCII punctuation. Both forms must be parsed: matching only the
-// second would let a real link such as `[x](<./missing file.md>)` slip past the broken-link gate.
-const linkPattern = /\[[^\]]*\]\(\s*(?:<((?:[^<>\n\\]|\\[!-\/:-@[-`{-~]|\\\\)*)>|((?:[^\s()\\]|\\[!-\/:-@[-`{-~]|\((?:[^\s()\\]|\\[!-\/:-@[-`{-~])*\))+))(?:\s+(?:"[^"]*"|'[^']*'|\([^()]*\)))?\s*\)/g;
+// CommonMark inline link openers — `[label](`. The destination itself is not regex-matched: a bounded
+// regex cannot represent arbitrarily deep balanced parentheses (e.g. `./missing(a(b)c).md`), so
+// `readDestination` below scans it by hand, tracking paren depth one character at a time.
+const linkOpenerPattern = /\[[^\]]*\]\(/g;
 const escapePattern = /\\([!-\/:-@[-`{-~])/g;
 const separatorPattern = /^:?-+:?$/;
+const whitespacePattern = /\s/;
+
+/**
+ * Scan a CommonMark link destination starting at `line[start]`, which is either `<` (an
+ * angle-bracket destination, which may contain spaces) or the first character of a bare destination
+ * (balanced, arbitrarily nested parentheses; unescaped whitespace ends it). Returns the raw
+ * (un-decoded) destination text and the index just past it, or null if the destination is malformed
+ * (unterminated `<...>` or unbalanced parentheses).
+ */
+function readDestination(line, start) {
+  if (line[start] === '<') {
+    let i = start + 1;
+    let raw = '';
+    while (i < line.length && line[i] !== '>') {
+      if (line[i] === '\\' && i + 1 < line.length) { raw += line[i] + line[i + 1]; i += 2; continue; }
+      raw += line[i];
+      i++;
+    }
+    if (line[i] !== '>') return null;
+    return { raw, end: i + 1 };
+  }
+  let depth = 0;
+  let i = start;
+  let raw = '';
+  while (i < line.length) {
+    const char = line[i];
+    if (char === '\\' && i + 1 < line.length) { raw += char + line[i + 1]; i += 2; continue; }
+    if (char === '(') { depth++; raw += char; i++; continue; }
+    if (char === ')') {
+      if (depth === 0) break;
+      depth--; raw += char; i++; continue;
+    }
+    if (whitespacePattern.test(char)) break;
+    raw += char;
+    i++;
+  }
+  if (depth !== 0) return null;
+  return { raw, end: i };
+}
+
+/** Skip an optional CommonMark link title, then require the closing ')'. Returns the index just past it, or null. */
+function readTitleAndClose(line, start) {
+  let i = start;
+  while (i < line.length && (line[i] === ' ' || line[i] === '\t')) i++;
+  if (line[i] === '"' || line[i] === "'" || line[i] === '(') {
+    const close = line[i] === '(' ? ')' : line[i];
+    let j = i + 1;
+    while (j < line.length && line[j] !== close) {
+      if (line[j] === '\\' && j + 1 < line.length) { j += 2; continue; }
+      j++;
+    }
+    if (line[j] !== close) return null;
+    i = j + 1;
+    while (i < line.length && (line[i] === ' ' || line[i] === '\t')) i++;
+  }
+  return line[i] === ')' ? i + 1 : null;
+}
 
 function readIfFile(path) {
   return existsSync(path) && statSync(path).isFile() ? readFileSync(path, 'utf8') : null;
@@ -72,8 +128,17 @@ function decodeTarget(target) {
 function linkTargets(lines) {
   const targets = [];
   for (const line of lines) {
-    for (const match of line.matchAll(linkPattern)) {
-      const raw = (match[1] ?? match[2]).replace(escapePattern, '$1').trim();
+    linkOpenerPattern.lastIndex = 0;
+    let opener;
+    while ((opener = linkOpenerPattern.exec(line))) {
+      let destStart = linkOpenerPattern.lastIndex;
+      while (destStart < line.length && (line[destStart] === ' ' || line[destStart] === '\t')) destStart++;
+      const destination = readDestination(line, destStart);
+      if (destination === null) continue;
+      const closeIndex = readTitleAndClose(line, destination.end);
+      if (closeIndex === null) continue;
+      linkOpenerPattern.lastIndex = closeIndex;
+      const raw = destination.raw.replace(escapePattern, '$1').trim();
       const target = raw.split('#')[0].trim();
       if (target === '' || target.startsWith('//') || /^[a-z][a-z0-9+.-]*:/i.test(target)) continue;
       targets.push(decodeTarget(target));
