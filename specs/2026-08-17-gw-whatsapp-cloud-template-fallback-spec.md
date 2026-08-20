@@ -11,6 +11,7 @@ verdict: approved
 repos: [minion]
 tags: [logic, test]
 type: feature
+possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/215
 ---
 
 # WhatsApp Cloud — auto-fallback to an approved template when the 24h window is closed
