@@ -27,17 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-08-20)
 
-- `NikolasP98/minion_hub@master src/server/services/crm-deposit-rule.ts:174` — defined and unit-tested here but not yet wired to an HTTP
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/crm-deposit-rule.ts#L174
-
-## Reconciliation note 2026-08-20
-
-Suspected same idea as `2026-08-17-hub-reserva-keyword-config` (in-spec), not certain enough to
-merge. `crm-deposit-rule.ts` is that spec's S1 extraction module (landed PR #124, commit
-`0b1440e` — per operator memory `factory/2026-08-20-5b828cca.md`); this marker's "not yet wired
-to an HTTP [endpoint]" open end may be the same gap as that spec's still-unlanded S2
-(`crm_settings.value.deposit` reader), or a distinct follow-on (an HTTP surface for the module,
-which S2 as described does not obviously cover) — the marker text alone doesn't resolve which.
-Left unmerged, `duplicate_candidate` set, held at `review` for a human to confirm scope, same
-disposition as the sibling reserva-keyword handoffs (`handoff-minion-hub-1323254565`,
-`handoff-minion-hub-2131866440`, `handoff-minion-hub-2785164896`).
+- `NikolasP98/minion_hub@master src/server/services/crm-deposit-rule.ts:178` — defined and unit-tested here but not yet wired to an HTTP
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/crm-deposit-rule.ts#L178
