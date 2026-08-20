@@ -1,12 +1,13 @@
 ---
 id: handoff-minion-ai-4278431509
 title: Handoff marker — src/agents/minion-tools.ts (minion-ai)
-status: review
+status: approved
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-ai]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-gw-defaces-crm-tools
+approved_reason: "Real marker in minion-tools.ts — same territory as the architect-pipeline regression (meta issue 85); resolving may fix both."
 ---
 
 # Handoff marker — src/agents/minion-tools.ts
