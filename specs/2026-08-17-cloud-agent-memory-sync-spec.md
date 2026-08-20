@@ -2,14 +2,15 @@
 id: 2026-08-17-cloud-agent-memory-sync-spec
 title: "Cloud agent memory — git-backed durable memory + B2 bulk sync, shared by claude/codex/factory"
 stage: spec
-status: approved
+status: done
 pass: 1
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 repos: [minion-meta, minion-factory]
 verdict: approved
 tags: [infra]
 type: infra
+done_reason: "Implemented directly 2026-08-17 (memory symlink, sync hooks, factory 3-tier mounts — all live); zero-diff PR #33 closed superseded confirms."
 ---
 
 # Cloud agent memory — where and how
