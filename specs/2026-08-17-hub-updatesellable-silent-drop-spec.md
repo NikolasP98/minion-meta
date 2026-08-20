@@ -2,15 +2,16 @@
 id: 2026-08-17-hub-updatesellable-silent-drop-spec
 title: "updateSellable — apply or refuse kind/trackStock/uom edits (no silent 200 no-op)"
 stage: spec
-status: approved
+status: done
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 proposal: 2026-08-17-hub-updatesellable-silent-drop
 verdict: approved
 repos: [minion_hub]
 tags: [logic, test]
 type: fix
+done_reason: "Implementation verified on master: updateSellable applies kind/trackStock/uom with derived-kind guard; fresh run eafcc91e produced zero diff."
 ---
 
 # updateSellable — apply or refuse kind/trackStock/uom edits
