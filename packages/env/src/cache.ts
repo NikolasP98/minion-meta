@@ -55,11 +55,28 @@ export function resolveCacheMode(): CacheMode {
 }
 
 /**
+ * Canonicalize a `domain` option to the exact value that reaches the Infisical CLI. Trims
+ * surrounding whitespace only — case and internal structure (scheme/host/path/query) are preserved,
+ * because the CLI's `--domain` value can be a full URL whose path is case-sensitive. A value that is
+ * `undefined` or blank after trimming canonicalizes to `undefined` ("no domain supplied"). Callers
+ * that both build a cache key and invoke the CLI must derive the CLI argument from this same
+ * canonical value — never from the raw `opts.domain` — so the two can never disagree.
+ */
+export function canonicalizeDomain(domain: string | undefined): string | undefined {
+	if (domain === undefined) return undefined;
+	const trimmed = domain.trim();
+	return trimmed === '' ? undefined : trimmed;
+}
+
+/**
  * Canonical cache identity — every input that can change the fetch result must be part of the key.
  * Encodes a structured tuple (never delimiter-joined strings) so no combination of inputs — including
  * values that contain the delimiter, or that look like a sentinel — can collide. `null` marks "absent"
  * for domain and cacheKeys; it is never a legal value for either after normalization, so it can't be
  * spoofed by a real input (e.g. domain `__default__`, or an allowlist that happens to be empty).
+ * `domain` is run through `canonicalizeDomain` — the identical canonicalization the CLI-invoking
+ * caller must apply before using it as the `--domain` argument, so cache identity and the actual
+ * request can never diverge (no case-folding, since domain paths are case-sensitive).
  */
 export function buildCacheKey(
 	projectSlug: string,
@@ -67,7 +84,7 @@ export function buildCacheKey(
 	domain: string | undefined,
 	cacheKeys: string[] | undefined,
 ): string {
-	const domainPart = domain && domain.trim() ? domain.trim().toLowerCase() : null;
+	const domainPart = canonicalizeDomain(domain) ?? null;
 	const keysPart = cacheKeys === undefined ? null : [...new Set(cacheKeys)].sort();
 	return JSON.stringify([projectSlug, envTier, domainPart, keysPart]);
 }

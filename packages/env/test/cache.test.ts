@@ -7,6 +7,7 @@ import {
 	cachePath,
 	resolveCacheMode,
 	buildCacheKey,
+	canonicalizeDomain,
 	readCache,
 	writeCache,
 	purgeLegacyCacheOnce,
@@ -107,6 +108,34 @@ describe('cache.ts', () => {
 			const absent = buildCacheKey('p', 'dev', undefined, undefined);
 			const literal = buildCacheKey('p', 'dev', '__default__', undefined);
 			expect(absent).not.toBe(literal);
+		});
+
+		it('preserves domain case — a path-case difference is a distinct identity', () => {
+			const upper = buildCacheKey('p', 'dev', 'https://vault.example/api/TenantA', undefined);
+			const lower = buildCacheKey('p', 'dev', 'https://vault.example/api/tenanta', undefined);
+			expect(upper).not.toBe(lower);
+		});
+
+		it('a whitespace-only domain canonicalizes the same as an absent domain', () => {
+			const absent = buildCacheKey('p', 'dev', undefined, undefined);
+			const whitespace = buildCacheKey('p', 'dev', '   ', undefined);
+			expect(absent).toBe(whitespace);
+		});
+	});
+
+	describe('canonicalizeDomain', () => {
+		it('passes through undefined', () => {
+			expect(canonicalizeDomain(undefined)).toBeUndefined();
+		});
+
+		it('trims surrounding whitespace but preserves internal case', () => {
+			expect(canonicalizeDomain('  https://vault.example/api/TenantA  ')).toBe(
+				'https://vault.example/api/TenantA',
+			);
+		});
+
+		it('canonicalizes a whitespace-only value to undefined', () => {
+			expect(canonicalizeDomain('   ')).toBeUndefined();
 		});
 	});
 

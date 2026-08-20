@@ -1,6 +1,13 @@
 import { spawnSync } from 'node:child_process';
 import { parseDotenv } from './dotenv.js';
-import { readCache, writeCache, resolveCacheMode, purgeLegacyCacheOnce, buildCacheKey } from './cache.js';
+import {
+	readCache,
+	writeCache,
+	resolveCacheMode,
+	purgeLegacyCacheOnce,
+	buildCacheKey,
+	canonicalizeDomain,
+} from './cache.js';
 
 export interface InfisicalFetchResult {
 	ok: boolean;
@@ -42,8 +49,12 @@ export async function fetchInfisicalSecrets(
 	purgeLegacyCacheOnce();
 
 	const envTier = opts.env ?? 'dev';
+	// Canonicalized once, then reused for both the cache identity and the actual CLI argument below —
+	// so a cache hit can never be returned for a domain other than the one that would actually be
+	// requested (see cache.ts `canonicalizeDomain`).
+	const domain = canonicalizeDomain(opts.domain);
 	const mode = resolveCacheMode();
-	const cacheKey = buildCacheKey(projectSlug, envTier, opts.domain, opts.cacheKeys);
+	const cacheKey = buildCacheKey(projectSlug, envTier, domain, opts.cacheKeys);
 	const cachingEnabled = !opts.noCache && mode !== 'off';
 
 	// Cache read
@@ -62,7 +73,7 @@ export async function fetchInfisicalSecrets(
 		'dotenv',
 		'--silent',
 	];
-	if (opts.domain) args.push('--domain', opts.domain);
+	if (domain) args.push('--domain', domain);
 
 	const result = spawnSync('infisical', args, { encoding: 'buffer' });
 	if (result.status !== 0) {

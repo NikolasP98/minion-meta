@@ -223,6 +223,41 @@ describe('fetchInfisicalSecrets', () => {
 		expect(spawnSyncMock).toHaveBeenCalledTimes(2);
 	});
 
+	it('a case-differing domain path is a distinct cache identity, not a hit on the other case', async () => {
+		mockExit(0, 'X=1\n');
+		await fetchInfisicalSecrets('minion-core', { domain: 'https://vault.example/api/TenantA' });
+		await fetchInfisicalSecrets('minion-core', { domain: 'https://vault.example/api/tenanta' });
+		expect(spawnSyncMock).toHaveBeenCalledTimes(2);
+	});
+
+	it('passes the exact domain string to the CLI, unmodified in case', async () => {
+		mockExit(0, 'X=1\n');
+		await fetchInfisicalSecrets('minion-core', { domain: 'https://vault.example/api/TenantA' });
+		expect(spawnSyncMock).toHaveBeenCalledWith(
+			'infisical',
+			expect.arrayContaining(['--domain', 'https://vault.example/api/TenantA']),
+			expect.anything(),
+		);
+	});
+
+	it('a whitespace-only domain canonicalizes the same as absent, sharing one cache identity', async () => {
+		mockExit(0, 'X=1\n');
+		const first = await fetchInfisicalSecrets('minion-core', { domain: undefined });
+		expect(spawnSyncMock).toHaveBeenCalledTimes(1);
+		expect(spawnSyncMock).toHaveBeenCalledWith(
+			'infisical',
+			expect.not.arrayContaining(['--domain']),
+			expect.anything(),
+		);
+
+		spawnSyncMock.mockReset();
+		// A malformed whitespace-only domain canonicalizes to the same identity as an absent domain —
+		// it is a cache HIT here, not a fresh CLI call with a literal `--domain '   '` argument.
+		const second = await fetchInfisicalSecrets('minion-core', { domain: '   ' });
+		expect(spawnSyncMock).not.toHaveBeenCalled();
+		expect(second).toEqual(first);
+	});
+
 	it('reordered/duplicated cacheKeys canonicalize to the same cache entry', async () => {
 		mockExit(0, 'A=1\nB=2\n');
 		await fetchInfisicalSecrets('minion-core', { cacheKeys: ['A', 'B'] });
