@@ -32,6 +32,10 @@ const includePattern = /^@[^\s@]\S*$/;
 const escapePattern = /\\([!-\/:-@[-`{-~])/g;
 const separatorPattern = /^:?-+:?$/;
 const whitespacePattern = /\s/;
+// Lines that close a paragraph, so the line after one starts a new block where a link reference
+// definition may appear: ATX headings, thematic breaks / setext underlines, table rows, and HTML.
+// A plain paragraph line does not — a definition may not interrupt a paragraph.
+const paragraphTerminatorPattern = /^ {0,3}(#{1,6}([ \t]|$)|([-*_][ \t]*){3,}$|\||<)/;
 // CommonMark caps a link label at 999 characters; the same cap keeps a stray '[' from scanning on.
 const LABEL_LIMIT = 999;
 
@@ -198,7 +202,7 @@ function referenceDefinitions(text) {
     if (isBlankLineAt(text, i)) { atBlockStart = true; i = lineEndAt(text, i) + 1; continue; }
     const definition = atBlockStart ? readDefinition(text, i) : null;
     if (definition === null) {
-      atBlockStart = false;
+      atBlockStart = paragraphTerminatorPattern.test(text.slice(i, lineEndAt(text, i)));
       i = lineEndAt(text, i) + 1;
       continue;
     }

@@ -173,6 +173,18 @@ try {
   assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
   reset();
 
+  // A definition may open a block after any paragraph-terminating line — a heading or a table row —
+  // but may not interrupt a paragraph, where the same text renders literally.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\n## Section\n[setup]: ./missing.md\n\nSee [setup].\n')));
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\n| a | b |\n| --- | --- |\n[setup]: ./missing.md\n\nSee [setup].\n')));
+  // An angle-bracket definition destination and a bracketed reference label resolve like any other.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing file\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\nSee [setup].\n\n[setup]: <./missing file.md>\n')));
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\nSee [a][b [c]].\n\n[b [c]]: ./missing.md\n')));
+
   // An inline attempt that never closes falls back to the reference forms, as a renderer does.
   failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
     writeAgents(goodAgents('\nSee [setup](unclosed here.\n\n[setup]: ./missing.md\n')));
