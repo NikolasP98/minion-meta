@@ -35,11 +35,3 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L583
 - `NikolasP98/minion-meta@dev scripts/spec-index.mjs:607` — this only checks consistency *when* revises/supersedes is
   https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L607
-
-## Reconciliation note 2026-08-20
-
-Same idea as `2026-08-18-spec-heading-lint-baseline-backfill` (approved) — that proposal's §1
-("127 grandfathered specs"), §3 ("5 legacy superseded specs have no known successor"), and §4
-("`related` ids are not resolved") match these four markers one-to-one (the :176/:181/:583/:607
-line numbers correspond to the same four open ends). Not merged (canonical is approved,
-off-limits to edit); status set to `review` for a human to confirm scope.

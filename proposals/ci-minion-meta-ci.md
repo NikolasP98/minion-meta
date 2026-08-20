@@ -1,7 +1,8 @@
 ---
 id: ci-minion-meta-ci
 title: CI red — CI on minion-meta dev
-status: draft
+status: merged
+merged_into: 2026-08-20-factory-spec-heading-nomenclature
 created: 2026-08-20
 updated: 2026-08-20
 repos: []
