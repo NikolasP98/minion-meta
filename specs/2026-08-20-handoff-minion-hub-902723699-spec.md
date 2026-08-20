@@ -2,7 +2,7 @@
 id: 2026-08-20-handoff-minion-hub-902723699-spec
 title: "updateSellable — apply the deferred trackStock/uom transitions (close the S2 handoff markers)"
 stage: spec
-status: approved
+status: implementing
 pass: 2
 created: 2026-08-20
 updated: 2026-08-20

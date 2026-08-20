@@ -2,10 +2,10 @@
 id: 2026-08-17-hub-pos-appointments-fork-spec
 title: "Collapse the /pos/appointments fork into one bookings view — extract the component, don't delete the route"
 stage: spec
-status: approved
+status: implementing
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 proposal: 2026-08-17-hub-pos-appointments-fork
 verdict: approved
 repos: [minion_hub, minion-meta]

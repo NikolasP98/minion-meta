@@ -2,10 +2,10 @@
 id: 2026-08-13-crm-customers-server-pagination-spec
 title: "CRM Customers — DataTable server mode (pagination, sort, filter, ICP-safe)"
 stage: spec
-status: approved
+status: implementing
 pass: 2
 created: 2026-08-13
-updated: 2026-08-17
+updated: 2026-08-20
 proposal: 2026-08-13-crm-customers-server-pagination
 verdict: approved
 repos: [minion_hub]
