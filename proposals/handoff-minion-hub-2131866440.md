@@ -1,12 +1,13 @@
 ---
 id: handoff-minion-hub-2131866440
 title: Handoff marker — src/server/services/crm-journey.service.ts (minion_hub)
-status: review
+status: approved
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-hub]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-hub-reserva-keyword-config
+approved_reason: "Real service-file marker (crm-journey)."
 ---
 
 # Handoff marker — src/server/services/crm-journey.service.ts
