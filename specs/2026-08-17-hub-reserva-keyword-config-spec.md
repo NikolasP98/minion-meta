@@ -11,6 +11,7 @@ verdict: approved
 repos: [minion_hub]
 tags: [logic, test]
 type: fix
+possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/140
 ---
 
 # CRM deposit classification — one rule module, then an org-configurable keyword set
