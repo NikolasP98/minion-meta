@@ -5,7 +5,7 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-19
-updated: 2026-08-19
+updated: 2026-08-20
 proposal: 2026-08-17-gateway-client-lifecycle-swallows-handoff
 verdict: approved
 repos: [minion-meta]
@@ -13,6 +13,7 @@ relationship: extends
 related: [2026-08-17-pkg-gateway-client-onevent-errors-spec, 2026-08-17-site-member-gateway-swallowed-errors-spec, 2026-08-17-gateway-client-error-hook-consumer-adoption]
 type: fix
 tags: [logic, test, docs, infra]
+possibly_shipped: https://github.com/NikolasP98/minion-meta/pull/89
 ---
 
 # `GatewayClient` — close the reconnect-failure and socket-error swallows
