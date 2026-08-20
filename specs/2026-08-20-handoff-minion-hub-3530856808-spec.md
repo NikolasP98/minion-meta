@@ -2,7 +2,7 @@
 id: 2026-08-20-handoff-minion-hub-3530856808-spec
 title: "Wire crm-funnel.concurrent.integration.test.ts into a real CI gate (close the funnel atomic-write handoff marker)"
 stage: spec
-status: approved
+status: done
 pass: 2
 created: 2026-08-20
 updated: 2026-08-20
@@ -13,6 +13,7 @@ relationship: extends
 related: [2026-08-18-hub-funnel-atomic-write-spec, 2026-08-17-hub-funnel-atomic-write]
 tags: [infra, test, data]
 type: fix
+done_reason: "Zero-diff dev run confirms the open end is already resolved on base (sibling merges covered it); husk PR closed."
 ---
 
 # Wire `crm-funnel.concurrent.integration.test.ts` into a real CI gate
