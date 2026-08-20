@@ -1,9 +1,10 @@
 ---
 id: handoff-minion-meta-3518589653
 title: Handoff marker — packages/shared/src/gateway/client.ts (minion-meta)
-status: approved
+status: in-spec
 created: 2026-08-20
 updated: 2026-08-20
+spawned_spec: 2026-08-20-handoff-minion-meta-3518589653-spec
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-gateway-client-error-hook-consumer-adoption
