@@ -2,10 +2,10 @@
 id: 2026-08-17-factory-token-budget-governance-spec
 title: "Factory token/budget governance — caps, iteration limits, tier laddering without quality loss"
 stage: spec
-status: approved
+status: implementing
 pass: 1
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 repos: [minion-factory]
 verdict: approved
 tags: [infra]
