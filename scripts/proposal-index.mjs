@@ -3,6 +3,7 @@
 // Run from repo root: node scripts/proposal-index.mjs
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { parseFrontmatter } from './spec-frontmatter.mjs';
+import { loadTopics, resolveTag } from './topics.mjs';
 
 export const P_STATUSES = [
 	'draft',      // being shaped in chat
@@ -18,6 +19,17 @@ export const P_STATUSES = [
 
 const proposals = [];
 const errors = [];
+
+// The topic taxonomy is itself a gated input, same posture as spec-index.mjs:
+// an invalid specs/topics.json fails this build with its own message, and tag
+// checks below are skipped (the build is already red — no fail-open).
+let topics = null;
+try {
+	topics = loadTopics();
+} catch (e) {
+	errors.push(String(e instanceof Error ? e.message : e));
+}
+
 for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f !== 'TEMPLATE.md').sort()) {
 	const parsed = parseFrontmatter(readFileSync(`proposals/${name}`, 'utf8'));
 	if (!parsed) {
@@ -32,6 +44,18 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 	// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).
 	if (fm.status === 'retired' && !(fm.retired_reason && fm.retired_reason.length >= 20))
 		errors.push(`${name}: status "retired" requires retired_reason (>=20 chars)`);
+	// Tags must resolve through the taxonomy (D2), and the index publishes the
+	// CANONICAL name, never the raw string — unknown tags fail the build naming
+	// file+tag (same convention as spec-index.mjs).
+	if (topics && Array.isArray(fm.tags)) {
+		const canonicalTags = [];
+		for (const tag of fm.tags) {
+			const resolved = resolveTag(tag, topics);
+			if (!resolved) errors.push(`${name}: unknown topic "${tag}" (see specs/topics.json)`);
+			else if (!canonicalTags.includes(resolved.canonical)) canonicalTags.push(resolved.canonical);
+		}
+		fm.tags = canonicalTags;
+	}
 	proposals.push({
 		id: fm.id,
 		title: fm.title,
