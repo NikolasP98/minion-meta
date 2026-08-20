@@ -1,12 +1,13 @@
 ---
 id: handoff-minion-meta-2958182560
 title: Handoff marker — specs/2026-08-17-factory-chat-restart-drops-pending-spec.md (minion-meta)
-status: review
+status: closed
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-factory-chat-restart-drops-pending
+closed_reason: "Marker lives in spec prose, not code; sweep should exclude specs/."
 ---
 
 # Handoff marker — specs/2026-08-17-factory-chat-restart-drops-pending-spec.md
