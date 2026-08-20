@@ -34,21 +34,28 @@ that slice deliberately left, so they are written down rather than assumed.
   workflow that already satisfies the contract but a `.github/labeler.yml` that carries
   only its `channel: *` topic labels — the work-type blocks must be pasted in **next to**
   those, never over them.
-- `routing.yml`'s `legacyTags` allowlist still carries 9 pre-taxonomy values
+- `routing.yml`'s `legacyTags` allowlist still carries 8 pre-taxonomy values
   (`handoff-sweep`, `edge-case`, `unwired`, `hardcoded`, `todo`, `duplication`,
-  `board`, `ux`, `crm`) used by 36 tag occurrences across ~30 cards. The factory's
-  handoff sweep keeps writing `tags: [handoff-sweep]`, so that entry cannot expire
-  on its own.
+  `board`, `ux`) used by 37 tag occurrences across 36 cards — all of them proposals
+  now that the four handoff specs below are retagged. `crm` was the ninth and is
+  deleted: its only carrier was a spec, and the validator fails on an allowlist entry
+  that has gone unused. The factory's handoff sweep keeps writing
+  `tags: [handoff-sweep]` on proposals, so that entry cannot expire on its own.
 - Spec **slice-level** tags are now machine truth: `slice_tags: [1:logic+test, 2:ui]`
   in spec frontmatter, validated by `scripts/spec-index.mjs` and `routing:validate`
   (unknown/legacy/duplicate/out-of-order tags, gaps in the 1..N numbering, disagreement
-  with the spec-level `tags` union, and a row-count mismatch against a
-  `| # | Slice | … |` table all fail). `sliceTagsRequiredFrom` was fixed from a
-  future date (2026-08-21, one day after this taxonomy actually landed) to the
-  taxonomy's real landing day (2026-08-20) — a future cutoff exempted same-day work
-  from the gate it was meant to enforce, and three executable
-  `specs/2026-08-20-handoff-*-spec.md` files landed without `slice_tags` under that
-  bug; they are now retro-tagged and the cutoff no longer has a same-day gap.
+  with the spec-level `tags` union, a legacy top-level tag next to that union, and a
+  row-count mismatch against a `| # | Slice | … |` table all fail).
+  `sliceTagsRequiredFrom` was fixed from a future date (2026-08-21, one day after this
+  taxonomy actually landed) to the taxonomy's real landing day (2026-08-20) — a future
+  cutoff exempted same-day work from the gate it was meant to enforce. Every executable
+  same-day spec that landed under that bug is now retro-tagged: `2026-08-20-handoff-minion-hub-2785164896-spec`,
+  `-3530856808-spec`, `-2131866440-spec`, `-1323254565-spec` and
+  `2026-08-20-handoff-minion-factory-1487584490-spec` (five, found by re-running the gate
+  against the merged `dev` tree — a branch-local run does not see base-only additions).
+  Two fail-open holes in the cutoff itself are closed with it: a non-ISO `created`
+  ("today") and an impossible cutoff date (`2026-13-01`, which sorts above every real
+  `created` under the lexicographic compare) now both mean "required", not "exempt".
   Required for specs created on or after `sliceTagsRequiredFrom`; the ~56 executable
   specs written before it (2026-07-19 through 2026-08-19) remain exempt until they
   are retro-tagged. One `TODO(handoff):` marker remains, in `scripts/routing.mjs`,
@@ -66,7 +73,7 @@ that slice deliberately left, so they are written down rather than assumed.
 3. minion-factory reads `generated/routing.json` to compose the per-tag dev loop and
    the per-facet reviewers (slice 9 of the phase-gates spec) instead of re-deriving
    tags; the handoff sweep writes `source: handoff-sweep`, freeing that legacy entry.
-4. `legacyTags` shrinks to empty as the ~30 legacy cards are retagged during their
+4. `legacyTags` shrinks to empty as the 36 legacy cards are retagged during their
    next triage pass; the validator already fails on an entry that has gone unused.
 5. `sliceTagsRequiredFrom` moves back further, to the taxonomy's design date
    (2026-08-17), once the ~56 pre-2026-08-20 executable specs are retro-tagged, and a
@@ -90,6 +97,14 @@ From `sliceTagsRequiredFrom` on, a spec written without `slice_tags` fails
 `index: … [auto-triage]`. The spec agent follows `specs/TEMPLATE.md`, which now
 documents the field, so the fix for a red sweep is to add the line the error names,
 never to relax the gate: an untagged slice is a dev run that cannot pick its checks.
+
+The same gate now also rejects a legacy top-level tag on a spec that must carry
+`slice_tags`. The handoff sweep writes `tags: [handoff-sweep, …]` on the **proposal**,
+and the spec agent has been copying that list onto the spec it derives — that copy is
+what fails. The fix is again the one the error names: tag the spec with the union of its
+slices' work types and leave `handoff-sweep` on the proposal, which is the card whose
+source it actually records. Relaxing the rule would let the legacy ledger grow on new
+work, which is the opposite of the ratchet it is supposed to be.
 
 ## Out of scope
 
