@@ -1,8 +1,8 @@
 ---
 id: 2026-08-20-handoff-minion-hub-3998033254-spec
 title: "CRM contacts handoff — party-spine DNI search and pagination filter wiring"
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-20
 updated: 2026-08-20
@@ -13,7 +13,8 @@ tags: [handoff-sweep, crm]
 type: fix
 relationship: extends
 related: [2026-08-13-crm-customers-server-pagination-spec]
-possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/143
+evidence: https://github.com/NikolasP98/minion_hub/pull/143
+shipped_reason: "Verified shipped: PR minion_hub#143 (crm-contacts handoff markers) merged to master 2026-08-20 and deployed via Vercel; e2e confirmation of the new disposition path."
 ---
 
 # CRM contacts handoff — party-spine DNI search and pagination filter wiring
