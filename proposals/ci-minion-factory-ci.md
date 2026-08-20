@@ -1,10 +1,11 @@
 ---
 id: ci-minion-factory-ci
 title: CI red — CI on minion-factory main
-status: draft
+status: closed
 created: 2026-08-19
-updated: 2026-08-19
+updated: 2026-08-20
 repos: []
+closed_reason: "Workflow healed: latest run on its watch branch is green post-billing-fix (verified 2026-08-20); red was the Actions billing outage, not code."
 ---
 
 # CI red — CI on NikolasP98/minion-factory@main
