@@ -1,12 +1,13 @@
 ---
 id: handoff-minion-meta-3253128100
 title: Handoff marker — specs/2026-08-18-factory-postmerge-discovery-loop-spec.md (minion-meta)
-status: review
+status: closed
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-factory-postmerge-discovery-loop
+closed_reason: "Marker lives in spec prose (specs/*.md), not code — documentation of an open end, not the open end itself; sweep should exclude specs/."
 ---
 
 # Handoff marker — specs/2026-08-18-factory-postmerge-discovery-loop-spec.md
