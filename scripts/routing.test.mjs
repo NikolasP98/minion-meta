@@ -274,6 +274,13 @@ assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['logic'] }), /malformed
 assert.match(sliceErrors({ tags: ['logic'], slice_tags: '1:logic' }), /slice_tags: must be a bracketed array/);
 assert.match(sliceErrors({ tags: ['logic'], slice_tags: [] }), /must list at least one slice/);
 assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:'] }), /malformed entry "1:"/);
+// A `+` must join two real tag ids. The old `[a-z0-9+-]+` payload accepted an empty position in
+// every place one can appear and then filtered it away, so the malformed string passed the
+// fail-closed gate and shipped verbatim into specs/index.json.
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:+logic'] }), /malformed entry "1:\+logic"/, 'a leading + is not a tag');
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic+'] }), /malformed entry "1:logic\+"/, 'a trailing + is not a tag');
+assert.match(sliceErrors({ tags: ['logic', 'test'], slice_tags: ['1:logic++test'] }), /malformed entry "1:logic\+\+test"/, 'a repeated + is not a tag');
+assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:+'] }), /malformed entry "1:\+"/);
 // Slice numbers are the join key to the spec body — gaps, duplicates and reordering are errors.
 assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic', '3:logic'] }), /expected 2, got 3/);
 assert.match(sliceErrors({ tags: ['logic'], slice_tags: ['1:logic', '1:logic'] }), /expected 2, got 1/);

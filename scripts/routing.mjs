@@ -41,8 +41,11 @@ const tagPattern = /^[a-z][a-z0-9-]*$/;
 const globPattern = /^[A-Za-z0-9_.@+*?/-]+$/;
 const topKeys = ['schemaVersion', 'sliceTagsRequiredFrom', 'tags', 'legacyTags', 'shared', 'repositories'];
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-// `slice_tags: [1:logic+test, 2:ui]` — one entry per slice, in slice order.
-const sliceTagsEntryPattern = /^(\d+):([a-z0-9+-]+)$/;
+// `slice_tags: [1:logic+test, 2:ui]` — one entry per slice, in slice order. Every `+` must
+// join two real tag ids: a payload of `[a-z0-9+-]+` also accepted `1:+logic`, `1:logic+` and
+// `1:logic++test`, whose empty positions were then filtered away silently — so a malformed string
+// passed the fail-closed gate and shipped verbatim into specs/index.json.
+const sliceTagsEntryPattern = /^(\d+):([a-z][a-z0-9-]*(?:\+[a-z][a-z0-9-]*)*)$/;
 // A spec nobody will execute is not routable work; everything else must carry slice tags.
 const sliceTagsExemptStatuses = new Set(['superseded', 'rejected', 'retired', 'parked']);
 
@@ -213,7 +216,7 @@ export function parseSliceTags(value) {
   value.forEach((entry, index) => {
     const match = typeof entry === 'string' ? entry.match(sliceTagsEntryPattern) : null;
     if (!match) { errors.push(`slice_tags[${index}]: malformed entry "${entry}" — expected <slice-number>:<tag>[+<tag>...]`); return; }
-    slices.push({ index, number: Number(match[1]), tags: match[2].split('+').filter(Boolean) });
+    slices.push({ index, number: Number(match[1]), tags: match[2].split('+') });
   });
   return { slices, errors };
 }
