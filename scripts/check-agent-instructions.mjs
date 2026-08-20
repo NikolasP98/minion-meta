@@ -29,36 +29,58 @@ const cliCommandKeys = commandKeys;
 const memoryBlockPattern = /^<claude-mem-context\b/i;
 const headingPattern = /^#{1,6}\s+\S/;
 const includePattern = /^@[^\s@]\S*$/;
-const referenceDefOpenerPattern = /^ {0,3}\[/;
 const escapePattern = /\\([!-\/:-@[-`{-~])/g;
 const separatorPattern = /^:?-+:?$/;
 const whitespacePattern = /\s/;
+// CommonMark caps a link label at 999 characters; the same cap keeps a stray '[' from scanning on.
+const LABEL_LIMIT = 999;
+
+/** Index of the newline that ends the line containing `index`, or the end of `text`. */
+function lineEndAt(text, index) {
+  const newline = text.indexOf('\n', index);
+  return newline === -1 ? text.length : newline;
+}
+
+/** True when the line starting at `index` holds nothing but whitespace (CommonMark's blank line). */
+function isBlankLineAt(text, index) {
+  return text.slice(index, lineEndAt(text, index)).trim() === '';
+}
+
+/** Skip whitespace, stopping before a blank line — no CommonMark inline construct may span one. */
+function skipInlineWhitespace(text, start) {
+  let i = start;
+  while (i < text.length && whitespacePattern.test(text[i])) {
+    if (text[i] === '\n' && isBlankLineAt(text, i + 1)) return i;
+    i++;
+  }
+  return i;
+}
 
 /**
- * Scan a CommonMark link destination starting at `line[start]`, which is either `<` (an
- * angle-bracket destination, which may contain spaces) or the first character of a bare destination
- * (balanced, arbitrarily nested parentheses; unescaped whitespace ends it). Returns the raw
- * (un-decoded) destination text and the index just past it, or null if the destination is malformed
- * (unterminated `<...>` or unbalanced parentheses).
+ * Scan a CommonMark link destination starting at `text[start]`, which is either `<` (an
+ * angle-bracket destination, which may contain spaces but no newline) or the first character of a
+ * bare destination (balanced, arbitrarily nested parentheses; unescaped whitespace ends it).
+ * Returns the raw (un-decoded) destination text and the index just past it, or null if the
+ * destination is malformed (unterminated `<...>` or unbalanced parentheses).
  */
-function readDestination(line, start) {
-  if (line[start] === '<') {
+function readDestination(text, start) {
+  if (text[start] === '<') {
     let i = start + 1;
     let raw = '';
-    while (i < line.length && line[i] !== '>') {
-      if (line[i] === '\\' && i + 1 < line.length) { raw += line[i] + line[i + 1]; i += 2; continue; }
-      raw += line[i];
+    while (i < text.length && text[i] !== '>' && text[i] !== '\n') {
+      if (text[i] === '\\' && i + 1 < text.length) { raw += text[i] + text[i + 1]; i += 2; continue; }
+      raw += text[i];
       i++;
     }
-    if (line[i] !== '>') return null;
+    if (text[i] !== '>') return null;
     return { raw, end: i + 1 };
   }
   let depth = 0;
   let i = start;
   let raw = '';
-  while (i < line.length) {
-    const char = line[i];
-    if (char === '\\' && i + 1 < line.length) { raw += char + line[i + 1]; i += 2; continue; }
+  while (i < text.length) {
+    const char = text[i];
+    if (char === '\\' && i + 1 < text.length) { raw += char + text[i + 1]; i += 2; continue; }
     if (char === '(') { depth++; raw += char; i++; continue; }
     if (char === ')') {
       if (depth === 0) break;
@@ -73,19 +95,21 @@ function readDestination(line, start) {
 }
 
 /**
- * Scan a CommonMark link label starting at `line[start]`, which must be `[`. Labels may nest
+ * Scan a CommonMark link label starting at `text[start]`, which must be `[`. Labels may nest
  * brackets to any depth (e.g. `[outer [inner]]`) — like `readDestination`, this is hand-scanned
- * because a bounded regex cannot represent arbitrarily deep balance. Returns the label text
- * (brackets stripped) and the index just past the closing `]`, or null if unterminated.
+ * because a bounded regex cannot represent arbitrary balance. A label may wrap lines but never
+ * crosses a blank line and never exceeds 999 characters. Returns the label text (outer brackets
+ * stripped, escapes intact) and the index just past the closing `]`, or null if unterminated.
  */
-function readLabel(line, start) {
-  if (line[start] !== '[') return null;
+function readLabel(text, start) {
+  if (text[start] !== '[') return null;
   let depth = 0;
   let i = start;
   let raw = '';
-  while (i < line.length) {
-    const char = line[i];
-    if (char === '\\' && i + 1 < line.length) { raw += char + line[i + 1]; i += 2; continue; }
+  while (i < text.length && raw.length <= LABEL_LIMIT) {
+    const char = text[i];
+    if (char === '\\' && i + 1 < text.length) { raw += char + text[i + 1]; i += 2; continue; }
+    if (char === '\n' && isBlankLineAt(text, i + 1)) return null;
     if (char === '[') { depth++; raw += char; i++; continue; }
     if (char === ']') {
       depth--; raw += char; i++;
@@ -104,34 +128,216 @@ function normalizeLabel(label) {
 }
 
 /** Skip an optional CommonMark link title, then require the closing ')'. Returns the index just past it, or null. */
-function readTitleAndClose(line, start) {
-  let i = start;
-  while (i < line.length && (line[i] === ' ' || line[i] === '\t')) i++;
-  if (line[i] === '"' || line[i] === "'" || line[i] === '(') {
-    const close = line[i] === '(' ? ')' : line[i];
+function readTitleAndClose(text, start) {
+  let i = skipInlineWhitespace(text, start);
+  if (text[i] === '"' || text[i] === "'" || text[i] === '(') {
+    const close = text[i] === '(' ? ')' : text[i];
     let j = i + 1;
-    while (j < line.length && line[j] !== close) {
-      if (line[j] === '\\' && j + 1 < line.length) { j += 2; continue; }
+    while (j < text.length && text[j] !== close) {
+      if (text[j] === '\\' && j + 1 < text.length) { j += 2; continue; }
+      if (text[j] === '\n' && isBlankLineAt(text, j + 1)) return null;
       j++;
     }
-    if (line[j] !== close) return null;
-    i = j + 1;
-    while (i < line.length && (line[i] === ' ' || line[i] === '\t')) i++;
+    if (text[j] !== close) return null;
+    i = skipInlineWhitespace(text, j + 1);
   }
-  return line[i] === ')' ? i + 1 : null;
+  return text[i] === ')' ? i + 1 : null;
+}
+
+/** A link reference definition's optional title, which must close on the line it opened. */
+function readDefinitionTitle(text, start) {
+  let i = start;
+  while (text[i] === ' ' || text[i] === '\t') i++;
+  const open = text[i];
+  if (open !== '"' && open !== "'" && open !== '(') return null;
+  const close = open === '(' ? ')' : open;
+  let j = i + 1;
+  while (j < text.length && text[j] !== close && text[j] !== '\n') {
+    if (text[j] === '\\' && j + 1 < text.length) { j += 2; continue; }
+    j++;
+  }
+  return text[j] === close ? j + 1 : null;
+}
+
+/**
+ * Parse one CommonMark link reference definition — `[label]: destination "title"`, up to three
+ * spaces of indent, the destination optionally on the next line — beginning at the line start
+ * `start`. Returns the normalized label, raw destination, and the index just past the definition,
+ * or null when this line opens ordinary paragraph text instead.
+ */
+function readDefinition(text, start) {
+  let i = start;
+  let indent = 0;
+  while (text[i] === ' ' && indent < 3) { i++; indent++; }
+  const label = readLabel(text, i);
+  if (label === null || label.raw.trim() === '' || text[label.end] !== ':') return null;
+  const destination = readDestination(text, skipInlineWhitespace(text, label.end + 1));
+  if (destination === null || destination.raw === '') return null;
+  let end = destination.end;
+  if (!isBlankLineAt(text, end)) {
+    const afterTitle = readDefinitionTitle(text, end);
+    if (afterTitle === null || !isBlankLineAt(text, afterTitle)) return null;
+    end = afterTitle;
+  }
+  return { label: normalizeLabel(label.raw), destination: destination.raw, end };
+}
+
+/**
+ * Every link reference definition in the document, plus the character spans they occupy. A
+ * definition may only start a block — the document start, a line after a blank line, or a line
+ * after another definition — because CommonMark does not let one interrupt a paragraph. The FIRST
+ * definition of a label wins, which is what a renderer resolves a reference against; a later
+ * duplicate must not silently redirect the check at a different file.
+ */
+function referenceDefinitions(text) {
+  const definitions = new Map();
+  const spans = [];
+  let i = 0;
+  let atBlockStart = true;
+  while (i < text.length) {
+    if (isBlankLineAt(text, i)) { atBlockStart = true; i = lineEndAt(text, i) + 1; continue; }
+    const definition = atBlockStart ? readDefinition(text, i) : null;
+    if (definition === null) {
+      atBlockStart = false;
+      i = lineEndAt(text, i) + 1;
+      continue;
+    }
+    if (!definitions.has(definition.label)) definitions.set(definition.label, definition.destination);
+    spans.push([i, definition.end]);
+    i = lineEndAt(text, definition.end) + 1;
+  }
+  return { definitions, spans };
+}
+
+/**
+ * Skip a CommonMark code span opening at `text[start]`: a run of N backticks closed by the next run
+ * of exactly N. Returns the index just past the closing run, or null when the run never closes and
+ * the backticks are therefore literal text. Code spans outrank links, so `` `[x](./gone.md)` `` is
+ * documentation about a link, not a link.
+ */
+function readCodeSpan(text, start) {
+  let length = 0;
+  while (text[start + length] === '`') length++;
+  const fence = '`'.repeat(length);
+  let i = start + length;
+  while (i < text.length) {
+    const at = text.indexOf(fence, i);
+    if (at === -1) return null;
+    let after = at + length;
+    if (text[after] === '`') {
+      while (text[after] === '`') after++;
+      i = after;
+      continue;
+    }
+    return after;
+  }
+  return null;
+}
+
+function pushTarget(targets, raw) {
+  const unescaped = raw.replace(escapePattern, '$1').trim();
+  const target = unescaped.split('#')[0].trim();
+  if (target === '' || target.startsWith('//') || /^[a-z][a-z0-9+.-]*:/i.test(target)) return;
+  targets.push(decodeTarget(target));
+}
+
+/**
+ * Append every local destination reachable from `text` to `targets`, covering all CommonMark link
+ * and image forms: inline (`[text](dest)`), full (`[text][label]`), collapsed (`[text][]`), and
+ * shortcut (`[label]`) references resolved against `definitions`. Returns true when a real link —
+ * not an image — was matched, because CommonMark forbids a link inside another link's text: in
+ * `[see [inner](./a.md)](./b.md)` only `./a.md` is a destination and `(./b.md)` renders literally.
+ * Link text is rescanned for inline links/images since it is rendered either way; nested reference
+ * forms are not re-resolved there, so a label is never mistaken for a shortcut use of itself.
+ */
+function scanLinks(text, definitions, targets, { references = true } = {}) {
+  let found = false;
+  let i = 0;
+  while (i < text.length) {
+    const char = text[i];
+    if (char === '\\') { i += 2; continue; }
+    if (char === '`') {
+      const end = readCodeSpan(text, i);
+      if (end === null) { while (text[i] === '`') i++; continue; }
+      i = end;
+      continue;
+    }
+    if (char !== '[') { i++; continue; }
+    const label = readLabel(text, i);
+    if (label === null) { i++; continue; }
+    const isImage = text[i - 1] === '!' && text[i - 2] !== '\\';
+    const nestedLink = scanLinks(label.raw, definitions, targets, { references: false });
+    let next = label.end;
+    if (nestedLink) {
+      i = next > i ? next : i + 1;
+      continue;
+    }
+    let matched = false;
+    if (text[label.end] === '(') {
+      const destination = readDestination(text, skipInlineWhitespace(text, label.end + 1));
+      if (destination !== null) {
+        const close = readTitleAndClose(text, destination.end);
+        if (close !== null) {
+          pushTarget(targets, destination.raw);
+          if (!isImage) found = true;
+          next = close;
+          matched = true;
+        }
+      }
+    }
+    // A failed inline attempt — an unterminated '(' — falls back to the reference forms, exactly as
+    // a renderer does: '[setup](unclosed' still renders the shortcut link when [setup] is defined.
+    if (!matched && references) {
+      const reference = text[label.end] === '[' ? readLabel(text, label.end) : null;
+      if (text[label.end] !== '[' || reference !== null) {
+        const key = normalizeLabel(reference === null ? label.raw : (reference.raw === '' ? label.raw : reference.raw));
+        if (definitions.has(key)) {
+          pushTarget(targets, definitions.get(key));
+          if (!isImage) found = true;
+        }
+        if (reference !== null) next = reference.end;
+      }
+    }
+    i = next > i ? next : i + 1;
+  }
+  return found;
+}
+
+/**
+ * Local link destinations, normalized: backslash escapes resolved, percent-escapes decoded, the
+ * fragment dropped, surrounding whitespace trimmed. Absolute URLs and protocol-relative links are
+ * skipped — only paths this checkout can resolve are returned. The reference definitions
+ * themselves are excluded from the usage scan: `[setup]: ./dest.md` defines a label, it does not
+ * use one, and only the definitions a document actually references are rendered as links.
+ */
+function linkTargets(lines) {
+  const text = lines.join('\n');
+  const { definitions, spans } = referenceDefinitions(text);
+  const targets = [];
+  let cursor = 0;
+  for (const [start, end] of spans) {
+    scanLinks(text.slice(cursor, start), definitions, targets);
+    cursor = end;
+  }
+  scanLinks(text.slice(cursor), definitions, targets);
+  return targets;
 }
 
 function readIfFile(path) {
   return existsSync(path) && statSync(path).isFile() ? readFileSync(path, 'utf8') : null;
 }
 
-/** Markdown lines outside fenced code blocks — command examples in fences are documentation, not policy. */
+/**
+ * Markdown lines with fenced code blocks blanked out — command examples in fences are
+ * documentation, not policy. Fenced lines are blanked rather than dropped so removing them can
+ * never splice two paragraphs into one construct.
+ */
 function proseLines(text) {
   const lines = [];
   let fenced = false;
   for (const line of text.split('\n')) {
-    if (/^\s*(```|~~~)/.test(line)) { fenced = !fenced; continue; }
-    if (!fenced) lines.push(line);
+    if (/^\s*(```|~~~)/.test(line)) { fenced = !fenced; lines.push(''); continue; }
+    lines.push(fenced ? '' : line);
   }
   return lines;
 }
@@ -147,75 +353,6 @@ function decodeTarget(target) {
   } catch {
     return target;
   }
-}
-
-/**
- * CommonMark link reference definitions: `[label]: destination "title"`, up to 3 leading spaces of
- * indent, title ignored. Returns a map from normalized label to raw (un-decoded) destination text.
- */
-function referenceDefinitions(lines) {
-  const defs = new Map();
-  for (const line of lines) {
-    if (!referenceDefOpenerPattern.test(line)) continue;
-    const trimmed = line.replace(referenceDefOpenerPattern, '[');
-    const label = readLabel(trimmed, 0);
-    if (label === null || trimmed[label.end] !== ':') continue;
-    let i = label.end + 1;
-    while (i < trimmed.length && whitespacePattern.test(trimmed[i])) i++;
-    const destination = readDestination(trimmed, i);
-    if (destination === null) continue;
-    defs.set(normalizeLabel(label.raw), destination.raw);
-  }
-  return defs;
-}
-
-function pushTarget(targets, raw) {
-  const unescaped = raw.replace(escapePattern, '$1').trim();
-  const target = unescaped.split('#')[0].trim();
-  if (target === '' || target.startsWith('//') || /^[a-z][a-z0-9+.-]*:/i.test(target)) return;
-  targets.push(decodeTarget(target));
-}
-
-/**
- * Local link destinations, normalized: backslash escapes resolved, percent-escapes decoded, the
- * fragment dropped, surrounding whitespace trimmed. Absolute URLs and protocol-relative links are
- * skipped — only paths this checkout can resolve are returned. Handles inline links (including
- * labels with balanced nested brackets, e.g. `[outer [inner]](./x.md)`) and full reference-style
- * links (`[text][label]` resolved against a `[label]: destination` definition anywhere in the doc).
- */
-function linkTargets(lines) {
-  const targets = [];
-  const defs = referenceDefinitions(lines);
-  for (const line of lines) {
-    let i = 0;
-    while (i < line.length) {
-      if (line[i] !== '[') { i++; continue; }
-      const label = readLabel(line, i);
-      if (label === null) { i++; continue; }
-      let nextIndex = label.end;
-      if (line[label.end] === '(') {
-        let destStart = label.end + 1;
-        while (destStart < line.length && (line[destStart] === ' ' || line[destStart] === '\t')) destStart++;
-        const destination = readDestination(line, destStart);
-        if (destination !== null) {
-          const closeIndex = readTitleAndClose(line, destination.end);
-          if (closeIndex !== null) {
-            pushTarget(targets, destination.raw);
-            nextIndex = closeIndex;
-          }
-        }
-      } else if (line[label.end] === '[') {
-        const refLabel = readLabel(line, label.end);
-        if (refLabel !== null) {
-          const key = normalizeLabel(refLabel.raw === '' ? label.raw : refLabel.raw);
-          if (defs.has(key)) pushTarget(targets, defs.get(key));
-          nextIndex = refLabel.end;
-        }
-      }
-      i = nextIndex > i ? nextIndex : i + 1;
-    }
-  }
-  return targets;
 }
 
 function substantiveErrors(label, text) {

@@ -153,6 +153,41 @@ try {
   assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
   reset();
 
+  // Shortcut references (`[label]` alone) are links too when a definition exists, and CommonMark
+  // resolves the FIRST definition of a label — a later duplicate must not redirect the check at a
+  // different file than the renderer follows.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\nSee [setup].\n\n[setup]: ./missing.md\n')));
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\nSee [setup].\n\n[setup]: ./missing.md\n\n[setup]: ./LINKED.md\n')));
+  // Label matching is case-folded and whitespace-collapsed, so a differently cased use still resolves.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\nSee [Set   Up][].\n\n[set up]: ./missing.md\n')));
+  // …and the resolving controls pass: shortcut, collapsed, and a first definition that resolves
+  // while a shadowed duplicate points at a missing file.
+  writeAgents(goodAgents('\nSee [setup], [setup][] and [guide][setup].\n\n[setup]: ./LINKED.md\n\n[setup]: ./missing.md\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  // A bracketed term with no definition is ordinary prose, and a definition cannot interrupt a
+  // paragraph — neither may be reported as a broken link.
+  writeAgents(goodAgents('\nA bracketed [term] is prose.\n\nSome paragraph text\n[term]: ./missing.md\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  reset();
+
+  // An inline attempt that never closes falls back to the reference forms, as a renderer does.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\nSee [setup](unclosed here.\n\n[setup]: ./missing.md\n')));
+
+  // A code span outranks a link: `[x](./gone.md)` inside backticks documents a link, it is not one.
+  writeAgents(goodAgents('\nWrite `[x](./gone.md)` and ``a ` tick`` in prose.\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  reset();
+
+  // A link may wrap onto the next line, and an image inside link text is a second real destination.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\nSee [the guide](\n./missing.md) for details.\n')));
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.png' does not resolve/, () =>
+    writeAgents(goodAgents('\n[![diagram](./missing.png)](./LINKED.md)\n')));
+
   // 7. An AGENTS.md that is only the include is not substantive.
   failsWith(/fixture\/AGENTS\.md: must be substantive/, () => writeAgents('@CLAUDE.md\n'));
 
