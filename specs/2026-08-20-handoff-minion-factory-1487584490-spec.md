@@ -13,6 +13,7 @@ relationship: extends
 related: [2026-08-18-factory-deterministic-unstick-spec, 2026-08-17-factory-deterministic-unstick, 2026-08-18-factory-controller-completion-invariants]
 type: fix
 tags: [infra, logic]
+possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/48
 ---
 
 # Cross-tick requeue cap for a persistently-failing unstick-cron lineage
