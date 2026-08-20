@@ -128,6 +128,15 @@ try {
   assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
   reset();
 
+  // A bare destination may nest parentheses to any depth — a bounded regex cannot represent that,
+  // so a missing target with two nesting levels must still be caught.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\(a\(b\)c\)\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\nSee [gone](./missing(a(b)c).md) for details.\n')));
+  writeFileSync(join(fixture, 'LINKED(DOC(deep)ok).md'), 'nested target\n');
+  writeAgents(goodAgents('\nSee [nested](./LINKED(DOC(deep)ok).md).\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  reset();
+
   // 7. An AGENTS.md that is only the include is not substantive.
   failsWith(/fixture\/AGENTS\.md: must be substantive/, () => writeAgents('@CLAUDE.md\n'));
 
