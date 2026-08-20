@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-factory-2943307277
 title: Handoff marker — agent/lib/handoff.sh (minion-factory)
-status: draft
+status: closed
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-factory]
 tags: [handoff-sweep]
+closed_reason: "Self-referential: handoff.sh is the sweep implementation itself."
 ---
 
 # Handoff marker — agent/lib/handoff.sh
