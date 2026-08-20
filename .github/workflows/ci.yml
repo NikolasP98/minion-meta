@@ -1,6 +1,8 @@
 # .github/workflows/ci.yml
-# Meta-repo CI — gates every PR against main or dev.
-# Runs lint-all, typecheck-all, build-all, test-all, and changeset:status.
+# Meta-repo CI — gates every PR against dev (the integration branch) and main.
+# Runs the repository-policy validator, lint-all, typecheck-all, build-all,
+# test-all, changeset:status, the specs/ hardening gate's own fixture self-test
+# (scripts/*.test.mjs), and the gate itself (scripts/spec-index.mjs --check).
 name: CI
 
 on:
@@ -49,6 +51,14 @@ jobs:
 
       - name: Curated engineering skill bundle
         run: scripts/check-minion-engineering-skills.sh
+
+      - name: Spec index gate self-test
+        run: pnpm run test:scripts
+
+      - name: Spec index check
+        run: node scripts/spec-index.mjs --check
+        env:
+          GITHUB_EVENT_BEFORE: ${{ github.event.before }}
 
       - name: Changesets status (PR only)
         if: github.event_name == 'pull_request'
