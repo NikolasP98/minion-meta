@@ -249,6 +249,37 @@ test('L1: a Product-prefix heading does not satisfy the Product section', () => 
 	assert.deepEqual(missingRequiredHeadings(body), ['"## 0. Product" section']);
 });
 
+test('L1: a Product heading with no space after the marker or the number is rejected', () => {
+	for (const heading of ['##0. Product', '## 0.Product', '##0.Product']) {
+		const body = `${heading}\n\n## Out of scope\n\n## Verification\n`;
+		assert.deepEqual(missingRequiredHeadings(body), ['"## 0. Product" section'], heading);
+	}
+});
+
+test('L2: an "Unverified" section does not satisfy the Verification requirement', () => {
+	for (const section of ['## Unverified assumptions', '**Unverified assumptions:**']) {
+		const body = `## 0. Product\n\n## Out of scope\n\n${section}\n`;
+		assert.deepEqual(
+			missingRequiredHeadings(body),
+			['a verification section (a heading or a **Verification:** label)'],
+			section
+		);
+	}
+});
+
+test('L2: the documented verification labels still satisfy the requirement', () => {
+	for (const section of [
+		'## Verification',
+		'## 6. End-to-end verification',
+		'## 3. Verification (definition of done)',
+		'**Verification:**',
+		'**Verify:**'
+	]) {
+		const body = `## 0. Product\n\n## Out of scope\n\n${section}\n`;
+		assert.deepEqual(missingRequiredHeadings(body), [], section);
+	}
+});
+
 test('M2: adding a brand-new id to an existing heading baseline is rejected', () => {
 	const base = { 'existing-spec': 'aaa' };
 	const current = { 'existing-spec': 'aaa', 'new-spec': 'bbb' };

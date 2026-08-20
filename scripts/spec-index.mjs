@@ -158,14 +158,14 @@ export function stripNonDocumentMarkdown(bodyText) {
 // (stripNonDocumentMarkdown),
 // so example/hidden headings never count.
 export const REQUIRED_HEADINGS = [
-	{ label: '"## 0. Product" section', re: /^##[ \t]*0\.[ \t]*Product[ \t]*(?:#+[ \t]*)?$/m },
+	{ label: '"## 0. Product" section', re: /^##[ \t]+0\.[ \t]+Product[ \t]*(?:#+[ \t]*)?$/m },
 	{
 		label: 'an out-of-scope section (a heading or a **Out of scope:** label)',
 		re: /^#{2,4}[ \t]+.*out.of.scope|^\*\*[^*\n]*out.of.scope[^*\n]*:\*\*/im
 	},
 	{
 		label: 'a verification section (a heading or a **Verification:** label)',
-		re: /^#{2,4}[ \t]+.*verif|^\*\*[^*\n]*verif[^*\n]*:\*\*/im
+		re: /^#{2,4}[ \t]+.*\b(?:verification|verify)\b|^\*\*[^*\n]*\b(?:verification|verify)\b[^*\n]*:\*\*/im
 	}
 ];
 // Returns the labels of any required sections missing from `body`.
