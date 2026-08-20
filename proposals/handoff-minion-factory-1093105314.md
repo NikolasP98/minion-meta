@@ -29,3 +29,10 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-factory@main runner/src/memory/read.ts:22` — spec 2026-08-18-factory-memory-governance Slice 2 remainder —
   https://github.com/NikolasP98/minion-factory/blob/main/runner/src/memory/read.ts#L22
+
+## Reconciliation note 2026-08-20
+
+Confirmed same idea as `2026-08-17-factory-memory-governance` (in-spec) — the comment names the
+spec directly ("spec 2026-08-18-factory-memory-governance Slice 2 remainder"). Not merged into
+the canonical (in-spec, off-limits to edit); status held at `review` for a human to confirm
+scope, same disposition as the `hub-reserva-keyword-config` sibling markers.

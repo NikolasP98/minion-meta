@@ -29,3 +29,11 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-meta@dev packages/env/src/cache.ts:32` — 'disk' currently degrades to 'memory' with a warning — S2
   https://github.com/NikolasP98/minion-meta/blob/dev/packages/env/src/cache.ts#L32
+
+## Reconciliation note 2026-08-20
+
+Confirmed same idea as `2026-08-17-pkg-infisical-cache-plaintext` (in-spec) — the full comment
+at `packages/env/src/cache.ts:32-36` names its own §S2 and points back at "the handoff note
+appended to proposals/2026-08-17-pkg-infisical-cache-plaintext.md (2026-08-20)" verbatim. Not
+merged into the canonical (in-spec, off-limits to edit); status held at `review` for a human to
+confirm scope, same disposition as the `hub-reserva-keyword-config` sibling markers.

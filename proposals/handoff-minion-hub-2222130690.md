@@ -29,3 +29,16 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/server/services/crm-deposit-rule.ts:178` — defined and unit-tested here but not yet wired to an HTTP
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/crm-deposit-rule.ts#L178
+
+## Reconciliation note 2026-08-20
+
+Confirmed related to `2026-08-17-hub-reserva-keyword-config` (in-spec), not a false match:
+operator memory (`/memory/MINION/factory/2026-08-20-5b828cca.md`) records that
+`crm-deposit-rule.ts` is the canonical spec's own S1 deliverable (the per-org deposit-rule
+extraction module, commit `0b1440e`, PR #124) — S2 (wiring `crm_settings.value.deposit` /
+an HTTP surface) has not landed yet. This marker documents that still-open S2 remainder, the
+same class of remaining work as sibling markers `handoff-minion-hub-1323254565`
+(`crm-similarity.service.ts`), `-2131866440` (`crm-journey.service.ts`), and `-2785164896`
+(`crm-finance.service.ts`) — a fourth call site, not a duplicate filing of an already-covered
+one. Not merged into the canonical (in-spec, off-limits to edit); status held at `review` for a
+human to confirm scope.

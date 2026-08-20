@@ -31,3 +31,12 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-ai/blob/DEV/extensions/nostr/src/inbound-dispatch.ts#L7
 - `NikolasP98/minion-ai@DEV extensions/nostr/src/inbound-dispatch.ts:42` — S2 of 2026-08-17-gw-nostr-dispatch-pipeline-spec (branch B1) replaces this
   https://github.com/NikolasP98/minion-ai/blob/DEV/extensions/nostr/src/inbound-dispatch.ts#L42
+
+## Reconciliation note 2026-08-20
+
+Confirmed same idea as `2026-08-17-gw-nostr-dispatch-pipeline` (in-spec) — both comments name
+"S2 of 2026-08-17-gw-nostr-dispatch-pipeline-spec" directly. This is the implementation-file half
+of the marker pair; the test-file half is filed separately as `handoff-minion-ai-492754540`
+(`inbound-dispatch.test.ts`) — not merged into each other since each names a distinct file the
+same spec's S2 must touch. Not merged into the canonical (in-spec, off-limits to edit); status
+held at `review` for a human to confirm scope.

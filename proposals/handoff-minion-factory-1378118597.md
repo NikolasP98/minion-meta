@@ -31,3 +31,11 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-factory/blob/main/runner/src/queue.ts#L963
 - `NikolasP98/minion-factory@main runner/src/queue.ts:1055` — S3 of 2026-08-17-factory-chat-restart-drops-pending-spec replaces this kill with docker-wait adoption (parity with adoptOrphans, queue.ts adoptOrphans()) — until then a live container's completed work is discarded.
   https://github.com/NikolasP98/minion-factory/blob/main/runner/src/queue.ts#L1055
+
+## Reconciliation note 2026-08-20
+
+Confirmed same idea as `2026-08-17-factory-chat-restart-drops-pending` (in-spec) — both quoted
+comments name the spec directly (`spec 2026-08-17-facto[ry-chat-restart-drops-pending]`, and
+`S3 of 2026-08-17-factory-chat-restart-drops-pending-spec`). Not merged into the canonical
+(in-spec, off-limits to edit); status held at `review` for a human to confirm scope, same
+disposition as the `hub-reserva-keyword-config` sibling markers.
