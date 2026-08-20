@@ -5,10 +5,11 @@ stage: spec
 status: approved
 pass: 1
 created: 2026-07-19
-updated: 2026-08-18
+updated: 2026-08-20
 repos: [minion]
 verdict: approved
 tags: [security, logic]
+possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/226
 ---
 
 # Channel Scoping Fix — sequenced plan
