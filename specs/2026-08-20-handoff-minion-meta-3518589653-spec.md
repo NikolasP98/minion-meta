@@ -2,7 +2,7 @@
 id: 2026-08-20-handoff-minion-meta-3518589653-spec
 title: "Remove the onEventError TODO(handoff) marker in packages/shared/src/gateway/client.ts"
 stage: spec
-status: approved
+status: done
 pass: 2
 created: 2026-08-20
 updated: 2026-08-20
@@ -12,6 +12,7 @@ verdict: approved
 relationship: depends-on
 related: [2026-08-19-gateway-client-error-hook-consumer-adoption-spec, 2026-08-17-gateway-client-error-hook-consumer-adoption, 2026-08-17-pkg-gateway-client-onevent-errors-spec]
 type: fix
+done_reason: "Zero-diff dev run confirms the open end is already resolved on base (sibling merges covered it); husk PR closed."
 ---
 
 # Remove the `onEventError` `TODO(handoff)` marker in `packages/shared/src/gateway/client.ts`
