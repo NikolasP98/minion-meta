@@ -17,7 +17,16 @@ tags: [logic, test, handoff-sweep]
 
 # Complete the finance side of the org-configurable deposit rule
 
-## 0. Relationship classification (recommend-only)
+## 0. Product
+
+The source proposal says the marker's open end is resolved only when the service reads the
+org-configurable rule planned by canonical S2 and the marker is removed. That is the scope here.
+The observable finance behavior affected by the rule is classification, not invoice arithmetic:
+`purchased`, `reservedOnly`, `loyal`, representative-item ordering, `topProduct`, and the contacts
+roster/funnel finance flags can change with the rule; invoice counts and summed invoice totals must
+not change merely because the keyword set changes.
+
+## 1. Relationship classification (recommend-only)
 
 `relationship: extends` — the approved
 [`2026-08-17-hub-reserva-keyword-config-spec`](2026-08-17-hub-reserva-keyword-config-spec.md)
@@ -39,15 +48,6 @@ The sibling handoff proposals `handoff-minion-hub-1323254565` and
 `handoff-minion-hub-2131866440` remain independently owned markers in similarity and journey.
 They should be implemented in the same canonical S2 branch/PR where practical, but this spec does
 not classify, close, or edit them.
-
-## 1. Product and source request
-
-The source proposal says the marker's open end is resolved only when the service reads the
-org-configurable rule planned by canonical S2 and the marker is removed. That is the scope here.
-The observable finance behavior affected by the rule is classification, not invoice arithmetic:
-`purchased`, `reservedOnly`, `loyal`, representative-item ordering, `topProduct`, and the contacts
-roster/funnel finance flags can change with the rule; invoice counts and summed invoice totals must
-not change merely because the keyword set changes.
 
 ## 2. Verified AS-IS
 

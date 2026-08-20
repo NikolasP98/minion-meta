@@ -17,7 +17,22 @@ tags: [logic, test, handoff-sweep]
 
 # Handoff marker `crm-similarity.service.ts:55` — resolve the rule per call in `buildWinIndex`
 
-## 0. Relationship classification (recommend-only)
+## 0. Product
+
+Quoted verbatim from the source proposal:
+
+> Filed automatically by the factory handoff-ledger sweep: this file carries a
+> `TODO(handoff):` marker (the open-items ledger clause). Approving sends it into the spec
+> pipeline to resolve the open end below.
+>
+> - `NikolasP98/minion_hub@master src/server/services/crm-similarity.service.ts:55` — rule is
+>   the module default here — S2 of 2026-08-17-hub-reserva-keyword-config-spec reads it from
+>   crm_settings
+>
+> **Definition of done:** the marker's open end is resolved and the `TODO(handoff):` comment
+> removed; the sweep closes this proposal automatically once the file carries no more markers.
+
+## 1. Relationship classification (recommend-only)
 
 **Recommended: `extends`.**
 
@@ -65,19 +80,6 @@ Not `already-satisfied`: canonical S2 has not landed (verified above), so the ma
 for removal ("S2 ... reads it from crm_settings") is not yet true. Not `conflicts-with`: this
 spec makes zero changes to `crm-finance.service.ts`, `crm-journey.service.ts`, the canonical
 `crm-deposit-rule.ts` module's public contract, or any DDL.
-
-## 1. Problem (from the proposal, verbatim)
-
-> Filed automatically by the factory handoff-ledger sweep: this file carries a
-> `TODO(handoff):` marker (the open-items ledger clause). Approving sends it into the spec
-> pipeline to resolve the open end below.
->
-> - `NikolasP98/minion_hub@master src/server/services/crm-similarity.service.ts:55` — rule is
->   the module default here — S2 of 2026-08-17-hub-reserva-keyword-config-spec reads it from
->   crm_settings
->
-> **Definition of done:** the marker's open end is resolved and the `TODO(handoff):` comment
-> removed; the sweep closes this proposal automatically once the file carries no more markers.
 
 ## 2. Verified AS-IS
 
