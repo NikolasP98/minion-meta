@@ -2,12 +2,12 @@
 id: 2026-08-20-handoff-minion-hub-1323254565-spec
 title: "Handoff marker crm-similarity.service.ts:55 — resolve the deposit/procedure rule per call in buildWinIndex"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-20
 updated: 2026-08-20
 proposal: handoff-minion-hub-1323254565
-verdict: pending
+verdict: approved
 repos: [minion_hub]
 relationship: extends
 related: [2026-08-17-hub-reserva-keyword-config-spec]
@@ -56,8 +56,10 @@ This spec is a sibling of, not a merge with:
   `crm-similarity.service.ts`'s `IS_PROCEDURE`, and `buildWinIndex` carries no in-process TTL
   cache — so this spec is deliberately narrower than its finance sibling rather than copying its
   shape unnecessarily.
-- `handoff-minion-hub-2131866440` (`status: approved`, no spec yet) — the third and last sibling
-  marker, at `crm-journey.service.ts`. Not classified or edited here.
+- [`2026-08-20-handoff-minion-hub-2131866440-spec`](2026-08-20-handoff-minion-hub-2131866440-spec.md)
+  (`status: draft`, pass 1 at this review) — the third and last sibling marker, at
+  `crm-journey.service.ts`. Its draft is not authoritative for this slice and is not classified or
+  edited here.
 
 Not `already-satisfied`: canonical S2 has not landed (verified above), so the marker's condition
 for removal ("S2 ... reads it from crm_settings") is not yet true. Not `conflicts-with`: this
@@ -113,7 +115,7 @@ Evidence pulled from `minion_hub@master` at `5e77bbe7a15aec126651f6cdac766720201
   `contactFinanceMap`, there is **no in-process cache** to invalidate — the "staleness" here is
   entirely "the stored table wasn't rebuilt since the rule changed," which is exactly the
   canonical spec's own ⚠️A3 concern, already owned by canonical S3's write-path
-  `staleDerivedCount` disclosure (§2 below repeats this so it is not silently duplicated here);
+  `staleDerivedCount` disclosure (§3 repeats this boundary so it is not silently duplicated here);
   and (b) there is no secondary in-repo consumer analogous to
   `crm-contacts.service.ts::runRankQuery` for this file — `similarWins` is the only reader and it
   reads the stored table, not `IS_PROCEDURE`.
@@ -128,16 +130,16 @@ Evidence pulled from `minion_hub@master` at `5e77bbe7a15aec126651f6cdac766720201
   query-level classification coverage that already covers `IS_PROCEDURE`'s SQL semantics
   end-to-end; this spec's slice does not need to add a new integration test for the predicate
   itself, only for `buildWinIndex`'s per-call resolution of *which* `DepositRule` object feeds it.
-- Operator memory `dev-process-specs-is-the-live-system.md` (`★ board fetch ?ref=dev`) and the
-  canonical spec's own §1 both flag that `dev` may not be the live branch; the canonical spec and
-  both merged sibling specs (`2026-08-20-handoff-minion-hub-2785164896-spec`,
-  `2026-08-20-handoff-minion-hub-3530856808-spec`) verified against `master` at the same commit
-  used here. Slice 0 below re-confirms the live base before branching, per that established
-  pattern — do not assume `master` is still current without rechecking.
+- Operator memory `/memory/MINION/MEMORY.md` carries the hard Hub deployment constraint
+  "`dev` DELETED (PR #83) → branch off `master`". Review-time remote evidence agrees:
+  `master` is the GitHub default branch and no `dev` branch exists, while the remote Hub
+  `CLAUDE.md` still describes the older `dev` integration flow. Slice 0 therefore checks the
+  remote default branch and branch existence explicitly before branching; it must not infer the
+  live base from the stale instruction text or assume today's `master` state will remain current.
 
 ## 3. TO-BE (target behavior + invariants)
 
-- `buildWinIndex(ctx)` resolves one `DepositRule` **per call**, via canonical S2's
+- Each enabled `buildWinIndex(ctx)` call resolves one `DepositRule`, via canonical S2's
   `resolveDepositRule(ctx)` (the CRM settings boundary the canonical spec defines — this spec
   does not redefine it, re-implement it, or add a second settings reader), and builds
   `IS_PROCEDURE`'s SQL fragment from that resolved rule at call time.
@@ -146,10 +148,12 @@ Evidence pulled from `minion_hub@master` at `5e77bbe7a15aec126651f6cdac766720201
   today (parity invariant — same guarantee the canonical spec's own S2 DELTA requires of finance
   and journey).
 - With a custom rule (e.g. `keywords: ['adelanto', 'seña']`), the *next* call to `buildWinIndex`
-  for that tenant classifies buyers/bought-items using the custom keywords — there is no
-  in-process cache to invalidate (§2), so "next call sees the new rule" is automatic once the
-  module-scope constant is removed; the invariant is that nothing silently keeps using the old
-  constant.
+  for that tenant classifies buyers/bought-items using the custom keywords. `buildWinIndex` has no
+  classification cache of its own (§2); immediate freshness still depends on canonical S2's
+  resolver contract, whose tests must prove the next `resolveDepositRule(ctx)` sees the new rule.
+  This slice proves it does not add a second cache or retain the old module-scope constant.
+- When `enabled(ctx)` is false, `buildWinIndex` keeps its current early return and does not resolve
+  settings; enabled calls resolve the rule exactly once with the same `ctx` passed by the caller.
 - `keywords: []` (explicitly empty) ⇒ `IS_PROCEDURE` evaluates to `sql\`(ii.description is not
   null and true)\``-shaped (i.e. every non-null description counts as a procedure line, per
   `notDepositMatchSql`'s empty-list contract) — asserted, not assumed.
@@ -168,9 +172,9 @@ Evidence pulled from `minion_hub@master` at `5e77bbe7a15aec126651f6cdac766720201
 
 | # | Transition | Slice | Proof |
 |---|---|---|---|
-| 1 | Replace `buildWinIndex`'s module-scope `DEPOSIT_RULE`/`IS_PROCEDURE` constants with a per-call `resolveDepositRule(ctx)` resolution, feeding the resolved rule into the buyer-selection query | S1 | Extend `crm-similarity.service.test.ts`'s PARITY test: (a) existing default-rule case still asserts `'%reserva%'` bound and unchanged compiled SQL; (b) new case with a mocked custom rule asserts the custom keywords are bound instead, in the same query shape |
+| 1 | Replace `buildWinIndex`'s module-scope `DEPOSIT_RULE`/`IS_PROCEDURE` constants with one enabled-call `resolveDepositRule(ctx)` resolution, feeding the resolved rule into the buyer-selection query while preserving the disabled early return | S1 | Extend `crm-similarity.service.test.ts`: default and custom-rule query cases assert the resolver is called once with the exact `ctx`; the disabled case asserts it is not called; compiled default SQL remains unchanged and the custom case binds only its configured patterns |
 | 2 | `keywords: []` still yields a total (non-`undefined`) predicate — every non-null description counts as a procedure — matching `notDepositMatchSql`'s existing contract | S1 | New unit case: empty-keywords rule → compiled SQL contains the `true`-shaped fragment; no dropped predicate |
-| 3 | No behavior change to `similarWins`, `winIndexStatus`, the `POST /api/crm/insights/win-index` route, or `crm_win_embeddings`'s schema | S1 | `git diff --name-only <base>...HEAD` touches only `crm-similarity.service.ts` (+ its test); route/table files absent from the diff |
+| 3 | No behavior change to `similarWins`, `winIndexStatus`, the `POST /api/crm/insights/win-index` route, or `crm_win_embeddings`'s schema from this slice | S1 | Focused diff review confines this slice to the import/marker and `buildWinIndex` query construction plus its tests; if canonical S2/S3 is co-delivered, every additional file is traced to that owning spec rather than falsely requiring a two-file PR |
 | 4 | The exact marker is removed only after 1-3 pass | S1 | `rg -n -F 'TODO(handoff): rule is the module default here — S2 of 2026-08-17-hub-reserva-keyword-config-spec reads it from crm_settings' src/server/services/crm-similarity.service.ts` returns no match |
 
 ## 5. Approach
@@ -186,7 +190,8 @@ file, so the finance sibling's larger two-part shape does not apply here.
 
 ```bash
 cd minion_hub
-git branch -r                                                     # confirm master is still live
+gh repo view NikolasP98/minion_hub --json defaultBranchRef        # record the current default
+git branch -r                                                     # confirm that branch exists locally/remotely
 git log --oneline -5 -- src/server/services/crm-similarity.service.ts src/server/services/crm-deposit-rule.ts
 rg -n 'resolveDepositRule' src/                                   # confirm canonical S2 still absent,
                                                                     # or already landed on this branch —
@@ -200,6 +205,9 @@ from, Slice 1 below only needs to *call* it — do not re-implement or fork a se
 reader. If it has **not** landed and is not being delivered in the same PR, stop: this spec's
 Slice 1 has a hard prerequisite on that contract existing (same dependency the finance sibling
 spec states), and implementing a stand-in here would fork the canonical rule-resolution path.
+If the resolver is co-delivered, identify the canonical S2 commit(s)/files in the PR before using
+the conditional scope checks below; those files are not owned by this slice and cannot be treated
+as unexplained scope expansion.
 
 ### Slice 1 — per-call rule resolution in `buildWinIndex`
 
@@ -221,7 +229,7 @@ the same branch/PR, exactly as `2026-08-17-hub-reserva-keyword-config-spec` §S2
   `isDepositText` in `crm-deposit-rule.ts` untouched — this slice is a consumer-side change only.
 - Remove the `TODO(handoff):` marker only after the DoD below passes.
 
-**Files:** `src/server/services/crm-similarity.service.ts`,
+**Files owned by this slice:** `src/server/services/crm-similarity.service.ts`,
 `src/server/services/crm-similarity.service.test.ts`.
 
 **Definition of done (machine-checkable):**
@@ -229,40 +237,46 @@ the same branch/PR, exactly as `2026-08-17-hub-reserva-keyword-config-spec` §S2
 cd minion_hub
 bunx svelte-kit sync
 bun run vitest run src/server/services/crm-similarity.service.test.ts
-# - existing PARITY case: default rule (no crm_settings.value.deposit) → compiled query and bound
-#   '%reserva%' params unchanged from today's snapshot
+# - existing PARITY case: mocked resolver returns DEFAULT_DEPOSIT_RULE → compiled query and bound
+#   '%reserva%' params unchanged from today's snapshot; resolver called once with the exact ctx
+#   (canonical S2's resolver tests separately prove absent crm_settings.value.deposit → default)
 # - new case: mocked resolveDepositRule returning { keywords: ['adelanto','seña'], label: 'Adelanto' }
-#   → compiled query binds those escaped patterns, never '%reserva%'
+#   → resolver called once with the exact ctx; compiled query binds those escaped patterns,
+#   never '%reserva%'
 # - new case: mocked resolveDepositRule returning { keywords: [], label: 'x' } → the true-shaped
 #   fragment appears; assert on the rendered SQL, not just "no throw"
-# - existing "returns { indexed: 0 } when disabled" and "MAPPING: ... no rows" cases still pass
-#   unmodified (behavior invariant, not touched by this slice)
+# - disabled case still returns { indexed: 0 } and asserts resolveDepositRule was not called;
+#   existing "MAPPING: ... no rows" behavior still passes
 
 bun run vitest run       # full suite green, no new skips
 bun run check            # 0 errors / 0 warnings
 
-rg -n -F 'TODO(handoff): rule is the module default here — S2 of 2026-08-17-hub-reserva-keyword-config-spec reads it from crm_settings' \
-  src/server/services/crm-similarity.service.ts
-# → no match
+if rg -n -F 'TODO(handoff): rule is the module default here — S2 of 2026-08-17-hub-reserva-keyword-config-spec reads it from crm_settings' \
+  src/server/services/crm-similarity.service.ts; then
+  exit 1
+fi
 
 rg -n '^const DEPOSIT_RULE =|^const IS_PROCEDURE =' src/server/services/crm-similarity.service.ts
 # → no match (both are now call-scoped, not module-scoped)
 
 git diff --name-only <base>...HEAD
-# → src/server/services/crm-similarity.service.ts and its .test.ts only
-#   (no route, no crm-finance.service.ts, no crm-journey.service.ts, no schema/migration file)
+# If resolveDepositRule existed at <base>:
+# → src/server/services/crm-similarity.service.ts and its .test.ts only.
+# If canonical S2/S3 is co-delivered:
+# → those two files plus only files explicitly required by the co-delivered approved spec(s);
+#   record the owning spec for each extra file. In either case this slice adds no schema/migration.
 ```
 
 ## 6. Cross-repo impact
 
 | Surface | Impact | Mitigation / evidence |
 |---|---|---|
-| `crm-finance.service.ts`, `crm-journey.service.ts` | **None** — separate module-scope copies, separate specs/proposals own them | `git diff --name-only` guard above |
+| `crm-finance.service.ts`, `crm-journey.service.ts` | **None from this slice** — separate module-scope copies, separate specs/proposals own them | Focused Slice 1 diff; any co-delivered sibling edits are traced to their own approved spec |
 | `crm_win_embeddings` (materialized `bought`/`snippet`) | **Indirect, already-flagged.** A rule change is only visible on the *next* `buildWinIndex()` call (operator-triggered rebuild); this slice does not add a rebuild trigger or staleness field | Owned by canonical S3's `staleDerivedCount` disclosure — not duplicated here; explicit out-of-scope below |
 | `minion_site` (shared DB) | **None** — no DDL, no schema/type change | `git diff --name-only <base>...HEAD -- supabase/migrations db/schema` empty |
 | `@minion-stack/db`, `@minion-stack/shared`, gateway WS protocol | **None** — no package or shared-type file touched | — |
 | `minion/` gateway CRM tools, `paperclip-minion`, `pixel-agents`, `minion_plugins`, `Minion Docs/` | **None** | — |
-| `POST /api/crm/insights/win-index` route contract | **None** — same request/response shape; only the query `buildWinIndex` runs internally changes | Route file absent from the diff (DELTA #3 proof) |
+| `POST /api/crm/insights/win-index` route contract | **None from this slice** — same request/response shape; only the query `buildWinIndex` runs internally changes | Focused Slice 1 diff leaves the route unchanged; any co-delivered canonical S3 route edit is reviewed and tested under that spec, not attributed here |
 
 No alert-class cross-repo impact was found (unlike the canonical spec's ⚠️A2 gateway-tools alert,
 which is that spec's concern, not re-raised here since this slice changes no gateway-adjacent
@@ -279,8 +293,9 @@ code).
   `crm_win_embeddings` rows built under a stale rule. Canonical S3's job (⚠️A3); implementing it
   here would fork that decision across two specs.
 - **`crm-finance.service.ts` and `crm-journey.service.ts`** — the two sibling markers
-  (`handoff-minion-hub-2785164896`, spec approved; `handoff-minion-hub-2131866440`, spec not yet
-  written). This spec does not classify, close, or edit either.
+  (`handoff-minion-hub-2785164896`, spec approved;
+  `2026-08-20-handoff-minion-hub-2131866440-spec`, draft/pass 1 at this review). This spec does
+  not classify, close, or edit either.
 - **Reclassifying already-stored `crm_win_embeddings` rows.** Explicitly out of scope in the
   canonical spec and not reopened here.
 - **Any `.svelte`/UI file.** No UI surface exists for this rebuild trigger beyond the existing
@@ -295,12 +310,18 @@ cd minion_hub
 bun run vitest run src/server/services/crm-similarity.service.test.ts
 bun run vitest run          # full suite green
 bun run check
-rg -n -F 'TODO(handoff): rule is the module default here — S2 of 2026-08-17-hub-reserva-keyword-config-spec reads it from crm_similarity.service.ts' \
-  src/server/services/crm-similarity.service.ts || true   # (defensive; exact string is in §5 DoD)
+if rg -n -F 'TODO(handoff): rule is the module default here — S2 of 2026-08-17-hub-reserva-keyword-config-spec reads it from crm_settings' \
+  src/server/services/crm-similarity.service.ts; then
+  exit 1
+fi
 git diff --name-only <base>...HEAD
+# Apply §5's conditional scope rule: exactly two files when the resolver pre-existed; otherwise
+# every extra file must be traced to the co-delivered approved canonical/sibling spec.
 ```
 
 **Ship gate:** §5's DoD all green; the exact marker absent from `crm-similarity.service.ts` on
-the watched branch; the diff touches only the two named files; and a subsequent conclusive
-handoff sweep changes `proposals/handoff-minion-hub-1323254565.md` to `status: closed` — proposal
-status is sweep-owned, this implementation must not edit it or either index file manually.
+the watched branch; the conditional scope rule is satisfied (exactly the two slice-owned files
+when the resolver pre-existed, otherwise every extra file is traced to a co-delivered approved
+spec); and a subsequent conclusive handoff sweep changes
+`proposals/handoff-minion-hub-1323254565.md` to `status: closed` — proposal status is sweep-owned,
+this implementation must not edit it or either index file manually.
