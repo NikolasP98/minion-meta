@@ -5,12 +5,13 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: 2026-08-17-factory-orchestration-tests
 verdict: approved
 repos: [minion-factory]
 tags: [test]
 type: infra
+possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/38
 ---
 
 # First-party tests for runner orchestration
