@@ -11,6 +11,7 @@ verdict: approved
 repos: [minion_hub]
 tags: [logic, test]
 type: fix
+possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/133
 ---
 
 # SUNAT emission — thread the org's configured IGV rate
