@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-factory-1487584490
 title: Handoff marker — scripts/unstick-cron.sh (minion-factory)
-status: approved
+status: in-spec
+spawned_spec: 2026-08-20-handoff-minion-factory-1487584490-spec
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-factory]

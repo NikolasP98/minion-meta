@@ -1,9 +1,10 @@
 ---
 id: handoff-minion-hub-3530856808
 title: Handoff marker — src/server/services/crm-funnel.concurrent.integration.test.ts (minion_hub)
-status: approved
+status: in-spec
 created: 2026-08-20
 updated: 2026-08-20
+spawned_spec: 2026-08-20-handoff-minion-hub-3530856808-spec
 repos: [minion-hub]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-hub-funnel-atomic-write
