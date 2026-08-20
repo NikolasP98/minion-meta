@@ -27,13 +27,13 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-08-20)
 
-- `NikolasP98/minion_hub@master src/server/services/crm-journey.service.ts:43` — rule is the module default here — S2 of 2026-08-17-hub-reserva-keyword-config-spec reads it from crm_settings
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/crm-journey.service.ts#L43
+- `NikolasP98/minion_hub@master src/server/services/crm-journey.service.ts:44` — rule is the module default here — S2 of 2026-08-17-hub-reserva-keyword-config-spec reads it from crm_settings
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/crm-journey.service.ts#L44
 
 ## Reconciliation note 2026-08-20
 
 Confirmed same idea as `2026-08-17-hub-reserva-keyword-config` (in-spec) — its Problem cites
-this exact file (`crm-journey.service.ts:39`, close to this marker's :43) among the three
+this exact file (`crm-journey.service.ts:39`, close to this marker's :44) among the three
 triplicated 'reserva' sites; the marker itself names the spec. Sibling markers for the other
 two sites filed separately (`handoff-minion-hub-1323254565` for crm-similarity.service.ts,
 `handoff-minion-hub-2785164896` for crm-finance.service.ts) — not merged into each other
