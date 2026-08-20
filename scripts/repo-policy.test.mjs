@@ -183,6 +183,8 @@ if (process.argv.includes('--parity')) {
     const entry = registry.subprojects[cliId];
     assert.equal(entry.path, row.checkout, `minion.json ${cliId}.path`);
     assert.equal(entry.branch, row.branches.development, `minion.json ${cliId}.branch`);
+    // Exact for every row, 'none' included — the CLI must never invent a package manager.
+    assert.equal(entry.packageManager, row.packageManager, `minion.json ${cliId}.packageManager`);
     assert.equal(entry.remote.replace(/^git@[^:]+:/, '').replace(/^https?:\/\/[^/]+\//, '').replace(/\.git$/, ''), row.remote, `minion.json ${cliId}.remote`);
     assert.ok(
       agents.includes(`| ${tick}${row.id}${tick} | ${tick}${cliId}${tick} | ${tick}${row.checkout}/${tick} |`),

@@ -1,7 +1,7 @@
 ---
 id: 2026-08-20-cli-registry-package-manager-none
 title: CLI subproject registry cannot project repo-policy packageManager 'none'
-status: draft
+status: done
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-meta]
@@ -12,6 +12,15 @@ source: handoff-2026-08-18-agent-instruction-parity-and-repo-policy-spec-slice-2
 ---
 
 # CLI subproject registry cannot project repo-policy packageManager 'none'
+
+## Resolution (2026-08-20)
+
+Delivered as part of Slice 2 rather than deferred: `'none'` is now accepted by
+`SubprojectRegistryEntry.packageManager` and `minion.schema.json`, `minion.json` declares
+`plugins.packageManager: "none"`, `minion doctor` reports `ok (no package manager)` instead of
+probing a binary, `minion link` is a no-op for such a row, and the parity checker compares
+`packageManager` exactly for all six CLI rows with no exemption. The record below is the original
+statement of the problem.
 
 ## Problem
 
