@@ -137,6 +137,22 @@ try {
   assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
   reset();
 
+  // An inline link's label may itself contain balanced brackets — `[outer [inner]](dest)` is one
+  // link with label 'outer [inner]', not a bracketed non-link followed by stray text.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\nSee [outer [inner]](./missing.md) for details.\n')));
+  writeAgents(goodAgents('\nSee [outer [inner]](./LINKED.md) for details.\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  reset();
+
+  // Full reference-style links (`[text][label]` + a `[label]: dest` definition anywhere in the
+  // doc) are a valid CommonMark link form and must resolve like an inline link.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\nSee [guide][setup].\n\n[setup]: ./missing.md\n')));
+  writeAgents(goodAgents('\nSee [guide][setup].\n\n[setup]: ./LINKED.md\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  reset();
+
   // 7. An AGENTS.md that is only the include is not substantive.
   failsWith(/fixture\/AGENTS\.md: must be substantive/, () => writeAgents('@CLAUDE.md\n'));
 
@@ -151,8 +167,13 @@ try {
     writeRegistry((registry) => { delete registry.subprojects.site.commands.test; }));
   failsWith(/subprojects\.hub\.commands\.typecheck: repo-policy declares no 'typecheck' command/, () =>
     writeRegistry((registry) => { registry.subprojects.hub.commands.typecheck = 'bun run check'; }));
-  failsWith(/subprojects\.hub\.commands\.install: unknown command/, () =>
-    writeRegistry((registry) => { registry.subprojects.hub.commands.install = 'bun install'; }));
+  failsWith(/subprojects\.hub\.commands\.lint: unknown command/, () =>
+    writeRegistry((registry) => { registry.subprojects.hub.commands.lint = 'bun run lint'; }));
+  // `install` is a full CLI-projected command: an absent or drifted install command must fail too.
+  failsWith(/subprojects\.minion\.commands\.install: 'pnpm i' does not match repo-policy 'pnpm install'/, () =>
+    writeRegistry((registry) => { registry.subprojects.minion.commands.install = 'pnpm i'; }));
+  failsWith(/subprojects\.hub\.commands\.install: '\(absent\)' does not match repo-policy 'bun install'/, () =>
+    writeRegistry((registry) => { delete registry.subprojects.hub.commands.install; }));
   failsWith(/subprojects\.minion\.packageManager: 'npm' does not match repo-policy 'pnpm'/, () =>
     writeRegistry((registry) => { registry.subprojects.minion.packageManager = 'npm'; }));
   failsWith(/subprojects\.plugins\.packageManager: 'npm' does not match repo-policy 'none'/, () =>

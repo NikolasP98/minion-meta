@@ -191,7 +191,7 @@ if (process.argv.includes('--parity')) {
       `AGENTS.md project-map is missing the row for ${row.id}`
     );
     for (const [key, command] of Object.entries(row.commands)) {
-      if (key !== 'install') assert.equal(entry.commands[key], command ?? undefined, `minion.json ${cliId}.commands.${key}`);
+      assert.equal(entry.commands[key], command ?? undefined, `minion.json ${cliId}.commands.${key}`);
       if (command !== null) assert.ok(agents.includes(`${tick}${command}${tick}`), `AGENTS.md commands block is missing ${command}`);
     }
   }
