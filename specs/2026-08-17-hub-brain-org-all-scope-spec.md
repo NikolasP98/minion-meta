@@ -2,15 +2,16 @@
 id: 2026-08-17-hub-brain-org-all-scope-spec
 title: "brain-vector org_all — make the unimplemented scope unrepresentable at the hub request boundary"
 stage: spec
-status: draft
+status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 proposal: 2026-08-17-hub-brain-org-all-scope
 verdict: approved
 repos: [minion_hub]
 tags: [logic, security, test]
 type: fix
+approved_reason: "G2 verdict approved in sidecar; security tag keeps merge human-gated."
 ---
 
 # brain-vector `org_all` — narrow the hub, keep the frozen contract
