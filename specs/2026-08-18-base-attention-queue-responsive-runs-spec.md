@@ -59,6 +59,24 @@ changes the product grouping contract"):
    the Factory run history. The group therefore renders with a zero count and an explanation
    rather than being silently dropped.
 
+Pass-4 review round 1 raised three findings against `minion-base@main`, all reproduced and all
+fixed in this revision rather than argued:
+
+1. **A Factory outage was being read as a human decision (High).** `loadActiveRuns` collapses
+   unconfigured, non-OK, malformed, and thrown reads to the same `[]` a healthy empty listing
+   returns, so "approved with no run in flight" could fire during a routine runner outage and tell
+   users to start duplicate runs. The loader contract now carries availability
+   (`loadActiveRunListing`), the two run-join predicates are listing-gated, and the outage path is
+   visible instead of silent (§2 AS-IS "Active-run availability", TO-BE 1, DELTA 5).
+2. **The 128-KiB log ceiling sat behind an unbounded buffer (Medium).** `factoryFetch` does
+   `await res.text()`, so a single oversized log line was unbounded server-side no matter what the
+   endpoint capped afterwards. A byte-bounded reader (`factoryFetchBounded`) is now specified and
+   tested at the transport boundary (§2 AS-IS log capability, TO-BE 10, DELTA 8).
+3. **Common terminal Factory states had no semantic mapping (Medium).** `passed`/`failed`/`error`/
+   `canceled` are not `StatusValue`s, so the normal completed run would have rendered "Unknown
+   status". An exhaustive, compile-time-checked Factory→`StatusValue` map is now part of the
+   contract, with one additive `error` mark (§2 TO-BE 9, DELTA 6).
+
 One open product parameter for the G2 reviewer to accept or set: `ATTENTION_STALE_AFTER_MS`
 (§2 TO-BE 1). No staleness window is declared anywhere in `minion-base`, `minion-meta`, or
 `2026-08-17-sdlc-phase-gates-scoring-spec`, so this spec must declare one rather than infer it. It
@@ -143,6 +161,20 @@ projected from `minion-meta@dev` `specs/index.json` (`stage`, `status`, `pass`, 
 `proposals/index.json`. `src/lib/server/factory.ts` `loadActiveRuns()` returns `ActiveRun[]`
 (`kind`, `status`, `spec_id`, `proposal_id`, `pr_url`) filtered to `pending|queued|running`.
 
+**Active-run availability is not observable today.** `loadActiveRuns` is fail-soft by construction
+(`src/lib/server/factory.ts:39-52`, and its own comment says so): an unconfigured runner
+(`FACTORY_URL`/`FACTORY_SECRET` unset), a non-OK upstream status, malformed JSON, and a thrown
+`fetch` all collapse to the same `[]` that a healthy listing with nothing in flight produces. To
+every caller, *“the runner says no run matches”* and *“we could not ask the runner”* are the same
+value. Two callers consume it: `src/routes/kanban/+page.server.ts` and
+`src/routes/kanban/[kind]/[...ref]/+page.server.ts`. The distinction is recoverable at the
+transport boundary without any factory change: `factoryFetch` synthesizes its own 503/502
+responses stamped with the `x-factory-transport-failed` header (`TRANSPORT_FAILED`,
+`TRANSPORT_UNCONFIGURED`, `TRANSPORT_UNREACHABLE` — exported from `src/lib/server/factory-path.ts`
+precisely so that “the request never left this process” is readable by a caller), while an upstream
+non-OK status and a JSON parse failure are separately observable inside the loader. Only the
+collapse to `[]` discards them.
+
 **Warning semantics.** `src/lib/spec-warning.ts` is the single reading of the three G0 fields:
 `specWarning()` returns non-null when `possibly_shipped` or `link_review` is present;
 `canDispose()` is true only with `possibly_shipped` and no `link_review`; `disposeBlockedReason()`
@@ -173,10 +205,16 @@ age) with a `showLog(id)` toggle. The kanban loader does **not** supply Factory-
 `src/lib/server/factory.ts`; `factoryPathAllowed` in `src/lib/server/factory-path.ts` admits it via
 the `runs(\/|$)` allowlist entry after checking every segment against
 `^[\w.-]{1,150}$` (`SPEC_ID_MAX` from `src/lib/spec-warning.ts`). The bearer secret stays
-server-side and `src/hooks.server.ts` gates the route. Three gaps this spec closes: the line count
-`n` is **client-chosen**, there is no byte ceiling, no control-character handling, and no check that
-the id appears in the authenticated run listing. `showLog` also refetches on every toggle and has no
-loading, empty, error, or retry state beyond the literal string `no log yet`.
+server-side and `src/hooks.server.ts` gates the route. Five gaps this spec closes: the line count
+`n` is **client-chosen**, there is no byte ceiling, no control-character handling, no check that the
+id appears in the authenticated run listing, and — the one no endpoint-side cap can fix —
+`factoryFetch` is not a bounded reader. It returns `new Response(await res.text(), …)`
+(`src/lib/server/factory.ts:83-93`), so the whole upstream body is decoded into server memory
+before any caller sees a byte. A fixed line count bounds the number of lines, not the length of a
+line, so one very large log line is unbounded on this path, and a ceiling applied to the string
+`factoryFetch` already produced is a *response-size* bound, not a *resource* bound. `showLog` also
+refetches on every toggle and has no loading, empty, error, or retry state beyond the literal
+string `no log yet`.
 
 **Design governance.** `src/lib/design/tokens.css`, `DESIGN.md`, and `scripts/lint-design.mjs`
 are Base's own surfaces. Base's `lint:design` is a whole-tree raw-color scan over `src/` with no
@@ -208,6 +246,10 @@ rg -n "WORK_DETAIL_ADAPTER_MATRIX|Availability|MissingReason" src/lib/work-detai
 rg -n "possibly_shipped|link_review|canDispose|disposeBlockedReason" src/lib/spec-warning.ts
 rg -n "runs\\(|SEGMENT|SPEC_ID_MAX" src/lib/server/factory-path.ts
 rg -n "showLog|/api/factory/runs|setInterval" src/lib/components/FactoryRuns.svelte
+rg -n "loadActiveRuns|res.ok|await res.text\\(\\)" src/lib/server/factory.ts
+rg -n "TRANSPORT_FAILED|TRANSPORT_UNCONFIGURED|TRANSPORT_UNREACHABLE" src/lib/server/factory-path.ts
+rg -n "FACTORY_STATUS_ORDER" src/lib/board/sort.ts
+rg -n "'success'|'failure'|'cancelled'|UNKNOWN_STATUS" src/lib/components/semantic-marks.ts
 ```
 
 Path-only drift may be substituted with the recon-resolved equivalent and documented in the PR. A
@@ -218,34 +260,68 @@ that cannot be run-scoped do the same.
 ### TO-BE — target behavior and invariants
 
 1. **Attention projection.** At 320–430px, `/kanban` defaults to an attention queue evaluated over
-   the existing five-column card set, using only fields `loadGitHub` and `loadActiveRuns` already
-   return. Precedence, highest first: `decision_required`, `blocked`, `risk`, `stale`, `running`,
-   `completed`, then the residual `open`. Each item appears in exactly one group. Every predicate
-   cell is one of three states, and the implementation records which:
+   the existing five-column card set, using only fields `loadGitHub` and the active-run listing
+   already return. Precedence, highest first: `decision_required`, `blocked`, `risk`, `stale`,
+   `running`, `completed`, then the residual `open`. Each item appears in exactly one group. Every
+   predicate cell is one of four states, and the implementation records which:
 
-   - **bound** — a named board field decides it (table below).
+   - **bound** — a named board field decides it, and the fetch that supplies that field succeeded
+     (table below).
    - **not-applicable** — `WORK_DETAIL_ADAPTER_MATRIX[kind][field].support === 'unsupported'`. The
      merged adapter contract declares the source has no such fact, so the predicate is definitively
      false. This is an answer, not a gap.
    - **detail-scope** — the matrix declares the field supported but only the per-item detail loader
      fetches it. The board makes no per-item fetch and this spec adds none.
+   - **unavailable** — a bound source exists but the fetch that supplies it did not answer, so the
+     fact is *unknown*, not false. Today only one board source can be unavailable: the Factory
+     active-run listing (AS-IS above). An unavailable cell is never read as false and never
+     silently promotes an item into a group.
 
    | Group | Bound source of truth | not-applicable | detail-scope |
    |---|---|---|---|
-   | `decision_required` | spec `SpecFile.status ∈ {draft, review}`, or `status === 'approved'` with no `activeRuns[].spec_id` match, or `canDispose(specWarning(spec))`; proposal `Proposal.status ∈ {draft, review}`, or `approved` with no `activeRuns[].proposal_id` match | issue, pr, deploy (`decision: unsupported/not-applicable`) | run (`actions[0]` needs the CI-proposal join the board does not make) |
+   | `decision_required` | spec `SpecFile.status ∈ {draft, review}`, or `canDispose(specWarning(spec))`; proposal `Proposal.status ∈ {draft, review}`. **Listing-gated arms** (bound only when `activeRunListing.state === 'available'`, else `unavailable`): spec `status === 'approved'` with no `activeRuns[].spec_id` match; proposal `approved` with no `activeRuns[].proposal_id` match | issue, pr, deploy (`decision: unsupported/not-applicable`) | run (`actions[0]` needs the CI-proposal join the board does not make) |
    | `blocked` | spec `link_review` present (`disposeBlockedReason`); deploy `RepoData.reachable === false` | proposal, issue (`blockers: unsupported`) | pr (`check_runs[].conclusion`, `mergeable_state`), run (`jobs`) |
    | `risk` | deploy `RepoData.ci.status === 'failing'`; testing card whose latest completed run has `conclusion === 'failure'` (the board's own testing-column predicate) | issue (`review`, `readiness`: unsupported) | pr, run (readiness vetoes) |
    | `stale` | every kind: `now - Date.parse(Card.updatedAt) > ATTENTION_STALE_AFTER_MS` — the same per-item source timestamp `comparePhaseItems` already sorts on. Never `data.fetchedAt` | — | — |
-   | `running` | every kind: `Card.active` present (the `activeRuns` join), or run card `status !== 'completed'`, or deploy `ci.status === 'running'` | — | — |
-   | `completed` | board: structurally empty — all five columns filter to non-terminal work. Factory view: run `status ∈ {passed, failed, error, canceled}` per `FACTORY_STATUS_ORDER` | — | — |
+   | `running` | every kind: `Card.active` present (the `activeRuns` join — **listing-gated**, `unavailable` when the listing did not answer), or run card `status !== 'completed'`, or deploy `ci.status === 'running'` | — | — |
+   | `completed` | board: structurally empty — all five columns filter to non-terminal work. Factory view: run `status ∈ {passed, failed, error, canceled}` per `FACTORY_STATUS_ORDER` (`src/lib/board/sort.ts:19`) | — | — |
    | `open` | residual: a classifiable item that matched no predicate above | — | — |
 
    Classification walks the chain and takes the first **bound** predicate that is true. A
-   **detail-scope** cell is skipped, never read as false, and the card renders a visible, named
-   note ("blocked: not evaluated on the board — `check_runs[].conclusion`"). `unclassified` is
-   reserved for a genuine data defect: an absent or unparseable `updatedAt`, or a `status` outside
-   `statusValues` in `src/lib/components/semantic-marks.ts`. It renders as a separate visible group
-   with the unavailable fields named and is never coerced into a normal group.
+   **detail-scope** or **unavailable** cell is skipped, never read as false, and the card renders a
+   visible, named note ("blocked: not evaluated on the board — `check_runs[].conclusion`";
+   "decision: not evaluated — Factory run listing unreachable"). `unclassified` is reserved for a
+   genuine data defect in the item itself: an absent or unparseable `updatedAt`, or a `status`
+   outside `statusValues` in `src/lib/components/semantic-marks.ts`. It renders as a separate
+   visible group with the unavailable fields named and is never coerced into a normal group. A
+   source outage is never an item defect: an unavailable listing puts *no* item in `unclassified`
+   — it downgrades the affected cells and raises the board-level notice above.
+
+   **Active-run listing carries its own availability.** `src/lib/server/factory.ts` gains
+   `loadActiveRunListing(): Promise<ActiveRunListing>` with
+   `ActiveRunListing = { state: 'available'; runs: ActiveRun[] } | { state: 'unavailable'; reason:
+   ActiveRunUnavailableReason }` and
+   `ActiveRunUnavailableReason = 'unconfigured' | 'unreachable' | 'upstream_error' | 'malformed'`.
+   `unconfigured` and `unreachable` are read from the `x-factory-transport-failed` header
+   `factoryFetch` already sets; `upstream_error` is any other non-OK status; `malformed` is a JSON
+   parse failure or a payload whose `runs` is present but not an array. The `PLAYWRIGHT_FIXTURES`
+   short-circuit stays `{ state: 'available', runs: [] }`, since a fixture run genuinely has no
+   runner. The shipped `loadActiveRuns()` remains exported and keeps its exact current signature
+   and fail-soft semantics as a thin wrapper (`listing.state === 'available' ? listing.runs : []`),
+   so the detail loader and its tests are untouched by this spec. `src/routes/kanban/+page.server.ts`
+   calls the listing form and returns `activeRunListing` in addition to today's `activeRuns` array;
+   no existing key changes shape.
+
+   **A missing run match is a fact only when the listing answered.** The `decision_required`
+   arm “approved with no matching active run” — and the `running` arm that reads the `activeRuns`
+   join — evaluate as **bound** only when `activeRunListing.state === 'available'`. When the state
+   is `unavailable`, both cells are `unavailable`: the item is classified by its remaining bound
+   predicates (an approved spec with no other signal therefore lands in `open`, never in
+   `decision_required`), and the board renders one visible, non-dismissable notice naming the
+   reason (“Factory run listing unavailable — unreachable; run state and decision-needed counts are
+   incomplete”). This is the truthful/fail-closed predicate invariant applied to an outage: the
+   product must never tell a user to start a second run because the runner could not be reached.
+   Nothing about the unavailable path infers a run, hides an item, or blocks the queue.
 
    `ATTENTION_STALE_AFTER_MS` is a single exported constant in `src/lib/board/attention.ts`,
    proposed at 7 days: the promotion train runs weekly (Saturday 21:00), so an item untouched
@@ -300,18 +376,69 @@ that cannot be run-scoped do the same.
    repeated toggles use the successful in-page result, concurrent duplicate requests are
    suppressed, and loading/empty/error/retry states remain explicit. The existing 15s list refresh
    and `sortFactoryRuns` ordering are preserved.
+
+   **The semantic state comes from one exhaustive Factory→`StatusValue` map.** Factory's run
+   vocabulary is not Base's `Status` vocabulary: `src/lib/board/sort.ts:19` orders runs by
+   `running | queued | failed | error | passed | canceled` (and `loadActiveRuns` additionally
+   filters on `pending`), while `statusValues` in `src/lib/components/semantic-marks.ts` has no
+   `passed`, `failed`, `error`, or `canceled`. Passing a raw Factory status to `statusMark` today
+   returns the `UNKNOWN_STATUS` fallback (`semantic-marks.ts:120-125`), so the *normal completed
+   run* would render “Unknown status”. `src/lib/runs/presentation.ts` therefore owns a total map,
+   typed `Record<FactoryRunStatus, StatusValue>` where
+   `FactoryRunStatus = (typeof FACTORY_STATUS_ORDER)[number] | 'pending'` — the existing constant
+   in `sort.ts` is exported unchanged so the map is exhaustive at compile time, and a Factory state
+   added later fails `bun run check` instead of silently rendering “Unknown status”:
+
+   | Factory `status` | `StatusValue` | Rendered label · tone (from the shipped table) |
+   |---|---|---|
+   | `running` | `running` | Running · warn |
+   | `queued` | `queued` | Queued · warn |
+   | `pending` | `pending` | Pending · warn |
+   | `passed` | `success` | Success · ok |
+   | `failed` | `failure` | Failed · err |
+   | `canceled` | `cancelled` | Cancelled · muted (spelling normalization only) |
+   | `error` | `error` | Errored · err (**new member**, below) |
+
+   `error` has no truthful counterpart in the shipped vocabulary and is not a synonym for `failed`:
+   the runner records “the self-test failed” as `failed` and “the run itself could not complete” as
+   `error`, so relabelling a harness crash as a failed test would be invented meaning. This spec
+   therefore makes one **additive** change to `src/lib/components/semantic-marks.ts`: a new
+   `'error'` member of `StatusValue` with `{ label: 'Errored', symbol: '!', tone: 'err' }`. No
+   existing entry's label, symbol, or tone changes; the table's
+   `satisfies Record<StatusValue, MarkDefinition>` keeps it exhaustive, and `statusValues` — which
+   TO-BE 1 uses as the `unclassified` validity set — gains exactly that one member. A status
+   outside the map is not silently normalized: the card renders the `unknown` mark *and* names the
+   raw value (“Unrecognized run state: `<raw>`”). This map is the single reading of run state for
+   both the run card and the Factory-view `completed` predicate in TO-BE 1; no component
+   re-derives it.
 10. Log reads are authenticated server-side and go through a new bounded endpoint rather than the
     generic factory proxy. It accepts only an opaque run id matching Base's existing segment
     grammar `^[\w.-]{1,150}$` (`SPEC_ID` / `SPEC_ID_MAX`, the same bound `factoryPathAllowed`
     enforces — a narrower local bound would reject ids the transport accepts, which is the exact
     failure mode `src/lib/spec-warning.ts` documents), and only when that id is present in the
-    authenticated Factory run listing. It calls only the fixed upstream `runs/<id>/log` route via
-    `factoryFetch`, with the line count fixed **server-side**; a client-supplied line or byte bound
-    is rejected. A response is capped at the lesser of the latest 200 lines or 128 KiB after UTF-8
-    decoding; disallowed control characters are removed while tabs/newlines remain, and Svelte
-    renders the result as text. No runner credential, arbitrary upstream URL, secret value, or
-    unbounded log history is sent to the client. Closing a disclosure does not cancel or corrupt
-    another card's request.
+    authenticated Factory run listing. It calls only the fixed upstream `runs/<id>/log` route, with
+    the line count fixed **server-side**; a client-supplied line or byte bound is rejected.
+
+    **The byte ceiling is enforced while reading, not after.** `factoryFetch` cannot deliver it: it
+    buffers the whole upstream body (`await res.text()`, AS-IS above), so a cap applied to its
+    result bounds only what Base sends to the browser while a single oversized log line still
+    consumes unbounded server memory — a 200-line query bounds line count, never line length.
+    `src/lib/server/factory.ts` therefore gains a byte-bounded sibling,
+    `factoryFetchBounded(path, { maxBytes, … })`, which reuses the identical URL construction,
+    bearer header, and `factoryPathAllowed` guard as `factoryFetch` (the path stays judged in
+    exactly one place, as `factory-path.ts` requires) and then consumes `res.body` incrementally:
+    it stops at the first chunk that reaches `maxBytes`, cancels the upstream reader so the
+    remainder is never transferred, decodes with a streaming `TextDecoder` (`{ stream: true }`) so
+    a multi-byte sequence split at the boundary cannot become a replacement character, drops the
+    trailing partial line, and returns `{ text, truncated, status }`. Bytes held in memory never
+    exceed `maxBytes` plus one upstream chunk, whatever the upstream sends. A missing `res.body` —
+    the synthesized 503/502 responses — is its own case, not an empty log. The endpoint calls this
+    primitive with `maxBytes = LOG_MAX_BYTES` (128 KiB, one exported constant) and then applies the
+    200-line cap to the decoded text; disallowed control characters are removed while tabs/newlines
+    remain, and Svelte renders the result as text. Truncation is stated to the user (“showing the
+    last 200 lines, truncated at 128 KiB”), never silently implied. No runner credential, arbitrary
+    upstream URL, secret value, or unbounded log history is sent to the client. Closing a
+    disclosure does not cancel or corrupt another card's request.
 11. `PUBLIC_ATTENTION_QUEUE_V2=1` and `PUBLIC_RESPONSIVE_RUNS_V2=1` are exact opt-ins, parsed by
     pure functions following the shipped `parseWorkDetailV2` pattern. Unset, empty, `0`, `true`, or
     any other value retains the current board/runs rendering. Both flag paths consume their current
@@ -332,8 +459,8 @@ that cannot be run-scoped do the same.
 
 1. **Ad hoc board items → one exhaustive attention/stage projection and canonical URL state** —
    Slice 1; proved by table-driven unit tests for the seven-group precedence, the bound/
-   not-applicable/detail-scope state of every cell, fail-closed `unclassified` output, stable
-   serialization, mutually exclusive attention/stage modes, invalid query values, defaults,
+   not-applicable/detail-scope/unavailable state of every cell, fail-closed `unclassified` output,
+   stable serialization, mutually exclusive attention/stage modes, invalid query values, defaults,
    back/forward inputs, and zero-result projections.
 2. **Five-column mobile scroll → attention summary, grouped queue, and decision-oriented cards** —
    Slice 2; proved by component tests plus browser tests at 320, 390, and 430px for group order,
@@ -346,13 +473,32 @@ that cannot be run-scoped do the same.
 4. **Static desktop lanes → sticky counted lanes with accessible empty-stage collapse** — Slice 3;
    proved at 768, 1280, and 1920px by collapse-state tests and a scroll test comparing heading
    rectangles before/after page movement while existing menu/link/refresh tests remain green.
-5. **Seven-column Factory-view mobile table → state-first responsive run cards** — Slice 4; proved by
+5. **A Factory outage indistinguishable from “nothing is running” → an availability-carrying
+   listing** — Slice 1; `loadActiveRunListing` replaces the silent collapse to `[]`, proved by
+   loader tests covering unconfigured, non-OK upstream status, malformed JSON, a non-array `runs`
+   payload, and a thrown `fetch` (each asserting its own `reason`), by a `loadActiveRuns` wrapper
+   test proving the shipped signature and fail-soft behavior are unchanged, and by classifier tests
+   proving an approved spec/proposal with no matching run is `decision_required` only when the
+   listing is available and lands in `open` with a named note plus the board-level notice when it
+   is not.
+6. **Seven-column Factory-view mobile table → state-first responsive run cards** — Slice 4; proved by
    component/browser tests at 320–430px and desktop regression checks for state, stage, elapsed,
-   work-item links, ordering, empty state, and absence of page overflow.
-6. **Client-bounded proxy log toggle → bounded, authenticated, per-run lazy logs** — Slice 4;
+   work-item links, ordering, empty state, and absence of page overflow, plus a table-driven test
+   asserting every Factory status in `FACTORY_STATUS_ORDER` (and `pending`) renders its mapped
+   label and tone rather than the “Unknown status” fallback, an unrecognized status renders the
+   unknown mark with the raw value named, and every pre-existing `Status` fixture is unchanged by
+   the additive `error` member.
+7. **Client-bounded proxy log toggle → bounded, authenticated, per-run lazy logs** — Slice 4;
    proved by server tests for auth/id validation/listing membership/server-fixed bounds/upstream
    failure and browser request-count assertions proving zero requests before expansion, one request
    on first expansion, cache reuse, duplicate suppression, explicit retry, and escaped hostile text.
+8. **Whole-body buffering at the factory transport → a byte-bounded reader** — Slice 4;
+   `factoryFetchBounded` proved by transport tests that feed a synthetic `ReadableStream` far
+   larger than `LOG_MAX_BYTES` — including a single line with no newline — and assert total bytes
+   read never exceed the ceiling plus one chunk, that the upstream reader was canceled, that
+   `truncated` is reported, that a multi-byte character split across the boundary decodes without a
+   replacement character, and that a body-less synthesized 503/502 is handled as a transport error
+   rather than an empty log.
 
 ## 3. Approach — vertical slices
 
@@ -373,11 +519,18 @@ for "what needs me, in which stage, under which shareable filters?"
 - `src/lib/board/parse-feature-flag.ts` (new — pure, mirrors `src/lib/work-detail/parse-feature-flag.ts`)
 - `src/lib/board/feature-flag.ts` (new — reads `$env/dynamic/public`, mirrors the work-detail pair)
 - `src/lib/board/parse-feature-flag.test.ts` (new)
+- `src/lib/server/factory.ts` (add `loadActiveRunListing` + its types; `loadActiveRuns` stays
+  exported with its current signature as a wrapper — no other export changes)
+- `src/lib/server/factory.test.ts` (new — the loader's availability matrix)
+- `src/routes/kanban/+page.server.ts` (call the listing form; return `activeRunListing` alongside
+  the existing `activeRuns` key)
 - `.env.example` (both flags, with their off-values and rollback note)
-- `src/routes/kanban/+page.svelte` (flag boundary and projected data wiring only)
+- `src/routes/kanban/+page.svelte` (flag boundary, projected data wiring, and the listing-unavailable
+  notice)
 
-`src/routes/kanban/+page.server.ts` is touched only if recon shows a bound field is not already in
-its return value; today every field in the TO-BE 1 table is.
+Every other bound field in the TO-BE 1 table is already in the board loader's return value; the
+loader change is confined to adding availability, and `src/routes/kanban/[kind]/[...ref]/+page.server.ts`
+is deliberately not touched (it keeps the unchanged `loadActiveRuns` wrapper).
 
 **Machine-checkable definition of done:**
 
@@ -389,6 +542,18 @@ its return value; today every field in the TO-BE 1 table is.
   `ATTENTION_STALE_AFTER_MS` boundary on both sides, running via `activeRuns` join and via run
   status, an issue that falls to `open`, a `completed` Factory-view run, and an unparseable
   `updatedAt`.
+- `loadActiveRunListing` returns `state: 'unavailable'` with the correct `reason` for each of:
+  unset `FACTORY_URL`/`FACTORY_SECRET` (`unconfigured`, read from `x-factory-transport-failed`), a
+  thrown/refused `fetch` (`unreachable`), any other non-OK upstream status (`upstream_error`), and
+  invalid JSON or a non-array `runs` (`malformed`); it returns `state: 'available'` with the
+  `pending|queued|running` filter applied on the healthy path, including the healthy-but-empty
+  case. `loadActiveRuns()` still resolves to `ActiveRun[]` and still yields `[]` on every one of
+  those failures, proved against the same fixtures.
+- No classifier input is a raw array: a test asserts that with an unavailable listing, an approved
+  spec and an approved proposal with no matching run are **not** `decision_required` (they fall to
+  `open`), that their decision and `running` cells report `unavailable` with the reason named, that
+  no item is moved to `unclassified` by the outage, and that the board-level notice is present.
+  The mirrored available-listing fixtures still classify as `decision_required`.
 - `ATTENTION_STALE_AFTER_MS` is exported once; a test asserts no other module defines or overrides
   a staleness bound, and that `data.fetchedAt` is never an input to the classifier.
 - Query parse/serialize round trips are idempotent and stable; duplicate, unknown, empty, and
@@ -399,7 +564,7 @@ its return value; today every field in the TO-BE 1 table is.
   `0`, `true`, and malformed values remain off, and `.env.example` documents rollback.
 - Existing repository-selection behavior (`src/lib/state/filter.svelte.ts`), refreshed-at behavior,
   and loader result shape remain green with the flag off; `src/lib/board/sort.test.ts` stays green.
-- `bun test src/lib/board` and `bun run check` exit 0 with no warnings.
+- `bun test src/lib/board`, `bun test src/lib/server`, and `bun run check` exit 0 with no warnings.
 
 ### Slice 2 — attention queue and bounded-action WorkItemCard (6–8 h)
 
@@ -473,31 +638,57 @@ view and selectively inspect its logs without downloading every run's history.
 
 **Exact files to touch:**
 
-- `src/lib/runs/presentation.ts` (new)
-- `src/lib/runs/presentation.test.ts` (new)
+- `src/lib/runs/presentation.ts` (new — owns the exhaustive Factory→`StatusValue` map of TO-BE 9)
+- `src/lib/runs/presentation.test.ts` (new — the mapping matrix, one row per Factory status)
+- `src/lib/board/sort.ts` (export the existing `FACTORY_STATUS_ORDER` constant; no other change,
+  `sort.test.ts` stays green)
+- `src/lib/components/semantic-marks.ts` (additive only: the new `'error'` `StatusValue` member)
+- `src/lib/components/Status.test.ts` (shipped — its literal `statusFixtures` table gains exactly
+  the one `error` row; every other row stays byte-identical)
 - `src/lib/components/runs/RunCard.svelte` (new)
 - `src/lib/components/runs/RunLogDisclosure.svelte` (new — composes the shipped `Disclosure`)
 - `src/lib/components/runs/run-card.test.ts` (new)
 - `src/lib/components/FactoryRuns.svelte` (confirmed shipped path; it owns the Factory-view fetch,
   so the flag boundary and card/table switch live here — the kanban loader is not involved)
 - `src/lib/board/feature-flag.ts` and `.env.example` (add `PUBLIC_RESPONSIVE_RUNS_V2`)
+- `src/lib/server/factory.ts` (add `factoryFetchBounded` + `LOG_MAX_BYTES`; `factoryFetch` keeps
+  its current behavior and callers)
+- `src/lib/server/factory-bounded.test.ts` (new — the byte-ceiling matrix)
 - `src/routes/api/runs/[id]/logs/+server.ts` (new; authenticated same-origin endpoint that calls
-  `factoryFetch('runs/<id>/log', …)` with server-fixed bounds — deliberately distinct from the
-  generic `/api/factory/[...path]` proxy, which forwards a client-chosen `n`)
+  `factoryFetchBounded('runs/<id>/log', { maxBytes: LOG_MAX_BYTES, … })` with server-fixed bounds —
+  deliberately distinct from the generic `/api/factory/[...path]` proxy, which forwards a
+  client-chosen `n` and buffers the whole body)
 - `src/routes/api/runs/[id]/logs/logs.test.ts` (new)
 - `tests/e2e/runs-responsive.spec.ts` (new)
 
 **Machine-checkable definition of done:**
 
+- A table-driven test maps every member of `FACTORY_STATUS_ORDER` plus `pending` to its
+  `StatusValue` and asserts the rendered label and tone match TO-BE 9 — in particular that
+  `passed`, `failed`, `error`, and `canceled` never render “Unknown status”. An unrecognized status
+  renders the `unknown` mark **and** the raw value. Removing a row from the map, or adding a
+  Factory state without one, fails `bun run check` (the map is typed `Record<FactoryRunStatus,
+  StatusValue>`). `src/lib/components/Status.test.ts` proves the `error` member is purely additive:
+  every pre-existing status fixture is unchanged and `statusValues` grows by exactly one.
+- `factoryFetchBounded` never holds more than `LOG_MAX_BYTES` plus one chunk: a synthetic
+  `ReadableStream` of several MiB — and a variant that is one newline-free line — is bounded, the
+  reader is canceled, `truncated` is true, and total bytes pulled are asserted. A UTF-8 sequence
+  split across the ceiling decodes without `U+FFFD`. A body-less synthesized 503/502 is reported as
+  a transport error, not an empty log. A body under the ceiling is returned whole with
+  `truncated: false`. `factoryFetch`'s own tests and callers are unaffected.
 - At 320/390/430px on `/kanban?view=factory` the seven-column table is absent and each fixture card
   exposes state, stage, elapsed value, resolvable internal work-item links, and a labeled log
   disclosure without page overflow. Desktop retains an efficient table or enhanced wide layout with
   the same data and `sortFactoryRuns` ordering.
 - The log endpoint rejects unauthenticated requests, ids outside `^[\w.-]{1,150}$`, ids absent from
   the authenticated run listing, arbitrary upstream targets, and any client-supplied line/byte
-  bound. It enforces the 200-line/128-KiB ceiling server-side and maps timeout, not-found, and
-  upstream failure — including `factoryFetch`'s 503 `unconfigured` and 502 `unreachable`
-  synthesized responses — to non-secret error responses.
+  bound. It enforces the 200-line/128-KiB ceiling server-side — the byte half through
+  `factoryFetchBounded`, asserted by a test that the endpoint never calls `factoryFetch` for log
+  reads — states truncation to the user, and maps timeout, not-found, and upstream failure —
+  including the 503 `unconfigured` and 502 `unreachable` synthesized responses — to non-secret
+  error responses. Membership is checked against `loadActiveRunListing`; an unavailable listing
+  answers with an explicit “cannot verify this run right now” error rather than serving or denying
+  on a guess.
 - Browser request counts prove no log request before expansion, one request on first expansion,
   no duplicate while pending, successful cache reuse, and one new request after explicit retry
   from failure. `<script>` and ANSI/control-character fixtures render as inert bounded text.
@@ -515,8 +706,10 @@ or Paperclip adapter. `repos: [minion-base]` is intentionally narrow.
 - **Minion Factory read surface — resolved:** the authenticated, run-scoped log capability is
   confirmed in use today (`FactoryRuns.showLog` → `/api/factory/runs/<id>/log?n=80` →
   `factoryFetch` → upstream `runs/:id/log`, admitted by the `runs(\/|$)` allowlist entry). Base
-  adds only a narrower same-origin endpoint that fixes the bounds server-side and checks listing
-  membership; it changes no factory endpoint and exposes no factory credential. Nothing about this
+  adds only a narrower same-origin endpoint that fixes the bounds server-side, reads the body through
+  a byte-bounded reader, and checks listing membership; it changes no factory endpoint, requests no
+  new factory capability, and exposes no factory credential. The byte ceiling is enforced entirely
+  inside Base, so it needs nothing from the runner. Nothing about this
   slice requires a factory change, so the pass-3 stop-for-revision guard is discharged rather than
   carried forward.
 - **WorkDetail destination — resolved:** all six board card kinds have internal detail routes
@@ -572,6 +765,14 @@ Memory shaping these decisions:
   preferences beyond URL state, or server-side user preference storage.
 - Redesigning the detail page, adding a second card action, inventing evidence/risk/action copy,
   or treating an unknown state as completed/safe.
+- **Known residual, deliberately not fixed here:** `src/routes/kanban/[kind]/[...ref]/+page.server.ts`
+  offers its recovery `start dev run` gate on the same "approved with no `ActiveRun` match"
+  condition and keeps the fail-soft `loadActiveRuns` wrapper, so it inherits the identical
+  false-positive during a Factory outage. This spec fixes the board classifier only; the detail
+  gate is a one-call migration to `loadActiveRunListing` and must be filed as its own proposal
+  (`proposals/`) rather than folded into these slices, per the open-items ledger rule in the root
+  `AGENTS.md`. Nothing in this spec makes that residual worse — the wrapper it depends on is
+  unchanged.
 - Replacing desktop lanes with the mobile queue, removing existing stage menus, or altering route
   URLs. No gradients, glass, decorative status color, raw colors outside `tokens.css`, or hub/site
   token imports.
@@ -584,7 +785,9 @@ From a clean Minion Base worktree based on `main`, with all four slices present:
 bun install
 bunx svelte-kit sync
 bun test src/lib/board
+bun test src/lib/server
 bun test src/lib/components/board src/lib/components/runs
+bun test src/lib/components/Status.test.ts
 bun test src/lib/runs
 bun test 'src/routes/api/runs'
 bun run check
@@ -619,4 +822,9 @@ clipped or page-overflowing content.
 Attach viewport screenshots, axe results with no serious or critical violations, request-count
 evidence, sticky-position measurements, and the unpiped command transcripts to the PR. Any missing
 log authorization, dependency mismatch, invented evidence, card mutation, inaccessible stage, or
-horizontal overflow is a release blocker.
+horizontal overflow is a release blocker. So is any of the three round-1 regressions: a
+`decision_required` classification produced while the active-run listing is unavailable, a log read
+that reaches `factoryFetch` instead of the byte-bounded reader, and a Factory run state rendering
+as “Unknown status”. Include a fault-injected pass with `FACTORY_URL` unset, proving the board
+still renders, the outage notice is visible, and no approved item is presented as needing a
+decision.
