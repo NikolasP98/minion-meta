@@ -46,6 +46,7 @@ try {
   cpSync(join(root, 'repo-policy.yaml'), join(fixture, 'repo-policy.yaml'));
   cpSync(join(root, 'minion.json'), join(fixture, 'minion.json'));
   writeFileSync(join(fixture, 'LINKED.md'), '# Linked\n');
+  writeFileSync(join(fixture, 'LINKED DOC.md'), '# Linked with a space in its name\n');
   const writeAgents = (text) => writeFileSync(join(fixture, 'AGENTS.md'), text);
   const writeClaude = (text) => writeFileSync(join(fixture, 'CLAUDE.md'), text);
   const writeRegistry = (mutate) => {
@@ -112,9 +113,20 @@ try {
   assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
   reset();
 
-  // 6. Broken includes and links.
+  // 6. Broken includes and links, in both CommonMark destination forms.
   failsWith(/fixture\/AGENTS\.md: include '@MISSING\.md' does not resolve/, () => writeAgents(goodAgents('\n@MISSING.md\n')));
   failsWith(/fixture\/AGENTS\.md: link '\.\/gone\.md' does not resolve/, () => writeAgents(goodAgents('\nSee [gone](./gone.md).\n')));
+  // An angle-bracket destination is a real link: a space in the path must not buy an exemption.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing file\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\nSee [gone](<./missing file.md>).\n')));
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing file\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\nSee [gone](<./missing file.md> "with a title").\n')));
+  failsWith(/fixture\/AGENTS\.md: link '\.\/gone%\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\nSee [gone](./gone%.md) — an undecodable escape is still a local path.\n')));
+  // …and an angle-bracket destination that does resolve passes, percent-escapes included.
+  writeAgents(goodAgents('\nSee [spaced](<./LINKED DOC.md>) and [escaped](./LINKED%20DOC.md).\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  reset();
 
   // 7. An AGENTS.md that is only the include is not substantive.
   failsWith(/fixture\/AGENTS\.md: must be substantive/, () => writeAgents('@CLAUDE.md\n'));
@@ -134,6 +146,8 @@ try {
     writeRegistry((registry) => { registry.subprojects.hub.commands.install = 'bun install'; }));
   failsWith(/subprojects\.minion\.packageManager: 'npm' does not match repo-policy 'pnpm'/, () =>
     writeRegistry((registry) => { registry.subprojects.minion.packageManager = 'npm'; }));
+  failsWith(/subprojects\.plugins\.packageManager: 'npm' does not match repo-policy 'none'/, () =>
+    writeRegistry((registry) => { registry.subprojects.plugins.packageManager = 'npm'; }));
   failsWith(/subprojects\.minion\.remote: '[^']*' does not normalize to repo-policy remote 'NikolasP98\/minion-ai'/, () =>
     writeRegistry((registry) => { registry.subprojects.minion.remote = 'git@github.com:NikolasP98/minion.git'; }));
   failsWith(/subprojects\.site: is required/, () =>
@@ -142,6 +156,9 @@ try {
     writeRegistry((registry) => { registry.subprojects.docs = registry.subprojects.hub; }));
   failsWith(/minion\.json: must be valid JSON/, () => writeFileSync(join(fixture, 'minion.json'), '{ not json'));
   failsWith(/minion\.json: is required/, () => rmSync(join(fixture, 'minion.json')));
+
+  // 'none' is projected as itself: the CLI registry never invents a package manager.
+  assert.equal(JSON.parse(readFileSync(join(root, 'minion.json'), 'utf8')).subprojects.plugins.packageManager, 'none');
 
   // Every stable CLI key is asserted, so a silently dropped row cannot pass.
   assert.deepEqual(Object.keys(cliMappings).sort(), ['hub', 'minion', 'paperclip', 'pixel-agents', 'plugins', 'site']);

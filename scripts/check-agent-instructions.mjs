@@ -28,7 +28,12 @@ const cliCommandKeys = ['dev', 'build', 'test', 'check', 'typecheck'];
 const memoryBlockPattern = /^<claude-mem-context\b/i;
 const headingPattern = /^#{1,6}\s+\S/;
 const includePattern = /^@[^\s@]\S*$/;
-const linkPattern = /\[[^\]]*\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
+// CommonMark inline links. The destination is either `<...>` — which may hold spaces — or a run of
+// non-whitespace characters with balanced parentheses; either form may carry an optional title, and
+// both admit backslash-escaped ASCII punctuation. Both forms must be parsed: matching only the
+// second would let a real link such as `[x](<./missing file.md>)` slip past the broken-link gate.
+const linkPattern = /\[[^\]]*\]\(\s*(?:<((?:[^<>\n\\]|\\[!-\/:-@[-`{-~]|\\\\)*)>|((?:[^\s()\\]|\\[!-\/:-@[-`{-~]|\((?:[^\s()\\]|\\[!-\/:-@[-`{-~])*\))+))(?:\s+(?:"[^"]*"|'[^']*'|\([^()]*\)))?\s*\)/g;
+const escapePattern = /\\([!-\/:-@[-`{-~])/g;
 const separatorPattern = /^:?-+:?$/;
 
 function readIfFile(path) {
@@ -50,13 +55,28 @@ function includeTargets(lines) {
   return lines.map((line) => line.trim()).filter((line) => includePattern.test(line)).map((line) => line.slice(1));
 }
 
+/** Percent-decode a destination, tolerating a literal '%' that is not a valid escape. */
+function decodeTarget(target) {
+  try {
+    return decodeURI(target);
+  } catch {
+    return target;
+  }
+}
+
+/**
+ * Local link destinations, normalized: backslash escapes resolved, percent-escapes decoded, the
+ * fragment dropped, surrounding whitespace trimmed. Absolute URLs and protocol-relative links are
+ * skipped — only paths this checkout can resolve are returned.
+ */
 function linkTargets(lines) {
   const targets = [];
   for (const line of lines) {
     for (const match of line.matchAll(linkPattern)) {
-      const target = match[1].split('#')[0];
+      const raw = (match[1] ?? match[2]).replace(escapePattern, '$1').trim();
+      const target = raw.split('#')[0].trim();
       if (target === '' || target.startsWith('//') || /^[a-z][a-z0-9+.-]*:/i.test(target)) continue;
-      targets.push(decodeURI(target));
+      targets.push(decodeTarget(target));
     }
   }
   return targets;
@@ -253,16 +273,10 @@ export function checkCliRegistry(rootDir, policy) {
     if (entry.path !== row.checkout) errors.push(`${path2}.path: '${entry.path}' does not match repo-policy checkout '${row.checkout}'`);
     if (normalizeRemote(entry.remote) !== row.remote) errors.push(`${path2}.remote: '${entry.remote}' does not normalize to repo-policy remote '${row.remote}'`);
     if (entry.branch !== row.branches.development) errors.push(`${path2}.branch: '${entry.branch}' does not match repo-policy development branch '${row.branches.development}'`);
-    // TODO(handoff): repo-policy models "this repository has no package manager" as `none`, but the
-    // CLI cannot project that value — `SubprojectRegistryEntry.packageManager` in @minion-stack/env
-    // and the enum in packages/cli/minion.schema.json only accept pnpm|bun|npm|yarn. For a `none`
-    // row we therefore assert the weaker invariant (policy declares no runnable command, so the CLI
-    // entry declares none either) and leave `packageManager` unchecked. Fix tracked in
-    // proposals/2026-08-20-cli-registry-package-manager-none.md.
-    if (row.packageManager === 'none') {
-      if (cliCommandKeys.some((key) => row.commands[key] !== null)) errors.push(`${path2}.packageManager: repo-policy declares 'none' yet also declares runnable commands`);
-    } else if (entry.packageManager !== row.packageManager) {
-      errors.push(`${path2}.packageManager: '${entry.packageManager}' does not match repo-policy '${row.packageManager}'`);
+    if (entry.packageManager !== row.packageManager) errors.push(`${path2}.packageManager: '${entry.packageManager}' does not match repo-policy '${row.packageManager}'`);
+    // A 'none' row must also be self-consistent: no package manager means no runnable command.
+    if (row.packageManager === 'none' && cliCommandKeys.some((key) => row.commands[key] !== null)) {
+      errors.push(`${path2}.packageManager: repo-policy declares 'none' yet also declares runnable commands`);
     }
     const commands = entry.commands;
     if (!commands || typeof commands !== 'object' || Array.isArray(commands)) { errors.push(`${path2}.commands: must be an object`); continue; }
