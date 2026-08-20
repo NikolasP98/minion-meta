@@ -2,15 +2,16 @@
 id: 2026-08-18-site-vendored-tgz-untracked-spec
 title: "Vendored design-tokens tgz untracked — verify the shipped fix and close"
 stage: spec
-status: approved
+status: done
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: 2026-08-17-site-vendored-tgz-untracked
 verdict: approved
 repos: [minion_site]
 tags: [deps, infra]
 type: infra
+done_reason: "Verification-only spec verified on site dev 940f0e6: tgz committed (blob 37fae618), package.json+bun.lock reference it, .gitignore clean, fresh-clone bun install green. Closed PRs were the correct outcome."
 ---
 
 # Vendored design-tokens tgz untracked
