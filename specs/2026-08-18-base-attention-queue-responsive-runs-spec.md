@@ -2,7 +2,7 @@
 id: 2026-08-18-base-attention-queue-responsive-runs-spec
 title: Base UI-004/011 — mobile attention queue, focused stages, responsive runs
 stage: spec
-status: review
+status: approved
 pass: 5
 created: 2026-08-18
 updated: 2026-08-20
@@ -11,6 +11,7 @@ verdict: approved
 repos: [minion-base]
 relationship: depends-on
 related: [2026-08-18-minion-base-mobile-hitl-ux-plan, 2026-08-18-base-ui-primitives-and-shell-spec, 2026-08-18-base-workdetail-summary-first-spec]
+approved_reason: "Pass-5 G2 by orchestrator: pass-4 FAIL findings resolved (membership now the full run-history listing w/ availability discrimination; outage-vs-decision rules were already fixed in the fix round)."
 ---
 
 # Base UI-004/011 — mobile attention queue, focused stages, responsive runs
