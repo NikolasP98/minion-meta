@@ -2,15 +2,16 @@
 id: 2026-08-17-factory-providers-put-harness-check-spec
 title: "PUT /providers — reject provider names no harness implements"
 stage: spec
-status: approved
+status: done
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 proposal: 2026-08-17-factory-providers-put-harness-check
 verdict: approved
 repos: [minion-factory]
 tags: [logic]
 type: fix
+done_reason: "Verified complete on main: single validateRegistry for PUT+load with loud fallback, harness-drift test parsing run.sh/spec.sh case arms — subagent verification 2026-08-20."
 ---
 
 # PUT /providers — reject provider names no harness implements
