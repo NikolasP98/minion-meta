@@ -2,15 +2,16 @@
 id: 2026-08-17-hub-dead-mirrors-cleanup-spec
 title: "Delete two satisfied-TODO dead mirrors in hub — prove equivalence before deleting, not after"
 stage: spec
-status: draft
+status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 proposal: 2026-08-17-hub-dead-mirrors-cleanup
 verdict: approved
 repos: [minion_hub]
 tags: [logic, data, test]
 type: fix
+approved_reason: "G2 verdict approved in sidecar; data tag keeps merge human-gated."
 ---
 
 # Delete two satisfied-TODO dead mirrors in hub
