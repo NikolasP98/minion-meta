@@ -5,7 +5,7 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: 2026-08-17-factory-memory-governance
 verdict: approved
 repos: [minion-factory]
@@ -13,6 +13,7 @@ tags: [security, infra, data, logic, test]
 type: infra
 relationship: extends
 related: [2026-08-17-cloud-agent-memory-sync-spec, 2026-08-18-sdlc-transformation-roadmap, 2026-08-17-factory-capability-separation, 2026-08-18-factory-worker-containment-spec, 2026-08-18-factory-durable-state-outbox-spec]
+possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/32
 ---
 
 # Govern factory memory as evidence, not instruction
