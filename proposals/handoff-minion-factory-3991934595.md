@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-factory-3991934595
 title: Handoff marker — agent/lib/handoff.test.sh (minion-factory)
-status: draft
+status: closed
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-factory]
 tags: [handoff-sweep]
+closed_reason: "Self-referential: handoff.test.sh is the sweep test suite matching its own pattern strings."
 ---
 
 # Handoff marker — agent/lib/handoff.test.sh
