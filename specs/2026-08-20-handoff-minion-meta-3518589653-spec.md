@@ -2,13 +2,13 @@
 id: 2026-08-20-handoff-minion-meta-3518589653-spec
 title: "Remove the onEventError TODO(handoff) marker in packages/shared/src/gateway/client.ts"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-meta]
 proposal: handoff-minion-meta-3518589653
-verdict: pending
+verdict: approved
 relationship: depends-on
 related: [2026-08-19-gateway-client-error-hook-consumer-adoption-spec, 2026-08-17-gateway-client-error-hook-consumer-adoption, 2026-08-17-pkg-gateway-client-onevent-errors-spec]
 type: fix
@@ -30,8 +30,9 @@ handoff-ledger sweep against a real `TODO(handoff):` comment in repository sourc
 The proposal's own frontmatter names a `duplicate_candidate`:
 `2026-08-17-gateway-client-error-hook-consumer-adoption`, and its body's 2026-08-20 reconciliation
 note observes the two describe the same underlying gap but declines to merge them ("canonical is
-in-spec, off-limits to edit"). This spec performs the classification the note stopped short of and
-scopes the one piece of work neither existing artifact currently owns: deleting the comment itself.
+in-spec, off-limits to edit"). This spec records the relationship recommendation the note stopped
+short of and scopes the one piece of work neither existing artifact currently owns: deleting the
+comment itself.
 
 ## 1. Relationship recommendation
 
@@ -58,8 +59,9 @@ scopes the one piece of work neither existing artifact currently owns: deleting 
   *wrote* the comment (its lines 419/442 record "`packages/shared/src/gateway/client.ts` | S1, S2,
   S3 | ... JSDoc; one `TODO(handoff):`"), per the AGENTS.md open-items ledger clause requiring a
   paired in-code marker + proposal for any open end left at handoff. Named here only for provenance;
-  it does not gate this spec because its own scope closed when S1 landed — it never claimed
-  ownership of the marker's *removal*, only its authorship.
+  it does not gate this spec because the source option, handoff marker, and consumer-adoption
+  proposal it owns are already present on `dev`. It never claimed ownership of the marker's
+  *removal*, only its authorship and the release/adoption handoff now owned by the dependent spec.
 
 No existing spec or proposal already covers deleting this comment — every artifact that touches
 this exact text either authored it or explicitly declines to edit `packages/shared/**`. This is new,
@@ -77,19 +79,25 @@ Verified in this checkout and against GitHub as of 2026-08-20:
   immediately above the `onEventError?: (err: unknown, frame: EventFrame) => void | Promise<void>;`
   declaration (line 38). The JSDoc block above it (lines 28-35) documents the hook's contract and is
   untouched by this spec.
-- **The claim in the comment is still factually true today**, i.e. this is not a stale marker that
-  merely forgot to get deleted after the real fix shipped:
+- This is the **only** `TODO(handoff):` marker currently in `client.ts` (`rg -n
+  'TODO\(handoff\)' packages/shared/src/gateway/client.ts` returns only line 36). The lifecycle-hook
+  markers cited by the 2026-08-19 adoption spec have since been removed; the corresponding
+  `onReconnectError` and `onSocketError` options are present in the current checkout.
+- **The release-side prerequisite described by the comment is still unmet today**, so this is not a
+  marker that may be deleted merely because the shared-client code landed:
   - `gh api repos/NikolasP98/minion-meta/contents/packages/shared/src/gateway/client.ts?ref=main`
     (raw) contains no `onEventError` match — the hook is still only on `dev` (via PR #29, merged
     2026-08-19), not promoted to `main`.
   - `gh pr list --repo NikolasP98/minion-meta --state merged --json number,title,mergedAt -q
-    '.[] | select(.title=="chore: version packages")'` lists only `#18` (merged 2026-08-13, an
-    unrelated shared-package change), `#17`, `#15` — no Version-Packages PR has merged after `#29`.
+    '.[] | select(.title=="chore: version packages")'` shows `#18` (merged 2026-08-13, an unrelated
+    shared-package change) as the most recent Version-Packages PR — none has merged after `#29`.
     Per the parent onevent-errors spec's own AS-IS (§2), publishing is two merges to `main`; neither
     has happened. `@minion-stack/shared` on npm therefore still does not export `onEventError`.
-  - Since the release has not published, none of `minion_hub`, `minion_site`, or `paperclip-minion`
-    can have bumped to it yet (the adoption spec's own S0 is a hard gate for exactly this reason).
-    "Hub, site and paperclip still run the console.error default and are unbumped" is accurate.
+  - The three consumer repos are absent from this checkout, so their current dependency pins and
+    reporting postures are **unverified here**; an unpublished registry version proves they cannot
+    yet satisfy the adoption spec's published-version DoD, but it does not by itself prove every
+    local consumer detail asserted by the comment. The marker must remain because its tracked
+    adoption proposal is still `status: in-spec` and its required evidence is incomplete.
 - The full remediation path is already fully specified and approved
   (`2026-08-19-gateway-client-error-hook-consumer-adoption-spec`, S0 → S1/S2/S3 → S4), but as shown
   in §1, none of its five slices edits `client.ts`. Nothing in the current spec graph currently
@@ -111,18 +119,24 @@ that spec's own §8 verification step 3), the two-line `// TODO(handoff):` comme
    containment, never-throw reporter) are byte-identical before and after this edit.
 3. No changeset is authored for this change — it is a comment-only, non-functional edit; nothing in
    `dist/` or the published `.d.ts` differs.
-4. This spec does not itself perform, verify, or re-litigate the hub/site/paperclip adoption work —
-   that is entirely `2026-08-19-gateway-client-error-hook-consumer-adoption-spec`'s job. This spec
-   only reads that work's completion evidence as a gate.
+4. This spec does not perform or re-litigate the hub/site/paperclip adoption work — that is entirely
+   `2026-08-19-gateway-client-error-hook-consumer-adoption-spec`'s job. This spec verifies only that
+   work's recorded completion evidence as a gate.
+5. S0 must still find exactly the one expected marker block. If another `TODO(handoff):` marker is
+   added to `client.ts` before implementation, stop and route that marker through its own ledger
+   work; S1 must not delete it to satisfy a whole-file zero-count check. This preserves the
+   file-granularity sweep contract recorded in
+   `/memory/MINION/factory/2026-08-20-933c20e9.md` and the marker-plus-proposal constraint in
+   `/memory/MINION/sdlc-board-triage-and-phase-gates.md` ("Handoff clause").
 
 ## 4. DELTA
 
 | # | Transition | Slice | Proving test / evidence |
 |---|---|---|---|
-| 1 | The adoption spec's full lifecycle (S0-S4) is confirmed complete, not merely approved/in-progress | S0 | `proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md` reads `status: done`, contains three `https://github.com/.../pull/...` links, and no `unverified — repo absent` text remains |
-| 2 | The two-line `TODO(handoff):` comment is removed from `client.ts` | S1 | `grep -c 'TODO(handoff)' packages/shared/src/gateway/client.ts` → 0; `git diff` for the commit touches only lines 36-37 (deletion) in that one file |
-| 3 | Package build/typecheck is unaffected by the comment removal | S1 | `pnpm --filter @minion-stack/shared build` and `pnpm --filter @minion-stack/shared typecheck` (or root `pnpm run build-all` / `typecheck-all` scoped to the package) succeed, matching pre-edit output |
-| 4 | This handoff proposal's own Definition of Done is met and the sweep can auto-close it | — (sweep-owned, not a slice) | proposal text itself: "the sweep closes this proposal automatically once the file carries no more markers" — no manual proposal-status edit is this spec's job beyond what the pipeline stage always requires |
+| 1 | The adoption spec's full lifecycle (S0-S4) is confirmed complete, not merely approved/in-progress, and the expected marker is still the file's only handoff marker | S0 | the adoption proposal's frontmatter is exactly `status: done`; its three named consumer rows contain three distinct merged consumer PRs; no `unverified — repo absent` remains; `client.ts` contains exactly the expected marker block and no second marker |
+| 2 | The two-line `TODO(handoff):` comment is removed from `client.ts` | S1 | the branch diff against its base contains exactly 0 additions/2 deletions in `packages/shared/src/gateway/client.ts`, and the deleted lines are the expected marker block |
+| 3 | Package build/typecheck is unaffected by the comment removal | S1 | `pnpm --filter @minion-stack/shared build` and `pnpm --filter @minion-stack/shared typecheck` succeed |
+| 4 | This handoff proposal's own Definition of Done is met and the sweep closes it after the deletion lands | — (post-merge sweep-owned, not a slice) | after the merged change is visible on the watched branch and a conclusive rescan runs, `proposals/handoff-minion-meta-3518589653.md` reads `status: closed`; no manual proposal-status edit is part of S1 |
 
 S0 and S1 are strictly sequential — S1 must not start until S0's evidence is gathered, because
 deleting the comment before the underlying work is real would make the ledger silently lie (an open
@@ -148,23 +162,48 @@ is still true. Mirrors the discipline the adoption spec's own S0 uses for the np
 
 ```bash
 cd /home/agent/work
-rg -n 'status:' proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md
-#   → must read "status: done" (not approved/in-spec/review)
-rg -n 'unverified — repo absent' proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md
-#   → must have zero matches
-rg -n 'https://github\.com/.*/pull/' proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md
-#   → must find exactly three links, one per consumer (hub, site, paperclip)
-for pr_url in $(rg -o 'https://github\.com/[^ )]*?/pull/[0-9]+' \
-    proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md); do
+proposal=proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md
+
+# Frontmatter status, not an incidental body mention.
+awk '
+  NR == 1 && $0 == "---" { in_fm=1; next }
+  in_fm && $0 == "---" { exit }
+  in_fm && $0 == "status: done" { found=1 }
+  END { exit(found ? 0 : 1) }
+' "$proposal"
+
+# S4 must have replaced every unknown with real evidence.
+if rg -n 'unverified — repo absent' "$proposal"; then exit 1; fi
+
+# Read one consumer PR from each named recon row. Release/source PR links elsewhere in the
+# proposal do not count, and the three consumer links must be distinct.
+consumer_pr_urls="$({
+  for consumer in minion_hub minion_site paperclip-minion; do
+    rg -m1 "^\\|[^|]*${consumer}[^|]*\\|.*https://github\\.com/.*/pull/[0-9]+" \
+      "$proposal" | rg -o 'https://github\.com/[^ )|]+/pull/[0-9]+'
+  done
+} | sort -u)"
+test "$(printf '%s\n' "$consumer_pr_urls" | sed '/^$/d' | wc -l)" -eq 3
+while IFS= read -r pr_url; do
+  test -n "$pr_url"
   gh pr view "$pr_url" --json state,mergedAt -q '.state' | rg -x MERGED
-done
-#   → every linked PR is independently confirmed MERGED via the GitHub API, not just present as text
+done <<EOF
+$consumer_pr_urls
+EOF
+
+# Guard the file-granularity ledger: this slice owns only the expected two-line block.
+test "$(rg -c 'TODO\(handoff\)' packages/shared/src/gateway/client.ts)" -eq 1
+rg -n -F '// TODO(handoff): hub, site and paperclip still run the console.error default and are' \
+  packages/shared/src/gateway/client.ts
+rg -n -F '// unbumped; adoption tracked in proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md' \
+  packages/shared/src/gateway/client.ts
 ```
 
 **Definition of done (machine-checkable):** every command above succeeds. If the proposal is not yet
-`status: done`, or any linked PR is not independently confirmed `MERGED`, **stop** — S1 does not
-start. Re-run this gate rather than caching a stale "yes" from an earlier check, since the three
-consumer PRs can land on different days.
+`status: done`, any named consumer row lacks a distinct merged PR, any unknown remains, or the source
+file contains a different/additional handoff marker, **stop** — S1 does not start. Re-run this gate
+rather than caching a stale "yes" from an earlier check, since the three consumer PRs can land on
+different days and the source file can change independently.
 
 ---
 
@@ -190,10 +229,15 @@ own Definition of Done verbatim.
 **Definition of done (machine-checkable):**
 
 ```bash
-grep -c 'TODO(handoff)' packages/shared/src/gateway/client.ts   # → 0
-git diff --stat -- packages/shared/src/gateway/client.ts        # → exactly 2 deletions, 0 additions
-pnpm --filter @minion-stack/shared build                        # → succeeds
-pnpm --filter @minion-stack/shared typecheck                    # → succeeds, if the package defines it
+base_ref="${BASE_REF:-origin/dev}"
+if rg -n 'TODO\(handoff\)' packages/shared/src/gateway/client.ts; then exit 1; fi
+git diff --numstat "$base_ref"...HEAD -- packages/shared/src/gateway/client.ts \
+  | rg -x '0[[:space:]]+2[[:space:]]+packages/shared/src/gateway/client\.ts'
+test "$(git diff --name-only "$base_ref"...HEAD | wc -l)" -eq 1
+git diff --name-only "$base_ref"...HEAD | rg -x 'packages/shared/src/gateway/client\.ts'
+git diff --check "$base_ref"...HEAD
+pnpm --filter @minion-stack/shared build
+pnpm --filter @minion-stack/shared typecheck
 ```
 
 ## 6. Cross-repo impact
@@ -206,7 +250,7 @@ type-level change to `packages/shared`, so it has no downstream effect on any co
 
 | Surface | Impact | Mitigation / evidence |
 |---|---|---|
-| `packages/shared/src/gateway/client.ts` | Comment-only deletion; no export, type, or runtime behavior changes | §3 invariants 1-2; S1 DoD diff-stat check |
+| `packages/shared/src/gateway/client.ts` | Comment-only deletion; no export, type, or runtime behavior changes | §3 invariants 1-2; S1 exact branch-diff check |
 | `minion_hub`, `minion_site`, `paperclip-minion` | **None.** No manifest, lockfile, or source file in any of the three is touched | this spec has `repos: [minion-meta]` only; the consumer work is entirely the other spec's |
 | `@minion-stack/shared` package version / npm | **None.** No changeset is authored (§3 invariant 3); this edit does not warrant or trigger a release | S1 "Do not... author a changeset" |
 | `minion/` gateway (server) | **None** — server-side frame handling untouched | no file in `minion/` named by any slice |
@@ -231,11 +275,10 @@ in place — that is the intended behavior, not a defect to route around.
   proposal's own S4 closeout (in the other spec) owns setting its `status: done`; this spec's S0 only
   reads it.
 - **Editing `proposals/index.json` or `specs/index.json`.** Generator-owned.
-- **Any other `TODO(handoff):` marker in `client.ts`** — specifically the S2 lifecycle markers at
-  (per the adoption spec's AS-IS) `:251-255` and `:330-335` for `onReconnectError`/`onSocketError`,
-  tracked by the separate, unrelated
-  `2026-08-19-gateway-client-lifecycle-swallows-handoff-spec`. This spec touches only the single
-  two-line marker at `:36-37`.
+- **Any different or newly-added `TODO(handoff):` marker in `client.ts`.** The lifecycle markers
+  cited by the adoption spec's older AS-IS are already absent in the current checkout. If another
+  marker appears before S1, S0 fails and this spec does not delete it; this spec touches only the
+  single two-line marker currently at `:36-37`.
 - **Re-classifying or merging** `proposals/handoff-minion-meta-3518589653.md` against
   `2026-08-17-gateway-client-error-hook-consumer-adoption.md`. §1 records the recommendation; the
   resolver/human applies it, not this spec.
@@ -244,25 +287,37 @@ in place — that is the intended behavior, not a defect to route around.
 
 ```bash
 # 1. Gate (runnable anytime from minion-meta; must be re-run, not cached, since the dependency
-#    can complete on a different day than this slice runs):
-rg -n 'status: done' proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md
-rg -c 'unverified — repo absent' proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md
-#   → 0 matches (grep -c on zero matches exits 1; treat "no output" as pass, not a script failure)
+#    can complete on a different day than this slice runs): execute every S0 command, including
+#    frontmatter-only status, the three named/distinct merged consumer PRs, zero unknown rows, and
+#    the exact-one-marker source guard.
 
 # 2. Edit + build (only after step 1 passes)
-grep -c 'TODO(handoff)' packages/shared/src/gateway/client.ts   # → 0
-git diff --stat -- packages/shared/src/gateway/client.ts        # → 2 deletions, 0 additions
+base_ref="${BASE_REF:-origin/dev}"
+if rg -n 'TODO\(handoff\)' packages/shared/src/gateway/client.ts; then exit 1; fi
+git diff --numstat "$base_ref"...HEAD -- packages/shared/src/gateway/client.ts \
+  | rg -x '0[[:space:]]+2[[:space:]]+packages/shared/src/gateway/client\.ts'
+test "$(git diff --name-only "$base_ref"...HEAD | wc -l)" -eq 1
 pnpm --filter @minion-stack/shared build
+pnpm --filter @minion-stack/shared typecheck
 
 # 3. No collateral damage
-git status --porcelain -- packages/shared                       # → only client.ts listed
-git diff --stat -- '.changeset'                                 # → empty (no changeset authored)
+git diff --name-only "$base_ref"...HEAD                         # → only client.ts listed
+git diff --name-only "$base_ref"...HEAD -- '.changeset'         # → empty (no changeset authored)
+
+# 4. Post-merge/post-rescan lifecycle evidence (read-only; sweep-owned)
+gh api -X GET repos/NikolasP98/minion-meta/contents/proposals/handoff-minion-meta-3518589653.md \
+  -f ref=dev -H 'Accept: application/vnd.github.raw+json' \
+  | awk 'NR == 1 && $0 == "---" { in_fm=1; next }
+         in_fm && $0 == "---" { exit }
+         in_fm && $0 == "status: closed" { found=1 }
+         END { exit(found ? 0 : 1) }'
 ```
 
 **Ship gate:**
 
 1. S0 green, re-confirmed at S1 start time (not reused from an earlier stale check).
-2. S1's diff touches exactly `packages/shared/src/gateway/client.ts`, removing exactly the two
-   `TODO(handoff):` lines and nothing else.
+2. S1's branch diff touches exactly `packages/shared/src/gateway/client.ts`, removing exactly the
+   expected two `TODO(handoff):` lines and nothing else.
 3. No changeset authored; no `proposals/index.json` or `specs/index.json` edit.
 4. Package build (and typecheck, if defined) for `@minion-stack/shared` still succeeds.
+5. After merge and a conclusive factory rescan, the sweep-owned handoff proposal is `status: closed`.
