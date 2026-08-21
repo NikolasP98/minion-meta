@@ -3,7 +3,7 @@ id: handoff-minion-meta-265306614
 title: Handoff marker — specs/2026-08-19-gateway-client-error-hook-consumer-adoption-spec.md (minion-meta)
 status: closed
 created: 2026-08-20
-updated: 2026-08-20
+updated: 2026-08-21
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-gateway-client-lifecycle-swallows-handoff
@@ -40,5 +40,9 @@ proposals/2026-08-17-gateway-client-lifecycle-swallows-handoff.md" — it is the
 TODO(handoff) comment quoted in `client.ts` (see `handoff-minion-meta-3518589653`) and in that
 spec's own AS-IS section (see `handoff-minion-meta-1508319703`), reproduced here a third time
 because this spec's AS-IS section also quotes it for context. All three handoff files are the
-same underlying marker. Both candidate proposals are in-spec (off-limits to edit either way);
-status held at `review`.
+same underlying marker. Both candidate proposals are in-spec (off-limits to edit either way).
+Originally left at `status: review` pending confirmation this is spec-prose noise.
+
+**Update 2026-08-21:** closed per the `closed_reason` above (spec-prose markers are out of
+the handoff-ledger sweep's intended scope) — this paragraph's now-stale `status: review`
+language is superseded by the frontmatter.

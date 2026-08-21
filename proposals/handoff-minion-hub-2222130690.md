@@ -29,18 +29,3 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/server/services/crm-deposit-rule.ts:178` — defined and unit-tested here but not yet wired to an HTTP
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/crm-deposit-rule.ts#L178
-
-## Reconciliation note 2026-08-21
-
-Confirmed same idea as `2026-08-17-hub-reserva-keyword-config` (in-spec) — this marker
-("defined and unit-tested here but not yet wired to an HTTP [endpoint]") is the
-pre-S3 state of exactly the gap that proposal's own "Handoff — S3 (write path),
-2026-08-20" addendum now describes as shipped: `PUT /api/crm/settings` writes
-`crm_settings.value.deposit` via `crm-settings.service.ts`'s `writeDepositRule`, gated by
-`apiWriteCapability`, with the anti-recurrence guard test `crm-deposit-rule.test.ts`.
-`crm-deposit-rule.ts` is the shared module the three triplication-site markers
-(`handoff-minion-hub-1323254565`/`2131866440`/`2785164896`) point back to via "S2 of
-2026-08-17-hub-reserva-keyword-config-spec reads it from crm_settings" — not a fourth
-triplication site itself, but the extraction target's own HTTP-wiring gap, now the S3
-slice. Not merged into the canonical (in-spec, off-limits to edit); status held at
-`review` for a human to confirm the marker is stale post-S3 and close it.

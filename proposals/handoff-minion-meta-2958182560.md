@@ -3,7 +3,7 @@ id: handoff-minion-meta-2958182560
 title: Handoff marker — specs/2026-08-17-factory-chat-restart-drops-pending-spec.md (minion-meta)
 status: closed
 created: 2026-08-20
-updated: 2026-08-20
+updated: 2026-08-21
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-factory-chat-restart-drops-pending
@@ -36,7 +36,13 @@ automatically once the file carries no more markers.
 Self-referential: this is the spec's own §5 guidance for the `TODO(handoff)` comment S2 must
 plant in `minion-factory`'s `src/queue.ts` (not a marker in this repo's own code). Same idea
 as `2026-08-17-factory-chat-restart-drops-pending`; not merged (canonical is in-spec,
-off-limits to edit); status held at `review`.
+off-limits to edit). Originally left at `status: review` pending confirmation this is
+spec-prose noise.
+
+**Update 2026-08-21:** closed per the `closed_reason` above (spec-prose markers are out of
+the handoff-ledger sweep's intended scope) — this paragraph's now-stale `status: review`
+language is superseded by the frontmatter. The factual note below still stands and remains
+open for a human/G0 to check.
 
 Factual note for the human reviewer: the spec's §5 also says that if S3 is cut, a
 `minion-meta` proposal must exist at `proposals/2026-08-17-factory-chat-adopt-surviving-turns.md`

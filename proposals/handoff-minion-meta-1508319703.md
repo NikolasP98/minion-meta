@@ -3,7 +3,7 @@ id: handoff-minion-meta-1508319703
 title: Handoff marker — specs/2026-08-19-gateway-client-lifecycle-swallows-handoff-spec.md (minion-meta)
 status: closed
 created: 2026-08-20
-updated: 2026-08-20
+updated: 2026-08-21
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-gateway-client-lifecycle-swallows-handoff
@@ -38,7 +38,13 @@ automatically once the file carries no more markers.
 Self-referential: this file IS the spec `2026-08-17-gateway-client-lifecycle-swallows-handoff`
 spawned, and its AS-IS section quotes the same TODO(handoff) comments as evidence — not a
 second, independent occurrence. Same idea as that proposal; not merged (canonical is
-in-spec, off-limits to edit); status held at `review`.
+in-spec, off-limits to edit). Originally left at `status: review` pending confirmation this
+is spec-prose noise.
+
+**Update 2026-08-21:** closed per the `closed_reason` above (spec-prose markers are out of
+the handoff-ledger sweep's intended scope) — this paragraph's now-stale `status: review`
+language is superseded by the frontmatter. The possibly-shipped factual note below still
+stands and remains open for a human/G0 to check.
 
 Factual note for the human reviewer: `packages/shared/src/gateway/client.ts` on this
 checkout (`dev`) no longer contains the quoted TODO(handoff) comments at the socket-error and

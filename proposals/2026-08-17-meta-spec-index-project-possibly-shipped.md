@@ -1,10 +1,9 @@
 ---
 id: 2026-08-17-meta-spec-index-project-possibly-shipped
 title: spec-index.mjs drops possibly_shipped/evidence/link_review — G0 amber chip never renders
-status: merged
-merged_into: 2026-08-17-base-kanban-possibly-shipped-surface
+status: review
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-21
 spawned_spec: 2026-08-18-meta-spec-index-project-possibly-shipped-spec
 repos: [minion-meta]
 duplicate_candidate: 2026-08-17-base-kanban-possibly-shipped-surface
@@ -64,3 +63,8 @@ human to reconcile.
 consumer for `possibly_shipped` or `link_review`. The projector-only scope crossed its explicit
 stop gate. This proposal returns to review and must be reordered behind an approved producer
 contract and a merged (or atomic) consumer contract. It is not approved for implementation.
+
+**Reconciliation update 2026-08-21:** frontmatter `status`/`merged_into` had not been synced to
+this correction — reset to `status: review` (`duplicate_candidate` kept, pointing at
+`2026-08-17-base-kanban-possibly-shipped-surface`, itself `in-spec` and off-limits to edit) to
+match the gate record above.
