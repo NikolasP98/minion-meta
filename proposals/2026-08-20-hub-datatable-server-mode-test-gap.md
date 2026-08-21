@@ -1,7 +1,7 @@
 ---
 id: 2026-08-20-hub-datatable-server-mode-test-gap
 title: DataTable.svelte server mode has no DOM-mount test — happy-dom/Button.svelte + browser stub gaps
-status: approved
+status: in-spec
 created: 2026-08-20
 updated: 2026-08-21
 repos: [minion_hub]
@@ -9,6 +9,7 @@ tags: [test, infra]
 value: 5
 effort: M
 source: orch/crm-pagination-s3-s4
+spawned_spec: 2026-08-21-hub-datatable-server-mode-test-gap-spec
 ---
 
 # DataTable.svelte server mode has no DOM-mount test
