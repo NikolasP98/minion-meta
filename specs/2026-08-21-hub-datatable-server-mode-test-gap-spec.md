@@ -2,12 +2,12 @@
 id: 2026-08-21-hub-datatable-server-mode-test-gap-spec
 title: "DataTable.svelte server mode DOM-mount tests — close the S4 test-gap (happy-dom, browser stub, testing-library)"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-21
 updated: 2026-08-21
 proposal: 2026-08-20-hub-datatable-server-mode-test-gap
-verdict: pending
+verdict: approved
 repos: [minion_hub]
 relationship: extends
 related: [2026-08-13-crm-customers-server-pagination-spec, 2026-08-13-crm-customers-server-pagination]
@@ -17,9 +17,10 @@ tags: [infra, test, ui]
 
 # DataTable.svelte server mode DOM-mount tests — close the S4 test-gap
 
-**Owner surface:** `minion_hub` — `src/lib/components/data-table/DataTable.svelte`,
-`src/lib/components/data-table/DataTable.test.ts` (new/extended), `vitest.config.ts`,
-`src/server/test-utils/env-stubs/app-environment.ts`.
+**Owner surface:** `minion_hub` — existing `src/lib/components/data-table/DataTable.svelte`
+(read-only subject), component tests under `src/lib/components/data-table/`, `vitest.config.ts`,
+`src/server/test-utils/env-stubs/app-environment.ts` (read-only default stub), and dependency
+metadata/lockfile only if the DOM environment changes.
 **Design ancestor:** [`specs/2026-08-13-crm-customers-server-pagination-spec.md`](2026-08-13-crm-customers-server-pagination-spec.md)
 §S4 — its DoD is what this spec finally satisfies with real DOM evidence (see §1).
 **Coordinates with:** [`specs/2026-08-13-agentic-sdlc-test-quality-gates-spec.md`](2026-08-13-agentic-sdlc-test-quality-gates-spec.md)
@@ -81,6 +82,9 @@ From the approved proposal `2026-08-20-hub-datatable-server-mode-test-gap`, verb
 >
 > **Out of scope:** Any other DataTable consumer's own component tests; general Svelte-5
 > component-testing conventions for the rest of the repo beyond what DataTable's tests need.
+
+The quote is provenance, not the normative execution plan. Pass 2 corrects its illustrative
+`environmentMatchGlobs` stub-swap and historical "before/after" snapshot language in §§3–7.
 
 ## 1. Relationship classification (recommend-only)
 
@@ -153,46 +157,52 @@ live in this checkout, because the package in question lives in the meta-repo it
   on its own while gaps 1 and 2 stood. Re-verify the dependency set hasn't grown a `browser`-aware
   export map since 2026-08-20 (package-updates campaigns run often in this repo — see
   `specs/2026-07-08-package-updates-tracking.md`).
-- **S4's DoD git-diff check** (`2026-08-13-crm-customers-server-pagination-spec` §S4) already
-  exists and already passed (no consumer `.svelte` files touched); that check is orthogonal to
-  this gap and is not re-run here.
+- **S4's original implementation-range git-diff check**
+  (`2026-08-13-crm-customers-server-pagination-spec` §S4) already exists and reportedly
+  passed (no consumer `.svelte` files touched). It does not prove that this follow-up remains
+  test-only, so this spec has its own zero-production-`.svelte` diff gate in §7.
 
 ## 3. TO-BE
 
 Invariants (must hold; none may regress what S4 shipped):
 
-- Client-mode `DataTable` behavior (no `server` prop) stays byte-identical before and after this
-  spec's changes — proven by a regression snapshot, not just "tests still pass."
-- No other DataTable consumer route (~11 total) requires any edit. Verified the same way S4
-  itself proved it: a diff of `.svelte` files outside `src/lib/components/data-table/` across
-  this spec's own commit range must be empty.
+- No production `.svelte` source changes in this spec. Client-mode `DataTable` behavior (no
+  `server` prop) is characterized by a reviewed, normalized DOM snapshot committed with the
+  tests, while a zero-production-`.svelte` diff proves this test-gap closure did not change the
+  implementation or any consumer route.
 - The default (non-test) `browser` value and behavior for the rest of the suite is unchanged —
-  the override is opt-in per test file/glob, not a global flip.
+  the override is an explicit, file-local `vi.mock('$app/environment', ...)`, not a global flip.
 - Fixing the happy-dom/Button crash does not require a `@minion-stack/ui` release cycle unless
-  Slice 2's recon proves no local (hub-side) fix works (§5 Alert A1).
+  Slice 1 proves no hub-local test-environment fix works (§5 Alert A1).
 
 Target behavior:
 
-1. A minimal, isolated mount of `Button.svelte` (or any component that renders one) under
-   `@testing-library/svelte` + happy-dom completes without throwing, in `minion_hub`'s existing
-   test environment.
+1. A minimal, isolated `render()` of `Button.svelte` (or a component that renders one) through
+   `@testing-library/svelte` completes without throwing in the selected DOM environment and
+   exposes its accessible role/name.
 2. A component test can opt into `browser === true` (via `$app/environment`) without changing
    the default for every other test in the suite.
-3. `@testing-library/svelte`'s `mount()` resolves to Svelte's client build under `vitest`
-   (`resolve.conditions: ['browser']`, `VITEST`-guarded) with zero regression to the rest of the
-   suite (which does not depend on this condition).
-4. `DataTable.test.ts` proves S4's original DoD in a real DOM: server mode doesn't re-sort/
-   re-filter, the pager reads `server.total`, `onQuery` fires exactly once per interaction —
-   while the pre-existing client-mode suite stays green and snapshot-identical.
+3. `@testing-library/svelte` resolves Svelte's client build under Vitest via an explicit
+   browser condition, with the complete pre-existing hub test suite remaining at its recorded
+   baseline (no new failures or skipped tests).
+4. A co-located DataTable DOM test proves S4's original DoD: server mode does not re-sort or
+   re-filter, the pager reads `server.total`, and each search/sort/page/filter interaction adds
+   exactly one `onQuery` call with the complete expected payload. Client mode has a committed
+   normalized-DOM characterization snapshot.
 
 ## 4. DELTA
 
 | # | Transition | Slice | Proof |
 |---|---|---|---|
-| 1 | `vitest.config.ts` resolves Svelte's client build under `vitest` (`resolve.conditions: ['browser']`, `VITEST`-guarded) | Slice 1 | full pre-existing hub vitest suite stays green (count ≥ pre-change baseline, zero new failures); a throwaway `mount()` call no longer throws `lifecycle_function_unavailable` |
-| 2 | `Button.svelte` (any consumer) mounts cleanly under `@testing-library/svelte` + happy-dom | Slice 2 | new isolated Button mount test green, asserting the rendered role/text/attrs, not just "did not throw" |
-| 3 | Component tests can force `browser = true` for row virtualization without changing the suite default | Slice 3 | a smoke test using the override renders ≥1 real row in the DOM; an unrelated existing test (no override) still observes `browser === false` |
-| 4 | `DataTable.test.ts` proves S4's DoD in the DOM; client-mode stays byte-identical | Slice 4 | new server-mode DOM cases green + client-mode before/after snapshot diff is empty |
+| 1 | Vitest resolves Svelte's client build for testing-library renders | Slice 1 | committed isolated render test no longer throws `lifecycle_function_unavailable`; full baseline suite is no worse |
+| 2 | Shared `Button` renders cleanly in a hub-local DOM test environment | Slice 1 | isolated render asserts accessible role/name and clean teardown |
+| 3 | One component-test file can force `browser = true` while the default alias remains false | Slice 1 | file-local mock test renders a real DataTable row; separate no-override test imports `$app/environment` and asserts `false` |
+| 4 | DataTable server-mode S4 behavior is proven in the DOM without runtime edits | Slice 2 | server-mode DOM tests, client-mode characterization snapshot, and zero production `.svelte` diff all pass |
+
+The two implementation slices are intentionally slice-scoped and each fit the repository's
+4–8 focused-hour convention. This follows the hard operational lesson in
+`/memory/MINION/sdlc-board-triage-and-phase-gates.md` ("slice-scoped dev runs mandatory") and
+avoids treating three coupled test-environment changes as separate undersized runs.
 
 ### Slice 0 — Recon (≤ 30 min, prepend to Slice 1; not counted as a slice)
 
@@ -209,8 +219,12 @@ test -f src/server/test-utils/env-stubs/app-environment.ts
 cat src/server/test-utils/env-stubs/app-environment.ts
 cat vitest.config.ts
 rg -n '"happy-dom"|"jsdom"|"@testing-library/svelte"' package.json
-rg -rn "from '@testing-library/svelte'|from \"@testing-library/svelte\"" src   # confirm still zero real usages; if one landed (e.g. S6 of the test-quality-gates spec), rebase onto its fixes instead of re-solving
-bun run vitest run 2>&1 | tail -20   # record current green/red baseline + total test count — this is Slice 1's regression floor
+if rg -n "from '@testing-library/svelte'|from \"@testing-library/svelte\"" src; then
+  echo "Existing usage found: inspect and reuse its test-environment setup"
+else
+  echo "No existing testing-library usage"
+fi
+bun run vitest run                  # must exit 0; record pass/skip totals as Slice 1's floor
 ```
 
 From the meta-repo root (not `minion_hub`), reconfirm §2's `@minion-stack/ui` claim hasn't moved:
@@ -220,123 +234,69 @@ cat packages/ui/package.json | grep '"version"'
 git -C packages/ui log -1 --oneline -- src/lib/Button.svelte
 ```
 
-If any recon step contradicts §2, fix the gap in this spec's Slice 1-4 text in the same commit
+Also inspect the current DataTable props/controls and identify the exact accessible selectors
+for search, sort, filter, page, rows, and pager text; record them in the implementation PR so
+tests exercise user-visible controls rather than implementation internals.
+
+If the complete baseline suite does not exit 0, stop and report that blocker before editing;
+this spec does not authorize accepting or baselining unrelated red tests.
+
+If any recon step contradicts §2, fix the gap in this spec's Slice 1-2 text in the same commit
 that starts implementation — do not silently implement against stale claims.
 
 ---
 
-### Slice 1 — `vitest.config.ts` browser-condition resolution
+### Slice 1 — component-test environment foundation
 
 **Topics:** `infra`, `test`
 
-**Goal:** `@testing-library/svelte`'s `mount()` resolves to Svelte's client build instead of its
-SSR build, without touching anything else in the suite.
+**Goal:** establish one hub-local component-test setup that resolves Svelte's client build,
+renders the shared Button, and opts DataTable DOM tests into `browser === true`, while preserving
+the suite-wide default `browser === false`.
 
 **Do:**
-- Add `resolve: { conditions: process.env.VITEST ? ['browser'] : [] }` (or equivalent explicit
-  `VITEST`-gated form) to `vitest.config.ts`.
-- Re-run the export-map safety check the proposal already did (`postgres`, `drizzle-orm`,
-  `@electric-sql/pglite`) against whatever `package.json` looks like today — if any dependency
-  now declares a `browser` condition with materially different code, note it and re-verify
-  before proceeding.
+- Add `resolve: { conditions: process.env.VITEST ? ['browser'] : [] }` (or an equivalent
+  explicit `VITEST`-gated form) to `vitest.config.ts`.
+- Re-run the export-map safety check the proposal did (`postgres`, `drizzle-orm`,
+  `@electric-sql/pglite`) against the current dependency tree. If any dependency now has a
+  materially different browser export, test that path before proceeding.
+- In the co-located DataTable DOM test file, add an isolated `@testing-library/svelte`
+  `render()` test for the shared Button. Fix
+  its DOM-emulator crash in this order, stopping at the first green path:
+  1. Update the hub's `happy-dom` devDependency to the current lockfile-resolved compatible
+     release and rerun the isolated reproduction.
+  2. If the crash remains, add `jsdom` and opt only the co-located DataTable DOM test file into
+     it with `// @vitest-environment jsdom`; record the failed happy-dom reproduction in the PR.
+  3. Only if both fail, stop and escalate per §5 Alert A1; a shared-package edit and release are
+     outside this spec.
+- In the co-located DataTable DOM test file, use a hoisted, file-local
+  `vi.mock('$app/environment', ...)` that preserves the original module exports and overrides
+  only `browser: true`; add a one-line comment explaining why virtualization needs it.
+- Add a separate no-override test that imports `$app/environment` through the normal Vitest
+  alias and asserts `browser === false`. This proves the default rather than testing the stub
+  file directly.
+- Render a minimal DataTable fixture and assert at least one real body row is present, proving
+  the file-local mock makes `rowVirt` initialize.
 
-**Files:** `vitest.config.ts`.
-
-**Definition of done (machine-checkable):**
-```bash
-cd minion_hub
-bun run vitest run 2>&1 | tail -5
-#   total test count >= Slice 0's recorded baseline, zero new failures
-cat > /tmp/mount-smoke.test.ts <<'EOF'
-import { describe, it, expect } from 'vitest';
-import { mount, unmount } from 'svelte';
-import Spinner from '../src/lib/components/data-table/../ui/Spinner.svelte'; // adjust to any trivial existing component
-it('mounts without lifecycle_function_unavailable', () => {
-  const target = document.createElement('div');
-  const app = mount(Spinner, { target });
-  expect(target.innerHTML).not.toBe('');
-  unmount(app);
-});
-EOF
-#   run once, ad hoc, to prove the condition works; delete the scratch file — Slice 2 supplies the real committed test
-```
-**Estimate:** 2-3 h.
-
----
-
-### Slice 2 — happy-dom / `Button.svelte` mount fix
-
-**Topics:** `infra`, `test`, `ui`
-
-**Goal:** any component that renders `Button.svelte` mounts cleanly under
-`@testing-library/svelte` + happy-dom. Preferred path is hub-local and touches zero shared
-packages — see §5 Alert A1 for why the `@minion-stack/ui` path is last resort.
-
-**Do, in this preference order (stop at the first that works):**
-1. Bump `happy-dom` (hub devDependency) toward the version already flagged available in
-   `specs/2026-07-08-package-updates-tracking.md` (`15.11→20.10` at time of writing; use
-   whatever is current) and re-test the crash repro. `happy-dom`'s `Node.nextSibling` getter
-   throwing on `Symbol(parentNode)` reads like exactly the class of DOM-emulation bug point
-   releases fix.
-2. If the bump doesn't resolve it, switch `minion_hub`'s vitest environment to `jsdom` for
-   component tests only (via `environmentMatchGlobs` scoped to the data-table test glob, or a
-   `// @vitest-environment jsdom` file-level pragma) — add `jsdom` as a new devDependency, and
-   document in the PR why happy-dom was insufficient.
-3. Only if both fail: this needs a `@minion-stack/ui` code change to `Button.svelte`'s insertion
-   effect. **Stop and escalate per §5 Alert A1** — do not fold a changeset/publish cycle into
-   this slice's estimate.
-
-**Files:** `minion_hub/package.json` (dep bump or new devDependency), possibly
-`minion_hub/vitest.config.ts` (`environmentMatchGlobs`), new isolated mount test (co-located,
-e.g. `src/lib/components/data-table/DataTable.test.ts`'s first DOM case, or a throwaway
-`Button.mount.test.ts` deleted once Slice 4 supersedes it).
+**Files:** `vitest.config.ts`; co-located component-test files; `package.json` and lockfile only
+if the DOM dependency changes. `src/server/test-utils/env-stubs/app-environment.ts` remains
+unchanged unless Slice 0 finds the carried claim stale.
 
 **Definition of done (machine-checkable):**
 ```bash
 cd minion_hub
-bun run vitest run <path-to-the-new-Button-mount-test>
-#   green: mounts, asserts rendered role/text (e.g. a button with children renders role="button"
-#   and the child text node), no TypeError, unmounts cleanly
-bun run vitest run 2>&1 | tail -5
-#   full suite still green at >= Slice 1's baseline count
+bun run vitest run src/lib/components/data-table
+# green: isolated Button render exposes role/name and tears down cleanly
+# green: browser=true DataTable smoke renders >=1 tbody row
+# green: separate no-override import of $app/environment observes browser=false
+bun run vitest run
+# no new failures or unexplained skips vs Slice 0; command exit status is the gate
 ```
-**Estimate:** 4-6 h.
+**Estimate:** 6–8 h.
 
 ---
 
-### Slice 3 — per-test `browser` override
-
-**Topics:** `infra`, `test`
-
-**Goal:** a component test can force `browser === true` so `DataTable`'s `rowVirt` initializes,
-without changing the default `browser = false` for the rest of the suite.
-
-**Do:** pick one documented mechanism and use it consistently:
-- A second env-stub file (e.g. `app-environment.browser-true.ts`) wired via `vitest.config.ts`
-  `environmentMatchGlobs` scoped to a naming convention (e.g. `*.dom.test.ts`), **or**
-- A per-file `vi.mock('$app/environment', () => ({ browser: true, ... }))` override, documented
-  in a short comment at the top of any test file that uses it.
-Whichever is chosen, write one paragraph in the PR description (not a new standalone doc — S7 of
-`2026-08-13-agentic-sdlc-test-quality-gates-spec` owns the repo-wide authoring standard) naming
-the mechanism so `DataTable.test.ts` and any future component test can reuse it without
-rediscovering this slice's reasoning.
-
-**Files:** `src/server/test-utils/env-stubs/` (new stub or override helper), `vitest.config.ts`
-(if `environmentMatchGlobs` is chosen).
-
-**Definition of done (machine-checkable):**
-```bash
-cd minion_hub
-bun run vitest run <a-throwaway-or-DataTable-smoke-test-using-the-override>
-#   with override: renders >= 1 real <tr> row in the DOM (rowVirt is non-null)
-bun run vitest run <any-preexisting-unrelated-test-importing-'$app/environment'>
-#   still observes browser === false — the override is opt-in, not global
-```
-**Estimate:** 3-5 h.
-
----
-
-### Slice 4 — `DataTable.test.ts` server-mode DOM coverage (closes the original S4 DoD)
+### Slice 2 — DataTable server-mode DOM coverage (closes the original S4 DoD)
 
 **Topics:** `test`, `ui`
 
@@ -344,22 +304,22 @@ bun run vitest run <any-preexisting-unrelated-test-importing-'$app/environment'>
 proven with real DOM evidence, plus a client-mode regression guard.
 
 **Do:**
-- Using Slices 1-3's now-working mount + browser-override machinery, add DOM-mount cases to
-  `DataTable.test.ts`:
+- Using Slice 1's render and file-local browser-override machinery, add DOM cases to the
+  co-located DataTable DOM test file:
   - Server mode does not re-sort/re-filter: feed intentionally unsorted `rows` with a `server`
     prop set, assert rendered `<tr>` DOM order equals input order (not client-sorted order).
   - Pager label/range derive from `server.total`, not `rows.length` (feed a short `rows` array
     with a large `server.total`, assert the rendered pager text reflects `total`).
-  - Search/sort/page/filter interactions each fire the `onQuery` callback exactly once with the
-    expected payload shape (`{ search, sort, filters, page, pageSize }`).
-- Regression snapshot: capture the rendered DOM (or a normalized subset of it) for
-  client-mode (no `server` prop) **before** this slice's diff and assert it is byte-identical
-  **after**. If no pre-existing client-mode DOM snapshot exists, generate the "before" snapshot
-  from the current `DataTable.svelte` on the commit immediately preceding this slice's own
-  commits (not from `origin/master`, for the same shared-branch reason S4's own DoD scopes its
-  diff check to its own commit range — see §2).
+  - Drive search/sort/page/filter through accessible user interactions. After clearing any
+    documented mount-time calls, each interaction increases the `onQuery` call count by exactly
+    one and the last call deeply equals the complete expected
+    `{ search, sort, filters, page, pageSize }` payload.
+- Add a reviewed normalized-DOM snapshot for client mode (no `server` prop). Normalize only
+  nondeterministic generated ids/attributes; do not remove row order, pager text, roles, or
+  control state from the snapshot.
+- Do not edit `DataTable.svelte` or any other production `.svelte` file.
 
-**Files:** `src/lib/components/data-table/DataTable.test.ts`.
+**Files:** co-located DataTable DOM test and snapshot files only.
 
 **Definition of done (machine-checkable):**
 ```bash
@@ -367,10 +327,8 @@ cd minion_hub
 bun run vitest run src/lib/components/data-table
 #   green: pre-existing client-mode tests (logic-level, non-DOM) untouched
 #   green: new DOM-mount cases above
-#   green: client-mode DOM snapshot diff is empty
-git diff --name-only <sha-before-this-spec-commits>..HEAD -- '*.svelte' \
-  | grep -v '^src/lib/components/data-table/' \
-  && echo "FAIL: closing this test gap must not require consumer edits" && exit 1
+#   green: reviewed client-mode normalized-DOM snapshot
+test -z "$(git diff --name-only <sha-before-this-spec-commits>..HEAD -- '*.svelte')"
 bun run check
 ```
 **Estimate:** 6-8 h.
@@ -386,7 +344,7 @@ consumer-visible `.svelte` change is in scope.
 | `minion_site` | None — does not consume `DataTable.svelte`, hub's `vitest.config.ts`, or hub's env stubs | — |
 | `@minion-stack/shared` / gateway WS protocol | None — no frame types touched | — |
 | `paperclip-minion`, `pixel-agents`, `minion_plugins` | None | — |
-| `@minion-stack/ui` (`packages/ui`, minion-meta) | **Conditional — see Alert A1.** Default plan (Slice 2, path 1 or 2) touches it not at all | Slice 2 stops and escalates before falling to path 3 |
+| `@minion-stack/ui` (`packages/ui`, minion-meta) | **Conditional — see Alert A1.** Approved scope does not touch it | Slice 1 stops and escalates before a shared-package edit |
 | `2026-08-13-agentic-sdlc-test-quality-gates-spec` S6 (same repo, unimplemented) | Shares the same infra surface (`vitest.config.ts`, `@testing-library/svelte`, happy-dom) | Alert A2 — check status before starting Slice 1 |
 
 ### 🚨 A1 — the `@minion-stack/ui` fallback is a real cross-repo release cycle, not a local edit
@@ -397,15 +355,15 @@ meta-repo, published to npm (`publishConfig.access: public`, current `0.1.0`) an
 `main` with `.changeset/*.md` trigger a Version Packages PR ... merging that PR publishes to
 npm"). `packages/ui`'s own test suite (`environment: 'node'`, SSR-string assertions via
 `svelte/server`'s `render()` — see §2) has never DOM-mounted `Button.svelte`, which is precisely
-why this class of bug was never caught there. If Slice 2 needs an actual `Button.svelte` code
+why this class of bug was never caught there. If Slice 1 needs an actual `Button.svelte` code
 change:
 
 1. That is a **minion-meta** change (`packages/ui/src/lib/Button.svelte`), not a `minion_hub`
    change — it needs a changeset, a Version-Packages PR, an npm publish, and then a
    `minion_hub` dependency bump before the fix is even consumable. `2026-08-17-hub-pos-appointments-fork-spec.md`
    documents this exact loop as a reason to avoid adding to `@minion-stack/ui` casually.
-2. That loop is materially bigger and slower than this spec's Slice 2 estimate (4-6 h) assumes.
-   If Slice 2's recon lands here, **stop and raise it to a human** (new proposal, `repos:
+2. That loop is outside this spec's repository list and estimate. If Slice 1 lands here,
+   **stop and raise it to a human** (new proposal, `repos:
    [minion-meta, minion_hub]`) rather than silently absorbing a package release cycle into this
    spec's scope or estimate.
 3. Prefer path 1 (happy-dom bump) or path 2 (jsdom swap) — both are `minion_hub`-only
@@ -417,7 +375,7 @@ change:
 `2026-08-13-agentic-sdlc-test-quality-gates-spec` S6 independently plans "rewrite commit-order
 tests with `@testing-library/svelte` (already a devDep) mounting the real component" for
 `ChannelSetupWizard.test.ts` — the same `@testing-library/svelte` + happy-dom + `vitest.config.ts`
-surface this spec's Slices 1-2 touch. Per `specs/index.json`, that spec is `status: approved`,
+surface this spec's Slice 1 touches. Per `specs/index.json`, that spec is `status: approved`,
 `pass: 1`, `verdict: pending` — not yet implemented. Whichever lands first genuinely becomes the
 first working `@testing-library/svelte` usage in `minion_hub`; the other implementer should check
 `specs/index.json` at start time and rebase onto the first mover's happy-dom/vitest.config fixes
@@ -426,20 +384,22 @@ instead of re-deriving them from scratch.
 ## 6. Out of scope (explicit)
 
 - **Any other DataTable consumer's own component tests.** ~11 routes share `DataTable.svelte`;
-  only `DataTable.test.ts` is touched, and Slice 4's DoD asserts zero other `.svelte` edits.
+  only co-located DataTable tests are touched, and Slice 2's DoD asserts zero production
+  `.svelte` edits.
 - **General Svelte-5 component-testing conventions for the rest of the repo.** `S7` of
   `2026-08-13-agentic-sdlc-test-quality-gates-spec` owns the repo-wide authoring standard; this
-  spec documents only what `DataTable.test.ts` needed (Slice 3's one-paragraph PR note).
+  spec documents only what the DataTable DOM test needs (Slice 1's local comment and PR note).
 - **`ChannelSetupWizard.test.ts`** and any other file `2026-08-13-agentic-sdlc-test-quality-gates-spec`
   S6 owns — coordinate (§5 A2), do not implement here.
 - **Editing `@minion-stack/ui`'s `Button.svelte` source.** Default plan never touches it; §5
   Alert A1's fallback path is explicitly escalated out of this spec if reached.
 - **Row virtualization feature work itself** — already shipped by
   `2026-07-06-hub-tanstack-consolidated-execution` T2. This spec only makes its existing
-  `browser`-gated behavior observable under test (Slice 3); it does not change virtualization
+  `browser`-gated behavior observable under test (Slice 1); it does not change virtualization
   logic.
-- **Any `DataTable.svelte` runtime/behavior change.** This is test-and-test-infra-only; Slice 4's
-  DoD includes a byte-identical client-mode snapshot specifically to prove this.
+- **Any `DataTable.svelte` runtime/behavior change.** This is test-and-test-infra-only; Slice 2's
+  zero-production-`.svelte` diff proves the implementation source is untouched, and the
+  characterization snapshot guards its observable client-mode DOM going forward.
 - **CRM SQL/API-level testing** (search, sort, filter correctness at the service layer) — already
   covered by `2026-08-13-crm-customers-server-pagination-spec`'s own S1-S3 DoDs.
 
@@ -448,14 +408,12 @@ instead of re-deriving them from scratch.
 ```bash
 cd minion_hub
 bun run check
-bun run vitest run 2>&1 | tail -20
+bun run vitest run
 #   total test count >= Slice 0's recorded baseline, zero failures, zero skipped-without-reason
 bun run vitest run src/lib/components/data-table
 #   the exact command 2026-08-13-crm-customers-server-pagination-spec §S4 specified — now
 #   actually exercises DOM-mounted server-mode cases, not just logic-level assertions
-git diff --name-only <sha-before-this-spec's-first-commit>..HEAD -- '*.svelte' \
-  | grep -v '^src/lib/components/data-table/' \
-  && echo "FAIL: zero consumer routes should be touched" && exit 1
+test -z "$(git diff --name-only <sha-before-this-spec's-first-commit>..HEAD -- '*.svelte')"
 ```
 
 **Ship gate:** §7 all green; DELTA #1-4 each individually proven by its listed test; the four DoD
@@ -464,5 +422,4 @@ outside `minion_hub` (§5 Alert A1's fallback was not needed) unless explicitly 
 approved as a separate spec. Once shipped, a human may reconcile
 `2026-08-13-crm-customers-server-pagination-spec`'s own status/pass to reflect that its S4 DoD is
 now fully (not just partially) satisfied — that reconciliation is a human call and is
-deliberately not made by this spec, which touches no other file's frontmatter but the source
-proposal's (below).
+deliberately not made by this spec.
