@@ -27,7 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-08-21)
 
-- `NikolasP98/minion-factory@main runner/src/queue.ts:1026` — a turn that fails AFTER claude --session-id <uuid> created the session leaves chats.message_count unchanged, so the NEXT turn sends FACTORY_CHAT_RESUME=0 and re-runs --session-id against a uuid that already exists on the persistent $HOME (/opt/factory/chat-home). Pre-existing; spec 2026-08-17-facto
-  https://github.com/NikolasP98/minion-factory/blob/main/runner/src/queue.ts#L1026
-- `NikolasP98/minion-factory@main runner/src/queue.ts:1118` — S3 of 2026-08-17-factory-chat-restart-drops-pending-spec replaces this kill with docker-wait adoption (parity with adoptOrphans, queue.ts adoptOrphans()) — until then a live container's completed work is discarded.
-  https://github.com/NikolasP98/minion-factory/blob/main/runner/src/queue.ts#L1118
+- `NikolasP98/minion-factory@main runner/src/queue.ts:1053` — a turn that fails AFTER claude --session-id <uuid> created the session leaves chats.message_count unchanged, so the NEXT turn sends FACTORY_CHAT_RESUME=0 and re-runs --session-id against a uuid that already exists on the persistent $HOME (/opt/factory/chat-home). Pre-existing; spec 2026-08-17-facto
+  https://github.com/NikolasP98/minion-factory/blob/main/runner/src/queue.ts#L1053
+- `NikolasP98/minion-factory@main runner/src/queue.ts:1145` — S3 of 2026-08-17-factory-chat-restart-drops-pending-spec replaces this kill with docker-wait adoption (parity with adoptOrphans, queue.ts adoptOrphans()) — until then a live container's completed work is discarded.
+  https://github.com/NikolasP98/minion-factory/blob/main/runner/src/queue.ts#L1145
