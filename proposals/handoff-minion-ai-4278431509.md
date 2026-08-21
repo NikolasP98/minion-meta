@@ -1,9 +1,10 @@
 ---
 id: handoff-minion-ai-4278431509
 title: Handoff marker — src/agents/minion-tools.ts (minion-ai)
-status: approved
+status: in-spec
+spawned_spec: 2026-08-21-handoff-minion-ai-4278431509-spec
 created: 2026-08-20
-updated: 2026-08-20
+updated: 2026-08-21
 repos: [minion-ai]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-gw-defaces-crm-tools
