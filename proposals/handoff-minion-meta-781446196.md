@@ -29,3 +29,11 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-meta@dev packages/env/src/cache.ts:32` — 'disk' currently degrades to 'memory' with a warning — S2
   https://github.com/NikolasP98/minion-meta/blob/dev/packages/env/src/cache.ts#L32
+
+## Reconciliation note 2026-08-22
+
+Same idea as `2026-08-17-pkg-infisical-cache-plaintext` (in-spec) — that proposal's own
+"Handoff — 2026-08-20" section states S1 shipped the disk→memory degrade-with-warning
+behavior this marker quotes, and names S2 (sealed on-disk cache) as the open follow-up. Not
+merged (canonical is in-spec, off-limits to edit); status held at `review` for a human to
+confirm scope.
