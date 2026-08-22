@@ -34,6 +34,8 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-22
 
-Same idea as `2026-08-17-gw-nostr-dispatch-pipeline` (in-spec) — both markers name that spec's
-S2 slice explicitly as their own resolution. Not merged (canonical is in-spec, off-limits to
-edit); status held at `review` for a human to confirm scope.
+Same idea as `2026-08-17-gw-nostr-dispatch-pipeline` (in-spec) — both markers in this file name
+that proposal's spawned spec (S2) directly. Sibling of `handoff-minion-ai-492754540` (same spec,
+same repo, the test file) — not a duplicate of that sibling, since each names a distinct file
+the S2 slice must touch. Not merged (canonical is in-spec, off-limits to edit); status held at
+`review` for a human to confirm.

@@ -32,6 +32,6 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-22
 
-Same idea as `2026-08-17-factory-memory-governance` (in-spec) — the marker names that spec's
-Slice 2 explicitly. Not merged (canonical is in-spec, off-limits to edit); status held at
-`review` for a human to confirm scope.
+Same idea as `2026-08-17-factory-memory-governance` (in-spec) — the marker names that proposal's
+spawned spec by id directly as a remaining slice. Not merged (canonical is in-spec, off-limits
+to edit); status held at `review` for a human to confirm.

@@ -34,7 +34,9 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-22
 
-Same idea as `2026-08-17-factory-chat-restart-drops-pending` (in-spec) — the `:1145` marker
-names that spec's S3 explicitly; `:1053` is the same restart-recovery area (pre-existing
-resume-vs-recreate race on `FACTORY_CHAT_RESUME`). Not merged (canonical is in-spec, off-limits
-to edit); status held at `review` for a human to confirm scope.
+Same idea as `2026-08-17-factory-chat-restart-drops-pending` (in-spec) — the :1145 marker names
+that proposal's spawned spec by id directly, and the :1053 marker (session-id reuse after a
+post-creation turn failure) is the same restart-recovery problem the canonical's "Problem"
+section describes, one level more specific. Not merged (canonical is in-spec, off-limits to
+edit); status held at `review` for a human to confirm both markers are covered by the spec's
+remaining slices.
