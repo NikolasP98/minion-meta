@@ -31,3 +31,10 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-factory/blob/main/runner/src/queue.ts#L1053
 - `NikolasP98/minion-factory@main runner/src/queue.ts:1145` — S3 of 2026-08-17-factory-chat-restart-drops-pending-spec replaces this kill with docker-wait adoption (parity with adoptOrphans, queue.ts adoptOrphans()) — until then a live container's completed work is discarded.
   https://github.com/NikolasP98/minion-factory/blob/main/runner/src/queue.ts#L1145
+
+## Reconciliation note 2026-08-22
+
+Same idea as `2026-08-17-factory-chat-restart-drops-pending` (in-spec) — the `:1145` marker
+names that spec's S3 explicitly; `:1053` is the same restart-recovery area (pre-existing
+resume-vs-recreate race on `FACTORY_CHAT_RESUME`). Not merged (canonical is in-spec, off-limits
+to edit); status held at `review` for a human to confirm scope.

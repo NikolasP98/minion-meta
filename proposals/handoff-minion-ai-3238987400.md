@@ -31,3 +31,9 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-ai/blob/DEV/extensions/nostr/src/inbound-dispatch.ts#L7
 - `NikolasP98/minion-ai@DEV extensions/nostr/src/inbound-dispatch.ts:42` — S2 of 2026-08-17-gw-nostr-dispatch-pipeline-spec (branch B1) replaces this
   https://github.com/NikolasP98/minion-ai/blob/DEV/extensions/nostr/src/inbound-dispatch.ts#L42
+
+## Reconciliation note 2026-08-22
+
+Same idea as `2026-08-17-gw-nostr-dispatch-pipeline` (in-spec) — both markers name that spec's
+S2 slice explicitly as their own resolution. Not merged (canonical is in-spec, off-limits to
+edit); status held at `review` for a human to confirm scope.

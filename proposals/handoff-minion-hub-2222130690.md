@@ -29,3 +29,17 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/server/services/crm-deposit-rule.ts:178` — defined and unit-tested here but not yet wired to an HTTP
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/crm-deposit-rule.ts#L178
+
+## Reconciliation note 2026-08-22
+
+Same idea as `2026-08-17-hub-reserva-keyword-config` (in-spec) — deposit-rule keyword
+configuration is exactly that proposal's subject. Possible tension worth a human's attention:
+that proposal's own "Handoff — S3 (write path)" section states the write path already shipped
+("`PUT /api/crm/settings` writes `crm_settings.value.deposit`... via `writeDepositRule`"), while
+this marker (in a different file, `crm-deposit-rule.ts`, not `crm-settings.service.ts`) still
+says "not yet wired to an HTTP [endpoint]" — this could be a distinct unwired surface (e.g. a
+read/GET path) or a stale marker left behind after S3 landed, same shape as the
+`pos-emission-mapping.ts` marker that turned out already-resolved
+(`handoff-minion-hub-1973736083`). Not verified — `minion_hub` is not checked out in this
+workspace. Not merged (canonical is in-spec, off-limits to edit); status held at `review` for a
+human to confirm which case this is.

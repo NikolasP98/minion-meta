@@ -29,3 +29,9 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-factory@main runner/src/memory/read.ts:22` — spec 2026-08-18-factory-memory-governance Slice 2 remainder —
   https://github.com/NikolasP98/minion-factory/blob/main/runner/src/memory/read.ts#L22
+
+## Reconciliation note 2026-08-22
+
+Same idea as `2026-08-17-factory-memory-governance` (in-spec) — the marker names that spec's
+Slice 2 explicitly. Not merged (canonical is in-spec, off-limits to edit); status held at
+`review` for a human to confirm scope.
