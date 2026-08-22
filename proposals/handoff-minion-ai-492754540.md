@@ -29,3 +29,10 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-ai@DEV extensions/nostr/src/inbound-dispatch.test.ts:27` — flips to a resolved dispatcher in S2 of
   https://github.com/NikolasP98/minion-ai/blob/DEV/extensions/nostr/src/inbound-dispatch.test.ts#L27
+
+## Reconciliation note 2026-08-22
+
+Same idea as `2026-08-17-gw-nostr-dispatch-pipeline` (in-spec) — this is a real assertion in the
+test file (not a scanner false-positive fixture string, unlike the `*.test.sh`/`*.test.ts`
+self-scans seen elsewhere in this sweep) pinned to that spec's S2. Not merged (canonical is
+in-spec, off-limits to edit); status held at `review` for a human to confirm scope.

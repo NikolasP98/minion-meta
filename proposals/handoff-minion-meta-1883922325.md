@@ -35,3 +35,12 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L662
 - `NikolasP98/minion-meta@dev scripts/spec-index.mjs:691` — this only checks consistency *when* revises/supersedes is
   https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L691
+
+## Reconciliation note 2026-08-22
+
+Same idea as `2026-08-18-spec-heading-lint-baseline-backfill` — all four markers map directly
+onto that proposal's own numbered asks: :223 (127-spec grandfather baseline) → its §1, :228
+(5 legacy superseded specs with no successor) → its §3, :662/:691 (`related` ids not resolved,
+consistency only checked when the field is present) → its §2/§4. Not merged (canonical is
+`status: approved`, off-limits to edit); status held at `review` for a human to confirm these
+markers should retire once that proposal's ledger items are worked, rather than independently.
