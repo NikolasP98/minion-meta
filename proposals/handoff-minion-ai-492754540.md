@@ -32,7 +32,8 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-22
 
-Same idea as `2026-08-17-gw-nostr-dispatch-pipeline` (in-spec) — this is a real assertion in the
-test file (not a scanner false-positive fixture string, unlike the `*.test.sh`/`*.test.ts`
-self-scans seen elsewhere in this sweep) pinned to that spec's S2. Not merged (canonical is
-in-spec, off-limits to edit); status held at `review` for a human to confirm scope.
+Same idea as `2026-08-17-gw-nostr-dispatch-pipeline` (in-spec) — the marker names that
+proposal's spawned spec (S2) directly. Sibling of `handoff-minion-ai-3238987400` (same spec,
+same repo, the non-test source file) — not a duplicate of that sibling, since each names a
+distinct file the S2 slice must touch (test vs. implementation). Not merged (canonical is
+in-spec, off-limits to edit); status held at `review` for a human to confirm.

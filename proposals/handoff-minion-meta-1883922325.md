@@ -38,9 +38,9 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-22
 
-Same idea as `2026-08-18-spec-heading-lint-baseline-backfill` — all four markers map directly
-onto that proposal's own numbered asks: :223 (127-spec grandfather baseline) → its §1, :228
-(5 legacy superseded specs with no successor) → its §3, :662/:691 (`related` ids not resolved,
-consistency only checked when the field is present) → its §2/§4. Not merged (canonical is
-`status: approved`, off-limits to edit); status held at `review` for a human to confirm these
-markers should retire once that proposal's ledger items are worked, rather than independently.
+Same idea as `2026-08-18-spec-heading-lint-baseline-backfill` (approved) — that proposal's own
+body already names three of these four markers verbatim: §1 is the 127-spec heading-lint
+baseline (:223), §3 is the 5-spec reverse-supersedes baseline (:228), §4 is unresolved `related`
+ids (:662 and :691 are the same §4 gap, quoted from two different call sites in the same
+function). No unique content here beyond line numbers. Not merged (canonical is approved,
+off-limits to edit); status held at `review` for a human to confirm.
