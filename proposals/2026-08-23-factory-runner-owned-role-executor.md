@@ -1,7 +1,7 @@
 ---
 id: 2026-08-23-factory-runner-owned-role-executor
 title: Add a runner-owned typed executor for Factory orchestrator roles
-status: proposed
+status: implementing
 created: 2026-08-23
 updated: 2026-08-23
 repos: [minion-factory]
@@ -23,19 +23,22 @@ claim generation. Restart, cancellation, timeout, and stale-claim paths all
 terminate durably. Native fanout remains disabled; the fixed runner-owned route
 is the trusted delegation path.
 
-The remaining activation work is data-plane and effect-plane integration. The
-fixed roles currently receive bounded lineage metadata and evidence references,
-not immutable checkout or artifact bytes. `worker` and `controller` phase roles
-remain explicit adapter-required policies with no transport. Production must
-therefore keep `FACTORY_LINEAGE_ORCHESTRATOR_V1=0` until those transports exist
-and pass exact-candidate release tests.
+The data and effect planes are now integrated. Fixed read roles receive only
+commit-pinned, bounded source and content-addressed artifact bodies. Artifact
+bytes deduplicate globally while append-only bindings preserve independent
+instance/request authority. Typed worker
+requests execute through containment v2, while controller requests alone own
+hosted CI, exact `dev` staging, scheduled deployment observation, and production
+verification. The remaining activation gate is the external spec-to-production
+canary, including restart, cancellation, late input, and rollback.
 
 Source marker:
 
 - `minion-factory/broker/src/policy.ts` — native `multi_agent` remains disabled;
   the fixed `/role-turn` path is the only structurally bound role executor.
-- `minion-factory/runner/src/phase-role-transport.ts` — metadata-only transport
-  marker for immutable checkout/artifact-body delivery and adapters.
+- `minion-factory/runner/src/phase-role-inputs.ts` — immutable input resolver.
+- `minion-factory/runner/src/lineage-phase-transports.ts` — worker and release
+  controller adapters.
 
 ## Definition of done
 
@@ -49,11 +52,11 @@ Source marker:
   failure, cancellation, timeout, and runner restart.
 - [x] Only runner-derived attempt status and controller evidence can create a
   validated phase handoff.
-- [ ] Read roles receive only controller-verified immutable checkout/artifact
+- [x] Read roles receive only controller-verified immutable checkout/artifact
   bodies, with path, byte, count, and digest bounds.
-- [ ] Worker phases use the containment-v2 phase runner through a typed adapter
+- [x] Worker phases use the containment-v2 phase runner through a typed adapter
   that returns exact candidate and artifact evidence.
-- [ ] Controller phases use a trusted CI/deploy/verify adapter; no model or
+- [x] Controller phases use a trusted CI/deploy/verify adapter; no model or
   worker receives deployment authority.
 - [ ] Production activation proves a complete spec-to-production lineage on an
   exact candidate while late input, restart, cancellation, and rollback remain
