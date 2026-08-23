@@ -19,8 +19,19 @@ attempts; model-bearing develop receives no GitHub credential.
 Unit and boot-path integration tests cover reservation, ambiguous accepted
 writes, restart reconciliation, exact candidate leases, and one confirmed
 effect per key. Activation preflight requires three distinct scoped GitHub
-principals and both model authentication surfaces. The remaining release gate
-is the disposable-repository drill through every real GitHub boundary.
+principals and both model authentication surfaces.
+
+A production-image activation canary is now hard-pinned to the private
+`NikolasP98/minion-factory-canary` fixture repository, initialized at
+`31bb5854b1d523127d4c652853e2a74123850065`. It exercises the real
+`ProductionContainmentGitHubRemote` and `phase_effects` ledger, injects a process
+crash after each accepted push, draft-PR, and readiness boundary, then
+reconciles and verifies exactly two pushes, one PR creation, and one readiness
+write before cleaning up the canary branch and PR. Factory PR #83 merged this
+harness to `dev` at `3edcd9de9ee87d27f5145895d5e6ec33a8f67671`; 850 runner tests and both
+exact-`dev` push checks passed. This is harness evidence only. The three scoped
+production credentials are not provisioned, so the external canary has not run
+and remains the release gate.
 
 Production must keep `FACTORY_CONTAINMENT_V2=0` until the live effect path is
 controller-owned and a crash-window integration suite passes.
@@ -47,9 +58,14 @@ Source marker:
   GitHub accepted it confirms by observation without repeating it.
 - [x] The runner can reconstruct or resume the phase without trusting a moving
   branch name or model-authored output.
+- [x] A production-image canary harness is hard-pinned to a private fixture,
+  refuses production repositories, uses the real effect adapter and ledger,
+  injects every accepted-write crash boundary, verifies exact remote counts,
+  and cleans up its branch and PR.
 - [ ] Integration tests exercise every reserve/remote/confirm crash window through
   the production `advanceContainmentRun` path, not a substitute driver.
 - [x] Production preflight checks the three scoped GitHub credentials and the
   selected model credential/auth home before the activation variable can be 1.
-- [ ] A disposable repository drill completes prepare through readiness, injects a
-  restart at each remote boundary, and proves one exact remote effect per key.
+- [ ] Run the credentialed disposable-repository drill through prepare and
+  readiness, inject a restart at each remote boundary, and preserve its
+  non-secret exact-effect evidence.
