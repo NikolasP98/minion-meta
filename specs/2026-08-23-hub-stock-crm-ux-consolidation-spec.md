@@ -1,15 +1,22 @@
 ---
-id: 2026-08-23-hub-stock-crm-ux-consolidation
+id: 2026-08-23-hub-stock-crm-ux-consolidation-spec
 title: Stock/CRM UX consolidation — retire redundant pages, warehouse management, entries redesign, Picker primitive
-status: in-progress
-owner: hub
+stage: dev
+status: implementing
+pass: 1
 created: 2026-08-23
-tags: [hub, stock, pos, crm, ui-primitive, route-retirement]
+updated: 2026-08-23
+repos: [minion_hub]
+tags: [crm, data, logic, migrations, ui, ux]
 ---
 
 # Stock/CRM UX consolidation
 
+## 0. Product
+
 Owner directive (2026-08-23): consolidate redundant surfaces into their canonical homes, complete warehouse management, restructure stock-entry creation by action, and introduce a reusable Picker primitive that encapsulates complex selection flows.
+
+The consolidated experience keeps stock and CRM behavior in the routes where operators already work, while preserving permission, masking, data-integrity, and route-contract guarantees during each retirement.
 
 ## S1 — Retire `/crm/graph`
 
@@ -88,6 +95,12 @@ PR-C: S3 warehouse management (+ archive migration).
 PR-D: S7 Picker primitive + S6 entries redesign (adopts Picker at 2 sites).
 PR-E: Picker adoption in catalog editor + POS register.
 
+## Out of scope
+
+- Deleting warehouses from the product UI; archive and restore are the supported lifecycle operations.
+- Rebuilding the accepted arbitrary-depth composition tree in the catalog editor.
+- Changes outside `minion_hub`; gateway, site, and Paperclip behavior remain unchanged.
+
 ## Shipping log (2026-08-23)
 
 All hub PRs merged same-day, sequentially, each CI-green and browser-verified
@@ -112,3 +125,13 @@ routes 404 / removed from nav.
 product add). Also open: ConsumptionGauge in SellableWizard (TODO(handoff) in
 code), archived-warehouse submit guard (proposal filed), RUC lookup upstream
 into `@minion-stack/crm-sdk`.
+
+## Verification
+
+For each remaining slice, run the Hub typecheck and focused route, primitive,
+RBAC, migration, and design-token contracts named above. Browser verification
+must cover the catalog and POS Picker flows, mobile sheet behavior, keyboard
+close/focus behavior, masking, inactive products, and retired-route 404s. Do
+not move this spec to `stage: done` until PR-E and every documented open item
+has either shipped with production evidence or been removed from this spec by
+an explicit follow-up decision.
