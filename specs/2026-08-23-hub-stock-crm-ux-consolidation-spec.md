@@ -87,3 +87,28 @@ PR-B: retirements — /crm/graph, /finances/products, /stock/consumption, /stock
 PR-C: S3 warehouse management (+ archive migration).
 PR-D: S7 Picker primitive + S6 entries redesign (adopts Picker at 2 sites).
 PR-E: Picker adoption in catalog editor + POS register.
+
+## Shipping log (2026-08-23)
+
+All hub PRs merged same-day, sequentially, each CI-green and browser-verified
+on prod:
+
+- **#171** PR-A catalog ports (billed/revenue/cost/margin + masking,
+  show-inactive, coverage banner, consumption note-wipe bugfix)
+- **#172** PR-C warehouse management (rename/archive/restore + `archived_at`
+  migration; open end filed: `2026-08-23-hub-archived-warehouse-submit-guard`)
+- **#173** PR-D Picker primitive + entries redesign (+ `POST
+  /api/crm/ruc-lookup`; DataTable `addMenu`)
+- **#174** PR-B retirements — all four routes gone; contract 152→148
+  endpoints / 142→138 screens; caller-less endpoints + service fns pruned
+- **#175** pinned ui-audit baseline regenerated (post-#174 commit)
+
+Prod-verified: transfer action hidden with one warehouse; Picker dblclick
+pick + "N added"; warehouse kebab actions; catalog analytics columns; retired
+routes 404 / removed from nav.
+
+**Remaining open slice: PR-E** — Picker adoption in the catalog item editor
+(bundle components + consumption rows) and the POS sale register (client +
+product add). Also open: ConsumptionGauge in SellableWizard (TODO(handoff) in
+code), archived-warehouse submit guard (proposal filed), RUC lookup upstream
+into `@minion-stack/crm-sdk`.
