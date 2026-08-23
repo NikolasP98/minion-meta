@@ -1,15 +1,14 @@
 ---
-id: handoff-minion-hub-2249203609
-title: Handoff marker — src/lib/components/data-table/DataTable.svelte (minion_hub)
-status: review
-created: 2026-08-22
+id: handoff-minion-hub-384264376
+title: Handoff marker — src/routes/api/crm/ruc-lookup/+server.ts (minion_hub)
+status: draft
+created: 2026-08-23
 updated: 2026-08-23
 repos: [minion-hub]
 tags: [handoff-sweep]
-duplicate_candidate: 2026-08-20-hub-datatable-server-mode-test-gap
 ---
 
-# Handoff marker — src/lib/components/data-table/DataTable.svelte
+# Handoff marker — src/routes/api/crm/ruc-lookup/+server.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -27,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-08-23)
 
-- `NikolasP98/minion_hub@master src/lib/components/data-table/DataTable.svelte:594` — no DOM-mount test covers this block. @testing-library/svelte
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/data-table/DataTable.svelte#L594
+- `NikolasP98/minion_hub@master src/routes/api/crm/ruc-lookup/+server.ts:13` — the DNI twin lives in @minion-stack/crm-sdk (dniPreview);
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/crm/ruc-lookup/+server.ts#L13

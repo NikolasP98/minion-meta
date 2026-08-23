@@ -1,1 +1,57 @@
-{}
+{
+  "NikolasP98/minion-base:main": {
+    "cursor": "c38eb84bb8028b72d73c710c40e23a2a5de447cb",
+    "head": "df37d6a03bc1a6089602d44d29039a031c0c255a",
+    "done": 3,
+    "kept": [
+      {
+        "file": "src/routes/+page.svelte",
+        "desc": "Accessing h.activeLanes.upstream without checking if h.activeLanes exists; will throw if activeLanes is null/undefined — use optional chaining h.activeLanes?.upstream",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 127
+      },
+      {
+        "file": "src/routes/stats-types.test.ts",
+        "desc": "Test accesses stats?.running which does not exist; Stats has queue.running, not a top-level running field — should be stats?.queue.running.",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 324
+      }
+    ]
+  },
+  "NikolasP98/minion_hub:master": {
+    "cursor": "7fdc291f88f87c5448a72240af8c8891346d1bff",
+    "head": "fbb9e0d4d0d3aa250f7566534d8bee21308bf3c2",
+    "done": 11,
+    "kept": [
+      {
+        "file": "scripts/ui-audit-inventory.test.ts",
+        "desc": "Three assertions about sourceRef, sourceCommit, and workingTreeFingerprint were removed from the main test and moved to a conditional test that only runs if pinnedBaselineIsReachable — in shallow clones (factory workers), this conditional test is skipped entirely.",
+        "severity": "medium",
+        "category": "weakened-test",
+        "line": 32
+      },
+      {
+        "file": "src/hooks.server.ts",
+        "desc": "Empty catch block silently swallows errors from getPostHogClient — failures in telemetry initialization or network calls are completely hidden from observation.",
+        "severity": "high",
+        "category": "empty-catch",
+        "line": 520
+      },
+      {
+        "file": "src/lib/components/scheduling/BookingsView.svelte",
+        "desc": "j.preview properties accessed without null check; if API response lacks preview key, throws TypeError at runtime. Use j?.preview?.hasMapping and j?.preview?.lines",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 316
+      }
+    ]
+  },
+  "NikolasP98/minion-meta:dev": {
+    "cursor": "83cfd862aa9632c9d01a1319cf51f1413b2d66bc",
+    "head": "92174f78fc2a24b74f6580ac7db7368d4d92b06f",
+    "done": 1,
+    "kept": []
+  }
+}
