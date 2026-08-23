@@ -1,11 +1,11 @@
 ---
 id: 2026-08-23-factory-deployment-recovery-controller
 title: Wire the Factory deployment recovery controller
-status: implementing
+status: draft
 created: 2026-08-23
 updated: 2026-08-23
 repos: [minion-factory]
-tags: [factory, orchestration, deployment, security]
+tags: [infra, security]
 ---
 
 # Wire the Factory deployment recovery controller
