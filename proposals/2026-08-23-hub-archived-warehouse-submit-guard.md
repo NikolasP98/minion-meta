@@ -2,7 +2,7 @@
 id: 2026-08-23-hub-archived-warehouse-submit-guard
 title: submitEntry accepts archived warehouses via direct API
 stage: proposal
-status: open
+status: draft
 created: 2026-08-23
 repos: [minion_hub]
 ---

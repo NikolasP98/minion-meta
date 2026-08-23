@@ -1,11 +1,11 @@
 ---
 id: 2026-08-23-factory-runner-owned-role-executor
 title: Add a runner-owned typed executor for Factory orchestrator roles
-status: implementing
+status: draft
 created: 2026-08-23
 updated: 2026-08-23
 repos: [minion-factory]
-tags: [factory, orchestration, security]
+tags: [logic, security]
 ---
 
 # Add a runner-owned typed executor for Factory orchestrator roles

@@ -1,11 +1,11 @@
 ---
 id: 2026-08-23-factory-containment-effect-ledger-integration
 title: Put Factory containment writes behind the controller effect ledger
-status: implementing
+status: draft
 created: 2026-08-23
 updated: 2026-08-23
 repos: [minion-factory]
-tags: [factory, containment, github, reliability, security]
+tags: [infra, security]
 ---
 
 # Put Factory containment writes behind the controller effect ledger
