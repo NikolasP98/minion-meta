@@ -53,7 +53,3 @@ resolve	UNKNOWN STEP	2026-08-24T09:31:56.9743848Z Set output 'main_sha'
 resolve	UNKNOWN STEP	2026-08-24T09:31:56.9744466Z Cleaning up orphan processes
 resolve	UNKNOWN STEP	2026-08-24T09:31:57.0015199Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
-
-## Diagnosis (auto)
-
-You've hit your weekly limit · resets Aug 26, 2am (UTC)
