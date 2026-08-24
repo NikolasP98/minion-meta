@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-08-24)
 
-- `NikolasP98/minion-ai@DEV .github/workflows/ci.yml:297` — Restore the known-red DEV Node/Bun baseline before the daily
-  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/workflows/ci.yml#L297
+- `NikolasP98/minion-ai@DEV .github/workflows/ci.yml:399` — Reach Bun 1.4 parity before promoting it from shadow evidence
+  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/workflows/ci.yml#L399
