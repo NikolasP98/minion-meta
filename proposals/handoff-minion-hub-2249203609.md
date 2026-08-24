@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-08-24)
 
-- `NikolasP98/minion_hub@master src/lib/components/data-table/DataTable.svelte:594` — no DOM-mount test covers this block. @testing-library/svelte
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/data-table/DataTable.svelte#L594
+- `NikolasP98/minion_hub@master src/lib/components/data-table/DataTable.svelte:599` — no DOM-mount test covers this block. @testing-library/svelte
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/data-table/DataTable.svelte#L599
