@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-08-24)
 
-- `NikolasP98/minion_hub@master src/lib/components/pos/SellableWizard.svelte:369` — other consumption-mapping surfaces (e.g.
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/pos/SellableWizard.svelte#L369
+- `NikolasP98/minion_hub@master src/lib/components/pos/SellableWizard.svelte:381` — other consumption-mapping surfaces (e.g.
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/pos/SellableWizard.svelte#L381
