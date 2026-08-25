@@ -3,7 +3,7 @@ id: ci-minion-factory-promote-factory-dev-to-production
 title: CI red — Promote Factory dev to production on minion-factory main
 status: draft
 created: 2026-08-24
-updated: 2026-08-24
+updated: 2026-08-25
 repos: []
 ---
 
@@ -19,7 +19,7 @@ green, or the workflow is deliberately removed/disabled with rationale.
 ## Latest failure
 
 - run: https://github.com/NikolasP98/minion-factory/actions/runs/32712040185
-- checked: 2026-08-24
+- checked: 2026-08-25
 
 ```
 resolve	UNKNOWN STEP	2026-08-24T09:31:55.0176884Z ^[[36;1mfi^[[0m
