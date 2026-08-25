@@ -18,38 +18,38 @@ green, or the workflow is deliberately removed/disabled with rationale.
 
 ## Latest failure
 
-- run: https://github.com/NikolasP98/minion-factory/actions/runs/32712040185
+- run: https://github.com/NikolasP98/minion-factory/actions/runs/32832101648
 - checked: 2026-08-25
 
 ```
-resolve	UNKNOWN STEP	2026-08-24T09:31:55.0176884Z ^[[36;1mfi^[[0m
-resolve	UNKNOWN STEP	2026-08-24T09:31:55.0177442Z ^[[36;1mprintf 'ci_sha=%s\n' "$CANDIDATE_SHA" >> "$GITHUB_OUTPUT"^[[0m
-resolve	UNKNOWN STEP	2026-08-24T09:31:55.0219199Z shell: /usr/bin/bash -e {0}
-resolve	UNKNOWN STEP	2026-08-24T09:31:55.0219527Z env:
-resolve	UNKNOWN STEP	2026-08-24T09:31:55.0219863Z   CANDIDATE_SHA: a84c95b7527d38850e3dd41c96b6982e32e40a69
-resolve	UNKNOWN STEP	2026-08-24T09:31:55.0223358Z   GH_TOKEN: ***
-resolve	UNKNOWN STEP	2026-08-24T09:31:55.0223636Z ##[endgroup]
-resolve	UNKNOWN STEP	2026-08-24T09:31:55.7211630Z [promotion] required hosted CI passed for a84c95b7527d38850e3dd41c96b6982e32e40a69 (run 32644259733)
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.2373449Z [promotion] required hosted CI passed for a84c95b7527d38850e3dd41c96b6982e32e40a69 (run 32644259758)
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.7453266Z required CI refused: missing
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.7505716Z ##[error]Process completed with exit code 1.
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.7640891Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.7642416Z Post job cleanup.
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.8537135Z [command]/usr/bin/git version
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.8585898Z git version 2.55.0
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.8625707Z Temporarily overriding HOME='/home/runner/work/_temp/6714f620-6e55-45df-809a-a338d195920d' before making global git config changes
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.8627486Z Adding repository directory to the temporary git global config as a safe directory
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.8631825Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/minion-factory/minion-factory/control
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.8677487Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.8719109Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.8982683Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.9023490Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.9287251Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.9327404Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.9732877Z Evaluate and set job outputs
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.9741511Z Set output 'advanced'
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.9743014Z Set output 'candidate_sha'
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.9743848Z Set output 'main_sha'
-resolve	UNKNOWN STEP	2026-08-24T09:31:56.9744466Z Cleaning up orphan processes
-resolve	UNKNOWN STEP	2026-08-24T09:31:57.0015199Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.1997361Z ^[[36;1mtrap 'ssh "${ssh_args[@]}" "$PRODUCTION_SSH_TARGET" "rm -rf -- $remote_dir"' EXIT^[[0m
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.1999423Z ^[[36;1mscp "${ssh_args[@]}" control/scripts/promotion/lib.sh control/scripts/promotion/host-preflight.sh "$PRODUCTION_SSH_TARGET:$remote_dir/"^[[0m
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.2001080Z ^[[36;1m# shellcheck disable=SC2029^[[0m
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.2002670Z ^[[36;1mssh "${ssh_args[@]}" "$PRODUCTION_SSH_TARGET" "chmod 0700 '$remote_dir/host-preflight.sh' && '$remote_dir/host-preflight.sh' '$live_sha'"^[[0m
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.2004386Z ^[[36;1mprintf 'live_sha=%s\n' "$live_sha" >> "$GITHUB_OUTPUT"^[[0m
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.2048095Z shell: /usr/bin/bash -e {0}
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.2049074Z env:
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.2050061Z   CANDIDATE_SHA: b2ff102fdbe293bf0769da8e96c96b6bc54c064f
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.2051251Z   MAIN_SHA: 631a1add4b0d6c0dad6ea87200ad79d60abb07c0
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.2052332Z   ACTIVATE_LINEAGE: 0
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.2053247Z   ACTIVATE_CONTAINMENT: 0
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.2054220Z   PRODUCTION_SSH_TARGET: niko@152.53.91.108
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.2055222Z ##[endgroup]
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.5206835Z [promotion] live SHA 01a39b3fa398582c55d0c03f9c5e1ef87fbbf7df matches neither resolved main 631a1add4b0d6c0dad6ea87200ad79d60abb07c0 nor recovery candidate b2ff102fdbe293bf0769da8e96c96b6bc54c064f
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.5221604Z ##[error]Process completed with exit code 1.
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.5477031Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.5481190Z Post job cleanup.
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.6273962Z [command]/usr/bin/git version
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.6307474Z git version 2.55.0
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.6375667Z Temporarily overriding HOME='/home/runner/work/_temp/a4964878-1fc0-412b-bc27-3fd8b3ff9abc' before making global git config changes
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.6379859Z Adding repository directory to the temporary git global config as a safe directory
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.6385516Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/minion-factory/minion-factory/control
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.6429920Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.6469064Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.6683758Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.6716248Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.6930177Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.6964309Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.7386188Z Cleaning up orphan processes
+Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.7699797Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
