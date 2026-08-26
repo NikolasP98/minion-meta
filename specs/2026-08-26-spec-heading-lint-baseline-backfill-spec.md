@@ -3,12 +3,12 @@ id: 2026-08-26-spec-heading-lint-baseline-backfill-spec
 title: Drain the spec-gate debt — backfill 126 grandfathered spec headings, resolve 5 orphan superseded specs, resolve `related` ids, and settle the pass>1 link policy
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-26
 updated: 2026-08-26
 repos: [minion-meta]
 proposal: 2026-08-18-spec-heading-lint-baseline-backfill
-verdict: pending
+verdict: changes_requested
 type: infra
 relationship: extends
 related: [2026-08-17-maintenance-lane-monitors-spec, 2026-08-17-sdlc-phase-gates-scoring-spec, 2026-08-20-factory-spec-heading-nomenclature, handoff-minion-meta-1883922325]
@@ -208,17 +208,25 @@ enforces the traceability the ask actually wanted, with zero backlog and no heur
 forward direction is enforced (`pass>1 ⇒ sidecar`); the converse is left open so a first-pass review
 sidecar is not made illegal.
 
-**C. Batching → 5 contiguous id ranges, one PR each, sequential.**
+**C. Batching → contiguous id ranges, one PR each, sequential.**
 Boundaries are frozen at the sorted 126-id baseline as of `83b...`/this spec's date, expressed as
 **id ranges** (not indices) so they stay stable as the baseline shrinks:
 
 | Batch | Count | First id | Last id (inclusive) |
 |---|---|---|---|
-| B1 | 26 | `2026-04-19-minion-meta-repo-design` | `2026-06-11-gog-nuke-execution-plan` |
-| B2 | 26 | `2026-06-11-google-oauth-verification-packet` | `2026-07-07-hub-db-migration-pipeline` |
-| B3 | 26 | `2026-07-08-package-updates-tracking` | `2026-07-17-crm-conversation-intelligence-spec` |
-| B4 | 26 | `2026-07-17-dashboard-kpi-popover-2step-spec` | `2026-08-12-minion-factory-agent-pipeline-spec` |
-| B5 | 22 | `2026-08-13-minion-factory-staged-harness-spec` | `ws-duplication-audit` |
+| B1 | 10 | `2026-04-19-minion-meta-repo-design` | `2026-05-22-document-ingestion` |
+| B2 | 10 | `2026-05-22-gateway-turn-recovery` | `2026-05-26-auth-token-simplification` |
+| B3 | 10 | `2026-05-27-gateway-dx-simplification` | `2026-06-13-plugin-sdk-recon-and-improvement-report` |
+| B4 | 10 | `2026-06-14-plugin-ui-cdn-caching-design` | `2026-07-02-hub-erp-agent-native-audit` |
+| B5 | 10 | `2026-07-04-meta-business-integration` | `2026-07-06-hub-tanstack-pacer` |
+| B6 | 10 | `2026-07-06-hub-tanstack-query` | `2026-07-10-per-org-volume-tenancy` |
+| B7 | 10 | `2026-07-11-fleet-update-orchestration` | `2026-07-13-hub-ui-coherence-audit` |
+| B8 | 10 | `2026-07-13-hub-ui-coherence-execution-log` | `2026-07-17-hub-performance-optimization-plan` |
+| B9 | 10 | `2026-07-17-ig-ad-attribution-spec` | `2026-07-20-whatsapp-sync-status-spec` |
+| B10 | 10 | `2026-07-21-unified-brains-knowledge-architecture` | `2026-08-03-crm-relationship-graph-v2-port-spec` |
+| B11 | 10 | `2026-08-07-projects-github-repos-and-factory-gates-spec` | `2026-08-18-base-kanban-possibly-shipped-surface-spec` |
+| B12 | 10 | `2026-08-18-base-phase-aware-sorting-provenance` | `2026-08-18-factory-workitem-handoff-schema-spec` |
+| B13 | 6 | `2026-08-18-minion-base-mobile-hitl-ux-plan` | `ws-duplication-audit` |
 
 The exact file list for a batch is reproducible, never guessed:
 
@@ -227,7 +235,8 @@ node -e 'const b=require("./scripts/spec-heading-lint-baseline.json");
 console.log(Object.keys(b).sort().filter(id=>id>="FIRST"&&id<="LAST").join("\n"))'
 ```
 
-Sequential, not parallel: two batch PRs that both touch `specs/index.json` conflict, and per
+Sequential, not parallel: two batch PRs that both touch the shared baseline and potentially
+`specs/index.json` conflict, and per
 `/memory/MINION/minion-factory-agent-pipeline.md` ★★★ meta pushes race. Each batch branch merges
 `origin/dev` **in** (never rebases — rebase rewrites history and the runner cannot force-push,
 `/memory/MINION/sdlc-board-triage-and-phase-gates.md:133`), regenerates the index after the merge,
@@ -253,7 +262,11 @@ and pushes with rebase-retry.
 
 ## 6. Slices
 
-Each slice is one PR against `dev`, sized for a junior dev at 4–8 focused hours.
+Each slice is one PR against `dev`, sized for a junior dev at 4–8 focused hours. **Pass-2 blocker:**
+the implementation section still defines only five 22–26-spec batch slices (S5–S9), despite the
+corrected 10-spec maximum in §5C. Those slices are not implementation-ready until the author replaces
+S5–S9 and D6–D10 with B1–B13 slices/transitions and updates ordering and baseline-count DoDs. The
+required split is exactly the corrected table in §5C; no product-scope decision is needed.
 
 ### Slice 1 — Baseline hygiene rules + backfill report tool
 
@@ -285,7 +298,9 @@ totals `product=122 out-of-scope=91 verification=92`; `--verify` exits 0.
 **Files:** new `scripts/corpus.mjs`; `scripts/spec-index.mjs` (replace the TODO at :662 with the
 rule); `scripts/spec-index.test.mjs` (fix the two fixtures at :640 and :649 that currently assert a
 dangling `related` id passes; add new ones); `specs/TEMPLATE.md` (`related` row: "every id must
-resolve to an existing spec or proposal").
+resolve to an existing spec or proposal");
+`proposals/2026-08-20-factory-spec-heading-nomenclature.md` (append the generator failure-mode
+alert required by §8; no lifecycle change).
 
 The loader tolerates a missing `proposals/` directory (returns an empty set) so the CLI fixtures at
 `scripts/spec-index.test.mjs:363` keep working without a proposals tree. Resolution runs **only**
@@ -295,7 +310,8 @@ an index for a corpus mid-edit.
 **DoD:** `--check` exits 0 on the corpus (84 related ids, 17 of them proposal-only); fixtures prove
 (i) a dangling id fails naming spec + id, (ii) a proposal-only id passes, (iii) a fixture repo with
 no `proposals/` dir passes, (iv) `node scripts/spec-index.mjs` (no `--check`) still succeeds with a
-dangling id; `grep -n 'TODO(handoff)' scripts/spec-index.mjs` no longer matches the `related` marker.
+dangling id; `grep -n 'TODO(handoff)' scripts/spec-index.mjs` no longer matches the `related` marker;
+the nomenclature proposal names invented `related` ids as a generator failure mode.
 
 ### Slice 3 — Settle the pass>1 policy; enforce review-sidecar traceability
 
@@ -303,7 +319,9 @@ dangling id; `grep -n 'TODO(handoff)' scripts/spec-index.mjs` no longer matches 
 
 **Files:** `scripts/spec-index.mjs` (replace the TODO at :691 with the decision + the sidecar rule);
 `scripts/spec-index.test.mjs`; `specs/TEMPLATE.md` (`pass` and `revises` rows: `pass` is bumped in
-place by a re-pass and requires a review sidecar; `revises` is only for the rare *new-file* re-pass).
+place by a re-pass and requires a review sidecar; `revises` is only for the rare *new-file* re-pass);
+`proposals/2026-08-20-factory-spec-heading-nomenclature.md` (append the missing-sidecar generator
+failure-mode alert required by §8; no lifecycle change).
 
 Implements decision B of §5: no presence rule; `pass > 1` requires `specs/<id>.review.md` to exist.
 The comment must state the measured facts (62 pass>1, 61 without a link, 0 file pairs, 62/62
@@ -311,7 +329,8 @@ sidecars) so the next reader does not re-litigate from the old "51 violate" fram
 the pair-detection case to `2026-08-17-sdlc-phase-gates-scoring-spec`'s G0 reconciler by name.
 
 **DoD:** `--check` exits 0 on the corpus; fixtures prove `pass: 2` without a sidecar fails, with one
-passes, and `pass: 1` without one passes; no `TODO(handoff)` remains at the pass/revises site.
+passes, and `pass: 1` without one passes; no `TODO(handoff)` remains at the pass/revises site; the
+nomenclature proposal names a missing pass-2 review sidecar as a generator failure mode.
 
 ### Slice 4 — Resolve the 5 orphan superseded specs and delete that baseline
 
@@ -348,8 +367,9 @@ implementer would do — i.e. essentially never for terminal specs, sometimes fo
 
 **DoD:** `node scripts/spec-index.mjs --check` exits 0; `node scripts/spec-heading-backfill.mjs
 --verify` exits 0; `--report` shows the baseline at 100 entries and zero B1 ids remaining; the diff
-touches no `stage`/`status`/`repos`/`pass` field (I4); any spec left unfixed is named in the PR body
-with the reason.
+touches no `stage`/`status`/`repos`/`pass` field (I4). If any batch id cannot be fixed without
+guessing product intent, the slice is blocked and must not claim this DoD or merge a partial range;
+the PR body names the id and reason.
 
 ### Slice 6 — Heading backfill batch B2 (26 specs, `2026-06-11-google-oauth-verification-packet` … `2026-07-07-hub-db-migration-pipeline`)
 
@@ -477,7 +497,8 @@ read directly, never through a pipe):
   wanted. `scripts/corpus.mjs` from S2 is the loader it would reuse.
 - **Rewriting or re-scoping any spec's content.** Backfill adds the missing sections and normalizes
   headings; it does not modernize stale specs, adjudicate whether an `unknown`-status spec is still
-  live, or change any lifecycle field (I4).
+  live, or change any lifecycle field (I4). S4 is the explicit exception: it may change only the
+  five orphan specs from `superseded` to `retired` when evidence shows there is no successor.
 - **New lint rules beyond the three named** (e.g. AS-IS→TO-BE→DELTA as a lint, required frontmatter
   `type`, per-slice DoD checks). TEMPLATE.md keeps AS-IS→TO-BE→DELTA a review expectation.
 - **Any change to `REQUIRED_HEADINGS`, `stripNonDocumentMarkdown`, or the per-slice topics lint**
