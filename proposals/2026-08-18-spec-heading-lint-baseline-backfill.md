@@ -1,11 +1,11 @@
 ---
 id: 2026-08-18-spec-heading-lint-baseline-backfill
 title: Backfill required headings on 127 grandfathered specs; decide whether pass>1 without revises/supersedes should hard-block
-status: approved
+status: in-spec
 created: 2026-08-18
-updated: 2026-08-20
+updated: 2026-08-26
 repos: [minion-meta]
-spawned_spec: 2026-08-17-maintenance-lane-monitors-spec
+spawned_spec: 2026-08-26-spec-heading-lint-baseline-backfill-spec
 tags: [infra, hygiene]
 source: factory-run-c6311188
 ---
