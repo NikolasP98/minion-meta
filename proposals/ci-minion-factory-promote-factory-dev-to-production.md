@@ -3,7 +3,7 @@ id: ci-minion-factory-promote-factory-dev-to-production
 title: CI red — Promote Factory dev to production on minion-factory main
 status: draft
 created: 2026-08-24
-updated: 2026-08-25
+updated: 2026-08-26
 repos: []
 ---
 
@@ -19,7 +19,7 @@ green, or the workflow is deliberately removed/disabled with rationale.
 ## Latest failure
 
 - run: https://github.com/NikolasP98/minion-factory/actions/runs/32832101648
-- checked: 2026-08-25
+- checked: 2026-08-26
 
 ```
 Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.1997361Z ^[[36;1mtrap 'ssh "${ssh_args[@]}" "$PRODUCTION_SSH_TARGET" "rm -rf -- $remote_dir"' EXIT^[[0m
