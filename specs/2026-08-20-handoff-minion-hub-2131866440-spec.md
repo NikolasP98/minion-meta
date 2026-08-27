@@ -2,7 +2,7 @@
 id: 2026-08-20-handoff-minion-hub-2131866440-spec
 title: "Handoff marker crm-journey.service.ts:44 — complete the journey side of the org-configurable deposit rule"
 stage: spec
-status: approved
+status: done
 pass: 2
 created: 2026-08-20
 updated: 2026-08-20
@@ -14,11 +14,28 @@ related: [2026-08-17-hub-reserva-keyword-config-spec]
 type: fix
 tags: [logic, test]
 slice_tags: [1:logic+test]
+possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/152
+done_reason: "Verified complete on master b7bd02cf: all 6 DELTA items (resolveDepositRule import, label fix, tests, integration test, zero handoff markers) — subagent verification 2026-08-20."
 ---
 
 # Complete the journey side of the org-configurable deposit rule
 
-## 0. Relationship classification (recommend-only)
+## 0. Product
+
+The source proposal is complete when the journey service reads the org-configurable rule named by
+the marker and the exact `TODO(handoff):` comment is removed. Observable journey behavior is:
+
+- invoices containing at least one non-deposit item produce a `purchase` milestone labelled from
+  the selected non-deposit item;
+- deposit-only invoices produce a `reserve` milestone;
+- configured keywords decide which invoice items are deposits; and
+- a configured label may rename the `reserve` milestone, while an org with no deposit config must
+  continue to see `Reserved a consult`.
+
+No route or response shape changes. The output remains `Milestone[]`; only classification and the
+configured reserve label may change.
+
+## 1. Relationship classification (recommend-only)
 
 `relationship: extends` — the approved
 [`2026-08-17-hub-reserva-keyword-config-spec`](2026-08-17-hub-reserva-keyword-config-spec.md)
@@ -38,21 +55,6 @@ to make canonical S2 internally consistent; it does not redesign the shared matc
 The sibling handoff proposals `handoff-minion-hub-1323254565` and
 `handoff-minion-hub-2785164896` remain independently owned markers. Implement them in the same
 canonical S2 branch/PR where practical, but do not classify, close, or edit them from this spec.
-
-## 1. Product and source request
-
-The source proposal is complete when the journey service reads the org-configurable rule named by
-the marker and the exact `TODO(handoff):` comment is removed. Observable journey behavior is:
-
-- invoices containing at least one non-deposit item produce a `purchase` milestone labelled from
-  the selected non-deposit item;
-- deposit-only invoices produce a `reserve` milestone;
-- configured keywords decide which invoice items are deposits; and
-- a configured label may rename the `reserve` milestone, while an org with no deposit config must
-  continue to see `Reserved a consult`.
-
-No route or response shape changes. The output remains `Milestone[]`; only classification and the
-configured reserve label may change.
 
 ## 2. Verified AS-IS
 

@@ -2,15 +2,16 @@
 id: 2026-08-18-ci-minion-ai-ci-spec
 title: CI red — make the minion gateway DEV correctness matrix honestly green
 stage: spec
-status: approved
+status: implementing
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: ci-minion-ai-ci
 verdict: approved
 repos: [minion]
 relationship: depends-on
 related: [2026-08-13-agentic-sdlc-test-quality-gates-spec]
+possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/227
 ---
 
 # CI red — make the minion gateway DEV correctness matrix honestly green

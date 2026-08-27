@@ -2,15 +2,16 @@
 id: 2026-08-17-hub-reserva-keyword-config-spec
 title: "CRM deposit classification — one rule module, then an org-configurable keyword set (no triplicated '%reserva%')"
 stage: spec
-status: approved
+status: implementing
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 proposal: 2026-08-17-hub-reserva-keyword-config
 verdict: approved
 repos: [minion_hub]
 tags: [logic, test]
 type: fix
+possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/140
 ---
 
 # CRM deposit classification — one rule module, then an org-configurable keyword set

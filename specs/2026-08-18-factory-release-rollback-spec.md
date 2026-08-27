@@ -2,15 +2,17 @@
 id: 2026-08-18-factory-release-rollback-spec
 title: "self-update.sh safety net — CI gate, image retention, DB snapshot, health-verified rollback"
 stage: spec
-status: approved
+status: implementing
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: 2026-08-17-factory-release-rollback
 verdict: approved
 repos: [minion-factory]
 tags: [infra]
 type: fix
+reconcile_ignore: true
+reconcile_ignore_reason: "Flag evidence was S1/S2 merges only — S3 rollback control flow verified ABSENT on main (no failure_reason path, no health poll, no previous-tag rollback). Implementation in flight by orchestrator."
 ---
 
 # self-update.sh safety net

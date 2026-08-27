@@ -2,14 +2,15 @@
 id: 2026-08-17-maintenance-lane-monitors-spec
 title: Maintenance lane — monitor-triggered pipeline intake (PostHog/Sentry, GH push evaluation, handoff ledger) + spec-format decision
 stage: spec
-status: approved
+status: implementing
 pass: 1
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 repos: [minion-meta, minion-factory, minion, minion_hub]
 verdict: approved
 tags: [infra]
 type: infra
+possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/122
 ---
 
 # Maintenance lane — monitor-triggered pipeline intake

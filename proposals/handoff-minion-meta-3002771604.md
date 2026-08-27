@@ -1,12 +1,13 @@
 ---
 id: handoff-minion-meta-3002771604
 title: Handoff marker — specs/2026-08-20-handoff-minion-hub-902723699-spec.md (minion-meta)
-status: review
+status: closed
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: handoff-minion-hub-902723699
+closed_reason: "Marker lives in spec prose, not code; sweep should exclude specs/."
 ---
 
 # Handoff marker — specs/2026-08-20-handoff-minion-hub-902723699-spec.md
@@ -40,11 +41,11 @@ automatically once the file carries no more markers.
 
 ## Reconciliation note 2026-08-20
 
-All five line hits are quoted `TODO(handoff)` text — AS-IS prose, `rg -nF` verification
-lines, and Slice-2 assertions — inside
-`specs/2026-08-20-handoff-minion-hub-902723699-spec.md`, not a new marker in
-`pos.service.ts` itself. The two real markers (trackStock `:1393`, uom `:1407`) are
-already tracked by `handoff-minion-hub-902723699` (`in-spec`, off-limits to edit), which
-itself already notes overlap with `2026-08-17-hub-updatesellable-silent-drop`. Not
-merged — canonical is in-spec; left at `review` for a human to confirm this is sweep
-noise from scanning spec markdown rather than a distinct open end, and close if so.
+Self-referential: this file IS the spec `handoff-minion-hub-902723699` spawned
+(`specs/2026-08-20-handoff-minion-hub-902723699-spec.md`), and all five cited lines quote that
+proposal's own `pos.service.ts:1393`/`:1407` (trackStock/uom) marker text verbatim as
+AS-IS/context repetitions — not independent occurrences. Same false-positive shape already
+established for sibling spec-prose markers this sweep (`handoff-minion-meta-1508319703`,
+`-265306614`, `-2958182560`, `-3253128100`): the marker lives in `specs/*.md` prose, not real
+unresolved code. Same idea as `2026-08-17-hub-updatesellable-silent-drop` (in-spec) via
+`handoff-minion-hub-902723699`.

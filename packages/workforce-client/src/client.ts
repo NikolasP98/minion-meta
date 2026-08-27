@@ -128,6 +128,10 @@ export function createWorkforceClient(opts: WorkforceClientOptions): WorkforceCl
         payload = JSON.parse(text);
       } catch {
         // Not JSON: a proxy 502 HTML page, a CDN interstitial, a login redirect body.
+        // TODO(handoff): `body.raw` carries an upstream error page (hostnames, upstream paths);
+        // consumers must not forward it to a browser when bodyKind === 'text' — log server-side and
+        // return a generic 502 envelope instead. minion_hub's src/lib/server/workforce-fetch.ts is
+        // unaudited (repo not checked out here); see proposals/2026-08-17-hub-workforce-error-body-leak.md.
         throw new WorkforceApiError(res.status, nonJsonBody(text, res.headers.get('content-type')), 'text');
       }
       if (!res.ok) throw new WorkforceApiError(res.status, payload, 'json');

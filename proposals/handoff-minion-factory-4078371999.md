@@ -3,7 +3,7 @@ id: handoff-minion-factory-4078371999
 title: Handoff marker — agent/run.sh (minion-factory)
 status: closed
 created: 2026-08-20
-updated: 2026-08-20
+updated: 2026-08-21
 repos: [minion-factory]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-factory-memory-governance
@@ -39,4 +39,9 @@ Confirmed same idea as `2026-08-17-factory-memory-governance` (in-spec) — the 
 names that spec's Slice 2 explicitly. The :37 marker ("this direct canonical PUT is the D4
 hole — worker writes shared...") reads as the same governance gap (worker/write-back
 containment) at a different call site. Not merged (canonical is in-spec, off-limits to
-edit); status held at `review` for a human to confirm scope.
+edit). Originally left at `status: review` pending confirmation both markers are already
+tracked elsewhere.
+
+**Update 2026-08-21:** confirmed and closed per the `closed_reason` above (both markers
+already tracked by escalated items) — this paragraph's now-stale `status: review` language
+is superseded by the frontmatter.

@@ -2,10 +2,10 @@
 id: 2026-08-18-factory-topic-capability-manifest-spec
 title: Topic taxonomy + immutable execution manifest (policy resolver)
 stage: spec
-status: approved
+status: implementing
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 repos: [minion-factory, minion-meta]
 proposal: 2026-08-18-factory-topic-capability-manifest
 verdict: approved
@@ -13,6 +13,8 @@ type: infra
 tags: [logic, infra]
 relationship: new
 related: [2026-08-18-factory-workitem-handoff-schema-spec, 2026-08-18-factory-m0-safety-foundation-spec, 2026-08-18-factory-durable-state-outbox-spec, 2026-08-18-sdlc-transformation-roadmap, 2026-08-18-factory-orchestration-round7, 2026-08-18-factory-browser-verification-stage, 2026-08-17-factory-worker-containment]
+reconcile_ignore: true
+reconcile_ignore_reason: "Flag evidence was Slice-2 merge only — Slice 1 (meta topics.json + scripts) verified absent, shipped topics.ts fails closed without it; Slices 3-6 unbuilt. Slice 1 in flight by orchestrator."
 ---
 
 # Topic taxonomy + immutable execution manifest (policy resolver)

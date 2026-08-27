@@ -2,15 +2,16 @@
 id: 2026-08-17-gw-defaces-crm-tools-spec
 title: "Builtin CRM tools — de-FACES the descriptions (business name, locale patterns and examples from org config)"
 stage: spec
-status: approved
+status: implementing
 pass: 2
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: 2026-08-17-gw-defaces-crm-tools
 verdict: approved
 repos: [minion]
 tags: [logic, test]
 type: fix
+possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/219
 ---
 
 # Builtin CRM tools — de-FACES the descriptions

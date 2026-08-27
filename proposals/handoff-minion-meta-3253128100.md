@@ -3,7 +3,7 @@ id: handoff-minion-meta-3253128100
 title: Handoff marker — specs/2026-08-18-factory-postmerge-discovery-loop-spec.md (minion-meta)
 status: closed
 created: 2026-08-20
-updated: 2026-08-20
+updated: 2026-08-21
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-factory-postmerge-discovery-loop
@@ -39,7 +39,10 @@ Likely a scanner false positive, not a real outstanding marker: both quoted line
 spec's own worked *examples* of what a `TODO(handoff):` string looks like, written to specify
 the discovery-loop's test fixtures and acceptance script (§ "Table-driven `scanCompare`
 tests" and a manual-verification step describing "a literal `// TODO(handoff): <something>,
-see spec Y` line"), not an unresolved marker anywhere in this repo's real source. Leaving
-`duplicate_candidate`/`status: review` as the sweep set them (self-referential to this
-proposal's own spec) since there is no genuine duplicate to merge into or reject authority in
-this sweep's mandate — flagged here for a human to close if confirmed noise.
+see spec Y` line"), not an unresolved marker anywhere in this repo's real source. Originally
+left at `status: review` (self-referential to this proposal's own spec, no genuine duplicate
+to merge into) pending a human confirming the noise call.
+
+**Update 2026-08-21:** noise confirmed — closed per the `closed_reason` above (spec-prose
+markers are out of the handoff-ledger sweep's intended scope). This paragraph's now-stale
+`status: review` language is superseded by the frontmatter.

@@ -14,6 +14,10 @@ related: [2026-08-18-hub-funnel-atomic-write-spec, 2026-08-17-hub-funnel-atomic-
 tags: [infra, test, data]
 type: fix
 slice_tags: [1:data+infra, 2:infra+test]
+done_reason: "Zero-diff dev run confirms the open end is already resolved on base (sibling merges covered it); husk PR closed."
+approved_reason: "Reopening: my zero-diff done-flip was wrong — PR #150 recon proves Slices 1-2 remain (CI gate for the concurrency test needs REAL prod RLS DDL, stop-ship until provided)."
+reconcile_ignore: true
+reconcile_ignore_reason: "Sweep false-positive: PR #150 is a stop-ship RECON DOC, not the implementation — Slices 1-2 (CI gate with verified prod RLS fixture) are in flight as run 485528fa. Spec correctly stays approved/active."
 ---
 
 # Wire `crm-funnel.concurrent.integration.test.ts` into a real CI gate
@@ -21,6 +25,26 @@ slice_tags: [1:data+infra, 2:infra+test]
 **Owner surface:** `minion_hub` — `.github/workflows/ci.yml` (a new Postgres job), a new CI-only
 schema fixture file (path decided in Slice 1), `src/server/services/crm-funnel.concurrent.integration.test.ts`
 (marker removal + docstring/guard-message correction only — no test-logic change).
+
+## 0. Product
+
+Quoted verbatim from the source proposal
+([`handoff-minion-hub-3530856808`](../proposals/handoff-minion-hub-3530856808.md)):
+
+> Filed automatically by the factory handoff-ledger sweep: this file carries a
+> `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
+> into the spec pipeline to resolve the open end below.
+>
+> - `NikolasP98/minion_hub@master src/server/services/crm-funnel.concurrent.integration.test.ts:21` —
+>   the spec's central concurrency claim is therefore proven by a
+>
+> **Definition of done:** the marker's open end is resolved and the
+> `TODO(handoff):` comment removed; the sweep closes this proposal
+> automatically once the file carries no more markers.
+
+The open end is that the concurrency proof this marker points at never executes in CI: the test
+skips without a Postgres URL, so the funnel atomic-write claim rests on a file nothing runs. This
+spec resolves it by giving that test a real CI gate, then removing the marker.
 
 ## 1. Relationship recommendation
 

@@ -2,15 +2,16 @@
 id: 2026-08-17-pkg-workforce-client-json-error-spec
 title: "@minion-stack/workforce-client — non-JSON responses must raise WorkforceApiError, not a raw SyntaxError"
 stage: spec
-status: approved
+status: done
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 proposal: 2026-08-17-pkg-workforce-client-json-error
 verdict: approved
 repos: [minion-meta]
 tags: [logic, test, docs, infra]
 type: fix
+done_reason: "Verified complete on meta dev: parse-then-fallback + nonJsonBody cap + bodyKind with 5 assertions, README contract table, changeset present — subagent verification 2026-08-20."
 ---
 
 # Non-JSON responses must raise `WorkforceApiError`

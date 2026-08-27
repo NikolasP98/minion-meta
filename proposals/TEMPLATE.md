@@ -25,7 +25,7 @@ conversations (or written by hand). Run `node scripts/proposal-index.mjs` after 
 | `possibly_reopens` | no | closed proposal id this may be a revival of (reconciler + human decide) |
 | `duplicate_candidate` | no | proposal id the reconciler suspects is the same idea |
 | `spawned_spec` | no | spec id once the spec stage picks this up |
-| `tags` | no | work types, multi-select from `routing.yml`: `ui` `logic` `data` `infra` `docs` `test` `security` `perf` `deps`. The classifier proposes them at intake, the G1 gate confirms them, and `scripts/routing.mjs tags` re-derives them from the diff once one exists |
+| `tags` | no | routing/classification labels, e.g. `[logic, test]`; every value must resolve (as a canonical name or an alias) via `specs/topics.json` — `scripts/proposal-index.mjs` rejects an unknown tag, naming the file and tag. Includes the `routing.yml` work-type taxonomy (`ui` `logic` `data` `infra` `docs` `test` `security` `perf` `deps`) as canonical topics; the classifier proposes them at intake, the G1 gate confirms them, and `scripts/routing.mjs tags` re-derives them from the diff once one exists |
 
 ## Body convention
 

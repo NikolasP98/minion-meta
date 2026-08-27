@@ -2,15 +2,16 @@
 id: 2026-08-17-factory-chat-restart-drops-pending-spec
 title: "minion-factory chat queue — a distinct dispatched state so a runner restart stops eating never-started user messages"
 stage: spec
-status: approved
+status: implementing
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 proposal: 2026-08-17-factory-chat-restart-drops-pending
 verdict: approved
 repos: [minion-base, minion-factory]
 tags: [logic, data]
 type: fix
+possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/46
 ---
 
 # A distinct `dispatched` state for factory chat turns

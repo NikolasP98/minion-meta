@@ -5,12 +5,13 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-20
 proposal: 2026-08-17-gw-shells-lifecycle-stubs
 verdict: approved
 repos: [minion]
 tags: [logic, security, test]
 type: fix
+possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/216
 ---
 
 # Shells — finish the two lifecycle stubs

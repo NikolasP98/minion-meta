@@ -1,8 +1,8 @@
 ---
 id: 2026-08-20-handoff-minion-factory-1487584490-spec
 title: "Cross-tick requeue cap for a persistently-failing unstick-cron lineage"
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-20
 updated: 2026-08-20
@@ -14,6 +14,8 @@ related: [2026-08-18-factory-deterministic-unstick-spec, 2026-08-17-factory-dete
 type: fix
 tags: [infra, logic]
 slice_tags: [1:logic, 2:logic+infra]
+evidence: https://github.com/NikolasP98/minion-factory/pull/48
+shipped_reason: "Verified shipped: PR minion-factory#48 (unstick cross-tick cap) merged to main 2026-08-20 and live on the box via self-update."
 ---
 
 # Cross-tick requeue cap for a persistently-failing unstick-cron lineage
@@ -62,7 +64,7 @@ not merely by file, when concurrent factory work relocates or changes unstick lo
 SQLite FTS database was absent at `/home/agent/.claude-mem/claude-mem.db`, and no semantic
 memory-search MCP tool was exposed in this review session; neither limitation leaves a decision gap.
 
-## 0. Problem (from the approved proposal, quoting the live `TODO(handoff)` marker)
+## 0. Product
 
 > `NikolasP98/minion-factory@main scripts/unstick-cron.sh:110` — there is no CROSS-TICK cap on
 > requeuing a persistently-failing lineage.
@@ -384,7 +386,7 @@ Blast radius is a single host-side cron script inside `minion-factory`, running 
 - Any change to `agent/unstick.sh`, the facilitator's Docker invocation, or its credential scope —
   untouched by this spec.
 
-## 9. End-to-end acceptance
+## 9. End-to-end verification
 
 From a clean clone of the merge commit:
 

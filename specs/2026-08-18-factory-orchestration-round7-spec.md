@@ -5,12 +5,13 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 repos: [minion-factory, minion-meta]
 proposal: 2026-08-18-factory-orchestration-round7
 verdict: approved
 relationship: depends-on
 related: [2026-08-18-agent-instruction-parity-and-repo-policy, 2026-08-18-factory-topic-capability-manifest-spec, 2026-08-18-factory-durable-state-outbox-spec, 2026-08-18-factory-workitem-handoff-schema-spec, 2026-08-18-factory-orchestration-tests-spec, 2026-08-17-factory-capability-separation, 2026-08-17-factory-worker-containment, 2026-08-18-factory-browser-verification-stage, 2026-08-18-sdlc-transformation-roadmap]
+possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/41
 ---
 
 # Typed execution graph — repo fan-out, slice continuation, scenario profiles, relationship resolution
