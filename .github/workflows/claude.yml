@@ -1,22 +1,26 @@
 name: Claude Code
 
+# Only events whose workflow run is attached to the PR head branch are
+# subscribed here. `issue_comment` and `issues` runs are pinned by GitHub to the
+# default branch (`main`) and its HEAD SHA, so every monitor-intake bot comment
+# filtered out by the `if:` below still left a `skipped` run on the deploy
+# branch — 51 of the 53 check runs on 5ffdfec, and 98 of the newest 100 runs
+# returned by `GET /actions/runs?branch=main`, burying the real CI/Release
+# verdict deep enough for deploy-status probes to read the branch as not-green.
+# The interactive path lost nothing: across 563 runs of this workflow not one
+# ever executed (542 skipped, 21 unapproved `action_required`).
+# See proposals/2026-08-28-base-deploy-status-skipped-run-noise.md.
 on:
-  issue_comment:
-    types: [created]
   pull_request_review_comment:
     types: [created]
-  issues:
-    types: [opened, assigned]
   pull_request_review:
     types: [submitted]
 
 jobs:
   claude:
     if: |
-      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
       (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
-      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude')) ||
-      (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')))
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude'))
     runs-on: ubuntu-latest
     permissions:
       contents: read
