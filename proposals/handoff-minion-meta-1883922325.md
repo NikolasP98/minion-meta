@@ -27,7 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-08-28)
 
-- `NikolasP98/minion-meta@dev scripts/spec-index.mjs:223` — 127 pre-existing specs are grandfathered here and never get
+- `NikolasP98/minion-meta@dev scripts/spec-index.mjs:223` — 115 pre-existing specs are grandfathered here and never get
   https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L223
 - `NikolasP98/minion-meta@dev scripts/spec-index.mjs:228` — 5 legacy superseded specs have no known successor in the
   https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L228
