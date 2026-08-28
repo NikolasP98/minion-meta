@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-722867358
 title: Handoff marker — src/server/services/server.service.ts (minion_hub)
-status: draft
+status: review
+duplicate_candidate: 2026-08-17-hub-updateserver-tenant-scope
 created: 2026-08-28
 updated: 2026-08-28
 repos: [minion-hub]
