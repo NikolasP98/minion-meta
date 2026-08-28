@@ -115,6 +115,15 @@ try {
 
   // 6. Broken includes and links, in both CommonMark destination forms.
   failsWith(/fixture\/AGENTS\.md: include '@MISSING\.md' does not resolve/, () => writeAgents(goodAgents('\n@MISSING.md\n')));
+
+  // An include-shaped line inside an HTML block is inert: a renderer emits an HTML comment or a
+  // <script> body verbatim, it never turns that text into an include directive, so a broken-looking
+  // target inside one must not be checked — while the identical line as live Markdown still is.
+  writeAgents(goodAgents('\n<!--\n@MISSING.md\n-->\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  writeAgents(goodAgents('\n<script>\n@MISSING.md\n</script>\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  reset();
   failsWith(/fixture\/AGENTS\.md: link '\.\/gone\.md' does not resolve/, () => writeAgents(goodAgents('\nSee [gone](./gone.md).\n')));
   // An angle-bracket destination is a real link: a space in the path must not buy an exemption.
   failsWith(/fixture\/AGENTS\.md: link '\.\/missing file\.md' does not resolve/, () =>
@@ -364,6 +373,15 @@ try {
     errors = [...checkRootProjections(fixture, policy), ...checkInstructionPair(fixture, { label: 'fixture' })];
     assert(errors.includes(`fixture/AGENTS.md: link './ESCAPE-LINK.md' does not resolve`), `symlink escape was not rejected:\n${errors.join('\n')}`);
     rmSync(join(fixture, 'ESCAPE-LINK.md'));
+    reset();
+
+    // An in-checkout relative name that merely starts with '..' (its own component, not a parent
+    // segment) is not a traversal — `relative()` returning e.g. '..valid/DOC.md' must not be
+    // confused with the true escape forms '..' and '../...' rejected above.
+    mkdirSync(join(fixture, '..valid'));
+    writeFileSync(join(fixture, '..valid', 'DOC.md'), '# dotted-prefix directory\n');
+    writeAgents(goodAgents('\nSee [dotted](./..valid/DOC.md).\n'));
+    assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
     reset();
   }
   // …and an ordinary relative link inside the checkout is the resolving control exercised throughout
