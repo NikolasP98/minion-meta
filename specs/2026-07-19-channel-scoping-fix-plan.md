@@ -2,21 +2,42 @@
 id: 2026-07-19-channel-scoping-fix-plan
 title: Channel Scoping Fix — sequenced plan
 stage: spec
-status: approved
+status: parked
 pass: 1
 created: 2026-07-19
-updated: 2026-08-18
-repos: [minion]
-verdict: approved
+updated: 2026-08-23
+repos: [minion, minion_hub]
+verdict: revision-required
 tags: [security, logic]
+possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/226
 ---
 
 # Channel Scoping Fix — sequenced plan
 
 **Date:** 2026-07-19
-**Status:** Plan, not yet executed
+**Status:** Parked pending a coordinated gateway, Hub, and runtime-config execution path
 **Trigger:** PINONITE (personal org) showed FACES SCULPTORS' channels. Gmail half fixed + verified (`c8f98ced` / `a6e24fee6`); this plan covers the remaining Discord / Telegram / WhatsApp leak.
 **Related:** memory `channel-identity-org-scoping-failopen`, gateway `cd1a8a4a7` (shells-only fix)
+
+**Execution hold (2026-08-23):** P1 is not a gateway-only slice. It requires a
+Hub browser-handshake change plus trusted gateway issuer/audience runtime
+configuration. Factory run `a3834485` / minion-ai PR #237 proved that the
+single-repository assignment cannot satisfy the acceptance criteria: after the
+unsafe caller-asserted `orgId` fallback was rejected, repeated fix rounds could
+only add anti-spoof tests while real browser sockets remained unchanged. Do not
+redispatch this spec as a single-repository run. Resume only through a
+coordinated `minion` + `minion_hub` implementation with deployment access, or
+after Factory supports an equivalent cross-repository lineage and runtime
+verification gate.
+
+## 0. Product
+
+Prevent one organization from seeing another organization's channel accounts
+without hiding a person's legitimate user-scoped identities across the
+organizations they belong to. The product boundary is safe only when the
+browser socket carries authenticated user and organization identity, every
+channel account is classified, and the final filter fails closed for missing or
+unclassified authority.
 
 ---
 

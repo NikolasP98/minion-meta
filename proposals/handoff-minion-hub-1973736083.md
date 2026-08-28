@@ -3,10 +3,11 @@ id: handoff-minion-hub-1973736083
 title: Handoff marker — src/server/services/pos-emission-mapping.ts (minion_hub)
 status: closed
 created: 2026-08-20
-updated: 2026-08-20
+updated: 2026-08-21
 repos: [minion-hub]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-hub-igv-rate-from-org-config
+closed_reason: "Auto-closed: no TODO(handoff): marker found in this file as of 2026-08-20 (see ## Closed (auto) below); supersedes the earlier dedup-review note."
 ---
 
 # Handoff marker — src/server/services/pos-emission-mapping.ts
@@ -37,7 +38,10 @@ hardcodes 18% IGV instead of reading the org's configured tax rate); the marker'
 ("rate is still a literal here — S2 of ...") reads as a truncated reference to that spec.
 Not merged (canonical is in-spec, off-limits to edit; also the named target file differs —
 that proposal's Problem cites `src/server/finance/emission/ubl.ts`, not
-`pos-emission-mapping.ts`); status held at `review` for a human to confirm scope.
+`pos-emission-mapping.ts`). Originally left at `status: review` for a human to confirm scope.
+
+**Update 2026-08-21:** superseded by the auto-close below — the underlying marker was
+resolved in source before the dedup question needed a human answer.
 
 ## Closed (auto)
 

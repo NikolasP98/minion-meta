@@ -2,15 +2,16 @@
 id: 2026-08-17-hub-personal-agent-entrypoint-test-spec
 title: "Direct unit tests for loadPersonalAgentForUser — cover the 401 guard and delegation path"
 stage: spec
-status: approved
+status: done
 pass: 2
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: 2026-08-17-hub-personal-agent-entrypoint-test
 verdict: approved
 repos: [minion_hub]
 tags: [test]
 type: fix
+done_reason: "Zero-diff dev run confirms the open end is already resolved on base (sibling merges covered it); husk PR closed."
 ---
 
 # Direct unit tests for `loadPersonalAgentForUser`
@@ -30,7 +31,7 @@ in Slice 0 because `minion_hub/` is not present in this meta-repo checkout.
 [`2026-08-17-sdlc-phase-gates-scoring-spec`](2026-08-17-sdlc-phase-gates-scoring-spec.md) §4b
 requires a mutation spot-check. No UI file is in scope.
 
-## 0. Product contract
+## 0. Product
 
 The approved proposal requires direct tests for two behaviors:
 

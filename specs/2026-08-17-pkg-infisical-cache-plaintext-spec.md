@@ -2,7 +2,7 @@
 id: 2026-08-17-pkg-infisical-cache-plaintext-spec
 title: "@minion-stack/env — stop leaving the gateway vault master key in a plaintext cache file"
 stage: spec
-status: approved
+status: implementing
 pass: 2
 created: 2026-08-17
 updated: 2026-08-20
@@ -12,6 +12,7 @@ repos: [minion-meta]
 tags: [security, infra, logic, test]
 type: fix
 approved_reason: "G2 verdict already approved in sidecar; security tag kept merge human-gated — dev run may proceed under overnight mandate."
+possibly_shipped: https://github.com/NikolasP98/minion-meta/pull/94
 ---
 
 # Stop leaving the gateway vault master key in a plaintext cache file

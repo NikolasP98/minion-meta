@@ -52,22 +52,24 @@ export async function resolveEnv(opts: ResolveOptions = {}): Promise<ResolvedEnv
 	applyLayer('root-defaults', parseDotenvFile(path.join(metaRoot, '.env.defaults')));
 
 	// Layer 2 — Infisical minion-core (narrowed to MINION_SECRETS_KEY only)
+	const NARROWED_KEYS = new Set(['MINION_SECRETS_KEY']);
 	const core = await fetchInfisicalSecrets('minion-core', {
 		domain:
 			opts.infisicalDomain ??
 			env.MINION_DEFAULT_INFISICAL_DOMAIN ??
 			process.env.INFISICAL_DOMAIN,
 		noCache: opts.noCache,
+		cacheKeys: [...NARROWED_KEYS],
 	});
 	if (core.ok) {
-		const NARROWED_KEYS = new Set(['MINION_SECRETS_KEY']);
 		const narrowed: Record<string, string> = {};
 		for (const [k, v] of Object.entries(core.env)) {
 			if (NARROWED_KEYS.has(k)) narrowed[k] = v;
 		}
 		applyLayer('infisical-core', narrowed);
 		// Warn if Infisical still has other keys — operators should migrate them to the vault.
-		const stale = Object.keys(core.env).filter((k) => !NARROWED_KEYS.has(k));
+		// Prefer `keyNames` (survives a narrowed cache hit) over `Object.keys(core.env)`.
+		const stale = (core.keyNames ?? Object.keys(core.env)).filter((k) => !NARROWED_KEYS.has(k));
 		if (stale.length > 0) {
 			warnings.push(
 				`Infisical project minion-core has ${stale.length} key(s) outside the narrowed set ` +

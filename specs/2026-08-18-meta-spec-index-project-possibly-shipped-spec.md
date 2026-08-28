@@ -1,16 +1,18 @@
 ---
 id: 2026-08-18-meta-spec-index-project-possibly-shipped-spec
 title: Establish G0 reconciliation contracts before projecting them
-stage: spec
-status: review
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: 2026-08-17-meta-spec-index-project-possibly-shipped
 verdict: changes_requested
 repos: [minion-factory, minion-meta, minion-base]
 relationship: depends-on
 related: [2026-08-17-sdlc-phase-gates-scoring-spec, 2026-08-18-base-kanban-possibly-shipped-surface-spec]
+evidence: https://github.com/NikolasP98/minion-meta/pull/43
+shipped_reason: "Verified shipped: the projection landed via my kanban Slice-1 commit on meta dev 2026-08-20 (spec-index projects possibly_shipped/evidence/link_review, fixtures green); PR #43 lineage carried the earlier attempt."
 ---
 
 # Establish G0 reconciliation contracts before projecting them

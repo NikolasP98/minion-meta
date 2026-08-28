@@ -2,10 +2,10 @@
 id: 2026-08-18-base-ui-primitives-and-shell-spec
 title: Base UI-002/003 — interaction primitives + mobile shell
 stage: deploy
-status: flag-ready
+status: done
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: 2026-08-18-base-ui-primitives-and-shell
 verdict: approved
 repos: [minion-base]
@@ -18,6 +18,7 @@ merged_at: 2026-08-18T15:58:40-05:00
 release_flag: PUBLIC_WORK_DETAIL_V2
 release_state: off
 evidence: https://github.com/NikolasP98/minion-base/commit/0513acb1440daeb8cc5cb5be6e28f9c1a6714203
+done_reason: "PUBLIC_MOBILE_SHELL_V2=true activated in production 2026-08-20: same verification battery; legacy shell preserved when flag unset (e2e proven)."
 ---
 
 # Base UI-002/003 — interaction primitives + mobile shell

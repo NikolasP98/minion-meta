@@ -2,15 +2,16 @@
 id: 2026-08-18-base-kanban-possibly-shipped-surface-spec
 title: minion-base kanban renders G0 warnings and acts on possibly_shipped flags
 stage: spec
-status: review
+status: done
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: 2026-08-17-base-kanban-possibly-shipped-surface
 verdict: changes_requested
 repos: [minion-base, minion-factory, minion-meta]
 tags: [ui, logic, docs, test]
 type: feature
+done_reason: "All 3 slices live 2026-08-20: meta index projects the G0 fields (fixtures green), factory runner ships the evidence-bound producer sweep + disposition endpoint (D1 exactly-one-of, D2 shipped-status on confirm only, D3 reconcile_ignore honored; 515/515 tests; e2e verified live: 3 specs flagged, confirm-shipped 200 with canonical projection, 409/400 negative gates), base surface + dispose relay enabled via FACTORY_DISPOSAL=1."
 ---
 
 # minion-base kanban renders G0 warnings and acts on possibly_shipped flags

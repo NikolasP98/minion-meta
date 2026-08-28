@@ -5,12 +5,13 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-20
 proposal: 2026-08-17-factory-postmerge-discovery-loop
 verdict: approved
 repos: [minion-factory]
 tags: [logic, infra]
 type: infra
+possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/34
 ---
 
 # Post-merge discovery loop
