@@ -5,13 +5,14 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-pkg-dev-crypto-failopen
 verdict: approved
 repos: [minion-meta, minion_hub, minion_site]
 tags: [security, logic, test]
 type: fix
-possibly_shipped: https://github.com/NikolasP98/minion-meta/pull/97
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: PR #97 completed S2 after S1, but its review explicitly deferred S3 consumer rollout and shared-database verification across Hub and Site; the fail-closed package work is not the whole cross-repo spec."
 ---
 
 # Fail closed on the dev crypto key

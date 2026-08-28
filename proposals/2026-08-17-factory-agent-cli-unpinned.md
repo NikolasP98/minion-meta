@@ -1,10 +1,10 @@
 ---
 id: 2026-08-17-factory-agent-cli-unpinned
 title: Agent image installs claude-code/codex unpinned — parser contract can break silently
-status: in-spec
+status: done
 spawned_spec: 2026-08-17-factory-agent-cli-unpinned-spec
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-28
 repos: [minion-factory]
 tags: [infra, deps]
 value: 5

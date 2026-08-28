@@ -12,7 +12,8 @@ tags: [test, logic]
 verdict: approved
 relationship: depends-on
 related: [2026-08-18-sdlc-transformation-roadmap]
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/21
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: PR #21 implemented only M0 S1. Current dev still lacks the D5 trusted GitHub App/check identity binding; that separate provenance change has not landed, so the safety foundation is not complete."
 ---
 
 # M0 — safety freeze and regression foundation
@@ -20,6 +21,10 @@ possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/21
 Per [[2026-08-18-sdlc-transformation-roadmap]] (program plan): close immediate
 holes before any new behavior. Baseline 46/100; credit only for controls
 implemented + tested + enforced + observable + fail-closed.
+
+## 0. Product
+
+The safety foundation turns those M0 security and release invariants into executable, regression-tested controls.
 
 ## AS-IS
 
@@ -114,8 +119,3 @@ re-add `git add -A`) in a scratch branch and observe the matching test fail.
 
 Each slice is a single revertable commit; no schema migrations; the CI
 workflow can be disabled by deleting one file.
-
-## Board audit 2026-08-28
-
-Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
-Scope narrowed: D1-D4, D6 shipped (spec.sh allowlist/sidecar/degrade, automerge rehash, ci.yml). Remaining: D5 only — automerge still matches required checks by NAME with no App-identity binding (automerge.ts:161); an untrusted App's green 'verify' satisfies the gate. If expectedIdentity was the deliberate replacement, record that and close.

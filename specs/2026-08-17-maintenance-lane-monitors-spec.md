@@ -5,12 +5,13 @@ stage: spec
 status: implementing
 pass: 1
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 repos: [minion-meta, minion-factory, minion, minion_hub]
 verdict: approved
 tags: [infra]
 type: infra
-possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/122
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: minion_hub PR #122 covers only the Hub half of runtime-monitor Slice 4. The six-slice spec still lacks complete merge-scan, alert resolution E2E, template visualizer/lint box, and gateway-health monitor closure evidence."
 ---
 
 # Maintenance lane — monitor-triggered pipeline intake

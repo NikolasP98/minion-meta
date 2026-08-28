@@ -19,7 +19,9 @@ reconcile_ignore_reason: "Flag evidence was Slice-2 merge only — Slice 1 (meta
 
 # Topic taxonomy + immutable execution manifest (policy resolver)
 
-## 0. Problem (quoted from the approved proposal)
+## 0. Product
+
+Problem quoted from the approved proposal:
 
 > Audit 2026-08-18: the pipeline has tags but no topic→capability policy.
 > Target architecture: declared topics + repo policy + deterministic changed-path
@@ -561,8 +563,3 @@ still treat `topics.json` as a meta file whose malformed content stops new facto
    an existing all-`docs`-tagged, diff-confined-to-docs PR still auto-merges exactly as before
    Slice 4 only when all manifest-required stage/evidence predicates and every pre-existing M0
    gate pass (regression, not just new behavior).
-
-## Board audit 2026-08-28
-
-Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
-ADDRESSED S1-S5 (frontmatter's 'Slice 1 verified absent' was stale): specs/topics.json + meta scripts + CI gate; topics.ts, manifest.ts (resolve/hash/enforce), reclassify.ts union+downgrade guard, manifest trailers + project_labels outbox job. Open end (ledger): S6 runner/README operator doc never written — folded here rather than holding a board slot.

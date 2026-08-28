@@ -11,7 +11,8 @@ verdict: approved
 repos: [minion-factory]
 tags: [test]
 type: infra
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/38
+evidence: https://github.com/NikolasP98/minion-factory/pull/38
+shipped_reason: "Accepted: current minion-factory contains every orchestration-test slice; the 2026-08-28 audit found the unified Node suite, CI/typecheck/shell enforcement, and retry PR #99 merged green."
 ---
 
 # First-party tests for runner orchestration
@@ -57,7 +58,9 @@ factory-specific observation that supersedes these two files.
 
 ---
 
-## 0. Problem and scope
+## 0. Product
+
+Problem and scope:
 
 From the approved proposal `2026-08-17-factory-orchestration-tests`:
 
@@ -371,7 +374,7 @@ after the test command exists and all tests pass.
   live `main` behavior;
 - hand-editing either `index.json` file.
 
-## 6. End-to-end acceptance
+## 6. Verification
 
 From a clean clone of the merge commit:
 
@@ -391,8 +394,3 @@ Acceptance requires:
 5. the latest attempt of `ci.yml` for the exact `main` HEAD is completed successfully.
 
 Only then is the release-rollback spec's previously inert CI dependency a real deployment signal.
-
-## Board audit 2026-08-28
-
-Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
-ADDRESSED: all §2/§3 exports exist; single `npm test` (~890 node:test incl. subtests); ci.yml runs runner tests + typecheck + all shell suites; board retry aa502dc0 passed and merged (#99).

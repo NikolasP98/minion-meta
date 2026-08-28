@@ -5,13 +5,14 @@ stage: spec
 status: implementing
 pass: 2
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-gw-whatsapp-cloud-template-fallback
 verdict: approved
 repos: [minion]
 tags: [logic, test]
 type: feature
-possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/215
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: minion-ai PR #215 is explicitly Slice 1 only and only exposes the Graph error at the call site. Opt-in account config, at-most-once fallback wrapper, diagnostics, docs, and ledger S2-S4 remain unproven."
 ---
 
 # WhatsApp Cloud — auto-fallback to an approved template when the 24h window is closed

@@ -33,6 +33,44 @@ describe('registry', () => {
 		expect(reg.subprojects.hub?.packageManager).toBe('bun');
 	});
 
+	it("accepts packageManager 'none' — a repo that runs no package manager", () => {
+		fs.writeFileSync(
+			regPath,
+			JSON.stringify({
+				subprojects: {
+					plugins: {
+						path: 'minion_plugins',
+						packageManager: 'none',
+						branch: 'main',
+						infisicalProject: 'minion-plugins',
+						remote: 'x',
+						commands: {},
+					},
+				},
+			}),
+		);
+		expect(loadRegistry(regPath).subprojects.plugins?.packageManager).toBe('none');
+	});
+
+	it('rejects a package manager outside the enum', () => {
+		fs.writeFileSync(
+			regPath,
+			JSON.stringify({
+				subprojects: {
+					hub: {
+						path: 'hub',
+						packageManager: 'deno',
+						branch: 'dev',
+						infisicalProject: 'minion-hub',
+						remote: 'x',
+						commands: {},
+					},
+				},
+			}),
+		);
+		expect(() => loadRegistry(regPath)).toThrow(/packageManager/);
+	});
+
 	it('throws on malformed registry (missing required field)', () => {
 		fs.writeFileSync(regPath, JSON.stringify({ subprojects: { hub: { path: 'hub' } } }));
 		expect(() => loadRegistry(regPath)).toThrow();

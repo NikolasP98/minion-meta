@@ -27,7 +27,8 @@ export interface ResolveOptions {
 
 export interface SubprojectRegistryEntry {
 	path: string;
-	packageManager: 'pnpm' | 'bun' | 'npm' | 'yarn';
+	/** `none` mirrors repo-policy's "this repository runs no package manager" row. */
+	packageManager: 'pnpm' | 'bun' | 'npm' | 'yarn' | 'none';
 	branch: string;
 	infisicalProject: string;
 	remote: string;

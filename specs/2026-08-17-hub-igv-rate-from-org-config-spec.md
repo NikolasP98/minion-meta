@@ -5,13 +5,14 @@ stage: spec
 status: implementing
 pass: 2
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-hub-igv-rate-from-org-config
 verdict: approved
 repos: [minion_hub]
 tags: [logic, test]
 type: fix
-possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/133
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: PR #133 merged S2 after S1, but Slice 3 resumen, rounding, anti-recurrence, and live verification work remains in open minion_hub PR #159; the spec is not yet shipped."
 ---
 
 # SUNAT emission — thread the org's configured IGV rate

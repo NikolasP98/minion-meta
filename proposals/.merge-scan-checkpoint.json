@@ -1,57 +1,134 @@
 {
-  "NikolasP98/minion-base:main": {
-    "cursor": "c38eb84bb8028b72d73c710c40e23a2a5de447cb",
-    "head": "df37d6a03bc1a6089602d44d29039a031c0c255a",
-    "done": 3,
-    "kept": [
-      {
-        "file": "src/routes/+page.svelte",
-        "desc": "Accessing h.activeLanes.upstream without checking if h.activeLanes exists; will throw if activeLanes is null/undefined — use optional chaining h.activeLanes?.upstream",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 127
-      },
-      {
-        "file": "src/routes/stats-types.test.ts",
-        "desc": "Test accesses stats?.running which does not exist; Stats has queue.running, not a top-level running field — should be stats?.queue.running.",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 324
-      }
-    ]
-  },
   "NikolasP98/minion_hub:master": {
     "cursor": "7fdc291f88f87c5448a72240af8c8891346d1bff",
-    "head": "fbb9e0d4d0d3aa250f7566534d8bee21308bf3c2",
-    "done": 11,
+    "head": "afd023b6100de280ba0f14e252f9afe1baa6a360",
+    "done": 38,
     "kept": [
       {
-        "file": "scripts/ui-audit-inventory.test.ts",
-        "desc": "Three assertions about sourceRef, sourceCommit, and workingTreeFingerprint were removed from the main test and moved to a conditional test that only runs if pinnedBaselineIsReachable — in shallow clones (factory workers), this conditional test is skipped entirely.",
+        "file": "scripts/audit-server-tenant-scope.ts",
+        "desc": "JSON.parse called without error handling; malformed evidence file produces unhelpful parse error instead of operator-facing message",
         "severity": "medium",
-        "category": "weakened-test",
-        "line": 32
+        "category": "unvalidated-input",
+        "line": 83
       },
       {
         "file": "src/hooks.server.ts",
-        "desc": "Empty catch block silently swallows errors from getPostHogClient — failures in telemetry initialization or network calls are completely hidden from observation.",
+        "desc": "permissions.permissions accessed without null/undefined check after awaiting loadPermissionsForUser",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 205
+      },
+      {
+        "file": "src/hooks.server.ts",
+        "desc": "PostHog errors silently swallowed without logging or visibility into telemetry failures",
         "severity": "high",
         "category": "empty-catch",
-        "line": 520
+        "line": 519
+      },
+      {
+        "file": "src/lib/components/crm/PartyPicker.svelte",
+        "desc": "Comment documents that initialVerifiedOnly 'Defaults on for customer contexts and off when the accepted types include system agents' but component does not implement this defaulting logic.",
+        "severity": "medium",
+        "category": "missing-handoff",
+        "line": 27
+      },
+      {
+        "file": "src/lib/components/crm/graph/CrmGraph.svelte",
+        "desc": "Empty catch block swallows releasePointerCapture error; despite comment, this pattern masks failures and should log or explicitly ignore",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 215
+      },
+      {
+        "file": "src/lib/components/dashboard/EditableGrid.svelte",
+        "desc": "Empty catch block silently swallows errors from loadDashboardLayout without logging or error handling.",
+        "severity": "high",
+        "category": "empty-catch",
+        "line": 70
+      },
+      {
+        "file": "src/lib/components/data-table/DataTable.svelte",
+        "desc": "Empty catch block silently swallows errors from server.onSelectAllMatching(), leaving the user with no feedback if the async call fails; loading state will still clear but selection remains unchanged with no error indication.",
+        "severity": "high",
+        "category": "empty-catch",
+        "line": 848
+      },
+      {
+        "file": "src/lib/components/pos/SellableWizard.svelte",
+        "desc": "catch block swallows all exceptions silently; network errors, JSON parse failures, and handler errors bypass toasting",
+        "severity": "high",
+        "category": "empty-catch",
+        "line": 280
+      },
+      {
+        "file": "src/lib/components/reliability/PerformanceMonitorPanel.svelte",
+        "desc": "API response is cast without validation; malformed data could cause crashes when accessing undefined properties.",
+        "severity": "high",
+        "category": "unvalidated-input",
+        "line": 46
       },
       {
         "file": "src/lib/components/scheduling/BookingsView.svelte",
-        "desc": "j.preview properties accessed without null check; if API response lacks preview key, throws TypeError at runtime. Use j?.preview?.hasMapping and j?.preview?.lines",
+        "desc": "API response field itemId cast as string without null check; missing field silently becomes undefined, violating type contract",
+        "severity": "high",
+        "category": "unvalidated-input",
+        "line": 149
+      },
+      {
+        "file": "src/lib/components/scheduling/BookingsView.svelte",
+        "desc": "API response property contact_id accessed without validating it exists; could be undefined, breaking contact selection",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 272
+      },
+      {
+        "file": "src/lib/components/scheduling/BookingsView.svelte",
+        "desc": "Accessing nested property j.preview.hasMapping without validating j.preview exists; TypeError caught but structure not validated",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 295
+      },
+      {
+        "file": "src/lib/components/stock/StockItemCreateForm.svelte",
+        "desc": "catch block swallows fetch/JSON errors without logging, hiding debugging information from developers",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 62
+      },
+      {
+        "file": "src/lib/components/ui/Picker.svelte",
+        "desc": "result.rows is accessed without checking if the rows property exists; accessing .length on undefined will crash if loadRows returns a malformed result",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 316
+        "line": 210
+      },
+      {
+        "file": "src/routes/(app)/crm/customers/+page.server.ts",
+        "desc": "scoreMin and scoreMax URL parameters are converted with Number() which can return NaN for invalid inputs; NaN values are then used in Math.max/Math.min and passed to rankContactsPageCached without validation.",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 28
+      },
+      {
+        "file": "src/routes/(app)/socials/+page.server.ts",
+        "desc": "Destructuring context without null check; will throw TypeError if socialDashboardContext returns null/undefined",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 42
+      },
+      {
+        "file": "src/routes/(app)/socials/+page.server.ts",
+        "desc": "Spreading dashboard without null check; will throw TypeError if socialDashboardData returns null/undefined",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 51
       }
     ]
   },
   "NikolasP98/minion-meta:dev": {
     "cursor": "83cfd862aa9632c9d01a1319cf51f1413b2d66bc",
-    "head": "92174f78fc2a24b74f6580ac7db7368d4d92b06f",
-    "done": 1,
+    "head": "c6772a18dbaf253cae86ad3c8286fb94e5a98eef",
+    "done": 20,
     "kept": []
   }
 }

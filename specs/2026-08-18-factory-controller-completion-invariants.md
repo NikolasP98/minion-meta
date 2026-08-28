@@ -18,6 +18,10 @@ Lifecycle record for the controller hardening implemented in Factory PR #28. Thi
 intentionally `test/review`, not `spec/approved`: it describes code already under review and must
 never launch a second development run.
 
+## 0. Product
+
+This artifact closes controller completion-identity, bounded-retry, reconciliation, and provider-fallback gaps at the reviewed head.
+
 ## Implemented at reviewed head
 
 Factory head `ee3e935f79a56bec16082d3e0c4a1b8391cd4f81` adds:
@@ -40,7 +44,7 @@ accounting, descendant merge evidence, stale-index reconciliation, merge-sweep s
 independent-review queue spinning, retry PR inheritance, legacy execution dedupe, and legacy root
 lineage migration.
 
-## Validation evidence
+## Verification
 
 - Fresh `npm ci`: zero vulnerabilities.
 - `npm run typecheck`: pass.
@@ -60,6 +64,10 @@ required hosted check.
 Production remains on Factory `d70760d2a761846e7debe2447f917ee367429414` with
 `FACTORY_AUTOPROMOTE=0`, a healthy runner, and zero queued or running work.
 
+## Out of scope
+
+No feature expansion beyond the controller completion and release invariants documented here is authorized by this artifact.
+
 ## Exit criteria
 
 1. Restore GitHub Actions billing/quota, or explicitly provision an isolated trusted self-hosted
@@ -69,8 +77,3 @@ Production remains on Factory `d70760d2a761846e7debe2447f917ee367429414` with
 4. Verify the live schema migration, health, zero duplicate descendants, and one merged
    implementation producing exactly one satisfied work item.
 5. Reconcile this artifact to `done/shipped` with the merge SHA and runtime evidence.
-
-## Board audit 2026-08-28
-
-Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
-ADDRESSED: already_satisfied outcome (queue.ts:3028, hardened in #110), merge_events/merge_reservations/outbox_jobs, reclassify.ts, requeue.ts; the Actions-billing blocker cleared (ed50b98, 94c798d). Production is ~135 commits past the spec's baseline.

@@ -1,8 +1,8 @@
 ---
 id: 2026-08-13-agentic-sdlc-test-quality-gates-spec
 title: Agentic SDLC test & quality gates — execution surfaces, test integrity, train gates
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 1
 created: 2026-08-13
 updated: 2026-08-28
@@ -11,6 +11,8 @@ verdict: approved
 tags: [infra, test]
 type: infra
 approved_reason: "Pending verdict resolved under overnight mandate: spec is the quality-gates plan of record (S1 already shipped as gw PR #214/#225 lineage); slice-scoped dev runs to continue."
+evidence: https://github.com/NikolasP98/minion-factory/pull/121
+shipped_reason: "Board audit narrowed the actionable remainder to S3 and S7; merged minion-factory PR #121 implements both, with Factory review PASS, runner 890/890, typecheck, and hosted checks green."
 ---
 
 # Agentic SDLC test & quality gates

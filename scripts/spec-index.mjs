@@ -220,7 +220,14 @@ export function missingRequiredHeadings(body) {
 	const scanned = stripNonDocumentMarkdown(body);
 	return REQUIRED_HEADINGS.filter(({ re }) => !re.test(scanned)).map(({ label }) => label);
 }
-// TODO(handoff): 127 pre-existing specs are grandfathered here and never get
+
+export function liveSliceNumbers(body) {
+	return new Set(
+		[...stripNonDocumentMarkdown(body).matchAll(/^###[ \t]+Slice[ \t]+([1-9][0-9]*)\b/gm)]
+			.map((match) => Number(match[1]))
+	);
+}
+// TODO(handoff): 115 pre-existing specs are grandfathered here and never get
 // checked again while their body is unchanged (hash-ratcheted — see header
 // comment). Shrink the baseline over time (backfill headings, remove the id)
 // — see proposals/2026-08-18-spec-heading-lint-baseline-backfill.md.
@@ -246,6 +253,7 @@ export const SCALAR_FIELDS = [
 	'created',
 	'updated',
 	'pass',
+	'next_slice',
 	'revises',
 	'supersedes',
 	'proposal',
@@ -273,7 +281,7 @@ export function findScalarArrayViolations(fm) {
 
 export function findScalarStringViolations(fm) {
 	return SCALAR_FIELDS.filter(
-		(key) => key !== 'pass' && key !== 'pr' && fm[key] !== undefined && typeof fm[key] !== 'string'
+		(key) => !['pass', 'pr', 'next_slice'].includes(key) && fm[key] !== undefined && typeof fm[key] !== 'string'
 	);
 }
 
@@ -335,6 +343,7 @@ export const OPTIONAL_INDEX_FIELDS = [
 	'verdict',
 	'pr',
 	'type',
+	'next_slice',
 	'retired_reason',
 	'tags',
 	'relationship',
@@ -609,6 +618,10 @@ function main() {
 		}
 		if (fm.pass !== undefined && !(Number.isInteger(fm.pass) && fm.pass >= 1))
 			errors.push(`${name}: "pass" must be a positive integer, got "${fm.pass}"`);
+		if (fm.next_slice !== undefined && !(Number.isInteger(fm.next_slice) && fm.next_slice >= 1))
+			errors.push(`${name}: "next_slice" must be a positive integer, got "${fm.next_slice}"`);
+		else if (fm.next_slice !== undefined && !liveSliceNumbers(body).has(fm.next_slice))
+			errors.push(`${name}: "next_slice" ${fm.next_slice} does not name a live Slice heading in the spec body`);
 		for (const message of findArrayFieldViolations(fm)) errors.push(`${name}: ${message}`);
 		// `repos: []` is the documented shape for a plan-of-record (`type: decision`)
 		// that no repo implements directly — milestone specs cite it instead. Every

@@ -1,11 +1,11 @@
 ---
 id: 2026-08-21-handoff-minion-ai-4278431509-spec
 title: "Handoff marker minion-tools.ts:263 — wire gateway.crm.defaultProfile into the CRM tool construction site"
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-21
-updated: 2026-08-21
+updated: 2026-08-28
 proposal: handoff-minion-ai-4278431509
 verdict: approved
 repos: [minion]
@@ -13,6 +13,8 @@ relationship: extends
 related: [2026-08-17-gw-defaces-crm-tools-spec]
 type: fix
 tags: [logic, test, handoff-sweep, crm]
+evidence: https://github.com/NikolasP98/minion-ai/pull/235
+shipped_reason: "PR #235 merged the runtime implementation; supervised follow-up PR #252 merged the only remaining exact-marker comment correction after all branch-exercising gates and independent review passed."
 ---
 
 # Wire `gateway.crm.defaultProfile` into the CRM tool construction site

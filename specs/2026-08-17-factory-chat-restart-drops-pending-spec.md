@@ -11,7 +11,8 @@ verdict: approved
 repos: [minion-base, minion-factory]
 tags: [logic, data]
 type: fix
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/46
+evidence: https://github.com/NikolasP98/minion-factory/pull/46
+shipped_reason: "Accepted: the 2026-08-28 audit verified dispatched-before-spawn, pending/dispatched busy checks, survivor pumping, adopt-not-kill recovery tests, and minion-base UI support; every S1-S3 contract is present."
 ---
 
 # A distinct `dispatched` state for factory chat turns

@@ -26,6 +26,7 @@ Flat scalars and string arrays only — no nesting (the parser is deliberately t
 | `stage` | yes | `proposal` `spec` `dev` `test` `deploy` `done` — the kanban column |
 | `status` | yes | `draft` `review` `approved` `implementing` `merged` `flag-ready` `shipped` `superseded` `rejected` `parked` `unknown` |
 | `pass` | yes | integer, 1-based; bump each review→revise cycle. Pass > 1 renders below the board divider |
+| `next_slice` | no | positive integer; the next numbered slice the Factory may implement. Omit only when Slice 1 is next |
 | `created` / `updated` | yes | ISO dates; `updated` = last substantive change (board sorts by it) |
 | `repos` | yes | target repo ids: `minion` `minion_hub` `minion_site` `minion_plugins` `minion-meta` `minion-base` `minion-factory` `paperclip` `pixel-agents`. Empty (`[]`) only for a plan-of-record (`type: decision`) that milestone specs cite instead of implementing |
 | `revises` | no | spec id this is a re-pass of (pass-2 links its pass-1) |

@@ -15,7 +15,9 @@ related: [2026-08-18-sdlc-transformation-roadmap, 2026-08-18-factory-orchestrati
 
 # Provider-neutral agent instructions and canonical repository policy
 
-## 0. Product — problem in the proposal's words
+## 0. Product
+
+Problem in the proposal's words:
 
 > Agent-file audit 2026-08-18 (alignment 62/100): Claude and Codex receive
 > materially different instructions — minion/ has AGENTS.md but no CLAUDE.md,
@@ -446,8 +448,3 @@ matrix and reconciliation execution are clean, `REPO_POLICY_V1=1` consumers use 
 with the same pinned hash, the old factory/Base fleet maps are absent, and valid factory extension rows
 still resolve. Any known open end must follow the root `AGENTS.md` two-place handoff ledger; an
 undocumented exception cannot be accepted as completion.
-
-## Board audit 2026-08-28
-
-Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
-S0/S1 shipped (repo-policy.yaml + schema + generated + CI). Remaining: S2 check-agent-instructions.mjs (absent), S6 factory consumer — runner still keeps its own REPO_ALIASES at queue.ts:2322, the exact drift defect this spec exists to kill — plus S7/S8.
