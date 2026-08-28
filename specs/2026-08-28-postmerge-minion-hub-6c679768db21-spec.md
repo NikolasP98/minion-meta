@@ -13,6 +13,7 @@ type: fix
 tags: [test, infra]
 relationship: extends
 related: [2026-08-21-hub-datatable-server-mode-test-gap-spec, 2026-08-20-hub-datatable-server-mode-test-gap, handoff-minion-hub-2249203609]
+possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/189
 ---
 
 # Post-merge finding — DataTable.svelte `TODO(handoff)` marker (minion_hub)
