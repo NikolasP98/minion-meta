@@ -2,7 +2,7 @@
 id: 2026-08-18-ci-minion-ai-deploy-gateway-devprd-channels-spec
 title: CI deploy gateway DEV/PRD channels — serialize and retry Swarm contention
 stage: spec
-status: approved
+status: done
 pass: 2
 created: 2026-08-18
 updated: 2026-08-28
@@ -13,6 +13,7 @@ relationship: extends
 related: [2026-07-19-build-channel-dev-prd-pipeline, 2026-07-13-runtime-aware-fleet-image-updates, 2026-07-13-minion-gateway-swarm-cutover]
 reconcile_ignore: true
 reconcile_ignore_reason: "Denied: PR #224 implemented workflow contention safety only. Slice 2 requires a current end-to-end DEV and PRD deployment verification with exact run and digest evidence, and no such closure evidence is attached."
+done_reason: "Completed: main deployment run 33140368165 and prd-netcup job 98749714135 succeeded; controller artifact reports completed at immutable digest sha256:ae5131ebcafb24c9e4f8dafebd38ca457bfe28b0eb7a8d7163e6eceda7d331c6 with both gateway services at 1/1. Live HTTP health returned protocol 3/version 2026.8.7-dev and a live WebSocket probe received connect.challenge."
 ---
 
 # CI deploy gateway DEV/PRD channels — serialize and retry Swarm contention
