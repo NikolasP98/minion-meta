@@ -1,7 +1,8 @@
 ---
 id: 2026-08-28-shared-db-encryption-key-convergence
 title: Converge Hub and Site shared-database encryption with an explicit legacy-key migration
-status: approved
+status: in-spec
+spawned_spec: 2026-08-28-shared-db-encryption-key-convergence-spec
 created: 2026-08-28
 updated: 2026-08-28
 repos: [minion-meta, minion-hub, minion-site]
