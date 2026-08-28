@@ -5,7 +5,7 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-factory-postmerge-discovery-loop
 verdict: approved
 repos: [minion-factory]
@@ -644,3 +644,8 @@ hand-editing `.env`):
 6. Confirm `factory-notify.yml`'s existing reconcile-poke on the same push still ran normally
    (`gh run list -R NikolasP98/minion-base --workflow factory-notify.yml --limit 1`) — proving
    the new channel is additive, not a replacement that silently dropped the old one.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+S1/S2 shipped (webhook intake, discovery.ts scan+findings). S3 deliberately suspended — see proposals/2026-08-20-discovery-synthesis-suspension.md (closed, with resume criteria); do not re-litigate. Remaining: S4 finding re-verification only (findings.last_verified_at is dead schema).

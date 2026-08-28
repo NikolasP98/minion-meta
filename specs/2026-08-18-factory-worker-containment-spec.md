@@ -5,7 +5,7 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-28
 proposal: 2026-08-17-factory-worker-containment
 verdict: approved
 repos: [minion-factory]
@@ -519,3 +519,8 @@ runner-owned manifest/evidence rules, provider independence, or the human merge 
 reviewers are technically read-only; automerge stays off through M7) and
 `/memory/MINION/minion-factory-agent-pipeline.md` (reviewers propose while the applier re-verifies; deploy rewrites
 `.env` wholesale).
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Scope narrowed: S1-S3 shipped (PHASE_POLICIES, factory-*.sh entrypoints, credential-free develop, phase_attempts/effects). Remaining: S4 supply-chain pinning (agent/runner Dockerfiles still tag-only FROM; no verify-image-pins.sh) + S5 canary activation (FACTORY_CONTAINMENT_V2=0).

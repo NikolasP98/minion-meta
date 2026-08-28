@@ -1,10 +1,10 @@
 ---
 id: handoff-minion-factory-1487584490
 title: Handoff marker — scripts/unstick-cron.sh (minion-factory)
-status: in-spec
+status: done
 spawned_spec: 2026-08-20-handoff-minion-factory-1487584490-spec
 created: 2026-08-20
-updated: 2026-08-20
+updated: 2026-08-28
 repos: [minion-factory]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-factory-deterministic-unstick
@@ -39,3 +39,8 @@ Same idea as `2026-08-17-factory-deterministic-unstick` (in-spec) — same scrip
 rather than escalating every retry to the facilitator agent). Reads as an edge-case surfaced
 while implementing that spec's requeue path. Not merged (canonical is in-spec, off-limits to
 edit); status held at `review` for a human to confirm scope.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+TODO gone from scripts/unstick-cron.sh; the cross-tick lineage cap shipped (:23-26, :126-131) + API admission caps (#110). Spawned spec already done/shipped.

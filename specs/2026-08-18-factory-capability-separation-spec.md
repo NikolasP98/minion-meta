@@ -2,10 +2,10 @@
 id: 2026-08-18-factory-capability-separation-spec
 title: Factory capability separation — purpose-separated GitHub Apps, run-bound grants, and server-derived actors
 stage: spec
-status: approved
+status: draft
 pass: 2
 created: 2026-08-18
-updated: 2026-08-19
+updated: 2026-08-28
 proposal: 2026-08-17-factory-capability-separation
 verdict: approved
 repos: [minion-factory, minion-base]
@@ -524,3 +524,8 @@ verification, revoke the shared PAT, rotate minion-base to read-only GitHub acce
 configuration a startup failure. If production regresses, stop new intake and all GitHub writes, preserve
 grant/effect evidence, and roll back the release while keeping write paths disabled; restoring broad worker/host
 credentials or minion-base direct meta writes is not an acceptable rollback.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Returned to draft for respec: the GitHub-App + publisher-module mechanism was superseded by scoped PATs (scoped-github-canary.ts) + the effect ledger. Live deltas worth keeping: caller-supplied `by` at index.ts:648,663; retiring the broad FACTORY_GH_TOKEN; minion-base cutover; memory candidate publisher.

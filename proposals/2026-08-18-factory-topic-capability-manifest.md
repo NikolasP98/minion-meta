@@ -1,9 +1,9 @@
 ---
 id: 2026-08-18-factory-topic-capability-manifest
 title: Topic taxonomy + immutable execution manifest (policy resolver)
-status: in-spec
+status: done
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-28
 repos: [minion-factory, minion-meta]
 tags: [logic, infra]
 source: audit-2026-08-18
@@ -30,3 +30,8 @@ unknown-topic rejection, and downgrade prevention.
 
 **Out of scope:** browser tooling (separate security-gated proposal);
 GitHub App check identities (capability-separation proposal).
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Spec S1-S5 shipped; S6 doc noted on the spec.

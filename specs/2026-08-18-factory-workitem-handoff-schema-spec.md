@@ -5,7 +5,7 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-28
 repos: [minion-factory, minion-meta]
 proposal: 2026-08-17-factory-workitem-handoff-schema
 verdict: approved
@@ -206,3 +206,8 @@ After all six slices are deployed:
 4. A multi-repo spec produces no automatic dev run and one idempotent, board-visible dispatch proposal. A human can then submit one explicit `POST /runs` per repo/slice; mismatched repo ids are rejected.
 5. The final review leaves both human-readable markdown and schema-valid JSON. The JSON's script-stamped `reviewedCommit` equals the reviewed PR head and cannot be supplied by the harness.
 6. Monitor repeats preserve the existing SQLite dedupe/flood behavior and create no issue or per-repeat commit.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+S1 shipped as content-hash spec pinning (+fail-closed automerge); S3 shipped as fail-loud refusal (logs instead of the specified spec-dispatch alert). Remaining: S2 must be re-scoped onto the containment review-evidence path (run.sh still greps ^VERDICT:, no review.json), S4 index trust/risk fields, S5 classifyRisk, S6 issue-filing replacement.

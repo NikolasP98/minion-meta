@@ -1,9 +1,9 @@
 ---
 id: ci-minion-base-factory-notify
 title: CI red — Factory Notify on minion-base main
-status: draft
+status: done
 created: 2026-08-18
-updated: 2026-08-20
+updated: 2026-08-28
 repos: []
 ---
 
@@ -24,3 +24,8 @@ green, or the workflow is deliberately removed/disabled with rationale.
 ```
 
 ```
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+CI-watch DoD met: Factory Notify on minion-base main green on every run since 2026-08-20 (latest 33105191798).

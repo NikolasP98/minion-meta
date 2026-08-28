@@ -1,9 +1,9 @@
 ---
 id: 2026-08-17-factory-orchestration-tests
 title: Factory first-party test suite — queue, lifecycle, automerge, classification
-status: in-spec
+status: done
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-28
 spawned_spec: 2026-08-18-factory-orchestration-tests-spec
 repos: [minion-factory]
 tags: [test]
@@ -29,3 +29,8 @@ Wired into a CI workflow on minion-factory main.
 
 **Out of scope:** end-to-end container tests — pure-function and sqlite-level
 coverage only.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Spec shipped (~890-test suite, single npm test, CI wired).

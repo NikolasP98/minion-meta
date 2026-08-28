@@ -1,9 +1,9 @@
 ---
 id: ci-minion-factory-promote-factory-dev-to-production
 title: CI red — Promote Factory dev to production on minion-factory main
-status: draft
+status: done
 created: 2026-08-24
-updated: 2026-08-26
+updated: 2026-08-28
 repos: []
 ---
 
@@ -53,3 +53,8 @@ Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.69
 Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.7386188Z Cleaning up orphan processes
 Promote and deploy (trusted controller only)	UNKNOWN STEP	2026-08-25T09:31:07.7699797Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+CI-watch DoD met: last 9 promotion runs green except one 2026-08-26 schedule run; 2026-08-28 dispatches all deployed cleanly; recorded failure mode no longer reproduces.

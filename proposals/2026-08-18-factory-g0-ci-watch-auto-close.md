@@ -1,9 +1,9 @@
 ---
 id: 2026-08-18-factory-g0-ci-watch-auto-close
 title: G0 reconciler should auto-close CI-watch proposals once the watched workflow goes green
-status: draft
+status: approved
 created: 2026-08-18
-updated: 2026-08-19
+updated: 2026-08-28
 repos: [minion-factory]
 source: factory-run-8af03178
 ---
@@ -127,3 +127,8 @@ This proposal, carrying a verified, ready-to-apply patch rather than only a prob
 description, is the maximum-complete substitute reachable from this sandbox. A
 minion-factory-scoped run (or a human) should apply the patch above, dry-run it against a
 fixture proposal, and merge.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Approved at audit: the gap is proven live — two green-again CI-watch proposals sat as board noise until this audit closed them by hand. reconcile.sh ci-watch still has no green branch (:62-140). Small, well-bounded.

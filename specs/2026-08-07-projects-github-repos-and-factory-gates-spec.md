@@ -1,11 +1,11 @@
 ---
 id: 2026-08-07-projects-github-repos-and-factory-gates-spec
 title: Projects ⇄ GitHub Repos + Software-Factory Gates
-stage: spec
-status: unknown
+stage: done
+status: superseded
 pass: 1
 created: 2026-08-07
-updated: 2026-08-07
+updated: 2026-08-28
 repos: [minion_hub]
 ---
 
@@ -316,3 +316,8 @@ via paraglide. `DataTable` for branches/commits (one `cell` snippet).
 - Never log or return the token. Never echo a repo URL supplied by a user into a fetch
   without the `owner/repo` shape check (`/^[\w.-]+$/` on each half) — SSRF guard precedent
   is `server/services/ssrf-guard.ts`.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Hub half shipped (workforce/projects/[id]/repo + api routes). Factory half predates minion-factory entirely and is superseded by the shipped v3/v4 factory (reconcile.sh gates, spec/proposal board, humanMergeOnly). Nothing should be built from this document.

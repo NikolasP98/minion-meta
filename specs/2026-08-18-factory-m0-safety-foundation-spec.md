@@ -5,7 +5,7 @@ stage: spec
 status: implementing
 pass: 1
 created: 2026-08-18
-updated: 2026-08-20
+updated: 2026-08-28
 repos: [minion-factory]
 type: infra
 tags: [test, logic]
@@ -114,3 +114,8 @@ re-add `git add -A`) in a scratch branch and observe the matching test fail.
 
 Each slice is a single revertable commit; no schema migrations; the CI
 workflow can be disabled by deleting one file.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Scope narrowed: D1-D4, D6 shipped (spec.sh allowlist/sidecar/degrade, automerge rehash, ci.yml). Remaining: D5 only — automerge still matches required checks by NAME with no App-identity binding (automerge.ts:161); an untrusted App's green 'verify' satisfies the gate. If expectedIdentity was the deliberate replacement, record that and close.

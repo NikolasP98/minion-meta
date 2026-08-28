@@ -3,7 +3,7 @@ id: 2026-08-23-factory-containment-effect-ledger-integration
 title: Put Factory containment writes behind the controller effect ledger
 status: draft
 created: 2026-08-23
-updated: 2026-08-23
+updated: 2026-08-28
 repos: [minion-factory]
 tags: [infra, security]
 ---
@@ -69,3 +69,8 @@ Source marker:
 - [ ] Run the credentialed disposable-repository drill through prepare and
   readiness, inject a restart at each remote boundary, and preserve its
   non-secret exact-effect evidence.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+One shared blocker: code is merged; each waits on the SAME credentialed disposable-repo drill (autonomy flags 0). The in-flight 2026-08-28-factory-containment-base-reconciliation-spec Slices 5-6 build exactly that drill harness + activation wiring — these three ride its outcome rather than needing separate triage.

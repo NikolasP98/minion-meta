@@ -1,11 +1,11 @@
 ---
 id: 2026-08-18-factory-orchestration-tests-spec
 title: "First-party Node 22 test suite for runner orchestration policy and SQLite lineage"
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-18
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-factory-orchestration-tests
 verdict: approved
 repos: [minion-factory]
@@ -391,3 +391,8 @@ Acceptance requires:
 5. the latest attempt of `ci.yml` for the exact `main` HEAD is completed successfully.
 
 Only then is the release-rollback spec's previously inert CI dependency a real deployment signal.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+ADDRESSED: all §2/§3 exports exist; single `npm test` (~890 node:test incl. subtests); ci.yml runs runner tests + typecheck + all shell suites; board retry aa502dc0 passed and merged (#99).
