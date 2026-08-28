@@ -5,13 +5,14 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-gw-shells-lifecycle-stubs
 verdict: approved
 repos: [minion]
 tags: [logic, security, test]
 type: fix
-possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/216
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: minion-ai PR #216 is explicitly Slice 1 only. The archived-shell wake coordinator and invoke behavior in S2/S3 are not merged; later attempts #231 and #236 closed without merge."
 ---
 
 # Shells — finish the two lifecycle stubs
