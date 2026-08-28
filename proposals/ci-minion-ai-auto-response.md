@@ -22,33 +22,34 @@ green, or the workflow is deliberately removed/disabled with rationale.
 - checked: 2026-08-28
 
 ```
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	﻿2026-08-28T09:10:15.1033683Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.1045798Z ##[group]Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.1047762Z with:
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.1048625Z   app-id: 2729701
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.1049651Z   github-api-url: https://api.github.com
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.1051026Z ##[endgroup]
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2307550Z /home/runner/work/_actions/actions/create-github-app-token/d72941d797fd3113feb6b93fd0dec494b13a2547/dist/main.cjs:42559
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2313531Z   throw new Error("Input required and not supplied: private-key");
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2316490Z   ^
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2317868Z 
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2319081Z Error: Input required and not supplied: private-key
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2325126Z     at Object.<anonymous> (/home/runner/work/_actions/actions/create-github-app-token/d72941d797fd3113feb6b93fd0dec494b13a2547/dist/main.cjs:42559:9)
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2330339Z     at Module._compile (node:internal/modules/cjs/loader:1871:14)
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2334203Z     at Object..js (node:internal/modules/cjs/loader:2002:10)
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2337334Z     at Module.load (node:internal/modules/cjs/loader:1594:32)
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2341028Z     at Module._load (node:internal/modules/cjs/loader:1396:12)
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2345003Z     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2349414Z     at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2353245Z     at node:internal/main/run_main_module:33:47
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2355370Z 
-auto-response	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-28T09:10:15.2356047Z Node.js v24.18.0
+auto-response	UNKNOWN STEP	2026-08-28T09:10:13.4586462Z Getting action download info
+auto-response	UNKNOWN STEP	2026-08-28T09:10:13.7165005Z Download action repository 'actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547' (SHA:d72941d797fd3113feb6b93fd0dec494b13a2547)
+auto-response	UNKNOWN STEP	2026-08-28T09:10:14.5680414Z Download action repository 'actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b' (SHA:f28e40c7f34bde8b3046d885e986cb6290c5673b)
+auto-response	UNKNOWN STEP	2026-08-28T09:10:14.9932494Z Complete job name: auto-response
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.1033727Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.1045827Z ##[group]Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.1047773Z with:
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.1048629Z   app-id: 2729701
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.1049655Z   github-api-url: https://api.github.com
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.1051036Z ##[endgroup]
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2307606Z /home/runner/work/_actions/actions/create-github-app-token/d72941d797fd3113feb6b93fd0dec494b13a2547/dist/main.cjs:42559
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2313566Z   throw new Error("Input required and not supplied: private-key");
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2316504Z   ^
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2317880Z 
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2319179Z Error: Input required and not supplied: private-key
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2325151Z     at Object.<anonymous> (/home/runner/work/_actions/actions/create-github-app-token/d72941d797fd3113feb6b93fd0dec494b13a2547/dist/main.cjs:42559:9)
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2330362Z     at Module._compile (node:internal/modules/cjs/loader:1871:14)
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2334225Z     at Object..js (node:internal/modules/cjs/loader:2002:10)
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2337360Z     at Module.load (node:internal/modules/cjs/loader:1594:32)
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2341054Z     at Module._load (node:internal/modules/cjs/loader:1396:12)
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2345031Z     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2349442Z     at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2353272Z     at node:internal/main/run_main_module:33:47
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2355392Z 
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2356058Z Node.js v24.18.0
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2828067Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.2834165Z Post job cleanup.
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.4284362Z Token is not set
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.4390577Z Cleaning up orphan processes
+auto-response	UNKNOWN STEP	2026-08-28T09:10:15.4925098Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
-
-## Diagnosis (auto)
-
-**Root cause:** The `actions/create-github-app-token` action is missing the required `private-key` input. The workflow supplies `app-id` and `github-api-url` but not the private key.
-
-**File:line:** `.github/workflows/` (likely `auto-response.yml` based on the job name) — check the step calling `actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547`.
-
-**Fix:** Add `private-key: ${{ secrets.GITHUB_APP_PRIVATE_KEY }}` (or your secret name) to the action's `with:` block. The secret itself must exist in your GitHub repo settings.

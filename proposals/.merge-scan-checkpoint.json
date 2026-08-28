@@ -1,9 +1,73 @@
 {
   "NikolasP98/minion_hub:master": {
     "cursor": "7fdc291f88f87c5448a72240af8c8891346d1bff",
-    "head": "c24018e7aaba0947ca45a796f9913e6c2693eeca",
-    "done": 2,
-    "kept": []
+    "head": "c43f8237fb06b1b58dadea4f0cbd9cf1218f98e4",
+    "done": 14,
+    "kept": [
+      {
+        "file": "scripts/ui-audit-inventory.test.ts",
+        "desc": "Assertions for sourceRef, sourceCommit, and workingTreeFingerprint moved from main test to conditional test, reducing coverage in shallow clones where baseline commit is unreachable.",
+        "severity": "medium",
+        "category": "weakened-test",
+        "line": 57
+      },
+      {
+        "file": "src/hooks.server.ts",
+        "desc": "const permissions = await loadPermissionsForUser(...) result is accessed for .permissions property without null check; could throw TypeError if the function returns null/undefined",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 200
+      },
+      {
+        "file": "src/hooks.server.ts",
+        "desc": "PostHog client error in .catch(() => {}) is silently swallowed with no logging or error recovery",
+        "severity": "high",
+        "category": "empty-catch",
+        "line": 513
+      },
+      {
+        "file": "src/lib/components/crm/PartyCreateForm.svelte",
+        "desc": "Response from /api/crm/parties is cast to a type without validating structure; if server returns missing 'party' field, accessing payload.party.id throws TypeError.",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 69
+      },
+      {
+        "file": "src/lib/components/crm/PartyPicker.svelte",
+        "desc": "Network error from loadParties() silently swallowed without logging, making debugging difficult",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 116
+      },
+      {
+        "file": "src/lib/components/crm/PartyPicker.svelte",
+        "desc": "Errors in DNI/RUC lookup and party creation silently converted to generic 'failed' message without logging",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 205
+      },
+      {
+        "file": "src/lib/components/crm/PartyPicker.svelte",
+        "desc": "created.party is accessed without null check; malformed API response will crash when accessing .id on undefined",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 218
+      },
+      {
+        "file": "src/lib/components/dashboard/EditableGrid.svelte",
+        "desc": "Empty catch block silently swallows layout loading errors without logging or notification",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 70
+      },
+      {
+        "file": "src/lib/components/data-table/DataTable.svelte",
+        "desc": "Error from server.onSelectAllMatching() is silently swallowed, potentially masking network failures or permission errors without any indication to the user.",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 847
+      }
+    ]
   },
   "NikolasP98/minion-meta:dev": {
     "cursor": "83cfd862aa9632c9d01a1319cf51f1413b2d66bc",
