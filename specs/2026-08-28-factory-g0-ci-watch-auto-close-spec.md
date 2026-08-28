@@ -13,6 +13,7 @@ type: fix
 tags: [infra, logic, test]
 relationship: extends
 related: [2026-08-17-sdlc-phase-gates-scoring-spec]
+possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/140
 ---
 
 # G0 reconciler auto-closes CI-watch proposals once the watched workflow goes green
