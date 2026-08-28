@@ -5,13 +5,14 @@ stage: spec
 status: implementing
 pass: 2
 created: 2026-08-18
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: ci-minion-ai-ci
 verdict: approved
 repos: [minion]
 relationship: depends-on
 related: [2026-08-13-agentic-sdlc-test-quality-gates-spec]
-possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/227
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: PR #227 implemented only native-binding Slice 2 after #225 Slice 1. Slices 3-6 and a latest-completed all-green DEV correctness matrix remain unproven; recent CI repair PRs do not supply the spec's final evidence."
 ---
 
 # CI red — make the minion gateway DEV correctness matrix honestly green
