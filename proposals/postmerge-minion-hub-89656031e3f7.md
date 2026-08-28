@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-89656031e3f7
 title: "Post-merge finding — todo-handoff in src/server/services/crm-contacts.service.ts (minion_hub)"
-status: draft
+status: closed
 created: 2026-08-28
 updated: 2026-08-28
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still draft — closing"
 ---
 
 # Post-merge finding — todo-handoff in `src/server/services/crm-contacts.service.ts`
