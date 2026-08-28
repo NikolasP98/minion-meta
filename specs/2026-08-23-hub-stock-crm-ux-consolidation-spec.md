@@ -2,12 +2,13 @@
 id: 2026-08-23-hub-stock-crm-ux-consolidation-spec
 title: Stock/CRM UX consolidation — retire redundant pages, warehouse management, entries redesign, Picker primitive
 stage: dev
-status: implementing
+status: done
 pass: 1
 created: 2026-08-23
-updated: 2026-08-23
+updated: 2026-08-28
 repos: [minion_hub]
 tags: [crm, data, logic, migrations, ui, ux]
+done_reason: "Core program shipped on Hub master through PRs #171-#175 and Picker follow-ups #178, #179, #181, #187, and #188. Exact current master 1b47e8ced0751eeb301c9a24d16082f36fe48f78 contains those lineages and has a successful Vercel production status. Live production verification on 2026-08-28 confirmed /en/pos/catalog, the dedicated non-dialog /en/pos/catalog/new editor, the POS customer quick-search Browse customers action, and the advanced Picker API/adoptions. The POS product catalog itself remains the single-click searchable product selection surface; adding a second product-picker window would duplicate the primary cashier workflow and is explicitly declined. Remaining non-core gaps are removed from this parent and independently dispositioned: archived-warehouse submission guard proposal 2026-08-23-hub-archived-warehouse-submit-guard approved; SellableWizard ConsumptionGauge handoff handoff-minion-hub-1447734948 approved after rejecting its false duplicate classification; Hub-local RUC-to-crm-sdk move handoff-minion-hub-384264376 retired as no current product or correctness benefit."
 ---
 
 # Stock/CRM UX consolidation
