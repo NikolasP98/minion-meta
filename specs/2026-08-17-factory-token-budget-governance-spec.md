@@ -10,7 +10,8 @@ repos: [minion-factory]
 verdict: approved
 tags: [infra]
 type: infra
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/43
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: the 2026-08-28 audit verified Factory S1-S4, but also verified that S5 is absent: minion-base has no budget endpoint consumer or budget widget. PR #43 is therefore partial completion."
 ---
 
 # Factory token/budget governance
