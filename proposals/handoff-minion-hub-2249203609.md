@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-2249203609
 title: Handoff marker — src/lib/components/data-table/DataTable.svelte (minion_hub)
-status: review
+status: closed
 created: 2026-08-22
 updated: 2026-08-28
 repos: [minion-hub]
@@ -29,3 +29,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/lib/components/data-table/DataTable.svelte:599` — no DOM-mount test covers this block. @testing-library/svelte
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/data-table/DataTable.svelte#L599
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-08-28; the sweep closed this proposal.
