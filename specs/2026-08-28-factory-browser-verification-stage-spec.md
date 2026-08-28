@@ -3,11 +3,11 @@ id: 2026-08-28-factory-browser-verification-stage-spec
 title: Credential-free, loopback-isolated browser-verification stage for UI-topic factory runs
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-28
 updated: 2026-08-28
 proposal: 2026-08-18-factory-browser-verification-stage
-verdict: pending
+verdict: approved
 repos: [minion-factory, minion-meta]
 type: infra
 tags: [security, infra, ui, test]
@@ -36,29 +36,33 @@ From the approved proposal `2026-08-18-factory-browser-verification-stage`, verb
 ### Relationship classification
 
 **Relationship: `new`** — no existing spec or proposal builds a preview/browser-verification
-stage. The two related artifacts below are the shipped prerequisites this spec activates; neither
-already satisfies this proposal's DoD.
+stage. The two related artifacts below provide the extension points this spec activates; neither
+already satisfies this proposal's DoD, and containment's production activation remains a rollout
+prerequisite for this spec's final policy flip.
 
 | id | relation |
 |---|---|
-| [[2026-08-18-factory-worker-containment-spec]] | **Prerequisite, mostly shipped.** Its 2026-08-28 board audit records S1-S3 shipped (phase-policy kernel `runner/src/containers.ts`, `factory-*.sh` entrypoints, credential-free setup/self-test, `phase_attempts`/`phase_effects` evidence tables) and S4-S5 still open (agent/runner Dockerfiles remain tag-only `FROM node:22-bookworm-slim`, no `verify-image-pins.sh`, `FACTORY_CONTAINMENT_V2` not yet flipped to `1` in production). This spec builds a **new** `browser-verify` `WorkerPhase` inside the same deny-by-default kernel; it pins its own Dockerfile from its first commit rather than waiting on or duplicating S4's remediation of the two pre-existing images, and it does not claim `FACTORY_CONTAINMENT_V2=1` is active in production — see §8 alert. |
+| [[2026-08-18-factory-worker-containment-spec]] | **Prerequisite, mostly shipped.** Its 2026-08-28 board audit records S1-S3 shipped (phase-policy kernel `runner/src/containers.ts`, `factory-*.sh` entrypoints, credential-free setup/self-test, `phase_attempts`/`phase_effects` evidence tables) and S4-S5 still open (agent/runner Dockerfiles remain tag-only `FROM node:22-bookworm-slim`, no `verify-image-pins.sh`, `FACTORY_CONTAINMENT_V2` not yet flipped to `1` in production). This spec builds a **new** `browser-verify` `WorkerPhase` inside the same deny-by-default kernel and pins its own image from its first commit. S1-S7 may land independently; S8 is blocked until containment-v2 is verified active in production (Target invariant 4). |
 | [[2026-08-18-factory-topic-capability-manifest-spec]] | **Prerequisite, shipped (S1-S5; S6 operator-doc open per its board audit).** Its Design decision 3 reserved exactly this extension point: "`requiredStages`/`requiredEvidence` are enforced constraints... so [[browser-verification-stage]] can later add a `browser-verify` entry... without changing the manifest schema." This spec is that entry. It also names this proposal in its own §9 out-of-scope ("The actual browser-verification stage and its evidence artifacts"). |
 
 The proposal's own 2026-08-28 board-audit note ("BOTH declared blockers cleared... topics.ts:37
-`SUPPORTED_STAGES`, topics.test.ts asserts `/unsupported stage "browser-verify"/`") verified that
-the fail-closed extension mechanism exists and rejects an undeclared `browser-verify` value today.
-§5 Design decision 1 below explains why this spec adds `browser-verify` to `SUPPORTED_EVIDENCE`
-rather than `SUPPORTED_STAGES`, and leaves that specific regression fixture untouched.
+`SUPPORTED_STAGES`, topics.test.ts asserts `/unsupported stage "browser-verify"/`") correctly
+identifies the landed extension mechanism, but the live baseline still has
+`FACTORY_CONTAINMENT_V2` disabled in production. This spec therefore treats the code prerequisite as
+available and the production activation as an explicit S8 gate. §5 Design decision 1 explains why
+`browser-verify` joins `SUPPORTED_EVIDENCE`, while the stage-rejection regression remains.
 
 ## 1. Owner surface
 
 **minion-factory** (`NikolasP98/minion-factory`, private, default branch `main`) — new
 `agent/factory-browser-verify.sh`, `agent/Dockerfile.browser-verify` (new image, not the existing
-`agent/Dockerfile`), `runner/src/browser-verify.ts` (+ `.test.ts`), edits to `runner/src/topics.ts`,
-`runner/src/containers.ts` (+ `.test.ts`), `runner/src/repos.ts`, `runner/src/queue.ts`,
-`runner/src/automerge.ts`, `repos.example.json`, `docker-compose.yml`, `deploy.sh`,
+`agent/Dockerfile`), `agent/lib/browser-verify-flows.mjs`, browser-image package/lock files,
+`runner/src/browser-verify.ts` (+ `.test.ts`), edits to `runner/src/topics.ts` (+ tests),
+`runner/src/containers.ts` (+ tests), `runner/src/repos.ts` (+ tests), `runner/src/manifest.ts`
+(+ tests), `runner/src/queue.ts` (+ tests), `runner/src/automerge.ts` (+ tests),
+`repos.example.json`, `docker-compose.yml`, `.env.example`, `deploy.sh`,
 `scripts/verify-image-pins.sh` (extend if landed by the containment spec's S4, else a minimal
-local check scoped to this one image), `playbooks/minion-hub-browser.md` (new pilot playbook),
+local check scoped to this one image), `browser-profiles/minion-hub.mjs` (new pilot profile),
 `README.md`.
 
 **minion-meta** (this repo) — `specs/topics.json` only, in the final slice.
@@ -100,7 +104,7 @@ factory PR lands first.
    for a disposable per-attempt copy (`${root}/selftest-${attempt}`); every other phase shares the
    one `${root}/workspace` develop owns.
 6. `runner/src/repos.ts:12-48`'s `RepoDef` has `setup`, `selfTest`, `playbook`, `setupNetwork`,
-   `selfTestNetwork`, `commandEnv` — no preview command, port, base URL, or browser-profile field of
+   `selfTestNetwork`, `commandEnv` — no preview command, base URL, or browser-profile field of
    any kind. `repoNetwork()` (`repos.ts:85-92`) resolves only `setup`/`selfTest`. The registry
    (`repos.ts:~110-209`) has exactly six entries — `minion-base`, `minion-site`, `minion-hub`,
    `minion-meta`, `minion-ai`, `minion-factory` — each with a `playbook: '<id>.md'` file under
@@ -144,11 +148,19 @@ factory PR lands first.
     verification stage owned by the factory runner — this spec does not depend on it, extend it, or
     collide with it, and does not reuse its worktree-on-the-box mechanism (this spec's preview is a
     same-container ephemeral build, torn down at phase exit).
+13. `advanceContainmentRun()` accepts one `image` and uses it for every phase, while
+    `phasePlanInput()` and `buildLaunchPlan()` persist that image in the phase policy. A separate
+    browser image therefore requires an explicit controller-owned phase→image selection; merely
+    adding a Compose image service would still launch `browser-verify` in the general agent image.
+14. A successful phase must write `/out/phase-result.json`; `advanceContainmentRun()` parses that
+    fixed file through `parsePhaseArtifact()` before it seals a passed `phase_attempts` row. Browser
+    detail files under `/out/browser/` cannot replace this generic phase result.
 
 **Hard constraints from operator memory** (`/memory/MINION/sdlc-board-triage-and-phase-gates.md`,
 ★★★): prompts are not a security boundary; reviewers are technically read-only; the controller owns
-truth; automerge stays disabled through M7 (`FACTORY_AUTOMERGE=0`). `/memory/MINION/factory` topic
-(`minion-factory-agent-pipeline.md`, ★★★): reviewers propose while the applier re-verifies;
+truth; automerge stays disabled through M7 (`FACTORY_AUTOMERGE=0`). The archived
+`minion-factory-agent-pipeline` entry in `/memory/MINION/index-archive.md` (★★★) says reviewers
+propose while the applier re-verifies;
 `deploy.sh` rewrites the box `.env` wholesale, so any new runtime flag/image reference this spec
 needs must be emitted by `deploy.sh`, never hand-added on the host. This spec treats "prompts are not
 a security boundary" as applying identically to page-rendered text reaching a downstream consumer
@@ -158,460 +170,281 @@ a security boundary" as applying identically to page-rendered text reaching a do
 
 ### Target invariants
 
-1. **`browser-verify` is evidence, not a model-driven stage.** The proposal's DoD explicitly forbids
-   a model credential in the browser-verification image, so its acceptance flows must be
-   deterministic scripts (Playwright-style), not an LLM driving `chrome-devtools-mcp` interactively.
-   It therefore joins `SUPPORTED_EVIDENCE`, mirroring `'self-test'` exactly (a deterministic,
-   credential-free, repo-registered command), **not** `SUPPORTED_STAGES` (whose three members are all
-   `{harness, model}`-configured). `runner/src/topics.test.ts:102-104`'s existing rejection fixture
-   is untouched by this spec.
-2. A UI-classified repo declares its browser-verification surface once, in the runner-owned registry:
-   a preview build+serve command, a fixed loopback port, and a playbook naming the acceptance flows —
-   symmetric with the existing `setup`/`selfTest`/`playbook` triad, not a new nested config shape.
-3. **One new, deny-by-default `WorkerPhase`.** `browser-verify` joins the phase-policy kernel with the
-   same credential posture as `self-test` (`github: null, model: 'forbidden'`) plus a disposable
-   candidate copy exactly like `self-test`'s. It builds the preview, serves it, drives the flows, and
-   tears the server down — all inside its own container's lifetime — so no phase boundary ever has to
-   hand off a still-running server process (a fixed constraint of the existing one-shot,
-   exit-code-gated phase model this spec must not break).
-4. **Egress isolation is loopback-only by default, not a proxy allowlist.** The preview server binds
-   `127.0.0.1:<previewPort>` inside the same container Chrome runs in. With the phase's Docker network
-   mode at its default `none`, Chrome can reach that loopback address (loopback always exists inside a
-   container's own network namespace regardless of `--network` mode) and **nothing else** — no proxy,
-   firewall rule, or second Docker network is needed for the common case, and there is no destination
-   to misconfigure. A repo whose flows genuinely need a real third-party origin (OAuth redirect, CDN
-   asset) may opt into `bridge` explicitly, symmetric with `selfTestNetwork`; that opt-in trades away
-   the loopback guarantee and is flagged, not solved, by this spec (§8 alert).
-5. **Fail-closed activation.** A run whose resolved manifest requires `browser-verify` evidence but
-   whose target repo lacks a complete preview/browser-playbook registration, or whose runner build
-   lacks the phase's entrypoint/image, refuses to queue — never silently skips the stage. This mirrors
-   the existing `containmentGate()`/unknown-declared-topic fail-closed postures exactly.
-6. **Evidence is bound, validated, and reused, not re-invented.** `/out` under a `browser-verify`
-   attempt already resolves to a phase+attempt-unique, runner-owned leaf directory
-   (`canonicalMountSource()`'s existing `out` case) — the proposal's "artifacts under `/out/browser/`"
-   is realized as that leaf directory's contents, not a new mount role. The evidence file set
-   (`result.json`, `axe.json`, `ax-tree.json`, `screenshots/*.png`, `console.jsonl`, `network.jsonl`)
-   is opened no-follow, size/type-validated the same way `review.ts` already validates `REVIEW.md`,
-   hashed together with the run's `candidate_sha` and a `browserProfileHash` (sha256 of the resolved
-   `previewCommand`/`previewPort`/`browserVerifyNetwork`/playbook **content**, via the existing
-   `manifest.ts:canonicalJson()` helper), and persisted on the existing generic
-   `phase_attempts.evidence` column — no new table.
-7. **Untrusted page content stays inert.** AX-tree accessible names/roles, page title, and
-   console/network log bodies are opaque evidence bytes: never concatenated into a shell command, a
-   file path, a subsequent prompt, or interpreted as a verdict. A page that emits text shaped like
-   `VERDICT: PASS` or an injection attempt aimed at a driving agent changes nothing, because there is
-   no driving agent in this phase to inject into (invariant 1) and the runner-side ingestion in
-   invariant 6 only ever reads the fixed evidence files as data.
-8. **Compatibility.** No existing `WORKER_PHASES` entry, `PHASE_POLICIES` value, `DEV_PHASE_SEQUENCE`
-   ordering, or `automerge` gate changes for a run whose manifest does not require `browser-verify`
-   evidence — every currently-registered repo's dev-run behavior is byte-identical until its
-   `RepoDef` is explicitly given a preview/browser-playbook registration **and** `specs/topics.json`
-   is updated in the final slice.
+1. **Evidence, not a model stage.** `browser-verify` joins `SUPPORTED_EVIDENCE`, not
+   `SUPPORTED_STAGES`. The phase is deterministic, has no harness/model selection, and receives no
+   GitHub, model, factory bearer, SSH, persistent-auth, or Docker-socket capability.
+2. **An executable server-owned profile.** `RepoDef` declares `previewCommand`,
+   `previewBaseUrl`, `browserProfile`, and optional `browserVerifyNetwork`. The first three are an
+   all-or-nothing registration. `previewBaseUrl` must be exactly an HTTP loopback origin
+   (`http://127.0.0.1:<1024-65535>`, no credentials/query/fragment/path beyond `/`).
+   `browserProfile` is a basename-only `.mjs` module under the runner-owned
+   `browser-profiles/` directory; it exports deterministic Playwright flows and assertion policy.
+   Candidate-controlled Markdown is documentation, not executable acceptance logic.
+3. **One credential-free phase and one controller-owned image choice.** `browser-verify` runs after
+   every passed `self-test` and before `prepare-review` when the run's current persisted manifest
+   requires the evidence. It receives a disposable copy of the controller-bound candidate, a
+   read-only snapshot of its browser profile, and a fresh `/out`. The controller selects
+   `FACTORY_BROWSER_VERIFY_IMAGE` for this phase; all existing phases keep `FACTORY_AGENT_IMAGE`.
+4. **Containment-v2 is an activation prerequisite.** The legacy worker cannot schedule this phase.
+   A manifest requiring `browser-verify` refuses to queue or advance unless
+   `FACTORY_CONTAINMENT_V2=1`, the phase is in `CONTAINMENT_IMPLEMENTED_PHASES`, the dedicated image
+   resolves, and the repo registration/profile is valid. Factory-side implementation may land
+   before the worker-containment spec's production canary, but minion-meta activation may not.
+5. **Loopback isolation by default.** The preview and Chrome share one container network namespace.
+   Default Docker network mode `none` leaves loopback reachable and non-loopback destinations
+   unreachable. An explicit `bridge` registration is permitted but intentionally gives general
+   outbound access and is reported as a residual risk.
+6. **Deterministic verdict.** The profile's Playwright assertions, configured console-error policy,
+   and the fixed axe policy (fail on `critical` or `serious` violations) are the only inputs to pass
+   or fail. Page text, AX labels, console bodies, and network bodies are evidence data and can never
+   set a verdict. Full AX data is captured through Chrome DevTools Protocol
+   `Accessibility.getFullAXTree`; `chrome-devtools-mcp` is installed and smoke-tested as required by
+   the proposal, but no LLM or MCP-driving agent runs in this phase.
+7. **Two-layer evidence contract.** Every successful or failed execution writes the generic
+   `/out/phase-result.json` required by `advanceContainmentRun()` plus
+   `/out/browser/{result.json,axe.json,ax-tree.json,console.jsonl,network.jsonl,screenshots/*.png}`.
+   The runner validates every path no-follow, hashes the validated files, and persists only the
+   bounded summary/hashes in `phase_attempts.evidence`; the full artifacts remain in the
+   phase-attempt-owned `/out` leaf. A passed attempt must bind the current `candidate_sha`, the
+   snapshotted `browserProfileHash`, and the inspected immutable browser image identity.
+8. **Stable profile binding.** When browser evidence first becomes required, the runner copies the
+   validated server-owned profile to a runner-owned, read-only per-run input leaf and records a hash
+   over canonical `{previewCommand, previewBaseUrl, browserVerifyNetwork, profileBytes,
+   browserImageIdentity}`. Retries and review-fix rounds reuse that snapshot; automerge compares the
+   passed attempt to the same snapshot and current candidate.
+9. **Compatibility and intentional refusal.** Runs whose manifests do not require browser evidence
+   retain their existing phase order, image, and gates. After the final `ui` policy activation, a
+   `ui`-effective run for a repo without a browser registration intentionally refuses to queue; it
+   never reports a false pass. This affects `minion-base`, `minion-site`, `minion-ai`, `minion-meta`,
+   and `minion-factory` until each receives a separately reviewed profile.
 
-## 4. DELTA (numbered; each maps to a slice + proving test)
+## 4. DELTA
 
-- **D1** `browser-verify` is added to `SUPPORTED_EVIDENCE` (not `SUPPORTED_STAGES`); the existing
-  `SUPPORTED_STAGES` rejection fixture is unmodified (→S1, T-EVIDENCE-SUPPORTED,
-  T-STAGE-FIXTURE-UNCHANGED)
-- **D2** `RepoDef` gains `previewCommand`, `previewPort`, `browserVerifyNetwork`, `browserPlaybook`,
-  validated all-or-nothing, with `repoNetwork()` extended accordingly (→S1, T-REPO-SCHEMA,
-  T-PARTIAL-CONFIG-REJECTED)
-- **D3** A new deny-by-default `browser-verify` `WorkerPhase` exists in the phase-policy kernel
-  (`github: null, model: 'forbidden'`, disposable workspace copy, closed `repo:browser-verify`
-  network defaulting `none`) and `nextPhase()` gains an additive, opt-in parameter that conditionally
-  inserts it between `self-test` and `prepare-review` without altering the unconditional path
-  (→S1, T-PHASE-POLICY-BROWSER, T-SEQUENCE-CONDITIONAL, T-SEQUENCE-REGRESSION)
-- **D4** A pinned browser-verification image (Chrome for Testing digest, pinned
-  `chrome-devtools-mcp`/Playwright versions, build-time toolchain manifest) and its entrypoint execute
-  build→preview→flows→axe→AX-tree→screenshots→console/network inside one container, writing the
-  fixed evidence file set (→S2, T-IMAGE-PINS-BROWSER, T-EVIDENCE-FILESET, T-LOOPBACK-ONLY)
-- **D5** Runner-side evidence ingestion validates/hashes/binds the file set to `candidate_sha` +
-  `browserProfileHash` and persists it on `phase_attempts.evidence`; queue-time resolution fails
-  closed on an incomplete preview registration or an unready phase build; `automerge.ts` gains an
-  explicit `browser-verify` predicate (→S3, T-EVIDENCE-VALIDATE, T-MISSING-PROFILE-FAILCLOSED,
-  T-READINESS-FAILCLOSED, T-AUTOMERGE-PREDICATE)
-- **D6** Adversarial proof that page-derived text cannot alter the runner's accept/reject decision,
-  and that Chrome under the default network policy cannot reach anything but the loopback preview
-  origin (→S4, T-INJECTION-AXTREE, T-INJECTION-CONSOLE, T-EGRESS-LOOPBACK-ONLY)
-- **D7** `specs/topics.json`'s `ui`/`ux` topics declare `requiredEvidence: [..., 'browser-verify']`
-  only after the factory-side slices are deployed and verified live (→S5, T-ROLLOUT-ORDER,
-  T-META-ACTIVATION)
+- **D1** Add the evidence name and all-or-nothing repo/profile schema (S1;
+  T-EVIDENCE-SUPPORTED, T-REPO-SCHEMA).
+- **D2** Add the phase policy, generic phase-artifact variant, conditional scheduler, disposable
+  candidate mount, and phase-specific image selection (S2; T-PHASE-POLICY-BROWSER,
+  T-SEQUENCE-CONDITIONAL, T-IMAGE-SELECTION).
+- **D3** Build and publish an immutable browser image from pinned inputs, including exact Chrome for
+  Testing archive version+checksum and exact Playwright, axe-core, chrome-devtools-mcp, Bun, pnpm,
+  npm, and Node/base-image identities (S3; T-IMAGE-PINS-BROWSER, T-DIGEST-DEPLOY).
+- **D4** Implement deterministic profile execution, loopback bind enforcement, capture, cleanup, and
+  both evidence layers (S4; T-PROFILE-CONTRACT, T-EVIDENCE-FILESET, T-LOOPBACK-ONLY).
+- **D5** Snapshot/hash profiles and securely validate/bind the fixed evidence set (S5;
+  T-PROFILE-SNAPSHOT, T-EVIDENCE-VALIDATE, T-EVIDENCE-BINDING).
+- **D6** Enforce queue/advance readiness and an explicit automerge predicate (S6;
+  T-MISSING-PROFILE-FAILCLOSED, T-V2-FAILCLOSED, T-READINESS-FAILCLOSED,
+  T-AUTOMERGE-PREDICATE).
+- **D7** Register and prove the `minion-hub` pilot, including adversarial content and egress cases
+  (S7; T-INJECTION-AXTREE, T-INJECTION-CONSOLE, T-EGRESS-LOOPBACK-ONLY, T-PILOT-E2E).
+- **D8** Add `browser-verify` to the canonical `ui` topic only after the production prerequisites and
+  refusal canaries pass (S8; T-ROLLOUT-ORDER, T-META-ACTIVATION).
 
 ## 5. Design decisions
 
-1. **Evidence, not a stage.** See TO-BE invariant 1. Modeling `browser-verify` as `SUPPORTED_EVIDENCE`
-   (like `self-test`) rather than `SUPPORTED_STAGES` (like `develop`/`review`) is the direct
-   consequence of the proposal's "no... model credentials" requirement — `automerge.ts`'s
-   `isExecutableStage()` predicate for `requiredStages` requires `{harness, model}`, which a
-   credential-free phase can never satisfy. Treating it as required evidence instead lets it reuse the
-   exact enforcement shape `self-test` already has, and needs a new explicit predicate only in the
-   `requiredEvidence` loop (closing AS-IS #9's pre-existing gap for this one evidence name — no other
-   evidence name's enforcement is touched).
-2. **Single container, not prepare+verify split.** An earlier draft of this design split "build/serve
-   the preview" and "drive Chrome against it" into two sequential phases, mirroring
-   `prepare-review`/`review`. That does not fit: a preview server must stay running while the
-   verification step executes, but every existing phase is a one-shot process gated by its own exit
-   code (`nextPhase()`'s `status === 'passed'` transition) — there is no mechanism today for one
-   phase's background process to outlive its container into the next phase's container. Folding
-   build→serve→verify→teardown into one `browser-verify` phase's entrypoint script avoids inventing
-   cross-container process handoff and keeps the "one container per WorkerPhase, one exit code"
-   invariant every other phase already relies on.
-3. **Loopback isolation instead of an egress-allowlist proxy.** Because the preview server and Chrome
-   share one container's network namespace, binding the server to `127.0.0.1:<previewPort>` and
-   leaving the phase's Docker network mode at its closed-set default `none` makes "everything outside
-   the preview origin is unreachable" a property of Linux network namespaces, not application-level
-   policy — there is no proxy config, allowlist table, or second Docker network to build, test, or
-   misconfigure. This is a strictly stronger and simpler guarantee than the codex-broker's
-   two-network/provider-egress pattern (AS-IS #11), which exists to reach a **known external**
-   upstream and does not fit an **ephemeral, per-run, purely local** origin. The `bridge` opt-in
-   (TO-BE invariant 4) intentionally does not attempt to build a dynamic allowlist for that rarer
-   case — see §8's alert.
-4. **Reuse the existing `out` mount, not a new `/out/browser/` mount role.** `MOUNT_ROLES` already
-   gives every phase attempt its own unique, runner-owned `/out` leaf
-   (`${root}/out/${phase}-${attempt}`, `containers.ts`'s `canonicalMountSource()`). The proposal's
-   `/out/browser/` is satisfied by the entrypoint writing evidence files under that existing mount
-   (optionally namespaced `browser/` inside it for readability); adding a distinct `MountRole` would
-   duplicate a guarantee (per-phase, per-attempt, leaf-only, never an ancestor of another role's
-   source) the kernel already provides.
-5. **Page-derived text is data, never instruction, symmetric with the review boundary.** The operator
-   memory constraint "prompts are not a security boundary" (AS-IS, hard constraints) was written for
-   the model-driven `review` phase; this spec applies the identical posture to `browser-verify`'s
-   evidence ingestion even though no model is present here — the risk this design decision closes is
-   not prompt injection into an LLM (there is none in this phase) but injection into whatever
-   downstream code later reads the evidence (`browser-verify.ts`, PR comment rendering, a future
-   agent summarizing results): AX-tree labels/console/network bodies are stored and displayed as
-   opaque strings, never interpolated into a shell command, file path, SQL, or template that could
-   reinterpret them.
-6. **Missing preview registration is a hard queue-time refusal, not a skipped stage.** Symmetric with
-   `resolveManifest()`'s existing unknown-declared-topic refusal (`DeclaredTopicError`) and
-   `containmentGate()`'s incomplete-phase refusal — an operator must never be able to misread "the
-   browser stage silently didn't run" as "the browser stage passed."
+1. **Use `requiredEvidence`.** Existing `requiredStages` entries require `{harness, model}` and are
+   the wrong contract for a model-forbidden deterministic worker. The existing test that rejects
+   `requiredStages: ['browser-verify']` remains; a new test accepts it only as evidence.
+2. **Keep preview and browser in one phase.** The current phase model is one container and one exit
+   code per phase. A server cannot survive into another phase, so build/serve/drive/teardown remain
+   one bounded process tree.
+3. **Use an executable profile, not a prose playbook.** A Markdown list of flows has no deterministic
+   parser or assertion semantics. A runner-owned `.mjs` module is reviewable code, can express real
+   Playwright actions/assertions, and is safe from candidate mutation through a per-run read-only
+   snapshot.
+4. **Use network `none` for the proposal's allowlist.** For a same-namespace loopback preview,
+   `--network none` is the enforceable one-origin policy. No proxy or dynamic Docker network is
+   necessary. The `bridge` escape hatch is explicit and does not claim allowlisting.
+5. **Reuse `/out`, but honor the generic phase contract.** Browser files live under
+   `/out/browser/`; `/out/phase-result.json` remains mandatory because it is how the existing runner
+   closes any phase attempt. No new database table or output mount role is required.
+6. **Snapshot before execution.** Binding evidence to whatever profile happens to be current at
+   automerge time would make a previously passed run change meaning after deployment. The per-run
+   snapshot makes crash retries, fix rounds, and later automerge evaluation deterministic.
+7. **Activation remains gated on containment-v2.** The worker-containment spec's open production
+   rollout is a real blocker to the final policy flip, not merely an alert: with the flag off the
+   legacy path cannot execute this new phase.
+8. **Activate canonical `ui`, not `ux`.** The shipped topic-manifest spec names `ui` as this
+   extension point, and this spec/proposal's DoD says a UI-tagged repo fails closed. `ux` is a
+   distinct canonical topic today, not an alias; widening it is a separate policy decision.
 
 ## 6. Slices
 
-### Slice 0 — recon (fold into Slice 1's first hour)
+Before every slice, re-fetch the named `minion-factory/main` files and reconcile drift. Each slice
+is one 4–8 hour implementation run and must not start a later slice.
 
-**Topics:** `docs`, `logic`
+### Slice 1 — evidence and repo-profile schema (minion-factory, 4–6h)
 
-Re-fetch `runner/src/topics.ts`, `runner/src/containers.ts`, `runner/src/repos.ts`,
-`runner/src/queue.ts`, `runner/src/automerge.ts`, `runner/src/db.ts`, `agent/Dockerfile`,
-`runner/Dockerfile`, and `docker-compose.yml` at HEAD of `main` and diff against the excerpts quoted
-in §2. If the worker-containment spec's Slice 4/5 (image pinning, `FACTORY_CONTAINMENT_V2=1`
-activation) or any other concurrent factory spec has landed changes to any of these files, rebase
-this spec's plan around the new shape rather than reverting a sibling spec's change to restore these
-excerpts.
+**Files:** `runner/src/topics.ts`, `runner/src/topics.test.ts`, `runner/src/repos.ts`, its tests,
+`repos.example.json`, `README.md`.
 
-### Slice 1 — schema and phase-policy extension points (minion-factory, 6-8h)
+Add `browser-verify` only to `SUPPORTED_EVIDENCE`. Add the four optional repo fields from invariant
+2 and `validateBrowserConfig()`. Validate the three required fields all-or-nothing; reject a network
+field without them, non-loopback/malformed base URLs, unsafe profile paths, a missing/non-regular
+profile file, and unknown network modes. Extend `repoNetwork()` with `browserVerify` defaulting
+`none`.
 
-**Topics:** `security`, `infra`, `logic`, `test`
+**DoD:** `cd runner && npm test -- --test-name-pattern='topics|repos|browser config' && npm run
+typecheck`. Tests prove accepted evidence, unchanged stage rejection, every partial combination,
+URL/port/path rejection, and `none|bridge` resolution.
 
-**Goal:** make the new phase and its registry surface machine-readable and deny-by-default before any
-container actually launches Chrome.
+### Slice 2 — phase policy, scheduling, and image routing (minion-factory, 4–6h)
 
-**Files:**
+**Files:** `runner/src/containers.ts`, `runner/src/containers.test.ts`, `runner/src/queue.ts`,
+`runner/src/queue.test.ts`.
 
-- `runner/src/topics.ts`, `runner/src/topics.test.ts`
-- `runner/src/repos.ts`, `runner/src/repos.test.ts` (or the file holding its existing tests)
-- `runner/src/containers.ts`, `runner/src/containers.test.ts`
-- `repos.example.json`
+Add the worker phase and exact policy: uid 1100, read-only root, writable `/tmp` and ephemeral home,
+`github: null`, `model: forbidden`, no socket/auth mounts, disposable workspace, `/out`, and a
+read-only `browser-profile` input. Extend the phase artifact parser with a browser variant that
+requires candidate/profile/image bindings. Make `nextPhase(...,
+{browserVerifyRequired:false})` byte-compatible and insert browser verification after each passed
+self-test when true; a failed browser attempt enters the same bounded develop-fix loop as failed
+self-test/review. Add `imageForPhase()` so only this phase uses the browser image.
 
-Add `'browser-verify'` to `SUPPORTED_EVIDENCE` (D1). Add `previewCommand?: string`,
-`previewPort?: number`, `browserVerifyNetwork?: NetworkMode`, `browserPlaybook?: string` to
-`RepoDef`; a new `validatePreviewConfig(id, def)` rejects any state where exactly one of
-`previewCommand`/`previewPort`/`browserPlaybook` is set without the other two (all-or-nothing), a
-`previewPort` outside `[1024, 65535]`, or an unknown `browserVerifyNetwork` value (reusing
-`parseNetworkMode`). Extend `repoNetwork()` to also resolve `browserVerify` (default `none`).
+**DoD:** `cd runner && npm test -- --test-name-pattern='phase policy|container plan|nextPhase|image
+selection|phase artifact' && npm run typecheck`. Exact allowlists/mounts are asserted, every old
+sequence fixture is unchanged, fix rounds rerun browser verification for the new candidate, and
+deleting the phase/artifact/image mapping fails tests.
 
-In `containers.ts`: add `'browser-verify'` to `WORKER_PHASES`; add a `PhasePolicy` entry
-`{phase: 'browser-verify', entrypoint: '/usr/local/bin/factory-browser-verify.sh', user: '1100:1100',
-network: 'repo:browser-verify', readOnlyRootfs: true, tmpfs: ['/tmp', '/home/agent'], github: null,
-model: 'forbidden', mountRoles: {workspace: 'rw', out: 'rw', cache: 'any'}, requiredMountRoles:
-['workspace', 'out'], envAllowlist: [...BASE_ENV, ...PHASE_ENV, 'FACTORY_RUN_ID', 'CI',
-'FACTORY_COMMAND', 'FACTORY_PREVIEW_PORT', 'FACTORY_BROWSER_PLAYBOOK'], repoCommandEnv: true, limits:
-WORK_LIMITS}`. Extend `canonicalMountSource()`'s `workspace` case so `phase === 'browser-verify'`
-also gets a disposable per-attempt copy (`${root}/browserverify-${attempt}`), exactly like
-`self-test`'s existing special case, so a mutation during the preview build can never become the
-next candidate. Extend `nextPhase()`'s options with an additive `browserVerifyRequired?: boolean`
-(default `false`); when `true`, the transition map inserts `'self-test': 'browser-verify'` and
-`'browser-verify': 'prepare-review'` in place of the existing `'self-test': 'prepare-review'`, and
-the bounded-fix-round gate-phase set (`reconcile-base`/`self-test`/`review`) gains
-`'browser-verify'`. When `false` (the default, and every call site until Slice 5), behavior is
-byte-identical to today.
+### Slice 3 — pinned image supply chain (minion-factory, 4–6h)
 
-**Definition of done (machine-checkable):**
+**Files:** `agent/Dockerfile.browser-verify`, browser-image lock/package files,
+`scripts/verify-image-pins.sh`, `docker-compose.yml`, `.env.example`, `deploy.sh`.
 
-```bash
-cd runner
-npm test -- --test-name-pattern='topics|repos|container plan|phase policy'
-npm run typecheck
-```
+Build from a digest-pinned base. Download an exact Chrome for Testing build with a committed SHA-256
+check; install dependencies through a committed lockfile and `npm ci`, not floating global installs.
+Write `/etc/factory-browser-toolchain.json` and smoke-test the Chrome binary and
+`chrome-devtools-mcp --version`. Publish/promote a named `repository@sha256:<manifest-digest>` and
+emit it as `FACTORY_BROWSER_VERIFY_IMAGE` from `deploy.sh`; a mutable tag or bare local image ID is
+not production-ready.
 
-`topics.test.ts` gains a case proving `requiredEvidence: ['browser-verify']` now validates —
-T-EVIDENCE-SUPPORTED — and the existing `requiredStages: ['browser-verify']` rejection fixture at
-`topics.test.ts:102-104` is asserted unchanged byte-for-byte in the diff —
-T-STAGE-FIXTURE-UNCHANGED. `repos.test.ts` proves a `RepoDef` with only `previewCommand` set (no
-`previewPort`/`browserPlaybook`) is rejected, and one with all three plus a `previewPort` of `80` is
-rejected — T-PARTIAL-CONFIG-REJECTED. `containers.test.ts` asserts the exact env/mount/network set
-for `browser-verify` (no GitHub/model/persistent-auth/Docker-socket surface can be added without the
-test failing), that its disposable workspace source never collides with `self-test`'s or `develop`'s,
-and that `nextPhase()` with `browserVerifyRequired: false` produces the identical sequence as before
-this slice for every existing fixture (regression) while `browserVerifyRequired: true` inserts the
-new phase exactly once between `self-test` and `prepare-review`, including in the bounded-fix-round
-path — T-PHASE-POLICY-BROWSER, T-SEQUENCE-CONDITIONAL, T-SEQUENCE-REGRESSION.
+**DoD:** `scripts/verify-image-pins.sh`; two clean builds produce identical toolchain manifests;
+`docker inspect` shows the fixed non-root entrypoint; a deployment fixture rejects a tag and accepts
+a named digest. T-IMAGE-PINS-BROWSER and T-DIGEST-DEPLOY are automated tests, not manual diff review.
 
-### Slice 2 — pinned image and entrypoint (minion-factory, 8h)
+### Slice 4 — deterministic browser worker (minion-factory, 6–8h)
 
-**Topics:** `security`, `infra`, `deps`, `ui`
+**Files:** `agent/factory-browser-verify.sh`, `agent/lib/browser-verify-flows.mjs`, fixture profile
+and preview app, shell/Node tests.
 
-**Goal:** one container performs build→preview→flows→axe→AX-tree→screenshots→console/network with no
-GitHub or model credential, and Chrome can reach nothing but the loopback preview origin.
+Run the already-mounted disposable workspace; do not copy it again. Start the registered command in
+a process group, poll the declared loopback URL with a fixed timeout, inspect listeners and reject a
+preview port bound to any non-loopback interface, and always terminate/reap the process group. Import
+the read-only profile, run its Playwright flows, inject axe-core, capture CDP full AX trees,
+checkpoint PNGs, console events, and request/response/failure events. Flow assertion failure,
+critical/serious axe violations, or configured console errors fail. Always write browser result
+files and `/out/phase-result.json`; gate failures return a valid `{status:'failed'}` phase artifact
+with process exit 0 so `nextPhase()` can enter its bounded fix loop, while launch/infrastructure
+failures exit nonzero and remain crash/retry events.
 
-**Files:**
+**DoD:** `bash -n agent/factory-browser-verify.sh` plus fixture tests prove profile actions and
+assertions execute, a wildcard bind is rejected before Chrome, timeout/flow/axe failures are named,
+the preview process is gone after success and failure, loopback succeeds under `--network none`,
+non-loopback `fetch`, WebSocket, EventSource and image requests fail and appear in `network.jsonl`,
+and the complete fixed evidence set exists.
 
-- `agent/Dockerfile.browser-verify` (new)
-- `agent/factory-browser-verify.sh` (new)
-- `agent/lib/browser-verify-flows.mjs` (new — thin Playwright/`chrome-devtools-mcp`-library driver,
-  no LLM in the loop)
-- `runner/src/queue.ts` (image reference plumbing only, no scheduling logic yet)
-- `docker-compose.yml`, `.env.example`
+### Slice 5 — profile snapshot and evidence ingestion (minion-factory, 4–6h)
 
-Pin `FROM` by digest (Chrome-for-Testing-compatible base), and pin exact `chrome-devtools-mcp`
-(or the underlying `chrome-launcher`/Playwright-core package, whichever the driver actually imports),
-`axe-core`, and Node versions with the same build-time "assert installed == pinned, write
-`/etc/factory-toolchain.json`" pattern `agent/Dockerfile` already uses (AS-IS #10) — do not repeat the
-tag-only mistake still open on the two pre-existing images. `factory-browser-verify.sh`: (1) copy the
-disposable workspace, (2) run `$FACTORY_COMMAND` (the resolved `previewCommand`) in the background,
-bound to `127.0.0.1:$FACTORY_PREVIEW_PORT` — the entrypoint refuses to proceed if the process is
-observed binding any other interface — poll the port with a bounded timeout, exit non-zero on
-timeout; (3) launch Chrome for Testing headless against that loopback origin only, drive the flows
-named by `$FACTORY_BROWSER_PLAYBOOK` deterministically (Playwright-style script, not free-form agent
-exploration), run `axe-core`, capture the full accessibility tree, take screenshots at each flow
-checkpoint, and record every console message and network request/response (including any denied by
-the container's network policy, which is valuable evidence of what the page attempted); (4) kill the
-preview server; (5) write `/out/browser/result.json` (`{exit, verdictReason}`), `/out/browser/axe.json`,
-`/out/browser/ax-tree.json`, `/out/browser/screenshots/*.png`, `/out/browser/console.jsonl`,
-`/out/browser/network.jsonl`.
+**Files:** `runner/src/browser-verify.ts`, `runner/src/browser-verify.test.ts`, `runner/src/queue.ts`.
 
-**Definition of done (machine-checkable):**
+Create a root-owned per-run profile input leaf without following links; copy the validated profile
+once when evidence first becomes required and compute the hash in invariant 8. Validate fixed names
+only: JSON/JSONL must be UTF-8 and structurally valid; allow 1 MiB each for JSON, 16 MiB and 100,000
+lines each for JSONL, at most 64 PNGs of at most 16 MiB each; reject symlinks, non-regular files,
+extra screenshot types, path traversal, missing files, or duplicate checkpoint names. Persist a
+bounded summary and SHA-256 for every artifact in `phase_attempts.evidence`, not raw screenshots.
 
-```bash
-bash -n agent/factory-browser-verify.sh
-docker build --pull -t factory-browser-verify-proof -f agent/Dockerfile.browser-verify .
-docker run --rm --entrypoint sh factory-browser-verify-proof -c 'test -r /etc/factory-toolchain.json'
-docker build --no-cache --pull -t factory-browser-verify-proof-2 -f agent/Dockerfile.browser-verify .
-diff <(docker run --rm --entrypoint cat factory-browser-verify-proof /etc/factory-toolchain.json) \
-  <(docker run --rm --entrypoint cat factory-browser-verify-proof-2 /etc/factory-toolchain.json)
-```
+**DoD:** `cd runner && npm test -- --test-name-pattern='browser.?verify|profile snapshot|evidence' &&
+npm run typecheck`. Corrupt, oversized, symlinked, extra, missing, and binding-mismatch fixtures fail
+with the offending path; retry uses the identical snapshot/hash after the source profile changes.
 
-A local fixture repo with a trivial static preview server proves: the entrypoint produces every file
-in the fixed evidence set (T-EVIDENCE-FILESET); a fixture preview page that attempts
-`fetch('http://169.254.169.254/')`, `fetch('https://example.com/')`, and a raw TCP connect to the
-Docker host gateway all fail from inside Chrome and are recorded as denied attempts in
-`network.jsonl`, while a request to the loopback preview origin itself succeeds
-(T-LOOPBACK-ONLY); and a fixture whose `previewCommand` binds `0.0.0.0` instead of `127.0.0.1` makes
-the entrypoint exit non-zero before Chrome ever launches (T-IMAGE-PINS-BROWSER covers the digest/pin
-assertions above).
+### Slice 6 — fail-closed requirements and automerge (minion-factory, 4–6h)
 
-### Slice 3 — runner-side evidence, fail-closed queueing, automerge predicate (minion-factory, 8h)
+**Files:** `runner/src/manifest.ts`, its tests, `runner/src/queue.ts`, `runner/src/queue.test.ts`,
+`runner/src/automerge.ts`, `runner/src/automerge.test.ts`.
 
-**Topics:** `security`, `infra`, `logic`, `test`
+At initial queue time, `enforceQueueRequirements()` rejects required browser evidence unless the
+repo config is complete, containment-v2 is enabled, the phase/entrypoint is declared ready, and the
+named-digest image resolves. Before every `nextPhase()` call, re-read the run's current persisted
+manifest so monotonic post-push reclassification can add the phase; never rely on the stale
+`manifestJson` dispatch argument. Re-run the same readiness check on advance. Automerge requires the
+latest passed browser attempt for current candidate+profile+image and never treats page strings as a
+verdict.
 
-**Goal:** the runner treats browser-verify evidence with the same rigor `review.ts` treats
-`REVIEW.md`, and a run cannot silently skip a required browser stage.
+**DoD:** `cd runner && npm test -- --test-name-pattern='queue requirements|browser readiness|automerge'
+&& npm run typecheck`. Missing profile, flag off, missing phase, missing/tagged image, late-added UI
+evidence, stale candidate/profile/image, and absent/failed attempts each have named fail-closed tests.
 
-**Files:**
+### Slice 7 — minion-hub pilot and adversarial E2E (minion-factory, 6–8h)
 
-- `runner/src/browser-verify.ts` (new), `runner/src/browser-verify.test.ts` (new)
-- `runner/src/queue.ts`
-- `runner/src/automerge.ts`, `runner/src/automerge.test.ts`
-- `runner/src/repos.ts` (pilot registration: `minion-hub`)
-- `playbooks/minion-hub-browser.md` (new)
+**Files:** `runner/src/repos.ts`, `browser-profiles/minion-hub.mjs`,
+`runner/src/browser-verify.e2e.test.ts`, `README.md`.
 
-`browser-verify.ts`: `validateBrowserEvidence(outDir)` opens each expected file with no-follow
-semantics, rejects a symlink, a non-regular file, anything over a fixed size ceiling per file type
-(screenshots larger than a generous PNG bound, JSON/JSONL logs larger than a generous line-count
-bound), or invalid UTF-8/JSON where structure is expected — mirroring `review.ts`'s existing
-`REVIEW.md` posture (AS-IS #9's sibling code, reused as a pattern, not imported directly since the
-file shapes differ). `computeBrowserProfileHash(repoDef, playbookContent)` reuses
-`manifest.ts`'s exported `canonicalJson()` + sha256 over
-`{previewCommand, previewPort, browserVerifyNetwork, playbookContent}`. The validated result plus
-`candidate_sha` plus `browserProfileHash` is what `queue.ts` persists into the `browser-verify`
-`phase_attempts.evidence` column (AS-IS #8 — no schema migration).
+Verify the current hub scripts before registering its exact build+preview command and loopback URL.
+The profile contains 2–3 executable unauthenticated flows with stable assertions and at least one
+screenshot checkpoint each. Adversarial fixtures put instruction-shaped strings and fake verdicts
+in DOM/AX/console/network fields and exercise non-loopback resource APIs under `none`; a separate
+`bridge` fixture proves/logs the documented escape hatch without asserting isolation.
 
-`queue.ts`: before calling `nextPhase()`, read the run's persisted `manifest_json.requiredEvidence`;
-if it includes `'browser-verify'`, pass `browserVerifyRequired: true` **only if** (a) the target
-`RepoDef` has a complete preview/browser-playbook registration (Slice 1's `validatePreviewConfig`)
-and (b) a `browserVerifyReadiness()` check (mirroring `containmentReadiness()`'s shape, scoped to
-just this one phase's entrypoint/image) reports ready; otherwise the run refuses to queue with a
-named reason (`DeclaredTopicError`-style refusal, not a silent `browserVerifyRequired: false`).
+**DoD:** full runner tests/typecheck, image-pin check, shell syntax, and one deployed scratch
+`minion-hub` run complete the sequence `...self-test → browser-verify → prepare-review → review`.
+The runner-owned attempt directory contains valid artifacts bound to the real candidate/profile/image;
+the DB row contains only the bounded summary/hashes. A second canary requiring browser evidence for
+unregistered `minion-site` refuses before any worker starts. No PR-artifact publication is claimed.
 
-`automerge.ts`: add an explicit branch to the `requiredEvidence` loop —
-`if (evidence === 'browser-verify') { /* require a passed browser-verify phase_attempts row whose
-candidate_sha equals the run's current candidate_sha */ }` — closing AS-IS #9's gap for this one
-evidence name.
+### Slice 8 — canonical UI activation (minion-meta, 4–6h)
 
-Register `minion-hub` as the pilot: `previewCommand: 'bun run build && bun run preview --port
-$FACTORY_PREVIEW_PORT --host 127.0.0.1'` (adjust to the repo's actual SvelteKit preview command),
-`previewPort: 4173`, `browserVerifyNetwork: 'none'`, `browserPlaybook: 'minion-hub-browser.md'`.
-`playbooks/minion-hub-browser.md` names 2-3 concrete acceptance flows (e.g. dashboard loads, a
-primary nav route renders, no console errors) the deterministic driver in Slice 2 executes.
+**Files:** `specs/topics.json` only.
 
-**Definition of done (machine-checkable):**
+Add `browser-verify` to `ui.requiredEvidence` only. Do not edit `ux`. This slice may merge only after
+S1–S7 are deployed, `FACTORY_CONTAINMENT_V2=1` is verified on the live runner, the hub success canary
+and site refusal canary pass, and the deployed runner recognizes the exact policy value.
 
-```bash
-cd runner
-npm test -- --test-name-pattern='browser.?verify|automerge'
-npm run typecheck
-```
-
-A fixture with a corrupted/oversized/symlinked evidence file is rejected with the offending file
-named — T-EVIDENCE-VALIDATE. A manifest requiring `browser-verify` evidence against a `RepoDef` with
-no preview registration refuses to queue with a named reason, never silently proceeds without the
-phase — T-MISSING-PROFILE-FAILCLOSED. The same manifest against a complete registration but a mocked
-`browserVerifyReadiness()` reporting not-ready also refuses to queue — T-READINESS-FAILCLOSED. An
-`evaluateAutoMergeRun()` fixture with `requiredEvidence: ['browser-verify']` and no passed
-`browser-verify` attempt bound to the current `candidate_sha` is ineligible with a named reason; one
-with a passed, correctly-bound attempt is eligible (all other existing gates held constant) —
-T-AUTOMERGE-PREDICATE.
-
-### Slice 4 — adversarial and end-to-end proof (minion-factory, 6-8h)
-
-**Topics:** `security`, `test`, `infra`
-
-**Goal:** prove the injection and egress boundaries under attack, and that the whole path works
-against the real `minion-hub` pilot.
-
-**Files:**
-
-- `runner/src/containment.e2e.test.ts` (extend the existing containment E2E suite from the
-  worker-containment spec if present, else new `runner/src/browser-verify.e2e.test.ts`)
-- `agent/lib/browser-verify-flows.mjs` (fixture hardening only, if gaps are found)
-
-Adversarial fixtures: a preview page whose DOM/AX-tree accessible names contain a string shaped like
-a driving-agent instruction (there is none to inject into — the test proves the evidence pipeline
-treats it as inert bytes reaching `browser-verify.ts` unchanged); a page whose console output emits
-`VERDICT: PASS` or JSON shaped like `phase_attempts.evidence`; a page that attempts `WebSocket`,
-`EventSource`, `<img src>`, and `fetch` requests to non-loopback hosts under both the default `none`
-network and an explicit `bridge` opt-in fixture (proving the opt-in genuinely removes the loopback
-guarantee, so the residual risk documented in §8 is demonstrated, not assumed). None of these change
-`validateBrowserEvidence()`'s output or the run's terminal status.
-
-**Definition of done (machine-checkable):**
-
-```bash
-cd runner
-npm test
-npm run typecheck
-cd ..
-bash -n agent/*.sh
-```
-
-The E2E suite fails if any adversarial fixture's page-derived content is observable anywhere except
-inside the opaque evidence blob, if a `bridge`-opted-in fixture's non-loopback request silently
-succeeds without appearing in `network.jsonl`, or if a `none`-network fixture's non-loopback request
-succeeds at all — T-INJECTION-AXTREE, T-INJECTION-CONSOLE, T-EGRESS-LOOPBACK-ONLY. One real
-(or CI-scratch) `minion-hub` run with `browserVerifyRequired: true` produces a complete evidence set
-bound to its real `candidate_sha`, visible on the draft PR's `/out/browser/` artifacts.
-
-### Slice 5 — minion-meta activation (minion-meta, 2-4h)
-
-**Topics:** `infra`, `docs`, `ui`
-
-**Goal:** flip the switch only once the factory side is live, matching the two-repo rollout discipline
-the topic-capability-manifest spec already established for its own classifier versioning.
-
-**Files:**
-
-- `specs/topics.json`
-
-Add `'browser-verify'` to the `ui` topic's `requiredEvidence` array (and, if the operator confirms
-`ux`-tagged work also targets rendered UI, to `ux` as well — default to `ui` only if uncertain, since
-`ux` today carries no evidence requirement at all and widening it is a reversible follow-up, not a
-blocking decision for this slice). This slice **must not** be merged/deployed before Slice 1-4 are
-live on `minion-factory/main` and the pilot run in Slice 4 has produced real evidence — deploying it
-early makes every `ui`-effective-topic run queue-time-refuse the moment `resolveManifest()` sees an
-evidence name the deployed runner doesn't yet support that it's now required to satisfy for a repo
-with no preview registration.
-
-**Definition of done (machine-checkable):**
-
-```bash
-node scripts/spec-index.mjs && node scripts/proposal-index.mjs
-```
-
-Exit 0. A scratch spec fixture tagged `[ui]` still validates. `git diff specs/topics.json` shows only
-the additive `requiredEvidence` entries — no other topic's fields change.
+**DoD:** `node scripts/spec-index.mjs && node scripts/proposal-index.mjs`; the existing topic tests
+pass; a scratch `[ui]` manifest requires the new evidence; a scratch `[ux]` manifest does not; the
+diff changes only `ui.requiredEvidence`. After deployment, one normal hub UI run (no override) runs
+the phase, and one normal unregistered-repo UI run refuses with the expected reason.
 
 ## 7. Cross-repo impact assessment
 
-| Change | Repos touched | Mitigation |
+| Impact zone | Repos/surface | Required treatment |
 |---|---|---|
-| `SUPPORTED_EVIDENCE` gains `browser-verify` | minion-factory only | Additive to a closed set; `specs/topics.json` cannot reference it until Slice 5, and Slice 5 is explicitly ordered last |
-| New `WorkerPhase` + `PhasePolicy` | minion-factory only | Deny-by-default, only enters `DEV_PHASE_SEQUENCE` when `nextPhase()` is called with `browserVerifyRequired: true`; every existing call site keeps the default `false` until Slice 3 wires the manifest read |
-| `RepoDef` schema growth | minion-factory only, `repos.ts` callers | All new fields optional and all-or-nothing validated; the five non-pilot repos are unaffected until an operator registers them |
-| New pinned image + entrypoint | minion-factory only | Independent Dockerfile, pinned from its first commit — does not depend on or block the worker-containment spec's still-open Slice 4 remediation of the two pre-existing images |
-| `automerge.ts` new predicate branch | minion-factory only, behavior-visible only to a run whose manifest requires `browser-verify` evidence (none, until Slice 5) | `FACTORY_AUTOMERGE` remains `0` through the roadmap regardless; this predicate only matters once that kill switch is lifted |
-| `specs/topics.json` `ui`/`ux` change | minion-meta, fleet-wide (every future `ui`-effective-topic run on any repo) | Deliberately the **last** slice, gated on live factory deployment (§6 Slice 5); any repo without a preview registration at that point fails closed at queue time rather than merging without evidence |
-| Deployment | minion-factory `deploy.sh`/`.env` | Any new required env (pinned browser image digest reference) must be emitted by `deploy.sh` per the hard memory constraint in AS-IS — never hand-added on the host |
+| Factory phase/evidence protocol | `minion-factory` only | Additive closed-set entries, generic phase result, exact policy tests, dedicated image selection |
+| Canonical topic policy | `minion-meta/specs/topics.json` → every factory fleet repo | Activate last; `ui` runs on unregistered repos intentionally refuse |
+| Registered UI applications | `minion-hub` pilot; behavior impact on `minion-base` and `minion-site` | Hub gets the only profile in scope; base/site refusal is verified and called out, not treated as compatibility |
+| Other fleet repos that may declare/derive `ui` | `minion-ai`, `minion-meta`, `minion-factory` | Same fail-closed behavior until separate per-repo profiles exist |
+| Deployment/env | `minion-factory/docker-compose.yml`, `deploy.sh`, production `.env` | `FACTORY_BROWSER_VERIFY_IMAGE` is a named immutable digest and is emitted by `deploy.sh`, per `/memory/MINION/index-archive.md`'s ★★★ wholesale-rewrite constraint |
+| Automerge | `minion-factory` only | New evidence predicate; `FACTORY_AUTOMERGE=0` remains untouched per `/memory/MINION/sdlc-board-triage-and-phase-gates.md` |
+| AGENTS.md named product impact zones | shared WS protocol, channel extensions, shared DB, agent definitions, auth, workshop, pixel office, paperclip adapters | None entered; no code or contract in those zones changes |
+| Existing hub live-preview subsystem | `minion_hub` + gateway plugin | No dependency or change; operator memory records it as inert until `PREVIEW_RUNNER_URL/_SECRET` is configured |
 
-**Alert (unavoidable, flagged not mitigated):** the `bridge` network opt-in (TO-BE invariant 4,
-Design decision 3) intentionally has no allowlist mechanism — a repo that opts a preview into
-`bridge` because its flows need a real third-party origin gets full outbound network access from
-Chrome, identical in shape to today's `selfTestNetwork: 'bridge'` opt-ins. This spec does not build a
-dynamic per-run egress allowlist for that case; if a future repo needs both a real external
-dependency and hard destination allowlisting, that is a new proposal, not silent scope creep here.
-Operators should treat a `browserVerifyNetwork: 'bridge'` registration as requiring the same review
-scrutiny `selfTestNetwork: 'bridge'` already gets.
+**Residual risk:** `browserVerifyNetwork: 'bridge'` gives Chrome general outbound access, matching the
+shape of existing command-network opt-ins. This spec neither claims nor implements destination
+allowlisting for that escape hatch.
 
 ## 8. Out of scope
 
-- General egress allowlisting/proxying for the `bridge` opt-in path — see the alert above.
-- Any use of an LLM/harness to drive `chrome-devtools-mcp` interactively; this spec's flows are
-  deterministic scripts only, per Design decision 1.
-- Migrating `agent/Dockerfile`/`runner/Dockerfile`'s existing tag-only `FROM` lines or shipping
-  `scripts/verify-image-pins.sh` for those two images — that remains the worker-containment spec's
-  open Slice 4.
-- Flipping `FACTORY_CONTAINMENT_V2` to `1` in production, or any other containment-v2 canary/rollout
-  work — that remains the worker-containment spec's open Slice 5. This spec's new phase joins the same
-  kernel regardless of that flag's state, exactly as every other `WorkerPhase` already does.
-- Configuring `previewCommand`/`browserPlaybook` for `minion-site`, `minion-base`, or any repo beyond
-  the `minion-hub` pilot — a follow-up per-repo rollout, not a blocking part of this DoD.
-- Custom per-repo `axe-core` rule configuration (`axeTags`-style overrides) — ship the fixed default
-  ruleset first.
-- The `minion_hub` Projects⇄GitHub live-preview gateway plugin (AS-IS #12) — unrelated subsystem, not
-  touched.
-- Any change to `review`'s existing model-driven posture, credential set, or evidence format.
-- Widening `ux`'s `requiredEvidence` — deferred to operator judgment in Slice 5, not decided here.
+- An LLM or harness driving browser/MCP interactions.
+- General egress allowlisting for the explicit `bridge` path.
+- Profiles for `minion-base`, `minion-site`, `minion-ai`, `minion-meta`, or `minion-factory`.
+- Making `ux` independently require browser evidence or introducing an `a11y` topic.
+- Custom per-repo axe rule sets beyond the fixed critical/serious gate.
+- The hub Projects⇄GitHub live-preview subsystem.
+- Existing agent/runner image pinning and the containment-v2 rollout implementation owned by the
+  worker-containment spec. The rollout's successful production completion is nevertheless a hard S8
+  prerequisite.
+- Uploading browser artifacts to GitHub/PRs or changing the review worker/evidence format.
 
-## 9. End-to-end verification
+## 9. End-to-end definition of done
 
-1. On a clean `minion-factory` checkout: `cd runner && npm test && npm run typecheck` all green;
-   `bash -n agent/*.sh`; `docker build --pull -f agent/Dockerfile.browser-verify .` succeeds and
-   `scripts/verify-image-pins.sh` (or its scoped equivalent from Slice 2) passes.
-2. Register `minion-hub` with a real `previewCommand`/`previewPort`/`browserPlaybook`. Queue a dev run
-   against a low-stakes `minion-hub` spec with `browserVerifyRequired` resolvable to `true` (via a
-   test-only manifest override, since `specs/topics.json` itself is not yet updated at this point).
-   Confirm the draft PR's phase sequence is
-   `prepare-workspace → setup → develop → reconcile-base → self-test → browser-verify → prepare-review
-   → review`, and that `/out` under the `browser-verify` attempt contains the full evidence set bound
-   to the run's `candidate_sha`.
-3. Repeat with a `RepoDef` lacking a preview registration and a manifest requiring `browser-verify`
-   evidence — queueing refuses with a named reason, no phase attempt row is created.
-4. Run the adversarial fixture suite (Slice 4) and confirm every page-derived-content and egress
-   boundary case behaves as specified — no observable leak of AX-tree/console text into any
-   accept/reject decision, no non-loopback request succeeding under the default network policy.
-5. Only after 1-4 pass against the real deployed runner: land the `specs/topics.json` change (Slice
-   5), open a scratch minion-meta PR with a `[ui]`-tagged fixture spec, and confirm
-   `node scripts/spec-index.mjs` still exits 0. Queue one more `minion-hub` run through the now-live
-   `specs/topics.json` (no manifest override needed this time) and confirm the same evidence set
-   appears through the unmodified, production manifest-resolution path.
-6. Confirm `FACTORY_AUTOMERGE=0` still fully disables the sweep (kill switch untouched, unaffected by
-   this spec) and that a non-`ui` repo's existing dev-run behavior is unchanged throughout.
+The spec is complete only when S1–S8 pass in order, the deployed runner reports containment-v2
+enabled, the browser image reference is a named manifest digest, the hub success and site refusal
+canaries pass, the canonical `ui` policy is live, and a post-activation hub run produces validated
+candidate/profile/image-bound evidence before review. `FACTORY_AUTOMERGE=0`, provider independence,
+the human merge gate, and reviewer read-only authority remain unchanged.
 
-This spec is complete only when those checks pass without weakening the worker-containment kernel's
-existing deny-by-default guarantees, the topic-capability-manifest's fail-closed unknown-value
-posture, provider independence, or the human merge gate — consistent with
-`/memory/MINION/sdlc-board-triage-and-phase-gates.md` (controller owns truth; prompts are not a
-security boundary; automerge stays off through M7) and `/memory/MINION/factory`'s
-`minion-factory-agent-pipeline.md` (reviewers propose while the applier re-verifies; `deploy.sh`
-rewrites `.env` wholesale).
+The memory constraints that shape this result are cited above: `/memory/MINION/MEMORY.md` and
+`/memory/MINION/sdlc-board-triage-and-phase-gates.md` require slice-scoped runs, controller-owned
+truth, prompts not serving as a security boundary, and automerge remaining off; the archived
+`minion-factory-agent-pipeline` entry in `/memory/MINION/index-archive.md` requires reviewers to
+propose while the applier re-verifies and records the `deploy.sh` wholesale `.env` rewrite.
