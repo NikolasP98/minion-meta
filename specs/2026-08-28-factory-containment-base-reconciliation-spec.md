@@ -332,6 +332,26 @@ Definition of done (machine-checkable):
   removes it.
 - `grep -c 'FACTORY_CONFLICT_MAX_TURNS' deploy.sh` → `1`.
 
+**Operator gate note (2026-08-28, after PR #130 dispositioned DENY/PRESERVE-WIP):** two implementation
+rounds proved that an in-container scope guard cannot pass review — the guard lived in the trust domain of
+the model it constrains. The restart run (S2b) MUST implement runner-owned enforcement; these four
+requirements are part of Slice 2's Definition of Done from this note forward:
+1. **Runner-owned scope baseline.** The RUNNER computes the pre-model out-of-scope baseline (index stage,
+   mode, blob OIDs, plus hashed worktree/untracked content) before launching the resolver container, stores
+   it as sealed attempt evidence (Slice 1's `bindPlannedPhaseAttempt` / sealed-output machinery), and
+   performs the post-model comparison itself. The container never reads or writes the baseline. Snapshot or
+   comparison errors fail closed.
+2. **Crashed resolver is terminal.** The generic crash-retry path (`runner/src/containers.ts`) special-cases
+   `resolve-conflict`: a crashed or orphaned resolver attempt finishes as a state-conflict result — the
+   one-attempt contract — never a retry on the dirty workspace.
+3. **Self-test isolation from resolver-writable content.** Self-test builds from the committed candidate
+   with dependencies from a trusted cache or fresh install; resolver-created ignored-path changes do not
+   survive the phase.
+4. **Codex turn ceiling.** `FACTORY_CONFLICT_MAX_TURNS` binds the Codex launch path, not only Claude's
+   `--max-turns`.
+PR #130's branch (head `87e57afd`) is preserved as implementation evidence for the working sequencing and
+plan-hygiene parts; it must not be merged or auto-fixed further.
+
 ### Slice 3 — Bind `{testedBase, testedCandidate}` through review and publish (minion-factory, 6–8h)
 
 **Topics:** `logic`, `security`, `test`
