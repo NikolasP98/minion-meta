@@ -1,13 +1,14 @@
 ---
 id: postmerge-minion-hub-6c679768db21
 title: "Post-merge finding — todo-handoff in src/lib/components/data-table/DataTable.svelte (minion_hub)"
-status: in-spec
+status: closed
 created: 2026-08-28
 updated: 2026-08-28
 spawned_spec: 2026-08-28-postmerge-minion-hub-6c679768db21-spec
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still in-spec — closing"
 ---
 
 # Post-merge finding — todo-handoff in `src/lib/components/data-table/DataTable.svelte`
