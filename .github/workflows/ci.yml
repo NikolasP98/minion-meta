@@ -44,6 +44,9 @@ jobs:
       - name: Test
         run: pnpm run test-all
 
+      - name: Curated engineering skill bundle
+        run: scripts/check-minion-engineering-skills.sh
+
       - name: Changesets status (PR only)
         if: github.event_name == 'pull_request'
         run: pnpm run changeset:status
