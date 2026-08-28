@@ -1,13 +1,14 @@
 ---
 id: 2026-08-23-minion-ai-ci-baseline-debt
 title: Restore the minion-ai DEV test baseline before daily promotion
-status: draft
+status: review
 created: 2026-08-23
-updated: 2026-08-23
+updated: 2026-08-28
 repos: [minion-meta, minion]
 tags: [infra, test]
 value: 10
 effort: L
+duplicate_candidate: ci-minion-ai-ci
 ---
 
 # Restore the minion-ai DEV test baseline before daily promotion
@@ -92,3 +93,16 @@ Daily production promotion must not reinterpret a known-red suite as green.
 - A DEV integration push runs the broad matrix exactly once and produces the immutable evidence
   consumed by daily promotion.
 - The Bun 1.4 keep-shadow versus migrate decision is recorded with measured evidence.
+
+## Reconciliation note 2026-08-28
+
+Merely suspicious, not certain: `ci-minion-ai-ci` ("CI red — CI on minion-ai DEV", `in-spec`,
+`2026-08-18-ci-minion-ai-ci-spec`) already tracks the same DEV `checks` workflow going red on
+this same clustered pre-existing-failure suite (its 2026-08-18 triage note references "~193
+clustered pre-existing failures... the spec should decide whether to fix the cluster roots or
+quarantine honestly"). This proposal is a much more thoroughly evidenced (PR #239, exact run
+IDs, failure counts) treatment of what may be the identical restoration work, filed five days
+later — but I cannot be certain it isn't scoped differently from whatever
+`2026-08-18-ci-minion-ai-ci-spec` already committed to. Not merged: the canonical is
+`in-spec`, off-limits to edit — flagged for a human to reconcile scope against the existing
+spec before this proceeds.
