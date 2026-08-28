@@ -53,11 +53,3 @@ label-issues	UNKNOWN STEP	2026-08-28T09:10:15.2246146Z Token is not set
 label-issues	UNKNOWN STEP	2026-08-28T09:10:15.2374381Z Cleaning up orphan processes
 label-issues	UNKNOWN STEP	2026-08-28T09:10:15.2757708Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
-
-## Diagnosis (auto)
-
-**Root cause:** The `actions/create-github-app-token` action requires a `private-key` input, but the workflow is not supplying it.
-
-**File:** `.github/workflows/` (job name `label-issues`, workflow `Stale` — likely `stale.yml` or similar)
-
-**Fix:** Add `private-key: ${{ secrets.GITHUB_APP_PRIVATE_KEY }}` (or the correct secret name) to the `create-github-app-token` action inputs. The secret must be configured in the repo's GitHub settings.
