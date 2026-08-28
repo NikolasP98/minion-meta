@@ -7,7 +7,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { cliMappings, readPolicy } from './repo-policy.mjs';
-import { INCLUDE_BYTES, checkCliRegistry, checkInstructionPair, checkProjections, checkRootProjections, renderBlock } from './check-agent-instructions.mjs';
+import { INCLUDE_BYTES, checkCliRegistry, checkInstructionPair, checkProjections, checkRootProjections, renderBlock, renderCommands } from './check-agent-instructions.mjs';
 
 const root = resolve(fileURLToPath(new URL('..', import.meta.url)));
 const policy = readPolicy();
@@ -173,17 +173,30 @@ try {
   assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
   reset();
 
-  // A definition may open a block after any paragraph-terminating line — a heading or a table row —
-  // but may not interrupt a paragraph, where the same text renders literally.
+  // A definition may open a block after a heading, and after a table once the table's own block has
+  // ended — but it may not interrupt a paragraph or a table body, where a renderer shows the same
+  // text literally and therefore renders no link at all.
   failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
     writeAgents(goodAgents('\n## Section\n[setup]: ./missing.md\n\nSee [setup].\n')));
   failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
-    writeAgents(goodAgents('\n| a | b |\n| --- | --- |\n[setup]: ./missing.md\n\nSee [setup].\n')));
-  // An angle-bracket definition destination and a bracketed reference label resolve like any other.
+    writeAgents(goodAgents('\n| a | b |\n| --- | --- |\n| c | d |\n\n[setup]: ./missing.md\n\nSee [setup].\n')));
+  // …and the control for the interrupting case: a GFM table body runs to the next blank line, so
+  // definition-looking text on the line after the delimiter row is a table cell, not a definition.
+  // `[setup]` below therefore renders as literal text and must not be reported as a broken link.
+  writeAgents(goodAgents('\n| a | b |\n| --- | --- |\n[setup]: ./missing.md\n\nSee [setup].\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  reset();
+  // An angle-bracket definition destination resolves like any other. A link label may hold a square
+  // bracket only when it is backslash-escaped: CommonMark ends a label at the first unescaped ']',
+  // so `[a][b [c]]` is literal text and `[b [c]]: dest` defines nothing — the escaped spelling is
+  // the one that renders a link, and it is the one that must be checked.
   failsWith(/fixture\/AGENTS\.md: link '\.\/missing file\.md' does not resolve/, () =>
     writeAgents(goodAgents('\nSee [setup].\n\n[setup]: <./missing file.md>\n')));
   failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
-    writeAgents(goodAgents('\nSee [a][b [c]].\n\n[b [c]]: ./missing.md\n')));
+    writeAgents(goodAgents('\nSee [a][b \\[c\\]].\n\n[b \\[c\\]]: ./missing.md\n')));
+  writeAgents(goodAgents('\nSee [a][b [c]] — an unescaped bracket is not a link label.\n\n[b [c]]: ./missing.md\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  reset();
 
   // A definition written inside a block quote or a list item still takes effect for the whole
   // document — CommonMark parses each container's content as its own sub-document, and the
@@ -227,6 +240,34 @@ try {
   // …and a broken link after a closed fence is reported, so the blanking really does stop there.
   failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
     writeAgents(goodAgents('\n```md\n[x](./gone.md)\n```\n\nSee [gone](./missing.md).\n')));
+
+  // Backticks inside an HTML block are raw HTML, not a fence opener: a renderer emits the comment
+  // (or the script) verbatim and keeps rendering Markdown after it, so a link below one is live and
+  // must be checked. This is block structure, not a comment special case — every HTML block type
+  // behaves the same way — and it is why the checker asks a CommonMark parser which lines belong to
+  // a code block instead of pattern-matching fence-looking lines itself.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\n<!--\n```\n-->\nSee [gone](./missing.md).\n')));
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\n<!--\n```\n-->\n\nSee [gone](./missing.md).\n')));
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\n<script>\n```\n</script>\n\nSee [gone](./missing.md).\n')));
+  // …and the control: a real fence that opens *after* an HTML comment still hides its contents.
+  writeAgents(goodAgents('\n<!--\n```\n-->\n\n```md\n[x](./gone.md)\n```\n\nSee [ok](./LINKED.md).\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  reset();
+
+  // A link reference definition written inside a code block defines nothing, so a bracketed word
+  // elsewhere stays literal text rather than becoming a link to the fenced destination.
+  writeAgents(goodAgents('\n```md\n[setup]: ./missing.md\n```\n\nSee [setup].\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  reset();
+
+  // Only a heading a renderer shows satisfies the heading rule: one written inside a fence is a
+  // code sample. (The rest of the document below the fence keeps the pair substantive, so this
+  // fixture isolates the heading rule instead of tripping the length rule too.)
+  failsWith(/fixture\/AGENTS\.md: must contain at least one markdown heading/, () =>
+    writeAgents(goodAgents().replace(/^# AGENTS\.md — fixture repository$/m, '```text\n# AGENTS.md — fixture repository\n```').replace(/^## /gm, 'Section: ')));
 
   // A link may wrap onto the next line, and an image inside link text is a second real destination.
   failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
@@ -286,6 +327,15 @@ try {
   // …and the same contract live (not fenced) is the clean-fixture control asserted at the top of
   // this file, which continues to pass.
   assert.deepEqual(checkRootProjections(fixture, policy), []);
+
+  // The same rule applied to each half of a governed block. A marker only governs where a renderer
+  // emits it as raw HTML: quoted inside a code span it is prose about the contract, so the block is
+  // reported missing rather than matched by a stray substring. And a table between two live markers
+  // must itself be live — fenced, it is a sample, so the block has no table to compare.
+  failsWith(/AGENTS\.md: policy-owned block 'commands' is missing/, () =>
+    writeAgents(goodAgents().replace(renderBlock('commands', policy), `Quote \`<!-- repo-policy:commands -->\` and \`<!-- /repo-policy:commands -->\` inline.`)));
+  failsWith(/AGENTS\.md \[commands\]: must contain a markdown table with a header separator row/, () =>
+    writeAgents(goodAgents().replace(renderCommands(policy), `\`\`\`md\n${renderCommands(policy)}\n\`\`\``)));
 
   // 10. An include or link must resolve inside the checkout, never against the host filesystem: not
   // via an absolute path (`path.resolve` honours an absolute second argument verbatim, discarding
