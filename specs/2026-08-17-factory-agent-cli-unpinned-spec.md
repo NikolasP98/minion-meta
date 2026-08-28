@@ -2,7 +2,7 @@
 id: 2026-08-17-factory-agent-cli-unpinned-spec
 title: "minion-factory agent image — pin the harness toolchain so the JSON parser contract stops floating"
 stage: spec
-status: approved
+status: shipped
 pass: 2
 created: 2026-08-17
 updated: 2026-08-28
@@ -12,7 +12,7 @@ repos: [minion-factory, minion-meta]
 tags: [deps, infra]
 type: fix
 reconcile_ignore: true
-reconcile_ignore_reason: "Denied: S1 pinning is shipped, but the 2026-08-28 audit returned the spec to approved solely for the descoped S2 README toolchain section and bump playbook; that final documentation slice has not merged."
+reconcile_ignore_reason: "Resolved 2026-08-28: descoped S2 (README toolchain section + bump playbook) merged via minion-factory PR #120 (run 6041c22c, all gates passed). All slices shipped."
 ---
 
 # Pin the agent image's harness toolchain
