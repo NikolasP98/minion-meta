@@ -11,7 +11,8 @@ verdict: approved
 repos: [minion-factory, minion-meta]
 tags: [deps, infra]
 type: fix
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/47
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: S1 pinning is shipped, but the 2026-08-28 audit returned the spec to approved solely for the descoped S2 README toolchain section and bump playbook; that final documentation slice has not merged."
 ---
 
 # Pin the agent image's harness toolchain
