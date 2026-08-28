@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-1508675347
 title: Handoff marker — src/server/services/stock.service.ts (minion_hub)
-status: draft
+status: merged
+merged_into: 2026-08-23-hub-archived-warehouse-submit-guard
 created: 2026-08-23
 updated: 2026-08-28
 repos: [minion-hub]

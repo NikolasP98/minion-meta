@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-site-2829334481
 title: Handoff marker — src/lib/services/member-gateway.svelte.ts (minion-site)
-status: draft
+status: review
+duplicate_candidate: 2026-08-17-site-member-gateway-swallowed-errors
 created: 2026-08-23
 updated: 2026-08-28
 repos: [minion-site]
