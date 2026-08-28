@@ -2,7 +2,7 @@
 id: 2026-08-18-ci-minion-ai-ci-spec
 title: CI red — make the minion gateway DEV correctness matrix honestly green
 stage: spec
-status: implementing
+status: done
 pass: 2
 created: 2026-08-18
 updated: 2026-08-28
@@ -13,6 +13,7 @@ relationship: depends-on
 related: [2026-08-13-agentic-sdlc-test-quality-gates-spec]
 reconcile_ignore: true
 reconcile_ignore_reason: "Denied: PR #227 implemented only native-binding Slice 2 after #225 Slice 1. Slices 3-6 and a latest-completed all-green DEV correctness matrix remain unproven; recent CI repair PRs do not supply the spec's final evidence."
+done_reason: "Completed: Gateway PR #242 repaired the remaining correctness matrix, and latest DEV CI run 33175879021 completed successfully with Node shards, Windows shards, Bun shadow, release-check, build, typecheck, lint, security, and protocol jobs green."
 ---
 
 # CI red — make the minion gateway DEV correctness matrix honestly green
