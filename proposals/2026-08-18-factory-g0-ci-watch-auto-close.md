@@ -1,12 +1,13 @@
 ---
 id: 2026-08-18-factory-g0-ci-watch-auto-close
 title: G0 reconciler should auto-close CI-watch proposals once the watched workflow goes green
-status: approved
+status: in-spec
 created: 2026-08-18
 updated: 2026-08-28
 repos: [minion-factory]
 tags: [infra, logic, test]
 source: factory-run-8af03178
+spawned_spec: 2026-08-28-factory-g0-ci-watch-auto-close-spec
 ---
 
 # G0 reconciler should auto-close CI-watch proposals once the watched workflow goes green
