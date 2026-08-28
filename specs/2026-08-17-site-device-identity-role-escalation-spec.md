@@ -2,12 +2,13 @@
 id: 2026-08-17-site-device-identity-role-escalation-spec
 title: "device-identity/sign — sign the caller's real grant, never the body's role/scopes"
 stage: spec
-status: approved
+status: review
 pass: 2
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-28
 proposal: 2026-08-17-site-device-identity-role-escalation
 verdict: changes_requested
+review_reason: "Invalid approval corrected after guarded Factory admission refused approved/changes_requested. Preserve the security work in review until the canonical tenant-bound role source, MAX_GRANT mapping, and authoritative scope vocabulary are decided."
 repos: [minion_site]
 tags: [security, logic, test]
 type: fix
