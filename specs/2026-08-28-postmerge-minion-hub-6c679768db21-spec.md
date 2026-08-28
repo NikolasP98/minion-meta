@@ -1,8 +1,8 @@
 ---
 id: 2026-08-28-postmerge-minion-hub-6c679768db21-spec
 title: "Post-merge finding — DataTable.svelte TODO(handoff) marker (minion_hub) — close the residual comment gap the approved S4 test-gap spec deliberately leaves behind"
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-28
 updated: 2026-08-28
@@ -13,7 +13,8 @@ type: fix
 tags: [test, infra]
 relationship: extends
 related: [2026-08-21-hub-datatable-server-mode-test-gap-spec, 2026-08-20-hub-datatable-server-mode-test-gap, handoff-minion-hub-2249203609]
-possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/189
+evidence: https://github.com/NikolasP98/minion_hub/pull/189
+shipped_reason: "Factory run 28cc4af3 added mutation-proven server-order coverage, removed the stale DataTable TODO(handoff) marker, passed independent review and the full Hub suite, and PR #189 was merged and deployed to production at 1b47e8ced0751eeb301c9a24d16082f36fe48f78."
 ---
 
 # Post-merge finding — DataTable.svelte `TODO(handoff)` marker (minion_hub)
