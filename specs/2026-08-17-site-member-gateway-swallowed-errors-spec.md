@@ -2,15 +2,16 @@
 id: 2026-08-17-site-member-gateway-swallowed-errors-spec
 title: "member-gateway — every gateway rejection is reported; no empty catches"
 stage: spec
-status: implementing
+status: done
 pass: 2
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-site-member-gateway-swallowed-errors
 verdict: approved
 repos: [minion_site]
 tags: [logic, test, ui]
 type: fix
+done_reason: "Accepted after supervised reconciliation: minion_site PR #22 merged the full member-gateway swallowed-error scope with translated degraded-state UI and lifecycle regression coverage; older PR #18 was partial and is closed as superseded."
 ---
 
 # `member-gateway` — every gateway rejection is reported
