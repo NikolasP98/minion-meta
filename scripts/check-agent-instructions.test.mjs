@@ -185,6 +185,20 @@ try {
   failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
     writeAgents(goodAgents('\nSee [a][b [c]].\n\n[b [c]]: ./missing.md\n')));
 
+  // A definition written inside a block quote or a list item still takes effect for the whole
+  // document — CommonMark parses each container's content as its own sub-document, and the
+  // resulting definition is not scoped to it (spec §4.7, example 218).
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\n> [setup]: ./missing.md\n> See [setup].\n')));
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\n- [setup]: ./missing.md\n\nSee [setup].\n')));
+  // …and a nested container (a list item inside a block quote) resolves the same way.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\n> - [setup]: ./missing.md\n\nSee [setup].\n')));
+  writeAgents(goodAgents('\n> [setup]: ./LINKED.md\n> See [setup].\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  reset();
+
   // An inline attempt that never closes falls back to the reference forms, as a renderer does.
   failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
     writeAgents(goodAgents('\nSee [setup](unclosed here.\n\n[setup]: ./missing.md\n')));

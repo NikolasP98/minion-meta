@@ -38,6 +38,10 @@ const whitespacePattern = /\s/;
 const paragraphTerminatorPattern = /^ {0,3}(#{1,6}([ \t]|$)|([-*_][ \t]*){3,}$|\||<)/;
 // CommonMark caps a link label at 999 characters; the same cap keeps a stray '[' from scanning on.
 const LABEL_LIMIT = 999;
+// A block quote marker, and a list item marker — CommonMark parses each container's content as its
+// own sub-document, so a line's real "start of block" content sits after any chain of these.
+const blockQuoteMarkerPattern = /^ {0,3}>[ \t]?/;
+const listMarkerPattern = /^ {0,3}(?:[-*+]|\d{1,9}[.)])[ \t]+/;
 
 /** Index of the newline that ends the line containing `index`, or the end of `text`. */
 function lineEndAt(text, index) {
@@ -187,11 +191,33 @@ function readDefinition(text, start) {
 }
 
 /**
+ * The length of the chain of block-quote and/or list-item markers opening `line`, so the caller can
+ * find where the line's own content — as opposed to its containers' — begins. CommonMark associates
+ * a link reference definition written inside a block quote or list item with the whole document, not
+ * just the container (spec §4.7, example 218), so a definition one or more containers deep must be
+ * found the same way a top-level one is.
+ */
+function containerPrefixLength(line) {
+  let length = 0;
+  while (true) {
+    const rest = line.slice(length);
+    const quote = blockQuoteMarkerPattern.exec(rest);
+    if (quote !== null && quote[0].length > 0) { length += quote[0].length; continue; }
+    const item = listMarkerPattern.exec(rest);
+    if (item !== null && item[0].length > 0) { length += item[0].length; continue; }
+    return length;
+  }
+}
+
+/**
  * Every link reference definition in the document, plus the character spans they occupy. A
- * definition may only start a block — the document start, a line after a blank line, or a line
- * after another definition — because CommonMark does not let one interrupt a paragraph. The FIRST
- * definition of a label wins, which is what a renderer resolves a reference against; a later
- * duplicate must not silently redirect the check at a different file.
+ * definition may only start a block — the document start, a line after a blank line (a container
+ * marker with nothing else on the line counts, since the container's content is itself blank), or a
+ * line after another definition — because CommonMark does not let one interrupt a paragraph. The
+ * FIRST definition of a label wins, which is what a renderer resolves a reference against; a later
+ * duplicate must not silently redirect the check at a different file. Only a definition that both
+ * opens and closes on one physical line is recognized inside a container: a continuation line would
+ * carry its own marker, which this does not attempt to strip mid-destination.
  */
 function referenceDefinitions(text) {
   const definitions = new Map();
@@ -199,11 +225,14 @@ function referenceDefinitions(text) {
   let i = 0;
   let atBlockStart = true;
   while (i < text.length) {
-    if (isBlankLineAt(text, i)) { atBlockStart = true; i = lineEndAt(text, i) + 1; continue; }
-    const definition = atBlockStart ? readDefinition(text, i) : null;
+    const end = lineEndAt(text, i);
+    const prefixLength = containerPrefixLength(text.slice(i, end));
+    const content = text.slice(i + prefixLength, end);
+    if (content.trim() === '') { atBlockStart = true; i = end + 1; continue; }
+    const definition = atBlockStart ? readDefinition(text, i + prefixLength) : null;
     if (definition === null) {
-      atBlockStart = paragraphTerminatorPattern.test(text.slice(i, lineEndAt(text, i)));
-      i = lineEndAt(text, i) + 1;
+      atBlockStart = paragraphTerminatorPattern.test(content);
+      i = end + 1;
       continue;
     }
     if (!definitions.has(definition.label)) definitions.set(definition.label, definition.destination);
