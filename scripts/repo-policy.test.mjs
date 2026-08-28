@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import Ajv2020 from 'ajv/dist/2020.js';
 import { buildArtifact, effectiveRequiredChecks, readPolicy, validatePolicy, validateRemoteState } from './repo-policy.mjs';
@@ -163,5 +164,42 @@ try {
     assert.match(result.stderr, diagnostic);
   }
 } finally { rmSync(temp, { recursive: true, force: true }); }
+
+// `--parity` asserts the checked-in projections in this checkout — the root AGENTS.md policy-owned
+// blocks, minion.json, and generated/repo-policy.json — against the registry (spec D3).
+if (process.argv.includes('--parity')) {
+  const { checkCliRegistry, checkInstructionPair, checkProjections, cliRows } = await import('./check-agent-instructions.mjs');
+  const rootDir = fileURLToPath(new URL('..', import.meta.url));
+  const agents = readFileSync(new URL('../AGENTS.md', import.meta.url), 'utf8');
+  assert.deepEqual(checkProjections(agents, policy), [], 'AGENTS.md policy-owned blocks drifted from repo-policy.yaml');
+  assert.deepEqual(checkCliRegistry(rootDir, policy), [], 'minion.json drifted from repo-policy.yaml');
+  assert.deepEqual(checkInstructionPair(rootDir, { label: 'minion-meta' }), [], 'the meta instruction pair drifted');
+
+  // Exact projection assertions, independent of the checker's own comparison logic.
+  const registry = JSON.parse(readFileSync(new URL('../minion.json', import.meta.url), 'utf8'));
+  assert.deepEqual(Object.keys(registry.subprojects).sort(), ['hub', 'minion', 'paperclip', 'pixel-agents', 'plugins', 'site']);
+  const tick = '`';
+  for (const { cliId, row } of cliRows(policy)) {
+    const entry = registry.subprojects[cliId];
+    assert.equal(entry.path, row.checkout, `minion.json ${cliId}.path`);
+    assert.equal(entry.branch, row.branches.development, `minion.json ${cliId}.branch`);
+    // Exact for every row, 'none' included — the CLI must never invent a package manager.
+    assert.equal(entry.packageManager, row.packageManager, `minion.json ${cliId}.packageManager`);
+    assert.equal(entry.remote.replace(/^git@[^:]+:/, '').replace(/^https?:\/\/[^/]+\//, '').replace(/\.git$/, ''), row.remote, `minion.json ${cliId}.remote`);
+    assert.ok(
+      agents.includes(`| ${tick}${row.id}${tick} | ${tick}${cliId}${tick} | ${tick}${row.checkout}/${tick} |`),
+      `AGENTS.md project-map is missing the row for ${row.id}`
+    );
+    for (const [key, command] of Object.entries(row.commands)) {
+      assert.equal(entry.commands[key], command ?? undefined, `minion.json ${cliId}.commands.${key}`);
+      if (command !== null) assert.ok(agents.includes(`${tick}${command}${tick}`), `AGENTS.md commands block is missing ${command}`);
+    }
+  }
+  const generated = JSON.parse(generatedText);
+  assert.deepEqual(generated.repositories.map((row) => row.id), policy.repositories.map((row) => row.id).sort((a, b) => a.localeCompare(b)));
+  assert.equal(generated.contentHash, contentHash);
+  assert.equal(generated.schemaVersion, 1);
+  console.log('repo policy parity assertions passed');
+}
 
 console.log('repo policy tests passed');
