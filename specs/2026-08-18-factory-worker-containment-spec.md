@@ -4,6 +4,7 @@ title: Factory worker containment — credential-free repo commands and isolated
 stage: spec
 status: approved
 pass: 2
+next_slice: 4
 created: 2026-08-18
 updated: 2026-08-28
 proposal: 2026-08-17-factory-worker-containment
