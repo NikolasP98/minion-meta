@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-2757299434
 title: Handoff marker — specs/2026-08-28-postmerge-minion-hub-6c679768db21-spec.md (minion-meta)
-status: draft
+status: review
 created: 2026-08-28
 updated: 2026-08-28
 repos: [minion-meta]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-08-20-hub-datatable-server-mode-test-gap
 ---
 
 # Handoff marker — specs/2026-08-28-postmerge-minion-hub-6c679768db21-spec.md
