@@ -1,6 +1,6 @@
 ---
 id: 2026-08-20-cli-registry-package-manager-none
-title: CLI subproject registry cannot project repo-policy packageManager 'none'
+title: "CLI subproject registry cannot project repo-policy packageManager 'none'"
 status: done
 created: 2026-08-20
 updated: 2026-08-20
