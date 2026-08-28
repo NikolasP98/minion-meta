@@ -1,17 +1,18 @@
 ---
 id: 2026-08-18-factory-orchestration-tests-spec
 title: "First-party Node 22 test suite for runner orchestration policy and SQLite lineage"
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-18
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-factory-orchestration-tests
 verdict: approved
 repos: [minion-factory]
 tags: [test]
 type: infra
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/38
+evidence: https://github.com/NikolasP98/minion-factory/pull/38
+shipped_reason: "Accepted: current minion-factory contains every orchestration-test slice; the 2026-08-28 audit found the unified Node suite, CI/typecheck/shell enforcement, and retry PR #99 merged green."
 ---
 
 # First-party tests for runner orchestration
@@ -57,7 +58,9 @@ factory-specific observation that supersedes these two files.
 
 ---
 
-## 0. Problem and scope
+## 0. Product
+
+Problem and scope:
 
 From the approved proposal `2026-08-17-factory-orchestration-tests`:
 
@@ -371,7 +374,7 @@ after the test command exists and all tests pass.
   live `main` behavior;
 - hand-editing either `index.json` file.
 
-## 6. End-to-end acceptance
+## 6. Verification
 
 From a clean clone of the merge commit:
 

@@ -2,16 +2,17 @@
 id: 2026-08-17-factory-agent-cli-unpinned-spec
 title: "minion-factory agent image — pin the harness toolchain so the JSON parser contract stops floating"
 stage: spec
-status: approved
+status: shipped
 pass: 2
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-factory-agent-cli-unpinned
 verdict: approved
 repos: [minion-factory, minion-meta]
 tags: [deps, infra]
 type: fix
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/47
+reconcile_ignore: true
+reconcile_ignore_reason: "Resolved 2026-08-28: descoped S2 (README toolchain section + bump playbook) merged via minion-factory PR #120 (run 6041c22c, all gates passed). All slices shipped."
 ---
 
 # Pin the agent image's harness toolchain
@@ -508,3 +509,10 @@ the negative controls pasted (a nonexistent-version `--build-arg` fails the buil
 not known to work; **and it is stated
 explicitly which DoD tiers were run, on what host, by whom** (⚠️ A1, ⚠️ A2). The `runner/Dockerfile` finding
 (§1 fact 5) exists at the exact `minion-meta` proposal path named in §3 before implementation starts.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+S1 shipped and build-verified (agent/Dockerfile:17-39 pins + npm ls mismatch fail). Remaining: S2 descoped to a README 'Agent toolchain' section + playbook line (the two proposed scripts are ceremony around self-verifying ARGs).
+
+**Gate note 2026-08-28**: status returned to approved solely to authorize the descoped S2 dev run (README toolchain section + playbook line); S1 is shipped — a run must not touch it. Flip to shipped when S2 merges.

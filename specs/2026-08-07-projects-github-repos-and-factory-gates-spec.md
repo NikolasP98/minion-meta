@@ -1,12 +1,13 @@
 ---
 id: 2026-08-07-projects-github-repos-and-factory-gates-spec
 title: Projects ⇄ GitHub Repos + Software-Factory Gates
-stage: spec
-status: unknown
+stage: done
+status: retired
 pass: 1
 created: 2026-08-07
-updated: 2026-08-07
+updated: 2026-08-28
 repos: [minion_hub]
+retired_reason: "The Hub portion shipped, while the pre-Factory gate design is obsolete and has no single successor spec."
 ---
 
 # Projects ⇄ GitHub Repos + Software-Factory Gates
@@ -55,7 +56,7 @@ affordance on the project detail page when no repo is linked. No new top-level n
 | Project detail already carries a sibling tab pattern | `/workforce/projects/[id]/pipelines` — one route, one `screen()` manifest entry |
 | No `worktree` support exists anywhere in hub or gateway | grep `worktree` → only `voice/visemeMap.ts`, `cli/update-cli/progress.ts` (unrelated) |
 
-## 2. Goals / non-goals
+## 2. Goals and out of scope
 
 **Goals**
 - Link a `proj_project` to one GitHub repo. Zero DDL.
@@ -271,7 +272,7 @@ via paraglide. `DataTable` for branches/commits (one `cell` snippet).
 8. `bun run lint:design && bun run lint:tokens` — debt does not increase.
 9. Route contract: new `screen()` entry + any count assertions updated.
 
-## 6. Test plan
+## 6. Verification
 
 | Test | Asserts |
 |---|---|

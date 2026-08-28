@@ -1,11 +1,11 @@
 ---
 id: 2026-08-18-factory-topic-capability-manifest-spec
 title: Topic taxonomy + immutable execution manifest (policy resolver)
-stage: spec
-status: implementing
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-18
-updated: 2026-08-20
+updated: 2026-08-28
 repos: [minion-factory, minion-meta]
 proposal: 2026-08-18-factory-topic-capability-manifest
 verdict: approved
@@ -19,7 +19,9 @@ reconcile_ignore_reason: "Flag evidence was Slice-2 merge only — Slice 1 (meta
 
 # Topic taxonomy + immutable execution manifest (policy resolver)
 
-## 0. Problem (quoted from the approved proposal)
+## 0. Product
+
+Problem quoted from the approved proposal:
 
 > Audit 2026-08-18: the pipeline has tags but no topic→capability policy.
 > Target architecture: declared topics + repo policy + deterministic changed-path

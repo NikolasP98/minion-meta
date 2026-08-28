@@ -3,7 +3,7 @@ id: 2026-08-22-ci-compute-savings-bun-test-roadmap
 title: CI and Factory compute savings — evidence-first roadmap including Bun 1.4 test evaluation
 status: review
 created: 2026-08-22
-updated: 2026-08-22
+updated: 2026-08-28
 repos: [minion, minion_hub, minion_site, minion-factory, minion-meta, minion-base, paperclip]
 tags: [infra, test]
 ---
@@ -200,3 +200,8 @@ lower token price with more malformed or repeated outputs is not a saving.
 - Estimating subscription Codex dollars as though they were API invoice data.
 - Letting an OpenRouter model satisfy provider-independent review without verified upstream origin.
 - Weakening human approval, deployment verification, security, data, or migration gates.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Re-scope before approval: R0/R2/R3 already shipped (docs/ci-cost-and-bun-roadmap.md, cancel-in-progress, ci-scope.mjs lanes) and R4 started (bun-shadow.yml). Approving as written would re-authorize done work. Remaining: R1 telemetry record, R4 benchmark manifest + 20% decision, R5, R6.

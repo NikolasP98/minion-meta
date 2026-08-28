@@ -5,7 +5,7 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-28
 repos: [minion-meta, minion, minion_hub, minion_site, minion_plugins, paperclip, pixel-agents, minion-factory, minion-base]
 proposal: 2026-08-18-agent-instruction-parity-and-repo-policy
 verdict: approved
@@ -15,7 +15,9 @@ related: [2026-08-18-sdlc-transformation-roadmap, 2026-08-18-factory-orchestrati
 
 # Provider-neutral agent instructions and canonical repository policy
 
-## 0. Product — problem in the proposal's words
+## 0. Product
+
+Problem in the proposal's words:
 
 > Agent-file audit 2026-08-18 (alignment 62/100): Claude and Codex receive
 > materially different instructions — minion/ has AGENTS.md but no CLAUDE.md,

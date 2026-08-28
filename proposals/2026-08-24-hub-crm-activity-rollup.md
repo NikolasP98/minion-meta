@@ -1,14 +1,15 @@
 ---
 id: 2026-08-24-hub-crm-activity-rollup
 title: Replace CRM per-request message aggregation with a validated incremental activity rollup
-status: draft
+status: review
 created: 2026-08-24
-updated: 2026-08-24
+updated: 2026-08-28
 repos: [minion_hub]
 tags: [crm, data, logic]
 value: 7
 effort: L
 source: crm-customers-scale-next
+duplicate_candidate: 2026-08-22-crm-rank-query-prod-latency
 ---
 
 # Replace CRM per-request message aggregation with a validated incremental activity rollup

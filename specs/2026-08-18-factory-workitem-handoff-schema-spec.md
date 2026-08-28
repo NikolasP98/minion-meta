@@ -5,7 +5,7 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-28
 repos: [minion-factory, minion-meta]
 proposal: 2026-08-17-factory-workitem-handoff-schema
 verdict: approved
@@ -15,7 +15,9 @@ type: infra
 
 # Typed WorkItem fields + commit-pinned, structured handoffs
 
-## 0. Problem and governing contracts
+## 0. Product
+
+Problem and governing contracts:
 
 The approved proposal (`proposals/2026-08-17-factory-workitem-handoff-schema.md`) identifies four integrity gaps:
 
@@ -196,7 +198,7 @@ No minion-base code is required: it already reads `proposals/index.json`. Adding
 - normalizing the separate `value` field;
 - retrofitting pre-Slice-6 GitHub Issues into proposals.
 
-## 6. End-to-end acceptance
+## 6. Verification
 
 After all six slices are deployed:
 

@@ -1,9 +1,9 @@
 ---
 id: 2026-08-17-factory-release-rollback
 title: Factory release safety — pre-deploy gate, backups, rollback for self-update
-status: in-spec
+status: done
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-28
 repos: [minion-factory]
 tags: [infra]
 source: audit-2026-08-17
@@ -24,3 +24,8 @@ A bad push bricks the factory until manually fixed.
 rolls back to the previous image on failure, filing a monitor event.
 
 **Out of scope:** canary/staging environments (single box).
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Spec shipped; see spec audit note.

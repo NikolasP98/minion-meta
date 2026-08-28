@@ -2,21 +2,24 @@
 id: 2026-08-18-factory-orchestration-round7-spec
 title: Typed execution graph — repo fan-out, slice continuation, scenario profiles, relationship resolution
 stage: spec
-status: approved
+status: draft
 pass: 2
 created: 2026-08-18
-updated: 2026-08-20
+updated: 2026-08-28
 repos: [minion-factory, minion-meta]
 proposal: 2026-08-18-factory-orchestration-round7
 verdict: approved
 relationship: depends-on
 related: [2026-08-18-agent-instruction-parity-and-repo-policy, 2026-08-18-factory-topic-capability-manifest-spec, 2026-08-18-factory-durable-state-outbox-spec, 2026-08-18-factory-workitem-handoff-schema-spec, 2026-08-18-factory-orchestration-tests-spec, 2026-08-17-factory-capability-separation, 2026-08-17-factory-worker-containment, 2026-08-18-factory-browser-verification-stage, 2026-08-18-sdlc-transformation-roadmap]
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/41
+reconcile_ignore: true
+reconcile_ignore_reason: "Cancelled this stale shipment claim: PR #41 is not the typed execution graph. The 2026-08-28 audit found zero graph, profile, or resolver deliverables and returned the spec to draft for redesign on pipeline_instances and phase_requests."
 ---
 
 # Typed execution graph — repo fan-out, slice continuation, scenario profiles, relationship resolution
 
-## 0. Product — problem in the proposal's words
+## 0. Product
+
+Problem in the proposal's words:
 
 > Today: multi-repo specs map to the FIRST recognized repo only; nothing continues
 > after Slice 1; every change takes the same linear path; spec relationships are

@@ -1,11 +1,11 @@
 ---
 id: 2026-08-18-factory-release-rollback-spec
 title: "self-update.sh safety net — CI gate, image retention, DB snapshot, health-verified rollback"
-stage: spec
-status: implementing
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-18
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-factory-release-rollback
 verdict: approved
 repos: [minion-factory]
@@ -674,3 +674,8 @@ proven in a scratch repo; S3's build-failure, rollback-failure, and missing-tag 
 disposable Docker host; `actionlint` and all Tier A commands are green. Record the actual workflow run
 URL, image IDs, backup path/`quick_check`, monitor issue, and which Tier B steps ran on production
 versus scratch.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+ADDRESSED: self-update.sh S1 exact-SHA CI gate (:65-98), S2 preflight/:previous retag/DB backup+retention (:111-154), S3 rollback+health poll (:159-191), plus .deploy-marker and /trigger-health running-SHA assertion beyond spec. Cosmetic misses (health-URL test seams, per-class fingerprints, README note) not worth a board slot.

@@ -5,18 +5,21 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-factory-postmerge-discovery-loop
 verdict: approved
 repos: [minion-factory]
 tags: [logic, infra]
 type: infra
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/34
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: PR #34 proves only discovery S1/S2. The 2026-08-28 audit found S3 deliberately suspended and S4 delayed finding re-verification absent because findings.last_verified_at remains unused; keep the spec active."
 ---
 
 # Post-merge discovery loop
 
-## 0. Problem (quoted from the approved proposal)
+## 0. Product
+
+Problem quoted from the approved proposal:
 
 > Audit 2026-08-17 addendum: the central missing subsystem is
 > merge SHA → post-merge scan → structured finding → verified proposal →

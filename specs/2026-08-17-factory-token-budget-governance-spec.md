@@ -5,19 +5,22 @@ stage: spec
 status: implementing
 pass: 1
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 repos: [minion-factory]
 verdict: approved
 tags: [infra]
 type: infra
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/43
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: the 2026-08-28 audit verified Factory S1-S4, but also verified that S5 is absent: minion-base has no budget endpoint consumer or budget widget. PR #43 is therefore partial completion."
 ---
 
 # Factory token/budget governance
 
 **User mandate (verbatim, 2026-08-17):** "I want set budgets to avoid overblowing tokens (max budgets, max iterations, etc); while avoiding loss in output quality."
 
-## 0. Observed burn data (what this spec is calibrated against)
+## 0. Product
+
+The governance design is calibrated against the following observed burn data.
 
 | Incident (2026-08-16/17) | Cost | Existing mitigation |
 |---|---|---|

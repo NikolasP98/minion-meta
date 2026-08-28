@@ -1,16 +1,18 @@
 ---
 id: 2026-08-13-agentic-sdlc-test-quality-gates-spec
 title: Agentic SDLC test & quality gates — execution surfaces, test integrity, train gates
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 1
 created: 2026-08-13
-updated: 2026-08-20
+updated: 2026-08-28
 repos: [minion, minion_hub, minion-meta, minion-factory]
-verdict: pending
+verdict: approved
 tags: [infra, test]
 type: infra
 approved_reason: "Pending verdict resolved under overnight mandate: spec is the quality-gates plan of record (S1 already shipped as gw PR #214/#225 lineage); slice-scoped dev runs to continue."
+evidence: https://github.com/NikolasP98/minion-factory/pull/121
+shipped_reason: "Board audit narrowed the actionable remainder to S3 and S7; merged minion-factory PR #121 implements both, with Factory review PASS, runner 890/890, typecheck, and hosted checks green."
 ---
 
 # Agentic SDLC test & quality gates
@@ -116,3 +118,10 @@ Live tests (`*.live.test.ts`) stay manual/env-gated — correct design for real-
 ## 6. End-to-end verification
 
 After S1–S5: (1) push a gw commit with a deliberately broken unit test → PR CI goes red (first time in this fork's history that's possible); revert. (2) Trigger the e2e workflow via dispatch → green + timing artifact. (3) Add `expect(true).toBe(true)` to a hub test → `test-integrity-lint --ci` fails; to a gw test → `pnpm check` fails; revert both. (4) Run the train dry-run with nightly forced red → skip + comment. (5) One factory run on a fleet repo shows selfTest output including a test count in its PR comment.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Scope narrowed to what is still factory-actionable: S3 — minion-base and minion-site registry entries still ship no test command and no `// build-only:` justification (repos.ts:94,:110); S7 — test-authoring rubric exists only in playbooks/minion-hub.md, no red-state TDD check. S1/S2/S5/S6 are gw/hub work that moved independently.
+
+**Gate note 2026-08-28**: verdict set to approved by the operator gate — this spec predates the pass-2 verdict sidecar convention, most slices are shipped (see audit note), and the authorized remainder is the S3 registry-justification + S7 rubric slice only.

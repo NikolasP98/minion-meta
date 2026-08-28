@@ -1,11 +1,11 @@
 ---
 id: 2026-08-17-factory-compose-tailnet-hardcode-spec
 title: "minion-factory compose — parameterize the tailnet bind so setup.sh's any-Docker-host promise is true"
-stage: spec
-status: implementing
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-factory-compose-tailnet-hardcode
 verdict: approved
 repos: [minion-factory]
@@ -405,3 +405,8 @@ S1's red-state `0` pasted (proving the override was inert before the change); th
 on what host, by whom** (⚠️ A1). Per §4b's `security` rule for S2, a human approval is on the record —
 a green command list is evidence, not a decision. S1 and S2 are merged in the same PR; neither is
 reported shipped independently.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+ADDRESSED: docker-compose.yml:44 `${FACTORY_TAILNET_IP:-100.80.222.29}` (exact DoD), plus fail-closed validation in setup.sh:27-39 and deploy.sh factory_assert_bind.

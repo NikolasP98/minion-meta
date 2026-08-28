@@ -1,11 +1,11 @@
 ---
 id: 2026-08-20-handoff-minion-hub-2131866440-spec
 title: "Handoff marker crm-journey.service.ts:44 — complete the journey side of the org-configurable deposit rule"
-stage: spec
-status: done
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-20
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: handoff-minion-hub-2131866440
 verdict: approved
 repos: [minion_hub]
@@ -13,8 +13,9 @@ relationship: extends
 related: [2026-08-17-hub-reserva-keyword-config-spec]
 type: fix
 tags: [logic, test, handoff-sweep]
-possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/152
 done_reason: "Verified complete on master b7bd02cf: all 6 DELTA items (resolveDepositRule import, label fix, tests, integration test, zero handoff markers) — subagent verification 2026-08-20."
+evidence: https://github.com/NikolasP98/minion_hub/pull/152
+shipped_reason: "Accepted: minion_hub PR #152 is merged and current master contains the spec's only implementation slice; focused and full Hub suites passed, including malformed, empty, default, and custom deposit-rule journey cases."
 ---
 
 # Complete the journey side of the org-configurable deposit rule

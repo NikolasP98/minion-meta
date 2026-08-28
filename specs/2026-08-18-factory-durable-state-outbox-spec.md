@@ -2,10 +2,10 @@
 id: 2026-08-18-factory-durable-state-outbox-spec
 title: "Durable state — transactional outbox for postFinish side effects, guarded lifecycle edges, append-only event log"
 stage: spec
-status: draft
+status: implementing
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-28
 proposal: 2026-08-17-factory-durable-state-outbox
 verdict: changes_requested
 repos: [minion-factory]
@@ -100,7 +100,9 @@ that supersedes these file-backed constraints; no semantic-memory MCP was availa
 
 ---
 
-## 0. Problem (quoted from the approved proposal)
+## 0. Product
+
+Problem quoted from the approved proposal:
 
 > Audit 2026-08-17 priority #2. `postFinish()` is fire-and-forget
 > (`queue.ts:193`): a runner restart can permanently lose auto-fix escalation,
@@ -649,7 +651,7 @@ action required (per `/memory/MINION/minion-factory-agent-pipeline.md`'s "box is
   transaction exists across SQLite and GitHub; GitHub commit history remains canonical. A separate
   commit-history reconciler would be required to close the post-PUT/pre-insert crash window.
 
-## 7. End-to-end acceptance
+## 7. Verification
 
 Full acceptance is blocked until §8 is resolved and encoded in Slice 4. From a clean clone of the
 eventual merge commit, no docker/box is needed (pure logic + SQLite + mocked HTTP):

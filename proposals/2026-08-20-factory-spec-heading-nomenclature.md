@@ -1,9 +1,9 @@
 ---
 id: 2026-08-20-factory-spec-heading-nomenclature
 title: "dev CI is red: the factory spec generator emits `## 0. Problem` where the heading gate requires `## 0. Product`"
-status: draft
+status: done
 created: 2026-08-20
-updated: 2026-08-20
+updated: 2026-08-28
 repos: [minion-meta]
 tags: [infra, hygiene]
 ---
@@ -149,3 +149,8 @@ that filing is not otherwise recorded here: the same failing run also reported
 i.e. the index needs regenerating after DELTA 1's heading backfill lands, not just the
 heading fix itself. Folded in here as the richer, evidenced writeup; the CI-watch stub
 is kept as a tombstone (`status: merged`, `merged_into` this id).
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+ADDRESSED: spec-index --check exits 0 on 194 specs; baseline 126 ids (did not grow); every factory-generated spec since opens with `## 0. Product` (TEMPLATE.md:52 + spec.sh:312-316). Optional DELTA 3 diagnostic message deliberately dropped.

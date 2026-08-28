@@ -2,10 +2,10 @@
 id: 2026-08-22-factory-lineage-orchestrator-instance-spec
 title: Durable lineage orchestrator — one Codex control instance from spec through deployment
 stage: spec
-status: review
+status: implementing
 pass: 1
 created: 2026-08-22
-updated: 2026-08-22
+updated: 2026-08-28
 repos: [minion-factory]
 verdict: pending
 type: infra
@@ -659,3 +659,8 @@ canary:
   compute-savings roadmap.
 - Production reliance on experimental Codex App Server WebSocket transport.
 - Mounting provider auth or broker-owned Codex state into the durable control container.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+S1-S7 already merged (pipeline_* + orchestrator_* tables, broker/tool-host isolation, phase-executor + transports). Do NOT dispatch dev runs against S1-S7. Remaining: S8 admission flag, shadow-compare, lineage counters in stats.

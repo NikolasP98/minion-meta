@@ -5,7 +5,7 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-factory-memory-governance
 verdict: approved
 repos: [minion-factory]
@@ -13,7 +13,8 @@ tags: [security, infra, data, logic, test]
 type: infra
 relationship: extends
 related: [2026-08-17-cloud-agent-memory-sync-spec, 2026-08-18-sdlc-transformation-roadmap, 2026-08-17-factory-capability-separation, 2026-08-18-factory-worker-containment-spec, 2026-08-18-factory-durable-state-outbox-spec]
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/32
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: PR #32/S1 and partial S2 do not close memory governance. The 2026-08-28 audit found no memory transport, no quarantine candidate flow, and S3-S6 absent; the shared-token canonical memory PUT remains an open security hole."
 ---
 
 # Govern factory memory as evidence, not instruction
@@ -381,3 +382,8 @@ Run after all slices are deployed with automerge still disabled:
 
 Acceptance requires all focused tests, TypeScript, `bash -n` checks, startup config tests, and this deployed canary
 to pass. Security-tagged implementation PRs and the final enablement remain human-gated.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+PRIORITY: highest-value open security item. S1 shipped (snapshot pinning, 7 columns, requeue refusal). S2 half-shipped — read adapter exists but no transport, so V2 runs see NO memory at all (read.ts:27). S3 not started — the unreviewed canonical memory PUT with the shared token is still live at agent/run.sh:62-66 (the D4 hole). S4-S6 absent.
