@@ -11,7 +11,8 @@ verdict: approved
 repos: [minion-factory]
 tags: [test]
 type: infra
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/38
+evidence: https://github.com/NikolasP98/minion-factory/pull/38
+shipped_reason: "Accepted: current minion-factory contains every orchestration-test slice; the 2026-08-28 audit found the unified Node suite, CI/typecheck/shell enforcement, and retry PR #99 merged green."
 ---
 
 # First-party tests for runner orchestration
