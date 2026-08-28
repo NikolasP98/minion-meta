@@ -53,11 +53,3 @@ stale	UNKNOWN STEP	2026-08-28T05:55:11.6444730Z Token is not set
 stale	UNKNOWN STEP	2026-08-28T05:55:11.6584902Z Cleaning up orphan processes
 stale	UNKNOWN STEP	2026-08-28T05:55:11.6852092Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
-
-## Diagnosis (auto)
-
-**Root cause:** `actions/create-github-app-token` is missing the required `private-key` input.
-
-**File:** Likely `.github/workflows/stale.yml` (job named "stale")
-
-**Fix:** Add `private-key: ${{ secrets.GITHUB_APP_PRIVATE_KEY }}` (or your secret name) to the action's `with:` block alongside the existing `app-id` and `github-api-url`.
