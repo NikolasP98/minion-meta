@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-ai-2877399286
 title: Handoff marker — .github/workflows/ci.yml (minion-ai)
-status: draft
+status: review
+duplicate_candidate: 2026-08-22-ci-compute-savings-bun-test-roadmap
 created: 2026-08-23
 updated: 2026-08-28
 repos: [minion-ai]

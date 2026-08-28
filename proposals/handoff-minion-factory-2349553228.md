@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-factory-2349553228
 title: Handoff marker — broker/src/policy.ts (minion-factory)
-status: draft
+status: merged
+merged_into: 2026-08-23-factory-runner-owned-role-executor
 created: 2026-08-23
 updated: 2026-08-28
 repos: [minion-factory]

@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-factory-420667051
 title: Handoff marker — runner/src/lifecycle.ts (minion-factory)
-status: draft
+status: merged
+merged_into: 2026-08-17-factory-durable-state-outbox
 created: 2026-08-23
 updated: 2026-08-28
 repos: [minion-factory]

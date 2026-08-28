@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-factory-3380133543
 title: Handoff marker — runner/src/deployment-recovery-runtime.ts (minion-factory)
-status: draft
+status: merged
+merged_into: 2026-08-23-factory-deployment-recovery-controller
 created: 2026-08-23
 updated: 2026-08-28
 repos: [minion-factory]
