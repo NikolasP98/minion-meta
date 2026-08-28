@@ -6,7 +6,6 @@ created: 2026-08-23
 updated: 2026-08-28
 repos: [minion-hub]
 tags: [handoff-sweep]
-duplicate_candidate: 2026-08-17-hub-updatesellable-silent-drop
 approved_reason: "Accepted and de-duplicated: the live SellableWizard TODO is specifically the missing ConsumptionGauge parity for diagram-enabled consumption rows. The recorded duplicate candidate concerns updateSellable write semantics and is already done; it does not cover this UI gap. Promote this marker as an independent focused follow-up."
 ---
 
