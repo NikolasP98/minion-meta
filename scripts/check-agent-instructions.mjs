@@ -19,7 +19,7 @@
 // HTML-comment markers.
 
 import { existsSync, readFileSync, realpathSync, statSync } from 'node:fs';
-import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
+import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import { gfmTableFromMarkdown } from 'mdast-util-gfm-table';
@@ -66,6 +66,11 @@ function* walk(node, parent = null) {
  *   numbers stable and can never splice two blocks into one.
  * - `htmlLines` — the 1-based line numbers covered by an HTML *block*, used to recognize the
  *   policy-owned `<!-- repo-policy:* -->` markers only where a renderer emits them as raw HTML.
+ * - `liveLines` — `lines` with those same HTML-block ranges also blanked. An HTML block (a comment,
+ *   a `<script>` body, any raw-HTML container) is opaque to Markdown processing: a renderer never
+ *   turns its text into instructions, so a line inside one that merely looks like an include
+ *   directive (`@file.md`) is not one. Governed-marker recognition keeps using `lines` + `htmlLines`
+ *   instead, since that check wants the marker text itself, not an absence of it.
  * - `headings` — how many real heading nodes the document has (a `#` inside a fence is not one).
  * - `targets` — every local destination the document links to, from every CommonMark link and image
  *   form: inline, full/collapsed/shortcut references, and angle-bracket destinations. micromark
@@ -114,7 +119,8 @@ function renderedView(text) {
   }
   const targets = [];
   for (const destination of destinations) pushTarget(targets, destination);
-  return { lines, htmlLines, headings, targets };
+  const liveLines = lines.map((line, index) => (htmlLines.has(index + 1) ? '' : line));
+  return { lines, liveLines, htmlLines, headings, targets };
 }
 
 /**
@@ -150,16 +156,18 @@ function readIfFile(path) {
  * used to escape either. Returns the resolved path, or null when the target does not resolve to a
  * real file/directory inside `dir`.
  */
+function escapesCheckout(rel) {
+  return rel !== '' && (rel === '..' || rel.startsWith(`..${sep}`) || isAbsolute(rel));
+}
+
 function resolveWithinCheckout(dir, target) {
   if (isAbsolute(target)) return null;
   const resolved = resolve(dir, target);
-  const rel = relative(dir, resolved);
-  if (rel !== '' && (rel.startsWith('..') || isAbsolute(rel))) return null;
+  if (escapesCheckout(relative(dir, resolved))) return null;
   if (!existsSync(resolved)) return null;
   const realDir = realpathSync(dir);
   const realResolved = realpathSync(resolved);
-  const realRel = relative(realDir, realResolved);
-  if (realRel !== '' && (realRel.startsWith('..') || isAbsolute(realRel))) return null;
+  if (escapesCheckout(relative(realDir, realResolved))) return null;
   return resolved;
 }
 
@@ -195,7 +203,7 @@ export function checkInstructionPair(checkout, { label = checkout } = {}) {
   if (agents !== null) {
     const view = renderedView(agents);
     errors.push(...substantiveErrors(`${label}/AGENTS.md`, view));
-    for (const target of includeTargets(view.lines)) {
+    for (const target of includeTargets(view.liveLines)) {
       if (resolveWithinCheckout(dir, target) === null) errors.push(`${label}/AGENTS.md: include '@${target}' does not resolve`);
     }
     for (const target of view.targets) {
