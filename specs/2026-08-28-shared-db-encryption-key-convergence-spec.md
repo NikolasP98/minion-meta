@@ -3,11 +3,11 @@ id: 2026-08-28-shared-db-encryption-key-convergence-spec
 title: Converge Hub and Site shared-database encryption with an explicit legacy-key migration
 stage: spec
 status: draft
-pass: 1
+pass: 2
 created: 2026-08-28
 updated: 2026-08-28
 proposal: 2026-08-28-shared-db-encryption-key-convergence
-verdict: pending
+verdict: changes_requested
 repos: [minion-meta, minion_hub, minion_site]
 tags: [security, data, migrations, logic, test]
 type: fix
@@ -18,10 +18,13 @@ related: [2026-08-17-pkg-dev-crypto-failopen-spec, 2026-08-20-dev-key-at-rest-au
 # Converge Hub and Site shared-database encryption with an explicit legacy-key migration
 
 **Owner surface:** `packages/db/src/crypto.ts` + `packages/db/src/pg/crypto.ts` (the single
-key-derivation path, extended with a key id and a migration-only legacy ring), every PG schema
-file in `packages/db/src/pg/schema/` that carries an app-encrypted column, and a new migration
-command. **Consumer surface:** `minion_hub` and `minion_site`, which both read/write the shared
-Supabase database through this module and must attest the same active key.
+key-derivation path, extended with a key id and a migration-only legacy ring), every owning schema
+and SQL migration for an app-encrypted shared-Postgres column, and a Hub-owned operator command
+that uses Hub's database connection conventions. **Consumer surface:** `minion_hub` and
+`minion_site`, which both read/write the shared Supabase database through this module and must
+attest the same active key. The Hub and Site working trees are absent from this checkout, so their
+call sites, instructions, and exact file paths remain S0 evidence requirements rather than facts
+verified here.
 
 **Relationship to existing artifacts (recommend-only):**
 
@@ -56,6 +59,13 @@ branch `dev`, but the `hub-deploy-workflow` operator memory (★★★, 2026-08-
 independently reports the same. Trust `git -C minion_hub branch -r` over the table in every slice
 below that touches hub.
 
+**Memory evidence used in this review:** `/memory/MINION/MEMORY.md` (lines 26, 46, and 48)
+supplies the dry-run-default/snapshot/run-twice/invariant rules and the Hub SQL-migration warning;
+`/memory/MINION/hub-local-qa-stack-recipe.md` supplies the isolated clone and grant requirements;
+`/memory/MINION/hub-deploy-workflow.md` supplies the ★★★ `master` branch and
+`DESIGN_LINT_BASE_REF=origin/master` corrections. The read-only observation searches for this
+failure class returned no directly relevant prior observation, so none is used as design evidence.
+
 ---
 
 ## 0. Product
@@ -83,7 +93,7 @@ prod Supabase — the shared hub+site DB):
 
 ## 1. AS-IS → TO-BE → DELTA
 
-### AS-IS (verified in this checkout)
+### AS-IS (verified in this checkout unless explicitly attributed to the audit or operator memory)
 
 - `packages/db/src/crypto.ts:34-96` derives exactly **one** key per process from
   `scryptSync(ENCRYPTION_KEY, 'minion-hub-salt', 32)` (or the gated dev-fallback). There is **no
@@ -114,8 +124,8 @@ prod Supabase — the shared hub+site DB):
      `server_provision_configs.api_key_ciphertext` **absent in prod** even though both are defined
      in this checkout's schema — i.e. drift in the opposite direction (schema ahead of deployed
      DDL). These two are out of migration scope until they exist in prod (nothing to migrate).
-- No `credential_reentry_required` state, typed or otherwise, exists anywhere in this checkout —
-  confirmed by `grep -rn "credential_reentry_required" packages/ specs/` returning zero hits.
+- No `credential_reentry_required` state, typed or otherwise, exists in the checked-out code —
+  confirmed by `rg -n "credential_reentry_required" packages/` returning zero hits.
 - No key-ring, legacy-key, or migration-command code exists (`grep -rn "keyRing\|legacyKey\|key_id"
   packages/db/src` returns zero hits beyond this spec).
 - Hub's actual DDL apply path (`2026-07-07-hub-db-migration-pipeline`, shipped) is hub-owned,
@@ -152,34 +162,34 @@ prod Supabase — the shared hub+site DB):
 
 | # | Transition | Slice | Proving test/evidence |
 |---|---|---|---|
-| 1 | Extend every app-encrypted column with a `key_id` companion; add typed `credential_reentry_required` state; close the schema-drift unknown above | S1 | Schema unit test asserts `key_id` NOT NULL-after-backfill on each column; hub SQL migration applies cleanly on the QA-stack clone; S0 recon note resolving the 3 unmirrored prod tables attached to the PR |
+| 1 | Extend every app-encrypted column with a per-column key-id companion; add typed `credential_reentry_required` state; close the schema-drift unknown above | S1 | Schema unit test asserts every inventoried encrypted column has its nullable companion and every rotatable credential has the state column; Hub SQL migration applies twice on the QA-stack clone; S0 inventory names the owner and disposition of every audited production table |
 | 2 | `sealSecret` writes the active key id; `openSecret` opens only the row's declared id; narrow migration-only legacy-ring API added | S2 | Crypto unit tests: active-key write, declared-legacy-key read, unknown key id (typed error, no fallback), GCM auth failure, idempotent re-seal retry, cross-app (hub↔site) roundtrip |
-| 3 | Hub and Site attest the same active key id/fingerprint at boot for the same DB env; diverge ⇒ fail closed | S3 | Boot test: same id/fingerprint on both ⇒ both start; either differs ⇒ both refuse to start with a named error |
+| 3 | Hub and Site compare their local active key id/fingerprint to one operator-provisioned expected value in the shared DB; missing or divergent ⇒ that process fails closed | S3a–S3b | Package test covers match/missing/mismatch; each consumer boot test proves its own process refuses on mismatch, without mutating the expected row |
 | 4a | Read-only dry-run inventory: counts by table × key-classification (active / each named legacy id / unreadable), no plaintext, no row touched | S4 | Integration test against the QA-stack clone with seeded mixed rows; report asserted byte-for-byte free of plaintext/ciphertext/key material |
 | 4b | Bounded, resumable, idempotent re-seal of every row readable by a named legacy key; unreadable rows become `credential_reentry_required`, never touched destructively | S5 | Integration tests: mixed hub/site legacy rows, already-migrated rows (idempotent no-op), simulated crash between batches (resumes from checkpoint, no double-seal), rollback executed before cutover (source rows intact), unreadable row preserved verbatim |
-| 5 | Reader compatibility ships first; migration runs; both deployments converge on the active key id/fingerprint; legacy write authority and migration keys are removed only after the rollback window | S7 | Production dry-run report (row counts by table/classification) attached to the PR; supervised backup + migration execution log; post-migration decrypt verification report; final zero-legacy-readable-row report before legacy-key removal |
-| 6 | `credential_reentry_required` disables the affected gateway connection and exposes an owner-facing rotation path | S6 | Service-level test: a connection whose row is quarantined is excluded from active-connection queries; hub UI smoke check shows the rotation affordance (governed by `ui-design-governance`) |
+| 5 | Execute the human-selected cutover contract; migrate while preventing incompatible old/new readers and concurrent credential overwrites; remove migration keys only after the rollback window | S7 | Approved cutover contract; exact revisions + backup; quiescence evidence; migration and post-invariant reports; per-app attestation and cross-app reads; human approval before key removal |
+| 6 | `credential_reentry_required` disables each affected credential and exposes its owner-facing rotation path | S6a–S6b | Gateway service/UI tests plus equivalent guard-and-fresh-write tests for every other credential type retained by S0 |
 
 ## 2. Approach — vertical slices
 
 ```
-S0 (recon, uncounted) ─▶ S1 (schema+state) ─▶ S2 (crypto core+ring) ─▶ S3 (boot attestation)
+S0 (recon, uncounted) ─▶ S1 (schema+state) ─▶ S2 (crypto core+ring) ─▶ S3a (attestation contract)
+                                                                         │
+                                                                         ▼
+                                                               S3b (consumer boots)
                                                     │
                                                     ▼
                                     S4 (dry-run inventory) ─▶ S5 (bounded re-seal)
                                                     │
                                                     ▼
-                                    S6 (reentry-required app behavior) ─▶ S7 (supervised rollout)
+                              S6a/S6b (reentry-required behavior) ─▶ S7 (supervised rollout)
 ```
 
-S1–S3 are meta-repo/`@minion-stack/db`-only and can land without hub/site checked out, mirroring
-the precedent in `2026-08-17-pkg-dev-crypto-failopen-spec` (its ⚠️A2). S4–S7 need real access to
-the shared database (via the QA-stack clone for tests, and supervised prod access for S7) and, for
-S3's consumer half and S6, the `minion_hub`/`minion_site` working trees — **if those are not
-checked out in the implementing session, land S1/S2 (the package-only halves), stop, and file the
-AGENTS.md open-items ledger entry** (`TODO(handoff):` in `crypto.ts` + an appended note on the
-source proposal) naming exactly which slices are blocked and why, rather than guessing at hub/site
-internals from this repo.
+Only S2 and the package half of S3a are meta-repo-only. S1 requires Hub's SQL migration tree; S3b
+requires both consumers; S4/S5 require Hub's real database client and the QA clone; S6 requires
+Hub. The breaking S2 API may land in the package repo, but its release must not be consumed by
+either app until S3b updates every caller. If a required working tree is unavailable, stop that
+slice and use the AGENTS.md open-items ledger rule rather than guessing at consumer internals.
 
 ### Slice 0 — recon (≤ 60 min, prepend to S1, not counted as a slice)
 
@@ -189,6 +199,9 @@ internals from this repo.
 cd /home/agent/work
 # resolve the schema-drift unknown (AS-IS ⚠️) before touching any schema file
 rg -n 'gateway_signing_keys|meta_assets|meta_connections' packages/ minion_hub/src minion_hub/supabase 2>/dev/null
+# mandatory subproject instructions before work in either consumer
+sed -n '1,260p' minion_hub/CLAUDE.md
+sed -n '1,260p' minion_site/CLAUDE.md
 # confirm hub's live branch (do not trust AGENTS.md's table — see Branch note above)
 git -C minion_hub branch -r 2>/dev/null || echo "minion_hub not checked out — note in PR"
 git -C minion_site branch -r 2>/dev/null || echo "minion_site not checked out — note in PR"
@@ -209,26 +222,32 @@ S1 changes any file.
 
 **Topics:** `data`, `migrations`
 
-**Goal:** every app-encrypted column gains a nullable `key_id` companion (nullable so existing rows
-are legal pre-migration) and a place to record `credential_reentry_required` without deleting the
-original ciphertext.
+**Goal:** every app-encrypted column gains a nullable, unambiguous key-id companion (nullable so
+existing rows are legal pre-migration) and each rotatable credential row gains a place to record
+`credential_reentry_required` without deleting the original ciphertext.
 
 **Do:**
 
-- Add `keyId: text('key_id')` (nullable) next to each `*_ciphertext`/`*_iv` pair identified in
-  AS-IS, in both `packages/db/src/pg/schema/*.ts` (Drizzle type-level model) **and** a new
-  hand-written SQL file in `minion_hub/supabase/migrations/` (`ALTER TABLE ... ADD COLUMN key_id
-  text`), following the existing idempotent-migration style (`IF NOT EXISTS`) so a re-run is a
-  no-op — do **not** use `drizzle-kit push`.
+- Add a nullable companion named for the encrypted field (for example
+  `tokenKeyId: text('token_key_id')` beside `token_ciphertext`/`token_iv`, and
+  `secretKeyId: text('secret_key_id')` beside the identity secret). Do not use one generic
+  `key_id` if a table can carry more than one encrypted field. Mirror the exact names in a new
+  hand-written SQL file in `minion_hub/supabase/migrations/`, following the existing idempotent
+  migration style (`ADD COLUMN IF NOT EXISTS`) so a re-run is a no-op — do **not** use
+  `drizzle-kit push`.
 - Add a `credentialStatus` (or per-table equivalent) enum/text column with at minimum `'active'`
   and `'credential_reentry_required'`, defaulting to `'active'`, on every table above that backs a
   live credential a user can rotate (`gateway`, `user_identities` — confirm `channels` and
   `server_provision_configs` need it too once S0 resolves whether they hold live, rotatable
   credentials or provisioning-time secrets).
-- Resolve the S0 schema-drift finding: either add schema files for the three prod-only tables (if
-  S0 finds they belong to this module's contract) or document in the PR, with evidence, that they
-  are out of this migration's reach and file the follow-up per the AGENTS.md ledger rule.
-- Do not backfill `key_id` here — that is S5's job under a migration, not a schema-time default.
+- Resolve the S0 schema-drift finding for all three prod-only tables. For each table, name the
+  owning repo/file and sealing helper. If it uses this crypto contract, include its key-id/state
+  DDL and migration adapter in this spec's owning slice even if the Drizzle model lives outside
+  `packages/db`. Exclusion is allowed only with code evidence that the column is not sealed by
+  this contract; an ownership gap is not evidence of non-impact and must be recorded as an open
+  ledger item before development continues.
+- Do not backfill the field-specific key-id companions here — that is S5's job under the
+  data-migration command, not a schema-time default.
 
 **Files:** `packages/db/src/pg/schema/gateway.ts`, `user-identities.ts`, `channels.ts`,
 `server-ops.ts`, `packages/db/src/schema/servers.ts` (LibSQL side, if S0 confirms it is still
@@ -237,10 +256,11 @@ written to), `minion_hub/supabase/migrations/<timestamp>_add_key_id_and_reentry_
 **Definition of done (machine-checkable):**
 
 ```bash
-cd packages/db && pnpm vitest run          # schema shape unit tests: key_id nullable, credentialStatus default 'active'
+cd packages/db && pnpm vitest run          # every S0-inventory entry has a nullable, field-specific key-id companion
 cd ../../minion_hub && bun run db:status   # new migration listed pending, not yet applied
 # on the QA-stack clone (hub-local-qa-stack-recipe), NOT prod:
-FORCE_DB_MIGRATE=1 bun run db:migrate      # applies cleanly, idempotent on second run
+FORCE_DB_MIGRATE=1 bun run db:migrate
+FORCE_DB_MIGRATE=1 bun run db:migrate      # second run: zero pending/applied; schema invariant unchanged
 ```
 
 ---
@@ -260,13 +280,18 @@ keys.
 - Introduce a stable, non-secret **active key id** (an env var, e.g. `ENCRYPTION_KEY_ID`, resolved
   alongside `ENCRYPTION_KEY` — never derived from the key material itself, so it can be attested
   without exposing a fingerprint of the secret).
-- Change `sealSecret()` to return `{ ciphertext, iv, keyId }` (additive — existing callers that
-  ignore the third field keep compiling; S1's schema makes room for it).
+- Change `sealSecret()` to return `{ ciphertext, iv, keyId }`. The returned field is additive, but
+  the overall API change is **breaking** because `openSecret` and the Hub-compatible decrypt
+  aliases below gain a required key id. Publish a minor changeset under this 0.x package's existing
+  convention and do not describe the consumer bump as backward-compatible.
 - Change `openSecret()` to require the row's declared `keyId` and open **only** with the key that
   id maps to: the active key if `keyId` matches `ENCRYPTION_KEY_ID`, otherwise throw a typed,
   named error (`UnknownKeyIdError` or equivalent) — no fallback, no trying the active key anyway.
   A row with a **null** `keyId` (pre-migration legacy row) is a distinct, explicitly typed case,
   not folded into "unknown."
+- Update `decrypt`, `encryptToken`, and `decryptToken` so key id is carried through their result and
+  required on decrypt. S3b must inventory and update every Hub/Site call site before either app
+  consumes this package version; a successful package build alone is not compatibility proof.
 - Add a separate export, e.g. `openWithLegacyKeyRing(ciphertext, iv, ring)`, that accepts an
   explicit `Record<legacyKeyId, keyMaterial>` map and tries only those entries — never the active
   key search space, never called from `sealSecret`/`openSecret`. Document in one line that this
@@ -275,7 +300,7 @@ keys.
   `crypto-guard.test.ts` (source-text assertion on the import graph).
 - Preserve every existing invariant from `2026-08-17-pkg-dev-crypto-failopen-spec`: fail-closed
   `cryptoKeyMode()`, the dev-key opt-in gate, the unchanged production error string, the byte
-  layout. This slice is additive to that module, not a rewrite.
+  layout. This slice extends that module but intentionally changes its read contract.
 
 **Files:** `packages/db/src/crypto.ts`, `packages/db/src/pg/crypto.ts` (re-export the new
 symbols), `packages/db/src/crypto.test.ts`, a new `packages/db/src/crypto-key-id.test.ts`, a new
@@ -293,60 +318,101 @@ cd packages/db && pnpm vitest run
 #   - openWithLegacyKeyRing() opens only against the ring passed in, ignores ENCRYPTION_KEY entirely
 #   - GCM auth-tag failure (wrong key material for a matching id — corruption) is distinguishable
 #     from UnknownKeyIdError (wrong id) in the thrown error type
-#   - idempotent: sealing an already-active-key value with the same key produces a byte-different
-#     ciphertext (fresh IV) but the same keyId — re-seal is safe to retry
+#   - two seals of the same active-key plaintext produce byte-different ciphertext (fresh IV) and
+#     the same keyId; migration idempotency itself is proved by S5's database-state tests
 #   - hub-shaped and site-shaped call patterns (encrypt/decrypt aliases, sealSecret/openSecret)
 #     both carry keyId through unchanged
-rg -n 'openWithLegacyKeyRing' packages/db/src --glob '!*.test.ts'   # → defined once, imported nowhere but the migration command (S5)
+rg -n 'openWithLegacyKeyRing' packages/db/src minion_hub/src minion_site/src --glob '!*.test.ts'
+# → defined once; application runtime imports zero; only the Hub-owned migration command may import it after S4
 cd ../.. && pnpm run typecheck-all && pnpm run lint-all
 ```
 
 ---
 
-### S3 — Shared startup attestation (Hub + Site fail closed on divergence)
+### S3a — Shared attestation contract and expected-policy row
 
-**Tags:** `security`, `infra`, `test` · **Estimate:** 5–7 h · **Repos:** `minion-meta`,
-`minion_hub`, `minion_site`
+**Tags:** `security`, `data`, `migrations`, `test` · **Estimate:** 4–6 h · **Repos:**
+`minion-meta`, `minion_hub`
 
-**Topics:** `security`, `infra`, `test`
+**Topics:** `security`, `data`, `migrations`, `test`
 
-**Goal:** both apps refuse to boot against a shared database if they disagree on which key is
-active — closing exactly the gap the 2026-08-20 audit found (hub and site silently ran with
-different keys against the same rows).
+**Goal:** define one deterministic expected active-key policy per database environment. Apps only
+verify it; they never elect a winner by writing "my last-seen value," which would make success
+depend on boot order and permit the first misconfigured app to bless itself.
 
 **Do:**
 
-- Add `assertSharedKeyAttestation(): void` to `packages/db` (alongside the existing
-  `assertCryptoKeyConfigured()`): reads `ENCRYPTION_KEY_ID` and a non-secret fingerprint (e.g. a
-  keyed hash of a fixed known plaintext under the active key — never the key bytes themselves, never
-  logged) and compares against a value the *other* app of the pair last recorded for this DB
-  environment (a small `key_attestation` table or a single row keyed by environment — S0 confirms
-  which shared-DB metadata table is appropriate; do not create a whole new schema surface for one
-  row if `gateway` or a settings table already has room).
-- Call it once at boot in both `minion_hub` and `minion_site` server entry/hooks, immediately after
-  `assertCryptoKeyConfigured()`. Guard server-side only, same as the precedent spec's S3.
-- Divergence throws a named error identifying both key ids (never the fingerprints' preimage,
-  never key material) and refuses to boot.
+- Add a dedicated singleton policy table keyed by an explicit, non-secret database-environment id,
+  with `active_key_id`, `active_key_fingerprint`, and `phase`. Do not overload a tenant gateway or
+  settings row: the policy is database-wide and must not inherit tenant RLS semantics. The Hub SQL
+  migration owns the DDL; the shared PG schema mirrors it.
+- Define the fingerprint exactly as HMAC-SHA-256 over the fixed public context string
+  `minion-shared-db-key-attestation-v1`, keyed by the already-derived 32-byte crypto key and encoded
+  as lowercase hex. It is a verifier, not key material; it may be stored in the policy table but
+  must not be printed by routine app logs or migration reports.
+- Add asynchronous `assertSharedKeyAttestation(db, environmentId): Promise<void>`. It derives the
+  local id/fingerprint, reads the expected row, and succeeds only on an exact match. Missing row,
+  duplicate rows, id mismatch, or fingerprint mismatch throw typed errors. This function has no
+  insert/update authority.
+- Provisioning or changing the expected row is an explicit operator action in S7, protected by the
+  security/data human gate and recorded with the backup/cutover evidence; ordinary app boot cannot
+  create or repair it.
 
-**Files:** `packages/db/src/crypto.ts` (or a new `crypto-attestation.ts` if the file is getting
-large — implementer's call), `packages/db/src/index.ts`, `minion_hub`'s server boot/hooks file,
-`minion_site`'s server boot/hooks file, each repo's `.env.example`.
+**Files:** `packages/db/src/crypto-attestation.ts`, its tests and exports, the shared PG schema,
+and `minion_hub/supabase/migrations/<timestamp>_shared_crypto_key_policy.sql`.
 
 **Definition of done (machine-checkable):**
 
 ```bash
-cd packages/db && pnpm vitest run          # same id/fingerprint → passes; different → throws named error
-# per consumer repo, on the QA-stack clone:
-ENCRYPTION_KEY_ID=k1 ENCRYPTION_KEY=... <bun|pnpm> run build && <start cmd>   # boots, records attestation
-# then in the OTHER app, same DB, different key:
-ENCRYPTION_KEY_ID=k2 ENCRYPTION_KEY=... <start cmd>                            # → fails to boot, named error
+cd packages/db && pnpm vitest run
+# exact match passes; missing/multiple/mismatched rows throw distinct typed errors; assertion performs zero writes
+cd ../../minion_hub
+bun run db:status
+FORCE_DB_MIGRATE=1 bun run db:migrate
+FORCE_DB_MIGRATE=1 bun run db:migrate       # second run is a no-op
+```
+
+---
+
+### S3b — Consumer boot wiring and breaking-call-site migration
+
+**Tags:** `security`, `infra`, `test` · **Estimate:** 4–6 h · **Repos:** `minion_hub`,
+`minion_site`
+
+**Topics:** `security`, `infra`, `test`
+
+**Goal:** both consumers pass key ids through every encrypted-field read/write and independently
+fail their own startup when local configuration differs from the operator-provisioned DB policy.
+
+**Do:**
+
+- Read each consumer's instructions first; inventory every `sealSecret`/`openSecret` and
+  encrypt/decrypt alias call. Update writes to persist the returned field-specific key id and reads
+  to supply it. No consumer bump is complete while an old two-argument decrypt call remains.
+- Call `assertCryptoKeyConfigured()` and then await `assertSharedKeyAttestation(...)` in each
+  server-only boot path before accepting traffic. A mismatch in one app proves that app refuses;
+  no test may claim the already-running peer is retroactively stopped.
+- Add `ENCRYPTION_KEY_ID` and the database-environment id to both `.env.example` files. Never put
+  key material, fingerprints, or real environment identifiers in fixtures or logs.
+
+**Files:** exact boot, crypto-call-site, test, and env-doc paths recorded by S0 in each consumer.
+
+**Definition of done (machine-checkable):**
+
+```bash
+cd minion_hub && bun run test && bun run check
+cd ../minion_site && bun run test && bun run check
+rg -n 'openSecret\([^,]+,[^,]+\)|decryptToken\([^,]+,[^,]+\)' minion_hub/src minion_site/src
+# → zero legacy two-argument calls (or a maintained AST-based equivalent with zero findings)
+# On the QA clone, each app boots against a matching expected policy and its own process exits
+# non-zero with the named mismatch error when either local id or key material is changed.
 ```
 
 ---
 
 ### S4 — Migration command: read-only dry-run inventory
 
-**Tags:** `data`, `migrations`, `test` · **Estimate:** 5–7 h · **Repos:** `minion-meta`
+**Tags:** `data`, `migrations`, `test` · **Estimate:** 5–7 h · **Repos:** `minion_hub`
 
 **Topics:** `data`, `migrations`, `test`
 
@@ -357,37 +423,42 @@ operator feedback memory, **dry-run is the default mode**, not a flag someone ha
 
 **Do:**
 
-- New `packages/db/src/migrate-legacy-keys.ts` (or `scripts/` if this repo's convention for
-  operator-run, non-published tooling differs — check `packages/db/package.json`'s `bin`/`files`
-  first) exporting an `inventory(ring: Record<legacyKeyId, keyMaterial>): Promise<InventoryReport>`
-  that, per sealed column: counts non-null ciphertext rows with `keyId === active`, per named
-  legacy id (test-decrypted via `openWithLegacyKeyRing`, S2), and rows unreadable by all of the
-  above. Row **identities** (primary keys) may be recorded for the readable/unreadable
-  classification bookkeeping S5 needs; **row values never are**.
+- Add `minion_hub/scripts/migrate-shared-db-keys.ts`, because Hub owns the Supabase connection and
+  operator-script conventions while `@minion-stack/db` has neither a Postgres client nor a `bin`
+  export. It exports an inventory function that, per S0-inventoried encrypted column, attempts an
+  authenticated open and counts `active-readable`, each named `legacy-readable`, and
+  `unreadable-by-any-known-key`. A matching active key id is not enough to count as readable: GCM
+  verification must succeed, otherwise S5 quarantines the row. Row primary keys may be held in
+  process for S5 bookkeeping but are omitted from the default report; secret column values never
+  enter the report.
+- Reject a ring with duplicate ids or duplicate key material before querying rows, so a successful
+  decrypt has exactly one named classification. Load legacy key material from the approved secret
+  source through environment/stdin or an operator-only file descriptor, never command-line values.
 - CLI entry defaults to dry-run; requires an explicit flag to do anything else (S5 wires that flag
   to itself, not this slice).
 - Report shape is a plain object/JSON — no console table with byte previews.
 
-**Files:** `packages/db/src/migrate-legacy-keys.ts` (new), `packages/db/src/migrate-legacy-keys.test.ts` (new).
+**Files:** `minion_hub/scripts/migrate-shared-db-keys.ts` and its Hub test file(s).
 
 **Definition of done (machine-checkable):**
 
 ```bash
-cd packages/db && pnpm vitest run
+cd minion_hub && bun run test
 #   - seeds rows sealed under active key, under 2 distinct fake "legacy" keys, and under neither
 #   - inventory() returns exact counts per table × classification
 #   - assert the returned report, JSON.stringify'd, contains no substring equal to any seeded
 #     plaintext, ciphertext hex, IV hex, or key material used in the test
 #   - inventory() opens zero write transactions (spy on the db client's write methods)
-# against the QA-stack clone (hub-local-qa-stack-recipe), read-only, with a real (test) legacy key:
-node --loader ... packages/db/src/migrate-legacy-keys.ts --dry-run   # exits 0, prints counts only
+# against the QA-stack clone (hub-local-qa-stack-recipe), read-only, with fake QA keys only:
+bun scripts/migrate-shared-db-keys.ts                 # default dry-run; exits 0, prints counts only
+bun scripts/migrate-shared-db-keys.ts --dry-run      # explicit synonym; byte-identical report
 ```
 
 ---
 
 ### S5 — Migration command: bounded, resumable re-seal
 
-**Tags:** `data`, `migrations`, `security`, `test` · **Estimate:** 7–8 h · **Repos:** `minion-meta`
+**Tags:** `data`, `migrations`, `security`, `test` · **Estimate:** 7–8 h · **Repos:** `minion_hub`
 
 **Topics:** `data`, `migrations`, `security`, `test`
 
@@ -398,64 +469,72 @@ whose new ciphertext hasn't been verified to open first. Rows S4 classified unre
 
 **Do:**
 
-- Extend `migrate-legacy-keys.ts` with `migrate(ring, { batchSize, resumeFrom }):
+- Extend `migrate-shared-db-keys.ts` with `migrate(ring, { batchSize, resumeFrom }):
   Promise<MigrationReport>`. Per batch, per row: open with the legacy ring, `sealSecret()` under
   the active key, **open the new ciphertext to confirm it round-trips**, then write
-  `ciphertext/iv/key_id` in one transaction with a checkpoint marker (e.g. last-migrated id per
-  table) written in the same transaction — so a crash mid-run resumes exactly where it left off
-  without re-touching completed rows or losing progress on a partial batch. Never delete/overwrite
+  `ciphertext/iv/<field>_key_id` in one transaction with a checkpoint marker (e.g. the last
+  committed primary-key cursor per
+  table) written in the same transaction — so a crash resumes after the last **committed** batch
+  without re-touching committed rows or losing committed progress. Work performed inside a rolled
+  back batch may repeat; database state must not expose a partial batch. Never delete/overwrite
   the source row until the new value has been opened successfully and the transaction can commit,
   per the proposal's own invariant.
 - Rows unreadable by every ring entry: set `credentialStatus = 'credential_reentry_required'`
-  (S1's column), leave `ciphertext`/`iv`/`key_id` exactly as found. Never write a guessed value,
+  (S1's column), leave `ciphertext`/`iv`/field-specific key id exactly as found. Never write a guessed value,
   never null out the ciphertext.
 - Require an explicit `--confirm-backup <backup-reference>` argument before any write path runs —
   the command refuses to execute without one, in keeping with the
   `prod-data-migration-script-pattern` memory's "dry-run default + snapshot" rule. This is a
   string/reference the operator supplies (e.g. a Supabase PITR timestamp or backup id); the tool
   does not take the backup itself.
-- Idempotency: re-running `migrate()` against already-migrated rows (keyId already === active) is
-  a no-op count, not a re-seal.
+- Idempotency: re-running `migrate()` against already-migrated rows is a no-op only after the row
+  successfully opens under the active key. An active id with failed authentication is unreadable,
+  is preserved, and receives `credential_reentry_required` rather than being silently skipped.
+- Protect every update with a compare-and-swap predicate over primary key plus the source
+  ciphertext/IV/key-id values read for that row. A concurrent credential rotation therefore wins;
+  the migration reports a conflict for re-inventory instead of overwriting newer ciphertext.
 
-**Files:** `packages/db/src/migrate-legacy-keys.ts` (extend), `packages/db/src/migrate-legacy-keys.test.ts` (extend).
+**Files:** `minion_hub/scripts/migrate-shared-db-keys.ts` and its tests (extend).
 
 **Definition of done (machine-checkable):**
 
 ```bash
-cd packages/db && pnpm vitest run
+cd minion_hub && bun run test
 #   - mixed hub-legacy-key rows + site-legacy-key rows in one run → both re-sealed to active key
 #   - already-migrated rows (keyId === active) → migrate() reports them as skipped, zero writes
-#   - simulated crash: kill the process mid-batch (throw after N writes in a test double), re-run
-#     → resumes from the checkpoint, no row is re-sealed twice (assert via a per-row seal counter)
+#   - simulated crash before commit: whole batch rolls back; re-run may seal it again but produces
+#     exactly one committed replacement per row and advances one checkpoint
+#   - crash after a committed batch: resumes after that checkpoint; committed rows receive zero writes
 #   - migrate() invoked without --confirm-backup → refuses, zero writes, exits non-zero
 #   - a row unreadable by every ring entry → credentialStatus flips to 'credential_reentry_required',
-#     original ciphertext/iv/key_id byte-identical before and after
+#     original ciphertext/iv/field-specific key id byte-identical before and after
 #   - rollback-before-cutover: run migrate() on a scratch copy, discard it, assert the source DB's
 #     original rows are what a fresh dry-run inventory (S4) still reports pre-migration
-# against the QA-stack clone, with REAL seeded legacy-shaped rows (hub-local-qa-stack-recipe):
-node ... migrate-legacy-keys.ts --confirm-backup local-qa-snapshot-<ts>   # per the memory's
-                                                                            # "run TWICE" rule —
-                                                                            # execute it twice here
-                                                                            # and assert identical
-                                                                            # final counts both times
+#   - concurrent source-row change makes the compare-and-swap affect zero rows, reports conflict,
+#     and preserves the newer value
+# against the QA-stack clone, with seeded legacy-shaped rows and fake QA keys:
+bun scripts/migrate-shared-db-keys.ts --execute --confirm-backup local-qa-snapshot-<ts>
+bun scripts/migrate-shared-db-keys.ts --execute --confirm-backup local-qa-snapshot-<ts>
+bun scripts/migrate-shared-db-keys.ts --dry-run
+# second execute performs zero credential rewrites; final dry-run proves the invariant counts
 ```
 
 ---
 
-### S6 — `credential_reentry_required` application behavior
+### S6a — Gateway `credential_reentry_required` behavior
 
 **Tags:** `logic`, `ui`, `test` · **Estimate:** 5–7 h · **Repos:** `minion_hub`
 
 **Topics:** `logic`, `ui`, `test`
 
-**Goal:** a gateway connection whose credential row is quarantined stops being treated as usable,
-and its owner sees a path to fix it. Before touching any `.svelte` file, invoke the
+**Goal:** a quarantined gateway credential stops being treated as usable and its owner sees the
+existing path that replaces it. Before touching any `.svelte` file, invoke the
 `ui-design-governance` skill per AGENTS.md — semantic tokens only, and `bun run lint:design &&
 bun run lint:tokens` after.
 
 **Do:**
 
-- Wherever hub resolves an active gateway/channel connection for use (S0 locates the exact
+- Wherever Hub resolves an active gateway/channel connection for use (S0 locates the exact
   service — likely near `server.service.ts` / the connection-resolution path referenced by
   `2026-08-18-hub-updateserver-tenant-scope-spec`), exclude rows with
   `credentialStatus === 'credential_reentry_required'` from the usable set, without deleting the
@@ -467,9 +546,8 @@ bun run lint:tokens` after.
   — that path already calls `sealSecret()` and, after S2, will naturally record the active key id
   on the new value, which is what clears the quarantine (a fresh write is not a "migration," so no
   legacy-ring involvement here).
-
-**Files:** the connection-resolution service (path from S0), its existing settings/connection UI
-route + component, corresponding test files.
+**Files:** the Hub connection-resolution service and existing settings UI found by S0, plus their
+tests.
 
 **Definition of done (machine-checkable):**
 
@@ -478,8 +556,38 @@ cd minion_hub
 bun run test   # service test: quarantined row excluded from active-connection resolution;
                # re-entering a credential clears credentialStatus back to 'active'
 bun run check
-bun run lint:design && bun run lint:tokens   # debt may only decrease (ui-design-governance)
+DESIGN_LINT_BASE_REF=origin/master bun run lint:design && bun run lint:tokens
 ```
+
+---
+
+### S6b — Other retained credential types
+
+**Tags:** `logic`, `ui`, `test` · **Estimate:** 4–6 h per owning repo · **Repos:** determined by
+S0 from `minion_hub`, `minion_site`
+
+**Topics:** `logic`, `ui`, `test`
+
+**Goal:** no non-gateway row retained in the migration inventory is left with a quarantine state
+that its owning runtime ignores or its owner cannot clear.
+
+**Do:**
+
+- For every non-gateway table S0 keeps in migration scope, identify the owning runtime and existing
+  replacement/reconnect path. Add the unusable-state guard and prove a successful fresh write
+  stores the active key id and returns status to `active`.
+- Group work by owning repo; if both Hub and Site own affected paths, implement them as separate
+  4–6 h PR slices rather than one cross-repo development run.
+- If no owner-facing replacement path exists, stop and amend this spec rather than declaring the
+  row migrated/quarantined with no way to recover service.
+
+**Files:** the owning service/UI/tests recorded in S0 (including Site if it owns OAuth identity
+reconnection).
+
+**Definition of done (machine-checkable):** for each retained table, an inventory-derived test
+case proves quarantined rows are unusable, ciphertext is preserved, and a fresh credential write
+restores `active` with the active key id. Run `bun run test && bun run check` in each owning repo;
+for any Svelte change, run that repo's required design-governance gates.
 
 ---
 
@@ -490,25 +598,44 @@ bun run lint:design && bun run lint:tokens   # debt may only decrease (ui-design
 
 **Topics:** `security`, `infra`
 
-**Goal:** the sequence the proposal's Decision requires, in order, with a human gate at the
-irreversible steps: reader compatibility (S2/S3, which understand `key_id` and can attest) ships
-to **both** apps first; the production dry run (S4) is reviewed by a human; the supervised backup +
-migration (S5) runs; both deployments' attestation (S3) confirms convergence; legacy write
-authority and the migration-only key ring are removed **only after** the rollback window closes.
+**Goal:** execute one human-approved cutover sequence with an exact old-app revision, new-app
+revision, database backup reference, write-quiescence rule, rollback trigger, and expected-policy
+row. Legacy key material is removed only after the rollback window closes.
+
+**⚠️ Human decision required before approval:** the current proposal simultaneously requires
+"reader compatibility first," missing key ids to fail closed, and the legacy ring to be
+migration-only. Those constraints do not define a live-traffic sequence for existing null-key-id
+rows: activating S2/S3b before migration makes those rows unreadable, while migrating them to the
+new shared key before both apps cut over makes them unreadable to the old revisions. Choose and
+record exactly one of these rollout contracts:
+
+1. **Maintenance cutover:** quiesce both applications' credential reads/writes, take the backup,
+   run S4/S5 with the final shared key, provision the expected policy row, deploy both new
+   revisions, verify, then reopen traffic. Rollback restores the backup **and** both old revisions
+   with their old environment keys.
+2. **Bounded runtime compatibility:** amend the proposal/spec to authorize a temporary,
+   explicitly expiring runtime compatibility mode, define exactly how null-key-id rows select one
+   key without iterating the legacy ring, and add removal tests. This is currently out of contract
+   because the ring is migration-only and a missing key id must fail closed.
+
+Until the human records that choice, the numbered rollout below is intentionally not executable
+and this pass remains `changes_requested`.
 
 **Do:**
 
-1. Deploy S1+S2+S3+S6 to both hub and site (reader/writer compatible with both old
-   keyless-legacy rows and new keyed rows — `openSecret` on a `null` keyId row is the explicit
-   legacy-unversioned case from S2, not an error).
-2. Run S4's dry-run against production; a human reviews the counts before authorizing S5.
-3. Take the backup S5 requires a reference to; run S5 in production, batch-bounded, with the
-   checkpoint visible to the operator.
-4. Run S4's dry-run again post-migration: assert **zero** rows remain classified under any named
-   legacy key (only "active" and "credential_reentry_required" remain).
-5. Confirm both hub and site's boot-time attestation (S3) shows the same key id/fingerprint in
-   production.
-6. Hold the rollback window (human-defined duration, per the proposal's invariant — this spec does
+1. Record the selected rollout contract and exact rollback procedure in the tracking artifact.
+2. Run S4's production dry-run; a human reviews counts and the list of in-scope tables before S5.
+3. Quiesce writes as required by the selected contract, take the named backup, and run S5 in
+   bounded batches with checkpoint/conflict counts visible to the operator.
+4. Run S4 again: assert every non-quarantined row is `active-readable`, zero rows are
+   legacy-readable, and every unreadable row is preserved and marked
+   `credential_reentry_required`. This is the memory-mandated invariant check, not merely a claim
+   that every SQL statement ran.
+5. Provision the expected attestation policy only at the selected cutover point; start Hub and
+   Site, prove each matches it, and exercise cross-app reads of migrated QA-shaped records.
+6. Resume traffic only after S6a/S6b's unusable-state and reconnect checks pass. Execute the rollback
+   procedure if any declared trigger fires.
+7. Hold the rollback window (human-defined duration, per the proposal's invariant — this spec does
    not set the number). After it closes: remove legacy write authority (there was never any legacy
    *write* path added by this spec, so this step is confirming none was reintroduced) and delete
    the legacy key material from wherever S5's `--confirm-backup`-gated run read it (an operator
@@ -518,11 +645,11 @@ authority and the migration-only key ring are removed **only after** the rollbac
 runbook file is wanted for the ledger, `specs/2026-08-28-shared-db-encryption-key-convergence-spec.rollout.md`
 is a reasonable sidecar, not required by this spec.
 
-**Definition of done:** the production dry-run report (step 2), the migration execution log
-(step 3), the post-migration zero-legacy-row report (step 4), and the dual-attestation
-confirmation (step 5) are all attached to the tracking PR/issue; the DoD's "supervised deployment
-step with an exact rollback revision and database backup" is satisfied by name, not by inference;
-a human has signed off per the `security`/`data` tag gate before legacy key deletion.
+**Definition of done:** the approved rollout-contract record, preflight report, exact old/new
+revisions, backup reference, write-quiescence evidence, migration log, post-migration invariant
+report, per-app attestation result, cross-app read result, rollback-window end, and human approval
+before legacy-key deletion are attached to the tracking PR/issue. Reports contain counts and ids
+only where explicitly allowed; never secret values or crypto bytes.
 
 ## 3. Cross-repo impact assessment
 
@@ -531,14 +658,15 @@ spec's §4 shape.
 
 | Surface | Impact | Mitigation / alert |
 |---|---|---|
-| `@minion-stack/db` (S1, S2) | Additive schema (`key_id`, `credentialStatus` nullable/defaulted) and additive crypto exports — no existing caller breaks | Roundtrip + backward-compat cases in S2's matrix; S1's columns are nullable so pre-migration rows stay valid |
-| Shared hub↔site database | **The entire point of this spec** — converging two divergent keys into one, with a migration in between | S7's ordering (reader-compat first, migration second, converge third) is the mitigation; S3 makes divergence a boot failure instead of a silent split, closing the exact gap the audit found |
-| `minion_hub`, `minion_site` boot path | New required attestation call; a misconfigured pair now fails to boot instead of silently mis-reading rows | Same availability-for-confidentiality trade as the precedent spec's ⚠️A4 — already an accepted trade in this lineage |
-| `minion_hub` connection-resolution + settings UI (S6) | A `.svelte` surface change — the only slice in this spec that does | `ui-design-governance` skill invoked explicitly in S6; `lint:design`/`lint:tokens` in its DoD |
+| `@minion-stack/db` (S1, S2, S3a) | Additive nullable schema companions plus a **breaking** decrypt signature and attestation exports | Minor changeset; consumers do not bump until S3b updates every call site; package tests do not substitute for consumer typechecks |
+| Shared hub↔site database | Converges two divergent keys, adds a database-wide policy row, and mutates credential ciphertext/state | S7 must resolve the old-reader/new-reader incompatibility before approval; backup, quiescence, compare-and-swap, and post-state invariants are mandatory |
+| `minion_hub`, `minion_site` boot path | Each process now verifies a read-only expected policy; mismatch or missing policy fails that process | S3a removes boot-order election; S3b proves each app independently. Availability impact is explicit in the selected S7 cutover |
+| `minion_hub` operator tooling | Owns the executable dry-run/migration command because it owns the shared Supabase client and migration conventions | S4/S5 use Hub scripts and the isolated QA clone; no unpublished DB client is assumed inside `@minion-stack/db` |
+| Credential resolution/reconnect UI in Hub and possibly Site (S6) | Every retained credential type needs an unusable-state guard and owner replacement path; `.svelte` changes may occur in either consumer | S0 ownership matrix closes the list; each affected Svelte repo invokes its own design governance and gates |
 | Prod tables not mirrored in this schema (`gateway_signing_keys`, `meta_assets`, `meta_connections`) | **Unresolved from this repo alone** — S0/S1 must either bring them into scope or explicitly exclude them with evidence | ⚠️ Alert, not silently assumed either way — see AS-IS |
 | `minion` gateway | None — the "sole key holder" decision already excludes the gateway from ever holding `ENCRYPTION_KEY` (`2026-05-24-unified-user-identities-design`); this spec does not change that | Re-grep the gateway repo at PR time, per the precedent spec's §4 table |
 | `packages/auth`, other meta packages, `paperclip-minion`, `pixel-agents`, `Minion Docs/` | None — no crypto import, no shared-DB dependency | Re-run the repo-wide grep at PR time |
-| Public npm (`@minion-stack/db`) | A `minor` version bump for the additive crypto/schema surface, same convention as the precedent spec's changeset | New changeset in S2, naming the new exports and the nullable columns as backward-compatible |
+| Public npm (`@minion-stack/db`) | A `minor` version bump under the repo's 0.x convention for a breaking decrypt-call contract plus additive schema/attestation exports | Changeset must name required consumer call-site migration and coordinated bump; it must not call the release backward-compatible |
 
 ## 4. Out of scope (explicit, from the proposal)
 
@@ -561,25 +689,31 @@ Run with S1–S6 merged in their owning repos and S7 executed and signed off.
 ```bash
 cd /home/agent/work
 pnpm run ci                                   # build-all, typecheck-all, lint-all, test-all, changeset:status
-git diff --name-only <base>...HEAD -- minion_hub | grep -E '\.svelte$'   # → only S6's files, if any
+cd minion_hub && bun run test && bun run check
+DESIGN_LINT_BASE_REF=origin/master bun run lint:design && bun run lint:tokens
+cd ../minion_site && bun run test && bun run check
 
-# package-level proof (S2/S4/S5 combined story), on the QA-stack clone:
-cd packages/db
-node ... migrate-legacy-keys.ts --dry-run                              # counts: N active, M per legacy id, K unreadable
-node ... migrate-legacy-keys.ts --confirm-backup <qa-snapshot-ref>      # re-seal
-node ... migrate-legacy-keys.ts --dry-run                              # counts: (N+M) active, 0 per legacy id, K unreadable (unchanged)
+# Migration proof on the QA-stack clone, with only fake QA keys:
+cd ../minion_hub
+bun scripts/migrate-shared-db-keys.ts --dry-run
+bun scripts/migrate-shared-db-keys.ts --execute --confirm-backup local-qa-snapshot-20260828
+bun scripts/migrate-shared-db-keys.ts --execute --confirm-backup local-qa-snapshot-20260828
+bun scripts/migrate-shared-db-keys.ts --dry-run
+# Assert first run converges readable rows, second run writes zero credential rows, and final
+# inventory has only active-readable or preserved+quarantined rows.
 
 # cross-app proof — the audit's exact failure mode, inverted:
 # 1. seal a value as "hub" (ENCRYPTION_KEY_ID=k-active), read it back as "site" (same env) → succeeds
-# 2. boot "hub" and "site" against the QA clone with DELIBERATELY different ENCRYPTION_KEY_ID → both refuse to boot
+# 2. for each app independently, change local ENCRYPTION_KEY_ID or key material → that process exits non-zero
+# 3. neither boot assertion inserts or updates the expected-policy row
 
 # S6 proof:
-cd ../../minion_hub && bun run test -- --grep "credential_reentry_required"
+cd ../minion_hub && bun run test -- --grep "credential_reentry_required"
 ```
 
-**Ship gate:** the table above all green; the proposal's Decision checked clause by clause (one
+**Ship gate:** the human rollout choice in S7 is recorded and the table above is green; the
+proposal's Decision is checked clause by clause (one
 active key, bounded legacy ring, no silent guessing/erasure, quarantine + owner path for
-unreadable rows); S7's four artifacts (dry-run report, migration log, post-migration zero-legacy
-report, dual-attestation confirmation) attached; and — per the `security`/`data` tag rule — a
-**human** approval on record before S7 step 6 (legacy key deletion), because a green command list
-is evidence, not a decision.
+unreadable rows); all S7 evidence artifacts are attached; and — per the `security`/`data` tag rule
+— a **human** approval is on record before S7 step 7 (legacy key deletion), because a green command
+list is evidence, not a decision.
