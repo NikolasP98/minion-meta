@@ -1,7 +1,8 @@
 ---
 id: 2026-08-18-factory-browser-verification-stage
 title: Isolated Chrome/AX/axe browser verification stage for UI-topic runs
-status: approved
+status: in-spec
+spawned_spec: 2026-08-28-factory-browser-verification-stage-spec
 created: 2026-08-18
 updated: 2026-08-28
 repos: [minion-factory]
