@@ -100,7 +100,9 @@ that supersedes these file-backed constraints; no semantic-memory MCP was availa
 
 ---
 
-## 0. Problem (quoted from the approved proposal)
+## 0. Product
+
+Problem quoted from the approved proposal:
 
 > Audit 2026-08-17 priority #2. `postFinish()` is fire-and-forget
 > (`queue.ts:193`): a runner restart can permanently lose auto-fix escalation,
@@ -649,7 +651,7 @@ action required (per `/memory/MINION/minion-factory-agent-pipeline.md`'s "box is
   transaction exists across SQLite and GitHub; GitHub commit history remains canonical. A separate
   commit-history reconciler would be required to close the post-PUT/pre-insert crash window.
 
-## 7. End-to-end acceptance
+## 7. Verification
 
 Full acceptance is blocked until §8 is resolved and encoded in Slice 4. From a clean clone of the
 eventual merge commit, no docker/box is needed (pure logic + SQLite + mocked HTTP):
@@ -703,8 +705,3 @@ unless policy intentionally retires those automations. Terminal sinks can be rep
 sets. The reviewer cannot infer whether approved/in-progress/historical states may be retired,
 closed, superseded, completed, or revived without inventing lifecycle policy. Until this table is
 approved, the proposal's explicit-edge definition of done is unmet and Slice 4 must not ship.
-
-## Board audit 2026-08-28
-
-Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
-Stale draft corrected: S1-S3 are in production (lifecycle_events, outbox_jobs, pump/lease/dead-letter + ~30 tests). Remaining: Slice 4 only — deliberately blocked at lifecycle.ts:22-27 pending the §8 human edge-table decision. That decision is the deliverable.

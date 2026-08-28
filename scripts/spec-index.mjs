@@ -220,7 +220,7 @@ export function missingRequiredHeadings(body) {
 	const scanned = stripNonDocumentMarkdown(body);
 	return REQUIRED_HEADINGS.filter(({ re }) => !re.test(scanned)).map(({ label }) => label);
 }
-// TODO(handoff): 127 pre-existing specs are grandfathered here and never get
+// TODO(handoff): 115 pre-existing specs are grandfathered here and never get
 // checked again while their body is unchanged (hash-ratcheted — see header
 // comment). Shrink the baseline over time (backfill headings, remove the id)
 // — see proposals/2026-08-18-spec-heading-lint-baseline-backfill.md.

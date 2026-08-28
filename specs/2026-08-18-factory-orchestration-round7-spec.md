@@ -17,7 +17,9 @@ reconcile_ignore_reason: "Cancelled this stale shipment claim: PR #41 is not the
 
 # Typed execution graph — repo fan-out, slice continuation, scenario profiles, relationship resolution
 
-## 0. Product — problem in the proposal's words
+## 0. Product
+
+Problem in the proposal's words:
 
 > Today: multi-repo specs map to the FIRST recognized repo only; nothing continues
 > after Slice 1; every change takes the same linear path; spec relationships are
@@ -499,8 +501,3 @@ After all prerequisite and slice PRs are merged and deployed, with automerge sti
 Acceptance evidence is the focused/full test output, execution/node/event/outbox rows, exact PR and
 attested head ids, projected frontmatter diff, profile/manifest hashes, resolver decision records,
 and the operator's shadow comparison. Screenshots or agent-written “done” text are not substitutes.
-
-## Board audit 2026-08-28
-
-Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
-Returned to draft for respec: zero deliverables exist (no FACTORY_GRAPH_V2/execution_nodes/graph modules; queue.ts still refuses multi-repo) and the design targets `runs` while today's sequencing plane is pipeline_instances + phase_requests. The possibly_shipped PR #41 link is a false positive. Rebase the graph/profile/resolver model onto the lineage instance layer before re-approval.

@@ -275,6 +275,8 @@ is one 4–8 hour implementation run and must not start a later slice.
 
 ### Slice 1 — evidence and repo-profile schema (minion-factory, 4–6h)
 
+**Topics:** infra, data, test
+
 **Files:** `runner/src/topics.ts`, `runner/src/topics.test.ts`, `runner/src/repos.ts`, its tests,
 `repos.example.json`, `README.md`.
 
@@ -289,6 +291,8 @@ typecheck`. Tests prove accepted evidence, unchanged stage rejection, every part
 URL/port/path rejection, and `none|bridge` resolution.
 
 ### Slice 2 — phase policy, scheduling, and image routing (minion-factory, 4–6h)
+
+**Topics:** infra, logic, test
 
 **Files:** `runner/src/containers.ts`, `runner/src/containers.test.ts`, `runner/src/queue.ts`,
 `runner/src/queue.test.ts`.
@@ -308,6 +312,8 @@ deleting the phase/artifact/image mapping fails tests.
 
 ### Slice 3 — pinned image supply chain (minion-factory, 4–6h)
 
+**Topics:** deps, infra, security, test
+
 **Files:** `agent/Dockerfile.browser-verify`, browser-image lock/package files,
 `scripts/verify-image-pins.sh`, `docker-compose.yml`, `.env.example`, `deploy.sh`.
 
@@ -323,6 +329,8 @@ not production-ready.
 a named digest. T-IMAGE-PINS-BROWSER and T-DIGEST-DEPLOY are automated tests, not manual diff review.
 
 ### Slice 4 — deterministic browser worker (minion-factory, 6–8h)
+
+**Topics:** infra, logic, security, test
 
 **Files:** `agent/factory-browser-verify.sh`, `agent/lib/browser-verify-flows.mjs`, fixture profile
 and preview app, shell/Node tests.
@@ -345,6 +353,8 @@ and the complete fixed evidence set exists.
 
 ### Slice 5 — profile snapshot and evidence ingestion (minion-factory, 4–6h)
 
+**Topics:** data, infra, test
+
 **Files:** `runner/src/browser-verify.ts`, `runner/src/browser-verify.test.ts`, `runner/src/queue.ts`.
 
 Create a root-owned per-run profile input leaf without following links; copy the validated profile
@@ -359,6 +369,8 @@ npm run typecheck`. Corrupt, oversized, symlinked, extra, missing, and binding-m
 with the offending path; retry uses the identical snapshot/hash after the source profile changes.
 
 ### Slice 6 — fail-closed requirements and automerge (minion-factory, 4–6h)
+
+**Topics:** infra, security, test
 
 **Files:** `runner/src/manifest.ts`, its tests, `runner/src/queue.ts`, `runner/src/queue.test.ts`,
 `runner/src/automerge.ts`, `runner/src/automerge.test.ts`.
@@ -377,6 +389,8 @@ evidence, stale candidate/profile/image, and absent/failed attempts each have na
 
 ### Slice 7 — minion-hub pilot and adversarial E2E (minion-factory, 6–8h)
 
+**Topics:** infra, test, ui
+
 **Files:** `runner/src/repos.ts`, `browser-profiles/minion-hub.mjs`,
 `runner/src/browser-verify.e2e.test.ts`, `README.md`.
 
@@ -393,6 +407,8 @@ the DB row contains only the bounded summary/hashes. A second canary requiring b
 unregistered `minion-site` refuses before any worker starts. No PR-artifact publication is claimed.
 
 ### Slice 8 — canonical UI activation (minion-meta, 4–6h)
+
+**Topics:** infra, test, ui
 
 **Files:** `specs/topics.json` only.
 
@@ -435,7 +451,7 @@ allowlisting for that escape hatch.
   prerequisite.
 - Uploading browser artifacts to GitHub/PRs or changing the review worker/evidence format.
 
-## 9. End-to-end definition of done
+## 9. Verification
 
 The spec is complete only when S1–S8 pass in order, the deployed runner reports containment-v2
 enabled, the browser image reference is a named manifest digest, the hub success and site refusal
