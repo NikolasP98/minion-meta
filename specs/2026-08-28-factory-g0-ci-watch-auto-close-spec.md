@@ -1,8 +1,8 @@
 ---
 id: 2026-08-28-factory-g0-ci-watch-auto-close-spec
 title: G0 reconciler auto-closes CI-watch proposals once the watched workflow goes green
-stage: spec
-status: approved
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-28
 updated: 2026-08-28
@@ -13,7 +13,8 @@ type: fix
 tags: [infra, logic, test]
 relationship: extends
 related: [2026-08-17-sdlc-phase-gates-scoring-spec]
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/140
+evidence: https://github.com/NikolasP98/minion-factory/pull/140
+shipped_reason: "PR #140 merged and its supervised canary passed on production; follow-up run c1ea12c5 produced an empty diff, proving the approved slice is already implemented."
 ---
 
 # G0 reconciler auto-closes CI-watch proposals once the watched workflow goes green
