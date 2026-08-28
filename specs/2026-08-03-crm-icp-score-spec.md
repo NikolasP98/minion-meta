@@ -3,23 +3,26 @@ id: 2026-08-03-crm-icp-score-spec
 title: CRM — Per-Org Ideal Customer Profile (ICP) Score
 stage: spec
 status: approved
-pass: 1
+pass: 2
 created: 2026-08-03
-updated: 2026-08-20
+updated: 2026-08-28
 repos: [minion_hub]
-approved_reason: "Unblocked: pagination dependency shipped (hub #128/#134). Hand-written spec; dev+review gates carry verification."
+verdict: approved
+tags: [logic, data, ui, test]
+next_slice: 1
+approved_reason: "Pass-2 review against minion_hub@1b47e8c: pagination and ICP server sort/filter prerequisites shipped; remaining units were collision-adjusted and bounded to 4-8h."
 ---
 
 # CRM — Per-Org Ideal Customer Profile (ICP) Score
 
 **Date:** 2026-08-03
-**Status:** Proposed (ready for subagent execution)
+**Status:** Approved after pass-2 review (ready for bounded Factory execution)
 **Owner surface:** `minion_hub` — `/crm/customers`, `/crm/settings`, `crm-contacts.service.ts`, `/api/crm/icp/**`
 **Prereq reading:** memory `crm-relationship-graph-v2-2026-07-23` (inference-kernel precedent), `hub-system-automations-manifest`, `rbac-erpnext-framework`, skill `ui-design-governance`
 
 ---
 
-## 1. Goal
+## 0. Product
 
 The CRM roster today ranks contacts by an **RFM score** — recency, frequency, monetary —
 which measures *engagement*: how much someone talks to us and pays us. It says nothing
@@ -41,9 +44,12 @@ tyre-kicker are the two cases the current single score cannot distinguish.
 | Asset | Location | Use |
 |---|---|---|
 | RFM score + lifecycle + weights | `src/server/services/crm-scoring.ts` (`RFM_WEIGHTS`, `RFM_CONST`) | reference for the "pure logic in TS, ranking in SQL" split |
-| Roster query with `r_score/f_score/m_score/score`, `minScore`/`maxScore` filters, `sort` union | `crm-contacts.service.ts` (`listContacts`) | extend, don't fork |
+| Roster query with `r_score/f_score/m_score/score`, `minScore`/`maxScore` filters, `sort` union | `crm-contacts.service.ts` (`rankContactsPage`) | extend, don't fork |
+| ICP server projection, inclusive `minIcp`/`maxIcp`, `sort: 'icp'`, and CSV query plumbing | `crm-contacts.service.ts`, `/api/crm/contacts/**` | **already shipped** by the pagination work; preserve and consume it rather than rebuilding it |
 | Per-org settings, one jsonb row | `crm_settings (org_id PK, value jsonb)` | home for the ICP definition — **zero migration** |
 | Reserved `custom_fields` keys `_funnel`, `_relationship` | `crm_contacts.custom_fields` | precedent for `_icp` — **zero migration** |
+| Atomic reserved-key writer | `setContactCustomField` in `crm-contacts.service.ts` | reuse for `_icp`; do not add another read-modify-write helper |
+| Expiring inference-claim kernel | `crm-relationship-inference.service.ts` | reuse its claim semantics and failure cleanup; do not copy stale pre-kernel behavior |
 | Finance bridge (revenue, invoice count, last purchase) | `crm-finance.service.ts` | ICP feature inputs |
 | Per-message sentiment | `crm_message_sentiment` | ICP feature input |
 | LLM call pattern | `crm-conversation-analysis.service.ts` — `generateText` from `ai` + `getOpenRouterModel` from `$server/llm` | copy this shape; hub has **no** `drones.execute` client |
@@ -199,9 +205,9 @@ still respects caps and the claim).
 `update`) and is **not concurrency-safe** — a tick and a user edit can clobber each
 other. `_icp` must be written with an atomic `jsonb_set` JSON-path update.
 
-If the relationship-graph slice (`specs/2026-08-03-crm-relationship-graph-v2-port-spec.md`)
-has already landed, **reuse its atomic setter**. If not, write one here and keep it
-generic so that slice can adopt it.
+The relationship kernel and generic `setContactCustomField` primitive have landed.
+**Reuse them.** Adding a second setter or restoring the old read-modify-write shape is
+out of scope and fails review.
 
 ---
 
@@ -243,10 +249,10 @@ Add an `icp` column beside `score` in the existing `columns` array
 - Explainability popover on the chip: reasons + per-criterion met/not — mirroring the
   existing RFM tooltip. Use the shared `Tooltip`/`Popover` wrappers, not `title=""`.
 
-⚠️ **`/crm/customers` is being rewritten for server-side pagination**
-(`specs/2026-08-03-crm-customers-server-pagination-spec.md`). Coordinate: the ICP column
-must be a **server-projected field with server sort/filter**, not a client-side
-computation over the full roster — otherwise it breaks the moment pagination lands.
+Server-side pagination is now shipped. Its contact API and service already accept
+`minIcp`, `maxIcp`, and `sort: 'icp'`, with inclusive boundaries and `NULLS LAST`
+covered by unit and PGlite tests. The UI unit in this spec must consume that existing
+contract. It must not compute ICP ordering client-side or duplicate the query path.
 
 ### 8.2 Definition editor (`/crm/settings`)
 
@@ -278,23 +284,73 @@ clobbers co-agent keys.
 
 ## 10. Execution order (subagent-sized units)
 
-1. **U1 — contract + storage.** Zod types, `crm_settings.value.icp` read/write, `_icp`
-   strip/mask rules in the sanitiser, atomic `jsonb_set` setter. Tests: masking + Zod.
-2. **U2 — feature bundle.** Stage-A extraction reusing finance/sentiment/RFM. Tests:
-   skip gate, bundle shape, presence-only PII.
-3. **U3 — judge + dirty gate.** LLM call, Zod parse, retry-once, `inputSig`. Tests: sig
-   stability, parse failure.
-4. **U4 — tick + refresh endpoints.** Org selection, claims, caps, allowlist entry,
-   `SYSTEM_AUTOMATIONS` entry (`unscheduled`). Tests: org-kind SQL, caps, claim release.
-5. **U5 — UI.** Roster column + server sort/filter, settings editor, i18n, popover.
-6. **U6 — gates + PR.**
+### Slice 1 — contract + settings storage (4–8h)
 
-U1–U4 are server-only and can proceed while U5 waits on the pagination spec's landing
-shape. **U5 must not be merged before confirming it composes with server-side pagination.**
+**Topics:** `logic`, `data`, `test`
+
+Add the Zod contracts, `crm_settings.value.icp` normalization/read/write, and `_icp`
+strip/mask rules. Reuse `setContactCustomField`; do not create a second setter. The
+slice is done when focused tests prove strict settings validation, atomic version
+bumps, masked free text, and unconditional `_icpClaim` stripping.
+
+### Slice 2 — deterministic feature bundle (4–8h)
+
+**Topics:** `logic`, `data`, `test`
+
+Build Stage A by composing the existing finance, sentiment, RFM, and bounded
+conversation inputs. The slice is done when tests prove the skip gate, stable bundle
+shape, bounded head+tail text, and presence-only DNI/sex/age values.
+
+### Slice 3 — judge + dirty gate (4–8h)
+
+**Topics:** `logic`, `data`, `test`
+
+Add the typed LLM judge, retry-once parser, disqualifier rule, and `inputSig`. The slice
+is done when pure tests prove signature stability/change dimensions, score/band bounds,
+prompt-injection containment, and that two parse failures persist no partial result.
+
+### Slice 4 — tick + refresh endpoints (4–8h)
+
+**Topics:** `logic`, `data`, `infra`, `test`
+
+Add business-org selection, expiring claims, caps, cron allowlist, contact refresh,
+and the `SYSTEM_AUTOMATIONS` entry with `wiring: 'unscheduled'`. The slice is done when
+route/service tests prove org filtering, caps, dirty-gate bypass only for explicit
+refresh, and claim release on every failure path.
+
+### Slice 5 — roster UI (4–6h)
+
+**Topics:** `ui`, `logic`, `test`
+
+Consume the already-shipped server ICP projection: band/score column, server-backed
+range controls, hidden-column empty state, and explainability popover. The slice is
+done when component/query-state tests prove the fixed status-token map, server query
+round-trip, hidden-off state, and masked-result rendering. Do not change ranking SQL.
+
+### Slice 6 — settings UI + i18n (4–8h)
+
+**Topics:** `ui`, `logic`, `test`
+
+Add the definition editor, bounded criteria and disqualifier repeaters, rescore
+warning, append-only EN/ES keys, and settings-route tests. The slice is done when UI
+tests prove both collection caps, weight bounds, save/version behavior, and translated
+validation errors.
+
+### Slice 7 — final gates + PR evidence (≤4h)
+
+**Topics:** `test`, `ui`, `data`
+
+Run the exact commands in §11, record the pagination-contract tests that remain green,
+and open one reviewable PR. This slice may repair gate failures but may not widen
+product scope.
+
+U1–U4 are server-only. U5a depends on the shipped pagination contract identified in
+§2; U5b is independent after U1. Factory should execute the units in numeric order so
+the browser never receives a UI contract the service cannot yet populate.
 
 ---
 
-## 11. Gates
+## Verification
 
 ```bash
 bun run check                        # 0 errors / 0 warnings
@@ -305,6 +361,15 @@ DESIGN_LINT_BASE_REF=origin/master bun run lint:design
 
 🚨 `lint:design` **silently exits 0** in a master-based worktree (its base defaults to the
 deleted `origin/dev`). U5 touches `.svelte` files, so the explicit base ref is mandatory.
+
+## Out of scope
+
+- Any DDL or speculative expression index. A measured query regression requires its
+  own migration-backed proposal.
+- Replacing or blending the existing RFM score, computing server ranking in the
+  browser, enabling ICP for personal orgs, or persisting raw conversation evidence.
+- Scheduling the automation on Netcup before an operator explicitly adds the crontab
+  entry, or weakening the human merge gate for the `data`/`ui` change.
 
 ## 12. Acceptance criteria
 
@@ -321,4 +386,10 @@ deleted `origin/dev`). U5 touches `.svelte` files, so the explicit base ref is m
 
 ---
 
-**Triage 2026-08-18:** KEPT (draft) — still wanted, but blocked by 2026-08-13-crm-customers-server-pagination-spec (server-sorted column prerequisite; its two pilot PRs #105/#106 closed unshipped — a fresh dev run was requeued). Approve for dev only after pagination merges.
+**Triage 2026-08-18:** KEPT (draft) — blocked on server-side pagination at that time.
+
+**Pass-2 reconciliation 2026-08-28:** APPROVED. Pagination subsequently shipped
+(including the server ICP projection and inclusive range/sort tests). The review
+removed that completed work from the implementation units, bound the remaining work
+to current Hub primitives, split the oversized UI unit, and retained a human merge
+gate through the `data`/`ui` topic manifest.
