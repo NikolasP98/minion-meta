@@ -16,6 +16,7 @@ import {
 	missingRequiredHeadings,
 	findScalarArrayViolations,
 	findScalarStringViolations,
+	liveSliceNumbers,
 	findArrayFieldViolations,
 	checkHeadingBaselineRatchet,
 	checkSupersedeBaselineRatchet,
@@ -70,6 +71,11 @@ test('M1: an unclosed fence consumes the rest of the document', () => {
 ## Verification
 `;
 	assert.equal(missingRequiredHeadings(body).length, 3);
+});
+
+test('M1: liveSliceNumbers ignores fenced slice-shaped examples', () => {
+	const body = '### Slice 4 — live\n\n```md\n### Slice 9 — example\n```\n';
+	assert.deepEqual([...liveSliceNumbers(body)], [4]);
 });
 
 test('M1: headings inside an HTML comment do not count', () => {
@@ -509,7 +515,7 @@ test('M1: a projected field nothing validates is rejected', () => {
 	);
 });
 
-test('M1: projectSpec preserves relationship, related and retired_reason', () => {
+test('M1: projectSpec preserves relationship, related, retired_reason and next_slice', () => {
 	const spec = projectSpec({
 		id: 'x',
 		title: 'X',
@@ -521,11 +527,13 @@ test('M1: projectSpec preserves relationship, related and retired_reason', () =>
 		repos: ['minion-meta'],
 		relationship: 'depends-on',
 		related: ['a-spec', 'b-spec'],
-		retired_reason: 'superseded by the consolidated plan of record'
+		retired_reason: 'superseded by the consolidated plan of record',
+		next_slice: 4
 	});
 	assert.equal(spec.relationship, 'depends-on');
 	assert.deepEqual(spec.related, ['a-spec', 'b-spec']);
 	assert.equal(spec.retired_reason, 'superseded by the consolidated plan of record');
+	assert.equal(spec.next_slice, 4);
 });
 
 test('M1: projectSpec omits absent optional fields', () => {
@@ -540,6 +548,7 @@ test('M1: projectSpec omits absent optional fields', () => {
 	assert.equal('relationship' in spec, false);
 	assert.equal('related' in spec, false);
 	assert.equal('retired_reason' in spec, false);
+	assert.equal('next_slice' in spec, false);
 	// updated defaults to created, pass to 1 — unchanged projection behaviour.
 	assert.equal(spec.updated, '2026-08-18');
 	assert.equal(spec.pass, 1);
@@ -603,6 +612,24 @@ test('M4: a plan-of-record (type: decision) may declare `repos: []`', () => {
 	gitCommit(root, 'plan of record');
 	const result = runCheck(root);
 	assert.equal(result.status, 0, result.stderr);
+});
+
+for (const value of ['0', 'all']) {
+	test(`M4: next_slice=${value} is rejected as non-positive or non-integer`, () => {
+		const root = makeCleanFixture();
+		writeSpec(root, 'fixture', `next_slice: ${value}\n`, VALID_BODY);
+		const generated = spawnSync('node', ['scripts/spec-index.mjs'], { cwd: root, encoding: 'utf8' });
+		assert.equal(generated.status, 1);
+		assert.match(generated.stderr, /"next_slice" must be a positive integer/);
+	});
+}
+
+test('M4: next_slice must name a live numbered slice heading', () => {
+	const root = makeCleanFixture();
+	writeSpec(root, 'fixture', 'next_slice: 9\n', `${VALID_BODY}\n### Slice 4 — real\n\n**Topics:** \`docs\`\n`);
+	const generated = spawnSync('node', ['scripts/spec-index.mjs'], { cwd: root, encoding: 'utf8' });
+	assert.equal(generated.status, 1);
+	assert.match(generated.stderr, /"next_slice" 9 does not name a live Slice heading/);
 });
 
 test('M4: an undocumented `relationship` value is rejected', () => {
