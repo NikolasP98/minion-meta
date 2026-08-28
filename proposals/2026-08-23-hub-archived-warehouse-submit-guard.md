@@ -2,9 +2,10 @@
 id: 2026-08-23-hub-archived-warehouse-submit-guard
 title: submitEntry accepts archived warehouses via direct API
 stage: proposal
-status: draft
+status: approved
 created: 2026-08-23
 repos: [minion_hub]
+approved_reason: "Accepted: current master still validates warehouse existence without excluding archived_at, so direct API clients can reintroduce stock into an archived warehouse. This is a confirmed data-integrity defect with a bounded service guard and regression test; promote independently from the completed Picker program."
 ---
 
 # submitEntry accepts archived warehouses via direct API
