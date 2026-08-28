@@ -2,7 +2,7 @@
 id: 2026-08-18-factory-postmerge-discovery-loop-spec
 title: "Post-merge discovery loop — signed merge intake, deterministic scan, LLM synthesis, verified rescan"
 stage: spec
-status: approved
+status: done
 pass: 2
 created: 2026-08-18
 updated: 2026-08-28
@@ -13,6 +13,7 @@ tags: [logic, infra]
 type: infra
 reconcile_ignore: true
 reconcile_ignore_reason: "Denied: PR #34 proves only discovery S1/S2. The 2026-08-28 audit found S3 deliberately suspended and S4 delayed finding re-verification absent because findings.last_verified_at remains unused; keep the spec active."
+done_reason: "Implemented by minion-factory PR #100 (merge 60369d3f34b60410a73fce11ff37864256729d08) and deployed in running Factory SHA 5db7d3919896042043e63da996d6441ec63db205. Independent review passed 889 tests plus typecheck and shell suites. On 2026-08-28 the three signed GitHub hooks were converged to the deployed secret: pings returned OK/202 and real merged-PR redeliveries were accepted (minion-base PR #38 returned 201; Hub PR #189 returned 201). The live loop had already synthesized postmerge-minion-hub-6c679768db21 from Hub PR #158; redelivering merged Hub PR #189 after fixing intake ran the verified rescan and closed that proposal at meta commit cf486b1a3c8bb026b5d2223362f478d07d227d16 because the marker was absent. This proves signed intake, deterministic finding, synthesis, fix, and verified closure end to end."
 ---
 
 # Post-merge discovery loop
