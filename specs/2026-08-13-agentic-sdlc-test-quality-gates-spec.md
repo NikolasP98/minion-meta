@@ -11,6 +11,7 @@ verdict: approved
 tags: [infra, test]
 type: infra
 approved_reason: "Pending verdict resolved under overnight mandate: spec is the quality-gates plan of record (S1 already shipped as gw PR #214/#225 lineage); slice-scoped dev runs to continue."
+possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/121
 ---
 
 # Agentic SDLC test & quality gates
