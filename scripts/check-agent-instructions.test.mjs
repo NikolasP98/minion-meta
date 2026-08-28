@@ -113,6 +113,18 @@ try {
   assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
   reset();
 
+  // Invisible Markdown source cannot satisfy the substantive-instructions threshold. HTML blocks
+  // and reference definitions are metadata in the rendered document, whereas equivalent live prose
+  // is an instruction body and remains a passing control.
+  const invisiblePadding = 'x'.repeat(60);
+  failsWith(/fixture\/AGENTS\.md: must be substantive/, () =>
+    writeAgents(`# Visible heading\n\n<!--\n${Array(6).fill(invisiblePadding).join('\n')}\n-->\n`));
+  failsWith(/fixture\/AGENTS\.md: must be substantive/, () =>
+    writeAgents(`# Visible heading\n\n${Array.from({ length: 6 }, (_, index) => `[hidden-${index}]: ./LINKED.md \"${invisiblePadding}\"`).join('\n')}\n`));
+  writeAgents(`# Visible heading\n\n${Array(5).fill(`Visible instruction prose ${invisiblePadding}`).join('\n\n')}\n`);
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  reset();
+
   // 6. Broken includes and links, in both CommonMark destination forms.
   failsWith(/fixture\/AGENTS\.md: include '@MISSING\.md' does not resolve/, () => writeAgents(goodAgents('\n@MISSING.md\n')));
 

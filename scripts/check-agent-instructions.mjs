@@ -66,11 +66,12 @@ function* walk(node, parent = null) {
  *   numbers stable and can never splice two blocks into one.
  * - `htmlLines` — the 1-based line numbers covered by an HTML *block*, used to recognize the
  *   policy-owned `<!-- repo-policy:* -->` markers only where a renderer emits them as raw HTML.
- * - `liveLines` — `lines` with those same HTML-block ranges also blanked. An HTML block (a comment,
- *   a `<script>` body, any raw-HTML container) is opaque to Markdown processing: a renderer never
- *   turns its text into instructions, so a line inside one that merely looks like an include
- *   directive (`@file.md`) is not one. Governed-marker recognition keeps using `lines` + `htmlLines`
- *   instead, since that check wants the marker text itself, not an absence of it.
+ * - `liveLines` — `lines` with HTML-block and link-definition ranges also blanked. Neither raw HTML
+ *   (a comment, a `<script>` body, any raw-HTML container) nor reference metadata renders as
+ *   instructions. A line inside one that merely looks like an include directive (`@file.md`) is
+ *   therefore not one, and invisible source bytes cannot satisfy the substantive-body threshold.
+ *   Governed-marker recognition keeps using `lines` + `htmlLines` instead, since that check wants
+ *   the marker text itself, not an absence of it.
  * - `headings` — how many real heading nodes the document has (a `#` inside a fence is not one).
  * - `targets` — every local destination the document links to, from every CommonMark link and image
  *   form: inline, full/collapsed/shortcut references, and angle-bracket destinations. micromark
@@ -81,6 +82,7 @@ function renderedView(text) {
   const tree = parseMarkdown(text);
   const lines = text.split('\n');
   const htmlLines = new Set();
+  const definitionLines = new Set();
   const definitions = new Map();
   const references = [];
   const destinations = [];
@@ -100,6 +102,7 @@ function renderedView(text) {
         headings += 1;
         break;
       case 'definition':
+        for (let line = position.start.line; line <= position.end.line; line += 1) definitionLines.add(line);
         if (!definitions.has(node.identifier)) definitions.set(node.identifier, node.url);
         break;
       case 'link':
@@ -119,7 +122,7 @@ function renderedView(text) {
   }
   const targets = [];
   for (const destination of destinations) pushTarget(targets, destination);
-  const liveLines = lines.map((line, index) => (htmlLines.has(index + 1) ? '' : line));
+  const liveLines = lines.map((line, index) => (htmlLines.has(index + 1) || definitionLines.has(index + 1) ? '' : line));
   return { lines, liveLines, htmlLines, headings, targets };
 }
 
@@ -180,7 +183,7 @@ function substantiveErrors(label, view) {
   const first = view.lines.find((line) => line.trim() !== '');
   if (first === undefined) return [`${label}: must not be empty`];
   if (memoryBlockPattern.test(first.trim())) errors.push(`${label}: must not open with a <claude-mem-context> memory block`);
-  const body = view.lines.filter((line) => line.trim() !== '' && !includePattern.test(line.trim()));
+  const body = view.liveLines.filter((line) => line.trim() !== '' && !includePattern.test(line.trim()));
   const characters = body.join('').replace(/\s+/g, '').length;
   if (view.headings === 0) errors.push(`${label}: must contain at least one markdown heading`);
   if (body.length < 5 || characters < 200) errors.push(`${label}: must be substantive, found ${body.length} content lines and ${characters} non-whitespace characters (minimum 5 and 200)`);
