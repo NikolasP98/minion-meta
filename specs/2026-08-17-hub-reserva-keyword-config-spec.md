@@ -5,13 +5,14 @@ stage: spec
 status: implementing
 pass: 2
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-hub-reserva-keyword-config
 verdict: approved
 repos: [minion_hub]
 tags: [logic, test]
 type: fix
-possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/140
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: S1/S2 and the journey handoff are merged, but Slice 3's validated CRM settings write path and anti-recurrence guard remain in open minion_hub PR #160; the linked PR #140 is not full-spec completion."
 ---
 
 # CRM deposit classification — one rule module, then an org-configurable keyword set
