@@ -1,22 +1,29 @@
 {
   "NikolasP98/minion-base:main": {
     "cursor": "c38eb84bb8028b72d73c710c40e23a2a5de447cb",
-    "head": "df37d6a03bc1a6089602d44d29039a031c0c255a",
-    "done": 3,
+    "head": "1d2151b9267d8286d87bc9719fa4ee95bce08cee",
+    "done": 9,
     "kept": [
       {
+        "file": "src/lib/components/PipelineLab.svelte",
+        "desc": "Response JSON parsed before checking HTTP status; non-OK responses may produce misleading JSON parse errors instead of HTTP error messages",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 41
+      },
+      {
         "file": "src/routes/+page.svelte",
-        "desc": "Accessing h.activeLanes.upstream without checking if h.activeLanes exists; will throw if activeLanes is null/undefined — use optional chaining h.activeLanes?.upstream",
+        "desc": "h.activeLanes accessed without null check; throws TypeError if undefined (should use h.activeLanes?.upstream)",
         "severity": "high",
         "category": "unchecked-access",
-        "line": 127
+        "line": 125
       },
       {
         "file": "src/routes/stats-types.test.ts",
-        "desc": "Test accesses stats?.running which does not exist; Stats has queue.running, not a top-level running field — should be stats?.queue.running.",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 324
+        "desc": "Test name 'every reason produces a distinct sentence' asserts only 4 unique values for 5 input kinds, contradicting the test's stated intent",
+        "severity": "medium",
+        "category": "weakened-test",
+        "line": 325
       }
     ]
   },
