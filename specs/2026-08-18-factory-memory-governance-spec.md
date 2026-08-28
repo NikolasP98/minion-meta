@@ -13,7 +13,8 @@ tags: [security, infra, data, logic, test]
 type: infra
 relationship: extends
 related: [2026-08-17-cloud-agent-memory-sync-spec, 2026-08-18-sdlc-transformation-roadmap, 2026-08-17-factory-capability-separation, 2026-08-18-factory-worker-containment-spec, 2026-08-18-factory-durable-state-outbox-spec]
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/32
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: PR #32/S1 and partial S2 do not close memory governance. The 2026-08-28 audit found no memory transport, no quarantine candidate flow, and S3-S6 absent; the shared-token canonical memory PUT remains an open security hole."
 ---
 
 # Govern factory memory as evidence, not instruction
