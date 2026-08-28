@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-02037879674c
 title: "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/+page.svelte (minion_hub)"
-status: draft
+status: closed
 created: 2026-08-28
 updated: 2026-08-28
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still draft — closing"
 ---
 
 # Post-merge finding — todo-handoff in `src/routes/(app)/crm/customers/+page.svelte`
