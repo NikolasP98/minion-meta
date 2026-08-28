@@ -11,7 +11,8 @@ verdict: approved
 repos: [minion-factory]
 tags: [logic, infra]
 type: infra
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/34
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: PR #34 proves only discovery S1/S2. The 2026-08-28 audit found S3 deliberately suspended and S4 delayed finding re-verification absent because findings.last_verified_at remains unused; keep the spec active."
 ---
 
 # Post-merge discovery loop
