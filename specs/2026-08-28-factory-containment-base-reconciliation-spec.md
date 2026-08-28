@@ -2,16 +2,16 @@
 id: 2026-08-28-factory-containment-base-reconciliation-spec
 title: Containment base reconciliation — admit behind-base resumes, bound the conflict phase, and gate activation on drills
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-28
 updated: 2026-08-28
 proposal: 2026-08-28-factory-containment-base-reconciliation
-verdict: pending
+verdict: approved
 repos: [minion-factory]
 type: infra
 relationship: extends
-related: [2026-08-18-factory-worker-containment-spec, 2026-08-23-factory-containment-effect-ledger-integration, 2026-08-22-factory-lineage-orchestrator-instance-spec, 2026-08-18-factory-durable-state-outbox-spec]
+related: [2026-08-18-factory-worker-containment-spec, 2026-08-22-factory-lineage-orchestrator-instance-spec, 2026-08-18-factory-durable-state-outbox-spec]
 tags: [infra, logic, test, security]
 ---
 
@@ -68,11 +68,6 @@ was read at that commit; the proposal's own anchors are stale (`pushExact` is at
   graph, `prepare-workspace`, and the runner-owned candidate authority. This spec changes the resume admission
   rule and adds one phase inside that graph; it must not loosen that spec's credential, mount, or read-only
   review boundaries.
-- `2026-08-23-factory-containment-effect-ledger-integration` — **depends-on**: its `phase_effects`
-  reserve/confirm ledger is the mechanism this spec's new phase publishes through, and its two unchecked DoD
-  items (crash-window integration tests through the production `advanceContainmentRun` path; a credentialed
-  disposable-repository drill) are subsumed by slice 5's drill harness. Recommend the resolver fold those two
-  items into slice 5 rather than tracking them twice.
 - `2026-08-22-factory-lineage-orchestrator-instance-spec` — **depends-on**: it consumes
   `LineageWorkerPhase` and `executeLineageContainmentWorkerPhase` (`runner/src/lineage-phase-transports.ts:23`,
   `runner/src/queue.ts:1839-1869`). Adding a phase changes a surface that spec plans against; slice 2 must keep
@@ -198,14 +193,17 @@ and finishes. Nothing in the model's reach decides Git topology.
    the conflicted paths. It receives no `FACTORY_TASK`, no playbook, no GitHub credential, and no push
    authority; it may only complete the in-progress merge. It does not consume a develop fix round. If it fails,
    or if it leaves any unresolved path or any conflict marker in a merged path, the run fails with an explicit
-   state-conflict note and the branch is left exactly as published. The whole run is never restarted for a
-   conflict.
-4. `self-test` stamps the base it ran against into its own attempt evidence. `prepare-review`, `review`, and the
-   publish effect all read that stamped value, and the publish asserts `testedBase ⊆ candidate` against it. A
-   candidate whose tested base no longer matches cannot be published or marked ready.
+   state-conflict note, the remote branch remains exactly at its published head, and no candidate is sealed from
+   the dirty workspace. On success it continues to `setup` for a pre-setup reconciliation, or to `self-test` for
+   the existing post-develop reconciliation. The whole run is never restarted for a conflict.
+4. `self-test` stamps both the base and candidate it tested into its own attempt evidence. `prepare-review`,
+   `review`, and the publish effect all read that immutable pair. They reject a different candidate, and publish
+   additionally asserts `testedBase ⊆ testedCandidate`. An attempt whose pair is absent or no longer matches
+   cannot be reviewed, published, or marked ready.
 5. On the legacy path, a resumed branch is merged with `FACTORY_BASE_SHA` by trusted, model-free code before the
-   model runs, and `factory_push()` refuses any push whose remote head is not an ancestor of the local head. A
-   rebase of a published factory branch is rejected by the pusher, not by convention.
+   model runs, and `factory_push()` refuses any push whose remote head is not an ancestor of the local head and
+   uses an exact `--force-with-lease=<ref>:<publishedHead>` lease. A rebase of a published factory branch is
+   rejected by the pusher, not by convention.
 6. `FACTORY_CONTAINMENT_V2=1` cannot be widened until a bare-repo drill harness proves all seven named scenarios
    and the one-repo canary passes. The drill runs in CI with no GitHub credential and no network.
 
@@ -215,8 +213,9 @@ and finishes. Nothing in the model's reach decides Git topology.
   push and uses `--force-with-lease` pinned to the exact expected head. No factory code path rebases, resets, or
   force-pushes over a published factory branch. (Containment: `runner/src/containment-effects.ts:415-434`, kept
   as-is. Legacy: added in slice 4.)
-- **I3 — evidence binds `{testedBase, candidate}`.** The base recorded on the passed `self-test` attempt is the
-  base every downstream phase and the publish effect use. It is written once and never re-derived.
+- **I3 — evidence binds `{testedBase, testedCandidate}`.** Both SHAs recorded on the passed `self-test` attempt
+  are the pair every downstream phase and the publish effect use. They are written atomically, never re-derived,
+  and the current candidate must equal `testedCandidate` at every downstream boundary.
 - **No model call decides topology.** Fetch, merge, ancestry assertion, lease, and push stay in trusted
   image-pinned scripts and the runner. The `resolve-conflict` phase resolves *file content* only; the merge
   parents are already fixed by the trusted checkpoint.
@@ -234,10 +233,12 @@ and finishes. Nothing in the model's reach decides Git topology.
 - Existing runs mid-flight must survive a runner restart across the deploy: `nextPhase` is a pure function over
   the persisted attempt log, so the new routing must be derivable from rows that already exist plus rows written
   after the deploy. A run whose `prepare-workspace` evidence predates the new field is treated as base-current
-  (today's behavior) — never as behind-base.
+  (today's behavior) — never as behind-base. A passed pre-deploy `self-test` row lacking the immutable tested pair
+  routes through one new `self-test` attempt before review; it never falls back to reconstructed evidence.
 - `runner/src/base-reconciliation.test.ts`, `containers.test.ts`, `queue.test.ts`, and `containment-effects.test.ts`
   keep passing unchanged except where a slice's DoD names the assertion it changes.
-- The full runner suite (890 tests as of PR #111) may only grow.
+- The full runner suite may only grow. Each slice records its checkout's pre-change count before implementation
+  and proves the post-change count is greater; the historical PR #111 count is context, not the gate baseline.
 
 ## 3. DELTA
 
@@ -250,14 +251,14 @@ DELTA entry is scope creep; a DELTA entry without a proving test is an open end.
 | D2 | `nextPhase` routes a passed `prepare-workspace` carrying `baseAhead` to `reconcile-base`, and a passed `reconcile-base` to `setup` when `setup` has no passed attempt (else `self-test`) | 1 | `runner/src/containers.test.ts` — table-driven `nextPhase` cases for both orders; absent-field rows route to `setup` |
 | D3 | `runner/src/queue.ts` builds the `reconcile-base` environment from the `prepare-workspace` candidate when `develop` has not run, instead of throwing on a null `run.candidate_sha` | 1 | `runner/src/base-reconciliation.test.ts` — pre-`setup` checkpoint produces an append-only merge candidate and the CAS at `queue.ts:1249-1254` succeeds |
 | D4 | New `resolve-conflict` worker phase: `agent/factory-resolve-conflict.sh` entrypoint, launcher in `runner/src/containers.ts`, env in `runner/src/queue.ts`; task is the conflicted path list only | 2 | `runner/src/containers.test.ts` — the launch plan for `resolve-conflict` carries no `FACTORY_TASK`/`FACTORY_PLAYBOOK`, no GitHub secret, and no writable mount `develop` lacks |
-| D5 | `nextPhase` routes a failed `reconcile-base` to one `resolve-conflict` attempt instead of a `develop` fix round; a second `BASE_CONFLICT` ends the run | 2 | `runner/src/containers.test.ts` — conflict → `resolve-conflict`; conflict again → `{kind:'done', outcome:'failed'}`; `countOf('develop')` unchanged across both |
+| D5 | `nextPhase` routes a failed `reconcile-base` to one `resolve-conflict` attempt instead of a `develop` fix round; success routes to `setup` when setup has not passed and otherwise to `self-test`; any resolution failure or repeated conflict ends the run | 2 | `runner/src/containers.test.ts` — both success routes, conflict → `resolve-conflict`, resolution failure/repeated conflict → `{kind:'done', outcome:'failed'}`, and `countOf('develop')` unchanged |
 | D6 | `agent/factory-resolve-conflict.sh` refuses to seal a candidate with any unresolved path or any conflict marker in a path the merge touched | 2 | `runner/src/base-reconciliation.test.ts` — a resolution leaving `<<<<<<<` in a merged path emits `status:failed`, and the marker never reaches a candidate |
-| D7 | `self-test` stamps `tested_base_sha` into its passed attempt evidence; `preparedBaseSha()` is replaced by a reader of that stamp for `prepare-review`, `review`, and the publish binding | 3 | `runner/src/queue.test.ts` — a second `reconcile-base` after `self-test` does not move the base seen by `review`; publish asserts `testedBase ⊆ candidate` |
-| D8 | Publish refuses a candidate whose stamped `testedBase` is not an ancestor, with a distinct error string | 3 | `runner/src/containment-effects.test.ts` — a forged binding with a non-ancestor tested base rejects before any remote call |
+| D7 | `self-test` atomically stamps `tested_base_sha` and `tested_candidate_sha` into its passed attempt evidence; downstream readers use only that pair, and legacy passed rows without it are routed through `self-test` once | 3 | `runner/src/queue.test.ts` — later reconciliation cannot move either SHA; a changed candidate and an old row without the pair cannot enter review |
+| D8 | Publish refuses when the current candidate differs from `testedCandidate` or `testedBase` is not its ancestor, with distinct error strings | 3 | `runner/src/containment-effects.test.ts` — both forged bindings reject before any remote call |
 | D9 | `agent/lib/base-merge.sh`: trusted model-free merge of `FACTORY_BASE_SHA` into a resumed legacy branch, invoked from `agent/run.sh` after `factory_resume_branch`; conflict ends the run with a state-conflict note | 4 | `agent/lib/base-merge.test.sh` — behind-base resume merges append-only against a local bare repo; conflict exits with the state-conflict note and pushes nothing |
-| D10 | `factory_push()` in `agent/run.sh` refuses a push whose remote head is not an ancestor of the local head (I6 enforced on the legacy path) | 4 | `agent/lib/base-merge.test.sh` — a locally rebased published branch is refused with a distinct note before `git push` runs |
-| D11 | `scripts/drills/base-reconciliation-drill.sh` + CI job: seven bare-repo drills (base advance, remote fast-forward, divergent rewrite, ambiguous accepted push, conflict, crash/restart, idempotent replay), no network, no GitHub credential | 5 | The drill script itself, green in CI; a deliberately reverted D1 makes the base-advance drill red |
-| D12 | `docs/runbooks/factory-autonomy-activation.md` names the drill run and the one-repo canary as required predecessors of `FACTORY_ACTIVATE_CONTAINMENT_V2=1`; `deploy.sh` emits every variable this spec adds | 5 | `runner/src/containers.test.ts` activation-gate case + `grep` assertion that each new `FACTORY_*` name appears in `deploy.sh` |
+| D10 | `factory_push()` refuses a push whose remote head is not an ancestor of the local head and publishes with an exact lease pinned to that head (I6 enforced on the legacy path) | 4 | `agent/lib/base-merge.test.sh` — a rebased branch is refused before push, and a moved head makes the exact lease fail without overwrite |
+| D11 | `scripts/drills/base-reconciliation-drill.sh`: seven bare-repo scenarios (base advance, remote fast-forward, divergent rewrite, ambiguous accepted push, conflict, crash/restart, idempotent replay), no network or GitHub credential | 5 | The drill script; a deliberately reverted D1 makes the base-advance scenario red |
+| D12 | CI requires the drill; the activation runbook requires its green run and the one-repo canary before activation; `deploy.sh` emits every variable introduced here | 6 | CI workflow/runbook assertions, activation-gate unit case, and variable-emission check |
 
 ## 4. Implementation slices
 
@@ -285,7 +286,8 @@ Definition of done (machine-checkable):
   marker set and leaves the remote ref byte-identical; fresh path with a candidate not descended from the base
   still fails with the existing message; resume whose fetched head ≠ `FACTORY_RESUME_HEAD_SHA` still fails with
   `factory-resume-authority: bound branch head moved`.
-- `npm test; echo $?` → `0` with the runner suite count strictly greater than its pre-slice value.
+- `npm test; echo $?` → `0` with the runner suite count strictly greater than the pre-change count recorded at
+  slice start.
 - A `nextPhase` unit table asserts: `prepare-workspace passed + baseAhead → reconcile-base`;
   `prepare-workspace passed + no marker → setup`; `reconcile-base passed + no passed setup → setup`;
   `reconcile-base passed + passed setup → self-test`; a `prepare-workspace` row with the field absent → `setup`.
@@ -302,12 +304,13 @@ Covers D4, D5, D6.
 A new `resolve-conflict` phase joins `WorkerPhase`, `DEV_PHASE_SEQUENCE`'s launcher table, and
 `CONTAINMENT_IMPLEMENTED_PHASES` (so the fail-closed activation gate keeps working). Its entrypoint,
 `agent/factory-resolve-conflict.sh`, runs in the same workspace with the merge already in progress. It computes
-the conflicted path list itself with `git diff --name-only --diff-filter=U`, hands the model only that list plus
+the conflicted path list itself with `git diff --name-only --diff-filter=U`, passes the derived list plus
 `merge.log`, and after the model returns it re-derives the unresolved set, scans every path the merge touched
 for conflict markers, and only then stages, commits the merge, and asserts both parents are ancestors. It never
 pushes. `nextPhase` routes a failed `reconcile-base` here (one attempt), and a `resolve-conflict` failure or a
 second `BASE_CONFLICT` to `{kind:'done', outcome:'failed'}` with a state-conflict reason — never to `develop`,
-never to a run restart. The develop fix-round counter is untouched.
+never to a run restart. A passed resolution routes to `setup` if no setup attempt has passed, otherwise to
+`self-test`. The develop fix-round counter is untouched.
 
 Files to touch: `agent/factory-resolve-conflict.sh` (new), `agent/Dockerfile` (install the entrypoint),
 `runner/src/containers.ts`, `runner/src/containers.test.ts`, `runner/src/queue.ts`, `runner/src/queue.test.ts`,
@@ -320,26 +323,29 @@ Definition of done (machine-checkable):
   `github-*` secret, no persistent-auth mount, and a `FACTORY_CONFLICT_PATHS` env whose value is the diff-derived
   list — compared field-by-field against the `develop` plan for the same run.
 - A `nextPhase` table asserts `reconcile-base failed → resolve-conflict (attempt 1)`;
+  `resolve-conflict passed + no passed setup → setup`; `resolve-conflict passed + passed setup → self-test`;
   `resolve-conflict failed → done/failed`; `reconcile-base failed twice → done/failed`; and that
-  `countOf('develop')` is identical in all three.
+  `countOf('develop')` is identical in all cases.
 - A behavior test asserts a resolution that leaves `<<<<<<<` in a merged path emits `status:failed` and that
   `git rev-parse HEAD` in the workspace is unchanged from the pre-resolution head.
 - `containmentReadiness().ready` is `true` only with the new entrypoint present, and `false` in a test that
   removes it.
 - `grep -c 'FACTORY_CONFLICT_MAX_TURNS' deploy.sh` → `1`.
 
-### Slice 3 — Bind `{testedBase, candidate}` through review and publish (minion-factory, 4–6h)
+### Slice 3 — Bind `{testedBase, testedCandidate}` through review and publish (minion-factory, 6–8h)
 
 **Topics:** `logic`, `security`, `test`
 
 Covers D7, D8.
 
-`self-test`'s attempt evidence gains `testedBaseSha`, written in the same transaction that closes the attempt
-(`runner/src/queue.ts:1240-1256`, `runner/src/db.ts:1652-1680`), sourced from the base the checkpoint sealed.
-`preparedBaseSha()` is replaced by `testedBaseSha(runId)`, which reads the passed `self-test` attempt and throws
-if absent or malformed. `prepare-review`, `review`, and the `ContainmentEffectBinding` all consume it.
-`pushExact` gains an explicit assertion that the bound tested base is an ancestor of the candidate, with a
-distinct error string.
+`self-test`'s attempt evidence gains `testedBaseSha` and `testedCandidateSha`, written atomically in the same
+transaction that closes the attempt (`runner/src/queue.ts:1240-1256`, `runner/src/db.ts:1652-1680`). The values
+come from the checkpoint-sealed base and the exact candidate checked out by self-test. `preparedBaseSha()` is
+replaced by a reader of this pair. `prepare-review`, `review`, and the `ContainmentEffectBinding` consume it and
+assert that their current candidate equals `testedCandidateSha`. `pushExact` additionally asserts the tested
+base is an ancestor of that candidate. Missing, malformed, mismatched, and non-ancestor cases have distinct
+errors. For restart compatibility, `nextPhase` routes a passed pre-deploy self-test lacking the pair through one
+new self-test attempt before `prepare-review`.
 
 Files to touch: `runner/src/queue.ts`, `runner/src/queue.test.ts`, `runner/src/db.ts`, `runner/src/db.test.ts`,
 `runner/src/containment-effects.ts`, `runner/src/containment-effects.test.ts`,
@@ -347,13 +353,14 @@ Files to touch: `runner/src/queue.ts`, `runner/src/queue.test.ts`, `runner/src/d
 
 Definition of done (machine-checkable):
 - `npm test; echo $?` → `0`.
-- A test drives `self-test passed` → a second `reconcile-base passed` with a *different* base → `review`, and
-  asserts the base in the review env equals the first one.
-- A test asserts a run whose `self-test` evidence lacks `testedBaseSha` fails to build the `review` env with a
-  named error rather than silently falling back.
+- A test drives `self-test passed` → a second `reconcile-base passed` with a different pair and asserts review
+  refuses both the changed candidate and any attempt to re-point the tested base.
+- A `nextPhase` test asserts a passed pre-deploy `self-test` row lacking either SHA routes once to `self-test`,
+  while a pair-bearing row routes to `prepare-review`; the evidence reader itself still fails closed if called
+  with an absent or malformed pair.
 - `grep -n 'preparedBaseSha' runner/src/*.ts` → no matches.
-- A `containment-effects` test asserts a binding whose tested base is not an ancestor rejects **before**
-  `execFile` is called (the fake remote records zero invocations).
+- `containment-effects` tests assert both a mismatched tested candidate and a non-ancestor tested base reject
+  **before** `execFile` is called (the fake remote records zero invocations).
 
 ### Slice 4 — Legacy path: model-free base merge and an append-only push guard (minion-factory, 6–8h)
 
@@ -367,7 +374,8 @@ both ways, `--no-ff --no-edit`). `agent/run.sh` calls it immediately after `fact
 model runs; a conflict ends the run with a state-conflict note and no push, matching PR 1's
 `^push rejected` unstick classification so the existing `unstick-stateconflict-<id>` monitor event fires.
 `factory_push()` gains the I6 guard: fetch the remote head, and refuse when it is not an ancestor of the local
-head. This closes PR 2's dangling `FACTORY_BASE_SHA` seam (`runner/src/queue.ts:1971`).
+head. Its push uses `--force-with-lease=refs/heads/${BRANCH}:${REMOTE_HEAD}` so a head movement after the fetch
+cannot be overwritten. This closes PR 2's dangling `FACTORY_BASE_SHA` seam (`runner/src/queue.ts:1971`).
 
 Files to touch: `agent/lib/base-merge.sh` (new), `agent/lib/base-merge.test.sh` (new), `agent/run.sh`,
 `agent/Dockerfile`, `runner/src/unstick-classifier.test.ts`, `runner/src/queue.test.ts`.
@@ -376,17 +384,18 @@ Definition of done (machine-checkable):
 - `bash agent/lib/base-merge.test.sh; echo $?` → `0` against a temporary local bare repo, covering: clean
   behind-base merge is append-only (both `git merge-base --is-ancestor` checks pass and the remote ref is
   unchanged); conflict exits non-zero with the state-conflict note and `git ls-remote` shows the branch
-  unmoved; a locally rebased published branch is refused by `factory_push` before `git push` runs.
+  unmoved; a locally rebased published branch is refused before push; movement after the ancestry fetch causes
+  the exact lease to reject without overwriting the new remote head.
 - `bash agent/spec-integrity.test.sh; echo $?` → `0` (existing agent-script gate).
 - `npm test; echo $?` → `0`, including an `unstick-classifier` case asserting the new note classifies as a state
   conflict and is never requeued.
 - `grep -n 'FACTORY_BASE_SHA' agent/run.sh agent/lib/base-merge.sh` → at least one match in each.
 
-### Slice 5 — Bare-repo drill harness and the activation gate (minion-factory, 6–8h)
+### Slice 5 — Bare-repo reconciliation drill harness (minion-factory, 6–8h)
 
 **Topics:** `test`, `infra`, `security`
 
-Covers D11, D12.
+Covers D11.
 
 `scripts/drills/base-reconciliation-drill.sh` builds a temporary bare repo and drives the real trusted scripts
 (`factory-prepare-workspace.sh`, `factory-reconcile-base.sh`, `factory-resolve-conflict.sh`,
@@ -395,20 +404,35 @@ branch; remote fast-forward between checkpoint and push; divergent rewrite of th
 accepted push (crash after GitHub accepted); conflict; crash/restart at each remote boundary; idempotent replay
 of the whole sequence. It uses `FACTORY_ALLOW_LOCAL_REMOTE=1` (already supported at
 `agent/factory-reconcile-base.sh:58-64`), takes no GitHub credential, and asserts exact remote ref counts and a
-single confirmed effect per key. It runs as a CI job and is named in the activation runbook alongside the
-existing one-repo canary. Every `FACTORY_*` variable slices 1–4 introduce is added to `deploy.sh`'s wholesale
-`.env` emission.
+single confirmed effect per key. “Crash/restart” is one named scenario containing a fixed table of the
+reserve-before-effect, effect-before-confirm, and confirm-before-resume boundaries; it emits one scenario PASS
+line so the seven-scenario count is unambiguous.
 
-Files to touch: `scripts/drills/base-reconciliation-drill.sh` (new), `.github/workflows/ci.yml`,
-`docs/runbooks/factory-autonomy-activation.md`, `deploy.sh`, `runner/src/containers.test.ts`.
+Files to touch: `scripts/drills/base-reconciliation-drill.sh` (new) and the smallest helper needed to drive the
+production effect path (expected: `runner/src/base-reconciliation.test.ts`).
 
 Definition of done (machine-checkable):
 - `bash scripts/drills/base-reconciliation-drill.sh; echo $?` → `0`, printing one `PASS <scenario>` line per
   scenario; `grep -c '^PASS ' <output>` → `7`.
-- The drill is a required CI job: `grep -n 'base-reconciliation-drill' .github/workflows/ci.yml` → at least one
-  match, and the job runs with no repository secret in its `env`.
 - Negative control: reverting slice 1's `agent/factory-prepare-workspace.sh` change makes the base-advance drill
   exit non-zero. Record the transcript in the PR body.
+
+### Slice 6 — CI and activation gate wiring (minion-factory, 4–6h)
+
+**Topics:** `test`, `infra`, `security`
+
+Covers D12.
+
+The slice adds the slice-5 drill as a required CI job with no credential or network dependency, names that job
+and the existing one-repo canary as activation prerequisites, and emits every new runtime variable through
+`deploy.sh`'s wholesale `.env` writer. It changes no reconciliation behavior.
+
+Files to touch: `.github/workflows/ci.yml`, `docs/runbooks/factory-autonomy-activation.md`, `deploy.sh`,
+`runner/src/containers.test.ts`.
+
+Definition of done (machine-checkable):
+- The drill is a required CI job: `grep -n 'base-reconciliation-drill' .github/workflows/ci.yml` → at least one
+  match, and the job declares no repository secret in its `env` or step arguments.
 - `for v in $(grep -rhoE 'FACTORY_[A-Z_]+' agent/factory-resolve-conflict.sh agent/lib/base-merge.sh | sort -u); do grep -q "$v" deploy.sh || echo "MISSING $v"; done` prints nothing.
 - The runbook's activation checklist lists the drill run *and* the one-repo canary as predecessors of
   `FACTORY_ACTIVATE_CONTAINMENT_V2=1`, and `FACTORY_CONTAINMENT_V2` still defaults to `0` after this slice.
@@ -420,11 +444,11 @@ Target repo: `minion-factory` only. No other repo's source is edited.
 | Surface | Impact | Mitigation |
 |---|---|---|
 | `LineageWorkerPhase` / `executeLineageContainmentWorkerPhase` (`runner/src/lineage-phase-transports.ts:23`, `runner/src/queue.ts:1839-1869`) — consumed by `2026-08-22-factory-lineage-orchestrator-instance-spec` | Slice 2 adds a `WorkerPhase` value. If it leaked into the lineage request vocabulary, an orchestrator could request a conflict phase directly | Slice 2's DoD keeps `resolve-conflict` out of `WORKER_PHASES` and asserts it in `lineage-phase-transports.test.ts`. The phase stays controller-scheduled only |
-| `phase_effects` ledger — `2026-08-23-factory-containment-effect-ledger-integration` | Slice 5's drill exercises the crash windows that proposal's two unchecked DoD items describe | Recommend (do not apply) folding those two items into slice 5. The proposal's frontmatter is not edited by this spec |
-| `phase_attempts` evidence — `2026-08-18-factory-durable-state-outbox-spec` | Slice 3 adds an evidence field on `self-test` attempts | Additive JSON field inside the existing `evidence` blob; no migration, no column. Rows written before the deploy read as absent and fail the review-env build loudly rather than falling back |
+| `phase_effects` ledger | Slice 5 drives the production reserve/effect/confirm path across fixed crash boundaries | Reuse the shipped ledger and assert one confirmed row per idempotency key; do not create a second effect mechanism |
+| `phase_attempts` evidence — `2026-08-18-factory-durable-state-outbox-spec` | Slice 3 adds two evidence fields on `self-test` attempts | Additive JSON fields inside the existing `evidence` blob; no migration or column. Older passed rows route through one new self-test before review |
 | minion-base board (`base.minion-ai.org`) | Reads `specs/index.json` from minion-meta only | None needed. This spec adds no board-visible field |
-| Production factory box | `deploy.sh` rewrites the box `.env` **wholesale** (★★★ `/memory/MINION/minion-factory-agent-pipeline.md`) — a variable absent from `deploy.sh` disappears on the next deploy | Slice 5's DoD greps every new `FACTORY_*` name against `deploy.sh` and fails the slice if one is missing |
-| Live production runs at deploy time | Slice 1 changes `nextPhase`, a pure function over persisted rows; a mid-flight run resumes under new routing | Compatibility requirement §2: an attempt row lacking the new field routes exactly as today. Asserted by a `nextPhase` unit case |
+| Production factory box | `deploy.sh` rewrites the box `.env` **wholesale** (★★★ `/memory/MINION/minion-factory-agent-pipeline.md`) — a variable absent from `deploy.sh` disappears on the next deploy | Slice 6's DoD greps every new `FACTORY_*` name against `deploy.sh` and fails the slice if one is missing |
+| Live production runs at deploy time | Slices 1 and 3 change `nextPhase`, a pure function over persisted rows; a mid-flight run resumes under new routing | Missing prepare evidence keeps today's route; missing tested-pair evidence causes one self-test rerun. Both are asserted by unit cases |
 
 ### Unavoidable impacts — explicit alerts
 
