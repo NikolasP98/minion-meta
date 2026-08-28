@@ -5,6 +5,7 @@ status: approved
 created: 2026-08-18
 updated: 2026-08-28
 repos: [minion-factory]
+tags: [infra, logic, test]
 source: factory-run-8af03178
 ---
 
