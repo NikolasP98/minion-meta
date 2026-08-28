@@ -17,7 +17,9 @@ reconcile_ignore_reason: "Denied: PR #34 proves only discovery S1/S2. The 2026-0
 
 # Post-merge discovery loop
 
-## 0. Problem (quoted from the approved proposal)
+## 0. Product
+
+Problem quoted from the approved proposal:
 
 > Audit 2026-08-17 addendum: the central missing subsystem is
 > merge SHA → post-merge scan → structured finding → verified proposal →
@@ -645,8 +647,3 @@ hand-editing `.env`):
 6. Confirm `factory-notify.yml`'s existing reconcile-poke on the same push still ran normally
    (`gh run list -R NikolasP98/minion-base --workflow factory-notify.yml --limit 1`) — proving
    the new channel is additive, not a replacement that silently dropped the old one.
-
-## Board audit 2026-08-28
-
-Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
-S1/S2 shipped (webhook intake, discovery.ts scan+findings). S3 deliberately suspended — see proposals/2026-08-20-discovery-synthesis-suspension.md (closed, with resume criteria); do not re-litigate. Remaining: S4 finding re-verification only (findings.last_verified_at is dead schema).
