@@ -5,13 +5,14 @@ stage: spec
 status: implementing
 pass: 2
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-gw-nostr-dispatch-pipeline
 verdict: approved
 repos: [minion]
 tags: [logic, test]
 type: fix
-possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/229
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: PR #229's own passing review says it implements only S1 and leaves an explicit S2 handoff. Buffered block dispatch plus the encrypted DM round-trip, docs, and ledger in S2/S3 are not shipped."
 ---
 
 # Nostr — route replies through the shared buffered block dispatcher
