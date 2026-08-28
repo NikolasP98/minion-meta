@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-1637616237
 title: Handoff marker — scripts/audit-server-tenant-scope.ts (minion_hub)
-status: draft
+status: review
+duplicate_candidate: 2026-08-17-hub-updateserver-tenant-scope
 created: 2026-08-28
 updated: 2026-08-28
 repos: [minion-hub]
