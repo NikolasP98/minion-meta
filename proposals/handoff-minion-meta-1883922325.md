@@ -27,11 +27,11 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-08-28)
 
-- `NikolasP98/minion-meta@dev scripts/spec-index.mjs:223` — 115 pre-existing specs are grandfathered here and never get
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L223
-- `NikolasP98/minion-meta@dev scripts/spec-index.mjs:228` — 5 legacy superseded specs have no known successor in the
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L228
-- `NikolasP98/minion-meta@dev scripts/spec-index.mjs:662` — related ids are not resolved. Unlike revises/supersedes
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L662
-- `NikolasP98/minion-meta@dev scripts/spec-index.mjs:691` — this only checks consistency *when* revises/supersedes is
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L691
+- `NikolasP98/minion-meta@dev scripts/spec-index.mjs:230` — 115 pre-existing specs are grandfathered here and never get
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L230
+- `NikolasP98/minion-meta@dev scripts/spec-index.mjs:235` — 5 legacy superseded specs have no known successor in the
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L235
+- `NikolasP98/minion-meta@dev scripts/spec-index.mjs:675` — related ids are not resolved. Unlike revises/supersedes
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L675
+- `NikolasP98/minion-meta@dev scripts/spec-index.mjs:704` — this only checks consistency *when* revises/supersedes is
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/spec-index.mjs#L704
