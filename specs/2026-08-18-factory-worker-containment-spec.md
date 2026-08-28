@@ -532,3 +532,20 @@ Slice 4 shipped through minion-factory PR #145 and supervised production release
 
 Remaining: S5 canary activation only. Production verification confirmed
 `FACTORY_CONTAINMENT_V2=0`; immutable supply-chain rollout does not authorize activation.
+
+Follow-up no-WIP-loss audit found that PR #145's digest proof did not yet bind
+the referenced image bytes to the admitted candidate SHA. The valid unpublished
+work from stale Factory PR #97 was reconciled onto current `dev` rather than
+merging that branch directly. Factory PRs #148 and #149 added clean-candidate
+image publication, OCI revision and image-owned manifest verification, running
+container identity proof, complete environment rollback, and behavioral
+negative fixtures. PR #150 restored a single `main` -> `dev` release lineage
+after #148 targeted the repository default branch, and added a fail-closed CI
+guard against feature PRs targeting production `main`.
+
+Supervised recovery run `33195522671` passed immutable identity, candidate
+tests, authenticated boundary supervision, exact deployment, GitHub Deployment
+recording, and production compare-and-swap. Final verified identity is
+`841877e683b23ca4306616e543ebbfa2f8f6a384` across GitHub `dev`, GitHub `main`,
+the live deploy marker, live checkout, and authenticated trigger health.
+Containment remains `0`; Slice 5 remains the only unshipped scope.
