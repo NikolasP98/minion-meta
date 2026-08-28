@@ -5,7 +5,7 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-21
-updated: 2026-08-21
+updated: 2026-08-28
 proposal: handoff-minion-ai-4278431509
 verdict: approved
 repos: [minion]
@@ -13,6 +13,7 @@ relationship: extends
 related: [2026-08-17-gw-defaces-crm-tools-spec]
 type: fix
 tags: [logic, test, handoff-sweep, crm]
+possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/235
 ---
 
 # Wire `gateway.crm.defaultProfile` into the CRM tool construction site
