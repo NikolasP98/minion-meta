@@ -5,13 +5,14 @@ stage: spec
 status: implementing
 pass: 2
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-hub-pos-appointments-fork
 verdict: approved
 repos: [minion_hub, minion-meta]
 tags: [ui, logic, test]
 type: fix
-possibly_shipped: https://github.com/NikolasP98/minion_hub/pull/135
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: PR #135 merged only Slice 2 after the Slice 1 characterization harness. Slice 3 remains in open draft PR #137 and Slice 4 route-contract/count/smoke closure is not merged."
 ---
 
 # Collapse the `/pos/appointments` fork into one bookings view
