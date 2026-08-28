@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-factory-2704064834
 title: Handoff marker — agent/lib/discovery.test.sh (minion-factory)
-status: draft
+status: review
 created: 2026-08-28
 updated: 2026-08-28
 repos: [minion-factory]
 tags: [handoff-sweep]
+duplicate_candidate: handoff-minion-factory-3991934595
 ---
 
 # Handoff marker — agent/lib/discovery.test.sh
@@ -38,3 +39,13 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-factory/blob/dev/agent/lib/discovery.test.sh#L279
 - `NikolasP98/minion-factory@dev agent/lib/discovery.test.sh:285` — a DIFFERENT recurrence' 'a DIFFERENT recurrence' \
   https://github.com/NikolasP98/minion-factory/blob/dev/agent/lib/discovery.test.sh#L285
+
+## Reconciliation note 2026-08-28
+
+Merely suspicious, not certain: every quoted "marker" ends in a stray single-quote plus
+trailing backslash, the same shell string-literal-fixture tell already documented at
+`handoff-minion-factory-3991934595` (`agent/lib/handoff.test.sh` — same `agent/lib/`
+directory, same `.test.sh` suffix, same self-scanning pattern where the handoff-ledger
+sweep matches its own test fixtures instead of a real `TODO(handoff):` comment). Not
+merged: distinct file, and I hold no authority in this sweep to close proposals — flagged
+for a human to verify against the real file.

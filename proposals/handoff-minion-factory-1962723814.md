@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-factory-1962723814
 title: Handoff marker — runner/src/queue.test.ts (minion-factory)
-status: draft
+status: review
 created: 2026-08-28
 updated: 2026-08-28
 repos: [minion-factory]
 tags: [handoff-sweep]
+duplicate_candidate: handoff-minion-factory-4051690038
 ---
 
 # Handoff marker — runner/src/queue.test.ts
@@ -28,3 +29,14 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-factory@dev runner/src/queue.test.ts:589` — x', 'x', 'new', ?, ?)
   https://github.com/NikolasP98/minion-factory/blob/dev/runner/src/queue.test.ts#L589
+
+## Reconciliation note 2026-08-28
+
+Merely suspicious, not certain: the quoted "marker" (`x', 'x', 'new', ?, ?)`) has the same
+tell as the already-closed self-scan false positives — a stray quote/paren fragment
+consistent with a SQL test-fixture string literal, not English `TODO(handoff):` prose. Same
+`runner/src/*.test.ts` self-referential pattern already documented at
+`handoff-minion-factory-4051690038` (`runner/src/discovery.test.ts`). Not merged: I cannot
+be certain this is the identical finding rather than a new fixture in a different test file,
+and I hold no authority in this sweep to close proposals — flagged for a human to verify
+against the real file.

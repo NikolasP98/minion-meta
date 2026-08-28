@@ -1,10 +1,11 @@
 ---
 id: ci-minion-ai-stale
 title: CI red — Stale on minion-ai main
-status: draft
+status: review
 created: 2026-08-28
 updated: 2026-08-28
 repos: []
+duplicate_candidate: ci-minion-ai-auto-response
 ---
 
 # CI red — Stale on NikolasP98/minion-ai@main
@@ -53,3 +54,15 @@ stale	UNKNOWN STEP	2026-08-28T05:55:11.6444730Z Token is not set
 stale	UNKNOWN STEP	2026-08-28T05:55:11.6584902Z Cleaning up orphan processes
 stale	UNKNOWN STEP	2026-08-28T05:55:11.6852092Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
+
+## Reconciliation note 2026-08-28
+
+Merely suspicious, not certain: this run fails with the byte-identical root cause as
+`ci-minion-ai-auto-response` (same `actions/create-github-app-token@d72941d79...` step,
+same `app-id: 2729701`, same `Error: Input required and not supplied: private-key`) — a
+missing/misconfigured GitHub App private-key secret shared by every workflow that mints an
+app token, not a Stale-specific defect. Not merged: this repo's established convention
+(the 2026-08-19/20 `ci-minion-ai-docker-release`/`-factory-notify`/etc. batch) tracks each
+red workflow as its own proposal even when the root cause is shared, closing each
+individually once healed — so the three are cross-referenced here rather than merged.
+Fixing the one shared secret should heal all three; a human can close them together.
