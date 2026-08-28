@@ -21,6 +21,10 @@ This is the **Minion meta-repo** — a self-hosted personal AI assistant platfor
 
 The `minion` CLI (`@minion-stack/cli` npm package, binary `minion`) orchestrates every subproject with resolved env vars. Install once: `npm install -g @minion-stack/cli` (or `pnpm add -g @minion-stack/cli`).
 
+## Curated Engineering Skills
+
+The canonical interactive bundle lives in `minion_plugins/plugins/minion-engineering/`. Run `scripts/sync-minion-engineering-skills.sh` after updating that released source to install the project-local skills for Claude, Cursor, and Codex and to copy the shared writing skill and advisory prose auditor into `minion_factory/agent/skills/`. The sync refuses dirty inputs and records the exact plugin commit in both distributions. Local project instructions always win; the prose auditor is advisory and has no rewrite, verdict, or merge authority.
+
 ### Core commands
 
 | Command | Use |
