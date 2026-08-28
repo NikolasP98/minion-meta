@@ -2,12 +2,12 @@
 id: 2026-08-28-postmerge-minion-hub-6c679768db21-spec
 title: "Post-merge finding — DataTable.svelte TODO(handoff) marker (minion_hub) — close the residual comment gap the approved S4 test-gap spec deliberately leaves behind"
 stage: spec
-status: draft
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-28
 updated: 2026-08-28
 proposal: postmerge-minion-hub-6c679768db21
-verdict: pending
+verdict: approved
 repos: [minion_hub]
 type: fix
 tags: [test, infra]
@@ -45,12 +45,14 @@ loop's own contract as a description to diagnose, not a command to execute verba
 2026-08-20-hub-datatable-server-mode-test-gap, handoff-minion-hub-2249203609]`.
 
 - **`2026-08-21-hub-datatable-server-mode-test-gap-spec`** (`stage: spec`, `status: approved`,
-  `verdict: approved`, **not yet implemented** per `specs/index.json` as of 2026-08-28) already
-  fully scopes closing the underlying reason this marker exists: `DataTable.svelte` has zero
-  DOM-mount test coverage anywhere, `@testing-library/svelte` has never been wired up in
-  `minion_hub`, and its Slice 1 (test-environment foundation) + Slice 2 (server-mode DOM
-  coverage) together add exactly the missing test class the marker names. This is not new scope
-  duplicated by this spec — it is a dependency this spec builds on.
+  `verdict: approved`) fully scopes closing the underlying reason this marker exists: its Slice 1
+  establishes the component-test environment and its Slice 2 adds server-mode DOM coverage.
+  `specs/index.json` still reports that planning state as of 2026-08-28, but it is coordination
+  metadata, not implementation proof. The hard backward-reconciliation warning in
+  `/memory/MINION/sdlc-board-triage-and-phase-gates.md` documents that approved/implementing spec
+  state may remain stale after code lands. Slice 0 therefore determines the dependency from the
+  live `minion_hub` source, tests, and history. This spec does not duplicate the referenced
+  spec's test-environment work.
 - **Critical asymmetry that makes this `extends` and not `already-satisfied`:** that spec's own
   §3 TO-BE states an explicit invariant — *"No production `.svelte` source changes in this
   spec"* — and its Slice 2 machine-checkable DoD gates on
@@ -59,16 +61,15 @@ loop's own contract as a description to diagnose, not a command to execute verba
   `TODO(handoff)` comment token stays in the file even after that spec ships. This proposal's DoD
   — the marker is *removed or intentionally left with an updated rationale* — is a one-line
   production-file edit that spec explicitly declines to make. That residual gap is this spec's
-  entire scope (§4 DELTA #2).
+  entire scope (§2 DELTA #3).
 - **`2026-08-20-hub-datatable-server-mode-test-gap`** (the proposal that spawned the spec above,
   `status: in-spec`) — linked for provenance; the spec is the operative artifact.
 - **`handoff-minion-hub-2249203609`** (`status: review`, created 2026-08-22) — an independent,
-  earlier discovery of a handoff marker in this same file, already flagged by the triage process
-  with `duplicate_candidate: 2026-08-20-hub-datatable-server-mode-test-gap`. This is the second
-  confirmation (this proposal is the third) that DataTable.svelte's untested-DOM-mount gap keeps
-  resurfacing via independent discovery passes because the closing spec has not shipped yet — not
-  because the finding is wrong. Not folded further than `related`: that proposal is still open
-  and outside this spec's authority to close.
+  earlier discovery of the same marker, with a 2026-08-28 anchor at `DataTable.svelte:599` and
+  `duplicate_candidate: 2026-08-20-hub-datatable-server-mode-test-gap`. It corroborates the
+  proposal's marker evidence, but does not prove whether the dependency tests have since landed.
+  It remains linked rather than merged because artifact disposal is outside this spec's code
+  scope; the normal marker sweep may reconcile it after the source marker disappears.
 
 A repo-wide check of `specs/index.json` and `proposals/index.json` for `DataTable`,
 `TODO(handoff)`, and `data-table` found no spec other than `2026-08-21-hub-datatable-server-mode-test-gap-spec`
@@ -81,46 +82,40 @@ not have authority to merge it.
 
 ### AS-IS (verified / carried, with anchors)
 
-- `src/lib/components/data-table/DataTable.svelte` in `minion_hub@eb4deae` (merged PR #158,
-  branch `master`) contains the literal comment `TODO(handoff): no DOM-mount test covers this
-  block. @testing-library/svelte` (proposal-quoted; this meta-repo checkout does not include
-  `minion_hub`, so the exact line number and enclosing code block are **not independently
-  verified here** — Slice 0 turns this into fact on the live branch, same limitation the
-  referenced spec's own §2 documents and resolves the same way).
-- `2026-08-21-hub-datatable-server-mode-test-gap-spec` §2 (Verified AS-IS, read in full this
-  session) independently establishes, for the same file: zero existing DOM-mount tests anywhere
-  in `minion_hub` for `DataTable.svelte`; `@testing-library/svelte` installed but with no working
-  usage in the repo; a `happy-dom` crash on `@minion-stack/ui`'s `Button.svelte`; and
-  `rowVirt`/row-body rendering gated on `browser === true`, which the test suite's stub hardcodes
-  to `false`. That spec's Slice 1 + Slice 2 close all of this — but, per §1 above, without editing
-  `DataTable.svelte`.
-- That spec is `status: approved` / `stage: spec` — approved to build, not yet built. Nothing in
-  the current artifact graph has removed or updated the marker.
+- The postmerge proposal records the literal marker in `minion_hub@eb4deae` after merged PR #158
+  on `master`; `handoff-minion-hub-2249203609` independently records the same marker at line 599
+  on 2026-08-28. This meta-repo checkout does not include `minion_hub`, so the current marker,
+  enclosing block, component tests, and subproject `CLAUDE.md` are **carried evidence, not
+  independently verified here**. Slice 0 resolves each live-code fact before any edit.
+- `2026-08-21-hub-datatable-server-mode-test-gap-spec` §2 documents the earlier test gap:
+  no working DataTable DOM mount, the `happy-dom`/shared-Button crash, and the `browser === true`
+  virtualization requirement. Those are that spec's carried inputs, not a guarantee about the
+  current branch.
+- The artifact graph establishes ownership and overlap, but not current implementation state.
+  Per the hard no-backward-reconciliation memory cited in §1, only the live dependency tests and
+  their passing execution establish readiness for this spec.
 
 ### TO-BE (target behavior + invariants)
 
-- Invariant: this spec does not re-derive, re-scope, or duplicate any part of
-  `2026-08-21-hub-datatable-server-mode-test-gap-spec`'s Slice 1 (test-environment foundation) or
-  Slice 2 (DOM coverage). If that spec is still unimplemented when this spec's Slice 1 starts,
-  the implementer confirms its current `specs/index.json` status first rather than re-deriving
-  its infra fixes from scratch (same coordination discipline that spec's own §5 Alert A2 already
-  documents for a different adjacent spec).
-  Invariant: DataTable.svelte's shipped behavior (client mode and server mode) is byte-identical
-  before and after this spec — the only change in scope is deletion/rewrite of one comment.
+- Invariant: this spec does not re-derive, re-scope, or duplicate
+  `2026-08-21-hub-datatable-server-mode-test-gap-spec`'s Slice 1 test-environment foundation or
+  Slice 2 server-mode coverage. If the live branch lacks that foundation, this spec is not
+  runnable: queue/finish the dependency first rather than expanding this slice.
+- Invariant: no executable script, markup, style, or component API in `DataTable.svelte` changes.
+  The production-file diff is deletion of the marker comment only.
 - Target: the literal `TODO(handoff): no DOM-mount test covers this block.
   @testing-library/svelte` string is no longer present in `DataTable.svelte`, replaced by nothing
-  (clean deletion) once the block it flags has real DOM-mount coverage, or, if recon finds the
-  marker's block sits outside `2026-08-21-hub-datatable-server-mode-test-gap-spec`'s Slice 2
-  scope, by an added targeted DOM test for that exact block using that spec's already-established
-  test-environment foundation, followed by the same deletion.
+  once the flagged block has passing DOM-mount coverage. If the test foundation exists but the
+  referenced spec's tests do not exercise the exact block, this slice adds one targeted
+  co-located DOM test before deleting the marker.
 
 ### DELTA
 
 | # | Transition | Slice | Proof |
 |---|---|---|---|
-| 1 | Marker's exact file location, enclosing block, and whether that block falls inside `2026-08-21-hub-datatable-server-mode-test-gap-spec` §Slice 2's DOM-coverage scope are confirmed on the live branch | Slice 0 | recon output committed to the implementation PR description |
-| 2 | Once DOM-mount coverage for the flagged block exists (via the referenced spec, already-shipped or landed in this same PR), the marker comment is deleted from `DataTable.svelte` in a standalone, test-behavior-neutral edit | Slice 1 | `rg` for the marker string returns no match; `git diff` for this PR touches only the comment line(s) in `DataTable.svelte`; full hub test suite and `bun run check` stay green |
-| 3 (contingent) | If recon finds the marker's block is genuinely outside the referenced spec's Slice 2 scope, a targeted DOM-mount test is added for that specific block, using the referenced spec's test-environment foundation as a dependency, before the marker is deleted | Slice 2 (only if triggered by Slice 0) | new DOM test green; same deletion proof as row above |
+| 1 | The live marker, enclosing block, component-test foundation, and exact covering DOM test are identified | Slice 0 | command output and the covering test name/path recorded in the implementation PR description |
+| 2 (conditional) | If the foundation exists but no DOM test reaches the flagged block, one co-located test is added for that block | Slice 1 | the named targeted test and the co-located suite pass |
+| 3 | After coverage exists, the marker is deleted without any executable `DataTable.svelte` change | Slice 1 | marker-absence assertion; commit-range numstat shows zero additions and exactly one deletion in `DataTable.svelte`; allowed-path assertion; full hub check and test suite pass |
 
 ### Slice 0 — Recon (≤ 30 min, prepend to Slice 1; not counted as a slice)
 
@@ -129,33 +124,38 @@ not have authority to merge it.
 ```bash
 cd minion_hub
 git log --oneline -1 -- src/lib/components/data-table/DataTable.svelte
-rg -n "TODO\(handoff\): no DOM-mount test covers this block" src/lib/components/data-table/DataTable.svelte
-# record the enclosing markup block (which prop/branch it sits inside) in the PR description
+rg -n -C 12 "TODO\(handoff\): no DOM-mount test covers this block" \
+  src/lib/components/data-table/DataTable.svelte || true
+rg -n "from ['\"]@testing-library/svelte['\"]|@vitest-environment (happy-dom|jsdom)" \
+  src/lib/components/data-table package.json vitest.config.ts || true
+bun run check
+bun run vitest run src/lib/components/data-table
+# Record the marker's enclosing branch and the exact passing DOM test name/path in the PR.
 ```
 
-From the meta-repo root, reconfirm the dependency spec's current status before proceeding (it may
-have shipped between this spec's authoring and its implementation):
+From the meta-repo root, read the dependency artifact status for coordination only:
 
 ```bash
 grep -A3 '"id": "2026-08-21-hub-datatable-server-mode-test-gap-spec"' specs/index.json
 ```
 
-- If that spec's `status` is `done`/`shipped`/`merged`: the referenced-block DOM coverage should
-  already exist — run `bun run vitest run src/lib/components/data-table` in `minion_hub` and
-  confirm real DOM-mount cases (not just logic-level assertions) cover the marker's block before
-  proceeding to Slice 1.
-- If that spec is still `approved`/`implementing`: check whether it is concurrently in flight. If
-  yes, coordinate (do not duplicate its Slice 1/2 PRs) and sequence this spec's Slice 1 after it
-  merges. If no active run exists and closing this proposal cannot wait, escalate — implementing
-  that spec's full infra foundation is out of this spec's estimate and repo-impact scope (§3).
+- If the exact marker is already absent, inspect `TODO(handoff)` in the file. If the comment was
+  deleted or rewritten with a current rationale, record the already-satisfied evidence and do
+  not create a no-op implementation PR.
+- If the marker remains and no working DOM-mount foundation exists, stop without editing and
+  queue/finish `2026-08-21-hub-datatable-server-mode-test-gap-spec` first. Index status never
+  overrides live code evidence.
+- If the foundation exists and a passing DOM test reaches the flagged branch, proceed to Slice 1
+  without adding a test.
+- If the foundation exists but the exact branch is uncovered, Slice 1 adds one targeted test.
 
-If the recon block does not match either §Slice 2's server-mode scope (search/sort/filter/page)
-or a virtualization-only path, stop and update this spec's DELTA row 3 trigger condition before
-implementing — do not silently assume coverage.
+`bun run check` precedes Vitest because a fresh hub worktree needs SvelteKit sync before Vitest
+dependency optimization; `/memory/MINION/factory/2026-08-20-2c5eccbc.md` records the deterministic
+failure and that `check` performs the required sync implicitly.
 
 ---
 
-### Slice 1 — remove the marker once its block has DOM-mount coverage
+### Slice 1 — prove coverage and remove the marker
 
 **Topics:** `test`, `infra`
 
@@ -163,60 +163,43 @@ implementing — do not silently assume coverage.
 proven test-behavior-neutral.
 
 **Do:**
-- Confirm (via Slice 0's recon) that the flagged block now has real DOM-mount test coverage —
-  either because `2026-08-21-hub-datatable-server-mode-test-gap-spec` already shipped it, or
-  because it lands in the same implementation window as this slice (coordinate per Slice 0).
-- Delete the `TODO(handoff)` comment line(s) from `DataTable.svelte`. No other line in the file
+- Confirm the referenced test-environment foundation exists on the live branch.
+- Run the exact covering DOM test identified in Slice 0. If none reaches the flagged block, add
+  one co-located DOM test named `DataTable handoff marker block` using the existing foundation and
+  accessible DOM assertions; do not add or change test infrastructure.
+- Delete the one-line `TODO(handoff)` comment from `DataTable.svelte`. No other line in that file
   changes.
 - Run the full hub check/test suite to confirm the deletion is behavior-neutral.
 
-**Files:** `src/lib/components/data-table/DataTable.svelte` (comment-only edit).
+**Files:** `src/lib/components/data-table/DataTable.svelte`; only when the exact branch lacks
+coverage, one existing or new co-located DataTable test file.
 
 **Definition of done (machine-checkable):**
 ```bash
 cd minion_hub
-rg -n "TODO\(handoff\): no DOM-mount test covers this block" src/lib/components/data-table/DataTable.svelte
-# expect: no match (exit 1)
-git diff --name-only -- src/lib/components/data-table/DataTable.svelte
-# expect: exactly this one file, and `git diff -- <file>` shows only comment-line removal
+BASE_SHA=<sha-before-this-spec>
+FILE=src/lib/components/data-table/DataTable.svelte
+TEST_FILE= # blank for pre-existing coverage; otherwise the one co-located test path
+! rg -n "TODO\(handoff\): no DOM-mount test covers this block" "$FILE"
+# The proposal and sibling handoff record a one-line marker: exactly that line was deleted.
+test "$(git diff --numstat "$BASE_SHA"..HEAD -- "$FILE" | awk '{print $1, $2, $3}')" = \
+  "0 1 $FILE"
+EXPECTED_PATHS=$(printf '%s\n' "$FILE" ${TEST_FILE:+"$TEST_FILE"} | sed '/^$/d' | sort)
+ACTUAL_PATHS=$(git diff --name-only "$BASE_SHA"..HEAD | sort)
+test "$ACTUAL_PATHS" = "$EXPECTED_PATHS"
+# Run the exact pre-existing covering test recorded by Slice 0, or the conditional new test.
+bun run vitest run src/lib/components/data-table -t "<covering-test-name>"
 bun run vitest run src/lib/components/data-table
 bun run check
+bun run vitest run
 ```
-**Estimate:** 1–2 h (comment-only edit gated on a dependency, not new implementation work — sized
-below the repo's usual 4–8h convention because the substantive work belongs to the referenced
-spec; see AGENTS.md SDLC contract note on not treating a dependent closure as undersized scope
-creep).
+For the pre-existing-coverage path, the complete changed-path list must be exactly `$FILE`. For
+the conditional-test path, it must be exactly `$FILE` plus the co-located test file recorded in
+the PR description; no snapshot, config, dependency, lockfile, or other source file is allowed.
 
----
-
-### Slice 2 — contingent: targeted DOM test if the marker's block is out of the referenced spec's scope
-
-**Topics:** `test`, `ui`
-
-**Only executes if Slice 0's recon finds the marker's block is not covered by
-`2026-08-21-hub-datatable-server-mode-test-gap-spec` §Slice 2** (e.g., it flags a different
-render branch than the server-mode search/sort/filter/page path that spec targets).
-
-**Goal:** add the one missing DOM-mount test case for that specific block, reusing the referenced
-spec's test-environment foundation (Slice 1 there: happy-dom/testing-library setup, the
-file-local `browser` override) as a dependency — this slice does not re-derive that foundation.
-
-**Do:**
-- Add a DOM-mount test case for the exact block the marker flags, following the same
-  accessible-selector, real-DOM-assertion pattern as the referenced spec's Slice 2.
-- Do not edit any other `DataTable.svelte` behavior.
-- Proceed to Slice 1's deletion once this test is green.
-
-**Files:** co-located `DataTable` test file only.
-
-**Definition of done (machine-checkable):**
-```bash
-cd minion_hub
-bun run vitest run src/lib/components/data-table
-bun run check
-test -z "$(git diff --name-only <sha-before-slice2>..HEAD -- '*.svelte')"
-```
-**Estimate:** 4–6 h.
+**Estimate:** 4–6 h including live recon, coverage-to-marker mapping, the conditional targeted
+test, the exact-diff proof, and full gates. The pre-existing-coverage path may complete sooner;
+the slice remains one bounded factory run and is not padded with unrelated work.
 
 ## 3. Cross-repo impact assessment
 
@@ -227,9 +210,9 @@ change with no DB schema, gateway/WS protocol, or shared-package edit.
 |---|---|---|
 | `minion_site`, `paperclip-minion`, `pixel-agents`, `minion_plugins` | None — none consume `DataTable.svelte` or hub's test tooling | — |
 | `@minion-stack/shared` / gateway WS protocol | None — no frame types touched | — |
-| `@minion-stack/ui` (`packages/ui`, minion-meta) | None planned — Slice 1 only deletes a comment; Slice 2 (contingent) adds a test, not a `Button.svelte` edit. If Slice 0 or Slice 2 surfaces a need to edit `@minion-stack/ui` itself, that is `2026-08-21-hub-datatable-server-mode-test-gap-spec`'s Alert A1 territory (a separate minion-meta release-cycle spec), not this spec's scope | Stop and escalate rather than absorb a shared-package edit here |
-| UI design governance (hub) | N/A — no markup, styling, token, or component-visual change; Slice 2 (if triggered) only adds a test file | — |
-| `2026-08-21-hub-datatable-server-mode-test-gap-spec` (same repo) | **Direct dependency** — Slice 1 here cannot land the deletion credibly until that spec's coverage exists for the flagged block | Slice 0 recon gates on that spec's live status before any edit |
+| `@minion-stack/ui` (`packages/ui`, minion-meta) | None planned — this spec may delete a comment and add one hub-local test, but cannot edit the shared Button or test foundation. A shared-package edit remains the referenced spec's Alert A1 release-cycle scope | Stop and escalate rather than absorb a shared-package edit here |
+| UI design governance (hub) | N/A — no markup, styling, token, or component-visual change; the conditional file is test-only | — |
+| `2026-08-21-hub-datatable-server-mode-test-gap-spec` (same repo) | **Direct dependency** — this spec cannot run until its test foundation exists; its existing tests may already cover the marker block | Slice 0 gates on live source and passing tests; artifact status is advisory only |
 
 ## 4. Out of scope (explicit)
 
@@ -241,20 +224,26 @@ change with no DB schema, gateway/WS protocol, or shared-package edit.
 - **Any other `DataTable.svelte` consumer's own component tests.**
 - **Editing `@minion-stack/ui`'s `Button.svelte` source** or any other shared-package change.
 - **Any `DataTable.svelte` behavior change.** Scope is strictly comment deletion (Slice 1) plus,
-  only if triggered, one additive test file (Slice 2).
+  only if triggered, one additive co-located test file.
+- **Manual edits to spec/proposal frontmatter or any `index.json`.** Reconciliation of the two
+  marker findings remains the maintenance sweep/resolver's responsibility after the code lands.
 
 ## 5. End-to-end verification
 
 ```bash
 cd minion_hub
-rg -n "TODO\(handoff\): no DOM-mount test covers this block" src/lib/components/data-table/DataTable.svelte
-# expect: no match
+BASE_SHA=<sha-before-this-spec>
+FILE=src/lib/components/data-table/DataTable.svelte
+TEST_FILE= # blank for pre-existing coverage; otherwise the one co-located test path
+! rg -n "TODO\(handoff\): no DOM-mount test covers this block" "$FILE"
+test "$(git diff --numstat "$BASE_SHA"..HEAD -- "$FILE" | awk '{print $1, $2, $3}')" = \
+  "0 1 $FILE"
+EXPECTED_PATHS=$(printf '%s\n' "$FILE" ${TEST_FILE:+"$TEST_FILE"} | sed '/^$/d' | sort)
+ACTUAL_PATHS=$(git diff --name-only "$BASE_SHA"..HEAD | sort)
+test "$ACTUAL_PATHS" = "$EXPECTED_PATHS"
+bun run check
 bun run vitest run src/lib/components/data-table
 bun run vitest run
-# no new failures or unexplained skips vs pre-change baseline
-bun run check
-git diff --name-only <sha-before-this-spec's-first-commit>..HEAD
-# expect: DataTable.svelte (comment-only) +, only if Slice 2 triggered, the co-located test file
 ```
 
 **Ship gate:** §5 all green; DELTA #1-3 each individually proven by its listed test/evidence; the
