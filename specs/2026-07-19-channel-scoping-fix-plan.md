@@ -5,11 +5,12 @@ stage: spec
 status: parked
 pass: 1
 created: 2026-07-19
-updated: 2026-08-23
+updated: 2026-08-28
 repos: [minion, minion_hub]
 verdict: revision-required
 tags: [security, logic]
-possibly_shipped: https://github.com/NikolasP98/minion-ai/pull/226
+reconcile_ignore: true
+reconcile_ignore_reason: "Cancelled this stale shipment claim while keeping the plan parked: PR #226 delivered only P0. The 2026-08-23 hold records that PR #237 proved P1 unsafe as a gateway-only run; resume only as coordinated Hub plus gateway work with deployment proof."
 ---
 
 # Channel Scoping Fix — sequenced plan
