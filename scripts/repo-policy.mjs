@@ -10,8 +10,8 @@ import Ajv2020 from 'ajv/dist/2020.js';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const policyPath = resolve(root, 'repo-policy.yaml');
 const generatedPath = resolve(root, 'generated/repo-policy.json');
-const fleetIds = ['minion-meta', 'minion', 'minion_hub', 'minion_site', 'minion_plugins', 'paperclip', 'pixel-agents', 'minion-factory', 'minion-base'];
-const cliMappings = { minion: 'minion', hub: 'minion_hub', site: 'minion_site', paperclip: 'paperclip', 'pixel-agents': 'pixel-agents', plugins: 'minion_plugins' };
+export const fleetIds = ['minion-meta', 'minion', 'minion_hub', 'minion_site', 'minion_plugins', 'paperclip', 'pixel-agents', 'minion-factory', 'minion-base'];
+export const cliMappings = { minion: 'minion', hub: 'minion_hub', site: 'minion_site', paperclip: 'paperclip', 'pixel-agents': 'pixel-agents', plugins: 'minion_plugins' };
 const rowKeys = ['id', 'aliases', 'checkout', 'remote', 'packageManager', 'branches', 'prBase', 'commands', 'requiredChecks'];
 const branchKeys = ['development', 'default', 'release'];
 const commandKeys = ['install', 'dev', 'build', 'test', 'check', 'typecheck'];
@@ -27,6 +27,11 @@ export function readPolicy(path = policyPath) {
   } catch (error) {
     throw new Error(`${path}: document must be valid JSON-compatible YAML: ${error.message}`);
   }
+}
+
+/** Resolve a canonical id or alias to its policy row, or `undefined` when the name is unknown. */
+export function resolveRepo(policy, name) {
+  return policy.repositories.find((row) => row.id === name || (Array.isArray(row.aliases) && row.aliases.includes(name)));
 }
 
 function sameMembers(actual, expected) {
@@ -295,7 +300,7 @@ export function run(argv = process.argv.slice(2)) {
     } else { writeFileSync(generatedPath, text); console.log(`wrote generated/repo-policy.json (${buildArtifact(policy).contentHash})`); }
   } else if (command === 'show') {
     const name = args[0];
-    const row = policy.repositories.find((candidate) => candidate.id === name || candidate.aliases.includes(name));
+    const row = resolveRepo(policy, name);
     if (!row) fail([`repository '${name}' is not in policy`]); else console.log(JSON.stringify(row, null, 2));
   } else if (command === 'verify-remote') {
     const fixtureIndex = args.indexOf('--fixture');
