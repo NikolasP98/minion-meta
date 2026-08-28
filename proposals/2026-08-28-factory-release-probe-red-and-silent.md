@@ -1,6 +1,6 @@
 ---
 id: 2026-08-28-factory-release-probe-red-and-silent
-title: "Factory release train red: authenticated boundary probe fails every promotion — and fails silently"
+title: "Factory release probe can omit the required posture MCP call and force a full replay"
 status: draft
 created: 2026-08-28
 updated: 2026-08-28
@@ -62,3 +62,27 @@ probe is red, dev cannot promote at all.
    readable directly from the next failed run).
 3. Decide the fallback: while the probe is red, is the manual box
    `self-update.sh` path still sanctioned for emergency deploys, or frozen?
+
+## Update — intermittent posture-call omission (2026-08-28 15:42Z)
+
+The earlier silent-failure problem is resolved: current logs identify the exact
+failure as `[release-probe] posture MCP call missing`, and the supervised path
+remains the only sanctioned production route.
+
+New exact evidence shows the remaining failure is intermittent and can waste a
+whole workflow replay:
+
+- Release run `33186231907`, attempt 1, bound candidate
+  `341fa832e1f2af5d29bb3b3fb0882cc461ec780d`, passed candidate resolution,
+  immutable identity, and candidate tests, then stopped before production
+  mutation after both bounded model turns omitted `factory_s2_posture_v1`.
+- The sealed rerun of the same workflow id and unchanged candidate passed the
+  posture call, production supervision, exact deploy, health verification, and
+  main compare-and-swap. Candidate code was not the cause.
+- minion-factory PR #147 raises the bounded in-job allowance from two attempts
+  to three. The posture MCP call remains mandatory and fail-closed; only the
+  cheaper retry occurs before replaying the full release workflow.
+
+Remaining ask: record posture-call omission counts and per-attempt provider
+metadata without response-body leakage, then replace the incident-derived retry
+bound with a measured policy. Do not turn a missing call into a passing probe.

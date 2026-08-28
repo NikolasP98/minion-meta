@@ -4,7 +4,7 @@ title: Factory worker containment — credential-free repo commands and isolated
 stage: spec
 status: approved
 pass: 2
-next_slice: 4
+next_slice: 5
 created: 2026-08-18
 updated: 2026-08-28
 proposal: 2026-08-17-factory-worker-containment
@@ -524,4 +524,11 @@ reviewers are technically read-only; automerge stays off through M7) and
 ## Board audit 2026-08-28
 
 Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
-Scope narrowed: S1-S3 shipped (PHASE_POLICIES, factory-*.sh entrypoints, credential-free develop, phase_attempts/effects). Remaining: S4 supply-chain pinning (agent/runner Dockerfiles still tag-only FROM; no verify-image-pins.sh) + S5 canary activation (FACTORY_CONTAINMENT_V2=0).
+Scope narrowed: S1-S3 shipped (PHASE_POLICIES, factory-*.sh entrypoints, credential-free develop, phase_attempts/effects).
+
+Slice 4 shipped through minion-factory PR #145 and supervised production release
+`1901ed0699f4a0e23d918392bac8429a09b30758`. Exact-head and post-merge CI proved the static pin verifier, a disposable-registry build/publish/digest-resolution integration, both immutable agent and runner refs across Compose/Swarm/Kubernetes, flattened promotion bundles, rollback digest alignment, ShellCheck, TypeScript, and 967 runner tests. Follow-up PR #146 fixed atomic replacement of stale read-only advisory reports and deployed as
+`341fa832e1f2af5d29bb3b3fb0882cc461ec780d` through the same supervised path.
+
+Remaining: S5 canary activation only. Production verification confirmed
+`FACTORY_CONTAINMENT_V2=0`; immutable supply-chain rollout does not authorize activation.
