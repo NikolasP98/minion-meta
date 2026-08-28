@@ -1,9 +1,9 @@
 ---
 id: 2026-08-22-factory-dev-staging-daily-production-promotion
 title: Factory release train — dev staging candidates and daily production promotion
-status: in-spec
+status: done
 created: 2026-08-22
-updated: 2026-08-22
+updated: 2026-08-28
 repos: [minion-factory]
 spawned_spec: 2026-08-22-factory-dev-staging-daily-production-promotion-spec
 tags: [data, infra, logic, security, test]
@@ -119,3 +119,8 @@ code site. This proposal is the open-items ledger for the undecided activation v
 - Rebuilding artifacts on staging or production.
 - Sharing production data, credentials, writable volumes, networks, or Docker authority with staging.
 - Treating a green staging UI, a webhook, a tag, or `main` alone as production evidence.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Promotion train shipped and running (promote-dev-daily.yml + scripts/promotion/); residual §9 S6/S7 tracked on the spec.

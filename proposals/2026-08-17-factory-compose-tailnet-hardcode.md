@@ -1,10 +1,10 @@
 ---
 id: 2026-08-17-factory-compose-tailnet-hardcode
 title: docker-compose hardcodes the Netcup tailnet IP, breaking any-host setup
-status: in-spec
+status: done
 spawned_spec: 2026-08-17-factory-compose-tailnet-hardcode-spec
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-28
 repos: [minion-factory]
 tags: [infra]
 value: 7
@@ -25,3 +25,8 @@ ${FACTORY_TAILNET_IP:-100.80.222.29} interpolation mirroring FACTORY_PUBLIC_IP; 
 ## Out of scope
 
 Multi-host orchestration.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Spec shipped; DoD string live at docker-compose.yml:44.

@@ -5,7 +5,7 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-28
 repos: [minion-meta, minion, minion_hub, minion_site, minion_plugins, paperclip, pixel-agents, minion-factory, minion-base]
 proposal: 2026-08-18-agent-instruction-parity-and-repo-policy
 verdict: approved
@@ -446,3 +446,8 @@ matrix and reconciliation execution are clean, `REPO_POLICY_V1=1` consumers use 
 with the same pinned hash, the old factory/Base fleet maps are absent, and valid factory extension rows
 still resolve. Any known open end must follow the root `AGENTS.md` two-place handoff ledger; an
 undocumented exception cannot be accepted as completion.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+S0/S1 shipped (repo-policy.yaml + schema + generated + CI). Remaining: S2 check-agent-instructions.mjs (absent), S6 factory consumer — runner still keeps its own REPO_ALIASES at queue.ts:2322, the exact drift defect this spec exists to kill — plus S7/S8.

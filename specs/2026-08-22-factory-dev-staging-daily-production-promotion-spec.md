@@ -5,7 +5,7 @@ stage: spec
 status: review
 pass: 1
 created: 2026-08-22
-updated: 2026-08-22
+updated: 2026-08-28
 repos: [minion-factory]
 proposal: 2026-08-22-factory-dev-staging-daily-production-promotion
 verdict: pending
@@ -739,3 +739,8 @@ resolved decisions, remote branch enforcement, and one-time explicit activation 
 approved; remote ruleset/protection enforcement is verified; exact manifest/digest identity matches
 CI, staging, production, and receipts; rollback drills pass; and `main` moves to `C` only after the
 production smoke receipt.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Largely shipped: promote-dev-daily.yml (event-driven on green dev CI, cron demoted to recovery) + 19 scripts/promotion/* + runbook. Remaining scope: §9 Slice 6 (retire/subordinate the main self-update poller — today it replays already-verified SHAs, which is safe) and Slice 7 (ruleset activation).

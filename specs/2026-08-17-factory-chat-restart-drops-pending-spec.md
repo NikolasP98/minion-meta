@@ -1,11 +1,11 @@
 ---
 id: 2026-08-17-factory-chat-restart-drops-pending-spec
 title: "minion-factory chat queue — a distinct dispatched state so a runner restart stops eating never-started user messages"
-stage: spec
-status: implementing
+stage: done
+status: shipped
 pass: 2
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-factory-chat-restart-drops-pending
 verdict: approved
 repos: [minion-base, minion-factory]
@@ -640,3 +640,8 @@ a real reply; `bun run lint:design` debt numbers before/after for S1; **the box 
 `/data/repos.json`** and the answer stated either way (§4); and both §5 ledger items discharged — the
 kill-branch `TODO(handoff)` deleted by S3 (or its named proposal exists if S3 is cut), and the session-resume
 proposal plus its exact-site `TODO(handoff)` both exist before S2 merges.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+ADDRESSED: dispatched-before-spawn (queue.ts:3579), busy check covers pending+dispatched (index.ts:985), boot pumps survivors (index.ts:1106), adopt-not-kill recovery (queue.ts:3716-3790, chat-recovery.test.ts). S1 verified in minion-base: src/lib/factory-chat.ts:2 IN_FLIGHT_MESSAGE_STATUSES includes 'dispatched'.

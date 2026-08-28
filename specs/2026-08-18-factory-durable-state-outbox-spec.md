@@ -2,10 +2,10 @@
 id: 2026-08-18-factory-durable-state-outbox-spec
 title: "Durable state — transactional outbox for postFinish side effects, guarded lifecycle edges, append-only event log"
 stage: spec
-status: draft
+status: implementing
 pass: 2
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-28
 proposal: 2026-08-17-factory-durable-state-outbox
 verdict: changes_requested
 repos: [minion-factory]
@@ -703,3 +703,8 @@ unless policy intentionally retires those automations. Terminal sinks can be rep
 sets. The reviewer cannot infer whether approved/in-progress/historical states may be retired,
 closed, superseded, completed, or revived without inventing lifecycle policy. Until this table is
 approved, the proposal's explicit-edge definition of done is unmet and Slice 4 must not ship.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Stale draft corrected: S1-S3 are in production (lifecycle_events, outbox_jobs, pump/lease/dead-letter + ~30 tests). Remaining: Slice 4 only — deliberately blocked at lifecycle.ts:22-27 pending the §8 human edge-table decision. That decision is the deliverable.

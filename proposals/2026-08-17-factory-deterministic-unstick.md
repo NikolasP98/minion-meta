@@ -1,9 +1,9 @@
 ---
 id: 2026-08-17-factory-deterministic-unstick
 title: Deterministic unstick handlers for known failure classes
-status: in-spec
+status: done
 created: 2026-08-17
-updated: 2026-08-18
+updated: 2026-08-28
 repos: [minion-factory]
 tags: [logic, infra]
 source: audit-2026-08-17
@@ -24,3 +24,8 @@ for unmatched signatures, with a read-only/scoped credential; each
 deterministic action logged as a monitor event.
 
 **Out of scope:** changing detection thresholds.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+ADDRESSED: unstick-cron.sh deterministic signature table (timeout/queue-wedged/orphan/state-conflict/transient/outage/deferred), facilitator only for unmatched, LINEAGE_CAP enforced at both call sites + API lineageAdmission backstop (#110).

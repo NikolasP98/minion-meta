@@ -3,7 +3,7 @@ id: 2026-08-23-factory-deployment-recovery-controller
 title: Wire the Factory deployment recovery controller
 status: draft
 created: 2026-08-23
-updated: 2026-08-23
+updated: 2026-08-28
 repos: [minion-factory]
 tags: [infra, security]
 ---
@@ -59,3 +59,8 @@ Source marker:
   tool host, orchestrator, or worker containers.
 - [ ] The lineage activation gate requires this drill and refuses startup when the
   recovery controller is absent.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+One shared blocker: code is merged; each waits on the SAME credentialed disposable-repo drill (autonomy flags 0). The in-flight 2026-08-28-factory-containment-base-reconciliation-spec Slices 5-6 build exactly that drill harness + activation wiring — these three ride its outcome rather than needing separate triage.

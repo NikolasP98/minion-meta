@@ -2,10 +2,10 @@
 id: 2026-08-17-factory-agent-cli-unpinned-spec
 title: "minion-factory agent image — pin the harness toolchain so the JSON parser contract stops floating"
 stage: spec
-status: approved
+status: implementing
 pass: 2
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 proposal: 2026-08-17-factory-agent-cli-unpinned
 verdict: approved
 repos: [minion-factory, minion-meta]
@@ -508,3 +508,8 @@ the negative controls pasted (a nonexistent-version `--build-arg` fails the buil
 not known to work; **and it is stated
 explicitly which DoD tiers were run, on what host, by whom** (⚠️ A1, ⚠️ A2). The `runner/Dockerfile` finding
 (§1 fact 5) exists at the exact `minion-meta` proposal path named in §3 before implementation starts.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+S1 shipped and build-verified (agent/Dockerfile:17-39 pins + npm ls mismatch fail). Remaining: S2 descoped to a README 'Agent toolchain' section + playbook line (the two proposed scripts are ceremony around self-verifying ARGs).

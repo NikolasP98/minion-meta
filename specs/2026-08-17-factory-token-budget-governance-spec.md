@@ -5,7 +5,7 @@ stage: spec
 status: implementing
 pass: 1
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-28
 repos: [minion-factory]
 verdict: approved
 tags: [infra]
@@ -65,3 +65,8 @@ Existing caps: maxTurns ≤100 (default 40), selfTest loop ≤5 with early-escal
 
 ## 3. E2E verification
 (1) A run's `cost_usd` matches the sum of its stage result JSONs. (2) Set `FACTORY_DAILY_BUDGET_USD=0.01` → new runs stay queued + one monitor event; reset → queue drains. (3) A run exceeding `FACTORY_RUN_BUDGET_USD` lands a draft PR with the budget note instead of burning its remaining turns. (4) A docs-tagged spec auto-queues at low/low with 40 turns. (5) A third review-fix attempt is refused with a monitor event.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+Factory surface (S1-S4) shipped: cost_usd ledger, GET /budget + budgetPause, run caps + reviewfix reserve + tiers ladder. Remaining: S5 minion-base budget widget (verified absent — no /budget consumer in base src/).

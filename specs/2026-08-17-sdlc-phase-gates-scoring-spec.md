@@ -5,7 +5,7 @@ stage: spec
 status: approved
 pass: 1
 created: 2026-08-17
-updated: 2026-08-17
+updated: 2026-08-28
 repos: [minion-meta, minion-factory, minion-base]
 verdict: approved
 tags: [infra]
@@ -155,3 +155,8 @@ Triage is therefore not a phase — it's a **property computed at birth and re-d
 ## 6. E2E verification
 
 (1) Run the G0 sweep against the pre-triage board state of 2026-08-17 in dry-run: it must propose flipping ≥ 19 of the 21 hand-verified shipped specs and the missing `supersedes` link. (2) Submit a deliberately vague proposal → G1 blocks with named missing axes. (3) Approve a spec with an oversized slice → G2 warns, board requires override reason. (4) A factory feature run shows a red-state line in its log before implementation. (5) Merge a fleet PR that ships a spec → within a day its card leaves the board without human touch.
+
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+G0 (possibly-shipped sweep) and G2 (score_* axes + 64 sidecars) shipped; Slice 8 superseded by specs/topics.json. Remaining: G1 proposal scorer, G3 red-state gate, docs-verifier lane. NOTE the G0 CONSUMER gap: possibly_shipped flags accumulate with nobody running dispositions — this audit cleared the backlog once; the consumer step needs an owner.

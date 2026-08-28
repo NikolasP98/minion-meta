@@ -1,11 +1,11 @@
 ---
 id: 2026-08-18-factory-controller-completion-invariants
 title: Controller completion identity, bounded retries, reconciliation, and provider fallback
-stage: test
-status: review
+stage: done
+status: shipped
 pass: 1
 created: 2026-08-18
-updated: 2026-08-18
+updated: 2026-08-28
 repos: [minion-factory]
 type: infra
 tags: [infra, test]
@@ -70,3 +70,7 @@ Production remains on Factory `d70760d2a761846e7debe2447f917ee367429414` with
    implementation producing exactly one satisfied work item.
 5. Reconcile this artifact to `done/shipped` with the merge SHA and runtime evidence.
 
+## Board audit 2026-08-28
+
+Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
+ADDRESSED: already_satisfied outcome (queue.ts:3028, hardened in #110), merge_events/merge_reservations/outbox_jobs, reclassify.ts, requeue.ts; the Actions-billing blocker cleared (ed50b98, 94c798d). Production is ~135 commits past the spec's baseline.
