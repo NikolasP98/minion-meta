@@ -8,8 +8,8 @@
 // roles, commands) may only be restated inside marked policy-owned blocks, which this checker
 // compares field by field. Prose outside those blocks is never rejected merely for naming a branch.
 
-import { existsSync, readFileSync, statSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { existsSync, readFileSync, realpathSync, statSync } from 'node:fs';
+import { dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { cliMappings, readPolicy, resolveRepo } from './repo-policy.mjs';
 
@@ -243,19 +243,36 @@ function referenceDefinitions(text) {
 }
 
 /**
+ * The index of the next blank line at or after the line following `index`, or `text.length` —
+ * inline constructs such as code spans are scoped to the block they open in, and a blank line
+ * always ends that block (CommonMark never lets a code span cross a paragraph boundary).
+ */
+function paragraphEndAt(text, index) {
+  let i = lineEndAt(text, index) + 1;
+  while (i < text.length) {
+    if (isBlankLineAt(text, i)) return i;
+    i = lineEndAt(text, i) + 1;
+  }
+  return text.length;
+}
+
+/**
  * Skip a CommonMark code span opening at `text[start]`: a run of N backticks closed by the next run
- * of exactly N. Returns the index just past the closing run, or null when the run never closes and
- * the backticks are therefore literal text. Code spans outrank links, so `` `[x](./gone.md)` `` is
- * documentation about a link, not a link.
+ * of exactly N on the same paragraph. Returns the index just past the closing run, or null when the
+ * run never closes before the paragraph ends and the backticks are therefore literal text. Code
+ * spans outrank links, so `` `[x](./gone.md)` `` is documentation about a link, not a link — but an
+ * unmatched opener must not swallow a real link in a later paragraph, since a code span can never
+ * cross the blank line that separates them.
  */
 function readCodeSpan(text, start) {
   let length = 0;
   while (text[start + length] === '`') length++;
   const fence = '`'.repeat(length);
+  const boundary = paragraphEndAt(text, start);
   let i = start + length;
-  while (i < text.length) {
+  while (i < boundary) {
     const at = text.indexOf(fence, i);
-    if (at === -1) return null;
+    if (at === -1 || at >= boundary) return null;
     let after = at + length;
     if (text[after] === '`') {
       while (text[after] === '`') after++;
@@ -361,6 +378,28 @@ function readIfFile(path) {
 }
 
 /**
+ * Resolve `target` against checkout root `dir`, refusing to leave it. `path.resolve` honours an
+ * absolute second argument verbatim, discarding `dir` entirely, so an include or link like
+ * `/etc/passwd` would otherwise be validated against the host filesystem instead of the checkout;
+ * a lexical `..` escape is rejected the same way. A target that survives that check is also
+ * resolved through `realpath`, so a symlink inside the checkout that points outside it cannot be
+ * used to escape either. Returns the resolved path, or null when the target does not resolve to a
+ * real file/directory inside `dir`.
+ */
+function resolveWithinCheckout(dir, target) {
+  if (isAbsolute(target)) return null;
+  const resolved = resolve(dir, target);
+  const rel = relative(dir, resolved);
+  if (rel !== '' && (rel.startsWith('..') || isAbsolute(rel))) return null;
+  if (!existsSync(resolved)) return null;
+  const realDir = realpathSync(dir);
+  const realResolved = realpathSync(resolved);
+  const realRel = relative(realDir, realResolved);
+  if (realRel !== '' && (realRel.startsWith('..') || isAbsolute(realRel))) return null;
+  return resolved;
+}
+
+/**
  * The CommonMark shape of a code fence line: at most three leading spaces — four, or a leading
  * tab, is an indented code block instead — then a run of at least three backticks or tildes, then
  * the rest of the line: an info string on an opener, whitespace only on a closer.
@@ -450,13 +489,13 @@ export function checkInstructionPair(checkout, { label = checkout } = {}) {
   if (claude === null) errors.push(`${label}/CLAUDE.md: is required — compatibility include`);
   else if (claude !== INCLUDE_BYTES) errors.push(`${label}/CLAUDE.md: must be exactly '${INCLUDE_LINE}' plus one trailing newline`);
   if (agents !== null) {
-    errors.push(...substantiveErrors(`${label}/AGENTS.md`, agents));
     const lines = proseLines(agents);
+    errors.push(...substantiveErrors(`${label}/AGENTS.md`, lines.join('\n')));
     for (const target of includeTargets(lines)) {
-      if (!existsSync(resolve(dir, target))) errors.push(`${label}/AGENTS.md: include '@${target}' does not resolve`);
+      if (resolveWithinCheckout(dir, target) === null) errors.push(`${label}/AGENTS.md: include '@${target}' does not resolve`);
     }
     for (const target of linkTargets(lines)) {
-      if (!existsSync(resolve(dir, target))) errors.push(`${label}/AGENTS.md: link '${target}' does not resolve`);
+      if (resolveWithinCheckout(dir, target) === null) errors.push(`${label}/AGENTS.md: link '${target}' does not resolve`);
     }
   }
   return errors;
@@ -559,7 +598,10 @@ function checkTable(body, label, name, header, expected, compare, errors) {
 export function checkProjections(agentsText, policy, label = 'AGENTS.md') {
   const errors = [];
   const expected = cliRows(policy);
-  const projectMap = blockBody(agentsText, PROJECT_MAP_BLOCK, label, errors);
+  // Fenced code is documentation, not policy — a policy-owned block or table inside a fence must
+  // not satisfy this gate, the same way it cannot satisfy the substantive-content or link checks.
+  const prose = proseLines(agentsText).join('\n');
+  const projectMap = blockBody(prose, PROJECT_MAP_BLOCK, label, errors);
   if (projectMap !== null) {
     checkTable(projectMap, label, PROJECT_MAP_BLOCK, projectMapHeader, expected, ({ cliId, row }, cells) => [
       ['CLI id', cell(cells[1]), cliId],
@@ -569,7 +611,7 @@ export function checkProjections(agentsText, policy, label = 'AGENTS.md') {
       ['PR base', cell(cells[5]), row.prBase]
     ], errors);
   }
-  const commands = blockBody(agentsText, COMMANDS_BLOCK, label, errors);
+  const commands = blockBody(prose, COMMANDS_BLOCK, label, errors);
   if (commands !== null) {
     checkTable(commands, label, COMMANDS_BLOCK, commandsHeader, expected, ({ row }, cells) => commandKeys.map((key, index) => {
       const declared = row.commands[key];

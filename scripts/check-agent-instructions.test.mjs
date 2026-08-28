@@ -2,7 +2,7 @@
 
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -267,6 +267,68 @@ try {
     writeRegistry((registry) => { registry.subprojects.docs = registry.subprojects.hub; }));
   failsWith(/minion\.json: must be valid JSON/, () => writeFileSync(join(fixture, 'minion.json'), '{ not json'));
   failsWith(/minion\.json: is required/, () => rmSync(join(fixture, 'minion.json')));
+
+  // 9. Fenced code is documentation, not policy. A complete, otherwise-valid AGENTS.md — headings,
+  // substantive prose, and both policy-owned blocks — wrapped in a single fence must fail both the
+  // substantive-content gate and the projection gate, exactly as if the contract were never written
+  // at all: a renderer shows it as an inert code sample, not live instructions. The outer fence uses
+  // a longer backtick run than the commands example nested inside the contract, so that inner
+  // closer cannot end the outer fence early.
+  {
+    writeAgents(`\`\`\`\`md\n${goodAgents()}\n\`\`\`\`\n`);
+    const errors = [...checkRootProjections(fixture, policy), ...checkInstructionPair(fixture, { label: 'fixture' })];
+    assert(errors.length > 0, 'negative fixture unexpectedly passed: fully fenced AGENTS.md');
+    assert.match(errors.join('\n'), /policy-owned block 'project-map' is missing/);
+    assert.match(errors.join('\n'), /policy-owned block 'commands' is missing/);
+    assert.match(errors.join('\n'), /must not be empty/);
+    reset();
+  }
+  // …and the same contract live (not fenced) is the clean-fixture control asserted at the top of
+  // this file, which continues to pass.
+  assert.deepEqual(checkRootProjections(fixture, policy), []);
+
+  // 10. An include or link must resolve inside the checkout, never against the host filesystem: not
+  // via an absolute path (`path.resolve` honours an absolute second argument verbatim, discarding
+  // the checkout root entirely), not via a lexical `..` escape, and not via a symlink that resolves
+  // outside the checkout.
+  {
+    const absoluteTarget = join(root, 'AGENTS.md');
+    writeAgents(goodAgents(`\n@${absoluteTarget}\n`));
+    let errors = [...checkRootProjections(fixture, policy), ...checkInstructionPair(fixture, { label: 'fixture' })];
+    assert(errors.includes(`fixture/AGENTS.md: include '@${absoluteTarget}' does not resolve`), `absolute include escape was not rejected:\n${errors.join('\n')}`);
+    reset();
+
+    writeAgents(goodAgents(`\nSee [host](${absoluteTarget}).\n`));
+    errors = [...checkRootProjections(fixture, policy), ...checkInstructionPair(fixture, { label: 'fixture' })];
+    assert(errors.includes(`fixture/AGENTS.md: link '${absoluteTarget}' does not resolve`), `absolute link escape was not rejected:\n${errors.join('\n')}`);
+    reset();
+
+    writeFileSync(join(temp, 'OUTSIDE.md'), '# outside\n');
+    writeAgents(goodAgents('\nSee [escape](../OUTSIDE.md).\n'));
+    errors = [...checkRootProjections(fixture, policy), ...checkInstructionPair(fixture, { label: 'fixture' })];
+    assert(errors.includes(`fixture/AGENTS.md: link '../OUTSIDE.md' does not resolve`), `parent-traversal link escape was not rejected:\n${errors.join('\n')}`);
+    reset();
+
+    symlinkSync(join(temp, 'OUTSIDE.md'), join(fixture, 'ESCAPE-LINK.md'));
+    writeAgents(goodAgents('\nSee [escape](./ESCAPE-LINK.md).\n'));
+    errors = [...checkRootProjections(fixture, policy), ...checkInstructionPair(fixture, { label: 'fixture' })];
+    assert(errors.includes(`fixture/AGENTS.md: link './ESCAPE-LINK.md' does not resolve`), `symlink escape was not rejected:\n${errors.join('\n')}`);
+    rmSync(join(fixture, 'ESCAPE-LINK.md'));
+    reset();
+  }
+  // …and an ordinary relative link inside the checkout is the resolving control exercised throughout
+  // section 6 above (e.g. `./LINKED.md`), which continues to pass.
+
+  // 11. A code span is scoped to the paragraph it opens in — CommonMark never lets one cross the
+  // blank line that ends a block — so an unmatched backtick opener must not swallow a real link in a
+  // later paragraph merely because some other backtick reappears further down the document.
+  failsWith(/fixture\/AGENTS\.md: link '\.\/missing\.md' does not resolve/, () =>
+    writeAgents(goodAgents('\nAn unmatched `code opener.\n\nSee [gone](./missing.md).\n\nA later closing ` backtick.\n')));
+  // …and a real code span that legitimately wraps onto a second line within the SAME paragraph (no
+  // intervening blank line) still hides the link written inside it.
+  writeAgents(goodAgents('\nWrite `[x](./gone.md)\nstill code` in prose.\n'));
+  assert.deepEqual(checkInstructionPair(fixture, { label: 'fixture' }), []);
+  reset();
 
   // 'none' is projected as itself: the CLI registry never invents a package manager.
   assert.equal(JSON.parse(readFileSync(join(root, 'minion.json'), 'utf8')).subprojects.plugins.packageManager, 'none');
