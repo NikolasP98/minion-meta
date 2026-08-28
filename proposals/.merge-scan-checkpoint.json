@@ -2,7 +2,7 @@
   "NikolasP98/minion_hub:master": {
     "cursor": "7fdc291f88f87c5448a72240af8c8891346d1bff",
     "head": "afd023b6100de280ba0f14e252f9afe1baa6a360",
-    "done": 12,
+    "done": 25,
     "kept": [
       {
         "file": "scripts/audit-server-tenant-scope.ts",
@@ -31,6 +31,76 @@
         "severity": "medium",
         "category": "missing-handoff",
         "line": 27
+      },
+      {
+        "file": "src/lib/components/crm/graph/CrmGraph.svelte",
+        "desc": "Empty catch block swallows releasePointerCapture error; despite comment, this pattern masks failures and should log or explicitly ignore",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 215
+      },
+      {
+        "file": "src/lib/components/dashboard/EditableGrid.svelte",
+        "desc": "Empty catch block silently swallows errors from loadDashboardLayout without logging or error handling.",
+        "severity": "high",
+        "category": "empty-catch",
+        "line": 70
+      },
+      {
+        "file": "src/lib/components/data-table/DataTable.svelte",
+        "desc": "Empty catch block silently swallows errors from server.onSelectAllMatching(), leaving the user with no feedback if the async call fails; loading state will still clear but selection remains unchanged with no error indication.",
+        "severity": "high",
+        "category": "empty-catch",
+        "line": 848
+      },
+      {
+        "file": "src/lib/components/pos/SellableWizard.svelte",
+        "desc": "catch block swallows all exceptions silently; network errors, JSON parse failures, and handler errors bypass toasting",
+        "severity": "high",
+        "category": "empty-catch",
+        "line": 280
+      },
+      {
+        "file": "src/lib/components/reliability/PerformanceMonitorPanel.svelte",
+        "desc": "API response is cast without validation; malformed data could cause crashes when accessing undefined properties.",
+        "severity": "high",
+        "category": "unvalidated-input",
+        "line": 46
+      },
+      {
+        "file": "src/lib/components/scheduling/BookingsView.svelte",
+        "desc": "API response field itemId cast as string without null check; missing field silently becomes undefined, violating type contract",
+        "severity": "high",
+        "category": "unvalidated-input",
+        "line": 149
+      },
+      {
+        "file": "src/lib/components/scheduling/BookingsView.svelte",
+        "desc": "API response property contact_id accessed without validating it exists; could be undefined, breaking contact selection",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 272
+      },
+      {
+        "file": "src/lib/components/scheduling/BookingsView.svelte",
+        "desc": "Accessing nested property j.preview.hasMapping without validating j.preview exists; TypeError caught but structure not validated",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 295
+      },
+      {
+        "file": "src/lib/components/stock/StockItemCreateForm.svelte",
+        "desc": "catch block swallows fetch/JSON errors without logging, hiding debugging information from developers",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 62
+      },
+      {
+        "file": "src/lib/components/ui/Picker.svelte",
+        "desc": "result.rows is accessed without checking if the rows property exists; accessing .length on undefined will crash if loadRows returns a malformed result",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 210
       }
     ]
   },
