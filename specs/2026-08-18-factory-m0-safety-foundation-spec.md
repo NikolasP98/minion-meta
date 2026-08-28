@@ -12,7 +12,8 @@ tags: [test, logic]
 verdict: approved
 relationship: depends-on
 related: [2026-08-18-sdlc-transformation-roadmap]
-possibly_shipped: https://github.com/NikolasP98/minion-factory/pull/21
+reconcile_ignore: true
+reconcile_ignore_reason: "Denied: PR #21 implemented only M0 S1. Current dev still lacks the D5 trusted GitHub App/check identity binding; that separate provenance change has not landed, so the safety foundation is not complete."
 ---
 
 # M0 — safety freeze and regression foundation
