@@ -48,6 +48,35 @@ Flat scalars and string arrays only — no nesting (the parser is deliberately t
 strings (`tags: infra` is a scalar and fails the gate). Everything else is a scalar; bracket
 syntax on a scalar field fails the gate too.
 
+## Review sidecars (`<id>.review.md`)
+
+Every SDLC phase gate writes its judgement to a sidecar beside the artifact it judged —
+`specs/<id>.review.md` for the G2 spec gate, `proposals/<id>.review.md` for the G1 proposal
+gate (`2026-08-17-sdlc-phase-gates-scoring-spec` §2, §4). `scripts/review-sidecar.mjs`
+validates them; the validated result is published as the `review` object on that artifact's
+`index.json` entry, which is where the board reads the score chip from.
+
+Same flat-YAML dialect as above — scalars only.
+
+| Field | Required | Values |
+|---|---|---|
+| `spec` / `proposal` | yes | the reviewed artifact's id; must equal the filename minus `.review.md`. Use `spec:` under `specs/`, `proposal:` under `proposals/` |
+| `pass` | yes | integer ≥ 1 — which review pass this is |
+| `verdict` | yes | same enum as a spec's `verdict`: `pending` `approved` `changes_requested` `rejected` `revision-required` |
+| `reviewer` | yes | the agent or human that scored it, e.g. `factory-review` |
+| `created` | yes | ISO date of the review |
+| `reviewed_commit` | no | 7–40 char lowercase hex sha the scorer actually read |
+| `score_<axis>` | no | integer 0–10, one key per rubric axis. Axes: `slice_size` `dod_verifiability` `scope_containment` `impact_zones` `collisions` `testability` `problem_clarity` `value` `dedupe` (aliases `dod` `out_of_scope` `impact` `motivation`). An unlisted axis fails the gate — add it to `SCORE_AXES` in `scripts/review-sidecar.mjs` first |
+
+`score`, `gate` and `chip` are **derived**, not authored: the weighted mean of the axes
+(one decimal), banded as `pass`/green ≥ 7, `warn`/amber 5–6.9, `block`/red < 5. A sidecar may
+still write them, in which case they are cross-checked and a mismatch fails the build.
+A sidecar with no `score_*` axis is valid and simply publishes no chip.
+
+Every `*.review.md` file under `specs/` and `proposals/` must be a sidecar for an existing
+artifact — an orphan fails the gate rather than being skipped. Multi-spec audit memos that
+belong to no single artifact go in `specs/audits/` instead.
+
 ## Body convention
 
 Keep the existing house style: `# Title`, then `## 0. Product` (what and why, in the user's

@@ -4,6 +4,7 @@
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { parseFrontmatter } from './spec-frontmatter.mjs';
 import { loadTopics, resolveTag } from './topics.mjs';
+import { readReviewSidecars } from './review-sidecar.mjs';
 
 export const P_STATUSES = [
 	'draft',      // being shaped in chat
@@ -30,7 +31,14 @@ try {
 	errors.push(String(e instanceof Error ? e.message : e));
 }
 
-for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f !== 'TEMPLATE.md').sort()) {
+// filename base -> parsed frontmatter, in the order proposals are read. The G1
+// sidecars are matched against these bases (a sidecar is named after the file it
+// sits beside), so they can only be resolved once the whole directory is read.
+const pending = [];
+
+for (const name of readdirSync('proposals')
+	.filter((f) => f.endsWith('.md') && f !== 'TEMPLATE.md' && !f.endsWith('.review.md'))
+	.sort()) {
 	const parsed = parseFrontmatter(readFileSync(`proposals/${name}`, 'utf8'));
 	if (!parsed) {
 		errors.push(`${name}: missing frontmatter`);
@@ -56,6 +64,22 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		}
 		fm.tags = canonicalTags;
 	}
+	pending.push({ base: name.slice(0, -3), fm });
+}
+
+// G1 proposal-gate sidecars (2026-08-17-sdlc-phase-gates-scoring-spec §4 — one
+// sidecar format everywhere). No producer writes these yet; Slice 3 owns the
+// scorer. Validating and projecting them now means the scorer lands into a
+// namespace that is already checked, and the board gets its proposal-column
+// chip from the same field name it reads on a spec card.
+const sidecars = readReviewSidecars('proposals', {
+	subjectKey: 'proposal',
+	knownIds: new Set(pending.map((entry) => entry.base))
+});
+errors.push(...sidecars.errors);
+
+for (const { base, fm } of pending) {
+	const review = sidecars.byId.get(base);
 	proposals.push({
 		id: fm.id,
 		title: fm.title,
@@ -69,7 +93,13 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		...(fm.spawned_spec ? { spawned_spec: fm.spawned_spec } : {}),
 		...(fm.tags ? { tags: fm.tags } : {}),
 		...(fm.value ? { value: fm.value } : {}),
-		...(fm.source ? { source: fm.source } : {})
+		// `effort` sits in 40 proposals' frontmatter and in the auto-triage tool's
+		// hand-written index entries, but was never projected here — so every
+		// regeneration silently deleted it again. Same failure class as the spec
+		// index's dropped `relationship`/`related` fields.
+		...(fm.effort ? { effort: fm.effort } : {}),
+		...(fm.source ? { source: fm.source } : {}),
+		...(review ? { review } : {})
 	});
 }
 

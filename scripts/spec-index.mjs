@@ -55,6 +55,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { parseFrontmatter, isValidISODate, STAGES, STATUSES, VERDICTS } from './spec-frontmatter.mjs';
 import { loadTopics, resolveTag } from './topics.mjs';
+import { readReviewSidecars, REVIEW_SUFFIX } from './review-sidecar.mjs';
 
 export const ALLOWED_REPOS = [
 	'minion',
@@ -351,15 +352,30 @@ export const OPTIONAL_INDEX_FIELDS = [
 	'link_review'
 ];
 
+// Fields the index publishes that are NOT spec frontmatter. `review` is
+// projected from the spec's `<id>.review.md` gate sidecar (see
+// scripts/review-sidecar.mjs), so the frontmatter coverage assertion below must
+// not read it as "published but never validated" — it is validated, just by a
+// different gate against a different file. Everything here still has to be a
+// real derived field: a typo lands in neither list and fails the same check.
+export const DERIVED_INDEX_FIELDS = ['review'];
+
 // Throws if any validated frontmatter field is neither required nor optional
 // in the projection, or if the projection claims a field nothing validates.
-// The two lists are parameters so the fixtures can prove both directions fail.
+// The lists are parameters so the fixtures can prove every direction fails.
 export function assertProjectionCoverage(
 	validatedFields = [...SCALAR_FIELDS, ...ARRAY_FIELDS],
-	projectedFields = [...REQUIRED_INDEX_FIELDS, ...OPTIONAL_INDEX_FIELDS]
+	projectedFields = [...REQUIRED_INDEX_FIELDS, ...OPTIONAL_INDEX_FIELDS],
+	derivedFields = DERIVED_INDEX_FIELDS
 ) {
 	const validated = new Set(validatedFields);
 	const projected = new Set(projectedFields);
+	const derived = new Set(derivedFields);
+	const collisions = [...derived].filter((key) => validated.has(key) || projected.has(key));
+	if (collisions.length)
+		throw new Error(
+			`spec index projection is incomplete — derived field(s) also declared as frontmatter: ${collisions.join(', ')}`
+		);
 	const dropped = [...validated].filter((key) => !projected.has(key));
 	const unknown = [...projected].filter((key) => !validated.has(key));
 	if (dropped.length || unknown.length) {
@@ -371,8 +387,10 @@ export function assertProjectionCoverage(
 	}
 }
 
-// Builds one specs/index.json entry from parsed frontmatter.
-export function projectSpec(fm) {
+// Builds one specs/index.json entry from parsed frontmatter, plus the spec's
+// gate review sidecar when it has one. `review` goes last so the frontmatter
+// projection reads the same as it always did.
+export function projectSpec(fm, review) {
 	const spec = {
 		id: fm.id,
 		title: fm.title,
@@ -387,6 +405,7 @@ export function projectSpec(fm) {
 		if (!fm[key]) continue;
 		spec[key] = fm[key];
 	}
+	if (review) spec.review = review;
 	return spec;
 }
 
@@ -527,7 +546,17 @@ export function readSpecCorpusAtRev(rev) {
 		encoding: 'utf8'
 	})
 		.split('\n')
-		.filter((name) => name.endsWith('.md') && !name.endsWith('/TEMPLATE.md') && !name.endsWith('.review.md'));
+		// `git ls-tree -r` is recursive but the live scan below is not, so mirror
+		// it: only direct children of specs/ are specs. specs/audits/ holds
+		// multi-spec audit memos that belong to no single artifact and therefore
+		// have neither spec frontmatter nor a review sidecar's subject id.
+		.filter(
+			(name) =>
+				name.endsWith('.md') &&
+				!name.endsWith('/TEMPLATE.md') &&
+				!name.endsWith('.review.md') &&
+				!name.slice('specs/'.length).includes('/')
+		);
 	return names.flatMap((name) => {
 		const parsed = parseFrontmatter(readFileAtRev(rev, name) ?? '');
 		return parsed?.fm.id ? [{ fm: parsed.fm, body: parsed.body }] : [];
@@ -576,6 +605,7 @@ function main() {
 	);
 
 	const specs = [];
+	const pending = [];
 	const errors = [];
 	const fmById = new Map();
 
@@ -685,8 +715,17 @@ function main() {
 				for (const message of findSliceTopicViolations(body, topics)) errors.push(`${name}: ${message}`);
 			}
 		}
-		specs.push(projectSpec(fm));
+		pending.push(fm);
 	}
+
+	// Gate review sidecars (2026-08-17-sdlc-phase-gates-scoring-spec §4). Read
+	// after the corpus loop because an orphan sidecar can only be identified once
+	// every real spec id is known. Errors are fatal in BOTH modes, not just
+	// --check: the projection below publishes these scores, so a sidecar that did
+	// not validate must never reach specs/index.json.
+	const sidecars = readReviewSidecars('specs', { subjectKey: 'spec', knownIds: new Set(fmById.keys()) });
+	errors.push(...sidecars.errors);
+	for (const fm of pending) specs.push(projectSpec(fm, sidecars.byId.get(fm.id)));
 
 	if (check) {
 		// Link integrity: revises/supersedes must point at a real spec, and
