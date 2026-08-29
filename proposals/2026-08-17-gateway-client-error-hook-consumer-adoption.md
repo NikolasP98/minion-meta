@@ -27,18 +27,24 @@ splitting the decision across two adoption passes would mean bumping twice for o
 title above still names only `onEventError` because the frontmatter `id`/`title` are indexed
 machine state; read it as "the `GatewayClient` lifecycle-error hooks".
 
-> ✅ **Artifact tension resolved 2026-08-29.** The spawned spec
-> `2026-08-19-gateway-client-error-hook-consumer-adoption-spec` scoped itself to `onEventError` only
-> and treated S2's hooks as a future, separate adoption pass. This note asked whoever picked it up to
-> either widen that spec or file its second pass; it was **widened in place** as its pass 3 — §3, §4,
-> S1–S3 and §7 now carry all three hooks and the nine-decision Definition of Done below. That pass
-> also declared the spec's missing canonical `tags` (it could not be queued without them).
+> ⚠️ **Artifact tension still open, re-checked 2026-08-29.** The spawned spec
+> `2026-08-19-gateway-client-error-hook-consumer-adoption-spec` (approved, pass 2) still scopes
+> itself to `onEventError` only and states that S2, if it shipped, would be "a **second**, separate
+> consumer-adoption pass, not an amendment to this one." S2 did ship, in the same unpublished
+> release, and the later spec `2026-08-19-gateway-client-lifecycle-swallows-handoff-spec` §2 Slice 2
+> directs this proposal be amended in place instead. A 2026-08-29 attempt to widen that spec in place
+> as its pass 3 was reverted on re-review: the pass-2 review sidecar only approved the one-hook
+> contract, so widening it needs its own independent pass-3 review before it is implementation-eligible,
+> not a same-day metadata-repair edit. Reconcile before starting consumer work: either get that
+> widened pass reviewed and approved, or file the sibling hooks as a second, separate adoption pass
+> and cross-link it here.
 >
-> ⛔ **Still blocked on the release itself.** Re-verified 2026-08-29: `main` carries no pending
+> ⛔ **Also blocked on the release itself, re-verified 2026-08-29.** `main` carries no pending
 > changesets, npm's newest `@minion-stack/shared` is `0.10.0` (2026-08-13), and no
 > "Version Packages" PR exists after #29 — so DELTA step 1 below ("wait for the release to actually
-> publish") is unsatisfied and no consumer may bump. The missing `minion-meta` dev→main promotion is
-> filed separately as `proposals/2026-08-29-meta-shared-release-promotion-stalled.md`.
+> publish") is unsatisfied and no consumer may bump regardless of how the tension above is resolved.
+> The missing `minion-meta` dev→main promotion is filed separately as
+> `proposals/2026-08-29-meta-shared-release-promotion-stalled.md`.
 
 ## AS-IS
 

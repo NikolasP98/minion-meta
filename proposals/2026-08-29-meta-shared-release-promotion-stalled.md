@@ -1,6 +1,6 @@
 ---
 id: 2026-08-29-meta-shared-release-promotion-stalled
-title: "minion-meta dev→main promotion has no owner — 13 changesets unpublished, @minion-stack consumers blocked"
+title: "minion-meta dev→main promotion ownership/hold disposition undocumented — 13 changesets unpublished, @minion-stack consumers blocked"
 status: draft
 created: 2026-08-29
 updated: 2026-08-29
@@ -8,7 +8,7 @@ repos: [minion-meta]
 tags: [deps, infra]
 ---
 
-# `minion-meta` dev→main promotion has no owner, and it is blocking consumer work
+# `minion-meta` dev→main promotion's ownership/hold disposition is undocumented, and it is blocking consumer work
 
 Filed by the pass-3 re-review of `2026-08-19-gateway-client-error-hook-consumer-adoption-spec`,
 whose Slice 0 is a hard gate on a real npm publish. That gate has been red for ten days and the
