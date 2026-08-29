@@ -4,11 +4,14 @@ title: Provider-neutral agent instructions and canonical repository policy
 stage: spec
 status: approved
 pass: 2
+next_slice: 3
 created: 2026-08-18
-updated: 2026-08-28
+updated: 2026-08-29
 repos: [minion-meta, minion, minion_hub, minion_site, minion_plugins, paperclip, pixel-agents, minion-factory, minion-base]
 proposal: 2026-08-18-agent-instruction-parity-and-repo-policy
 verdict: approved
+type: infra
+tags: [infra, docs]
 relationship: depends-on
 related: [2026-08-18-sdlc-transformation-roadmap, 2026-08-18-factory-orchestration-round7-spec, 2026-04-19-minion-meta-repo-design]
 ---
