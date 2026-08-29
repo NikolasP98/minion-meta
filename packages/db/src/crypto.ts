@@ -70,24 +70,29 @@ function key(): Buffer {
           "source-visible development key. Never set this in a deployed environment.",
       );
     }
-    // TODO(handoff): the at-rest audit this branch calls for (spec
-    // 2026-08-17-pkg-dev-crypto-failopen-spec S2 / ⚠️ A3 — count rows already
-    // sealed under this dev key, per sealed column) could NOT be run in the
-    // implementing environment: no database is reachable from the meta-repo
-    // checkout (no TURSO_DB_URL / SUPABASE_DB_URL / local .db file), and
-    // minion_hub/minion_site are not checked out. Until it runs, treat the
-    // dev-key exposure as UNKNOWN, not zero — S3 (consumer bump) must not be
-    // sequenced on an assumption. Column inventory + the exact procedure:
-    // proposals/2026-08-20-dev-key-at-rest-audit.md
+    // The at-rest question this branch used to raise is SETTLED: the audit ran
+    // 2026-08-20 against hub's production Supabase (the database hub and site
+    // share) and found ZERO rows sealed under this key, so ⚠️ A3 does not apply
+    // to that database — proposals/2026-08-20-dev-key-at-rest-audit.md (closed).
     //
-    // TODO(handoff): S3 of the same spec is UNLANDED — minion_hub and
-    // minion_site have neither the boot-time assertCryptoKeyConfigured() call
-    // nor a bumped @minion-stack/db, because neither repo is checked out in the
-    // meta-repo workspace (⚠️ A2). Until S3 lands, this package's stricter
-    // contract is inert for the two apps that consume it. Do NOT run
-    // `pnpm update @minion-stack/db` in either consumer before the environment
-    // work in the spec's S3 steps 1–4 is done and verified — the bump PR is the
-    // real deploy of this fix. Ledger entry: proposals/2026-08-17-pkg-dev-crypto-failopen.md
+    // TODO(handoff): S3 of spec 2026-08-17-pkg-dev-crypto-failopen-spec is still
+    // UNLANDED — minion_hub and minion_site have neither the boot-time
+    // assertCryptoKeyConfigured() call nor a bumped @minion-stack/db, because
+    // neither repo is checked out in the meta-repo workspace (⚠️ A2). Until it
+    // lands, this package's stricter contract is inert for both apps. Two
+    // preconditions gate the consumer bump, and neither is satisfied yet:
+    //   1. Release. The published `latest` is 0.10.0 (2026-08-13), which
+    //      predates this guard — there is nothing to bump TO until a dev→main
+    //      release publishes the pending changeset db-crypto-fail-closed-dev-key.
+    //   2. Key convergence. The same audit found hub and site carry DIFFERENT
+    //      ENCRYPTION_KEY values against that shared database, so S3 step 1's
+    //      "one key per shared-DB group" is not a plain env change; it needs the
+    //      key-id/legacy-ring migration owned by
+    //      specs/2026-08-28-shared-db-encryption-key-convergence-spec.md (its
+    //      S3b carries the consumer boot wiring this slice describes).
+    // Do NOT run `pnpm update @minion-stack/db` in either consumer before both
+    // are resolved — the bump PR is the real deploy of this fix.
+    // Ledger entry: proposals/2026-08-17-pkg-dev-crypto-failopen.md
     cachedKey = scryptSync("minion-hub-dev-key", "minion-hub-salt", 32);
     return cachedKey;
   }
