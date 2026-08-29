@@ -13,8 +13,11 @@ source: review-fix-6f292604
 
 ## Problem in the user's words
 
-"Verifying the proposal index shouldn't change the proposal index, and regenerating it
-shouldn't silently throw away triage data."
+Agent-authored summary, not a user quotation: PR #281's 2026-08-29T17:06:55Z reviewer-integrity
+note reports that running `proposal-index.mjs --check` for verification purposes silently
+ignored the unknown flag, rewrote `proposals/index.json` anyway, and required the reviewer to
+restore the file by hand. That review comment is the evidence for this proposal, not something
+the user said.
 
 ## AS-IS (current observable behavior)
 
@@ -26,24 +29,29 @@ that maintains the same file:
    `writeFileSync('proposals/index.json', ...)`. Running it to verify the index therefore
    mutates the working tree. Observed on PR #281 (2026-08-29): a reviewer ran
    `node scripts/proposal-index.mjs --check`, the unknown flag was ignored, the file was
-   rewritten, and the reviewer had to restore it by hand.
+   rewritten, and the reviewer had to restore it by hand. **Still open** — this proposal
+   remains the tracking artifact for it.
 
-2. **Field/order drift.** `proposals/index.json` at `6548c40` carries
-   `"effort": "S"` on `2026-08-29-hub-pos-bookings-stock-gate-drift` and places that entry
-   first. The generator projects `id, title, status, created, updated, repos, merged_into,
-   possibly_reopens, duplicate_candidate, spawned_spec, tags, value, source` — no `effort` —
-   and sorts `b.id.localeCompare(a.id)`, which puts `postmerge-*` ids above dated ids. So the
-   first mandated regeneration after any proposal edit drops `effort` and moves the row.
-   40 of 154 proposal files declare `effort:` in frontmatter; only 1 index entry carries it.
+2. **Field drift — fixed in review-fix-6f292604.** `proposals/index.json` at `6548c40` carried
+   `"effort": "S"` on `2026-08-29-hub-pos-bookings-stock-gate-drift`, but the generator
+   projected `id, title, status, created, updated, repos, merged_into, possibly_reopens,
+   duplicate_candidate, spawned_spec, tags, value, source` — no `effort` — so the first
+   mandated regeneration after any proposal edit dropped it. The generator now also projects
+   `effort` (`scripts/proposal-index.mjs`'s proposal-object literal), covered by
+   `scripts/proposal-index.test.mjs`, and the current `proposals/index.json` carries `effort`
+   for all 40 declaring files. The auto-triage writer's row-ordering behavior (it prepends new
+   entries; the generator sorts `b.id.localeCompare(a.id)`) was not investigated and may still
+   diverge — see DELTA item 2 below.
 
 ## TO-BE (desired observable behavior)
 
 - `node scripts/proposal-index.mjs --check` exits 0 when `proposals/index.json` matches the
   frontmatter projection and exits 1 with a diff-style message otherwise, writing nothing —
   same contract the file header already claims ("Same contract as spec-index.mjs").
-- One writer owns the projection: either the generator projects `effort` (making it canonical
-  for all 40 declaring files) or the auto-triage writer stops emitting it and stops prepending
-  rows. Either way, a regeneration immediately after an auto-triage commit is a no-op.
+- ~~One writer owns the projection: either the generator projects `effort`... or the auto-triage
+  writer stops emitting it~~ — done: the generator now projects `effort` and is canonical.
+  Remaining: confirm the auto-triage writer's insertion order matches the generator's sort, so
+  a regeneration immediately after an auto-triage commit is a no-op end to end.
 
 **Invariant that must not change:** the committed `proposals/index.json` stays the board's
 read surface, and invalid frontmatter still exits 1.
@@ -53,12 +61,16 @@ read surface, and invalid frontmatter still exits 1.
 1. Add `const check = process.argv.includes('--check')` and branch before `writeFileSync`,
    mirroring `scripts/spec-index.mjs:574-...`. Test: run `--check` on a clean tree (exit 0,
    `git status --porcelain proposals/` empty), then on a hand-perturbed index (exit 1, still
-   no write).
-2. Decide the `effort` question with whoever owns the auto-triage writer, then implement it in
-   ONE place. Test: `node scripts/proposal-index.mjs && git diff --exit-code proposals/index.json`
-   is clean immediately after an auto-triage commit.
+   no write). **Still open.**
+2. ~~Decide the `effort` question with whoever owns the auto-triage writer, then implement it in
+   ONE place.~~ **Done** — the generator projects `effort` unconditionally when frontmatter
+   declares it (`scripts/proposal-index.mjs`). Confirm separately whether the auto-triage
+   writer's prepend-ordering still diverges from the generator's `b.id.localeCompare(a.id)`
+   sort; if so, decide with whoever owns that writer which side changes.
 3. Extend `scripts/spec-index.test.mjs`'s sibling coverage (or a new
-   `scripts/proposal-index.test.mjs`) with both cases above.
+   `scripts/proposal-index.test.mjs`) with both cases above. `scripts/proposal-index.test.mjs`
+   now exists and covers the `effort` projection (item 2); it does not yet cover `--check`
+   (item 1, still open).
 
 ## Out of scope
 
@@ -69,7 +81,8 @@ read surface, and invalid frontmatter still exits 1.
 ## Definition of done
 
 `--check` verifies without writing (proved by a test that fails if the write returns), and a
-regeneration run straight after an auto-triage index commit produces an empty diff.
+regeneration run straight after an auto-triage index commit produces an empty diff. The
+`effort`-projection half of this is done; `--check` is not.
 
 ## Handoff note
 
@@ -77,5 +90,11 @@ This proposal is the required artifact for an open end left by factory run `6f29
 (PR #281): that run's mandated `node scripts/proposal-index.mjs` regeneration dropped
 `"effort": "S"` from the `2026-08-29-hub-pos-bookings-stock-gate-drift` projection and
 reordered it. The generator is the documented canon, so the regenerated output was committed
-as-is rather than hand-patched. Marked `TODO(handoff)` at both sites in
-`scripts/proposal-index.mjs`.
+as-is rather than hand-patched at the time.
+
+**Update (review-fix-6f292604, round 1):** the `effort`-drop half of this handoff is now fixed
+— `scripts/proposal-index.mjs` projects `effort`, `scripts/proposal-index.test.mjs` covers it,
+and `proposals/index.json` was regenerated. The `TODO(handoff)` comment for the dropped-effort
+site was removed from `scripts/proposal-index.mjs` since it no longer applies. The `--check`
+mode gap (`TODO(handoff)` at `scripts/proposal-index.mjs`'s bottom) and the possible
+auto-triage row-ordering divergence remain open; this proposal stays `draft` for them.

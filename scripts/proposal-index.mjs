@@ -69,10 +69,7 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		...(fm.spawned_spec ? { spawned_spec: fm.spawned_spec } : {}),
 		...(fm.tags ? { tags: fm.tags } : {}),
 		...(fm.value ? { value: fm.value } : {}),
-		// TODO(handoff): `effort` is NOT projected, but the out-of-band auto-triage
-		// index writer emits it (and prepends new entries instead of sorting by id).
-		// Any mandated regeneration therefore drops effort and reorders those rows —
-		// see proposals/2026-08-29-proposal-index-check-mode-and-effort-projection.md.
+		...(fm.effort ? { effort: fm.effort } : {}),
 		...(fm.source ? { source: fm.source } : {})
 	});
 }

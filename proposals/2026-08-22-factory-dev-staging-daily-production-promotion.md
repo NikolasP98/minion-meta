@@ -1,7 +1,7 @@
 ---
 id: 2026-08-22-factory-dev-staging-daily-production-promotion
 title: Factory release train — dev staging candidates and daily production promotion
-status: done
+status: in-spec
 created: 2026-08-22
 updated: 2026-08-29
 repos: [minion-factory]
@@ -132,6 +132,8 @@ running; residual §9 S6/S7 tracked on the spec". That is disproved. The superse
 at minion-factory `0315707d8c8ffdfb024d2b97fa2eebf45c3b1914` slices S1–S4 are absent, S5 is only
 partial, and S7's activation gate is actively violated in the live repository. Per-slice S1–S7
 status is delegated to that spec's pass-2 review sidecar,
-`specs/2026-08-22-factory-dev-staging-daily-production-promotion-spec.review.md`. `status: done`
-here denotes only that this proposal spawned that spec — not that the release train is
-implemented.
+`specs/2026-08-22-factory-dev-staging-daily-production-promotion-spec.review.md`. Status is
+`in-spec`, the documented state for a proposal whose spawned spec has been picked up by the spec
+pipeline but has not yet shipped end to end (see `scripts/proposal-index.mjs`'s `P_STATUSES`);
+this proposal moves to `done` only once this proposal's own "Definition of done" section below is
+met.
