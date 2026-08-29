@@ -1,11 +1,70 @@
 ---
 spec: 2026-08-17-gw-msteams-large-upload-spec
-pass: 4
+pass: 5
 verdict: changes_requested
 reviewer: factory-review
 created: 2026-08-17
 updated: 2026-08-29
 ---
+
+# Pass 5 disposition — STILL REVIEW (changes_requested), unchanged
+
+Pass 5 is a repair pass, not a re-disposition. The pass-4 cross-provider review agreed with pass 4's
+`changes_requested` verdict and with keeping the drive-path scope gated rather than deleted, but found
+three defects in **how pass 4 stated its own blockers**. All three are verified against this branch and
+fixed in the spec; the disposition, the scope, and the ship gates are otherwise untouched.
+
+1. **§7 step 0 could not distinguish a size failure from an environment failure (medium).** The
+   mandatory live matrix sent only 4.1 MiB / 12 MiB / ~99 MiB payloads with no sub-threshold control, so
+   a 401/403 from the app-only identity, a missing `MinionShared` parent, or a wrong site id would fail
+   all three probes and could then be read as proof of a byte ceiling — the exact inference that would
+   authorize S1. Compounding it, the step told the operator to configure a SharePoint site id *and* to
+   exercise "both `uploadToOneDrive` and `uploadToSharePoint`", which one configuration cannot do:
+   verified at the pin, `send.ts:204-222` takes SharePoint whenever `sharePointSiteId` is set and
+   reaches OneDrive only when it is absent (`:267-278`), and `:197-202` sends images inline in that
+   second case so an image probe never reaches OneDrive at all.
+   **Fixed:** §7 step 0 is rewritten as a controlled experiment — 0a (two runs, or direct invocation of
+   the two exported helpers; non-image files; not a 1:1 chat, which is the consent path), 0b (a
+   known-good ~1 MiB non-image control that must pass before its probes, same tenant/identity/
+   destination/config, full method+URL+status+body+size recorded per request), 0c (an explicit reading
+   table: failing control ⇒ environment finding that may not approve S1 or derive a threshold; green
+   control + all probes green ⇒ premise disproved; green control + a size-specific probe failure ⇒
+   derive the threshold from the measurements, not from the 4,000,000 already written in §3; the two
+   helpers may disagree and are read per-helper). The top-of-file banner, §1.1a, the ship gate and the
+   approval gate all now state the control requirement rather than the uncontrolled matrix.
+
+2. **The pass-4 heap correction was contradicted by three active passages (medium).** §1.3a correctly
+   recorded that local files are fully read by `fs.readFile` (`src/web/media.ts:309`) before
+   `clampAndFinalize` checks the cap (`:319-324`, `:265-267`) — re-verified this pass against
+   `NikolasP98/minion@bd55137`. But §1.5 still said the ceiling is "enforced before the bytes are ever
+   in hand", §3's routing table said over-ceiling input is refused "before the buffer exists", and §6
+   called buffering "bounded by the existing ceiling". None of those sat inside the marked superseded
+   pass-3 history; all three were present-tense guidance, and the first was the sentence used to declare
+   the pass-2 heap-policy gate closed.
+   **Fixed:** all three now state the same qualified contract — remote reads are bounded *during* fetch,
+   local files are read in full and rejected *after*, both reject before any Graph request, only the
+   remote path is a heap bound. §1.5 no longer claims to clear G2: the heap-policy gate is explicitly
+   reopened, a new **Heap-policy gate** paragraph in §7 makes approval depend on either recorded
+   operator acceptance of the measured concurrent-local envelope or a fix, and the required ledger entry
+   is filed as
+   [`proposals/2026-08-29-gw-local-media-read-before-cap-check.md`](../proposals/2026-08-29-gw-local-media-read-before-cap-check.md)
+   (its in-code `TODO(handoff):` half is owed by the first `minion` change to land there — this branch
+   may not edit product code).
+
+3. **The `createUploadSession` URL instruction was malformed as written (low).** The simple URLs end in
+   `:${uploadPath}:/content` (verified: `graph-upload.ts:42` and `:186`, path built at `:40` / `:183`).
+   The spec said to swap `/content` for `:/createUploadSession`, which literally yields
+   `...root:${uploadPath}::/createUploadSession`, and the S1 DoD only asserted the OneDrive-vs-SharePoint
+   *base* — so a mock would accept the malformed suffix and the defect would surface only against a real
+   tenant.
+   **Fixed:** §2 S1 now says to replace the trailing `/content` and nothing else, gives both exact
+   templates verbatim, and warns against the extra colon; the DoD asserts the **complete** requested URL
+   string for each helper and states that a base-only assertion is insufficient.
+
+No other change: the ">4 MB fails" premise remains unproved, the drive-path scope remains gated behind
+step 0, and `status: draft` / `verdict: changes_requested` stand. No product code exists for this spec
+(re-checked this pass: no matching `NikolasP98/minion` PR or branch), so there is still no WIP to
+preserve, reject, or archive.
 
 # Pass 4 disposition — STILL REVIEW (changes_requested), not approved
 
@@ -84,10 +143,15 @@ That value already exists, is already a deliberate product policy, and is alread
 `MSTEAMS_MAX_MEDIA_BYTES = 100 * 1024 * 1024` (`send.ts:47`, `messenger.ts:29`), overridable by
 `cfg.channels.msteams.mediaMaxMb` → `cfg.agents.defaults.mediaMaxMb` via `resolveChannelMediaMaxBytes`
 (`src/channels/plugins/media-limits.ts`), and **enforced before the buffer is ever allocated** by
-`loadWebMedia(mediaUrl, mediaMaxBytes)` (`send.ts:128`). The pass-2 requirement was an artifact of not
+`loadWebMedia(mediaUrl, mediaMaxBytes)` (`send.ts:128`). *[Pass-4/5 correction: the emphasised clause is
+false for local paths — see §1.3a and the pass-5 section above. Retained verbatim as the historical
+record of why pass 3 wrongly considered the heap-policy gate closed.]* The pass-2 requirement was an artifact of not
 being able to read the repo. Adding a new `MAX_UPLOAD_BYTES` would have created a second, conflicting
 ceiling on the same axis. S3 now reuses the existing one and S3's DoD asserts
 `rg -n 'MAX_UPLOAD_BYTES' extensions/msteams` returns zero. **No human policy decision is outstanding.**
+*[Pass-5 correction: that last sentence is wrong. Reusing the existing constant settles which byte
+*value* to use, but not whether it is an acceptable per-upload heap bound — which it is not on the local
+path. The heap-policy gate is open; see the pass-5 section above.]*
 
 ## Defects found by recon and fixed in this pass
 

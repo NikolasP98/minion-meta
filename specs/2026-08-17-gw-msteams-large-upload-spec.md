@@ -3,7 +3,7 @@ id: 2026-08-17-gw-msteams-large-upload-spec
 title: "MS Teams attachments — route >4MB through a Graph resumable upload session (chunked PUT with resume, expiry and cancel)"
 stage: spec
 status: draft
-pass: 4
+pass: 5
 created: 2026-08-17
 updated: 2026-08-29
 proposal: 2026-08-17-gw-msteams-large-upload
@@ -13,7 +13,14 @@ tags: [logic, test]
 type: fix
 ---
 
-> **Pass 4 disposition: STILL REVIEW, not approved.** Pass 3's approval rested on the premise that
+> **Pass 5 disposition: STILL REVIEW, not approved.** Pass 5 changes no disposition — it repairs three
+> defects the pass-4 review found in *how* pass 4 stated its own blockers: §7 step 0's live matrix had no
+> known-good control and could not tell a size failure from an auth/path one (fixed below and in §7);
+> three active passages still asserted the pre-allocation guarantee §1.3a disproves (§1.5, §3's routing
+> table, §6 — all now qualified remote-vs-local, with the heap-policy gate explicitly reopened and
+> filed as a ledger proposal); and S1's `createUploadSession` URL instruction, read literally, produced
+> a malformed `::` path (§2 S1 now gives the two exact templates and requires a whole-URL assertion).
+> The substance below is unchanged: Pass 3's approval rested on the premise that
 > Graph's simple `PUT .../content` endpoint caps uploads at 4MB. Microsoft's current v1.0 documentation
 > for the exact endpoint shapes this spec targets — [Upload or replace the contents of a
 > driveItem](https://learn.microsoft.com/en-us/graph/api/driveitem-put-content?view=graph-rest-1.0),
@@ -26,13 +33,23 @@ type: fix
 > simple `PUT`. §1.1a records this correction in full; two independently-evidenced problems survive it
 > and are preserved (§1.3a corrects false heap/copy claims used to clear the pass-2 blocker; §4's
 > consent-URL fragment-ceiling concern is untouched). **Before this spec can move to `approved`**, run a
-> live simple `PUT` with representative 4.1 MiB, 12 MiB, and near-ceiling (~99 MiB) payloads against
-> both `uploadToOneDrive` and `uploadToSharePoint`'s exact endpoints on a real tenant, and record
-> status/body for each. If runtime agrees with the 250 MB contract, the original ">4 MB fails" premise
+> **controlled** live simple `PUT` matrix (§7 step 0) on a real tenant. Controlled means: for **each**
+> of `uploadToOneDrive` and `uploadToSharePoint`, a known-good **~1 MiB non-image control** succeeds
+> first, and only then 4.1 MiB, 12 MiB and near-ceiling (~99 MiB) payloads run through the *same*
+> tenant, identity, destination folder and channel configuration — status and body recorded for every
+> request. The control is the discriminator, not a formality: without it, a 401/403 from the app-only
+> identity, a missing `MinionShared` parent, a wrong site id or any other path/configuration fault makes
+> all three large probes fail while proving nothing whatsoever about a byte ceiling. **A failing control
+> is an auth/path/configuration finding, is not evidence about size, and may not be used to approve S1
+> or to derive any threshold.** The two helpers also cannot both be reached from one send configuration
+> — `send.ts:204-222` takes SharePoint whenever `sharePointSiteId` is set and reaches OneDrive only when
+> it is absent (`:267-278`) — so the matrix runs twice, or the helpers are invoked directly (§7 step 0).
+> If every control passes and the large payloads pass too, the original ">4 MB fails" premise
 > is disproved — reject/archive it and, if the surviving findings are valuable, spin them into a
 > narrower proposal (resumability above Microsoft's own >10 MiB recommendation, and chunking the Teams
 > consent-URL upload below its <60 MiB per-request fragment limit — §4). If runtime contradicts the
-> docs, record the tenant/cloud/auth-specific failure and derive the threshold from that evidence instead
+> docs — controls green on both helpers, larger payloads rejected with a size-specific response — record
+> the tenant/cloud/identity-specific failure and derive the threshold from that evidence instead
 > of from documentation alone. **No product code has been implemented against this spec; do not start
 > S1 until a corrected pass records an explicit `approved` disposition.**
 
@@ -140,7 +157,10 @@ to 250 MB in size."* No 4 MB ceiling is documented anywhere on that page for thi
 
 No live reproduction exists. This spec's own DoD (§7) requires a live 12 MB send to prove the fix, but
 no pass has run the *inverse* check — a live send of a 4.1 MB (or larger) file through **today's**
-unmodified simple `PUT`, to see whether it actually fails. PR #253 (this spec's own tracking PR) is not
+unmodified simple `PUT`, to see whether it actually fails. §7 step 0 specifies that check as a
+*controlled* one: a known-good ~1 MiB non-image control per helper, under the same tenant, identity,
+destination and configuration as its probes, so that an identity/permission/path fault cannot be read
+as a byte ceiling. An uncontrolled matrix cannot resolve this finding. PR #253 (this spec's own tracking PR) is not
 that evidence: its `verify` check validates the meta-repo spec/proposal index only, `claude-review` was
 skipped due to workflow validation, and `thermonuclear-review` was skipped outright.
 
@@ -224,7 +244,11 @@ corrected here, because they were used as evidence to clear the pass-2 heap-poli
 zero-copy behavior from a comment. The local-file pre-allocation gap is a distinct, real finding: it is
 **not fixed by this spec** (S1–S3 touch `extensions/msteams/`, not `src/web/media.ts`) and stays in
 review until the operator either accepts the measured worst-case concurrent-local-upload heap envelope
-or a follow-up scopes an early local-size check / streaming read in the plugin-sdk.
+or a follow-up scopes an early local-size check / streaming read in the plugin-sdk. Per AGENTS.md's
+open-items ledger clause, that follow-up is filed rather than left implicit:
+[`proposals/2026-08-29-gw-local-media-read-before-cap-check.md`](../proposals/2026-08-29-gw-local-media-read-before-cap-check.md).
+Until one of those two things happens, the pass-2 heap-policy gate is **open** (§1.5, §7 heap-policy
+gate) — this spec does not claim to have cleared it.
 
 ### 1.4 ⚠️ A3 resolved — the current failure mechanism, precisely
 
@@ -238,24 +262,39 @@ or a follow-up scopes an early local-size check / streaming read in the plugin-s
   **S2/S3 must keep it that way**; widening that error to include the URL would publish a
   pre-authenticated write token into a Teams conversation.
 
-### 1.5 ⚠️ A4 resolved, and the pass-2 human gate dissolved with it
+### 1.5 ⚠️ A4 resolved — the pass-2 *constant* question is answered; the pass-2 *heap-policy* question is not
 
 A4 was "the target repo is not in this workspace". It now is (read-only recon at the pin above).
 
-The one item the pass-2 review flagged for a human — *"choose and record an explicit byte value for
-`MAX_UPLOAD_BYTES`"* — was an artifact of that blindness. **The ceiling already exists, is already a
-deliberate product policy, and is already configurable:**
+The pass-2 review flagged one item for a human: *"choose and record an explicit byte value for
+`MAX_UPLOAD_BYTES`, no greater than the verified destination limit and acceptable as a per-upload
+gateway heap bound."* That is two questions, and recon answers only the first. **The ceiling already
+exists, is already a deliberate product policy, and is already configurable:**
 
 - `MSTEAMS_MAX_MEDIA_BYTES = 100 * 1024 * 1024` — `send.ts:47`, `messenger.ts:29`
 - overridable per channel by `cfg.channels.msteams.mediaMaxMb`, falling back to
   `cfg.agents.defaults.mediaMaxMb`, resolved by `resolveChannelMediaMaxBytes`
   (`src/channels/plugins/media-limits.ts`, re-exported through `minion/plugin-sdk`)
-- **enforced before the bytes are ever in hand**, by `loadWebMedia(mediaUrl, mediaMaxBytes)`
+- **enforced by `loadWebMedia(mediaUrl, mediaMaxBytes)` before the upload network call — but not
+  uniformly before allocation.** Per §1.3a, and stated the same way everywhere in this spec: a **remote**
+  URL is bounded *during* the fetch, so the ceiling really is a pre-allocation bound there; a **local**
+  path is read in full by `fs.readFile` (`media.ts:309`) and only then rejected by `clampAndFinalize`
+  (`:319-324`, non-image length check `:265-267`), so on that path the ceiling is a post-allocation
+  check. Both paths reject before any Graph request; only the remote path bounds heap.
 
 Introducing a new `MAX_UPLOAD_BYTES` constant would create a *second, conflicting* ceiling on the same
 axis — the classic way two limits drift and a user gets a rejection naming the wrong number. S3 is
-rewritten accordingly: **reuse the existing ceiling, add none.** There is no human policy decision
-outstanding, which is what clears G2.
+rewritten accordingly: **reuse the existing ceiling, add none.** That settles the *constant* the pass-2
+review asked a human to choose — there is no new byte value to pick.
+
+**It does not settle the heap policy, and this spec no longer claims it clears G2.** The pass-2 gate
+asked whether the byte ceiling is an acceptable per-upload gateway heap bound; on the local path it is
+not a bound at all (an oversized local file, and any number of concurrent local sends, are allocated
+before rejection). That gap lives in `src/web/media.ts`, outside this spec's `extensions/msteams/`
+surface, so this spec cannot close it. It is filed as a ledger item —
+[`proposals/2026-08-29-gw-local-media-read-before-cap-check.md`](../proposals/2026-08-29-gw-local-media-read-before-cap-check.md)
+— and G2 stays open until the operator either accepts the measured worst-case concurrent-local-upload
+heap envelope or that proposal ships an early local-size check / streaming read.
 
 ### 1.6 The rest of Slice 0's questions
 
@@ -327,8 +366,22 @@ and the resulting drive item is returned, on **both** drive call sites (§1.1). 
   two drift. Do not "simplify" this to always-resumable: a small attachment would grow from one request
   to at least two (create plus one or more chunk PUTs), and the simple path is the common case by a
   wide margin.
-- **`createUploadSession`.** `POST` to the drive item's `:/createUploadSession` — same path prefix the
-  simple PUT already builds, `/content` swapped for `:/createUploadSession` — with a body carrying
+- **`createUploadSession`.** `POST` to the drive item's `createUploadSession` action. Build the URL by
+  replacing the trailing **`/content`** — and nothing else — in the URL the simple `PUT` already builds
+  (`graph-upload.ts:42`, `:186`). The path-escaping colons stay exactly as they are; do **not** prepend a
+  second colon, which is what "swap `/content` for `:/createUploadSession`" would literally produce
+  (`...root:${uploadPath}::/createUploadSession` — malformed, and a mock will happily accept it). With
+  `GRAPH_ROOT = "https://graph.microsoft.com/v1.0"` and
+  `uploadPath` = `/MinionShared/` + `encodeURIComponent(filename)` (`graph-upload.ts:40`, `:183`),
+  the two exact templates are:
+
+  ```
+  OneDrive:   ${GRAPH_ROOT}/me/drive/root:${uploadPath}:/createUploadSession
+  SharePoint: ${GRAPH_ROOT}/sites/${siteId}/drive/root:${uploadPath}:/createUploadSession
+  ```
+
+  Assert the **complete** requested URL in S1, not just the base — a base-only assertion passes on a
+  malformed suffix. The body carries
   `item: { "@microsoft.graph.conflictBehavior": ... }`. **Pass-4 correction:** use **`replace`**, not
   `rename`. The existing simple path is silent on conflict behavior (verified §1.1: neither function
   sets it) and Graph's documented default for a silent simple `PUT` is `replace` — two uploads of
@@ -391,8 +444,11 @@ pnpm vitest run extensions/msteams          # or: pnpm --filter <msteams-pkg-fro
 #   - upload(<Buffer.alloc(1_000_000)>) → one PUT to /content, zero createUploadSession calls
 #   - upload(<Buffer.alloc(4_000_001)>) → session path       ← the boundary, from above
 #   - upload(<Buffer.alloc(4_000_000)>) → simple path        ← the boundary, from below
-#   - the SharePoint session URL is built from /sites/{siteId}/drive/..., the OneDrive one
-#         from /me/drive/... — the two must not collapse into one hardcoded base  ← §1.1
+#   - the COMPLETE createUploadSession URL is asserted for each helper, string-equal to:
+#         https://graph.microsoft.com/v1.0/me/drive/root:/MinionShared/<enc>:/createUploadSession
+#         https://graph.microsoft.com/v1.0/sites/<siteId>/drive/root:/MinionShared/<enc>:/createUploadSession
+#         ← §1.1 (bases must not collapse) AND the exact suffix: no '::', no missing colon.
+#           A base-only assertion is NOT sufficient — it accepts a malformed suffix a mock will serve.
 #   - createUploadSession body carries "@microsoft.graph.conflictBehavior": "replace"     ← NOT rename
 #   - same-name parity: uploading the same filename twice via the SIMPLE path replaces the
 #         prior item, and twice via the SESSION path also replaces it — one consistent policy,
@@ -597,7 +653,7 @@ table until the live check in §1.1a / the top-of-file disposition banner has be
 | `0` bytes | Simple PUT (unchanged) | Empty-file semantics are Graph's problem, not this spec's; do not add a special case. |
 | `1 B … 4,000,000 B` | Simple `PUT /content` | Today's behavior, byte-identical. One request. |
 | `4,000,001 B … ceiling` | `createUploadSession` + chunked PUT | **The fix.** Chunks of 5 MiB (16 × 320 KiB), sequential, last chunk short. |
-| `> ceiling` | Rejected before any network call | Already the behavior: `loadWebMedia(url, mediaMaxBytes)` refuses before the buffer exists (§1.5). No new constant. |
+| `> ceiling` | Rejected before any Graph request | Already the behavior: `loadWebMedia(url, mediaMaxBytes)` refuses the payload. Remote media is refused *before* the buffer exists (bounded during fetch); local media is read in full and refused *after* (§1.3a, §1.5). No new constant either way. |
 
 **"Ceiling" = the existing `resolveChannelMediaMaxBytes` result**, i.e.
 `cfg.channels.msteams.mediaMaxMb` → `cfg.agents.defaults.mediaMaxMb` → `MSTEAMS_MAX_MEDIA_BYTES`
@@ -658,7 +714,7 @@ claim pass 2 could only assert.
 | `@minion-stack/shared` (frames, events, WS protocol) | **None.** No frame type, event, or protocol field is added or changed | §6 excludes it; nothing here crosses the gateway boundary |
 | `minion_hub`, `minion_site`, `paperclip-minion` | **None.** No protocol change ⇒ no consumer change | AGENTS.md's "Gateway protocol" row does not apply |
 | Other channel extensions (slack, discord, telegram, whatsapp, …) | **None from this diff.** Each has its own upload ceiling and its own API; a shared abstraction is not justified by one instance | §1.6 found no other `Content-Range` user in the fleet. §6 excludes the sweep |
-| Gateway process memory | ⚠️ **Real, and pre-existing, and worse for local files than pass 3 claimed.** A 100MB attachment is 100MB of heap. For **remote** media, `loadWebMedia` bounds the read to the cap while fetching. For **local** media it does not: `fs.readFile` reads the whole file before the cap is checked (§1.3a) — so an oversized local file is briefly fully allocated before rejection, which is a heap-bound gap this spec does not close. Chunking itself adds no *new* allocation as long as chunks are sliced with `subarray()` and never wrapped in `new Uint8Array(...)` (§1.3a) | The ceiling that bounds the accepted size is configurable (§1.5), but the pre-check local-read gap is unresolved — see §1.3a's disposition. Streaming is a ledger item, not a silent omission |
+| Gateway process memory | ⚠️ **Real, and pre-existing, and worse for local files than pass 3 claimed.** A 100MB attachment is 100MB of heap. For **remote** media, `loadWebMedia` bounds the read to the cap while fetching. For **local** media it does not: `fs.readFile` reads the whole file before the cap is checked (§1.3a) — so an oversized local file is briefly fully allocated before rejection, which is a heap-bound gap this spec does not close. Chunking itself adds no *new* allocation as long as chunks are sliced with `subarray()` and never wrapped in `new Uint8Array(...)` (§1.3a) | The ceiling that bounds the accepted size is configurable (§1.5), but the pre-check local-read gap is unresolved — see §1.3a's disposition and the heap-policy gate in §7. Filed as `proposals/2026-08-29-gw-local-media-read-before-cap-check.md`; a ledger item, not a silent omission |
 | Microsoft Graph / SharePoint (external) | **More requests per large file**: 1 create + ⌈size/5 MiB⌉ PUTs + status/retry/cancel requests when needed, versus 1 failed request today. Files land in the destination drive and consume tenant storage | Sequential chunks (no fan-out), bounded retries with `Retry-After` honoured, `429` respected — S2. This is the intended cost of the feature |
 | `Minion Docs/`, `minion_plugins`, `pixel-agents` | **None** | No dependency on this extension |
 
@@ -684,9 +740,11 @@ requires every case to run against both functions for exactly this reason.
 - **The download side** — the proposal's own exclusion. No resumable *fetch*, no range requests on read.
 - **Non-OneDrive / non-drive storage** — the proposal's own exclusion. No blob store, no CDN, no
   gateway-hosted file serving.
-- **Streaming instead of buffering** (§1.3). Bounded by the existing ceiling here; filed as a ledger
-  item in S3. It would have to change `loadWebMedia` in the plugin-sdk and every channel that calls it —
-  its own proposal, its own callers.
+- **Streaming instead of buffering** (§1.3). Accepted payloads are bounded by the existing ceiling, but
+  only the *remote* read is bounded before allocation — the local read is not (§1.3a, §1.5). Fixing that
+  would have to change `loadWebMedia` in the plugin-sdk and every channel that calls it, so it is out of
+  scope here and filed as its own ledger item,
+  [`proposals/2026-08-29-gw-local-media-read-before-cap-check.md`](../proposals/2026-08-29-gw-local-media-read-before-cap-check.md).
 - **A new config or env surface** for chunk size, retry counts, or the size ceiling. Named constants
   with comments; the ceiling is the *existing* `mediaMaxMb` (§1.5). If someone genuinely needs to tune
   chunk size in production, that demand is evidence for a follow-up, not a reason to add six env vars.
@@ -720,17 +778,55 @@ primary path ships broken.
 ```bash
 cd minion
 
-# 0. PREREQUISITE, pre-implementation (§1.1a) — do this BEFORE S1, against TODAY's unmodified code:
-#    Configure the msteams channel WITH a SharePoint site id, start the gateway (pnpm gateway:watch):
-#    - Send a 4.1MB file, a 12MB file, and a near-ceiling (~99MB) file through the UNCHANGED
-#      simple PUT path (both uploadToOneDrive and uploadToSharePoint) and record status/body for each.
-#    - If all three succeed: the ">4MB fails" premise is disproved. Do not proceed to S1 as scoped;
-#      reject/archive the proposal's drive-path claim, and file a narrower proposal for whatever of
-#      §1.2/§4's independently-evidenced findings (consent-URL fragment ceiling, resumability) remain.
-#    - If any fails: record the exact status/body/tenant/cloud — that is the evidence base S1 needs,
-#      and it may justify a different byte threshold than the 4,000,000 used in §3.
-#    This step is the pass-4 blocker (top-of-file disposition banner). Do not run steps 1-3 until it
-#    has been run and its result recorded in the PR.
+# 0. PREREQUISITE, pre-implementation (§1.1a) — do this BEFORE S1, against TODAY's unmodified code.
+#    This is a CONTROLLED experiment, not a smoke test: its only job is to decide whether the drive
+#    endpoints have a SIZE-dependent failure below the gateway's accepted ceiling. Every other kind of
+#    failure (identity, permission, path, destination, configuration) must be excluded first, or a
+#    401/403/404 that happens to hit all three large payloads reads as "proof" of a byte ceiling.
+#
+#    0a. Two runs, because ONE configuration cannot exercise both helpers.
+#        send.ts:204-222 takes the SharePoint path whenever cfg.channels.msteams.sharePointSiteId is
+#        set, and only reaches uploadToOneDrive when it is absent (:267-278). So either:
+#          RUN A: sharePointSiteId SET   -> exercises uploadToSharePoint  (group chat / channel)
+#          RUN B: sharePointSiteId UNSET -> exercises uploadToOneDrive    (group chat / channel)
+#        ...or invoke the two exported helpers directly from a scratch script with a real
+#        MSTeamsAccessTokenProvider (uploadToOneDrive / uploadToSharePoint, graph-upload.ts:29 / :171),
+#        which is the cheaper and more precise option and is equally acceptable evidence.
+#        Use a NON-IMAGE file in every case: send.ts:197-202 sends images inline when no site id is
+#        configured, so an image in RUN B never reaches OneDrive at all.
+#        Do NOT use a 1:1 chat for this step — personal chats route to the consent card (§1.2), a
+#        different code path with a different (Teams-supplied) URL.
+#
+#    0b. Per run, in this order, through the SAME tenant, identity, /MinionShared destination and
+#        configuration — record method, full URL, HTTP status, response body and byte size for EACH:
+#          1. CONTROL   ~1 MiB non-image  -> MUST succeed (2xx, item id returned)
+#          2. PROBE     4.1 MiB           -> record
+#          3. PROBE     12 MiB            -> record
+#          4. PROBE     ~99 MiB (near the 100 MiB ceiling, §1.5) -> record
+#        Changing tenant, identity, folder or config between the control and its probes voids the run.
+#
+#    0c. Reading the result — per run, and both runs must be read before any disposition:
+#        - CONTROL FAILS -> this run proves NOTHING about size. Record it as an auth / permission /
+#          path / configuration finding, fix the environment, and re-run. It may NOT be used to
+#          approve S1, to justify the routing split, or to derive any byte threshold. If the control
+#          cannot be made to pass, say so and stop — "we could not upload at all" is the finding.
+#        - CONTROL PASSES, all three probes succeed -> the ">4MB fails" premise is disproved for that
+#          helper. If both runs read this way: do not proceed to S1 as scoped; reject/archive the
+#          proposal's drive-path claim, and file a narrower proposal for whatever of §1.2/§4's
+#          independently-evidenced findings (consent-URL fragment ceiling, resumability) remain.
+#        - CONTROL PASSES, some probe fails -> a size-dependent failure exists. Record the exact
+#          status/body/tenant/cloud/identity and the smallest failing and largest passing size; the
+#          threshold in §3 must be DERIVED from those measurements, not from the 4,000,000 already
+#          written there and not from documentation. Note that a failure whose body names an auth,
+#          scope or path problem rather than size is NOT size evidence even with a green control —
+#          re-run that single payload before treating it as such.
+#        - The two runs may disagree (OneDrive is labelled "deprecated for bot use" in the source's
+#          own header comment, graph-upload.ts:4-7). A per-helper result is a per-helper finding;
+#          do not average them into one threshold.
+#
+#    This step is the pass-4 blocker, restated as a controlled experiment in pass 5 (top-of-file
+#    disposition banner). Do not run steps 1-3 until it
+#    has been run with passing controls and its full result table recorded in the PR.
 
 # 1. Gates (logic/test/docs-tagged: no design or token lint — §6)
 pnpm install && pnpm build
@@ -770,8 +866,10 @@ git diff --name-only <base>...HEAD          # → extensions/msteams/** only in 
 #    no zero-byte or partial items left by (f)/(g).
 ```
 
-**Ship gate:** step 0 run and recorded, confirming there is still a fix to make (§1.1a) — a green step 0
-that disproves the premise is a valid outcome and means this spec, as scoped, does not ship; §7 steps
+**Ship gate:** step 0 run with **passing controls on both helpers** and its full result table recorded,
+confirming there is still a fix to make (§1.1a) — a step 0 whose controls pass and whose probes all
+succeed disproves the premise, which is a valid outcome and means this spec, as scoped, does not ship;
+a step 0 whose controls fail is not a result at all and blocks the gate either way; §7 steps
 1–3 green on **both** a SharePoint-configured conversation and a 1:1 chat; the proposal's DoD checked
 clause by clause (`createUploadSession` + chunked PUT path taken for >4MB — S1's `graph-upload.test.ts`
 mock-buffer case against *both* drive functions, and step 2b/2d live); the S1 red-state failure pasted
@@ -783,5 +881,15 @@ band (§4); the same-name parity case (§2 S1) passing on both the simple and se
 path, and it does **not** get closed with `uploadToSharePoint` still on the simple PUT.
 
 **Approval gate (spec, not code):** this spec itself may not move to `approved` until step 0 above has
-been run and recorded (§1.1a, top-of-file disposition banner). That is a pass-4 finding, not a
-pre-existing part of this section — do not treat its absence as a pre-4 oversight to silently backfill.
+been run **with a passing ~1 MiB control for each of `uploadToOneDrive` and `uploadToSharePoint`** and
+its per-request result table recorded (§1.1a, top-of-file disposition banner). An uncontrolled matrix,
+or one whose controls failed, is an environment finding and may not be converted into a size threshold
+or into an approval. That is a pass-4/pass-5 finding, not a pre-existing part of this section — do not
+treat its absence as an earlier oversight to silently backfill.
+
+**Heap-policy gate (spec, not code):** independently of step 0, the pass-2 question "is the byte ceiling
+an acceptable per-upload gateway heap bound?" is **still open**, because the ceiling is a pre-allocation
+bound only for remote media (§1.3a, §1.5). Approval also requires either recorded operator acceptance of
+the measured worst-case concurrent-local-upload envelope, or
+[`proposals/2026-08-29-gw-local-media-read-before-cap-check.md`](../proposals/2026-08-29-gw-local-media-read-before-cap-check.md)
+being resolved. Nothing in this spec closes it.
