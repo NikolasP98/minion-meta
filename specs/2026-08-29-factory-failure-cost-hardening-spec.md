@@ -154,19 +154,25 @@ resolved line in the red test, rather than trusting a line number copied from th
 
 1. **Queue preservation:** deployment and verification MUST leave all pre-existing queued run ids
    queued. No canary may use the production queue while `FACTORY_DISPATCH_PAUSED=1`.
-2. **One decision per source run:** retry admission is a durable, idempotent record keyed by the
-   source run. A restart cannot create a second child or change the recorded decision.
+2. **One decision per terminal source run:** retry admission is a durable, idempotent record keyed
+   by the terminal run being evaluated. A restart cannot create a second child or change that
+   source run's recorded decision. A repair child that later terminates is a new source run and may
+   receive its own decision, subject to the lineage-wide ceiling below.
 3. **Progress-bound retry:** a retry with no candidate advance and the same normalized failure
    fingerprint is stopped. A larger model is not a remedy for state conflict, budget exhaustion,
    provider outage, missing authority, or no-change output.
-4. **Two repair attempts maximum:** the original run may receive at most two automatic repair
-   children. The second repair requires demonstrable progress or a changed failure fingerprint.
+4. **Two repair descendants maximum:** one lineage may contain a chain of at most two automatic
+   repair descendants after the original run. A source run may admit at most one direct child; the
+   second lineage repair is admitted from the first repair only after demonstrable candidate
+   progress or a changed failure fingerprint.
 5. **Circuit breaker coverage:** an open distinct-lineage breaker blocks every automatic child
    admission regardless of origin — new spec promotion, auto-fix retry, and automatic unstick
    requeue. Operator pause independently suppresses the same origins, so either signal alone is
    sufficient to refuse. A manual operator requeue is the only admission permitted while the breaker
-   is open; it is recorded as a supervised override with reason code
-   `supervised-breaker-override`. A supervised passing canary is required to close the breaker.
+   is open. That admission is recorded in a separate append-only override record keyed by the
+   manually created child, with reason code `supervised-breaker-override`; it never mutates or
+   competes with an immutable automatic retry decision. A supervised passing canary is required to
+   close the breaker.
 6. **Bounded evidence:** retry prompts receive the latest in-scope failure evidence, normalized and
    fenced as untrusted data, capped at 6 KiB. They do not fetch an unbounded comment history.
 7. **One full self-test owner:** agents run focused checks. The trusted wrapper runs the configured
@@ -222,6 +228,11 @@ Add `retry_decisions`:
 The outbox handler obtains bounded failure context, classifies the source, evaluates the breaker,
 pause, attempt ceiling, progress, and budgets, then transactionally records the decision and optional
 child. Replaying the outbox returns the existing decision.
+
+Manual operator requeue is not another `retry_decisions` row for the stopped source. When the
+breaker is open, the operator admission transaction writes a separate append-only
+`retry_overrides` record keyed by `child_run_id`, containing `source_run_id`, operator identity,
+`supervised-breaker-override`, and timestamp. The immutable stop decision remains intact.
 
 ### 4.3 Prompt contract
 
@@ -303,8 +314,8 @@ compare-and-swap so concurrent recurrence creates at most one effect.
 - Add strict `FACTORY_DISPATCH_PAUSED` parsing and expose it through health/budget/trigger health.
 - Gate queue claims, auto-fix/spec promotion admission, and unstick remedies on operator pause, and
   gate every automatic unstick requeue on the distinct-lineage breaker as well.
-- Record a manual operator requeue admitted while the breaker is open as a supervised override with
-  reason code `supervised-breaker-override`.
+- Record a manual operator requeue admitted while the breaker is open in the separate append-only
+  override ledger keyed by its child, with reason code `supervised-breaker-override`.
 - Refresh/reopen the existing issue for a stale fingerprint.
 - Document deployment and resume procedures.
 
@@ -350,7 +361,7 @@ start no process, insert no child, preserve queue order, and keep health/monitor
 | Budget stop | `stop/budget-stop`; no child at any tier, escalated or same. |
 | State conflict | no retry; reconciliation card. |
 | Breaker open, pause `0` | no automatic child from any origin — promotion, auto-fix, or unstick requeue. |
-| Breaker open, manual operator requeue | one child, recorded with reason code `supervised-breaker-override`. |
+| Breaker open, manual operator requeue | one child; immutable stop decision unchanged; append-only child-keyed override records `supervised-breaker-override`. |
 | Outbox replay after restart | same decision/child id. |
 | Stale closed monitor issue recurs | same issue reopens and receives one recurrence comment. |
 | Pause `1` with queued work | API online, queue unchanged, zero claims/spawns. |
@@ -362,10 +373,12 @@ start no process, insert no child, preserve queue order, and keep health/monitor
 
 Deployment is complete only when all statements are true:
 
-1. The spec and both implementation PRs are merged through their required branches with green
-   exact-head checks.
-2. Production Factory source, marker, running image label, and reported SHA equal the merged Factory
-   candidate.
+1. The spec and both implementation PRs are merged through their required branches. Define
+   `deployment_sha` as the exact Factory commit merged into `dev`; the latest required hosted CI
+   attempts for that SHA, including promotion-safety CI, must complete successfully before release.
+2. The supervised promotion must deploy that same `deployment_sha` without a squash/rebuild
+   substitution. Production Factory source, marker, running image label, and reported SHA all equal
+   `deployment_sha`.
 3. Production has `FACTORY_DISPATCH_PAUSED=1`; `/health`, `/budget`, and `/trigger-health` report the
    operator pause.
 4. Production has zero running runs, exactly the same 59 pre-deployment queued ids, and valid SQLite
