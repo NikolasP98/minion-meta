@@ -52,8 +52,7 @@ test('preview termination accepts the matching process birth identity', async ()
   const current = { pid: child.pid, processStartTicks: ticks };
   assert.equal(await processMatchesState(current), true);
   assert.equal(await terminateState(current), true);
-  await delay(25);
-  assert.equal(await processMatchesState(current), false);
+  assert.equal(await processStops(child.pid), true);
 });
 
 test('pidfd termination reaches the timeout supervisor command', async () => {
@@ -94,8 +93,7 @@ test('status expires and terminates only the process recorded by the state file'
     );
     assert.equal(result.status, 0, result.stderr);
     assert.deepEqual(JSON.parse(result.stdout), []);
-    await delay(25);
-    assert.equal(await processMatchesState({ pid: child.pid, processStartTicks: ticks }), false);
+    assert.equal(await processStops(child.pid), true);
   } finally {
     try { process.kill(-child.pid, 'SIGKILL'); } catch { /* already stopped */ }
     await rm(stateDir, { recursive: true, force: true });
