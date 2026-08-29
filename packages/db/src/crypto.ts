@@ -85,22 +85,40 @@ function key(): Buffer {
     // UNLANDED — minion_hub and minion_site have neither the boot-time
     // assertCryptoKeyConfigured() call nor a bumped @minion-stack/db, because
     // neither repo is checked out in the meta-repo workspace (⚠️ A2). Until it
-    // lands, this package's stricter contract is inert for both apps. Three
-    // preconditions gate the consumer bump, and none are satisfied yet:
-    //   1. Release. The published `latest` is 0.10.0 (2026-08-13), which
-    //      predates this guard — there is nothing to bump TO until a dev→main
-    //      release publishes the pending changeset db-crypto-fail-closed-dev-key.
-    //   2. Key convergence. The same audit found hub and site carry DIFFERENT
-    //      ENCRYPTION_KEY values against that shared database, so S3 step 1's
-    //      "one key per shared-DB group" is not a plain env change; it needs the
-    //      key-id/legacy-ring migration owned by
-    //      specs/2026-08-28-shared-db-encryption-key-convergence-spec.md (its
-    //      S3b carries the consumer boot wiring this slice describes).
-    //   3. Complete the at-rest audit above — every encrypted row in the shared
+    // lands, this package's stricter contract is inert for both apps.
+    //
+    // The consumer work itself is NOT blocked: it is S3b of
+    // specs/2026-08-28-shared-db-encryption-key-convergence-spec.md, ordered
+    // there BEFORE its S4/S5 migration slices. What is gated is activation, not
+    // preparation:
+    //   ALLOWED (this is S3b) — on a held branch in each consumer that is not
+    //      merged, not deployed, and changes no environment's key material:
+    //      migrate every seal/open/encryptToken/decryptToken call site to the
+    //      new contract, wire assertCryptoKeyConfigured() (plus that spec's
+    //      attestation call) into each server-only boot path, update
+    //      .env.example, run each repo's own check + test.
+    //   FORBIDDEN until the three preconditions below hold — merging or
+    //      deploying a bumped consumer; setting/rotating/converging a real
+    //      ENCRYPTION_KEY in any environment that reads the shared database;
+    //      the convergence spec's S7 cutover (which also awaits an unmade HUMAN
+    //      rollout-contract decision).
+    // Preconditions:
+    //   1. Release — gates the version PIN only. The published `latest` is
+    //      0.10.0 (2026-08-13), which predates this guard, so there is nothing
+    //      to pin TO until a dev→main release publishes the pending changeset
+    //      db-crypto-fail-closed-dev-key. Call-site migration and boot wiring
+    //      can be developed against a locally packed build in the meantime.
+    //   2. Key convergence — gates activation. The same audit found hub and
+    //      site carry DIFFERENT ENCRYPTION_KEY values against that shared
+    //      database, so S3 step 1's "one key per shared-DB group" is not a plain
+    //      env change; it needs the key-id/legacy-ring migration owned by the
+    //      convergence spec above. Build it on held branches; converge no live
+    //      key until this is resolved.
+    //   3. At-rest audit — gates activation. Every encrypted row in the shared
     //      production database classified success/failure under the dev key,
     //      plus the A1 inventory and unchecked-database list.
-    // Do NOT run `pnpm update @minion-stack/db` in either consumer before all
-    // three are resolved — the bump PR is the real deploy of this fix.
+    // So: prepare freely, activate nothing. The bump PR only becomes the real
+    // deploy of this fix when it is merged and deployed — that is the gated step.
     // Ledger entry: proposals/2026-08-17-pkg-dev-crypto-failopen.md
     cachedKey = scryptSync("minion-hub-dev-key", "minion-hub-salt", 32);
     return cachedKey;
