@@ -69,8 +69,9 @@ the committed text.
    scoped and escalated.** §1 withdraws the delegation (milestone specs are the
    fidelity authority) and states that content living only in that message is not
    binding until a spec adopts it *and is not retired by that rule*. Ratifying
-   even that narrowed rule needs the source, which is unrecoverable here, so §1.5
-   records `still-review` with an explicit flip condition instead of approval.
+   even that narrowed rule needs the source, which is unrecoverable here, so the
+   roadmap's §1 *Disposition* subsection records `still-review` with an explicit
+   flip condition instead of approval.
 2. **No milestone→spec join.** Pass 1 named M0–M9 but never said which spec is which
    milestone; only 6 of 16 owning specs self-declare an M-number, and 5 declare none.
    Resolved by the §4 table.

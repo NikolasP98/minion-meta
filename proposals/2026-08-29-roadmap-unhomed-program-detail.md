@@ -40,9 +40,9 @@ are *known* orphans: each is enumerable, and each can be decided today. The
 message that named them is an *unknown* orphan: it may contain deliverables,
 schemas or exit criteria that no committed artifact records, and no pass can
 decide those without reading it. Until someone who can read it says otherwise,
-the roadmap stays `status: review` / `verdict: pending` (roadmap §1.5) rather
-than approving a document whose authority rule touches content nobody in this
-repository can enumerate.
+the roadmap stays `status: review` / `verdict: pending` (its §1 *Disposition*
+subsection) rather than approving a document whose authority rule touches content
+nobody in this repository can enumerate.
 
 ## AS-IS (evidenced 2026-08-29)
 
@@ -136,5 +136,6 @@ milestone-ordering deviation, which is
 - The preservation map from DELTA 4 is committed, or the human statement that
   replaces it is committed, with every unmatched requirement filed.
 - The roadmap spec's §1.3 list shrinks to the items still undecided, or the section
-  is removed once all three are closed; §1.5 is removed and the roadmap re-passed
-  to `verdict: approved` only once DELTA 4 is closed too.
+  is removed once all three are closed; the roadmap's §1 *Disposition* subsection
+  is removed and the roadmap re-passed to `verdict: approved` only once DELTA 4 is
+  closed too.

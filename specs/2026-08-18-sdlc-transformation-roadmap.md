@@ -46,7 +46,7 @@ may live. Restated as the rule for this document:
    it. It is **not retired** by that rule — this document does not claim such a
    requirement is absent, unwanted, or superseded, only that nothing in this
    repository can enforce it. Collapsing "unenforceable" into "gone" is exactly
-   what §1.5 refuses to do on the evidence available.
+   what the §1 *Disposition* subsection below refuses to do on this evidence.
 3. Three artifacts named by pass 1 have no committed home and are therefore
    unenforceable today, tracked by
    [`2026-08-29-roadmap-unhomed-program-detail`](../proposals/2026-08-29-roadmap-unhomed-program-detail.md):
@@ -77,7 +77,7 @@ may live. Restated as the rule for this document:
    proposal — not a gap this pass can retroactively close by asserting more text
    without a committed source to check it against.
 
-### 1.5 Disposition: still-review, and the one fact that would change it
+### §1 Disposition — still-review, and the one fact that would change it
 
 This pass revised the document but does **not** record approval:
 `status: review`, `verdict: pending`. One question decides it, and no agent
@@ -323,8 +323,9 @@ meta-repo root.
 
 1. **Frontmatter and index integrity** — `node scripts/spec-index.mjs --check`
    passes, and `specs/index.json` carries this spec with `status: review`,
-   `verdict: pending`, `pass: 2`. Those two values are the §1.5 disposition, not
-   a defect: they change together with §1.5, or not at all.
+   `verdict: pending`, `pass: 2`. Those two values are the disposition recorded in
+   §1 *Disposition*, not a defect: they change together with that subsection, or
+   not at all.
 2. **§4 statuses are current** — for each spec id in the milestone table,
    `grep -E '^(status|verdict|next_slice):' specs/<id>.md` matches the table row.
    A mismatch means the table is stale, not that the spec is wrong.
@@ -345,9 +346,10 @@ meta-repo root.
 6. **No dangling authority, and no silent retirement** — this file contains no
    requirement whose only source is an off-repo message (§1.2), and contains no
    rule declaring such a requirement absent or superseded. §1.2 says
-   "not binding until adopted" and §1.5 says the verdict stays pending until a
-   human closes DELTA 4 of the tracking proposal; if either sentence is ever
-   weakened to "retired", this step fails and the document needs a new pass.
+   "not binding until adopted", and §1 *Disposition* says the verdict stays
+   pending until a human closes DELTA 4 of the tracking proposal; if either
+   sentence is ever weakened to "retired", this step fails and the document needs
+   a new pass.
 
 Failing step 1 blocks the commit. Failing steps 2–5 means this document needs a new
 pass, not that the underlying work is wrong.
