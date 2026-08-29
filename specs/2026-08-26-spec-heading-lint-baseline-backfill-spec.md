@@ -1,15 +1,16 @@
 ---
 id: 2026-08-26-spec-heading-lint-baseline-backfill-spec
-title: Drain the spec-gate debt — backfill 126 grandfathered spec headings, resolve 5 orphan superseded specs, resolve `related` ids, and settle the pass>1 link policy
+title: Drain the spec-gate debt — backfill the grandfathered spec headings, resolve 5 orphan superseded specs, resolve `related` ids, and settle the pass>1 link policy
 stage: spec
-status: draft
-pass: 2
+status: approved
+pass: 3
 created: 2026-08-26
-updated: 2026-08-26
+updated: 2026-08-29
 repos: [minion-meta]
 proposal: 2026-08-18-spec-heading-lint-baseline-backfill
-verdict: changes_requested
+verdict: approved
 type: infra
+approved_reason: "Pass-3 revision on minion-meta@2c86617: the pass-2 blocker was mechanical only (rewrite S5-S9/D6-D10 into the 13 frozen ranges) and is now done; every AS-IS claim was re-measured and re-anchored to the live corpus, and all three proposed rules still measure 0 violations."
 relationship: extends
 related: [2026-08-17-maintenance-lane-monitors-spec, 2026-08-17-sdlc-phase-gates-scoring-spec, 2026-08-20-factory-spec-heading-nomenclature, handoff-minion-meta-1883922325]
 tags: [infra, hygiene, docs, test]
@@ -42,7 +43,7 @@ From the approved proposal `2026-08-18-spec-heading-lint-baseline-backfill`, in 
 
 Why it matters: `node scripts/spec-index.mjs --check` is a required meta CI step
 (`.github/workflows/ci.yml:55-58`). It currently passes only because two exception files
-grandfather 126 specs and 5 orphan `superseded` markers out of the very rules the gate exists to
+grandfather 114 specs and 5 orphan `superseded` markers out of the very rules the gate exists to
 enforce, and because two link rules were deliberately never written. The board at
 base.minion-ai.org consumes `specs/index.json`, so a spec with no out-of-scope and no verification
 section is a card an implementer cannot execute from. This spec drains all four debts to zero and
@@ -59,39 +60,47 @@ leaves rules behind that stop them re-accumulating.
   with no supersedes link either direction", i.e. it owns the *pair-detection* half of §2 of the
   proposal; §5 below returns a decision to it rather than duplicating it.
 - `2026-08-20-factory-spec-heading-nomenclature` (proposal) — adjacent and explicitly disjoint: it
-  fixes the minion-factory *generator* that emits `## 0. Problem`; it names the 126 grandfathered
+  fixes the minion-factory *generator* that emits `## 0. Problem`; it names the grandfathered
   specs as out of its scope and this spec's territory. Its still-open DELTA 2 is a cross-repo alert
   here (§8), not a slice.
 - `handoff-minion-meta-1883922325` (proposal) — the handoff-ledger sweep's marker proposal for the
   four `TODO(handoff)` comments in `scripts/spec-index.mjs`; those are exactly the four asks below,
-  so it closes automatically when the markers go (Slice 10). Its own frontmatter already carries
+  so it closes automatically when the markers go (Slice 18). Its own frontmatter already carries
   `duplicate_candidate: 2026-08-18-spec-heading-lint-baseline-backfill`.
 
 Recommendation only — no lifecycle field on any of those four artifacts is changed by this spec.
 
-## 2. AS-IS (verified 2026-08-26 on `minion-meta@dev`, tip `83d69b6`)
+## 2. AS-IS (re-measured 2026-08-29 on `minion-meta@dev`, tip `2c86617`)
 
-`node scripts/spec-index.mjs --check` → **exit 0**, `192 specs, specs/index.json up to date`. Every
-number below was measured on that tree with the gate's own exported helpers
-(`missingRequiredHeadings`, `parseFrontmatter`); re-run instructions are in §9.
+`node scripts/spec-index.mjs --check` → `198 specs`. Every number below was measured on that tree
+with the gate's own exported helpers (`missingRequiredHeadings`, `parseFrontmatter`); re-run
+instructions are in §9.
 
-1. **Heading debt: 126 specs, 0 of them currently clean.** `scripts/spec-heading-lint-baseline.json`
-   holds 126 `id -> sha256(body)` entries (the proposal says 127; one has since been removed). Of
-   those 126 specs: 122 are missing `## 0. Product`, 91 are missing an out-of-scope section, 92 are
-   missing a verification section. Distribution of missing sections per spec: 75 specs miss all
-   three, 29 miss two, 22 miss one. **No baselined id currently passes the lint**, so there is no
+**Counts here are dated observations, not contract.** The corpus is live: between the pass-1
+measurement (2026-08-26, 192 specs / 126 baselined) and this one (2026-08-29, 198 specs / 114
+baselined) twelve ids drained out of the heading baseline through unrelated PRs, because the ratchet
+permits removal from any branch. Every *structural* claim below survived that drift unchanged; only
+the magnitudes moved. Consequently **no DoD in this spec is gated on a memorized count** — DoDs are
+gated on predicates (`zero B<n> ids remain`, `--check` exit 0) that stay true under drift, and §5C's
+batch boundaries are frozen **id ranges**, not indices, for the same reason. Re-measure before
+starting any slice; do not trust the numbers on this page.
+
+1. **Heading debt: 114 specs, 0 of them currently clean.** `scripts/spec-heading-lint-baseline.json`
+   holds 114 `id -> sha256(body)` entries (the proposal said 127; the pass-1 measurement said 126).
+   Of those 114 specs: 111 are missing `## 0. Product`, 88 are missing an out-of-scope section, 86
+   are missing a verification section. Distribution of missing sections per spec: 73 specs miss all
+   three, 25 miss two, 16 miss one. **No baselined id currently passes the lint**, so there is no
    free removal available today — every removal costs an edit. Corpus shape: 62 are terminal
-   (`shipped`/`superseded`/`rejected`/`retired`/`done` or `stage: done`), 64 are still active
-   (48 of them `status: unknown` from the 2026-08-13 retrofit); created 2026-04 (2), 2026-05 (23),
-   2026-06 (14), 2026-07 (58), 2026-08 (27), plus 2 undated ids. Total 2.32 MB of markdown, median
-   spec 15 KB.
-2. **The exemption is by content hash, not id** (`scripts/spec-index.mjs:671`): a baselined spec
+   (`shipped`/`superseded`/`rejected`/`retired`/`done` or `stage: done`), 52 are still active
+   (47 of them `status: unknown` from the 2026-08-13 retrofit); created 2026-04 (4), 2026-05 (23),
+   2026-06 (14), 2026-07 (58), 2026-08 (15).
+2. **The exemption is by content hash, not id** (`scripts/spec-index.mjs:684`): a baselined spec
    stays exempt only while `sha256(body)` matches. Editing a baselined spec silently drops the
    exemption and applies the heading lint. Consequence for this work: a batch that backfills
    headings *and forgets to delete the id* still passes CI — the stale entry is inert, invisible,
    and the baseline never visibly shrinks. Nothing detects that today.
 3. **Both baseline files are one-way ratchets** (`checkHeadingBaselineRatchet` /
-   `checkSupersedeBaselineRatchet`, wired at `scripts/spec-index.mjs:759-761`): a PR may delete
+   `checkSupersedeBaselineRatchet`, wired at `scripts/spec-index.mjs:772-773`): a PR may delete
    entries but never add an id or rewrite a hash, checked against the merge base (PRs), the push
    event's before-SHA, or every parent of `HEAD` locally. Removals are therefore always legal;
    batching is safe.
@@ -103,31 +112,33 @@ number below was measured on that tree with the gate's own exported helpers
    `2026-07-13-runtime-aware-fleet-image-updates`, and `2026-04-21-triage-executor-adapter-design`
    vs `2026-07-10-bug-triage-workforce-agents` / `2026-07-12-living-workforce-harness`.
 5. **`related` is enum-checked but never resolved** (`TODO(handoff)` at
-   `scripts/spec-index.mjs:662`). Measured: 84 `related` ids across 31 specs; **0 are unresolvable**;
-   67 resolve against the spec corpus and **17 resolve only against `proposals/`**. So the rule can
-   land today with zero backlog and zero new baseline — but a spec-corpus-only implementation would
-   red 17 legitimate references. `scripts/proposal-index.mjs` has no `--check` mode (it always
-   writes) and is not run by CI, so it cannot host the rule.
-6. **The `pass > 1` TODO misstates the corpus** (`scripts/spec-index.mjs:691`, "51 specs violate
-   that today"). Measured: 62 specs have `pass > 1` (61 at pass 2, 1 at pass 5) and 61 carry neither
-   `revises` nor `supersedes`. But there are **zero pass-1/pass-2 file pairs**: no two specs share a
-   title, and the only same-slug groups (`…-design`/`…-plan`) are all pass 1. The factory's 2-pass
-   review bumps `pass` **in place on the same file**, so `revises` has no target to point at — those
-   61 specs are not violating anything. Meanwhile **62 of 62 pass>1 specs have a
-   `specs/<id>.review.md` sidecar, and 0 of 130 pass-1 specs do**: the corpus already satisfies an
-   exact traceability invariant that the proposed presence rule does not express.
-7. **The gate's own fixtures encode the current permissiveness.** `scripts/spec-index.test.mjs:640`
-   and `:649` both write `related: [some-other-spec]` — a deliberately dangling id — and assert
-   exit 0. `makeCliFixture` (`:363`) creates only `scripts/` and `specs/` in its temp repo: there is
-   no `proposals/` directory.
+   `scripts/spec-index.mjs:675`). Measured: 99 `related` ids across 35 specs; **0 are unresolvable**;
+   77 resolve against the spec corpus and **22 resolve only against `proposals/`** (154 proposals).
+   So the rule can land today with zero backlog and zero new baseline — but a spec-corpus-only
+   implementation would red 22 legitimate references. `scripts/proposal-index.mjs` has no `--check`
+   mode (it always writes) and is not run by CI, so it cannot host the rule.
+6. **The `pass > 1` TODO misstates the corpus** (`scripts/spec-index.mjs:704`, "51 specs violate
+   that today"). Measured: 69 specs have `pass > 1` and 68 carry neither `revises` nor `supersedes`.
+   But there are **zero pass-1/pass-2 file pairs**: no two specs share a title, and the only
+   same-slug groups (`…-design`/`…-plan`) are all pass 1. The factory's 2-pass review bumps `pass`
+   **in place on the same file**, so `revises` has no target to point at — those 68 specs are not
+   violating anything. Meanwhile **69 of 69 pass>1 specs have a `specs/<id>.review.md` sidecar, and
+   0 of 129 pass-1 specs do**: the corpus already satisfies an exact traceability invariant that the
+   proposed presence rule does not express. (This ratio held at 62/62 and 0/130 three days earlier —
+   the invariant is stable under corpus growth, which is why it is safe to enforce.)
+7. **The gate's own fixtures encode the current permissiveness.**
+   `scripts/spec-index.test.mjs:665` ("array-form `tags` and `related` pass --check") writes
+   `related: [some-other-spec]` — a deliberately dangling id — and asserts exit 0; the scalar-field
+   loop at `:650` uses the same dangling value, though its assertion is about array-ness and
+   survives S2 unchanged. Neither `makeCliFixture` (`:369`) nor `makeCleanFixture` creates a
+   `proposals/` directory in its temp repo.
 8. **Body edits do not disturb `specs/index.json`.** The index projects frontmatter only, so
    heading-only edits leave it byte-identical; changing `updated:` does not (the board sorts by it).
    Recorded from a prior factory run: "`specs/index.json` does not hash bodies, so heading edits
    leave it untouched" (`/memory/MINION/factory/2026-08-20-b9b4a8a9.md`).
-9. `specs/TEMPLATE.md`'s status column omits `retired` and `done`, both of which
-   `scripts/spec-frontmatter.mjs:5-20` accepts and the corpus uses (4 retired, 3 done among the
-   baselined specs alone). `retired` additionally requires `retired_reason` ≥ 20 chars
-   (`scripts/spec-index.mjs:624`).
+9. `specs/TEMPLATE.md:27`'s status column omits `retired` and `done`, both of which
+   `scripts/spec-frontmatter.mjs:6-20` accepts and the corpus uses (5 retired, 19 done corpus-wide).
+   `retired` additionally requires `retired_reason` ≥ 20 chars (`scripts/spec-index.mjs:637`).
 
 ## 3. TO-BE
 
@@ -172,16 +183,27 @@ Invariants that must not change:
 | D1 | Baseline entries can go stale unnoticed → `--check` errors on any baseline id that passes the lint or names a missing spec (both files) | S1 | New fixtures in `scripts/spec-index.test.mjs`: a baselined-but-clean spec fails; a baseline id with no file fails; the real corpus still exits 0 |
 | D2 | No way to see what the 126 specs are missing → `node scripts/spec-heading-backfill.mjs --report` prints per-id missing sections + totals; `--verify` is the same check as D1 usable pre-commit | S1 | `--report` on the corpus prints 126 rows and the totals 122/91/92; `--verify` exits 0 today and 1 on a seeded stale entry |
 | D3 | `related` ids unresolved → every `related` id must resolve against specs ∪ proposals, via one shared loader | S2 | Fixtures: dangling id fails; proposal-only id passes; missing `proposals/` dir does not crash; corpus (84 ids, 17 proposal-only) exits 0 |
-| D4 | `pass>1` policy undecided and TODO misstates the corpus → decision recorded, TODO replaced, `pass>1 ⇒ review sidecar exists` enforced | S3 | Fixtures: `pass: 2` with no sidecar fails, with sidecar passes, `pass: 1` unaffected; corpus (62/62) exits 0 |
+| D4 | `pass>1` policy undecided and TODO misstates the corpus → decision recorded, TODO replaced, `pass>1 ⇒ review sidecar exists` enforced | S3 | Fixtures: `pass: 2` with no sidecar fails, with sidecar passes, `pass: 1` unaffected; corpus (69/69) exits 0 |
 | D5 | 5 orphan `superseded` specs → each linked from a real successor or flipped to `retired` + `retired_reason`; `scripts/spec-supersede-baseline.json` deleted | S4 | `--check` exits 0 with the file absent; `specs/index.json` regenerated; each disposition justified in the PR body |
-| D6 | Heading baseline 126 → 100 (batch B1) | S5 | `--check` exits 0; `--verify` exits 0; no B1 id remains in the baseline |
-| D7 | 100 → 74 (B2) | S6 | same |
-| D8 | 74 → 48 (B3) | S7 | same |
-| D9 | 48 → 22 (B4) | S8 | same |
-| D10 | 22 → 0 (B5) | S9 | same, and the file contains `{}` |
-| D11 | Empty baselines + 4 stale `TODO(handoff)` markers + stale TEMPLATE docs → files deleted, markers removed, `specs/TEMPLATE.md` corrected, proposal closed | S10 | `--check` exits 0 with neither baseline file present; `grep -c 'TODO(handoff)' scripts/spec-index.mjs` = 0; `pnpm run test:scripts` green |
+| D6 | Heading-baseline range B1 grandfathered → backfilled and removed | S5 | `--check` exits 0; `--verify` exits 0; `--report --batch B1` prints 0 rows |
+| D7 | range B2 grandfathered → backfilled and removed | S6 | same, for B2 |
+| D8 | range B3 grandfathered → backfilled and removed | S7 | same, for B3 |
+| D9 | range B4 grandfathered → backfilled and removed | S8 | same, for B4 |
+| D10 | range B5 grandfathered → backfilled and removed | S9 | same, for B5 |
+| D11 | range B6 grandfathered → backfilled and removed | S10 | same, for B6 |
+| D12 | range B7 grandfathered → backfilled and removed | S11 | same, for B7 |
+| D13 | range B8 grandfathered → backfilled and removed | S12 | same, for B8 |
+| D14 | range B9 grandfathered → backfilled and removed | S13 | same, for B9 |
+| D15 | range B10 grandfathered → backfilled and removed | S14 | same, for B10 |
+| D16 | range B11 grandfathered → backfilled and removed | S15 | same, for B11 |
+| D17 | range B12 grandfathered → backfilled and removed | S16 | same, for B12 |
+| D18 | range B13 grandfathered → backfilled and removed; heading baseline reaches `{}` | S17 | same, for B13, and `--report` prints 0 rows corpus-wide |
+| D19 | Empty baselines + 4 stale `TODO(handoff)` markers + stale TEMPLATE docs → files deleted, markers removed, `specs/TEMPLATE.md` corrected, proposal closed | S18 | `--check` exits 0 with neither baseline file present; `grep -c 'TODO(handoff)' scripts/spec-index.mjs` = 0; `pnpm run test:scripts` green |
 
-Every slice below traces to at least one row; no row lacks a proving test.
+Every slice below traces to at least one row; no row lacks a proving test. D6–D18 are stated as
+*range emptied*, not as a baseline count, deliberately: §2's preamble shows counts drift under
+unrelated merges, so a count-based transition can be satisfied or falsified by a PR that never
+touched this work. The cumulative counts measured on 2026-08-29 are carried in §5C as orientation.
 
 ## 5. Design decisions (the four asks, answered)
 
@@ -209,24 +231,33 @@ forward direction is enforced (`pass>1 ⇒ sidecar`); the converse is left open 
 sidecar is not made illegal.
 
 **C. Batching → contiguous id ranges, one PR each, sequential.**
-Boundaries are frozen at the sorted 126-id baseline as of `83b...`/this spec's date, expressed as
-**id ranges** (not indices) so they stay stable as the baseline shrinks:
+Boundaries are frozen, expressed as **id ranges** (not indices) so they stay stable as the baseline
+shrinks. `Count` and `Left after` are the 2026-08-29 measurement, for orientation only — the binding
+DoD is "no id in this range remains in the baseline" (§6):
 
-| Batch | Count | First id | Last id (inclusive) |
-|---|---|---|---|
-| B1 | 10 | `2026-04-19-minion-meta-repo-design` | `2026-05-22-document-ingestion` |
-| B2 | 10 | `2026-05-22-gateway-turn-recovery` | `2026-05-26-auth-token-simplification` |
-| B3 | 10 | `2026-05-27-gateway-dx-simplification` | `2026-06-13-plugin-sdk-recon-and-improvement-report` |
-| B4 | 10 | `2026-06-14-plugin-ui-cdn-caching-design` | `2026-07-02-hub-erp-agent-native-audit` |
-| B5 | 10 | `2026-07-04-meta-business-integration` | `2026-07-06-hub-tanstack-pacer` |
-| B6 | 10 | `2026-07-06-hub-tanstack-query` | `2026-07-10-per-org-volume-tenancy` |
-| B7 | 10 | `2026-07-11-fleet-update-orchestration` | `2026-07-13-hub-ui-coherence-audit` |
-| B8 | 10 | `2026-07-13-hub-ui-coherence-execution-log` | `2026-07-17-hub-performance-optimization-plan` |
-| B9 | 10 | `2026-07-17-ig-ad-attribution-spec` | `2026-07-20-whatsapp-sync-status-spec` |
-| B10 | 10 | `2026-07-21-unified-brains-knowledge-architecture` | `2026-08-03-crm-relationship-graph-v2-port-spec` |
-| B11 | 10 | `2026-08-07-projects-github-repos-and-factory-gates-spec` | `2026-08-18-base-kanban-possibly-shipped-surface-spec` |
-| B12 | 10 | `2026-08-18-base-phase-aware-sorting-provenance` | `2026-08-18-factory-workitem-handoff-schema-spec` |
-| B13 | 6 | `2026-08-18-minion-base-mobile-hitl-ux-plan` | `ws-duplication-audit` |
+| Batch | Count | Left after | First id | Last id (inclusive) |
+|---|---:|---:|---|---|
+| B1 | 10 | 104 | `2026-04-19-minion-meta-repo-design` | `2026-05-22-document-ingestion` |
+| B2 | 10 | 94 | `2026-05-22-gateway-turn-recovery` | `2026-05-26-auth-token-simplification` |
+| B3 | 10 | 84 | `2026-05-27-gateway-dx-simplification` | `2026-06-13-plugin-sdk-recon-and-improvement-report` |
+| B4 | 10 | 74 | `2026-06-14-plugin-ui-cdn-caching-design` | `2026-07-02-hub-erp-agent-native-audit` |
+| B5 | 10 | 64 | `2026-07-04-meta-business-integration` | `2026-07-06-hub-tanstack-pacer` |
+| B6 | 10 | 54 | `2026-07-06-hub-tanstack-query` | `2026-07-10-per-org-volume-tenancy` |
+| B7 | 10 | 44 | `2026-07-11-fleet-update-orchestration` | `2026-07-13-hub-ui-coherence-audit` |
+| B8 | 10 | 34 | `2026-07-13-hub-ui-coherence-execution-log` | `2026-07-17-hub-performance-optimization-plan` |
+| B9 | 10 | 24 | `2026-07-17-ig-ad-attribution-spec` | `2026-07-20-whatsapp-sync-status-spec` |
+| B10 | 9 | 15 | `2026-07-21-unified-brains-knowledge-architecture` | `2026-08-03-crm-relationship-graph-v2-port-spec` |
+| B11 | 7 | 8 | `2026-08-07-projects-github-repos-and-factory-gates-spec` | `2026-08-18-base-kanban-possibly-shipped-surface-spec` |
+| B12 | 2 | 6 | `2026-08-18-base-phase-aware-sorting-provenance` | `2026-08-18-factory-workitem-handoff-schema-spec` |
+| B13 | 6 | 0 | `2026-08-18-minion-base-mobile-hitl-ux-plan` | `ws-duplication-audit` |
+
+**The ranges are drift-proof, and that was verified rather than assumed.** Re-run against the
+2026-08-29 baseline, all 114 surviving ids still fall inside these 13 ranges — zero uncovered, zero
+double-covered — even though two boundary ids (`2026-08-07-projects-github-repos-and-factory-gates-spec`,
+`2026-08-18-factory-workitem-handoff-schema-spec`) have themselves already drained out of the
+baseline. Because the ranges are string bounds rather than members, a drained boundary costs
+nothing. Sizes shrank in the tail only (B10 9, B11 7, B12 2) and no batch grew, which the ratchet
+(§2.3) guarantees. A batch that measures 0 ids at start time is a no-op: close it and move on.
 
 The exact file list for a batch is reproducible, never guessed:
 
@@ -244,13 +275,13 @@ and pushes with rebase-retry.
 
 **D. What "backfilled" means per spec (the content contract).** Judgment, not templating:
 
-- *Terminal specs* (62: `shipped`/`superseded`/`rejected`/`retired`/`done`, or `stage: done`) — a
+- *Terminal specs* (62 of the 114: `shipped`/`superseded`/`rejected`/`retired`/`done`, or `stage: done`) — a
   historical record does not acquire new scope. `## 0. Product` states, in one or two sentences,
   what the document was for; out-of-scope and verification may be honest stubs
   (`**Out of scope:** historical record — this spec is closed; scope changes belong in a new spec.` /
   `**Verification:** none — shipped and closed on <date>; see <evidence/PR> if known.`). Do not
   invent a verification procedure for work that already shipped.
-- *Active specs* (64) — the sections must be real. If the document says nowhere what is out of scope
+- *Active specs* (52) — the sections must be real. If the document says nowhere what is out of scope
   or how to verify it, the backfiller writes what the document's own content implies and says so in
   the PR body; it does not guess at product intent. A spec whose active scope genuinely cannot be
   determined is left in the baseline and reported in the PR body as unresolved (I1 permits this —
@@ -262,11 +293,35 @@ and pushes with rebase-retry.
 
 ## 6. Slices
 
-Each slice is one PR against `dev`, sized for a junior dev at 4–8 focused hours. **Pass-2 blocker:**
-the implementation section still defines only five 22–26-spec batch slices (S5–S9), despite the
-corrected 10-spec maximum in §5C. Those slices are not implementation-ready until the author replaces
-S5–S9 and D6–D10 with B1–B13 slices/transitions and updates ordering and baseline-count DoDs. The
-required split is exactly the corrected table in §5C; no product-scope decision is needed.
+Each slice is one PR against `dev`, sized for a junior dev at 4–8 focused hours. S1–S4 are the
+rule/decision slices; S5–S17 are the thirteen frozen heading batches of §5C; S18 is cleanup.
+
+**Shared contract for the batch slices S5–S17.** Every batch slice is the same work on a different
+frozen range, so the contract is stated once here and each slice below carries only its range and
+its topics line.
+
+- **Files:** the `specs/*.md` in the batch's range (list reproduced by the §5C command — never
+  guessed); `scripts/spec-heading-lint-baseline.json` (that range's entries deleted);
+  `specs/index.json` only if some spec in the batch legitimately bumps `updated:` per rule R3.
+- **Content contract:** §5D — terminal specs get honest stubs, active specs get real sections,
+  misnamed sections are renamed/moved rather than duplicated.
+- **Rule R3:** bump `updated:` only when the added section changes what an implementer would do —
+  essentially never for terminal specs, sometimes for active ones. If any `updated:` is bumped,
+  regenerate `specs/index.json` in the same commit (the staleness check at
+  `scripts/spec-index.mjs:783` catches the omission anyway).
+- **DoD (machine-checkable), identical for every batch:**
+  1. `node scripts/spec-index.mjs --check` exits 0, exit code captured unpiped;
+  2. `node scripts/spec-heading-backfill.mjs --verify` exits 0;
+  3. `node scripts/spec-heading-backfill.mjs --report --batch B<n>` prints **0 rows** — no id in the
+     range remains in the baseline;
+  4. the diff touches no `stage`/`status`/`repos`/`pass` field on any spec (I4).
+- **Partial ranges do not merge.** If any id in the range cannot be fixed without guessing product
+  intent, the slice is blocked: it must not claim the DoD and must not merge a partial range. The PR
+  body names the id and the reason, and the id stays in the baseline (I1 permits leaving it; the
+  ratchet only forbids growth).
+- **A batch that measures 0 ids at start time is a no-op** — the range drained through unrelated
+  merges. Close it, say so, and move to the next; that is a legal outcome, not a failure.
+
 
 ### Slice 1 — Baseline hygiene rules + backfill report tool
 
@@ -352,57 +407,96 @@ lineage to satisfy the gate. The heading debt of these same 5 specs stays with t
 **DoD:** `scripts/spec-supersede-baseline.json` is deleted; `--check` exits 0; `specs/index.json`
 regenerated in the same commit; PR body states the disposition and the evidence for each of the 5.
 
-### Slice 5 — Heading backfill batch B1 (26 specs, `2026-04-19-minion-meta-repo-design` … `2026-06-11-gog-nuke-execution-plan`)
+### Slice 5 — Heading backfill batch B1
 
 **Topics:** `docs`, `hygiene`
 
-**Files:** the 26 `specs/*.md` in the B1 range (list reproduced by the §5C command);
-`scripts/spec-heading-lint-baseline.json` (26 entries deleted); `specs/index.json` only if some spec
-in the batch legitimately bumps `updated:` per rule R3.
+Range `2026-04-19-minion-meta-repo-design` … `2026-05-22-document-ingestion` (inclusive), 10 ids as measured 2026-08-29.
+Files, content contract, R3 and DoD are the shared batch contract at the top of §6; proves D6.
 
-**Rule R3 (applies to S5–S9):** bump `updated:` only when the added section changes what an
-implementer would do — i.e. essentially never for terminal specs, sometimes for active ones. If any
-`updated:` is bumped, regenerate `specs/index.json` in the same commit (the staleness check at
-`scripts/spec-index.mjs:770` will catch the omission anyway).
-
-**DoD:** `node scripts/spec-index.mjs --check` exits 0; `node scripts/spec-heading-backfill.mjs
---verify` exits 0; `--report` shows the baseline at 100 entries and zero B1 ids remaining; the diff
-touches no `stage`/`status`/`repos`/`pass` field (I4). If any batch id cannot be fixed without
-guessing product intent, the slice is blocked and must not claim this DoD or merge a partial range;
-the PR body names the id and reason.
-
-### Slice 6 — Heading backfill batch B2 (26 specs, `2026-06-11-google-oauth-verification-packet` … `2026-07-07-hub-db-migration-pipeline`)
+### Slice 6 — Heading backfill batch B2
 
 **Topics:** `docs`, `hygiene`
 
-**Files:** the 26 B2 specs; `scripts/spec-heading-lint-baseline.json`; `specs/index.json` per R3.
+Range `2026-05-22-gateway-turn-recovery` … `2026-05-26-auth-token-simplification` (inclusive), 10 ids as measured 2026-08-29.
+Files, content contract, R3 and DoD are the shared batch contract at the top of §6; proves D7.
 
-**DoD:** as S5, with the baseline at 74 entries and zero B2 ids remaining.
-
-### Slice 7 — Heading backfill batch B3 (26 specs, `2026-07-08-package-updates-tracking` … `2026-07-17-crm-conversation-intelligence-spec`)
-
-**Topics:** `docs`, `hygiene`
-
-**Files:** the 26 B3 specs; `scripts/spec-heading-lint-baseline.json`; `specs/index.json` per R3.
-
-**DoD:** as S5, with the baseline at 48 entries and zero B3 ids remaining.
-
-### Slice 8 — Heading backfill batch B4 (26 specs, `2026-07-17-dashboard-kpi-popover-2step-spec` … `2026-08-12-minion-factory-agent-pipeline-spec`)
+### Slice 7 — Heading backfill batch B3
 
 **Topics:** `docs`, `hygiene`
 
-**Files:** the 26 B4 specs; `scripts/spec-heading-lint-baseline.json`; `specs/index.json` per R3.
+Range `2026-05-27-gateway-dx-simplification` … `2026-06-13-plugin-sdk-recon-and-improvement-report` (inclusive), 10 ids as measured 2026-08-29.
+Files, content contract, R3 and DoD are the shared batch contract at the top of §6; proves D8.
 
-**DoD:** as S5, with the baseline at 22 entries and zero B4 ids remaining.
-
-### Slice 9 — Heading backfill batch B5 (22 specs, `2026-08-13-minion-factory-staged-harness-spec` … `ws-duplication-audit`)
+### Slice 8 — Heading backfill batch B4
 
 **Topics:** `docs`, `hygiene`
 
-**Files:** the 22 B5 specs; `scripts/spec-heading-lint-baseline.json` (left containing `{}`);
-`specs/index.json` per R3.
+Range `2026-06-14-plugin-ui-cdn-caching-design` … `2026-07-02-hub-erp-agent-native-audit` (inclusive), 10 ids as measured 2026-08-29.
+Files, content contract, R3 and DoD are the shared batch contract at the top of §6; proves D9.
 
-**DoD:** as S5, with the baseline file containing exactly `{}` and `--report` printing 0 rows.
+### Slice 9 — Heading backfill batch B5
+
+**Topics:** `docs`, `hygiene`
+
+Range `2026-07-04-meta-business-integration` … `2026-07-06-hub-tanstack-pacer` (inclusive), 10 ids as measured 2026-08-29.
+Files, content contract, R3 and DoD are the shared batch contract at the top of §6; proves D10.
+
+### Slice 10 — Heading backfill batch B6
+
+**Topics:** `docs`, `hygiene`
+
+Range `2026-07-06-hub-tanstack-query` … `2026-07-10-per-org-volume-tenancy` (inclusive), 10 ids as measured 2026-08-29.
+Files, content contract, R3 and DoD are the shared batch contract at the top of §6; proves D11.
+
+### Slice 11 — Heading backfill batch B7
+
+**Topics:** `docs`, `hygiene`
+
+Range `2026-07-11-fleet-update-orchestration` … `2026-07-13-hub-ui-coherence-audit` (inclusive), 10 ids as measured 2026-08-29.
+Files, content contract, R3 and DoD are the shared batch contract at the top of §6; proves D12.
+
+### Slice 12 — Heading backfill batch B8
+
+**Topics:** `docs`, `hygiene`
+
+Range `2026-07-13-hub-ui-coherence-execution-log` … `2026-07-17-hub-performance-optimization-plan` (inclusive), 10 ids as measured 2026-08-29.
+Files, content contract, R3 and DoD are the shared batch contract at the top of §6; proves D13.
+
+### Slice 13 — Heading backfill batch B9
+
+**Topics:** `docs`, `hygiene`
+
+Range `2026-07-17-ig-ad-attribution-spec` … `2026-07-20-whatsapp-sync-status-spec` (inclusive), 10 ids as measured 2026-08-29.
+Files, content contract, R3 and DoD are the shared batch contract at the top of §6; proves D14.
+
+### Slice 14 — Heading backfill batch B10
+
+**Topics:** `docs`, `hygiene`
+
+Range `2026-07-21-unified-brains-knowledge-architecture` … `2026-08-03-crm-relationship-graph-v2-port-spec` (inclusive), 9 ids as measured 2026-08-29.
+Files, content contract, R3 and DoD are the shared batch contract at the top of §6; proves D15.
+
+### Slice 15 — Heading backfill batch B11
+
+**Topics:** `docs`, `hygiene`
+
+Range `2026-08-07-projects-github-repos-and-factory-gates-spec` … `2026-08-18-base-kanban-possibly-shipped-surface-spec` (inclusive), 7 ids as measured 2026-08-29.
+Files, content contract, R3 and DoD are the shared batch contract at the top of §6; proves D16.
+
+### Slice 16 — Heading backfill batch B12
+
+**Topics:** `docs`, `hygiene`
+
+Range `2026-08-18-base-phase-aware-sorting-provenance` … `2026-08-18-factory-workitem-handoff-schema-spec` (inclusive), 2 ids as measured 2026-08-29.
+Files, content contract, R3 and DoD are the shared batch contract at the top of §6; proves D17.
+
+### Slice 17 — Heading backfill batch B13
+
+**Topics:** `docs`, `hygiene`
+
+Range `2026-08-18-minion-base-mobile-hitl-ux-plan` … `ws-duplication-audit` (inclusive), 6 ids as measured 2026-08-29.
+Files, content contract, R3 and DoD are the shared batch contract at the top of §6; proves D18. This is the last batch, so the baseline file is left containing exactly `{}`; S18 deletes it.
 
 ### Slice 10 — Retire the baselines, close the markers, correct the template
 
