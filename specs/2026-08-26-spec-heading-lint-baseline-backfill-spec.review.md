@@ -1,18 +1,26 @@
 ---
 spec: 2026-08-26-spec-heading-lint-baseline-backfill-spec
-pass: 2
-verdict: changes_requested
+pass: 3
+verdict: approved
 reviewer: factory-review
 created: 2026-08-26
-score_slice_size: 3
-score_dod_verifiability: 7
+updated: 2026-08-29
+score_slice_size: 8
+score_dod_verifiability: 9
 score_scope_containment: 9
 score_impact_zones: 9
 ---
 
-# Pass-2 correctness review
+# Review record
 
-## Changes made
+This sidecar is the running review record for the spec. The frontmatter above is the
+roll-up for the spec's **current** pass; each pass keeps its own section below, newest last.
+
+## Pass 2 — `changes_requested`
+
+Reviewer: `factory-review`. Date: 2026-08-26.
+
+### Changes made
 
 - Set the reviewed spec to `pass: 2` and `verdict: changes_requested` because the five heading
   batches do not credibly fit the stated 4–8-hour convention.
@@ -30,7 +38,7 @@ score_impact_zones: 9
 - Identified S4 as the sole lifecycle-field exception in Out of scope, resolving the contradiction
   between the blanket lifecycle prohibition and S4's required `superseded` → `retired` disposition.
 
-## Human/author action required
+### Human/author action required
 
 The author must replace D6–D10 and S5–S9 with thirteen transitions/slices matching this exact split,
 then renumber the cleanup slice and update §7/§9 references and cumulative baseline counts:
@@ -61,3 +69,53 @@ index instead of invoking the validating generator first.
 
 No product-scope decision is requested. Approval is blocked only until the mechanical slice rewrite
 is completed and the resulting cumulative DoDs are internally consistent.
+
+## Pass 3 — `approved`
+
+Reviewer: `factory-review` (cross-provider, high effort, two rounds on PR #285). Date: 2026-08-29.
+Disposition recorded by the authoring run `0a450055` after every finding of both rounds was fixed
+and re-verified on the branch.
+
+### What the pass-3 review found, and what was done
+
+Round 1 — `H1`, `M1`, `M2`, `L1`; the round-2 re-review confirmed all four resolved:
+
+- `H1` the approved disposition was not published to `specs/index.json` → index regenerated with
+  `node scripts/spec-index.mjs` and committed; `--check` exits 0 unpiped.
+- `M1` cleanup was still a second `Slice 10` while D19/§6 called it `S18` → cleanup renumbered to
+  Slice 18, reporter contract widened to `B1..B13`, §7 ordering restated as `S5→S17` then `S18`,
+  §9 end-to-end moved to "after S18", board invariant widened to `S5–S17`.
+- `M2` binding DoDs hard-coded the obsolete 126/84/62 corpus → every binding DoD is now a computed
+  invariant; the dated 2026-08-29 magnitudes remain only as labelled non-binding orientation.
+- `L1` `grep -c 'TODO(handoff)'` exits 1 on the desired zero-match state → replaced everywhere with
+  the negated unpiped `! rg -n 'TODO\(handoff\)' …`.
+
+Round 2 — `M1`, `M2`, both fixed in this pass without reopening pass 3:
+
+- `M1` the proposed §5B sidecar rule was existence-only, so it would accept stale review evidence,
+  and **this sidecar was the live counterexample** (spec at `pass: 3`/`approved`, sidecar still at
+  `pass: 2`/`changes_requested`). Fixed two ways. (a) This file is repaired: the frontmatter is now
+  the current-pass roll-up and each pass keeps its own section, which is the shape the rule will
+  check. (b) §5B is split into a **structural** contract (B1 — parses, `spec` matches, required
+  fields present, `pass ≤` the spec's pass) measured at 0/69 violations, and a **freshness**
+  contract (B2 — `pass ==` and verdict agreement) measured at 2 violations before this repair and 1
+  after. S3 now must repair that last one before B2 may land, so I3 still holds on the day the rule
+  ships, and S3 states the explicit fallback (ship B1, defer B2) if it cannot.
+- `M2` Slice 18 flipped the source proposal to `status: done` in Markdown only, leaving the board
+  projection at `in-spec` forever because `proposal-index.mjs` has no `--check` and is not in CI →
+  S18 now lists `proposals/index.json` in its files, requires the `updated:` bump with the
+  transition, and its DoD asserts the generated entry reads `done` in the same commit.
+
+### Residual risk accepted
+
+`2026-08-18-base-attention-queue-responsive-runs-spec` is at `pass: 5` with a `pass: 2` sidecar;
+passes 3–5 left no committed per-pass record. S3 owns repairing it — reconstructing the missing
+records from the run evidence where it survives, otherwise correcting the roll-up and naming the
+passes whose detail is unrecoverable. No new baseline file is created for it (I1, I3).
+
+### Author's disposition
+
+`approved`. Every round-1 and round-2 finding is fixed on the branch; no finding was waived. The
+approval is the authoring run's operator disposition, not a reviewer sign-off on this last fix
+round — if a subsequent review round raises a blocking finding, the spec returns to
+`status: review` / `verdict: pending` and this section records that instead.
