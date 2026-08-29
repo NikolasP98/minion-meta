@@ -25,6 +25,8 @@ conversations (or written by hand). Run `node scripts/proposal-index.mjs` after 
 | `possibly_reopens` | no | closed proposal id this may be a revival of (reconciler + human decide) |
 | `duplicate_candidate` | no | proposal id the reconciler suspects is the same idea |
 | `spawned_spec` | no | spec id once the spec stage picks this up |
+| `effort` | no | board sizing estimate — `S` `M` `L`; any other value (including a present-but-empty one) fails `scripts/proposal-index.mjs` |
+| `value` | no | board priority estimate; free-form today (numbers and `high`/`medium` are both in live use), rejected only when present-but-empty |
 | `tags` | no | routing/classification labels, e.g. `[logic, test]`; every value must resolve (as a canonical name or an alias) via `specs/topics.json` — `scripts/proposal-index.mjs` rejects an unknown tag, naming the file and tag |
 
 ## Body convention

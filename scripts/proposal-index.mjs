@@ -17,9 +17,9 @@ export const P_STATUSES = [
 	'closed'
 ];
 
-// Board sizing estimate: S/M/L. Not documented in TEMPLATE.md but in live use
-// across 40+ proposals — validated and projected here so a generator run can
-// never silently drop it (see proposals/index.json history, effort field).
+// Board sizing estimate: S/M/L (documented in proposals/TEMPLATE.md). Validated
+// and projected here so a generator run can never silently drop it (see
+// proposals/index.json history, effort field).
 export const P_EFFORTS = ['S', 'M', 'L'];
 
 const proposals = [];
@@ -46,7 +46,16 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		if (!fm[key]) errors.push(`${name}: missing required field "${key}"`);
 	}
 	if (fm.status && !P_STATUSES.includes(fm.status)) errors.push(`${name}: invalid status "${fm.status}"`);
-	if (fm.effort && !P_EFFORTS.includes(fm.effort)) errors.push(`${name}: invalid effort "${fm.effort}"`);
+	// PRESENCE, not truthiness. `effort: 0` parses to the number 0 and a bare
+	// `effort:` parses to the empty string; a truthy guard lets both skip
+	// validation AND projection, which is exactly the silent drop this check
+	// exists to prevent. Same reason `value` below is checked for emptiness.
+	if (Object.hasOwn(fm, 'effort') && !P_EFFORTS.includes(fm.effort))
+		errors.push(`${name}: invalid effort "${fm.effort}"`);
+	// `value` has no fixed vocabulary yet (both numbers and words — `high`,
+	// `medium` — are in live use), so it is only rejected when present-but-empty.
+	if (Object.hasOwn(fm, 'value') && fm.value === '')
+		errors.push(`${name}: empty value (drop the key or give it a value)`);
 	// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).
 	if (fm.status === 'retired' && !(fm.retired_reason && fm.retired_reason.length >= 20))
 		errors.push(`${name}: status "retired" requires retired_reason (>=20 chars)`);
@@ -74,8 +83,8 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		...(fm.duplicate_candidate ? { duplicate_candidate: fm.duplicate_candidate } : {}),
 		...(fm.spawned_spec ? { spawned_spec: fm.spawned_spec } : {}),
 		...(fm.tags ? { tags: fm.tags } : {}),
-		...(fm.value ? { value: fm.value } : {}),
-		...(fm.effort ? { effort: fm.effort } : {}),
+		...(Object.hasOwn(fm, 'value') ? { value: fm.value } : {}),
+		...(Object.hasOwn(fm, 'effort') ? { effort: fm.effort } : {}),
 		...(fm.source ? { source: fm.source } : {})
 	});
 }

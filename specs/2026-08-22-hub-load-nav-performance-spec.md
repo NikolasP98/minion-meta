@@ -3,11 +3,11 @@ id: 2026-08-22-hub-load-nav-performance-spec
 title: Hub load & nav performance — prod config gap, layout decoupling, bundle diet, RUM monitoring
 stage: spec
 status: review
-pass: 5
+pass: 6
 next_slice: 5
 created: 2026-08-22
 updated: 2026-08-29
-repos: [minion_hub, minion]
+repos: [minion_hub]
 type: infra
 relationship: extends
 related: [2026-07-17-hub-performance-optimization-plan, 2026-08-13-crm-customers-server-pagination-spec, 2026-07-06-hub-tanstack-consolidated-execution, 2026-08-21-hub-datatable-server-mode-test-gap-spec, 2026-08-22-crm-rank-query-prod-latency, 2026-07-19-channel-scoping-fix-plan]
@@ -46,7 +46,7 @@ Relationship to existing board items (folded, not duplicated):
 - `2026-08-22-crm-rank-query-prod-latency` (proposal, draft) owns the CRM rank-query cost
   that Slice 5 of the pagination spec uncovered — deliberately NOT a slice here; see §0.1.
 
-## 0.1 Disposition (pass 5, 2026-08-29) — NOT approved; human approval gate required
+## 0.1 Disposition (pass 6, 2026-08-29) — NOT approved; human approval gate required
 
 **Verdict: revision-required — awaiting a human.** The program is real, already
 half-delivered, and the unshipped half is still the correct next work, but this spec may
@@ -62,8 +62,8 @@ to run it.
 Pass 1 was written *before* implementation and was never updated; four of its eight slices
 shipped to prod the same day it was authored, so the pass-1 AS-IS described a hub that no
 longer exists. Pass 2 re-verified every claim against hub `master` at `1b47e8ce`
-(2026-08-28) and against merged PRs. Pass 4 (this one) repairs four defects the pass-3
-review found, each re-verified against that same `master` SHA before editing:
+(2026-08-28) and against merged PRs. **Pass 4** repaired four defects the pass-3 review
+found, each re-verified against that same `master` SHA before editing:
 
 1. Slice 7 named no fail-closed tenant contract, so the obvious implementation
    (`gatewayCallAsUser`) would inherit `resolveCredentialsForUser`'s fall-through to
@@ -78,11 +78,11 @@ review found, each re-verified against that same `master` SHA before editing:
 4. Slice 6 described a rollback Vercel does not offer and named 2 of the 7 existing
    per-route SSR opt-outs. Both corrected against `master` in §Slice 6.
 
-Pass 5 (this one) repairs three defects the pass-4 review found. Each was re-verified
-live against gateway `minion` `DEV` `bd55137100aceaf193ab99a827302d3f865b50e7`
-(confirmed the current branch head at verification time via
-`gh api repos/NikolasP98/minion/branches/DEV`) and hub `master` before editing, not
-assumed from the review text:
+**Pass 5** repaired the defects the pass-4 review found. Each was re-verified live against
+gateway `minion` `DEV` `bd55137100aceaf193ab99a827302d3f865b50e7` (confirmed the current
+branch head at verification time via `gh api repos/NikolasP98/minion/branches/DEV`, and
+still the head at pass 6) and hub `master` before editing, not assumed from the review
+text:
 
 5. **Pass 4's S7 contract required a signed JWT the gateway cannot accept, and its
    tenant test proved the wrong thing.** Confirmed on gateway `DEV` `bd551371`:
@@ -108,6 +108,32 @@ assumed from the review text:
    `Minion Docs` (a separate, non-CLI-registered repository S5's `minion_hub` PR cannot
    commit to) to a tracked location inside `minion_hub` itself — see §Slice 2.
 
+*(Pass 6 supersedes item 5's remedy: the gateway-side prerequisite is no longer a slice of
+this spec — see item 7 and §Slice 7. Item 5's finding stands; its fix moved out.)*
+
+**Pass 6** (this one) repairs the two defects the pass-5 review found — both real, both
+re-read from gateway `DEV` `bd55137100aceaf193ab99a827302d3f865b50e7` and hub `master`
+`1b47e8ce`, still the branch heads on 2026-08-29:
+
+7. The tenant contract covered only the *buffered query* path. `emitReliabilityEvent` also
+   broadcasts every event to every connected client through a path with no `reliability`
+   scope guard, and forwards it to the hub metrics push client. Filtering
+   `reliability.events` alone isolates nothing.
+8. "Attribute events with the connecting client's `orgId` at write time" has no runtime
+   source: 16 of the 19 production emitters run with no connected client, and the gateway
+   has no org identifier anywhere in its source. A synthetic buffer-injection test could
+   have gone green while the real feed stayed unattributed.
+
+Rather than add a seventh clause to a gateway program a performance spec should not own,
+pass 6 moves that program out to proposal
+`2026-08-29-gateway-reliability-feed-is-cross-tenant` (which carries the evidence and
+stays coupled to the parked `2026-07-19-channel-scoping-fix-plan` hold) and re-scopes
+Slice 7 to the perf work on a path that is executable today — see §Slice 7, path G. The
+cross-tenant exposure is pre-existing: it ships now through the browser WS path this slice
+inherits, and S7 must not widen it. `repos` drops back to `[minion_hub]` because no
+`minion` change is owned here; if the human ratifies path T instead, `minion` goes back in
+and 7a is handed to the owning program before any dev run.
+
 Slice ledger — verified 2026-08-29 against hub master `1b47e8ce` and gateway `minion`
 `DEV` `bd55137100aceaf193ab99a827302d3f865b50e7`:
 
@@ -119,7 +145,7 @@ Slice ledger — verified 2026-08-29 against hub master `1b47e8ce` and gateway `
 | S4 shell diet | **shipped in part — DoD unmet, remainder moved into S5** | Supabase browser client dynamic-imported inside `signOut()` (`user.svelte.ts:94-97`); FloatingAssistant/carta-md moved behind the layout's idle `{#await import}`; `vite.config.ts:82-90` `optimizeDeps.include` incl. `lucide-svelte`. hub PR #162 `14bfce72`. **NOT done:** no `manualChunks` pass in `vite.config.ts`, no committed shell-size measurement script in `scripts/`, and the ≤700 KB target was not reached — the post-S4 ad-hoc measurement was 1,538 KB, of which 815 KB is the both-locale Paraglide chunk. The script and `manualChunks` are now S5's DoD; the byte target is split across S5's staged budget and S9. |
 | S5 one-locale Paraglide | **open — next slice** | `package.json:18` still `@inlang/paraglide-sveltekit: ^0.16.1` (the package is deprecated; `svelte.config.js` already carries a manual preprocessor shim for it). The catalog is build-generated (`i18n:compile` → `src/lib/paraglide/`, untracked), so the byte claims must be re-measured, not assumed. **Budget re-staged in pass 4:** the pass-2 `≤ 450 KB` DoD was unreachable from this spec's own numbers (`1,538 − 815 = 723 KB` remains after deleting the entire catalog), so S5 now carries a staged, ratcheted budget and the 450 KB goal moved to S9. |
 | S6 SSR re-enable | **open — human merge gate** | `src/routes/+layout.ts:17` still `export const ssr = false` (`:18` is `prerender = false`; the pass-2 `:18` anchor was off by one). Seven `(app)` page opt-outs exist on `master`, not the two pass 2 named — enumerated in §Slice 6. |
-| S7 HTTP-first WS routes | **open — blocked on a gateway prerequisite (repo: minion)** | `/reliability` gained a trivial `+page.server.ts` (RBAC comment only, returns `{}`); the RPCs moved out of the page into `$lib/state/reliability/*`, but every load is still gated on `conn.connected` (`reliability/+page.svelte:1159,1170,1188`). The premise holds; the pass-1 line/RPC-count anchor does not. **`security`-tagged since pass 4; pass 5 confirms the pass-4 contract cannot execute:** gateway `minion` `DEV` `bd551371` has no `jwt`/`orgId` field on `ConnectParamsSchema` (rejected before auth by `message-handler.ts:209-218`) and no per-org attribution anywhere in the reliability event pipeline (`ReliabilityEventSchema`, `reliability-buffer.ts`, `server-methods/reliability.ts` — one shared, unpartitioned buffer). S7 now splits into 7a (gateway prerequisite, blocking, human-coordinated cross-repo) and 7b (hub implementation, depends on 7a landing and deploying). |
+| S7 HTTP-first WS routes | **open — re-scoped in pass 6 to a `minion_hub` slice (7b), path G** | `/reliability` gained a trivial `+page.server.ts` (RBAC comment only, returns `{}`); the RPCs moved out of the page into `$lib/state/reliability/*`, but every load is still gated on `conn.connected` (`reliability/+page.svelte:1159,1170,1188`). The premise holds; the pass-1 line/RPC-count anchor does not. **`security`-tagged since pass 4.** Pass 5 confirmed the pass-4 JWT contract cannot execute (no `jwt`/`orgId` on `ConnectParamsSchema`, rejected before auth by `message-handler.ts:209-218`). Pass 6 confirmed the rest: no org identifier exists anywhere in the gateway's `src/`/`extensions/`; `emitReliabilityEvent` (`src/logging/reliability.ts:33-43`) broadcasts every event to every connected client through an unguarded path (`server-broadcast.ts:9-17`) and pushes it to `hub-metrics-push.ts:104-109`; and 16 of the 19 production emitters have no connected client to attribute to. The feed is gateway-global on every path, including the browser WS one hub already uses — so tenant partitioning is proposal `2026-08-29-gateway-reliability-feed-is-cross-tenant`, not a slice here, and S7 is scoped to not widen it. |
 | S8 reconcile stale statuses | **open** | `specs/index.json` still carries `status: unknown` for `2026-07-05-hub-tanstack-virtual`, `2026-07-06-hub-tanstack-{consolidated-execution,query,pacer,ai-assessment,db-store-assessment}` and `2026-07-17-hub-performance-optimization-plan`. |
 
 Work that shipped under this program but was never specced (recorded here so the program's
@@ -235,9 +261,12 @@ not, and building it is a prerequisite of S5. (3) layout re-runs per nav → S3 
 and the missing `manualChunks`/measurement script transfer to S5. (5) both locales ship to
 every user, and the shell has no enforced budget → S5. (6) empty-shell cold load → S6.
 (7) WS handshake gates first data, and moving those reads server-side puts them on a
-credential resolver that fails open across tenants, on a gateway with no validated-identity
-or per-tenant reliability partitioning to resolve onto → S7 (7a gateway prerequisite,
-`minion`, blocking; 7b hub implementation, `minion_hub`, depends on 7a). (8) perf spec
+credential resolver that fails open across tenants → S7b, which pins the reads to the
+caller's own org gateway and fails closed instead. The gateway's missing tenant model —
+which makes the reliability feed gateway-global on *every* path, including the one the
+browser already uses — is not fixed here: it is proposal
+`2026-08-29-gateway-reliability-feed-is-cross-tenant`, and S7 is scoped so it does not
+widen it. (8) perf spec
 statuses unknown →
 S8. (9) the shell is still above the program's 450 KB goal after S5's locale work, by at
 least the 723 KB of non-catalog bytes S5 does not touch → S9. CRM roster payload (the 10th
@@ -439,89 +468,138 @@ page's `+page.server.ts` (currently a stub returning `{}`, streamed), and let th
 connection upgrade to live data when it arrives. Apply the same pattern to
 sessions/overview/home feed only if S2 data shows they matter.
 
-**Why this slice is `security`-tagged, and why pass 5 splits it into two.** In the browser
-the WS connection is already org-bound: `api/servers/[id]/token/+server.ts` hands out a
-gateway token only after checking that the gateway row belongs to the caller's active org,
-and returns 404 for another org's gateway and 503 (not 404) when the registry is merely
-unavailable. Moving the same reads server-side moves them off that check and onto
+**Why this slice is `security`-tagged.** In the browser the WS connection is at least
+gateway-bound: `api/servers/[id]/token/+server.ts` hands out a gateway token only after
+checking that the gateway row belongs to the caller's active org, and returns 404 for
+another org's gateway and 503 (not 404) when the registry is merely unavailable. Moving
+the same reads server-side moves them off that check and onto
 `src/lib/server/gateway-rpc.ts`, whose `resolveCredentialsForUser` (`:75-121`) falls
 through an `(org, channel)` lease **miss or error**, then a per-user lookup **miss or
 error**, to PG system-wide credentials and finally to env bootstrap credentials —
-`gatewayCallAsUser` (`:295-315`) documents that fallback as intended behaviour.
+`gatewayCallAsUser` (`:295-315`) documents that fallback as intended behaviour. Left
+alone, S7 would read *some other org's* gateway during a mapping miss or a registry
+outage. That is the risk this slice creates, and clause 3 below is what closes it.
 
-Pass 4's fix for that was to require a hub-signed JWT carrying `orgId` on every gateway
-call. Pass 5 verified that requirement against gateway `minion` `DEV`
-`bd55137100aceaf193ab99a827302d3f865b50e7` (confirmed the current branch head) and found
-it cannot execute: `ConnectParamsSchema` (`src/gateway/protocol/schema/frames.ts`) has no
-`jwt` or `orgId` field and is `additionalProperties: false`; `message-handler.ts:209-218`
-validates that schema and rejects the connect frame before authentication runs; a
-recursive listing of the gateway's entire tree at that SHA contains zero files with `jwt`,
-`oidc`, or `multiTenant` in their path. There is no JWT/OIDC infrastructure to call into,
-partial or otherwise. Worse, even a validated `orgId` claim would filter nothing yet:
-`ReliabilityEventSchema` carries no `orgId`, `server-methods/reliability.ts` never reads
-`client.orgId`, and `ReliabilityRingBuffer` (`src/logging/reliability-buffer.ts`) is one
-process-global ring shared by every connected client — so pass 4's own DoD test (two
-tenants on two *distinct* gateways) proved gateway *selection*, not tenant *isolation*
-inside the one gateway most orgs actually share.
+**What passes 4–6 verified, and why pass 6 reshapes the slice instead of adding another
+clause.** Pass 4 required a hub-signed JWT carrying `orgId` on every server-side gateway
+call. Pass 5 checked that requirement against gateway `minion` `DEV`
+`bd55137100aceaf193ab99a827302d3f865b50e7` and found it cannot execute:
+`ConnectParamsSchema` (`src/gateway/protocol/schema/frames.ts:20-68`) has no `jwt` and no
+`orgId` field and is `additionalProperties: false`; `message-handler.ts:209-218` validates
+it and rejects the connect frame *before* authentication. Pass 6 re-read the same SHA
+(still `DEV` head on 2026-08-29, alongside hub `master` `1b47e8ce`) and finished the
+inventory. Four facts, each read from that source:
 
-This is not a novel risk to invent a workaround for: `specs/2026-07-19-channel-scoping-fix-plan.md`
-already lived this exact failure. Its P1 ("carry org identity on the socket") tried adding
-an `orgId` claim to the connect frame twice; `minion-ai` PR #237 FAILed the second attempt
-CRITICAL because every hub browser session presents the *same shared operator token*, so a
-caller-asserted (or even a same-shape-but-unvalidated) `orgId` on the connect frame proves
-nothing about org membership — it is a tenant-authorization bypass, not identity. That
-spec is now parked with an execution hold: "resume only through a coordinated `minion` +
-`minion_hub` implementation with deployment access... do not redispatch as a
-single-repository run." S7 would repeat that exact mistake if scoped as a `minion_hub`-only
-slice, so pass 5 splits it the same way that hold prescribes.
+1. **The gateway has no tenant model at all.** `orgId`, `organizationId`, `accountOrgs`
+   and `orgDisabled` appear nowhere in `src/` or `extensions/` at that SHA except
+   `src/infra/provider-usage.fetch.claude.ts` (an Anthropic billing org — unrelated). Hub
+   writes `channels.accountOrgs` and `plugins.orgDisabled` into the gateway's config blob
+   (`channel-sync.service.ts:98-102`, `pg-plugin-org-schema.ts:3-12`), but no gateway code
+   reads them. There is no `client.orgId` for a claim to populate, and no
+   session/agent/channel → org map to derive one from.
+2. **The live path is unfiltered, not only the buffered one.** `src/logging/reliability.ts:33-43`
+   pushes each event into the process-global ring and then calls
+   `broadcastFn("reliability", event, { dropIfSlow: true })`.
+   `src/gateway/server-core/server-broadcast.ts:9-17,41-55,93-117` scope-guards only
+   `exec.approval.*`, `device.pair.*` and `node.pair.*`; `reliability` has no entry, so
+   `hasEventScope` returns `true` and the frame goes to **every** connected client. Hub
+   consumes exactly that frame (`gateway.svelte.ts:852-855` → `pushReliabilityEvent` →
+   `state/reliability/reliability.svelte.ts`), which is the "upgrade to live data" this
+   slice keeps. Partitioning `reliability.events` / `reliability.summary` alone leaves this
+   path wide open.
+3. **There is a third egress.** The same emit forwards to
+   `getHubMetricsPushClient().pushEvent(event)` (`src/gateway/hub-metrics-push.ts:104-109`),
+   which buffers up to 10,000 events and flushes them to the hub. Any tenant-partitioning
+   contract that names only the query path is incomplete by construction.
+4. **Almost nothing that emits an event knows whose it is.** All 19 production call sites
+   of `emitReliabilityEvent` at that SHA, with the trusted org source each one actually
+   has today:
 
-#### Slice 7a — Gateway org-identity + tenant-partition prerequisite (blocking; repo: `minion`)
+   | Producer | Sites | Trusted org attribution available today |
+   |---|---|---|
+   | `gateway/server-methods/browser.ts:262,270,278` (via `emitBrowserReliabilityEvent`) | 3 | The request's own `client` is in scope — connection-scoped, so it could carry whatever a handshake validated. There is no such handshake. |
+   | `gateway/server-core/server-cron.ts:206,215,224,237` | 4 | `sessionKey` = `cron:<jobId>` and `jobId`. No org in the cron store. |
+   | `logging/diagnostic.ts:97,227,309` (webhook error, stuck session, tool loop) | 3 | `channel`, `chatId`, `sessionKey` — none of which the gateway maps to an org. |
+   | `agents/auth-profiles/startup-check.ts:43,57,71,88` | 4 | Process startup: no request, no session. |
+   | `agents/auth-profiles/refresh-scheduler.ts:79,96,118` | 3 | Scheduled: no request. |
+   | `agents/auth-profiles/oauth.ts:267,284` | 2 | Auth profiles are gateway-level, not org-level. |
 
-Not a `minion_hub` PR's work, and not startable as a single-repository factory run — see
-the execution-hold precedent above. Required before any part of 7b:
+   So "attribute events with the connecting client's validated `orgId` at write time" is
+   executable for **3 of 19** sites, and only after a handshake that does not exist.
+   Excluding everything unattributed — the only safe reading — empties the tenant-facing
+   feed of cron, auth, startup and stuck-session events, i.e. most of what `/reliability`
+   shows. Deriving an org from `channel` / `sessionKey` / `metadata` instead is exactly the
+   caller-asserted identity `minion-ai` PR #237 FAILed CRITICAL on
+   `specs/2026-07-19-channel-scoping-fix-plan` P1, which is now parked with an execution
+   hold: "resume only through a coordinated `minion` + `minion_hub` implementation with
+   deployment access… do not redispatch as a single-repository run."
 
-1. Add a gateway-validated identity credential to the connect handshake — extend
-   `ConnectParamsSchema` with an explicit new field (do not simply relax
-   `additionalProperties`) and add the issuer/signature (or equivalent) verification that
-   currently does not exist anywhere in this repo, so `client.orgId` can be trusted.
-2. **`client.orgId` may be set only from that validated claim, never from any
-   caller-asserted field on the connect frame** — this is the precise shape PR #237
-   rejected. A `userId` claim from a trusted proxy is a materially different, lower-risk
-   case than an `orgId` claim asserted by a shared-token client; do not conflate them.
-3. Attribute reliability events with the connecting client's validated `orgId` at write
-   time (extend `ReliabilityEventSchema`); partition or filter
-   `ReliabilityRingBuffer`/`server-methods/reliability.ts` so a query returns only the
-   caller's `orgId` events; events with no attribution (pre-migration, or genuinely
-   system-level) are excluded from any tenant-facing response, or exposed only on a
-   surface explicitly restricted to a system-admin capability.
-4. A real handshake test in `minion`'s own suite: a validly signed claim succeeds and the
-   resulting `client.orgId` matches it; a missing, expired, or signature-invalid claim
-   fails the handshake closed (connection rejected, not degraded to anonymous/system
-   scope).
-5. A same-gateway two-org isolation test: org A and org B both connected to the **same**
-   gateway instance, each emitting reliability events; an org-A-scoped
-   `reliability.events`/`reliability.summary` call returns zero org-B rows or fields.
-6. If the actually-deployed gateway differs from `minion` `DEV` (a hotfix branch, a
-   forked implementation, etc.), pin and test against its exact serving SHA rather than
-   this repo's source, per the pass-4 review's own guidance.
+**Pass 6 decision: this performance program does not own the gateway's tenant model.**
+Building one is a multi-repo security program with its own AS-IS; three review rounds of
+bolting it onto a perf slice produced a contract that could not execute. It is filed as
+proposal `2026-08-29-gateway-reliability-feed-is-cross-tenant` (with the evidence above)
+and stays coupled to the parked channel-scoping hold for the identity half. What remains
+here is the perf work, on one of two paths — **path G is chosen; the human approval gate
+this spec already requires is where that choice is ratified or replaced by path T.**
 
-DoD (7a): tests in items 4–5 exist and pass in `minion`'s suite against the SHA that will
-actually serve hub traffic; the connect-schema and reliability-schema changes are reviewed
-and merged there under that repo's own security gate.
+#### Path G (chosen) — treat the reliability feed as what it verifiably is
 
-#### Slice 7b — HTTP-first hub implementation (repo: `minion_hub`, depends on 7a)
+Gateway-global operational telemetry, presented as such. No `minion` change, so 7b is a
+`minion_hub` slice: pass 5's "dispatching S7 as a single-repository run is itself a defect"
+was written about the gateway program and applies to path T; it does not apply to path G,
+whose blast radius is one hub route and its new endpoints.
 
-May not start design or code until 7a has shipped **and deployed** to the gateway hub
-actually talks to — clause 4 below has nothing to call otherwise.
+The audience has to match the data. `/reliability` is gated today by `reliability:view`, a
+per-org role permission any org's role matrix can grant (`src/lib/permissions.ts:85-90`,
+enforced by the central RBAC guard that `(app)/reliability/+page.server.ts:3-4` documents
+as "replacing the old admin-only super-view check"). Since every number on that page is
+gateway-wide, the default under path G is to put the surface back behind an explicitly
+platform/gateway-operator gate, and 7b names the exact check it shipped. **Narrowing an
+existing surface is a product decision, not an implementation detail** — the human
+approval gate ratifies it, and may instead choose to keep `reliability:view` and label the
+feed gateway-wide, which changes none of 7b's engineering but leaves the exposure open
+under the proposal's ownership. Either way S7b must not *widen* it: that is what clauses
+2–6 below enforce.
+
+#### Path T — per-org reliability data (not a slice of this spec)
+
+Only if the product decides tenants must see their own reliability data. That is the
+proposal's cross-repo work (`minion` + `minion_hub`), and 7b would then wait for it to
+ship **and deploy**. Its clauses are binding *together* — any one alone leaves a hole, as
+passes 4–6 each demonstrated:
+
+1. A gateway-validated identity credential in the connect handshake: a new explicit field
+   on `ConnectParamsSchema` (never a relaxation of `additionalProperties`), with the
+   issuer/signature verification that does not exist anywhere in that repo today.
+2. `client.orgId` set **only** from that validated claim, never from a caller-asserted
+   connect field — the shape PR #237 rejected, because every hub browser session presents
+   the same shared operator token.
+3. Write-time attribution with a named trusted source **per producer class** from the
+   inventory above, not one rule for all 19: connection identity where the event is
+   connection-scoped, authoritative session/agent/job/profile ownership where the gateway
+   can prove it, and an explicit `global` class for everything no tenant owns — served
+   only on a system-admin surface, never merged into a tenant response.
+4. The live broadcast filtered the same way: an org-attributed `reliability` event reaches
+   only connections whose validated org matches; `global` events reach only system-admin
+   connections. Query filtering without this is not isolation (fact 2 above).
+5. `hub-metrics-push` partitioned or explicitly declared system-scope (fact 3 above).
+6. Tests, in `minion`'s own suite, against the SHA that will actually serve hub traffic:
+   handshake accepts a valid claim and fails **closed** on missing/expired/forged (no
+   degrade to anonymous or system scope); a same-gateway two-org **query** isolation test;
+   and a same-gateway two-org **subscription** test in which both clients are connected and
+   org A never receives org B's broadcast frame. Injecting tagged events into the ring
+   buffer proves nothing about the real producers — drive at least one test per class
+   through a real one (a browser request, a cron finish, a startup check).
+
+#### Slice 7b — HTTP-first hub implementation (repo: `minion_hub`, path G)
 
 **Contract (binding on the implementation, each clause with its own test):**
 
-1. **Authorization.** Every endpoint calls `await requireOrgCapability(locals,
-   'reliability', 'view')` as its first statement, exactly as
-   `api/reliability/architecture/+server.ts` does. Mirror that endpoint for the RBAC and
-   tenant-context shape only — it resolves nothing through `gateway-rpc.ts`
-   (`probeArchitecture` is org-scoped PG reads), so it is not a template for credential
-   resolution.
+1. **Authorization.** Every endpoint's first statement is the capability check path G's
+   human gate ratified, called the way `api/reliability/architecture/+server.ts` calls
+   `requireOrgCapability`. Mirror that endpoint for RBAC/tenant-context *shape* only — it
+   resolves nothing through `gateway-rpc.ts` (`probeArchitecture` is org-scoped PG reads),
+   so it is not a template for credential resolution.
 2. **Identity comes only from the session.** `profileId`, `orgId` and the build channel are
    derived from authenticated `locals` (`locals.orgId ?? locals.tenantCtx?.tenantId`, and
    the request-ambient channel). No org, profile, gateway id, or channel is ever read from
@@ -533,36 +611,38 @@ actually talks to — clause 4 below has nothing to call otherwise.
    caller's org. Implement this as a new strict entry point (e.g.
    `resolveCredentialsForOrgStrict`) rather than by adding a flag to
    `resolveCredentialsForUser`, so no existing caller silently changes behaviour.
-4. **Signed org claim.** Every gateway call mints and passes the hub-signed credential 7a
-   defines (`issueGatewayJwt` in `src/server/services/gateway-jwt.service.ts`, whose claims
-   carry `orgId`, as `opts.jwt` or whatever field 7a's schema change actually names) —
-   validated against 7a's deployed contract, not assumed compatible with it. The shared
-   operator token is not an org-scoping credential.
+4. **No invented claims.** There is no org-scoping credential the gateway accepts (fact 1),
+   and a `jwt`/`orgId` field on the connect frame is rejected *before* auth by
+   `additionalProperties: false`. 7b therefore mints nothing, sends no connect field outside
+   the serving gateway's `ConnectParamsSchema`, and does not treat the shared operator token
+   as org scoping. Under path G, "which gateway" comes from clause 3 and "who may ask" from
+   clause 1 — that is the whole of 7b's org boundary, and the response says so (clause 6).
 5. **Fail closed, and distinguish the two failures.** 404 = this org has no gateway for
    this channel; 503 = the registry/lease lookup failed. Never substitute another gateway,
    and never degrade to an empty 200 that the page renders as "all healthy".
-6. **No new surface.** These endpoints are read-only, expose no gateway URL or token in
-   their responses, and add no gateway RPC method that the WS path did not already call.
+6. **No new surface, and no false scoping.** These endpoints are read-only, expose no
+   gateway URL or token in their responses, and add no gateway RPC method the WS path did
+   not already call. Each response marks its data gateway-wide (e.g. `scope: 'gateway'`)
+   and the page says so, so no operator — and no later feature — reads the numbers as
+   org-scoped.
 
 DoD (7b): `/reliability` renders populated KPIs with WS blocked (devtools offline-WS test);
-no duplicate fetch when WS connects (guard test); and the following tests exist and pass —
-(a) **mapping miss**: an authenticated user whose active org has no gateway lease for the
+no duplicate fetch when WS connects (guard test); and these tests exist and pass —
+(a) **mapping miss**: an authenticated caller whose active org has no gateway lease for the
 channel gets 404 and *no* gateway call is made with system or env credentials;
 (b) **registry outage**: the lease/per-user lookup throwing yields 503 with `retry-after`
-and, again, no fallback credentials; (c) **tenant isolation, same gateway**: org A and org
-B share one gateway (per 7a's isolation test); a session in org A never receives org B's
-rows — asserted on the credentials the resolver returns and, against a real or
-contract-faithful test gateway, on the response body; a two-*distinct*-gateway test proves
-selection only and does not satisfy this clause; (d) **capability denied**: a session
-without `reliability:view` gets the same status the route guard already produces; (e) the
-signed credential passed to the gateway carries the caller's `orgId` and 7a's handshake
-test accepts it.
+and, again, no fallback credentials; (c) **gateway selection**: with org A and org B on
+distinct gateways, an org-A session's endpoints resolve org A's gateway credentials and
+never the system/env pair — this proves *selection*, which under path G is the only org
+claim 7b makes; (d) **audience**: a session lacking the ratified capability gets the route
+guard's denial, and the test names the capability actually shipped; (e) **handshake
+compatibility**: the connect params the endpoints send validate against the serving
+gateway's `ConnectParamsSchema` (assert against that SHA's schema), so no call can regress
+to a pre-auth rejection; (f) the response carries the gateway-wide scope marker of clause 6.
 
-**Human gates (required, `security`, both slices):** a human approves the design of 7a and
-of 7b before either starts a dev run, and a human merges each PR. Neither gate is
-satisfiable by green CI or by an agent review verdict. Per the execution-hold precedent
-this section cites, dispatching S7 as a single-repository (`minion_hub`-only) factory run
-is itself a defect, independent of what the run produces.
+**Human gates (required, `security`):** a human approves S7's path choice and design before
+any dev run, and a human merges the PR. Neither gate is satisfiable by green CI or by an
+agent review verdict.
 
 ### Slice 8 — Reconcile stale perf-spec statuses (board hygiene)
 
@@ -614,6 +694,10 @@ evidence-backed target written back into this spec — not a number gamed to fit
   `2026-08-29-hub-prod-runtime-config-drift-check`.
 - Gateway-side performance, minion_site performance, dev-machine DX beyond the
   `optimizeDeps` line in S4.
+- The gateway's tenant model — validated org identity on the socket, per-org attribution
+  of reliability events, and filtering of the buffered, broadcast and hub-metrics-push
+  paths — owned by proposal `2026-08-29-gateway-reliability-feed-is-cross-tenant` and, for
+  the identity half, by the parked `2026-07-19-channel-scoping-fix-plan`.
 - New storage for perf metrics (the dead `reliability-events` table stays dead; PostHog +
   Speed Insights are the stores).
 

@@ -105,3 +105,62 @@ test('effort: regenerating an untouched proposal a second time does not drop its
 	const entry = index.proposals.find((p) => p.id === 'stable');
 	assert.equal(entry.effort, 'M');
 });
+
+// The truthiness regression: `effort: 0` and a bare `effort:` are PRESENT but
+// falsy, so the first fix (which guarded on `fm.effort`) skipped both the
+// validation and the projection and dropped the field without a word.
+test('effort: a present-but-falsy numeric value fails the build instead of vanishing', () => {
+	const root = makeFixture();
+	writeProposal(root, 'zero-effort', [
+		'id: zero-effort',
+		'title: Zero effort',
+		'status: draft',
+		'created: 2026-08-29',
+		'effort: 0'
+	]);
+	const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /zero-effort\.md: invalid effort "0"/);
+});
+
+test('effort: a present-but-empty value fails the build instead of vanishing', () => {
+	const root = makeFixture();
+	writeProposal(root, 'empty-effort', [
+		'id: empty-effort',
+		'title: Empty effort',
+		'status: draft',
+		'created: 2026-08-29',
+		'effort:'
+	]);
+	const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /empty-effort\.md: invalid effort ""/);
+});
+
+// `value` is the same silent-drop class one field over: no fixed vocabulary
+// (numbers and words are both live), so it is projected on presence and only
+// rejected when present-but-empty.
+test('value: zero is projected rather than dropped, and an empty value fails the build', () => {
+	const root = makeFixture();
+	writeProposal(root, 'zero-value', [
+		'id: zero-value',
+		'title: Zero value',
+		'status: draft',
+		'created: 2026-08-29',
+		'value: 0'
+	]);
+	execFileSync('node', ['scripts/proposal-index.mjs'], { cwd: root });
+	const index = JSON.parse(readFileSync(join(root, 'proposals', 'index.json'), 'utf8'));
+	assert.equal(index.proposals.find((p) => p.id === 'zero-value').value, 0);
+
+	writeProposal(root, 'empty-value', [
+		'id: empty-value',
+		'title: Empty value',
+		'status: draft',
+		'created: 2026-08-29',
+		'value:'
+	]);
+	const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /empty-value\.md: empty value/);
+});
