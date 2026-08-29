@@ -36,7 +36,11 @@ const TRUSTED = { source_trust: 'trusted-automation', owner: 'factory' };
 const HUMAN = { source_trust: 'human', owner: 'human' };
 
 // Files written before `source:` existed. Matched against the FILENAME (sans
-// .md), because that is the only provenance evidence such a file carries.
+// .md), because that is the only provenance evidence in the frontmatter — but
+// the classification is not inferred from the name alone: every file in each
+// machine family carries its writer's own "Filed automatically by the factory
+// <writer>" banner in the body, and no file classified `human` below carries
+// one.
 export const SOURCELESS_RULES = [
 	{ match: /^ci-/, source: 'ci-watch', ...TRUSTED, why: 'filed by the factory CI watch' },
 	{ match: /^handoff-/, source: 'handoff-sweep', ...TRUSTED, why: 'filed by the factory handoff-ledger sweep' },
@@ -63,8 +67,11 @@ export const SOURCE_RULES = [
 	{ match: /^handoff-/, ...TRUSTED, why: 'factory handoff-ledger sweep' },
 	{ match: /^merge-scan$/, ...TRUSTED, why: 'factory merge-scan lane' },
 	{ match: /^\d{4}-\d{2}-\d{2}-.+-spec$/, ...TRUSTED, why: 'consumer handoff filed by the factory spec stage' },
-	// Human-supervised sessions. An agent may have typed the file, but a human
-	// drove the session and owns the outcome, so gate 1 stays.
+	// Human-supervised sessions, plus the literal `human` this script writes
+	// onto a source-less hand-written file (without which a second run would
+	// fail on its own output). An agent may have typed some of these, but a
+	// human drove the session and owns the outcome, so gate 1 stays.
+	{ match: /^human$/, ...HUMAN, why: 'hand-written proposal' },
 	{ match: /^ux-plan-/, ...HUMAN, why: 'human UX planning session' },
 	{ match: /^cost-audit-/, ...HUMAN, why: 'human cost/ops audit session' },
 	{ match: /^hub-perf-session-/, ...HUMAN, why: 'human performance investigation session' },

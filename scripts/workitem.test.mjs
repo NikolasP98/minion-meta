@@ -207,7 +207,7 @@ test('retrofit derives risk from tags, defaults priority, and is idempotent', ()
 	]);
 });
 
-test('the retrofitted corpus itself is complete and self-consistent', async () => {
+test('the retrofitted corpus is complete, self-consistent, and a re-run is a no-op', async () => {
 	const { readdirSync, readFileSync } = await import('node:fs');
 	const { parseFrontmatter } = await import('./spec-frontmatter.mjs');
 	const names = readdirSync('proposals').filter((f) => f.endsWith('.md') && f !== 'TEMPLATE.md');
@@ -215,5 +215,10 @@ test('the retrofitted corpus itself is complete and self-consistent', async () =
 	for (const name of names) {
 		const { fm } = parseFrontmatter(readFileSync(`proposals/${name}`, 'utf8'));
 		assert.deepEqual(validateWorkItem(fm), [], name);
+		// Idempotence over the script's OWN output: the retrofit writes
+		// `source: human` onto hand-written files, so SOURCE_RULES has to
+		// recognise every source SOURCELESS_RULES can produce or a second run
+		// fails on the first run's result.
+		assert.deepEqual(plan(name.replace(/\.md$/, ''), fm), { lines: [] }, name);
 	}
 });
