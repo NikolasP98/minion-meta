@@ -47,14 +47,44 @@ configured cap says should have been refused for free.
 
 ## Definition of done
 
-- A local-path size check that runs **before** the file contents are read —
-  `fs.stat` (or the `readFileOverride` equivalent) compared against the same
-  effective cap, throwing the same `formatCapLimit("Media", cap, size)` error —
-  or a streaming/bounded local read that stops at the cap.
-- A regression test that a local file above the cap is rejected **without**
-  reading it: assert via a `readFileOverride` / spy that no full read occurred
-  (a size-only assertion cannot distinguish the two behaviors and is not
-  sufficient).
+- **No bare `fs.stat`-then-`readFile` gate.** A raw `stat.size > cap` rejection
+  is not behavior-preserving: at the pinned implementation, local bytes are
+  read, MIME-sniffed, and images are optimized **before** the final cap is
+  enforced (`src/web/media.ts:209-267`, `:309-324`), and the existing test
+  suite locks in that a local JPEG whose **raw** size exceeds the cap is
+  accepted once optimization brings it under the cap
+  (`src/web/media.test.ts:144-153`). A stat-based precheck against the final
+  cap would reject that file today, regressing a currently-working send.
+  `stat` immediately followed by an unbounded `readFile` is also a
+  check-then-act race — the file can grow or be replaced in the window
+  between the two calls, defeating the bound the check exists to enforce.
+- **A bounded read/file-handle protocol instead**, not a stat precheck: read
+  local files through a mechanism that cannot allocate past a defined
+  raw-input ceiling regardless of on-disk size — e.g. a file handle read or
+  bounded stream that stops (and rejects) at that ceiling without
+  materializing the remainder. Define the ceiling consistently with the
+  remote path's existing two-tier shape (a raw pre-optimization ceiling
+  distinct from the final post-optimization `cap`, mirroring
+  `fetchRemoteMedia`'s `maxBytes`/`fetchCap` split), so a compressible local
+  image above the final cap but within the raw ceiling is still accepted,
+  matching today's behavior.
+- **Preserve the `readFileOverride` seam.** The current implementation
+  supports virtual/sandbox paths through a `readFile` override with no `stat`
+  override (`media.ts:185-196`, tests `:357-382`). Any bounded-read mechanism
+  must go through that same seam (or add a matching override), not call
+  `fs.stat` directly — a bare `fs.stat(mediaUrl)` rejects override-backed
+  paths that have no corresponding host file, which currently work.
+- A regression test: a compressible local image whose **raw** size is above
+  the final cap but optimizes below it is still accepted (mirrors
+  `media.test.ts:144-153`) — proves the fix does not regress the existing
+  optimize-then-clamp path.
+- A regression test: an override-backed (`readFileOverride`) local path with
+  no corresponding host file still works — proves the fix does not call
+  `fs.stat` on a path that only exists virtually.
+- A regression test: a local file that grows or is replaced in the window
+  between the size check and the read completing does not result in an
+  allocation beyond the raw-input ceiling — proves the fix is bounded, not a
+  check-then-act race.
 - Symmetry test: remote and local paths reject the same oversized payload with
   the same error text and the same effective cap.
 - The in-code half of the ledger clause is added at the exact site the first

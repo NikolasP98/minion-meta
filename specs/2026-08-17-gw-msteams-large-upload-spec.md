@@ -3,7 +3,7 @@ id: 2026-08-17-gw-msteams-large-upload-spec
 title: "MS Teams attachments — route >4MB through a Graph resumable upload session (chunked PUT with resume, expiry and cancel)"
 stage: spec
 status: draft
-pass: 5
+pass: 6
 created: 2026-08-17
 updated: 2026-08-29
 proposal: 2026-08-17-gw-msteams-large-upload
@@ -13,14 +13,21 @@ tags: [logic, test]
 type: fix
 ---
 
-> **Pass 5 disposition: STILL REVIEW, not approved.** Pass 5 changes no disposition — it repairs three
-> defects the pass-4 review found in *how* pass 4 stated its own blockers: §7 step 0's live matrix had no
-> known-good control and could not tell a size failure from an auth/path one (fixed below and in §7);
-> three active passages still asserted the pre-allocation guarantee §1.3a disproves (§1.5, §3's routing
-> table, §6 — all now qualified remote-vs-local, with the heap-policy gate explicitly reopened and
-> filed as a ledger proposal); and S1's `createUploadSession` URL instruction, read literally, produced
-> a malformed `::` path (§2 S1 now gives the two exact templates and requires a whole-URL assertion).
-> The substance below is unchanged: Pass 3's approval rested on the premise that
+> **Pass 6 disposition: STILL REVIEW, not approved.** Pass 6 changes no disposition — it repairs three
+> defects a cross-provider review found in *how* pass 5 stated its own AS-IS and its own gates: (1) the
+> "0. Product" narrative, §1.1 and §1.2 still asserted the ">4MB fails" premise as settled fact ("the
+> break is real", "identical 4MB cap", "the proposal's drive-path DoD stands") even though §1.1a
+> disproves it against current documentation and no live check has run — those passages, and S1's code
+> comment restating "documented as 4MB" over a hard-coded `4_000_000`, are now explicitly qualified as
+> conditional on §7 step 0's outcome, not stated as current fact; (2) the follow-up local-media proposal
+> ([`proposals/2026-08-29-gw-local-media-read-before-cap-check.md`](../proposals/2026-08-29-gw-local-media-read-before-cap-check.md))
+> permitted a bare `fs.stat`-then-`readFile` fix as an acceptable DoD, which both regresses the existing
+> optimize-then-clamp local-image behavior and remains check-then-act racy — its DoD is rewritten to
+> require a bounded read/file-handle protocol and the missing regression tests; (3) two active S3/§3
+> passages still called the reused byte ceiling "the gateway's per-upload heap policy" and said the
+> pass-2 "flagged for human" item was fully satisfied, contradicting §1.5's and the ship gate's own
+> "heap-policy gate: open" — both now say only the byte-*value* half is settled. Pass 5's substance is
+> otherwise unchanged: Pass 3's approval rested on the premise that
 > Graph's simple `PUT .../content` endpoint caps uploads at 4MB. Microsoft's current v1.0 documentation
 > for the exact endpoint shapes this spec targets — [Upload or replace the contents of a
 > driveItem](https://learn.microsoft.com/en-us/graph/api/driveitem-put-content?view=graph-rest-1.0),
@@ -99,12 +106,19 @@ From the approved proposal `2026-08-17-gw-msteams-large-upload`, verbatim:
 >
 > Download side; non-OneDrive storage.
 
-**What the user actually loses today.** The assistant can compose a report, a recording, an export —
-and then cannot hand it over in a group chat or a channel. Recon (§1) confirms the failure and
-narrows it: the break is real, but it is **not** where the proposal pointed. The proposal names the
-OneDrive *fallback*; the path most tenants actually take — SharePoint, used whenever a site is
-configured — has the identical 4MB cap and **no TODO marking it**. A 4.1MB PDF and a 400MB video fail
-identically, as a thrown `Error`, not as a graceful "too large" message.
+**What the user actually loses today, if the drive-path failure is real.** The assistant can compose a
+report, a recording, an export — and then cannot hand it over in a group chat or a channel. Recon (§1)
+narrows the *code-level* claim but does not prove it: the TODO quoted in the proposal sits only on
+`uploadToOneDrive`, not on `uploadToSharePoint`, even though both call the identical simple-`PUT` shape
+(§1.1). **Whether either function actually fails below Microsoft's currently-documented 250 MB ceiling
+is unproven** (§1.1a) — no live `PUT` has ever been run against a tenant to test it, and current primary
+documentation says it should not fail there at all. Do not read "has the identical 4MB cap" or "4.1MB
+and 400MB fail identically" as this spec's settled premise: they are the disproved-by-documentation,
+not-yet-tested claim, held open pending the controlled check in §7 step 0. What recon does establish
+without qualification: *if* a failure occurs on either drive path today, it surfaces as a thrown
+`Error`, not as a graceful "too large" message (§1.4) — and the proposal names the wrong function as
+primary, since SharePoint, not OneDrive, is the path most tenants actually take (§1.1) and carries no
+TODO at all.
 
 **Why this is more than "add a second endpoint".** A resumable upload is a *stateful protocol* — a
 session that expires, chunks that must tile the byte range exactly with no gap and no overlap, a server
@@ -136,8 +150,9 @@ finding for the G0 sweep (`2026-08-17-sdlc-phase-gates-scoring-spec` §3) — re
 
 It sits on **`uploadToOneDrive`** (`graph-upload.ts:29`), which `PUT`s to
 `/me/drive/root:{path}:/content`. But **`uploadToSharePoint`** (`graph-upload.ts:171`) does the same
-simple `PUT` to `/sites/{siteId}/drive/root:{path}:/content` with the same 4MB ceiling and **carries no
-TODO at all**. Both wrap into `uploadAndShareOneDrive` (`:125`) and `uploadAndShareSharePoint` (`:390`).
+simple `PUT` to `/sites/{siteId}/drive/root:{path}:/content` — the identical call shape, and, per
+§1.1a, an **unproven** ceiling — and **carries no TODO at all**. Both wrap into `uploadAndShareOneDrive`
+(`:125`) and `uploadAndShareSharePoint` (`:390`).
 
 **This is the single most important correction in this pass.** Reading the call sites
 (`send.ts:204-273`, `messenger.ts:322-352`), SharePoint is the *preferred* path and OneDrive is the
@@ -193,14 +208,19 @@ months before this spec was drafted) implements it end to end.
 - `uploadToConsentUrl` sends **one** `PUT` of the whole buffer with
   `Content-Range: bytes 0-{len-1}/{len}` and — correctly — **no `Authorization` header**.
 
-So the answer to A1 is "both", and the consequence is better than the pass-2 worst case:
+So the answer to A1 is "both" — but per §1.1a, whether item 1 below actually applies is **conditional
+on the live check in §7 step 0**, not decided by this recon pass:
 
-1. The proposal's DoD stands **for the drive path** (§1.1) — `createUploadSession` genuinely is the
-   right API for SharePoint/OneDrive, and genuinely is absent.
-2. The consent path needs **no session creation** (Teams hands it the URL) but does need the **same
-   chunk loop**, because a single full-file `PUT` has no resume, no retry, no `Retry-After`, and is
-   subject to Graph's per-request fragment ceiling (§4). Today it is the only >4MB path that works at
-   all, and it works only on a healthy network in one shot.
+1. **If** step 0 confirms a real size-dependent failure on the drive paths, the proposal's DoD would
+   apply **for the drive path** (§1.1) — `createUploadSession` would be the right API for
+   SharePoint/OneDrive, and it is absent from both today. **If** step 0 instead confirms Microsoft's
+   documented 250 MB ceiling with no drive-path failure, this item does not apply — see §1.1a's
+   consequence-for-scope, which is this spec's current disposition.
+2. The consent path's need is independent of that outcome: it needs **no session creation** (Teams
+   hands it the URL) but does need the **same chunk loop**, because a single full-file `PUT` has no
+   resume, no retry, no `Retry-After`, and is subject to Graph's per-request fragment ceiling (§4). It
+   is the only >4MB path this spec has evidence is exercised today, on a healthy network, in one shot —
+   that is a claim about what code exists and runs, not proof that the drive paths fail below 250 MB.
 3. `uploadToConsentUrl` is the **house pattern** for the no-`Authorization` rule that S1 must preserve —
    the constraint is already honoured in this codebase, and S1's test locks it against regression.
 
@@ -341,10 +361,24 @@ and the resulting drive item is returned, on **both** drive call sites (§1.1). 
   The extension already injects `fetchFn?: typeof fetch` on every network function (§1.6) — **match
   that signature exactly** rather than inventing a client abstraction.
 
+  **This threshold, its routing branch, and the comment below are provisional on §7 step 0 (§1.1a) and
+  must not be implemented before that check returns a confirmed drive-path size failure.** The comment
+  states the in-repo TODO's claim that Graph caps the simple `PUT` at 4MB — that claim is exactly what
+  pass 4/5 found contradicted by current primary Microsoft documentation (250 MB for this call shape,
+  §1.1a), and no live request has confirmed either number. The constant below is the value to route on
+  **only if** step 0 confirms a real failure near this range; if step 0 instead confirms the 250 MB
+  ceiling, drop this constant and the routing split entirely rather than keeping it as an inert
+  safety margin.
+
   ```ts
-  /** Graph's simple PUT /content is documented as 4MB. Whether that is 4,000,000 or 4,194,304 is
-   *  not worth guessing: take the smaller reading, so we never attempt a simple PUT that Graph
-   *  would reject under either. Routing extra files through the session path is harmless.
+  /** UNVERIFIED pending §7 step 0 (§1.1a): the in-repo TODO this spec started from claims Graph's
+   *  simple PUT /content is capped at 4MB; current primary Microsoft documentation instead states a
+   *  250 MB ceiling for this exact call shape, and no live PUT has confirmed either number. Do not
+   *  read this comment as a verified fact. If step 0 confirms a real size-dependent failure, take the
+   *  smaller reading between 4,000,000 and 4,194,304, so a simple PUT is never attempted where Graph
+   *  would reject under either — routing extra files through the session path is harmless. If step 0
+   *  confirms the 250 MB ceiling instead, this constant and the routing split it drives must be
+   *  removed, not kept.
    *
    *  DELIBERATELY NOT the same number as FILE_CONSENT_THRESHOLD_BYTES (4 * 1024 * 1024, send.ts:41 /
    *  messenger.ts:35). That constant answers "does Teams require a consent card in a 1:1 chat"; this
@@ -580,10 +614,15 @@ stop promising a 4MB world, and every remaining open end is in the ledger.
   edits under `src/` are fine; production edits there are the line.
 - **Reuse the existing ceiling; add none.** Recon (§1.5) found `MSTEAMS_MAX_MEDIA_BYTES = 100 * 1024 *
   1024` (`send.ts:47`, `messenger.ts:29`), already overridable via `channels.msteams.mediaMaxMb` /
-  `agents.defaults.mediaMaxMb` and already enforced ahead of the transfer by `loadWebMedia`. That is
-  the gateway's per-upload heap policy and it is **already a deliberate human choice recorded in
-  code**. Do **not** introduce a `MAX_UPLOAD_BYTES` constant — a second ceiling on the same axis is how
-  a user gets a rejection naming the wrong number. Two obligations instead:
+  `agents.defaults.mediaMaxMb` and already enforced ahead of the transfer by `loadWebMedia`. **Only the
+  byte-value question is settled** — this is a deliberate, already-recorded human choice for *what
+  number* to enforce (§1.5). It is **not** yet an accepted per-upload heap bound: per §1.3a/§1.5, the
+  ceiling is a pre-allocation bound only for remote media, and the local-read gap keeps the heap-policy
+  gate (§7) open until
+  [`proposals/2026-08-29-gw-local-media-read-before-cap-check.md`](../proposals/2026-08-29-gw-local-media-read-before-cap-check.md)
+  is resolved or the operator accepts the measured worst-case envelope. Do **not** introduce a
+  `MAX_UPLOAD_BYTES` constant — a second ceiling on the same axis is how a user gets a rejection naming
+  the wrong number. Two obligations instead:
   - Confirm the existing ceiling is **≤** the destination's documented per-file limit (§4). If it is
     not, that is a finding: report it, do not silently lower a configured value.
   - The rejection `loadWebMedia` already produces must name the effective limit. If it does not, fixing
@@ -658,9 +697,12 @@ table until the live check in §1.1a / the top-of-file disposition banner has be
 **"Ceiling" = the existing `resolveChannelMediaMaxBytes` result**, i.e.
 `cfg.channels.msteams.mediaMaxMb` → `cfg.agents.defaults.mediaMaxMb` → `MSTEAMS_MAX_MEDIA_BYTES`
 (100 MiB, `send.ts:47` / `messenger.ts:29`). This is a pre-existing, deliberate, configurable product
-policy; **the pass-2 review's "flagged for human" item is satisfied by it** and no new byte value needs
-choosing (§1.5). The only obligation is §4's check that 100 MiB is at or under the destination's
-documented per-file limit.
+policy; **only the byte-value half of the pass-2 review's "flagged for human" item is satisfied by it**
+— no new byte value needs choosing (§1.5). The other half, whether that value is an acceptable
+per-upload gateway **heap bound**, is **not** satisfied and stays open: it is a pre-allocation bound
+only for remote media, not for local files (§1.3a, §1.5), and closing it needs the heap-policy gate in
+§7 resolved, not just a byte value picked. The only obligation this row settles is §4's check that
+100 MiB is at or under the destination's documented per-file limit.
 
 The `4,000,000` boundary is the **conservative** reading of Graph's documented "4 MB" simple-upload cap
 (the other reading is `4,194,304`). Erring low routes a handful of files through the session path

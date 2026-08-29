@@ -1,11 +1,61 @@
 ---
 spec: 2026-08-17-gw-msteams-large-upload-spec
-pass: 5
+pass: 6
 verdict: changes_requested
 reviewer: factory-review
 created: 2026-08-17
 updated: 2026-08-29
 ---
+
+# Pass 6 disposition — STILL REVIEW (changes_requested), unchanged
+
+A cross-provider review of pass 5 agreed with keeping `changes_requested` and with pass 5's step-0
+control design, but found three defects in **how pass 5 stated its own AS-IS facts and its own gates**
+— contradictions a future reader or implementer could cite to treat unproved or explicitly-reopened
+claims as settled. All three are verified against this branch and fixed in the spec/proposal text; the
+disposition, the scope, and the ship gates are otherwise untouched.
+
+1. **Active AS-IS prose still stated the disproved/unproved ">4MB fails" premise as fact (medium).**
+   §1.1a (pass 4) and the top-of-file banner correctly say the exact simple `PUT .../content` path is
+   currently documented up to 250 MB and that no tenant request has reproduced a 4 MB failure. But the
+   "0. Product" section still said "the break is real", §1.1 still said SharePoint has "the identical
+   4MB cap", and §1.2 still said the proposal's drive-path DoD "stands", that `createUploadSession` is
+   "genuinely" required and absent, and that the consent route is "the only working >4MB path". S1's
+   `SIMPLE_UPLOAD_MAX_BYTES` code comment likewise stated "Graph's simple PUT /content is documented as
+   4MB" as fact, over a hard-coded `4_000_000` threshold — none of that sat inside marked-superseded
+   history; all of it was active, present-tense guidance a later pass or implementer could point to in
+   order to preserve S1 after the live matrix in §7 step 0 disproves it.
+   **Fixed:** all four passages now state the premise as conditional on §7 step 0's outcome — "if step 0
+   confirms a failure, then X; if it confirms the 250 MB ceiling, X does not apply" — rather than as
+   settled fact. The `SIMPLE_UPLOAD_MAX_BYTES` comment and its surrounding prose are marked UNVERIFIED
+   and instruct removing the constant/routing split entirely if step 0 confirms no failure.
+2. **The local-media follow-up proposal's DoD permitted a fix that breaks existing behavior and remains
+   racy (medium).** `proposals/2026-08-29-gw-local-media-read-before-cap-check.md` accepted a bare
+   `fs.stat` size check ahead of the existing `fs.readFile` as a valid DoD option. At the pinned
+   implementation, local bytes are read, MIME-sniffed and images optimized *before* the final cap is
+   enforced (`src/web/media.ts:209-267`, `:309-324`), and the existing test suite locks in that a raw
+   local JPEG above the cap is accepted once optimization brings it under the cap
+   (`src/web/media.test.ts:144-153`) — a stat-against-final-cap precheck would reject that file today. A
+   bare `stat` immediately followed by an unbounded `readFile` is also a check-then-act race, and the
+   codebase's `readFileOverride` seam for virtual/sandbox paths (`media.ts:185-196`, tests `:357-382`)
+   has no matching `stat` override.
+   **Fixed:** the DoD now explicitly rules out the bare stat-then-read shape, requires a bounded
+   read/file-handle protocol with a raw-vs-final ceiling split mirroring the remote path's
+   `maxBytes`/`fetchCap` shape, requires the fix to go through the existing override seam, and adds the
+   three missing regression tests (compressible-image-above-cap, override-backed virtual path, and a
+   grow/replace-during-check race).
+3. **The active heap-policy disposition was internally inconsistent (low).** §1.5 and the ship gate
+   correctly say the byte-*value* question is settled but the heap-*policy* question (is that value a
+   pre-allocation bound) remains open. But S3's "Reuse the existing ceiling" bullet still called the
+   ceiling "the gateway's per-upload heap policy" and "already a deliberate human choice", and §3's
+   routing-table note said "the pass-2 review's 'flagged for human' item is satisfied by it" — both
+   active implementation instructions that could let a later pass close the gate without the required
+   measurement.
+   **Fixed:** both passages now say only the byte-value half of the pass-2 item is settled; the
+   heap-envelope half stays open and points at §7's heap-policy gate and the ledger proposal.
+
+No other change: the ">4 MB fails" premise remains unproved, the drive-path scope remains gated behind
+step 0, and `status: draft` / `verdict: changes_requested` stand.
 
 # Pass 5 disposition — STILL REVIEW (changes_requested), unchanged
 
