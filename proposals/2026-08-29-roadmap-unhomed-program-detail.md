@@ -1,6 +1,6 @@
 ---
 id: 2026-08-29-roadmap-unhomed-program-detail
-title: Roadmap program detail that has no committed home (SDLC-CONTRACT.md, PR order 1-26, gates G0-G8)
+title: Roadmap program detail with no committed home - the 2026-08-18 message and its three orphan labels (SDLC-CONTRACT.md, PR order 1-26, gates G0-G8)
 status: draft
 created: 2026-08-29
 updated: 2026-08-29
@@ -32,7 +32,17 @@ named artifacts below, which is why this proposal's scope is exactly those
 three rather than an open-ended claim about milestone completeness. The first
 half of the quoted sentence is a dangling reference to an off-repo chat
 message, which the `AGENTS.md` SDLC contract forbids as a state location. Pass
-2 voided the delegation and this proposal tracks what was left without a home.
+2 narrowed the delegation to "not binding until a spec adopts it" and this
+proposal tracks what was left without a home — including the message itself.
+
+Two different gaps live here, and they close differently. The three labels below
+are *known* orphans: each is enumerable, and each can be decided today. The
+message that named them is an *unknown* orphan: it may contain deliverables,
+schemas or exit criteria that no committed artifact records, and no pass can
+decide those without reading it. Until someone who can read it says otherwise,
+the roadmap stays `status: review` / `verdict: pending` (roadmap §1.5) rather
+than approving a document whose authority rule touches content nobody in this
+repository can enumerate.
 
 ## AS-IS (evidenced 2026-08-29)
 
@@ -52,12 +62,31 @@ Three named artifacts resolve to nothing in the repositories:
    semantics are not known to match. Two ladders sharing the `G0` label is a
    collision, not a synonym.
 
+And the source that named all three is itself unreachable. Searched 2026-08-29,
+all read-only, all negative:
+
+- `git log --all -S` over this repository for `PR order 1`, `G0-G8` and
+  `exit criteria` — the only hits are the roadmap and this branch's own text; the
+  message was never pasted into a commit on any ref.
+- The operator memory index and its topic files (`/memory/MINION`) — the roadmap
+  program is not among them.
+- 30,033 past-session observations (`claude-mem` full-text) for the program's own
+  distinctive phrasings: `controller owns truth agents propose`, `prompts are not
+  security boundaries`, `M0 M9 milestone deliverables schemas exit criteria`,
+  `autonomy ladder L0 L5 bounded PR`, `46/100` — zero matches.
+
+So the message exists only wherever the user's 2026-08-18 chat is retained. That
+is a fact about tooling, not a judgement about the content: it means an agent
+cannot close this item, and a human with that chat closes it in minutes.
+
 ## TO-BE
 
 Either each item has a committed definition, or it is retired as a label. No third
-state. Invariant that must not change: the roadmap's milestone ordering, principles,
-ladder and predicates stay exactly as they are — this is about naming and homes, not
-about program content.
+state. And the message behind them is either recovered and compared requirement by
+requirement, or its irrecoverability is recorded by someone who could have read it —
+not assumed by an agent that could not. Invariant that must not change: the
+roadmap's milestone ordering, principles, ladder and predicates stay exactly as
+they are — this is about naming and homes, not about program content.
 
 ## DELTA
 
@@ -72,8 +101,17 @@ about program content.
 3. Decide `G0–G8`: define G6–G8 in a milestone spec (and reconcile G0–G5 semantics
    against the phase-gates spec), or leave the roadmap's §10 disambiguation as the
    final answer. Recommended: leave §10 standing.
+4. Decide the source message. Recover the 2026-08-18 program message and commit a
+   requirement-level preservation map — every deliverable, schema and exit
+   criterion it names, mapped to the milestone spec that carries it, with every
+   unmatched item filed as its own proposal. If the message cannot be produced,
+   record that a human who would have had it says so, and that the milestone specs
+   in roadmap §4 are accepted as the whole of the program's fidelity. Either
+   outcome unblocks the roadmap's approval; neither can be produced by an agent
+   working from this repository alone (see AS-IS).
 
-Each decision is one edit plus a spec re-pass; none of them touches product code.
+Decisions 1-3 are one edit plus a spec re-pass each; none of them touches product
+code. Decision 4 needs a human with access to the 2026-08-18 chat.
 
 **Out of scope:** changing any milestone, governing principle, autonomy rung, or
 acceptance predicate; re-scoring the frozen 46/100 and 72/100 baselines; the
@@ -86,6 +124,17 @@ milestone-ordering deviation, which is
   returns no stale citation.
 - `grep -rn 'PR order 1' specs/ proposals/` returns either a committed enumeration
   or nothing.
-- `grep -rnE '\bG[6-8]\b' specs/ proposals/` returns either a definition or nothing.
+- `grep -rnE '^#{1,4} *G[6-8]\b' --include='*.md' specs/ proposals/` — the same
+  heading-scoped definition check the roadmap's §12 step 5 runs — exits non-zero
+  (no match) if G6-G8 were retired, or names the file and heading that defines
+  them if they were adopted. Record the command's exit status and output in the
+  closing note. A bare `\bG[6-8]\b` grep is not a valid substitute: it matches
+  this proposal's own title, problem statement and DELTA, plus the copied title
+  text in the generated `proposals/index.json` (14 matches at the time of
+  writing, none of them a definition), so it can never return "nothing" and
+  cannot distinguish a definition from a discussion of one.
+- The preservation map from DELTA 4 is committed, or the human statement that
+  replaces it is committed, with every unmatched requirement filed.
 - The roadmap spec's §1.3 list shrinks to the items still undecided, or the section
-  is removed once all three are closed.
+  is removed once all three are closed; §1.5 is removed and the roadmap re-passed
+  to `verdict: approved` only once DELTA 4 is closed too.

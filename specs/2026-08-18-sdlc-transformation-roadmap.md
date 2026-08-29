@@ -2,13 +2,13 @@
 id: 2026-08-18-sdlc-transformation-roadmap
 title: Autonomous SDLC transformation roadmap (M0–M9 program plan)
 stage: spec
-status: approved
+status: review
 pass: 2
 created: 2026-08-18
 updated: 2026-08-29
 repos: []
 type: decision
-verdict: approved
+verdict: pending
 tags: [infra]
 ---
 
@@ -31,21 +31,27 @@ program progress is read from the milestone table in §4, not from a score.
 ## 1. Authority — what is normative and what is not
 
 Pass 1 delegated the milestone detail to "the user's program message of 2026-08-18",
-an off-repo chat message. That delegation is void: the SDLC contract in `AGENTS.md`
-requires state to live in artifacts committed to minion-meta, never only in chat,
-memory, or a dashboard. Restated as the rule for this document:
+an off-repo chat message. That delegation cannot stand as the authority: the SDLC
+contract in `AGENTS.md` requires state to live in artifacts committed to
+minion-meta, never only in chat, memory, or a dashboard. Withdrawing the
+delegation says nothing about the message's content — only about where authority
+may live. Restated as the rule for this document:
 
 1. Normative program content is §5–§8 of this file plus the milestone specs listed
    in §4. Those specs carry implementation fidelity; this file carries ordering and
    invariants only.
 2. A requirement that exists only in the 2026-08-18 program message and in no
-   committed spec has **no normative force**. It becomes binding when a milestone
-   spec adopts it, and not before.
+   committed spec is **not binding today**: no agent may cite it as authority and
+   no reviewer may be held to it. It becomes binding when a milestone spec adopts
+   it. It is **not retired** by that rule — this document does not claim such a
+   requirement is absent, unwanted, or superseded, only that nothing in this
+   repository can enforce it. Collapsing "unenforceable" into "gone" is exactly
+   what §1.5 refuses to do on the evidence available.
 3. Three artifacts named by pass 1 have no committed home and are therefore
-   non-normative today, tracked by
+   unenforceable today, tracked by
    [`2026-08-29-roadmap-unhomed-program-detail`](../proposals/2026-08-29-roadmap-unhomed-program-detail.md):
    `SDLC-CONTRACT.md` (M1), the "PR order 1–26" sequence, and "stage gates G0–G8"
-   (see §10).
+   (see §10). That same proposal, DELTA 4, tracks the message that named them.
 4. **This is not a three-item spot check.** Pass 1's exact committed text (meta
    blob `3dbdcd95dc3acd21e6940f2a02c7715e0a4fc193`, 70 lines, recovered with
    `git cat-file -p`) was diffed section by section against this document: the
@@ -70,6 +76,44 @@ memory, or a dashboard. Restated as the rule for this document:
    milestone spec, that is a new, checkable finding to raise as its own
    proposal — not a gap this pass can retroactively close by asserting more text
    without a committed source to check it against.
+
+### 1.5 Disposition: still-review, and the one fact that would change it
+
+This pass revised the document but does **not** record approval:
+`status: review`, `verdict: pending`. One question decides it, and no agent
+working from this repository can answer it.
+
+Pass 1's closing sentence asserts that the 2026-08-18 message contains M0–M9
+deliverables, schemas and exit criteria. Item 4 above proves that everything
+*committed* in pass 1 survives into this pass intact. It cannot prove anything
+about the part that was never committed, and §1.2 governs exactly that part.
+Approving §1.2 while the source is unread would mean an agent deciding, on no
+evidence, that nothing of value is lost — the one judgement this pass is least
+equipped to make, and the exact opposite of the "preserve unique WIP"
+instruction this pass was given.
+
+The search for that source was exhaustive within the tools available and came
+back empty: `git log --all -S` over every ref of this repository, the operator
+memory index and its topic files, and 30,033 past-session observations queried
+for the program's own distinctive phrasings (`controller owns truth agents
+propose`, `prompts are not security boundaries`, `M0 M9 milestone deliverables
+schemas exit criteria`, `autonomy ladder L0 L5 bounded PR`, `46/100`). Zero
+matches; the evidence is itemised in
+[`2026-08-29-roadmap-unhomed-program-detail`](../proposals/2026-08-29-roadmap-unhomed-program-detail.md)
+§AS-IS.
+
+**Flip condition.** This document goes to `verdict: approved` when a human who
+can read the 2026-08-18 chat either (a) commits a requirement-level preservation
+map — each deliverable, schema and exit criterion mapped to the milestone spec
+carrying it, every unmatched item filed as its own proposal — or (b) records
+that the message is unavailable to them too and that the §4 milestone specs are
+accepted as the whole of the program's fidelity. That is DELTA 4 of the tracking
+proposal. Nothing else in this document is waiting on anything.
+
+**What `status: review` costs: nothing.** This is `type: decision` with
+`repos: []`; no implementation is gated on it, and §5–§10 remain the ordering the
+milestone specs already cite. A pending verdict withholds one thing only — the
+claim that §1.2 was ratified on evidence.
 
 ## 2. AS-IS — verified program reality, 2026-08-29
 
@@ -278,8 +322,9 @@ facts from committed artifacts. Every step is read-only and runnable from the
 meta-repo root.
 
 1. **Frontmatter and index integrity** — `node scripts/spec-index.mjs --check`
-   passes, and `specs/index.json` carries this spec with `status: approved`,
-   `verdict: approved`, `pass: 2`.
+   passes, and `specs/index.json` carries this spec with `status: review`,
+   `verdict: pending`, `pass: 2`. Those two values are the §1.5 disposition, not
+   a defect: they change together with §1.5, or not at all.
 2. **§4 statuses are current** — for each spec id in the milestone table,
    `grep -E '^(status|verdict|next_slice):' specs/<id>.md` matches the table row.
    A mismatch means the table is stale, not that the spec is wrong.
@@ -297,8 +342,12 @@ meta-repo root.
    `proposals/index.json`'s copied title text, which discuss the labels without
    defining them. If a real heading-level definition of G6, G7, or G8 appears
    anywhere, §10 must be re-passed.
-6. **No dangling authority** — this file contains no requirement whose only source
-   is an off-repo message (§1.2).
+6. **No dangling authority, and no silent retirement** — this file contains no
+   requirement whose only source is an off-repo message (§1.2), and contains no
+   rule declaring such a requirement absent or superseded. §1.2 says
+   "not binding until adopted" and §1.5 says the verdict stays pending until a
+   human closes DELTA 4 of the tracking proposal; if either sentence is ever
+   weakened to "retired", this step fails and the document needs a new pass.
 
 Failing step 1 blocks the commit. Failing steps 2–5 means this document needs a new
 pass, not that the underlying work is wrong.
