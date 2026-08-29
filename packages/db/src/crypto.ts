@@ -70,17 +70,23 @@ function key(): Buffer {
           "source-visible development key. Never set this in a deployed environment.",
       );
     }
-    // The at-rest question this branch used to raise is SETTLED: the audit ran
-    // 2026-08-20 against hub's production Supabase (the database hub and site
-    // share) and found ZERO rows sealed under this key, so ⚠️ A3 does not apply
-    // to that database — proposals/2026-08-20-dev-key-at-rest-audit.md (closed).
+    // TODO(handoff): The at-rest question this branch raises is still UNKNOWN,
+    // not settled. The 2026-08-20 audit against hub's production Supabase (the
+    // database hub and site share) sampled only 3 of the 8 non-null
+    // user_identities.secret_ciphertext rows there — 5 rows in that same
+    // production database were never test-decrypted under any key, including
+    // this one. The audit's own required A1 environment inventory and named
+    // unchecked-database list are also missing from its report. Do not treat
+    // the sampled rows as a stand-in for the full column, and do not infer a
+    // zero for any database from a partial sample —
+    // proposals/2026-08-20-dev-key-at-rest-audit.md (reopened; DoD unmet).
     //
-    // TODO(handoff): S3 of spec 2026-08-17-pkg-dev-crypto-failopen-spec is still
+    // S3 of spec 2026-08-17-pkg-dev-crypto-failopen-spec is also still
     // UNLANDED — minion_hub and minion_site have neither the boot-time
     // assertCryptoKeyConfigured() call nor a bumped @minion-stack/db, because
     // neither repo is checked out in the meta-repo workspace (⚠️ A2). Until it
-    // lands, this package's stricter contract is inert for both apps. Two
-    // preconditions gate the consumer bump, and neither is satisfied yet:
+    // lands, this package's stricter contract is inert for both apps. Three
+    // preconditions gate the consumer bump, and none are satisfied yet:
     //   1. Release. The published `latest` is 0.10.0 (2026-08-13), which
     //      predates this guard — there is nothing to bump TO until a dev→main
     //      release publishes the pending changeset db-crypto-fail-closed-dev-key.
@@ -90,8 +96,11 @@ function key(): Buffer {
     //      key-id/legacy-ring migration owned by
     //      specs/2026-08-28-shared-db-encryption-key-convergence-spec.md (its
     //      S3b carries the consumer boot wiring this slice describes).
-    // Do NOT run `pnpm update @minion-stack/db` in either consumer before both
-    // are resolved — the bump PR is the real deploy of this fix.
+    //   3. Complete the at-rest audit above — every encrypted row in the shared
+    //      production database classified success/failure under the dev key,
+    //      plus the A1 inventory and unchecked-database list.
+    // Do NOT run `pnpm update @minion-stack/db` in either consumer before all
+    // three are resolved — the bump PR is the real deploy of this fix.
     // Ledger entry: proposals/2026-08-17-pkg-dev-crypto-failopen.md
     cachedKey = scryptSync("minion-hub-dev-key", "minion-hub-salt", 32);
     return cachedKey;

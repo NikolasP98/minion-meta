@@ -32,22 +32,26 @@ Spec `2026-08-17-pkg-dev-crypto-failopen-spec` S1 (fail-closed key resolver) and
 failure + release contract) are landed in `packages/db` on `dev`. One end stays open — S3 — and
 it is matched by the single remaining `TODO(handoff):` in `packages/db/src/crypto.ts`.
 
-### Resolved 2026-08-29
+### Still open 2026-08-29 — the S2 at-rest audit is partial, not settled
 
-**The S2 at-rest audit ran.** [`2026-08-20-dev-key-at-rest-audit`](2026-08-20-dev-key-at-rest-audit.md)
-was executed 2026-08-20 against hub's production Supabase — the database hub and site share — and
-found **zero rows sealed under the dev key**. ⚠️ A3 therefore does not apply to that database, and
-the earlier in-code marker saying the audit "could NOT be run" and the exposure was "UNKNOWN, not
-zero" was stale; it has been removed. The proposal is closed. Databases outside that one are still
-unaudited, and an unverified environment remains an unknown rather than a zero.
+[`2026-08-20-dev-key-at-rest-audit`](2026-08-20-dev-key-at-rest-audit.md) ran 2026-08-20 against
+hub's production Supabase — the database hub and site share — but a 2026-08-29 cross-provider
+review of a downstream branch caught that its results do not support a "zero rows sealed under
+the dev key" conclusion: only 3 of the 8 non-null `user_identities.secret_ciphertext` rows in that
+production database were sampled, the other 5 were never test-decrypted under any key, and the
+audit's own required A1 environment inventory and unchecked-database list were never produced.
+That proposal has been reopened rather than closed. ⚠️ A3 therefore **still applies** — the
+in-code `TODO(handoff):` marker continues to say the at-rest question is unknown, not zero, and
+this proposal is not resolved. Databases outside hub's shared prod Supabase remain unaudited, and
+an unverified environment remains an unknown rather than a zero.
 
-### Still open — S3 (consumer rollout), with two preconditions
+### Still open — S3 (consumer rollout), with three preconditions
 
 `minion_hub` and `minion_site` have neither the boot-time `assertCryptoKeyConfigured()` call nor a
 bumped `@minion-stack/db`; neither repo is checked out in the meta-repo workspace (spec ⚠️ A2). The
 apps are therefore still on the fail-open path, which is the safe resting state only because
-nothing has changed under them. **Do not bump the dependency in either consumer** until both of
-the following hold:
+nothing has changed under them. **Do not bump the dependency in either consumer** until all three
+of the following hold:
 
 1. **A release carries the fix.** Verified 2026-08-29 from this checkout: the published `latest` is
    `@minion-stack/db@0.10.0` (published 2026-08-13), and its `src`/`dist` `crypto.ts` still contains
@@ -64,6 +68,10 @@ the following hold:
    which `extends` this spec and whose **S3b** carries exactly the consumer boot wiring
    (`assertCryptoKeyConfigured()` in each server-only boot path) that S3 describes, plus the key-id
    and legacy-ring machinery the split now requires.
+3. **The at-rest audit is actually complete.** See "Still open 2026-08-29" above —
+   [`2026-08-20-dev-key-at-rest-audit`](2026-08-20-dev-key-at-rest-audit.md) is reopened until
+   every `user_identities.secret_ciphertext` row in hub prod is classified under the dev key, and
+   the A1 inventory and unchecked-database list are attached.
 
 **On spec ⚠️ A2's "file one proposal per consumer repo".** Not done as two new proposals, on
 purpose: the convergence spec above (filed 2026-08-28, after this spec was written) already owns
