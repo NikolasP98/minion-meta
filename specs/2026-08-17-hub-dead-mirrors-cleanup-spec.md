@@ -5,7 +5,7 @@ stage: spec
 status: implementing
 pass: 2
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-08-29
 proposal: 2026-08-17-hub-dead-mirrors-cleanup
 verdict: approved
 repos: [minion_hub]
@@ -41,6 +41,14 @@ deletion).
 per-slice tags below are the routing unit. Slice 1 is `logic`/`test` (red-state TDD, **no**
 UI-governance checks — no `.svelte` file is edited anywhere in this spec). Slice 2 is `data`, which
 per §4b pulls the **schema-drift check** and a **reversibility note** — both are written into its DoD.
+
+**Implementation ownership (2026-08-29):** both slices were implemented twice in parallel — hub PR
+[#196](https://github.com/NikolasP98/minion_hub/pull/196) as a single-purpose extraction, and hub PR
+[#159](https://github.com/NikolasP98/minion_hub/pull/159) bundled with two unrelated specs. #196 is
+the designated owner of both slices; #159's disposition (drop its dead-mirror commits on rebase,
+keep its unrelated work) and the inverse case are recorded in the proposal ledger,
+[`2026-08-17-hub-dead-mirrors-cleanup`](../proposals/2026-08-17-hub-dead-mirrors-cleanup.md)
+§ "Implementation ownership". `status` stays `implementing` until one of the two lands.
 
 ---
 
