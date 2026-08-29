@@ -3,7 +3,7 @@ id: 2026-08-17-hub-distinct-visit-dates-spec
 title: "CRM funnel — one timezone-correct visit-date definition (invoices + completed bookings) behind the shipped Loyal floor"
 stage: spec
 status: review
-pass: 5
+pass: 6
 next_slice: 1
 created: 2026-08-17
 updated: 2026-08-29
@@ -71,6 +71,30 @@ broken every aggregate that reads `fin` **membership** as "has ≥1 invoice" —
 correct combination point is one CTE lower: both queries already anchor on `crm_contacts c` and
 `left join fin`, so the visit aggregate is a second left join in `base`, and `fin` is not touched
 at all. §1, §2, §3 and Slices 1–2 are corrected in place.
+
+**Pass-6 fix (2026-08-29).** A third external review of pass 5, against the same pinned hub commit,
+returned **FAIL** with one High and three Medium findings, plus a Low on the §7 ship gate. All were
+re-verified this pass against the same `1b47e8ce` sparse checkout — `git ls-remote` confirms hub
+`master` has not moved: (H1) the review's own H1, distinct from pass 4's — invoice creation and
+voiding invalidate only the `finances` tag (`bustFinanceCache`, `finance-sync.service.ts:123-140`),
+but `rankContactsPageCached` (the actual `/crm/customers` cache) carries only the `crm` tag
+(`crm-contacts.service.ts:443`), while `getCrmDashboardStats` right next to it already adds the
+`finances` tag conditionally (`:552-555`) — a normal invoice sync or void can leave the roster
+stale while the dashboard and the uncached contact-detail read update; (M1) `updateFinSettings`
+(`finance.service.ts:546-588`) performs no cache invalidation at all, so a timezone change can
+leave the roster/dashboard serving results bucketed in the old zone for their TTL+SWR window; (M2)
+the pass-5 `booking_owner` CTE fixed the sibling-fan-out defect but still lets a directly-linked
+sibling contact diverge from the canonical contact invoices attribute that party to — a booking
+linked to `crm_contact_id = B` stays credited to B even when B and the canonical contact A share a
+party, so an invoice on A and a booking on B never combine; (M3) `contactFinanceMap` is **not**
+consumer-free as §1 claimed — `crmRevenueSummary` (`crm-finance.service.ts:152-177`) calls it and
+does `buyers += 1` for every map entry unconditionally, so S2's booking-only rows (added because
+H1 required a row per visitor, not per invoice) would inflate the finance-buyers rollup; (L1) the
+§7 end-to-end gate's `if git diff … grep -Eq '\.svelte$'; then exit 1; fi` fails on exactly the one
+`.svelte` file S1 requires. §1 gains the five rows these five findings turn on; §2 invariants 5, 7,
+and 11 are sharpened; DELTA gains D13–D15 and D3/D8 are corrected in place; Slice 1 gains the
+cache-tag-parity and settings-invalidation work; Slice 2's `booking_owner` CTE and `crmRevenueSummary`
+are corrected; §7's gate is fixed to match S1's own exact-path assertion.
 
 **Design ancestors:**
 [`2026-08-13-crm-customers-server-pagination-spec`](2026-08-13-crm-customers-server-pagination-spec.md)
@@ -188,12 +212,22 @@ but `show timezone;` is what tells you whether it is currently *firing*.
 | `contactFinanceSummary` is a **third** Loyal definition, and it is the one the contact detail page renders. It has its own `count(distinct case when has_proc then issued_at::date end)` (session zone — the D1 defect, a second copy), its `cparty` CTE requires `party_id is not null`, and it `return null`s *before* the aggregate whenever the contact has no invoices | `crm-finance.service.ts:190-251`, esp. `:197` (`party_id is not null`), `:208` (`if (invoices.length === 0) return null`), `:230` (`issued_at::date`), `:247` (`loyal: proc_dates >= 2`) |
 | The contact page loads it and derives the funnel floor from it — this is the R2-H1 path | `routes/(app)/crm/[contactId]/+page.server.ts:13,56-61,75`; `+page.svelte:748` = `financeFloor={financeFloorStage(data.finance)}` |
 | `/crm/customers` already derives the same floor from the **shared** definition — the ranked row's `finance` decoration, built from the roster `fin` CTE — and the contact page **already loads that same ranked row** (`rankContacts(ctx, { contactId: id, limit: 1, … })` → `score`). Converging the contact page costs one prop, not a new query | `routes/(app)/crm/customers/+page.svelte:97-104`; decoration at `crm-contacts.service.ts:1090-1103`; `[contactId]/+page.server.ts:38-49,70` |
-| `contactFinanceMap` has **no production consumer**. `rg` finds only `crm-finance.service.test.ts`, `crm-contacts.sql.integration.test.ts` and `crm-funnel-parity.sql.integration.test.ts`; `/api/crm/contacts:98` names it only in a comment explaining why it does *not* call it. It is the TS twin the parity test compares the SQL against — which is exactly why it must still gain the visit axis | `rg -n contactFinanceMap src/` at `1b47e8ce` |
+| ~~`contactFinanceMap` has no production consumer~~ — **corrected in pass 6 (M3): it does.** `crmRevenueSummary` (`crm-finance.service.ts:152-177`) calls it to power the CRM dashboard's Revenue summary widget and sums `buyers += 1` per row with no invoice guard. It is also the TS twin the parity test compares the SQL against, which is a second, independent reason it must gain the visit axis | `crm-finance.service.ts:152,164,170`; `rg -n contactFinanceMap src/` at `1b47e8ce` — pass-6 review M3 |
 | `fin`'s **membership** is load-bearing and means "has ≥1 invoice": `booked = count(*) filter (where fin_invoices is not null)`, `finance_buyers = (select count(*) from fin)`, `is_buyer = (fn.first_purchase_at is not null)`, the `revenue` sort key, and the row decoration's `r.fin_invoices == null → finance: null` all read it. Both queries already anchor on `crm_contacts c` and `left join fin fn` — so the visit axis belongs in `base`, not inside `fin` (P5-F1) | `crm-contacts.service.ts:630-632,680,709-714,1005-1010,1090-1103` |
 | `fin_invoices.status` is **nullable** — `status: text('status')`, no `.notNull()` — and the canonical connector contract types it `string \| null`. So `<> 'void'` is "known and not void" and silently drops every unstatused invoice; the shipped void-exclusion precedent is `is distinct from 'void'` | `pg-finance-schema.ts:44`; `finance/connector.ts:33-49`; `crm-journey.service.ts:83` |
 | Several live contacts may share one `party_id`: `crm_contacts_party_idx` is a plain (non-unique) index, and `CONTACT_PARTY`'s `distinct on (c.party_id) … order by c.party_id, c.created_at asc` exists precisely to pick ONE canonical contact per party so invoices can't double-count | `pg-crm-schema.ts:60,75`; `crm-finance.service.ts:29-45` |
 | A shared, **exported** cache-bust helper already exists for sibling services: `bustCrmList(tenantId)` → `invalidateTags(tags.tenantDomain(tenantId, 'crm'))`. Every visit-dependent cache carries that CRM tag (`crm-fin-map` = crm ∪ finances, `crm-page`, the dashboard entry), so one call busts all three. `setBookingStatus` already has the post-commit fail-soft pattern to copy (`releaseAccruals`) | `crm-contacts.service.ts:1253-1262,443,553`; `crm-finance.service.ts:99-106`; `scheduling-bookings.service.ts:381-388` |
 | `sched_bookings` has **no** soft-delete column; `status` is `not null default 'accepted'`; `(org_id,status)`, `(crm_contact_id)` and `(party_id)` are all indexed | `pg-scheduling-schema.ts:179,187,190,197,199,209-221` |
+
+**Added in pass 6** — the five rows the round-3 review's findings turn on:
+
+| Fact | Evidence |
+|---|---|
+| `rankContactsPageCached` (the actual `/crm/customers` cache) is tagged with `crmListTags(ctx.tenantId)` only — the `crm` domain, unconditionally. `getCrmDashboardStats`, three functions below it in the same file, already does `[...crmListTags(...), ...(finance.withFinance ? tags.tenantDomain(tenantId,'finances') : [])]` — the roster is the one cache that never got the same conditional `finances` tag | `crm-contacts.service.ts:439-443` (roster) vs `:552-555` (dashboard) — pass-6 review H1 |
+| Canonical invoice sync busts only the `finances` domain, never `crm`: `finance-sync.service.ts` calls `bustFinanceCache(ctx)` (→ `invalidateTags(financeCacheTags)`, tag = `finances` only) after every invoice write and after voiding; it never calls `bustCrmList` | `finance-sync.service.ts:123-140`; `finance.service.ts:24-29` — pass-6 review H1 |
+| `updateFinSettings` (accepts and persists `timezone`, `currency`, `taxRate`, `fxMode`, `fxManualRate`) upserts `fin_settings` and returns — no `invalidateTags`/`bustFinanceCache`/`bustCrmList` call anywhere in the function | `finance.service.ts:546-588` (full body read) — pass-6 review M1 |
+| `contactFinanceMap` is **not** consumer-free: `crmRevenueSummary` calls it and loops `for (const f of Object.values(map)) { … buyers += 1; … }` — `buyers` increments once per map row with no `f.invoices > 0` guard, so a booking-only row (S2's `{revenue:0, invoices:0, loyal:true, visitDates:2}` shape) would count as a buyer | `crm-finance.service.ts:152-177`, esp. `:164` (`contactFinanceMap` call) and `:170` (`buyers += 1`) — pass-6 review M3, corrects the pass-5 §1 claim at (old) line 191 |
+| `sched_bookings.party_id` is populated by a **separate** reconciliation pass keyed on `attendee_phone` → `parties.phone9` (`party.service.ts:218-221`), independent of the linked `crm_contact_id` contact's own `party_id`. A directly-linked booking's `party_id` column can therefore differ from (or lag) the party its `crm_contact_id` contact belongs to — the M2 canonicalization must key off the **contact's** `party_id` (via `contact_target`), not the booking row's own `party_id`, when a direct link exists | `party.service.ts:218-221`; `pg-scheduling-schema.ts:199` — read while designing the pass-6 `booking_owner` fix |
 
 **Consequences for the pass-2 plan, stated plainly:** its S1 ("build a new `crm-visits.ts` and a
 second batched count") and S2 ("make the decision deterministic, add forward-only / manual-wins /
@@ -224,34 +258,48 @@ slices below are the residue that is genuinely missing.
    bookings is aggregated independently, one row per contact each, then combined — never by
    filtering bookings through an invoice-anchored relation. A contact with zero invoices and two
    `completed` bookings is exactly as eligible as one with zero bookings and two invoices.
-5. **Every live contact identity shape is reachable, and every booking has exactly one owner.**
-   Reachability: a contact with no `party_id` at all is still reachable through `crm_contact_id`
-   (the shape `createBooking` normally produces). Ownership: `crm_contact_id` is authoritative
-   when it names a live contact in the org; `party_id` is a **fallback**, used only when
-   `crm_contact_id` is null, and it then resolves through the canonical `CONTACT_PARTY`
-   (`distinct on (party_id)`) pick — the same single contact the invoice bridge already attributes
-   that party's invoices to. Two contacts sharing one party therefore never inherit each other's
-   appointments, and a doubly-linked booking counts once, for the directly-linked contact (R2-M2).
+5. **Every live contact identity shape is reachable, and every booking has exactly one owner, and
+   that owner agrees with the invoice attribution for the same party (M2).** Reachability: a
+   contact with no `party_id` at all is still reachable through `crm_contact_id` (the shape
+   `createBooking` normally produces). Ownership resolves in this order: (a) `crm_contact_id`
+   names a live contact in the org **and** that contact has a `party_id` → canonicalize through
+   `CONTACT_PARTY` (`distinct on (party_id)`) on **that contact's own `party_id`** — the same
+   canonical pick the invoice bridge already attributes that party's invoices to, so a booking
+   directly linked to a non-canonical sibling still lands on the contact holding that party's
+   invoice history; (b) `crm_contact_id` names a live, **partyless** contact → that contact
+   directly, unchanged; (c) no live `crm_contact_id` → fall back to the booking's own `party_id`
+   (independently reconciled from `attendee_phone`, per §1), resolved through the same
+   `CONTACT_PARTY` pick. Two contacts sharing one party therefore never inherit each other's
+   *distinct* appointments, but every appointment on that party — however it was linked — reaches
+   the one canonical contact, and a doubly-linked booking still counts once.
 6. **Loyal stays read-time.** `visitDates >= 2` remains a *floor* derived at read time; nothing new
    is persisted into `custom_fields._funnel`. Evidence disappearing (a voided invoice, a booking
    flipped to `no_show`) self-corrects.
-7. **Every cached surface that reads visit-date evidence stays consistent with the evidence.**
-   Booking creation and every booking status mutation that can add or remove visit evidence busts
-   the same cache tags a comparable invoice mutation would — there is no cached read path that can
-   see stale scheduling evidence longer than an equivalent stale invoice would be tolerated.
+7. **Every cached surface that reads visit-date evidence stays consistent with the evidence, and
+   with itself.** Booking creation and every booking status mutation that can add or remove visit
+   evidence busts the same cache tags a comparable invoice mutation would — there is no cached
+   read path that can see stale scheduling evidence longer than an equivalent stale invoice would
+   be tolerated. Symmetrically (H1), every cache a **finance** mutation is expected to invalidate
+   must actually carry the tag that mutation busts: the roster (`rankContactsPageCached`) carries
+   the `finances` tag under the exact same condition the dashboard (`getCrmDashboardStats`)
+   already does, so a normal invoice sync or void reaches all three visit-dependent caches, not
+   two of three. And a `fin_settings` change (M1) — the timezone above all — invalidates every
+   cache whose bucketing depends on it (`crm-fin-map`, the roster, the dashboard) before its
+   TTL+SWR window would otherwise serve a stale zone's grouping.
 8. **SQL and TS keep agreeing** — the parity truth table covers the new axis; the roster and the
    contact page can never show different Loyal sets.
 9. **Batched, never N+1.** The count is computed for a whole page in one query, as today.
 10. **No behavior change for orgs whose invoices are already ≥2 distinct *local* days** — the tz fix
     only removes contacts promoted by a UTC-midnight straddle.
 11. **The visit axis is additive: nothing that means "has invoices" changes meaning.** `booked`,
-    `finance_buyers`, `is_buyer`, the `revenue` sort key and the `fin` CTE's membership stay
-    invoice-derived and byte-identical on any fixture without bookings. The visit aggregate is a
-    *separate* relation left-joined alongside `fin`, never a re-anchoring of `fin` itself (P5-F1).
-    Exactly one sentinel changes, deliberately: the `RankedContact.finance` decoration becomes
-    `null` only when the contact has **neither** an invoice **nor** a visit date. Leaving it at
-    "no invoices" would hand `financeFloorStage` a `null` for a booking-only contact and put both
-    pages back in disagreement with the SQL `funnel_stage` that says `loyal`.
+    `finance_buyers`, `is_buyer`, the `revenue` sort key, `crmRevenueSummary`'s `buyers` rollup
+    (M3), and the `fin` CTE's membership stay invoice-derived and byte-identical on any fixture
+    without bookings. The visit aggregate is a *separate* relation left-joined alongside `fin`,
+    never a re-anchoring of `fin` itself (P5-F1). Exactly one sentinel changes, deliberately: the
+    `RankedContact.finance` decoration becomes `null` only when the contact has **neither** an
+    invoice **nor** a visit date. Leaving it at "no invoices" would hand `financeFloorStage` a
+    `null` for a booking-only contact and put both pages back in disagreement with the SQL
+    `funnel_stage` that says `loyal`.
 
 ## 3. DELTA — transitions and the tests that prove them
 
@@ -259,8 +307,8 @@ slices below are the residue that is genuinely missing.
 |---|---|---|---|
 | D1 | `issued_at::date` → `(issued_at at time zone $tz)::date`, `$tz` from `fin_settings` | S1 | Postgres test: two invoices at 18:00 and 20:00 Lima on one day ⇒ `loyal=false`; 18:00 Lima on two different days ⇒ `loyal=true` |
 | D2 | The loyal predicate stops being invoice-only: distinct dates over (procedure invoices that are non-void **by `status is distinct from 'void'`** ∪ `completed`-and-past bookings), deduped across sources, aggregated as an **independent** per-contact relation that is left-joined onto the contact spine — never by filtering bookings through `contact_invoice_class`, and never by re-anchoring `fin` | S2 | Tests: invoice day A + completed booking day B ⇒ loyal; invoice and booking on the same local day ⇒ 1 date, not loyal; `no_show`/`cancelled`/`accepted`/future-dated-`completed` bookings ⇒ not counted; **zero invoices + two completed bookings ⇒ loyal, and revenue fields stay `0`/unset, not thrown**; a procedure invoice with `status IS NULL` still counts (R2-M1) |
-| D3 | Each booking gets **exactly one** owner: `crm_contact_id` when it names a live contact in the org; otherwise `party_id` resolved through the canonical `CONTACT_PARTY` (`distinct on (party_id)`) pick. Partyless contacts stay reachable; sibling contacts on one party never both count the same booking | S2 | Tests over all three link shapes, **including a `party_id IS NULL` contact whose only link is `crm_contact_id`**; a doubly-linked booking ⇒ counted once, for the direct contact only; **two live contacts sharing one party ⇒ exactly one recipient for a direct-linked booking and for a party-only booking (R2-M2)** |
-| D4 | The finance-map cache key gains the timezone (and the visit-source shape), so a settings change cannot serve a stale Loyal set | S1 | Unit test on the key builder |
+| D3 | Each booking gets **exactly one** owner, and that owner agrees with invoice attribution for the same party (M2): `crm_contact_id` **canonicalized through `CONTACT_PARTY` on that contact's own `party_id`** when it names a live, party-linked contact in the org; the live contact itself, unchanged, when it is partyless; otherwise the booking's own `party_id` resolved through the same canonical `CONTACT_PARTY` pick. Partyless contacts stay reachable; a booking directly linked to a non-canonical sibling still lands on the party's canonical contact — the same one the invoice bridge attributes that party's invoices to | S2 | Tests over all three link shapes, **including a `party_id IS NULL` contact whose only link is `crm_contact_id`**; a doubly-linked booking ⇒ counted once, for the canonical contact only; **two live contacts A (canonical) and B share one party ⇒ a direct-link booking on B and a party-only booking both credit A, the same contact an invoice on that party is attributed to — one invoice-day on A plus one booking-day directly linked to B combine into 2 dates on A and reach loyal (M2, extends R2-M2)** |
+| D4 | The finance-map cache key gains the timezone (and the visit-source shape) (S1); `updateFinSettings` invalidates every visit-dependent cache — `crm-fin-map`, the roster, and the dashboard — after any settings write, so a timezone change cannot serve a stale Loyal set past that one write (M1, extends D4) | S1 | Unit test on the key builder; integration test warming all three caches, calling `updateFinSettings({timezone: …})`, and asserting the very next read of each reflects the new zone without a TTL wait |
 | D5 | Roster SQL and TS derivations still agree, now including the visit axis | S1, S2 | `crm-funnel-parity.sql.integration.test.ts` extended with 0/1/2 visit dates × source mix |
 | D6 | `distinctVisitDates` and the analyze route's `visits >= 2` write branch are deleted; the route documents the floor as the Loyal source | S3 | `rg distinctVisitDates src/` is empty; route test: a model answering `loyal` still cannot set it, and no `_funnel` write happens on the Loyal path |
 | D7 | Re-stubbing a visit/loyal signal to a constant fails a test | S3 | Anti-recurrence guard test |
@@ -269,6 +317,8 @@ slices below are the residue that is genuinely missing.
 | D10 | The contact detail page stops carrying its own Loyal: `contactFinanceSummary` loses `purchased`/`reservedOnly`/`loyal` and the `proc_dates`/`has_deposit` aggregate that computed them; `+page.server.ts` derives `financeFloor` from the ranked row it **already loads** (`score.finance`), keeping the personal-org `null`; `+page.svelte` passes `data.financeFloor`. The financials card's visibility keeps keying on `data.finance`, so no card appears or disappears (R2-H1) | S1 | Contact-detail tests: the Lima-midnight pair ⇒ not loyal on the contact page *and* the roster; a zero-invoice/two-completed-bookings contact ⇒ loyal on both (after S2); `rg -n 'loyal' ` inside `contactFinanceSummary` is empty; a snapshot/DOM assertion that the financials card still renders exactly when the contact has ≥1 invoice |
 | D11 | `fin`'s membership stays invoice-derived — the visit aggregate is a second CTE left-joined in `base` next to `fin`, and `fin_loyal` moves out of the `fin` aggregate into `base` (P5-F1) | S2 | Golden test: `booked`, `finance_buyers`, `finance_customers`, `is_buyer` and an `order by revenue` page are unchanged on a fixture that adds only bookings; `fin_loyal` still `false` for every contact when the finance bridge is off |
 | D12 | The `RankedContact.finance` decoration is `null` only when the contact has neither an invoice nor a visit date | S2 | Unit test on the mapping over all four (has-invoice × has-visit) combinations; the booking-only row yields `{revenue: 0, invoices: 0, loyal: true, visitDates: 2}` |
+| D13 | `rankContactsPageCached` gains the same conditional `finances` tag `getCrmDashboardStats` already carries (`...(finance.withFinance ? tags.tenantDomain(tenantId,'finances') : [])`), so a canonical invoice mutation (`bustFinanceCache` — invoice creation, sync, void) invalidates the roster exactly the way it already invalidates the dashboard (H1) | S1 | Test: warm the roster page for a contact, create a second procedure invoice through the production `finance-sync` invalidation path (not a test-only bust call), assert the very next roster read shows the changed Loyal set with no TTL wait; repeat for voiding an invoice |
+| D14 | `crmRevenueSummary`'s `buyers` rollup increments only when a `contactFinanceMap` row has `invoices > 0`, so a booking-only contact (S2's zero-invoice, two-completed-booking shape) is not counted as a finance buyer (M3) | S2 | Regression test: a fixture with one booking-only loyal contact and zero invoice-having contacts asserts `crmRevenueSummary().buyers === 0` |
 
 ---
 
@@ -301,6 +351,25 @@ source yet; that is S2.
   request, never per row.
 - Add the resolved zone to the `crm-fin-map` cache key next to the deposit-rule fingerprint (D4).
   A settings change must not serve a stale Loyal set from the 2m/30s cache.
+- **Give the roster cache the same finances tag the dashboard already has (D13, H1).**
+  `rankContactsPageCached` (`crm-contacts.service.ts:439-443`) tags its cache entry with
+  `crmListTags(ctx.tenantId)` only. `getCrmDashboardStats`, in the same file, already does
+  `tags: [...crmListTags(ctx.tenantId), ...(finance.withFinance ? tags.tenantDomain(ctx.tenantId,
+  'finances') : [])]`. Copy that exact conditional onto the roster's `tags` array. Without it, a
+  canonical invoice mutation — `bustFinanceCache` from `finance-sync.service.ts`, called on every
+  invoice create/sync and every void — busts `finances` but never `crm`, so the roster can keep
+  serving a pre-sync Loyal set for its full 2m+1h TTL+SWR window while the dashboard and the
+  (uncached) contact-detail read already show the new one.
+- **Invalidate every visit-dependent cache from `updateFinSettings` (D4/M1).** Today it upserts
+  `fin_settings` and returns with no invalidation call at all
+  (`finance.service.ts:546-588`) — a `timezone` change can be served stale by any of the three
+  caches for its TTL+SWR window. Add one `await bustFinanceCache(ctx)` after the upsert commits.
+  This is sufficient for all three, not just `crm-fin-map`: `crm-fin-map` already carries the
+  `finances` tag unconditionally (§1), and the previous bullet gives the roster and the dashboard
+  that same tag whenever `finance.withFinance` is true — which it is whenever `fin_settings`
+  exists to be updated. Bust unconditionally on any settings patch (not only when `timezone`
+  changes) — the same "cheap over-invalidation beats fragile change-detection" reasoning S2 uses
+  for booking status transitions (D8).
 - Update the `FIN_LOYAL` / `ContactFinance.loyal` doc comments to say which zone the day boundary
   is in.
 - **Collapse the contact page onto the shared definition (D10, R2-H1).** `contactFinanceSummary`
@@ -324,7 +393,8 @@ source yet; that is S2.
   - `rg -n 'financeFloorStage' src/` afterwards must show `crm-funnel.ts`, its test, the parity
     test, and `crm/customers/+page.svelte` — and no longer `crm/[contactId]/+page.svelte`.
 
-**Files:** `crm-finance.service.ts`, `crm-contacts.service.ts` (call site only),
+**Files:** `crm-finance.service.ts` (incl. `updateFinSettings`'s `bustFinanceCache` call),
+`crm-contacts.service.ts` (call site and `rankContactsPageCached`'s `tags` array),
 `src/routes/(app)/crm/[contactId]/+page.server.ts`, `src/routes/(app)/crm/[contactId]/+page.svelte`,
 `crm-finance.service.test.ts`, `crm-funnel-parity.sql.integration.test.ts`, and the contact-detail
 load test (`+page.server.test.ts` or the equivalent route suite).
@@ -345,6 +415,13 @@ bun run vitest run src/server/services/crm-finance src/server/services/crm-funne
 #   - PERSONAL ORG: activeOrgKind 'personal' still yields financeFloor = null
 #   - CARDS: the financials / similar-wins cards still render exactly when the contact has >=1
 #     invoice (contactFinanceSummary's null contract is unchanged)
+#   - CACHE PARITY (D13/H1): warm the roster (rankContactsPageCached) for an org with a Loyal-
+#     bordering contact; call the PRODUCTION invoice-mutation path (finance-sync's own
+#     bustFinanceCache after invoice create, then again after voiding it) — not a test-only
+#     invalidateTags call; assert the very next roster read reflects each change with no TTL wait
+#   - SETTINGS INVALIDATION (D4/M1): warm crm-fin-map, the roster, and the dashboard for a Lima-
+#     seeded org; call updateFinSettings({ timezone: 'UTC' }); assert the very next read of all
+#     three reflects the new zone's day bucketing with no TTL wait
 bun run vitest run && bun run check
 bun run lint:design && bun run lint:tokens   # S1 touches one .svelte prop expression (§5)
 if git diff --name-only origin/master...HEAD | grep -Eq 'supabase/migrations|db/schema'; then exit 1; fi
@@ -377,21 +454,37 @@ leaving any cached surface holding stale scheduling evidence.
        and c.deleted_at is null
   )
   ```
-- Add a `booking_owner` CTE that assigns each qualifying booking **exactly one** contact
-  (fixes R2-M2). The OR-join pass 4 proposed matched every live contact independently, so a booking
+- Add a `booking_owner` CTE that assigns each qualifying booking **exactly one** contact, and that
+  contact is the same one invoice attribution would pick for that party (fixes R2-M2 **and**
+  pass-6 M2). The OR-join pass 4 proposed matched every live contact independently, so a booking
   carrying a `party_id` was inherited by *every* sibling contact on that party — a shape hub
   deliberately allows (`crm_contacts_party_idx` is not unique, and `CONTACT_PARTY`'s
-  `distinct on (party_id)` exists exactly to collapse it). Direct link wins; party is the fallback:
+  `distinct on (party_id)` exists exactly to collapse it). Pass 5's direct-link-always-wins fix
+  closed the fan-out but reopened a narrower version of the same identity problem: a booking
+  linked directly to a **non-canonical** sibling stayed credited to that sibling forever, so an
+  invoice on the canonical contact and a booking on its sibling could never combine into one
+  Loyal count — contradicting TO-BE #5's promise that a party's invoices and appointments "can
+  never land on two different contacts." The fix canonicalizes a direct link through the
+  *linked contact's own* `party_id` (via `contact_target`, not the booking row's independently
+  reconciled `party_id` — see §1 on `party.service.ts:218-221`), and only falls back to a
+  partyless contact's own identity or to the booking's own `party_id` when there is no live
+  direct link:
   ```
   booking_owner as (
-    select case when b.crm_contact_id is not null then ct.contact_id else cp.contact_id end
-             as contact_id,
-           b.start_time
+    select
+      case
+        when b.crm_contact_id is not null and ct.party_id is not null then cp_direct.contact_id
+        when b.crm_contact_id is not null then ct.contact_id
+        else cp_fallback.contact_id
+      end as contact_id,
+      b.start_time
       from sched_bookings b
       left join contact_target ct
         on b.crm_contact_id is not null and ct.contact_id = b.crm_contact_id
-      left join contact_party cp
-        on b.crm_contact_id is null and b.party_id is not null and cp.party_id = b.party_id
+      left join contact_party cp_direct
+        on b.crm_contact_id is not null and ct.party_id is not null and cp_direct.party_id = ct.party_id
+      left join contact_party cp_fallback
+        on b.crm_contact_id is null and b.party_id is not null and cp_fallback.party_id = b.party_id
      where b.org_id = current_setting('app.current_org_id', true)
        and b.status = any(${VISIT_BOOKING_STATUSES})
        and b.start_time <= now()
@@ -399,10 +492,14 @@ leaving any cached surface holding stale scheduling evidence.
   ```
   Consequences to state in the PR rather than discover later: a booking whose `crm_contact_id`
   points at a soft-deleted contact (or one in another org) yields `contact_id is null` and counts
-  for **nobody** — it does *not* silently fall back to the party, because a direct link that no
-  longer resolves is missing data, not a party signal. And the party fallback resolves to the same
-  canonical contact the invoice bridge already credits that party's invoices to, so a party's
-  invoices and its appointments can never land on two different contacts.
+  for **nobody** — `ct` and therefore `cp_direct` join to nothing, and it does *not* silently fall
+  back to the booking's own `party_id`, because a direct link that no longer resolves is missing
+  data, not a party signal (the `b.crm_contact_id is null` guard on `cp_fallback` excludes this
+  row on purpose). A direct link to a **partyless** contact (`ct.party_id is null`) keeps that
+  contact as its own owner, unchanged from pass 5. A direct link to a **party-linked** contact
+  always resolves through `cp_direct` to the party's canonical pick — the same one the invoice
+  bridge already credits that party's invoices to — so a party's invoices and its appointments,
+  however the booking was linked, converge on exactly one contact.
 - Add a `contact_visit_date` CTE next to `contactInvoiceClassSql` — exported from
   `crm-finance.service.ts` so every consumer splices the *same* SQL. It unions **non-void**
   procedure-invoice days with **past, `completed`** booking days:
@@ -492,6 +589,14 @@ leaving any cached surface holding stale scheduling evidence.
   add a scheduling-specific tag. Bust unconditionally on every settable status, not only on
   transitions into/out of `completed`: the cheap over-invalidation is one recomputation, while
   reasoning about which transitions can change evidence is exactly the kind of guard that rots.
+- **Fix `crmRevenueSummary`'s buyer count (D14, M3).** `contactFinanceMap` is not consumer-free
+  (§1 corrects the pass-5 claim that it was): `crmRevenueSummary` (`crm-finance.service.ts:152-177`)
+  loops the map and does `buyers += 1` for every row, no guard. Once this slice makes the map emit
+  a row for booking-only contacts (previous bullet), that loop would count them as buyers too.
+  Change the increment to `if (f.invoices > 0) buyers += 1;` — buyers stays "has ≥1 invoice",
+  matching `booked`/`finance_buyers`/`is_buyer` (invariant #11) — while `loyal`/`customers`/
+  `reserved` keep summing the map's own booleans unchanged (those are meant to include the visit
+  axis).
 - Keep the existing module gate (`bothEnabled(ctx, 'crm', 'finances')`) exactly as-is. Consequence,
   which must be recorded and not silently absorbed: an org with scheduling but **not** finances
   still gets no Loyal. Leave `TODO(handoff): scheduling-only orgs get no visit dates while the
@@ -502,7 +607,8 @@ leaving any cached surface holding stale scheduling evidence.
 - Extend the parity truth table with the visit axis (D5), including the zero-invoice/booking-only
   case and the void-invoice case.
 
-**Files:** `crm-finance.service.ts`, `crm-contacts.service.ts` (both `base` CTEs, the two `fin`
+**Files:** `crm-finance.service.ts` (incl. `booking_owner`'s canonicalization and
+`crmRevenueSummary`'s buyer guard), `crm-contacts.service.ts` (both `base` CTEs, the two `fin`
 CTEs' `fin_loyal` removal, the `scored`/`filtered` column lists and the row decoration),
 `scheduling-bookings.service.ts` (`bustCrmList` on `createBooking` and `setBookingStatus`),
 `crm-finance.service.test.ts`, `crm-contacts.sql.integration.test.ts`,
@@ -524,13 +630,23 @@ bun run vitest run src/server/services/crm-
 #   - DEDUPE: invoice and completed booking on the SAME local day → 1 date → NOT loyal
 #   - EXCLUDED: no_show / cancelled / rejected / pending / accepted bookings → not counted
 #   - NULL STATUS: a procedure invoice with status IS NULL still counts as a visit date — R2-M1
-#   - LINKS: booking linked only by crm_contact_id on a contact with party_id NULL counts; only by
-#     party_id counts; both → once, credited to the DIRECT contact only — H2/R2-M2
-#   - SIBLINGS: two live contacts A and B share one party_id. A booking linked directly to A does
-#     NOT give B a visit date; a party-only booking credits exactly ONE of them (the CONTACT_PARTY
-#     canonical pick — the same contact the party's invoices land on) — R2-M2
+#   - LINKS: booking linked only by crm_contact_id on a PARTYLESS contact counts, credited to that
+#     contact directly; booking linked only by party_id counts, credited to the CONTACT_PARTY
+#     canonical pick; a booking with both links → once, per the same rule — H2/R2-M2
+#   - SIBLINGS: two live contacts A (canonical, created first) and B share one party_id. A booking
+#     linked directly to A does NOT give B a visit date; a party-only booking credits exactly ONE
+#     of them (the CONTACT_PARTY canonical pick, i.e. A — the same contact the party's invoices
+#     land on) — R2-M2
+#   - CROSS-SOURCE IDENTITY (pass-6 M2): same A/B siblings. A procedure invoice lands on A (day 1,
+#     via CONTACT_PARTY, as it already does). A booking linked DIRECTLY to B — the non-canonical
+#     sibling — on day 2. Assert both dates land on A (not one date each on A and B), A.visitDates
+#     == 2, A reaches loyal, and B.visitDates == 0 / B is not present in the map with any visit
+#     evidence. This is the exact shape the pass-5 booking_owner CTE still got wrong: direct-link-
+#     always-wins let B keep its own booking day forever
 #   - DANGLING: a completed booking whose crm_contact_id names a soft-deleted contact counts for
-#     nobody, and does not fall back to its party_id
+#     nobody, and does not fall back to its party_id (verify this still holds now that direct links
+#     resolve through contact_target: a dangling crm_contact_id makes BOTH ct.contact_id and
+#     ct.party_id null, so cp_direct never matches either)
 #   - MEMBERSHIP (regression, P5-F1): on a fixture where the ONLY change is added bookings,
 #     `booked`, `finance_buyers`, `finance_customers`, `is_buyer` and an `order by revenue` page are
 #     byte-identical to before; with the finance bridge off, fin_loyal is false for every contact
@@ -541,6 +657,9 @@ bun run vitest run src/server/services/crm-
 #   - COUNT: visitDates asserts the literal 0/1/2, not just the >=2 threshold — M2/D9
 #   - PARITY: SQL funnel_stage == maxFunnelStage(effectiveFunnelStage, financeFloorStage) for
 #     every (_funnel × inbound × deposit/procedure × visit-dates 0/1/2 × source mix). No skips.
+#   - BUYER SEMANTICS (D14, M3): a fixture with one booking-only loyal contact (0 invoices, 2
+#     completed bookings) and zero invoice-having contacts asserts crmRevenueSummary().buyers === 0
+#     and .loyal === 1 — the booking-only contact counts toward loyal but not toward buyers
 bun run vitest run src/server/services/scheduling-bookings
 #   - INVALIDATION: warm contactFinanceMap + roster page + dashboard cache for a contact, transition
 #     a booking accepted → completed, assert the very next read (no TTL wait) shows loyal where
@@ -643,7 +762,11 @@ bun run check                                    # 0 errors / 0 warnings
 bun run vitest run                               # full suite green; no new skips
 SUPABASE_DB_URL=... REQUIRE_CRM_FUNNEL_PARITY_POSTGRES=1 \
   bun run vitest run src/server/services/crm-funnel-parity.sql.integration.test.ts
-if git diff --name-only origin/master...HEAD | grep -Eq '\.svelte$'; then exit 1; fi
+# the ONLY .svelte in the whole-spec diff is the contact page S1 changes (L1 — the earlier
+# `grep -Eq '\.svelte$' && exit 1` form failed the block precisely when S1's required file was
+# present; this is the same exact-path assertion S1's own verification block uses):
+svelte_changed=$(git diff --name-only origin/master...HEAD | grep -E '\.svelte$' || true)
+[ "$svelte_changed" = 'src/routes/(app)/crm/[contactId]/+page.svelte' ] || exit 1
 if git diff --name-only origin/master...HEAD | grep -Eq 'supabase/migrations|db/schema'; then exit 1; fi
 ! rg -n 'distinctVisitDates' src/ scripts/       # → empty
 
@@ -669,10 +792,20 @@ bun run vitest run src/server/services/crm-finance src/server/services/crm-funne
 curl -s "$HUB/api/crm/contacts?funnelStage=loyal&limit=5" -H "$AUTH" | jq '.total, [.contacts[].id]'
 #  h. that roster set matches the per-contact derivation for the same org (parity, live)
 #  i. a contact with an invoice whose `status` is NULL still counts that day as a visit (R2-M1)
-#  j. two contacts sharing one party_id: a booking linked directly to one does not promote the
-#     other; a party-only booking promotes exactly one of them (R2-M2)
+#  j. two contacts sharing one party_id: a booking linked directly to the CANONICAL one does not
+#     promote the other; a party-only booking promotes exactly the canonical one; a booking linked
+#     directly to the NON-canonical sibling still combines with an invoice on the canonical
+#     contact to reach loyal on the canonical contact (R2-M2, pass-6 M2)
 #  k. the CRM dashboard's "booked"/buyers/customers counters and the revenue-sorted first page are
 #     unchanged from before the branch on an org whose only new evidence is bookings (P5-F1)
+#  l. sync a second invoice for a contact with a warm /crm/customers page (no manual cache clear) —
+#     the very next load of that page shows the new Loyal set immediately; repeat after voiding an
+#     invoice (pass-6 H1)
+#  m. change fin_settings.timezone from a warm state (map + roster + dashboard all previously hit)
+#     — the very next load of all three reflects the new zone's day bucketing immediately (pass-6 M1)
+#  n. an org with a booking-only Loyal contact and no invoice-having contacts: the dashboard's
+#     Revenue widget (crmRevenueSummary) reports buyers = 0 while still counting that contact
+#     toward loyal (pass-6 M3)
 ```
 
 **Ship gate:** §7 green; the EXPLAIN plan from S2 pasted in the PR; the `show timezone;` output

@@ -1,13 +1,13 @@
 ---
 spec: 2026-08-17-hub-distinct-visit-dates-spec
-pass: 5
+pass: 6
 verdict: pending
 reviewer: factory-review
 created: 2026-08-17
 updated: 2026-08-29
 ---
 
-# Review record — disposition: STILL IN REVIEW (pass 5 awaiting re-review)
+# Review record — disposition: STILL IN REVIEW (pass 6 awaiting re-review)
 
 ## Pass 3 — approved (rewritten against verified hub reality)
 
@@ -105,3 +105,20 @@ change would have silently broken five shipped numbers to fix one. Both queries 
 **Disposition.** `status: review`, `verdict: pending` — the spec is corrected and internally
 consistent, but three external FAILs mean the approval is the reviewer's to give, not the author's
 to re-assert. No hub product code has been written; the branch stays planning-only.
+
+## Pass 6 — external review: FAIL, then fixed in place
+
+One High, three Medium, one Low. All re-verified this pass against the same `1b47e8ce` sparse
+checkout (`git ls-remote` confirms hub `master` has not moved since pass 5):
+
+| Finding | Verified | Fix |
+|---|---|---|
+| H1 — invoice mutations bust only the `finances` tag; `rankContactsPageCached` carries only `crm`, so a normal sync/void can leave the roster stale while the dashboard (which already carries `finances` conditionally) and the uncached contact-detail read update | Confirmed: `crm-contacts.service.ts:439-443` (roster, `crm` only) vs `:552-555` (dashboard, `crm` + conditional `finances`); `finance-sync.service.ts:123-140` calls `bustFinanceCache` only | S1 copies the dashboard's exact conditional `finances` tag onto the roster (D13) |
+| M1 — `updateFinSettings` performs no cache invalidation; a `timezone` change can serve a stale Loyal set from any of the three caches for their TTL+SWR window | Confirmed: full body read, `finance.service.ts:546-588`, no `invalidateTags`/`bustFinanceCache` call | S1 adds one `bustFinanceCache(ctx)` post-commit; sufficient for all three once H1's tag fix lands, because `crm-fin-map` already carries `finances` unconditionally (D4) |
+| M2 — the pass-5 `booking_owner` CTE fixed sibling fan-out but still let a booking linked directly to a non-canonical sibling stay on that sibling forever, so an invoice on the canonical contact and a booking on its sibling never combine | Confirmed by re-reading the pass-5 CTE against `CONTACT_PARTY`'s canonical-pick semantics and `party.service.ts:218-221` (booking's own `party_id` is independently reconciled from `attendee_phone`, not copied from the linked contact) | S2's `booking_owner` canonicalizes a direct link through the **linked contact's own** `party_id` via `contact_target` + `CONTACT_PARTY`, so it always resolves to the same canonical contact invoice attribution already uses; partyless direct links and the no-direct-link fallback are unchanged (D3) |
+| M3 — `contactFinanceMap` is not consumer-free as §1 claimed; `crmRevenueSummary` counts `buyers += 1` per map row with no invoice guard, so S2's booking-only rows would inflate the buyers rollup | Confirmed: `crm-finance.service.ts:152-177`, `buyers += 1` unconditional at `:170` | §1's false claim corrected; S2 guards the increment on `f.invoices > 0` (D14) |
+| L1 — the §7 gate's `grep -Eq '\.svelte$' && exit 1` fails on exactly the one `.svelte` file S1 requires | Confirmed by reading §7 against S1's own (correct) exact-path assertion | §7 replaced with the same exact-path assertion S1 already uses |
+
+**Disposition.** `status: review`, `verdict: pending` — unchanged posture from pass 5: corrected and
+internally consistent, approval still belongs to an external reviewer. No hub product code has
+been written; the branch stays planning-only.
