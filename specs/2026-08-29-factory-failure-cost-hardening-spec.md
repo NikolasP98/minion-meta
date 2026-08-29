@@ -40,6 +40,26 @@ Retain the current `minion-ai/DEV` CI architecture. It already removed feature-b
 deferred full Windows tests to the exact `DEV` integration SHA, sharded the suite, and added bounded
 Windows/Linux jobs. Add only the missing macOS timeout and cancel superseded `DEV` CI runs.
 
+### Provenance and related programs
+
+No proposal precedes this spec. It was authored directly from the 2026-08-29 Factory failure and
+billing audit session, whose evidence §1 records; the proposal stage was skipped because the audit
+already produced the measured baseline a proposal would have argued for, and this artifact records
+that skip. The spec extends four live programs and replaces none of them:
+
+- `2026-08-17-factory-token-budget-governance-spec` — extends its caps and tier ladder with a
+  durable, evidence-bound retry decision. Its budget caps, daily budget, and iteration limits are
+  unchanged.
+- `2026-08-18-factory-deterministic-unstick-spec` — extends its deterministic unstick classes with an
+  authoritative operator-pause signal to read. Its advisory-only facilitator contract and scoped
+  credential are unchanged.
+- `2026-08-18-factory-durable-state-outbox-spec` — extends its `postFinish` outbox with the
+  `retry_decisions` record and admission transaction. The outbox mechanism, processing lease, and
+  lifecycle edges are unchanged.
+- `2026-08-22-factory-lineage-orchestrator-instance-spec` — shares its lineage identity so one
+  monitor card per lineage survives. The orchestrator instance itself stays out of scope (§10) and
+  its branches (Factory PRs #160–#163) are untouched.
+
 ## 1. Evidence and baseline
 
 The audit used the August usage report whose SHA-256 is
@@ -112,22 +132,22 @@ cancels only pull-request runs. Those are the remaining code deltas.
 
 ### 2.2 Gaps this spec closes
 
-1. Auto-fix admission still uses attempt count plus a four-regex capability allowlist. It does not
-   persist why a retry was admitted, compare candidate progress with the parent attempt, or refuse
-   repeated failure semantics across runs.
-2. The promotion circuit breaker does not guard auto-fix or manual requeue admission.
-3. The auto-fix prompt tells the agent to fetch every PR comment. This repeats large context and
-   exposes unrelated or stale text. The runner can supply a bounded latest failure context.
-4. Review says out-of-scope findings are follow-ups, while review-fix says `Fix EVERY finding`.
-5. Review-fix tells the agent to run the complete self-test and then the wrapper repeats it.
-6. Monitor recurrence after 24 hours creates a new issue instead of refreshing the existing lineage
-   card.
-7. Stopping the runner is the only reliable operator pause; it removes observability and makes the
-   unstick monitor interpret the queue without an authoritative operator-pause signal.
-8. Stage cost is visible in logs/terminal rows, but no stable retry-decision record explains the
-   cost-bearing transition between attempts.
-9. The current macOS CI lane can reach GitHub's multi-hour limit, and superseded `DEV` pushes are not
-   canceled structurally.
+Anchors below are file-and-symbol level against the audited `minion-factory` source at
+`0315707d8c8ffdfb024d2b97fa2eebf45c3b1914` and the `minion-ai/DEV` workflow observed the same day.
+Slice 1 resolves each anchor to an exact current line in the checkout it tests, and records the
+resolved line in the red test, rather than trusting a line number copied from this spec.
+
+| # | Gap | Anchor |
+|---|---|---|
+| 1 | Auto-fix admission still uses attempt count plus a four-regex capability allowlist. It does not persist why a retry was admitted, compare candidate progress with the parent attempt, or refuse repeated failure semantics across runs. | `runner/src/queue.ts` — the auto-fix escalation ladder reached from `postFinish()` |
+| 2 | The promotion circuit breaker does not guard auto-fix, automatic unstick requeue, or manual requeue admission. | `runner/src/queue.ts` — breaker evaluated on the spec-promotion path only |
+| 3 | The auto-fix prompt tells the agent to fetch every PR comment. This repeats large context and exposes unrelated or stale text. The runner can supply a bounded latest failure context. | `agent/run.sh` — review-fix task text |
+| 4 | Review says out-of-scope findings are follow-ups, while review-fix says `Fix EVERY finding`. | `agent/review.sh` vs. `agent/run.sh` review-fix task text |
+| 5 | Review-fix tells the agent to run the complete self-test and then the wrapper repeats it. | `agent/run.sh` — review-fix task text and the wrapper self-test loop |
+| 6 | Monitor recurrence after 24 hours creates a new issue instead of refreshing the existing lineage card. | `runner/src/index.ts` — `POST /hooks/monitor` intake and its fingerprint reservation |
+| 7 | Stopping the runner is the only reliable operator pause; it removes observability and makes the unstick monitor interpret the queue without an authoritative operator-pause signal. | `runner/src/queue.ts` (`pump()`), `runner/src/unstick-classifier.ts`, `scripts/unstick-cron.sh` |
+| 8 | Stage cost is visible in logs/terminal rows, but no stable retry-decision record explains the cost-bearing transition between attempts. | `runner/src/db.ts` — no retry-decision table exists; cost lives on run rows only |
+| 9 | The current macOS CI lane can reach GitHub's multi-hour limit, and superseded `DEV` pushes are not canceled structurally. | `minion-ai` `.github/workflows/ci.yml` — `concurrency` block and the macOS job |
 
 ## 3. Required invariants
 
@@ -140,9 +160,12 @@ cancels only pull-request runs. Those are the remaining code deltas.
    provider outage, missing authority, or no-change output.
 4. **Two repair attempts maximum:** the original run may receive at most two automatic repair
    children. The second repair requires demonstrable progress or a changed failure fingerprint.
-5. **Circuit breaker coverage:** an open distinct-lineage breaker blocks new spec promotion and
-   auto-fix admission; operator pause separately suppresses automatic unstick requeues. A supervised passing canary is required to
-   close it.
+5. **Circuit breaker coverage:** an open distinct-lineage breaker blocks every automatic child
+   admission regardless of origin — new spec promotion, auto-fix retry, and automatic unstick
+   requeue. Operator pause independently suppresses the same origins, so either signal alone is
+   sufficient to refuse. A manual operator requeue is the only admission permitted while the breaker
+   is open; it is recorded as a supervised override with its reason code. A supervised passing canary
+   is required to close the breaker.
 6. **Bounded evidence:** retry prompts receive the latest in-scope failure evidence, normalized and
    fenced as untrusted data, capped at 6 KiB. They do not fetch an unbounded comment history.
 7. **One full self-test owner:** agents run focused checks. The trusted wrapper runs the configured
@@ -264,7 +287,7 @@ compare-and-swap so concurrent recurrence creates at most one effect.
 - Add `runner/src/retry-policy.ts` and tests.
 - Add the additive `retry_decisions` schema, indexes, upgrade assertions, and immutable-row triggers.
 - Replace attempt-count-only auto-fix admission with the durable decision transaction.
-- Apply the distinct-lineage breaker to auto-fix.
+- Apply the distinct-lineage breaker to auto-fix admission, recording `policy-refusal` when it refuses.
 - Fetch and sanitize bounded latest failure evidence in the runner.
 - Update legacy and containment prompts to use in-scope findings and focused checks.
 
@@ -277,7 +300,10 @@ compare-and-swap so concurrent recurrence creates at most one effect.
 **Repo:** `minion-factory`.
 
 - Add strict `FACTORY_DISPATCH_PAUSED` parsing and expose it through health/budget/trigger health.
-- Gate queue claims, auto-fix/spec promotion admission, and unstick remedies.
+- Gate queue claims, auto-fix/spec promotion admission, and unstick remedies on operator pause, and
+  gate every automatic unstick requeue on the distinct-lineage breaker as well.
+- Record a manual operator requeue admitted while the breaker is open as a supervised override with
+  its reason code.
 - Refresh/reopen the existing issue for a stale fingerprint.
 - Document deployment and resume procedures.
 
@@ -320,9 +346,10 @@ start no process, insert no child, preserve queue order, and keep health/monitor
 | Changed candidate, first in-scope review failure | one escalated child. |
 | Provider outage, first occurrence | one same-tier child. |
 | Provider outage repeats | stop; existing card refreshed. |
-| Budget stop | no retry at a larger model. |
+| Budget stop | `stop/budget-stop`; no child at any tier, escalated or same. |
 | State conflict | no retry; reconciliation card. |
-| Breaker open | no automatic child from any origin. |
+| Breaker open, pause `0` | no automatic child from any origin — promotion, auto-fix, or unstick requeue. |
+| Breaker open, manual operator requeue | one child, recorded as a supervised override. |
 | Outbox replay after restart | same decision/child id. |
 | Stale closed monitor issue recurs | same issue reopens and receives one recurrence comment. |
 | Pause `1` with queued work | API online, queue unchanged, zero claims/spawns. |
