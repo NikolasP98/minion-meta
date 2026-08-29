@@ -11,7 +11,7 @@ repos: [minion-meta, minion, minion_hub, minion_site, minion_plugins, paperclip,
 proposal: 2026-08-18-agent-instruction-parity-and-repo-policy
 verdict: approved
 type: infra
-tags: [infra, docs]
+tags: [infra]
 relationship: depends-on
 related: [2026-08-18-sdlc-transformation-roadmap, 2026-08-18-factory-orchestration-round7-spec, 2026-04-19-minion-meta-repo-design]
 ---

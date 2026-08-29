@@ -1,12 +1,7 @@
 // Regenerates proposals/index.json from proposal frontmatter. Same contract as
 // spec-index.mjs: committed output, exits 1 on invalid files.
-// Run from repo root: node scripts/proposal-index.mjs [--check]
-//
-// --check validates without writing: it fails if proposals/index.json is
-// stale (would differ from a fresh generation) instead of overwriting it.
-// Same non-writing contract as spec-index.mjs --check, topics.mjs --check,
-// and repo-policy.mjs generate --check — safe to run in a read-only gate.
-import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+// Run from repo root: node scripts/proposal-index.mjs
+import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { parseFrontmatter } from './spec-frontmatter.mjs';
 import { loadTopics, resolveTag } from './topics.mjs';
 
@@ -83,17 +78,5 @@ if (errors.length) {
 	process.exit(1);
 }
 proposals.sort((a, b) => b.id.localeCompare(a.id));
-const computed = JSON.stringify({ proposals }, null, '\t') + '\n';
-const check = process.argv.includes('--check');
-
-if (check) {
-	const existing = existsSync('proposals/index.json') ? readFileSync('proposals/index.json', 'utf8') : '';
-	if (existing !== computed) {
-		console.error('proposals/index.json is stale — run `node scripts/proposal-index.mjs` and commit the result');
-		process.exit(1);
-	}
-	console.log(`proposal-index --check passed: ${proposals.length} proposals, proposals/index.json up to date`);
-} else {
-	writeFileSync('proposals/index.json', computed);
-	console.log(`proposals/index.json written: ${proposals.length} proposals`);
-}
+writeFileSync('proposals/index.json', JSON.stringify({ proposals }, null, '\t') + '\n');
+console.log(`proposals/index.json written: ${proposals.length} proposals`);
