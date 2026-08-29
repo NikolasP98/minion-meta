@@ -1,7 +1,7 @@
 ---
 id: 2026-08-29-hub-pos-bookings-stock-gate-drift
 title: Fix module-state stock-gate drift between /pos/appointments and /scheduling/bookings
-status: draft
+status: approved
 created: 2026-08-29
 updated: 2026-08-29
 spawned_spec: 2026-07-22-personal-org-differentiation-spec
