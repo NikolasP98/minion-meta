@@ -19,6 +19,22 @@ export const STATUSES = [
 	'unknown'
 ];
 
+// specs/TEMPLATE.md's documented enum for the review roll-up. Shared because the
+// same vocabulary is the sidecar's `verdict` (scripts/review-sidecar.mjs) and a
+// spec's own `verdict` frontmatter — one list, so the two can never drift into
+// accepting different words for the same judgement.
+export const VERDICTS = ['pending', 'approved', 'changes_requested', 'rejected', 'revision-required'];
+
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+// Rejects calendar-invalid values that still match the YYYY-MM-DD shape
+// (e.g. "2026-99-99" or "2026-02-30") by round-tripping through Date.UTC.
+export function isValidISODate(value) {
+	if (typeof value !== 'string' || !DATE_RE.test(value)) return false;
+	const [y, m, d] = value.split('-').map(Number);
+	const dt = new Date(Date.UTC(y, m - 1, d));
+	return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d;
+}
+
 export function parseFrontmatter(src) {
 	if (!src.startsWith('---\n')) return null;
 	const end = src.indexOf('\n---\n', 4);

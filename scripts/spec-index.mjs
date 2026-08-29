@@ -53,7 +53,7 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
-import { parseFrontmatter, STAGES, STATUSES } from './spec-frontmatter.mjs';
+import { parseFrontmatter, isValidISODate, STAGES, STATUSES, VERDICTS } from './spec-frontmatter.mjs';
 import { loadTopics, resolveTag } from './topics.mjs';
 
 export const ALLOWED_REPOS = [
@@ -68,17 +68,10 @@ export const ALLOWED_REPOS = [
 	'pixel-agents'
 ];
 
-const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
-// Rejects calendar-invalid values that still match the YYYY-MM-DD shape
-// (e.g. "2026-99-99" or "2026-02-30") by round-tripping through Date.UTC.
-function isValidISODate(value) {
-	if (!DATE_RE.test(value)) return false;
-	const [y, m, d] = value.split('-').map(Number);
-	const dt = new Date(Date.UTC(y, m - 1, d));
-	return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d;
-}
-// specs/TEMPLATE.md's documented enums for the two optional review/roll-up fields.
-const VERDICTS = ['pending', 'approved', 'changes_requested', 'rejected', 'revision-required'];
+// isValidISODate and VERDICTS now live in spec-frontmatter.mjs — the sidecar
+// gate (scripts/review-sidecar.mjs) validates the same date shape and the same
+// verdict vocabulary, and two copies would drift.
+// specs/TEMPLATE.md's documented enum for the roll-up field.
 const TYPES = ['feature', 'fix', 'infra', 'decision', 'research'];
 // specs/TEMPLATE.md's spec-intake classification enum.
 const RELATIONSHIPS = [
