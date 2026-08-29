@@ -45,7 +45,31 @@ memory, or a dashboard. Restated as the rule for this document:
    non-normative today, tracked by
    [`2026-08-29-roadmap-unhomed-program-detail`](../proposals/2026-08-29-roadmap-unhomed-program-detail.md):
    `SDLC-CONTRACT.md` (M1), the "PR order 1–26" sequence, and "stage gates G0–G8"
-   (see §9).
+   (see §10).
+4. **This is not a three-item spot check.** Pass 1's exact committed text (meta
+   blob `3dbdcd95dc3acd21e6940f2a02c7715e0a4fc193`, 70 lines, recovered with
+   `git cat-file -p`) was diffed section by section against this document: the
+   intro (baseline scores, credit rule) carries into §0; the critical path into
+   §5; the twelve governing principles into §6; the autonomy ladder into §7; the
+   proposal ordering into §8; the twenty predicates into §9, checked word-for-word
+   and in order, not just counted. All six carry forward with no loss. The only
+   part of pass 1 that does not carry forward verbatim is its closing sentence,
+   which names five categories — "M0–M9 deliverables, schemas, exit criteria, PR
+   order 1–26, stage gates G0–G8" — and attributes all of them to the off-repo
+   message, not to pass 1 itself. Pass 1 never enumerates a single deliverable,
+   schema, or exit criterion; it only asserts, unverified, that they are
+   "reproduced in each milestone spec at implementation fidelity." There is
+   therefore no enumerable content in any committed artifact — including pass
+   1 — to compare against beyond the three stray labels in item 3. This diff is
+   exhaustive with respect to everything committed to this repository, which is
+   the whole of what "verify against reality" can mean here: it cannot
+   independently verify the substance of the off-repo message, because that
+   message is not accessible from this repository under any tool available to
+   this pass. If a future reader recalls a specific deliverable, schema, or exit
+   criterion from that original message that is genuinely missing from its
+   milestone spec, that is a new, checkable finding to raise as its own
+   proposal — not a gap this pass can retroactively close by asserting more text
+   without a committed source to check it against.
 
 ## 2. AS-IS — verified program reality, 2026-08-29
 
@@ -80,10 +104,10 @@ Evidence gathered against `NikolasP98/minion-factory` `main` and this checkout's
 - Every acceptance predicate is individually citable, so a milestone spec can claim
   "satisfies P7" and a reviewer can check it.
 - The document's own claims are recomputable from committed artifacts by the
-  procedure in §11 — no claim rests on an agent's recollection.
+  procedure in §12 — no claim rests on an agent's recollection.
 - Invariants that must NOT change: the critical-path ordering in §5, the twelve
   governing principles in §6, the autonomy ladder in §7, and the requirement that
-  all twenty predicates in §8 pass before automerge is considered.
+  all twenty predicates in §9 pass before automerge is considered.
 
 ## 4. DELTA — milestone map (the transition pass 1 was missing)
 
@@ -128,7 +152,28 @@ practice. M8's discovery loop likewise merged ahead of M4/M5/M6. This is documen
 not retroactively blessed: the ordering above stays normative, and reconciling the
 shipped M7/M8 surface against its unmet M4/M5 prerequisites is tracked by
 [`2026-08-29-roadmap-milestone-order-deviation`](../proposals/2026-08-29-roadmap-milestone-order-deviation.md).
-No autonomy graduation may cite M7 as complete while that reconciliation is open.
+
+**Durable closure gate.** No autonomy graduation may cite M7 or M8 as complete
+until all three of the following hold — checked directly against the fleet,
+never inferred from a single proposal's status:
+
+1. M4's containment, identity, and final-diff controls are enforced, not just
+   coded: `FACTORY_CONTAINMENT_V2` is enabled and enforcing, or the specific gap
+   is covered by a named fail-closed control in the promotion path with an
+   explicit, human-signed risk acceptance.
+2. M5 (M7's and M8's DAG/multi-repo/slices/portfolio dependency) has a committed
+   disposition — implemented, or explicitly waived by a spec pass with stated
+   reasoning. "Out of scope for this audit" is not a disposition.
+3. M6 (M8's browser-evidence/durable-HITL dependency) has a committed
+   disposition on the same terms as M5 above.
+
+The P5/P6/P7 promotion-path audit in `2026-08-29-roadmap-milestone-order-deviation`
+produces evidence toward condition 1 only — its own definition of done explicitly
+excludes enabling containment and implementing M5, and never addresses M6. Closing
+that proposal on its own narrower scope therefore does **not** satisfy conditions 2
+or 3 and does **not** lift this gate. If M5/M6 are to stay deliberately deferred,
+that deferral needs its own explicit, human-signed disposition — silence or a
+narrowed proposal closing is not one.
 
 ## 6. Governing principles (normative for every milestone spec)
 
@@ -151,8 +196,12 @@ L0 draft generation → L1 safe planning autonomy → L2 bounded PR autonomy (hu
 merge) → L3 low-risk merge autonomy (named profiles, same-SHA evidence, trusted
 checks) → L4 staging deploy autonomy → L5 production canary autonomy.
 
-`FACTORY_AUTOMERGE` stays `0` through M0–M7. The current fleet position is **L2**:
-agents open and drive PRs, humans merge.
+`FACTORY_AUTOMERGE` stays `0` through M0–M7. Per §2, the declared repository
+default posture is **L2** (agents open and drive PRs, humans merge) —
+`.env.example` and `deploy.sh`'s accepted-value check are what this claim
+covers; `deploy.sh` preserves whatever value the box already has, and that
+production runtime value is not readable from this repository. Treat "L2" here
+as the declared default, not a confirmed live measurement.
 
 ## 8. Existing proposal ordering
 
@@ -241,9 +290,13 @@ meta-repo root.
    declares `FACTORY_AUTOMERGE=0`, `FACTORY_CONTAINMENT_V2=0`, and
    `FACTORY_MEMORY_GOVERNANCE_V2=0`.
 5. **§10 has no regression** —
-   `grep -rnE '\bG[6-8]\b' specs/ proposals/ --exclude='*roadmap*'` returns nothing
-   (this file and its tracking proposal discuss the labels without defining them).
-   If a real definition appears, §10 must be re-passed.
+   `grep -rnE '^#{1,4} *G[6-8]\b' --include='*.md' specs/ proposals/` returns
+   nothing. This checks for a heading-level *definition* in the same style as the
+   live G0–G5 ladder (`### G0 — Staleness reconciler`, etc.), not a bare mention —
+   a plain `\bG[6-8]\b` grep self-matches this file's own prose and
+   `proposals/index.json`'s copied title text, which discuss the labels without
+   defining them. If a real heading-level definition of G6, G7, or G8 appears
+   anywhere, §10 must be re-passed.
 6. **No dangling authority** — this file contains no requirement whose only source
    is an off-repo message (§1.2).
 

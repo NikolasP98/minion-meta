@@ -18,12 +18,21 @@ tags: [infra]
 > 1–26, stage gates G0–G8) lives in the user's program message of 2026-08-18 and
 > is reproduced in each milestone spec at implementation fidelity.
 
-The second half of that sentence is true for most milestones — the specs in the
-roadmap's §4 table do carry the detail, and ten of the twelve ordered proposals
-resolve to real files. The first half is a dangling reference to
-an off-repo chat message, which the `AGENTS.md` SDLC contract forbids as a state
-location. Pass 2 voided the delegation and this proposal tracks what was left
-without a home.
+The second half of that sentence cannot be checked against the "M0–M9
+deliverables, schemas, exit criteria" it names, because pass 1 never enumerates
+any of them — it only asserts them, unverified, of the off-repo message. What
+*is* checkable, and was checked (roadmap §1 item 4, a line-by-line diff of the
+exact pass-1 blob): pass 1's own committed content — the critical path, the
+twelve governing principles, the autonomy ladder, the proposal ordering, and
+the twenty predicates — carries into pass 2/3 without loss, and ten of the
+twelve ordered proposals resolve to real files (the other two are absorbed by
+`2026-08-18-factory-orchestration-round7`, §8). Beyond that committed content,
+there is nothing left to audit for "most milestones" against — only the three
+named artifacts below, which is why this proposal's scope is exactly those
+three rather than an open-ended claim about milestone completeness. The first
+half of the quoted sentence is a dangling reference to an off-repo chat
+message, which the `AGENTS.md` SDLC contract forbids as a state location. Pass
+2 voided the delegation and this proposal tracks what was left without a home.
 
 ## AS-IS (evidenced 2026-08-29)
 
