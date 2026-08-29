@@ -113,9 +113,27 @@ passes 3–5 left no committed per-pass record. S3 owns repairing it — reconst
 records from the run evidence where it survives, otherwise correcting the roll-up and naming the
 passes whose detail is unrecoverable. No new baseline file is created for it (I1, I3).
 
+Round 3 — `M1`, `M2`, both fixed in this pass without reopening pass 3:
+
+- `M1` the B1-only fallback was internally impossible: the escape hatch (lines 450-452, this
+  revision) authorized S3 to defer B2, leave a `TODO(handoff)` pointer, and file a follow-up
+  proposal, while the same slice's DoD, the TO-BE bullet, S18's DoD, and end-to-end verification #4
+  unconditionally required zero B1/B2 violations and zero `TODO(handoff)` markers anywhere. Fixed by
+  making every one of those sites explicitly conditional on which path S3 takes: the B1+B2 path keeps
+  the original zero-violation/zero-marker requirements verbatim; the B1-only path asserts zero B1
+  violations only, permits the replacement marker + its proposal to persist, and scopes
+  `handoff-minion-meta-1883922325`'s closure to the three unconditionally-resolved markers in that
+  case (end-to-end verification #5 already carried this conditional; #4 now matches it).
+- `M2` S2 and S3 both append to `proposals/2026-08-20-factory-spec-heading-nomenclature.md` but were
+  declared independent/any-order in §7, and neither slice's files/DoD required the `updated:` bump or
+  `node scripts/proposal-index.mjs` regeneration that a substantive proposal edit needs (per
+  `proposals/TEMPLATE.md:12-13` and the generator's own `updated` projection). Fixed by serializing
+  S2 before S3 in §7 (both edit the same file; they are not safe to dispatch concurrently) and adding
+  the `updated` bump + `proposals/index.json` regeneration to both slices' file lists and DoDs.
+
 ### Author's disposition
 
-`approved`. Every round-1 and round-2 finding is fixed on the branch; no finding was waived. The
-approval is the authoring run's operator disposition, not a reviewer sign-off on this last fix
-round — if a subsequent review round raises a blocking finding, the spec returns to
+`approved`. Every round-1, round-2, and round-3 finding is fixed on the branch; no finding was
+waived. The approval is the authoring run's operator disposition, not a reviewer sign-off on this
+last fix round — if a subsequent review round raises a blocking finding, the spec returns to
 `status: review` / `verdict: pending` and this section records that instead.
