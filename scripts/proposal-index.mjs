@@ -1,21 +1,23 @@
 // Regenerates proposals/index.json from proposal frontmatter. Same contract as
 // spec-index.mjs: committed output, exits 1 on invalid files.
+//
+// Every entry emitted here is a canonical WorkItem record (spec
+// 2026-08-18-factory-workitem-handoff-schema-spec §2.1): source, source trust,
+// risk class, priority, owner, and lifecycle status are required, validated,
+// and projected for every proposal. Downstream (minion-factory's lifecycle
+// promoteSweep/automerge, minion-base's board) reads only this file, so a
+// record that cannot be trusted must fail the build here rather than reach
+// them half-typed. `scripts/proposal-workitem-retrofit.mjs` fills the fields
+// for an existing file; new intake writers must emit them.
 // Run from repo root: node scripts/proposal-index.mjs
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { parseFrontmatter } from './spec-frontmatter.mjs';
 import { loadTopics, resolveTag } from './topics.mjs';
+import { P_STATUSES, WORKITEM_FIELDS, validateWorkItem } from './workitem.mjs';
 
-export const P_STATUSES = [
-	'draft',      // being shaped in chat
-	'review',     // reconciler flagged something (duplicate_candidate etc.)
-	'approved',   // human gate 1 passed → eligible for the spec stage
-	'in-spec',    // spec pipeline has picked it up
-	'done',       // shipped end to end
-	'rejected',
-	'retired',
-	'merged',     // merged into another proposal (see merged_into)
-	'closed'
-];
+// Re-exported for compatibility: P_STATUSES now lives beside the rest of the
+// WorkItem contract in workitem.mjs.
+export { P_STATUSES };
 
 const proposals = [];
 const errors = [];
@@ -37,10 +39,13 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		continue;
 	}
 	const { fm } = parsed;
-	for (const key of ['id', 'title', 'status', 'created']) {
+	const errorsBefore = errors.length;
+	for (const key of ['id', 'title', 'created']) {
 		if (!fm[key]) errors.push(`${name}: missing required field "${key}"`);
 	}
-	if (fm.status && !P_STATUSES.includes(fm.status)) errors.push(`${name}: invalid status "${fm.status}"`);
+	// The six WorkItem fields (status included) are validated as one record so
+	// a mislabelled risk_class is reported next to a missing owner.
+	for (const message of validateWorkItem(fm)) errors.push(`${name}: ${message}`);
 	// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).
 	if (fm.status === 'retired' && !(fm.retired_reason && fm.retired_reason.length >= 20))
 		errors.push(`${name}: status "retired" requires retired_reason (>=20 chars)`);
@@ -56,7 +61,7 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		}
 		fm.tags = canonicalTags;
 	}
-	proposals.push({
+	const entry = {
 		id: fm.id,
 		title: fm.title,
 		status: fm.status,
@@ -69,8 +74,22 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		...(fm.spawned_spec ? { spawned_spec: fm.spawned_spec } : {}),
 		...(fm.tags ? { tags: fm.tags } : {}),
 		...(fm.value ? { value: fm.value } : {}),
-		...(fm.source ? { source: fm.source } : {})
-	});
+		source: fm.source,
+		source_trust: fm.source_trust,
+		risk_class: fm.risk_class,
+		priority: fm.priority,
+		owner: fm.owner
+	};
+	// Coverage guard: adding a field to WORKITEM_FIELDS without projecting it
+	// would silently ship a partial WorkItem to every consumer. Only meaningful
+	// for a record that already validated — otherwise it just echoes the
+	// missing-field errors above.
+	if (errors.length === errorsBefore) {
+		for (const field of WORKITEM_FIELDS) {
+			if (entry[field] === undefined) errors.push(`${name}: WorkItem field "${field}" is not projected into the index`);
+		}
+	}
+	proposals.push(entry);
 }
 
 if (errors.length) {

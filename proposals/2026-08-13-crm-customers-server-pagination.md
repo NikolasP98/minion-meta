@@ -6,6 +6,11 @@ created: 2026-08-13
 updated: 2026-08-13
 repos: [minion_hub]
 spawned_spec: 2026-08-13-crm-customers-server-pagination-spec
+source: human
+source_trust: human
+risk_class: unclassified
+priority: medium
+owner: human
 ---
 
 # Wire DataTable server mode for /crm/customers

@@ -6,6 +6,11 @@ created: 2026-08-13
 updated: 2026-08-18
 repos: [minion_hub]
 merged_into: 2026-08-13-crm-customers-server-pagination
+source: human
+source_trust: human
+risk_class: unclassified
+priority: medium
+owner: human
 ---
 
 # Make the CRM customer list fast for large orgs

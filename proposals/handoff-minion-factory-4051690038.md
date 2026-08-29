@@ -7,6 +7,11 @@ updated: 2026-08-20
 repos: [minion-factory]
 tags: [handoff-sweep]
 closed_reason: "Self-referential: discovery.test.ts contains the sweep pattern as test fixture, not real debt."
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — runner/src/discovery.test.ts

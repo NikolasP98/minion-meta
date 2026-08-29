@@ -10,6 +10,10 @@ tags: [infra]
 value: 7
 effort: S
 source: debt-sweep-2-2026-08-17
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # docker-compose hardcodes the Netcup tailnet IP, breaking any-host setup

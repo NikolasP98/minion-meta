@@ -10,6 +10,10 @@ tags: [board, ux]
 value: 5
 effort: S
 source: factory-review-fix-run-8303bc51
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # minion-base kanban never renders/acts on G0's possibly_shipped verification flags

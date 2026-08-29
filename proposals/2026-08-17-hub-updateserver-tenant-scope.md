@@ -10,6 +10,10 @@ tags: [logic, security, edge-case]
 value: 5
 effort: M
 source: debt-sweep-2026-08-17
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Add DB-level tenant scope to updateServer (blocked on Turso re-key migration)

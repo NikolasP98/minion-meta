@@ -9,6 +9,10 @@ tags: [infra]
 source: audit-2026-08-17
 value: medium
 spawned_spec: 2026-08-18-factory-release-rollback-spec
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # self-update.sh has no safety net

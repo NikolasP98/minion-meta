@@ -9,6 +9,10 @@ repos: [minion-base]
 tags: [ui, logic]
 source: ux-plan-2026-08-18
 value: high
+source_trust: human
+risk_class: low
+priority: medium
+owner: human
 ---
 
 # Shared primitives + mobile app shell

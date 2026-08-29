@@ -7,6 +7,11 @@ updated: 2026-08-28
 repos: [minion-factory]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-factory-memory-governance
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — runner/src/memory/read.ts

@@ -7,6 +7,11 @@ created: 2026-08-28
 updated: 2026-08-28
 repos: [minion-hub]
 tags: [handoff-sweep]
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — scripts/audit-server-tenant-scope.ts

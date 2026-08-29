@@ -9,6 +9,10 @@ tags: [security, logic]
 value: 3
 effort: S
 source: 2026-08-17-pkg-workforce-client-json-error-spec
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Audit hub's `WorkforceApiError` handling — do not forward an upstream error page to the browser

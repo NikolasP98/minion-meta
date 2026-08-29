@@ -7,6 +7,10 @@ updated: 2026-08-28
 repos: [minion-meta, minion, minion_hub, minion_site, minion_plugins, paperclip, pixel-agents, minion-factory, minion-base]
 tags: [infra, security, logic, test]
 source: supervised-stale-wip-cleanup-2026-08-28
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # Recover tag-routing WIP from stale Meta PR 100

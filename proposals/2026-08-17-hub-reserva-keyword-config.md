@@ -10,6 +10,10 @@ tags: [logic, hardcoded]
 value: 6
 effort: M
 source: debt-sweep-2026-08-17
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Extract the triplicated 'reserva' keyword into one org-configurable rule

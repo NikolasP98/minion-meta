@@ -10,6 +10,10 @@ tags: [logic, edge-case]
 value: 6
 effort: S
 source: debt-sweep-2026-08-17
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Nextcloud Talk: every webhook message is classified as group chat

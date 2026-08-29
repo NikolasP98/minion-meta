@@ -7,6 +7,11 @@ updated: 2026-08-28
 repos: [minion-ai]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-gw-nostr-dispatch-pipeline
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — extensions/nostr/src/inbound-dispatch.test.ts

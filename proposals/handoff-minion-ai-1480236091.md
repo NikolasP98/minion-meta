@@ -6,6 +6,11 @@ created: 2026-08-24
 updated: 2026-08-28
 repos: [minion-ai]
 tags: [handoff-sweep]
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — .github/scripts/ci-security-scope.sh

@@ -5,6 +5,11 @@ status: draft
 created: 2026-08-28
 updated: 2026-08-28
 repos: []
+source: ci-watch
+source_trust: trusted-automation
+risk_class: unclassified
+priority: medium
+owner: factory
 ---
 
 # CI red — Auto response on NikolasP98/minion-ai@main

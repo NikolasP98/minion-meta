@@ -6,6 +6,11 @@ created: 2026-08-22
 updated: 2026-08-28
 repos: [minion, minion_hub, minion_site, minion-factory, minion-meta, minion-base, paperclip]
 tags: [infra, test]
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # CI and Factory compute savings — evidence-first roadmap including Bun 1.4 test evaluation

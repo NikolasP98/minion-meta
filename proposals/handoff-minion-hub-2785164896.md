@@ -9,6 +9,11 @@ repos: [minion-hub]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-hub-reserva-keyword-config
 approved_reason: "Real service-file marker (crm-finance)."
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — src/server/services/crm-finance.service.ts

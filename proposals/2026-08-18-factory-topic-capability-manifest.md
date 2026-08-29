@@ -9,6 +9,10 @@ tags: [logic, infra]
 source: audit-2026-08-18
 value: high
 spawned_spec: 2026-08-18-factory-topic-capability-manifest-spec
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Tags are inputs to a versioned policy resolver, never direct grants

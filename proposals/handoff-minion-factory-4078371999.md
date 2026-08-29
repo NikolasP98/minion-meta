@@ -8,6 +8,11 @@ repos: [minion-factory]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-factory-memory-governance
 closed_reason: "Both markers already tracked by escalated items: D4 worker-writes-shared = worker-containment (issue 73, PR 30); run.sh:269 = memory-governance S2 (PR 35 escalated)."
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — agent/run.sh

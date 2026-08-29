@@ -5,6 +5,11 @@ status: closed
 created: 2026-08-14
 updated: 2026-08-17
 repos: []
+source: ci-watch
+source_trust: trusted-automation
+risk_class: unclassified
+priority: medium
+owner: factory
 ---
 
 # CI red — CI on NikolasP98/minion_hub@master

@@ -9,6 +9,10 @@ tags: [logic, infra]
 source: audit-2026-08-17
 value: high
 spawned_spec: 2026-08-18-factory-postmerge-discovery-loop-spec
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # The pipeline ends at merge; the SDLC does not

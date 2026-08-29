@@ -5,6 +5,11 @@ status: done
 created: 2026-08-24
 updated: 2026-08-28
 repos: []
+source: ci-watch
+source_trust: trusted-automation
+risk_class: unclassified
+priority: medium
+owner: factory
 ---
 
 # CI red — Promote Factory dev to production on NikolasP98/minion-factory@main

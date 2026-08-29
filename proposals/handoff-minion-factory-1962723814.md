@@ -7,6 +7,11 @@ updated: 2026-08-28
 repos: [minion-factory]
 tags: [handoff-sweep]
 duplicate_candidate: handoff-minion-factory-4051690038
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — runner/src/queue.test.ts

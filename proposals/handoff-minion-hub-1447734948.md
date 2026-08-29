@@ -7,6 +7,11 @@ updated: 2026-08-28
 repos: [minion-hub]
 tags: [handoff-sweep]
 approved_reason: "Accepted and de-duplicated: the live SellableWizard TODO is specifically the missing ConsumptionGauge parity for diagram-enabled consumption rows. The recorded duplicate candidate concerns updateSellable write semantics and is already done; it does not cover this UI gap. Promote this marker as an independent focused follow-up."
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — src/lib/components/pos/SellableWizard.svelte

@@ -7,6 +7,11 @@ updated: 2026-08-28
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-pkg-dev-crypto-failopen
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — packages/db/src/crypto.ts

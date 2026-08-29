@@ -7,6 +7,11 @@ updated: 2026-08-24
 repos: [minion-hub]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-13-crm-customers-server-pagination
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — src/routes/(app)/crm/customers/+page.svelte

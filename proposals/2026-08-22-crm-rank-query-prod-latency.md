@@ -7,6 +7,10 @@ updated: 2026-08-22
 repos: [minion_hub]
 tags: [crm, data]
 source: hub-perf-session-2026-08-22
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # CRM rank query: 43–57s raw in production

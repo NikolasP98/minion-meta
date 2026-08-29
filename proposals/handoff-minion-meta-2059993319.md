@@ -8,6 +8,11 @@ updated: 2026-08-20
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-hub-workforce-error-body-leak
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — packages/workforce-client/src/client.ts

@@ -10,6 +10,10 @@ tags: [logic, unwired]
 value: 5
 effort: S
 source: debt-sweep-2026-08-17
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Delete satisfied-TODO dead mirrors: local secrets.ts + workspace-membership schema

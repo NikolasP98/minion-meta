@@ -10,6 +10,10 @@ tags: [logic, hardcoded]
 value: 8
 effort: M
 source: debt-sweep-2026-08-17
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # De-FACES the builtin CRM tools (crm_search + crm_insight ship clinic identity to every org)

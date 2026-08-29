@@ -10,6 +10,10 @@ tags: [ui, logic, duplication]
 value: 7
 effort: L
 source: debt-sweep-2026-08-17
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Collapse /pos/appointments (732-line fork) into /scheduling/bookings

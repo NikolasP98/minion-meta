@@ -10,6 +10,10 @@ tags: [logic]
 value: 4
 effort: S
 source: debt-sweep-2-2026-08-17
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # GatewayClient discards exceptions thrown in consumer onEvent handlers

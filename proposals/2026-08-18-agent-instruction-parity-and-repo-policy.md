@@ -9,6 +9,10 @@ repos: [minion-meta]
 tags: [docs, logic]
 source: audit-2026-08-18
 value: medium
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # One agent contract per repo, one registry for branch/command truth

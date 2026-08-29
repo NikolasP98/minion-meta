@@ -9,6 +9,10 @@ repos: [minion-factory]
 tags: [security, infra]
 source: audit-2026-08-18
 value: high
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Browser evidence for UI work — after containment, never before

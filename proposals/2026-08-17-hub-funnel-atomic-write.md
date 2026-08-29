@@ -10,6 +10,10 @@ tags: [logic, data, edge-case]
 value: 7
 effort: M
 source: debt-sweep-2026-08-17
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Make CRM _funnel write atomic (read-modify-write loses concurrent custom-field edits)

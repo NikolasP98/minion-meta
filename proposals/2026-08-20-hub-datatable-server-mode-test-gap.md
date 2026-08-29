@@ -10,6 +10,10 @@ value: 5
 effort: M
 source: orch/crm-pagination-s3-s4
 spawned_spec: 2026-08-21-hub-datatable-server-mode-test-gap-spec
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # DataTable.svelte server mode has no DOM-mount test

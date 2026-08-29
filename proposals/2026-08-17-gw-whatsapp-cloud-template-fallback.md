@@ -10,6 +10,10 @@ tags: [logic, edge-case]
 value: 5
 effort: M
 source: debt-sweep-2026-08-17
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # WhatsApp Cloud: auto-fallback to template when the 24h window is closed

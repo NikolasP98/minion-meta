@@ -8,6 +8,10 @@ repos: [minion-factory]
 tags: [infra, logic, test]
 source: factory-run-8af03178
 spawned_spec: 2026-08-28-factory-g0-ci-watch-auto-close-spec
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # G0 reconciler should auto-close CI-watch proposals once the watched workflow goes green

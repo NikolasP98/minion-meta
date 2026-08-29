@@ -10,6 +10,10 @@ value: 6
 effort: S
 source: debt-sweep-2-2026-08-17
 spawned_spec: 2026-08-18-site-vendored-tgz-untracked-spec
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Vendored design-tokens tgz untracked — fresh clone bun install fails on dev

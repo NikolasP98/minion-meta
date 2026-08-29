@@ -5,6 +5,11 @@ status: done
 created: 2026-08-18
 updated: 2026-08-28
 repos: []
+source: ci-watch
+source_trust: trusted-automation
+risk_class: unclassified
+priority: medium
+owner: factory
 ---
 
 # CI red — Factory Notify on NikolasP98/minion-base@main

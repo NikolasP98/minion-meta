@@ -10,6 +10,10 @@ tags: [logic, unwired]
 value: 5
 effort: M
 source: debt-sweep-2026-08-17
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Finish (or explicitly retire) the shells lifecycle stubs: shells.update + wake-from-archive

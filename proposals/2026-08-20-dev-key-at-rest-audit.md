@@ -9,6 +9,11 @@ repos: [minion-meta, minion_hub, minion_site]
 tags: [security, data]
 value: 8
 effort: S
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # Count what is already sealed under the source-visible dev crypto key

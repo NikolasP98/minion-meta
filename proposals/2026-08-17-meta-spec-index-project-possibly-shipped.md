@@ -8,6 +8,11 @@ spawned_spec: 2026-08-18-meta-spec-index-project-possibly-shipped-spec
 repos: [minion-meta]
 duplicate_candidate: 2026-08-17-base-kanban-possibly-shipped-surface
 tags: [logic]
+source: human
+source_trust: human
+risk_class: low
+priority: medium
+owner: human
 ---
 
 # spec-index.mjs drops possibly_shipped/evidence/link_review
