@@ -39,9 +39,12 @@ that maintains the same file:
    mandated regeneration after any proposal edit dropped it. The generator now also projects
    `effort` (`scripts/proposal-index.mjs`'s proposal-object literal), covered by
    `scripts/proposal-index.test.mjs`, and the current `proposals/index.json` carries `effort`
-   for all 40 declaring files. The auto-triage writer's row-ordering behavior (it prepends new
-   entries; the generator sorts `b.id.localeCompare(a.id)`) was not investigated and may still
-   diverge — see DELTA item 2 below.
+   for all 40 declaring files. **Row ordering still diverges.** Before this branch regenerated,
+   `proposals/index.json` led with the newest dated id (`2026-08-29-hub-pos-bookings-stock-gate-drift`
+   at `6548c40`); the generator's `b.id.localeCompare(a.id)` sort leads with the `postmerge-*`
+   ids instead, so the regeneration reordered the whole file. The auto-triage writer's exact
+   insertion rule was not investigated and neither order has been declared canonical —
+   `TODO(handoff)` sits at the sort site; see DELTA item 2 below.
 
 ## TO-BE (desired observable behavior)
 
@@ -95,6 +98,10 @@ as-is rather than hand-patched at the time.
 **Update (review-fix-6f292604, round 1):** the `effort`-drop half of this handoff is now fixed
 — `scripts/proposal-index.mjs` projects `effort`, `scripts/proposal-index.test.mjs` covers it,
 and `proposals/index.json` was regenerated. The `TODO(handoff)` comment for the dropped-effort
-site was removed from `scripts/proposal-index.mjs` since it no longer applies. The `--check`
-mode gap (`TODO(handoff)` at `scripts/proposal-index.mjs`'s bottom) and the possible
-auto-triage row-ordering divergence remain open; this proposal stays `draft` for them.
+site was removed from `scripts/proposal-index.mjs` since it no longer applies.
+
+**Update (review-fix-6f292604, round 2):** that removal also took the row-ordering half of the
+marker with it, leaving the ordering open end tracked in prose only. Both still-open ends now
+carry a marker at their exact site in `scripts/proposal-index.mjs`: ordering above the
+`proposals.sort(...)` call, `--check` above the `writeFileSync(...)` call. No functional
+change to ordering was made in this review-fix branch; this proposal stays `draft`.
