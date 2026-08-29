@@ -103,21 +103,18 @@ export function nameTokens(name: string): string[] {
  * Does the CRM party name match the registry person?
  * Party names come from SUSII as "PATERNO MATERNO NOMBRES" while the registry
  * returns "NOMBRES PATERNO MATERNO" — so compare order-insensitively. Match when
- * nothing contradicts: every party-name token appears in the registry full name
- * (handles short names like "Carla"), or the registry's surnames + first given
- * name all appear in the party name (handles extra aliases in CRM).
+ * the first given name and every registry surname appear in the party name.
+ * A one-token or given-name-only subset is not sufficient identity evidence.
+ * Extra CRM aliases remain allowed because they do not weaken the registry
+ * anchors.
  */
 export function dniNameMatches(partyName: string, person: PerudevsPerson): boolean {
   const party = nameTokens(partyName);
-  const registry = nameTokens(person.nombre_completo);
-  if (party.length === 0 || registry.length === 0) return false;
-  if (party.every((t) => registry.includes(t))) return true;
-  const required = [
-    ...nameTokens(person.apellido_paterno),
-    ...nameTokens(person.apellido_materno),
-    ...nameTokens(person.nombres).slice(0, 1),
-  ];
-  return required.length > 0 && required.every((t) => party.includes(t));
+  const firstGiven = nameTokens(person.nombres).slice(0, 1);
+  const paternal = nameTokens(person.apellido_paterno);
+  const maternal = nameTokens(person.apellido_materno);
+  if (party.length === 0 || firstGiven.length !== 1 || paternal.length === 0) return false;
+  return [...firstGiven, ...paternal, ...maternal].every((token) => party.includes(token));
 }
 
 /**

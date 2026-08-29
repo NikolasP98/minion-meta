@@ -5,6 +5,7 @@ import { closeSync, existsSync, openSync } from 'node:fs';
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { hostname } from 'node:os';
 import { createConnection } from 'node:net';
+import { fileURLToPath } from 'node:url';
 import { resolve } from 'node:path';
 
 const DEFAULT_PORT = 4173;
@@ -92,6 +93,34 @@ function alive(pid) {
   }
 }
 
+/** Linux process birth identity (field 22 of /proc/<pid>/stat). */
+export async function processStartTicks(pid) {
+  if (!Number.isInteger(pid) || pid <= 0) return null;
+  try {
+    const stat = await readFile(`/proc/${pid}/stat`, 'utf8');
+    const tail = stat.slice(stat.lastIndexOf(')') + 2).trim().split(/\s+/);
+    return /^\d+$/.test(tail[19] ?? '') ? tail[19] : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function processMatchesState(state) {
+  if (!state || !Number.isInteger(state.pid) || typeof state.processStartTicks !== 'string') return false;
+  if (!alive(state.pid)) return false;
+  return (await processStartTicks(state.pid)) === state.processStartTicks;
+}
+
+export async function terminateState(state) {
+  if (!(await processMatchesState(state))) return false;
+  try {
+    process.kill(-state.pid, 'SIGTERM');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function waitForPort(port, pid, timeoutMs = 30_000) {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline && alive(pid)) {
@@ -115,8 +144,16 @@ async function readStates() {
   for (const file of files) {
     try {
       const state = JSON.parse(await readFile(resolve(stateRoot, file), 'utf8'));
-      if (alive(state.pid)) states.push(state);
-      else await rm(resolve(stateRoot, file), { force: true });
+      const expiresAt = Date.parse(state.expiresAt);
+      const currentProcess = await processMatchesState(state);
+      if (currentProcess && Number.isFinite(expiresAt) && expiresAt > Date.now()) {
+        states.push(state);
+      } else {
+        if (currentProcess && Number.isFinite(expiresAt) && expiresAt <= Date.now()) {
+          await terminateState(state);
+        }
+        await rm(resolve(stateRoot, file), { force: true });
+      }
     } catch {
       await rm(resolve(stateRoot, file), { force: true });
     }
@@ -173,10 +210,16 @@ async function launch({ options, argv, directory, label }) {
   }
 
   const started = Date.now();
+  const startTicks = await processStartTicks(child.pid);
+  if (!startTicks) {
+    try { process.kill(-child.pid, 'SIGTERM'); } catch { /* already stopped */ }
+    fail(`${label} process identity could not be recorded`);
+  }
   const state = {
     name,
     port: options.port,
     pid: child.pid,
+    processStartTicks: startTicks,
     url,
     directory,
     command: argv,
@@ -226,7 +269,10 @@ async function main() {
     if (!state) fail(`active preview not found: ${identifier}`);
     if (action === 'url') process.stdout.write(`${state.url}\n`);
     else {
-      try { process.kill(-state.pid, 'SIGTERM'); } catch { /* already stopped */ }
+      if (!(await terminateState(state))) {
+        await rm(resolve(stateRoot, `${state.name}.json`), { force: true });
+        fail(`preview process identity changed before stop: ${state.name}`);
+      }
       await rm(resolve(stateRoot, `${state.name}.json`), { force: true });
       if (parsed.options.json) process.stdout.write(`${JSON.stringify({ stopped: true, name: state.name, port: state.port })}\n`);
       else process.stdout.write(`Stopped ${state.name} (${state.port}).\n`);
@@ -237,4 +283,5 @@ async function main() {
   usage(1);
 }
 
-await main();
+const invokedPath = process.argv[1] ? resolve(process.argv[1]) : '';
+if (invokedPath === fileURLToPath(import.meta.url)) await main();

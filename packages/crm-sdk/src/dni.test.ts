@@ -42,12 +42,15 @@ describe('dniNameMatches', () => {
   it('matches SUSII order (PATERNO MATERNO NOMBRES)', () => {
     expect(dniNameMatches('PINON SARRIA NIKOLAS SEBASTIAN', person())).toBe(true);
   });
-  it('matches short party name that is a subset of the registry name', () => {
-    expect(dniNameMatches('Nikolas Pinon', person())).toBe(true);
+  it('rejects partial-name subsets that do not establish surname identity', () => {
+    expect(dniNameMatches('Nikolas Pinon', person())).toBe(false);
     expect(dniNameMatches('Carla', person({
       nombres: 'CARLA CRISTINA', apellido_paterno: 'SARRIA', apellido_materno: 'COLLANTES',
       nombre_completo: 'CARLA CRISTINA SARRIA COLLANTES',
-    }))).toBe(true);
+    }))).toBe(false);
+  });
+  it('allows extra aliases only when the first given name and all surnames match', () => {
+    expect(dniNameMatches('PINON SARRIA NIKOLAS TATO', person())).toBe(true);
   });
   it('rejects a different person', () => {
     expect(dniNameMatches('MAZA LUCAS ROXANA ROCIO', person())).toBe(false);

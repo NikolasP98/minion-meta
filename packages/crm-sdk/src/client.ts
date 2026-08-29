@@ -23,6 +23,8 @@ export interface CrmClientOptions {
 export interface LeadInput {
   name: string;
   email: string;
+  /** Stable caller-owned submission key. Required when retries must be idempotent. */
+  idempotencyKey?: string;
   company?: string;
   message?: string;
   source?: string;
@@ -65,31 +67,31 @@ export function createCrmClient(opts: CrmClientOptions) {
 
   return {
     /**
-     * Register-or-update a person party from a public form submission.
-     * Keyed on email (case-insensitive); merges form data into metadata.lead.
+     * Register a person party from a public form submission. Email is a contact
+     * channel, not person identity, so unrelated people sharing an address are
+     * never merged. A caller-provided idempotency key deduplicates delivery
+     * retries under a transaction-scoped advisory lock.
      */
     async upsertLead(input: LeadInput): Promise<{ partyId: string; created: boolean }> {
       const email = input.email.trim().toLowerCase();
       const name = input.name.trim();
+      const idempotencyKey = input.idempotencyKey?.trim() || null;
       const lead = {
+        idempotency_key: idempotencyKey,
         company: input.company?.trim() || null,
         message: input.message?.trim() || null,
         source: input.source ?? 'minion_site',
         submitted_at: new Date().toISOString(),
       };
       return withOrg(async (tx) => {
-        const [existing] = await tx<{ id: string }[]>`
-          select id from parties
-          where org_id = ${orgId} and type = 'person' and lower(email) = ${email}
-          order by created_at asc limit 1`;
-        if (existing) {
-          await tx`
-            update parties set
-              name = coalesce(nullif(name, ''), ${name}),
-              metadata = metadata || jsonb_build_object('lead', ${tx.json(lead)}::jsonb),
-              updated_at = now()
-            where id = ${existing.id}`;
-          return { partyId: existing.id, created: false };
+        if (idempotencyKey) {
+          await tx`select pg_advisory_xact_lock(hashtextextended(${`${orgId}:lead:${idempotencyKey}`}, 0))`;
+          const [existing] = await tx<{ id: string }[]>`
+            select id from parties
+            where org_id = ${orgId} and type = 'person'
+              and metadata->'lead'->>'idempotency_key' = ${idempotencyKey}
+            order by created_at asc limit 1`;
+          if (existing) return { partyId: existing.id, created: false };
         }
         const rows = await tx<{ id: string }[]>`
           insert into parties (org_id, type, name, email, metadata)
@@ -218,6 +220,8 @@ export function createCrmClient(opts: CrmClientOptions) {
      * contact(s). Sex stays canonical M/F in the DB; the UI localizes it.
      */
     async enrichParty(partyId: string, person: PerudevsPerson): Promise<void> {
+      const registryDni = person.id.trim();
+      if (!isDni8(registryDni)) throw new Error('registry person has no valid 8-digit DNI authority');
       const name = formatRegistryName(person);
       const registry = {
         nombres: person.nombres,
@@ -229,12 +233,19 @@ export function createCrmClient(opts: CrmClientOptions) {
         captured_at: new Date().toISOString(),
       };
       await withOrg(async (tx) => {
-        await tx`
+        const updated = await tx<{ id: string }[]>`
           update parties set
             name = coalesce(${name}, name),
             metadata = metadata || jsonb_build_object('dni_registry', ${tx.json(registry)}::jsonb),
             updated_at = now()
-          where id = ${partyId}`;
+          where id = ${partyId}
+            and doc_number = ${registryDni}
+            and dni_verified = true
+            and metadata->'dni_registry'->>'status' = 'enriching'
+          returning id`;
+        if (updated.length === 0) {
+          throw new Error('party identity or enrichment claim changed before registry write');
+        }
         await tx`
           update crm_contacts set display_name = coalesce(${name}, display_name), updated_at = now()
           where party_id = ${partyId} and org_id = ${orgId} and deleted_at is null`;

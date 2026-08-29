@@ -15,6 +15,22 @@ assert.deepEqual(validatePolicy(policy), []);
 assert.deepEqual(policy.repositories.map((row) => row.id).sort(), ['minion-meta', 'minion', 'minion_hub', 'minion_site', 'minion_plugins', 'paperclip', 'pixel-agents', 'minion-factory', 'minion-base'].sort());
 
 function clone(value) { return structuredClone(value); }
+function governedTable(text, name) {
+  const lines = text.split('\n');
+  const start = lines.findIndex((line) => line.trim() === `<!-- repo-policy:${name} -->`);
+  const end = lines.findIndex((line, index) => index > start && line.trim() === `<!-- /repo-policy:${name} -->`);
+  assert.notEqual(start, -1, `missing governed ${name} block`);
+  assert.notEqual(end, -1, `unterminated governed ${name} block`);
+  const rows = lines.slice(start + 1, end)
+    .map((line) => line.trim())
+    .filter((line) => line.startsWith('|'))
+    .map((line) => line.replace(/^\|/, '').replace(/\|$/, '').split('|').map((value) => value.trim()));
+  assert(rows.length >= 2, `${name} block is not a table`);
+  assert(rows[1].every((value) => /^:?-{3,}:?$/.test(value)), `${name} table has no separator row`);
+  const clean = (value) => value.replace(/^`|`$/g, '').trim();
+  const header = rows[0].map(clean);
+  return rows.slice(2).map((values) => Object.fromEntries(header.map((key, index) => [key, clean(values[index] ?? '')])));
+}
 function errorFor(mutator, options) {
   const candidate = clone(policy);
   mutator(candidate);
@@ -178,7 +194,9 @@ if (process.argv.includes('--parity')) {
   // Exact projection assertions, independent of the checker's own comparison logic.
   const registry = JSON.parse(readFileSync(new URL('../minion.json', import.meta.url), 'utf8'));
   assert.deepEqual(Object.keys(registry.subprojects).sort(), ['hub', 'minion', 'paperclip', 'pixel-agents', 'plugins', 'site']);
-  const tick = '`';
+  const projectRows = new Map(governedTable(agents, 'project-map').map((row) => [row['Repo id'], row]));
+  const commandRows = new Map(governedTable(agents, 'commands').map((row) => [row['Repo id'], row]));
+  const commandColumns = { install: 'Install', dev: 'Dev', build: 'Build', test: 'Test', check: 'Check', typecheck: 'Typecheck' };
   for (const { cliId, row } of cliRows(policy)) {
     const entry = registry.subprojects[cliId];
     assert.equal(entry.path, row.checkout, `minion.json ${cliId}.path`);
@@ -186,13 +204,19 @@ if (process.argv.includes('--parity')) {
     // Exact for every row, 'none' included — the CLI must never invent a package manager.
     assert.equal(entry.packageManager, row.packageManager, `minion.json ${cliId}.packageManager`);
     assert.equal(entry.remote.replace(/^git@[^:]+:/, '').replace(/^https?:\/\/[^/]+\//, '').replace(/\.git$/, ''), row.remote, `minion.json ${cliId}.remote`);
-    assert.ok(
-      agents.includes(`| ${tick}${row.id}${tick} | ${tick}${cliId}${tick} | ${tick}${row.checkout}/${tick} |`),
-      `AGENTS.md project-map is missing the row for ${row.id}`
-    );
+    assert.deepEqual(projectRows.get(row.id), {
+      'Repo id': row.id,
+      'CLI id': cliId,
+      Directory: `${row.checkout}/`,
+      'Package manager': row.packageManager,
+      'Development branch': row.branches.development,
+      'PR base': row.prBase,
+    });
+    const commandProjection = commandRows.get(row.id);
+    assert(commandProjection, `AGENTS.md commands table is missing ${row.id}`);
     for (const [key, command] of Object.entries(row.commands)) {
       assert.equal(entry.commands[key], command ?? undefined, `minion.json ${cliId}.commands.${key}`);
-      if (command !== null) assert.ok(agents.includes(`${tick}${command}${tick}`), `AGENTS.md commands block is missing ${command}`);
+      assert.equal(commandProjection[commandColumns[key]], command ?? '—', `AGENTS.md commands ${row.id}.${key}`);
     }
   }
   const generated = JSON.parse(generatedText);

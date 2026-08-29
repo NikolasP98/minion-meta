@@ -26,7 +26,7 @@ services:
 
   paperclip:
     build:
-      context: ./paperclip-minion
+      context: ../paperclip-minion
       args:
         INCLUDE_UI: "0"
     environment:
@@ -44,7 +44,7 @@ services:
 
   hub:
     build:
-      context: ./minion_hub
+      context: ../minion_hub
     environment:
       # Hub uses libsql with a local SQLite file — no Turso token needed for dev
       TURSO_DB_URL: file:/app/data/minion_hub.db
@@ -64,7 +64,7 @@ services:
 
   gateway:
     build:
-      context: ./minion
+      context: ../minion
     environment:
       OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN}
       PORT: "8080"
