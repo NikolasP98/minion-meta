@@ -20,6 +20,7 @@ export const P_STATUSES = [
 
 const proposals = [];
 const errors = [];
+const fmById = new Map();
 
 // The topic taxonomy is itself a gated input, same posture as spec-index.mjs:
 // an invalid specs/topics.json fails this build with its own message, and tag
@@ -47,6 +48,19 @@ for (const name of readdirSync('proposals')
 	const { fm } = parsed;
 	for (const key of ['id', 'title', 'status', 'created']) {
 		if (!fm[key]) errors.push(`${name}: missing required field "${key}"`);
+	}
+	// id is the stable join key (proposals/TEMPLATE.md: "id equals the
+	// filename sans .md") — the sidecar join below looks reviews up by
+	// filename base and publishes the unrelated fm.id beside them, so an
+	// id that doesn't match its filename (or collides with another
+	// proposal's id) would transfer one proposal's review evidence onto a
+	// different published identity. Mirrors spec-index.mjs.
+	const idFromFilename = name.slice(0, -3);
+	if (fm.id && fm.id !== idFromFilename)
+		errors.push(`${name}: "id" ("${fm.id}") must match filename ("${idFromFilename}")`);
+	if (fm.id) {
+		if (fmById.has(fm.id)) errors.push(`${name}: duplicate id "${fm.id}" (already used by another proposal)`);
+		else fmById.set(fm.id, fm);
 	}
 	if (fm.status && !P_STATUSES.includes(fm.status)) errors.push(`${name}: invalid status "${fm.status}"`);
 	// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).

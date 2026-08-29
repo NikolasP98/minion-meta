@@ -7,7 +7,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { cpSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
@@ -146,12 +146,25 @@ test('H1: a reviewer veto (changes_requested/rejected/revision-required) can nev
 		assert.equal(review.gate, 'block', verdict);
 		assert.equal(review.chip, 'red', verdict);
 	}
-	// 'pending' and 'approved' are not vetoes — the axis-derived band stands.
-	for (const verdict of ['pending', 'approved']) {
-		const src = VALID.replace('verdict: approved', `verdict: ${verdict}`);
+	// 'approved' is not a veto — the axis-derived band stands.
+	{
+		const src = VALID.replace('verdict: approved', 'verdict: approved');
 		const { review } = parseReviewSidecar('specs/a-spec.review.md', src, SUBJECT);
-		assert.equal(review.gate, 'pass', verdict);
+		assert.equal(review.gate, 'pass');
 	}
+});
+
+test('M1: a `pending` review earns no effective gate/chip, however high its axes score', () => {
+	const src = VALID.replace('verdict: approved', 'verdict: pending');
+	const { errors, review } = parseReviewSidecar('specs/a-spec.review.md', src, SUBJECT);
+	assert.deepEqual(errors, []);
+	// The full G2 rubric here averages 8.8 — pass/green if it were honored —
+	// but 'pending' means no decision has been made, so nothing is published.
+	assert.equal('score' in review, false);
+	assert.equal('gate' in review, false);
+	assert.equal('chip' in review, false);
+	assert.equal('axes' in review, false);
+	assert.equal(review.verdict, 'pending');
 });
 
 test('H1: a declared gate/chip contradicting the vetoed band fails the build', () => {
@@ -292,6 +305,25 @@ test('created must be a calendar-valid ISO date', () => {
 		SUBJECT
 	);
 	assert.match(errors.join('\n'), /"created" is not a valid ISO calendar date/);
+});
+
+// L1: the required-field loop checks presence (`undefined`/`null`/`''`), but
+// the enum/date validators below it were guarded by truthiness — a numeric
+// zero is present (so the required check passes it) yet falsy (so the
+// truthy-guarded validator never ran). A complete, high-scoring rubric could
+// therefore publish green evidence with an invalid verdict or review date.
+test('L1: verdict:0 is present but invalid, not silently skipped', () => {
+	const src = VALID.replace('verdict: approved', 'verdict: 0');
+	const { errors, review } = parseReviewSidecar('specs/a-spec.review.md', src, SUBJECT);
+	assert.match(errors.join('\n'), /invalid verdict "0"/);
+	assert.equal(review, null);
+});
+
+test('L1: created:0 is present but invalid, not silently skipped', () => {
+	const src = VALID.replace('created: 2026-08-28', 'created: 0');
+	const { errors, review } = parseReviewSidecar('specs/a-spec.review.md', src, SUBJECT);
+	assert.match(errors.join('\n'), /"created" is not a valid ISO calendar date/);
+	assert.equal(review, null);
 });
 
 // §4 fixes the colour boundaries; a consumer that re-derives them from prose is
@@ -507,6 +539,25 @@ test('M1: spec-index fails closed on a sidecar whose pass does not match the spe
 	}
 });
 
+test('M1 integration: spec-index publishes no gate for a high-scoring pending review', () => {
+	const root = scratchRepo();
+	try {
+		writeFileSync(join(root, 'specs', 'a-spec.md'), SPEC);
+		// The full G2 rubric, score 8.8 — pass/green if verdict were honored.
+		writeFileSync(join(root, 'specs', 'a-spec.review.md'), VALID.replace('verdict: approved', 'verdict: pending'));
+		const result = spawnSync('node', ['scripts/spec-index.mjs'], { cwd: root, encoding: 'utf8' });
+		assert.equal(result.status, 0, result.stderr);
+		const index = JSON.parse(readFileSync(join(root, 'specs', 'index.json'), 'utf8'));
+		const review = index.specs[0].review;
+		assert.equal(review.verdict, 'pending');
+		assert.equal('score' in review, false);
+		assert.equal('gate' in review, false);
+		assert.equal('chip' in review, false);
+	} finally {
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
 test('integration: an invalid sidecar fails spec-index in write mode, not just --check', () => {
 	const root = scratchRepo();
 	try {
@@ -590,6 +641,58 @@ test('M1 integration: proposal-index publishes gate:pass at G1 score 6 and gate:
 		} finally {
 			rmSync(root, { recursive: true, force: true });
 		}
+	}
+});
+
+// M2: the sidecar join looks reviews up by filename base, then publishes the
+// unrelated frontmatter `id` beside them. Without this check a mismatched
+// filename/id pair transfers one proposal's review evidence onto a different
+// published identity.
+test('M2 integration: a proposal id that does not match its filename fails closed', () => {
+	const root = scratchRepo();
+	try {
+		writeFileSync(
+			join(root, 'proposals', 'filename-id.md'),
+			`---\nid: declared-id\ntitle: A proposal\nstatus: draft\ncreated: 2026-08-28\nrepos: [minion-meta]\n---\n\n# A proposal\n`
+		);
+		writeFileSync(
+			join(root, 'proposals', 'filename-id.review.md'),
+			sidecar(
+				[
+					'proposal: filename-id',
+					'pass: 1',
+					'verdict: approved',
+					'reviewer: proposal-gate-agent',
+					'created: 2026-08-28',
+					'score_problem_clarity: 10',
+					'score_value: 10',
+					'score_dod_verifiability: 10',
+					'score_scope_containment: 10',
+					'score_dedupe: 10'
+				].join('\n')
+			)
+		);
+		const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+		assert.equal(result.status, 1);
+		assert.match(result.stderr, /"id" \("declared-id"\) must match filename \("filename-id"\)/);
+		assert.equal(existsSync(join(root, 'proposals', 'index.json')), false);
+	} finally {
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test('M2 integration: duplicate proposal ids across two files are rejected', () => {
+	const root = scratchRepo();
+	try {
+		const body = (id) =>
+			`---\nid: ${id}\ntitle: A proposal\nstatus: draft\ncreated: 2026-08-28\nrepos: [minion-meta]\n---\n\n# A proposal\n`;
+		writeFileSync(join(root, 'proposals', 'dup-a.md'), body('dup'));
+		writeFileSync(join(root, 'proposals', 'dup-b.md'), body('dup').replace('dup-a', 'dup-b'));
+		const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+		assert.equal(result.status, 1);
+		assert.match(result.stderr, /duplicate id "dup"/);
+	} finally {
+		rmSync(root, { recursive: true, force: true });
 	}
 });
 

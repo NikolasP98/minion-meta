@@ -138,7 +138,11 @@ export const CHIP_BANDS = [
 // `changes_requested` while the axes happen to average >= 7 — and when they
 // do, the veto wins: a human (or the next pass) said "not yet", and a
 // numeric mean must never overrule that into a green chip. `pending` is not
-// listed: it means "no decision yet", not "rejected", so it does not veto.
+// listed: it means "no decision yet", not "rejected", so it does not veto —
+// but it also must never EARN a passing band on its own. A `pending` review
+// has made no decision, so even a complete, high-scoring rubric publishes no
+// score/gate/chip at all (same shape as an unscored sidecar) rather than
+// letting the axis mean stand in for a decision nobody made yet.
 export const VETO_VERDICTS = ['changes_requested', 'rejected', 'revision-required'];
 const VETO_BAND = { gate: 'block', chip: 'red' };
 
@@ -303,11 +307,15 @@ export function parseReviewSidecar(label, src, { subjectKey, subjectId, currentP
 		errors.push(
 			`${label}: "pass" (${fm.pass}) does not match ${subjectKey} "${subjectId}"'s current pass (${currentPass}) — this sidecar reviewed an older revision; update or remove it`
 		);
-	if (fm.verdict && !VERDICTS.includes(fm.verdict))
+	// Presence, not truthiness — a falsy-but-present value (`verdict: 0`,
+	// `created: 0`) must still hit these validators, or a numeric zero
+	// silently skips the enum/date check while satisfying the required-field
+	// presence loop above.
+	if (fm.verdict !== undefined && !VERDICTS.includes(fm.verdict))
 		errors.push(`${label}: invalid verdict "${fm.verdict}" (allowed: ${VERDICTS.join(', ')})`);
 	if (fm.reviewer !== undefined && typeof fm.reviewer !== 'string')
 		errors.push(`${label}: "reviewer" must be a string, got ${typeof fm.reviewer}`);
-	if (fm.created && !isValidISODate(fm.created))
+	if (fm.created !== undefined && !isValidISODate(fm.created))
 		errors.push(`${label}: "created" is not a valid ISO calendar date (YYYY-MM-DD): "${fm.created}"`);
 	// §4's `reviewed_commit`: the revision the scorer actually read. Nothing
 	// emits it yet, so only its shape is pinned — an id that is not a git object
@@ -361,7 +369,11 @@ export function parseReviewSidecar(label, src, { subjectKey, subjectId, currentP
 	// earned. A subject with no declared rubric (there is none today) has no
 	// axis set and no threshold, so it publishes nothing either.
 	const rubricComplete = Boolean(rubric) && rubric.required.every((name) => name in axes);
-	const score = rubricComplete ? computeScore(axes) : null;
+	const rawScore = rubricComplete ? computeScore(axes) : null;
+	// A `pending` review has made no decision yet — its axis mean is not
+	// published as an effective score/gate/chip, however high it is. See the
+	// VETO_VERDICTS comment above.
+	const score = fm.verdict === 'pending' ? null : rawScore;
 	// `gate` from this gate's threshold, `chip` from §4's universal colour
 	// scale — a score-6 G1 proposal is `pass` and amber at the same time.
 	let band = score === null ? null : { gate: gateFor(score, subjectKey), chip: chipFor(score) };
