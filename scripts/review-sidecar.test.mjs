@@ -20,6 +20,7 @@ import {
 	chipFor,
 	computeScore,
 	gateFor,
+	nullScoreReason,
 	parseReviewSidecar,
 	readReviewSidecars,
 	resolveAxis
@@ -713,4 +714,150 @@ test('integration: a proposal sidecar keyed "spec" instead of "proposal" fails c
 	} finally {
 		rmSync(root, { recursive: true, force: true });
 	}
+});
+
+// ---- M1: the proposal gate is a REPOSITORY boundary, not just a CLI ----
+//
+// Write mode rewrites whatever it finds and exits 0, so running it in CI proves
+// nothing: a PR that adds an invalid G1 sidecar, or edits a proposal without
+// regenerating proposals/index.json, still merged green because no CI step ever
+// read `proposals/*.review.md`. These drive `--check`, the step meta CI runs.
+
+// The full G1 rubric at a passing score, for a proposal named `a-proposal`.
+const VALID_PROPOSAL_SIDECAR = sidecar(
+	[
+		...PROPOSAL_BASE_FIELDS,
+		'score_problem_clarity: 8',
+		'score_value: 8',
+		'score_dod_verifiability: 8',
+		'score_scope_containment: 8',
+		'score_dedupe: 8'
+	].join('\n')
+);
+
+// A scratch repo holding one proposal (+ optional sidecar) with a freshly
+// generated, therefore up-to-date, proposals/index.json.
+function proposalRepo(sidecarSrc) {
+	const root = scratchRepo();
+	writeFileSync(join(root, 'proposals', 'a-proposal.md'), PROPOSAL);
+	if (sidecarSrc) writeFileSync(join(root, 'proposals', 'a-proposal.review.md'), sidecarSrc);
+	const generated = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+	assert.equal(generated.status, 0, generated.stderr);
+	return root;
+}
+
+const checkProposals = (root) =>
+	spawnSync('node', ['scripts/proposal-index.mjs', '--check'], { cwd: root, encoding: 'utf8' });
+
+test('M1: proposal-index --check passes on a valid, freshly generated corpus', () => {
+	const root = proposalRepo(VALID_PROPOSAL_SIDECAR);
+	try {
+		const result = checkProposals(root);
+		assert.equal(result.status, 0, result.stderr);
+		assert.match(result.stdout, /proposal-index --check passed: 1 proposals/);
+	} finally {
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test('M1: proposal-index --check fails on a stale committed proposals/index.json', () => {
+	const root = proposalRepo(VALID_PROPOSAL_SIDECAR);
+	try {
+		const before = readFileSync(join(root, 'proposals', 'index.json'), 'utf8');
+		// Exactly the PR that forgets to regenerate: the artifact changes, the
+		// committed projection does not.
+		writeFileSync(join(root, 'proposals', 'a-proposal.md'), PROPOSAL.replace('title: A proposal', 'title: Renamed'));
+		const result = checkProposals(root);
+		assert.equal(result.status, 1);
+		assert.match(result.stderr, /proposals\/index\.json is stale/);
+		// Read-only: --check must never "fix" the staleness it is reporting.
+		assert.equal(readFileSync(join(root, 'proposals', 'index.json'), 'utf8'), before);
+	} finally {
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test('M1: proposal-index --check fails on an invalid G1 sidecar without touching the index', () => {
+	const root = proposalRepo(VALID_PROPOSAL_SIDECAR);
+	try {
+		const before = readFileSync(join(root, 'proposals', 'index.json'), 'utf8');
+		writeFileSync(
+			join(root, 'proposals', 'a-proposal.review.md'),
+			VALID_PROPOSAL_SIDECAR.replace('score_dedupe: 8', 'score_dedupe: 42')
+		);
+		const result = checkProposals(root);
+		assert.equal(result.status, 1);
+		assert.match(result.stderr, /"score_dedupe" must be an integer 0-10/);
+		assert.equal(readFileSync(join(root, 'proposals', 'index.json'), 'utf8'), before);
+	} finally {
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test('M1: an orphan G1 sidecar fails --check even though the index itself is fresh', () => {
+	const root = proposalRepo(null);
+	try {
+		// A sidecar for a proposal that does not exist changes nothing in the
+		// projection, so only the validator can catch it — which is the whole
+		// reason --check must run the validation, not just the byte comparison.
+		writeFileSync(
+			join(root, 'proposals', 'ghost.review.md'),
+			VALID_PROPOSAL_SIDECAR.replace('proposal: a-proposal', 'proposal: ghost')
+		);
+		const result = checkProposals(root);
+		assert.equal(result.status, 1);
+		assert.match(result.stderr, /no proposal "ghost" exists/);
+	} finally {
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test('M1: meta CI and the root ci script both run the proposal gate', () => {
+	// The finding this fixture exists for was "the validator has no call site in
+	// CI" — so assert the call sites, not just the flag.
+	const workflow = readFileSync(join(REPO, '.github', 'workflows', 'ci.yml'), 'utf8');
+	assert.match(workflow, /node scripts\/proposal-index\.mjs --check/);
+	const pkg = JSON.parse(readFileSync(join(REPO, 'package.json'), 'utf8'));
+	assert.match(pkg.scripts['index:check'], /proposal-index\.mjs --check/);
+	assert.match(pkg.scripts.ci, /index:check/);
+});
+
+// ---- L1: a null score has three causes; the diagnostic must name the right one ----
+
+test('L1: a pending sidecar declaring a derived field is told pending suppressed it', () => {
+	const src = VALID.replace('verdict: approved', 'verdict: pending').replace(
+		'score_slice_size: 8',
+		'score: 8.8\nscore_slice_size: 8'
+	);
+	const { errors, review } = parseReviewSidecar('specs/a-spec.review.md', src, SUBJECT);
+	assert.equal(review, null);
+	assert.match(errors.join('\n'), /"pending" review publishes no score, gate or chip/);
+	// The old message blamed a missing axis, sending the author to look for one
+	// the sidecar already scored.
+	assert.doesNotMatch(errors.join('\n'), /no score_\* axis is/);
+});
+
+test('L1: an incomplete rubric names the axes it is still missing', () => {
+	const { errors } = parseReviewSidecar(
+		'specs/a-spec.review.md',
+		withFields('score: 9', 'score_slice_size: 9', 'score_dod_verifiability: 9'),
+		SUBJECT
+	);
+	assert.match(errors.join('\n'), /G2 rubric is incomplete/);
+	assert.match(errors.join('\n'), /score_scope_containment/);
+	assert.match(errors.join('\n'), /score_testability/);
+});
+
+test('L1: an entirely unscored sidecar is told the whole rubric is what derives a score', () => {
+	const { errors } = parseReviewSidecar('proposals/a-proposal.review.md', withProposalFields('gate: pass'), PROPOSAL_SUBJECT);
+	assert.match(errors.join('\n'), /no score_\* axis is — a score derives from the complete G1 rubric/);
+});
+
+test('L1: nullScoreReason is a pure function of the three suppression rules', () => {
+	assert.match(nullScoreReason({ verdict: 'pending' }, RUBRICS.spec, {}, 'spec'), /"pending" review/);
+	assert.match(nullScoreReason({ verdict: 'approved' }, undefined, {}, 'audit'), /no rubric is declared for a "audit" sidecar/);
+	assert.match(
+		nullScoreReason({ verdict: 'approved' }, RUBRICS.proposal, { problem_clarity: 8 }, 'proposal'),
+		/G1 rubric is incomplete — a score needs every axis, still missing score_value, score_dod_verifiability, score_scope_containment, score_dedupe/
+	);
 });

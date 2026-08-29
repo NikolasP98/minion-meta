@@ -263,6 +263,21 @@ function asNumber(value) {
 	return null;
 }
 
+// Why a sidecar publishes no effective score/gate/chip, in the producer's own
+// terms. Diagnostics only — the suppression rules themselves live in
+// parseReviewSidecar. Three different rules produce a null score and a producer
+// following specs/TEMPLATE.md can hit any of them, so naming the wrong one sends
+// the author hunting for an axis they already wrote (the `pending` case).
+export function nullScoreReason(fm, rubric, axes, subjectKey) {
+	if (fm.verdict === 'pending')
+		return 'a "pending" review publishes no score, gate or chip however complete its rubric is — decide a verdict, or drop the declared field';
+	if (!rubric) return `no rubric is declared for a "${subjectKey}" sidecar, so nothing derives a score`;
+	const missing = rubric.required.filter((name) => !(name in axes));
+	if (missing.length === rubric.required.length)
+		return `no score_* axis is — a score derives from the complete ${rubric.gate} rubric (${rubric.required.join(', ')})`;
+	return `the ${rubric.gate} rubric is incomplete — a score needs every axis, still missing score_${missing.join(', score_')}`;
+}
+
 /**
  * Validate one sidecar's frontmatter.
  *
@@ -388,9 +403,8 @@ export function parseReviewSidecar(label, src, { subjectKey, subjectId, currentP
 	]) {
 		if (fm[key] === undefined || fm[key] === '') continue;
 		if (derived === null) {
-			errors.push(
-				`${label}: "${key}" is declared but no score_* axis is — a score needs the complete rubric's axes to derive from`
-			);
+			// Name the rule that actually suppressed it — see nullScoreReason.
+			errors.push(`${label}: "${key}" is declared but ${nullScoreReason(fm, rubric, axes, subjectKey)}`);
 			continue;
 		}
 		const declared = key === 'score' ? asNumber(fm[key]) : fm[key];

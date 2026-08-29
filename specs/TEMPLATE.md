@@ -76,9 +76,13 @@ partial rubric is incomplete evidence, not a lower score, so it publishes no chi
 (§3): **G2** `pass` ≥ 7 / `warn` 5–6.9 / `block` < 5, **G1** `pass` ≥ 6 / `block` < 6 (the
 "threshold 6 to enable spec-it" rule — no warn band). The two are independent: a G1 score of 6
 is `gate: pass` with an amber chip. A vetoing `verdict` (`changes_requested`, `rejected`,
-`revision-required`) forces `block`/red however high the axes average. A sidecar may still
-write these three fields, in which case they are cross-checked and a mismatch fails the build.
-A sidecar with no `score_*` axis is valid and simply publishes no chip.
+`revision-required`) forces `block`/red however high the axes average. A `verdict: pending`
+sidecar has made no decision yet, so it publishes **no `score`, `gate`, `chip` or `axes` at
+all** — a complete, high-scoring rubric does not change that, and such a sidecar must not
+declare the three derived fields (doing so fails the build, naming `pending` as the reason).
+A sidecar with a decided verdict may still write these three fields, in which case they are
+cross-checked and a mismatch fails the build. A sidecar with no `score_*` axis, or with only
+part of its gate's rubric, is valid and simply publishes no chip.
 
 Every `*.review.md` file under `specs/` and `proposals/` must be a sidecar for an existing
 artifact — an orphan fails the gate rather than being skipped. Multi-spec audit memos that

@@ -34,6 +34,10 @@ colour scale (green ≥ 7 / amber 5–6.9 / red < 5) while `gate` now uses the t
 that actually scored the artifact (`RUBRICS.<subject>.bands` — G2 `pass` ≥ 7, G1 `pass` ≥ 6 per
 §3's "threshold 6 to enable spec-it"), so the G1 producer in item 2 below lands against the
 eligibility boundary the spec specifies rather than G2's.
+A third round gave `proposal-index.mjs` a read-only `--check` mode and wired it into meta CI
+(`.github/workflows/ci.yml`, `pnpm run index:check`): before that, the only reader of
+`proposals/*.review.md` was the write-mode generator, which no CI step ran, so an invalid G1
+sidecar or a stale `proposals/index.json` could merge with a green `verify`.
 That fix is what turned item 1 below from "untraceable but green" into "no chip published
 until the axes/commit exist" — the consumer is safe now; the producers still need to catch up.
 

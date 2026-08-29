@@ -10,7 +10,9 @@ repos: [minion-meta]
 # Proposal Template
 
 Copy to `proposals/YYYY-MM-DD-<slug>.md`. Proposals are the output of request-agent
-conversations (or written by hand). Run `node scripts/proposal-index.mjs` after edits.
+conversations (or written by hand). Run `node scripts/proposal-index.mjs` after edits — meta CI
+runs `node scripts/proposal-index.mjs --check`, which re-derives the index (including every
+`*.review.md` sidecar) read-only and fails if the committed `proposals/index.json` is stale.
 
 ## Frontmatter
 
