@@ -32,9 +32,15 @@
 //   score_impact_zones: 10
 //   ---
 //
-// DERIVED, NOT DECLARED. `score`, `gate` and `chip` are computed from the axes
-// by ONE threshold table (GATE_BANDS) so no producer and no consumer can drift
-// into its own cutoffs. A producer MAY still write them; when it does they are
+// DERIVED, NOT DECLARED. `score`, `gate` and `chip` are computed here so that
+// no producer and no consumer can drift into its own cutoffs. They are computed
+// from TWO tables, not one, because the spec grades two different things:
+// `chip` is §4's colour scale, which grades the NUMBER and is therefore the same
+// at every gate, while `gate` is the promote/block decision of the gate that
+// actually scored the artifact — §3 gives G2 `pass >= 7 / warn 5-6.9 / block < 5`
+// but G1 a single "threshold 6 to enable spec-it". One shared table cannot
+// express both, and collapsing them published an eligible score-6 proposal as
+// `gate: warn`. A producer MAY still write these fields; when it does they are
 // checked against the computed values and a mismatch fails the build, which is
 // how a rubric change in minion-factory surfaces here instead of silently
 // publishing two different numbers for the same review.
@@ -115,13 +121,14 @@ export const SCORE_AXES = [
 	{ name: 'dedupe', aliases: [], weight: 1, description: 'dedupe check ran, candidates listed' }
 ];
 
-// §4: green >= 7, amber 5-6.9, red < 5. G2 names the same three bands
-// pass/warn/block. One ordered table, highest band first, so the two names can
-// never disagree about where a boundary sits.
-export const GATE_BANDS = [
-	{ min: 7, gate: 'pass', chip: 'green' },
-	{ min: 5, gate: 'warn', chip: 'amber' },
-	{ min: 0, gate: 'block', chip: 'red' }
+// §4's colour scale: "green >= 7, amber 5-6.9, red < 5". It grades the score
+// itself and says nothing about promotion, so it is universal — the same 6.4 is
+// amber on a proposal card and on a spec card, even though only one of them is
+// above its gate's threshold. Ordered highest band first.
+export const CHIP_BANDS = [
+	{ min: 7, chip: 'green' },
+	{ min: 5, chip: 'amber' },
+	{ min: 0, chip: 'red' }
 ];
 
 // A sidecar carries TWO independent judgements: the lifecycle `verdict`
@@ -142,14 +149,34 @@ const VETO_BAND = { gate: 'block', chip: 'red' };
 // derived once every required axis is present; an axis outside this set is a
 // cross-gate mistake (e.g. a proposal scored on G2's `slice_size`), not a
 // new dimension, so it fails the build rather than silently padding the mean.
+//
+// `bands` is that gate's OWN promote policy, because §3 gives the two gates
+// different thresholds: G2 is a three-band verdict, G1 is a single cutoff at 6
+// ("threshold 6 to enable 'spec it'; below, the button shows the missing axes")
+// with no warn state to override through. Deriving both from G2's table made a
+// complete, approved score-6 proposal — exactly the eligibility boundary — come
+// out as `gate: warn`, i.e. blocked-pending-override, and made the genuinely
+// below-threshold score-5 proposal indistinguishable from it.
 export const RUBRICS = {
 	spec: {
 		gate: 'G2',
-		required: ['slice_size', 'dod_verifiability', 'scope_containment', 'impact_zones', 'collisions', 'testability']
+		required: ['slice_size', 'dod_verifiability', 'scope_containment', 'impact_zones', 'collisions', 'testability'],
+		// §3 G2: "Verdict `pass >= 7 / warn 5-6 / block < 5`".
+		bands: [
+			{ min: 7, gate: 'pass' },
+			{ min: 5, gate: 'warn' },
+			{ min: 0, gate: 'block' }
+		]
 	},
 	proposal: {
 		gate: 'G1',
-		required: ['problem_clarity', 'value', 'dod_verifiability', 'scope_containment', 'dedupe']
+		required: ['problem_clarity', 'value', 'dod_verifiability', 'scope_containment', 'dedupe'],
+		// §3 G1: one threshold, no warn band — the "spec it" button is either
+		// enabled or it names the missing axes.
+		bands: [
+			{ min: 6, gate: 'pass' },
+			{ min: 0, gate: 'block' }
+		]
 	}
 };
 
@@ -204,10 +231,22 @@ export function computeScore(axes) {
 	return Math.round((weighted / total) * 10) / 10;
 }
 
-/** The band a score falls in: `{ gate, chip }`. */
-export function bandFor(score) {
-	const band = GATE_BANDS.find((b) => score >= b.min) ?? GATE_BANDS[GATE_BANDS.length - 1];
-	return { gate: band.gate, chip: band.chip };
+/** §4's chip colour for a score. Universal: the same number is the same colour at every gate. */
+export function chipFor(score) {
+	const band = CHIP_BANDS.find((b) => score >= b.min) ?? CHIP_BANDS[CHIP_BANDS.length - 1];
+	return band.chip;
+}
+
+/**
+ * The gate state a score earns under `subjectKey`'s own rubric (§3): `pass`,
+ * `warn` or `block`. Returns null for a subject with no declared rubric —
+ * there is no default threshold to fall back on, and inventing one is how a
+ * gate silently promotes on a policy nobody wrote down.
+ */
+export function gateFor(score, subjectKey) {
+	const bands = RUBRICS[subjectKey]?.bands;
+	if (!bands) return null;
+	return (bands.find((b) => score >= b.min) ?? bands[bands.length - 1]).gate;
 }
 
 // The flat-YAML parser only coerces /^\d+$/ to a number, so `score: 7.5` and
@@ -319,11 +358,13 @@ export function parseReviewSidecar(label, src, { subjectKey, subjectId, currentP
 	// A score is only derived once the rubric is COMPLETE — a subset (however
 	// high it averages) is incomplete evidence, not a lower score, so it
 	// publishes no gate at all rather than a gate the rubric never actually
-	// earned. A subject with no declared rubric (there is none today) falls
-	// back to "any axes at all", matching the pre-rubric behaviour.
-	const rubricComplete = rubric ? rubric.required.every((name) => name in axes) : Object.keys(axes).length > 0;
+	// earned. A subject with no declared rubric (there is none today) has no
+	// axis set and no threshold, so it publishes nothing either.
+	const rubricComplete = Boolean(rubric) && rubric.required.every((name) => name in axes);
 	const score = rubricComplete ? computeScore(axes) : null;
-	let band = score === null ? null : bandFor(score);
+	// `gate` from this gate's threshold, `chip` from §4's universal colour
+	// scale — a score-6 G1 proposal is `pass` and amber at the same time.
+	let band = score === null ? null : { gate: gateFor(score, subjectKey), chip: chipFor(score) };
 	// A reviewer veto overrides a passing numeric mean — see VETO_VERDICTS.
 	if (band && VETO_VERDICTS.includes(fm.verdict)) band = VETO_BAND;
 

@@ -11,14 +11,15 @@ import { cpSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writ
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
-	GATE_BANDS,
+	CHIP_BANDS,
 	REQUIRED_SIDECAR_FIELDS,
 	RUBRICS,
 	SCORE_AXES,
 	VETO_VERDICTS,
 	axisNames,
-	bandFor,
+	chipFor,
 	computeScore,
+	gateFor,
 	parseReviewSidecar,
 	readReviewSidecars,
 	resolveAxis
@@ -293,16 +294,90 @@ test('created must be a calendar-valid ISO date', () => {
 	assert.match(errors.join('\n'), /"created" is not a valid ISO calendar date/);
 });
 
-// §4 fixes the band boundaries; a consumer that re-derives them from prose is
+// §4 fixes the colour boundaries; a consumer that re-derives them from prose is
 // how green/amber/red drifts. These pin them at the edges.
-test('the band table matches §4 exactly at every boundary', () => {
-	assert.deepEqual(bandFor(10), { gate: 'pass', chip: 'green' });
-	assert.deepEqual(bandFor(7), { gate: 'pass', chip: 'green' });
-	assert.deepEqual(bandFor(6.9), { gate: 'warn', chip: 'amber' });
-	assert.deepEqual(bandFor(5), { gate: 'warn', chip: 'amber' });
-	assert.deepEqual(bandFor(4.9), { gate: 'block', chip: 'red' });
-	assert.deepEqual(bandFor(0), { gate: 'block', chip: 'red' });
-	assert.equal(GATE_BANDS.length, 3);
+test('the chip colour scale matches §4 exactly at every boundary, for every subject', () => {
+	assert.equal(chipFor(10), 'green');
+	assert.equal(chipFor(7), 'green');
+	assert.equal(chipFor(6.9), 'amber');
+	assert.equal(chipFor(5), 'amber');
+	assert.equal(chipFor(4.9), 'red');
+	assert.equal(chipFor(0), 'red');
+	assert.equal(CHIP_BANDS.length, 3);
+});
+
+// M1: the promote decision belongs to the gate that scored the artifact, not to
+// one shared table. G2 has three bands (§3 "pass >= 7 / warn 5-6 / block < 5");
+// G1 has a single cutoff at 6 ("threshold 6 to enable 'spec it'").
+test('M1: each gate bands the score with its own §3 threshold', () => {
+	assert.equal(gateFor(10, 'spec'), 'pass');
+	assert.equal(gateFor(7, 'spec'), 'pass');
+	assert.equal(gateFor(6.9, 'spec'), 'warn');
+	assert.equal(gateFor(5, 'spec'), 'warn');
+	assert.equal(gateFor(4.9, 'spec'), 'block');
+	assert.equal(gateFor(0, 'spec'), 'block');
+
+	assert.equal(gateFor(7, 'proposal'), 'pass');
+	assert.equal(gateFor(6, 'proposal'), 'pass'); // the eligibility boundary itself
+	assert.equal(gateFor(5.9, 'proposal'), 'block');
+	assert.equal(gateFor(5, 'proposal'), 'block'); // below threshold, and NOT the same state as 6
+	assert.equal(gateFor(0, 'proposal'), 'block');
+
+	// No rubric, no threshold to guess at.
+	assert.equal(gateFor(10, 'not_a_subject'), null);
+});
+
+test('M1: a score-6 G1 review is gate:pass with an amber chip — gate and colour are independent', () => {
+	const atThreshold = withProposalFields(
+		'score_problem_clarity: 6',
+		'score_value: 6',
+		'score_dod_verifiability: 6',
+		'score_scope_containment: 6',
+		'score_dedupe: 6'
+	);
+	const { errors, review } = parseReviewSidecar('proposals/a-proposal.review.md', atThreshold, PROPOSAL_SUBJECT);
+	assert.deepEqual(errors, []);
+	assert.equal(review.score, 6);
+	assert.equal(review.gate, 'pass');
+	assert.equal(review.chip, 'amber'); // §4 colours the number; §3 gates the promotion
+
+	// One axis lower is 5.8 — below G1's threshold, so blocked, yet still amber.
+	const belowThreshold = atThreshold.replace('score_dedupe: 6', 'score_dedupe: 5');
+	const below = parseReviewSidecar('proposals/a-proposal.review.md', belowThreshold, PROPOSAL_SUBJECT);
+	assert.deepEqual(below.errors, []);
+	assert.equal(below.review.score, 5.8);
+	assert.equal(below.review.gate, 'block');
+	assert.equal(below.review.chip, 'amber');
+});
+
+test('M1: a score-6 spec review stays warn — G1 threshold must not leak into G2', () => {
+	const { errors, review } = parseReviewSidecar(
+		'specs/a-spec.review.md',
+		withFields(
+			'score_slice_size: 6',
+			'score_dod_verifiability: 6',
+			'score_scope_containment: 6',
+			'score_impact_zones: 6',
+			'score_collisions: 6',
+			'score_testability: 6'
+		),
+		SUBJECT
+	);
+	assert.deepEqual(errors, []);
+	assert.equal(review.score, 6);
+	assert.equal(review.gate, 'warn');
+	assert.equal(review.chip, 'amber');
+});
+
+test('M1: every rubric declares bands that cover 0-10 and only use the gate vocabulary', () => {
+	for (const [subject, rubric] of Object.entries(RUBRICS)) {
+		assert.ok(rubric.bands.length > 0, `${subject} needs bands`);
+		assert.equal(rubric.bands.at(-1).min, 0, `${subject}'s last band must catch 0`);
+		for (const band of rubric.bands) assert.ok(['pass', 'warn', 'block'].includes(band.gate));
+		// Ordered highest-first, or `.find()` returns the wrong band.
+		const mins = rubric.bands.map((b) => b.min);
+		assert.deepEqual(mins, [...mins].sort((a, b) => b - a), `${subject}'s bands must be ordered highest-first`);
+	}
 });
 
 test('computeScore is the weighted mean, rounded to one decimal, and null when nothing is scored', () => {
@@ -478,6 +553,43 @@ test('integration: proposal-index publishes a G1 sidecar under the same field na
 		assert.equal(index.proposals[0].review.chip, 'red');
 	} finally {
 		rmSync(root, { recursive: true, force: true });
+	}
+});
+
+const PROPOSAL = `---\nid: a-proposal\ntitle: A proposal\nstatus: draft\ncreated: 2026-08-28\nrepos: [minion-meta]\n---\n\n# A proposal\n`;
+
+// M1 end to end: the board reads `review.gate` out of proposals/index.json, so
+// the G1 threshold has to survive the CLI, not just the helper.
+test('M1 integration: proposal-index publishes gate:pass at G1 score 6 and gate:block just below', () => {
+	for (const [dedupe, score, gate] of [
+		[6, 6, 'pass'],
+		[5, 5.8, 'block']
+	]) {
+		const root = scratchRepo();
+		try {
+			writeFileSync(join(root, 'proposals', 'a-proposal.md'), PROPOSAL);
+			writeFileSync(
+				join(root, 'proposals', 'a-proposal.review.md'),
+				sidecar(
+					[
+						...PROPOSAL_BASE_FIELDS,
+						'score_problem_clarity: 6',
+						'score_value: 6',
+						'score_dod_verifiability: 6',
+						'score_scope_containment: 6',
+						`score_dedupe: ${dedupe}`
+					].join('\n')
+				)
+			);
+			const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+			assert.equal(result.status, 0, result.stderr);
+			const index = JSON.parse(readFileSync(join(root, 'proposals', 'index.json'), 'utf8'));
+			assert.equal(index.proposals[0].review.score, score);
+			assert.equal(index.proposals[0].review.gate, gate);
+			assert.equal(index.proposals[0].review.chip, 'amber');
+		} finally {
+			rmSync(root, { recursive: true, force: true });
+		}
 	}
 });
 

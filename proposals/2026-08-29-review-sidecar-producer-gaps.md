@@ -29,7 +29,12 @@ vetoing lifecycle `verdict` (`changes_requested`/`rejected`/`revision-required`)
 `gate: block`/`chip: red` regardless of the axis mean; a score is only derived once a subject's
 **full** rubric (`RUBRICS.spec` / `RUBRICS.proposal`) is present, an axis outside that rubric fails
 the build, and a sidecar's `pass` must match its artifact's current `pass` or the build fails
-closed. That fix is what turned item 1 below from "untraceable but green" into "no chip published
+closed. A second round split the derived `gate` from the derived `chip`: `chip` keeps §4's universal
+colour scale (green ≥ 7 / amber 5–6.9 / red < 5) while `gate` now uses the threshold of the gate
+that actually scored the artifact (`RUBRICS.<subject>.bands` — G2 `pass` ≥ 7, G1 `pass` ≥ 6 per
+§3's "threshold 6 to enable spec-it"), so the G1 producer in item 2 below lands against the
+eligibility boundary the spec specifies rather than G2's.
+That fix is what turned item 1 below from "untraceable but green" into "no chip published
 until the axes/commit exist" — the consumer is safe now; the producers still need to catch up.
 
 ## AS-IS

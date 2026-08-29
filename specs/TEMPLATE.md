@@ -66,11 +66,18 @@ Same flat-YAML dialect as above — scalars only.
 | `reviewer` | yes | the agent or human that scored it, e.g. `factory-review` |
 | `created` | yes | ISO date of the review |
 | `reviewed_commit` | no | 7–40 char lowercase hex sha the scorer actually read |
-| `score_<axis>` | no | integer 0–10, one key per rubric axis. Axes: `slice_size` `dod_verifiability` `scope_containment` `impact_zones` `collisions` `testability` `problem_clarity` `value` `dedupe` (aliases `dod` `out_of_scope` `impact` `motivation`). An unlisted axis fails the gate — add it to `SCORE_AXES` in `scripts/review-sidecar.mjs` first |
+| `score_<axis>` | no | integer 0–10, one key per rubric axis. A sidecar scores its own gate's rubric and only that: **G2** (`specs/`) = `slice_size` `dod_verifiability` `scope_containment` `impact_zones` `collisions` `testability`; **G1** (`proposals/`) = `problem_clarity` `value` `dod_verifiability` `scope_containment` `dedupe` (aliases `dod` `out_of_scope` `impact` `motivation`). An axis from the other gate, or one that is not in the registry at all, fails the gate — add it to `SCORE_AXES` and to the subject's `RUBRICS` entry in `scripts/review-sidecar.mjs` first |
 
-`score`, `gate` and `chip` are **derived**, not authored: the weighted mean of the axes
-(one decimal), banded as `pass`/green ≥ 7, `warn`/amber 5–6.9, `block`/red < 5. A sidecar may
-still write them, in which case they are cross-checked and a mismatch fails the build.
+`score`, `gate` and `chip` are **derived**, not authored. `score` is the weighted mean of the
+axes (one decimal) and is derived only once the subject's **complete** rubric is scored — a
+partial rubric is incomplete evidence, not a lower score, so it publishes no chip at all.
+`chip` is §4's universal colour scale for that number: green ≥ 7, amber 5–6.9, red < 5.
+`gate` is the promote decision of the gate that scored it, so the two gates band differently
+(§3): **G2** `pass` ≥ 7 / `warn` 5–6.9 / `block` < 5, **G1** `pass` ≥ 6 / `block` < 6 (the
+"threshold 6 to enable spec-it" rule — no warn band). The two are independent: a G1 score of 6
+is `gate: pass` with an amber chip. A vetoing `verdict` (`changes_requested`, `rejected`,
+`revision-required`) forces `block`/red however high the axes average. A sidecar may still
+write these three fields, in which case they are cross-checked and a mismatch fails the build.
 A sidecar with no `score_*` axis is valid and simply publishes no chip.
 
 Every `*.review.md` file under `specs/` and `proposals/` must be a sidecar for an existing
