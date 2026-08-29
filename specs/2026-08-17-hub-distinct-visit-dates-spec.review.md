@@ -1,13 +1,15 @@
 ---
 spec: 2026-08-17-hub-distinct-visit-dates-spec
-pass: 3
-verdict: approved
+pass: 5
+verdict: pending
 reviewer: factory-review
 created: 2026-08-17
 updated: 2026-08-29
 ---
 
-# Pass 3 review — disposition: APPROVED (rewritten against verified hub reality)
+# Review record — disposition: STILL IN REVIEW (pass 5 awaiting re-review)
+
+## Pass 3 — approved (rewritten against verified hub reality)
 
 Passes 1–2 were written without a `minion_hub` checkout and reasoned from meta-repo migrations plus
 older CRM specs. This pass verified the code directly: hub `master` @ `1b47e8ce` (2026-08-28,
@@ -67,3 +69,39 @@ appointments). It stays read-time, so it self-corrects when evidence changes.
   map's `crm × finances` gate. `TODO(handoff):` at the gate + append to
   `proposals/2026-08-17-hub-distinct-visit-dates.md` (S2).
 - Widening the attended set to past-dated `accepted` bookings — deferred, same proposal.
+
+## Pass 4 — external review: FAIL (superseded the pass-3 approval)
+
+Four High, two Medium, one Low against the pass-3 S2 SQL and its consumers. All were fixed in
+pass 4 of the spec and confirmed closed by the pass-5 reviewer: booking-only contacts could never
+produce an aggregate row (H1); the booking join started from the party-filtered CTE and so missed
+the partyless shape `createBooking` normally writes (H2); scheduling mutations busted no cache,
+leaving three cached surfaces stale (H3); `void` invoices stayed visit evidence (H4);
+`completed` was assumed terminal and past-dated when `setBookingStatus` validates neither (M1);
+the literal count the source DoD asks for had nowhere to land (M2); three verification gates used
+`grep … && exit 1`, which fails precisely when the diff is clean (L1).
+
+## Pass 5 — external review: FAIL, then fixed in place
+
+Three findings, each re-verified this pass against a real `minion_hub` sparse checkout at
+`1b47e8ce` (blobless clone + `sparse-checkout '/src/*'` — no database, no credentials needed):
+
+| Finding | Verified | Fix |
+|---|---|---|
+| R2-H1 (High) — `contactFinanceSummary` is a third Loyal definition and it is what the contact detail page renders | Confirmed: own session-zone `issued_at::date` (`:230`), own `party_id is not null` gate (`:197`), `return null` before the aggregate when there are no invoices (`:208`); loaded at `[contactId]/+page.server.ts:57` and spent at `+page.svelte:748` | S1 now deletes its `purchased`/`reservedOnly`/`loyal` and moves the page's floor onto the ranked row it **already loads** — the same decoration `/crm/customers` uses. Its null contract is left alone so no card appears or disappears (D10) |
+| R2-M1 (Medium) — `fi.status <> 'void'` drops NULL-status invoices | Confirmed: `status: text('status')` with no `.notNull()` (`pg-finance-schema.ts:44`), `string \| null` in the connector contract, and `crm-journey.service.ts:83` already uses the null-safe form | Predicate is now `status is distinct from 'void'`, stated as an invariant (§2.3) with its own test case |
+| R2-M2 (Medium) — the OR join fans one party-linked booking across sibling contacts | Confirmed: `crm_contacts_party_idx` is non-unique and `CONTACT_PARTY`'s `distinct on (party_id)` exists to collapse exactly that | A `booking_owner` CTE gives every booking exactly one owner: direct `crm_contact_id` wins, `party_id` is a fallback resolved through the canonical `CONTACT_PARTY` pick (§2.5, D3) |
+
+### One defect found while verifying, not raised by either review
+
+**P5-F1.** Pass 4's own H1 fix said to re-anchor the roster and dashboard `fin` CTE on all live
+contacts. `fin`'s *membership* means "has ≥1 invoice" and is read by `booked`
+(`count(*) filter (where fin_invoices is not null)`), `finance_buyers` (`select count(*) from
+fin`), `is_buyer`, the `revenue` sort key, and the `RankedContact.finance` null sentinel — so that
+change would have silently broken five shipped numbers to fix one. Both queries already anchor on
+`crm_contacts c` and `left join fin`, so the visit aggregate is a second left join in `base` and
+`fin` is not touched at all. Recorded as invariant §2.11 and D11, with a golden regression test.
+
+**Disposition.** `status: review`, `verdict: pending` — the spec is corrected and internally
+consistent, but three external FAILs mean the approval is the reviewer's to give, not the author's
+to re-assert. No hub product code has been written; the branch stays planning-only.
