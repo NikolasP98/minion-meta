@@ -62,6 +62,12 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		}
 		fm.tags = canonicalTags;
 	}
+	// TODO(handoff): this projection is the only thing that decides what the board
+	// sees — a frontmatter key missing here is deleted from index.json on the next
+	// regeneration, silently (that is how `effort` was lost; see
+	// proposals/2026-08-29-proposal-index-projection-parity-untested.md). There is
+	// no test for it, unlike spec-index.mjs, whose test asserts validated↔published
+	// parity. Add the analogue before adding the next field.
 	proposals.push({
 		id: fm.id,
 		title: fm.title,
