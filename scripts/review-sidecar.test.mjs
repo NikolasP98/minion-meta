@@ -13,7 +13,9 @@ import { join } from 'node:path';
 import {
 	GATE_BANDS,
 	REQUIRED_SIDECAR_FIELDS,
+	RUBRICS,
 	SCORE_AXES,
+	VETO_VERDICTS,
 	axisNames,
 	bandFor,
 	computeScore,
@@ -24,8 +26,9 @@ import {
 import { VERDICTS } from './spec-frontmatter.mjs';
 
 const SUBJECT = { subjectKey: 'spec', subjectId: 'a-spec' };
+const PROPOSAL_SUBJECT = { subjectKey: 'proposal', subjectId: 'a-proposal' };
 
-// The control case: exactly what the shipped G2 reviewer writes today.
+// The control case: the full G2 rubric (§3), all six axes.
 const VALID = `---
 spec: a-spec
 pass: 2
@@ -36,6 +39,8 @@ score_slice_size: 8
 score_dod_verifiability: 9
 score_scope_containment: 9
 score_impact_zones: 9
+score_collisions: 9
+score_testability: 9
 ---
 
 # Pass 2 review
@@ -44,18 +49,28 @@ score_impact_zones: 9
 const sidecar = (frontmatter) => `---\n${frontmatter}\n---\n\n# Pass 2 review\n`;
 const BASE_FIELDS = ['spec: a-spec', 'pass: 2', 'verdict: approved', 'reviewer: factory-review', 'created: 2026-08-28'];
 const withFields = (...extra) => sidecar([...BASE_FIELDS, ...extra].join('\n'));
+const PROPOSAL_BASE_FIELDS = [
+	'proposal: a-proposal',
+	'pass: 1',
+	'verdict: approved',
+	'reviewer: proposal-gate-agent',
+	'created: 2026-08-28'
+];
+const withProposalFields = (...extra) => sidecar([...PROPOSAL_BASE_FIELDS, ...extra].join('\n'));
 
 test('the shipped G2 sidecar shape validates and derives its score, gate and chip', () => {
 	const { errors, review } = parseReviewSidecar('specs/a-spec.review.md', VALID, SUBJECT);
 	assert.deepEqual(errors, []);
-	assert.equal(review.score, 8.8); // (8+9+9+9)/4 = 8.75 -> 8.8
+	assert.equal(review.score, 8.8); // (8+9+9+9+9+9)/6 = 8.8333 -> 8.8
 	assert.equal(review.gate, 'pass');
 	assert.equal(review.chip, 'green');
 	assert.deepEqual(review.axes, {
 		slice_size: 8,
 		dod_verifiability: 9,
 		scope_containment: 9,
-		impact_zones: 9
+		impact_zones: 9,
+		collisions: 9,
+		testability: 9
 	});
 	assert.equal(review.pass, 2);
 	assert.equal(review.verdict, 'approved');
@@ -71,6 +86,80 @@ test('an unscored sidecar is valid and simply carries no chip', () => {
 	assert.equal('gate' in review, false);
 	assert.equal('chip' in review, false);
 	assert.equal('axes' in review, false);
+});
+
+test('H2: an incomplete G2 rubric (missing collisions/testability) publishes no gate, never green', () => {
+	// The exact shape the live pass-2 reviewer writes today — four axes, no
+	// collisions/testability. Before the fix this derived score 8.8/pass/green.
+	const legacyFourAxis = withFields(
+		'score_slice_size: 8',
+		'score_dod_verifiability: 9',
+		'score_scope_containment: 9',
+		'score_impact_zones: 9'
+	);
+	const { errors, review } = parseReviewSidecar('specs/a-spec.review.md', legacyFourAxis, SUBJECT);
+	assert.deepEqual(errors, []);
+	assert.equal('score' in review, false);
+	assert.equal('gate' in review, false);
+	assert.equal('chip' in review, false);
+	assert.equal('axes' in review, false);
+});
+
+test('H2: a proposal scored only on a G2 axis is rejected, not published green', () => {
+	// The exact regression a focused parser call reproduced: a G1 (proposal)
+	// sidecar carrying only `score_slice_size`, a G2-only axis.
+	const { errors, review } = parseReviewSidecar(
+		'proposals/a-proposal.review.md',
+		withProposalFields('score_slice_size: 10'),
+		PROPOSAL_SUBJECT
+	);
+	assert.equal(review, null);
+	assert.match(errors.join('\n'), /"score_slice_size".*axis "slice_size".*not part of the G1 rubric/);
+});
+
+test('H2: the full G1 rubric derives a score; a partial G1 rubric derives none', () => {
+	const complete = withProposalFields(
+		'score_problem_clarity: 7',
+		'score_value: 7',
+		'score_dod_verifiability: 7',
+		'score_scope_containment: 7',
+		'score_dedupe: 7'
+	);
+	const { errors, review } = parseReviewSidecar('proposals/a-proposal.review.md', complete, PROPOSAL_SUBJECT);
+	assert.deepEqual(errors, []);
+	assert.equal(review.score, 7);
+	assert.equal(review.gate, 'pass');
+
+	const partial = withProposalFields('score_problem_clarity: 7', 'score_value: 7', 'score_dedupe: 7');
+	const partialResult = parseReviewSidecar('proposals/a-proposal.review.md', partial, PROPOSAL_SUBJECT);
+	assert.deepEqual(partialResult.errors, []);
+	assert.equal('score' in partialResult.review, false);
+});
+
+test('H1: a reviewer veto (changes_requested/rejected/revision-required) can never publish a pass/green gate', () => {
+	for (const verdict of VETO_VERDICTS) {
+		const src = VALID.replace('verdict: approved', `verdict: ${verdict}`);
+		const { errors, review } = parseReviewSidecar('specs/a-spec.review.md', src, SUBJECT);
+		assert.deepEqual(errors, [], verdict);
+		// The axes alone would derive pass/green (score 8.8); the veto forces block/red.
+		assert.equal(review.gate, 'block', verdict);
+		assert.equal(review.chip, 'red', verdict);
+	}
+	// 'pending' and 'approved' are not vetoes — the axis-derived band stands.
+	for (const verdict of ['pending', 'approved']) {
+		const src = VALID.replace('verdict: approved', `verdict: ${verdict}`);
+		const { review } = parseReviewSidecar('specs/a-spec.review.md', src, SUBJECT);
+		assert.equal(review.gate, 'pass', verdict);
+	}
+});
+
+test('H1: a declared gate/chip contradicting the vetoed band fails the build', () => {
+	const src = VALID.replace('verdict: approved', 'verdict: changes_requested').replace(
+		'---\n\n# Pass 2',
+		'gate: pass\nchip: green\n---\n\n# Pass 2'
+	);
+	const { errors } = parseReviewSidecar('specs/a-spec.review.md', src, SUBJECT);
+	assert.match(errors.join('\n'), /"gate" is "pass" but the axes derive "block"/);
 });
 
 test('a file with no frontmatter is rejected — every *.review.md is a sidecar', () => {
@@ -125,11 +214,25 @@ test('an unknown score axis is rejected with the registry printed — a typo mus
 test('§4 shorthand axis names resolve to the same canonical axes the live reviewer writes', () => {
 	const { errors, review } = parseReviewSidecar(
 		'specs/a-spec.review.md',
-		withFields('score_dod: 6', 'score_out_of_scope: 6', 'score_impact: 6'),
+		withFields(
+			'score_slice_size: 6',
+			'score_dod: 6',
+			'score_out_of_scope: 6',
+			'score_impact: 6',
+			'score_collisions: 6',
+			'score_testability: 6'
+		),
 		SUBJECT
 	);
 	assert.deepEqual(errors, []);
-	assert.deepEqual(review.axes, { dod_verifiability: 6, scope_containment: 6, impact_zones: 6 });
+	assert.deepEqual(review.axes, {
+		slice_size: 6,
+		dod_verifiability: 6,
+		scope_containment: 6,
+		impact_zones: 6,
+		collisions: 6,
+		testability: 6
+	});
 });
 
 test('an alias and its canonical name are the same axis, so scoring both is rejected', () => {
@@ -300,8 +403,30 @@ test('integration: spec-index publishes the sidecar score into specs/index.json'
 			score: 8.8,
 			gate: 'pass',
 			chip: 'green',
-			axes: { slice_size: 8, dod_verifiability: 9, scope_containment: 9, impact_zones: 9 }
+			axes: {
+				slice_size: 8,
+				dod_verifiability: 9,
+				scope_containment: 9,
+				impact_zones: 9,
+				collisions: 9,
+				testability: 9
+			}
 		});
+	} finally {
+		rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test('M1: spec-index fails closed on a sidecar whose pass does not match the spec\'s current pass', () => {
+	const root = scratchRepo();
+	try {
+		// The live failure: a spec moved on to pass 5 while its sidecar still
+		// reviewed pass 2 — the stale sidecar must not attach as current evidence.
+		writeFileSync(join(root, 'specs', 'a-spec.md'), SPEC.replace('pass: 2', 'pass: 5'));
+		writeFileSync(join(root, 'specs', 'a-spec.review.md'), VALID);
+		const result = spawnSync('node', ['scripts/spec-index.mjs'], { cwd: root, encoding: 'utf8' });
+		assert.equal(result.status, 1);
+		assert.match(result.stderr, /"pass" \(2\) does not match spec "a-spec"'s current pass \(5\)/);
 	} finally {
 		rmSync(root, { recursive: true, force: true });
 	}
@@ -336,8 +461,11 @@ test('integration: proposal-index publishes a G1 sidecar under the same field na
 					'verdict: changes_requested',
 					'reviewer: proposal-gate-agent',
 					'created: 2026-08-28',
+					// The full G1 rubric (§3) — problem/value/dod/out-of-scope/dedupe.
 					'score_problem_clarity: 4',
 					'score_value: 5',
+					'score_dod_verifiability: 4',
+					'score_scope_containment: 5',
 					'score_dedupe: 3'
 				].join('\n')
 			)
@@ -345,7 +473,7 @@ test('integration: proposal-index publishes a G1 sidecar under the same field na
 		const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
 		assert.equal(result.status, 0, result.stderr);
 		const index = JSON.parse(readFileSync(join(root, 'proposals', 'index.json'), 'utf8'));
-		assert.equal(index.proposals[0].review.score, 4);
+		assert.equal(index.proposals[0].review.score, 4.2);
 		assert.equal(index.proposals[0].review.gate, 'block');
 		assert.equal(index.proposals[0].review.chip, 'red');
 	} finally {

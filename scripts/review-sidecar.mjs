@@ -124,6 +124,35 @@ export const GATE_BANDS = [
 	{ min: 0, gate: 'block', chip: 'red' }
 ];
 
+// A sidecar carries TWO independent judgements: the lifecycle `verdict`
+// (validated against spec-frontmatter's VERDICTS — the reviewer's actual
+// pass/fail decision) and the numeric axis mean this module derives a
+// gate/chip from. They can disagree — a reviewer can veto with
+// `changes_requested` while the axes happen to average >= 7 — and when they
+// do, the veto wins: a human (or the next pass) said "not yet", and a
+// numeric mean must never overrule that into a green chip. `pending` is not
+// listed: it means "no decision yet", not "rejected", so it does not veto.
+export const VETO_VERDICTS = ['changes_requested', 'rejected', 'revision-required'];
+const VETO_BAND = { gate: 'block', chip: 'red' };
+
+// Per-gate rubric: the EXACT axis set a subject's gate scores on (§3). Keyed
+// by `subjectKey` because today each artifact type is scored by exactly one
+// gate — `spec` sidecars are G2, `proposal` sidecars are G1 — so the file's
+// own location already tells us which rubric applies. A score is only
+// derived once every required axis is present; an axis outside this set is a
+// cross-gate mistake (e.g. a proposal scored on G2's `slice_size`), not a
+// new dimension, so it fails the build rather than silently padding the mean.
+export const RUBRICS = {
+	spec: {
+		gate: 'G2',
+		required: ['slice_size', 'dod_verifiability', 'scope_containment', 'impact_zones', 'collisions', 'testability']
+	},
+	proposal: {
+		gate: 'G1',
+		required: ['problem_clarity', 'value', 'dod_verifiability', 'scope_containment', 'dedupe']
+	}
+};
+
 const AXIS_INDEX = new Map();
 for (const axis of SCORE_AXES) {
 	for (const slug of [axis.name, ...axis.aliases]) AXIS_INDEX.set(slug, axis);
@@ -131,16 +160,22 @@ for (const axis of SCORE_AXES) {
 
 const COMMIT_RE = /^[0-9a-f]{7,40}$/;
 
-// TODO(handoff): three producer-side halves of §4 are still absent, so this
-// module currently validates and publishes strictly less than the spec
-// describes. See proposals/2026-08-29-review-sidecar-producer-gaps.md.
+// TODO(handoff): producer-side halves of §4 are still absent, so this module
+// currently validates and publishes strictly less than the spec describes.
+// See proposals/2026-08-29-review-sidecar-producer-gaps.md.
 //   1. Nothing writes `reviewed_commit` — every published score is untraceable
-//      to the revision it judged (only its shape is pinned here).
+//      to the revision it judged (only its shape is pinned here; `pass`
+//      equality against the artifact's current `pass` is the fail-closed
+//      guard readReviewSidecars enforces in the meantime).
 //   2. No G1 producer writes proposals/<id>.review.md, so the proposal axes in
 //      SCORE_AXES are declared from the spec's prose, not from a live writer.
 //   3. Sidecars are OPTIONAL: a spec with no sidecar publishes no `review`, so
 //      this cannot yet answer "was this spec gated at all?" — that requires the
 //      board's promote-button rule (§2 principle 3, minion-base Slice 7).
+//   4. The live G2 pass-2 reviewer only emits 4 of the 6 axes RUBRICS.spec
+//      requires (missing `collisions`, `testability`) — every spec sidecar it
+//      writes today publishes no score/gate/chip until it is upgraded to
+//      score the full rubric.
 
 /** Canonical axis for a raw `score_<slug>` suffix, or undefined if unknown. */
 export function resolveAxis(slug) {
@@ -190,13 +225,16 @@ function asNumber(value) {
  *
  * @param {string} label  path used in error messages
  * @param {string} src    file contents
- * @param {{ subjectKey: string, subjectId: string }} opts
+ * @param {{ subjectKey: string, subjectId: string, currentPass?: number }} opts
  *        `subjectKey` is `spec` under specs/ and `proposal` under proposals/;
- *        `subjectId` is the id the filename claims the sidecar belongs to.
+ *        `subjectId` is the id the filename claims the sidecar belongs to;
+ *        `currentPass` is the artifact's own current `pass`, when the subject
+ *        has one — a sidecar reviewing an older pass is stale evidence, not a
+ *        valid review of the artifact being promoted now.
  * @returns {{ errors: string[], review: object | null }} `review` is the
  *        projection to publish, or null when the sidecar did not validate.
  */
-export function parseReviewSidecar(label, src, { subjectKey, subjectId }) {
+export function parseReviewSidecar(label, src, { subjectKey, subjectId, currentPass }) {
 	const errors = [];
 	const parsed = parseFrontmatter(src);
 	if (!parsed) {
@@ -222,6 +260,10 @@ export function parseReviewSidecar(label, src, { subjectKey, subjectId }) {
 	}
 	if (fm.pass !== undefined && !(Number.isInteger(fm.pass) && fm.pass >= 1))
 		errors.push(`${label}: "pass" must be a positive integer, got "${fm.pass}"`);
+	else if (fm.pass !== undefined && currentPass !== undefined && fm.pass !== currentPass)
+		errors.push(
+			`${label}: "pass" (${fm.pass}) does not match ${subjectKey} "${subjectId}"'s current pass (${currentPass}) — this sidecar reviewed an older revision; update or remove it`
+		);
 	if (fm.verdict && !VERDICTS.includes(fm.verdict))
 		errors.push(`${label}: invalid verdict "${fm.verdict}" (allowed: ${VERDICTS.join(', ')})`);
 	if (fm.reviewer !== undefined && typeof fm.reviewer !== 'string')
@@ -236,7 +278,12 @@ export function parseReviewSidecar(label, src, { subjectKey, subjectId }) {
 			`${label}: "reviewed_commit" must be a 7-40 character lowercase hex commit sha, got "${fm.reviewed_commit}"`
 		);
 
-	// Axes: `score_<axis>` -> canonical name.
+	// Axes: `score_<axis>` -> canonical name, restricted to the rubric the
+	// subject is actually gated by. An axis that resolves in the global
+	// registry but does not belong to THIS subject's rubric is a cross-gate
+	// mistake (a proposal scored on G2's `slice_size`, say) — rejected the same
+	// as an unrecognised axis, not silently folded into the mean.
+	const rubric = RUBRICS[subjectKey];
 	const axes = {};
 	const seenBy = new Map(); // canonical name -> the raw key that claimed it
 	for (const [key, raw] of Object.entries(fm)) {
@@ -245,6 +292,12 @@ export function parseReviewSidecar(label, src, { subjectKey, subjectId }) {
 		const axis = resolveAxis(slug);
 		if (!axis) {
 			errors.push(`${label}: unknown score axis "${key}" (allowed: ${axisNames().join(', ')})`);
+			continue;
+		}
+		if (rubric && !rubric.required.includes(axis.name)) {
+			errors.push(
+				`${label}: "${key}" (axis "${axis.name}") is not part of the ${rubric.gate} rubric for a "${subjectKey}" sidecar (allowed: ${rubric.required.join(', ')})`
+			);
 			continue;
 		}
 		const previous = seenBy.get(axis.name);
@@ -263,8 +316,16 @@ export function parseReviewSidecar(label, src, { subjectKey, subjectId }) {
 		axes[axis.name] = value;
 	}
 
-	const score = computeScore(axes);
-	const band = score === null ? null : bandFor(score);
+	// A score is only derived once the rubric is COMPLETE — a subset (however
+	// high it averages) is incomplete evidence, not a lower score, so it
+	// publishes no gate at all rather than a gate the rubric never actually
+	// earned. A subject with no declared rubric (there is none today) falls
+	// back to "any axes at all", matching the pre-rubric behaviour.
+	const rubricComplete = rubric ? rubric.required.every((name) => name in axes) : Object.keys(axes).length > 0;
+	const score = rubricComplete ? computeScore(axes) : null;
+	let band = score === null ? null : bandFor(score);
+	// A reviewer veto overrides a passing numeric mean — see VETO_VERDICTS.
+	if (band && VETO_VERDICTS.includes(fm.verdict)) band = VETO_BAND;
 
 	// A declared value is a cross-check, never the source of truth.
 	for (const [key, derived] of [
@@ -274,7 +335,9 @@ export function parseReviewSidecar(label, src, { subjectKey, subjectId }) {
 	]) {
 		if (fm[key] === undefined || fm[key] === '') continue;
 		if (derived === null) {
-			errors.push(`${label}: "${key}" is declared but no score_* axis is — a score needs axes to derive from`);
+			errors.push(
+				`${label}: "${key}" is declared but no score_* axis is — a score needs the complete rubric's axes to derive from`
+			);
 			continue;
 		}
 		const declared = key === 'score' ? asNumber(fm[key]) : fm[key];
@@ -314,9 +377,14 @@ export function parseReviewSidecar(label, src, { subjectKey, subjectId }) {
  * to kill, and a silent skip would let a renamed spec quietly abandon its
  * review record.
  *
+ * `passById`, when given, maps subject id -> the artifact's current `pass`;
+ * a sidecar whose own `pass` disagrees is stale evidence and fails to
+ * validate (see parseReviewSidecar). Proposals have no `pass` concept, so
+ * callers that omit it skip the freshness check entirely.
+ *
  * @returns {{ errors: string[], byId: Map<string, object> }}
  */
-export function readReviewSidecars(dir, { subjectKey, knownIds }) {
+export function readReviewSidecars(dir, { subjectKey, knownIds, passById }) {
 	const errors = [];
 	const byId = new Map();
 	for (const name of readdirSync(dir)
@@ -332,7 +400,8 @@ export function readReviewSidecars(dir, { subjectKey, knownIds }) {
 		}
 		const { errors: fileErrors, review } = parseReviewSidecar(label, readFileSync(label, 'utf8'), {
 			subjectKey,
-			subjectId
+			subjectId,
+			currentPass: passById?.get(subjectId)
 		});
 		errors.push(...fileErrors);
 		if (review) byId.set(subjectId, review);

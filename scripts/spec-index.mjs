@@ -723,7 +723,11 @@ function main() {
 	// every real spec id is known. Errors are fatal in BOTH modes, not just
 	// --check: the projection below publishes these scores, so a sidecar that did
 	// not validate must never reach specs/index.json.
-	const sidecars = readReviewSidecars('specs', { subjectKey: 'spec', knownIds: new Set(fmById.keys()) });
+	const sidecars = readReviewSidecars('specs', {
+		subjectKey: 'spec',
+		knownIds: new Set(fmById.keys()),
+		passById: new Map([...fmById].map(([id, fm]) => [id, fm.pass ?? 1]))
+	});
 	errors.push(...sidecars.errors);
 	for (const fm of pending) specs.push(projectSpec(fm, sidecars.byId.get(fm.id)));
 

@@ -20,9 +20,17 @@ minion-meta now validates that format (`scripts/review-sidecar.mjs`) and publish
 `review` object on each `specs/index.json` / `proposals/index.json` entry, so the board finally
 has a score to render a chip from.
 
-Standing up the consumer made four producer-side holes visible. None of them are regressions —
+Standing up the consumer made five producer-side holes visible. None of them are regressions —
 they were invisible before because nothing checked. Each is written down here because the
 consumer is now live and silently tolerates them.
+
+A 2026-08-29 review-fix round hardened the consumer itself (`scripts/review-sidecar.mjs`): a
+vetoing lifecycle `verdict` (`changes_requested`/`rejected`/`revision-required`) now forces
+`gate: block`/`chip: red` regardless of the axis mean; a score is only derived once a subject's
+**full** rubric (`RUBRICS.spec` / `RUBRICS.proposal`) is present, an axis outside that rubric fails
+the build, and a sidecar's `pass` must match its artifact's current `pass` or the build fails
+closed. That fix is what turned item 1 below from "untraceable but green" into "no chip published
+until the axes/commit exist" — the consumer is safe now; the producers still need to catch up.
 
 ## AS-IS
 
@@ -31,6 +39,12 @@ consumer is now live and silently tolerates them.
    Every published score is therefore untraceable to the revision it judged — a score can be
    stale by 40 commits and look identical to a fresh one. `scripts/review-sidecar.mjs` pins the
    field's shape (7–40 hex) but cannot require what nobody writes.
+1a. **The G2 reviewer only scores 4 of the 6 required axes.** `RUBRICS.spec` (§3) requires
+   `slice_size`, `dod_verifiability`, `scope_containment`, `impact_zones`, `collisions`,
+   `testability`; the live writer never emits `collisions`/`testability`. Every spec sidecar it
+   writes today therefore validates but derives no score/gate/chip at all — the 9 previously
+   "scored" specs in `specs/index.json` lost their chip in the 2026-08-29 fix precisely because
+   their rubric was incomplete. Until the reviewer scores the full six, G2 publishes no chips.
 2. **No G1 producer exists.** Slice 3 of the governing spec owns the proposal scorer. Until it
    lands, `proposals/*.review.md` is an empty namespace, and the G1 axes in `SCORE_AXES`
    (`problem_clarity`, `value`, `dedupe`) are transcribed from the spec's §3 prose rather than
@@ -51,6 +65,8 @@ consumer is now live and silently tolerates them.
 
 - The G2 reviewer writes `reviewed_commit` with the sha it actually read; the board can show
   "scored N commits ago" and G0 can treat a score older than its subject as absent.
+- The G2 reviewer scores `collisions` and `testability` alongside its existing four axes, so its
+  sidecars satisfy `RUBRICS.spec` and resume publishing a chip.
 - The G1 scorer writes `proposals/<id>.review.md` against the axis registry, or amends the
   registry in the same change.
 - The board refuses to promote an unscored artifact past G1/G2 (or records an override reason),
@@ -67,7 +83,8 @@ that is a separate slice from the sidecar contract).
 ## Definition of done
 
 - `specs/*.review.md` written after the change all carry a `reviewed_commit` that resolves in the
-  target repo.
+  target repo, and all six `RUBRICS.spec` axes, so `node scripts/spec-index.mjs` publishes their
+  `review.score`/`gate`/`chip` again.
 - At least one `proposals/<id>.review.md` exists and `node scripts/proposal-index.mjs` publishes
   its `review.score`/`gate`/`chip`.
 - `node scripts/proposal-index.mjs` fails when a projected field is not declared, proven by a
