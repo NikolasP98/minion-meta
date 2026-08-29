@@ -160,9 +160,34 @@ Round 4 — `M1`, `M2`, both fixed in this pass without reopening pass 3:
   §10, S2's and S3's files/DoD and the spec's `related` list at it. §7's S2-before-S3 serialization
   still applies — both slices still edit one shared proposal, now the new one.
 
+Round 5 — `M1`, `M2`, `L1`, all fixed in this pass without reopening pass 3:
+
+- `M1` (medium) the shipped B1/B2 sidecar contract from round 2 proved matching frontmatter, not a
+  review record: nothing in B1/B2 or S3's fixture list required a `## Pass N` body section, so a
+  sidecar with valid, current, agreeing frontmatter and an empty body satisfied every predicate.
+  Fixed by adding a third clause, **Body**, to §5B: for every `2 ≤ N ≤ spec.pass` the sidecar body
+  must carry a `## Pass N — <verdict>` section, or an explicit `## Pass N — record unavailable:
+  <reason>` for a genuinely unrecoverable pass; an empty-body sidecar and a sidecar missing only the
+  *current*-pass section both fail. Landing rule, the repair-before-enable text, the S3 DoD fixtures
+  (two new negative cases + the positive updated), and the sibling factory proposal's invariant/DELTA
+  3/proves-it were all updated to the same three-clause contract (B1, B2, Body) so no site still
+  describes the two-clause version.
+- `M2` (medium) S4 adds `supersedes:` to a successor or flips an orphan to `retired`, both
+  substantive lifecycle/lineage transitions per `specs/TEMPLATE.md:30`, but never required bumping
+  that spec's `updated` field — so the regenerated board index would carry the stale
+  `updated: 2026-08-13` through the transition. Fixed by requiring the `updated` bump in the same
+  edit on whichever spec S4 touches (successor or orphan), and adding a DoD check that diffs each
+  touched file's `updated` field against its pre-slice value and confirms `specs/index.json` matches.
+- `L1` (low) §7 declared S4 independent of the batches and safe to land in any order, but S4's
+  permitted edits are frontmatter on the same 5 orphan specs (and their successor candidates) that
+  §6 assigns to specific heading batches — as measured 2026-08-29, two orphans are in B1 (S5), two in
+  B4 (S8), one in B6 (S10) — so dispatching S4 alongside one of those batches could race on the same
+  spec file, not merely on a generated index. Fixed by serializing S4 before S5–S17 in §7, naming the
+  three colliding batches and ids, and removing the "index files only" independence claim.
+
 ### Author's disposition
 
-`approved`. Every round-1, round-2, round-3 and round-4 finding is fixed on the branch; no finding
-was waived. The approval is the authoring run's operator disposition, not a reviewer sign-off on this
-last fix round — if a subsequent review round raises a blocking finding, the spec returns to
-`status: review` / `verdict: pending` and this section records that instead.
+`approved`. Every round-1 through round-5 finding is fixed on the branch; no finding was waived. The
+approval is the authoring run's operator disposition, not a reviewer sign-off on this last fix round —
+if a subsequent review round raises a blocking finding, the spec returns to `status: review` /
+`verdict: pending` and this section records that instead.

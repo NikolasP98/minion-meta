@@ -10,7 +10,7 @@ repos: [minion-meta]
 proposal: 2026-08-18-spec-heading-lint-baseline-backfill
 verdict: approved
 type: infra
-approved_reason: "Pass-3 revision on minion-meta@2c86617, corrected across four cross-provider review rounds. Round 1: the pass-2 blocker (rewrite S5-S9/D6-D10 into the 13 frozen ranges) is fully done, cleanup renumbered to Slice 18 with D19/§6/§7/§9 reconciled so no Slice-10 collision remains; every AS-IS claim re-measured 2026-08-29 (114 heading debt, 99 related ids/22 proposal-only, 69 pass>1 specs all with sidecars); binding DoDs are computed invariants with dated counts labeled non-binding orientation; the zero-TODO gate uses an unpiped negated `rg` instead of `grep -c`. Round 2: the §5B sidecar rule is no longer existence-only - it is a parsed contract split into B1 structural (0/69 violations, lands in S3) and B2 freshness (2 violations measured, this spec own sidecar repaired here, the last one repaired inside S3 before B2 is enabled, with a stated defer-B2 escape hatch so I3 never bends); and S18 now closes the source proposal in the committed board projection (proposals/index.json regenerated, `updated` bumped, DoD asserts status done) because proposal-index.mjs has no --check and no CI step. Round 3: the B1-only escape hatch is now conditional everywhere it is referenced (TO-BE, D4, S3's DoD, S18's DoD, end-to-end verification #4) instead of contradicting the same slice's unconditional zero-violation/zero-marker requirements; and S2/S3 — which both edit `proposals/2026-08-20-factory-spec-heading-nomenclature.md` — are serialized in §7 instead of declared independent, with both slices' files/DoD now requiring the proposal's `updated` bump and a `proposals/index.json` regeneration. Round 4: the B1-only escape hatch is WITHDRAWN rather than conditionalized a third time - two rounds of adding conditionals kept missing a site (this round it was D19 and, decisively, the handoff proposals own file-level auto-close contract at proposals/handoff-minion-meta-1883922325.md:24-26, which no in-spec conditional can satisfy while a marker remains), and the hatch guarded a condition that cannot arise because §5B already states an always-honest repair; B1+B2 now land together in S3 or S3 is blocked and merges nothing, mirroring §6 partial-ranges-do-not-merge, so TO-BE/D4/§5B/S3/S18/§9 each carry one contract. Also round 4: the two new generator failure modes are no longer appended to 2026-08-20-factory-spec-heading-nomenclature (status: done since its 2026-08-28 board audit, and proposal-index.mjs:59-72 projects status through unchanged, so a completed card cannot own new work) - they are owned by the new active proposal 2026-08-29-factory-generator-related-ids-and-review-sidecars (repos: [minion-factory]), which S2/S3/§1/§8/§10 and the related list now point at; proposals/index.json and specs/index.json are regenerated to match this disposition."
+approved_reason: "Pass-3 revision on minion-meta@2c86617, corrected across four cross-provider review rounds. Round 1: the pass-2 blocker (rewrite S5-S9/D6-D10 into the 13 frozen ranges) is fully done, cleanup renumbered to Slice 18 with D19/§6/§7/§9 reconciled so no Slice-10 collision remains; every AS-IS claim re-measured 2026-08-29 (114 heading debt, 99 related ids/22 proposal-only, 69 pass>1 specs all with sidecars); binding DoDs are computed invariants with dated counts labeled non-binding orientation; the zero-TODO gate uses an unpiped negated `rg` instead of `grep -c`. Round 2: the §5B sidecar rule is no longer existence-only - it is a parsed contract split into B1 structural (0/69 violations, lands in S3) and B2 freshness (2 violations measured, this spec own sidecar repaired here, the last one repaired inside S3 before B2 is enabled, with a stated defer-B2 escape hatch so I3 never bends); and S18 now closes the source proposal in the committed board projection (proposals/index.json regenerated, `updated` bumped, DoD asserts status done) because proposal-index.mjs has no --check and no CI step. Round 3: the B1-only escape hatch is now conditional everywhere it is referenced (TO-BE, D4, S3's DoD, S18's DoD, end-to-end verification #4) instead of contradicting the same slice's unconditional zero-violation/zero-marker requirements; and S2/S3 — which both edit `proposals/2026-08-20-factory-spec-heading-nomenclature.md` — are serialized in §7 instead of declared independent, with both slices' files/DoD now requiring the proposal's `updated` bump and a `proposals/index.json` regeneration. Round 4: the B1-only escape hatch is WITHDRAWN rather than conditionalized a third time - two rounds of adding conditionals kept missing a site (this round it was D19 and, decisively, the handoff proposals own file-level auto-close contract at proposals/handoff-minion-meta-1883922325.md:24-26, which no in-spec conditional can satisfy while a marker remains), and the hatch guarded a condition that cannot arise because §5B already states an always-honest repair; B1+B2 now land together in S3 or S3 is blocked and merges nothing, mirroring §6 partial-ranges-do-not-merge, so TO-BE/D4/§5B/S3/S18/§9 each carry one contract. Also round 4: the two new generator failure modes are no longer appended to 2026-08-20-factory-spec-heading-nomenclature (status: done since its 2026-08-28 board audit, and proposal-index.mjs:59-72 projects status through unchanged, so a completed card cannot own new work) - they are owned by the new active proposal 2026-08-29-factory-generator-related-ids-and-review-sidecars (repos: [minion-factory]), which S2/S3/§1/§8/§10 and the related list now point at; proposals/index.json and specs/index.json are regenerated to match this disposition. Round 5: M1 - the shipped B1/B2 sidecar contract was frontmatter-only and would accept an empty-bodied sidecar as compliant, so §5B gained a third clause (Body) requiring a parsed `## Pass N — <verdict>` (or `record unavailable`) section for every reviewed pass through the current one, with S3's DoD, the repair-before-enable text, and the sibling factory-generator proposal's invariant/DELTA all updated to the three-clause contract. M2 - S4 changed successor/orphan lifecycle-lineage frontmatter without requiring the `updated` bump the template makes mandatory for a substantive change, so S4's instructions and DoD now require bumping `updated` on whichever spec it touches and assert the regenerated index matches. L1 - S4 was declared independent of the heading batches, but its permitted edits land on orphan specs individually owned by B1/B4/B6, so §7 now serializes S4 before S5-S17 instead of claiming only index files can collide."
 relationship: extends
 related: [2026-08-17-maintenance-lane-monitors-spec, 2026-08-17-sdlc-phase-gates-scoring-spec, 2026-08-20-factory-spec-heading-nomenclature, 2026-08-29-factory-generator-related-ids-and-review-sidecars, handoff-minion-meta-1883922325]
 tags: [infra, hygiene, docs, test]
@@ -223,7 +223,7 @@ Invariants that must not change:
 | D2 | No way to see what the baselined specs are missing → `node scripts/spec-heading-backfill.mjs --report` prints per-id missing sections + totals; `--verify` is the same check as D1 usable pre-commit | S1 | `--report` row count equals the baseline file's key count exactly (114 as measured 2026-08-29; totals 111/88/86 — dated orientation numbers per §2's drift note, not a binding count); `--verify` exits 0 today and 1 on a seeded stale entry |
 | D3 | `related` ids unresolved → every `related` id must resolve against specs ∪ proposals, via one shared loader | S2 | Fixtures: dangling id fails; proposal-only id passes; missing `proposals/` dir does not crash; corpus exits 0 with zero unresolvable ids (99 ids, 22 proposal-only, as measured 2026-08-29 — dated orientation numbers, not a binding count) |
 | D4 | `pass>1` policy undecided and TODO misstates the corpus → decision recorded, TODO removed, `pass>1 ⇒ a **parsed, current** review sidecar` enforced (§5B B1 **and** B2 together — there is no half-rule variant) | S3 | Fixtures: `pass: 2` with no sidecar fails; with an unparseable, wrong-`spec`, missing-field, `pass`-ahead, stale-`pass`, or verdict-contradicting sidecar fails; with a current sidecar passes; `pass: 1` unaffected; the one known stale sidecar is repaired in the same slice so the corpus exits 0 with no new baseline and the TODO is removed outright |
-| D5 | 5 orphan `superseded` specs → each linked from a real successor or flipped to `retired` + `retired_reason`; `scripts/spec-supersede-baseline.json` deleted | S4 | `--check` exits 0 with the file absent; `specs/index.json` regenerated; each disposition justified in the PR body |
+| D5 | 5 orphan `superseded` specs → each linked from a real successor or flipped to `retired` + `retired_reason`, each with `updated` bumped; `scripts/spec-supersede-baseline.json` deleted | S4 | `--check` exits 0 with the file absent; `specs/index.json` regenerated with matching `updated` dates; each disposition justified in the PR body |
 | D6 | Heading-baseline range B1 grandfathered → backfilled and removed | S5 | `--check` exits 0; `--verify` exits 0; `--report --batch B1` prints 0 rows |
 | D7 | range B2 grandfathered → backfilled and removed | S6 | same, for B2 |
 | D8 | range B3 grandfathered → backfilled and removed | S7 | same, for B3 |
@@ -286,23 +286,35 @@ separately named so a failure message says which contract broke, but shipped in 
   equals the spec's `verdict` (the roll-up must not contradict its own evidence). The single known
   violation — `2026-08-18-base-attention-queue-responsive-runs-spec`, spec `pass: 5` / sidecar
   `pass: 2` — is repaired **inside S3, before the rule is enabled**, so B2 also lands at zero (I3).
+- **Body — per-pass record (binding, lands in S3).** For every integer N with `2 ≤ N ≤ spec.pass`,
+  the sidecar body contains a heading matching `^## Pass N — (\S.*)$` — normally `<verdict>`, or,
+  for a pass whose review record is genuinely unrecoverable, the literal `record unavailable`
+  followed by a one-sentence reason. Frontmatter validity is not sufficient: a sidecar with a
+  parseable, current, agreeing frontmatter (B1 and B2 both green) and an empty or sectionless body
+  fails Body for every N in range, and a sidecar that has sections for passes `2..spec.pass-1` but
+  is missing the section for `spec.pass` itself — the current pass — fails Body even though B1 and
+  B2 are both green. This is what makes the frontmatter roll-up prove there is an actual review
+  record behind it, not just matching metadata copied forward.
 
-**Landing rule: B1 and B2 land together in S3, or S3 lands nothing.** An earlier revision of this
-spec authorized a B1-only fallback that deferred B2 behind a replacement `TODO(handoff)`. That
+**Landing rule: B1, B2, and Body land together in S3, or S3 lands nothing.** An earlier revision of
+this spec authorized a B1-only fallback that deferred B2 behind a replacement `TODO(handoff)`. That
 branch is withdrawn, for two reasons that are facts about the repository rather than preferences.
 (a) `handoff-minion-meta-1883922325` closes on a *file-level* predicate — the sweep closes it "once
 the file carries no more markers" (`proposals/handoff-minion-meta-1883922325.md:24-26`) — so leaving
 one of the four markers behind leaves that proposal open with no closing path and makes D19's and
 §9's zero-marker proof unsatisfiable. (b) The fallback guarded a condition that cannot arise: the
 repair S3 performs has an always-available honest form — correct the sidecar's roll-up to the spec's
-current `pass`/`verdict` and name in the body which passes left no committed detail, inventing
-nothing. That needs no evidence beyond the spec's own frontmatter. If some future corpus state
-defeats even that, S3 is **blocked** and merges nothing — the same discipline §6 applies to a
-partially fixable heading range — and the spec is revised rather than a half-rule shipped.
+current `pass`/`verdict` and append a `## Pass N — record unavailable: <reason>` section for the
+current pass (and any other pass whose detail cannot be recovered), inventing nothing. That needs no
+evidence beyond the spec's own frontmatter. If some future corpus state defeats even that, S3 is
+**blocked** and merges nothing — the same discipline §6 applies to a partially fixable heading
+range — and the spec is revised rather than a half-rule shipped.
 
-The sidecar shape B2 assumes is the one this spec's own sidecar now uses: frontmatter is the
-**current-pass roll-up**, and each pass keeps its own `## Pass N — <verdict>` section, newest last.
-That keeps prior-pass findings readable without letting the machine-checked fields go stale.
+The sidecar shape B2 assumes, and Body formalizes above, is the one this spec's own sidecar now
+uses: frontmatter is the **current-pass roll-up**, and each pass keeps its own `## Pass N —
+<verdict>` section, newest last. That keeps prior-pass findings readable without letting the
+machine-checked fields go stale, and Body is what makes that shape a machine-checked requirement
+instead of a described convention.
 
 Only the forward direction is enforced (`pass>1 ⇒ sidecar`); the converse stays unenforced, and not
 merely out of caution — `specs/2026-08-28-factory-board-audit.review.md` is a real, legitimate
@@ -471,25 +483,28 @@ required by §8; no lifecycle change — the proposal is already active — but 
 commit date; this is that proposal's *second* substantive edit, landing after S2 per §7);
 `proposals/index.json` (regenerated via `node scripts/proposal-index.mjs` in the same commit — I7).
 
-Implements decision B of §5: no presence rule; `pass > 1` requires a **parsed, current** sidecar.
-Ship B1 and B2 as separate, separately-named errors so a failure message says which contract broke.
+Implements decision B of §5: no presence rule; `pass > 1` requires a **parsed, current** sidecar
+with a per-pass record. Ship B1, B2, and Body as separate, separately-named errors so a failure
+message says which contract broke.
 
 **Repair before enable (the I3 precondition).** §2.6b measured exactly one B2 violation left after
 this spec's own sidecar was repaired: `2026-08-18-base-attention-queue-responsive-runs-spec`, spec
 `pass: 5`, sidecar `pass: 2`. Re-measure first — it may have drained. If it is still there: recover
 the pass-3/4/5 review records from the run evidence (the spec's `approved_reason` names "Pass-5 G2
 by orchestrator" and a pass-4 FAIL, so the reviewing runs and their PR comments are findable) and
-append them as `## Pass N` sections. Where a pass's detail genuinely cannot be recovered, do **not**
-invent one: correct the frontmatter roll-up to the spec's current pass/verdict and state in the body
-which passes left no committed detail and why. Fabricating review findings is a worse defect than
-the stale field.
+append them as `## Pass N — <verdict>` sections. Where a pass's detail genuinely cannot be
+recovered, do **not** invent one: correct the frontmatter roll-up to the spec's current
+pass/verdict and append a `## Pass N — record unavailable: <reason>` section for that pass instead
+— this is what satisfies Body without fabricating findings. Fabricating review findings is a worse
+defect than the stale field.
 
 **There is no B1-only fallback** (§5B, "Landing rule"). The repair above always has an honest form —
-correcting the roll-up and naming the unrecoverable passes needs nothing beyond the spec's own
-frontmatter — so B1 and B2 ship in one commit. In the event some corpus state defeats even that,
-**S3 is blocked and merges nothing**: it does not ship half the rule, does not leave a replacement
-`TODO(handoff)`, and does not create a third baseline file (I1). The PR body says what defeated the
-repair and the spec is revised. This mirrors §6's "partial ranges do not merge".
+correcting the roll-up and naming the unrecoverable passes as `record unavailable` sections needs
+nothing beyond the spec's own frontmatter — so B1, B2, and Body ship in one commit. In the event
+some corpus state defeats even that, **S3 is blocked and merges nothing**: it does not ship part of
+the rule, does not leave a replacement `TODO(handoff)`, and does not create a third baseline file
+(I1). The PR body says what defeated the repair and the spec is revised. This mirrors §6's "partial
+ranges do not merge".
 
 The comment must state the measured facts as of implementation — re-measure with §9's helper rather
 than copying stale numbers; as measured 2026-08-29 these are 69 pass>1, 68 without a link, 0 file
@@ -500,20 +515,25 @@ orientation numbers, not a binding count) — so the next reader does not re-lit
 
 **DoD (machine-checkable):**
 1. `node scripts/spec-index.mjs --check` exits 0 on the corpus, exit code captured unpiped, with
-   **zero** sidecar violations of either half — no baseline, no exemption list, no skip flag;
+   **zero** sidecar violations of any of B1, B2, or Body — no baseline, no exemption list, no skip
+   flag;
 2. `pnpm run test:scripts` green with fixtures proving each clause fails independently: `pass: 2`
    with **no** sidecar; with an unparseable/empty sidecar; with `sidecar.spec` naming a different
    id; with `pass`/`verdict`/`reviewer`/`created` missing; with `sidecar.pass > spec.pass`; with
    `sidecar.pass < spec.pass` (B2); with `sidecar.pass === spec.pass` but a contradicting `verdict`
-   (B2). Positives: a current, agreeing sidecar passes, and `pass: 1` with no sidecar passes;
+   (B2); with a parseable, current, agreeing frontmatter and an empty/sectionless body (Body); with
+   `pass: 3` and a `## Pass 2 — <verdict>` section present but no `## Pass 3` section for the
+   current pass (Body). Positives: a current, agreeing sidecar with a `## Pass N — <verdict>` (or
+   `record unavailable`) section for every N from 2 through the current pass passes, and `pass: 1`
+   with no sidecar passes;
 3. each fixture fails if its control is reverted (fixtures that cannot fail prove nothing);
-4. `2026-08-18-base-attention-queue-responsive-runs-spec`'s sidecar satisfies B1 **and** B2 in the
-   same commit that enables them, and every other pass>1 sidecar does too;
+4. `2026-08-18-base-attention-queue-responsive-runs-spec`'s sidecar satisfies B1, B2, **and** Body
+   in the same commit that enables them, and every other pass>1 sidecar does too;
 5. no `TODO(handoff)` remains at the pass/revises site — it is deleted, not replaced, not commented
    out. S3 leaves no open end of its own, so it files no new handoff marker;
-6. `proposals/2026-08-29-factory-generator-related-ids-and-review-sidecars.md` names both a
-   missing and a stale pass-2 review sidecar as generator failure modes, with the as-shipped error
-   text;
+6. `proposals/2026-08-29-factory-generator-related-ids-and-review-sidecars.md` names a missing
+   sidecar, a stale pass-2 review sidecar, and a sidecar missing its current-pass `## Pass N`
+   section as generator failure modes, with the as-shipped error text;
 7. that proposal's `updated` field is bumped again (its second substantive edit, after S2), its
    `status` is still an active (non-terminal) value, and `node scripts/proposal-index.mjs` was
    re-run with `git diff --exit-code proposals/index.json` clean in the same commit.
@@ -529,14 +549,23 @@ never hand-edited).
 
 Per id: read it, then search commits and sibling specs around `updated: 2026-08-13` for the work that
 actually replaced it (starting anchors in §2.4). If a successor exists → add `supersedes: <orphan>`
-to the successor. If not → `status: retired` with a ≥ 20-char `retired_reason` naming why, and the
-orphan leaves the superseded population entirely. **Constraint to check first:** `supersedes` is a
-scalar — one successor may name only one predecessor. If two orphans map to the same successor, one
-of them is retired instead (or a different, more specific successor is used); do not chain a false
-lineage to satisfy the gate. The heading debt of these same 5 specs stays with their heading batch.
+to the successor **and bump that successor's `updated` field to the commit date in the same edit**.
+If not → `status: retired` with a ≥ 20-char `retired_reason` naming why, **and bump the orphan's own
+`updated` field to the commit date in the same edit**; the orphan leaves the superseded population
+entirely. Either path is a substantive lifecycle or lineage transition per `specs/TEMPLATE.md:30`
+("`updated`: last substantive change"), so leaving the old `2026-08-13` date in place would make the
+board (which sorts by `updated`) report a transition that happened today as having happened three
+weeks ago. **Constraint to check first:** `supersedes` is a scalar — one successor may name only one
+predecessor. If two orphans map to the same successor, one of them is retired instead (or a
+different, more specific successor is used); do not chain a false lineage to satisfy the gate. The
+heading debt of these same 5 specs stays with their heading batch.
 
-**DoD:** `scripts/spec-supersede-baseline.json` is deleted; `--check` exits 0; `specs/index.json`
-regenerated in the same commit; PR body states the disposition and the evidence for each of the 5.
+**DoD:** `scripts/spec-supersede-baseline.json` is deleted; `--check` exits 0; every successor that
+gained `supersedes:` and every orphan flipped to `retired` in this slice carries an `updated` field
+equal to this slice's commit date — not `2026-08-13` — verified by diffing each touched file's
+`updated` field against its pre-slice value; `specs/index.json` regenerated in the same commit, and
+its `updated` entries for those ids match the frontmatter (no hand-edit); PR body states the
+disposition and the evidence for each of the 5.
 
 ### Slice 5 — Heading backfill batch B1
 
@@ -668,15 +697,27 @@ the generator produces no further diff — `git diff --exit-code proposals/index
 
 ## 7. Ordering and concurrency
 
-S1 must land before S5–S17 (it is what makes "removed from the baseline" enforceable). S4 is
-independent of S2/S3 and of the batches and may land in any order. **S2 must land before S3: both
-substantively append to `proposals/2026-08-29-factory-generator-related-ids-and-review-sidecars.md` (§8),
-each with its own `updated` bump and `proposals/index.json` regeneration (see each slice's DoD) —
-running them concurrently would race on the same proposal file and index projection, so they are not
-independent and must not be dispatched together.** S5→S17 land sequentially; S18 is last. Batches are the only
-slices that touch many files, and they touch disjoint file sets, so a late-arriving S3/S4 never
-conflicts with a batch except on `specs/index.json` and, for S3, `proposals/index.json` — resolve by
-merging `dev` in and re-running the generator, never by hand-editing the index (I7).
+S1 must land before S5–S17 (it is what makes "removed from the baseline" enforceable). **S4 must
+land before S5–S17.** S4 is independent of S2/S3 (disjoint files: S2/S3 touch
+`scripts/spec-index.mjs`, the proposal, and one review sidecar; S4 touches orphan/successor spec
+frontmatter), but it is **not** independent of the batches — up to 5 of the orphan specs it edits
+are individually owned by a heading batch (§5C's "the heading debt of these same 5 specs stays with
+their heading batch" is about content, not file identity): as measured 2026-08-29,
+`2026-04-21-triage-executor-adapter-design` and `2026-05-20-shells-golden-agents` are in B1 (S5),
+`2026-06-15-plugin-distribution-cicd-design` and `2026-06-20-constructed-pipelines-voltagent-gaps`
+are in B4 (S8), and `2026-07-10-gateway-update-system` is in B6 (S10); the successor candidates
+named in §2.4 fall in baselined ranges too. Dispatching S4 alongside one of those batches would race
+on the same spec file's frontmatter, not merely on a generated index, and manual conflict resolution
+there risks silently reverting either the heading backfill or the lineage/lifecycle edit. Landing S4
+first removes the race outright and needs no batch re-scoping or re-measurement. **S2 must land
+before S3: both substantively append to
+`proposals/2026-08-29-factory-generator-related-ids-and-review-sidecars.md` (§8), each with its own
+`updated` bump and `proposals/index.json` regeneration (see each slice's DoD) — running them
+concurrently would race on the same proposal file and index projection, so they are not independent
+and must not be dispatched together.** S5→S17 land sequentially after S4; S18 is last. Once S4 has
+landed, batches touch disjoint file sets from each other and from S4, so a late-arriving S3 never
+conflicts with a batch except on `specs/index.json` and `proposals/index.json` — resolve by merging
+`dev` in and re-running the generator, never by hand-editing the index (I7).
 
 ## 8. Cross-repo impact
 

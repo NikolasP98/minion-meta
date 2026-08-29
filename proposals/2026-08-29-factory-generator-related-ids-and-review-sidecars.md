@@ -60,9 +60,14 @@ A spec produced (or re-passed) by the factory pipeline passes `node scripts/spec
   equal the spec's current `pass`/`verdict`.
 
 Invariant that must not change: the sidecar keeps its per-pass history — the frontmatter is the
-**current-pass roll-up** and each pass keeps its own `## Pass N — <verdict>` section. Refreshing
-the roll-up must not overwrite or delete earlier passes' recorded findings, and a pass whose
-detail was never committed is named as such rather than reconstructed.
+**current-pass roll-up** and each pass keeps its own `## Pass N — <verdict>` section (or, for a
+pass whose record is genuinely unrecoverable, `## Pass N — record unavailable: <reason>`).
+Refreshing the roll-up must not overwrite or delete earlier passes' recorded findings, and a pass
+whose detail was never committed is named as such rather than reconstructed. This is a machine-
+checked requirement, not a convention: `2026-08-26-spec-heading-lint-baseline-backfill-spec` S3
+ships it as the Body clause of `node scripts/spec-index.mjs --check` — a sidecar with a current,
+agreeing frontmatter but no section for the current pass fails the gate even though its frontmatter
+alone is spotless.
 
 ## DELTA
 
@@ -76,10 +81,11 @@ detail was never committed is named as such rather than reconstructed.
    *Proves it:* a generated spec containing a `related` id that does not exist no longer
    occurs; `--check` exits 0 on the generated spec unmodified.
 3. **Make the `pass` bump and the sidecar write atomic** — one commit updates both the spec's
-   `pass`/`verdict` and the sidecar's roll-up frontmatter, appending a `## Pass N` section
-   rather than replacing the file.
+   `pass`/`verdict` and the sidecar's roll-up frontmatter, appending a `## Pass N — <verdict>`
+   section for the new current pass rather than replacing the file.
    *Proves it:* after a factory re-pass, `sidecar.pass === spec.pass` and
-   `sidecar.verdict === spec.verdict`, and the prior pass's section is still present.
+   `sidecar.verdict === spec.verdict`, the prior pass's section is still present, and a `## Pass N`
+   section exists for the new current pass (the Body clause — see TO-BE above).
 
 The exact rule semantics and error text that the generator must satisfy are appended to this
 proposal by slices S2 and S3 of
