@@ -11,7 +11,7 @@ type: decision
 tags: [ui, board]
 verdict: approved
 related: [2026-08-18-base-ui-primitives-and-shell-spec, 2026-08-18-base-workdetail-summary-first-spec, 2026-08-18-base-attention-queue-responsive-runs-spec]
-approved_reason: "Pass-2 operator review 2026-08-29: plan re-verified against minion-base@19531059 — 3 of 4 authored work-package specs merged and flag-activated, the 4th is mid-implementation, every non-negotiable is honored by shipped code. Kept as plan of record (repos [] — never dev-queued); the stale delivery-order status line and the superseded UI-003 nav enumeration were corrected in this pass."
+approved_reason: "Pass-2 operator review 2026-08-29: plan re-verified against minion-base@19531059 — of the three authored work-package specs, two (UI-002/003, UI-005/006/007) are merged and recorded flag-activated by their own specs (not runtime-reverified this pass), the third (UI-004/011) has only Slice 1 of 4 merged with both flags off; UI-001 shipped directly, outside any authored work-package spec. The already-shipped packages conform to the applicable non-negotiables, but the mobile-default law ('attention queue default, one stage at a time') is not yet built or enabled — that non-negotiable is open, not shipped. Kept as plan of record (repos [] — never dev-queued); the stale delivery-order status line and the superseded UI-003 nav enumeration were corrected in this pass."
 ---
 
 # Minion Base mobile-first HITL UX plan
@@ -88,15 +88,18 @@ binding.
 
 **AS-IS (verified).** Every claim below was read from `minion-base@main`
 `19531059cf42e352e35425dd3b3b71afa9eb540f` (2026-08-28) through the GitHub
-contents API, and from the merged-PR record.
+contents API, and from the merged-PR record. Code presence, merged PRs, and
+`.env.example` defaults are verified this way; production flag *activation*
+is not — the two rows below record what the linked work-package specs claim
+about activation, not a runtime probe against a live deployment.
 
 | WP | State | Evidence |
 |---|---|---|
 | UI-001 gate integrity | shipped, on main | `src/lib/server/meta-write.ts` — `applyTransition()` with the `transition_committed` / `already_applied` / `revision_conflict` / `invalid_transition` outcome union and `indexSynced` returned, never swallowed |
-| UI-002 + UI-003 | shipped + flag on | spec `2026-08-18-base-ui-primitives-and-shell-spec` (deploy/done); PR #25 `0513acb1`; `PUBLIC_MOBILE_SHELL_V2` activated in production 2026-08-20; `Status/AsyncButton/Popover/Disclosure/IntegrityMark/CopyableHash/BottomNav/ContextHeader/AppShell` all present; DESIGN.md §Scene rewritten to the mobile decision cockpit |
-| UI-005 + UI-006 + UI-007 | shipped + flag on | spec `2026-08-18-base-workdetail-summary-first-spec` (deploy/done); PR #28 `805886e0`; `PUBLIC_WORK_DETAIL_V2=1` activated in production 2026-08-20; `src/lib/work-detail/{adapters,types,fixtures}.ts` + `src/lib/components/work-detail/{IdentityStrip,DecisionBrief,ReadinessBand,DecisionDock,WorkDetailShell}.svelte`; `src/routes/kanban/issue-route.test.ts` |
+| UI-002 + UI-003 | shipped; flag recorded on, not runtime-reverified | spec `2026-08-18-base-ui-primitives-and-shell-spec` (deploy/done); PR #25 `0513acb1`; `PUBLIC_MOBILE_SHELL_V2` recorded as activated in production 2026-08-20 by that spec — not runtime-reverified in this pass (no deployment id, live probe, or rendered-shell assertion captured); `Status/AsyncButton/Popover/Disclosure/IntegrityMark/CopyableHash/BottomNav/ContextHeader/AppShell` all present; DESIGN.md §Scene rewritten to the mobile decision cockpit |
+| UI-005 + UI-006 + UI-007 | shipped; flag recorded on, not runtime-reverified | spec `2026-08-18-base-workdetail-summary-first-spec` (deploy/done); PR #28 `805886e0`; `PUBLIC_WORK_DETAIL_V2=1` recorded as activated in production 2026-08-20 by that spec — not runtime-reverified in this pass (no deployment id, live probe, or rendered-shell assertion captured); `src/lib/work-detail/{adapters,types,fixtures}.ts` + `src/lib/components/work-detail/{IdentityStrip,DecisionBrief,ReadinessBand,DecisionDock,WorkDetailShell}.svelte`; `src/routes/kanban/issue-route.test.ts` |
 | UI-004 + UI-011 | Slice 1 of 4 merged, flag off | spec `2026-08-18-base-attention-queue-responsive-runs-spec` (pass 5, approved); PR #39 `19531059` "feat(board): add URL-restorable attention queue filters" introduced `src/lib/board/{attention,view-state,feature-flag,parse-feature-flag}.ts`; `PUBLIC_ATTENTION_QUEUE_V2` and `PUBLIC_RESPONSIVE_RUNS_V2` are both reserved and default off (`.env.example`) — the queue UI (Slice 2), focused stages + filter sheet (Slice 3) and run cards (Slice 4) are not built |
-| UI-008 / UI-009 / UI-010 | still blocked | their named prerequisites (durable decision API, SDLC evidence manifest, durable events) map to M2/M6 of `2026-08-18-sdlc-transformation-roadmap`; no milestone spec beyond `2026-08-18-factory-m0-safety-foundation-spec` (implementing) exists in `specs/index.json`, so no prerequisite has landed |
+| UI-008 / UI-009 / UI-010 | still blocked | their named prerequisites (durable decision API, durable events, SDLC evidence manifest) map to the roadmap's M2 (durable state/evidence spine) and M6 (browser evidence + durable HITL) milestones. The corpus is not empty beyond M0: `2026-08-18-agent-instruction-parity-and-repo-policy-spec` (M1, approved, verdict approved, merged fleet-wide) and `2026-08-18-factory-topic-capability-manifest-spec` (M3, stage done/status shipped, but its own `reconcile_ignore_reason` says only Slice 2 of 6 merged) both exist and postdate M0. The two prerequisites that actually gate UI-008/009/010 are `2026-08-18-factory-durable-state-outbox-spec` (M2 — status `implementing`, verdict `changes_requested`, 0 of 6 slices merged; this is the durable decision API + append-only event log UI-008 and UI-010 need) and `2026-08-28-factory-browser-verification-stage-spec` (M6 — stage `spec`, status `draft`, 0 of 8 slices merged; this is the evidence manifest UI-009 needs). Neither has a merged PR, so the blocker holds on prerequisite-non-landing, not on milestone-spec nonexistence |
 
 Cross-cutting law also verified as honored on main: `@axe-core/playwright` +
 Playwright are wired (`package.json`), the visual-regression matrix covers
@@ -121,13 +124,16 @@ made the plan indistinguishable from a spec awaiting review.
 ## Related
 
 - `2026-08-18-base-ui-primitives-and-shell-spec` — UI-002/003, `extends` this
-  plan; merged and flag-activated.
+  plan; merged, flag recorded activated (not runtime-reverified).
 - `2026-08-18-base-workdetail-summary-first-spec` — UI-005/006/007,
-  `depends-on` this plan; merged and flag-activated.
+  `depends-on` this plan; merged, flag recorded activated (not
+  runtime-reverified).
 - `2026-08-18-base-attention-queue-responsive-runs-spec` — UI-004/011,
   `depends-on` this plan; approved, Slice 1 merged, Slices 2–4 open.
 - `2026-08-18-sdlc-transformation-roadmap` — the factory-side programme whose
-  M2/M6 milestones gate UI-008/009/010.
+  M2 (`2026-08-18-factory-durable-state-outbox-spec`, implementing) and M6
+  (`2026-08-28-factory-browser-verification-stage-spec`, draft) milestones
+  gate UI-008/009/010; both exist with 0 merged slices, not absent.
 
 ## Out of scope
 
@@ -155,14 +161,17 @@ artifact is stale, and this plan's laws are the tiebreaker.
 ## Disposition — approved (2026-08-29, pass 2)
 
 **Approved and kept as the plan of record.** The plan is live law, not
-archaeology: four of its work-package groups produced specs, three of those
-merged and are flag-activated in production, the fourth is mid-implementation,
-and later unrelated base work (the 2026-08-28 traceability overhaul) was
-governed by these same non-negotiables. Nothing in it was contradicted by the
-code review above.
+archaeology: UI-001 shipped directly, outside any authored work-package spec;
+of the three authored work-package specs, two (UI-002/003, UI-005/006/007)
+merged and are recorded flag-activated by their own specs (not
+runtime-reverified this pass), and the third (UI-004/011) is mid-implementation
+with both flags off. Later unrelated base work (the 2026-08-28 traceability
+overhaul) was governed by these same non-negotiables. Nothing in it was
+contradicted by the code review above.
 
-Not `archived` — three work packages remain unbuilt and three more are
-blocked-not-cancelled, so the document still has consumers. Not `rejected` —
+Not `archived` — two work packages remain partially built (UI-004, UI-011 —
+Slice 1 of 4 merged, flags off) and three more are blocked-not-cancelled
+(UI-008/009/010), so the document still has consumers. Not `rejected` —
 its laws are implemented, not merely proposed. Not `still-review` — the only
 thing that was open was a missing `verdict`, and the evidence to close it is
 above.
