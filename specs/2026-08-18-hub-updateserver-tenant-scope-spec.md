@@ -5,10 +5,12 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-18
-updated: 2026-08-19
+updated: 2026-08-29
+next_slice: 2
 proposal: 2026-08-17-hub-updateserver-tenant-scope
 verdict: approved
 repos: [minion_hub]
+tags: [security, data, logic, test]
 relationship: extends
 related: [2026-05-25-auth-supabase-pg-migration-design]
 ---
@@ -24,6 +26,35 @@ From the approved proposal, verbatim:
 The goal is to make the database mutation itself reject a server owned by another tenant, even if a
 future caller omits or weakens its route-level ownership check. The change remains parked until the
 re-key compatibility gate in Slice 1 passes; this spec does not authorize the re-key migration.
+
+### Delivery status (recorded 2026-08-29, metadata-repair pass)
+
+The approved intent still stands — the defect this spec targets is live on `minion_hub` `master` —
+but the spec no longer described what had already shipped. Verified against `minion_hub` `master`
+on 2026-08-29:
+
+| Slice | State | Evidence |
+|---|---|---|
+| Slice 1 | **Merged** | `minion_hub` PR #130 (`factory: auto: hub-updateserver-tenant-scope-spec S1`), merged 2026-08-28, merge commit `afd023b6100de280ba0f14e252f9afe1baa6a360`. It landed the two-tenant baseline tests in `src/server/services/server.service.test.ts`, the read-only two-source audit (`scripts/audit-server-tenant-scope.ts` + `.lib.ts` + tests), the unconditional `bun run rekey:readiness` status command, `scripts/rekey-readiness-gate.test.ts`, and `docs/runbooks/server-tenant-scope-rekey-readiness.md`. |
+| Slice 1 human half | **Outstanding** | The four evidence artifacts (non-production audit, production audit, concrete re-key record, rollback note) are not recorded: `tests/rekey-readiness/evidence.json` is absent on `master`, so `bun run rekey:readiness` exits 1. Only a holder of the real Turso + Supabase service-role credentials can produce them. |
+| Slice 2 | **Not started** | `updateServer` in `src/server/services/server.service.ts` still matches on `eq(servers.id, id)` alone, carrying an explicit `TODO(handoff)` that names this spec. |
+
+Two facts about the AS-IS below changed after it was written, and neither retires this spec:
+
+- The **live IDOR is closed at the route boundary**. `assertOwnsOrAdmin()` in
+  `src/routes/api/servers/[id]/+server.ts` (hardened by `19ba7894e`, "preserve tenant and user
+  mutation boundaries") resolves every `PUT`/`DELETE` target against the Supabase `gateway`
+  registry and falls back to a Turso `servers.tenantId` authorization check, denying with 404 on a
+  mismatch. Slice 2 is therefore **defense in depth / data hygiene**, not an open exploit path —
+  its priority is lower than the original proposal implies, and its TO-BE invariants are unchanged.
+- The **Slice 1 stop rule is now executable**, not prose. `bun run rekey:readiness` exits 0 only
+  when all four artifacts are present and passing, and `src/server/services/server.service.test.ts`
+  fails if the tenant predicate lands ahead of that evidence. Slice 2 cannot be implemented by any
+  agent until the human half is done; attempting it produces a red suite, not a merge.
+
+`next_slice: 2` records that Slice 1's code is merged. It does **not** waive the gate above: the
+Slice 2 preflight is a hard stop, and this spec keeps its `security`/`data` human gates at approval
+and merge.
 
 ### Relationship recommendation
 
@@ -101,7 +132,9 @@ the related artifact.
 
 ### Slice 1 — re-key readiness and executable baseline
 
-**Size:** ~4–6 focused hours · **Tags:** `security`, `data`, `test`
+**Topics:** `security`, `data`, `test`
+
+**Size:** ~4–6 focused hours
 
 Work from a `minion_hub` feature worktree based on the current `master` branch (the old `dev` branch
 was deleted). First read that checkout's `CLAUDE.md` or `AGENTS.md`. Source:
@@ -151,7 +184,9 @@ spec.
 
 ### Slice 2 — tenant-scoped mutation and regression coverage
 
-**Size:** ~4–6 focused hours · **Tags:** `security`, `logic`, `test`
+**Topics:** `security`, `logic`, `test`
+
+**Size:** ~4–6 focused hours
 
 #### Exact files to touch
 
@@ -160,6 +195,21 @@ spec.
   `src/server/services/server.service.test.ts`)
 - Only if discovery shows an existing route-level test owns the public contract: that existing
   `src/routes/api/servers/[id]/...` test file. No route production file is expected to change.
+
+#### Preflight — a hard stop, run before any edit
+
+Slice 1 shipped an unconditional readiness command. Run it first, from the `minion_hub` worktree:
+
+```bash
+bun run rekey:readiness    # exits 0 only when all four Slice 1 evidence artifacts are recorded
+```
+
+A non-zero exit means the credential-holder half of Slice 1 is still outstanding. Stop there: make
+no edit, open no PR, and report the missing artifacts it printed. Implementing the predicate anyway
+turns `src/server/services/server.service.test.ts` red by design (the suite binds the shipped
+mutation to the recorded evidence in both directions), so there is no version of this slice that
+passes its own gates ahead of the evidence. As of 2026-08-29 this command exits 1 — see §0
+Delivery status.
 
 #### Work
 
@@ -176,6 +226,7 @@ spec.
 #### Definition of done
 
 ```bash
+bun run rekey:readiness   # must exit 0 before anything below is attempted
 rg -n "and\(|servers\.tenantId|servers\.id" src/server/services/server.service.ts
 server_service_test=${SERVER_SERVICE_TEST:-src/server/services/server.service.test.ts}
 test -f "$server_service_test" && bun run test -- "$server_service_test"
