@@ -3,7 +3,7 @@ id: 2026-08-28-factory-browser-verification-stage-spec
 title: Credential-free, loopback-isolated browser-verification stage for UI-topic factory runs
 stage: spec
 status: review
-pass: 4
+pass: 5
 created: 2026-08-28
 updated: 2026-08-29
 proposal: 2026-08-18-factory-browser-verification-stage
@@ -244,6 +244,39 @@ excerpts quoted below if a concurrent factory PR lands first.
     re-inspects, and only then runs `network rm` with a confirmation read. This spec's phase group must
     reuse that discipline rather than invent a second one — the delta is that the group identity has to
     become durable *phase-attempt* state, which the instance path does not need.
+19. **A plain `--internal` bridge does not isolate either role from the Docker host.** Docker's own
+    docs state that an internal bridge is normally assigned a host-side gateway address: processes on
+    the host can reach containers on it, and containers can reach host services bound to that address;
+    the `gateway_mode=isolated` bridge option (Docker Engine 28+) is what removes the host route
+    ([Docker gateway modes](https://docs.docker.com/engine/network/port-publishing/#gateway-modes),
+    [Docker Engine 28 release notes](https://docs.docker.com/engine/release-notes/28/)). No minimum
+    Docker Engine version is pinned anywhere in `minion-factory` today, and the existing
+    `createInternalNetworkArgs`/`ensureInstanceNetwork()` precedent (item 18) only asserts
+    `Driver === 'bridge' && Internal === true` — it never requests or asserts a gateway mode. A pass-3
+    fix closed the wildcard-bind/general-egress defect but left this one open: `--internal` alone
+    leaves the Docker host reachable from both roles and leaves both roles reachable from the host,
+    contradicting Target invariant 5's "only reachable destination is preview" claim.
+20. **No controller-owned bare Git mirror exists anywhere in `minion-factory` today, and Git's
+    replace-object mechanism can make an archive of a trusted SHA emit different bytes than that SHA's
+    own tree.** A repository-wide search finds no bare mirror, mirror-creation path, or immutable
+    object-store precedent; `agent/factory-prepare-workspace.sh:45-58` clones directly into the durable
+    `${root}/workspace` — the same checkout `develop` mounts read-write with model/persistent-auth
+    surfaces attached (`containers.ts:362-407`, item 15) — which is the only local Git object store the
+    runner has today. A focused fixture proved the risk of treating that checkout as an archive source:
+    after creating trusted commit A and attacker commit B, `git replace A B` made `git archive A` emit
+    B's file and made `git rev-parse A^{tree}` return B's tree; only
+    `GIT_NO_REPLACE_OBJECTS=1 git rev-parse A^{tree}` returned A's real tree. Archiving `candidate_sha`
+    out of this checkout — even by SHA, even from the runner process — cannot by itself prove the
+    exported bytes were not substituted by a develop-writable replacement ref, config, or alternate ref.
+21. **No slice, table, or contract owns producing runnable dependencies for the preview role.**
+    `minion-hub`'s registered `setup` is `bun install` (`runner/src/repos.ts:144-157`) run against the
+    durable `${root}/workspace` with a generic writable `/cache` and no cache-location contract
+    (`runner/src/queue.ts:1080-1088`); `git archive` excludes `node_modules` by construction (Git
+    tracks no untracked path), and the `browser-internal` network (invariant 5) gives the preview
+    container no registry egress of its own. Nothing in D1-D10 or Slices 1-9 declares a
+    post-materialization dependency-install role, its network/credential posture, an artifact format,
+    or a mount into the preview container — a hub pilot run with an unchanged manifest still has no
+    declared way to receive installed packages.
 
 **Hard constraints from operator memory** (`/memory/MINION/sdlc-board-triage-and-phase-gates.md`,
 ★★★): prompts are not a security boundary; reviewers are technically read-only; the controller owns
@@ -296,21 +329,33 @@ a security boundary" as applying identically to page-rendered text reaching a do
    `FACTORY_CONTAINMENT_V2=1`, the phase is in `CONTAINMENT_IMPLEMENTED_PHASES`, the dedicated image
    resolves, and the repo registration/profile is valid. Factory-side implementation may land
    before the worker-containment spec's production canary, but minion-meta activation may not.
-5. **Per-attempt internal network; no unrestricted-egress mode and no host port exists.** The
-   preview and browser containers share a Docker network created per attempt with `--internal` (no
-   route to any external destination), named `factory-browser-<runId>-<attempt>` and carrying the
-   existing `factory.minion-ai/role=browser-verify-network` label. It is created, adopted, asserted
-   (`Driver === 'bridge' && Internal === true`, labels match, no stale attachments) and torn down
-   through the same idempotent discipline `ensureInstanceNetwork()`/instance teardown already use
-   (AS-IS item 18), and its identity is durable attempt state (invariant 12) — not in-process state.
-   Only the two containers for this attempt are ever attached to it. `NETWORK_MODES` gains exactly one
-   new closed value, `browser-internal`, used only by this phase's two roles; there is no `bridge` or
-   other general-outbound mode for `browser-verify`, and a repo registration cannot opt into one.
+5. **Per-attempt internal network, host-isolated by construction; no unrestricted-egress mode and no
+   host port exists.** The preview and browser containers share a Docker network created per attempt
+   with `--internal` **and** `--opt com.docker.network.bridge.gateway_mode_ipv4=isolated`, with IPv6
+   disabled on the network (`--ipv6=false`, so there is no unisolated IPv6 gateway path either), named
+   `factory-browser-<runId>-<attempt>` and carrying the existing
+   `factory.minion-ai/role=browser-verify-network` label. Before this phase can be scheduled at all,
+   the runner preflights the connected Docker Engine's reported version and refuses to run — a
+   distinct fail-closed infrastructure reason, never a phase failure — on any engine that does not
+   support `gateway_mode_ipv4=isolated` (AS-IS item 19); a plain `--internal` bridge without that
+   option is not an acceptable fallback. The network is created, adopted, and asserted against the
+   **exact** options it was created with — `Driver === 'bridge' && Internal === true &&
+   Options['com.docker.network.bridge.gateway_mode_ipv4'] === 'isolated' && EnableIPv6 === false`,
+   labels match, no stale attachments — since asserting `Internal === true` alone does not prove host
+   isolation (AS-IS item 19). Teardown reuses the same idempotent discipline `ensureInstanceNetwork()`/
+   instance teardown already use (AS-IS item 18), and the network's identity, including its recorded
+   creation options, is durable attempt state (invariant 12) — not in-process state. Only the two
+   containers for this attempt are ever attached to it. `NETWORK_MODES` gains exactly one new closed
+   value, `browser-internal`, used only by this phase's two roles; there is no `bridge` or other
+   general-outbound mode for `browser-verify`, and a repo registration cannot opt into one.
    **Neither role's container spec may publish a host port** (`-p`/`--publish`/`--publish-all` are
    absent from the rendered argv and rejected by the plan validator), so the preview origin is
    reachable only from inside this one network. This satisfies the proposal's egress-allowlisting
-   requirement by construction — the only destination reachable from the browser container is the
-   preview container, and the preview container has no external destination to reach at all.
+   requirement by construction, and the isolated gateway mode additionally removes the Docker-host
+   route a plain internal bridge would otherwise leave open in both directions: the only destination
+   reachable from the browser container is the preview container, the preview container has no
+   external destination to reach at all, the Docker host cannot reach either container's declared
+   port, and neither container can reach a host-bound service through the bridge gateway address.
 6. **Deterministic verdict.** The profile's Playwright assertions, configured console-error policy,
    and the fixed axe policy (fail on `critical` or `serious` violations) are the only inputs to pass
    or fail. Page text, AX labels, console bodies, and network bodies are evidence data and can never
@@ -334,22 +379,48 @@ a security boundary" as applying identically to page-rendered text reaching a do
    `ui`-effective run for a repo without a browser registration intentionally refuses to queue; it
    never reports a false pass. This affects `minion-base`, `minion-site`, `minion-ai`, `minion-meta`,
    and `minion-factory` until each receives a separately reviewed profile.
-10. **Clean, tracked-only candidate materialization, performed by the controller before launch.**
-    The preview container's workspace is produced **by the runner**, in the runner's own process,
-    **before either container is created**: the runner exports exactly `candidate_sha` out of the
-    bare mirror it already owns (`git archive` piped into a fresh, empty, root-created per-attempt
-    directory `${root}/browser-preview-${attempt}`, the controller-owned sibling of the existing
-    `${root}/selftest-${attempt}` special case in `canonicalMountSource()`), verifies the extracted
-    tree hashes to `candidate_sha`'s tree, and only then mounts that directory into the preview
-    container. It is **never** a recursive copy of the develop workspace followed by `git reset --hard`
-    (AS-IS item 15 proves that path leaves untracked/ignored residue).
+10. **Clean, tracked-only candidate materialization, drawn from an independently-fetched,
+    worker-inaccessible object store, performed by the runner before launch.** The runner does not
+    treat the develop-writable `${root}/workspace` checkout as a trustworthy archive source (AS-IS item
+    20 shows why: a replacement ref, alternate object directory, or replace-shaped config reachable
+    from `develop` can make `git archive`/`git rev-parse` disagree with `candidate_sha`'s real tree).
+    Instead, before either container is created, the runner:
+    a. independently fetches `candidate_sha` from the controller's own remote authority (the same
+       GitHub remote and read-only credential the controller already uses to learn the pushed SHA —
+       never a path under `develop`'s checkout) into a **fresh, per-attempt bare object store** that no
+       container ever mounts and no worker process can write to
+       (`${root}/browser-mirror-${attempt}.git`, created and destroyed by the runner alone — the
+       controller-owned sibling of the existing `${root}/selftest-${attempt}` special case in
+       `canonicalMountSource()`);
+    b. runs every Git operation against that store with `GIT_NO_REPLACE_OBJECTS=1`, so a
+       `refs/replace` entry, alternate object directory, or replace-shaped config planted anywhere else
+       can never be consulted;
+    c. verifies the fetched commit's raw object id equals `candidate_sha` and that
+       `candidate_sha^{tree}` (replacement processing disabled) matches the tree the controller's own
+       remote authority reports for that SHA — the store is trusted because it was independently
+       fetched and never touched by `develop`, not merely because its bytes match a hash drawn from the
+       same source;
+    d. archives exactly `candidate_sha`'s tree out of that verified store (`git archive`) into a fresh,
+       empty, root-created per-attempt directory `${root}/browser-preview-${attempt}`, and re-verifies
+       the extracted tree hashes to `candidate_sha`'s tree;
+    e. closes and deletes the per-attempt bare store immediately after the archive succeeds, before the
+       dependency-prep (invariant 13), preview, or browser role is created — the verified source exists
+       only for the duration of steps (a)-(d) and is never available to any container.
+    It is **never** a recursive copy of the develop workspace followed by `git reset --hard` (AS-IS item
+    15 proves that path leaves untracked/ignored residue) and **never** an archive taken directly
+    against the develop-writable checkout (AS-IS item 20 proves that path is replace-ref bypassable).
     **The untrusted containers never receive a Git object store, a mirror mount, a remote, or an
-    archive transport**: the preview role's container spec contains no path under the mirror, the
+    archive transport**: the preview role's container spec contains no path under any mirror, the
     extracted tree contains no `.git` directory, and no role runs `git` against any object store after
     launch. The mount therefore contains exactly the tracked files at `candidate_sha` — no other ref,
     no history, no credential, secret, or residue written into an ignored or untracked path during
-    `develop`. Runtime dependencies come from a separately sealed, credential-free, read-only setup
-    cache/artifact, never from copying develop's `node_modules` or install state.
+    `develop`. Runtime dependencies come from the separately sealed, credential-free, read-only
+    dependency artifact invariant 13 defines, mounted read-only into the preview role — never from
+    copying develop's `node_modules` or install state.
+    **Regression proof:** a fixture plants a `refs/replace` entry, a malicious `.git/config` (an
+    inserted replace-ref/alternates entry), and an unrelated ref carrying different content, all inside
+    the develop workspace, immediately before the phase runs; none may reach the exported bytes, the
+    reported tree hash, or any browser artifact (T-NO-REPLACE-REF-BYPASS).
 11. **Chromium's own sandbox is enabled, minimally provisioned, and proved at runtime.** The browser
     entrypoint launches Playwright with `chromiumSandbox: true`; `--no-sandbox` and
     `--disable-setuid-sandbox` never appear in the launch options, the profile's allowed argument set,
@@ -375,6 +446,25 @@ a security boundary" as applying identically to page-rendered text reaching a do
     correct at every failpoint — after network create, after either role launch, between browser exit
     and seal, and during teardown — leaving no orphan container, no leaked network, no duplicate
     launch, and no second writer to a sealed `/out`.
+13. **The dependency artifact is produced by a controller-scheduled, credential-free install role —
+    never by copying develop's `node_modules`.** After invariant 10 produces the tracked-only export
+    and before the preview container is created, the runner launches a disposable **dependency-prep**
+    role: the repo's already-registered `setup` command runs once, against a private copy of that same
+    export, under the repo's already-registered `setupNetwork` egress (AS-IS item 6/21) — the closed,
+    per-repo opt-in network already used to install `develop`'s dependencies, default `none` — with the
+    same disposable-role posture as `self-test` (`github: null`, `model: forbidden`, `uid 1100`,
+    read-only rootfs, no `/out`, no browser-profile mount, no candidate execution beyond the registered
+    command). No new registry allowlist, proxy, or credential surface is introduced. On success the
+    runner packs the resulting dependency directory into a single immutable, read-only artifact file
+    named by a SHA-256 over `{candidate_sha, lockfile bytes, setup command, toolchain image digest}`,
+    stores it under a controller-owned per-attempt leaf, and mounts only that one file read-only into
+    the preview container; the preview entrypoint unpacks it locally and opens no network of its own
+    (invariant 10's "separately sealed... dependency artifact" is this producer). The dependency-prep
+    role and its private copy of the export are deleted before the preview or browser role is created.
+    A missing, oversized (over a fixed byte ceiling), or hash-mismatched artifact fails the phase
+    closed rather than falling back to develop's dependency state; an unchanged candidate, lockfile,
+    setup command, and toolchain image produce a byte-identical artifact hash, and a changed dependency
+    produces a differently-hashed one.
 
 ## 4. DELTA
 
@@ -382,24 +472,29 @@ a security boundary" as applying identically to page-rendered text reaching a do
   T-EVIDENCE-SUPPORTED, T-REPO-SCHEMA).
 - **D2** Add the two-container phase policy (preview + browser roles, disjoint mounts/UIDs, no
   published host ports), generic phase-artifact variant, conditional scheduler kept outside
-  `DEV_PHASE_SEQUENCE`, and phase-specific image selection per role (S2; T-PHASE-POLICY-BROWSER,
-  T-CONTAINER-SPLIT, T-SEQUENCE-CONDITIONAL, T-IMAGE-SELECTION, T-NO-PUBLISHED-PORTS).
+  `DEV_PHASE_SEQUENCE`, phase-specific image selection per role, and the host-isolated network's
+  minimum-Engine-version preflight (S2; T-PHASE-POLICY-BROWSER, T-CONTAINER-SPLIT,
+  T-SEQUENCE-CONDITIONAL, T-IMAGE-SELECTION, T-NO-PUBLISHED-PORTS, T-ENGINE-GATEWAY-MODE-PREFLIGHT).
 - **D3** Build and publish an immutable browser image from pinned inputs, including exact Chrome for
   Testing archive version+checksum and exact Playwright, axe-core, chrome-devtools-mcp, Bun, pnpm,
   npm, and Node/base-image identities (S3; T-IMAGE-PINS-BROWSER, T-DIGEST-DEPLOY).
-- **D4** Implement controller-side tracked-only candidate materialization, deterministic profile
-  execution under an enabled Chromium sandbox, per-attempt internal-network reachability enforcement,
-  capture, cleanup, and both evidence layers (S4; T-PROFILE-CONTRACT, T-CLEAN-MATERIALIZATION,
-  T-EVIDENCE-FILESET, T-INTERNAL-NETWORK-ONLY, T-SANDBOX-ENFORCED).
+- **D4** Implement controller-side tracked-only candidate materialization from an independently-fetched
+  bare object store with replacement-object processing disabled, deterministic profile execution under
+  an enabled Chromium sandbox, per-attempt host-isolated-network reachability enforcement, capture,
+  cleanup, and both evidence layers (S4; T-PROFILE-CONTRACT, T-CLEAN-MATERIALIZATION,
+  T-NO-REPLACE-REF-BYPASS, T-EVIDENCE-FILESET, T-INTERNAL-NETWORK-ONLY, T-HOST-ISOLATED-NETWORK,
+  T-SANDBOX-ENFORCED).
 - **D5** Snapshot/hash profiles and securely validate/bind the fixed evidence set (S5;
   T-PROFILE-SNAPSHOT, T-EVIDENCE-VALIDATE, T-EVIDENCE-BINDING).
 - **D6** Enforce queue/advance readiness and an explicit automerge predicate (S6;
   T-MISSING-PROFILE-FAILCLOSED, T-V2-FAILCLOSED, T-READINESS-FAILCLOSED,
   T-AUTOMERGE-PREDICATE).
 - **D7** Register and prove the `minion-hub` pilot, including adversarial content,
-  container-isolation, mirror/history-unreachability, and sandbox-status cases (S7;
-  T-INJECTION-AXTREE, T-INJECTION-CONSOLE, T-EGRESS-INTERNAL-NETWORK-ONLY, T-CONTAINER-ISOLATION,
-  T-CLEAN-MATERIALIZATION-E2E, T-NO-MIRROR-REACHABILITY, T-SANDBOX-STATUS-E2E, T-PILOT-E2E).
+  container-isolation, mirror/history-unreachability, dependency-artifact-leak, the
+  `CONTAINMENT_IMPLEMENTED_PHASES` transition, and sandbox-status cases (S7; T-INJECTION-AXTREE,
+  T-INJECTION-CONSOLE, T-EGRESS-INTERNAL-NETWORK-ONLY, T-CONTAINER-ISOLATION,
+  T-CLEAN-MATERIALIZATION-E2E, T-NO-MIRROR-REACHABILITY, T-NO-DEVELOP-DEPENDENCY-LEAK-E2E,
+  T-IMPLEMENTED-PHASES-TRANSITION, T-SANDBOX-STATUS-E2E, T-PILOT-E2E).
 - **D8** Add `browser-verify` to the canonical `ui` topic only after the production prerequisites and
   refusal canaries pass (S9; T-ROLLOUT-ORDER, T-META-ACTIVATION).
 - **D9** Add the per-phase kernel-surface hook the launch renderer lacks (a closed, policy-owned
@@ -411,6 +506,9 @@ a security boundary" as applying identically to page-rendered text reaching a do
   and prove it against a real restarted controller (S2 unit + S8 integration;
   T-GROUP-LAUNCH-IDENTITY, T-LEGACY-POLICY-COMPAT, T-GROUP-TEARDOWN-IDEMPOTENT, T-GROUP-RECOVERY-UNIT,
   T-GROUP-RECOVERY-FAILPOINTS, T-GROUP-CANCEL).
+- **D11** Add the dependency-artifact producer (disposable `setup`-network install role, hash-named
+  immutable artifact, read-only preview mount) and its size/hash fail-closed checks (S4;
+  T-DEPENDENCY-ARTIFACT-PRODUCER, T-DEPENDENCY-ARTIFACT-BINDING, T-NO-DEVELOP-DEPENDENCY-LEAK).
 
 ## 5. Design decisions
 
@@ -429,14 +527,22 @@ a security boundary" as applying identically to page-rendered text reaching a do
    parser or assertion semantics. A runner-owned `.mjs` module is reviewable code, can express real
    Playwright actions/assertions, and is safe from candidate mutation through a per-run read-only
    snapshot.
-4. **Use a per-attempt `--internal` Docker network, not `bridge`.** Splitting preview and browser into
-   separate containers (decision 2) removes the shared network namespace the pre-fix design relied
-   on for "loopback isolation," and `bridge` mode's general outbound access directly contradicts the
-   proposal's egress-allowlisting requirement (pass-2 review finding H2). A freshly created `--internal`
-   network scoped to exactly the two containers for this attempt has no route to any external
-   destination by construction — stronger than allowlisting, since there is nothing to allowlist
-   against. No proxy is necessary, and there is no configurable escape hatch left to document as
-   residual risk.
+4. **Use a per-attempt `--internal` Docker network with an isolated gateway mode, not `bridge` and not
+   a plain internal bridge.** Splitting preview and browser into separate containers (decision 2)
+   removes the shared network namespace the pre-fix design relied on for "loopback isolation," and
+   `bridge` mode's general outbound access directly contradicts the proposal's egress-allowlisting
+   requirement (pass-2 review finding H2). A freshly created `--internal` network scoped to exactly the
+   two containers for this attempt has no route to any external destination by construction — stronger
+   than allowlisting, since there is nothing to allowlist against. However, Docker documents a plain
+   internal bridge as still carrying a host-side gateway address by default, so the Docker host can
+   reach the containers and the containers can reach host-bound services unless the network is
+   additionally created with `gateway_mode_ipv4=isolated` (Docker Engine 28+) and IPv6 disabled
+   (pass-4 review finding H1). This spec therefore makes the isolated gateway mode, a pinned minimum
+   Engine version (enforced by a fail-closed preflight), and an exact-options network inspection (not
+   merely `Internal: true`) part of the network's durable identity and its recovery/teardown
+   discipline — the Docker-host boundary is proved the same way the external-egress boundary is: by
+   inspecting the object Docker actually created, not by the flag that was passed to create it. No
+   proxy is necessary, and there is no configurable escape hatch left to document as residual risk.
 5. **Reuse `/out`, but honor the generic phase contract.** Browser files live under
    `/out/browser/`; `/out/phase-result.json` remains mandatory because it is how the existing runner
    closes any phase attempt. No new database table or output mount role is required.
@@ -508,15 +614,33 @@ a security boundary" as applying identically to page-rendered text reaching a do
     (`orchestrator-runtime.ts:270-296`), which is idempotent and therefore safe to re-run after a
     partial failure. Failing to *prove* a clean group leaves `runDispatchBlocked = true`, matching the
     existing fail-closed recovery posture rather than inventing a new one.
-12. **The controller materializes; the untrusted role only receives.** Invariant 10's tracked-only
-    export must run in the runner, not in the preview entrypoint. Handing the preview container a
-    mirror mount would let candidate code read every other ref and all history and then render it into
-    browser artifacts; handing it an archive *stream* would require a controller-owned producer and a
-    binding/close protocol that neither this spec nor the shipped container-plan contract defines.
-    Exporting into a controller-created directory and mounting only the result needs no new transport,
-    matches the existing controller-owned `${root}/selftest-${attempt}` precedent, and makes
-    "the untrusted container has no Git object store" a property of the container spec — inspectable
-    in the persisted plan, not a promise about entrypoint behavior.
+12. **The controller materializes from an independently verified source; the untrusted role only
+    receives.** Invariant 10's tracked-only export must run in the runner, not in the preview
+    entrypoint, and must not trust the same develop-writable checkout that `develop`'s
+    model/persistent-auth mounts already touch — pass-4 review finding H2 showed that trusting that
+    checkout as an archive source is bypassable through Git's own replace-object mechanism, regardless
+    of whether the archive command runs in the runner process or a container. Handing the preview
+    container a mirror mount would let candidate code read every other ref and all history and then
+    render it into browser artifacts; handing it an archive *stream* would require a controller-owned
+    producer and a binding/close protocol that neither this spec nor the shipped container-plan
+    contract defines. Fetching `candidate_sha` fresh from the controller's own remote authority into a
+    bare store the runner alone creates and destroys, with replacement-object processing disabled, and
+    verifying the raw commit/tree identity before archiving, makes "the untrusted container has no Git
+    object store" **and** "the exported bytes cannot have been substituted by a develop-writable ref"
+    both properties of the container spec and the fetch protocol — inspectable and testable, not a
+    promise about entrypoint behavior or a hash computed from a source that could itself have been
+    tampered with.
+13. **Reuse the existing `setup` phase's egress and credential posture for dependency install, rather
+    than inventing a new registry proxy.** The repo already declares a `setup` command and a
+    `setupNetwork` opt-in egress (AS-IS item 6) used to install `develop`'s dependencies; pass-4 review
+    finding H3 showed no slice ever produces the dependency artifact invariant 10 promised the preview
+    role. `browser-verify`'s dependency-prep role runs the identical command under the identical
+    posture against the tracked-only export instead of the mutable develop workspace, so no new
+    registry allowlist, proxy, or credential surface is introduced. Packing the result into a single
+    hash-named artifact — rather than mounting the install role's writable directory directly — makes
+    "no develop residue crosses into preview" a property of the copy step, since the pack step reads
+    only from the install role's own disposable output, and gives the preview and browser containers a
+    stable, read-only, candidate-bound input consistent with invariant 8's profile-snapshot pattern.
 
 ## 6. Slices
 
@@ -555,7 +679,13 @@ workspace, **no** `/out` mount, **no** `browser-profile` mount) and a **browser*
 dedicated `FACTORY_BROWSER_VERIFY_IMAGE` under a distinct uid (exclusive `/out` rw, read-only
 `browser-profile` input, **no** candidate/workspace mount). Add the `browser-internal` value to
 `NETWORK_MODES` and attach both roles, and only both roles, to a per-attempt `--internal` network
-(§5 Design decision 4) — no other network mode is valid for this phase. Neither role's rendered argv
+created with `--opt com.docker.network.bridge.gateway_mode_ipv4=isolated` and `--ipv6=false`
+(§5 Design decision 4) — no other network mode is valid for this phase, and a plain `--internal`
+network without the isolated gateway option is rejected by the plan validator, not merely
+undocumented. Before scheduling this phase, query the connected Docker Engine's reported version and
+refuse with a distinct "Docker Engine does not support isolated gateway mode" infrastructure reason
+(never a `{status:'failed'}` verdict) on any engine below the minimum that supports
+`gateway_mode_ipv4=isolated` (T-ENGINE-GATEWAY-MODE-PREFLIGHT). Neither role's rendered argv
 may contain `-p`/`--publish`/`--publish-all`, and the plan validator rejects a spec that carries one.
 Extend the phase artifact parser with a browser variant that requires candidate/profile/image
 bindings sourced from the browser role's `/out` only.
@@ -615,7 +745,12 @@ failpoint (network created only; preview launched; both launched; browser exited
 half-done) kills every live role, removes the network, seals the row `crashed`, and leaves no orphan;
 if the double reports any role still running or the network still attached, recovery returns `false`
 and dispatch stays blocked. **T-GROUP-TEARDOWN-IDEMPOTENT** — running teardown twice, and running it
-against an already-absent network, both succeed without error.
+against an already-absent network, both succeed without error. **T-ENGINE-GATEWAY-MODE-PREFLIGHT** —
+with an injected Docker-version double reporting an engine below the isolated-gateway-mode minimum,
+scheduling this phase refuses with the named infrastructure reason before any network or container is
+created; with a double reporting a supporting engine, the network-create call includes
+`gateway_mode_ipv4=isolated` and `--ipv6=false`; every other phase's scheduling is unaffected by the
+preflight.
 
 ### Slice 3 — pinned image supply chain (minion-factory, 4–6h)
 
@@ -666,19 +801,40 @@ and T-DIGEST-DEPLOY are automated tests, not manual diff review.
 
 **Controller-side materialization runs first** (§5 Design decision 12, invariant 10) and is *not* an
 entrypoint responsibility: in `runner/src/browser-verify.ts`, before the network or either container
-exists, the runner creates an empty root-owned `${root}/browser-preview-${attempt}`, pipes
-`git archive candidate_sha` from the bare mirror it already owns into it, asserts the extracted tree
-hashes to `candidate_sha`'s tree and contains no `.git` path, and mounts that directory into the
-preview role. The preview container receives no mirror path, no remote, and no Git object store, so
-`git archive` never runs inside an untrusted container and there is no archive transport to define.
+exists, the runner independently fetches `candidate_sha` from the controller's own remote authority
+into a fresh, per-attempt bare object store (`${root}/browser-mirror-${attempt}.git`) that no
+container ever mounts, runs every Git operation against it with `GIT_NO_REPLACE_OBJECTS=1`, verifies
+the fetched commit's raw object id and `candidate_sha^{tree}` (replacement disabled) against the
+controller's own remote authority, then creates an empty root-owned
+`${root}/browser-preview-${attempt}`, pipes `git archive candidate_sha` from that verified store into
+it, asserts the extracted tree hashes to `candidate_sha`'s tree and contains no `.git` path, and
+mounts that directory into the preview role. It never reads or exports from the develop-writable
+`${root}/workspace` checkout. Immediately after the archive succeeds, the runner closes and deletes
+the per-attempt bare store — it exists only for the duration of the fetch-verify-archive sequence and
+is never available to any container. The preview container receives no mirror path, no remote, and no
+Git object store, so `git archive` never runs inside an untrusted container and there is no archive
+transport to define.
+
+**Dependency-artifact production runs next, still before either container exists** (§5 Design
+decision 13, invariant 13): the runner copies the freshly archived tracked-only tree into a private
+`${root}/browser-deps-${attempt}` directory and launches the disposable dependency-prep role — the
+repo's existing `setup` command, under its existing `setupNetwork` egress, with the same
+`github: null`/`model: forbidden`/`uid 1100`/read-only-rootfs posture as `self-test`, no `/out`, no
+browser-profile mount, and no candidate execution beyond the registered command. On exit 0 the runner
+packs the resulting dependency directory into a single immutable file named
+`sha256(candidate_sha + lockfile bytes + setup command + toolchain image digest)`, deletes the private
+directory and the dependency-prep container, and mounts only that one file read-only into the preview
+role. A missing, oversized, or hash-mismatched artifact fails the phase closed before either the
+preview or browser role is created.
 
 Split entrypoints by role (§5 Design decision 2). **Preview entrypoint** (runs in the preview
-container): take the already-mounted tracked-only tree as given — it performs no materialization,
-fetch, or checkout of any kind; install dependencies from the separately sealed, credential-free,
-read-only setup cache/artifact; start the registered command in a process group bound to
+container): take the already-mounted tracked-only tree and the already-mounted dependency artifact as
+given — it performs no materialization, fetch, checkout, or install of any kind; unpack the mounted
+dependency artifact locally; start the registered command in a process group bound to
 `0.0.0.0:<declared port>` so the browser role can reach it across the per-attempt internal network;
 and always terminate/reap the process group at container exit. This container never mounts `/out`,
-the browser profile, or any Git metadata, publishes no host port, and holds no credential of any kind.
+the browser profile, or any Git metadata, publishes no host port, opens no network of its own, and
+holds no credential of any kind.
 **Browser entrypoint** (runs in the browser container): read and assert Chromium's reported sandbox
 status through the mechanism Slice 3 pinned, exiting nonzero if any layer is missing or the report is
 unreadable (invariant 11); poll `http://preview:<declared port>` (the fixed per-attempt network alias)
@@ -701,13 +857,30 @@ requests issued from the browser container fail and appear in `network.jsonl`, a
 evidence set exists.
 
 **T-CLEAN-MATERIALIZATION** asserts the controller-produced mount equals `git archive candidate_sha`
-byte-for-byte, contains no `.git` entry, and that the preview entrypoint issues no Git command.
+byte-for-byte as fetched into the independent bare store, contains no `.git` entry, that the preview
+entrypoint issues no Git command, and that the per-attempt bare store no longer exists once the
+preview role is created. **T-NO-REPLACE-REF-BYPASS** plants a `refs/replace` entry, a malicious
+`.git/config`, and an unrelated ref carrying different content inside the develop workspace before the
+phase runs, and proves none of them can change the fetched commit id, the archived tree hash, or any
+emitted artifact — the fetch source is the controller's independent remote authority, never the
+develop-writable checkout. **T-DEPENDENCY-ARTIFACT-PRODUCER** proves the artifact is produced from the
+tracked-only export (never the develop workspace) by the disposable dependency-prep role, and that the
+dependency-prep container and its private directory are gone before the preview role is created.
+**T-DEPENDENCY-ARTIFACT-BINDING** proves a missing/oversized/hash-mismatched artifact fails the phase
+closed, an unchanged candidate+lockfile+setup command+toolchain image reuses a byte-identical artifact
+hash, and a changed dependency produces a differently-hashed one.
 **T-INTERNAL-NETWORK-ONLY** replaces the removed loopback-era wildcard-bind assertion, which was
 unsatisfiable once the roles became separate containers (`0.0.0.0` *is* the required listener):
 assert instead that neither role's rendered argv publishes a host port, that the attempt network
 inspects as `Internal: true` with exactly the two role containers attached, that the preview origin is
 unreachable from the host and from a third container not on that network, and that it *is* reachable
 from the browser role on the declared port.
+**T-HOST-ISOLATED-NETWORK** asserts the attempt network was created with
+`gateway_mode_ipv4=isolated` and IPv6 disabled, that the Docker host cannot reach either container's
+declared port through the bridge gateway address, and that neither container can reach a host-bound
+test service through that address; a control case run against a plain `--internal` network (gateway
+mode omitted) must show the probe suite detecting the host-reachable gap, proving the assertions are
+load-bearing rather than vacuous.
 **T-SANDBOX-ENFORCED (entrypoint level)** asserts the entrypoint refuses to run flows when the
 sandbox status reports any disabled layer or cannot be read, and that a profile attempting to inject
 `--no-sandbox` is rejected by name.
@@ -755,8 +928,20 @@ evidence, stale candidate/profile/image, and absent/failed attempts each have na
 
 **Topics:** infra, test, ui
 
-**Files:** `runner/src/repos.ts`, `browser-profiles/minion-hub.mjs`,
-`runner/src/browser-verify.e2e.test.ts`, `README.md`.
+**Files:** `runner/src/repos.ts`, `runner/src/containers.ts`, `runner/src/containers.test.ts`,
+`browser-profiles/minion-hub.mjs`, `runner/src/browser-verify.e2e.test.ts`, `README.md`.
+
+**Add `browser-verify` to `CONTAINMENT_IMPLEMENTED_PHASES`** (`runner/src/containers.ts`) as this
+slice's own change (§5 Design decision 9), only after the entrypoints (Slice 4), the pinned image
+(Slice 3), and evidence ingestion (Slice 5) all exist and this slice's own hub profile is registered:
+`browserVerifyReadiness()` is what actually gates execution, so this membership addition is what turns
+"browser-verify not yet implemented" into "implemented, subject to `browserVerifyReadiness()`." Add a
+before/after readiness regression test extending Slice 2's intermediate-state fixture
+(T-IMPLEMENTED-PHASES-TRANSITION): with `browser-verify` absent from `CONTAINMENT_IMPLEMENTED_PHASES`,
+a manifest requiring the evidence still refuses with "browser-verify not yet implemented"; with this
+slice's addition landed, the same manifest is admitted only when `browserVerifyReadiness()`'s other
+conditions (flag on, image resolves, repo registration/profile valid) also hold, while
+`containmentReadiness()`'s existing eight-phase computation stays byte-identical either way.
 
 Verify the current hub scripts before registering its exact build+preview command and port. The
 profile contains 2–3 executable unauthenticated flows with stable assertions and at least one
@@ -776,6 +961,12 @@ develop workspace immediately before `browser-verify` runs, and prove it is abse
 container's filesystem, the browser container, and every emitted artifact — the fixture fails loudly
 if the file is ever readable from either container.
 
+Add the dependency-artifact-leak adversarial fixture required by pass-4 review finding H3
+(T-NO-DEVELOP-DEPENDENCY-LEAK-E2E): seed a develop-only, secret-shaped file inside `node_modules` (in
+addition to the workspace-level file above) immediately before `browser-verify` runs, and prove it is
+absent from the dependency artifact, the preview container's filesystem, the browser container, and
+every emitted artifact.
+
 Add the mirror/history-unreachability suite (T-NO-MIRROR-REACHABILITY, §5 Design decision 12): commit
 a secret-shaped blob on a ref that is **not** `candidate_sha`, then, from inside the preview container,
 attempt to read the bare mirror path, any `.git` directory, any object store, and that other ref by
@@ -793,8 +984,8 @@ profile withheld must fail the phase as an infrastructure failure rather than pa
 The runner-owned attempt directory contains valid artifacts bound to the real candidate/profile/image;
 the DB row contains only the bounded summary/hashes. A second canary requiring browser evidence for
 unregistered `minion-site` refuses before any worker starts. The container-isolation,
-clean-materialization, mirror-unreachability, and sandbox-status suites all pass. No PR-artifact
-publication is claimed.
+clean-materialization, dependency-artifact-leak, mirror-unreachability, implemented-phases-transition,
+and sandbox-status suites all pass. No PR-artifact publication is claimed.
 
 ### Slice 8 — group lifecycle failpoints and restart recovery (minion-factory, 6–8h)
 
@@ -853,10 +1044,15 @@ the phase, and one normal unregistered-repo UI run refuses with the expected rea
 | AGENTS.md named product impact zones | shared WS protocol, channel extensions, shared DB, agent definitions, auth, workshop, pixel office, paperclip adapters | None entered; no code or contract in those zones changes |
 | Existing hub live-preview subsystem | `minion_hub` + gateway plugin | No dependency or change; operator memory records it as inert until `PREVIEW_RUNNER_URL/_SECRET` is configured |
 
-**Residual risk:** none for egress — the per-attempt `--internal` network (§5 Design decision 4) has
-no route to any external destination, no role publishes a host port, and there is no configurable
-escape hatch. Two risks are converted from unproved assumptions into gated work rather than eliminated
-by design alone:
+**Residual risk:** none for external egress — the per-attempt `--internal` network (§5 Design
+decision 4) has no route to any external destination, no role publishes a host port, and there is no
+configurable escape hatch. Host-boundary isolation, unlike external egress, is not free by construction
+under a plain `--internal` bridge (AS-IS item 19) and is instead a gated, proved property: Slice 2's
+Docker-Engine-version preflight and the exact-options network inspection (invariant 5) must both pass
+before the phase schedules at all, and Slice 4's `T-HOST-ISOLATED-NETWORK` proves the host cannot
+reach either container and neither container can reach the host, with a plain-`--internal` control
+case proving the assertion is load-bearing. Three risks are converted from unproved assumptions into
+gated work rather than eliminated by design alone:
 
 - **Chromium sandbox availability under `--cap-drop ALL` + `no-new-privileges` is an empirical
   question, not a certainty** (§5 Design decision 10). Slice 3 either pins a seccomp profile that
@@ -866,6 +1062,11 @@ by design alone:
 - **Group lifecycle correctness is proved by failpoint testing, not by construction** (invariant 12).
   S2 proves the algorithm against a Docker double and S8 proves it against a restarted real
   controller; between those slices the phase must not be activated for any fleet repo.
+- **Host-isolated gateway mode requires a minimum Docker Engine version** (invariant 5, AS-IS item 19).
+  The production host's Engine version is not verified by this spec's authoring process; Slice 2's
+  preflight is what makes an unsupporting engine a fail-closed infrastructure refusal instead of a
+  silently unisolated network, and S9 activation must not proceed until a production run has exercised
+  that preflight against the real deployed engine.
 
 The remaining residual risk is scope, not isolation: `minion-hub` is the only registered profile, so
 `minion-base`, `minion-site`, `minion-ai`, `minion-meta`, and `minion-factory` stay fail-closed on
@@ -887,9 +1088,12 @@ The remaining residual risk is scope, not isolation: `minion-hub` is the only re
 
 The spec is complete only when S1–S9 pass in order, the deployed runner reports containment-v2
 enabled, the browser image reference is a named manifest digest, Chromium reports a fully enabled
-sandbox under the production launch flags, every group-lifecycle failpoint leaves zero orphan
-containers and zero leaked networks, the hub success and site refusal canaries pass, the canonical
-`ui` policy is live, and a post-activation hub run produces validated candidate/profile/image-bound
+sandbox under the production launch flags, the deployed Docker Engine passes the isolated-gateway-mode
+preflight and every attempt network inspects with `gateway_mode_ipv4=isolated`, every group-lifecycle
+failpoint leaves zero orphan containers and zero leaked networks, every browser-verify attempt's
+dependency artifact is produced from the tracked-only export and bound to
+candidate+lockfile+toolchain, the hub success and site refusal canaries pass, the canonical `ui`
+policy is live, and a post-activation hub run produces validated candidate/profile/image-bound
 evidence before review. `FACTORY_AUTOMERGE=0`, provider independence,
 the human merge gate, and reviewer read-only authority remain unchanged.
 
@@ -925,3 +1129,26 @@ updated. Slice count 8 → 9; no slice exceeds the 4–8 hour bound.
 **Not changed, and why:** the spec title keeps the approved proposal's "loopback-isolated" wording.
 Invariant 2 and §5 Design decision 4 already record that the per-attempt internal network supersedes a
 literal loopback address; renaming the artifact is a proposal-level decision, not a review fix.
+
+**Pass 5 disposition: still-review (`status: review`, `verdict: pending`).** Pass 4 was independently
+reviewed with `VERDICT: FAIL` on PR #286 (2026-08-29). Every finding was re-verified against the
+factory baseline `0315707d8c8ffdfb024d2b97fa2eebf45c3b1914` before being acted on — none was accepted
+on the reviewer's word alone, and none was dismissed. All four were confirmed genuine and are resolved
+in this pass. This pass does not self-approve: an independent re-review owns the next disposition, and
+per the SDLC contract this spec's `security` tag keeps human gates at approval and merge. Finding
+labels are round-scoped: references reading "pass-3 review finding …" in §2, §5, and §6 belong to the
+earlier round and are already resolved; the table below is the pass-4 round.
+
+| Pass-4 finding | Re-verification against `0315707d…` | Resolution in pass 5 |
+|---|---|---|
+| **H1** Plain `--internal` does not isolate either role from the Docker host | Confirmed against Docker's documented gateway-mode behavior: a plain internal bridge is normally assigned a host-side gateway address, and the pass-3 network creation (`ensureInstanceNetwork()`-style `Driver === 'bridge' && Internal === true` assertion) never requests or checks a gateway mode | New AS-IS item 19; Target invariant 5 and §5 Design decision 4 rewritten to require `gateway_mode_ipv4=isolated` (Docker Engine 28+) and IPv6 disabled, a fail-closed minimum-Engine-version preflight, and an exact-options network inspection instead of `Internal: true` alone; S2 adds the preflight (T-ENGINE-GATEWAY-MODE-PREFLIGHT), S4 adds the runtime host-isolation probe with a plain-`--internal` control case (T-HOST-ISOLATED-NETWORK) |
+| **H2** Clean materialization has no trusted object source and is replacement-ref bypassable | Confirmed by a focused fixture: `git replace A B` made `git archive A` emit B's file and made `git rev-parse A^{tree}` return B's tree; only `GIT_NO_REPLACE_OBJECTS=1` returned the real tree, and no bare mirror exists anywhere in `minion-factory` — the only object store is the develop-writable `${root}/workspace` checkout | New AS-IS item 20; Target invariant 10 rewritten to fetch `candidate_sha` independently from the controller's own remote authority into a fresh, per-attempt, worker-inaccessible bare store, run every Git operation against it with `GIT_NO_REPLACE_OBJECTS=1`, verify the raw commit/tree identity before archiving, and close/delete the store before either role launches; §5 Design decision 12 rewritten; S4 adds T-NO-REPLACE-REF-BYPASS (plants `refs/replace`, malicious config, and an alternate ref in the develop workspace and proves none reach the exported bytes or tree) |
+| **H3** No slice creates the promised sealed dependency artifact | Confirmed: `minion-hub`'s `setup` (`bun install`) only ever installs into the durable workspace, `git archive` excludes `node_modules` by construction, the `browser-internal` network has no registry egress, and no D-item or slice owned a dependency producer | New AS-IS item 21; new Target invariant 13 and §5 Design decision 13 define a disposable dependency-prep role reusing the repo's existing `setup` command and `setupNetwork` egress, packing output into a single immutable candidate+lockfile+toolchain-hash-named artifact mounted read-only into the preview role; new **D11**; S4 adds the producer and its fail-closed binding checks (T-DEPENDENCY-ARTIFACT-PRODUCER, T-DEPENDENCY-ARTIFACT-BINDING), S7 adds the develop-`node_modules`-leak adversarial fixture (T-NO-DEVELOP-DEPENDENCY-LEAK-E2E) |
+| **M1** No slice makes `browser-verify` implemented, so the pilot remains permanently fail-closed | Confirmed: §5 Design decision 9 already said the `CONTAINMENT_IMPLEMENTED_PHASES` addition happens in Slice 7, but Slice 7's file list and body never instructed it | Slice 7's file list now includes `runner/src/containers.ts` (+ tests) and its body adds `browser-verify` to `CONTAINMENT_IMPLEMENTED_PHASES` explicitly, after the entrypoint/image/ingestion prerequisites, plus a before/after readiness regression test (T-IMPLEMENTED-PHASES-TRANSITION) proving non-implemented refusal and post-slice admission gated on `browserVerifyReadiness()` |
+
+**Not changed, and why:** slice count stays at 9 — the dependency-artifact producer and its adversarial
+proof extend Slice 4 and Slice 7 (both already own controller-side materialization and hub-pilot
+adversarial testing respectively) rather than adding a new numbered slice, consistent with how prior
+rounds folded the sandbox and group-lifecycle fixes into existing slices instead of renumbering. No
+slice's file list changed its owning repo; `runner/src/containers.ts` was already a Slice 2 file and is
+now also touched by Slice 7 for the single-line implemented-phases addition.
