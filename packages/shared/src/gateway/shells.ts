@@ -476,11 +476,46 @@ export function isShellEvent(
 export function isShellDelta(
   frame: { type?: unknown; event?: unknown; payload?: unknown },
 ): frame is { type: 'event'; event: typeof SHELLS_EVENTS.delta; payload: ShellDeltaPayload } {
-  return frame.type === 'event' && frame.event === SHELLS_EVENTS.delta;
+  if (frame.type !== 'event' || frame.event !== SHELLS_EVENTS.delta || !isRecord(frame.payload)) {
+    return false;
+  }
+  return (
+    isNonEmptyString(frame.payload.shellId) &&
+    isNonEmptyString(frame.payload.runId) &&
+    isNonEmptyString(frame.payload.sessionId) &&
+    Number.isInteger(frame.payload.seq) &&
+    (frame.payload.seq as number) >= 0 &&
+    Object.prototype.hasOwnProperty.call(frame.payload, 'acpUpdate')
+  );
 }
 
 export function isShellFinal(
   frame: { type?: unknown; event?: unknown; payload?: unknown },
 ): frame is { type: 'event'; event: typeof SHELLS_EVENTS.final; payload: ShellFinalPayload } {
-  return frame.type === 'event' && frame.event === SHELLS_EVENTS.final;
+  if (frame.type !== 'event' || frame.event !== SHELLS_EVENTS.final || !isRecord(frame.payload)) {
+    return false;
+  }
+  return (
+    isNonEmptyString(frame.payload.shellId) &&
+    isNonEmptyString(frame.payload.runId) &&
+    isNonEmptyString(frame.payload.sessionId) &&
+    (frame.payload.state === 'final' || frame.payload.state === 'aborted' || frame.payload.state === 'error') &&
+    typeof frame.payload.durationMs === 'number' &&
+    Number.isFinite(frame.payload.durationMs) &&
+    frame.payload.durationMs >= 0 &&
+    isOptionalString(frame.payload.stopReason) &&
+    isOptionalString(frame.payload.errorMessage)
+  );
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === 'string' && value.length > 0;
+}
+
+function isOptionalString(value: unknown): value is string | undefined {
+  return value === undefined || typeof value === 'string';
 }

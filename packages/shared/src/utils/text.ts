@@ -42,7 +42,7 @@ export function extractText(message: unknown): string | null {
 export function parseGatewayMetadata(text: string): { clean: string; isoTs?: string } {
   const metaRe = /^Conversation info \(untrusted metadata\):\s*```(?:json)?\s[\s\S]*?```\s*\n*/;
   let clean = text.replace(metaRe, '');
-  const tsRe = /^\[([^\[\]]+)\]\s*/;
+  const tsRe = /^\[([^\u005B\u005D]+)]\s*/;
   let isoTs: string | undefined;
   const m = clean.match(tsRe);
   if (m) { isoTs = m[1]; clean = clean.slice(m[0].length); }

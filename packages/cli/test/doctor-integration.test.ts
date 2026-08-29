@@ -4,7 +4,7 @@ import * as path from 'node:path';
 import * as os from 'node:os';
 import { execa } from 'execa';
 import { gitStatusSummary, isCloned } from '../src/lib/git-status.js';
-import { packageManagerStatus } from '../src/commands/doctor.js';
+import { doctorExitCode, packageManagerStatus } from '../src/commands/doctor.js';
 
 describe('gitStatusSummary — clone presence + git status', () => {
 	let tmpRoot: string;
@@ -63,5 +63,29 @@ describe('packageManagerStatus — probe only what is declared', () => {
 		expect(await packageManagerStatus('yarn-that-does-not-exist' as 'yarn')).toBe(
 			'missing-pm:yarn-that-does-not-exist',
 		);
+	});
+});
+
+describe('doctorExitCode', () => {
+	it('fails when the required Infisical binary is unavailable', () => {
+		expect(
+			doctorExitCode({
+				authFailure: false,
+				authConfigured: true,
+				infisicalBin: false,
+				anyDrift: false,
+			}),
+		).toBe(1);
+	});
+
+	it('preserves the dedicated authentication failure code', () => {
+		expect(
+			doctorExitCode({
+				authFailure: false,
+				authConfigured: false,
+				infisicalBin: true,
+				anyDrift: false,
+			}),
+		).toBe(3);
 	});
 });

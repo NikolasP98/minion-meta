@@ -1,6 +1,10 @@
 import * as path from 'node:path';
 import { execa } from 'execa';
-import { resolveEnv, type SubprojectRegistryEntry } from '@minion-stack/env';
+import {
+	resolveEnv,
+	resolveInfisicalAuth,
+	type SubprojectRegistryEntry,
+} from '@minion-stack/env';
 import { findMetaRoot, loadRegistry } from '../registry.js';
 import { printTable, printJson } from '../lib/output.js';
 import { detectLinkDrift, renderDriftLine, hasDrift } from '../lib/link-drift.js';
@@ -12,16 +16,12 @@ export async function doctorCommand(json: boolean): Promise<number> {
 	const rows: Array<Record<string, string>> = [];
 
 	// Meta-level probes.
-	const infisicalAuth =
-		process.env.INFISICAL_UNIVERSAL_AUTH_CLIENT_ID &&
-		process.env.INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET
-			? 'ok'
-			: 'missing';
+	const infisicalAuth = resolveInfisicalAuth();
 	const infisicalBin = await hasBin('infisical');
 	rows.push({
 		id: '(meta)',
-		vars: infisicalBin ? 'infisical-cli-ok' : 'infisical-cli-MISSING',
-		warnings: infisicalAuth === 'ok' ? '' : 'INFISICAL_* auth env vars missing',
+		vars: `${infisicalBin ? 'infisical-cli-ok' : 'infisical-cli-MISSING'};auth:${infisicalAuth.source}`,
+		warnings: infisicalAuth.configured ? '' : infisicalAuth.error,
 		links: '-',
 		git: '-',
 	});
@@ -72,8 +72,22 @@ export async function doctorCommand(json: boolean): Promise<number> {
 	if (json) printJson(rows);
 	else printTable(rows);
 
-	if (authFailure || infisicalAuth === 'missing') return 3;
-	if (anyDrift) return 1;
+	return doctorExitCode({
+		authFailure,
+		authConfigured: infisicalAuth.configured,
+		infisicalBin,
+		anyDrift,
+	});
+}
+
+export function doctorExitCode(status: {
+	authFailure: boolean;
+	authConfigured: boolean;
+	infisicalBin: boolean;
+	anyDrift: boolean;
+}): number {
+	if (status.authFailure || !status.authConfigured) return 3;
+	if (!status.infisicalBin || status.anyDrift) return 1;
 	return 0;
 }
 

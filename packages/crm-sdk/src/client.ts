@@ -102,8 +102,9 @@ export function createCrmClient(opts: CrmClientOptions) {
 
     /**
      * Validate a party's identity against the PERUDEVS DNI registry.
-     * verified → dni_verified=true + dob set; mismatch/not_found/error recorded
-     * in metadata.dni_validation. Parties without an exactly-8-digit DNI are skipped.
+     * verified → dni_verified=true + dob set; mismatch/not_found/registry errors are recorded
+     * in metadata.dni_validation. Parties without an exactly-8-digit DNI are skipped. If the
+     * identity changes during lookup, return an error without overwriting the newer identity.
      */
     async validatePartyDni(partyId: string): Promise<DniValidationOutcome> {
       if (!opts.perudevsKey) return { partyId, status: 'error', detail: 'perudevsKey not configured' };
@@ -131,16 +132,22 @@ export function createCrmClient(opts: CrmClientOptions) {
         status = 'mismatch';
       }
 
-      await withOrg(async (tx) => {
+      const updated = await withOrg(async (tx) => {
         const validation = { status, checked_at: new Date().toISOString(), api: 'perudevs' };
-        await tx`
+        return tx<{ id: string }[]>`
           update parties set
             dni_verified = ${status === 'verified'},
             dob = coalesce(${dob}::date, dob),
             metadata = metadata || jsonb_build_object('dni_validation', ${tx.json(validation)}::jsonb),
             updated_at = now()
-          where id = ${partyId}`;
+          where id = ${partyId}
+            and doc_number is not distinct from ${party.doc_number}
+            and name is not distinct from ${party.name}
+          returning id`;
       });
+      if (updated.length === 0) {
+        return { partyId, status: 'error', detail: 'party identity changed during validation' };
+      }
       return { partyId, status, detail };
     },
 

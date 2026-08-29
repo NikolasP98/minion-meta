@@ -312,7 +312,7 @@ export class Bridge {
     }
   }
 
-  private async handleBackup(params: ShellsBackupNowParams): Promise<ShellsBackupNowResponse> {
+  private async handleBackup(_params: ShellsBackupNowParams): Promise<ShellsBackupNowResponse> {
     if (!this.config.backupTarget) throw new Error('no backup target configured');
     const res = await backup({
       workDir: this.config.harnessWorkDir,
