@@ -426,10 +426,18 @@ landed code already states — *workers get read credentials, writes live in the
    invariant's implementation (Slice 2) is active, the runner **refuses to dispatch a `dev`-kind run under the
    legacy (non-v2) path at all** — failing closed with a queue-time error, never falling back to a write-capable
    legacy credential. `dev` runs therefore require `FACTORY_CONTAINMENT_V2=1` verified active from Slice 2 onward;
-   until an operator makes that flip (a deploy-time prerequisite named in §8, not assumed here), `dev` dispatch is
-   unavailable rather than credential-downgraded-and-broken. This is the fail-closed alternative to building a
-   second, parallel target-repo publication protocol when one (the v2 adapter) already exists and only needs to
-   become mandatory.
+   until an operator makes that flip, `dev` dispatch is unavailable rather than credential-downgraded-and-broken.
+   This is the fail-closed alternative to building a second, parallel target-repo publication protocol when one
+   (the v2 adapter) already exists and only needs to become mandatory.
+
+   **"Verified active" is a proof obligation, not a flag read.** Making the fail-closed gate ship without it would
+   only move H1's outage from "dev runs break at `git push`" to "dev runs are refused and nothing replaces them".
+   The v2 adapter's binding covers a single-branch candidate push (§1 point 2), while `agent/run.sh` publishes at
+   **four** distinct moments (§1 point 11): the initial branch push + draft-PR creation (`:266-275`), each
+   develop/fix-round push (`:121-134,473`), the resumed-branch push (`:107-108`), and the budget-salvage push
+   (`:460-461`). Before the admission gate lands, Slice 2 must prove the containment-v2 dev path already serves all
+   four — and, for any moment it does not, close that gap inside Slice 2 rather than assuming coverage
+   (`T-DEV-V2-PUBLICATION-COMPLETE`, §4 Slice 2 prerequisites; operational activation named in §8).
 4. **No direct memory write from worker code.** `agent/run.sh:79-83` is deleted. A runner-owned, create-only
    publisher accepts runner-validated bytes plus runner-owned run/candidate ids and targets the separate private
    quarantine repository at `<run-id>/<candidate-id>.json`, consistent with the approved
@@ -538,9 +546,10 @@ contract precedes the minion-base cutover.
    `phase_effects` receipt), adopt it in `agent/spec.sh`, `agent/reconcile.sh`, `agent/discovery.sh`,
    `agent/chat.sh`; downgrade `legacyCredentialTransport` to the read-only `github-checkout` credential for those
    four launch paths; and make `dev`-kind dispatch under the legacy (non-v2) path fail closed rather than
-   credential-downgraded (→ Slice 2; proves `T-META-CANDIDATE-BOUNDED`, `T-META-APPLY-CHECKOUT-ISOLATED`,
+   credential-downgraded, after proving the containment-v2 dev path already publishes at every moment
+   `agent/run.sh` does (→ Slice 2; proves `T-META-CANDIDATE-BOUNDED`, `T-META-APPLY-CHECKOUT-ISOLATED`,
    `T-META-PUBLISH-REBASE-RETRY`, `T-META-PUBLISH-RECEIPT`, `T-WORKER-NO-WRITE-CREDENTIAL`,
-   `T-LEGACY-PATH-READ-ONLY`, `T-DEV-CONTAINMENT-V2-REQUIRED`).
+   `T-LEGACY-PATH-READ-ONLY`, `T-DEV-V2-PUBLICATION-COMPLETE`, `T-DEV-CONTAINMENT-V2-REQUIRED`).
 3. Reject `by` unconditionally at the lifecycle HTTP boundary and derive the actor only from the credential
    registry, on both the `status` and `disposition` routes (→ Slice 3; proves `T-BY-REJECTED`,
    `T-ACTOR-SERVER-DERIVED`).
@@ -620,6 +629,15 @@ check has not yet run is reported as not-yet-active rather than silently trusted
 The security-critical slice. It may only land with a real publication path proven end to end — a DoD that merely
 shows the token missing from argv would pass while the first `git push` fails at runtime.
 
+**Prerequisites (named, not assumed):** the fail-closed `dev` admission gate in §2 invariant 3 replaces a broken
+write path with a refusal, so it may only ship once the containment-v2 dev path is proven to publish at all four
+moments `agent/run.sh` publishes today (§1 point 11): initial branch push + draft PR, each develop/fix-round push,
+the resumed-branch push, and the budget-salvage push. The implementer re-reads
+`runner/src/containment-effects.ts`'s binding union and the v2 dev launch path at HEAD, records which moments are
+covered, and — for any moment that is not — extends the adapter within this slice. If that extension proves larger
+than this slice can carry, the slice splits (publication protocol first, admission gate second) rather than
+shipping the refusal ahead of its replacement.
+
 **Files to touch:**
 
 - `runner/src/containment-effects.ts` (extend the `phase` union `:16-33` and validator `:77` with the meta
@@ -645,7 +663,7 @@ shows the token missing from argv would pass while the first `git push` fails at
 
 ```bash
 cd runner
-npm test -- --test-name-pattern='T-META-CANDIDATE-BOUNDED|T-META-APPLY-CHECKOUT-ISOLATED|T-META-PUBLISH-REBASE-RETRY|T-META-PUBLISH-RECEIPT|T-WORKER-NO-WRITE-CREDENTIAL|T-LEGACY-PATH-READ-ONLY|T-DEV-CONTAINMENT-V2-REQUIRED'
+npm test -- --test-name-pattern='T-META-CANDIDATE-BOUNDED|T-META-APPLY-CHECKOUT-ISOLATED|T-META-PUBLISH-REBASE-RETRY|T-META-PUBLISH-RECEIPT|T-WORKER-NO-WRITE-CREDENTIAL|T-LEGACY-PATH-READ-ONLY|T-DEV-V2-PUBLICATION-COMPLETE|T-DEV-CONTAINMENT-V2-REQUIRED'
 npm test
 npx tsc --noEmit
 cd ..
@@ -666,7 +684,10 @@ retry that converges, matching today's `push_meta()` behaviour, entirely inside 
 and a replay is a no-op returning the same commit; `T-WORKER-NO-WRITE-CREDENTIAL` — the launch plan and Docker argv
 for **each of** discovery/spec/reconcile/chat contain no write-purpose credential and no `FACTORY_GH_TOKEN`;
 `T-LEGACY-PATH-READ-ONLY` — the credential those plans do carry resolves to `github-checkout`, whose
-`GITHUB_CAPABILITY` is `read`; `T-DEV-CONTAINMENT-V2-REQUIRED` — dispatching a `dev`-kind run with
+`GITHUB_CAPABILITY` is `read`; `T-DEV-V2-PUBLICATION-COMPLETE` — the containment-v2 `dev` path resolves a trusted
+effect binding for each of the four publication moments §1 point 11 enumerates (initial branch + draft PR,
+develop/fix-round push, resumed-branch push, budget-salvage push), and a moment with no binding fails the test
+rather than falling back to a worker-held token; `T-DEV-CONTAINMENT-V2-REQUIRED` — dispatching a `dev`-kind run with
 `FACTORY_CONTAINMENT_V2` unset/`0` is refused at admission time with a queue-time error naming the missing
 prerequisite, never silently downgraded to a read-only credential and never silently routed through
 `legacyCredentialTransport`'s unmodified (still-broad) form either — the refusal is the only allowed outcome once
@@ -674,9 +695,12 @@ this slice is active.
 
 **End-to-end gate before merge (not a unit test):** execute one real spec run, one reconcile run, and one discovery
 run against the meta repo with `FACTORY_GH_TOKEN` **unset in the runner process**, and attach the resulting meta
-commits plus `phase_effects` rows to the PR. Additionally attempt to dispatch a `dev` run with
-`FACTORY_CONTAINMENT_V2=0` and attach the resulting refusal (not a broken/partial run). Slice 2 does not merge on
-unit fixtures alone.
+commits plus `phase_effects` rows to the PR. Then, with the same variable unset, execute one real `dev` run under
+`FACTORY_CONTAINMENT_V2=1` that exercises branch creation + draft PR, at least one fix-round push, and one
+salvage/early-exit push, and attach its branch, PR, and effect rows — this is the positive half of the fail-closed
+gate and the only evidence that refusing non-v2 dev leaves dev runs *working* rather than merely refused.
+Additionally attempt to dispatch a `dev` run with `FACTORY_CONTAINMENT_V2=0` and attach the resulting refusal (not a
+broken/partial run). Slice 2 does not merge on unit fixtures alone.
 
 ### Slice 3 — reject caller-supplied `by`, server-derive actor (3-4h)
 
@@ -840,7 +864,7 @@ push or merge, and rejects a pair injected through the environment.
 | Promotion train | `scripts/train.sh` operates on **two** fixed pairs (`minion-ai@DEV→main`, `minion-site@dev→master`), not one. | Slice 6's `github-train` purpose is scoped to the declared pair set and cannot accept repo/ref input from the calling script. |
 | `minion-base` ← **cross-repo dependency** | The cutover needs factory-side authentication, revision CAS, an edge table, and a canonical response that do not exist today; minion-base additionally holds the factory **admin** bearer for *every* proxied call (`factory.ts:149`), not only lifecycle mutations — runs/history, stats, trigger-health, providers, `pipeline/spec`, `pipeline/reconcile`, `runs` creation, and `chat/*` all use it too — and enforces transitions the factory route would reject. | Slice 4 (minion-factory) lands and deploys **before** Slice 5 (minion-base) and registers `lifecycle`, `dashboard-read`, and `dashboard-run` as three separate principals (§2 invariant 7), not just `lifecycle`. Slice 5 removes `FACTORY_SECRET` from minion-base's deployment entirely and proves the app still operates without it (`T-BASE-NO-ADMIN-BEARER`). One shared contract fixture is authored in Slice 4 and mirrored in Slice 5. Read-only GitHub-access narrowing stays explicit later scope (§6). |
 | Other lifecycle API callers | Unknown fields including `by` become 400; server actor labels become credential-registry ids for every caller. | Slice 3 requires a caller inventory in its PR body before the 400 is unconditional; log rejected field names only, never body values. |
-| Deployment surface (`deploy.sh`, `setup.sh`, `deploy/k8s.yml`, `.env.example`) | Six new environment variables plus one new bearer secret. `deploy.sh` rewrites `/opt/factory/.env` **wholesale** (operator memory), so a variable absent from it is silently dropped on the next deploy. | Every slice that introduces a credential edits all four writers in the same PR; Slice 1's DoD greps for exactly that. |
+| Deployment surface (`deploy.sh`, `setup.sh`, `deploy/k8s.yml`, `.env.example`) | Six new purpose credentials plus **three** new bearer secrets (`FACTORY_LIFECYCLE_SECRET`, `FACTORY_DASHBOARD_READ_SECRET`, `FACTORY_DASHBOARD_RUN_SECRET` — Slice 4), and one removal: `FACTORY_SECRET` leaves minion-base's deployment entirely (Slice 5). `deploy.sh` rewrites `/opt/factory/.env` **wholesale** (operator memory), so a variable absent from it is silently dropped on the next deploy. | Every slice that introduces a credential edits all four writers in the same PR; Slice 1's DoD greps for exactly that. |
 | Worker containment (separate spec) | Shares the deny-by-default credential boundary and the trusted adapter this spec extends with a meta publication binding. | Coordinate slice ordering with `2026-08-18-factory-worker-containment-spec` implementers so neither duplicates the other's boundary/adapter code (§0 relationship recommendation). |
 | Gateway protocol, shared DB, hub/site auth, UI | No protocol/schema/UI change. | Per the Cross-Project Impact Zones table, no fan-out to `@minion-stack/shared`, hub, site, paperclip, or gateway is required. |
 
@@ -868,31 +892,43 @@ push or merge, and rejects a pair injected through the environment.
 
 ## 7. End-to-end verification
 
-1. Confirm every purpose in §2 invariant 1 is configured, pairwise-distinct, and written by all four deployment
-   writers; confirm the startup validator fails closed on a missing or duplicated purpose.
+1. Confirm every purpose in §2 invariant 1 and all three Slice 4 bearer secrets are configured, pairwise-distinct,
+   and written by all four deployment writers; confirm the startup validator fails closed on a missing or
+   duplicated value. For every purpose, confirm its negative-scope canary (§2 invariant 1a) ran against the current
+   token value and was denied — a purpose whose negative check has not run is reported not-yet-active.
 2. Queue one spec run, one reconcile run, one discovery run, and one chat turn with `FACTORY_GH_TOKEN` unset in the
    runner process. Verify each launch plan and Docker argv carries only the read-only `github-checkout` credential,
    that each publication lands a real meta commit through the runner adapter, and that each writes exactly one
    `phase_effects` receipt. Force one concurrent meta writer and verify the rebase-retry converges.
-3. Execute one authenticated lifecycle transition without `by`; verify the meta commit/event actor equals the
+3. With `FACTORY_GH_TOKEN` still unset, run one `dev` run under `FACTORY_CONTAINMENT_V2=1` through branch creation,
+   draft PR, a fix round, and a salvage exit; verify every publication landed through the trusted adapter and no
+   worker plan carried a write credential. Then dispatch a `dev` run with `FACTORY_CONTAINMENT_V2=0` and verify it
+   is refused at admission with an error naming the missing prerequisite — no container started, no credential
+   forwarded, no partial branch left behind.
+4. Execute one authenticated lifecycle transition without `by`; verify the meta commit/event actor equals the
    credential-registry label. Repeat with `by` set (both `status` and `disposition` shapes); verify 400 with no
    GitHub write, for admin and non-admin bearers.
-4. Exercise the lifecycle contract directly against the factory: the lifecycle bearer on a non-lifecycle route
+5. Exercise the lifecycle contract directly against the factory: the lifecycle bearer on a non-lifecycle route
    (403), a stale `expectedRevision` (409 with the current status/revision), a repeat of an applied transition
    (`already_applied`, no commit), an edge outside the table (refused), and a success (canonical
    `{outcome, commit, revision, indexSynced, spec}` with exactly one queued run on approval).
-5. Through the minion-base UI, drive an approval and a stale-page conflict. Verify the conflict still blocks the
-   overwrite, the actor is the registered service label, the response is the factory's canonical projection, and no
-   `meta-write.ts` PUT and no `FACTORY_SECRET` use remain on that path.
-6. Invoke the dormant quarantine publisher with one runner-validated JSON fixture. Verify a create-only candidate
+6. Exercise the two dashboard principals the same way: the `dashboard-read` bearer reaches its GET routes and 403s
+   on every mutation and on `/lifecycle/*`; the `dashboard-run` bearer reaches `pipeline/spec`, `runs`,
+   `pipeline/reconcile`, and `chat` mutations and 403s on `/lifecycle/*`.
+7. Through the minion-base UI, drive an approval and a stale-page conflict with `FACTORY_SECRET` **absent from
+   minion-base's environment entirely**. Verify the conflict still blocks the overwrite, the actor is the registered
+   service label, the response is the factory's canonical projection, no `meta-write.ts` PUT remains on that path,
+   and every other dashboard surface (run history, stats, trigger-health, providers, dev-run creation) still works
+   on the two dashboard bearers.
+8. Invoke the dormant quarantine publisher with one runner-validated JSON fixture. Verify a create-only candidate
    appears at `<run-id>/<candidate-id>.json` in the separate private repository; overwrite and canonical-memory
    attempts fail; verify ordinary run output (including `agent/run.sh`) cannot invoke it.
-7. Trigger the self-update and promotion-train fixtures. Verify self-update performs all three of its authorities
+9. Trigger the self-update and promotion-train fixtures. Verify self-update performs all three of its authorities
    each on its own credential (and fails loudly, not silently, if one is unset), and that the train can only compare
    its declared pairs and open a draft PR.
-8. Run the full runner and minion-base CI/typecheck gates plus every `T-*` control named in §4; then search
-   deployment, runner, agent, and host-script sources/config for any remaining `FACTORY_GH_TOKEN=`/bare `GH_TOKEN=`
-   injection outside test files.
+10. Run the full runner and minion-base CI/typecheck gates plus every `T-*` control named in §4; then search
+    deployment, runner, agent, and host-script sources/config for any remaining `FACTORY_GH_TOKEN=`/bare `GH_TOKEN=`
+    injection outside test files.
 
 ## 8. Rollout and rollback
 
@@ -900,6 +936,16 @@ Land Slices 1-6 in order with `FACTORY_AUTOMERGE=0` throughout; no new feature f
 `FACTORY_CONTAINMENT_V2` (which continues to gate the *physical*-isolation half of the related worker-containment
 spec, not this spec's credential purposes — §2 invariant 9). Slice 4 must be **deployed**, not merely merged, before
 Slice 5 ships, because minion-base and the runner deploy independently.
+
+**Slice 2 carries one operational prerequisite, and it is a deploy-time gate on the operator, not on the
+implementer.** Because Slice 2 makes non-v2 `dev` dispatch fail closed (§2 invariant 3), `FACTORY_CONTAINMENT_V2=1`
+must be set in the deployed runner's environment — and, per operator memory, written into `deploy.sh`'s wholesale
+`/opt/factory/.env` rewrite so the next deploy does not silently drop it — **before or in the same deploy as** the
+Slice 2 image. Order for that deploy: (a) confirm Slice 2's `T-DEV-V2-PUBLICATION-COMPLETE` evidence and its real
+containment-v2 dev run (§4 Slice 2's end-to-end gate); (b) flip and deploy the flag; (c) verify one real dev run
+end-to-end on the deployed runner; (d) only then deploy the image carrying the admission gate. Deploying the gate
+before the flip converts dev-run capacity to zero — the correct rollback for that mistake is re-deploying the
+previous runner image, not restoring a worker write token.
 
 Revocation of the broad `FACTORY_GH_TOKEN` is the last step, and it is gated on a closed map, not on a slice count:
 after Slice 6 lands and §7 is green, confirm that every consumer inventoried in §1 point 4 — the nine runner modules,
@@ -917,12 +963,12 @@ minion-base at the previous release while the factory endpoint stays authoritati
 Follow-on, explicitly out of scope for this spec's approval (§6): narrowing minion-base's remaining GitHub *read*
 access to a mechanically read-only credential.
 
-## Board audit 2026-08-28 (superseded by passes 3-4 — kept for history)
+## Board audit 2026-08-28 (superseded by passes 3-5 — kept for history)
 
 Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
 Returned to draft for respec: the GitHub-App + publisher-module mechanism was superseded by scoped PATs (scoped-github-canary.ts) + the effect ledger. Live deltas worth keeping: caller-supplied `by` at index.ts:648,663; retiring the broad FACTORY_GH_TOKEN; minion-base cutover; memory candidate publisher.
 
-## Board respec 2026-08-29 (passes 3-4)
+## Board respec 2026-08-29 (passes 3-5)
 
 **Pass 3** reviewed this spec at exact pre-review blob `6be58a23e2730f89313b8a527237b4aeaed2830d` per operator task,
 verified it against `minion-factory@5db7d391` (main, PR #153 merged), `minion-base@19531059`, and closed/unmerged
@@ -938,12 +984,39 @@ lifecycle transition tables **diverge**, so a naive cutover would have 400'd liv
 rewritten accordingly; the slice count went 4 → 6 because the two missing prerequisites — a meta publication
 protocol, and a complete factory lifecycle endpoint — are each a slice, not a footnote.
 
+**Pass 5** answers the second cross-provider review of PR #271 (four High, one Medium, one Low). All six findings
+were re-verified from fresh clones of the same pinned commits and all six were confirmed; §0's pass-5 note records
+each finding, its confirmation evidence, and where it is fixed. Two of the fixes changed the shape of the plan
+rather than its wording: `dev` dispatch under the legacy path now fails **closed** instead of being downgraded
+(§2 invariant 3, with the containment-v2 activation proof obligation in §4 Slice 2 and the deploy ordering in §8),
+and the minion-base cutover now removes `FACTORY_SECRET` from that deployment entirely behind three scoped
+principals rather than narrowing one call site (§2 invariant 7, §4 Slices 4-5). Pass 5 also stopped the spec
+claiming its security outcome was unchanged from the source proposal's (§0, invariant 1a) — see the human decision
+below.
+
 **Disposition: `status: review`, `verdict: pending`.**
 
 - Not `approved`: this spec is `tags: [security, infra]`, and the SDLC contract keeps human gates at approval AND
   merge for security-tagged work, so a factory pass may not self-approve it. The recommendation to the human gate is
-  **approve**: the plan is now executable, dependency-ordered, and every slice's DoD is machine-checkable against
-  code that exists.
+  **approve the plan, and decide the deviation explicitly** — the plan is executable, dependency-ordered, and every
+  slice's DoD is machine-checkable against code that exists, but approval also means accepting one recorded
+  departure from the approved proposal, below.
+
+**Human decision required at the approval gate (H4).** The source proposal's DoD asks for *short-lived* credentials
+scoped to one repository/branch/action set (`proposals/2026-08-17-factory-capability-separation.md:21-25`). This
+spec instead extends the long-lived purpose-scoped PATs that landed in `minion-factory@5db7d391` (§0, §2 invariant
+1a). That is weaker in one specific way: a stolen purpose token stays usable until an operator rotates it, not until
+the run ends. The compensating controls are per-purpose GitHub scope, a negative-scope canary as a hard activation
+gate, and the trusted runner adapter holding every write purpose. A factory pass may not resolve this trade-off by
+itself, and no factory pass may amend the approved proposal to match the spec. So the human gate has two options,
+and picking one is part of approving:
+
+1. **Accept the interim target.** Approve this spec as written and amend the source proposal's DoD to record
+   long-lived purpose PATs + negative-scope canaries as the accepted M4 target, with short-lived run-bound grants
+   named as later work.
+2. **Hold the original contract.** Keep the proposal's DoD and require a controller-minted, run/repo/ref/action-bound
+   credential — which means this spec needs a further pass adding that minting path (the trusted adapter and the
+   purpose registry both survive as defense in depth; the token lifetime is the part that changes).
 - Not `changes_requested`: that verdict was pass 3's own request for the correctness pass this pass performed. The
   findings that motivated it are resolved above, and leaving it set would keep the spec behind the server-side
   `changes_requested` promotion gate for a reason that no longer holds.
@@ -952,7 +1025,7 @@ protocol, and a complete factory lifecycle endpoint — are each a slice, not a 
   4); `by` is still caller-supplied for admin bearers (§1 point 6); and minion-base still writes `minion-meta` with
   a raw PAT while holding the factory admin secret (§1 point 8).
 
-No product code was implemented in pass 3 or pass 4, per the task's instruction not to implement while the spec is
+No product code was implemented in passes 3, 4, or 5, per the task's instruction not to implement while the spec is
 not validly approved. The `T-*` control names and DoD commands are written against the runner's existing
 `node:test` invocation (`npm test -- --test-name-pattern=…`); the implementer re-verifies exact anchors at HEAD
 before each slice, as §1 states.

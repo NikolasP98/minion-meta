@@ -1,15 +1,17 @@
 ---
 spec: 2026-08-18-factory-capability-separation-spec
-pass: 4
+pass: 5
 verdict: pending
 reviewer: factory-review-fix
 created: 2026-08-18
 updated: 2026-08-29
 ---
 
-# Pass 4 review (executability fix — answers PR #271 `VERDICT: FAIL`)
+# Review sidecar — passes 4-5 (answers PR #271's two `VERDICT: FAIL` reviews)
 
-## Trigger
+## Pass 4 review (executability fix — historical; superseded by pass 5 below)
+
+### Trigger
 
 Pass 3 rewrote this spec around the scoped-credential foundation that landed in `minion-factory@5db7d391` and
 recorded `status: review` / `verdict: changes_requested` against itself. The cross-provider review of that branch
@@ -17,7 +19,7 @@ recorded `status: review` / `verdict: changes_requested` against itself. The cro
 product code and preserves the human gates — but returned `VERDICT: FAIL` on three executability findings. Pass 4
 resolves those findings. It writes no product code.
 
-## Verification performed this pass
+### Verification performed this pass
 
 Every finding was re-verified from **fresh** local clones of the same pinned commits, rather than accepted on the
 reviewer's word:
@@ -34,7 +36,7 @@ reviewer's word:
 Anchor corrections applied from the same reading: monitor intake is `runner/src/monitor.ts:69`, not
 `runner/src/index.ts:393-418`; the `by` expressions are at `index.ts:700-704` and `:715-719`.
 
-## Changes made this pass
+### Changes made this pass
 
 - **§1 AS-IS** — added the fourth/fifth credentialed launch paths, the in-container publication protocol (point 5),
   the adapter's dev-only binding shape (point 2), a consumer/authority table for `github.ts`'s nine importers, the
@@ -56,7 +58,7 @@ Anchor corrections applied from the same reading: monitor intake is `runner/src/
   shared `/opt/factory/meta` clone's physical isolation stays with the worker-containment spec.
 - Frontmatter `pass: 4`, `verdict: pending`, `status: review` unchanged; regenerated `specs/index.json`.
 
-## Disposition and why `pending`, not `approved`
+### Disposition and why `pending`, not `approved` (pass 4; see pass 5 for the current recommendation)
 
 `tags: [security, infra]` keeps human gates at approval AND merge (AGENTS.md SDLC contract), so no factory pass may
 move this spec to `approved`. `changes_requested` was pass 3's own request for the correctness pass that pass 4
@@ -64,8 +66,50 @@ performed, and it additionally holds the spec behind the server-side `changes_re
 set would misreport the state. `pending` = the plan is complete and awaiting the human security gate. The
 recommendation to that gate is **approve**.
 
+## Pass 5 review (hardening fix — answers the second PR #271 `VERDICT: FAIL`)
+
+### Trigger
+
+The cross-provider review of pass 4 returned `VERDICT: FAIL` again with four High findings (H1-H4), one Medium
+(M1), and one Low (L1). Pass 5 resolves them. It writes no product code.
+
+### Verification performed this pass
+
+Same method as pass 4 — fresh clones of `minion-factory@5db7d391` and `minion-base@19531059`, every finding checked
+before it was acted on. All six confirmed:
+
+| Finding | Verdict after independent check | Fix |
+|---|---|---|
+| **H1** — non-v2 `dev` loses its only write transport | **Confirmed** | Invariant 3 had folded `dev` into the same unconditional downgrade as the four meta paths, contradicting invariant 9, which had already (correctly) excluded it. `dev`'s legacy dispatch now **fails closed** instead, and the containment-v2 path it hands over to must first be proven to publish at all four moments `agent/run.sh` publishes today (§1 point 11) — `T-DEV-V2-PUBLICATION-COMPLETE`, Slice 2 prerequisites, a real v2 dev run in Slice 2's end-to-end gate, and the deploy ordering in §8. |
+| **H2** — worker-writable checkout crosses into the trusted apply phase | **Confirmed** | Invariant 2 splits the mount: a gitless worker snapshot (edit surface, bytes leave only through the bounded candidate) and a runner-private checkout the worker never touches, which the apply/commit/push/index-regeneration phase always runs against, under a minimal allowlisted environment. New control `T-META-APPLY-CHECKOUT-ISOLATED`. |
+| **H3** — minion-base keeps the admin bearer outside `/lifecycle/*` | **Confirmed** | `factory.ts:149` sends `FACTORY_SECRET` on *every* proxied call, not just lifecycle. Invariant 7 adds `dashboard-read` and `dashboard-run` principals beside `lifecycle` (Slice 4) and requires `FACTORY_SECRET` to leave minion-base's deployment entirely (Slice 5, `T-BASE-NO-ADMIN-BEARER`, `! rg 'FACTORY_SECRET' src/`). |
+| **H4** — long-lived PATs vs. the approved run-bound contract | **Confirmed as a real, under-stated deviation** | §0 stops claiming an unchanged security outcome; invariant 1a records the deviation and makes a negative-scope canary a hard activation gate (`T-PURPOSE-NEGATIVE-SCOPE`). The trade-off itself is escalated as an explicit two-option decision at the human approval gate — a factory pass may neither accept it silently nor amend the approved proposal to match. |
+| **M1** — `phase_effects` cannot represent the promised receipts | **Confirmed for `meta-publish` only** | Lifecycle and monitor already have durable idempotent records outside `phase_effects` (the CAS-checked commit; `monitor_events`' fingerprint dedup, verified to predate this spec), so a row there would duplicate a mechanism rather than fill a gap. Invariant 8 narrows to the run-bound credentialed effects the table can represent, with additive `purpose`/`target_repo` columns and the two new kinds assigned to Slices 2 and 6. |
+| **L1** — Slice 1's deploy gate skips `deploy/k8s.yml` | **Confirmed** | `deploy/k8s.yml` already carries three existing purpose vars, so the omission was a real gap. Added to the DoD loop. |
+
+### Changes made in the review-fix round
+
+The first fix round applied the six fixes above. A second pass over the result closed the internal inconsistencies
+those fixes left behind, each traceable to the finding that caused it: invariant 3's forward reference to a
+containment-v2 prerequisite `§8` did not yet contain (H1); no positive proof that refusing non-v2 `dev` leaves dev
+runs *working* (H1); §5's deployment row still counting "one new bearer secret" after H3 added three; §7 not
+verifying the dev refusal, the two dashboard principals, or `FACTORY_SECRET`'s absence; and the closing disposition
+still recording only passes 3-4. `specs/index.json` was regenerated for `pass: 5`.
+
+### Disposition after pass 5
+
+Unchanged mechanically — `status: review`, `verdict: pending`, `pass: 5` — and for the same reason: a
+security-tagged spec keeps its human gates at approval AND merge, so no factory pass may self-approve it. What
+changed is the recommendation. Pass 4 recommended **approve**; pass 5 recommends **approve the plan and decide
+finding H4 explicitly**, because approving the spec as written also accepts a departure from the source proposal's
+short-lived-credential DoD that only a human may accept (flag 0 below).
+
 ## Human flags
 
+0. **The long-lived-PAT deviation is a decision, not a note (H4).** Approving this spec means either amending the
+   source proposal's DoD to record long-lived purpose PATs + negative-scope canaries as the accepted M4 target, or
+   holding the original short-lived run-bound contract and sending the spec back for a minting-path pass. The two
+   options are written out at the end of the spec.
 1. **Slice 4 transcribes a policy decision that is formally open.** The interim source→target edge table is
    minion-base's shipped table, adopted verbatim because it is the behaviour humans use today. The owning decision
    (`runner/src/lifecycle.ts:30-33` → `2026-08-18-factory-durable-state-outbox-spec` §8) is still unresolved. Slice
