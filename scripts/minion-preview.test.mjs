@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { spawn, spawnSync } from 'node:child_process';
+import { once } from 'node:events';
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -22,6 +23,18 @@ async function detachedSleeper() {
   throw new Error('could not observe sleeper process identity');
 }
 
+async function processStops(pid) {
+  for (let attempt = 0; attempt < 40; attempt += 1) {
+    try {
+      process.kill(pid, 0);
+    } catch {
+      return true;
+    }
+    await delay(10);
+  }
+  return false;
+}
+
 test('preview termination refuses a live PID with a different birth identity', async () => {
   const { child, ticks } = await detachedSleeper();
   try {
@@ -41,6 +54,25 @@ test('preview termination accepts the matching process birth identity', async ()
   assert.equal(await terminateState(current), true);
   await delay(25);
   assert.equal(await processMatchesState(current), false);
+});
+
+test('pidfd termination reaches the timeout supervisor command', async () => {
+  const supervisor = spawn(
+    'nice',
+    ['-n', '5', 'timeout', '--signal=TERM', '--kill-after=1s', '30s', 'sh', '-c', 'echo $$; exec sleep 30'],
+    { detached: true, stdio: ['ignore', 'pipe', 'ignore'] },
+  );
+  const [output] = await once(supervisor.stdout, 'data');
+  const commandPid = Number(String(output).trim());
+  const ticks = await processStartTicks(supervisor.pid);
+  assert.ok(ticks);
+  assert.ok(Number.isInteger(commandPid));
+  try {
+    assert.equal(await terminateState({ pid: supervisor.pid, processStartTicks: ticks }), true);
+    assert.equal(await processStops(commandPid), true);
+  } finally {
+    try { process.kill(-supervisor.pid, 'SIGKILL'); } catch { /* already stopped */ }
+  }
 });
 
 test('status expires and terminates only the process recorded by the state file', async () => {

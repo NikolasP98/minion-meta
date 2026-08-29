@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { spawn, spawnSync } from 'node:child_process';
-import { closeSync, existsSync, openSync } from 'node:fs';
+import { closeSync, existsSync, openSync, readFileSync } from 'node:fs';
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { hostname } from 'node:os';
 import { createConnection } from 'node:net';
@@ -105,14 +105,25 @@ export async function processStartTicks(pid) {
   }
 }
 
+function processStartTicksSync(pid) {
+  if (!Number.isInteger(pid) || pid <= 0) return null;
+  try {
+    const stat = readFileSync(`/proc/${pid}/stat`, 'utf8');
+    const tail = stat.slice(stat.lastIndexOf(')') + 2).trim().split(/\s+/);
+    return /^\d+$/.test(tail[19] ?? '') ? tail[19] : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function processMatchesState(state) {
   if (!state || !Number.isInteger(state.pid) || typeof state.processStartTicks !== 'string') return false;
   if (!alive(state.pid)) return false;
   return (await processStartTicks(state.pid)) === state.processStartTicks;
 }
 
-export async function terminateState(state) {
-  if (!state || !Number.isInteger(state.pid) || typeof state.processStartTicks !== 'string') return false;
+function terminatePid(pid, expectedStartTicks = '') {
+  if (!Number.isInteger(pid) || pid <= 0 || typeof expectedStartTicks !== 'string') return false;
   const result = spawnSync('python3', ['-c', `
 import os
 import signal
@@ -127,18 +138,24 @@ except (AttributeError, OSError):
     sys.exit(1)
 
 try:
-    with open(f'/proc/{pid}/stat', encoding='utf-8') as stat_file:
-        stat = stat_file.read()
-    fields = stat[stat.rfind(')') + 2:].split()
-    if len(fields) < 20 or fields[19] != expected:
-        sys.exit(1)
-    os.killpg(pid, signal.SIGTERM)
+    if expected:
+        with open(f'/proc/{pid}/stat', encoding='utf-8') as stat_file:
+            stat = stat_file.read()
+        fields = stat[stat.rfind(')') + 2:].split()
+        if len(fields) < 20 or fields[19] != expected:
+            sys.exit(1)
+    signal.pidfd_send_signal(pidfd, signal.SIGTERM)
 except (OSError, ValueError):
     sys.exit(1)
 finally:
     os.close(pidfd)
-`, String(state.pid), state.processStartTicks], { stdio: 'ignore' });
+`, String(pid), expectedStartTicks], { stdio: 'ignore' });
   return result.status === 0;
+}
+
+export async function terminateState(state) {
+  if (!state || typeof state.processStartTicks !== 'string') return false;
+  return terminatePid(state.pid, state.processStartTicks);
 }
 
 async function waitForPort(port, pid, timeoutMs = 30_000) {
@@ -220,21 +237,23 @@ async function launch({ options, argv, directory, label }) {
     },
     stdio: ['ignore', logFd, logFd],
   });
+  const startTicks = processStartTicksSync(child.pid);
   child.unref();
   closeSync(logFd);
 
+  if (!startTicks) {
+    terminatePid(child.pid);
+    fail(`${label} process identity could not be recorded`);
+  }
+  const processState = { pid: child.pid, processStartTicks: startTicks };
+
   if (!(await waitForPort(options.port, child.pid))) {
-    try { process.kill(-child.pid, 'SIGTERM'); } catch { /* already stopped */ }
+    await terminateState(processState);
     const log = existsSync(logPath) ? (await readFile(logPath, 'utf8')).trim().slice(-1200) : '';
     fail(`${label} did not listen on port ${options.port}${log ? `:\n${log}` : ''}`);
   }
 
   const started = Date.now();
-  const startTicks = await processStartTicks(child.pid);
-  if (!startTicks) {
-    try { process.kill(-child.pid, 'SIGTERM'); } catch { /* already stopped */ }
-    fail(`${label} process identity could not be recorded`);
-  }
   const state = {
     name,
     port: options.port,
