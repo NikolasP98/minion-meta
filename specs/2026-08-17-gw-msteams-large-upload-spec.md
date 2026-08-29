@@ -2,16 +2,39 @@
 id: 2026-08-17-gw-msteams-large-upload-spec
 title: "MS Teams attachments — route >4MB through a Graph resumable upload session (chunked PUT with resume, expiry and cancel)"
 stage: spec
-status: approved
-pass: 3
+status: draft
+pass: 4
 created: 2026-08-17
 updated: 2026-08-29
 proposal: 2026-08-17-gw-msteams-large-upload
-verdict: approved
+verdict: changes_requested
 repos: [minion]
 tags: [logic, test]
 type: fix
 ---
+
+> **Pass 4 disposition: STILL REVIEW, not approved.** Pass 3's approval rested on the premise that
+> Graph's simple `PUT .../content` endpoint caps uploads at 4MB. Microsoft's current v1.0 documentation
+> for the exact endpoint shapes this spec targets — [Upload or replace the contents of a
+> driveItem](https://learn.microsoft.com/en-us/graph/api/driveitem-put-content?view=graph-rest-1.0),
+> fetched 2026-08-29, page `updated_at: 2026-08-11` — states: *"This method only supports files up to
+> 250 MB in size."* No live `PUT` was ever run against a tenant to reproduce the claimed >4MB failure:
+> PR #253's green `verify` check validates only the meta-repo spec index, `claude-review` was skipped,
+> and `thermonuclear-review` was skipped. At a 250 MB simple-upload ceiling and the gateway's own
+> **100 MiB** default accepted payload (`send.ts:47`, `messenger.ts:29`), **the drive-path routing
+> change in S1 may not be needed at all** — every default-accepted file could already go through the
+> simple `PUT`. §1.1a records this correction in full; two independently-evidenced problems survive it
+> and are preserved (§1.3a corrects false heap/copy claims used to clear the pass-2 blocker; §4's
+> consent-URL fragment-ceiling concern is untouched). **Before this spec can move to `approved`**, run a
+> live simple `PUT` with representative 4.1 MiB, 12 MiB, and near-ceiling (~99 MiB) payloads against
+> both `uploadToOneDrive` and `uploadToSharePoint`'s exact endpoints on a real tenant, and record
+> status/body for each. If runtime agrees with the 250 MB contract, the original ">4 MB fails" premise
+> is disproved — reject/archive it and, if the surviving findings are valuable, spin them into a
+> narrower proposal (resumability above Microsoft's own >10 MiB recommendation, and chunking the Teams
+> consent-URL upload below its <60 MiB per-request fragment limit — §4). If runtime contradicts the
+> docs, record the tenant/cloud/auth-specific failure and derive the threshold from that evidence instead
+> of from documentation alone. **No product code has been implemented against this spec; do not start
+> S1 until a corrected pass records an explicit `approved` disposition.**
 
 # MS Teams — resumable upload session for attachments over 4MB
 
@@ -105,6 +128,38 @@ fallback taken only when no `sharePointSiteId` is configured — and `uploadToOn
 comment calls `/me/drive` "personal scope - now deprecated for bot use". A fix scoped to the TODO
 alone would leave the primary path broken while closing the proposal. **Both functions are in scope.**
 
+### 1.1a Pass-4 correction — the ">4MB fails" premise is disproved by current primary documentation, and was never proved by runtime
+
+The code-comment TODO quoted above (§1.1, `graph-upload.ts:26-27`) is a stale in-repo claim, not
+independent evidence. Both `uploadToOneDrive` and `uploadToSharePoint` call the exact path forms
+Microsoft documents in [Upload or replace the contents of a
+driveItem](https://learn.microsoft.com/en-us/graph/api/driveitem-put-content?view=graph-rest-1.0)
+(v1.0, fetched 2026-08-29, `updated_at: 2026-08-11`): `PUT .../drive/root:{path}:/content` for
+`/me/drive` and `/sites/{siteId}/drive`. That page states plainly: *"This method only supports files up
+to 250 MB in size."* No 4 MB ceiling is documented anywhere on that page for this call shape.
+
+No live reproduction exists. This spec's own DoD (§7) requires a live 12 MB send to prove the fix, but
+no pass has run the *inverse* check — a live send of a 4.1 MB (or larger) file through **today's**
+unmodified simple `PUT`, to see whether it actually fails. PR #253 (this spec's own tracking PR) is not
+that evidence: its `verify` check validates the meta-repo spec/proposal index only, `claude-review` was
+skipped due to workflow validation, and `thermonuclear-review` was skipped outright.
+
+**Consequence for scope.** At a 250 MB simple-upload ceiling and the gateway's own 100 MiB default
+accepted payload (`send.ts:47`, `messenger.ts:29`, §1.5), every file the gateway will hand to this
+extension by default already fits under the simple `PUT`'s documented limit. If that holds under a live
+check, **the S1 routing split (simple vs. session) has no defect to fix on the drive paths** — the
+routing table in §3 and the boundary tests in S1's DoD would need to be dropped or re-scoped, not just
+have a constant changed, contradicting the §4 closing claim that "the design does not change... only
+the constants do." This is exactly why the disposition is `changes_requested`, not `approved`: the
+scope of S1 itself is unresolved pending a live check, and this spec must not authorize implementation
+while that is true.
+
+**What is not in question.** §1.2's consent-path finding is independent of this correction: Teams hands
+the bot a pre-authenticated one-shot URL and the current code sends the whole buffer in a single `PUT`
+with no resume — that has nothing to do with the 4 MB/250 MB drive-endpoint dispute, and §4's ~60 MiB
+Graph per-request fragment ceiling (if verified) would still make that a real, narrower bug worth its
+own scoped fix.
+
 ### 1.2 ⚠️ A1 resolved — *both* delivery mechanisms exist, and the consent path is already built
 
 The consent-card path is not a hypothetical: `file-consent.ts` (added `0f7f7bb9`, 2026-01-22 — seven
@@ -135,11 +190,41 @@ this discovery costs a wiring change and not a rewrite.
 
 ### 1.3 ⚠️ A2 resolved — the input is a `Buffer`, already fully materialized upstream
 
-Every upload function takes `buffer: Buffer` and passes `new Uint8Array(params.buffer)` as the body (a
-view, not a copy). Chunking with `subarray` is therefore free. The buffer is materialized before any
-upload by `loadWebMedia(mediaUrl, mediaMaxBytes)` (`send.ts:128`, `messenger.ts:290`), so the heap cost
-is paid at load time regardless of transfer strategy. Streaming stays out of scope (§6) and stays a
-ledger item — but note it would have to change `loadWebMedia`, i.e. the plugin-sdk, not this extension.
+Every upload function takes `buffer: Buffer`. §6 correctly keeps streaming out of scope regardless of
+which of the two claims below holds, because either way the buffer already exists in memory before this
+extension sees it. But two specific pass-2/pass-3 claims about the mechanics were wrong and are
+corrected here, because they were used as evidence to clear the pass-2 heap-policy blocker.
+
+#### 1.3a Pass-4 correction — two false claims
+
+1. **"`loadWebMedia` enforces the ceiling before allocation" is false for local files.** In
+   `src/web/media.ts`, remote URLs *are* bounded during the read — `fetchRemoteMedia` is called with a
+   `maxBytes`/`fetchCap` and enforces it while streaming the response. Local paths are not: the local
+   branch calls `data = await fs.readFile(mediaUrl)` (`media.ts:309`), reading the **entire file into
+   memory unconditionally**, and only afterward does `clampAndFinalize` reject it for being over `cap`
+   (the non-image length check is `media.ts:265-267`, the call site `:319-324`). An oversized local file
+   is therefore allocated in full before it is rejected, and concurrent local sends can exceed the
+   claimed heap bound in a way the claimed pre-allocation check would have prevented. This is the
+   opposite of what the pass-3 spec and its review sidecar (`...review.md:29-36`) asserted to close the
+   pass-2 human gate on the acceptable per-upload heap bound.
+2. **"`new Uint8Array(params.buffer)` is a view, not a copy" is false.** `params.buffer` is a `Buffer`
+   (a `Uint8Array` subclass). `new Uint8Array(typedArray)` invokes the TypedArray-from-TypedArray
+   constructor, which **allocates a new backing `ArrayBuffer` and copies the elements** — it does not
+   share storage with the source. (`Buffer.subarray()`/`Uint8Array.prototype.subarray()` *does* share
+   storage; that is a different call and was not what was being described.) A focused Node check
+   confirms distinct backing stores and no mutation propagation between the two. Today's
+   `new Uint8Array(params.buffer)` at `graph-upload.ts:47` and `:191` therefore already allocates one
+   extra full-size copy per drive upload; the S1 chunk-body idiom this spec specified — see the
+   correction below — would have repeated that mistake per chunk instead of fixing it.
+
+**Corrected guidance for any future S1:** pass the `Buffer` (or a `Buffer.subarray()`/
+`Uint8Array.prototype.subarray()` view of it) directly as the `fetch` body instead of wrapping it in
+`new Uint8Array(...)`. That is genuinely zero-copy. Add a focused aliasing/allocation regression test
+(mutate the source after slicing; assert the "view" did or did not change) rather than asserting
+zero-copy behavior from a comment. The local-file pre-allocation gap is a distinct, real finding: it is
+**not fixed by this spec** (S1–S3 touch `extensions/msteams/`, not `src/web/media.ts`) and stays in
+review until the operator either accepts the measured worst-case concurrent-local-upload heap envelope
+or a follow-up scopes an early local-size check / streaming read in the plugin-sdk.
 
 ### 1.4 ⚠️ A3 resolved — the current failure mechanism, precisely
 
@@ -244,10 +329,15 @@ and the resulting drive item is returned, on **both** drive call sites (§1.1). 
   wide margin.
 - **`createUploadSession`.** `POST` to the drive item's `:/createUploadSession` — same path prefix the
   simple PUT already builds, `/content` swapped for `:/createUploadSession` — with a body carrying
-  `item: { "@microsoft.graph.conflictBehavior": ... }`. The existing simple path is **silent** on
-  conflict behavior (verified §1.1: neither function sets it), so use **`rename`** — the option that
-  cannot destroy a user's file. Note this leaves the two paths nominally different (Graph's default for
-  a simple PUT is `replace`); that is a deliberate, documented safety choice, not an oversight. The
+  `item: { "@microsoft.graph.conflictBehavior": ... }`. **Pass-4 correction:** use **`replace`**, not
+  `rename`. The existing simple path is silent on conflict behavior (verified §1.1: neither function
+  sets it) and Graph's documented default for a silent simple `PUT` is `replace` — two uploads of
+  `/MinionShared/report.pdf` today both replace the prior item regardless of size. `rename` would make
+  that behavior size-dependent: a small file replaces `report.pdf`, a large one creates a renamed
+  duplicate, with no same-name parity test to catch the split (§3's routing table has none). "Cannot
+  destroy a user's file" is a new product-policy decision this spec was not asked to make. If rename (or
+  any other collision policy) is wanted, it needs its own explicit operator approval and must apply
+  uniformly to both the simple and session paths, not just the one this spec happens to touch. The
   response yields `uploadUrl` and `expirationDateTime`; keep both.
 - **⚠️ Send **no** `Authorization` header on the chunk `PUT`s.** The `uploadUrl` is pre-authenticated
   and Microsoft documents that attaching the bearer token can cause the request to fail. This is the
@@ -272,8 +362,12 @@ and the resulting drive item is returned, on **both** drive call sites (§1.1). 
   status and the presence of an item id, because a `202` on the last chunk means the server disagrees
   with your arithmetic.
 - **Zero-copy chunking.** The input is a `Buffer` (§1.3): slice with `subarray`, which returns a view.
-  Never `Buffer.concat`, never `slice().toString()`. Match the existing body idiom
-  (`new Uint8Array(chunkView)`), which is also a view.
+  Never `Buffer.concat`, never `slice().toString()`. **Do not** wrap the result in `new Uint8Array(...)`
+  before passing it as the fetch body — per §1.3a that constructor form copies, it does not view; pass
+  the `subarray()` result directly. (Today's `graph-upload.ts:47`/`:191` already makes this mistake once
+  per whole-file upload; do not repeat it once per chunk.) Add a regression test that mutates the source
+  buffer after slicing and asserts the chunk body did or did not change, rather than asserting
+  "zero-copy" from a comment.
 - **Red-state first (G3).** Write the >4MB test, run it against today's simple-only code, and paste the
   failure into the PR. The existing ~143-test suite cannot serve as red-state proof: it passes today by
   construction.
@@ -299,6 +393,10 @@ pnpm vitest run extensions/msteams          # or: pnpm --filter <msteams-pkg-fro
 #   - upload(<Buffer.alloc(4_000_000)>) → simple path        ← the boundary, from below
 #   - the SharePoint session URL is built from /sites/{siteId}/drive/..., the OneDrive one
 #         from /me/drive/... — the two must not collapse into one hardcoded base  ← §1.1
+#   - createUploadSession body carries "@microsoft.graph.conflictBehavior": "replace"     ← NOT rename
+#   - same-name parity: uploading the same filename twice via the SIMPLE path replaces the
+#         prior item, and twice via the SESSION path also replaces it — one consistent policy,
+#         not one that flips with size                                            ← pass-4 fix
 #   upload-session.test.ts:
 #   - 5_242_880 B  → 1 chunk;  Content-Range 'bytes 0-5242879/5242880'
 #   - 5_242_881 B  → 2 chunks; last is 'bytes 5242880-5242880/5242881'   ← 1-byte tail
@@ -310,9 +408,9 @@ pnpm vitest run extensions/msteams          # or: pnpm --filter <msteams-pkg-fro
 #   - a 202 on the FINAL chunk → rejects (does not report success)
 #   - the returned value carries the drive item id from the 201 body
 pnpm tsgo && pnpm check                 # typecheck (no `any`, no @ts-nocheck) + oxlint/oxfmt
-rg -n 'TODO' extensions/msteams/src/graph-upload.ts          # → the :27 TODO is GONE
-rg -n 'Buffer\.concat|\.slice\(' extensions/msteams/src/upload-session.ts   # → ZERO (use subarray)
-rg -n 'Authorization|Bearer' extensions/msteams/src/upload-session.ts       # → ZERO in the chunk path
+if rg -n 'TODO' extensions/msteams/src/graph-upload.ts; then echo "FAIL: :27 TODO still present"; exit 1; fi
+if rg -n 'Buffer\.concat|\.slice\(' extensions/msteams/src/upload-session.ts; then echo "FAIL: use subarray, not concat/slice"; exit 1; fi
+if rg -n 'Authorization|Bearer' extensions/msteams/src/upload-session.ts; then echo "FAIL: chunk PUTs must carry no Authorization header"; exit 1; fi
 ```
 
 ---
@@ -391,7 +489,7 @@ pnpm vitest run extensions/msteams
 #   - String(<every typed error>) contains no 'http' substring from the uploadUrl     ← chat-safe (§1.4)
 #   - a 20-chunk upload emits <= 20 debug lines and exactly 1 info line
 pnpm tsgo && pnpm check
-rg -n 'uploadUrl' extensions/msteams/src/upload-session.ts | rg -n 'log|console'   # → ZERO
+if rg -n 'uploadUrl' extensions/msteams/src/upload-session.ts | rg -n 'log|console'; then echo "FAIL: uploadUrl passed near a logger/console call"; exit 1; fi
 ```
 
 ---
@@ -472,10 +570,10 @@ pnpm tsgo && pnpm check
 #   - a file above the effective mediaMax ceiling → rejected by loadWebMedia BEFORE any
 #         createUploadSession call, and the message names the effective limit
 #   - consent path, 12MB → chunked PUTs to the Teams-supplied uploadUrl, zero createUploadSession calls
-git diff --name-only <base>...HEAD | rg -v '^extensions/msteams/'  # → EMPTY in the minion repo
+if git diff --name-only <base>...HEAD | rg -v '^extensions/msteams/'; then echo "FAIL: diff touches files outside extensions/msteams/"; exit 1; fi
 git diff --name-only <base>...HEAD | rg '\.svelte$'   && echo "FAIL: UI out of scope"           && exit 1
 git diff --name-only <base>...HEAD | rg 'index\.json' && echo "FAIL: generators own index.json" && exit 1
-rg -n 'MAX_UPLOAD_BYTES' extensions/msteams  # → ZERO: the ceiling is mediaMaxMb, not a new constant
+if rg -n 'MAX_UPLOAD_BYTES' extensions/msteams; then echo "FAIL: new ceiling constant added; reuse mediaMaxMb"; exit 1; fi
 rg -n '4 ?MB' extensions/msteams --glob '!*.test.ts'  # → only the consent-card threshold and the
                                                       #   simple-PUT routing threshold, never a
                                                       #   ceiling on what can be sent
@@ -488,6 +586,11 @@ rg -n '4 ?MB' extensions/msteams --glob '!*.test.ts'  # → only the consent-car
 Read this as the **drive paths** (SharePoint and OneDrive). The consent path enters at the same chunk
 loop but is handed its URL, so its first two rows collapse into "one chunk, one PUT" — identical wire
 behavior to today.
+
+**Pass-4 caveat: this table is unverified against runtime and may be wrong.** §1.1a found that current
+Microsoft documentation puts the simple `PUT`'s limit at 250 MB, not 4 MB, for these exact endpoints,
+and that no live request has ever confirmed the row below fails today. Do not implement against this
+table until the live check in §1.1a / the top-of-file disposition banner has been run and recorded.
 
 | Payload size | Path | Why |
 |---|---|---|
@@ -512,15 +615,19 @@ of the boundary (S1 DoD) so nobody "rounds it to 4 MiB" later without reading th
 ## 4. Numbers that must be verified before shipping
 
 Rows marked **verified (code)** were read from `NikolasP98/minion@bd55137` during §1 and need no
-further check. The rest are stated from knowledge of the Microsoft Graph upload-session API, **not**
-from a document read during this spec, and Graph's limits have moved before. The implementer must check
-each unverified row against the current Graph documentation for the tenant's cloud and record the check
-in the PR — one line is enough. The *design* does not change under any plausible revision; only the
-constants do.
+further check. The rest are stated from knowledge of the Microsoft Graph upload-session API — **and, per
+§1.1a, one of them (the first row) is now contradicted by a document that *was* read during pass 4**:
+[Upload or replace the contents of a driveItem](https://learn.microsoft.com/en-us/graph/api/driveitem-put-content?view=graph-rest-1.0)
+states a 250 MB cap, not 4 MB, for the exact call shapes this spec targets. The claim two sentences below
+— "the design does not change under any plausible revision; only the constants do" — is false for this
+specific row: at 250 MB, §1.1a's consequence-for-scope analysis applies and the S1/S3 routing split may
+need to be dropped, not just re-numbered. Every other unverified row must still be checked by the
+implementer against current Graph documentation for the tenant's cloud, with the check recorded in the
+PR — one line is enough.
 
 | Constant | Value used here | Confidence | Note |
 |---|---|---|---|
-| Simple `PUT /content` cap | 4 MB | High that it is "4 MB"; **low** on which 4 MB | §3 resolves the ambiguity conservatively — this is why the constant is 4,000,000. |
+| Simple `PUT /content` cap | 4 MB | **Disputed — see §1.1a.** Current Microsoft docs for these exact endpoints say 250 MB; no live tenant request has confirmed a 4 MB failure. | Do not treat this row as settled. Live-verify before relying on the routing split in §3. |
 | Chunk alignment | multiple of 320 KiB (327,680 B) | High | Applies to every chunk **except** the last. |
 | Default chunk size | 5 MiB (5,242,880 B) | High that this is within guidance | Exactly 16 × 320 KiB, so it satisfies alignment by construction. |
 | Max bytes per single chunk request | ~60 MiB | Medium | **Now load-bearing:** today's consent path sends the whole file in one PUT (§1.2), so if this ceiling is real, files between it and the 100 MiB gateway ceiling fail *today* on the consent path. Verify it, and record whether that silent band existed — it is a second bug this fix closes. |
@@ -551,7 +658,7 @@ claim pass 2 could only assert.
 | `@minion-stack/shared` (frames, events, WS protocol) | **None.** No frame type, event, or protocol field is added or changed | §6 excludes it; nothing here crosses the gateway boundary |
 | `minion_hub`, `minion_site`, `paperclip-minion` | **None.** No protocol change ⇒ no consumer change | AGENTS.md's "Gateway protocol" row does not apply |
 | Other channel extensions (slack, discord, telegram, whatsapp, …) | **None from this diff.** Each has its own upload ceiling and its own API; a shared abstraction is not justified by one instance | §1.6 found no other `Content-Range` user in the fleet. §6 excludes the sweep |
-| Gateway process memory | ⚠️ **Real, and pre-existing.** A 100MB attachment is 100MB of heap — but `loadWebMedia` already allocates it before any upload is attempted, so **this fix adds no new allocation**; `subarray` chunking is a view (§1.3) | The ceiling that bounds it already exists and is configurable (§1.5). Streaming is a ledger item, not a silent omission |
+| Gateway process memory | ⚠️ **Real, and pre-existing, and worse for local files than pass 3 claimed.** A 100MB attachment is 100MB of heap. For **remote** media, `loadWebMedia` bounds the read to the cap while fetching. For **local** media it does not: `fs.readFile` reads the whole file before the cap is checked (§1.3a) — so an oversized local file is briefly fully allocated before rejection, which is a heap-bound gap this spec does not close. Chunking itself adds no *new* allocation as long as chunks are sliced with `subarray()` and never wrapped in `new Uint8Array(...)` (§1.3a) | The ceiling that bounds the accepted size is configurable (§1.5), but the pre-check local-read gap is unresolved — see §1.3a's disposition. Streaming is a ledger item, not a silent omission |
 | Microsoft Graph / SharePoint (external) | **More requests per large file**: 1 create + ⌈size/5 MiB⌉ PUTs + status/retry/cancel requests when needed, versus 1 failed request today. Files land in the destination drive and consume tenant storage | Sequential chunks (no fan-out), bounded retries with `Retry-After` honoured, `429` respected — S2. This is the intended cost of the feature |
 | `Minion Docs/`, `minion_plugins`, `pixel-agents` | **None** | No dependency on this extension |
 
@@ -613,6 +720,18 @@ primary path ships broken.
 ```bash
 cd minion
 
+# 0. PREREQUISITE, pre-implementation (§1.1a) — do this BEFORE S1, against TODAY's unmodified code:
+#    Configure the msteams channel WITH a SharePoint site id, start the gateway (pnpm gateway:watch):
+#    - Send a 4.1MB file, a 12MB file, and a near-ceiling (~99MB) file through the UNCHANGED
+#      simple PUT path (both uploadToOneDrive and uploadToSharePoint) and record status/body for each.
+#    - If all three succeed: the ">4MB fails" premise is disproved. Do not proceed to S1 as scoped;
+#      reject/archive the proposal's drive-path claim, and file a narrower proposal for whatever of
+#      §1.2/§4's independently-evidenced findings (consent-URL fragment ceiling, resumability) remain.
+#    - If any fails: record the exact status/body/tenant/cloud — that is the evidence base S1 needs,
+#      and it may justify a different byte threshold than the 4,000,000 used in §3.
+#    This step is the pass-4 blocker (top-of-file disposition banner). Do not run steps 1-3 until it
+#    has been run and its result recorded in the PR.
+
 # 1. Gates (logic/test/docs-tagged: no design or token lint — §6)
 pnpm install && pnpm build
 pnpm vitest run extensions/msteams && pnpm tsgo && pnpm check   # msteams baseline + new cases, green
@@ -651,12 +770,18 @@ git diff --name-only <base>...HEAD          # → extensions/msteams/** only in 
 #    no zero-byte or partial items left by (f)/(g).
 ```
 
-**Ship gate:** §7 steps 1–3 green on **both** a SharePoint-configured conversation and a 1:1 chat; the
-proposal's DoD checked clause by clause (`createUploadSession` + chunked PUT path taken for >4MB —
-S1's `graph-upload.test.ts` mock-buffer case against *both* drive functions, and step 2b/2d live); the
-S1 red-state failure pasted into the PR, proving the old code failed the way the proposal reported;
-§4's unverified constants each checked and recorded as one line, including any that came back
-different — in particular the per-request fragment ceiling, since it determines whether the consent
-path had a second silent failure band (§4). S1–S3 must ship together; the proposal does **not** get
-closed on a happy path, and it does **not** get closed with `uploadToSharePoint` still on the simple
-PUT.
+**Ship gate:** step 0 run and recorded, confirming there is still a fix to make (§1.1a) — a green step 0
+that disproves the premise is a valid outcome and means this spec, as scoped, does not ship; §7 steps
+1–3 green on **both** a SharePoint-configured conversation and a 1:1 chat; the proposal's DoD checked
+clause by clause (`createUploadSession` + chunked PUT path taken for >4MB — S1's `graph-upload.test.ts`
+mock-buffer case against *both* drive functions, and step 2b/2d live); the S1 red-state failure pasted
+into the PR, proving the old code failed the way the proposal reported; §4's unverified constants each
+checked and recorded as one line, including any that came back different — in particular the
+per-request fragment ceiling, since it determines whether the consent path had a second silent failure
+band (§4); the same-name parity case (§2 S1) passing on both the simple and session paths with
+`conflictBehavior: replace`. S1–S3 must ship together; the proposal does **not** get closed on a happy
+path, and it does **not** get closed with `uploadToSharePoint` still on the simple PUT.
+
+**Approval gate (spec, not code):** this spec itself may not move to `approved` until step 0 above has
+been run and recorded (§1.1a, top-of-file disposition banner). That is a pass-4 finding, not a
+pre-existing part of this section — do not treat its absence as a pre-4 oversight to silently backfill.

@@ -1,13 +1,67 @@
 ---
 spec: 2026-08-17-gw-msteams-large-upload-spec
-pass: 3
-verdict: approved
+pass: 4
+verdict: changes_requested
 reviewer: factory-review
 created: 2026-08-17
 updated: 2026-08-29
 ---
 
-# Pass 3 disposition — APPROVED
+# Pass 4 disposition — STILL REVIEW (changes_requested), not approved
+
+Pass 3's `approved` disposition is superseded. A cross-provider review of pass 3 found three defects in
+the evidence pass 3 used to justify approval; all three are fixed in the spec text as of this pass, and
+this sidecar records the disposition change and the evidence for it. **No product code exists for this
+spec** — `gh pr list --repo NikolasP98/minion --state all --search "msteams upload"` is empty and no
+branch matches `msteam|upload|resumable|86546` (re-checked this pass), so there is nothing to preserve,
+reject, or archive at the code level. The disposition is on the *spec*, not on any WIP.
+
+## Why pass 3 was wrong to approve, and what changed
+
+1. **The defining ">4MB fails" claim is unverified and contradicted by current primary documentation.**
+   Pass 3 treated a stale in-repo TODO comment (`graph-upload.ts:26-27`) as proof of a live failure. It
+   never was: no pass ever ran a live `PUT` against a tenant to reproduce it, and PR #253's green checks
+   only validate the meta-repo spec/proposal index (`claude-review` skipped, `thermonuclear-review`
+   skipped). Fetched this pass: Microsoft's v1.0 docs for the exact endpoint shapes this spec targets
+   (`.../drive/root:{path}:/content`) state a **250 MB** limit, on a page updated 2026-08-11 — before
+   pass 3 was written. At the gateway's own 100 MiB default ceiling, every default-accepted file may
+   already fit under the simple `PUT`, which would mean the S1 routing split has nothing to fix. Fixed
+   by adding a pass-4 disposition banner, §1.1a, and a mandatory pre-implementation live-check (§7 step
+   0) that must run and be recorded before this spec can move to `approved`.
+2. **Two false technical claims cleared the pass-2 heap-policy blocker.** Pass 3 (and this sidecar's own
+   prior text) asserted `loadWebMedia` enforces the byte ceiling before allocation and that
+   `new Uint8Array(chunkView)` is zero-copy. Verified against `NikolasP98/minion@bd55137`: local files
+   are fully read by `fs.readFile` (`media.ts:309`) before the length check (`:319-324`, `:265-267`) —
+   only remote fetches are bounded during read; and `new Uint8Array(typedArray)` copies (confirmed via
+   Node's TypedArray-from-TypedArray semantics), unlike `Buffer`/`Uint8Array.prototype.subarray()`,
+   which does share storage. Fixed by §1.3a, a corrected S1 chunking instruction (pass the `subarray()`
+   view directly, never wrap it), and a corrected §5 memory-impact row. The local-file pre-allocation gap
+   itself is **not** fixed by this spec (out of `extensions/msteams/`'s surface) and stays flagged in
+   review rather than silently accepted.
+3. **`conflictBehavior: rename` was an unapproved product-policy change.** Pass 3 changed session
+   uploads to `rename` while leaving the simple `PUT` on Graph's default `replace`, with no same-name
+   test to catch the split — two uploads of the same filename would behave differently purely based on
+   size. Fixed: S1 now specifies `replace` (matching current behavior on both paths) and the DoD gained a
+   same-name parity case. `rename` remains available as a future, explicitly-approved product decision,
+   not something this fix bundles in silently.
+4. (Low, also fixed) **Several DoD `rg` probes were miswritten** — a bare `rg` expecting zero matches
+   exits 1 on the success case, which fails a correct implementation under `bash -e`. Rewritten as
+   explicit `if rg ...; then echo FAIL; exit 1; fi` assertions everywhere this pattern occurred.
+
+## Disposition
+
+**`changes_requested` / still-review**, evidence-based:
+- The proposal's underlying problem statement (§0) is not retracted — the consent-path chunking gap
+  (§1.2) and the unverified ~60 MiB Graph fragment ceiling (§4) are real, independently-evidenced
+  findings that do not depend on the disputed 4 MB claim and remain in scope.
+- The drive-path routing fix (S1's core mechanism) is **not** confirmed necessary. It stays in the spec,
+  gated behind a mandatory live pre-check (§7 step 0), rather than being deleted outright — deleting it
+  now would be guessing in the other direction with no more evidence than pass 3 had.
+- Do not re-approve this spec on documentation review alone. The next pass must either (a) attach the
+  step-0 live-check results and re-scope accordingly, or (b) explicitly accept the residual risk of
+  approving without that check, which is a human call this reviewer is not making unilaterally.
+
+## Superseded — Pass 3 disposition — APPROVED (kept below for history, no longer authoritative)
 
 **Disposition: `approved`** (status `approved`, verdict `approved`, pass 3). The pass-2 blocker was a
 single "flagged for human" policy question; it was resolved with code evidence rather than with a
