@@ -192,6 +192,33 @@ describe('fetchInfisicalSecrets', () => {
 		);
 	});
 
+	it('passes credentials from the documented auth file to the CLI', async () => {
+		const previousId = process.env.INFISICAL_UNIVERSAL_AUTH_CLIENT_ID;
+		const previousSecret = process.env.INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET;
+		delete process.env.INFISICAL_UNIVERSAL_AUTH_CLIENT_ID;
+		delete process.env.INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET;
+		try {
+			const directory = path.join(tmpHome, 'minion');
+			fs.mkdirSync(directory, { recursive: true });
+			fs.writeFileSync(
+				path.join(directory, 'infisical-auth.json'),
+				JSON.stringify({ clientId: 'file-id', clientSecret: 'file-secret' }),
+				{ mode: 0o600 },
+			);
+			mockExit(0, 'X=1\n');
+
+			await fetchInfisicalSecrets('minion-core', { noCache: true });
+			const options = spawnSyncMock.mock.calls[0]?.[2] as { env?: NodeJS.ProcessEnv };
+			expect(options.env?.INFISICAL_UNIVERSAL_AUTH_CLIENT_ID).toBe('file-id');
+			expect(options.env?.INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET).toBe('file-secret');
+		} finally {
+			if (previousId === undefined) delete process.env.INFISICAL_UNIVERSAL_AUTH_CLIENT_ID;
+			else process.env.INFISICAL_UNIVERSAL_AUTH_CLIENT_ID = previousId;
+			if (previousSecret === undefined) delete process.env.INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET;
+			else process.env.INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET = previousSecret;
+		}
+	});
+
 	it('cacheKeys allowlist narrows a later cache hit, but keyNames still lists every fetched name', async () => {
 		mockExit(0, 'MINION_SECRETS_KEY=b64==\nOPENAI_API_KEY=sk-legacy\n');
 		await fetchInfisicalSecrets('minion-core', { cacheKeys: ['MINION_SECRETS_KEY'] });

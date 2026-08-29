@@ -1,5 +1,6 @@
 import { spawnSync } from 'node:child_process';
 import { parseDotenv } from './dotenv.js';
+import { resolveInfisicalAuth } from './infisical-auth.js';
 import {
 	readCache,
 	writeCache,
@@ -75,7 +76,11 @@ export async function fetchInfisicalSecrets(
 	];
 	if (domain) args.push('--domain', domain);
 
-	const result = spawnSync('infisical', args, { encoding: 'buffer' });
+	const auth = resolveInfisicalAuth();
+	const result = spawnSync('infisical', args, {
+		encoding: 'buffer',
+		env: auth.configured ? { ...process.env, ...auth.env } : process.env,
+	});
 	if (result.status !== 0) {
 		const stderr = result.stderr?.toString('utf8').trim() ?? '';
 		return { ok: false, env: {}, error: stderr || `exit ${result.status}` };

@@ -131,16 +131,22 @@ export function createCrmClient(opts: CrmClientOptions) {
         status = 'mismatch';
       }
 
-      await withOrg(async (tx) => {
+      const updated = await withOrg(async (tx) => {
         const validation = { status, checked_at: new Date().toISOString(), api: 'perudevs' };
-        await tx`
+        return tx<{ id: string }[]>`
           update parties set
             dni_verified = ${status === 'verified'},
             dob = coalesce(${dob}::date, dob),
             metadata = metadata || jsonb_build_object('dni_validation', ${tx.json(validation)}::jsonb),
             updated_at = now()
-          where id = ${partyId}`;
+          where id = ${partyId}
+            and doc_number is not distinct from ${party.doc_number}
+            and name is not distinct from ${party.name}
+          returning id`;
       });
+      if (updated.length === 0) {
+        return { partyId, status: 'error', detail: 'party identity changed during validation' };
+      }
       return { partyId, status, detail };
     },
 

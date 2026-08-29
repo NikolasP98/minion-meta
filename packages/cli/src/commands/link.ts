@@ -20,7 +20,8 @@ export async function linkCommand(id: string, unlink: boolean): Promise<number> 
 	}
 	for (const pkg of MINION_SCOPE_PKGS) {
 		const verb = unlink ? ['unlink'] : ['link', '--global'];
-		await execa(pm, [...verb, pkg], { cwd: subRoot, stdio: 'inherit', reject: false });
+		const result = await execa(pm, [...verb, pkg], { cwd: subRoot, stdio: 'inherit', reject: false });
+		if (result.exitCode !== 0) return result.exitCode ?? 1;
 	}
 	return 0;
 }
