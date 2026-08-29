@@ -1,13 +1,13 @@
 ---
 spec: 2026-08-18-factory-capability-separation-spec
-pass: 5
+pass: 6
 verdict: pending
 reviewer: factory-review-fix
 created: 2026-08-18
 updated: 2026-08-29
 ---
 
-# Review sidecar — passes 4-5 (answers PR #271's two `VERDICT: FAIL` reviews)
+# Review sidecar — passes 4-6 (answers PR #271's three `VERDICT: FAIL` reviews)
 
 ## Pass 4 review (executability fix — historical; superseded by pass 5 below)
 
@@ -103,6 +103,63 @@ security-tagged spec keeps its human gates at approval AND merge, so no factory 
 changed is the recommendation. Pass 4 recommended **approve**; pass 5 recommends **approve the plan and decide
 finding H4 explicitly**, because approving the spec as written also accepts a departure from the source proposal's
 short-lived-credential DoD that only a human may accept (flag 0 below).
+
+## Pass 6 review (worktree substrate + scope audit + mandatory CAS — answers PR #271's third `VERDICT: FAIL`)
+
+### Trigger
+
+The cross-provider review of pass 5 returned `VERDICT: FAIL` again with two High findings (H1: gitless worker
+snapshot is non-executable; H2: one negative probe cannot prove exact scope) and one Medium (M1: lifecycle CAS
+optional). Verifying those findings against fresh code also surfaced a second, independently-reachable Medium not
+named as a top-level finding by the review's own numbering but present in its findings list (M2: `dashboard-run`
+omits the live `PUT /providers` route) and a third (M3: `meta-publish` has no crash-window reconciliation identity).
+Pass 6 resolves all five. It writes no product code.
+
+### Verification performed this pass
+
+Same method as passes 4-5 — a fresh clone of `minion-factory@5db7d391` (re-confirmed still the pinned commit;
+`minion-base@19531059` unchanged), every finding checked before it was acted on:
+
+| Finding | Verdict after independent check | Fix |
+|---|---|---|
+| **H1** — gitless worker snapshot cannot run any of the four meta agents | **Confirmed, and worse than the review stated** | `agent/spec.sh`'s `require_exact_changes` (`:47-74`) needs a working `git rev-parse --is-inside-work-tree` and `git status`, is called **four** times across the two passes (`:366,369,424,427`, not once), and the normal path also needs two `git add`/`git commit` pairs plus `git rev-parse HEAD` (`:373-375,434-436,445`). `agent/reconcile.sh:407-424,528-532`, `agent/discovery.sh:149-165`, `agent/chat.sh:64-83` use the same shape. Fixed: the worker's edit surface is now a writable, credential-free, remote-stripped git worktree — the scripts' existing survey/commit-checkpoint calls run unmodified inside it; only `gh repo clone` and `push_meta()` are dropped. New `T-META-WORKTREE-WRITABLE`, `T-META-WORKTREE-NO-EGRESS`. |
+| **H2** — one negative probe cannot prove exact scope | **Confirmed** | An over-scoped token denied on one unrelated target still passes; a probe against a nonexistent target is indistinguishable from a correctly-denied one to the token being tested. Fixed: invariant 1a becomes a scope audit — every in-fleet forbidden target enumerated (from `repos.ts`/`repos.json`), each target's existence independently verified, forbidden action classes probed on allowed repos too, evidence bound to the token's fingerprint so rotation invalidates it. `T-PURPOSE-NEGATIVE-SCOPE` redefined to require the specific "one forbidden target denied, another allowed" failure case; new `T-PURPOSE-SCOPE-FINGERPRINT-BOUND`. |
+| **M1** — lifecycle CAS is optional | **Confirmed** | `expectedStatus`/`expectedRevision` were accept-if-present; `api/meta/status/+server.ts:18-31` types both optional and `meta-write.ts:90-119` only checks them when present — an omitting caller can overwrite a newer human decision today. Checked whether any in-process caller needed the optionality: `lifecycle.ts:263,454` (auto-triage) and `index.ts:106` (postmerge-close) call `transition()` directly, never through the HTTP route, so making the route require both fields has no effect on them. Fixed: both fields mandatory, 400 before any read/write when either is missing. New `T-LIFECYCLE-CAS-REQUIRED`. |
+| **M2** — `dashboard-run` omits `PUT /providers` | **Confirmed as a live route regression** | `index.ts:731,735` serve both `GET` and `PUT /providers`; invariant 7's split had only ever listed the `GET`. Fixed: `PUT /providers` added to `dashboard-run`'s allowlist (not `dashboard-read`, since it mutates), with a positive-PUT/negative-read-principal test (`T-BASE-PROVIDERS-WRITE`) and an explicit settings-save exercise in `T-BASE-NO-ADMIN-BEARER`. |
+| **M3** — `meta-publish` has no crash-window reconciliation identity | **Confirmed** | `minion-meta`'s branch is shared (not a dedicated per-run branch like the target-push binding's), so branch HEAD cannot identify this run's publication after a concurrent writer advances it. `ensurePhaseEffect`'s `reconcile → perform → confirm` protocol (`db.ts:1912-1955`) needs an identity-based `reconcile()`, which `ensureExactPush`'s branch-HEAD `observe` cannot supply here. Fixed: a bounded `run:<run_id>:candidate:<candidate-hash>` marker is trailered into every published commit; `reconcile()` walks branch history from HEAD (bounded to the pinned base) for a commit carrying that trailer, independent of concurrent-writer drift. New `T-META-PUBLISH-CRASH-RECONCILE`. |
+
+### Changes made this pass
+
+- **§0** — new pass-6 executability note summarizing all five findings, their confirmation evidence, and where each
+  is fixed.
+- **§2 invariant 1a** — rewritten from a single negative probe into a provider-backed scope audit (enumerate,
+  independently verify existence, probe forbidden action classes on allowed repos, bind to token fingerprint, fail
+  closed on any surprise).
+- **§2 invariant 2** — rewritten: the worker's edit surface is a writable, credential-free, remote-stripped git
+  worktree running the scripts' existing survey/commit-checkpoint flow unmodified, not a gitless read-only mount.
+  The runner-private checkout and the "runner never trusts the worker's tree directly" rule are unchanged from pass
+  5 — only the worker-facing substrate changed.
+- **§2 invariant 6** — `expectedStatus`/`expectedRevision` changed from optional to mandatory at the HTTP boundary;
+  in-process callers unaffected (they never go through the route).
+- **§2 invariant 7** — `dashboard-run`'s route list gains `PUT /providers`.
+- **§2 invariant 8** — added the `meta-publish` crash-window reconciliation identity (commit-trailer marker +
+  history-walk `reconcile()`), mirroring the `push`/`pr-create` precedent in `containment-effects.ts`.
+- **§3/§4** — DELTA bullets 1, 2, 4 and Slices 1, 2, 4, 5 updated: new file-touch notes, new/renamed DoD test-name
+  patterns (`T-META-WORKTREE-WRITABLE`, `T-META-WORKTREE-NO-EGRESS`, `T-META-PUBLISH-CRASH-RECONCILE`,
+  `T-PURPOSE-SCOPE-FINGERPRINT-BOUND`, `T-LIFECYCLE-CAS-REQUIRED`, `T-BASE-PROVIDERS-WRITE`), and fixture
+  descriptions rewritten to match.
+- **§7, §8** — verification steps 1, 2, 5, 6, 7 updated for the scope audit, worktree substrate, mandatory CAS, and
+  provider-settings write; §8's revocation gate now also requires each purpose's audit evidence to be bound to its
+  currently-deployed token fingerprint, and rotation is named as an operational trigger to re-run the audit.
+- Frontmatter `pass: 6`, `verdict: pending`, `status: review` unchanged; regenerate `specs/index.json`.
+
+### Disposition after pass 6
+
+Unchanged mechanically — `status: review`, `verdict: pending`, `pass: 6` — for the same reason as passes 4-5: a
+security-tagged spec keeps its human gates at approval AND merge, so no factory pass may self-approve it. The
+recommendation is unchanged from pass 5: **approve the plan, and decide finding H4 explicitly** (the long-lived-PAT
+deviation, flag 0 below) — this pass's findings were executability and evidence-completeness gaps in the plan, not
+new instances of the H4 trade-off itself.
 
 ## Human flags
 

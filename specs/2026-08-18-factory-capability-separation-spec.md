@@ -3,7 +3,7 @@ id: 2026-08-18-factory-capability-separation-spec
 title: Factory capability separation — purpose-scoped GitHub credentials, run-bound grants, and server-derived actors
 stage: spec
 status: review
-pass: 5
+pass: 6
 created: 2026-08-18
 updated: 2026-08-29
 proposal: 2026-08-17-factory-capability-separation
@@ -120,6 +120,56 @@ confirmed real:
   to the loop (§4 Slice 1).
 
 No product code was implemented this pass either, for the same `tags: [security, infra]` reason pass 4 gave.
+
+**Pass-6 executability note (2026-08-29).** A third cross-provider review of pass 5 (PR #271, `VERDICT: FAIL` again)
+found two High findings and one Medium finding, all re-verified this pass from **fresh** clones of
+`minion-factory@5db7d391` (still the current pinned commit — re-confirmed by cloning it again this pass) before being
+acted on, not accepted on the reviewer's word:
+
+- **H1 (the gitless worker snapshot cannot run any of the four meta agents).** Confirmed, and worse than stated: it
+  is not only the write-allowlist gate that needs a live worktree. Re-read at the pinned commit, `agent/spec.sh`'s
+  `require_exact_changes` (`:47-74`) hard-fails unless `git rev-parse --is-inside-work-tree` and a captured
+  `git status --porcelain=v1 -z` both succeed, is called **four times** across the two passes (`:366,369,424,427`),
+  and the normal path also needs two `git add`/`git commit` pairs and a `git rev-parse HEAD` (`:373-375,434-436,445`).
+  `agent/reconcile.sh:407-424,528-532`, `agent/discovery.sh:149-165`, and `agent/chat.sh:64-83` all use the same
+  `git status`/`add`/`commit`/`show` shape to detect and checkpoint what they publish. A read-only, gitless mount
+  cannot serve any of that — pass 5's H2 fix (§2 invariant 2, splitting worker snapshot from runner-private checkout)
+  solved the trust problem and broke the substrate problem in the same edit. Invariant 2 is rewritten below: the
+  worker's edit surface is now a **writable, credential-free, remote-stripped git worktree** — `require_exact_changes`
+  and the commit-checkpoint flow run **unmodified** inside it — while the runner-private checkout (never
+  worker-reachable) stays exactly as pass 5 specified, so `T-META-APPLY-CHECKOUT-ISOLATED` is unaffected. Two new
+  controls prove the worktree is genuinely git-capable (`T-META-WORKTREE-WRITABLE`) and genuinely cannot reach GitHub
+  (`T-META-WORKTREE-NO-EGRESS`).
+- **H2 (one negative probe cannot prove exact scope).** Confirmed: invariant 1a's single 403/404 sample against one
+  out-of-scope target does not rule out a purpose token also holding access to a *different* forbidden repository or
+  action, and does not distinguish "correctly denied" from "target does not exist" when the probing token itself
+  cannot see the target either way. Rewritten below into a provider-backed scope audit: every in-fleet repository
+  outside a purpose's declared scope is enumerated and probed, each forbidden target's existence is confirmed by a
+  control independent of the token under test, representative forbidden action classes are probed on *allowed*
+  repositories too, and the resulting evidence is bound to the token's provider-reported fingerprint so a rotation
+  invalidates stale evidence (`T-PURPOSE-NEGATIVE-SCOPE` redefined; new `T-PURPOSE-SCOPE-FINGERPRINT-BOUND`).
+- **M1 (lifecycle CAS is optional, so a caller can bypass the stale-decision guard).** Confirmed: invariant 6 made
+  `expectedStatus`/`expectedRevision` acceptable-if-present rather than required, and Slice 4's DoD only tested
+  mismatches, never omission. Checked for a compensating internal caller and found none needed one: the only
+  in-process callers of `transition()` that do not go through this HTTP route (`runner/src/lifecycle.ts:263,454`
+  auto-triage, `runner/src/index.ts:106` postmerge-close) already construct and pass their own `expectedStatus`
+  directly to the function, never through the HTTP boundary — making both fields mandatory at the route only closes
+  the caller-omission gap `src/routes/api/meta/status/+server.ts:18-31` and `meta-write.ts:90-119` prove is reachable
+  today, with no internal caller to break.
+- **M2 (the dashboard-run principal omits `PUT /providers`), confirmed as a live route regression** was also raised
+  by this review. `runner/src/index.ts:731,735` serve both `GET /providers` and `PUT /providers`; invariant 7's route
+  split had only ever listed the `GET`. Fixed by adding `PUT /providers` to `dashboard-run`'s allowlist.
+- **M3 (`meta-publish` has no crash-window reconciliation identity), also raised**, is fixed by giving the new
+  `meta-publish` effect the same `reserve → (perform | reconcile) → confirm` shape `push`/`pr-create` already use
+  (`runner/src/db.ts:1912-1955`, `containment-effects.ts:146-175`'s `ensureExactPush`/`observe` precedent): a bounded
+  runner-derived `{run_id, candidate-hash}` marker is trailered into every published commit, and `reconcile()` walks
+  branch history from current HEAD (bounded depth, back to the pinned base) for a commit carrying that trailer —
+  independent of how far a concurrent writer has since moved HEAD.
+
+This pass's findings target the same invariants and slice (§2 invariant 2, §4 Slice 2 for H1; §2 invariant 1a, §4
+Slice 1 for H2; §2 invariant 6, §4 Slice 4 for M1; §2 invariant 7, §4 Slices 4-5 for M2; §2 invariant 8, §4 Slice 2
+for M3) rather than introducing new ones — see those sections for the rewritten text. No product code was
+implemented this pass either, for the same reason passes 4-5 gave.
 
 ### Relationship recommendation
 
@@ -373,43 +423,90 @@ landed code already states — *workers get read credentials, writes live in the
    rejects: a purpose that any *enabled* code path exercises but which is unconfigured; and any two configured
    credential values that are byte-identical. `runner/src/github.ts`'s module-level `TOKEN` is replaced by a
    purpose-bound client factory; no module may construct an unlabelled GitHub transport.
-1a. **Purpose activation requires a negative-scope canary, not presence/distinctness alone.** This spec adopts the
+1a. **Purpose activation requires a provider-backed scope audit, not one negative sample.** This spec adopts the
    long-lived purpose-scoped PAT mechanism that already shipped in `minion-factory@5db7d391` rather than pass 2's
    short-lived, run/repo/branch/action-bound grant design the source proposal's DoD specifies
    (`proposals/2026-08-17-factory-capability-separation.md:21-25`) — a recorded deviation, not a claimed equivalent
    (§0). `runner/src/scoped-github-canary.ts`'s `verifyCommand` performs only *positive* checks against the one
-   declared canary repository (`requireOk` calls at `:383-398`). Extend it (or add a sibling canary invocation) so
-   every purpose's activation additionally proves a *negative* check: an authenticated call using that purpose's
-   token against a repository or action outside its declared scope returns 403/404, not 200. A purpose is not
-   eligible for §8's revocation gate, and may not back a real (non-canary) call, until its negative check has run
-   and failed as expected at least once against the current token value. This is the compensating control the human
-   approval gate should weigh against the long-lived-token deviation named in §0 — it is not a substitute for asking
-   the human whether the deviation itself is acceptable.
+   declared canary repository (`requireOk` calls at `:383-398`). A single negative probe is not evidence of exact
+   scope: an over-granted token (e.g. a `github-meta` token that also reaches `minion-factory`) still passes if the
+   one probed target is a *third*, still-forbidden repository, and a probe against a nonexistent target returns the
+   same 404 a correctly-scoped token would produce, so presence-of-a-403/404 alone proves nothing about a target
+   whose existence the probing token cannot itself confirm. Extend the canary into a **scope audit**, run once per
+   distinct token value before that value backs any real (non-canary) call:
+   - **Enumerate every forbidden target.** For a repository-scoped purpose, that is every repository in the fleet
+     registry (`runner/src/repos.ts`/`repos.json`, a closed, already-known set) outside the purpose's declared
+     repository scope, plus `minion-meta`/`minion-factory`/`minion-agent-memory` whenever they are not the purpose's
+     own target. The audit probes each one.
+   - **Verify existence independently before trusting a denial.** A forbidden target's existence is confirmed by a
+     control that does not depend on the token under test — the operator/bootstrap credential the provisioning
+     script already runs under, or another purpose's token whose declared scope already covers that target (e.g.
+     `github-checkout`'s fleet-wide read). A denial against a target whose existence cannot be independently
+     confirmed is not counted as evidence; that target's probe blocks activation until existence is established some
+     other way, it does not silently pass.
+   - **Probe representative forbidden action classes on *allowed* repositories too**, not just repository scope: a
+     read-capability purpose gets a probed write call on its own allowed target and must be refused; a
+     write-but-not-merge purpose (`github-branch`) gets a probed PR-merge and must be refused; a
+     merge-capability purpose (`github-merge`) is exempt from that specific probe by design.
+   - **Bind evidence to the token's fingerprint.** The provider-reported identity of the credential (fine-grained
+     PAT id, or the last verifiable identifier GitHub's API exposes for it) is recorded with the audit result.
+     Rotating a purpose's token invalidates its prior audit; the new value must pass its own audit before it backs
+     any real call.
+   - **Fail closed on any surprise.** Any forbidden probe that returns 2xx, or any forbidden target whose existence
+     could not be independently verified, fails activation for that purpose entirely — not just that one probe row —
+     and the purpose is reported not-yet-active.
+
+   A purpose is not eligible for §8's revocation gate, and may not back a real (non-canary) call, until its full
+   scope audit has run and passed against the current token's fingerprint. This is the compensating control the
+   human approval gate should weigh against the long-lived-token deviation named in §0 — it is not a substitute for
+   asking the human whether the deviation itself is acceptable.
 2. **A runner-owned meta publication protocol replaces in-container clone-and-push, before any credential is
-   removed.** For every meta-writing run kind (`spec`, `reconcile`, `discovery`, `chat`):
-   - The **runner** prepares two things before the worker starts: (a) a **gitless, read-only snapshot** of the
-     pinned base commit — plain files, no `.git/` directory, nothing the worker can use as a live repository or a
-     script the runner will later trust — mounted into the worker as its edit surface, and (b) its **own private
-     checkout** of the same pinned commit, held entirely outside any worker-reachable mount or volume. The pinned
-     base commit is recorded by the runner, never claimed by the worker.
-   - The worker edits the snapshot with **no write credential present** and no live `.git/` to tamper with, and
-     emits a bounded candidate artifact to its existing `/out` directory (`/out/meta-candidate.json`): ordered
+   removed — but the worker keeps a real, git-capable edit surface, because its existing scripts require one.**
+   `agent/spec.sh`'s `require_exact_changes` (called four times across its two passes, `:366,369,424,427`) hard-fails
+   without a working `git rev-parse --is-inside-work-tree` and a captured `git status --porcelain=v1 -z`
+   (`:47-74`), and the normal path needs two `git add`/`git commit` pairs plus `git rev-parse HEAD`
+   (`:373-375,434-436,445`); `agent/reconcile.sh:407-424,528-532`, `agent/discovery.sh:149-165`, and
+   `agent/chat.sh:64-83` use the same shape. A read-only or gitless mount cannot serve any of that — it is not
+   merely a missing convenience, it is a guaranteed first-write failure. For every meta-writing run kind (`spec`,
+   `reconcile`, `discovery`, `chat`):
+   - The **runner** prepares two things before the worker starts: (a) a **writable, network- and credential-free git
+     worktree** checked out at the pinned base commit — a real `.git/` directory with ordinary `status`/`add`/
+     `commit`/`diff`/`show` behaviour, but with every remote removed (no `origin`, no credential helper, no
+     `GIT_TERMINAL_PROMPT`-bypassing token) so no `git push`/`git fetch`/`gh` call from inside it can reach GitHub —
+     mounted into the worker as its edit surface, and (b) its **own private checkout** of the same pinned commit,
+     held entirely outside any worker-reachable mount or volume. The pinned base commit is recorded by the runner,
+     never claimed by the worker. Both worktrees start from byte-identical content; only (a) is git-backed for the
+     worker's benefit.
+   - The worker edits the worktree with **no write credential present** and runs its **existing, unmodified**
+     write-allowlist survey and commit-checkpoint flow inside it — the same `require_exact_changes`/`git add`/
+     `git commit` calls each script already makes — producing one or more ordinary local commits on top of the
+     pinned base. It never runs `gh repo clone` (the worktree is pre-provisioned) and never calls `push_meta()` or
+     `git push` (there is no remote to push to). After the local commits are made, the script serializes them into
+     the existing `/out` directory (`/out/meta-candidate.json`) using ordinary git plumbing against its own
+     worktree — `git log`/`git diff-tree --no-commit-id --name-status -r`/`git show <sha>:<path>` — into ordered
      commits of `{message, files[]}`, where **each file entry carries its own bounded byte content** (not a path
-     reference into the shared mount), every path passes the run kind's write allowlist (the allowlist
-     `agent/spec.sh:51-74` already computes), and every entry is a regular file within declared size/count bounds —
-     no symlinks, no path escapes, no `.git/` or `scripts/` targets. The runner never reads or trusts anything from
-     the worker's snapshot directory itself after the worker exits — only the bytes inside the validated artifact.
-   - After the worker exits, the **runner** validates the artifact's bytes against that allowlist (rejecting on any
-     violation with no GitHub call — `T-META-CANDIDATE-BOUNDED`), applies them onto its **own private checkout**
-     from the first bullet — never the worker's snapshot — regenerates `specs/index.json` / `proposals/index.json`
-     by running the meta repo's own `scripts/spec-index.mjs` / `scripts/proposal-index.mjs` from that same
-     runner-private checkout under a minimal allowlisted environment (so the committed index and the generator that
-     produced it are never worker-influenced), commits with a server-derived author, and pushes with `github-meta`.
-     On a non-fast-forward it performs the same `pull --rebase` → regenerate → retry convergence `push_meta()`
-     performs today, bounded to the current retry count, still entirely inside the runner-private checkout.
+     reference into the shared mount), every path passes the run kind's write allowlist (the same allowlist
+     `agent/spec.sh:51-74` already computes and enforced live via `require_exact_changes` before serialization), and
+     every entry is a regular file within declared size/count bounds — no symlinks, no path escapes, no `.git/` or
+     `scripts/` targets. The runner never reads, executes, or trusts anything from the worker's worktree itself
+     after the worker exits — not its `.git/hooks`, not its `.git/config`, not a shadowed copy of
+     `scripts/spec-index.mjs` the worker might have planted — only the bytes inside the validated artifact the
+     worker emitted. The worker's local commits and its worktree's git history have no bearing on what the runner
+     applies; they exist only so the scripts' own survey/checkpoint logic keeps working.
+   - After the worker exits, the **runner** validates the artifact's bytes against that allowlist independently
+     (rejecting on any violation with no GitHub call — `T-META-CANDIDATE-BOUNDED`), applies them onto its **own
+     private checkout** from the first bullet — never the worker's worktree — regenerates `specs/index.json` /
+     `proposals/index.json` by running the meta repo's own `scripts/spec-index.mjs` / `scripts/proposal-index.mjs`
+     from that same runner-private checkout under a minimal allowlisted environment (so the committed index and the
+     generator that produced it are never worker-influenced), commits with a server-derived author, and pushes with
+     `github-meta`. On a non-fast-forward it performs the same `pull --rebase` → regenerate → retry convergence
+     `push_meta()` performs today, bounded to the current retry count, still entirely inside the runner-private
+     checkout.
    - The effect is expressed as a new `containment-effects.ts` binding variant (extending the `phase` union at
      `:16-33` and its validator at `:77`, reusing `tokenFor`/`githubRequest`'s bounded-response primitives) and
-     records an idempotent `phase_effects` row (invariant 8).
+     records an idempotent `phase_effects` row carrying a bounded `{run_id, candidate-hash}` publication marker
+     trailered into the commit it pushes, so a crash between push and confirmation can be reconciled by identity
+     rather than by branch position (invariant 8).
 3. **After invariant 2 lands, no GitHub *write* credential reaches a worker/harness container for the four
    meta-writing run kinds on any deployment.** `legacyCredentialTransport` (`queue.ts:2101-2113`) is not deleted but
    **downgraded** for `discovery`, `spec`, `reconcile`, and `chat`: it forwards `github-checkout` (read) only. The
@@ -453,10 +550,19 @@ landed code already states — *workers get read credentials, writes live in the
      exactly `POST /lifecycle/spec/:id` and `POST /lifecycle/proposal/:id` and nothing else (same route-allowlist
      shape as `UNSTICK_ROUTES`, `index.ts:206-214`). It joins the weak-secret and pairwise-distinct startup checks
      at `:164-190`, and its actor label is a fixed registry string (`base-dashboard-v1`).
-   - **Caller-stated revision CAS.** The route accepts optional `expectedStatus` (string) and `expectedRevision`
-     (contents-API blob sha), validates both against the freshly-read file *before* any write, and answers **409**
-     `{outcome:'revision_conflict', current:{status, revision}}` on mismatch — preserving the guard
-     `minion-base/src/lib/server/meta-write.ts:112-119` provides today.
+   - **Caller-stated revision CAS is mandatory, not optional.** `POST /lifecycle/:kind/:id` **requires** both
+     `expectedStatus` (string) and `expectedRevision` (contents-API blob sha) on every HTTP request, for both the
+     `status` and `disposition` shapes; either missing returns **400** before any GitHub read or write — an omission
+     is never treated as "no expectation," it is a malformed request. When both are present they are validated
+     against the freshly-read file *before* any write, answering **409** `{outcome:'revision_conflict',
+     current:{status, revision}}` on mismatch — preserving the guard `minion-base/src/lib/server/meta-write.ts:112-119`
+     provides today, but closing the gap that guard's *optionality* left open: `api/meta/status/+server.ts:18-31`
+     types both fields optional and `meta-write.ts:90-119` only checks them when present, so an authenticated caller
+     that omits both can overwrite a newer human decision today. Making them mandatory at the HTTP boundary closes
+     that without touching any in-process caller: `transition()`'s only callers that do not go through this route —
+     `runner/src/lifecycle.ts:263,454` (auto-triage) and `runner/src/index.ts:106` (postmerge-close) — already
+     construct and pass their own `expectedStatus` directly to the function, never through the HTTP body, so this
+     requirement has no effect on them.
    - **Idempotent replay.** Current status already equal to the target answers 200
      `{outcome:'already_applied', revision}` with no write (today's `meta-write.ts:112` behaviour).
    - **An explicit source→target edge table.** The factory's target-only allowlist (`lifecycle.ts:34-43`) is
@@ -489,7 +595,11 @@ landed code already states — *workers get read credentials, writes live in the
    - **`dashboard-read`** (`FACTORY_DASHBOARD_READ_SECRET`) — `GET /runs`, `GET /runs/:id`, `GET /stats`,
      `GET /trigger-health`, `GET /providers`, `GET /chat/*`. Read-only telemetry; no mutation.
    - **`dashboard-run`** (`FACTORY_DASHBOARD_RUN_SECRET`) — `POST /pipeline/spec`, `POST /runs`,
-     `POST /pipeline/reconcile`, `POST /chat/*`. Dashboard-triggered mutations that are not lifecycle transitions.
+     `POST /pipeline/reconcile`, `POST /chat/*`, `PUT /providers`. Dashboard-triggered mutations that are not
+     lifecycle transitions. `PUT /providers` (`index.ts:735`) is provider-settings write, currently reachable only
+     by the admin bearer; omitting it from either principal would 403 the live settings-save route the moment
+     `FACTORY_SECRET` leaves minion-base (Slice 5) — it belongs on `dashboard-run`, not `dashboard-read`, because it
+     mutates state.
 
    Both join the weak-secret and pairwise-distinct startup checks at `:164-190` alongside `lifecycle`. minion-base
    routes each existing call to its matching principal, and `env.FACTORY_SECRET` is removed from its deployment
@@ -505,6 +615,24 @@ landed code already states — *workers get read credentials, writes live in the
    `purpose` and `target_repo` columns (migration in Slice 2) populated by every new kind Slice 2/6 introduce;
    back-filling the two pre-existing kinds is not required. Token values are never persisted, logged, or included in
    Docker argv/result JSON/PR bodies/error messages.
+
+   **`meta-publish` needs its own crash-window reconciliation identity, because `minion-meta`'s branch is not a
+   dedicated per-run branch the way the target-push binding's is.** `ensurePhaseEffect`'s `reserve → (perform |
+   reconcile) → confirm` protocol (`db.ts:1912-1955`) requires a `reconcile()` that reads remote state to answer
+   "did this already land" after a restart finds a `pending` row — `ensureExactPush`'s `observe`
+   (`containment-effects.ts:146-175`) answers that by comparing branch HEAD to the bound candidate SHA, which works
+   because that binding owns an exclusive candidate branch. `minion-meta`'s target branch is the shared branch every
+   meta writer pushes to (the reason `push_meta()`'s rebase-retry exists at all), so a concurrent writer can advance
+   branch HEAD past this run's commit before or during a crash-recovery reconcile, and HEAD position alone can no
+   longer identify *this run's* publication. The `meta-publish` binding fixes this the same way `pr-create`'s
+   `observe` establishes identity independent of a mutable value (`validatePullRequest`, `:127-144`): every commit
+   the publication protocol pushes (the primary commit and any rebase-continuation regeneration commit that becomes
+   the eventual tip) carries a trailer line embedding the bounded runner-derived marker `run:<run_id>:candidate:
+   <candidate-hash>`. `reconcile()` for `meta-publish` walks branch history from the current HEAD backward, bounded
+   to the depth since the recorded pinned base commit, for a commit whose trailer matches this run's marker; a match
+   confirms the effect with that commit's SHA as `ref` regardless of how far a concurrent writer has since moved
+   HEAD, and no match lets `perform()` proceed (push/rebase-retry) exactly as an unreserved effect would. Replay of
+   an already-confirmed `{run_id,'meta-publish',candidate-hash}` key returns the same commit without a GitHub call.
 
    Lifecycle transitions are **not** run-bound, so they do not get a `phase_effects` row: their evidence is the git
    commit itself (author = the credential-registry actor label, message, sha) plus the CAS-checked canonical
@@ -538,32 +666,39 @@ contract precedes the minion-base cutover.
 
 1. Close the purpose registry: add `github-meta`, `github-merge`, `github-factory-source`, `github-memory-read`,
    `github-memory-candidate`, `github-train`; replace `github.ts`'s module `TOKEN` with purpose-bound clients for
-   the runner's own calls; add the startup validator; extend the activation canary with a negative-scope check per
-   purpose (→ Slice 1; proves `T-PURPOSE-REGISTRY-CLOSED`, `T-PURPOSE-TOKENS-DISTINCT`, `T-META-PURPOSE-TOKEN`,
-   `T-PURPOSE-NEGATIVE-SCOPE`). No container or agent-script behaviour changes yet.
-2. Build the runner-owned meta publication protocol (gitless worker snapshot → bounded candidate artifact with
-   inline bytes → apply/commit/regenerate/push against a runner-private checkout the worker never touches →
-   `phase_effects` receipt), adopt it in `agent/spec.sh`, `agent/reconcile.sh`, `agent/discovery.sh`,
-   `agent/chat.sh`; downgrade `legacyCredentialTransport` to the read-only `github-checkout` credential for those
-   four launch paths; and make `dev`-kind dispatch under the legacy (non-v2) path fail closed rather than
-   credential-downgraded, after proving the containment-v2 dev path already publishes at every moment
-   `agent/run.sh` does (→ Slice 2; proves `T-META-CANDIDATE-BOUNDED`, `T-META-APPLY-CHECKOUT-ISOLATED`,
-   `T-META-PUBLISH-REBASE-RETRY`, `T-META-PUBLISH-RECEIPT`, `T-WORKER-NO-WRITE-CREDENTIAL`,
-   `T-LEGACY-PATH-READ-ONLY`, `T-DEV-V2-PUBLICATION-COMPLETE`, `T-DEV-CONTAINMENT-V2-REQUIRED`).
+   the runner's own calls; add the startup validator; extend the activation canary with a full negative-scope audit
+   per purpose — enumerated forbidden targets, independently verified existence, forbidden-action probes on allowed
+   repositories, fingerprint-bound evidence (→ Slice 1; proves `T-PURPOSE-REGISTRY-CLOSED`,
+   `T-PURPOSE-TOKENS-DISTINCT`, `T-META-PURPOSE-TOKEN`, `T-PURPOSE-NEGATIVE-SCOPE`,
+   `T-PURPOSE-SCOPE-FINGERPRINT-BOUND`). No container or agent-script behaviour changes yet.
+2. Build the runner-owned meta publication protocol (writable, credential-free, remote-stripped worker git worktree
+   running the scripts' existing survey/commit-checkpoint flow unmodified → bounded candidate artifact with inline
+   bytes serialized from the worker's local commits → apply/commit/regenerate/push against a separate runner-private
+   checkout the worker never touches → trailer-marked `phase_effects` receipt reconciled by commit identity, not
+   branch position), adopt it in `agent/spec.sh`, `agent/reconcile.sh`, `agent/discovery.sh`, `agent/chat.sh`;
+   downgrade `legacyCredentialTransport` to the read-only `github-checkout` credential for those four launch paths;
+   and make `dev`-kind dispatch under the legacy (non-v2) path fail closed rather than credential-downgraded, after
+   proving the containment-v2 dev path already publishes at every moment `agent/run.sh` does (→ Slice 2; proves
+   `T-META-CANDIDATE-BOUNDED`, `T-META-APPLY-CHECKOUT-ISOLATED`, `T-META-WORKTREE-WRITABLE`,
+   `T-META-WORKTREE-NO-EGRESS`, `T-META-PUBLISH-REBASE-RETRY`, `T-META-PUBLISH-RECEIPT`,
+   `T-META-PUBLISH-CRASH-RECONCILE`, `T-WORKER-NO-WRITE-CREDENTIAL`, `T-LEGACY-PATH-READ-ONLY`,
+   `T-DEV-V2-PUBLICATION-COMPLETE`, `T-DEV-CONTAINMENT-V2-REQUIRED`).
 3. Reject `by` unconditionally at the lifecycle HTTP boundary and derive the actor only from the credential
    registry, on both the `status` and `disposition` routes (→ Slice 3; proves `T-BY-REJECTED`,
    `T-ACTOR-SERVER-DERIVED`).
 4. Make the factory lifecycle endpoint a complete writer, and register the two additional dashboard-scoped
-   principals minion-base's non-lifecycle calls need: lifecycle-only principal with `expectedStatus`/
-   `expectedRevision` CAS and 409, idempotent replay, explicit source→target edge table, canonical committed
-   response with `indexSynced`, single promotion; plus `dashboard-read` and `dashboard-run` route allowlists
-   (→ Slice 4; proves `T-LIFECYCLE-PRINCIPAL-SCOPED`, `T-LIFECYCLE-CAS`, `T-LIFECYCLE-IDEMPOTENT`,
-   `T-LIFECYCLE-EDGE-TABLE`, `T-LIFECYCLE-CANONICAL-RESPONSE`, `T-DASHBOARD-READ-SCOPED`,
+   principals minion-base's non-lifecycle calls need: lifecycle-only principal with mandatory `expectedStatus`/
+   `expectedRevision` CAS (400 on omission, 409 on mismatch), idempotent replay, explicit source→target edge table,
+   canonical committed response with `indexSynced`, single promotion; plus `dashboard-read` and `dashboard-run`
+   route allowlists, `dashboard-run` including `PUT /providers`
+   (→ Slice 4; proves `T-LIFECYCLE-PRINCIPAL-SCOPED`, `T-LIFECYCLE-CAS`, `T-LIFECYCLE-CAS-REQUIRED`,
+   `T-LIFECYCLE-IDEMPOTENT`, `T-LIFECYCLE-EDGE-TABLE`, `T-LIFECYCLE-CANONICAL-RESPONSE`, `T-DASHBOARD-READ-SCOPED`,
    `T-DASHBOARD-RUN-SCOPED`).
 5. Cut minion-base over to all three factory principals (lifecycle, dashboard-read, dashboard-run) for every call
-   `factory.ts` makes; delete its Contents-API mutation path, its duplicate promotion call, and `FACTORY_SECRET`
-   from its deployment entirely (→ Slice 5; proves `T-BASE-NO-META-WRITE`, `T-BASE-SERVICE-ACTOR`,
-   `T-BASE-CONFLICT-SURFACED`, `T-BASE-NO-DOUBLE-PROMOTE`, `T-BASE-NO-ADMIN-BEARER`).
+   `factory.ts` makes, including routing the provider-settings save to `dashboard-run`'s `PUT /providers`; delete its
+   Contents-API mutation path, its duplicate promotion call, and `FACTORY_SECRET` from its deployment entirely
+   (→ Slice 5; proves `T-BASE-NO-META-WRITE`, `T-BASE-SERVICE-ACTOR`, `T-BASE-CONFLICT-SURFACED`,
+   `T-BASE-NO-DOUBLE-PROMOTE`, `T-BASE-PROVIDERS-WRITE`, `T-BASE-NO-ADMIN-BEARER`).
 6. Delete `agent/run.sh`'s direct memory upload, stand up the dormant create-only quarantine publisher, and map
    every host-script operation to its purpose credential — including self-update's three distinct authorities
    (→ Slice 6; proves `T-MEMORY-PATH`, `T-MEMORY-CREATE-ONLY`, `T-MEMORY-DORMANT`, `T-NO-HOST-SCRIPT-PAT`,
@@ -592,9 +727,12 @@ while the meta-writing agents still hold the broad PAT.
 - `runner/src/lifecycle.ts`, `runner/src/monitor.ts` (use `github-meta`), `runner/src/automerge.ts` (use
   `github-merge`), and the seven fleet-read modules listed in §1 point 4 (use `github-checkout`)
 - `runner/src/index.ts` (extend the startup validator at `:164-190` to the credential registry)
-- `runner/src/scoped-github-canary.ts` (add a negative-scope check per configured purpose alongside `verifyCommand`'s
-  existing positive checks `:383-398` — an authenticated call against a repository/action outside the purpose's
-  declared scope must be refused)
+- `runner/src/scoped-github-canary.ts` (add a full negative-scope audit per configured purpose alongside
+  `verifyCommand`'s existing positive checks `:383-398`: enumerate every fleet repo — from `runner/src/repos.ts`/
+  `repos.json` — outside the purpose's declared scope, verify each forbidden target's existence via a control
+  independent of the token under test, probe representative forbidden action classes on the purpose's own allowed
+  repositories, record the token's provider-reported fingerprint with the result, and refuse activation on any
+  unexpected success or unverifiable target)
 - `runner/src/github.test.ts`, `runner/src/index.test.ts`, new `runner/src/github-purpose.test.ts`,
   `runner/src/scoped-github-canary.test.ts`
 - `.env.example`, `deploy.sh` (`:316`), `setup.sh` (`:102`), `deploy/k8s.yml` (`:18`), `README.md` — every new env
@@ -604,7 +742,7 @@ while the meta-writing agents still hold the broad PAT.
 
 ```bash
 cd runner
-npm test -- --test-name-pattern='T-PURPOSE-REGISTRY-CLOSED|T-PURPOSE-TOKENS-DISTINCT|T-META-PURPOSE-TOKEN|T-PURPOSE-NEGATIVE-SCOPE'
+npm test -- --test-name-pattern='T-PURPOSE-REGISTRY-CLOSED|T-PURPOSE-TOKENS-DISTINCT|T-META-PURPOSE-TOKEN|T-PURPOSE-NEGATIVE-SCOPE|T-PURPOSE-SCOPE-FINGERPRINT-BOUND'
 npm test
 npx tsc --noEmit
 cd ..
@@ -620,9 +758,14 @@ Fixtures prove: `T-PURPOSE-REGISTRY-CLOSED` — every consumer enumerated in §1
 and no module can build an unlabelled transport; `T-PURPOSE-TOKENS-DISTINCT` — two purposes configured with the same
 underlying token value refuse startup, and an unconfigured purpose that an enabled path exercises refuses startup;
 `T-META-PURPOSE-TOKEN` — a lifecycle commit and a monitor issue both carry the `github-meta` credential and never
-the target-purpose or checkout credential; `T-PURPOSE-NEGATIVE-SCOPE` — every configured purpose's token is proven
-denied (403/404) against at least one repository/action outside its declared scope, and a purpose whose negative
-check has not yet run is reported as not-yet-active rather than silently trusted.
+the target-purpose or checkout credential; `T-PURPOSE-NEGATIVE-SCOPE` — for a fixture purpose configured with an
+intentionally *over-broad* scope (denied on forbidden target A, but able to reach forbidden target B, and able to
+perform a forbidden action class on an allowed repository), the audit fails activation entirely — not merely
+logs a partial pass — and a purpose whose full audit has not yet run is reported as not-yet-active rather than
+silently trusted; a probe against a forbidden target whose existence cannot be independently confirmed also fails
+activation rather than counting as a pass. `T-PURPOSE-SCOPE-FINGERPRINT-BOUND` — a purpose that passed its audit
+under one token value is reported not-yet-active again after its token value (and provider-reported fingerprint)
+changes, until the audit re-runs against the new value.
 
 ### Slice 2 — runner-owned meta publication, then legacy-path downgrade (8h; split if the DoD cannot be met in one PR)
 
@@ -642,20 +785,24 @@ shipping the refusal ahead of its replacement.
 
 - `runner/src/containment-effects.ts` (extend the `phase` union `:16-33` and validator `:77` with the meta
   publication binding; add the multi-file commit + rebase-retry publish operation reusing `tokenFor`/
-  `githubRequest`, run only against the runner-private checkout described below)
+  `githubRequest`, run only against the runner-private checkout described below; add the trailer-marker
+  `reconcile()` for `meta-publish` alongside `ensureExactPush`'s `observe`)
 - `runner/src/meta-publication.ts` (new: candidate-artifact schema carrying inline file bytes, allowlist/bounds
-  validation, gitless worker-snapshot preparation, runner-private apply-checkout preparation, index regeneration
-  via the meta repo's own `scripts/spec-index.mjs`/`scripts/proposal-index.mjs` run under a minimal allowlisted
-  environment against the apply checkout only)
+  validation, writable credential-free worker-worktree preparation — checkout at the pinned base commit with every
+  remote removed — runner-private apply-checkout preparation, index regeneration via the meta repo's own
+  `scripts/spec-index.mjs`/`scripts/proposal-index.mjs` run under a minimal allowlisted environment against the
+  apply checkout only, and the commit-trailer marker format `run:<run_id>:candidate:<candidate-hash>`)
 - `runner/src/db.ts` (migration: add nullable `purpose TEXT` and `target_repo TEXT` columns to `phase_effects`;
   widen `PhaseEffectKind` `:1612` to add `'meta-publish'`)
-- `runner/src/queue.ts` (runner-side gitless snapshot + private apply-checkout preparation for the four meta run
+- `runner/src/queue.ts` (runner-side worker-worktree + private apply-checkout preparation for the four meta run
   kinds; `legacyCredentialTransport` `:2101-2113` forwards `github-checkout` only for `discovery`/`spec`/
   `reconcile`/`chat` `:2186-2231`, `:4038-4043`; `dispatchPreparedRun` `:439` fails a `dev`-kind dispatch closed with
   a queue-time error when `!containmentV2Enabled()`, instead of falling through to `startLegacy`)
 - `agent/spec.sh`, `agent/reconcile.sh`, `agent/discovery.sh`, `agent/chat.sh` (drop `gh repo clone`/`git push`/
-  `push_meta()`; write `/out/meta-candidate.json` — including file bytes — from the existing write-allowlist survey
-  instead)
+  `push_meta()` only — `require_exact_changes`/`git add`/`git commit` stay exactly as they are today, now running
+  against the runner-provisioned worktree instead of a fresh clone; add the serialization step that reads the
+  worktree's local commits via `git log`/`git diff-tree`/`git show` into `/out/meta-candidate.json`, including file
+  bytes)
 - `runner/src/meta-publication.test.ts` (new), `runner/src/queue.test.ts`, `runner/src/containment-effects.test.ts`,
   `agent/spec-integrity.test.sh`
 
@@ -663,33 +810,44 @@ shipping the refusal ahead of its replacement.
 
 ```bash
 cd runner
-npm test -- --test-name-pattern='T-META-CANDIDATE-BOUNDED|T-META-APPLY-CHECKOUT-ISOLATED|T-META-PUBLISH-REBASE-RETRY|T-META-PUBLISH-RECEIPT|T-WORKER-NO-WRITE-CREDENTIAL|T-LEGACY-PATH-READ-ONLY|T-DEV-V2-PUBLICATION-COMPLETE|T-DEV-CONTAINMENT-V2-REQUIRED'
+npm test -- --test-name-pattern='T-META-CANDIDATE-BOUNDED|T-META-APPLY-CHECKOUT-ISOLATED|T-META-WORKTREE-WRITABLE|T-META-WORKTREE-NO-EGRESS|T-META-PUBLISH-REBASE-RETRY|T-META-PUBLISH-RECEIPT|T-META-PUBLISH-CRASH-RECONCILE|T-WORKER-NO-WRITE-CREDENTIAL|T-LEGACY-PATH-READ-ONLY|T-DEV-V2-PUBLICATION-COMPLETE|T-DEV-CONTAINMENT-V2-REQUIRED'
 npm test
 npx tsc --noEmit
 cd ..
 bash agent/spec-integrity.test.sh
-# no meta-writing agent script may still own a push
+# no meta-writing agent script may still clone-with-credentials or push
 ! rg -n 'git push|gh repo clone' agent/spec.sh agent/reconcile.sh agent/discovery.sh agent/chat.sh
+# but the existing survey/checkpoint calls must still be present, unmodified, in the worktree
+rg -n 'require_exact_changes' agent/spec.sh agent/reconcile.sh agent/discovery.sh agent/chat.sh
 ```
 
 Fixtures prove: `T-META-CANDIDATE-BOUNDED` — a candidate naming a path outside the run kind's allowlist, a symlink,
 a `.git/` entry, a `scripts/` target, or an over-bound file/byte count is rejected with no GitHub call;
-`T-META-APPLY-CHECKOUT-ISOLATED` — a worker that tampers with its snapshot's `.git/hooks`, `.git/config`, or a
+`T-META-APPLY-CHECKOUT-ISOLATED` — a worker that tampers with its worktree's `.git/hooks`, `.git/config`, or a
 shadowed copy of `scripts/spec-index.mjs` has zero effect on the apply/commit/push/index-regeneration phase, because
 that phase runs only against the separate runner-private checkout the worker was never given access to;
-`T-META-PUBLISH-REBASE-RETRY` — a simulated non-fast-forward triggers pull-rebase, index regeneration, and a bounded
-retry that converges, matching today's `push_meta()` behaviour, entirely inside the runner-private checkout;
-`T-META-PUBLISH-RECEIPT` — publication writes exactly one `phase_effects` row per
+`T-META-WORKTREE-WRITABLE` — inside the worker worktree, `require_exact_changes`'s `git status`/`git rev-parse
+--is-inside-work-tree` check succeeds, and `git add`/`git commit`/`git rev-parse HEAD` behave exactly as they do in
+today's clone-based flow, proving the substrate change did not break the scripts' existing survey/checkpoint logic;
+`T-META-WORKTREE-NO-EGRESS` — the worker worktree has no configured remote, and an attempted `git push`/`git fetch`/
+`gh` call from inside it fails locally (no remote configured) rather than reaching GitHub, even if the worker script
+is made to attempt one; `T-META-PUBLISH-REBASE-RETRY` — a simulated non-fast-forward triggers pull-rebase, index
+regeneration, and a bounded retry that converges, matching today's `push_meta()` behaviour, entirely inside the
+runner-private checkout; `T-META-PUBLISH-RECEIPT` — publication writes exactly one `phase_effects` row per
 `{run_id,'meta-publish',candidate-hash}` with `purpose='github-meta'` and the target `minion-meta` slug recorded,
-and a replay is a no-op returning the same commit; `T-WORKER-NO-WRITE-CREDENTIAL` — the launch plan and Docker argv
-for **each of** discovery/spec/reconcile/chat contain no write-purpose credential and no `FACTORY_GH_TOKEN`;
-`T-LEGACY-PATH-READ-ONLY` — the credential those plans do carry resolves to `github-checkout`, whose
-`GITHUB_CAPABILITY` is `read`; `T-DEV-V2-PUBLICATION-COMPLETE` — the containment-v2 `dev` path resolves a trusted
-effect binding for each of the four publication moments §1 point 11 enumerates (initial branch + draft PR,
-develop/fix-round push, resumed-branch push, budget-salvage push), and a moment with no binding fails the test
-rather than falling back to a worker-held token; `T-DEV-CONTAINMENT-V2-REQUIRED` — dispatching a `dev`-kind run with
-`FACTORY_CONTAINMENT_V2` unset/`0` is refused at admission time with a queue-time error naming the missing
-prerequisite, never silently downgraded to a read-only credential and never silently routed through
+and a replay is a no-op returning the same commit; `T-META-PUBLISH-CRASH-RECONCILE` — a fixture simulates a crash
+after the runner's push is accepted by GitHub but before `confirmPhaseEffect()` runs, injects a concurrent writer's
+commit on top of the pushed one, then restarts reconciliation: `reconcile()` locates the original commit by its
+trailer marker (not by branch HEAD, which has moved), confirms the effect with that commit's SHA, and a subsequent
+`perform()` is never invoked — exactly one publication commit exists, matching the original; `T-WORKER-NO-WRITE-CREDENTIAL`
+— the launch plan and Docker argv for **each of** discovery/spec/reconcile/chat contain no write-purpose credential
+and no `FACTORY_GH_TOKEN`; `T-LEGACY-PATH-READ-ONLY` — the credential those plans do carry resolves to
+`github-checkout`, whose `GITHUB_CAPABILITY` is `read`; `T-DEV-V2-PUBLICATION-COMPLETE` — the containment-v2 `dev`
+path resolves a trusted effect binding for each of the four publication moments §1 point 11 enumerates (initial
+branch + draft PR, develop/fix-round push, resumed-branch push, budget-salvage push), and a moment with no binding
+fails the test rather than falling back to a worker-held token; `T-DEV-CONTAINMENT-V2-REQUIRED` — dispatching a
+`dev`-kind run with `FACTORY_CONTAINMENT_V2` unset/`0` is refused at admission time with a queue-time error naming
+the missing prerequisite, never silently downgraded to a read-only credential and never silently routed through
 `legacyCredentialTransport`'s unmodified (still-broad) form either — the refusal is the only allowed outcome once
 this slice is active.
 
@@ -742,9 +900,10 @@ must state that it transcribes rather than decides, and carry a human confirmati
 - `runner/src/index.ts` (new `FACTORY_LIFECYCLE_SECRET` → capability `lifecycle` with a two-route allowlist; new
   `FACTORY_DASHBOARD_READ_SECRET` → capability `dashboard-read` with the read-route allowlist in §2 invariant 7; new
   `FACTORY_DASHBOARD_RUN_SECRET` → capability `dashboard-run` with the mutation-route allowlist in the same
-  invariant, all three in the same fixed-allowlist shape as `UNSTICK_ROUTES` `:206-214`; join the weak/
-  pairwise-distinct guards at `:164-190` for all three new secrets; accept and forward `expectedStatus`/
-  `expectedRevision`; return the canonical response; surface the promotion outcome)
+  invariant **including `PUT /providers`** (`:735`), all three in the same fixed-allowlist shape as
+  `UNSTICK_ROUTES` `:206-214`; join the weak/pairwise-distinct guards at `:164-190` for all three new secrets;
+  **require** `expectedStatus`/`expectedRevision` on every `status`/`disposition` request body, 400 before any read/
+  write when either is absent; return the canonical response; surface the promotion outcome)
 - `runner/src/lifecycle.ts` (source→target edge table replacing `:34-43`; blob-sha CAS; `already_applied` replay;
   typed outcome union replacing `TransitionResult` `:49`; `indexSynced` reported rather than swallowed `:142-168`)
 - `runner/src/index.test.ts`, `runner/src/lifecycle.test.ts`
@@ -757,23 +916,26 @@ must state that it transcribes rather than decides, and carry a human confirmati
 
 ```bash
 cd runner
-npm test -- --test-name-pattern='T-LIFECYCLE-PRINCIPAL-SCOPED|T-LIFECYCLE-CAS|T-LIFECYCLE-IDEMPOTENT|T-LIFECYCLE-EDGE-TABLE|T-LIFECYCLE-CANONICAL-RESPONSE|T-DASHBOARD-READ-SCOPED|T-DASHBOARD-RUN-SCOPED'
+npm test -- --test-name-pattern='T-LIFECYCLE-PRINCIPAL-SCOPED|T-LIFECYCLE-CAS|T-LIFECYCLE-CAS-REQUIRED|T-LIFECYCLE-IDEMPOTENT|T-LIFECYCLE-EDGE-TABLE|T-LIFECYCLE-CANONICAL-RESPONSE|T-DASHBOARD-READ-SCOPED|T-DASHBOARD-RUN-SCOPED'
 npm test
 npx tsc --noEmit
 ```
 
 Fixtures prove: `T-LIFECYCLE-PRINCIPAL-SCOPED` — the lifecycle bearer reaches exactly the two lifecycle routes and
 403s everywhere else, is refused at startup when weak or equal to any other secret, and yields a fixed registry
-actor label; `T-LIFECYCLE-CAS` — a stale `expectedRevision` or `expectedStatus` returns 409 with
-`{current:{status,revision}}` and performs no write; `T-LIFECYCLE-IDEMPOTENT` — a transition to the current status
-returns `already_applied` with no commit; `T-LIFECYCLE-EDGE-TABLE` — every edge minion-base's shipped table permits
-is accepted and every edge outside it is refused, enumerated from a table fixture; `T-LIFECYCLE-CANONICAL-RESPONSE`
-— a successful transition returns `{outcome, commit, revision, indexSynced, spec}`, and an index-patch failure
-returns `indexSynced: false` rather than a silent success; `T-DASHBOARD-READ-SCOPED` — the `dashboard-read` bearer
-reaches exactly its GET routes and 403s on any mutation and on `/lifecycle/*`, is refused at startup when weak or
-equal to any other secret; `T-DASHBOARD-RUN-SCOPED` — the `dashboard-run` bearer reaches exactly
-`pipeline/spec`/`runs`/`pipeline/reconcile`/`chat` mutations and 403s on `/lifecycle/*` and on any `dashboard-read`
-route it does not also need.
+actor label; `T-LIFECYCLE-CAS` — a mismatching `expectedRevision` or `expectedStatus` (both present, one or both
+wrong) returns 409 with `{current:{status,revision}}` and performs no write; `T-LIFECYCLE-CAS-REQUIRED` — a request
+omitting `expectedStatus`, omitting `expectedRevision`, or omitting both returns 400 with no GitHub read or write,
+tested independently for each omission and for both the `status` and `disposition` shapes; `T-LIFECYCLE-IDEMPOTENT`
+— a transition to the current status (with matching CAS fields) returns `already_applied` with no commit;
+`T-LIFECYCLE-EDGE-TABLE` — every edge minion-base's shipped table permits is accepted and every edge outside it is
+refused, enumerated from a table fixture; `T-LIFECYCLE-CANONICAL-RESPONSE` — a successful transition returns
+`{outcome, commit, revision, indexSynced, spec}`, and an index-patch failure returns `indexSynced: false` rather
+than a silent success; `T-DASHBOARD-READ-SCOPED` — the `dashboard-read` bearer reaches exactly its GET routes
+(including `GET /providers`, never `PUT /providers`) and 403s on any mutation and on `/lifecycle/*`, is refused at
+startup when weak or equal to any other secret; `T-DASHBOARD-RUN-SCOPED` — the `dashboard-run` bearer reaches
+exactly `pipeline/spec`/`runs`/`pipeline/reconcile`/`chat`/`PUT providers` mutations and 403s on `/lifecycle/*` and
+on any `dashboard-read` route it does not also need (including `GET /providers`, which stays `dashboard-read`-only).
 
 ### Slice 5 — minion-base cutover off the admin bearer (5-7h, minion-base only; requires Slice 4 deployed)
 
@@ -783,8 +945,10 @@ route it does not also need.
   `applyTransition` `:90-151`; keep the typed-outcome surface `:80-86` as the client's return type)
 - `src/lib/server/factory.ts` (`factoryFetch` `:139-170` selects `FACTORY_LIFECYCLE_SECRET`,
   `FACTORY_DASHBOARD_READ_SECRET`, or `FACTORY_DASHBOARD_RUN_SECRET` by the path/method being called, per §2
-  invariant 7's route split; `factoryConfigured()` `:18-20` checks the three new vars instead of `FACTORY_SECRET`;
-  `env.FACTORY_SECRET` is removed from `.env.example`/deployment configuration and no code path reads it)
+  invariant 7's route split — **`PUT /providers` selects `FACTORY_DASHBOARD_RUN_SECRET`, `GET /providers` selects
+  `FACTORY_DASHBOARD_READ_SECRET`**; `factoryConfigured()` `:18-20` checks the three new vars instead of
+  `FACTORY_SECRET`; `env.FACTORY_SECRET` is removed from `.env.example`/deployment configuration and no code path
+  reads it)
 - `src/routes/api/meta/status/+server.ts` (forward `expectedStatus`/`expectedRevision`; drop the duplicate
   promotion calls `:38-61` in favour of the server's outcome, preserving the 202 partial-success semantics)
 - `src/lib/server/spec-dispose.ts` (relay uses the lifecycle bearer; update its contract note)
@@ -795,7 +959,7 @@ route it does not also need.
 
 ```bash
 cd <minion-base checkout>
-bun test --test-name-pattern='T-BASE-NO-META-WRITE|T-BASE-SERVICE-ACTOR|T-BASE-CONFLICT-SURFACED|T-BASE-NO-DOUBLE-PROMOTE|T-BASE-NO-ADMIN-BEARER'
+bun test --test-name-pattern='T-BASE-NO-META-WRITE|T-BASE-SERVICE-ACTOR|T-BASE-CONFLICT-SURFACED|T-BASE-NO-DOUBLE-PROMOTE|T-BASE-NO-ADMIN-BEARER|T-BASE-PROVIDERS-WRITE'
 bun test
 bun run check
 ! rg -n "contents/|method: 'PUT'" src/lib/server/meta-write.ts
@@ -808,11 +972,15 @@ Tests prove: `T-BASE-NO-META-WRITE` — no production minion-base module can `PU
 data/logs; `T-BASE-CONFLICT-SURFACED` — a 409 from the factory renders the same `revision_conflict` outcome and
 current-state pair the UI renders today, and a stale page still cannot overwrite a newer human decision;
 `T-BASE-NO-DOUBLE-PROMOTE` — approving a spec results in exactly one queued run, sourced from the lifecycle
-response; `T-BASE-NO-ADMIN-BEARER` — the application starts and every existing dashboard surface (run history,
-stats, trigger-health, providers, spec/proposal approval, dev-run creation) still operates end-to-end with
-`FACTORY_SECRET` **absent** from the environment entirely — not just unused on one route. `by` is never sent. If the
-repository's actual package scripts differ at implementation-time recon, use its documented equivalents and record
-the exact commands in the PR.
+response; `T-BASE-PROVIDERS-WRITE` — a provider-settings save from `src/routes/settings/+page.svelte` reaches the
+factory's `PUT /providers` using `FACTORY_DASHBOARD_RUN_SECRET` (never `FACTORY_DASHBOARD_READ_SECRET`, never
+`FACTORY_SECRET`) and succeeds, while a `dashboard-read`-bearer-only fixture attempting the same PUT gets 403 —
+this is the live regression the third review round caught (§0 pass-6 note); `T-BASE-NO-ADMIN-BEARER` — the
+application starts and every existing dashboard surface (run history, stats, trigger-health, providers **read and
+write**, spec/proposal approval, dev-run creation) still operates end-to-end with `FACTORY_SECRET` **absent** from
+the environment entirely — not just unused on one route. `by` is never sent. If the repository's actual package
+scripts differ at implementation-time recon, use its documented equivalents and record the exact commands in the
+PR.
 
 ### Slice 6 — memory upload cutover and host-script purpose map (5-7h)
 
@@ -894,12 +1062,18 @@ push or merge, and rejects a pair injected through the environment.
 
 1. Confirm every purpose in §2 invariant 1 and all three Slice 4 bearer secrets are configured, pairwise-distinct,
    and written by all four deployment writers; confirm the startup validator fails closed on a missing or
-   duplicated value. For every purpose, confirm its negative-scope canary (§2 invariant 1a) ran against the current
-   token value and was denied — a purpose whose negative check has not run is reported not-yet-active.
+   duplicated value. For every purpose, confirm its full negative-scope audit (§2 invariant 1a) ran against the
+   current token's fingerprint — every enumerated forbidden fleet target denied with independently-verified
+   existence, representative forbidden action classes on allowed repositories denied, no unexpected success — and
+   that a purpose whose audit has not run, or whose token has rotated since, is reported not-yet-active.
 2. Queue one spec run, one reconcile run, one discovery run, and one chat turn with `FACTORY_GH_TOKEN` unset in the
    runner process. Verify each launch plan and Docker argv carries only the read-only `github-checkout` credential,
-   that each publication lands a real meta commit through the runner adapter, and that each writes exactly one
-   `phase_effects` receipt. Force one concurrent meta writer and verify the rebase-retry converges.
+   that each worker's worktree supports its existing `require_exact_changes`/`git add`/`git commit` flow unmodified
+   and has no configured remote, that each publication lands a real meta commit through the runner adapter carrying
+   the run's trailer marker, and that each writes exactly one `phase_effects` receipt. Force one concurrent meta
+   writer and verify the rebase-retry converges. Simulate a crash between an accepted push and `confirmPhaseEffect()`
+   with a concurrent writer's commit landed on top, and verify reconciliation locates the original commit by its
+   trailer rather than duplicating it.
 3. With `FACTORY_GH_TOKEN` still unset, run one `dev` run under `FACTORY_CONTAINMENT_V2=1` through branch creation,
    draft PR, a fix round, and a salvage exit; verify every publication landed through the trusted adapter and no
    worker plan carried a write credential. Then dispatch a `dev` run with `FACTORY_CONTAINMENT_V2=0` and verify it
@@ -909,17 +1083,20 @@ push or merge, and rejects a pair injected through the environment.
    credential-registry label. Repeat with `by` set (both `status` and `disposition` shapes); verify 400 with no
    GitHub write, for admin and non-admin bearers.
 5. Exercise the lifecycle contract directly against the factory: the lifecycle bearer on a non-lifecycle route
-   (403), a stale `expectedRevision` (409 with the current status/revision), a repeat of an applied transition
-   (`already_applied`, no commit), an edge outside the table (refused), and a success (canonical
+   (403), a request omitting `expectedStatus`, `expectedRevision`, or both (400, no read/write), a mismatching
+   `expectedRevision`/`expectedStatus` with both present (409 with the current status/revision), a repeat of an
+   applied transition (`already_applied`, no commit), an edge outside the table (refused), and a success (canonical
    `{outcome, commit, revision, indexSynced, spec}` with exactly one queued run on approval).
-6. Exercise the two dashboard principals the same way: the `dashboard-read` bearer reaches its GET routes and 403s
-   on every mutation and on `/lifecycle/*`; the `dashboard-run` bearer reaches `pipeline/spec`, `runs`,
-   `pipeline/reconcile`, and `chat` mutations and 403s on `/lifecycle/*`.
+6. Exercise the two dashboard principals the same way: the `dashboard-read` bearer reaches its GET routes
+   (including `GET /providers`) and 403s on every mutation (including `PUT /providers`) and on `/lifecycle/*`; the
+   `dashboard-run` bearer reaches `pipeline/spec`, `runs`, `pipeline/reconcile`, `chat`, and `PUT /providers`
+   mutations and 403s on `/lifecycle/*` and on `GET /providers`.
 7. Through the minion-base UI, drive an approval and a stale-page conflict with `FACTORY_SECRET` **absent from
    minion-base's environment entirely**. Verify the conflict still blocks the overwrite, the actor is the registered
    service label, the response is the factory's canonical projection, no `meta-write.ts` PUT remains on that path,
-   and every other dashboard surface (run history, stats, trigger-health, providers, dev-run creation) still works
-   on the two dashboard bearers.
+   and every other dashboard surface (run history, stats, trigger-health, providers **read and write** — save a
+   provider setting through the UI and confirm it lands — dev-run creation) still works on the two dashboard
+   bearers.
 8. Invoke the dormant quarantine publisher with one runner-validated JSON fixture. Verify a create-only candidate
    appears at `<run-id>/<candidate-id>.json` in the separate private repository; overwrite and canonical-memory
    attempts fail; verify ordinary run output (including `agent/run.sh`) cannot invoke it.
@@ -950,9 +1127,13 @@ previous runner image, not restoring a worker write token.
 Revocation of the broad `FACTORY_GH_TOKEN` is the last step, and it is gated on a closed map, not on a slice count:
 after Slice 6 lands and §7 is green, confirm that every consumer inventoried in §1 point 4 — the nine runner modules,
 all five container launch paths, `self-update.sh`'s three authorities, `train.sh`'s pair set, and
-`provision-webhooks.sh`'s operator fallback — has an exercised purpose credential. Only then revoke the PAT, remove
-it from `.env.example`/`deploy.sh`/`setup.sh`/`deploy/k8s.yml`, and make missing purpose-credential configuration a
-startup failure. Revoking earlier converts a security improvement into a host-path outage.
+`provision-webhooks.sh`'s operator fallback — has an exercised purpose credential *and* a passed full negative-scope
+audit (§2 invariant 1a) bound to its currently-deployed token fingerprint. Only then revoke the PAT, remove it from
+`.env.example`/`deploy.sh`/`setup.sh`/`deploy/k8s.yml`, and make missing purpose-credential configuration a startup
+failure. Revoking earlier converts a security improvement into a host-path outage. **Any subsequent rotation of a
+purpose credential invalidates that purpose's audit evidence** (§2 invariant 1a's fingerprint binding) — the audit
+must re-run and pass against the new value before the rotated token backs any real call; this is an operational
+runbook item, not a one-time activation step.
 
 If production regresses, stop new intake and all GitHub writes, preserve `phase_effects` evidence, and roll back the
 release while keeping write paths disabled. Restoring the broad `FACTORY_GH_TOKEN` to any worker or host script, or
@@ -968,7 +1149,7 @@ access to a mechanically read-only credential.
 Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
 Returned to draft for respec: the GitHub-App + publisher-module mechanism was superseded by scoped PATs (scoped-github-canary.ts) + the effect ledger. Live deltas worth keeping: caller-supplied `by` at index.ts:648,663; retiring the broad FACTORY_GH_TOKEN; minion-base cutover; memory candidate publisher.
 
-## Board respec 2026-08-29 (passes 3-5)
+## Board respec 2026-08-29 (passes 3-6)
 
 **Pass 3** reviewed this spec at exact pre-review blob `6be58a23e2730f89313b8a527237b4aeaed2830d` per operator task,
 verified it against `minion-factory@5db7d391` (main, PR #153 merged), `minion-base@19531059`, and closed/unmerged
@@ -993,6 +1174,20 @@ and the minion-base cutover now removes `FACTORY_SECRET` from that deployment en
 principals rather than narrowing one call site (§2 invariant 7, §4 Slices 4-5). Pass 5 also stopped the spec
 claiming its security outcome was unchanged from the source proposal's (§0, invariant 1a) — see the human decision
 below.
+
+**Pass 6** answers the third cross-provider review of PR #271 (two High, three Medium — one Medium, dashboard
+providers write, was independently caught by this pass's own re-read while verifying the review's findings). All
+were re-verified from a fresh clone of `minion-factory@5db7d391` (re-confirmed still the pinned commit) before being
+acted on; §0's pass-6 note records each finding, its confirmation evidence, and where it is fixed. The two High
+findings changed substance, not just wording: the worker's meta-writing edit surface is a **writable,
+credential-free, remote-stripped git worktree** running the agent scripts' existing, unmodified survey/checkpoint
+logic, not a gitless read-only mount (§2 invariant 2, §4 Slice 2), and purpose activation requires a **provider-backed
+scope audit** — enumerated forbidden targets, independently-verified existence, forbidden-action probes on allowed
+repositories, fingerprint-bound evidence — not one negative sample (§2 invariant 1a, §4 Slice 1). The Medium findings
+close two other reachable gaps: lifecycle CAS is now mandatory at the HTTP boundary rather than optional (§2
+invariant 6, §4 Slice 4), and `dashboard-run` now carries `PUT /providers` so the live settings-save route survives
+`FACTORY_SECRET`'s removal (§2 invariant 7, §4 Slices 4-5). A fifth fix, `meta-publish`'s crash-window reconciliation
+identity via a commit-trailer marker (§2 invariant 8, §4 Slice 2), closes the gap the review's own M3 finding named.
 
 **Disposition: `status: review`, `verdict: pending`.**
 
@@ -1025,7 +1220,7 @@ and picking one is part of approving:
   4); `by` is still caller-supplied for admin bearers (§1 point 6); and minion-base still writes `minion-meta` with
   a raw PAT while holding the factory admin secret (§1 point 8).
 
-No product code was implemented in passes 3, 4, or 5, per the task's instruction not to implement while the spec is
-not validly approved. The `T-*` control names and DoD commands are written against the runner's existing
+No product code was implemented in passes 3, 4, 5, or 6, per the task's instruction not to implement while the spec
+is not validly approved. The `T-*` control names and DoD commands are written against the runner's existing
 `node:test` invocation (`npm test -- --test-name-pattern=…`); the implementer re-verifies exact anchors at HEAD
 before each slice, as §1 states.
