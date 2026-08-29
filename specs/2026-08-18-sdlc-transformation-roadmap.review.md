@@ -109,10 +109,16 @@ and needs its own spec or a human decision:
 
 No product code was written: the spec was not validly approved for implementation
 when this run began, and it is a `type: decision` document with `repos: []` that is
-never implementable. The change set is four markdown files, two regenerated
-indexes, one baseline deletion, and one generator fix (`scripts/proposal-index.mjs`
-now projects and validates `effort`, which regeneration had been silently dropping
-from an unrelated approved proposal's index entry).
+never implementable. The change set is six markdown files (the roadmap and its
+review sidecar, `proposals/TEMPLATE.md`'s `effort` contract note, and three new
+proposals — `2026-08-29-roadmap-milestone-order-deviation`,
+`2026-08-29-roadmap-unhomed-program-detail`, and
+`2026-08-29-proposal-index-projection-parity-untested`), two regenerated indexes,
+one baseline deletion, and a generator fix plus test
+(`scripts/proposal-index.mjs` now projects and validates `effort` — rejecting
+every non-S/M/L value, not just falsy ones — which regeneration had been silently
+dropping from an unrelated approved proposal's index entry;
+`scripts/proposal-index.test.mjs` is new and covers it).
 
 Gates green, exit codes captured directly (not through a pipe):
 `spec-index --check` · `proposal-index` · `check-agent-instructions` ·
