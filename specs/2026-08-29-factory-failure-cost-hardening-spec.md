@@ -21,12 +21,12 @@ next_slice: 1
 
 This program hardens the Factory execution and MINION CI control planes using the observed failure
 and billing evidence from August 2026. Its product outcome is fewer paid runs that repeat known
-failure states, an observable operator pause that preserves the queue, one incident card per failure
-lineage, and bounded cross-platform CI on the exact integration candidate.
+failure states, an observable operator pause that preserves the queue, one incident card per semantic
+failure fingerprint, and bounded cross-platform CI on the exact integration candidate.
 
 ### Decision
 
-Adopt one runner-owned retry decision for every failed development lineage. The decision uses a
+Adopt one runner-owned retry decision for every failed development source run. The decision uses a
 normalized failure class, exact candidate progress, prior lineage outcomes, remaining budget, and
 the fleet circuit breaker. It may admit one bounded retry, escalate one model tier for a demonstrated
 capability failure, or stop and reuse one monitor card. Agent prose does not authorize a retry.
@@ -56,9 +56,10 @@ that skip. The spec extends four live programs and replaces none of them:
 - `2026-08-18-factory-durable-state-outbox-spec` — extends its `postFinish` outbox with the
   `retry_decisions` record and admission transaction. The outbox mechanism, processing lease, and
   lifecycle edges are unchanged.
-- `2026-08-22-factory-lineage-orchestrator-instance-spec` — shares its lineage identity so one
-  monitor card per lineage survives. The orchestrator instance itself stays out of scope (§10) and
-  its branches (Factory PRs #160–#163) are untouched.
+- `2026-08-22-factory-lineage-orchestrator-instance-spec` — shares its lineage identity so retry and
+  monitor recurrence survive restarts; monitor-card cardinality follows the semantic-fingerprint
+  rule in §3. The orchestrator instance itself stays out of scope (§10) and its branches (Factory
+  PRs #160–#163) are untouched.
 
 ## 1. Evidence and baseline
 
@@ -89,7 +90,7 @@ other zero-cost failures (`3`).
 
 August net Actions cost was `$301.176`; `minion-ai` contributed `$291.414` (`96.76%`). Its CI
 workflow contributed `$283.586`, of which Windows and macOS contributed `$240.428`. August 20, 21,
-and 23 contributed `$247.455` (`82.17%`) of monthly Actions net cost.
+and 23 contributed `$247.455` (`82.16%`) of monthly Actions net cost.
 
 In the historical spike, 54 commits had both a feature push run and a pull-request run. The redundant
 push side alone consumed at least 5,828 Windows test minutes and 1,202 Linux test minutes. A
@@ -116,7 +117,7 @@ cancels only pull-request runs. Those are the remaining code deltas.
 - Factory PRs #160–#163 and Base PR #42 contain unique durable-state, containment, lineage, and
   budget-UI work. This program MUST NOT overwrite, close, or imply completion of those branches.
 
-## 2. Current behavior and gaps
+## 2. AS-IS: current behavior and gaps
 
 ### 2.1 Controls already shipped
 
@@ -144,12 +145,12 @@ resolved line in the red test, rather than trusting a line number copied from th
 | 3 | The auto-fix prompt tells the agent to fetch every PR comment. This repeats large context and exposes unrelated or stale text. The runner can supply a bounded latest failure context. | `agent/run.sh` — review-fix task text |
 | 4 | Review says out-of-scope findings are follow-ups, while review-fix says `Fix EVERY finding`. | `agent/review.sh` vs. `agent/run.sh` review-fix task text |
 | 5 | Review-fix tells the agent to run the complete self-test and then the wrapper repeats it. | `agent/run.sh` — review-fix task text and the wrapper self-test loop |
-| 6 | Monitor recurrence after 24 hours creates a new issue instead of refreshing the existing lineage card. | `runner/src/index.ts` — `POST /hooks/monitor` intake and its fingerprint reservation |
+| 6 | Monitor recurrence after 24 hours creates a new issue instead of refreshing the existing fingerprint card. | `runner/src/index.ts` — `POST /hooks/monitor` intake and its fingerprint reservation |
 | 7 | Stopping the runner is the only reliable operator pause; it removes observability and makes the unstick monitor interpret the queue without an authoritative operator-pause signal. | `runner/src/queue.ts` (`pump()`), `runner/src/unstick-classifier.ts`, `scripts/unstick-cron.sh` |
 | 8 | Stage cost is visible in logs/terminal rows, but no stable retry-decision record explains the cost-bearing transition between attempts. | `runner/src/db.ts` — no retry-decision table exists; cost lives on run rows only |
 | 9 | The current macOS CI lane can reach GitHub's multi-hour limit, and superseded `DEV` pushes are not canceled structurally. | `minion-ai` `.github/workflows/ci.yml` — `concurrency` block and the macOS job |
 
-## 3. Required invariants
+## 3. TO-BE: required invariants
 
 1. **Queue preservation:** deployment and verification MUST leave all pre-existing queued run ids
    queued. No canary may use the production queue while `FACTORY_DISPATCH_PAUSED=1`.
@@ -164,8 +165,8 @@ resolved line in the red test, rather than trusting a line number copied from th
    admission regardless of origin — new spec promotion, auto-fix retry, and automatic unstick
    requeue. Operator pause independently suppresses the same origins, so either signal alone is
    sufficient to refuse. A manual operator requeue is the only admission permitted while the breaker
-   is open; it is recorded as a supervised override with its reason code. A supervised passing canary
-   is required to close the breaker.
+   is open; it is recorded as a supervised override with reason code
+   `supervised-breaker-override`. A supervised passing canary is required to close the breaker.
 6. **Bounded evidence:** retry prompts receive the latest in-scope failure evidence, normalized and
    fenced as untrusted data, capped at 6 KiB. They do not fetch an unbounded comment history.
 7. **One full self-test owner:** agents run focused checks. The trusted wrapper runs the configured
@@ -194,7 +195,7 @@ resolved line in the red test, rather than trusting a line number copied from th
 | `budget-stop` | run/daily/lineage cap or insufficient round reserve | stop |
 | `state-conflict` | non-fast-forward, stale authority, moved PR head | stop and reconcile |
 | `no-progress` | no changes, unchanged candidate plus repeated failure | stop |
-| `policy-refusal` | breaker open, paused dispatch, missing immutable authority | stop |
+| `policy-refusal` | breaker open, missing immutable authority | stop |
 | `unknown` | unrecognized terminal note | stop and request supervised triage |
 
 The classifier normalizes volatile SHAs, run ids, attempt numbers, dollar amounts, paths under run
@@ -261,7 +262,7 @@ confirmed missing (404), creation is allowed and the stored URL is replaced. Tra
 failure restores the reservation and creates no duplicate. Reservation remains a
 compare-and-swap so concurrent recurrence creates at most one effect.
 
-## 7. Implementation slices
+## 7. DELTA: implementation slices
 
 ### Slice 1 — plan of record and executable red tests
 
@@ -303,7 +304,7 @@ compare-and-swap so concurrent recurrence creates at most one effect.
 - Gate queue claims, auto-fix/spec promotion admission, and unstick remedies on operator pause, and
   gate every automatic unstick requeue on the distinct-lineage breaker as well.
 - Record a manual operator requeue admitted while the breaker is open as a supervised override with
-  its reason code.
+  reason code `supervised-breaker-override`.
 - Refresh/reopen the existing issue for a stale fingerprint.
 - Document deployment and resume procedures.
 
@@ -349,7 +350,7 @@ start no process, insert no child, preserve queue order, and keep health/monitor
 | Budget stop | `stop/budget-stop`; no child at any tier, escalated or same. |
 | State conflict | no retry; reconciliation card. |
 | Breaker open, pause `0` | no automatic child from any origin — promotion, auto-fix, or unstick requeue. |
-| Breaker open, manual operator requeue | one child, recorded as a supervised override. |
+| Breaker open, manual operator requeue | one child, recorded with reason code `supervised-breaker-override`. |
 | Outbox replay after restart | same decision/child id. |
 | Stale closed monitor issue recurs | same issue reopens and receives one recurrence comment. |
 | Pause `1` with queued work | API online, queue unchanged, zero claims/spawns. |
