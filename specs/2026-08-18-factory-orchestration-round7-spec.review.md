@@ -6,7 +6,7 @@ reviewer: factory-review
 created: 2026-08-18
 ---
 
-# Pass 3 disposition review (2026-08-29)
+# Pass 3 disposition review (2026-08-29, corrected after independent review)
 
 **Verdict: revision-required.** The pass-2 `approved` verdict below is superseded — a 2026-08-28
 board audit had already found zero graph/profile/resolver deliverables and flipped `status` back to
@@ -20,10 +20,24 @@ with no coherent disposition recorded. This pass records one: `status: review`,
 
 - The spec's own storage design (Slice 3: new `executions`/`execution_nodes`/`execution_edges`
   tables) assumes the DB "has no execution model" (§3.1). That premise is false: `runner/src/db.ts`
-  already defines immutable `pipeline_instances` (line 780), append-only
-  `pipeline_instance_relations`, and immutable `phase_requests` (~line 1317) with claim/lock/lease
-  semantics and real call sites. Implementing S3–S5 unchanged would build a second, competing
-  execution authority rather than extend the live one.
+  already defines `pipeline_instances` (line 780), `pipeline_instance_relations` (line 1155), and
+  `phase_requests` (line 1317), with real call sites. Their contract is **partly immutable, not
+  wholly immutable** — an earlier draft of this review said "immutable `pipeline_instances`" and
+  "immutable `phase_requests`", which is wrong and would push the redesign toward append-only
+  replacement rows instead of the guarded transition APIs it must reuse. Precisely:
+  - `pipeline_instances`: identity/binding columns frozen by `pipeline_instances_immutable_identity`
+    (line 819) and rows undeletable via `pipeline_instances_no_delete` (line 833); there is **no**
+    blanket no-update trigger, and `status`/`current_phase`/`runtime_state`/lease/`candidate_sha`
+    transition under guarded predicates (`runner/src/phase-requests.ts:343`).
+  - `phase_requests`: request intent/bindings frozen by `phase_requests_immutable_request`
+    (line 1346) and rows undeletable via `phase_requests_no_delete` (line 1360), while
+    `state`/`claim_generation`/`claim_lease_owner`/`started_at`/`finished_at` transition through the
+    claim/cancel/complete APIs (`runner/src/phase-requests.ts:479`, `:490`, `:544`, `:566`).
+  - Append-only in the strict sense: `pipeline_instance_relations` (line 1163) and `pipeline_events`
+    (line 1231).
+
+  Implementing S3–S5 unchanged would still build a second, competing execution authority rather
+  than extend the live one.
 - `runner/src/queue.ts` (~line 3500) already refuses multi-repo spec auto-dispatch
   (`already_satisfied` / "multi-repo spec requires explicit per-repo queueing") instead of silently
   picking `repos[0]` — one of this spec's own motivating problems is already partially mitigated
@@ -33,8 +47,24 @@ with no coherent disposition recorded. This pass records one: `status: review`,
   ([minion-factory#160](https://github.com/NikolasP98/minion-factory/pull/160)) draft and failing
   `verify`/`label` checks. The WorkItem-handoff factory PR
   ([minion-factory#159](https://github.com/NikolasP98/minion-factory/pull/159)) is open, not draft,
-  and also failing checks. No PR in `minion-factory` implements this spec's graph/profile/resolver
-  work; PR #41 (the only PR ever linked to this spec id) is confirmed unrelated.
+  and also failing checks.
+- **Prior-run inventory — corrected.** An earlier draft of this review asserted that #41 was the
+  only PR ever linked to this spec and that it was unrelated. Both claims are false. Three
+  minion-factory PRs were linked to this spec id and all three ended with an empty net diff:
+  [#23](https://github.com/NikolasP98/minion-factory/pull/23) (run `936ccaed`, "S1", closed
+  2026-08-18, run-start commit only) and
+  [#57](https://github.com/NikolasP98/minion-factory/pull/57) (run `a02e324c`, "S1", closed
+  2026-08-20, run-start commit only) were empty no-change attempts;
+  [#41](https://github.com/NikolasP98/minion-factory/pull/41) (run `3aa40139`) was a *related*
+  Slice-2 attempt merged 2026-08-20 whose net diff is empty only because the work was reverted
+  in-PR (`2cf9811e` profile table + deterministic resolution, `f9f65fc1` handoff docs, `48ff85e0`
+  revert for the absent `runner/src/manifest.ts` prerequisite). Its review's three policy findings
+  — integration nodes inheriting a work-node develop/review/pr-open floor their executor may not
+  produce, the `graph: ['any']` fallback over-declaring unattended-merge eligibility beyond
+  `risk.ts`'s docs/test/deps allowlist, and the missing-manifest "reduced local substitute"
+  violation — are preserved verbatim in the §2 gate note so the redesign cannot rediscover them.
+  The conclusion is unchanged: **no run produced a landed graph, profile, or relationship-resolver
+  deliverable.**
 - `node scripts/spec-index.mjs --check` passes against the edited source (index regenerated).
 
 ## Disposition and what changed this pass
@@ -54,10 +84,36 @@ with no coherent disposition recorded. This pass records one: `status: review`,
   `permissions_json` contract that this review pass, scoped to disposition and correctness, should
   not guess at. Whoever picks this spec up next must rewrite §3.1/§3.2 point 2/§3.3 D2/Slice 3 (and
   re-check Slices 4–8 for knock-on assumptions) against those tables, then request a fresh
-  independent pass-4 review before this can return to `approved`. Slices 1–2 (minion-meta authoring
-  contract; versioned scenario profiles) do not depend on the execution-table redesign and remain
-  candidate ship units once their own prerequisites land, but the spec as a whole stays
-  `revision-required` until the storage layer conflict is resolved.
+  independent pass-4 review before this can return to `approved`.
+- **The approval gate is the whole spec, not a per-slice line.** No slice may start or ship until a
+  fresh pass approves this spec in full. Slices 1–2 (minion-meta authoring contract; versioned
+  scenario profiles) happen not to depend on the execution-table redesign, but that does **not**
+  make them separately shippable while the artifact reads `review`/`revision-required`: they are
+  retained as draft source material and candidate slice boundaries for the revision only. A
+  whole-spec stop banner now sits above Slice 1 in the spec so no operator reads a partial
+  authorization into it. (An earlier draft of this review said the spec "must not proceed past
+  Slice 2" and called Slices 1–2 "candidate ship units" — that wording weakened the SDLC approval
+  gate and is withdrawn.)
+
+## Corrections applied within pass 3 (2026-08-29, after independent review)
+
+An independent review of the first pass-3 commit returned VERDICT: FAIL on three points; all three
+were verified against the current branch and the cited factory SHA before being corrected above.
+The disposition itself (`status: review`, `verdict: revision-required`) is unchanged — only the
+evidence and the gate wording were wrong.
+
+1. **Gate weakened (medium).** "Must not proceed past Slice 2" plus "Slices 1–2 remain candidate
+   ship units" invited pre-approval implementation. Replaced with a whole-spec stop, restated in
+   §2, in a banner above Slice 1, and in this sidecar.
+2. **Prior-run inventory false (medium).** #41 was a Round 7 Slice-2 run (`3aa40139`), not an
+   unrelated PR, and #23/#57 were linked Round 7 attempts that went unmentioned. All three are now
+   inventoried with their states, and #41's reverted commits and three review lessons are preserved
+   in the §2 gate note as required WIP.
+3. **Mutability evidence wrong (low).** `pipeline_instances` and `phase_requests` were described as
+   wholly immutable, and a `pipeline_instances` no-update trigger was implied that does not exist.
+   Corrected to the actual contract: immutable identity/request bindings plus no-delete guards,
+   with lifecycle/lease/claim/result fields transitioned through guarded APIs; only
+   `pipeline_instance_relations` and `pipeline_events` are strictly append-only.
 
 ## Pass 2 correctness review (2026-08-18, superseded by the above — kept for history)
 
