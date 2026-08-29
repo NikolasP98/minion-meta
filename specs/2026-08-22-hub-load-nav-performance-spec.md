@@ -3,7 +3,7 @@ id: 2026-08-22-hub-load-nav-performance-spec
 title: Hub load & nav performance — prod config gap, layout decoupling, bundle diet, RUM monitoring
 stage: spec
 status: approved
-pass: 2
+pass: 3
 next_slice: 5
 created: 2026-08-22
 updated: 2026-08-29
@@ -12,7 +12,7 @@ type: infra
 relationship: extends
 related: [2026-07-17-hub-performance-optimization-plan, 2026-08-13-crm-customers-server-pagination-spec, 2026-07-06-hub-tanstack-consolidated-execution, 2026-08-21-hub-datatable-server-mode-test-gap-spec, 2026-08-22-crm-rank-query-prod-latency]
 verdict: approved
-tags: [infra, ux]
+tags: [infra, ux, security]
 ---
 
 # Hub load & nav performance — prod config gap, layout decoupling, bundle diet, RUM monitoring

@@ -5,7 +5,7 @@ stage: spec
 status: implementing
 pass: 2
 created: 2026-08-17
-updated: 2026-08-29
+updated: 2026-08-28
 proposal: 2026-08-17-hub-igv-rate-from-org-config
 verdict: approved
 repos: [minion_hub]

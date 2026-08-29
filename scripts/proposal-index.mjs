@@ -17,6 +17,11 @@ export const P_STATUSES = [
 	'closed'
 ];
 
+// Board sizing estimate: S/M/L. Not documented in TEMPLATE.md but in live use
+// across 40+ proposals — validated and projected here so a generator run can
+// never silently drop it (see proposals/index.json history, effort field).
+export const P_EFFORTS = ['S', 'M', 'L'];
+
 const proposals = [];
 const errors = [];
 
@@ -41,6 +46,7 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		if (!fm[key]) errors.push(`${name}: missing required field "${key}"`);
 	}
 	if (fm.status && !P_STATUSES.includes(fm.status)) errors.push(`${name}: invalid status "${fm.status}"`);
+	if (fm.effort && !P_EFFORTS.includes(fm.effort)) errors.push(`${name}: invalid effort "${fm.effort}"`);
 	// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).
 	if (fm.status === 'retired' && !(fm.retired_reason && fm.retired_reason.length >= 20))
 		errors.push(`${name}: status "retired" requires retired_reason (>=20 chars)`);
@@ -69,6 +75,7 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		...(fm.spawned_spec ? { spawned_spec: fm.spawned_spec } : {}),
 		...(fm.tags ? { tags: fm.tags } : {}),
 		...(fm.value ? { value: fm.value } : {}),
+		...(fm.effort ? { effort: fm.effort } : {}),
 		...(fm.source ? { source: fm.source } : {})
 	});
 }
