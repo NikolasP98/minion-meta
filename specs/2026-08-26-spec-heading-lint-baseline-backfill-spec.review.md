@@ -100,7 +100,9 @@ Round 2 — `M1`, `M2`, both fixed in this pass without reopening pass 3:
   fields present, `pass ≤` the spec's pass) measured at 0/69 violations, and a **freshness**
   contract (B2 — `pass ==` and verdict agreement) measured at 2 violations before this repair and 1
   after. S3 now must repair that last one before B2 may land, so I3 still holds on the day the rule
-  ships, and S3 states the explicit fallback (ship B1, defer B2) if it cannot.
+  ships, and S3 states the explicit fallback (ship B1, defer B2) if it cannot. *(That fallback was
+  withdrawn in round 4 below — the split into B1/B2 as separately named errors survives, the
+  separate landing does not.)*
 - `M2` Slice 18 flipped the source proposal to `status: done` in Markdown only, leaving the board
   projection at `in-spec` forever because `proposal-index.mjs` has no `--check` and is not in CI →
   S18 now lists `proposals/index.json` in its files, requires the `updated:` bump with the
@@ -123,17 +125,44 @@ Round 3 — `M1`, `M2`, both fixed in this pass without reopening pass 3:
   the original zero-violation/zero-marker requirements verbatim; the B1-only path asserts zero B1
   violations only, permits the replacement marker + its proposal to persist, and scopes
   `handoff-minion-meta-1883922325`'s closure to the three unconditionally-resolved markers in that
-  case (end-to-end verification #5 already carried this conditional; #4 now matches it).
-- `M2` S2 and S3 both append to `proposals/2026-08-20-factory-spec-heading-nomenclature.md` but were
+  case (end-to-end verification #5 already carried this conditional; #4 now matches it). *(Round 4
+  below found this fix incomplete and wrong at the root, and replaced it by removing the branch.)*
+- `M2` S2 and S3 both append to `proposals/2026-08-20-factory-spec-heading-nomenclature.md` (round 4
+  retargeted that write to a new active proposal; the serialization below still stands) but were
   declared independent/any-order in §7, and neither slice's files/DoD required the `updated:` bump or
   `node scripts/proposal-index.mjs` regeneration that a substantive proposal edit needs (per
   `proposals/TEMPLATE.md:12-13` and the generator's own `updated` projection). Fixed by serializing
   S2 before S3 in §7 (both edit the same file; they are not safe to dispatch concurrently) and adding
   the `updated` bump + `proposals/index.json` regeneration to both slices' file lists and DoDs.
 
+Round 4 — `M1`, `M2`, both fixed in this pass without reopening pass 3:
+
+- `M1` round 3 made the B1-only branch conditional at six sites, but not at D19, and — the part no
+  in-spec conditional could have fixed — `handoff-minion-meta-1883922325`'s own definition of done is
+  a **file-level** predicate: "the sweep closes this proposal automatically once the file carries no
+  more markers" (`proposals/handoff-minion-meta-1883922325.md:24-26`). A retained replacement marker
+  therefore leaves that proposal open with no closing path, and the spec's claim that it "closes over
+  the other three markers only" was simply false about the consumer. Rather than conditionalize a
+  third time, the escape hatch is **withdrawn**: §5B gains a "Landing rule" (B1+B2 in one commit, or
+  S3 blocked and merging nothing, mirroring §6's partial-ranges rule), and TO-BE, D4, S3's DoD 1/4/5,
+  S18's DoD and §9 items 4/5 each carry exactly one contract again. The hatch also guarded a
+  condition that cannot arise — §5B/S3 already specify an always-honest repair (correct the roll-up
+  to the spec's current pass/verdict, name the passes whose detail was never committed, invent
+  nothing) that needs no evidence beyond the spec's own frontmatter.
+- `M2` S2 and S3 appended the two new generator failure modes to
+  `proposals/2026-08-20-factory-spec-heading-nomenclature.md`, which is `status: done` (its 2026-08-28
+  board audit recorded DELTA 2 addressed), and `scripts/proposal-index.mjs:59-72` projects status
+  through unchanged — so the cross-repo mitigation had no active lifecycle owner and §8's "DELTA 2 is
+  still open" was stale. Fixed by filing
+  `proposals/2026-08-29-factory-generator-related-ids-and-review-sidecars.md` (`status: draft`,
+  `repos: [minion-factory]`) with the corpus-level evidence and an explicit "the generator-side cause
+  is inferred, confirm it first" caveat, regenerating `proposals/index.json`, and repointing §1, §8,
+  §10, S2's and S3's files/DoD and the spec's `related` list at it. §7's S2-before-S3 serialization
+  still applies — both slices still edit one shared proposal, now the new one.
+
 ### Author's disposition
 
-`approved`. Every round-1, round-2, and round-3 finding is fixed on the branch; no finding was
-waived. The approval is the authoring run's operator disposition, not a reviewer sign-off on this
+`approved`. Every round-1, round-2, round-3 and round-4 finding is fixed on the branch; no finding
+was waived. The approval is the authoring run's operator disposition, not a reviewer sign-off on this
 last fix round — if a subsequent review round raises a blocking finding, the spec returns to
 `status: review` / `verdict: pending` and this section records that instead.
