@@ -6,7 +6,6 @@ status: approved
 pass: 2
 created: 2026-08-18
 updated: 2026-08-29
-next_slice: 2
 proposal: 2026-08-17-hub-updateserver-tenant-scope
 verdict: approved
 repos: [minion_hub]
@@ -36,7 +35,7 @@ on 2026-08-29:
 | Slice | State | Evidence |
 |---|---|---|
 | Slice 1 | **Merged** | `minion_hub` PR #130 (`factory: auto: hub-updateserver-tenant-scope-spec S1`), merged 2026-08-28, merge commit `afd023b6100de280ba0f14e252f9afe1baa6a360`. It landed the two-tenant baseline tests in `src/server/services/server.service.test.ts`, the read-only two-source audit (`scripts/audit-server-tenant-scope.ts` + `.lib.ts` + tests), the unconditional `bun run rekey:readiness` status command, `scripts/rekey-readiness-gate.test.ts`, and `docs/runbooks/server-tenant-scope-rekey-readiness.md`. |
-| Slice 1 human half | **Outstanding** | The four evidence artifacts (non-production audit, production audit, concrete re-key record, rollback note) are not recorded: `tests/rekey-readiness/evidence.json` is absent on `master`, so `bun run rekey:readiness` exits 1. Only a holder of the real Turso + Supabase service-role credentials can produce them. |
+| Slice 1 human half | **Outstanding** | The production audit output is recorded — the [minion_hub PR #130](https://github.com/NikolasP98/minion_hub/pull/130) supervised-takeover comment reports `turso_server_rows=1 null_tenant_ids=0 unmatched_tenant_ids=0` against the configured production pair — but it has not been promoted into the canonical evidence file: `tests/rekey-readiness/evidence.json` is absent on `master`, so `bun run rekey:readiness` still exits 1. Still missing: an independent non-production audit (PR #130 states no separate non-production credential set was available), a concrete re-key apply record, a rollback/recovery note, and completion of the canonical evidence file. Only a holder of the real Turso + Supabase service-role credentials can produce these. |
 | Slice 2 | **Not started** | `updateServer` in `src/server/services/server.service.ts` still matches on `eq(servers.id, id)` alone, carrying an explicit `TODO(handoff)` that names this spec. |
 
 Two facts about the AS-IS below changed after it was written, and neither retires this spec:
@@ -52,9 +51,11 @@ Two facts about the AS-IS below changed after it was written, and neither retire
   fails if the tenant predicate lands ahead of that evidence. Slice 2 cannot be implemented by any
   agent until the human half is done; attempting it produces a red suite, not a merge.
 
-`next_slice: 2` records that Slice 1's code is merged. It does **not** waive the gate above: the
-Slice 2 preflight is a hard stop, and this spec keeps its `security`/`data` human gates at approval
-and merge.
+`next_slice` is omitted (Slice 1 remains the next Factory-executable slice), because the Slice 1
+human half above is still outstanding: `bun run rekey:readiness` exits 1, and the spec's own Slice 2
+preflight forbids any implementer edit until it exits 0. Slice 1's merged code does not change that —
+this spec keeps its `security`/`data` human gates at approval and merge, and advances to
+`next_slice: 2` only once the readiness command is green.
 
 ### Relationship recommendation
 
