@@ -36,7 +36,8 @@ describe('HttpBroadcaster', () => {
     const b = new HttpBroadcaster({ url: 'https://gateway.example/x', fetch: fetchMock });
     await b.emit({ tags: ['t'], source: 'hub', sourceId: 'x', tenantId: 't', ts: 0 });
     const [, init] = fetchMock.mock.calls[0]!;
-    expect((init?.headers as Record<string, string>).authorization).toBeUndefined();
+    const headers = init?.headers as Record<string, string> | undefined;
+    expect(headers?.authorization).toBeUndefined();
   });
 
   it('does not throw on non-2xx — logs via onError', async () => {

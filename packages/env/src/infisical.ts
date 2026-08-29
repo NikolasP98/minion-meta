@@ -36,8 +36,8 @@ export interface InfisicalFetchOptions {
  *
  * Invokes `infisical secrets --projectSlug <slug> --env <env> [-domain <d>] -o dotenv --silent`,
  * captures stdout, parses it as dotenv. Successful results are memoized in-process (see `cache.ts`)
- * for a 5-minute TTL by default; nothing is written to disk unless `MINION_ENV_CACHE=disk` and a
- * future release implements the sealed on-disk cache.
+ * for a 5-minute TTL by default. This release does not write a cache to disk;
+ * `MINION_ENV_CACHE=disk` warns and falls back to the process memo.
  *
  * Never logs secret VALUES; callers only see variable names via `keyNames` and the returned env map
  * (which the hierarchy resolver projects into `source[]` by name only).

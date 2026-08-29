@@ -4,7 +4,7 @@
 // Browser consumers (hub, site) import from '@minion-stack/shared' (main entry) — NOT this file.
 // This file is the ONLY entry point in this package that imports 'ws'.
 import { WebSocket } from 'ws';
-import { GatewayClient, type GatewayClientOptions, PROTOCOL_VERSION } from '../gateway/client.js';
+import { GatewayClient, type GatewayClientOptions } from '../gateway/client.js';
 
 export interface NodeGatewayClientOptions
   extends Omit<GatewayClientOptions, 'WebSocketImpl' | 'wsConstructorArgs'> {

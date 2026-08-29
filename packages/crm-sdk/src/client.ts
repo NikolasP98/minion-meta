@@ -102,8 +102,9 @@ export function createCrmClient(opts: CrmClientOptions) {
 
     /**
      * Validate a party's identity against the PERUDEVS DNI registry.
-     * verified → dni_verified=true + dob set; mismatch/not_found/error recorded
-     * in metadata.dni_validation. Parties without an exactly-8-digit DNI are skipped.
+     * verified → dni_verified=true + dob set; mismatch/not_found/registry errors are recorded
+     * in metadata.dni_validation. Parties without an exactly-8-digit DNI are skipped. If the
+     * identity changes during lookup, return an error without overwriting the newer identity.
      */
     async validatePartyDni(partyId: string): Promise<DniValidationOutcome> {
       if (!opts.perudevsKey) return { partyId, status: 'error', detail: 'perudevsKey not configured' };

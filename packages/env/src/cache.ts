@@ -26,8 +26,8 @@ export function cachePath(): string {
 }
 
 /**
- * Parse `MINION_ENV_CACHE` into a cache mode. Unrecognized values (including case/whitespace
- * variants that don't match) fall back to 'memory' and warn — never silently fall through to 'disk'.
+ * Parse `MINION_ENV_CACHE` into a cache mode. Values are trimmed and case-normalized. Unrecognized
+ * values fall back to 'memory' and warn — never silently fall through to 'disk'.
  *
  * TODO(handoff): 'disk' currently degrades to 'memory' with a warning — S2
  * (2026-08-17-pkg-infisical-cache-plaintext-spec.md §S2, cache-crypto.ts) has not shipped yet. Until

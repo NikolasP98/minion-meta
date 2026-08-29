@@ -1,6 +1,6 @@
 # AGENTS.md — Minion Meta-Repo Orchestrator Hub
 
-This is the **Minion meta-repo** — a self-hosted personal AI assistant platform with orchestration tooling, shared packages (`@minion-stack/*`), and specs at the root, wrapped around 7 independent subprojects. The agent operating from this directory is the **orchestrator**: it has full knowledge of every subdirectory, connects concepts cross-project, and dispatches subagents with the right context.
+This is the **Minion meta-repo** — a self-hosted personal AI assistant platform with orchestration tooling, shared packages (`@minion-stack/*`), and specs at the root, wrapped around six CLI-registered subprojects plus documentation trees. The agent operating from this directory is the **orchestrator**: it has full knowledge of every subdirectory, connects concepts cross-project, and dispatches subagents with the right context.
 
 ## Project Map
 
@@ -64,7 +64,7 @@ Use these when the user asks about prior-session context, durable memory, projec
 | Command | Use |
 |---|---|
 | `minion list` | Print subproject registry (6 ids: minion, hub, site, paperclip, pixel-agents, plugins) |
-| `minion dev <id>` | Launch subproject's dev command with the 6-layer env merge applied |
+| `minion dev <id>` | Launch subproject's dev command with the current env merge applied |
 | `minion dev --all` | Parallel fanout (concurrently) across subprojects that declare a dev command |
 | `minion build <id>`, `minion test <id>`, `minion check <id>` | Same pattern for build/test/check |
 | `minion status` | Tabular git status across all subprojects |
@@ -74,16 +74,11 @@ Use these when the user asks about prior-session context, durable memory, projec
 
 Full command reference: `minion --help` or the `@minion-stack/cli` README.
 
-### Env hierarchy (6 layers, lowest → highest precedence)
+### Environment resolution
 
-1. `AI/.env.defaults` — meta-repo shared non-secret defaults
-2. Infisical project `minion-core` — shared secrets (Anthropic, OpenRouter, GitHub PAT, etc.)
-3. `<subproject>/.env.defaults` — per-subproject non-secret defaults
-4. Infisical project `minion-<name>` — per-subproject secrets
-5. `<subproject>/.env.local` — gitignored dev escape hatch
-6. Shell `process.env` — wins
-
-Configure Infisical auth once via Universal Auth machine identity. Export `INFISICAL_UNIVERSAL_AUTH_CLIENT_ID` + `INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET` in your shell (or put in `~/.config/minion/infisical-auth.json`, mode 0600). The `minion doctor` command reports status.
+[`packages/env/README.md`](packages/env/README.md) owns the current precedence, secret-location,
+authentication, and cache contracts. Read it before changing environment resolution. The `minion
+doctor` command reports Infisical authentication status.
 
 ### Shared packages (`@minion-stack/*`)
 
@@ -92,7 +87,7 @@ Published to npm under the `@minion-stack` scope. Independent semver via Changes
 | Package | Purpose |
 |---|---|
 | `@minion-stack/cli` | The `minion` bin (this workflow's entrypoint) |
-| `@minion-stack/env` | 6-layer env resolver (wraps Infisical CLI) |
+| `@minion-stack/env` | Environment hierarchy resolver (wraps Infisical CLI) |
 | `@minion-stack/tsconfig` | Base / node / svelte / library TS configs |
 | `@minion-stack/lint-config` | oxlint + flat-ESLint + Prettier presets |
 | `@minion-stack/shared` | See [`README.md`](README.md#shared-packages) for the current public surface; gateway surfaces are consumed by hub, site, and paperclip |
@@ -107,7 +102,7 @@ The meta-repo ships two GitHub Actions workflows:
 
 | Workflow | Trigger | Purpose |
 |---|---|---|
-| `.github/workflows/ci.yml` | PR to main, push to main | Runs `pnpm run build-all`, `typecheck-all`, `lint-all`, `test-all`, and `changeset:status` on every PR |
+| `.github/workflows/ci.yml` | PR/push to `dev` or `main` | Runs the exact repository-policy, build, typecheck, lint, test, skill-bundle, spec-index, and PR changeset gates declared in the workflow |
 | `.github/workflows/release.yml` | Push to main | Uses `changesets/action@v1.7.0` to open a "Version Packages" PR when changesets are present; publishes `@minion-stack/*` to npm when that PR is merged |
 
 Root scripts that fan out across workspace packages:
@@ -118,7 +113,7 @@ Root scripts that fan out across workspace packages:
 | `pnpm run typecheck-all` | `pnpm -r --parallel --if-present run typecheck` |
 | `pnpm run lint-all` | `pnpm -r --parallel --if-present run lint` |
 | `pnpm run test-all` | `pnpm -r --parallel --if-present run test` |
-| `pnpm run ci` | build-all → typecheck-all → lint-all → test-all → changeset:status |
+| `pnpm run ci` | Run the complete local gate sequence declared in `package.json` |
 | `pnpm run changeset` | Interactive changeset authoring |
 
 Release tokens and secrets: `NPM_TOKEN` (automation type) must be set as a GitHub repo secret — see `.planning/phases/08-polish-automation/NPM_TOKEN-SETUP.md` for one-time setup.
@@ -292,7 +287,7 @@ Research workspace for an AI course. Docs-only — no production code. Uses the 
 ## Commands Quick Reference
 
 Run these from the subproject directory, or through the CLI (`minion dev|build|test|check <id>`),
-which applies the 6-layer env merge first. `—` means the repository declares no such command.
+which applies the current env merge first. `—` means the repository declares no such command.
 
 <!-- repo-policy:commands -->
 | Repo id | Install | Dev | Build | Test | Check | Typecheck |
@@ -394,5 +389,3 @@ You are committed to honesty and accuracy above all else. Follow these rules in 
 3. **STATISTICS & NUMBERS** — Flag any statistic you are not 100% confident in. Say "I believe this is approximately..." and recommend the user verify it from an official or primary source.
 4. **RECENT EVENTS** — Remind the user when a topic may have changed since your knowledge cutoff. Do not guess at current events or present outdated info as current.
 5. **PEOPLE & QUOTES** — Never attribute a quote to a real person unless you are certain they said it. If unsure, say "I cannot confirm this quote is accurate."
-
-
