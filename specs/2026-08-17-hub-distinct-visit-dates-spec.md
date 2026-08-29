@@ -2,13 +2,13 @@
 id: 2026-08-17-hub-distinct-visit-dates-spec
 title: "CRM funnel — one timezone-correct visit-date definition (invoices + completed bookings) behind the shipped Loyal floor"
 stage: spec
-status: approved
-pass: 3
+status: review
+pass: 4
 next_slice: 1
 created: 2026-08-17
 updated: 2026-08-29
 proposal: 2026-08-17-hub-distinct-visit-dates
-verdict: approved
+verdict: pending
 repos: [minion_hub, minion-meta]
 tags: [logic, test, crm]
 type: fix
@@ -28,6 +28,26 @@ different shape** while they were in review. §1 records what was verified again
 `1b47e8ce` (fetched 2026-08-29) and what is actually still broken. The pass-2 blocker ("no
 authoritative attended booking status exists, a human must decide") is **resolved by evidence**:
 hub's scheduling service defines a closed status domain that includes `completed` and `no_show`.
+
+**Pass-4 fix (2026-08-29).** An external review of pass 3 against the same pinned hub commit
+(`1b47e8ce`) returned **FAIL** with four High findings, all against the S2 SQL and its consumers:
+(H1) the query still only emits a row per contact that has *some* invoice, so a booking-only
+repeat visitor (zero invoices, two `completed` bookings) can never reach Loyal; (H2) the booking
+join started from `contact_party`, which the shared invoice CTE itself filters to
+`party_id is not null` — excluding exactly the `crm_contact_id`-only, partyless shape
+`createBooking` produces; (H3) the spec added scheduling as a read dependency for three cached
+outputs (`contactFinanceMap`, the roster page, the dashboard) without adding a matching
+invalidation path, so `setBookingStatus` (no cache bust today) leaves all three stale after a
+completion or no-show; (H4) the invoice branch had no status filter, so a `void` invoice remains
+visit evidence, contradicting the spec's own "evidence disappearing self-corrects" invariant. Two
+Medium findings followed: (M1) the "`completed` is terminal, no time guard needed" claim has no
+code behind it — `setBookingStatus` validates neither transitions nor timestamps, so a future
+booking can be marked `completed`; (M2) the DELTA never gives the proposal's literal "assert the
+count" DoD anywhere to land. One Low finding: (L1) three verification-block gates used
+`grep ... && exit 1`, which is *inverted* — it fails the block precisely when the diff is clean.
+§1, §2, §3, and Slices 1–3 below are corrected in place; the fixes are additive to what pass 3
+got right (the withdrawal of the pass-2 plan, the tz defect, the dead-stub deletion) and do not
+reopen any of that reasoning.
 
 **Design ancestors:**
 [`2026-08-13-crm-customers-server-pagination-spec`](2026-08-13-crm-customers-server-pagination-spec.md)
@@ -100,6 +120,20 @@ instead of a second per-contact function.
 Every row below was read from the checkout, not carried from an older spec. Line numbers are from
 that commit; re-anchor at implementation time (`rg`, not `sed -n`).
 
+**Pass-4 addendum.** This working checkout (minion-meta only) has no `minion_hub` clone and no
+database runtime, so the rows below the divider are **carried from the pass-4 external review's
+own file:line citations against the same pinned commit** (`1b47e8ce`), not independently
+re-verified this pass. They must be re-confirmed with `rg` against a real hub checkout before S1
+starts — treat them as evidence to design against, not as re-proven facts.
+
+| Fact | Evidence |
+|---|---|
+| `loadContactFinanceMap` (and the dashboard/roster `fin` CTEs) select and `group by` **from `contact_invoice_class`** — a contact with zero classified invoice rows produces no `ContactFinance`/`fin` row at all, regardless of any other evidence | `crm-finance.service.ts:117-121`; `crm-contacts.service.ts:560-571,925-938` (pass-4 review, H1) |
+| The shared invoice CTE filters `c.party_id is not null`; `ensureCrmContact` inserts a contact **without** `party_id`, and `createBooking` stores `crmContactId` but not `partyId` — a `crm_contact_id`-only booker is a normal, currently-occurring shape, not an edge case | `crm-finance.service.ts:39-44`; `scheduling-bookings.service.ts:159-184,266-300` (pass-4 review, H2) |
+| `contactFinanceMap` is cached 2m + 30s SWR (CRM/finances tags); `rankContactsPageCached` (the actual customer-page path) is cached 2m + 1h SWR (CRM tag); the dashboard has a third 2m + 30s cached path. `setBookingStatus` updates the row and performs **no cache invalidation** | `crm-finance.service.ts:90-108`; `crm-contacts.service.ts:417-445,531-556`; `scheduling-bookings.service.ts:370-389` (pass-4 review, H3) — consistent with this repo's own observed pattern of tag-scoped Valkey caches with TTL+SWR on CRM roster/finance reads ([[hub-perf-investigation-2026-08-22]]) |
+| `void` is a real canonical invoice status; an existing CRM journey query already excludes it deliberately. The shared invoice CTE carries no `status` column today and filters only `shadowed = false` | `finance/connector.ts:33-49`; `crm-journey.service.ts:80-86`; `crm-finance.service.ts:58-67` (pass-4 review, H4) |
+| `setBookingStatus` accepts any status in the closed domain and updates it with **no transition or timestamp validation**; the public PATCH route exposes the same enum — a future booking can be marked `completed` (and later reverted) | `scheduling-bookings.service.ts:370-380`; `routes/api/scheduling/bookings/[id]/+server.ts:11-24` (pass-4 review, M1) |
+
 | Fact | Evidence |
 |---|---|
 | `distinctVisitDates(_ctx, _contactId)` returns `0`, documented as a STUB | `crm-contacts.service.ts:1715` |
@@ -131,29 +165,44 @@ slices below are the residue that is genuinely missing.
    `funnel_stage` CASE. No second copy, no per-contact TS re-derivation.
 2. **Bucketed in the org's business timezone** (`fin_settings.timezone`, default `America/Lima`),
    never in the session zone. The zone is a bound parameter, never interpolated into SQL text.
-3. **A visit is evidence, not intent.** A procedure (non-deposit) invoice with a non-null
-   `issued_at`, or a booking whose status is `completed`. `pending`/`accepted`/`cancelled`/
-   `rejected`/`no_show` bookings and deposit-only invoices are not visits.
-4. **Loyal stays read-time.** `visitDates >= 2` remains a *floor* derived at read time; nothing new
+3. **A visit is evidence, not intent.** A **non-void** procedure (non-deposit) invoice with a
+   non-null `issued_at`, or a booking whose status is `completed` **and** whose `start_time` is not
+   in the future. `pending`/`accepted`/`cancelled`/`rejected`/`no_show` bookings, future-dated
+   `completed` bookings, deposit-only invoices, and `void` invoices are not visits.
+4. **A contact needs no invoice to be a visitor.** Visit-date evidence from invoices and from
+   bookings is aggregated independently, one row per contact each, then combined — never by
+   filtering bookings through an invoice-anchored relation. A contact with zero invoices and two
+   `completed` bookings is exactly as eligible as one with zero bookings and two invoices.
+5. **Every live contact identity shape is reachable**, independent of party linkage: a booking
+   counts toward its contact if `crm_contact_id` matches directly, or if both sides carry the same
+   non-null `party_id`. A contact with no `party_id` at all must still be reachable through
+   `crm_contact_id`.
+6. **Loyal stays read-time.** `visitDates >= 2` remains a *floor* derived at read time; nothing new
    is persisted into `custom_fields._funnel`. Evidence disappearing (a voided invoice, a booking
    flipped to `no_show`) self-corrects.
-5. **SQL and TS keep agreeing** — the parity truth table covers the new axis; the roster and the
+7. **Every cached surface that reads visit-date evidence stays consistent with the evidence.**
+   Booking creation and every booking status mutation that can add or remove visit evidence busts
+   the same cache tags a comparable invoice mutation would — there is no cached read path that can
+   see stale scheduling evidence longer than an equivalent stale invoice would be tolerated.
+8. **SQL and TS keep agreeing** — the parity truth table covers the new axis; the roster and the
    contact page can never show different Loyal sets.
-6. **Batched, never N+1.** The count is computed for a whole page in one query, as today.
-7. **No behavior change for orgs whose invoices are already ≥2 distinct *local* days** — the tz fix
-   only removes contacts promoted by a UTC-midnight straddle.
+9. **Batched, never N+1.** The count is computed for a whole page in one query, as today.
+10. **No behavior change for orgs whose invoices are already ≥2 distinct *local* days** — the tz fix
+    only removes contacts promoted by a UTC-midnight straddle.
 
 ## 3. DELTA — transitions and the tests that prove them
 
 | # | Transition | Slice | Proof |
 |---|---|---|---|
 | D1 | `issued_at::date` → `(issued_at at time zone $tz)::date`, `$tz` from `fin_settings` | S1 | Postgres test: two invoices at 18:00 and 20:00 Lima on one day ⇒ `loyal=false`; 18:00 Lima on two different days ⇒ `loyal=true` |
-| D2 | The loyal predicate stops being invoice-only: distinct dates over (procedure invoices ∪ `completed` bookings), deduped across sources | S2 | Tests: invoice day A + completed booking day B ⇒ loyal; invoice and booking on the same local day ⇒ 1 date, not loyal; `no_show`/`cancelled`/`accepted`/future bookings ⇒ not counted |
-| D3 | Booking↔contact resolution uses both nullable paths (`crm_contact_id`, `party_id`) and counts a doubly-linked booking once | S2 | Tests over all three link shapes |
+| D2 | The loyal predicate stops being invoice-only: distinct dates over (**non-void** procedure invoices ∪ `completed`-and-past bookings), deduped across sources, aggregated as an **independent** per-contact relation and combined with the invoice aggregate by a base-contact left join — not by filtering bookings through `contact_invoice_class` | S2 | Tests: invoice day A + completed booking day B ⇒ loyal; invoice and booking on the same local day ⇒ 1 date, not loyal; `no_show`/`cancelled`/`accepted`/future-dated-`completed` bookings ⇒ not counted; **zero invoices + two completed bookings ⇒ loyal, and revenue fields stay `0`/unset, not thrown** |
+| D3 | Booking↔contact resolution starts from **every live contact** (`crm_contact_id`, nullable `party_id`) — not from the party-filtered invoice CTE — and matches on `crm_contact_id = contact_id OR (party_id is not null AND party_id = contact.party_id)`, counting a doubly-linked booking once | S2 | Tests over all three link shapes, **including a `party_id IS NULL` contact whose only link is `crm_contact_id`** |
 | D4 | The finance-map cache key gains the timezone (and the visit-source shape), so a settings change cannot serve a stale Loyal set | S1 | Unit test on the key builder |
 | D5 | Roster SQL and TS derivations still agree, now including the visit axis | S1, S2 | `crm-funnel-parity.sql.integration.test.ts` extended with 0/1/2 visit dates × source mix |
 | D6 | `distinctVisitDates` and the analyze route's `visits >= 2` write branch are deleted; the route documents the floor as the Loyal source | S3 | `rg distinctVisitDates src/` is empty; route test: a model answering `loyal` still cannot set it, and no `_funnel` write happens on the Loyal path |
 | D7 | Re-stubbing a visit/loyal signal to a constant fails a test | S3 | Anti-recurrence guard test |
+| D8 | `createBooking` and every `setBookingStatus` transition bust the same cache tags a comparable invoice mutation busts (`contactFinanceMap`, `rankContactsPageCached`, the dashboard cache) — scheduling evidence is never staler than invoice evidence | S2 | Test: warm all three caches, transition `accepted → completed → no_show`, assert the very next read reflects each transition (no TTL wait) |
+| D9 | `ContactFinance` (internal, not the wire response) exposes a numeric `visitDates` alongside `loyal`, so tests can assert the literal count the source DoD asked for | S2 | Tests assert exact `visitDates` of 0, 1, and 2 across the source-mix cases in D2, separately from the `>= 2` threshold check |
 
 ---
 
@@ -193,7 +242,7 @@ bun run vitest run src/server/services/crm-finance src/server/services/crm-funne
 #   - an org whose fin_settings.timezone is 'UTC' behaves exactly as today (no silent shift)
 #   - CACHE KEY: two different timezones produce different keys
 bun run vitest run && bun run check
-git diff --name-only origin/master...HEAD | grep -E '\.svelte$|supabase/migrations|db/schema' && exit 1
+if git diff --name-only origin/master...HEAD | grep -Eq '\.svelte$|supabase/migrations|db/schema'; then exit 1; fi
 ```
 
 ### Slice 2 — Completed appointments become the second visit source
@@ -201,62 +250,116 @@ git diff --name-only origin/master...HEAD | grep -E '\.svelte$|supabase/migratio
 **Topics:** `crm`, `logic`, `test`, `edge-case` · **Tags:** `logic`, `test` · **Estimate:** 6–8 h
 
 **Goal:** the proposal's "fin_invoices/scheduling" becomes true, inside the single definition S1
-just made timezone-correct.
+just made timezone-correct — including for contacts that have **no invoice at all**, and without
+leaving any cached surface holding stale scheduling evidence.
 
 **Do:**
+- Add a `contact_target` CTE — every live contact, independent of party linkage, **not** filtered
+  to `party_id is not null` the way the invoice CTE is (fixes H2):
+  ```
+  contact_target as (
+    select c.id as contact_id, c.party_id
+      from crm_contacts c
+     where c.org_id = current_setting('app.current_org_id', true)
+       and c.deleted_at is null
+  )
+  ```
 - Add a `contact_visit_date` CTE next to `contactInvoiceClassSql` — exported from
-  `crm-finance.service.ts` so both consumers splice the *same* SQL:
+  `crm-finance.service.ts` so both consumers splice the *same* SQL. It unions **non-void**
+  procedure-invoice days with **past, `completed`** booking days, joining bookings off
+  `contact_target` (not `contact_party`) so a `crm_contact_id`-only, partyless booker is reachable:
   ```
   contact_visit_date as (
     select contact_id, d from (
       select cic.contact_id, ${visitDateSql(sql`cic.issued_at`, tz)} d
         from contact_invoice_class cic
-       where cic.has_proc and cic.issued_at is not null
+        join fin_invoices fi on fi.id = cic.invoice_id
+       where cic.has_proc and cic.issued_at is not null and fi.status <> 'void'
       union all
-      select cp.contact_id, ${visitDateSql(sql`b.start_time`, tz)} d
-        from contact_party cp
+      select ct.contact_id, ${visitDateSql(sql`b.start_time`, tz)} d
+        from contact_target ct
         join sched_bookings b
           on b.org_id = current_setting('app.current_org_id', true)
-         and (b.party_id = cp.party_id or b.crm_contact_id = cp.contact_id)
+         and (b.crm_contact_id = ct.contact_id
+              or (ct.party_id is not null and b.party_id = ct.party_id))
        where b.status = any(${VISIT_BOOKING_STATUSES})
+         and b.start_time <= now()
     ) u
     group by contact_id, d
+  ),
+  contact_visit_agg as (
+    select contact_id, count(distinct d) as visit_dates
+      from contact_visit_date
+     group by contact_id
   )
   ```
-  and redefine the loyal predicate as `count(distinct d) >= 2` over it. `union all` + `group by`
-  dedupes across sources and across the two booking link paths (D2, D3).
+  `union all` + `group by` dedupes across sources and across the two booking link paths (D2, D3).
+  `fi.status <> 'void'` mirrors `crm-journey.service.ts`'s existing void exclusion (D2/H4).
+  `b.start_time <= now()` is the M1 fix: `setBookingStatus` validates neither transitions nor
+  timestamps, so a future booking can be marked `completed` — the predicate, not an unenforced
+  service invariant, is what keeps a future booking from counting as attendance.
+- **`contact_visit_agg` is aggregated independently and combined by a base-contact left join, not
+  by selecting from `contact_invoice_class` (fixes H1).** In both consumers
+  (`loadContactFinanceMap` in `crm-finance.service.ts:117-121` and the roster/dashboard `fin` CTEs
+  in `crm-contacts.service.ts:560-571,925-938`), change the base relation from
+  `from contact_invoice_class cic ... group by cic.contact_id` to a base-contact-anchored form:
+  `from contact_target ct left join (existing invoice aggregate) ic on ic.contact_id = ct.contact_id
+  left join contact_visit_agg cva on cva.contact_id = ct.contact_id`. Revenue/count fields keep
+  reading from the invoice aggregate only (`coalesce(ic.total, 0)`, etc.) — the visit axis must
+  never fan out or change those numbers. `fin_loyal` becomes
+  `coalesce(cva.visit_dates, 0) >= 2`, and `ContactFinance.visitDates` (D9) is
+  `coalesce(cva.visit_dates, 0)`.
 - `const VISIT_BOOKING_STATUSES = ['completed'] as const`, with the reasoning in a comment:
   hub's own status domain (`scheduling-bookings.service.ts:370`) has a distinct `no_show`, so
   `accepted` is a *pre-visit* state, not attendance. **This is the resolution of the pass-2 human
   blocker: `completed` is the authoritative attended status.** It under-counts for orgs that never
   close out appointments — an under-count never falsely promotes anyone, and widening it to
   past-dated `accepted` bookings is deferred (§5) with a ledger entry rather than guessed at.
-  Because `completed` is terminal and only set after the fact, no `start_time <= now()` predicate
-  is needed; add one only if S2 finds `completed` future rows in the dev data.
+- **Cache invalidation (D8, H3).** `createBooking` and every `setBookingStatus` transition in
+  `scheduling-bookings.service.ts` must, after commit, bust the same cache tags an invoice mutation
+  busts for the affected contact: the `contactFinanceMap` tag, the roster/`rankContactsPageCached`
+  CRM tag, and the dashboard tag. Locate the existing invoice-mutation invalidation call (used by
+  `fin-invoices` writes) and call the same helper from the booking service — do not invent a
+  second invalidation path. If no shared helper exists, name that as a blocking discovery in the
+  PR before writing scheduling-side invalidation ad hoc.
 - Keep the existing module gate (`bothEnabled(ctx, 'crm', 'finances')`) exactly as-is. Consequence,
   which must be recorded and not silently absorbed: an org with scheduling but **not** finances
   still gets no Loyal. Leave `TODO(handoff): scheduling-only orgs get no visit dates while the
   count rides the finance map — see proposals/2026-08-17-hub-distinct-visit-dates.md` at the gate,
   and append the same to that proposal.
 - Update `ContactFinance.loyal`'s doc comment: "repeat visitor — ≥2 distinct local days with a
-  procedure invoice or a completed appointment".
-- Extend the parity truth table with the visit axis (D5).
+  non-void procedure invoice or a past, completed appointment".
+- Extend the parity truth table with the visit axis (D5), including the zero-invoice/booking-only
+  case and the void-invoice case.
 
-**Files:** `crm-finance.service.ts`, `crm-contacts.service.ts` (the CASE's CTE list),
-`crm-finance.service.test.ts`, `crm-funnel-parity.sql.integration.test.ts`,
+**Files:** `crm-finance.service.ts`, `crm-contacts.service.ts` (the CASE's CTE list and both `fin`
+call sites), `scheduling-bookings.service.ts` (cache invalidation on `createBooking` and
+`setBookingStatus`), `crm-finance.service.test.ts`, `crm-funnel-parity.sql.integration.test.ts`,
+`scheduling-bookings.service.test.ts` (or equivalent, for the invalidation assertions),
 `proposals/2026-08-17-hub-distinct-visit-dates.md` (ledger append, meta-repo).
 
 **Verification criteria (automated except the EXPLAIN review):**
 ```bash
 bun run vitest run src/server/services/crm-
 #   - CROSS-SOURCE: procedure invoice on local day A + completed booking on local day B → loyal
+#   - BOOKING-ONLY: zero invoices, two completed bookings on different local days → loyal=true,
+#     visitDates=2, revenue/invoice-count fields unchanged (0/unset) — H1
+#   - VOID: a procedure invoice + a VOID procedure invoice on a different day → 1 date, not loyal;
+#     a valid second invoice later voided → drops back below 2 — H4
+#   - FUTURE-COMPLETED: a booking dated in the future marked completed → not counted — M1
 #   - DEDUPE: invoice and completed booking on the SAME local day → 1 date → NOT loyal
 #   - EXCLUDED: no_show / cancelled / rejected / pending / accepted bookings → not counted
-#   - LINKS: booking linked only by crm_contact_id counts; only by party_id counts; both → once
+#   - LINKS: booking linked only by crm_contact_id on a contact with party_id NULL counts; only by
+#     party_id counts; both → once — H2
 #   - EMPTY: contact with party_id null and no bookings → 0, no throw
 #   - MODULES: org with no sched_* rows → unchanged; org with finances off → {} as today
+#   - COUNT: visitDates asserts the literal 0/1/2, not just the >=2 threshold — M2/D9
 #   - PARITY: SQL funnel_stage == maxFunnelStage(effectiveFunnelStage, financeFloorStage) for
 #     every (_funnel × inbound × deposit/procedure × visit-dates 0/1/2 × source mix). No skips.
+bun run vitest run src/server/services/scheduling-bookings
+#   - INVALIDATION: warm contactFinanceMap + roster page + dashboard cache for a contact, transition
+#     a booking accepted → completed, assert the very next read (no TTL wait) shows loyal where
+#     applicable; transition completed → no_show, assert the very next read drops back — D8/H3
 bun run vitest run && bun run check
 # EXPLAIN ANALYZE the batched roster query for a 100-contact page on the largest dev org and paste
 # the plan in the PR. sched_bookings has (org_id,status), (crm_contact_id) and (party_id) indexes,
@@ -291,7 +394,7 @@ bun run vitest run && bun run check
 
 **Verification criteria (automated):**
 ```bash
-rg -n 'distinctVisitDates' src/ scripts/          # → no hits
+! rg -n 'distinctVisitDates' src/ scripts/        # → no hits
 bun run vitest run src/routes/api/crm/contacts src/server/services/crm-
 #   - the analyze route never writes 'loyal': a stubbed model returning "loyal" (and one throwing)
 #     leaves _funnel untouched; the stage still comes from the floor
@@ -314,7 +417,7 @@ bun run vitest run && bun run check
   operator decision about whether this business closes appointments out. Ledger entry required.
 - **Scheduling-only orgs.** The count rides the finance map's `crm × finances` gate; widening that
   gate touches revenue reads too. Recorded as a handoff, not fixed here.
-- **Persisting Loyal.** The floor stays read-time (TO-BE #4). No backfill, no cron, no
+- **Persisting Loyal.** The floor stays read-time (TO-BE #6). No backfill, no cron, no
   re-analysis pass over existing contacts.
 - **An org-configurable threshold or a lookback window.** `>= 2`, all-time, one constant — matching
   what ships today. A window is an unmade product decision.
@@ -349,9 +452,9 @@ bun run check                                    # 0 errors / 0 warnings
 bun run vitest run                               # full suite green; no new skips
 SUPABASE_DB_URL=... REQUIRE_CRM_FUNNEL_PARITY_POSTGRES=1 \
   bun run vitest run src/server/services/crm-funnel-parity.sql.integration.test.ts
-git diff --name-only origin/master...HEAD | grep -E '\.svelte$'                 && exit 1
-git diff --name-only origin/master...HEAD | grep -E 'supabase/migrations|db/schema' && exit 1
-rg -n 'distinctVisitDates' src/ scripts/         # → empty
+if git diff --name-only origin/master...HEAD | grep -Eq '\.svelte$'; then exit 1; fi
+if git diff --name-only origin/master...HEAD | grep -Eq 'supabase/migrations|db/schema'; then exit 1; fi
+! rg -n 'distinctVisitDates' src/ scripts/       # → empty
 
 # The proposal's DoD, literally: a contact seeded with 2 visit dates on the party spine reports
 # 2 dates and lands on 'loyal' — one from fin_invoices, one from a completed booking.
@@ -362,10 +465,17 @@ bun run vitest run src/server/services/crm-finance src/server/services/crm-funne
 #     AND on the contact page (this is the row the old UTC cast promoted)
 #  b. add a completed booking on a different local day → both surfaces show loyal
 #  c. flip that booking to no_show → both surfaces drop back (read-time floor, self-correcting)
-#  d. POST /api/crm/contacts/$C/funnel/analyze → _funnel is NOT written with 'loyal',
+#  d. a contact with ZERO invoices and two completed bookings on different local days → loyal on
+#     BOTH surfaces (H1) — including a contact with party_id NULL, linked only by crm_contact_id (H2)
+#  e. a second procedure invoice that is void does NOT promote; voiding a previously-counted
+#     invoice drops the contact back below 2 (H4)
+#  f. complete a booking, THEN immediately (no TTL wait) hit /crm/customers and the contact page —
+#     both reflect it; flip to no_show and immediately re-hit both — both drop back (D8/H3, the
+#     specific staleness the review caught: caches must not need their TTL to expire)
+#  g. POST /api/crm/contacts/$C/funnel/analyze → _funnel is NOT written with 'loyal',
 #     and crm_contacts.updated_at is unchanged when the model returns nothing actionable
 curl -s "$HUB/api/crm/contacts?funnelStage=loyal&limit=5" -H "$AUTH" | jq '.total, [.contacts[].id]'
-#  e. that roster set matches the per-contact derivation for the same org (parity, live)
+#  h. that roster set matches the per-contact derivation for the same org (parity, live)
 ```
 
 **Ship gate:** §7 green; the EXPLAIN plan from S2 pasted in the PR; the `show timezone;` output
