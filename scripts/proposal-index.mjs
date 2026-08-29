@@ -45,7 +45,7 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		if (!fm[key]) errors.push(`${name}: missing required field "${key}"`);
 	}
 	if (fm.status && !P_STATUSES.includes(fm.status)) errors.push(`${name}: invalid status "${fm.status}"`);
-	if (fm.effort && !P_EFFORTS.includes(fm.effort))
+	if (fm.effort !== undefined && !P_EFFORTS.includes(fm.effort))
 		errors.push(`${name}: invalid effort "${fm.effort}" (allowed: ${P_EFFORTS.join(', ')})`);
 	// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).
 	if (fm.status === 'retired' && !(fm.retired_reason && fm.retired_reason.length >= 20))
