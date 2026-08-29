@@ -3,18 +3,46 @@ id: 2026-08-19-gateway-client-error-hook-consumer-adoption-spec
 title: "Adopt the GatewayClient onEventError hook in hub, site and paperclip (S3 consumer handoff)"
 stage: spec
 status: approved
-pass: 2
+pass: 3
 created: 2026-08-19
-updated: 2026-08-19
+updated: 2026-08-29
 proposal: 2026-08-17-gateway-client-error-hook-consumer-adoption
 verdict: approved
 repos: [minion_hub, minion_site, paperclip]
+tags: [deps, logic]
 relationship: depends-on
 related: [2026-08-17-pkg-gateway-client-onevent-errors-spec, 2026-08-17-site-member-gateway-swallowed-errors-spec, 2026-08-19-gateway-client-lifecycle-swallows-handoff-spec]
 type: fix
 ---
 
 # Adopt the `onEventError` hook in the three `@minion-stack/shared` consumers
+
+> **Pass 3 — metadata repair + re-review, 2026-08-29.** Approval is unchanged (`verdict: approved`);
+> the evidence below was re-verified today and still holds. Three things changed in this pass:
+>
+> 1. **Canonical topics declared.** The spec carried no frontmatter `tags`, so the guarded
+>    implementation route refused to queue it (a spec that declares no canonical topic cannot be
+>    risk-classified). It now declares `tags: [deps, logic]` — `deps` because the manifest +
+>    lockfile bump is the mandatory half of every consumer slice, `logic` because the optional
+>    hook wiring is consumer control-flow. Deliberately **not** declared: `docs` (`specs/topics.json`
+>    states specs/proposals are not `docs`, and no consumer documentation is written here) and
+>    `infra` (S0 only *inspects* the release pipeline; no slice changes infrastructure).
+>    The per-slice annotations below are relabelled `**Topics:**` and use the same canonical
+>    vocabulary.
+> 2. **Scope widened to all three lifecycle hooks**, on the parent proposal's written instruction.
+>    `proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md` was amended 2026-08-20
+>    ("Scope amended" + the ⚠️ artifact-tension note) to cover `onEventError`, `onReconnectError`
+>    **and** `onSocketError`, because one bump delivers all three and splitting the decision would
+>    mean bumping twice for one release. That note asks whoever picks this up to "either widen that
+>    spec to all three hooks, or file its second pass". It is widened here, in place. §1's earlier
+>    reading — that S2's hooks would be a *second, separate* adoption pass — is superseded by that
+>    amendment and by S2 having actually shipped (meta PR #89).
+> 3. **S0 re-verified and still RED** (§2). Ten days after approval the hook is still not on `main`
+>    and still not on npm. **No implementation run may start S1–S3.** A dev agent that picks this
+>    spec up executes S0 first, records the red gate, and stops — that is the correct outcome, not a
+>    failed run. The stall itself is not this spec's to fix (§7); it is filed as
+>    `proposals/2026-08-29-meta-shared-release-promotion-stalled.md`.
+
 
 ## 1. Relationship recommendation
 
@@ -32,11 +60,15 @@ type: fix
   slice below treats that function's existence as a Slice-0 recon question, not an assumption, so this
   spec does not block on that one shipping first. If the sink is absent, accepting the default is one
   of this proposal's complete postures; this spec does not create an implicit rewiring follow-up.
-- **`2026-08-19-gateway-client-lifecycle-swallows-handoff-spec`** (draft, pass 1,
-  `repos: [minion-meta]`) — **related, not depends-on**. It implements S2 of the onEvent-errors spec
-  (`onReconnectError` / `onSocketError`) and is explicitly out of this proposal's scope (proposal's own
-  "Out of scope" section). Named here only so a future reader does not conflate the two hooks: if S2
-  ships, it is a **second**, separate consumer-adoption pass, not an amendment to this one.
+- **`2026-08-19-gateway-client-lifecycle-swallows-handoff-spec`** — **related, not depends-on**. It
+  implements S2 of the onEvent-errors spec (`onReconnectError` / `onSocketError`).
+  ~~*Pass 2 read (superseded):* if S2 ships, it is a **second**, separate consumer-adoption pass, not
+  an amendment to this one.~~ **Amended 2026-08-29:** that spec is now `stage: done` /
+  `status: shipped` (meta PR #89, 2026-08-20), and its Slice 2 directed the parent proposal to be
+  amended in place instead — which happened the same day. Both sibling hooks therefore ride the
+  **same unpublished release** as `onEventError`, so a consumer cannot adopt one without receiving
+  all three. This spec's slices now cover all three hooks (banner item 2); the package work for them
+  is still owned entirely by that spec, not by this one.
 
 No existing spec already covers hub/site/paperclip adopting `onEventError` — this is new work, gated
 on an external event (a real npm publish) rather than on another draft.
@@ -55,10 +87,15 @@ this checkout and against GitHub
   `reportEventError` private reporter, exactly as `2026-08-17-pkg-gateway-client-onevent-errors-spec`
   §S1 specified. GitHub `main` does not yet contain the option. Promotion to `main` is therefore part
   of S0's prerequisite chain, not an accomplished fact.
-- **S2 has not shipped.** `client.ts:251-255` and `:330-335` still carry
-  `// TODO(handoff): ... carried forward as S2 in proposals/2026-08-17-gateway-client-lifecycle-swallows-handoff.md`
-  — `onReconnectError` / `onSocketError` do not exist yet. Irrelevant to this spec (§1), noted so a
-  slice below does not accidentally assume they exist.
+- ~~**S2 has not shipped.**~~ **Corrected 2026-08-29 — S2 has shipped.** The pass-2 statement
+  ("`onReconnectError` / `onSocketError` do not exist yet") was true on 2026-08-19 and is now false:
+  `packages/shared/src/gateway/client.ts:46,53` declare
+  `onReconnectError?: (err, attempt: { delayMs: number })` and `onSocketError?: (err)`, with their
+  reporters at `:314` and `:323`. Delivered by `2026-08-19-gateway-client-lifecycle-swallows-handoff-spec`
+  (meta PR #89, `status: shipped`). `.changeset/gateway-client-event-error-hook.md` was rewritten to
+  announce **all three** hooks in one minor — including the explicit no-dedupe warning that a gateway
+  down for an hour prints roughly one `onReconnectError` line per attempt (~every 15 s at the backoff
+  cap). Consumer slices below must therefore assume all three hooks exist in the version S0 clears.
 - **The changeset is written on `dev` but has not reached the release branch — the hook release has
   NOT published.**
   `.changeset/gateway-client-event-error-hook.md` exists on disk (`"@minion-stack/shared": minor`,
@@ -77,6 +114,26 @@ this checkout and against GitHub
     Unified Brains change, PR #18's release workflow succeeded, and its registry tarball does **not**
     contain `onEventError`. It must not be selected merely because it is the latest tag. Slice 0
     discovers and inspects the later exact version that contains this hook.
+  - **Re-verified 2026-08-29 (10 days after approval) — the gate is still RED, on every clause:**
+    - `gh api repos/NikolasP98/minion-meta/contents/packages/shared/src/gateway/client.ts -f ref=main`
+      → **0** matches for `onEventError`; `main`'s `packages/shared/package.json` still reads
+      `0.10.0`. The promotion from `dev` to `main` has not happened.
+    - `main`'s `.changeset/` directory holds only `README.md` and `config.json`, while `dev` carries
+      **13** pending changesets including `gateway-client-event-error-hook.md`. Nothing is queued for
+      release on the release branch at all.
+    - `npm view @minion-stack/shared versions` ends at **0.10.0**, published **2026-08-13** — before
+      PR #29 merged. `gh pr list --state all` shows the newest `chore: version packages` PR is **#18**
+      (merged 2026-08-13); **no** Version-Packages PR exists after #29.
+    This is the *first* of the two merges to `main` still being absent, not a slow second merge.
+- **Consumer state, re-checked 2026-08-29 via the GitHub API (not a substitute for each slice's
+  Slice-0 recon, which still runs in a real checkout):** no consumer has adopted anything —
+  `minion_hub@master` and `minion-site@dev` both pin `"@minion-stack/shared": "^0.9.0"` in their root
+  `package.json` (a `^0.x` range that cannot even resolve `0.10.0`), and `paperclip@minion-integration`
+  declares no `@minion-stack/shared` dependency in its root manifest, so S3's owning-manifest question
+  is still genuinely open. One conditional from §1 *is* now settled: `minion_site`'s
+  `src/lib/services/gateway-errors.ts` exists on `dev` and exports `reportGatewayError` — the sibling
+  spec `2026-08-17-site-member-gateway-swallowed-errors-spec` reached `status: done` on 2026-08-28 —
+  so S2's preferred wiring target exists and its "or wait" branch is moot.
 - **The three consumer repos are absent from this workspace** (`.gitignore`:
   `minion_hub/`, `minion_site/`, `paperclip-minion/`; verified `ls -d` → three "No such file or
   directory"). This is the same ⚠️ A1 condition the parent spec and the site spec both recorded. Every
@@ -111,10 +168,14 @@ this checkout and against GitHub
 ## 3. TO-BE
 
 Each of the three consumers has a merged PR in its own repo whose manifest and lockfile resolve
-`@minion-stack/shared` to a registry version whose published declarations contain `onEventError`.
-Each PR either (a) wires the hook into a semantically appropriate existing error/reporting surface,
-or (b) explicitly accepts the `console.error` fallback. The recon table in the parent proposal (the
-"unverified — repo absent" grid) is filled in with real values for all three consumers.
+`@minion-stack/shared` to a registry version whose published declarations contain `onEventError`,
+`onReconnectError` and `onSocketError`. For **each of the three hooks**, each PR either (a) wires it
+into a semantically appropriate existing error/reporting surface, or (b) explicitly accepts the
+`console.error` fallback — nine recorded decisions in total (3 consumers × 3 hooks), none implicit,
+matching the parent proposal's Definition of Done verbatim. Mixed postures are fine (wire
+`onEventError`, accept the default for `onSocketError`); silence about a hook is not. The recon table
+in the parent proposal (the "unverified — repo absent" grid) is filled in with real values for all
+three consumers.
 
 **Invariants that must not change** (restated from the proposal, binding on every slice below):
 
@@ -124,6 +185,9 @@ or (b) explicitly accepts the `console.error` fallback. The recon table in the p
 2. No consumer awaits, buffers, or reorders `onEvent` dispatch — `onEventError` is a reporting hook,
    not a delivery-semantics change.
 3. No protocol, frame-type, or reconnect-timing behavior changes in any consumer.
+   In particular no consumer may drive reconnect, close, pending-flush or hello-rejection behavior
+   from `onSocketError` — `close` owns those, and reporting from the error hook would double-drive
+   them (parent proposal, TO-BE invariants).
 4. No slice here edits `packages/shared/**` — that surface is owned and closed by the parent spec.
 5. A reporting choice must not alter connection-health state: an `onEvent` handler failure does not
    imply that the WebSocket disconnected.
@@ -132,11 +196,11 @@ or (b) explicitly accepts the `console.error` fallback. The recon table in the p
 
 | # | Transition | Slice | Proving test / evidence |
 |---|---|---|---|
-| 1 | The exact package version containing `onEventError` is published to npm | S0 | Version-Packages PR and successful release workflow are linked; `npm view @minion-stack/shared@<version>` succeeds with `--prefer-online`; that version's registry tarball contains `onEventError` in `dist/gateway/client.d.ts` |
-| 2 | `minion_hub` adopts the published version and records its posture | S1 | merged hub PR; manifest + lockfile resolve the S0 version; PR records wired sink or accepted default; build/check pass |
-| 3 | `minion_site` adopts the published version and records its posture | S2 | merged site PR; same dependency evidence and decision record, naming `reportGatewayError` only if it exists; check/build and applicable focused tests pass |
-| 4 | `paperclip-minion` adopts the published version and records its posture | S3 | merged paperclip PR; same dependency evidence and decision record; focused adapter gate passes; PR records the observed, not presumed, result of the sync-throw probe |
-| 5 | This proposal closes with all three consumers accounted for, no "unverified — repo absent" left | S4 | all three PRs are merged and linked; the parent proposal's Definition of Done is checked clause by clause in the proposal |
+| 1 | The exact package version containing all three hooks is published to npm | S0 | Version-Packages PR and successful release workflow are linked; `npm view @minion-stack/shared@<version>` succeeds with `--prefer-online`; that version's registry tarball declares `onEventError`, `onReconnectError` and `onSocketError` in `dist/gateway/client.d.ts` |
+| 2 | `minion_hub` adopts the published version and records its posture for all three hooks | S1 | merged hub PR; manifest + lockfile resolve the S0 version; PR records wired sink or accepted default; build/check pass |
+| 3 | `minion_site` adopts the published version and records its posture for all three hooks | S2 | merged site PR; same dependency evidence and decision record, wiring into `reportGatewayError` (confirmed to exist on site `dev` as of 2026-08-29) or explicitly accepting the default; check/build and applicable focused tests pass |
+| 4 | `paperclip-minion` adopts the published version and records its posture for all three hooks | S3 | merged paperclip PR; same dependency evidence and decision record; focused adapter gate passes; PR records the observed, not presumed, result of the sync-throw probe |
+| 5 | This proposal closes with all nine consumer×hook decisions accounted for, no "unverified — repo absent" left | S4 | all three PRs are merged and linked; the parent proposal's Definition of Done is checked clause by clause in the proposal |
 
 S1–S3 do not depend on each other and may run in parallel once S0 is satisfied; each is independently
 shippable per-repo. S4 is a closeout that reads the other three, not new code.
@@ -153,13 +217,19 @@ S0 (gate: confirm the release actually published) ─▶ S1 (hub) ─┐
 
 ### S0 — Confirm publish; do not let anyone bump against an unpublished hook
 
-**Tags:** `infra` · **Estimate:** ≤ 1 h · **Files:**
+**Topics:** `deps` · **Estimate:** ≤ 1 h · **Files:**
 `proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md` (record the verified version
 and release evidence; verification commands run from `minion-meta`)
 
 **Goal:** a hard, machine-checkable gate that stops S1–S3 from starting against a version of
-`@minion-stack/shared` that does not actually export `onEventError` yet — the exact trap the AS-IS
+`@minion-stack/shared` that does not actually export the three hooks yet — the exact trap the AS-IS
 section's `npm view` discrepancy flags.
+
+> **Status 2026-08-29: RED.** Every clause below was re-run today and the first one already fails —
+> `main` has no `onEventError`, `main` carries no pending changesets, npm's newest version is
+> `0.10.0` from 2026-08-13, and no `chore: version packages` PR exists after #29 (§2). S1–S3 do not
+> start. Re-run the block below rather than trusting this line; it is a dated observation, not a
+> standing fact.
 
 **Do:**
 
@@ -189,8 +259,9 @@ gh run list --repo NikolasP98/minion-meta --workflow release.yml \
 #   → at least one successful publish workflow for the Version-Packages merge
 npm view @minion-stack/shared@<version> version --prefer-online | rg -x '<version>'
 tarball="$(npm view @minion-stack/shared@<version> dist.tarball --prefer-online)"
-curl -fsSL "$tarball" | tar -xzO package/dist/gateway/client.d.ts | rg 'onEventError'
-#   → the exact registry artifact, not only the source/changelog, exports the hook
+curl -fsSL "$tarball" | tar -xzO package/dist/gateway/client.d.ts \
+  | rg -c 'onEventError|onReconnectError|onSocketError'   # → 3
+#   → the exact registry artifact, not only the source/changelog, exports all three hooks
 ```
 
 **Definition of done (machine-checkable):** every command above succeeds, and the exact published
@@ -205,7 +276,7 @@ but only a successful workflow plus registry inspection proves that publication 
 
 ### S1 — `minion_hub` adoption
 
-**Tags:** `logic`, `docs` · **Estimate:** 4–6 h · **Files:** `minion_hub/package.json` and
+**Topics:** `deps`, `logic` · **Estimate:** 4–6 h · **Files:** `minion_hub/package.json` and
 `minion_hub/bun.lock` (dependency bump), `minion_hub/src/lib/services/gateway.svelte.ts` (only if
 wired rather than accepted), an existing generic reporter/test file if recon identifies one, and the
 PR description (the decision record).
@@ -227,12 +298,17 @@ explicit, recorded choice about it.
   it already displays errors.
 - **Bump** `@minion-stack/shared` so the manifest range and regenerated `bun.lock` resolve to at least
   the exact version S0 recorded.
-- **Decide, in the PR description, one of:**
-  - Pass `onEventError` to an existing generic logger/reporter that does not mutate connection status;
+- **Decide, in the PR description, once per hook** (`onEventError`, `onReconnectError`,
+  `onSocketError` — the bump delivers all three), one of:
+  - Pass the hook to an existing generic logger/reporter that does not mutate connection status;
     record the sink and prove one failing handler produces one report without logging `frame.payload`;
     or
   - accept the `console.error` default explicitly, and say so, so the new console output is not later
-    filed as a regression.
+    filed as a regression. For `onReconnectError`, state the expected volume (no dedupe in the
+    library: ~one line per attempt, ~every 15 s at the backoff cap) so the acceptance is informed.
+  Hub's connect/close error surface is a plausible sink for `onReconnectError`/`onSocketError`
+  specifically — but only as reporting: nothing here may drive reconnect or close behavior (§3
+  invariant 3).
 - **Do not** touch hub's connect/close error paths, connection-health state,
   `describeGatewayError`'s cases, or any `.svelte` UI. If no generic sink exists, accept the default;
   introducing a new UI/reporting subsystem is outside this slice (§7).
@@ -255,7 +331,7 @@ bun run check && bun run build                                  # → check/buil
 
 ### S2 — `minion_site` adoption
 
-**Tags:** `logic`, `docs` · **Estimate:** 4–6 h · **Files:** `minion_site/package.json`,
+**Topics:** `deps`, `logic` · **Estimate:** 4–6 h · **Files:** `minion_site/package.json`,
 `minion_site/bun.lock`, `minion_site/src/lib/services/member-gateway.svelte.ts` (only if wired),
 applicable existing gateway-error tests, and the PR description.
 
@@ -271,14 +347,18 @@ has shipped by the time this slice starts.
   rg -n '"@minion-stack/shared"' minion_site/package.json
   rg -n 'reportGatewayError' minion_site/src/lib/services/gateway-errors.ts 2>/dev/null
   ```
-  If `reportGatewayError` exists (the sibling spec merged), it is the preferred wiring target named by
-  that spec. If it does not exist, either wait or accept the default as this proposal already permits;
-  accepting the default is a complete posture, not an implicit follow-up. State the chosen path.
+  `reportGatewayError` **does** exist on site `dev` as of 2026-08-29 (sibling spec `status: done`,
+  2026-08-28), so it is the preferred wiring target and the "or wait" branch is moot — confirm it in
+  recon rather than assuming it. Accepting the default is still a complete posture, not an implicit
+  follow-up. State the chosen path per hook.
 - **Bump** `@minion-stack/shared` so the manifest range and regenerated `bun.lock` resolve to at least
   the exact version S0 recorded.
 - **If wiring**, use `onEventError: (err) => reportGatewayError('event', err)` (or the equivalent
   stable `op` id the sibling spec settled on). Do not retain an unused `frame` parameter or log the
   frame/payload. Otherwise leave the option absent and record accepted-default.
+- **Decide the same way for `onReconnectError` and `onSocketError`.** `reportGatewayError` is the
+  named target for the reconnect handoff the sibling spec's §4 ⚠️ A1 opened; `onSocketError` is
+  reporting only — the site's reconnect/close path keeps sole ownership of lifecycle control flow.
 - Do not duplicate `reportGatewayError`'s classification/dedupe logic inline in
   `member-gateway.svelte.ts` — call the sink, do not reimplement it (mirrors that spec's own S1 rule).
 
@@ -301,7 +381,7 @@ test ! -f src/lib/services/gateway-errors.test.ts || bun x vitest run src/lib/se
 
 ### S3 — `paperclip-minion` adoption
 
-**Tags:** `logic`, `docs` · **Estimate:** 5–7 h (most unverified consumer) · **Files:** the manifest
+**Topics:** `deps`, `logic` · **Estimate:** 5–7 h (most unverified consumer) · **Files:** the manifest
 that owns `@paperclipai/adapter-minion-gateway`, `paperclip-minion/pnpm-lock.yaml`,
 `packages/adapters/minion-gateway/src/server/**` only if wired, applicable adapter tests, and the PR
 description. Slice-0 recon confirms the current paths before editing.
@@ -330,9 +410,11 @@ Node-process impact actually applies; no crash/restart outcome is presumed.
   than asserting that none exists.
 - **Bump** `@minion-stack/shared` so the owning manifest range and regenerated `pnpm-lock.yaml`
   resolve to at least the exact version S0 recorded.
-- **Decide and wire**, same two-option shape as S1/S2 — route `onEventError` into whatever error/log
-  surface the adapter already uses (including its carried `onLog` surface if recon confirms it fits),
-  or accept the default explicitly. Do not route an asynchronous WebSocket event through Express
+- **Decide and wire**, same two-option shape as S1/S2, **once per hook** — route each of
+  `onEventError`, `onReconnectError` and `onSocketError` into whatever error/log surface the adapter
+  already uses (including its carried `onLog` surface if recon confirms it fits), or accept the
+  default explicitly. A long-lived Node process is where the undeduped `onReconnectError` volume
+  lands hardest, so an accepted default here must name the expected log rate. Do not route an asynchronous WebSocket event through Express
   request middleware.
 - **Confirm the conditional operational signature in the PR**, per parent spec ⚠️ A3. Using the
   existing adapter test harness or a local non-production probe, make the consumer `onEvent` throw
@@ -363,7 +445,7 @@ pnpm --filter @paperclipai/server test:run -- \
 
 ### S4 — Closeout
 
-**Tags:** `docs` · **Estimate:** ≤ 1 h · **Files:**
+**Topics:** `deps` · **Estimate:** ≤ 1 h · **Files:**
 `proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md` (frontmatter + a closing note).
 
 **Goal:** the proposal's Definition of Done is checked clause by clause against S1–S3's actual PRs and
@@ -378,8 +460,10 @@ An opened-but-unmerged PR does not make the proposal's "all three consumers are 
 Set the proposal to `status: done`; `approved`/`in-spec` describe unfinished lifecycle states, while
 `closed` is also used for non-implemented dispositions.
 
-**Definition of done:** the parent proposal's own three-line Definition of Done section reads true
-with links, not placeholders; no consumer row still says "unverified — repo absent."
+**Definition of done:** the parent proposal's own Definition of Done section reads true with links,
+not placeholders — including its "nine decisions total (3 consumers × 3 hooks), none implicit" clause
+and its "no consumer drives reconnect or close behavior from `onSocketError`" clause; no consumer row
+still says "unverified — repo absent."
 
 ## 6. Cross-repo impact
 
@@ -412,9 +496,13 @@ the entire remaining code surface rather than one flagged unknown inside a large
 - Everything the parent proposal's own "Out of scope" section excludes: event replay, awaiting
   `onEvent`, retry/backoff changes, the malformed-JSON discard, typed error classes, dedupe/throttling
   in the shared library, remote telemetry.
-- **S2 of the onEvent-errors spec** (`onReconnectError` / `onSocketError`,
-  `2026-08-19-gateway-client-lifecycle-swallows-handoff-spec`) — separate hooks and a separate future
-  consumer-adoption pass, not this one (§1).
+- ~~**S2 of the onEvent-errors spec** (`onReconnectError` / `onSocketError`) — a separate future
+  consumer-adoption pass, not this one.~~ **Amended 2026-08-29 (pass 3):** the *consumer-side*
+  decisions for `onReconnectError` and `onSocketError` are **in scope** here, per the parent
+  proposal's 2026-08-20 amendment — one bump delivers all three hooks, so splitting the decision
+  would mean bumping twice for one release. What remains out of scope is the **package
+  implementation** of those hooks, which shipped under
+  `2026-08-19-gateway-client-lifecycle-swallows-handoff-spec` (meta PR #89) and is not re-opened here.
 - **Editing `packages/shared`** — the shared-client specs own that surface; this spec only performs
   read-only GitHub/npm inspection against it (S0), never edits it.
 - **UI for event-handler failures** in any consumer (a toast, banner, popover case, or repurposed
@@ -438,7 +526,8 @@ the entire remaining code surface rather than one flagged unknown inside a large
 #    minion_site:            bun run check && bun run build; gateway-errors test when present
 #    paperclip-minion:       pnpm typecheck + Slice-0-recorded focused adapter test
 #    Each: frozen install + lockfile/resolved-version proof for the S0 version
-#    Each: PR description states the onEventError decision (wired-to-<sink> | accepted-default)
+#    Each: PR description states one decision per hook — onEventError / onReconnectError /
+#          onSocketError — as wired-to-<sink> | accepted-default (9 decisions across the three PRs)
 
 # 3. Closeout
 rg -n 'status:|unverified — repo absent|https://github.com/.*/pull/' \
@@ -450,8 +539,9 @@ rg -n 'status:|unverified — repo absent|https://github.com/.*/pull/' \
 
 1. S0 green before any of S1–S3 starts (or re-confirmed independently before each, if they start on
    different days).
-2. Each of S1–S3 has a linked, merged PR recording an explicit `onEventError` decision — wired or
-   accepted-default — plus manifest/lockfile resolution and the required consumer gate evidence.
+2. Each of S1–S3 has a linked, merged PR recording an explicit decision for **each of the three
+   hooks** — wired or accepted-default — plus manifest/lockfile resolution and the required consumer
+   gate evidence.
 3. Paperclip's PR (S3) records the observed pre/post sync-throw behavior per ⚠️ A3; it does not claim a
    crash-to-log change unless the pre-bump probe demonstrates one.
 4. S4's proposal-closeout edit lands, and no consumer row still reads "unverified — repo absent."
