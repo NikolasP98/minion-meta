@@ -518,9 +518,12 @@ close that.
 identity rail exists end to end, which is the opposite of what pass 5 recorded:
 
 1. `ConnectParamsSchema` (`src/gateway/protocol/schema/frames.ts:64-71`) has an optional
-   `jwt` field and a trusted-proxy `userId` field. Hub already sends the JWT on the
-   server-side path (`gateway-rpc.ts:225-245`, `...(opts.jwt ? { jwt: opts.jwt } : {})`),
-   so that call shape is accepted, not rejected.
+   `jwt` field and a trusted-proxy `userId` field. Hub's server-side helper already
+   supports it — `gatewayCallAsUser` takes `opts.jwt` and `gatewayCallWithCreds` forwards
+   it into the connect frame (`gateway-rpc.ts:141-148,225-245`), documented there as the
+   only org-scoping credential, since every hub session holds the same operator token. It
+   is opt-in per call: a caller that omits it connects as admin. So the shape 7b needs is
+   accepted, not rejected — it simply has to be passed.
 2. `src/gateway/server/ws-jwt-auth.ts` `resolveJwtAuth` validates a presented JWT against
    the configured OIDC issuers (`validateGatewayJwt` → JWKS, `src/gateway/auth/auth-jwt.ts`)
    and derives `userId`, `role`, **`orgId`**, `assignedAgentIds` and `jti` from *validated
