@@ -1,13 +1,13 @@
 ---
 spec: 2026-08-17-hub-distinct-visit-dates-spec
-pass: 7
+pass: 8
 verdict: pending
 reviewer: factory-review
 created: 2026-08-17
 updated: 2026-08-29
 ---
 
-# Review record — disposition: STILL IN REVIEW (pass 7 awaiting re-review)
+# Review record — disposition: STILL IN REVIEW (pass 8 awaiting re-review)
 
 ## Pass 3 — approved (rewritten against verified hub reality)
 
@@ -153,3 +153,18 @@ This is the structural answer to a failure class that four targeted fixes did no
 **Disposition.** `status: review`, `verdict: pending` — unchanged posture from passes 5 and 6:
 corrected and internally consistent, approval belongs to an external reviewer. No hub product code
 has been written; the branch stays planning-only.
+
+## Pass 8 — external review: FAIL, then fixed in place
+
+One High, one Medium, one Low, all re-verified this pass against the same pinned hub commit
+(`git ls-remote` re-confirms `master` is still `1b47e8ce`):
+
+| Finding | Verified | Fix |
+|---|---|---|
+| H1 (High) — a budget-limited finance sync page can commit invoice evidence and return without invalidating any Loyal cache | Confirmed: `advanceJob` commits `upsertInvoicesBatch` (`finance-sync.service.ts:123`) and returns at its per-run deadline (`:136`) *before* either of its own `bustFinanceCache` calls (`:133,140`) — the intended multi-tick path for a long sync, not an exception. The exported `upsertInvoice` wrapper delegates to the same writer and shares the gap, so the census's structural closure claim was false even outside `advanceJob` | Moved the bust into the writer itself: `upsertInvoicesBatch` now does `await bustFinanceCache(ctx)` immediately after its own commit (D18), the same writer-level pattern D15 used for `reconcileParties`. Covers every caller and every early-return path structurally instead of chasing the next one |
+| M1 (Medium) — the D16 legacy-repair evidence gates were not independent, so following them in order could rewrite booking status before the STOP condition could ever be observed | Confirmed: `setBookingStatus` stamps `updated_at` at completion, so every row gate 1 targets (`status='completed' and start_time > now()`) necessarily satisfies the pass-7 wording of gate 2 (`status='completed' and updated_at < start_time`) — the two were never disjoint | Gate 2 is rescoped to `start_time <= now()`, making the two gates disjoint by construction; gate 2 now answers the real workflow question independent of gate 1's residue, and gate 1's normalization is never automatic — it requires recorded operator sign-off and its own `where` clause structurally cannot touch a row gate 2 flagged |
+| L1 (Low) — the PR's actual GitHub merge ref fails the binding `spec-index.mjs --check` gate | Confirmed: the branch tip was self-consistent, but `origin/dev` had drifted (a stale `updated` date for an unrelated spec's index entry, `2026-08-17-hub-igv-rate-from-org-config-spec`), and the merge tree inherits that drift | Merged current `origin/dev`, regenerated `specs/index.json` from the resulting tree, and reran `--check` against it before this round's commit |
+
+**Disposition.** `status: review`, `verdict: pending` — corrected and internally consistent, approval
+belongs to an external reviewer. No hub product code has been written; the branch stays
+planning-only.
