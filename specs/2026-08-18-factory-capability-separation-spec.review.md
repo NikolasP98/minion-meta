@@ -1,78 +1,77 @@
 ---
 spec: 2026-08-18-factory-capability-separation-spec
-pass: 3
-verdict: changes_requested
+pass: 4
+verdict: pending
 reviewer: factory-review-fix
 created: 2026-08-18
 updated: 2026-08-29
 ---
 
-# Pass 3 review (respec — operator-directed)
+# Pass 4 review (executability fix — answers PR #271 `VERDICT: FAIL`)
 
 ## Trigger
 
-Cross-provider review of the prior branch found it a no-op: `pass: 2`/`status: draft`/`verdict: approved` was left
-unchanged even though its own trailing "Board audit 2026-08-28" note already said the spec had been returned to
-draft because the proposed GitHub-App/publisher architecture was superseded by a scoped-PAT + effect-ledger
-implementation that had since landed. The task required an evidence-backed operator disposition
-(approved/rejected/archived/still-review), not a byte-identical branch.
+Pass 3 rewrote this spec around the scoped-credential foundation that landed in `minion-factory@5db7d391` and
+recorded `status: review` / `verdict: changes_requested` against itself. The cross-provider review of that branch
+(PR #271, 2026-08-29) accepted the framing — it explicitly closed the prior H1 and confirmed the branch avoids
+product code and preserves the human gates — but returned `VERDICT: FAIL` on three executability findings. Pass 4
+resolves those findings. It writes no product code.
 
 ## Verification performed this pass
 
-- Read local checkouts of `NikolasP98/minion-factory@5db7d3919896042043e63da996d6441ec63db205` (main, PR #153
-  merged) and `NikolasP98/minion-base@19531059cf42e352e35425dd3b3b71afa9eb540f` (main).
-- Confirmed the scoped-credential foundation is real, not aspirational: `runner/src/containers.ts` (purpose set +
-  deny-by-default credential boundary), `runner/src/containment-effects.ts` (trusted effect adapter),
-  `runner/src/scoped-github-canary.ts` (activation canary), `runner/src/db.ts:757-813` (`pipeline_instances` +
-  `phase_effects`) — all gated to `dev`-kind runs with `FACTORY_CONTAINMENT_V2=1` (default `0`).
-- Confirmed the remaining gaps named in the source proposal are still live: `runner/src/github.ts:6-16` (shared
-  `FACTORY_GH_TOKEN` backing every `gh()` call, including meta commits via `lifecycle.ts:8`),
-  `runner/src/queue.ts:2101-2113` (`legacyCredentialTransport` injects the same PAT into every spec/reconcile/non-v2
-  dev run), `agent/run.sh:79-83` (direct memory PUT to canonical `minion-agent-memory` with the same PAT),
-  `runner/src/index.ts:683,701-719` (caller-supplied `by` still accepted for admin callers on both the `status` and
-  `disposition` lifecycle branches), `minion-base@.../src/lib/server/meta-write.ts:13-45,126-145` (direct
-  Contents-API `PUT` with `env.GITHUB_TOKEN`, no factory-authenticated actor).
-- Read closed/unmerged `minion-factory` PR #29: confirms a prior pass-1/pass-2-design implementation attempt was
-  correctly self-postponed for lack of a persisted authority record, and that the specific record it needed
-  (`pipeline_instances`) has since landed — but under a different mechanism than the App-based design it was
-  written against.
-- Cross-checked `related` spec statuses (`specs/index.json`): topic-capability-manifest now `shipped`;
-  durable-state-outbox still `implementing`/`changes_requested`; worker-containment `approved`; memory-governance
-  `approved`; m0-safety-foundation `implementing`/`approved`; base-kanban-possibly-shipped-surface `done`/
-  `changes_requested`.
-- Consulted `/memory/MINION/MEMORY.md`, `/memory/MINION/factory-moving-origin-strategy-implementation.md` (2026-08-28
-  board-audit entry independently reached the same "approved→draft for respec" disposition with the same live-delta
-  list), `/memory/MINION/sdlc-board-triage-and-phase-gates.md`, and
-  `/memory/MINION/projects-github-repo-link-and-factory-gates.md`.
+Every finding was re-verified from **fresh** local clones of the same pinned commits, rather than accepted on the
+reviewer's word:
+
+- `NikolasP98/minion-factory@5db7d3919896042043e63da996d6441ec63db205` and
+  `NikolasP98/minion-base@19531059cf42e352e35425dd3b3b71afa9eb540f`.
+
+| Review finding | Verdict after independent check | Evidence |
+|---|---|---|
+| **H1** — Slice 1 removes the only GitHub transport from the meta-writing workers | **Confirmed, and understated** | `queue.ts:2101-2113` feeds `GH_TOKEN` to **five** launch paths (`:2192-2206` discovery, `:2207-2231` spec/reconcile, `:2232+` non-v2 dev, `:4038-4043` chat), and each agent script owns its own clone + `push_meta()` rebase loop (`spec.sh:242-279`, `reconcile.sh:40-68`, `discovery.sh:47,95`, `chat.sh:9-14,43,71`). `containment-effects.ts:16-33,47-58,77` is a single-branch dev-candidate binding with `pushExact`/`createDraftPullRequest` and no multi-file or rebase operation. Pass 3 omitted discovery *and* chat. |
+| **H2** — Slice 3 cannot authenticate or preserve the stale-decision guard | **Confirmed, plus one further break the review did not name** | `index.ts:223-267` knows only admin/hook/unstick/instance/orchestrator; the route `:681-729` destructures no `expectedStatus`/`expectedRevision` (though `lifecycle.ts:99` accepts one) and answers `{ok, commit}` (`lifecycle.ts:49`) with a silently-swallowed index patch (`:142-168`). **Additionally:** the two transition tables diverge — base permits spec `draft→review`, `approved→implementing`, `implementing→done|superseded` and proposal `approved→in-spec` (`meta-write.ts:64-78`) that the factory's target-only allowlist (`lifecycle.ts:34-43`) rejects. And base already holds the **admin** bearer (`factory.ts:149`) and duplicates promotion (`status/+server.ts:38-61` vs `index.ts:724-726`). |
+| **M1** — the purpose registry is not closed and self-update cannot work under it | **Confirmed** | `self-update.sh` uses one token for three authorities: private memory pull `:70-71`, factory source + Actions read `:73,91`, meta issue write `:58-60`. `train.sh:9-12` operates on **two** pairs, not the "one pair" pass 3 wrote. Further unregistered consumers found: `automerge.ts:706,720` (PR merge), `provision-webhooks.sh:24-26`, `deploy.sh:316`, `setup.sh:102`, `deploy/k8s.yml:18`. |
+
+Anchor corrections applied from the same reading: monitor intake is `runner/src/monitor.ts:69`, not
+`runner/src/index.ts:393-418`; the `by` expressions are at `index.ts:700-704` and `:715-719`.
 
 ## Changes made this pass
 
-- Rewrote AS-IS with the current evidence above; removed the GitHub-App/installation-token AS-IS framing.
-- Rewrote TO-BE to extend the landed purpose-scoped-credential + trusted-adapter pattern to all run kinds and all
-  non-worker PAT consumers, instead of proposing GitHub Apps or a new `CapabilityGrantEnvelope` table.
-- Rewrote DELTA and the vertical-slice Approach section from 6 slices to 4, dropping the two slices whose target
-  (target-purpose scoping + trusted adapter/canary) is already shipped, and adding the previously-missing `meta`
-  purpose and legacy-path scoping to Slice 1.
-- Updated the Relationship recommendation, Cross-repo impact table, Out-of-scope list, End-to-end verification, and
-  Rollout/rollback sections to match.
-- Set `pass: 3`, `updated: 2026-08-29`, `status: review`, `verdict: changes_requested`. Retitled to drop
-  "GitHub Apps" from the title since that mechanism is no longer proposed.
-- Added a "Board respec 2026-08-29" section recording the disposition and its evidence; kept the prior "Board audit
-  2026-08-28" note for history, marked superseded.
+- **§1 AS-IS** — added the fourth/fifth credentialed launch paths, the in-container publication protocol (point 5),
+  the adapter's dev-only binding shape (point 2), a consumer/authority table for `github.ts`'s nine importers, the
+  factory lifecycle endpoint's three gaps plus the diverging transition tables (point 7), minion-base's
+  admin-bearer and duplicate-promotion reality (point 8), and a "Known unknowns" block. All anchors re-verified.
+- **§2 TO-BE** — replaced the four-purpose sketch with one closed registry table (purpose × env var × capability ×
+  scope × consumers) covering every inventoried operation; added the runner-owned meta publication protocol as an
+  invariant; added the complete factory lifecycle contract (principal, CAS, idempotent replay, edge table,
+  canonical response, single promotion) as factory-side work.
+- **§3/§4 DELTA and slices** — 4 → 6 slices with an explicit dependency chain: registry → publication protocol →
+  `by` rejection → factory lifecycle endpoint → minion-base cutover → memory/host scripts. Slice 2 gains an
+  end-to-end merge gate (one real spec/reconcile/discovery publication with the broad token unset) so it cannot
+  pass on "token absent from argv" alone. Every slice that introduces a credential now edits `.env.example`,
+  `deploy.sh`, `setup.sh`, and `deploy/k8s.yml` in the same PR, with a DoD that greps for it.
+- **§5, §7, §8** — new rows for chat turns, self-update, the train, the deployment surface, and the cross-repo
+  ordering; verification steps for the lifecycle contract and the three self-update authorities; revocation
+  re-gated on a closed, exercised credential map rather than on a slice count, with per-slice rollback.
+- **§6** — added two exclusions: this spec transcribes rather than decides lifecycle transition policy, and the
+  shared `/opt/factory/meta` clone's physical isolation stays with the worker-containment spec.
+- Frontmatter `pass: 4`, `verdict: pending`, `status: review` unchanged; regenerated `specs/index.json`.
 
-## Disposition and why not `approved`
+## Disposition and why `pending`, not `approved`
 
-`status: review` / `verdict: changes_requested` — the conservative option named by the prior review round. The
-security gap the source proposal names (§1 points 4-6: shared PAT across meta/legacy-target/memory, caller-spoofable
-`by`, minion-base's raw-PAT write path) is real, current, and independently corroborated by operator memory. This
-pass's rewrite is evidence-based and internally consistent, but a fresh correctness pass should re-verify exact file/
-line anchors and the named `T-*` test IDs against the runner test suite at implementation time before slices start —
-this pass did not run the runner test suite or attempt to write any product code, per the task's explicit
-instruction not to implement while the spec is not validly approved.
+`tags: [security, infra]` keeps human gates at approval AND merge (AGENTS.md SDLC contract), so no factory pass may
+move this spec to `approved`. `changes_requested` was pass 3's own request for the correctness pass that pass 4
+performed, and it additionally holds the spec behind the server-side `changes_requested` promotion gate; leaving it
+set would misreport the state. `pending` = the plan is complete and awaiting the human security gate. The
+recommendation to that gate is **approve**.
 
 ## Human flags
 
-None blocking. Flagging for the next reviewer: `2026-08-18-factory-durable-state-outbox-spec` remains
-`changes_requested` — this spec's Slice 1 evidence work depends only on already-landed `pipeline_instances`/
-`phase_effects`, not on that spec's own unresolved design, so it is not a hard blocker, but a reviewer should
-confirm that reasoning still holds at implementation time.
+1. **Slice 4 transcribes a policy decision that is formally open.** The interim source→target edge table is
+   minion-base's shipped table, adopted verbatim because it is the behaviour humans use today. The owning decision
+   (`runner/src/lifecycle.ts:30-33` → `2026-08-18-factory-durable-state-outbox-spec` §8) is still unresolved. Slice
+   4's PR must state that it transcribes rather than decides, and carry a human confirmation.
+2. **Slice 2 is the highest-risk slice in this spec** — it moves the factory's own meta-writing protocol. Its
+   end-to-end gate (real spec + reconcile + discovery publication with `FACTORY_GH_TOKEN` unset) is not optional.
+3. `2026-08-18-factory-durable-state-outbox-spec` remains `changes_requested`. This spec's evidence work depends
+   only on already-landed `pipeline_instances`/`phase_effects`, so it is not a hard blocker — but a reviewer should
+   confirm that reasoning still holds at implementation time.
