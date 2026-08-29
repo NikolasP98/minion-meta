@@ -11,7 +11,7 @@ type: decision
 tags: [ui, board]
 verdict: approved
 related: [2026-08-18-base-ui-primitives-and-shell-spec, 2026-08-18-base-workdetail-summary-first-spec, 2026-08-18-base-attention-queue-responsive-runs-spec]
-approved_reason: "Pass-2 operator review 2026-08-29: plan re-verified against minion-base@19531059 — of the three authored work-package specs, two (UI-002/003, UI-005/006/007) are merged and recorded flag-activated by their own specs (not runtime-reverified this pass), the third (UI-004/011) has only Slice 1 of 4 merged with both flags off; UI-001 shipped directly, outside any authored work-package spec. The already-shipped packages conform to the applicable non-negotiables, but the mobile-default law ('attention queue default, one stage at a time') is not yet built or enabled — that non-negotiable is open, not shipped. Kept as plan of record (repos [] — never dev-queued); the stale delivery-order status line and the superseded UI-003 nav enumeration were corrected in this pass."
+approved_reason: "Pass-2 operator review 2026-08-29: plan re-verified against minion-base@19531059 — of the three authored work-package specs, two (UI-002/003, UI-005/006/007) are merged and recorded flag-activated by their own specs (not runtime-reverified this pass), the third (UI-004/011) has only Slice 1 of 4 merged with both flags off; UI-001 shipped directly, outside any authored work-package spec. Two non-negotiables are recorded OPEN rather than shipped: the mobile-default law ('attention queue default, one stage at a time') is not built or enabled, and UI-001's revision-binding law is honored by the shipped caller but not enforced at the server boundary (POST /api/meta/status still accepts a body with no expectedStatus/expectedRevision) — follow-up proposal 2026-08-29-base-meta-status-revision-binding-required. No blanket conformance claim is made for the shipped packages. Kept as plan of record (repos [] — never dev-queued); the stale delivery-order status line and the superseded UI-003 nav enumeration were corrected in this pass."
 ---
 
 # Minion Base mobile-first HITL UX plan
@@ -95,11 +95,11 @@ about activation, not a runtime probe against a live deployment.
 
 | WP | State | Evidence |
 |---|---|---|
-| UI-001 gate integrity | shipped, on main | `src/lib/server/meta-write.ts` — `applyTransition()` with the `transition_committed` / `already_applied` / `revision_conflict` / `invalid_transition` outcome union and `indexSynced` returned, never swallowed |
+| UI-001 gate integrity | shipped, on main — with one open contract gap | `src/lib/server/meta-write.ts` — `applyTransition()` with the `transition_committed` / `already_applied` / `revision_conflict` / `invalid_transition` outcome union and `indexSynced` returned, never swallowed; the source→target `TRANSITIONS` table (`meta-write.ts:64-78`, enforced at `:121-124`) and the GitHub-side blob-sha CAS on the PUT (`:128-132`) both hold unconditionally, and the shipped caller `src/routes/kanban/[kind]/[...ref]/+page.server.ts` sends `expectedStatus` + `expectedRevision` on every gate (`:321`, `:523-524`, `:535-536`). **Open gap — the revision-binding law is honored by the caller, not enforced by the contract:** `src/routes/api/meta/status/+server.ts` types both guards optional (`:16-25`) and requires only `kind`/`id`/`status` (`:26-27`) before forwarding them (`:29-32`), and `meta-write.ts` takes `expected?` (`:90-95`) and runs the conflict check only when a guard is present (`:114-119`). A direct or stale client posting `{kind,id,status}` therefore commits against whatever blob the server itself just fetched, without proving which status or revision the operator reviewed. Recorded as an open non-negotiable, not as shipped → `proposals/2026-08-29-base-meta-status-revision-binding-required.md` |
 | UI-002 + UI-003 | shipped; flag recorded on, not runtime-reverified | spec `2026-08-18-base-ui-primitives-and-shell-spec` (deploy/done); PR #25 `0513acb1`; `PUBLIC_MOBILE_SHELL_V2` recorded as activated in production 2026-08-20 by that spec — not runtime-reverified in this pass (no deployment id, live probe, or rendered-shell assertion captured); `Status/AsyncButton/Popover/Disclosure/IntegrityMark/CopyableHash/BottomNav/ContextHeader/AppShell` all present; DESIGN.md §Scene rewritten to the mobile decision cockpit |
 | UI-005 + UI-006 + UI-007 | shipped; flag recorded on, not runtime-reverified | spec `2026-08-18-base-workdetail-summary-first-spec` (deploy/done); PR #28 `805886e0`; `PUBLIC_WORK_DETAIL_V2=1` recorded as activated in production 2026-08-20 by that spec — not runtime-reverified in this pass (no deployment id, live probe, or rendered-shell assertion captured); `src/lib/work-detail/{adapters,types,fixtures}.ts` + `src/lib/components/work-detail/{IdentityStrip,DecisionBrief,ReadinessBand,DecisionDock,WorkDetailShell}.svelte`; `src/routes/kanban/issue-route.test.ts` |
 | UI-004 + UI-011 | Slice 1 of 4 merged, flag off | spec `2026-08-18-base-attention-queue-responsive-runs-spec` (pass 5, approved); PR #39 `19531059` "feat(board): add URL-restorable attention queue filters" introduced `src/lib/board/{attention,view-state,feature-flag,parse-feature-flag}.ts`; `PUBLIC_ATTENTION_QUEUE_V2` and `PUBLIC_RESPONSIVE_RUNS_V2` are both reserved and default off (`.env.example`) — the queue UI (Slice 2), focused stages + filter sheet (Slice 3) and run cards (Slice 4) are not built |
-| UI-008 / UI-009 / UI-010 | still blocked | their named prerequisites (durable decision API, durable events, SDLC evidence manifest) map to the roadmap's M2 (durable state/evidence spine) and M6 (browser evidence + durable HITL) milestones. The corpus is not empty beyond M0: `2026-08-18-agent-instruction-parity-and-repo-policy-spec` (M1, approved, verdict approved, merged fleet-wide) and `2026-08-18-factory-topic-capability-manifest-spec` (M3, stage done/status shipped, but its own `reconcile_ignore_reason` says only Slice 2 of 6 merged) both exist and postdate M0. The two prerequisites that actually gate UI-008/009/010 are `2026-08-18-factory-durable-state-outbox-spec` (M2 — status `implementing`, verdict `changes_requested`, 0 of 6 slices merged; this is the durable decision API + append-only event log UI-008 and UI-010 need) and `2026-08-28-factory-browser-verification-stage-spec` (M6 — stage `spec`, status `draft`, 0 of 8 slices merged; this is the evidence manifest UI-009 needs). Neither has a merged PR, so the blocker holds on prerequisite-non-landing, not on milestone-spec nonexistence |
+| UI-008 / UI-009 / UI-010 | still blocked — prerequisites partly built, the contracts they need still absent | Their named prerequisites (durable decision API, durable events, SDLC evidence manifest) map to the roadmap's M2 (durable state/evidence spine) and M6 (browser evidence + durable HITL) milestones. The corpus is not empty beyond M0 — `2026-08-18-agent-instruction-parity-and-repo-policy-spec` (M1, approved, merged fleet-wide) and `2026-08-18-factory-topic-capability-manifest-spec` (M3, stage done/status shipped, its own `reconcile_ignore_reason` saying only Slice 2 of 6 merged) both postdate it — and both gating milestones carry real, partly merged WIP. **M2 — `2026-08-18-factory-durable-state-outbox-spec`** (status `implementing`, verdict `changes_requested`): it defines Slice 0 (recon/collision gate, §3) plus implementation Slices 1–4 (§4), not six. minion-factory PR [#61](https://github.com/NikolasP98/minion-factory/pull/61) merged as `3e011de1` on 2026-08-22 stating "This implements Slices 1-3", and factory `main` carries that merge: the append-only `lifecycle_events` table, the CAS-guarded run-status writes and the `outbox_jobs` drain worker are shipped. Slice 4 is split — its explicit source→target `EDGES` table is still blocked on the spec's §8 *human* policy decision, while the rest of it is live unique WIP in OPEN PR [#160](https://github.com/NikolasP98/minion-factory/pull/160) (head `factory/179243f0-implementing-spec-durable-state-`, 5 commits, `verify` + `label` checks FAILING as of 2026-08-29T13:48Z). Treat #160 as neither merged nor abandoned: do not re-implement Slices 1–3, and do not overwrite #160's Slice-4 work. What UI-008 and UI-010 still lack is not the storage but the *exposed contract* — on factory `main` the `lifecycle_events` table is written and read only inside the runner process (`runner/src/events.ts` is its sole writer; `runner/src/db.ts` INSERTs and EXISTS-checks it), and `runner/src/index.ts` publishes no HTTP route that returns lifecycle events, so base has no durable-event feed to render a timeline from; the guarded-edge policy UI-008's workflows would enforce is likewise still an undecided human decision. **M6 — `2026-08-28-factory-browser-verification-stage-spec`** (stage `spec`, status `draft`, verdict `approved`): 8 slices, 0 merged — no minion-factory PR implements it — so the SDLC evidence manifest UI-009 needs does not exist yet. The blocker therefore holds on missing contracts and one undecided policy, not on milestone-spec nonexistence and not on the absence of all M2 work |
 
 Cross-cutting law also verified as honored on main: `@axe-core/playwright` +
 Playwright are wired (`package.json`), the visual-regression matrix covers
@@ -113,13 +113,23 @@ behind its `PUBLIC_*_V2` flag until activated, with the non-negotiables above
 holding on every screen. The plan itself never changes state beyond
 `stage: spec` / `repos: []` — it is cited, not implemented.
 
-**DELTA (pass 1 → pass 2).** No law changed. Three documentation transitions:
+**DELTA (pass 1 → pass 2).** No law changed. Documentation transitions only:
 (1) the delivery-order line no longer claims UI-001 is the only shipped
 package — the verified table above replaces that status claim; (2) the UI-003
 nav enumeration is marked superseded with the shipped enumeration and the
 still-binding law named; (3) the lifecycle disposition is now explicit
 (`verdict: approved`) instead of `approved` with no verdict, which is what
-made the plan indistinguishable from a spec awaiting review.
+made the plan indistinguishable from a spec awaiting review; (4) after the
+first review round, the approval reason stopped claiming that every
+non-negotiable is shipped, production flag activation was relabelled
+recorded-not-runtime-reverified, and the work-package roll-up was corrected to
+UI-001-shipped-directly plus two-complete/one-partial authored specs;
+(5) after the second review round, the M2 prerequisite ledger was replaced with
+the exact merged/open PR evidence (factory PR #61 merged Slices 1–3; PR #160
+carries the unmerged remainder of Slice 4) so no downstream planner can read
+this document as "M2 has zero merged work", and UI-001's revision binding was
+demoted from shipped to an open contract gap with a named follow-up proposal.
+Every law in §Non-negotiables is unchanged by all five.
 
 ## Related
 
@@ -131,9 +141,16 @@ made the plan indistinguishable from a spec awaiting review.
 - `2026-08-18-base-attention-queue-responsive-runs-spec` — UI-004/011,
   `depends-on` this plan; approved, Slice 1 merged, Slices 2–4 open.
 - `2026-08-18-sdlc-transformation-roadmap` — the factory-side programme whose
-  M2 (`2026-08-18-factory-durable-state-outbox-spec`, implementing) and M6
-  (`2026-08-28-factory-browser-verification-stage-spec`, draft) milestones
-  gate UI-008/009/010; both exist with 0 merged slices, not absent.
+  M2 (`2026-08-18-factory-durable-state-outbox-spec`, implementing — Slices 1–3
+  merged as factory PR #61 `3e011de1`; Slice 4 split between the open §8 policy
+  decision and open PR #160) and M6
+  (`2026-08-28-factory-browser-verification-stage-spec`, draft — 8 slices, none
+  merged) milestones gate UI-008/009/010. Both specs exist and M2 is partly
+  built; what is missing is the exposed durable-event/decision contract and the
+  evidence manifest, not the milestone specs.
+- `proposals/2026-08-29-base-meta-status-revision-binding-required` — the
+  follow-up that closes UI-001's server-side revision-binding gap recorded in
+  the status table above.
 
 ## Out of scope
 
@@ -166,12 +183,27 @@ of the three authored work-package specs, two (UI-002/003, UI-005/006/007)
 merged and are recorded flag-activated by their own specs (not
 runtime-reverified this pass), and the third (UI-004/011) is mid-implementation
 with both flags off. Later unrelated base work (the 2026-08-28 traceability
-overhaul) was governed by these same non-negotiables. Nothing in it was
-contradicted by the code review above.
+overhaul) was governed by these same non-negotiables.
+
+Approval is of the *plan*, not a certificate that the code satisfies it. Two
+non-negotiables are recorded open by the verification above, and neither may
+be cited as shipped:
+
+1. **Mobile default** (lines 48–50) — the attention queue / focused-stage law
+   is unbuilt behind `PUBLIC_ATTENTION_QUEUE_V2`, which defaults off. Owned by
+   `2026-08-18-base-attention-queue-responsive-runs-spec` Slices 2–4.
+2. **Revision-bound mutations** (lines 44–46) — enforced by the shipped UI
+   caller but optional at the server boundary, so a direct or stale client can
+   still mutate without proving the reviewed revision. Owned by the follow-up
+   `proposals/2026-08-29-base-meta-status-revision-binding-required.md`; UI-001
+   stays "shipped with an open contract gap" until that endpoint rejects a
+   missing/stale `expectedStatus` or `expectedRevision` before any PUT, with
+   tests proving the omission, stale-status and stale-revision paths all write
+   nothing. No product code was touched in this spec-stage pass.
 
 Not `archived` — two work packages remain partially built (UI-004, UI-011 —
-Slice 1 of 4 merged, flags off) and three more are blocked-not-cancelled
-(UI-008/009/010), so the document still has consumers. Not `rejected` —
-its laws are implemented, not merely proposed. Not `still-review` — the only
-thing that was open was a missing `verdict`, and the evidence to close it is
-above.
+Slice 1 of 4 merged, flags off), three more are blocked-not-cancelled
+(UI-008/009/010), and UI-001 has an open follow-up, so the document still has
+consumers. Not `rejected` — its laws are implemented in part and open in part,
+not refuted. Not `still-review` — the two open non-negotiables are recorded
+with owners and evidence, which is a disposition, not an unanswered question.

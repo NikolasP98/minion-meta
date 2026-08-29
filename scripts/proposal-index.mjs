@@ -69,6 +69,9 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		...(fm.spawned_spec ? { spawned_spec: fm.spawned_spec } : {}),
 		...(fm.tags ? { tags: fm.tags } : {}),
 		...(fm.value ? { value: fm.value } : {}),
+		// effort rides with value: the auto-triage writer emits both, so omitting
+		// it here made every mandated regeneration silently drop the triage sizing.
+		...(fm.effort ? { effort: fm.effort } : {}),
 		...(fm.source ? { source: fm.source } : {})
 	});
 }
