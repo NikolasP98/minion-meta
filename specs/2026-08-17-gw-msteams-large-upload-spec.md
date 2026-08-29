@@ -626,13 +626,19 @@ stop promising a 4MB world, and every remaining open end is in the ledger.
      recreation callback**. This is a strict upgrade: same wire protocol for a one-chunk file, plus
      retry and resume above one chunk.
 - **Test the callers, not just the module.** S1/S2 prove the transfer; this slice proves the
-  consequence. Drive each path with: a 1MB file → simple path, attachment delivered · a 12MB file →
-  session path, attachment delivered · a 12MB file whose transfer permanently fails → the send reports
-  a typed error and does **not** post a card pointing at a nonexistent file. That last case is the one
-  an implementer skips, and it is the one that produces a broken link in a real chat. For the
-  SharePoint path specifically, assert that `getDriveItemProperties` is called with the id returned by
-  the *session* terminal response (§1.1) — a native file card built from a stale or missing id is a
-  broken card.
+  consequence. For **each of the two drive-path callers** (SharePoint and OneDrive), drive it with that
+  helper's own §3 **below-boundary** and **above-boundary** fixtures, derived from its §7 step 0c
+  measurement (§3's bracket rule) — never a fixed 1 MB / 12 MB pair, because the two helpers may bracket
+  the boundary at different sizes and the true boundary may sit above every size step 0 probed. Below
+  the boundary → simple path, attachment delivered. Above the boundary → session path, attachment
+  delivered. Above the boundary, transfer permanently fails → the send reports a typed error and does
+  **not** post a card pointing at a nonexistent file. That last case is the one an implementer skips,
+  and it is the one that produces a broken link in a real chat. For the SharePoint path specifically,
+  assert that `getDriveItemProperties` is called with the id returned by the *session* terminal response
+  (§1.1) — a native file card built from a stale or missing id is a broken card.
+  **The consent-path caller (§1.2) is separate and keeps its literal 12MB case** (§7 step 2e): it is
+  handed a Teams-supplied `uploadUrl` and always chunks regardless of size, so it never evaluates the
+  drive simple/session threshold and has nothing to derive from step 0.
 - **Do not edit anything under `minion/src/`.** Recon found zero coupling to change (§1.6). If the fix
   seems to need a `src/` edit, that is a **finding, not a chore** (§5) — say so in the PR. Test-only
   edits under `src/` are fine; production edits there are the line.
@@ -685,7 +691,8 @@ ceiling), their `*.test.ts`, `extensions/msteams/README.md` or the `upload-sessi
 cd minion
 pnpm vitest run extensions/msteams   # the ~143-case msteams baseline must not regress (count is not the gate)
 pnpm tsgo && pnpm check
-#   the three caller cases above on EACH of the three call sites, plus:
+#   the below/above-boundary/permanent-failure cases above, each on its own helper's derived fixtures,
+#   for the two drive call sites, plus:
 #   - a file above the effective mediaMax ceiling → rejected by loadWebMedia BEFORE any
 #         createUploadSession call, and the message names the effective limit
 #   - consent path, 12MB → chunked PUTs to the Teams-supplied uploadUrl, zero createUploadSession calls
@@ -746,6 +753,19 @@ Only in that second case do the two readings of a "4 MB" cap (`4,000,000` vs `4,
 all, and then only if the measurement lands between them — in which case take the smaller and lock
 both sides with tests (S1 DoD). Do **not** write those boundary tests before step 0's result is
 recorded in the PR: a test asserting an unmeasured threshold is what makes a placeholder permanent.
+
+**The general bracket rule, beyond the two 4 MB readings.** Step 0 only probes four fixed sizes (§7 step
+0b: ~1 MiB, 4.1 MiB, 12 MiB, ~99 MiB), so its result usually *brackets* the true boundary rather than
+pinning it exactly — the largest probe that passes and the smallest probe that fails are not adjacent
+bytes. In that case the routing threshold to implement, and the boundary fixtures S3 and §7 steps 2b–2d
+test against, is the **largest passing probe size for that helper** — not the midpoint of the bracket
+and not the smallest failing probe. Everything in the untested gap between the largest passing probe and
+the smallest failing probe is unknown, and the conservative reading (same reasoning as the 4 MB case
+above: routing extra bytes through the session path when they might have fit in a simple `PUT` is
+harmless; the reverse is not) treats that whole gap as "route through session." This derived value, not
+`4,000,000`, is what every remaining "over-threshold" fixture in this spec must use, and it may differ
+between OneDrive and SharePoint (§7 step 0c).
+
 Independently of all of the above, `FILE_CONSENT_THRESHOLD_BYTES` *is* `4 * 1024 * 1024`,
 deliberately, and answers a different question (S1) — do not unify the two whatever step 0 returns.
 
@@ -916,15 +936,17 @@ git diff --name-only <base>...HEAD          # → extensions/msteams/** only in 
 
 # 2. Live — the reported symptom, gone, on the path that actually matters
 #    Configure the msteams channel WITH a SharePoint site id, start the gateway (pnpm gateway:watch):
-#    a) Channel/group: send a ~1MB non-image file
+#    a) Channel/group: send SharePoint's step-0-derived BELOW-boundary non-image fixture (§3 bracket rule)
 #         → delivered. Debug log shows the SIMPLE path, exactly one PUT.   ← no regression
-#    b) Channel/group: send a ~12MB file
+#    b) Channel/group: send SharePoint's step-0-derived ABOVE-boundary fixture
 #         → delivered as a native file card, opens correctly, byte size matches the source exactly.
-#         → debug log shows createUploadSession + 3 chunk PUTs; the LAST is short.  ← the bug, fixed
+#         → debug log shows createUploadSession + N chunk PUTs; the LAST is short.  ← the bug, fixed
 #         → the file appears intact in the SharePoint drive (open it, don't just trust the card)
-#    c) Channel/group: send a ~4.1MB file
+#    c) Channel/group: send a file at SharePoint's derived boundary (the largest-passing probe from
+#       step 0 — §3 bracket rule)
 #         → delivered via the SESSION path.                                 ← the boundary, live
-#    d) Unconfigure sharePointSiteId; repeat (b)
+#    d) Unconfigure sharePointSiteId; repeat (b) and (c) using OneDrive's OWN step-0-derived fixtures —
+#       do not reuse SharePoint's sizes, the two helpers may bracket differently (§7 step 0c)
 #         → delivered via the OneDrive fallback + markdown link.            ← the proposal's :27 site
 #    e) 1:1 chat: send a ~12MB file, accept the consent card
 #         → delivered; debug log shows chunked PUTs to the TEAMS-supplied url,
@@ -952,8 +974,9 @@ confirming there is still a fix to make (§1.1a) — a step 0 whose controls pas
 succeed disproves the premise, which is a valid outcome and means this spec, as scoped, does not ship;
 a step 0 whose controls fail is not a result at all and blocks the gate either way; §7 steps
 1–3 green on **both** a SharePoint-configured conversation and a 1:1 chat; the proposal's DoD checked
-clause by clause (`createUploadSession` + chunked PUT path taken for >4MB — S1's `graph-upload.test.ts`
-mock-buffer case against *both* drive functions, and step 2b/2d live); the S1 red-state failure pasted
+clause by clause (`createUploadSession` + chunked PUT path taken above each helper's own step-0-derived
+boundary — §3 bracket rule, never a fixed `4MB` — S1's `graph-upload.test.ts` mock-buffer case against
+*both* drive functions using each helper's own derived fixture, and step 2b/2d live); the S1 red-state failure pasted
 into the PR, proving the old code failed the way the proposal reported; §4's unverified constants each
 checked and recorded as one line, including any that came back different — in particular the
 per-request fragment ceiling, since it determines whether the consent path had a second silent failure
