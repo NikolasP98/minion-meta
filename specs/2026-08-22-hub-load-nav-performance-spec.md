@@ -132,7 +132,7 @@ Slice 7 to the perf work on a path that is executable today — see §Slice 7, p
 cross-tenant exposure is pre-existing: it ships now through the browser WS path this slice
 inherits, and S7 must not widen it. `repos` drops back to `[minion_hub]` because no
 `minion` change is owned here; if the human ratifies path T instead, `minion` goes back in
-and 7a is handed to the owning program before any dev run.
+and the gateway program is handed to the proposal above before any dev run.
 
 Slice ledger — verified 2026-08-29 against hub master `1b47e8ce` and gateway `minion`
 `DEV` `bd55137100aceaf193ab99a827302d3f865b50e7`:
