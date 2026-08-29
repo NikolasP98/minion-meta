@@ -2,8 +2,8 @@
 id: 2026-08-22-hub-load-nav-performance-spec
 title: Hub load & nav performance — prod config gap, layout decoupling, bundle diet, RUM monitoring
 stage: spec
-status: approved
-pass: 3
+status: review
+pass: 4
 next_slice: 5
 created: 2026-08-22
 updated: 2026-08-29
@@ -11,7 +11,7 @@ repos: [minion_hub]
 type: infra
 relationship: extends
 related: [2026-07-17-hub-performance-optimization-plan, 2026-08-13-crm-customers-server-pagination-spec, 2026-07-06-hub-tanstack-consolidated-execution, 2026-08-21-hub-datatable-server-mode-test-gap-spec, 2026-08-22-crm-rank-query-prod-latency]
-verdict: approved
+verdict: revision-required
 tags: [infra, ux, security]
 ---
 
@@ -46,26 +46,49 @@ Relationship to existing board items (folded, not duplicated):
 - `2026-08-22-crm-rank-query-prod-latency` (proposal, draft) owns the CRM rank-query cost
   that Slice 5 of the pagination spec uncovered — deliberately NOT a slice here; see §0.1.
 
-## 0.1 Pass-2 disposition (2026-08-29) — APPROVED for the remaining slices
+## 0.1 Disposition (pass 4, 2026-08-29) — NOT approved; human approval gate required
 
-**Verdict: approved.** The program is real, already half-delivered, and the unshipped half
-is still the correct next work. Pass 1 was written *before* implementation and was never
-updated; four of its eight slices shipped to prod the same day it was authored, so the
-pass-1 AS-IS described a hub that no longer exists. This pass re-verifies every claim
-against hub `master` at `1b47e8ce` (2026-08-28) and against merged PRs, records what
-shipped with evidence, and leaves the remaining slices executable.
+**Verdict: revision-required — awaiting a human.** The program is real, already
+half-delivered, and the unshipped half is still the correct next work, but this spec may
+not be agent-approved. Pass 3 classified it `security` because Slice 7 crosses
+tenant-scoped gateway credential resolution, and both `AGENTS.md` ("Security/data-tagged
+work always keeps human gates at approval AND merge") and `specs/TEMPLATE.md` ("`security`
+and `data` keep human gates at approval AND merge") make a human the only party who may
+approve it. Pass 2's `status: approved` / `verdict: approved` was written by an agent and
+is retracted here. **No factory dev run may start any slice of this spec until a human
+flips `status`/`verdict`** — `next_slice: 5` records which slice is next, not permission
+to run it.
+
+Pass 1 was written *before* implementation and was never updated; four of its eight slices
+shipped to prod the same day it was authored, so the pass-1 AS-IS described a hub that no
+longer exists. Pass 2 re-verified every claim against hub `master` at `1b47e8ce`
+(2026-08-28) and against merged PRs. Pass 4 (this one) repairs four defects the pass-3
+review found, each re-verified against that same `master` SHA before editing:
+
+1. Slice 7 named no fail-closed tenant contract, so the obvious implementation
+   (`gatewayCallAsUser`) would inherit `resolveCredentialsForUser`'s fall-through to
+   system/env credentials — see §Slice 7, now rewritten with an explicit contract, tests,
+   and both human gates.
+2. Slice 5's `≤ 450 KB` budget was arithmetically unreachable from this spec's own
+   measurements (`1,538 − 815 = 723`). Re-staged in §Slice 5; the 450 KB goal moves to the
+   new §Slice 9, gated on evidence that it is reachable.
+3. Slice 2 was recorded as shipped while its decision dashboard — the surface S5/S6 are
+   supposed to be judged by — does not exist. Now `shipped in part`, with the dashboard a
+   named prerequisite of Slice 5.
+4. Slice 6 described a rollback Vercel does not offer and named 2 of the 7 existing
+   per-route SSR opt-outs. Both corrected against `master` in §Slice 6.
 
 Slice ledger — verified 2026-08-29 against hub master `1b47e8ce`:
 
 | Slice | State | Evidence (verified this pass unless noted) |
 |---|---|---|
 | S1 prod config gap | **shipped (code); env half unverified from here** | `src/server/db/with-org-core.ts:61-64` = ONE `select set_config(...)×4`; `pg-pool.ts` `DEFAULT_POOL_SIZE = 5`, prod `idle_timeout: 120`. hub PR #162 `14bfce72`. Vercel prod env (`SUPABASE_DB_RLS_POOL_SIZE=5`, `SUPABASE_DB_POOL_SIZE=8`) was set on 2026-08-22 per the session record but **cannot be re-verified without Vercel access** — see the S1 residual below. |
-| S2 RUM + server timing | **shipped, exceeded** | `src/lib/server/server-timing.ts` (`createServerTimingHandle`) wired at `hooks.server.ts:12,503,528`; it since grew a request-local stage recorder + `PerformanceSample` persistence. `hooks.client.ts:33` `capture_performance: { web_vitals: true }`; `+layout.svelte:71` `nav_timing`. hub PR #162 `14bfce72`. |
+| S2 RUM + server timing | **shipped in part — dashboard outstanding** | `src/lib/server/server-timing.ts` (`createServerTimingHandle`) wired at `hooks.server.ts:12,503,528`; it since grew a request-local stage recorder + `PerformanceSample` persistence. `hooks.client.ts:33` `capture_performance: { web_vitals: true }`; `+layout.svelte:71` `nav_timing`. hub PR #162 `14bfce72`. **NOT done:** the before/after PostHog dashboard — the surface §5 step 1 and S6 use to decide whether a slice helped — does not exist. A code search of `master` finds the capture sites but no dashboard URL, and #162's file list contains no dashboard artifact. It is now a named prerequisite of S5 (see §Slice 2 and §Slice 5). Events are flowing; only the decision surface is missing. |
 | S3 layout↔nav decoupling | **shipped, with one deliberate divergence** | `applyRouteAccessGuard` lives in `hooks.server.ts:201` and runs at both auth call sites (`:186`, `:358`); `(app)/+layout.server.ts:68` reads the pathname under `untrack`, `:157` records the guard's move. hub PR #166 `1988ef09`. **Divergence:** S3 specified `data-sveltekit-preload-data="tap"`; `src/app.html:9` is back to `"hover"` — tap measurably delayed the click-to-content path (prefetch-then-click rendered in 0.35 s vs 1.5 s cold). Hover is the accepted end state; the pass-1 text was wrong. |
-| S4 shell diet | **shipped in part — DoD unmet, remainder moved into S5** | Supabase browser client dynamic-imported inside `signOut()` (`user.svelte.ts:94-97`); FloatingAssistant/carta-md moved behind the layout's idle `{#await import}`; `vite.config.ts:82-90` `optimizeDeps.include` incl. `lucide-svelte`. hub PR #162 `14bfce72`. **NOT done:** no `manualChunks` pass in `vite.config.ts`, no committed shell-size measurement script in `scripts/`, and the ≤700 KB target was not reached — the post-S4 ad-hoc measurement was 1,538 KB, of which 815 KB is the both-locale Paraglide chunk. Both remainders are now S5's DoD. |
-| S5 one-locale Paraglide | **open — next slice** | `package.json:18` still `@inlang/paraglide-sveltekit: ^0.16.1` (the package is deprecated; `svelte.config.js` already carries a manual preprocessor shim for it). The catalog is build-generated (`i18n:compile` → `src/lib/paraglide/`, untracked), so the byte claims must be re-measured, not assumed. |
-| S6 SSR re-enable | **open — human merge gate** | `src/routes/+layout.ts:18` still `export const ssr = false`. |
-| S7 HTTP-first WS routes | **open — anchors moved** | `/reliability` gained a trivial `+page.server.ts` (RBAC comment only, returns `{}`); the RPCs moved out of the page into `$lib/state/reliability/*`, but every load is still gated on `conn.connected` (`reliability/+page.svelte:1159,1170,1188`). The premise holds; the pass-1 line/RPC-count anchor does not. |
+| S4 shell diet | **shipped in part — DoD unmet, remainder moved into S5** | Supabase browser client dynamic-imported inside `signOut()` (`user.svelte.ts:94-97`); FloatingAssistant/carta-md moved behind the layout's idle `{#await import}`; `vite.config.ts:82-90` `optimizeDeps.include` incl. `lucide-svelte`. hub PR #162 `14bfce72`. **NOT done:** no `manualChunks` pass in `vite.config.ts`, no committed shell-size measurement script in `scripts/`, and the ≤700 KB target was not reached — the post-S4 ad-hoc measurement was 1,538 KB, of which 815 KB is the both-locale Paraglide chunk. The script and `manualChunks` are now S5's DoD; the byte target is split across S5's staged budget and S9. |
+| S5 one-locale Paraglide | **open — next slice** | `package.json:18` still `@inlang/paraglide-sveltekit: ^0.16.1` (the package is deprecated; `svelte.config.js` already carries a manual preprocessor shim for it). The catalog is build-generated (`i18n:compile` → `src/lib/paraglide/`, untracked), so the byte claims must be re-measured, not assumed. **Budget re-staged in pass 4:** the pass-2 `≤ 450 KB` DoD was unreachable from this spec's own numbers (`1,538 − 815 = 723 KB` remains after deleting the entire catalog), so S5 now carries a staged, ratcheted budget and the 450 KB goal moved to S9. |
+| S6 SSR re-enable | **open — human merge gate** | `src/routes/+layout.ts:17` still `export const ssr = false` (`:18` is `prerender = false`; the pass-2 `:18` anchor was off by one). Seven `(app)` page opt-outs exist on `master`, not the two pass 2 named — enumerated in §Slice 6. |
+| S7 HTTP-first WS routes | **open — anchors moved** | `/reliability` gained a trivial `+page.server.ts` (RBAC comment only, returns `{}`); the RPCs moved out of the page into `$lib/state/reliability/*`, but every load is still gated on `conn.connected` (`reliability/+page.svelte:1159,1170,1188`). The premise holds; the pass-1 line/RPC-count anchor does not. **`security`-tagged in pass 4:** moving these reads server-side means resolving gateway credentials for a tenant, and `src/lib/server/gateway-rpc.ts:75-121` falls through an org-lease miss/error and a per-user miss/error to PG system-wide and then env bootstrap credentials. S7 now carries an explicit fail-closed contract and human gates at approval AND merge. |
 | S8 reconcile stale statuses | **open** | `specs/index.json` still carries `status: unknown` for `2026-07-05-hub-tanstack-virtual`, `2026-07-06-hub-tanstack-{consolidated-execution,query,pacer,ai-assessment,db-store-assessment}` and `2026-07-17-hub-performance-optimization-plan`. |
 
 Work that shipped under this program but was never specced (recorded here so the program's
@@ -82,7 +105,7 @@ history is honest, no action implied):
   `2026-08-22-crm-rank-query-prod-latency`, which already records the regression and the
   durable fix; not re-specced here.
 
-**S1 residual (the only ledger item without an owner):** the prod-env half of S1 has no
+**S1 residual:** the prod-env half of S1 has no
 durable check. The RLS-pool-size fix from the 2026-07-17 plan sat unapplied in prod for a
 month precisely because nothing compares intended runtime config against what Vercel
 serves, and this run could not verify it either (no Vercel credentials in the factory
@@ -92,17 +115,31 @@ environment). Filed as `proposals/2026-08-29-hub-prod-runtime-config-drift-check
 
 ### 1.1 Verified 2026-08-29 (hub master `1b47e8ce`) — what the remaining slices face
 
-1. `src/routes/+layout.ts:18` still sets `ssr = false` app-wide → SvelteKit returns an
+1. `src/routes/+layout.ts:17` still sets `ssr = false` app-wide → SvelteKit returns an
    empty shell without running any server load, then the client fetches `__data.json` and
-   re-runs the whole handle chain. Two serial round trips before any content. (S6)
+   re-runs the whole handle chain. Two serial round trips before any content. Underneath
+   it, seven `(app)` pages already opt out for their own reasons —
+   `flow-editor/+page.ts`, `flow-editor/[id]/+page.ts` (both bare `ssr = false`),
+   `agents/workshop/+page.ts`, `agents/workshop/[id]/+page.ts` ("PixiJS and Rapier are
+   client-only"), and `agents/workshop/{compare,groupchat,leaderboard}/+page.ts` ("gateway
+   WS client is browser-only") — plus `login/+layout.ts` and `invite/accept/+layout.ts`
+   outside `(app)`. Deleting the root flag server-renders every other route graph for the
+   first time. (S6)
 2. Paraglide is still `@inlang/paraglide-sveltekit ^0.16.1` with a single compiled catalog
    containing both locales, statically imported by ~436 modules — every `en` user
    downloads the `es` catalog and vice versa. (S5)
 3. `/reliability` renders nothing until the WS handshake completes: its `+page.server.ts`
    returns `{}` and all aggregate loads sit behind `if (serverId && conn.connected)`. (S7)
 4. `vite.config.ts` has no `manualChunks`; no committed script measures the shell's byte
-   budget, so S4's ≤700 KB claim is unfalsifiable as it stands. (S5, folded)
+   budget, so S4's ≤700 KB claim is unfalsifiable as it stands. The only measurement that
+   exists is the ad-hoc post-S4 count: 1,538 KB of static-import closure, 815 KB of it the
+   both-locale Paraglide chunk — i.e. 723 KB that is *not* Paraglide and that no named
+   work in this spec removes. (S5 owns the script and the locale split, S9 the rest)
 5. Five perf-adjacent specs still carry `status: unknown` in `specs/index.json`. (S8)
+6. S2's events flow but its dashboard does not exist: no PostHog dashboard URL appears in
+   hub `master` or in #162, so the program currently has no surface on which to compare a
+   slice's before and after. Every DoD below that says "the S2 dashboard shows …" is
+   unexecutable until it is built. (prerequisite of S5)
 
 ### 1.2 Verified 2026-08-22 and since fixed — kept for provenance
 
@@ -146,8 +183,12 @@ Remaining:
 
 - Cold load: the document request carries rendered content (SSR on for all routes except
   the existing per-route opt-outs).
-- Shell JS ≤ 450 KB uncompressed with one locale's catalog only, proven by a committed
-  measurement script rather than an ad-hoc count.
+- One locale's catalog only, and a committed measurement script that makes the shell's
+  byte budget machine-checkable and ratcheted instead of an ad-hoc count (S5). ≤ 450 KB
+  uncompressed remains the program's shell goal, but it is S9's target and is contingent
+  on S5's per-chunk attribution showing it is reachable — S5's own arithmetic
+  (`1,538 − 815 = 723 KB` of non-catalog bytes) says the locale work alone cannot get
+  there.
 - Data-gated routes render server data first; WS upgrades them live.
 - The board tells the truth about which perf specs shipped.
 - Invariants (unchanged from pass 1): RBAC/module gating semantics stay fail-closed;
@@ -157,13 +198,17 @@ Remaining:
 ## 3. DELTA → slices
 
 Numbered transitions: (1) prod pool/idle/set_config gap → S1 **shipped**. (2) no owned
-RUM/server timing → S2 **shipped**. (3) layout re-runs per nav → S3 **shipped**. (4) shell
-carries supabase-js + carta-md/KaTeX → S4 **shipped**; its unproven byte budget and the
-missing `manualChunks`/measurement script transfer to S5. (5) both locales ship to every
-user, and the shell has no enforced budget → S5. (6) empty-shell cold load → S6. (7) WS
-handshake gates first data → S7. (8) perf spec statuses unknown → S8. CRM roster payload
-(the 9th delta) is owned by the pagination spec; the CRM rank-query cost (10th, surfaced
-by that work) is owned by proposal `2026-08-22-crm-rank-query-prod-latency`.
+RUM/server timing → S2 **shipped in part**; the events landed, the decision dashboard did
+not, and building it is a prerequisite of S5. (3) layout re-runs per nav → S3 **shipped**.
+(4) shell carries supabase-js + carta-md/KaTeX → S4 **shipped**; its unproven byte budget
+and the missing `manualChunks`/measurement script transfer to S5. (5) both locales ship to
+every user, and the shell has no enforced budget → S5. (6) empty-shell cold load → S6.
+(7) WS handshake gates first data, and moving those reads server-side puts them on a
+credential resolver that fails open across tenants → S7. (8) perf spec statuses unknown →
+S8. (9) the shell is still above the program's 450 KB goal after S5's locale work, by at
+least the 723 KB of non-catalog bytes S5 does not touch → S9. CRM roster payload (the 10th
+delta) is owned by the pagination spec; the CRM rank-query cost (11th, surfaced by that
+work) is owned by proposal `2026-08-22-crm-rank-query-prod-latency`.
 
 ### Slice 1 — Prod runtime config gap closure — SHIPPED (hub #162 `14bfce72`)
 
@@ -182,7 +227,7 @@ verified live via `server-timing: app;dur=7` on `/en/home`. **Open residual:** t
 half has no durable verification — see §0.1 and
 `proposals/2026-08-29-hub-prod-runtime-config-drift-check.md`.
 
-### Slice 2 — RUM + route-level server timing — SHIPPED (hub #162 `14bfce72`)
+### Slice 2 — RUM + route-level server timing — SHIPPED IN PART (hub #162 `14bfce72`)
 
 **Topics:** `infra`, `ux`
 
@@ -193,10 +238,22 @@ ms, emits `Server-Timing`, and captures a sampled server-side PostHog event
 (`SERVER_TIMING_SAMPLE_RATE`, default 0.1); the >3 s layout warn is now an
 `app_layout_slow_load` capture. Five unit tests cover the handle.
 
-Residual DoD (do not reopen a slice for it — carry it into the S5/S6/S7 PRs): the
-before/after PostHog dashboard (p75 LCP/INP per route, `nav_timing` p75, server p75 by
-route id) still needs to be built and linked from the next slice's PR and `Minion Docs`.
-Every event it needs is already flowing.
+**Not done — the decision dashboard.** Every event it needs is flowing, but the
+before/after PostHog dashboard does not exist, and pass 2's "carry it into the S5/S6/S7
+PRs" gave it no owner: no later DoD required it, while §5 step 1 and S6 both spend it as if it
+were there. Pass 4 gives it one owner and one gate — **it is a prerequisite of Slice 5**,
+delivered by S5's PR before S5's own DoD is judged:
+
+- a durable PostHog dashboard URL (plus an exported screenshot or dashboard JSON committed
+  to `Minion Docs`, so the artifact survives a PostHog project change);
+- tiles: p75 LCP and INP per route id, `nav_timing` p75 per route id, `server_timing` p75
+  per route id, and `app_layout_slow_load` rate;
+- the exact queries and the route-id definitions behind each tile, written down;
+- a named baseline window (the ≥7-day period the "before" numbers are read from), recorded
+  in the S5 PR so later slices compare against a fixed reference rather than a moving one.
+
+S6 is not eligible to start until that artifact exists — its rollout decision has no other
+input.
 
 ### Slice 3 — Decouple the (app) layout load from navigation — SHIPPED (hub #166 `1988ef09`)
 
@@ -223,73 +280,186 @@ Done: supabase browser client dynamic-imported inside `signOut()`; carta-md/KaTe
 with `FloatingAssistant` in the layout's existing idle import group; `optimizeDeps.include`
 with `lucide-svelte`.
 
-Not done, transferred to S5 (so nothing here is an undocumented open end): the
-`manualChunks` pass, the committed build-output measurement script, and the ≤700 KB shell
-target itself. The ad-hoc post-S4 measurement was 1,538 KB with 815 KB of it the
-both-locale Paraglide catalog, which is exactly what S5 removes — measuring the shell
-before S5 lands would only re-measure Paraglide.
+Not done, and re-homed in pass 4 so nothing here is an undocumented open end: the
+`manualChunks` pass and the committed build-output measurement script go to **S5**; the
+shell *target* itself goes to **S5's staged budget and then S9**, because S4's ≤700 KB
+number shared the same flaw as S5's ≤450 KB one — it was never derived from an
+attribution of the 1,538 KB the shell actually measured. Of that, 815 KB is the
+both-locale Paraglide catalog, which is what S5 removes; the other 723 KB is S9's.
 
-### Slice 5 — Ship one locale, not two (and put the shell on an enforced budget)
+### Slice 5 — Ship one locale, not two (and put the shell on a measured, ratcheted budget)
 
 **Topics:** `deps`, `infra`
 
-The compiled Paraglide catalog statically bundles `en` + `es` for everyone (~815 KB of a
-~1,538 KB shell as last measured). Preferred path: upgrade off the deprecated
-`@inlang/paraglide-sveltekit ^0.16.1` to Paraglide 2 (per-message modules, per-locale
-tree-shaking) — note `svelte.config.js` already carries a manual preprocessor shim for the
-deprecated package, so the upgrade also retires that workaround. Fallback if the upgrade
-is disruptive: split the compiled `en`/`es` catalogs into separate lazy chunks keyed by the
-locale route prefix. `/es` must stay fully functional, and nothing may SSR-bake a fixed
-locale (known gotcha: module-scope `m.x()` bakes `'en'`).
+**Gate A — measure first, and commit the ruler.** The slice's first commit is the
+measurement script, not the Paraglide change. Commit a `scripts/` script that computes the
+shell's uncompressed JS bytes from the build output (static-import closure of the entry +
+`nodes/0` + the `(app)` layout node), emits a per-chunk breakdown sorted by size, and
+compares the total against a budget constant committed alongside it. Run it against
+current `master` and paste the baseline — total and top chunks — into the PR before
+changing anything. The pass-2 figures (1,538 KB total / 815 KB catalog) came from an
+ad-hoc count and are the number to *replace*, not to assume: if Gate A disagrees with
+them, Gate C's numbers are re-derived from Gate A's output and the substitution recorded
+in the PR. Use code-level markers, never string greps, when asserting a dependency is out
+of the shell — message keys and Spanish copy inside the catalog chunk false-positive on
+names like `carta` or `floatingAssistant`.
 
-Folded in from S4: add the `manualChunks` pass for the worst remaining shared chunks, and
-commit a `scripts/` measurement script that computes the shell's uncompressed JS bytes
-from the build output (static-import closure of the entry + `nodes/0` + the `(app)` layout
-node) so the budget is machine-checkable and re-runnable, not an ad-hoc count. Use
-code-level markers, never string greps, when asserting a dependency is out of the shell —
-message keys and Spanish copy inside the catalog chunk false-positive on names like
-`carta` or `floatingAssistant`.
+**Gate B — one locale.** The compiled Paraglide catalog statically bundles `en` + `es` for
+everyone. Preferred path: upgrade off the deprecated `@inlang/paraglide-sveltekit ^0.16.1`
+to Paraglide 2 (per-message modules, per-locale tree-shaking) — note `svelte.config.js`
+already carries a manual preprocessor shim for the deprecated package, so the upgrade also
+retires that workaround. Fallback if the upgrade is disruptive: split the compiled
+`en`/`es` catalogs into separate lazy chunks keyed by the locale route prefix. `/es` must
+stay fully functional, and nothing may SSR-bake a fixed locale (known gotcha: module-scope
+`m.x()` bakes `'en'`). Also folded in from S4: a `manualChunks` pass for the worst
+remaining shared chunks. Note what `manualChunks` can and cannot do — it repartitions
+statically imported code across chunk files, it does not remove any byte from the closure
+Gate A measures, so it may improve caching but must never be counted toward Gate C.
 
-DoD: the script is committed and printed in the PR; an `en` page load's JS graph contains
-zero `es` catalog bytes (script-verified); combined shell ≤ 450 KB uncompressed; i18n e2e
-for both locales green; route-contract counts unchanged.
+**Gate C — a staged budget, honestly derived.** The pass-2 DoD demanded ≤ 450 KB, which
+this spec's own measurements make impossible for this slice: deleting the *entire*
+both-locale catalog leaves `1,538 − 815 = 723 KB`, and only the catalog is in scope here.
+S5's budget is therefore the reachable one:
+
+- **Primary (path-independent):** total closure ≤ `baseline − (bytes of the locale the
+  user does not load, as measured in Gate A)`. This is the slice's actual claim and holds
+  under either the upgrade or the split.
+- **Absolute backstop:** ≤ 1,150 KB on the locale-split path (baseline minus ~one
+  locale), ≤ 800 KB if the Paraglide 2 upgrade lands and tree-shakes. Whichever path is
+  taken, the achieved total is recorded in the PR and written into the script's budget
+  constant as a ratchet, so no later PR can regress past it.
+- The program's ≤ 450 KB goal moves to **S9**, which is scoped from Gate A's per-chunk
+  breakdown rather than from a number nobody has attributed.
+
+**Prerequisite:** S2's decision dashboard (see §Slice 2) ships in this PR — durable URL,
+tiles, queries, route-id definitions, and named baseline window — before S5's DoD is
+judged. It is the surface S6 is later required to read.
+
+DoD: the measurement script is committed and its baseline + post-change output printed in
+the PR; an `en` page load's JS graph contains zero `es` catalog bytes (script-verified,
+not string-grepped); the primary budget above holds and the achieved total is written into
+the script's ratchet constant; the S2 dashboard artifact exists and is linked; i18n e2e for
+both locales green; route-contract counts unchanged.
 
 ### Slice 6 — Re-enable SSR app-wide
 
 **Topics:** `infra`, `edge-case`
 
-Delete `ssr = false` from `src/routes/+layout.ts:18`; keep the existing per-route opt-outs
-(`flow-editor`, `agents/workshop/[id]`). Audit the shell graph for module-scope
-`window`/`document` access (the classic SPA-rot class) and fix with `browser` guards or
-`onMount`. This collapses the double round trip and makes every existing `streamed:` block
-pay off on cold load.
+Delete `ssr = false` from `src/routes/+layout.ts:17` (`:18` is `prerender = false` and
+stays). **Preserve all seven existing `(app)` page opt-outs** — pass 2 named two of them;
+verified against `master` `1b47e8ce`, the full set is `flow-editor/+page.ts`,
+`flow-editor/[id]/+page.ts`, `agents/workshop/+page.ts`, `agents/workshop/[id]/+page.ts`,
+`agents/workshop/compare/+page.ts`, `agents/workshop/groupchat/+page.ts`,
+`agents/workshop/leaderboard/+page.ts` (PixiJS/Rapier and the browser-only gateway WS
+client), plus `login/+layout.ts` and `invite/accept/+layout.ts` outside `(app)`. Re-derive
+that list from the tree at implementation time rather than trusting this one; adding a
+route between now and then is exactly the failure mode.
 
-Riskiest slice: land behind a short-lived env flag (`PUBLIC_SSR_DISABLED=1` escape hatch
-honored by the layout) so rollback is an env flip, and remove the flag once S2's dashboard
-confirms FCP improvement. **This slice requires a human merge gate** — an app-wide render
-mode flip is not an automatic merge, regardless of green CI. Note that #167's version-skew
-reload changes the risk shape in both directions: open tabs now pick up a bad deploy
-quickly, and they also cannot be left on the old bundle as an accidental fallback.
+Every *other* route graph is server-rendered for the first time, so the audit is not
+"the shell graph" as pass 2 said — it is each newly SSR-enabled route's own graph. Audit
+for module-scope `window`/`document`/`localStorage` access and browser-only imports (the
+classic SPA-rot class) and fix with `browser` guards or `onMount`. This collapses the
+double round trip and makes every existing `streamed:` block pay off on cold load.
+
+**Rollback, stated accurately.** `PUBLIC_SSR_DISABLED` is a `PUBLIC_*` value inlined at
+build time, and Vercel env changes do not reach a running deployment without a redeploy
+(same constraint recorded in `proposals/2026-08-29-hub-prod-runtime-config-drift-check.md`)
+— so it is a *deploy-time selector*, not an instant switch, and pass 2's "rollback is an
+env flip" was wrong. The real escape hatch is promoting the previous production deployment
+(`vercel rollback` / promote the prior build, which still carries `ssr = false`), verified
+by re-resolving the alias with `vercel inspect hub.minion-ai.org` afterwards; the flag's
+job is to let a *rebuild* opt out without reverting the code. Both paths need someone with
+Vercel access — record in the PR which one was rehearsed and how long it took. Remove the
+flag once S2's dashboard confirms FCP improvement.
+
+**Human gates:** this slice requires a human merge gate — an app-wide render-mode flip is
+not an automatic merge regardless of green CI — and it may not start until S2's dashboard
+artifact exists (§Slice 2), because its rollout decision has no other input. Note that
+#167's version-skew reload changes the risk shape in both directions: open tabs now pick
+up a bad deploy quickly, and they also cannot be left on the old bundle as an accidental
+fallback.
 
 DoD: prod document response for `/en/home` contains rendered app markup (not the empty
-shell); S2 dashboard shows cold-load LCP p75 improvement; both locales and one
-WS-dependent route verified manually in a prod preview.
+shell); an authenticated smoke matrix over **every** route in `src/lib/routes/`'s
+route-access registry / design manifest, in both `en` and `es`, run against a prod preview
+and pasted into the PR — each route either renders or is a recorded, justified opt-out
+(a green build and a `/en/home` check do not detect a module-scope browser access on one
+ordinary route); the seven opt-outs above still opt out (assert in the route-contract
+test); the rollback path rehearsed and timed; S2 dashboard shows cold-load LCP p75
+improvement over the baseline window S5 recorded.
 
 ### Slice 7 — HTTP-first data for WS-gated routes
 
-**Topics:** `unwired`, `ux`
+**Topics:** `unwired`, `ux`, `security`, `permissions`
 
 `/reliability`'s aggregate RPCs are read-only. They now live in `$lib/state/reliability/*`
 (`loadData` / `loadFiltered` in `reliability/+page.svelte`, gated on `conn.connected` at
 `:1159`, `:1170`, `:1188`) rather than as inline `sendRequest` calls — re-read that module
 before designing, the pass-1 "8 sendRequest calls at `:1149-1178`" anchor is stale. Add
-HTTP read endpoints (mirror `api/reliability/architecture/+server.ts`) backed by the same
-gateway calls server-side, load them from the page's `+page.server.ts` (currently a stub
-returning `{}`, streamed), and let the WS connection upgrade to live data when it arrives.
-Apply the same pattern to sessions/overview/home feed only if S2 data shows they matter.
+HTTP read endpoints backed by the same gateway calls server-side, load them from the
+page's `+page.server.ts` (currently a stub returning `{}`, streamed), and let the WS
+connection upgrade to live data when it arrives. Apply the same pattern to
+sessions/overview/home feed only if S2 data shows they matter.
+
+**Why this slice is `security`-tagged.** In the browser the WS connection is already
+org-bound: `api/servers/[id]/token/+server.ts` hands out a gateway token only after
+checking that the gateway row belongs to the caller's active org, and returns 404 for
+another org's gateway and 503 (not 404) when the registry is merely unavailable. Moving
+the same reads server-side moves them off that check and onto
+`src/lib/server/gateway-rpc.ts`, whose `resolveCredentialsForUser` (`:75-121`) falls
+through an `(org, channel)` lease **miss or error**, then a per-user lookup **miss or
+error**, to PG system-wide credentials and finally to env bootstrap credentials —
+`gatewayCallAsUser` (`:295-315`) documents that fallback as intended behaviour. The
+connect frame it then sends (`:225-245`) authenticates the raw operator token with
+`role: 'operator'` and `operator.admin` scopes, and the same file states at `:141-146`
+that only the hub-signed JWT carries an RBAC-validated `orgId`. A straightforward
+implementation of this slice would therefore return the default/system gateway's
+reliability data to a user in a different org during a mapping miss or a database outage.
+This is a fail-open cross-tenant read, and it is why this spec now needs human approval
+and a human merge.
+
+**Contract (binding on the implementation, each clause with its own test):**
+
+1. **Authorization.** Every endpoint calls `await requireOrgCapability(locals,
+   'reliability', 'view')` as its first statement, exactly as
+   `api/reliability/architecture/+server.ts` does. Mirror that endpoint for the RBAC and
+   tenant-context shape only — it resolves nothing through `gateway-rpc.ts`
+   (`probeArchitecture` is org-scoped PG reads), so it is not a template for credential
+   resolution.
+2. **Identity comes only from the session.** `profileId`, `orgId` and the build channel are
+   derived from authenticated `locals` (`locals.orgId ?? locals.tenantCtx?.tenantId`, and
+   the request-ambient channel). No org, profile, gateway id, or channel is ever read from
+   a query string, body, or header. Missing tenant context → 401.
+3. **Strict, org-qualified credential resolution.** Use a resolver that, once an `orgId` is
+   present, resolves *only* the `(org, channel)` lease and the per-user row for that org.
+   A miss → 404. An error → 503 with `retry-after`. It must **never** continue to
+   `getSystemGatewayCredentials` or the env bootstrap pair, because neither is bound to the
+   caller's org. Implement this as a new strict entry point (e.g.
+   `resolveCredentialsForOrgStrict`) rather than by adding a flag to
+   `resolveCredentialsForUser`, so no existing caller silently changes behaviour.
+4. **Signed org claim.** Every gateway call mints and passes the hub-signed JWT
+   (`issueGatewayJwt` in `src/server/services/gateway-jwt.service.ts`, whose claims carry
+   `orgId`) as `opts.jwt`. The shared operator token is not an org-scoping credential.
+5. **Fail closed, and distinguish the two failures.** 404 = this org has no gateway for
+   this channel; 503 = the registry/lease lookup failed. Never substitute another gateway,
+   and never degrade to an empty 200 that the page renders as "all healthy".
+6. **No new surface.** These endpoints are read-only, expose no gateway URL or token in
+   their responses, and add no gateway RPC method that the WS path did not already call.
 
 DoD: `/reliability` renders populated KPIs with WS blocked (devtools offline-WS test); no
-duplicate fetch when WS connects (guard test).
+duplicate fetch when WS connects (guard test); and the following tests exist and pass —
+(a) **mapping miss**: an authenticated user whose active org has no gateway lease for the
+channel gets 404 and *no* gateway call is made with system or env credentials;
+(b) **registry outage**: the lease/per-user lookup throwing yields 503 with `retry-after`
+and, again, no fallback credentials; (c) **tenant mismatch**: with org A and org B each
+holding a distinct gateway, a session in org A never receives org B's rows — asserted on
+the credentials the resolver returns, not only on the response body; (d) **capability
+denied**: a session without `reliability:view` gets the same status the route guard
+already produces; (e) the JWT passed to the gateway carries the caller's `orgId`.
+
+**Human gates (required, `security`):** a human approves this slice's design before a dev
+run starts, and a human merges its PR. Neither gate is satisfiable by green CI or by an
+agent review verdict.
 
 ### Slice 8 — Reconcile stale perf-spec statuses (board hygiene)
 
@@ -303,6 +473,31 @@ landmarks (T1–T10; Phases 0–2 markers), then set `shipped`/`superseded`/`par
 
 DoD: none of those specs carries `status: unknown`; the pagination spec's "if T2 landed"
 uncertainty is answered in its sidecar or body.
+
+### Slice 9 — Close the remaining shell bytes to the 450 KB goal
+
+**Topics:** `deps`, `ui`
+
+S5 removes one locale's catalog and nothing else, which by this spec's own arithmetic
+leaves roughly 723 KB of non-catalog shell bytes that no named work touches — 273 KB above
+the program's ≤ 450 KB goal. This slice owns that gap, and it is deliberately **not**
+scoped until it can be: it starts from S5's committed measurement script and its per-chunk
+breakdown, not from a target someone picked.
+
+Steps: run S5's script against the post-S5 build; attribute the top chunks to their
+importing modules; name each candidate as *remove* (unused or replaceable dependency),
+*lazy* (moved behind an idle/route-level dynamic import, the pattern S4 used for
+supabase-js and carta-md/KaTeX), or *load-bearing* (must stay in the shell, with the
+reason); then land the named removals. `manualChunks` alone does not count — it
+repartitions the closure without shrinking it.
+
+DoD: the attribution table is committed in the PR (chunk → importer → disposition →
+bytes); the shell total is ≤ 450 KB uncompressed as measured by S5's script, and the
+script's ratchet constant is lowered to the achieved number; no route loses functionality
+(route-contract counts unchanged, both-locale i18n e2e green); S2 dashboard shows no LCP
+p75 regression. **If the attribution shows ≤ 450 KB is unreachable without removing a
+load-bearing dependency, this slice's output is the attribution table plus a revised,
+evidence-backed target written back into this spec — not a number gamed to fit.**
 
 ## 4. Out of scope
 
@@ -327,10 +522,14 @@ bundle until the version-skew reload fires, and old-tab numbers silently describ
 previous deployment.
 
 1. S2 dashboard: p75 LCP, INP, `nav_timing`, and server p75 per route — screenshot/link
-   before starting a slice and after each landing. The program's exit criterion is p75
-   warm nav server time < 500 ms and cold-load LCP p75 < 2.5 s on /home, /crm, /finances.
-2. Shell budget: the S5 measurement script's total ≤ 450 KB uncompressed, and the `/en/...`
-   graph free of `es` catalog bytes (script-verified, not string-grepped).
+   before starting a slice and after each landing. **This dashboard does not exist yet**
+   (see §Slice 2); S5 builds it, and until then this step is a promise, not a check —
+   which is precisely why S6 may not start before S5 lands. The program's exit criterion is
+   p75 warm nav server time < 500 ms and cold-load LCP p75 < 2.5 s on /home, /crm,
+   /finances, read against the baseline window S5 records.
+2. Shell budget: the S5 measurement script's total is at or below the ratchet constant
+   committed with it (S5's staged budget, then S9's ≤ 450 KB), and the `/en/...` graph is
+   free of `es` catalog bytes (script-verified, not string-grepped).
 3. `Server-Timing` per route (the header shipped in S2 is now the cheapest measurement
    tool: `curl -sI https://hub.minion-ai.org/en/<route>` → `server-timing: app;dur=…`),
    plus the `fetch('/en/<route>/__data.json')` timing loop for /home, /crm, /finances,
