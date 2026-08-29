@@ -44,7 +44,13 @@ export async function lookupDni(document: string, key: string): Promise<DniLooku
   } catch {
     return { status: 'error', message: `non-JSON response (http ${res.status})` };
   }
-  if (body.estado && body.resultado) return { status: 'found', person: body.resultado };
+  if (body.estado && body.resultado) {
+    const providerId = typeof body.resultado.id === 'string' ? body.resultado.id.trim() : '';
+    if (providerId !== document) {
+      return { status: 'error', message: 'registry identity did not match requested document' };
+    }
+    return { status: 'found', person: { ...body.resultado, id: providerId } };
+  }
   if (res.ok || res.status === 404 || res.status === 422)
     return { status: 'not_found' };
   return { status: 'error', message: scrub(body.mensaje ?? `http ${res.status}`) };

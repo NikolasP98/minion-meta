@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import postgres from 'postgres';
 import {
   ageFromDob,
@@ -23,8 +24,8 @@ export interface CrmClientOptions {
 export interface LeadInput {
   name: string;
   email: string;
-  /** Stable caller-owned submission key. Required when retries must be idempotent. */
-  idempotencyKey?: string;
+  /** Stable caller-owned submission key. */
+  idempotencyKey: string;
   company?: string;
   message?: string;
   source?: string;
@@ -69,13 +70,14 @@ export function createCrmClient(opts: CrmClientOptions) {
     /**
      * Register a person party from a public form submission. Email is a contact
      * channel, not person identity, so unrelated people sharing an address are
-     * never merged. A caller-provided idempotency key deduplicates delivery
+     * never merged. The caller-provided idempotency key deduplicates delivery
      * retries under a transaction-scoped advisory lock.
      */
     async upsertLead(input: LeadInput): Promise<{ partyId: string; created: boolean }> {
       const email = input.email.trim().toLowerCase();
       const name = input.name.trim();
-      const idempotencyKey = input.idempotencyKey?.trim() || null;
+      const idempotencyKey = input.idempotencyKey?.trim();
+      if (!idempotencyKey) throw new Error('idempotencyKey must not be blank');
       const lead = {
         idempotency_key: idempotencyKey,
         company: input.company?.trim() || null,
@@ -84,15 +86,13 @@ export function createCrmClient(opts: CrmClientOptions) {
         submitted_at: new Date().toISOString(),
       };
       return withOrg(async (tx) => {
-        if (idempotencyKey) {
-          await tx`select pg_advisory_xact_lock(hashtextextended(${`${orgId}:lead:${idempotencyKey}`}, 0))`;
-          const [existing] = await tx<{ id: string }[]>`
-            select id from parties
-            where org_id = ${orgId} and type = 'person'
-              and metadata->'lead'->>'idempotency_key' = ${idempotencyKey}
-            order by created_at asc limit 1`;
-          if (existing) return { partyId: existing.id, created: false };
-        }
+        await tx`select pg_advisory_xact_lock(hashtextextended(${`${orgId}:lead:${idempotencyKey}`}, 0))`;
+        const [existing] = await tx<{ id: string }[]>`
+          select id from parties
+          where org_id = ${orgId} and type = 'person'
+            and metadata->'lead'->>'idempotency_key' = ${idempotencyKey}
+          order by created_at asc limit 1`;
+        if (existing) return { partyId: existing.id, created: false };
         const rows = await tx<{ id: string }[]>`
           insert into parties (org_id, type, name, email, metadata)
           values (${orgId}, 'person', ${name}, ${email},
@@ -194,11 +194,13 @@ export function createCrmClient(opts: CrmClientOptions) {
      * Claim already-verified parties that predate identity enrichment (no
      * metadata.dni_registry yet) so a re-query backfill can fill name/sex.
      */
-    claimUnenriched(limit: number): Promise<{ id: string; doc_number: string }[]> {
+    claimUnenriched(limit: number): Promise<{ id: string; doc_number: string; claimToken: string }[]> {
+      const claimToken = randomUUID();
       return withOrg(
-        (tx) => tx<{ id: string; doc_number: string }[]>`
+        (tx) => tx<{ id: string; doc_number: string; claimToken: string }[]>`
           update parties set
-            metadata = metadata || '{"dni_registry":{"status":"enriching"}}'::jsonb,
+            metadata = metadata || jsonb_build_object('dni_registry',
+              jsonb_build_object('status', 'enriching', 'claim_token', ${claimToken}::text)),
             updated_at = now()
           where id in (
             select id from parties
@@ -209,7 +211,10 @@ export function createCrmClient(opts: CrmClientOptions) {
                        and updated_at < now() - interval '5 minutes'))
             limit ${limit}
             for update skip locked)
-          returning id, doc_number` as unknown as Promise<{ id: string; doc_number: string }[]>,
+          returning id, doc_number,
+            metadata->'dni_registry'->>'claim_token' as "claimToken"` as unknown as Promise<
+          { id: string; doc_number: string; claimToken: string }[]
+        >,
       );
     },
 
@@ -219,7 +224,10 @@ export function createCrmClient(opts: CrmClientOptions) {
      * in metadata.dni_registry, and propagate the name to the linked CRM
      * contact(s). Sex stays canonical M/F in the DB; the UI localizes it.
      */
-    async enrichParty(partyId: string, person: PerudevsPerson): Promise<void> {
+    async enrichParty(partyId: string, claimToken: string, person: PerudevsPerson): Promise<void> {
+      if (typeof claimToken !== 'string' || !claimToken.trim()) {
+        throw new Error('enrichment claim token must not be blank');
+      }
       const registryDni = person.id.trim();
       if (!isDni8(registryDni)) throw new Error('registry person has no valid 8-digit DNI authority');
       const name = formatRegistryName(person);
@@ -242,6 +250,7 @@ export function createCrmClient(opts: CrmClientOptions) {
             and doc_number = ${registryDni}
             and dni_verified = true
             and metadata->'dni_registry'->>'status' = 'enriching'
+            and metadata->'dni_registry'->>'claim_token' = ${claimToken}
           returning id`;
         if (updated.length === 0) {
           throw new Error('party identity or enrichment claim changed before registry write');

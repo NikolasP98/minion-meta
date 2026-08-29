@@ -1,10 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   ageFromDob,
   canonicalSex,
   dniNameMatches,
   formatRegistryName,
   isDni8,
+  lookupDni,
   nameTokens,
   parseDob,
   type PerudevsPerson,
@@ -20,6 +21,44 @@ const person = (over: Partial<PerudevsPerson> = {}): PerudevsPerson => ({
   fecha_nacimiento: '12/11/1998',
   codigo_verificacion: '2',
   ...over,
+});
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
+
+describe('lookupDni', () => {
+  it('normalizes and accepts only the requested provider identity', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({ estado: true, resultado: person({ id: ' 60525600 ' }) }),
+          { status: 200 },
+        ),
+      ),
+    );
+    await expect(lookupDni('60525600', 'secret')).resolves.toMatchObject({
+      status: 'found',
+      person: { id: '60525600' },
+    });
+  });
+
+  it('rejects a successful provider response for another identity', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({ estado: true, resultado: person({ id: '12345678' }) }),
+          { status: 200 },
+        ),
+      ),
+    );
+    await expect(lookupDni('60525600', 'secret')).resolves.toEqual({
+      status: 'error',
+      message: 'registry identity did not match requested document',
+    });
+  });
 });
 
 describe('isDni8', () => {

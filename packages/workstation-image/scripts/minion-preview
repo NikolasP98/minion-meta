@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import { closeSync, existsSync, openSync } from 'node:fs';
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { hostname } from 'node:os';
@@ -112,13 +112,33 @@ export async function processMatchesState(state) {
 }
 
 export async function terminateState(state) {
-  if (!(await processMatchesState(state))) return false;
-  try {
-    process.kill(-state.pid, 'SIGTERM');
-    return true;
-  } catch {
-    return false;
-  }
+  if (!state || !Number.isInteger(state.pid) || typeof state.processStartTicks !== 'string') return false;
+  const result = spawnSync('python3', ['-c', `
+import os
+import signal
+import sys
+
+pid = int(sys.argv[1])
+expected = sys.argv[2]
+
+try:
+    pidfd = os.pidfd_open(pid)
+except (AttributeError, OSError):
+    sys.exit(1)
+
+try:
+    with open(f'/proc/{pid}/stat', encoding='utf-8') as stat_file:
+        stat = stat_file.read()
+    fields = stat[stat.rfind(')') + 2:].split()
+    if len(fields) < 20 or fields[19] != expected:
+        sys.exit(1)
+    os.killpg(pid, signal.SIGTERM)
+except (OSError, ValueError):
+    sys.exit(1)
+finally:
+    os.close(pidfd)
+`, String(state.pid), state.processStartTicks], { stdio: 'ignore' });
+  return result.status === 0;
 }
 
 async function waitForPort(port, pid, timeoutMs = 30_000) {
