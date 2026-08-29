@@ -40,9 +40,12 @@ machine state; read it as "the `GatewayClient` lifecycle-error hooks".
 > and cross-link it here.
 >
 > ⛔ **Also blocked on the release itself, re-verified 2026-08-29.** `main` carries no pending
-> changesets, npm's newest `@minion-stack/shared` is `0.10.0` (2026-08-13), and no
-> "Version Packages" PR exists after #29 — so DELTA step 1 below ("wait for the release to actually
-> publish") is unsatisfied and no consumer may bump regardless of how the tension above is resolved.
+> changesets (only `.changeset/README.md` + `config.json`) while `dev` holds 13, npm's newest
+> `@minion-stack/shared` is `0.10.0` (published 2026-08-13), and the newest "Version Packages" PR is
+> **#18** (merged 2026-08-13) — none has opened since the S1 merge (#29, 2026-08-19) that carried
+> `.changeset/gateway-client-event-error-hook.md`. So DELTA step 1 below ("wait for the release to
+> actually publish") is unsatisfied and no consumer may bump regardless of how the tension above is
+> resolved.
 > The missing `minion-meta` dev→main promotion is filed separately as
 > `proposals/2026-08-29-meta-shared-release-promotion-stalled.md`.
 
