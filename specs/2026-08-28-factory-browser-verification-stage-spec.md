@@ -2,10 +2,10 @@
 id: 2026-08-28-factory-browser-verification-stage-spec
 title: Credential-free, loopback-isolated browser-verification stage for UI-topic factory runs
 stage: spec
-status: draft
-pass: 2
+status: approved
+pass: 3
 created: 2026-08-28
-updated: 2026-08-28
+updated: 2026-08-29
 proposal: 2026-08-18-factory-browser-verification-stage
 verdict: approved
 repos: [minion-factory, minion-meta]
@@ -42,7 +42,7 @@ prerequisite for this spec's final policy flip.
 
 | id | relation |
 |---|---|
-| [[2026-08-18-factory-worker-containment-spec]] | **Prerequisite, mostly shipped.** Its 2026-08-28 board audit records S1-S3 shipped (phase-policy kernel `runner/src/containers.ts`, `factory-*.sh` entrypoints, credential-free setup/self-test, `phase_attempts`/`phase_effects` evidence tables) and S4-S5 still open (agent/runner Dockerfiles remain tag-only `FROM node:22-bookworm-slim`, no `verify-image-pins.sh`, `FACTORY_CONTAINMENT_V2` not yet flipped to `1` in production). This spec builds a **new** `browser-verify` `WorkerPhase` inside the same deny-by-default kernel and pins its own image from its first commit. S1-S7 may land independently; S8 is blocked until containment-v2 is verified active in production (Target invariant 4). |
+| [[2026-08-18-factory-worker-containment-spec]] | **Prerequisite, S1-S4 shipped; only S5 open (re-verified 2026-08-29).** S1-S3 shipped the phase-policy kernel (`runner/src/containers.ts`), `factory-*.sh` entrypoints, credential-free setup/self-test, and the `phase_attempts`/`phase_effects` evidence tables. **S4 shipped** through minion-factory PR #145 (+ #146, #148, #149, #150): both `agent/Dockerfile` and `runner/Dockerfile` are now digest-pinned via a manifest-digest `ARG`, and `scripts/verify-image-pins.sh`, `scripts/verify-image-provenance.sh`, and `scripts/publish-images.sh` exist on `main`. **S5 (adversarial E2E + supervised canary activation) is open as factory PR #161**, and production still reports `FACTORY_CONTAINMENT_V2=0`. This spec builds a **new** `browser-verify` `WorkerPhase` inside the same deny-by-default kernel and pins its own image to the bar S4 already set. S1-S7 may land independently; S8 is blocked until containment-v2 is verified active in production (Target invariant 4). |
 | [[2026-08-18-factory-topic-capability-manifest-spec]] | **Prerequisite, shipped (S1-S5; S6 operator-doc open per its board audit).** Its Design decision 3 reserved exactly this extension point: "`requiredStages`/`requiredEvidence` are enforced constraints... so [[browser-verification-stage]] can later add a `browser-verify` entry... without changing the manifest schema." This spec is that entry. It also names this proposal in its own §9 out-of-scope ("The actual browser-verification stage and its evidence artifacts"). |
 
 The proposal's own 2026-08-28 board-audit note ("BOTH declared blockers cleared... topics.ts:37
@@ -61,17 +61,19 @@ available and the production activation as an explicit S8 gate. §5 Design decis
 `runner/src/containers.ts` (+ tests), `runner/src/repos.ts` (+ tests), `runner/src/manifest.ts`
 (+ tests), `runner/src/queue.ts` (+ tests), `runner/src/automerge.ts` (+ tests),
 `repos.example.json`, `docker-compose.yml`, `.env.example`, `deploy.sh`,
-`scripts/verify-image-pins.sh` (extend if landed by the containment spec's S4, else a minimal
-local check scoped to this one image), `browser-profiles/minion-hub.mjs` (new pilot profile),
-`README.md`.
+`scripts/verify-image-pins.sh` (**extend** — the containment spec's S4 shipped it, so this spec adds
+the browser image to the existing verifier rather than writing a parallel check),
+`browser-profiles/minion-hub.mjs` (new pilot profile), `README.md`.
 
 **minion-meta** (this repo) — `specs/topics.json` only, in the final slice.
 
-**Live baseline reviewed:** `minion-factory/main` commit `9dc06488683fd700e6e2a11d83bc6ccbcc0ad2d0`
-(2026-08-28T08:44:29Z), read via `gh api repos/NikolasP98/minion-factory/contents/...` (this repo
-is meta-gitignored and not checked out locally). Re-read every touched file before implementation —
-this is a drift gate, not permission to implement the stale excerpts quoted below if a concurrent
-factory PR lands first.
+**Live baseline reviewed:** `minion-factory/main` commit `0315707d8c8ffdfb024d2b97fa2eebf45c3b1914`
+(2026-08-29T16:31:09Z, "containment-base-reconciliation S2b: resolve-conflict with RUNNER-OWNED
+enforcement", PR #157), read via `gh api repos/NikolasP98/minion-factory/contents/...` (this repo
+is meta-gitignored and not checked out locally). Every line anchor in §2 was re-resolved against
+this commit on 2026-08-29; the pass-2 anchors against `9dc06488683f` are superseded. Re-read every
+touched file before implementation — this is a drift gate, not permission to implement the stale
+excerpts quoted below if a concurrent factory PR lands first.
 
 ## 2. AS-IS (verified against the live baseline)
 
@@ -85,21 +87,35 @@ factory PR lands first.
    requiredStages: [], requiredEvidence: ['self-test']}`; `ux` is `{riskTier: unclassified,
    autoMergeEligible: false, requiredStages: [], requiredEvidence: []}`. Neither names any
    browser-evidence requirement.
-3. `runner/src/containers.ts:38-46` declares a closed `WORKER_PHASES` union of exactly
-   `prepare-workspace, setup, develop, reconcile-base, self-test, prepare-review, review`.
-   `NETWORK_MODES` (`containers.ts:55`) is closed to `none|bridge` — no proxy/allowlist/second-network
-   primitive exists anywhere in this file. `PHASE_POLICIES` (`containers.ts:289-476`) gives every
+3. `runner/src/containers.ts:38-48` declares a closed `WORKER_PHASES` union of exactly
+   `prepare-workspace, setup, develop, reconcile-base, resolve-conflict, self-test, prepare-review,
+   review` — **eight** phases as of PR #157 (the pass-2 baseline had seven; `resolve-conflict` was
+   added by the containment-base-reconciliation spec's S2b).
+   `NETWORK_MODES` (`containers.ts:56`) is closed to `none|bridge` — no proxy/allowlist/second-network
+   primitive exists anywhere in this file. `PHASE_POLICIES` (`containers.ts:314`) gives every
    phase a fixed `network`, `mountRoles`, `envAllowlist`, `github`/`model` credential posture, and
    resource limits; an unlisted phase is a hard `unknown worker phase` error
-   (`phasePolicy()`, `containers.ts:478-484`). `self-test`'s policy (`containers.ts:409-424`) is
+   (`phasePolicy()`, `containers.ts:552-556`). `self-test`'s policy (`containers.ts:475-489`) is
    `github: null, model: 'forbidden', network: 'repo:self-test'` (closed per-repo opt-in, default
-   `none`) with `mountRoles: {workspace: 'rw', out: 'rw', cache: 'any'}` — the closest existing
-   analogue to what this spec needs.
-4. `DEV_PHASE_SEQUENCE` (`containers.ts:1115-1122`) is a **fixed** 7-element array, and `nextPhase()`
-   (the same file, ~1128-1180) is a pure function of `attempts` plus `{maxFixRounds}` only — it has
-   no manifest/topic input, so it cannot conditionally schedule a phase today.
-   `queue.ts:1573` calls it as `nextPhase(containmentPhaseStates(runId), {maxFixRounds})`, again with
-   no per-run conditional-phase argument.
+   `none`) with `mountRoles: {workspace: 'rw', out: 'rw', cache: 'any'}`,
+   `requiredMountRoles: ['workspace', 'out']`, `user: '1100:1100'`, `readOnlyRootfs: true`,
+   `tmpfs: ['/tmp', '/home/agent']` — the closest existing analogue to what this spec needs.
+4. `DEV_PHASE_SEQUENCE` (`containers.ts:1180-1189`) is a **fixed** 8-element array mirroring
+   `WORKER_PHASES`, and `nextPhase()` (`containers.ts:1221-1223`) is a pure function of `attempts`
+   plus `{maxFixRounds}` only — it has no manifest/topic input, so it cannot conditionally schedule a
+   phase today. It has **three** call sites in `queue.ts`, not one:
+   `advanceContainmentRun()`'s pump (`queue.ts:1750`) passes `{maxFixRounds}` and is the authoritative
+   routing decision; `preSetupReconciliation()` (`queue.ts:2170`) and
+   `reconcileBaseWithBoundedResolution()` (`queue.ts:2206`) call `nextPhase(states)` with **no
+   options** and only ask whether it elects `reconcile-base` / `resolve-conflict`. Any new argument
+   must therefore default to the byte-compatible value, and only the pump may pass a true one.
+4b. `CONTAINMENT_IMPLEMENTED_PHASES` (`containers.ts:1337-1346`) lists all eight phases, and
+   `containmentReadiness()` (`containers.ts:1348-1353`) computes `missing` as
+   `DEV_PHASE_SEQUENCE.filter(p => !implemented.includes(p))`. `containmentGate()`
+   (`containers.ts:1360-1369`) then refuses **every** dev run when `FACTORY_CONTAINMENT_V2=1` and any
+   member of `DEV_PHASE_SEQUENCE` is unimplemented. Adding `browser-verify` to `DEV_PHASE_SEQUENCE`
+   would therefore be a fleet-wide kill switch, not an additive change — the conditional phase must
+   be elected by `nextPhase()` without joining that static array (§5 Design decision 9).
 5. `canonicalMountSource()` (`containers.ts`, the `workspace` case) special-cases only `self-test`
    for a disposable per-attempt copy (`${root}/selftest-${attempt}`); every other phase shares the
    one `${root}/workspace` develop owns.
@@ -116,10 +132,21 @@ factory PR lands first.
    is not confirmed Svelte-routed at this baseline. None of these three repos has a Playwright suite
    today (`paperclip-minion` does, but it is not a `minion-factory`-registered repo and is out of
    this proposal's `repos: [minion-factory]` scope).
-8. `runner/src/db.ts:672-694`'s `phase_attempts` table already has `run_id, phase, attempt, status,
-   policy, candidate_sha, reviewed_sha, provider, exit_code, exit_reason, evidence TEXT, started_at,
+8. `runner/src/db.ts:715-735`'s `phase_attempts` table already has `run_id, phase, attempt, status,
+   policy, candidate_sha, reviewed_sha, provider, instance_id, plan_revision, request_id,
+   claim_generation, output_candidate_sha, exit_code, exit_reason, evidence TEXT, started_at,
    finished_at` with `UNIQUE(run_id, phase, attempt)`. `evidence` is a free-form column any phase
    name can populate — no new table or migration is implied by adding one more `WorkerPhase`.
+8b. **The attempt row is sealed exactly once.** `closePhaseAttempt()` (`runner/src/db.ts:1708-1723`)
+   writes `status`, `exit_code`, `exit_reason`, `provider`, `reviewed_sha`, `output_candidate_sha`
+   and `evidence` in a **single** `UPDATE ... WHERE id = ? AND status = 'running'`, and the
+   `phase_attempts_terminal_immutable` trigger (`db.ts:737-750`) raises
+   `phase_attempts terminal result is immutable` on any later update of a non-`running` row.
+   `phase_attempts_no_delete` forbids deletion. Browser-evidence validation, hashing and summarisation
+   must therefore complete **before** the seal — there is no second write in which to attach them,
+   and a validation failure discovered after the seal cannot be recorded against that attempt.
+   `output_candidate_sha` is additionally restricted to passed `develop`/`reconcile-base` attempts
+   (`db.ts:1699-1707`), so `browser-verify` must never attempt to stamp it.
 9. `runner/src/automerge.ts`'s `evaluateAutoMergeRun()` (`automerge.ts:44-88`) loops
    `manifest.requiredStages` requiring each to resolve to `isExecutableStage(configuredStages[stage])`
    (an object with `{harness, model}`) — that shape fits `spec`/`develop`/`review` but is meaningless
@@ -128,12 +155,17 @@ factory PR lands first.
    today's `'self-test'`) is accepted with **no explicit predicate** beyond the run-level
    `status === 'passed'` check at the top of the function — a real gap this spec must close for its
    own evidence name, not inherited debt to fix generally.
-10. `agent/Dockerfile:1` and `runner/Dockerfile:1` still read `FROM node:22-bookworm-slim` (mutable
-    tag) and `runner/Dockerfile:19` still `CMD ["npx", "tsx", "src/index.ts"]` — confirmed live at
-    the baseline commit above. The worker-containment spec's own 2026-08-28 board audit records this
-    as its still-open Slice 4; the digest-pinning discipline it establishes is the bar this spec's
-    **new** image must clear from its first commit, independent of when that slice lands for the two
-    pre-existing images.
+10. **Corrected at pass 3 — the pass-2 statement is no longer true.** `agent/Dockerfile` and
+    `runner/Dockerfile` are now digest-pinned: both open with a comment block naming
+    `node:22-bookworm-slim` and resolve the base through a manifest-digest `ARG` so the `FROM` line
+    and the recorded toolchain manifest cannot drift apart, and `runner/Dockerfile:41` is
+    `CMD ["/app/node_modules/.bin/tsx", "src/index.ts"]` (no `npx`). `scripts/verify-image-pins.sh`,
+    `scripts/verify-image-provenance.sh` (+ its test) and `scripts/publish-images.sh` all exist on
+    `main`. This landed as the worker-containment spec's Slice 4 (factory PR #145, supervised release
+    `1901ed0699f4a0e23d918392bac8429a09b30758`, hardened by PRs #146/#148/#149/#150). Consequence for
+    this spec: the browser image does **not** get to invent its own pinning discipline or a parallel
+    verifier — Slice 3 extends the shipped one and matches the shipped bar (digest-pinned base,
+    committed toolchain manifest, candidate-bound publication, provenance verification).
 11. No `playwright`, `chrome-devtools`, `preview`, or egress-proxy code exists anywhere in
     `minion-factory` today (verified by a repository code search at the baseline commit). The only
     existing "restrict egress to one destination" precedent is `runner/src/codex-broker-policy.ts`'s
