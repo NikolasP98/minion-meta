@@ -3,14 +3,14 @@ id: 2026-08-22-hub-load-nav-performance-spec
 title: Hub load & nav performance — prod config gap, layout decoupling, bundle diet, RUM monitoring
 stage: spec
 status: review
-pass: 4
+pass: 5
 next_slice: 5
 created: 2026-08-22
 updated: 2026-08-29
-repos: [minion_hub]
+repos: [minion_hub, minion]
 type: infra
 relationship: extends
-related: [2026-07-17-hub-performance-optimization-plan, 2026-08-13-crm-customers-server-pagination-spec, 2026-07-06-hub-tanstack-consolidated-execution, 2026-08-21-hub-datatable-server-mode-test-gap-spec, 2026-08-22-crm-rank-query-prod-latency]
+related: [2026-07-17-hub-performance-optimization-plan, 2026-08-13-crm-customers-server-pagination-spec, 2026-07-06-hub-tanstack-consolidated-execution, 2026-08-21-hub-datatable-server-mode-test-gap-spec, 2026-08-22-crm-rank-query-prod-latency, 2026-07-19-channel-scoping-fix-plan]
 verdict: revision-required
 tags: [infra, ux, security]
 ---
@@ -46,7 +46,7 @@ Relationship to existing board items (folded, not duplicated):
 - `2026-08-22-crm-rank-query-prod-latency` (proposal, draft) owns the CRM rank-query cost
   that Slice 5 of the pagination spec uncovered — deliberately NOT a slice here; see §0.1.
 
-## 0.1 Disposition (pass 4, 2026-08-29) — NOT approved; human approval gate required
+## 0.1 Disposition (pass 5, 2026-08-29) — NOT approved; human approval gate required
 
 **Verdict: revision-required — awaiting a human.** The program is real, already
 half-delivered, and the unshipped half is still the correct next work, but this spec may
@@ -78,7 +78,38 @@ review found, each re-verified against that same `master` SHA before editing:
 4. Slice 6 described a rollback Vercel does not offer and named 2 of the 7 existing
    per-route SSR opt-outs. Both corrected against `master` in §Slice 6.
 
-Slice ledger — verified 2026-08-29 against hub master `1b47e8ce`:
+Pass 5 (this one) repairs three defects the pass-4 review found. Each was re-verified
+live against gateway `minion` `DEV` `bd55137100aceaf193ab99a827302d3f865b50e7`
+(confirmed the current branch head at verification time via
+`gh api repos/NikolasP98/minion/branches/DEV`) and hub `master` before editing, not
+assumed from the review text:
+
+5. **Pass 4's S7 contract required a signed JWT the gateway cannot accept, and its
+   tenant test proved the wrong thing.** Confirmed on gateway `DEV` `bd551371`:
+   `ConnectParamsSchema` (`src/gateway/protocol/schema/frames.ts`) has no `jwt` or
+   `orgId` field and is `additionalProperties: false`; `message-handler.ts:209-218`
+   validates that schema and rejects the connect frame before authentication runs; a
+   recursive listing of the entire repo tree at that SHA contains zero files with `jwt`,
+   `oidc`, or `multiTenant` in their path — there is no partial or reverted
+   implementation to restore, only the absence pass 4 assumed was recoverable. The
+   reliability pipeline confirms the same way: `ReliabilityEventSchema` carries no
+   `orgId`, `ReliabilityRingBuffer` (`src/logging/reliability-buffer.ts`) is one
+   process-global ring, and `server-methods/reliability.ts` never reads `client.orgId`
+   — so even a validated `orgId` claim would have nothing to filter by yet. §Slice 7 is
+   now split into a blocking gateway-side prerequisite (new repo scope: `minion`) and
+   the hub-side implementation that depends on it, and its tenant test now requires two
+   orgs on **one shared gateway**, not two distinct gateways. This is not a new failure
+   mode invented for this pass: `specs/2026-07-19-channel-scoping-fix-plan.md` already
+   parked its own P1 ("carry org identity on the socket") after `minion-ai` PR #237
+   proved, the same way, that adding an org claim to the connect frame without a
+   gateway that validates it is a tenant-authorization bypass, not a fix — see that
+   spec's execution hold before treating S7's JWT step as a same-repo task.
+6. **M1 remains valid as stated:** S5's decision-dashboard artifact is re-homed from
+   `Minion Docs` (a separate, non-CLI-registered repository S5's `minion_hub` PR cannot
+   commit to) to a tracked location inside `minion_hub` itself — see §Slice 2.
+
+Slice ledger — verified 2026-08-29 against hub master `1b47e8ce` and gateway `minion`
+`DEV` `bd55137100aceaf193ab99a827302d3f865b50e7`:
 
 | Slice | State | Evidence (verified this pass unless noted) |
 |---|---|---|
@@ -88,7 +119,7 @@ Slice ledger — verified 2026-08-29 against hub master `1b47e8ce`:
 | S4 shell diet | **shipped in part — DoD unmet, remainder moved into S5** | Supabase browser client dynamic-imported inside `signOut()` (`user.svelte.ts:94-97`); FloatingAssistant/carta-md moved behind the layout's idle `{#await import}`; `vite.config.ts:82-90` `optimizeDeps.include` incl. `lucide-svelte`. hub PR #162 `14bfce72`. **NOT done:** no `manualChunks` pass in `vite.config.ts`, no committed shell-size measurement script in `scripts/`, and the ≤700 KB target was not reached — the post-S4 ad-hoc measurement was 1,538 KB, of which 815 KB is the both-locale Paraglide chunk. The script and `manualChunks` are now S5's DoD; the byte target is split across S5's staged budget and S9. |
 | S5 one-locale Paraglide | **open — next slice** | `package.json:18` still `@inlang/paraglide-sveltekit: ^0.16.1` (the package is deprecated; `svelte.config.js` already carries a manual preprocessor shim for it). The catalog is build-generated (`i18n:compile` → `src/lib/paraglide/`, untracked), so the byte claims must be re-measured, not assumed. **Budget re-staged in pass 4:** the pass-2 `≤ 450 KB` DoD was unreachable from this spec's own numbers (`1,538 − 815 = 723 KB` remains after deleting the entire catalog), so S5 now carries a staged, ratcheted budget and the 450 KB goal moved to S9. |
 | S6 SSR re-enable | **open — human merge gate** | `src/routes/+layout.ts:17` still `export const ssr = false` (`:18` is `prerender = false`; the pass-2 `:18` anchor was off by one). Seven `(app)` page opt-outs exist on `master`, not the two pass 2 named — enumerated in §Slice 6. |
-| S7 HTTP-first WS routes | **open — anchors moved** | `/reliability` gained a trivial `+page.server.ts` (RBAC comment only, returns `{}`); the RPCs moved out of the page into `$lib/state/reliability/*`, but every load is still gated on `conn.connected` (`reliability/+page.svelte:1159,1170,1188`). The premise holds; the pass-1 line/RPC-count anchor does not. **`security`-tagged in pass 4:** moving these reads server-side means resolving gateway credentials for a tenant, and `src/lib/server/gateway-rpc.ts:75-121` falls through an org-lease miss/error and a per-user miss/error to PG system-wide and then env bootstrap credentials. S7 now carries an explicit fail-closed contract and human gates at approval AND merge. |
+| S7 HTTP-first WS routes | **open — blocked on a gateway prerequisite (repo: minion)** | `/reliability` gained a trivial `+page.server.ts` (RBAC comment only, returns `{}`); the RPCs moved out of the page into `$lib/state/reliability/*`, but every load is still gated on `conn.connected` (`reliability/+page.svelte:1159,1170,1188`). The premise holds; the pass-1 line/RPC-count anchor does not. **`security`-tagged since pass 4; pass 5 confirms the pass-4 contract cannot execute:** gateway `minion` `DEV` `bd551371` has no `jwt`/`orgId` field on `ConnectParamsSchema` (rejected before auth by `message-handler.ts:209-218`) and no per-org attribution anywhere in the reliability event pipeline (`ReliabilityEventSchema`, `reliability-buffer.ts`, `server-methods/reliability.ts` — one shared, unpartitioned buffer). S7 now splits into 7a (gateway prerequisite, blocking, human-coordinated cross-repo) and 7b (hub implementation, depends on 7a landing and deploying). |
 | S8 reconcile stale statuses | **open** | `specs/index.json` still carries `status: unknown` for `2026-07-05-hub-tanstack-virtual`, `2026-07-06-hub-tanstack-{consolidated-execution,query,pacer,ai-assessment,db-store-assessment}` and `2026-07-17-hub-performance-optimization-plan`. |
 
 Work that shipped under this program but was never specced (recorded here so the program's
@@ -204,7 +235,10 @@ not, and building it is a prerequisite of S5. (3) layout re-runs per nav → S3 
 and the missing `manualChunks`/measurement script transfer to S5. (5) both locales ship to
 every user, and the shell has no enforced budget → S5. (6) empty-shell cold load → S6.
 (7) WS handshake gates first data, and moving those reads server-side puts them on a
-credential resolver that fails open across tenants → S7. (8) perf spec statuses unknown →
+credential resolver that fails open across tenants, on a gateway with no validated-identity
+or per-tenant reliability partitioning to resolve onto → S7 (7a gateway prerequisite,
+`minion`, blocking; 7b hub implementation, `minion_hub`, depends on 7a). (8) perf spec
+statuses unknown →
 S8. (9) the shell is still above the program's 450 KB goal after S5's locale work, by at
 least the 723 KB of non-catalog bytes S5 does not touch → S9. CRM roster payload (the 10th
 delta) is owned by the pagination spec; the CRM rank-query cost (11th, surfaced by that
@@ -245,7 +279,11 @@ were there. Pass 4 gives it one owner and one gate — **it is a prerequisite of
 delivered by S5's PR before S5's own DoD is judged:
 
 - a durable PostHog dashboard URL (plus an exported screenshot or dashboard JSON committed
-  to `Minion Docs`, so the artifact survives a PostHog project change);
+  inside `minion_hub` itself — e.g. `minion_hub/docs/perf/rum-dashboard.md` plus its export
+  file — so the artifact survives a PostHog project change. **Not `Minion Docs`:** that tree
+  is a separate, non-CLI-registered repository (`AGENTS.md`'s Project Map carries no registry
+  row for it) that S5's own `minion_hub` PR cannot commit to; the artifact must live in a
+  repository the delivering PR actually touches);
 - tiles: p75 LCP and INP per route id, `nav_timing` p75 per route id, `server_timing` p75
   per route id, and `app_layout_slow_load` rate;
 - the exact queries and the route-id definitions behind each tile, written down;
@@ -401,22 +439,80 @@ page's `+page.server.ts` (currently a stub returning `{}`, streamed), and let th
 connection upgrade to live data when it arrives. Apply the same pattern to
 sessions/overview/home feed only if S2 data shows they matter.
 
-**Why this slice is `security`-tagged.** In the browser the WS connection is already
-org-bound: `api/servers/[id]/token/+server.ts` hands out a gateway token only after
-checking that the gateway row belongs to the caller's active org, and returns 404 for
-another org's gateway and 503 (not 404) when the registry is merely unavailable. Moving
-the same reads server-side moves them off that check and onto
+**Why this slice is `security`-tagged, and why pass 5 splits it into two.** In the browser
+the WS connection is already org-bound: `api/servers/[id]/token/+server.ts` hands out a
+gateway token only after checking that the gateway row belongs to the caller's active org,
+and returns 404 for another org's gateway and 503 (not 404) when the registry is merely
+unavailable. Moving the same reads server-side moves them off that check and onto
 `src/lib/server/gateway-rpc.ts`, whose `resolveCredentialsForUser` (`:75-121`) falls
 through an `(org, channel)` lease **miss or error**, then a per-user lookup **miss or
 error**, to PG system-wide credentials and finally to env bootstrap credentials —
-`gatewayCallAsUser` (`:295-315`) documents that fallback as intended behaviour. The
-connect frame it then sends (`:225-245`) authenticates the raw operator token with
-`role: 'operator'` and `operator.admin` scopes, and the same file states at `:141-146`
-that only the hub-signed JWT carries an RBAC-validated `orgId`. A straightforward
-implementation of this slice would therefore return the default/system gateway's
-reliability data to a user in a different org during a mapping miss or a database outage.
-This is a fail-open cross-tenant read, and it is why this spec now needs human approval
-and a human merge.
+`gatewayCallAsUser` (`:295-315`) documents that fallback as intended behaviour.
+
+Pass 4's fix for that was to require a hub-signed JWT carrying `orgId` on every gateway
+call. Pass 5 verified that requirement against gateway `minion` `DEV`
+`bd55137100aceaf193ab99a827302d3f865b50e7` (confirmed the current branch head) and found
+it cannot execute: `ConnectParamsSchema` (`src/gateway/protocol/schema/frames.ts`) has no
+`jwt` or `orgId` field and is `additionalProperties: false`; `message-handler.ts:209-218`
+validates that schema and rejects the connect frame before authentication runs; a
+recursive listing of the gateway's entire tree at that SHA contains zero files with `jwt`,
+`oidc`, or `multiTenant` in their path. There is no JWT/OIDC infrastructure to call into,
+partial or otherwise. Worse, even a validated `orgId` claim would filter nothing yet:
+`ReliabilityEventSchema` carries no `orgId`, `server-methods/reliability.ts` never reads
+`client.orgId`, and `ReliabilityRingBuffer` (`src/logging/reliability-buffer.ts`) is one
+process-global ring shared by every connected client — so pass 4's own DoD test (two
+tenants on two *distinct* gateways) proved gateway *selection*, not tenant *isolation*
+inside the one gateway most orgs actually share.
+
+This is not a novel risk to invent a workaround for: `specs/2026-07-19-channel-scoping-fix-plan.md`
+already lived this exact failure. Its P1 ("carry org identity on the socket") tried adding
+an `orgId` claim to the connect frame twice; `minion-ai` PR #237 FAILed the second attempt
+CRITICAL because every hub browser session presents the *same shared operator token*, so a
+caller-asserted (or even a same-shape-but-unvalidated) `orgId` on the connect frame proves
+nothing about org membership — it is a tenant-authorization bypass, not identity. That
+spec is now parked with an execution hold: "resume only through a coordinated `minion` +
+`minion_hub` implementation with deployment access... do not redispatch as a
+single-repository run." S7 would repeat that exact mistake if scoped as a `minion_hub`-only
+slice, so pass 5 splits it the same way that hold prescribes.
+
+#### Slice 7a — Gateway org-identity + tenant-partition prerequisite (blocking; repo: `minion`)
+
+Not a `minion_hub` PR's work, and not startable as a single-repository factory run — see
+the execution-hold precedent above. Required before any part of 7b:
+
+1. Add a gateway-validated identity credential to the connect handshake — extend
+   `ConnectParamsSchema` with an explicit new field (do not simply relax
+   `additionalProperties`) and add the issuer/signature (or equivalent) verification that
+   currently does not exist anywhere in this repo, so `client.orgId` can be trusted.
+2. **`client.orgId` may be set only from that validated claim, never from any
+   caller-asserted field on the connect frame** — this is the precise shape PR #237
+   rejected. A `userId` claim from a trusted proxy is a materially different, lower-risk
+   case than an `orgId` claim asserted by a shared-token client; do not conflate them.
+3. Attribute reliability events with the connecting client's validated `orgId` at write
+   time (extend `ReliabilityEventSchema`); partition or filter
+   `ReliabilityRingBuffer`/`server-methods/reliability.ts` so a query returns only the
+   caller's `orgId` events; events with no attribution (pre-migration, or genuinely
+   system-level) are excluded from any tenant-facing response, or exposed only on a
+   surface explicitly restricted to a system-admin capability.
+4. A real handshake test in `minion`'s own suite: a validly signed claim succeeds and the
+   resulting `client.orgId` matches it; a missing, expired, or signature-invalid claim
+   fails the handshake closed (connection rejected, not degraded to anonymous/system
+   scope).
+5. A same-gateway two-org isolation test: org A and org B both connected to the **same**
+   gateway instance, each emitting reliability events; an org-A-scoped
+   `reliability.events`/`reliability.summary` call returns zero org-B rows or fields.
+6. If the actually-deployed gateway differs from `minion` `DEV` (a hotfix branch, a
+   forked implementation, etc.), pin and test against its exact serving SHA rather than
+   this repo's source, per the pass-4 review's own guidance.
+
+DoD (7a): tests in items 4–5 exist and pass in `minion`'s suite against the SHA that will
+actually serve hub traffic; the connect-schema and reliability-schema changes are reviewed
+and merged there under that repo's own security gate.
+
+#### Slice 7b — HTTP-first hub implementation (repo: `minion_hub`, depends on 7a)
+
+May not start design or code until 7a has shipped **and deployed** to the gateway hub
+actually talks to — clause 4 below has nothing to call otherwise.
 
 **Contract (binding on the implementation, each clause with its own test):**
 
@@ -437,29 +533,36 @@ and a human merge.
    caller's org. Implement this as a new strict entry point (e.g.
    `resolveCredentialsForOrgStrict`) rather than by adding a flag to
    `resolveCredentialsForUser`, so no existing caller silently changes behaviour.
-4. **Signed org claim.** Every gateway call mints and passes the hub-signed JWT
-   (`issueGatewayJwt` in `src/server/services/gateway-jwt.service.ts`, whose claims carry
-   `orgId`) as `opts.jwt`. The shared operator token is not an org-scoping credential.
+4. **Signed org claim.** Every gateway call mints and passes the hub-signed credential 7a
+   defines (`issueGatewayJwt` in `src/server/services/gateway-jwt.service.ts`, whose claims
+   carry `orgId`, as `opts.jwt` or whatever field 7a's schema change actually names) —
+   validated against 7a's deployed contract, not assumed compatible with it. The shared
+   operator token is not an org-scoping credential.
 5. **Fail closed, and distinguish the two failures.** 404 = this org has no gateway for
    this channel; 503 = the registry/lease lookup failed. Never substitute another gateway,
    and never degrade to an empty 200 that the page renders as "all healthy".
 6. **No new surface.** These endpoints are read-only, expose no gateway URL or token in
    their responses, and add no gateway RPC method that the WS path did not already call.
 
-DoD: `/reliability` renders populated KPIs with WS blocked (devtools offline-WS test); no
-duplicate fetch when WS connects (guard test); and the following tests exist and pass —
+DoD (7b): `/reliability` renders populated KPIs with WS blocked (devtools offline-WS test);
+no duplicate fetch when WS connects (guard test); and the following tests exist and pass —
 (a) **mapping miss**: an authenticated user whose active org has no gateway lease for the
 channel gets 404 and *no* gateway call is made with system or env credentials;
 (b) **registry outage**: the lease/per-user lookup throwing yields 503 with `retry-after`
-and, again, no fallback credentials; (c) **tenant mismatch**: with org A and org B each
-holding a distinct gateway, a session in org A never receives org B's rows — asserted on
-the credentials the resolver returns, not only on the response body; (d) **capability
-denied**: a session without `reliability:view` gets the same status the route guard
-already produces; (e) the JWT passed to the gateway carries the caller's `orgId`.
+and, again, no fallback credentials; (c) **tenant isolation, same gateway**: org A and org
+B share one gateway (per 7a's isolation test); a session in org A never receives org B's
+rows — asserted on the credentials the resolver returns and, against a real or
+contract-faithful test gateway, on the response body; a two-*distinct*-gateway test proves
+selection only and does not satisfy this clause; (d) **capability denied**: a session
+without `reliability:view` gets the same status the route guard already produces; (e) the
+signed credential passed to the gateway carries the caller's `orgId` and 7a's handshake
+test accepts it.
 
-**Human gates (required, `security`):** a human approves this slice's design before a dev
-run starts, and a human merges its PR. Neither gate is satisfiable by green CI or by an
-agent review verdict.
+**Human gates (required, `security`, both slices):** a human approves the design of 7a and
+of 7b before either starts a dev run, and a human merges each PR. Neither gate is
+satisfiable by green CI or by an agent review verdict. Per the execution-hold precedent
+this section cites, dispatching S7 as a single-repository (`minion_hub`-only) factory run
+is itself a defect, independent of what the run produces.
 
 ### Slice 8 — Reconcile stale perf-spec statuses (board hygiene)
 
