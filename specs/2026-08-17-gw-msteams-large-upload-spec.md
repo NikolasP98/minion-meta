@@ -3,7 +3,7 @@ id: 2026-08-17-gw-msteams-large-upload-spec
 title: "MS Teams attachments — route >4MB through a Graph resumable upload session (chunked PUT with resume, expiry and cancel)"
 stage: spec
 status: draft
-pass: 6
+pass: 7
 created: 2026-08-17
 updated: 2026-08-29
 proposal: 2026-08-17-gw-msteams-large-upload
@@ -13,21 +13,31 @@ tags: [logic, test]
 type: fix
 ---
 
-> **Pass 6 disposition: STILL REVIEW, not approved.** Pass 6 changes no disposition — it repairs three
-> defects a cross-provider review found in *how* pass 5 stated its own AS-IS and its own gates: (1) the
-> "0. Product" narrative, §1.1 and §1.2 still asserted the ">4MB fails" premise as settled fact ("the
-> break is real", "identical 4MB cap", "the proposal's drive-path DoD stands") even though §1.1a
-> disproves it against current documentation and no live check has run — those passages, and S1's code
-> comment restating "documented as 4MB" over a hard-coded `4_000_000`, are now explicitly qualified as
-> conditional on §7 step 0's outcome, not stated as current fact; (2) the follow-up local-media proposal
+> **Pass 7 disposition: STILL REVIEW, not approved.** Pass 7 changes no disposition — it closes the two
+> defects the pass-6 review found surviving in *how* the artifacts state their own contracts.
+> (1) §3's explanation under the routing table was still the last active passage calling `4,000,000`
+> "Graph's documented 4 MB simple-upload cap" and warning that erring high "resends the reported bug",
+> which contradicted §1.1a, §4 and §7 step 0c in the same file and would let a later pass keep the
+> hard-coded route by citing it. That paragraph now says what is true: `4,000,000` comes only from the
+> stale in-repo TODO, is a placeholder, and is either **deleted** (step 0 shows no size failure) or
+> **replaced by the measured per-helper threshold** (step 0 shows one). The routing-table boundary rows,
+> the §2 red-state convention, S1's goal/red-state bullet and S1's DoD byte sizes carry the same
+> conditional, and S1 opens with a slice-level banner saying so once.
+> (2) The follow-up local-media proposal
 > ([`proposals/2026-08-29-gw-local-media-read-before-cap-check.md`](../proposals/2026-08-29-gw-local-media-read-before-cap-check.md))
-> permitted a bare `fs.stat`-then-`readFile` fix as an acceptable DoD, which both regresses the existing
-> optimize-then-clamp local-image behavior and remains check-then-act racy — its DoD is rewritten to
-> require a bounded read/file-handle protocol and the missing regression tests; (3) two active S3/§3
-> passages still called the reused byte ceiling "the gateway's per-upload heap policy" and said the
-> pass-2 "flagged for human" item was fully satisfied, contradicting §1.5's and the ship gate's own
-> "heap-policy gate: open" — both now say only the byte-*value* half is settled. Pass 5's substance is
-> otherwise unchanged: Pass 3's approval rested on the premise that
+> required a bounded read *through the existing `readFile` seam*, but that seam returns an
+> already-materialized `Buffer` (`src/web/media.ts:25-34`, awaited at `:309`) and its production callers
+> are real sandboxed/outbound paths whose bridge `cat`s the whole file over `docker exec`
+> (`src/agents/sandbox/fs-bridge.ts:28-53`, `:77-88`) — so an implementation could satisfy every listed
+> test and leave the OOM path fully open. Its DoD now forces an explicit choice — widen the injected-reader
+> contract and migrate the callers, or formally exclude override-supplied inputs and keep this spec's
+> heap-policy gate open for them — plus a test on an *oversized* override-backed source that proves the
+> producer stopped. Pass 6's substance is otherwise unchanged: it had qualified the ">4MB fails" premise
+> in the "0. Product" narrative, §1.1, §1.2 and S1's code comment, removed the `fs.stat`-then-`readFile`
+> DoD from the local-media proposal, and reconciled the two S3/§3 passages that called the reused byte
+> ceiling an accepted "per-upload heap policy" while §1.5 and the ship gate called that gate open (only
+> the byte-*value* half is settled). Pass 5's substance is likewise unchanged: Pass 3's approval rested
+> on the premise that
 > Graph's simple `PUT .../content` endpoint caps uploads at 4MB. Microsoft's current v1.0 documentation
 > for the exact endpoint shapes this spec targets — [Upload or replace the contents of a
 > driveItem](https://learn.microsoft.com/en-us/graph/api/driveitem-put-content?view=graph-rest-1.0),
@@ -74,8 +84,9 @@ spec asserts `src/` is read-only and treats any need to edit it as a finding (§
 **Gate conventions:** [`2026-08-17-sdlc-phase-gates-scoring-spec`](2026-08-17-sdlc-phase-gates-scoring-spec.md)
 §4b — slices are tagged `logic` / `test`. The proposal's `edge-case` tag has no slot in the §4b enum
 (`ui logic data infra docs test security perf deps`); it is carried here as `logic` + `test`, which is
-what it routes to anyway. Red-state TDD (G3) is mandatory: the >4MB fixture is written and shown
-failing against today's simple-PUT-only code before the fix lands. **No UI governance applies** — zero
+what it routes to anyway. Red-state TDD (G3) is mandatory: the over-threshold fixture is written and
+shown failing against today's simple-PUT-only code before the fix lands — at the size §7 step 0
+measured, and only if step 0 established a drive-path threshold at all (§1.1a). **No UI governance applies** — zero
 `.svelte` files, zero design or token lint, in any slice.
 
 **Prior art consulted.** `rg -li 'msteams|createUploadSession|graph-upload' specs/ proposals/` finds no
@@ -336,7 +347,7 @@ S1 (threshold routing + createUploadSession + happy-path chunk loop)   ← the p
 ```
 
 Slice 0 is gone — it was executed and its findings are §1. **S1 alone is a partial implementation, not
-a shippable fix.** It makes >4MB uploads *work* on a healthy network, but cancellation and recovery are
+a shippable fix.** It makes over-threshold uploads *work* on a healthy network, but cancellation and recovery are
 S2 and caller-safe behavior is S3. S1–S3 ship together; do not let "resumable upload" imply that
 resume, cleanup, and caller behavior are optional.
 
@@ -348,7 +359,16 @@ resume, cleanup, and caller behavior are optional.
 
 **Goal:** a buffer over the simple-upload cap is uploaded through a resumable session in ordered chunks
 and the resulting drive item is returned, on **both** drive call sites (§1.1). A unit test with a mock
->4MB buffer asserts the resumable path was taken. Under the cap, behavior is byte-identical to today.
+over-threshold buffer asserts the resumable path was taken. Under the cap, behavior is byte-identical
+to today.
+
+> **⚠️ This whole slice is provisional on §7 step 0 (§1.1a).** Every instruction below — the threshold
+> constant, the routing branch, the red-state fixture and the boundary cases in the DoD — is
+> conditional on step 0 returning a **controlled, recorded, size-dependent** drive-path failure. If
+> step 0's controls pass and its probes also pass, S1 is **deleted, not re-numbered**. If step 0
+> measures a failure, every "over-threshold" size named below is the **measured per-helper** value
+> from §7 step 0c, not `4,000,000` and not a documented number. Do not write these tests against
+> `4,000,000` before that result is in the PR.
 
 **Do:**
 
@@ -455,9 +475,10 @@ and the resulting drive item is returned, on **both** drive call sites (§1.1). 
   per whole-file upload; do not repeat it once per chunk.) Add a regression test that mutates the source
   buffer after slicing and asserts the chunk body did or did not change, rather than asserting
   "zero-copy" from a comment.
-- **Red-state first (G3).** Write the >4MB test, run it against today's simple-only code, and paste the
-  failure into the PR. The existing ~143-test suite cannot serve as red-state proof: it passes today by
-  construction.
+- **Red-state first (G3).** Write the over-threshold test at the size §7 step 0c measured (not at
+  `4,000,000`, and only once step 0 has established that a threshold exists at all — see the slice
+  banner above), run it against today's simple-only code, and paste the failure into the PR. The
+  existing ~143-test suite cannot serve as red-state proof: it passes today by construction.
 
 **Files:** `extensions/msteams/src/upload-session.ts` (new),
 `extensions/msteams/src/upload-session.test.ts` (new),
@@ -470,7 +491,10 @@ outside `extensions/msteams/`.
 ```bash
 cd minion
 pnpm vitest run extensions/msteams          # or: pnpm --filter <msteams-pkg-from-package.json> test
-#   red-state first (G3): the >4MB case shown failing against the old simple-only code.
+#   red-state first (G3): the over-threshold case shown failing against the old simple-only code.
+#   The four byte sizes below are written against the 4,000,000 PLACEHOLDER (§3). Before running them,
+#   substitute the threshold §7 step 0c measured for this helper — or delete this slice if step 0
+#   showed no size-dependent failure.
 #   graph-upload.test.ts — run EVERY case against BOTH uploadToOneDrive AND uploadToSharePoint:
 #   - upload(<Buffer.alloc(5_000_000)>) → createUploadSession called exactly once
 #         AND >=1 PUT to the returned uploadUrl AND zero PUTs to /content
@@ -690,8 +714,8 @@ table until the live check in §1.1a / the top-of-file disposition banner has be
 | Payload size | Path | Why |
 |---|---|---|
 | `0` bytes | Simple PUT (unchanged) | Empty-file semantics are Graph's problem, not this spec's; do not add a special case. |
-| `1 B … 4,000,000 B` | Simple `PUT /content` | Today's behavior, byte-identical. One request. |
-| `4,000,001 B … ceiling` | `createUploadSession` + chunked PUT | **The fix.** Chunks of 5 MiB (16 × 320 KiB), sequential, last chunk short. |
+| `1 B … 4,000,000 B` *(placeholder — §7 step 0)* | Simple `PUT /content` | Today's behavior, byte-identical. One request. |
+| `4,000,001 B … ceiling` *(placeholder — §7 step 0)* | `createUploadSession` + chunked PUT | **The fix, if step 0 proves one is needed.** Chunks of 5 MiB (16 × 320 KiB), sequential, last chunk short. |
 | `> ceiling` | Rejected before any Graph request | Already the behavior: `loadWebMedia(url, mediaMaxBytes)` refuses the payload. Remote media is refused *before* the buffer exists (bounded during fetch); local media is read in full and refused *after* (§1.3a, §1.5). No new constant either way. |
 
 **"Ceiling" = the existing `resolveChannelMediaMaxBytes` result**, i.e.
@@ -704,11 +728,26 @@ only for remote media, not for local files (§1.3a, §1.5), and closing it needs
 §7 resolved, not just a byte value picked. The only obligation this row settles is §4's check that
 100 MiB is at or under the destination's documented per-file limit.
 
-The `4,000,000` boundary is the **conservative** reading of Graph's documented "4 MB" simple-upload cap
-(the other reading is `4,194,304`). Erring low routes a handful of files through the session path
-unnecessarily; erring high resends the reported bug for files between the two numbers. Test both sides
-of the boundary (S1 DoD) so nobody "rounds it to 4 MiB" later without reading this row — and note that
-`FILE_CONSENT_THRESHOLD_BYTES` *is* `4 * 1024 * 1024`, deliberately, for a different question (S1).
+**Where `4,000,000` came from, and why it is a placeholder.** It is **not** a Microsoft-documented
+number and this spec does not claim it is one. Its only source is the stale in-repo TODO at
+`graph-upload.ts:26-27` (§1.1) — current primary documentation for this exact call shape says 250 MB,
+not 4 MB (§1.1a), and no live request has shown a simple `PUT` failing anywhere near either number.
+The row above has two possible fates, and §7 step 0 decides between them, not this paragraph:
+
+- **Step 0 disproves a size-dependent failure** (controls pass, all probes pass, both helpers): the
+  boundary and the routing split it drives are **deleted, not re-numbered** — S1 has no drive-path
+  defect to fix (§1.1a).
+- **Step 0 measures a real per-helper failure**: the boundary becomes the *measured* smallest-failing /
+  largest-passing pair for that helper (§7 step 0c). That measurement may land nowhere near 4 MB and
+  may differ between OneDrive and SharePoint. `4,000,000` is not a floor, a default, or a safety
+  margin to fall back on when the measurement is inconvenient.
+
+Only in that second case do the two readings of a "4 MB" cap (`4,000,000` vs `4,194,304`) matter at
+all, and then only if the measurement lands between them — in which case take the smaller and lock
+both sides with tests (S1 DoD). Do **not** write those boundary tests before step 0's result is
+recorded in the PR: a test asserting an unmeasured threshold is what makes a placeholder permanent.
+Independently of all of the above, `FILE_CONSENT_THRESHOLD_BYTES` *is* `4 * 1024 * 1024`,
+deliberately, and answers a different question (S1) — do not unify the two whatever step 0 returns.
 
 ## 4. Numbers that must be verified before shipping
 

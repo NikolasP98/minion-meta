@@ -35,6 +35,19 @@ At `NikolasP98/minion@bd55137`:
   and are only rejected afterwards by `clampAndFinalize` (call site `:319-324`,
   non-image length check `:265-267`).
 
+  The injected `readFile` override is the same story, only worse: it is typed
+  `(filePath: string) => Promise<Buffer>` (`src/web/media.ts:25-34`, destructured
+  as `readFileOverride` at `:195`), so it hands back an already-materialized
+  buffer. Its production callers are real outbound/sandbox paths, not test
+  doubles — `src/infra/outbound/message-action-params.ts:204-209` (`fs.readFile`),
+  `src/agents/tools/image-tool.ts:519-527` and
+  `src/agents/pi-embedded-runner/run/images.ts:216-224` (both
+  `sandboxConfig.bridge.readFile`) — and the sandbox bridge is unbounded by
+  construction: `SandboxFsBridge.readFile(...): Promise<Buffer>` shells out to
+  `docker exec ... sh -c 'cat -- "$1"'` and returns the whole captured stdout
+  (`src/agents/sandbox/fs-bridge.ts:28-53`, `:77-88`), so the file crosses the
+  exec boundary in full before `loadWebMedia` sees a byte.
+
 So an oversized local file is fully resident in heap before it is refused, and N
 concurrent local sends can exceed the configured ceiling by a factor of N with
 no back-pressure. Nothing rejects before allocation on that path. A pass-3
@@ -60,7 +73,8 @@ configured cap says should have been refused for free.
   between the two calls, defeating the bound the check exists to enforce.
 - **A bounded read/file-handle protocol instead**, not a stat precheck: read
   local files through a mechanism that cannot allocate past a defined
-  raw-input ceiling regardless of on-disk size — e.g. a file handle read or
+  raw-input ceiling regardless of on-disk size (for the reads in scope per the
+  injected-reader bullet below) — e.g. a file handle read or
   bounded stream that stops (and rejects) at that ceiling without
   materializing the remainder. Define the ceiling consistently with the
   remote path's existing two-tier shape (a raw pre-optimization ceiling
@@ -68,19 +82,55 @@ configured cap says should have been refused for free.
   `fetchRemoteMedia`'s `maxBytes`/`fetchCap` split), so a compressible local
   image above the final cap but within the raw ceiling is still accepted,
   matching today's behavior.
-- **Preserve the `readFileOverride` seam.** The current implementation
-  supports virtual/sandbox paths through a `readFile` override with no `stat`
-  override (`media.ts:185-196`, tests `:357-382`). Any bounded-read mechanism
-  must go through that same seam (or add a matching override), not call
-  `fs.stat` directly — a bare `fs.stat(mediaUrl)` rejects override-backed
-  paths that have no corresponding host file, which currently work.
+- **Preserve the `readFileOverride` seam — and either bound it too, or say
+  plainly that it is not bounded.** The current implementation supports
+  virtual/sandbox paths through a `readFile` override with no `stat` override
+  (`media.ts:185-196`, tests `:357-382`). Any bounded-read mechanism must go
+  through that same seam (or add a matching override), not call `fs.stat`
+  directly — a bare `fs.stat(mediaUrl)` rejects override-backed paths that have
+  no corresponding host file, which currently work.
+
+  But routing a bounded read "through the existing seam" as it stands bounds
+  **nothing**: the callback's return type is `Promise<Buffer>` and it is awaited
+  in full at `media.ts:309`, so the allocation has already happened by the time
+  the promise resolves, and the two sandbox callers above sit behind an
+  unbounded `cat` over `docker exec`. So this proposal must pick one of the
+  following, explicitly, and record which one landed:
+
+  1. **Widen the seam.** Give the injected reader the raw ceiling — e.g.
+     `readFile(filePath, { maxBytes })`, or a chunk/stream-yielding callback —
+     require it to **reject rather than truncate** when the source exceeds that
+     ceiling, migrate all three callers above, and extend
+     `SandboxFsBridge.readFile` with the same bound. The bridge already exposes
+     `stat()` (`fs-bridge.ts:48-52`), but a separate stat round-trip is the same
+     check-then-act race as the bullet above: the bound has to be enforced by
+     the read itself. This is the only option that actually closes the OOM path
+     for sandboxed outbound sends.
+  2. **Scope the claim down.** Bound only the reads `loadWebMedia` performs
+     itself, and state — in code at the seam and in this ledger entry — that
+     override-supplied inputs are **outside** the bound. Then the msteams
+     spec's heap-policy gate stays open for every caller listed above, and this
+     proposal is explicitly not the entry that closes it.
+
+  A change that bounds the direct `fs.readFile` branch and silently leaves the
+  override branch unbounded is neither option, and must not be accepted as
+  done.
 - A regression test: a compressible local image whose **raw** size is above
   the final cap but optimizes below it is still accepted (mirrors
   `media.test.ts:144-153`) — proves the fix does not regress the existing
   optimize-then-clamp path.
-- A regression test: an override-backed (`readFileOverride`) local path with
+- A regression test: an override-backed (`readFile` option) local path with
   no corresponding host file still works — proves the fix does not call
   `fs.stat` on a path that only exists virtually.
+- A test for the option chosen above, driven by an override-backed source whose
+  **raw** size exceeds the raw-input ceiling. Under option 1 it is rejected and
+  the test asserts the *producer stopped*: the override was asked for at most
+  `ceiling + 1` bytes, or was aborted mid-stream, and never materialized the
+  remainder. Asserting only that an error was thrown is not sufficient — a
+  wrapper that reads the whole file and then throws passes that assertion while
+  keeping the OOM. Under option 2 it is accepted unbounded, and the test
+  documents that as the deliberate, ledgered gap. The small-virtual-file
+  compatibility test above covers neither case.
 - A regression test: a local file that grows or is replaced in the window
   between the size check and the read completing does not result in an
   allocation beyond the raw-input ceiling — proves the fix is bounded, not a
