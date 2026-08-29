@@ -10,7 +10,7 @@ repos: [minion-meta]
 proposal: 2026-08-18-spec-heading-lint-baseline-backfill
 verdict: approved
 type: infra
-approved_reason: "Pass-3 revision on minion-meta@2c86617: the pass-2 blocker was mechanical only (rewrite S5-S9/D6-D10 into the 13 frozen ranges) and is now done; every AS-IS claim was re-measured and re-anchored to the live corpus, and all three proposed rules still measure 0 violations."
+approved_reason: "Pass-3 revision on minion-meta@2c86617, corrected after cross-provider review: the pass-2 blocker (rewrite S5-S9/D6-D10 into the 13 frozen ranges) is now fully done, including renumbering cleanup to Slice 18 and reconciling D19/§6/§7/§9 references so no Slice-10 collision or stale S10-boundary text remains; every AS-IS claim was re-measured 2026-08-29 (114 heading debt, 99 related ids/22 proposal-only, 69 pass>1 specs all with sidecars) and binding DoDs now read as computed invariants with dated counts labeled non-binding orientation, so they cannot go stale under corpus drift; the zero-TODO gate uses an unpiped `rg` exit code instead of `grep -c`; all three proposed rules still measure 0 violations; specs/index.json is regenerated to match this disposition."
 relationship: extends
 related: [2026-08-17-maintenance-lane-monitors-spec, 2026-08-17-sdlc-phase-gates-scoring-spec, 2026-08-20-factory-spec-heading-nomenclature, handoff-minion-meta-1883922325]
 tags: [infra, hygiene, docs, test]
@@ -170,7 +170,8 @@ Invariants that must not change:
   different name, renames/moves it. No slice deletes spec content, changes a DoD, or edits
   `stage`/`status`/`repos`/`pass` on a spec it is only backfilling headings for.
 - **I5 — the board stays legible.** `updated:` is bumped only when the added section changes what an
-  implementer would do (see §6 rule R3), so a 126-spec sweep does not reshuffle the whole board.
+  implementer would do (see §6 rule R3), so the backfill sweep (114 ids as measured 2026-08-29;
+  see §2's drift note) does not reshuffle the whole board.
 - **I6 — `specs/index.json` is regenerated in the same commit as any frontmatter change.** The
   staleness check (`scripts/spec-index.mjs:770`) already enforces this; slices must not fight it.
 - **I7 — no index file is hand-edited.** `specs/index.json` and `proposals/index.json` change only
@@ -181,8 +182,8 @@ Invariants that must not change:
 | # | Transition | Slice | Proving test / evidence |
 |---|---|---|---|
 | D1 | Baseline entries can go stale unnoticed → `--check` errors on any baseline id that passes the lint or names a missing spec (both files) | S1 | New fixtures in `scripts/spec-index.test.mjs`: a baselined-but-clean spec fails; a baseline id with no file fails; the real corpus still exits 0 |
-| D2 | No way to see what the 126 specs are missing → `node scripts/spec-heading-backfill.mjs --report` prints per-id missing sections + totals; `--verify` is the same check as D1 usable pre-commit | S1 | `--report` on the corpus prints 126 rows and the totals 122/91/92; `--verify` exits 0 today and 1 on a seeded stale entry |
-| D3 | `related` ids unresolved → every `related` id must resolve against specs ∪ proposals, via one shared loader | S2 | Fixtures: dangling id fails; proposal-only id passes; missing `proposals/` dir does not crash; corpus (84 ids, 17 proposal-only) exits 0 |
+| D2 | No way to see what the baselined specs are missing → `node scripts/spec-heading-backfill.mjs --report` prints per-id missing sections + totals; `--verify` is the same check as D1 usable pre-commit | S1 | `--report` row count equals the baseline file's key count exactly (114 as measured 2026-08-29; totals 111/88/86 — dated orientation numbers per §2's drift note, not a binding count); `--verify` exits 0 today and 1 on a seeded stale entry |
+| D3 | `related` ids unresolved → every `related` id must resolve against specs ∪ proposals, via one shared loader | S2 | Fixtures: dangling id fails; proposal-only id passes; missing `proposals/` dir does not crash; corpus exits 0 with zero unresolvable ids (99 ids, 22 proposal-only, as measured 2026-08-29 — dated orientation numbers, not a binding count) |
 | D4 | `pass>1` policy undecided and TODO misstates the corpus → decision recorded, TODO replaced, `pass>1 ⇒ review sidecar exists` enforced | S3 | Fixtures: `pass: 2` with no sidecar fails, with sidecar passes, `pass: 1` unaffected; corpus (69/69) exits 0 |
 | D5 | 5 orphan `superseded` specs → each linked from a real successor or flipped to `retired` + `retired_reason`; `scripts/spec-supersede-baseline.json` deleted | S4 | `--check` exits 0 with the file absent; `specs/index.json` regenerated; each disposition justified in the PR body |
 | D6 | Heading-baseline range B1 grandfathered → backfilled and removed | S5 | `--check` exits 0; `--verify` exits 0; `--report --batch B1` prints 0 rows |
@@ -198,7 +199,7 @@ Invariants that must not change:
 | D16 | range B11 grandfathered → backfilled and removed | S15 | same, for B11 |
 | D17 | range B12 grandfathered → backfilled and removed | S16 | same, for B12 |
 | D18 | range B13 grandfathered → backfilled and removed; heading baseline reaches `{}` | S17 | same, for B13, and `--report` prints 0 rows corpus-wide |
-| D19 | Empty baselines + 4 stale `TODO(handoff)` markers + stale TEMPLATE docs → files deleted, markers removed, `specs/TEMPLATE.md` corrected, proposal closed | S18 | `--check` exits 0 with neither baseline file present; `grep -c 'TODO(handoff)' scripts/spec-index.mjs` = 0; `pnpm run test:scripts` green |
+| D19 | Empty baselines + 4 stale `TODO(handoff)` markers + stale TEMPLATE docs → files deleted, markers removed, `specs/TEMPLATE.md` corrected, proposal closed | S18 | `--check` exits 0 with neither baseline file present; `! rg -n 'TODO\(handoff\)' scripts/spec-index.mjs` exits 0 (no match); `pnpm run test:scripts` green |
 
 Every slice below traces to at least one row; no row lacks a proving test. D6–D18 are stated as
 *range emptied*, not as a baseline count, deliberately: §2's preamble shows counts drift under
@@ -219,12 +220,13 @@ Resolution reads the **markdown**, not `index.json`.
 
 **B. `pass > 1` presence rule → NO. Do not add it, and correct the record.**
 The premise ("51 specs violate that") does not survive measurement (§2.6): the factory's 2-pass
-review bumps `pass` in place, so 61 of 62 specs have no second file to link to, and there are zero
-pass-1/pass-2 file pairs in the corpus. A blanket presence rule would demand a link that cannot
-exist and would be a permanent 61-file red. The genuine pair case — two files, two passes, no link —
-is already assigned to the G0 reconciler by `2026-08-17-sdlc-phase-gates-scoring-spec`, and it needs
-semantic pair detection (title/slug similarity), which is a heuristic that does not belong in a
-required CI gate. What *is* exact and already true of 62/62 specs is: a pass bump is evidence of a
+review bumps `pass` in place, so 68 of 69 specs (as measured 2026-08-29; see §2.6) have no second
+file to link to, and there are zero pass-1/pass-2 file pairs in the corpus. A blanket presence rule
+would demand a link that cannot exist and would be a permanent 68-file red. The genuine pair case —
+two files, two passes, no link — is already assigned to the G0 reconciler by
+`2026-08-17-sdlc-phase-gates-scoring-spec`, and it needs semantic pair detection (title/slug
+similarity), which is a heuristic that does not belong in a required CI gate. What *is* exact and
+already true of 69/69 specs is: a pass bump is evidence of a
 completed review, and a completed review leaves `specs/<id>.review.md`. Ship that rule instead; it
 enforces the traceability the ask actually wanted, with zero backlog and no heuristic. Only the
 forward direction is enforced (`pass>1 ⇒ sidecar`); the converse is left open so a first-pass review
@@ -336,15 +338,17 @@ Adds to `--check`: for each id in either baseline file, error if (a) `specs/<id>
 or (b) it exists and `missingRequiredHeadings(body).length === 0` (heading baseline) / it is now
 named by some spec's `supersedes` or is no longer `status: superseded` (supersede baseline). Error
 text names the file and the exact line to delete. `spec-heading-backfill.mjs` is a read-only
-reporter: `--report` prints `<id>\t<missing labels>` plus totals; `--report --batch B1..B5` filters
+reporter: `--report` prints `<id>\t<missing labels>` plus totals; `--report --batch B1..B13` filters
 to a frozen range; `--verify` runs the same predicate as (a)/(b) and exits non-zero, for use before
 committing a batch.
 
 **DoD (machine-checkable):** `node scripts/spec-index.mjs --check` exits 0 unpiped (capture `$?`
 directly — a piped gate returns the pipe's exit code, `/memory/MINION/MEMORY.md` FEEDBACK
 "piped gates lie"); `pnpm run test:scripts` green with ≥ 4 new fixtures, each of which fails if its
-control is reverted; `node scripts/spec-heading-backfill.mjs --report` prints 126 rows and the
-totals `product=122 out-of-scope=91 verification=92`; `--verify` exits 0.
+control is reverted; `node scripts/spec-heading-backfill.mjs --report` prints exactly one row per id
+currently in `scripts/spec-heading-lint-baseline.json` (114 rows, totals `product=111 out-of-scope=88
+verification=86` as measured 2026-08-29 — dated orientation numbers per §2's drift note, re-measure
+before relying on them; the binding predicate is "row count == baseline key count"); `--verify` exits 0.
 
 ### Slice 2 — `related` ids resolve across the spec ∪ proposal corpora
 
@@ -362,7 +366,8 @@ The loader tolerates a missing `proposals/` directory (returns an empty set) so 
 under `--check`; the plain generator path stays permissive so `spec-index.mjs` can still regenerate
 an index for a corpus mid-edit.
 
-**DoD:** `--check` exits 0 on the corpus (84 related ids, 17 of them proposal-only); fixtures prove
+**DoD:** `--check` exits 0 on the corpus with zero unresolvable `related` ids (99 related ids, 22 of
+them proposal-only, as measured 2026-08-29 — dated orientation numbers, not a binding count); fixtures prove
 (i) a dangling id fails naming spec + id, (ii) a proposal-only id passes, (iii) a fixture repo with
 no `proposals/` dir passes, (iv) `node scripts/spec-index.mjs` (no `--check`) still succeeds with a
 dangling id; `grep -n 'TODO(handoff)' scripts/spec-index.mjs` no longer matches the `related` marker;
@@ -379,9 +384,11 @@ place by a re-pass and requires a review sidecar; `revises` is only for the rare
 failure-mode alert required by §8; no lifecycle change).
 
 Implements decision B of §5: no presence rule; `pass > 1` requires `specs/<id>.review.md` to exist.
-The comment must state the measured facts (62 pass>1, 61 without a link, 0 file pairs, 62/62
-sidecars) so the next reader does not re-litigate from the old "51 violate" framing, and must hand
-the pair-detection case to `2026-08-17-sdlc-phase-gates-scoring-spec`'s G0 reconciler by name.
+The comment must state the measured facts as of implementation — re-measure with §9's helper rather
+than copying stale numbers; as measured 2026-08-29 these are 69 pass>1, 68 without a link, 0 file
+pairs, 69/69 sidecars (dated orientation numbers, not a binding count) — so the next reader does not
+re-litigate from the old "51 violate" framing, and must hand the pair-detection case to
+`2026-08-17-sdlc-phase-gates-scoring-spec`'s G0 reconciler by name.
 
 **DoD:** `--check` exits 0 on the corpus; fixtures prove `pass: 2` without a sidecar fails, with one
 passes, and `pass: 1` without one passes; no `TODO(handoff)` remains at the pass/revises site; the
@@ -498,7 +505,7 @@ Files, content contract, R3 and DoD are the shared batch contract at the top of 
 Range `2026-08-18-minion-base-mobile-hitl-ux-plan` … `ws-duplication-audit` (inclusive), 6 ids as measured 2026-08-29.
 Files, content contract, R3 and DoD are the shared batch contract at the top of §6; proves D18. This is the last batch, so the baseline file is left containing exactly `{}`; S18 deletes it.
 
-### Slice 10 — Retire the baselines, close the markers, correct the template
+### Slice 18 — Retire the baselines, close the markers, correct the template
 
 **Topics:** `infra`, `docs`, `todo`, `handoff-sweep`
 
@@ -515,14 +522,16 @@ The ratchet code stays: with both files absent, an attempt to re-create either w
 still an error, which is exactly the regression guard this whole effort earns.
 
 **DoD:** neither baseline file exists; `node scripts/spec-index.mjs --check` exits 0;
-`grep -c 'TODO(handoff)' scripts/spec-index.mjs` returns 0 (which lets the handoff sweep close
-`handoff-minion-meta-1883922325` on its own); `pnpm run test:scripts` green; `pnpm run ci` green.
+`! rg -n 'TODO\(handoff\)' scripts/spec-index.mjs` exits 0, i.e. `rg` finds no match — `rg -n` alone
+exits 1 on no-match, so the check is the negated, unpiped exit code, not stdout (which lets the
+handoff sweep close `handoff-minion-meta-1883922325` on its own); `pnpm run test:scripts` green;
+`pnpm run ci` green.
 
 ## 7. Ordering and concurrency
 
-S1 must land before S5–S9 (it is what makes "removed from the baseline" enforceable). S2, S3 and S4
-are independent of each other and of the batches and may land in any order. S5→S9 land sequentially;
-S10 is last. Batches are the only slices that touch many files, and they touch disjoint file sets,
+S1 must land before S5–S17 (it is what makes "removed from the baseline" enforceable). S2, S3 and S4
+are independent of each other and of the batches and may land in any order. S5→S17 land sequentially;
+S18 is last. Batches are the only slices that touch many files, and they touch disjoint file sets,
 so a late-arriving S2/S3/S4 never conflicts with a batch except on `specs/index.json` — resolve by
 merging `dev` in and re-running the generator, never by hand-editing the index (I7).
 
@@ -552,7 +561,7 @@ merging `dev` in and re-running the generator, never by hand-editing the index (
 
 ## 9. End-to-end verification
 
-Run from the repo root on a fresh clone of `dev` **after S10 has merged** (each command's exit code
+Run from the repo root on a fresh clone of `dev` **after S18 has merged** (each command's exit code
 read directly, never through a pipe):
 
 1. `node scripts/spec-index.mjs --check` → exit 0, prints `spec-index --check passed: N specs`.
@@ -566,7 +575,9 @@ read directly, never through a pipe):
    const p=parseFrontmatter(fs.readFileSync("specs/"+f,"utf8")); if(p&&m.missingRequiredHeadings(p.body).length) {bad++; console.log(f);} }
    console.log("specs missing required headings:", bad);})'
    ```
-4. `grep -c 'TODO(handoff)' scripts/spec-index.mjs` → `0`.
+4. `! rg -n 'TODO\(handoff\)' scripts/spec-index.mjs` → exit 0 (no match; `rg -n` alone would exit 1
+   on no-match, so read the negated, unpiped exit code directly — never `grep -c`'s stdout, which
+   prints `0` but still exits 1 on no match).
 5. `node -e '…'` over `specs/*.md`: every `status: superseded` spec is named by some spec's
    `supersedes`, and every `pass > 1` spec has a `specs/<id>.review.md` → 0 exceptions.
 6. Negative controls, each of which must make `--check` exit **1** (run on a scratch branch, then
@@ -575,7 +586,7 @@ read directly, never through a pipe):
    out-of-scope section from any spec.
 7. `pnpm run test:scripts` and `pnpm run ci` → both green.
 8. Board check: fetch `specs/index.json` from `dev` and confirm the base.minion-ai.org board renders
-   the same card count as before the sweep, with no spec's `stage`/`status` changed by S5–S9.
+   the same card count as before the sweep, with no spec's `stage`/`status` changed by S5–S17.
 
 ## 10. Out of scope
 
@@ -584,7 +595,7 @@ read directly, never through a pipe):
 - **A `pass > 1 ⇒ revises|supersedes` presence rule** — explicitly rejected in §5B; the pair case
   stays with the G0 reconciler under `2026-08-17-sdlc-phase-gates-scoring-spec`.
 - **G0 reconciler changes of any kind**, including having it *write* `revises`/`supersedes` onto the
-  61 in-place re-passed specs. §2.6 shows there is nothing to write.
+  68 in-place re-passed specs (as measured 2026-08-29). §2.6 shows there is nothing to write.
 - **Proposal-side link integrity** (`spawned_spec`, `merged_into`, `duplicate_candidate`) and giving
   `scripts/proposal-index.mjs` a `--check` mode + a CI step. All 3 field types resolve cleanly today
   (measured: 0 unresolvable), so this is a regression guard, not a debt — file it separately if
