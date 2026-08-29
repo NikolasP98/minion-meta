@@ -3,7 +3,7 @@ id: 2026-08-18-factory-capability-separation-spec
 title: Factory capability separation — purpose-scoped GitHub credentials, run-bound grants, and server-derived actors
 stage: spec
 status: review
-pass: 4
+pass: 5
 created: 2026-08-18
 updated: 2026-08-29
 proposal: 2026-08-17-factory-capability-separation
@@ -28,9 +28,15 @@ From approved proposal `2026-08-17-factory-capability-separation`, verbatim:
 > to one repository/branch/action set; separate credentials for (a) target-code pushes, (b) meta lifecycle commits,
 > (c) memory candidate uploads; `by` derived server-side from the authenticating principal, never caller-supplied.
 
-The security outcome is unchanged from pass 2: compromise of one run or purpose-specific integration must not be
-able to reuse a factory-wide credential to mutate unrelated repositories or impersonate another authenticated
-principal. This is M4 identity work. It retains the human merge gate.
+The security outcome is *containment-equivalent, not identical* to pass 2's design: pass 3 adopted the long-lived
+purpose-scoped PATs that already shipped in `minion-factory@5db7d391` rather than pass 2's short-lived,
+run/repo/branch/action-bound grant, and passes 3-4 described that as an unchanged outcome. Pass 5 stops making that
+claim (§1 point 4, §2 invariant 1a) — a stolen long-lived purpose token is reusable until an operator rotates it, not
+until a run ends, and that gap is now named explicitly for the human approval gate rather than papered over. Within
+that constraint, compromise of one run or purpose-specific integration must still not be able to reuse a
+factory-wide credential to mutate unrelated repositories or impersonate another authenticated principal — enforced
+by GitHub's own per-purpose scope grant, proven by a negative-scope canary rather than assumed from token presence.
+This is M4 identity work. It retains the human merge gate.
 
 **Pass-3 respec note (2026-08-29).** Passes 1-2 designed this as a GitHub-Apps/installation-token architecture with
 a new `CapabilityGrantEnvelope` authority table. That specific mechanism is superseded: `minion-factory@5db7d391`
@@ -64,6 +70,56 @@ pass 4 re-verified independently against the same pinned commits before acting o
 Pass 4 also corrects pass 3's inventory (discovery and chat runs were missing; monitor intake lives in
 `runner/src/monitor.ts`, not `runner/src/index.ts`) and its anchors. See §1 for the evidence and §4 for the
 re-sliced plan.
+
+**Pass-5 hardening note (2026-08-29).** A second cross-provider review of pass 4 (PR #271, `VERDICT: FAIL` again)
+found four high-severity and one medium finding that survive against the same pinned commits, plus one low finding
+in the spec's own DoD text. Every finding was re-verified this pass from **fresh** clones of
+`minion-factory@5db7d391` and `minion-base@19531059` — not accepted on the reviewer's word — and all six are
+confirmed real:
+
+- **H1 (non-v2 dev loses its only write transport).** Confirmed: invariant 3 downgraded all five launch paths
+  including `dev` to read-only, but the runner-owned publication protocol invariant 2 built only replaces the
+  meta-writing agents' transport (`spec.sh`/`reconcile.sh`/`discovery.sh`/`chat.sh`), not `agent/run.sh`'s
+  target-repository branch push + draft PR (confirmed at `run.sh:107,123,266-275,383,460-461`; the container "holds
+  only GH_TOKEN (repo-scoped)" per `run.sh:4`, and every one of those call sites needs write authority).
+  §2 invariant 9 already (correctly) excluded `dev` from the "purpose tokens unconditionally" list — invariant 3
+  contradicted it by including all five paths anyway. Fixed by making `dev`'s downgrade conditional on
+  containment v2 being verified active for 100% of dev dispatch, with the runner failing dev dispatch closed — never
+  silently forwarding a write credential — when it is not (§2 invariant 3, §4 Slice 2).
+- **H2 (worker-writable checkout crosses into the trusted apply phase).** Confirmed: the runner-mounted checkout the
+  worker edits was also the checkout the runner would later apply/commit/push from and run
+  `scripts/spec-index.mjs` against, so worker-side tampering outside the declared candidate (a hook, `.git/config`,
+  a shadowed copy of the index generator) could reach trusted execution. Fixed by splitting the mount into a gitless
+  worker snapshot (edit surface only; bytes exit through the bounded candidate artifact) and a separate
+  runner-private checkout the worker never touches, which the trusted apply/commit/push/index-regeneration phase now
+  always runs against (§2 invariant 2, §4 Slice 2, new `T-META-APPLY-CHECKOUT-ISOLATED`).
+- **H3 (minion-base keeps the admin bearer outside `/lifecycle/*`).** Confirmed: `factory.ts:149`'s single
+  `FACTORY_SECRET` backs every dashboard call — runs/history, stats, trigger-health, providers, `pipeline/spec`,
+  `pipeline/reconcile`, `runs` creation, and `chat/*` (`factory-path.ts`'s `ALLOWED` regex, `+page.server.ts`,
+  `stats/+page.server.ts`, `settings/+page.server.ts`, `api/meta/status/+server.ts`) — not just lifecycle mutations.
+  Fixed by adding two more scoped principals alongside `lifecycle` (`dashboard-read`, `dashboard-run`), each with
+  its own fixed route allowlist in the same shape as the existing `UNSTICK_ROUTES` precedent, and requiring
+  minion-base to drop `FACTORY_SECRET` from its deployment entirely, not just from the `/lifecycle/*` call site
+  (§2 invariant 7, §4 Slices 4-5).
+- **H4 (long-lived PATs vs. the approved run-bound contract).** Confirmed as a real, previously under-stated
+  deviation from the source proposal's DoD. This pass stops claiming an unchanged security outcome (§0 above), names
+  the deviation for the human approval gate, and adds a negative-scope canary requirement as a hard activation gate
+  — a purpose is not "active" until it is proven *denied* on a repository/action outside its declared scope, not
+  just present and pairwise-distinct (§2 invariant 1a, §4 Slice 1, new `T-PURPOSE-NEGATIVE-SCOPE`).
+- **M1 (`phase_effects` cannot represent the promised receipts).** Confirmed for `meta-publish` (no such
+  `PhaseEffectKind`, no purpose/target-repo columns) but **not** for lifecycle/monitor: both already have their own
+  durable idempotency records outside `phase_effects` — the lifecycle commit itself (git history + the CAS-checked
+  canonical response, invariant 6) and `monitor_events` (fingerprint-deduped, `runner/src/monitor.ts`, verified to
+  predate this spec) — so folding them into `phase_effects` too would duplicate an existing mechanism, not fill a
+  gap. Fixed by narrowing invariant 8 to the run-bound credentialed effects the table can represent (target push/PR,
+  meta publication, memory-candidate PUT) with additive `purpose`/`target_repo` columns and two new kinds, and
+  pointing lifecycle/monitor evidence at their existing mechanisms instead (§2 invariant 8).
+- **L1 (Slice 1's deploy gate skips one of the four writers it claims to check).** Confirmed: the DoD loop grepped
+  `.env.example`/`deploy.sh`/`setup.sh` only, and `deploy/k8s.yml` was independently verified to already carry three
+  of the existing purpose env vars, so the omission is a real gap, not a non-issue. Fixed by adding `deploy/k8s.yml`
+  to the loop (§4 Slice 1).
+
+No product code was implemented this pass either, for the same `tags: [security, infra]` reason pass 4 gave.
 
 ### Relationship recommendation
 
@@ -239,6 +295,20 @@ implementation; line numbers are anchors, not immutable coordinates.
     strategy-implementation]]'s independent finding from the same day: "capability-separation approved→draft for
     respec (architectures superseded: runs→pipeline_instances; GitHub-Apps→scoped PATs + effect ledger, keep by-spoof
     + broad-token deltas)".
+11. **`agent/run.sh` (the `dev` worker) needs write authority for a *different* transport than the meta-writing
+    agents — a target-repository branch push and draft PR, not a `minion-meta` commit — and only the
+    containment-v2-gated trusted adapter (point 2) can supply that without a worker-held token.** Re-verified at
+    `5db7d391`: the script's own header states "the container is the sandbox; it holds only `GH_TOKEN`
+    (repo-scoped)" (`run.sh:4`). It uses that token directly: the initial branch push and draft-PR creation
+    (`git push -u origin`, `gh pr create --draft`, `run.sh:266-275`), every develop/fix-round push through
+    `factory_push()`'s non-fast-forward-aware retry (`run.sh:121-134`, invoked at `:473`), the resumed-branch push
+    path (`:107-108`), and the budget-salvage push on early exit (`:460-461`). `runner/src/queue.ts:2101-2113`
+    (`legacyCredentialTransport`) is the only credential source for this container — it forwards
+    `source.FACTORY_GH_TOKEN` as `GH_TOKEN` unconditionally, for every launch path point 4 lists, `dev` included —
+    and `dispatchPreparedRun` (`queue.ts:439`) routes a `dev` run to the containment-v2 path (which does *not* give
+    the worker a write token at all; see point 2) only `if (run.kind === 'dev' && containmentV2Enabled())`; every
+    other `dev` dispatch — the default, since `FACTORY_CONTAINMENT_V2` defaults to `0` (point 1) — falls through to
+    `startLegacy`, which is exactly the write-token path above.
 
 Hard constraints shaping this spec (unchanged from pass 2, reconfirmed 2026-08-29):
 
@@ -303,29 +373,63 @@ landed code already states — *workers get read credentials, writes live in the
    rejects: a purpose that any *enabled* code path exercises but which is unconfigured; and any two configured
    credential values that are byte-identical. `runner/src/github.ts`'s module-level `TOKEN` is replaced by a
    purpose-bound client factory; no module may construct an unlabelled GitHub transport.
+1a. **Purpose activation requires a negative-scope canary, not presence/distinctness alone.** This spec adopts the
+   long-lived purpose-scoped PAT mechanism that already shipped in `minion-factory@5db7d391` rather than pass 2's
+   short-lived, run/repo/branch/action-bound grant design the source proposal's DoD specifies
+   (`proposals/2026-08-17-factory-capability-separation.md:21-25`) — a recorded deviation, not a claimed equivalent
+   (§0). `runner/src/scoped-github-canary.ts`'s `verifyCommand` performs only *positive* checks against the one
+   declared canary repository (`requireOk` calls at `:383-398`). Extend it (or add a sibling canary invocation) so
+   every purpose's activation additionally proves a *negative* check: an authenticated call using that purpose's
+   token against a repository or action outside its declared scope returns 403/404, not 200. A purpose is not
+   eligible for §8's revocation gate, and may not back a real (non-canary) call, until its negative check has run
+   and failed as expected at least once against the current token value. This is the compensating control the human
+   approval gate should weigh against the long-lived-token deviation named in §0 — it is not a substitute for asking
+   the human whether the deviation itself is acceptable.
 2. **A runner-owned meta publication protocol replaces in-container clone-and-push, before any credential is
    removed.** For every meta-writing run kind (`spec`, `reconcile`, `discovery`, `chat`):
-   - The **runner** prepares the checkout (clone/fetch with `github-checkout`, read-only) into a runner-owned
-     workspace and mounts it into the worker. The pinned base commit is recorded by the runner, never claimed by
-     the worker.
-   - The worker edits files with **no write credential present** and emits a bounded candidate artifact to its
-     existing `/out` directory (`/out/meta-candidate.json`): ordered commits of `{message, files[]}` where every
-     path passes the run kind's write allowlist (the allowlist `agent/spec.sh:51-74` already computes) and every
-     entry is a regular file within declared size/count bounds — no symlinks, no path escapes, no `.git/` writes.
-   - The **runner** validates the artifact against that allowlist, applies it, regenerates `specs/index.json` /
-     `proposals/index.json` by running the meta repo's own `scripts/spec-index.mjs` / `scripts/proposal-index.mjs`
-     (so the committed index is never worker-authored), commits with a server-derived author, and pushes with
-     `github-meta`. On a non-fast-forward it performs the same `pull --rebase` → regenerate → retry convergence
-     `push_meta()` performs today, bounded to the current retry count.
+   - The **runner** prepares two things before the worker starts: (a) a **gitless, read-only snapshot** of the
+     pinned base commit — plain files, no `.git/` directory, nothing the worker can use as a live repository or a
+     script the runner will later trust — mounted into the worker as its edit surface, and (b) its **own private
+     checkout** of the same pinned commit, held entirely outside any worker-reachable mount or volume. The pinned
+     base commit is recorded by the runner, never claimed by the worker.
+   - The worker edits the snapshot with **no write credential present** and no live `.git/` to tamper with, and
+     emits a bounded candidate artifact to its existing `/out` directory (`/out/meta-candidate.json`): ordered
+     commits of `{message, files[]}`, where **each file entry carries its own bounded byte content** (not a path
+     reference into the shared mount), every path passes the run kind's write allowlist (the allowlist
+     `agent/spec.sh:51-74` already computes), and every entry is a regular file within declared size/count bounds —
+     no symlinks, no path escapes, no `.git/` or `scripts/` targets. The runner never reads or trusts anything from
+     the worker's snapshot directory itself after the worker exits — only the bytes inside the validated artifact.
+   - After the worker exits, the **runner** validates the artifact's bytes against that allowlist (rejecting on any
+     violation with no GitHub call — `T-META-CANDIDATE-BOUNDED`), applies them onto its **own private checkout**
+     from the first bullet — never the worker's snapshot — regenerates `specs/index.json` / `proposals/index.json`
+     by running the meta repo's own `scripts/spec-index.mjs` / `scripts/proposal-index.mjs` from that same
+     runner-private checkout under a minimal allowlisted environment (so the committed index and the generator that
+     produced it are never worker-influenced), commits with a server-derived author, and pushes with `github-meta`.
+     On a non-fast-forward it performs the same `pull --rebase` → regenerate → retry convergence `push_meta()`
+     performs today, bounded to the current retry count, still entirely inside the runner-private checkout.
    - The effect is expressed as a new `containment-effects.ts` binding variant (extending the `phase` union at
      `:16-33` and its validator at `:77`, reusing `tokenFor`/`githubRequest`'s bounded-response primitives) and
      records an idempotent `phase_effects` row (invariant 8).
-3. **After invariant 2 lands, no GitHub *write* credential reaches any worker/harness container on any run kind.**
-   `legacyCredentialTransport` (`queue.ts:2101-2113`) is not deleted but **downgraded**: it forwards
-   `github-checkout` (read) only, for all five launch paths in §1 point 4 including `discovery` and `chat`. The
-   deny-by-default boundary (`GITHUB_CREDENTIAL_NAMES`, `RESERVED_CREDENTIAL_ENV`) is extended to those launch
+3. **After invariant 2 lands, no GitHub *write* credential reaches a worker/harness container for the four
+   meta-writing run kinds on any deployment.** `legacyCredentialTransport` (`queue.ts:2101-2113`) is not deleted but
+   **downgraded** for `discovery`, `spec`, `reconcile`, and `chat`: it forwards `github-checkout` (read) only. The
+   deny-by-default boundary (`GITHUB_CREDENTIAL_NAMES`, `RESERVED_CREDENTIAL_ENV`) is extended to those four launch
    plans. `agent/reconcile.sh`'s fleet reads (`gh run list`, `gh api …/compare`) legitimately continue inside the
    container on that read-only credential — that is exactly the capability label the landed design grants workers.
+
+   **The fifth launch path — `dev` without containment v2 — is handled differently, not silently folded into the
+   above.** Its write need is a different transport than meta publication: a target-repository branch push and
+   draft PR via `agent/run.sh` (§1 point 11), which only the already-landed, containment-v2-gated trusted adapter
+   (§1 point 2) can serve without a worker-held token. Downgrading it on the same unconditional schedule as the four
+   meta paths would deterministically break every default (`FACTORY_CONTAINMENT_V2=0`) dev run at its first
+   `git push` — pass 3's original H1 mistake, repeated for a fifth path pass 4 itself introduced. Instead: once this
+   invariant's implementation (Slice 2) is active, the runner **refuses to dispatch a `dev`-kind run under the
+   legacy (non-v2) path at all** — failing closed with a queue-time error, never falling back to a write-capable
+   legacy credential. `dev` runs therefore require `FACTORY_CONTAINMENT_V2=1` verified active from Slice 2 onward;
+   until an operator makes that flip (a deploy-time prerequisite named in §8, not assumed here), `dev` dispatch is
+   unavailable rather than credential-downgraded-and-broken. This is the fail-closed alternative to building a
+   second, parallel target-repo publication protocol when one (the v2 adapter) already exists and only needs to
+   become mandatory.
 4. **No direct memory write from worker code.** `agent/run.sh:79-83` is deleted. A runner-owned, create-only
    publisher accepts runner-validated bytes plus runner-owned run/candidate ids and targets the separate private
    quarantine repository at `<run-id>/<candidate-id>.json`, consistent with the approved
@@ -358,24 +462,59 @@ landed code already states — *workers get read credentials, writes live in the
      swallowing its own failure (`lifecycle.ts:142-168`) and reports `indexSynced: false` instead.
    - **One promotion, not two.** Because the route already auto-queues dev on spec approval (`index.ts:724-726`),
      the response carries that outcome (`runId` or a pending reason) so the caller does not queue a second run.
-7. **minion-base stops writing minion-meta directly and stops holding the admin bearer.**
-   `src/lib/server/meta-write.ts`'s `putFile`/Contents-API mutation path is removed; `applyTransition` becomes a
-   thin client of the factory endpoint contract in invariant 6, keeping its typed-outcome surface so
-   `src/routes/api/meta/status/+server.ts:29-36`'s 409/422/500 mapping is unchanged from a browser's point of view,
-   and dropping its own promotion calls (`:38-61`) in favour of the server's. `src/lib/server/factory.ts:149` uses
-   the new lifecycle bearer for `/lifecycle/*` (the disposal relay in `spec-dispose.ts` included). minion-base's
-   remaining direct GitHub *reads* (`src/lib/server/github.ts:142`) keep their current `env.GITHUB_TOKEN` scope for
-   now: narrowing reads to a mechanically read-only credential is real remaining work but is lower-risk and
-   independent of the write cutover, so it is explicit later scope (§6, §8) rather than blocking this spec.
-8. **Evidence reuses `phase_effects`.** Every credentialed effect (target push/PR, meta publication, lifecycle
-   commit, memory-candidate PUT, monitor issue) records an idempotent `phase_effects` row (existing table,
-   `db.ts:757-773`) keyed by `{run_id, kind, key}`. Purpose, target repo, and a redacted result are recorded; token
-   values are never persisted, logged, or included in Docker argv/result JSON/PR bodies/error messages.
+7. **minion-base stops writing minion-meta directly and stops holding the factory admin bearer *for any call*, not
+   only `/lifecycle/*`.** `src/lib/server/meta-write.ts`'s `putFile`/Contents-API mutation path is removed;
+   `applyTransition` becomes a thin client of the factory endpoint contract in invariant 6, keeping its
+   typed-outcome surface so `src/routes/api/meta/status/+server.ts:29-36`'s 409/422/500 mapping is unchanged from a
+   browser's point of view, and dropping its own promotion calls (`:38-61`) in favour of the server's.
+
+   `FACTORY_SECRET` reaching minion-base at all is the residual gap, not just its use on `/lifecycle/*`: the single
+   `factoryFetch` transport (`factory.ts:139-170`) sends it on *every* proxied call, and those calls are not only
+   lifecycle mutations — `loadRunHistoryListing` (`:68-76`, `GET /runs`), `+page.server.ts` (`stats`,
+   `trigger-health`), `stats/+page.server.ts` (`stats`), `settings/+page.server.ts` (`providers`),
+   `api/meta/status/+server.ts` (`pipeline/spec`, `runs` creation), and the generic `api/factory/[...path]` proxy
+   (`ALLOWED` pattern in `factory-path.ts`: `chat`, `runs`, `pipeline/spec`, `pipeline/reconcile`, `providers`,
+   `stats`, `trigger-health`) all use it too. Narrowing only the lifecycle call site would leave every one of those
+   still sending the admin bearer, which does not satisfy "stops holding the admin bearer" (§1 point 8). Instead,
+   the factory registers two more capability-scoped service principals alongside `lifecycle` (invariant 6), in the
+   same fixed-route-allowlist shape `UNSTICK_ROUTES` already establishes (`index.ts:206-214`):
+   - **`dashboard-read`** (`FACTORY_DASHBOARD_READ_SECRET`) — `GET /runs`, `GET /runs/:id`, `GET /stats`,
+     `GET /trigger-health`, `GET /providers`, `GET /chat/*`. Read-only telemetry; no mutation.
+   - **`dashboard-run`** (`FACTORY_DASHBOARD_RUN_SECRET`) — `POST /pipeline/spec`, `POST /runs`,
+     `POST /pipeline/reconcile`, `POST /chat/*`. Dashboard-triggered mutations that are not lifecycle transitions.
+
+   Both join the weak-secret and pairwise-distinct startup checks at `:164-190` alongside `lifecycle`. minion-base
+   routes each existing call to its matching principal, and `env.FACTORY_SECRET` is removed from its deployment
+   configuration entirely — not aliased, not kept as a fallback. minion-base's remaining direct GitHub *reads*
+   (`src/lib/server/github.ts:142`) keep their current `env.GITHUB_TOKEN` scope for now: narrowing reads to a
+   mechanically read-only credential is real remaining work but is lower-risk and independent of the write cutover,
+   so it is explicit later scope (§6, §8) rather than blocking this spec.
+8. **Evidence reuses `phase_effects` for run-bound credentialed effects; lifecycle and monitor evidence reuse their
+   own existing mechanisms instead of a new row on a table that cannot represent them.** Every run-bound
+   credentialed effect — target push/PR (existing `push`/`pr-create` kinds), meta publication (new `meta-publish`
+   kind, Slice 2), and memory-candidate PUT (new `memory-candidate` kind, Slice 6) — records an idempotent
+   `phase_effects` row (existing table, `db.ts:757-773`) keyed by `{run_id, kind, key}`, with additive nullable
+   `purpose` and `target_repo` columns (migration in Slice 2) populated by every new kind Slice 2/6 introduce;
+   back-filling the two pre-existing kinds is not required. Token values are never persisted, logged, or included in
+   Docker argv/result JSON/PR bodies/error messages.
+
+   Lifecycle transitions are **not** run-bound, so they do not get a `phase_effects` row: their evidence is the git
+   commit itself (author = the credential-registry actor label, message, sha) plus the CAS-checked canonical
+   response (invariant 6) — a durable, queryable trail that already exists. Monitor issues already have a durable,
+   idempotent record of their own — `monitor_events` (fingerprint-keyed dedup, `runner/src/monitor.ts`), which
+   predates this spec — that satisfies the same evidence requirement invariant 8 is after; a `phase_effects` row for
+   the same event would duplicate it, not fill a gap, and inventing a synthetic run subject for a non-run event
+   would be a parallel identity scheme, not an extension of the existing one (§6 explicit out-of-scope already
+   rejects a parallel schema; this is that rule applied here).
 9. **Compatibility.** `FACTORY_CONTAINMENT_V2` remains the rollout flag for the worker-containment spec's *physical*
-   isolation boundary; credential purpose-scoping itself is not conditioned on it — meta/train/self-update/spec/
-   reconcile/discovery/chat paths get purpose tokens unconditionally, independent of containment v2's dev-only
-   rollout state. `FACTORY_AUTOMERGE` stays `0`. The concurrent-meta-writer rebase/retry convergence rule is
-   preserved (moved, not dropped — invariant 2). The human merge gate is unchanged.
+   isolation boundary; credential purpose-scoping is not conditioned on it for the seven paths listed —
+   meta/train/self-update/spec/reconcile/discovery/chat get purpose tokens unconditionally, independent of
+   containment v2's rollout state. **`dev` is deliberately not in that list**: invariant 3 conditions its write-path
+   downgrade on `FACTORY_CONTAINMENT_V2` being verified active, precisely because it is the one path whose
+   credential-purpose-scoping and physical-isolation concerns are not yet separable — the trusted target-push
+   adapter both properties share only exists inside the v2 launch path today. `FACTORY_AUTOMERGE` stays `0`. The
+   concurrent-meta-writer rebase/retry convergence rule is preserved (moved, not dropped — invariant 2). The human
+   merge gate is unchanged.
 
 Explicitly **not** proposed by this pass: standalone GitHub Apps, App JWT/installation-token minting infrastructure,
 or a new `CapabilityGrantEnvelope`/authority table. `pipeline_instances`/`phase_effects` are the authority/evidence
@@ -391,24 +530,31 @@ contract precedes the minion-base cutover.
 
 1. Close the purpose registry: add `github-meta`, `github-merge`, `github-factory-source`, `github-memory-read`,
    `github-memory-candidate`, `github-train`; replace `github.ts`'s module `TOKEN` with purpose-bound clients for
-   the runner's own calls; add the startup validator (→ Slice 1; proves `T-PURPOSE-REGISTRY-CLOSED`,
-   `T-PURPOSE-TOKENS-DISTINCT`, `T-META-PURPOSE-TOKEN`). No container or agent-script behaviour changes yet.
-2. Build the runner-owned meta publication protocol (runner-prepared checkout → credential-free worker edit →
-   bounded candidate artifact → trusted rebase-and-retry publish → `phase_effects` receipt), adopt it in
-   `agent/spec.sh`, `agent/reconcile.sh`, `agent/discovery.sh`, `agent/chat.sh`, and only then downgrade
-   `legacyCredentialTransport` to the read-only `github-checkout` credential for all five launch paths
-   (→ Slice 2; proves `T-META-CANDIDATE-BOUNDED`, `T-META-PUBLISH-REBASE-RETRY`, `T-META-PUBLISH-RECEIPT`,
-   `T-WORKER-NO-WRITE-CREDENTIAL`, `T-LEGACY-PATH-READ-ONLY`).
+   the runner's own calls; add the startup validator; extend the activation canary with a negative-scope check per
+   purpose (→ Slice 1; proves `T-PURPOSE-REGISTRY-CLOSED`, `T-PURPOSE-TOKENS-DISTINCT`, `T-META-PURPOSE-TOKEN`,
+   `T-PURPOSE-NEGATIVE-SCOPE`). No container or agent-script behaviour changes yet.
+2. Build the runner-owned meta publication protocol (gitless worker snapshot → bounded candidate artifact with
+   inline bytes → apply/commit/regenerate/push against a runner-private checkout the worker never touches →
+   `phase_effects` receipt), adopt it in `agent/spec.sh`, `agent/reconcile.sh`, `agent/discovery.sh`,
+   `agent/chat.sh`; downgrade `legacyCredentialTransport` to the read-only `github-checkout` credential for those
+   four launch paths; and make `dev`-kind dispatch under the legacy (non-v2) path fail closed rather than
+   credential-downgraded (→ Slice 2; proves `T-META-CANDIDATE-BOUNDED`, `T-META-APPLY-CHECKOUT-ISOLATED`,
+   `T-META-PUBLISH-REBASE-RETRY`, `T-META-PUBLISH-RECEIPT`, `T-WORKER-NO-WRITE-CREDENTIAL`,
+   `T-LEGACY-PATH-READ-ONLY`, `T-DEV-CONTAINMENT-V2-REQUIRED`).
 3. Reject `by` unconditionally at the lifecycle HTTP boundary and derive the actor only from the credential
    registry, on both the `status` and `disposition` routes (→ Slice 3; proves `T-BY-REJECTED`,
    `T-ACTOR-SERVER-DERIVED`).
-4. Make the factory lifecycle endpoint a complete writer: lifecycle-only principal, `expectedStatus`/
-   `expectedRevision` CAS with 409, idempotent replay, explicit source→target edge table, canonical committed
-   response with `indexSynced`, single promotion (→ Slice 4; proves `T-LIFECYCLE-PRINCIPAL-SCOPED`,
-   `T-LIFECYCLE-CAS`, `T-LIFECYCLE-IDEMPOTENT`, `T-LIFECYCLE-EDGE-TABLE`, `T-LIFECYCLE-CANONICAL-RESPONSE`).
-5. Cut minion-base over to that endpoint with the lifecycle bearer; delete its Contents-API mutation path and its
-   duplicate promotion call (→ Slice 5; proves `T-BASE-NO-META-WRITE`, `T-BASE-SERVICE-ACTOR`,
-   `T-BASE-CONFLICT-SURFACED`, `T-BASE-NO-DOUBLE-PROMOTE`).
+4. Make the factory lifecycle endpoint a complete writer, and register the two additional dashboard-scoped
+   principals minion-base's non-lifecycle calls need: lifecycle-only principal with `expectedStatus`/
+   `expectedRevision` CAS and 409, idempotent replay, explicit source→target edge table, canonical committed
+   response with `indexSynced`, single promotion; plus `dashboard-read` and `dashboard-run` route allowlists
+   (→ Slice 4; proves `T-LIFECYCLE-PRINCIPAL-SCOPED`, `T-LIFECYCLE-CAS`, `T-LIFECYCLE-IDEMPOTENT`,
+   `T-LIFECYCLE-EDGE-TABLE`, `T-LIFECYCLE-CANONICAL-RESPONSE`, `T-DASHBOARD-READ-SCOPED`,
+   `T-DASHBOARD-RUN-SCOPED`).
+5. Cut minion-base over to all three factory principals (lifecycle, dashboard-read, dashboard-run) for every call
+   `factory.ts` makes; delete its Contents-API mutation path, its duplicate promotion call, and `FACTORY_SECRET`
+   from its deployment entirely (→ Slice 5; proves `T-BASE-NO-META-WRITE`, `T-BASE-SERVICE-ACTOR`,
+   `T-BASE-CONFLICT-SURFACED`, `T-BASE-NO-DOUBLE-PROMOTE`, `T-BASE-NO-ADMIN-BEARER`).
 6. Delete `agent/run.sh`'s direct memory upload, stand up the dormant create-only quarantine publisher, and map
    every host-script operation to its purpose credential — including self-update's three distinct authorities
    (→ Slice 6; proves `T-MEMORY-PATH`, `T-MEMORY-CREATE-ONLY`, `T-MEMORY-DORMANT`, `T-NO-HOST-SCRIPT-PAT`,
@@ -437,22 +583,27 @@ while the meta-writing agents still hold the broad PAT.
 - `runner/src/lifecycle.ts`, `runner/src/monitor.ts` (use `github-meta`), `runner/src/automerge.ts` (use
   `github-merge`), and the seven fleet-read modules listed in §1 point 4 (use `github-checkout`)
 - `runner/src/index.ts` (extend the startup validator at `:164-190` to the credential registry)
-- `runner/src/github.test.ts`, `runner/src/index.test.ts`, new `runner/src/github-purpose.test.ts`
+- `runner/src/scoped-github-canary.ts` (add a negative-scope check per configured purpose alongside `verifyCommand`'s
+  existing positive checks `:383-398` — an authenticated call against a repository/action outside the purpose's
+  declared scope must be refused)
+- `runner/src/github.test.ts`, `runner/src/index.test.ts`, new `runner/src/github-purpose.test.ts`,
+  `runner/src/scoped-github-canary.test.ts`
 - `.env.example`, `deploy.sh` (`:316`), `setup.sh` (`:102`), `deploy/k8s.yml` (`:18`), `README.md` — every new env
-  var documented and written by the deployment writers
+  var documented and written by **all four** deployment writers
 
 **Definition of done (machine-checkable):**
 
 ```bash
 cd runner
-npm test -- --test-name-pattern='T-PURPOSE-REGISTRY-CLOSED|T-PURPOSE-TOKENS-DISTINCT|T-META-PURPOSE-TOKEN'
+npm test -- --test-name-pattern='T-PURPOSE-REGISTRY-CLOSED|T-PURPOSE-TOKENS-DISTINCT|T-META-PURPOSE-TOKEN|T-PURPOSE-NEGATIVE-SCOPE'
 npm test
 npx tsc --noEmit
 cd ..
-# every registry env var is written by every deployment writer
+# every registry env var is written by every deployment writer, INCLUDING deploy/k8s.yml
 for v in FACTORY_GH_META_TOKEN FACTORY_GH_MERGE_TOKEN FACTORY_GH_SOURCE_TOKEN \
          FACTORY_GH_MEMORY_READ_TOKEN FACTORY_GH_MEMORY_CANDIDATE_TOKEN FACTORY_GH_TRAIN_TOKEN; do
-  grep -q "$v" .env.example && grep -q "$v" deploy.sh && grep -q "$v" setup.sh || { echo "missing: $v"; exit 1; }
+  grep -q "$v" .env.example && grep -q "$v" deploy.sh && grep -q "$v" setup.sh && grep -q "$v" deploy/k8s.yml \
+    || { echo "missing: $v"; exit 1; }
 done
 ```
 
@@ -460,7 +611,9 @@ Fixtures prove: `T-PURPOSE-REGISTRY-CLOSED` — every consumer enumerated in §1
 and no module can build an unlabelled transport; `T-PURPOSE-TOKENS-DISTINCT` — two purposes configured with the same
 underlying token value refuse startup, and an unconfigured purpose that an enabled path exercises refuses startup;
 `T-META-PURPOSE-TOKEN` — a lifecycle commit and a monitor issue both carry the `github-meta` credential and never
-the target-purpose or checkout credential.
+the target-purpose or checkout credential; `T-PURPOSE-NEGATIVE-SCOPE` — every configured purpose's token is proven
+denied (403/404) against at least one repository/action outside its declared scope, and a purpose whose negative
+check has not yet run is reported as not-yet-active rather than silently trusted.
 
 ### Slice 2 — runner-owned meta publication, then legacy-path downgrade (8h; split if the DoD cannot be met in one PR)
 
@@ -471,14 +624,20 @@ shows the token missing from argv would pass while the first `git push` fails at
 
 - `runner/src/containment-effects.ts` (extend the `phase` union `:16-33` and validator `:77` with the meta
   publication binding; add the multi-file commit + rebase-retry publish operation reusing `tokenFor`/
-  `githubRequest`)
-- `runner/src/meta-publication.ts` (new: candidate-artifact schema, allowlist/bounds validation, index regeneration
-  via the meta repo's own `scripts/spec-index.mjs`/`scripts/proposal-index.mjs`)
-- `runner/src/queue.ts` (runner-side checkout preparation and workspace mount for the four meta run kinds;
-  `legacyCredentialTransport` `:2101-2113` forwards `github-checkout` only; all five launch paths `:2186-2231`,
-  `:4038-4043`)
+  `githubRequest`, run only against the runner-private checkout described below)
+- `runner/src/meta-publication.ts` (new: candidate-artifact schema carrying inline file bytes, allowlist/bounds
+  validation, gitless worker-snapshot preparation, runner-private apply-checkout preparation, index regeneration
+  via the meta repo's own `scripts/spec-index.mjs`/`scripts/proposal-index.mjs` run under a minimal allowlisted
+  environment against the apply checkout only)
+- `runner/src/db.ts` (migration: add nullable `purpose TEXT` and `target_repo TEXT` columns to `phase_effects`;
+  widen `PhaseEffectKind` `:1612` to add `'meta-publish'`)
+- `runner/src/queue.ts` (runner-side gitless snapshot + private apply-checkout preparation for the four meta run
+  kinds; `legacyCredentialTransport` `:2101-2113` forwards `github-checkout` only for `discovery`/`spec`/
+  `reconcile`/`chat` `:2186-2231`, `:4038-4043`; `dispatchPreparedRun` `:439` fails a `dev`-kind dispatch closed with
+  a queue-time error when `!containmentV2Enabled()`, instead of falling through to `startLegacy`)
 - `agent/spec.sh`, `agent/reconcile.sh`, `agent/discovery.sh`, `agent/chat.sh` (drop `gh repo clone`/`git push`/
-  `push_meta()`; write `/out/meta-candidate.json` from the existing write-allowlist survey instead)
+  `push_meta()`; write `/out/meta-candidate.json` — including file bytes — from the existing write-allowlist survey
+  instead)
 - `runner/src/meta-publication.test.ts` (new), `runner/src/queue.test.ts`, `runner/src/containment-effects.test.ts`,
   `agent/spec-integrity.test.sh`
 
@@ -486,7 +645,7 @@ shows the token missing from argv would pass while the first `git push` fails at
 
 ```bash
 cd runner
-npm test -- --test-name-pattern='T-META-CANDIDATE-BOUNDED|T-META-PUBLISH-REBASE-RETRY|T-META-PUBLISH-RECEIPT|T-WORKER-NO-WRITE-CREDENTIAL|T-LEGACY-PATH-READ-ONLY'
+npm test -- --test-name-pattern='T-META-CANDIDATE-BOUNDED|T-META-APPLY-CHECKOUT-ISOLATED|T-META-PUBLISH-REBASE-RETRY|T-META-PUBLISH-RECEIPT|T-WORKER-NO-WRITE-CREDENTIAL|T-LEGACY-PATH-READ-ONLY|T-DEV-CONTAINMENT-V2-REQUIRED'
 npm test
 npx tsc --noEmit
 cd ..
@@ -496,17 +655,28 @@ bash agent/spec-integrity.test.sh
 ```
 
 Fixtures prove: `T-META-CANDIDATE-BOUNDED` — a candidate naming a path outside the run kind's allowlist, a symlink,
-a `.git/` entry, or an over-bound file/byte count is rejected with no GitHub call; `T-META-PUBLISH-REBASE-RETRY` —
-a simulated non-fast-forward triggers pull-rebase, index regeneration, and a bounded retry that converges, matching
-today's `push_meta()` behaviour; `T-META-PUBLISH-RECEIPT` — publication writes exactly one `phase_effects` row per
-`{run_id,'meta-publish',candidate-hash}` and a replay is a no-op returning the same commit;
-`T-WORKER-NO-WRITE-CREDENTIAL` — the launch plan and Docker argv for **each of** discovery/spec/reconcile/chat/
-non-v2-dev contain no write-purpose credential and no `FACTORY_GH_TOKEN`; `T-LEGACY-PATH-READ-ONLY` — the credential
-those plans do carry resolves to `github-checkout`, whose `GITHUB_CAPABILITY` is `read`.
+a `.git/` entry, a `scripts/` target, or an over-bound file/byte count is rejected with no GitHub call;
+`T-META-APPLY-CHECKOUT-ISOLATED` — a worker that tampers with its snapshot's `.git/hooks`, `.git/config`, or a
+shadowed copy of `scripts/spec-index.mjs` has zero effect on the apply/commit/push/index-regeneration phase, because
+that phase runs only against the separate runner-private checkout the worker was never given access to;
+`T-META-PUBLISH-REBASE-RETRY` — a simulated non-fast-forward triggers pull-rebase, index regeneration, and a bounded
+retry that converges, matching today's `push_meta()` behaviour, entirely inside the runner-private checkout;
+`T-META-PUBLISH-RECEIPT` — publication writes exactly one `phase_effects` row per
+`{run_id,'meta-publish',candidate-hash}` with `purpose='github-meta'` and the target `minion-meta` slug recorded,
+and a replay is a no-op returning the same commit; `T-WORKER-NO-WRITE-CREDENTIAL` — the launch plan and Docker argv
+for **each of** discovery/spec/reconcile/chat contain no write-purpose credential and no `FACTORY_GH_TOKEN`;
+`T-LEGACY-PATH-READ-ONLY` — the credential those plans do carry resolves to `github-checkout`, whose
+`GITHUB_CAPABILITY` is `read`; `T-DEV-CONTAINMENT-V2-REQUIRED` — dispatching a `dev`-kind run with
+`FACTORY_CONTAINMENT_V2` unset/`0` is refused at admission time with a queue-time error naming the missing
+prerequisite, never silently downgraded to a read-only credential and never silently routed through
+`legacyCredentialTransport`'s unmodified (still-broad) form either — the refusal is the only allowed outcome once
+this slice is active.
 
 **End-to-end gate before merge (not a unit test):** execute one real spec run, one reconcile run, and one discovery
 run against the meta repo with `FACTORY_GH_TOKEN` **unset in the runner process**, and attach the resulting meta
-commits plus `phase_effects` rows to the PR. Slice 2 does not merge on unit fixtures alone.
+commits plus `phase_effects` rows to the PR. Additionally attempt to dispatch a `dev` run with
+`FACTORY_CONTAINMENT_V2=0` and attach the resulting refusal (not a broken/partial run). Slice 2 does not merge on
+unit fixtures alone.
 
 ### Slice 3 — reject caller-supplied `by`, server-derive actor (3-4h)
 
@@ -532,11 +702,11 @@ equals the registered credential-registry label for the authenticated capability
 slice:** inventory the live lifecycle callers (factory sweeps, minion-base, any cron) and confirm none sends `by`
 before the 400 becomes unconditional; record that inventory in the PR body.
 
-### Slice 4 — factory lifecycle endpoint becomes a complete writer (6-8h, minion-factory only)
+### Slice 4 — factory lifecycle endpoint becomes a complete writer, and the two dashboard principals (6-9h, minion-factory only)
 
 This slice exists because pass 3 assigned its work to nobody. Slice 5 cannot be written against a server that does
-not authenticate a lifecycle principal, does not honour a stated revision, and does not answer with the committed
-projection.
+not authenticate a lifecycle principal, does not honour a stated revision, does not answer with the committed
+projection, and has nothing narrower than `admin` for minion-base's non-lifecycle dashboard calls (§2 invariant 7).
 
 **Prerequisites (named, not assumed):** the interim source→target edge table is minion-base's shipped table
 (`meta-write.ts:64-78`) transcribed verbatim — no new policy is invented here. The `TODO(handoff)` at
@@ -545,14 +715,17 @@ must state that it transcribes rather than decides, and carry a human confirmati
 
 **Files to touch:**
 
-- `runner/src/index.ts` (new `FACTORY_LIFECYCLE_SECRET` → capability `lifecycle` with a two-route allowlist; join
-  the weak/pairwise-distinct guards at `:164-190`; accept and forward `expectedStatus`/`expectedRevision`; return
-  the canonical response; surface the promotion outcome)
+- `runner/src/index.ts` (new `FACTORY_LIFECYCLE_SECRET` → capability `lifecycle` with a two-route allowlist; new
+  `FACTORY_DASHBOARD_READ_SECRET` → capability `dashboard-read` with the read-route allowlist in §2 invariant 7; new
+  `FACTORY_DASHBOARD_RUN_SECRET` → capability `dashboard-run` with the mutation-route allowlist in the same
+  invariant, all three in the same fixed-allowlist shape as `UNSTICK_ROUTES` `:206-214`; join the weak/
+  pairwise-distinct guards at `:164-190` for all three new secrets; accept and forward `expectedStatus`/
+  `expectedRevision`; return the canonical response; surface the promotion outcome)
 - `runner/src/lifecycle.ts` (source→target edge table replacing `:34-43`; blob-sha CAS; `already_applied` replay;
   typed outcome union replacing `TransitionResult` `:49`; `indexSynced` reported rather than swallowed `:142-168`)
 - `runner/src/index.test.ts`, `runner/src/lifecycle.test.ts`
-- `.env.example`, `deploy.sh`, `setup.sh`, `deploy/k8s.yml`, `runner/README.md` (the new secret + the request/
-  response contract)
+- `.env.example`, `deploy.sh`, `setup.sh`, `deploy/k8s.yml`, `runner/README.md` (the three new secrets + the
+  request/response contract)
 - `runner/src/lifecycle-contract.test.ts` (new): the shared contract fixture Slice 5 imports/mirrors, so both sides
   are tested against one document
 
@@ -560,7 +733,7 @@ must state that it transcribes rather than decides, and carry a human confirmati
 
 ```bash
 cd runner
-npm test -- --test-name-pattern='T-LIFECYCLE-PRINCIPAL-SCOPED|T-LIFECYCLE-CAS|T-LIFECYCLE-IDEMPOTENT|T-LIFECYCLE-EDGE-TABLE|T-LIFECYCLE-CANONICAL-RESPONSE'
+npm test -- --test-name-pattern='T-LIFECYCLE-PRINCIPAL-SCOPED|T-LIFECYCLE-CAS|T-LIFECYCLE-IDEMPOTENT|T-LIFECYCLE-EDGE-TABLE|T-LIFECYCLE-CANONICAL-RESPONSE|T-DASHBOARD-READ-SCOPED|T-DASHBOARD-RUN-SCOPED'
 npm test
 npx tsc --noEmit
 ```
@@ -572,45 +745,59 @@ actor label; `T-LIFECYCLE-CAS` — a stale `expectedRevision` or `expectedStatus
 returns `already_applied` with no commit; `T-LIFECYCLE-EDGE-TABLE` — every edge minion-base's shipped table permits
 is accepted and every edge outside it is refused, enumerated from a table fixture; `T-LIFECYCLE-CANONICAL-RESPONSE`
 — a successful transition returns `{outcome, commit, revision, indexSynced, spec}`, and an index-patch failure
-returns `indexSynced: false` rather than a silent success.
+returns `indexSynced: false` rather than a silent success; `T-DASHBOARD-READ-SCOPED` — the `dashboard-read` bearer
+reaches exactly its GET routes and 403s on any mutation and on `/lifecycle/*`, is refused at startup when weak or
+equal to any other secret; `T-DASHBOARD-RUN-SCOPED` — the `dashboard-run` bearer reaches exactly
+`pipeline/spec`/`runs`/`pipeline/reconcile`/`chat` mutations and 403s on `/lifecycle/*` and on any `dashboard-read`
+route it does not also need.
 
-### Slice 5 — minion-base lifecycle cutover (4-6h, minion-base only; requires Slice 4 deployed)
+### Slice 5 — minion-base cutover off the admin bearer (5-7h, minion-base only; requires Slice 4 deployed)
 
 **Files to touch (minion-base only):**
 
 - `src/lib/server/meta-write.ts` (remove `gh`/`getFile`/`putFile` `:13-45` and the mutation half of
   `applyTransition` `:90-151`; keep the typed-outcome surface `:80-86` as the client's return type)
-- `src/lib/server/factory.ts` (`:149` — `/lifecycle/*` uses `FACTORY_LIFECYCLE_SECRET`, not `FACTORY_SECRET`)
+- `src/lib/server/factory.ts` (`factoryFetch` `:139-170` selects `FACTORY_LIFECYCLE_SECRET`,
+  `FACTORY_DASHBOARD_READ_SECRET`, or `FACTORY_DASHBOARD_RUN_SECRET` by the path/method being called, per §2
+  invariant 7's route split; `factoryConfigured()` `:18-20` checks the three new vars instead of `FACTORY_SECRET`;
+  `env.FACTORY_SECRET` is removed from `.env.example`/deployment configuration and no code path reads it)
 - `src/routes/api/meta/status/+server.ts` (forward `expectedStatus`/`expectedRevision`; drop the duplicate
   promotion calls `:38-61` in favour of the server's outcome, preserving the 202 partial-success semantics)
 - `src/lib/server/spec-dispose.ts` (relay uses the lifecycle bearer; update its contract note)
 - existing server tests for these modules, plus a mirror of the Slice 4 contract fixture
-- deployment/env documentation for the lifecycle-only service bearer
+- deployment/env documentation for the three new service bearers, with `FACTORY_SECRET` removed
 
 **Definition of done (machine-checkable):**
 
 ```bash
 cd <minion-base checkout>
-bun test --test-name-pattern='T-BASE-NO-META-WRITE|T-BASE-SERVICE-ACTOR|T-BASE-CONFLICT-SURFACED|T-BASE-NO-DOUBLE-PROMOTE'
+bun test --test-name-pattern='T-BASE-NO-META-WRITE|T-BASE-SERVICE-ACTOR|T-BASE-CONFLICT-SURFACED|T-BASE-NO-DOUBLE-PROMOTE|T-BASE-NO-ADMIN-BEARER'
 bun test
 bun run check
 ! rg -n "contents/|method: 'PUT'" src/lib/server/meta-write.ts
+! rg -n 'FACTORY_SECRET' src/
 ```
 
 Tests prove: `T-BASE-NO-META-WRITE` — no production minion-base module can `PUT` `minion-meta` contents;
-`T-BASE-SERVICE-ACTOR` — the lifecycle bearer (never `FACTORY_SECRET`, never `GITHUB_TOKEN`) is sent, and it never
-reaches browser/page data/logs; `T-BASE-CONFLICT-SURFACED` — a 409 from the factory renders the same
-`revision_conflict` outcome and current-state pair the UI renders today, and a stale page still cannot overwrite a
-newer human decision; `T-BASE-NO-DOUBLE-PROMOTE` — approving a spec results in exactly one queued run, sourced from
-the lifecycle response. `by` is never sent. If the repository's actual package scripts differ at implementation-time
-recon, use its documented equivalents and record the exact commands in the PR.
+`T-BASE-SERVICE-ACTOR` — each call sends the bearer matching its own route (`lifecycle`/`dashboard-read`/
+`dashboard-run`), never `FACTORY_SECRET`, never `GITHUB_TOKEN`, and none of the three reaches browser/page
+data/logs; `T-BASE-CONFLICT-SURFACED` — a 409 from the factory renders the same `revision_conflict` outcome and
+current-state pair the UI renders today, and a stale page still cannot overwrite a newer human decision;
+`T-BASE-NO-DOUBLE-PROMOTE` — approving a spec results in exactly one queued run, sourced from the lifecycle
+response; `T-BASE-NO-ADMIN-BEARER` — the application starts and every existing dashboard surface (run history,
+stats, trigger-health, providers, spec/proposal approval, dev-run creation) still operates end-to-end with
+`FACTORY_SECRET` **absent** from the environment entirely — not just unused on one route. `by` is never sent. If the
+repository's actual package scripts differ at implementation-time recon, use its documented equivalents and record
+the exact commands in the PR.
 
 ### Slice 6 — memory upload cutover and host-script purpose map (5-7h)
 
 **Files to touch:**
 
 - `agent/run.sh` (delete the direct memory `gh api PUT`, lines `79-83`, and its now-resolved `TODO(handoff)`)
-- `runner/src/memory/candidate-publisher.ts` (new; purpose-bound transport only, create-only semantics)
+- `runner/src/memory/candidate-publisher.ts` (new; purpose-bound transport only, create-only semantics; records a
+  `phase_effects` row with kind `'memory-candidate'` — widen `PhaseEffectKind` `:1612` for this one addition,
+  reusing the `purpose`/`target_repo` columns Slice 2 already migrated in)
 - `runner/src/memory/candidate-publisher.test.ts` (new)
 - `runner/src/queue.ts`, `runner/src/db.ts` (wire the publisher; dormant until memory-governance's validator lands)
 - `scripts/self-update.sh` (`:37-40` stop reading `FACTORY_GH_TOKEN`; `:70-71` memory pull → `github-memory-read`;
@@ -644,14 +831,14 @@ push or merge, and rejects a pair injected through the environment.
 
 | Surface | Impact | Mitigation / alert |
 |---|---|---|
-| Target repositories (`runner/src/repos.ts` / `repos.json`) | No change — target-purpose scoping already shipped via containment v2 (§1). Automerge's merge authority moves to its own purpose but stays inert (`FACTORY_AUTOMERGE=0`). | Slices 1-2 change the *credential path*, not target-repo behavior. No target-repo source edit required. |
+| Target repositories (`runner/src/repos.ts` / `repos.json`) | Read/branch-push/workspace-prepare purpose scoping for `dev` runs already shipped via containment v2 (§1) — unchanged for runs dispatched under it. What *does* change: once Slice 2 lands, `dev` dispatch under the legacy (non-v2) path is refused outright rather than silently downgraded (§2 invariant 3), so containment-v2 activation becomes an operational prerequisite for the factory's dev-run capacity, not merely an optional rollout. Automerge's merge authority moves to its own purpose but stays inert (`FACTORY_AUTOMERGE=0`). | Slices 1-2 change the *credential path* for the four meta kinds and add a fail-closed admission gate for `dev`. No target-repo source edit required, but the operator must verify containment v2 is active fleet-wide before or as part of activating Slice 2, or dev dispatch stops. |
 | `minion-meta` | Every meta write moves twice: off the shared PAT onto `github-meta` (Slice 1), and out of the worker container onto the runner's publication adapter (Slice 2). Commit actor text becomes strictly server-derived (Slice 3). | The rebase/retry convergence rule is preserved by porting `push_meta()`'s loop into the adapter, not by deleting it. Slice 2 cannot merge on unit fixtures alone — it requires one real spec, reconcile, and discovery publication with the broad token unset. |
 | `minion-meta` chat turns + `/opt/factory/meta` shared clone | `startChatTurn` (`queue.ts:4038-4043`) is the fifth credentialed launch path and mounts a *shared persistent* clone; pass 3 omitted it entirely. | Slice 2 covers `agent/chat.sh` alongside the run-kind agents. The shared-mutable-clone hazard is called out for the worker-containment spec, which owns physical isolation. |
 | Private memory-quarantine repository | A candidate-only purpose and create-only JSON namespace are provisioned before M8 activation, matching the already-approved memory-governance spec. | Slice 6. Repo creation/access remains a human-gated provisioning step; do not install the candidate purpose against canonical `minion-agent-memory`. |
 | `minion-agent-memory` (canonical) | Direct worker writes stop entirely (Slice 6 deletes `agent/run.sh:79-83`). The host's own read pull (`self-update.sh:70-71`) keeps working via a dedicated read purpose. | A canonical *write* from any purpose other than the (future, memory-governance-owned) promotion path is a failing adversarial test. |
 | `minion-factory` self-update | `scripts/self-update.sh` uses one token for three different authorities (private memory read, factory source + Actions read, meta issue write). A `minion-meta`-only credential cannot serve the first two. | Slice 6 maps each command to its own purpose. §8's revocation happens only after that map is exercised — otherwise self-update is a deterministic host-path outage. |
 | Promotion train | `scripts/train.sh` operates on **two** fixed pairs (`minion-ai@DEV→main`, `minion-site@dev→master`), not one. | Slice 6's `github-train` purpose is scoped to the declared pair set and cannot accept repo/ref input from the calling script. |
-| `minion-base` ← **cross-repo dependency** | The cutover needs factory-side authentication, revision CAS, an edge table, and a canonical response that do not exist today; minion-base additionally holds the factory **admin** bearer and enforces transitions the factory route would reject. | Slice 4 (minion-factory) lands and deploys **before** Slice 5 (minion-base). One shared contract fixture is authored in Slice 4 and mirrored in Slice 5. Read-only GitHub-access narrowing stays explicit later scope (§6). |
+| `minion-base` ← **cross-repo dependency** | The cutover needs factory-side authentication, revision CAS, an edge table, and a canonical response that do not exist today; minion-base additionally holds the factory **admin** bearer for *every* proxied call (`factory.ts:149`), not only lifecycle mutations — runs/history, stats, trigger-health, providers, `pipeline/spec`, `pipeline/reconcile`, `runs` creation, and `chat/*` all use it too — and enforces transitions the factory route would reject. | Slice 4 (minion-factory) lands and deploys **before** Slice 5 (minion-base) and registers `lifecycle`, `dashboard-read`, and `dashboard-run` as three separate principals (§2 invariant 7), not just `lifecycle`. Slice 5 removes `FACTORY_SECRET` from minion-base's deployment entirely and proves the app still operates without it (`T-BASE-NO-ADMIN-BEARER`). One shared contract fixture is authored in Slice 4 and mirrored in Slice 5. Read-only GitHub-access narrowing stays explicit later scope (§6). |
 | Other lifecycle API callers | Unknown fields including `by` become 400; server actor labels become credential-registry ids for every caller. | Slice 3 requires a caller inventory in its PR body before the 400 is unconditional; log rejected field names only, never body values. |
 | Deployment surface (`deploy.sh`, `setup.sh`, `deploy/k8s.yml`, `.env.example`) | Six new environment variables plus one new bearer secret. `deploy.sh` rewrites `/opt/factory/.env` **wholesale** (operator memory), so a variable absent from it is silently dropped on the next deploy. | Every slice that introduces a credential edits all four writers in the same PR; Slice 1's DoD greps for exactly that. |
 | Worker containment (separate spec) | Shares the deny-by-default credential boundary and the trusted adapter this spec extends with a meta publication binding. | Coordinate slice ordering with `2026-08-18-factory-worker-containment-spec` implementers so neither duplicates the other's boundary/adapter code (§0 relationship recommendation). |
