@@ -229,8 +229,16 @@ The outbox handler obtains bounded failure context, classifies the source, evalu
 pause, attempt ceiling, progress, and budgets, then transactionally records the decision and optional
 child. Replaying the outbox returns the existing decision.
 
+An admitted child that fails the runner's exact-head authority check before checkout has not consumed
+a model attempt. The runner keeps the original `retry_decisions` row immutable and may admit a
+correctly pinned replacement only after proving the prior child is a runner-created auto-fix child in
+that pre-execution failure state. Each replacement appends a `retry_rebindings` row keyed by the old
+child and naming the source and new child. Replays follow this bounded chain to the effective child;
+ordinary failures, ambiguous ownership, and already-started work cannot use the exception.
+
 Manual operator requeue is not another `retry_decisions` row for the stopped source. When the
-breaker is open, the operator admission transaction writes a separate append-only
+breaker is open, the runner first preserves or creates the automatic circuit-open `stop`, then the
+operator admission transaction writes a separate append-only
 `retry_overrides` record keyed by `child_run_id`, containing `source_run_id`, operator identity,
 `supervised-breaker-override`, and timestamp. The immutable stop decision remains intact.
 
@@ -363,6 +371,7 @@ start no process, insert no child, preserve queue order, and keep health/monitor
 | Breaker open, pause `0` | no automatic child from any origin — promotion, auto-fix, or unstick requeue. |
 | Breaker open, manual operator requeue | one child; immutable stop decision unchanged; append-only child-keyed override records `supervised-breaker-override`. |
 | Outbox replay after restart | same decision/child id. |
+| Admitted child loses exact-head authority before checkout | same decision; one append-only rebind to the correctly pinned replacement; no attempt increment. |
 | Stale closed monitor issue recurs | same issue reopens and receives one recurrence comment. |
 | Pause `1` with queued work | API online, queue unchanged, zero claims/spawns. |
 | Pause `1` with a finished failed run | auto-fix outbox remains pending; no child or terminal decision. |
