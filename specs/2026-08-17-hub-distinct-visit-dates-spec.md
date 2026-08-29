@@ -3,7 +3,7 @@ id: 2026-08-17-hub-distinct-visit-dates-spec
 title: "CRM funnel — one timezone-correct visit-date definition (invoices + completed bookings) behind the shipped Loyal floor"
 stage: spec
 status: review
-pass: 6
+pass: 7
 next_slice: 1
 created: 2026-08-17
 updated: 2026-08-29
@@ -95,6 +95,40 @@ H1 required a row per visitor, not per invoice) would inflate the finance-buyers
 and 11 are sharpened; DELTA gains D13–D15 and D3/D8 are corrected in place; Slice 1 gains the
 cache-tag-parity and settings-invalidation work; Slice 2's `booking_owner` CTE and `crmRevenueSummary`
 are corrected; §7's gate is fixed to match S1's own exact-path assertion.
+
+**Pass-7 fix (2026-08-29).** A fourth external review of pass 6, against the same pinned hub
+commit (`git ls-remote` re-confirms `master` is still `1b47e8ce`), returned **FAIL** with one
+High, one Medium and one Low. Before fixing them: **the pattern across passes 4–7 is itself the
+finding.** Every round has surfaced *one more writer, or one more consumer,* that the previous
+round's targeted fix did not sweep — H3/D8 (booking mutations), pass-6 H1 (invoice mutations),
+pass-6 M1 (settings), pass-6 M3 (a map consumer), and now pass-7 H1 (identity mutations). Fixing
+the named call site each round is what guarantees a fifth round. So this pass stops enumerating
+from memory and enumerates from the tree: §1 gains a **complete writer census** of every relation
+the visit SQL reads, produced at `1b47e8ce` by grepping both write forms for each relation — the
+Drizzle form (`.insert(T)` / `.update(T)` / `.delete(T)` for `crmContacts`, `finClients`,
+`finInvoices`, `schedBookings`, `finSettings`) and the raw-SQL form (`insert into` / `update` /
+`delete from` on each table name) — and invariant 7 is restated as a property of that census
+rather than as a list of remembered mutations.
+
+The three findings, each confirmed in that checkout and each **wider than reported**:
+(H1) `reconcileParties` (`party.service.ts:140-267`) rewrites `crm_contacts.party_id`,
+`fin_clients.party_id` **and** `sched_bookings.party_id`, and mints canonical CRM contacts, with
+**no invalidation at all** — and it has *four* production call sites, not one. Two of them
+(`syncSource`, `harvestContacts`) bust *before* reconciliation runs, and two
+(`POST /api/crm/parties/reconcile`, the daily finance cron) never bust. The convention it is
+missing already exists in its own file: `party.service.ts` post-commit-invalidates at three
+*smaller* writers (`:393`, `:468`, `:557`). Fixing it at the four call sites would be the same
+mistake again — so the fix goes in the writer.
+(M1) `b.start_time <= now()` makes eligibility a function of the wall clock, and crossing that
+boundary writes nothing, so no invalidation fires and a cached "not a visit" survives its full
+TTL+SWR window. Pass 7 does not shrink a TTL to hide this: it removes the clock from the read
+path by enforcing at the **write** what §2.3 already claimed — `completed` means attended.
+(L1) `visitDates` is not internal. `GET /api/crm/contacts` returns ranked rows verbatim
+(`routes/api/crm/contacts/+server.ts:104`), so both `finance.visitDates` and D12's sentinel change
+are wire-visible. The spec now *declares* that API delta, with contract coverage, instead of
+denying it.
+§1, §2, §3 and Slices 1–2 are corrected in place; §6 and §7 gain the rows the API declaration and
+the new invalidation paths require.
 
 **Design ancestors:**
 [`2026-08-13-crm-customers-server-pagination-spec`](2026-08-13-crm-customers-server-pagination-spec.md)
@@ -229,6 +263,34 @@ but `show timezone;` is what tells you whether it is currently *firing*.
 | `contactFinanceMap` is **not** consumer-free: `crmRevenueSummary` calls it and loops `for (const f of Object.values(map)) { … buyers += 1; … }` — `buyers` increments once per map row with no `f.invoices > 0` guard, so a booking-only row (S2's `{revenue:0, invoices:0, loyal:true, visitDates:2}` shape) would count as a buyer | `crm-finance.service.ts:152-177`, esp. `:164` (`contactFinanceMap` call) and `:170` (`buyers += 1`) — pass-6 review M3, corrects the pass-5 §1 claim at (old) line 191 |
 | `sched_bookings.party_id` is populated by a **separate** reconciliation pass keyed on `attendee_phone` → `parties.phone9` (`party.service.ts:218-221`), independent of the linked `crm_contact_id` contact's own `party_id`. A directly-linked booking's `party_id` column can therefore differ from (or lag) the party its `crm_contact_id` contact belongs to — the M2 canonicalization must key off the **contact's** `party_id` (via `contact_target`), not the booking row's own `party_id`, when a direct link exists | `party.service.ts:218-221`; `pg-scheduling-schema.ts:199` — read while designing the pass-6 `booking_owner` fix |
 
+**Added in pass 7 — the complete writer census.** Passes 4–6 each patched the one mutation the
+round's review named. This table is the enumeration that ends that loop: every relation the visit
+SQL reads, every writer of it at `1b47e8ce`, and whether that writer invalidates today. It was
+built by grepping both write forms for each relation (`.insert(T)`/`.update(T)`/`.delete(T)` and
+raw `insert into`/`update`/`delete from <table>`), not from recall. **A row is "covered" only if
+the invalidation happens *after* the mutation commits** — a bust that runs before the write is
+worse than none, because it re-warms the cache from the pre-mutation state.
+
+| Relation the visit SQL reads | Every writer at `1b47e8ce` | Invalidates today? | Disposition |
+|---|---|---|---|
+| `fin_invoices` (insert/upsert, `status` incl. `void`, `shadowed`) | `upsertInvoicesBatch` (`finance.service.ts:233,358`) — sole caller is `finance-sync.advanceJob` (`finance-sync.service.ts:123`); `rg 'upsertInvoicesBatch\|upsertInvoice('` finds no other production caller (POS only *mentions* it in a comment, `pos.service.ts:1367`) | Partly — `bustFinanceCache` after the page loop and on finish (`:133,140`), `finances` tag only | **D13** gives the roster that tag; then covered |
+| `crm_contacts.party_id`, `fin_clients.party_id`, `sched_bookings.party_id`, minted canonical `crm_contacts` | `reconcileParties` (`party.service.ts:140-267`, statements at `:196,202,207,213,220,243,255`) | **No — none at all.** Four production call sites: `finance-sync.service.ts:159` (`syncSource`, whose only bust is `advanceJob`'s, *before* it), `crm-contacts.service.ts:185` (`harvestContacts`, whose `bustCrmList` at `:173` is also *before* it **and** conditional on `created > 0`), `routes/api/crm/parties/reconcile/+server.ts:12` (manual/backfill, no bust), `routes/api/finances/sync/daily/+server.ts:132` (cron, no bust) | **D15** — pass-7 H1 |
+| `crm_contacts.party_id` | `linkContactParty` / `ensurePartyForContact` (`party.service.ts:329-351`) | **No.** `rg` over the whole tree finds **no production caller** — it is an exported trap, not a live path; stating this precisely matters, because the fix is trap-closing, not an outage fix | **D15** — same writer-level fix |
+| `crm_contacts` (create, patch, soft-delete, bulk soft-delete, hard delete, merge, harvest) | `crm-contacts.service.ts:124,138,149,1241,1488,1559,1623,1651,1682`; `crm-cleanup.service.ts:131,463,496,502` | **Yes** — every one is followed by `bustCrmList` (`:173,1511,1615,1642,1674,1684,1790,1839,1847,1862,1871,1959,2261`) or cleanup's local `invalidateTags(tenantDomain(…,'crm'))` (`crm-cleanup.service.ts:16`) | No change |
+| `crm_contacts` insert on the booking path (`ensureCrmContact`) | `scheduling-bookings.service.ts:173`, inside `createBooking` | **No** | **D8** (already specified) |
+| `sched_bookings` insert; `status` | `createBooking` (`:283`), `setBookingStatus` (`:377`) | **No** | **D8** (already specified) |
+| `sched_bookings.start_time` | **Nothing.** Written once at insert (`:289`); no `.update(schedBookings)` or raw `update sched_bookings` touches it anywhere (the only raw one is `party.service.ts:220`, `party_id`). Rescheduling is cancel-then-create (`routes/api/gateway/actions/booking-reschedule/+server.ts:64`) | n/a — immutable | The fact **D16** turns on: a row crossing its own `start_time` is not a mutation, so no invalidation can be attached to it |
+| `sched_bookings.status` → `completed` | `setBookingStatus` (`:373-388`) — `SETTABLE` membership is the only validation; no transition check, no timestamp check. `createBooking` can only insert `pending`/`accepted` (`:280`), so a future-`completed` row is reachable **only** through `setBookingStatus` (PATCH `bookings/[id]/+server.ts:23`, `bookings/[id]/complete/+server.ts:43`, gateway `booking-complete/+server.ts:56`) | **No** | **D8** + **D16** (write-side attended guard) |
+| `fin_settings.timezone` (the day-bucket parameter) | `updateFinSettings` (`finance.service.ts:546-592`) | **No** | **D4/M1** (already specified) |
+| `fin_settings.fx*` | `refreshExchangeRate` (`finance.service.ts:598-640`) | No | **Out of scope, deliberately** — fx fields are not read by the visit query; D4's bust rides on `updateFinSettings` only. Recorded here so the next reader does not mistake the omission for an oversight |
+| deposit/procedure rule | `crm-settings.service` (owned by `2026-08-17-hub-reserva-keyword-config-spec`) | n/a — the rule's fingerprint is already part of the `crm-fin-map` cache key (§1, S1) | No change |
+
+**How to re-run this census** (it is the gate against a fifth round, and it belongs in the S1 PR
+body): for each of `crm_contacts`, `fin_clients`, `fin_invoices`, `sched_bookings`, `fin_settings`,
+run `rg -n '\.(insert|update|delete)\(<drizzleTable>\)' src/` and
+`rg -n '(insert into|update|delete from) <table_name>' src/`, and confirm each hit is followed by a
+**post-commit** `bustCrmList` / `bustFinanceCache` / `invalidateTags(tenantDomain(…,'crm'))`.
+
 **Consequences for the pass-2 plan, stated plainly:** its S1 ("build a new `crm-visits.ts` and a
 second batched count") and S2 ("make the decision deterministic, add forward-only / manual-wins /
 write-only-on-change guards") would have re-implemented four things that already exist and would
@@ -247,13 +309,23 @@ slices below are the residue that is genuinely missing.
    nothing else that decides it.
 2. **Bucketed in the org's business timezone** (`fin_settings.timezone`, default `America/Lima`),
    never in the session zone. The zone is a bound parameter, never interpolated into SQL text.
-3. **A visit is evidence, not intent.** A **non-void** procedure (non-deposit) invoice with a
-   non-null `issued_at`, or a booking whose status is `completed` **and** whose `start_time` is not
-   in the future. `pending`/`accepted`/`cancelled`/`rejected`/`no_show` bookings, future-dated
-   `completed` bookings, deposit-only invoices, and `void` invoices are not visits.
+3. **A visit is evidence, not intent — and the evidence is a stored fact, never the clock.** A
+   **non-void** procedure (non-deposit) invoice with a non-null `issued_at`, or a booking whose
+   status is `completed`. `pending`/`accepted`/`cancelled`/`rejected`/`no_show` bookings,
+   deposit-only invoices, and `void` invoices are not visits.
    **"Non-void" is `status is distinct from 'void'`, never `status <> 'void'`** — the column is
    nullable, so the inequality form is really "status is known and not void" and would silently
    stop counting every invoice a connector ingested without a status (R2-M1).
+   **`completed` means attended, and that is enforced where the status is written, not where it is
+   read (M1).** `setBookingStatus` refuses — atomically, in the statement that writes it — to move
+   a booking into `completed` while its `start_time` is still in the future, so the visit query
+   carries **no** `now()` predicate at all. This is not a stylistic preference: `start_time` is
+   written exactly once, at insert, and never updated (§1 census), so a row crossing its own start
+   time is *not a mutation* and no invalidation can be hung on it. A `start_time <= now()` filter
+   in the read would therefore have converted the pass-4 defect ("a future booking promotes
+   prematurely") into a strictly worse one ("a booking becomes eligible and every cached
+   projection that says otherwise stays valid"). Read-time truth must be a pure function of stored
+   rows; that is what makes invariant 7 provable rather than probable.
 4. **A contact needs no invoice to be a visitor.** Visit-date evidence from invoices and from
    bookings is aggregated independently, one row per contact each, then combined — never by
    filtering bookings through an invoice-anchored relation. A contact with zero invoices and two
@@ -275,17 +347,27 @@ slices below are the residue that is genuinely missing.
 6. **Loyal stays read-time.** `visitDates >= 2` remains a *floor* derived at read time; nothing new
    is persisted into `custom_fields._funnel`. Evidence disappearing (a voided invoice, a booking
    flipped to `no_show`) self-corrects.
-7. **Every cached surface that reads visit-date evidence stays consistent with the evidence, and
-   with itself.** Booking creation and every booking status mutation that can add or remove visit
-   evidence busts the same cache tags a comparable invoice mutation would — there is no cached
-   read path that can see stale scheduling evidence longer than an equivalent stale invoice would
-   be tolerated. Symmetrically (H1), every cache a **finance** mutation is expected to invalidate
-   must actually carry the tag that mutation busts: the roster (`rankContactsPageCached`) carries
-   the `finances` tag under the exact same condition the dashboard (`getCrmDashboardStats`)
-   already does, so a normal invoice sync or void reaches all three visit-dependent caches, not
-   two of three. And a `fin_settings` change (M1) — the timezone above all — invalidates every
-   cache whose bucketing depends on it (`crm-fin-map`, the roster, the dashboard) before its
-   TTL+SWR window would otherwise serve a stale zone's grouping.
+7. **Cache coherence is a closed property over the writer census, not a list of remembered
+   mutations.** Stated so it can actually be checked: *for every relation the visit SQL reads,
+   every writer of that relation invalidates every visit-dependent cache **after** its own
+   mutation commits.* The census in §1 is the domain of that quantifier, and re-running it (the
+   `rg` recipe printed there) is how a reviewer or a future agent falsifies this invariant instead
+   of trusting it. Three properties follow, and each is where a previous pass failed:
+   - **Coverage.** Booking creation and every booking status mutation bust the same tags a
+     comparable invoice mutation does (H3/D8); every `fin_settings` write that changes the day
+     bucket busts them too (M1/D4); and every **identity** write — `reconcileParties`,
+     `linkContactParty` — busts them as well (pass-7 H1/D15), because the party spine is the join
+     that decides *whose* visit a row is.
+   - **Reachability.** A cache is only invalidated by a tag it actually carries. The roster
+     (`rankContactsPageCached`) carries the `finances` tag under the exact same condition the
+     dashboard (`getCrmDashboardStats`) already does (pass-6 H1/D13), so an invoice sync or void
+     reaches all three visit-dependent caches rather than two of three.
+   - **Ordering.** The bust happens *after* the mutation commits. A bust that precedes the write
+     is worse than no bust: a concurrent read can refill the entry from the pre-mutation state and
+     the write then commits behind it. That is exactly the shape `syncSource` and
+     `harvestContacts` have today around `reconcileParties` (§1), and fixing it inside the writer
+     — rather than at each of its four call sites — is what makes the property hold for callers
+     that do not exist yet.
 8. **SQL and TS keep agreeing** — the parity truth table covers the new axis; the roster and the
    contact page can never show different Loyal sets.
 9. **Batched, never N+1.** The count is computed for a whole page in one query, as today.
@@ -300,25 +382,37 @@ slices below are the residue that is genuinely missing.
     invoice **nor** a visit date. Leaving it at "no invoices" would hand `financeFloorStage` a
     `null` for a booking-only contact and put both pages back in disagreement with the SQL
     `funnel_stage` that says `loyal`.
+12. **The public API delta is declared, not discovered (L1).** `GET /api/crm/contacts` serializes
+    ranked rows verbatim (`routes/api/crm/contacts/+server.ts:104`), so the row decoration **is**
+    the wire contract. Two things change on it, and both are stated here, specified in D17, and
+    covered by a contract test: `contacts[].finance` gains an additive numeric `visitDates`, and
+    `contacts[].finance` becomes non-null for a contact that has visit evidence but no invoice.
+    Nothing is removed and no field changes type, so the change is additive for tolerant readers —
+    but "additive" is a claim about *consumers*, so the slice that makes it enumerates them (hub's
+    own `/crm/customers` page and `export.csv`, plus the gateway CRM tools §6 flags) instead of
+    asserting it.
 
 ## 3. DELTA — transitions and the tests that prove them
 
 | # | Transition | Slice | Proof |
 |---|---|---|---|
 | D1 | `issued_at::date` → `(issued_at at time zone $tz)::date`, `$tz` from `fin_settings` | S1 | Postgres test: two invoices at 18:00 and 20:00 Lima on one day ⇒ `loyal=false`; 18:00 Lima on two different days ⇒ `loyal=true` |
-| D2 | The loyal predicate stops being invoice-only: distinct dates over (procedure invoices that are non-void **by `status is distinct from 'void'`** ∪ `completed`-and-past bookings), deduped across sources, aggregated as an **independent** per-contact relation that is left-joined onto the contact spine — never by filtering bookings through `contact_invoice_class`, and never by re-anchoring `fin` | S2 | Tests: invoice day A + completed booking day B ⇒ loyal; invoice and booking on the same local day ⇒ 1 date, not loyal; `no_show`/`cancelled`/`accepted`/future-dated-`completed` bookings ⇒ not counted; **zero invoices + two completed bookings ⇒ loyal, and revenue fields stay `0`/unset, not thrown**; a procedure invoice with `status IS NULL` still counts (R2-M1) |
+| D2 | The loyal predicate stops being invoice-only: distinct dates over (procedure invoices that are non-void **by `status is distinct from 'void'`** ∪ `completed` bookings, with attendance enforced at the write per D16 rather than by a `now()` filter in the read), deduped across sources, aggregated as an **independent** per-contact relation that is left-joined onto the contact spine — never by filtering bookings through `contact_invoice_class`, and never by re-anchoring `fin` | S2 | Tests: invoice day A + completed booking day B ⇒ loyal; invoice and booking on the same local day ⇒ 1 date, not loyal; `no_show`/`cancelled`/`accepted` bookings ⇒ not counted (a *future-dated* `completed` booking is unreachable by construction — D16); **zero invoices + two completed bookings ⇒ loyal, and revenue fields stay `0`/unset, not thrown**; a procedure invoice with `status IS NULL` still counts (R2-M1) |
 | D3 | Each booking gets **exactly one** owner, and that owner agrees with invoice attribution for the same party (M2): `crm_contact_id` **canonicalized through `CONTACT_PARTY` on that contact's own `party_id`** when it names a live, party-linked contact in the org; the live contact itself, unchanged, when it is partyless; otherwise the booking's own `party_id` resolved through the same canonical `CONTACT_PARTY` pick. Partyless contacts stay reachable; a booking directly linked to a non-canonical sibling still lands on the party's canonical contact — the same one the invoice bridge attributes that party's invoices to | S2 | Tests over all three link shapes, **including a `party_id IS NULL` contact whose only link is `crm_contact_id`**; a doubly-linked booking ⇒ counted once, for the canonical contact only; **two live contacts A (canonical) and B share one party ⇒ a direct-link booking on B and a party-only booking both credit A, the same contact an invoice on that party is attributed to — one invoice-day on A plus one booking-day directly linked to B combine into 2 dates on A and reach loyal (M2, extends R2-M2)** |
 | D4 | The finance-map cache key gains the timezone (and the visit-source shape) (S1); `updateFinSettings` invalidates every visit-dependent cache — `crm-fin-map`, the roster, and the dashboard — after any settings write, so a timezone change cannot serve a stale Loyal set past that one write (M1, extends D4) | S1 | Unit test on the key builder; integration test warming all three caches, calling `updateFinSettings({timezone: …})`, and asserting the very next read of each reflects the new zone without a TTL wait |
 | D5 | Roster SQL and TS derivations still agree, now including the visit axis | S1, S2 | `crm-funnel-parity.sql.integration.test.ts` extended with 0/1/2 visit dates × source mix |
 | D6 | `distinctVisitDates` and the analyze route's `visits >= 2` write branch are deleted; the route documents the floor as the Loyal source | S3 | `rg distinctVisitDates src/` is empty; route test: a model answering `loyal` still cannot set it, and no `_funnel` write happens on the Loyal path |
 | D7 | Re-stubbing a visit/loyal signal to a constant fails a test | S3 | Anti-recurrence guard test |
 | D8 | `createBooking` and every `setBookingStatus` transition bust the same cache tags a comparable invoice mutation busts (`contactFinanceMap`, `rankContactsPageCached`, the dashboard cache) — scheduling evidence is never staler than invoice evidence | S2 | Test: warm all three caches, transition `accepted → completed → no_show`, assert the very next read reflects each transition (no TTL wait) |
-| D9 | `ContactFinance` (internal, not the wire response) exposes a numeric `visitDates` alongside `loyal`, so tests can assert the literal count the source DoD asked for | S2 | Tests assert exact `visitDates` of 0, 1, and 2 across the source-mix cases in D2, separately from the `>= 2` threshold check |
+| D9 | `ContactFinance` (the service type behind `contactFinanceMap`) exposes a numeric `visitDates` alongside `loyal`, so tests can assert the literal count the source DoD asked for. **This type is internal; the same field on `RankedContact.finance` (D12) is not — see D17** | S2 | Tests assert exact `visitDates` of 0, 1, and 2 across the source-mix cases in D2, separately from the `>= 2` threshold check |
 | D10 | The contact detail page stops carrying its own Loyal: `contactFinanceSummary` loses `purchased`/`reservedOnly`/`loyal` and the `proc_dates`/`has_deposit` aggregate that computed them; `+page.server.ts` derives `financeFloor` from the ranked row it **already loads** (`score.finance`), keeping the personal-org `null`; `+page.svelte` passes `data.financeFloor`. The financials card's visibility keeps keying on `data.finance`, so no card appears or disappears (R2-H1) | S1 | Contact-detail tests: the Lima-midnight pair ⇒ not loyal on the contact page *and* the roster; a zero-invoice/two-completed-bookings contact ⇒ loyal on both (after S2); `rg -n 'loyal' ` inside `contactFinanceSummary` is empty; a snapshot/DOM assertion that the financials card still renders exactly when the contact has ≥1 invoice |
 | D11 | `fin`'s membership stays invoice-derived — the visit aggregate is a second CTE left-joined in `base` next to `fin`, and `fin_loyal` moves out of the `fin` aggregate into `base` (P5-F1) | S2 | Golden test: `booked`, `finance_buyers`, `finance_customers`, `is_buyer` and an `order by revenue` page are unchanged on a fixture that adds only bookings; `fin_loyal` still `false` for every contact when the finance bridge is off |
 | D12 | The `RankedContact.finance` decoration is `null` only when the contact has neither an invoice nor a visit date | S2 | Unit test on the mapping over all four (has-invoice × has-visit) combinations; the booking-only row yields `{revenue: 0, invoices: 0, loyal: true, visitDates: 2}` |
 | D13 | `rankContactsPageCached` gains the same conditional `finances` tag `getCrmDashboardStats` already carries (`...(finance.withFinance ? tags.tenantDomain(tenantId,'finances') : [])`), so a canonical invoice mutation (`bustFinanceCache` — invoice creation, sync, void) invalidates the roster exactly the way it already invalidates the dashboard (H1) | S1 | Test: warm the roster page for a contact, create a second procedure invoice through the production `finance-sync` invalidation path (not a test-only bust call), assert the very next roster read shows the changed Loyal set with no TTL wait; repeat for voiding an invoice |
 | D14 | `crmRevenueSummary`'s `buyers` rollup increments only when a `contactFinanceMap` row has `invoices > 0`, so a booking-only contact (S2's zero-invoice, two-completed-booking shape) is not counted as a finance buyer (M3) | S2 | Regression test: a fixture with one booking-only loyal contact and zero invoice-having contacts asserts `crmRevenueSummary().buyers === 0` |
+| D15 | The **identity** writers join the invalidation contract, at the writer rather than at their call sites: `reconcileParties` and `linkContactParty` each `await bustCrmList(ctx.tenantId)` **and** `await bustFinanceCache(ctx)` immediately after their `withOrgCore` transaction returns. This closes all four `reconcileParties` call sites at once — including the two whose existing bust runs *before* it (`syncSource`, `harvestContacts`) and the two that never bust (`POST /api/crm/parties/reconcile`, the daily finance cron) — and any caller added later (pass-7 H1) | S1 | Integration test: warm `crm-fin-map`, the roster page and the dashboard against the *pre*-reconciliation spine, run `reconcileParties`, and assert the very next read of each uses the new owner/visit set with no TTL wait. A second test drives the race explicitly: refill the three caches from inside the reconcile transaction (before it commits) and assert the post-commit bust still removes those entries. A third asserts the call-site fix is *not* what makes it pass — call `POST /api/crm/parties/reconcile` (which has no bust of its own) and assert the same coherence |
+| D16 | `setBookingStatus` refuses to move a booking into `completed` while `start_time > now()`, enforced in the same UPDATE (`… where id = $id and org_id = $org and start_time <= now()` for that status, zero rows affected ⇒ throw `BookingNotStartedError`), surfaced as HTTP 409 by the PATCH route, `/complete`, and the gateway `booking-complete` action. With that guard, the visit predicate is `b.status = 'completed'` with **no** `now()` term, so eligibility changes only through a mutation that busts caches (M1). `createBooking` cannot produce the state (it inserts only `pending`/`accepted`, `:280`) and `start_time` is never updated (§1), so the guarded set is closed | S2 | Postgres tests on both sides of the boundary **with warmed caches**: (a) a booking starting in 1 h cannot be completed — 409, status unchanged, and the three caches are untouched; (b) a booking that started 1 h ago completes, and the very next read of all three shows the new visit date with no TTL wait; (c) an already-`completed` past booking is idempotent. Plus the legacy census below |
+| D17 | The `/api/crm/contacts` response contract is declared additive and covered: `contacts[].finance.visitDates` is a documented public numeric field, and `contacts[].finance` is documented as non-null whenever the contact has an invoice **or** a visit date (L1). `export.csv` gains no column (its `valueOf` switch is closed — §6) | S2 | Contract test in `routes/api/crm/contacts/contacts.test.ts` asserting the exact serialized `finance` object for an invoice-only, a booking-only and a neither row — the existing strict `expect(body.contacts[0].finance).toEqual(…)` assertion at `:177` is extended, not relaxed; plus `rg` over hub for every reader of `RankedContact['finance']` recorded in the PR body |
 
 ---
 
@@ -370,6 +464,36 @@ source yet; that is S2.
   exists to be updated. Bust unconditionally on any settings patch (not only when `timezone`
   changes) — the same "cheap over-invalidation beats fragile change-detection" reasoning S2 uses
   for booking status transitions (D8).
+- **Invalidate from the identity writers, in the writers (D15, pass-7 H1).** `reconcileParties`
+  (`party.service.ts:140-267`) rewrites `crm_contacts.party_id`, `fin_clients.party_id` and
+  `sched_bookings.party_id` and mints canonical CRM contacts — the exact joins the Loyal count
+  attributes visits through — and invalidates nothing. Add, immediately **after** its `withOrgCore`
+  transaction returns (not inside it — the entries must be removed after the new spine is
+  committed, or a concurrent read refills them from the old one):
+  ```ts
+  await bustCrmList(ctx.tenantId);
+  await bustFinanceCache(ctx);
+  ```
+  and the same two lines after `linkContactParty`'s transaction. Notes the implementer needs:
+  - **Put it in the writer, not at the call sites.** There are four production callers
+    (`finance-sync.service.ts:159`, `crm-contacts.service.ts:185`,
+    `routes/api/crm/parties/reconcile/+server.ts:12`, `routes/api/finances/sync/daily/+server.ts:132`);
+    two of them already bust *before* reconciliation, which is worse than not busting. One fix in
+    the writer corrects all four and every caller added later. Do **not** reorder `syncSource`'s
+    existing `bustFinanceCache` — leave it; the writer's own post-commit bust is what makes the
+    ordering correct, and a second bust is idempotent.
+  - `bustCrmList` alone would technically cover the three visit projections (all three carry the
+    `crm` tag). `bustFinanceCache` is added because reconciliation also re-points
+    `fin_clients.party_id`, which finance-tagged rollups read; this is deliberate
+    over-invalidation on a path that already runs a whole-org set-based pass, not a hot request.
+  - `party.service.ts` already uses exactly this post-commit shape at three smaller writers
+    (`:393`, `:468`, `:557`) — match it; import `bustCrmList` from `crm-contacts.service` and
+    `bustFinanceCache` from `finance.service`, and check for an import cycle at implementation
+    time (if one exists, call `invalidateTags([...tags.tenantDomain(ctx.tenantId,'crm')])` and the
+    finance equivalent directly, which is what those three sibling writers already do).
+  - `linkContactParty`/`ensurePartyForContact` have **no production caller** today (`rg` over the
+    whole tree). Fixing them is trap-closing for the next caller, not an outage fix — say so in
+    the PR body rather than overselling it.
 - Update the `FIN_LOYAL` / `ContactFinance.loyal` doc comments to say which zone the day boundary
   is in.
 - **Collapse the contact page onto the shared definition (D10, R2-H1).** `contactFinanceSummary`
@@ -394,6 +518,8 @@ source yet; that is S2.
     test, and `crm/customers/+page.svelte` — and no longer `crm/[contactId]/+page.svelte`.
 
 **Files:** `crm-finance.service.ts` (incl. `updateFinSettings`'s `bustFinanceCache` call),
+`party.service.ts` (post-commit busts in `reconcileParties` + `linkContactParty`),
+`party.service.test.ts` (or the equivalent suite, for the D15 assertions),
 `crm-contacts.service.ts` (call site and `rankContactsPageCached`'s `tags` array),
 `src/routes/(app)/crm/[contactId]/+page.server.ts`, `src/routes/(app)/crm/[contactId]/+page.svelte`,
 `crm-finance.service.test.ts`, `crm-funnel-parity.sql.integration.test.ts`, and the contact-detail
@@ -422,6 +548,15 @@ bun run vitest run src/server/services/crm-finance src/server/services/crm-funne
 #   - SETTINGS INVALIDATION (D4/M1): warm crm-fin-map, the roster, and the dashboard for a Lima-
 #     seeded org; call updateFinSettings({ timezone: 'UTC' }); assert the very next read of all
 #     three reflects the new zone's day bucketing with no TTL wait
+#   - IDENTITY INVALIDATION (D15/pass-7 H1): warm all three caches against the PRE-reconciliation
+#     spine (a fin_client and a crm_contact that are not yet on the same party); call
+#     reconcileParties; assert the very next read of each uses the new owner set, no TTL wait
+#   - IDENTITY RACE (D15): refill the three caches from INSIDE the reconcile transaction (before
+#     commit), then let it commit; assert the post-commit bust removed those entries. This is the
+#     case the current syncSource/harvestContacts bust-before-reconcile ordering cannot pass
+#   - IDENTITY, NO CALL-SITE HELP (D15): drive POST /api/crm/parties/reconcile — a caller with no
+#     bust of its own — and assert the same coherence. This is what proves the fix lives in the
+#     writer; a call-site patch would leave this red
 bun run vitest run && bun run check
 bun run lint:design && bun run lint:tokens   # S1 touches one .svelte prop expression (§5)
 if git diff --name-only origin/master...HEAD | grep -Eq 'supabase/migrations|db/schema'; then exit 1; fi
@@ -487,9 +622,11 @@ leaving any cached surface holding stale scheduling evidence.
         on b.crm_contact_id is null and b.party_id is not null and cp_fallback.party_id = b.party_id
      where b.org_id = current_setting('app.current_org_id', true)
        and b.status = any(${VISIT_BOOKING_STATUSES})
-       and b.start_time <= now()
   )
   ```
+  There is deliberately **no** `b.start_time <= now()` term here — see the attended-status guard
+  bullet below (D16). Attendance is enforced at the write, so the read stays a pure function of
+  stored rows.
   Consequences to state in the PR rather than discover later: a booking whose `crm_contact_id`
   points at a soft-deleted contact (or one in another org) yields `contact_id is null` and counts
   for **nobody** — `ct` and therefore `cp_direct` join to nothing, and it does *not* silently fall
@@ -502,7 +639,8 @@ leaving any cached surface holding stale scheduling evidence.
   however the booking was linked, converge on exactly one contact.
 - Add a `contact_visit_date` CTE next to `contactInvoiceClassSql` — exported from
   `crm-finance.service.ts` so every consumer splices the *same* SQL. It unions **non-void**
-  procedure-invoice days with **past, `completed`** booking days:
+  procedure-invoice days with **`completed`** booking days (which D16 has already made
+  synonymous with "attended", so no time term appears here):
   ```
   contact_visit_date as (
     select contact_id, d from (
@@ -533,9 +671,12 @@ leaving any cached surface holding stale scheduling evidence.
   is nullable and the connector contract types it `string | null`, so the inequality form evaluates
   to unknown for an unstatused invoice and would silently stop counting it. This mirrors
   `crm-journey.service.ts:83`, which already uses the null-safe form for the same column.
-  `b.start_time <= now()` is the M1 fix: `setBookingStatus` validates neither transitions nor
-  timestamps, so a future booking can be marked `completed` — the predicate, not an unenforced
-  service invariant, is what keeps a future booking from counting as attendance.
+  Note what is **absent**: no `now()`, no `current_date`, no clock term of any kind. Pass 5 added
+  `b.start_time <= now()` because `setBookingStatus` validates neither transitions nor timestamps;
+  pass 7 removes it and fixes the write instead (the attended-status guard bullet below). The reason is invariant 3: with a
+  clock term, a booking becomes a visit at an instant when *nothing is written*, so no
+  invalidation can fire and the three caches keep serving the pre-boundary answer for their full
+  TTL+SWR window — trading premature promotion for silent staleness.
 - **Combine at the contact spine, and do not touch `fin` (fixes H1; avoids P5-F1).** Pass 4 said to
   re-anchor the `fin` aggregate itself on `contact_target`. That is wrong: `fin`'s *membership*
   means "has ≥1 invoice" and is read by `booked`, `finance_buyers`, `is_buyer`, the `revenue` sort
@@ -558,6 +699,23 @@ leaving any cached surface holding stale scheduling evidence.
     `visitDates`. `delete rest.fin_visit_dates` alongside the other stripped columns. Update the
     `RankedContact.finance` doc comment: "null when the bridge is enabled but this contact has
     neither an invoice nor a visit date."
+  - **Declare the API delta (D17, L1)** — this decoration is *not* internal. `GET
+    /api/crm/contacts` returns ranked rows verbatim (`routes/api/crm/contacts/+server.ts:104`,
+    `{ contacts: withAutoTags, … }`), so both changes above are wire-visible: `finance` gains
+    `visitDates`, and `finance` stops being `null` for a booking-only contact. Neither removes nor
+    retypes a field, so it is additive — but the slice proves that rather than asserting it:
+    - Extend the existing strict contract assertion in
+      `routes/api/crm/contacts/contacts.test.ts` (`expect(body.contacts[0].finance).toEqual(…)`,
+      currently at `:177`) into three cases — invoice-only, booking-only, neither — asserting the
+      exact serialized `finance` object each time. Keep it `toEqual`, not `toMatchObject`: a
+      strict assertion is the only kind that catches the *next* silent field.
+    - Record the consumer sweep in the PR body: `rg -n '\.finance\b' src/` over hub. At
+      `1b47e8ce` the readers are `/crm/customers/+page.svelte` (covered by the D12 test),
+      `routes/api/crm/contacts/export.csv/+server.ts` (a **closed** `valueOf` switch — `revenue`,
+      `invoices`, `lastPurchase` only, so it gains no column and needs no change), and the contact
+      page after D10. Anything else the sweep finds becomes a named test case.
+    - §6's cross-repo row for the gateway CRM tools already says "alert, not a dependency"; the
+      declared field is exactly what that alert is about.
   - **`loadContactFinanceMap`** — this one *is* invoice-anchored today (`from contact_invoice_class
     group by contact_id`), and it is the TS twin the parity test compares SQL against, so it must
     gain booking-only contacts or parity fails the moment a booking-only contact goes Loyal in SQL.
@@ -572,6 +730,50 @@ leaving any cached surface holding stale scheduling evidence.
     CTE. One exported `visitLoyalSql(alias)` serves all three call sites, so the `>= 2` threshold
     also has exactly one definition. This is the only churn S1→S2 creates, and it is deliberate:
     S1 must be shippable and provable on its own before a second source exists.
+- **Make `completed` mean attended, at the write (D16, M1).** `setBookingStatus`
+  (`scheduling-bookings.service.ts:373-388`) today validates only `SETTABLE` membership. Add the
+  timestamp precondition to the UPDATE itself, so it is checked and applied atomically rather than
+  read-then-write:
+  ```ts
+  const changed = await withOrgCore(ctx, (tx) =>
+    tx.update(schedBookings)
+      .set({ status, updatedAt: new Date() })
+      .where(and(
+        eq(schedBookings.id, id),
+        eq(schedBookings.orgId, ctx.tenantId),
+        // a visit that has not started cannot have been attended
+        status === 'completed' ? lte(schedBookings.startTime, sql`now()`) : undefined,
+      ))
+      .returning({ id: schedBookings.id }),
+  );
+  ```
+  Zero rows for `status === 'completed'` means either "no such booking" or "not started yet";
+  disambiguate with one `getBooking` read on the failure path only and throw a typed
+  `BookingNotStartedError`. Surface it as **409** at the three entry points that can reach it —
+  `routes/api/scheduling/bookings/[id]/+server.ts:23` (PATCH),
+  `routes/api/scheduling/bookings/[id]/complete/+server.ts:43`, and gateway
+  `routes/api/gateway/actions/booking-complete/+server.ts:56` — with a message naming the start
+  time, because a front-desk user completing an appointment early needs to see *why*. The
+  `RELEASING` accrual hook is untouched.
+  Three things make this guard's blast radius closed rather than hopeful, all from the §1 census:
+  `createBooking` inserts only `pending`/`accepted` (`:280`), `start_time` is never updated after
+  insert, and `setBookingStatus` is the only writer of `status`. So after this change the state
+  "`completed` with a future `start_time`" is unreachable — which is what lets the read drop its
+  `now()` term.
+  **Two evidence gates before flipping the read (both are cheap, both go in the PR body):**
+  1. `select count(*) from sched_bookings where status = 'completed' and start_time > now();` —
+     the legacy rows the old, unguarded writer allowed. If `0`, there is no residual and the read
+     can drop `now()` outright. If `> 0`, the same PR ships a one-off statement setting exactly
+     those rows back to `accepted` (they are invalid under the new rule; this is a data repair on
+     a status column, **not** a funnel backfill, which §5 still forbids), and records the affected
+     count.
+  2. `select count(*) from sched_bookings where status = 'completed' and updated_at < start_time;`
+     — does this business *ever* complete a booking before its start time (a walk-in booked into
+     the next slot and closed out immediately)? If `> 0`, **stop**: the guard would reject a
+     workflow that actually happens, and the right fix is on the create side (book the walk-in at
+     its real time), not here. File a proposal and leave `VISIT_BOOKING_STATUSES` and the read
+     unchanged for that org rather than guessing — the same rule §5 applies to widening the
+     attended set.
 - `const VISIT_BOOKING_STATUSES = ['completed'] as const`, with the reasoning in a comment:
   hub's own status domain (`scheduling-bookings.service.ts:370`) has a distinct `no_show`, so
   `accepted` is a *pre-visit* state, not attendance. **This is the resolution of the pass-2 human
@@ -603,14 +805,20 @@ leaving any cached surface holding stale scheduling evidence.
   count rides the finance map — see proposals/2026-08-17-hub-distinct-visit-dates.md` at the gate,
   and append the same to that proposal.
 - Update `ContactFinance.loyal`'s doc comment: "repeat visitor — ≥2 distinct local days with a
-  non-void procedure invoice or a past, completed appointment".
+  non-void procedure invoice or a completed appointment (which cannot be set before the
+  appointment starts — D16)".
 - Extend the parity truth table with the visit axis (D5), including the zero-invoice/booking-only
   case and the void-invoice case.
 
 **Files:** `crm-finance.service.ts` (incl. `booking_owner`'s canonicalization and
 `crmRevenueSummary`'s buyer guard), `crm-contacts.service.ts` (both `base` CTEs, the two `fin`
 CTEs' `fin_loyal` removal, the `scored`/`filtered` column lists and the row decoration),
-`scheduling-bookings.service.ts` (`bustCrmList` on `createBooking` and `setBookingStatus`),
+`scheduling-bookings.service.ts` (`bustCrmList` on `createBooking` and `setBookingStatus`, plus
+the D16 attended-status guard and `BookingNotStartedError`),
+`routes/api/scheduling/bookings/[id]/+server.ts`,
+`routes/api/scheduling/bookings/[id]/complete/+server.ts`,
+`routes/api/gateway/actions/booking-complete/+server.ts` (409 mapping),
+`routes/api/crm/contacts/contacts.test.ts` (the D17 response contract),
 `crm-finance.service.test.ts`, `crm-contacts.sql.integration.test.ts`,
 `crm-funnel-parity.sql.integration.test.ts`,
 `scheduling-bookings.service.test.ts` (or equivalent, for the invalidation assertions),
@@ -626,7 +834,16 @@ bun run vitest run src/server/services/crm-
 #     visitDates=2, revenue/invoice-count fields unchanged (0/unset) — H1
 #   - VOID: a procedure invoice + a VOID procedure invoice on a different day → 1 date, not loyal;
 #     a valid second invoice later voided → drops back below 2 — H4
-#   - FUTURE-COMPLETED: a booking dated in the future marked completed → not counted — M1
+#   - FUTURE-COMPLETED (D16/M1): setBookingStatus on a booking starting in 1h → BookingNotStartedError
+#     (409 at all three routes), status UNCHANGED, and the three caches untouched; the same booking
+#     once its start_time is in the past → completes, and the very next read of all three shows the
+#     new visit date with NO TTL wait. Assert BOTH sides of the boundary with WARMED caches — the
+#     point is that no eligibility change can happen without a mutation. Also assert the generated
+#     read SQL contains no `now()`/`current_date` term, so a later pass cannot reintroduce the
+#     clock without failing a test
+#   - LEGACY CENSUS (D16): the two counting queries in the S2 "Do" bullet are run and their output
+#     pasted in the PR; if the first is > 0 the normalization statement and its affected-row count
+#     are in the PR too; if the second is > 0 the slice STOPS and files a proposal
 #   - DEDUPE: invoice and completed booking on the SAME local day → 1 date → NOT loyal
 #   - EXCLUDED: no_show / cancelled / rejected / pending / accepted bookings → not counted
 #   - NULL STATUS: a procedure invoice with status IS NULL still counts as a visit date — R2-M1
@@ -660,6 +877,11 @@ bun run vitest run src/server/services/crm-
 #   - BUYER SEMANTICS (D14, M3): a fixture with one booking-only loyal contact (0 invoices, 2
 #     completed bookings) and zero invoice-having contacts asserts crmRevenueSummary().buyers === 0
 #     and .loyal === 1 — the booking-only contact counts toward loyal but not toward buyers
+#   - API CONTRACT (D17, L1): GET /api/crm/contacts for invoice-only / booking-only / neither rows
+#     asserts the EXACT serialized finance object each time (strict toEqual, extending the existing
+#     assertion) — visitDates present, and finance non-null exactly when invoice OR visit exists
+#   - CSV: export.csv gains no column and its three finance columns are unchanged
+bun run vitest run src/routes/api/crm/contacts src/routes/api/scheduling
 bun run vitest run src/server/services/scheduling-bookings
 #   - INVALIDATION: warm contactFinanceMap + roster page + dashboard cache for a contact, transition
 #     a booking accepted → completed, assert the very next read (no TTL wait) shows loyal where
@@ -727,7 +949,15 @@ bun run vitest run && bun run check
 - **Scheduling-only orgs.** The count rides the finance map's `crm × finances` gate; widening that
   gate touches revenue reads too. Recorded as a handoff, not fixed here.
 - **Persisting Loyal.** The floor stays read-time (TO-BE #6). No backfill, no cron, no
-  re-analysis pass over existing contacts.
+  re-analysis pass over existing contacts. The D16 legacy normalization is not an exception: it
+  repairs `sched_bookings.status` rows that the unguarded writer should never have allowed, and
+  writes nothing into `custom_fields._funnel`.
+- **Every other consequence of a booking's start time passing.** D16 removes the clock from the
+  *visit* read only. Reminders, slot computation and scheduling analytics keep their own
+  time-dependent reads; they are not cached behind the CRM tags and are not this spec's problem.
+- **`refreshExchangeRate`'s missing invalidation.** It writes `fin_settings` but only the `fx*`
+  columns, which the visit query does not read (§1 census). Left alone deliberately, and recorded
+  in the census so the omission is not mistaken for an oversight.
 - **An org-configurable threshold or a lookback window.** `>= 2`, all-time, one constant — matching
   what ships today. A window is an unmade product decision.
 - **POS-only and purchase-side visits.** Only `fin_invoices` (already the POS bridge target) and
@@ -745,7 +975,10 @@ bun run vitest run && bun run check
 |---|---|---|
 | `minion_site` (shares the database) | **None** — read-only use of existing columns, zero DDL | `git diff --name-only origin/master...HEAD \| grep -E 'supabase/migrations\|db/schema'` must be empty |
 | `/crm/customers` (same repo, same shared decoration) | **Watch, not a change** — S1 leaves the customers page's `financeFloorStage(finOf(c))` untouched, but S2 changes what `finOf(c)` returns for a booking-only contact (was `null`, becomes a real object). Its `reservedOnly` filter and `revenue`/`invoices` columns read the same object and must be re-checked against a booking-only row | `routes/(app)/crm/customers/+page.svelte:97-104,466-472`; covered by the D12 decoration test |
-| `@minion-stack/db`, `@minion-stack/shared`, gateway WS frames | **None** — server-side services and one existing REST route; no frame, no response-shape change (the analyze route's JSON keys are unchanged; only the dead `loyal` early-return disappears) | re-check `rg 'funnel/analyze' ~/work/minion/src` at PR time |
+| `@minion-stack/db`, `@minion-stack/shared`, gateway WS frames | **None** — server-side services only; no frame, no shared-package type, no DDL. `RankedContact` is declared in `crm-contacts.service.ts` and is not exported from any `@minion-stack/*` package | `rg -n 'RankedContact' src/` finds only hub-internal readers at `1b47e8ce` |
+| `GET /api/crm/contacts` (public REST) | **Declared additive change (D17/L1), not "none"** — `contacts[].finance` gains a numeric `visitDates`, and `contacts[].finance` becomes non-null for a contact with visit evidence but no invoice. Nothing removed, nothing retyped. Pass 6 asserted "no response-shape change" here; that was **false**, because the route serializes ranked rows verbatim (`routes/api/crm/contacts/+server.ts:104`) | Strict `toEqual` contract test over invoice-only / booking-only / neither (D17); consumer sweep `rg -n '\.finance\b' src/` recorded in the PR |
+| `POST /api/crm/contacts/[id]/funnel/analyze` | **None** — JSON keys unchanged; only the dead `loyal` early-return disappears | re-check `rg 'funnel/analyze' ~/work/minion/src` at PR time |
+| `PATCH /api/scheduling/bookings/[id]`, `…/complete`, gateway `booking-complete` | **New failure mode (D16)** — completing a booking before its `start_time` now returns **409** instead of silently succeeding. No success-path shape change | The two evidence queries in S2 gate this: if any org actually completes bookings early, the slice stops instead of shipping the guard |
 | `minion/` gateway CRM tools | **Alert, not a dependency** — if `crm_search`/`crm_insight` surface a funnel stage, they will see a slightly different Loyal set. A hit means an append to `proposals/2026-08-17-gw-defaces-crm-tools.md`, not a fix here | grep at PR time |
 | In-flight hub specs on the same files | **Coordination required** — `2026-08-17-hub-reserva-keyword-config-spec` S3 is open in hub PR #160 touching `crm-finance.service.ts`/`crm-settings.service.ts`, and `2026-08-13-crm-customers-server-pagination-spec` is `implementing` on `crm-contacts.service.ts`. Branch off current `origin/master`, rebase before opening the PR, scope commits narrowly, never `git add -A` | check open hub PRs on those paths before S1 |
 | `paperclip-minion`, `pixel-agents`, `minion_plugins` | **None** | — |
@@ -806,9 +1039,26 @@ curl -s "$HUB/api/crm/contacts?funnelStage=loyal&limit=5" -H "$AUTH" | jq '.tota
 #  n. an org with a booking-only Loyal contact and no invoice-having contacts: the dashboard's
 #     Revenue widget (crmRevenueSummary) reports buyers = 0 while still counting that contact
 #     toward loyal (pass-6 M3)
+#  o. IDENTITY (pass-7 H1): with /crm/customers, the CRM dashboard and a contact page all warm,
+#     POST /api/crm/parties/reconcile (the caller with no bust of its own) after seeding a
+#     fin_client + crm_contact that reconcile onto the same party — all three surfaces reflect the
+#     new attribution on the very next load, no manual cache clear, no TTL wait. Repeat via a
+#     normal finance sync (syncSource), whose own bust runs BEFORE reconciliation
+#  p. ATTENDED GUARD (pass-7 M1/D16): try to complete a booking that starts in an hour, from all
+#     three entry points (PATCH, /complete, gateway booking-complete) — each returns 409 and the
+#     row's status is unchanged. Wait past its start (or seed one that already started), complete
+#     it, and both surfaces show the new Loyal set immediately
+#  q. API CONTRACT (pass-7 L1/D17): GET /api/crm/contacts | jq '.contacts[0].finance' shows
+#     visitDates, and a booking-only contact's `finance` is a real object rather than null;
+#     export.csv for the same page is byte-identical to before the branch
 ```
 
-**Ship gate:** §7 green; the EXPLAIN plan from S2 pasted in the PR; the `show timezone;` output
+**Ship gate:** §7 green; the §1 **writer census re-run** pasted in the S1 PR body (the `rg` recipe
+in §1 — this is the gate that stops a fifth "one more writer" round, and it must show every hit
+followed by a post-commit bust); the two D16 evidence queries and their output pasted in the S2 PR
+(with the normalization statement and its affected-row count if the first is non-zero, or the
+proposal link and a STOP if the second is non-zero); the D17 consumer sweep pasted in the S2 PR;
+the EXPLAIN plan from S2 pasted in the PR; the `show timezone;` output
 recorded (it is the evidence that D1 was a real defect, and the one §1 fact this spec could not
 prove without a database); the S2 handoff appends made to
 `proposals/2026-08-17-hub-distinct-visit-dates.md`; `bun run lint:design && bun run lint:tokens`

@@ -1,13 +1,13 @@
 ---
 spec: 2026-08-17-hub-distinct-visit-dates-spec
-pass: 6
+pass: 7
 verdict: pending
 reviewer: factory-review
 created: 2026-08-17
 updated: 2026-08-29
 ---
 
-# Review record — disposition: STILL IN REVIEW (pass 6 awaiting re-review)
+# Review record — disposition: STILL IN REVIEW (pass 7 awaiting re-review)
 
 ## Pass 3 — approved (rewritten against verified hub reality)
 
@@ -122,3 +122,34 @@ checkout (`git ls-remote` confirms hub `master` has not moved since pass 5):
 **Disposition.** `status: review`, `verdict: pending` — unchanged posture from pass 5: corrected and
 internally consistent, approval still belongs to an external reviewer. No hub product code has
 been written; the branch stays planning-only.
+
+
+## Pass 7 — external review: FAIL, then fixed in place
+
+One High, one Medium, one Low, all re-verified this pass against a fresh `1b47e8ce` sparse checkout
+(blobless clone + `sparse-checkout '/src/*'`; `git ls-remote` confirms hub `master` has still not
+moved). All three turned out to be **wider than reported**, which is recorded below because the
+width is the point.
+
+### The meta-finding: four rounds of one-call-site-at-a-time
+
+Passes 4, 5, 6 and 7 each found *one more writer or consumer* of the visit-date evidence that the
+previous round's targeted fix had not swept: H3/D8 (booking mutations) → pass-6 H1 (invoice
+mutations) → pass-6 M1 (settings) and M3 (a map consumer) → pass-7 H1 (identity mutations). Each
+fix was correct and each left the next one findable. Pass 7 therefore stops patching named call
+sites and adds a **complete writer census** to §1 — every relation the visit SQL reads, every
+writer of it at `1b47e8ce`, whether that writer invalidates, and whether it does so *after* its
+mutation commits — built by grepping both write forms (Drizzle `.insert/.update/.delete(T)` and
+raw `insert into`/`update`/`delete from <table>`) rather than from recall. Invariant 7 is restated
+as a closed property over that census, and re-running the census is now part of the S1 ship gate.
+This is the structural answer to a failure class that four targeted fixes did not close.
+
+| Finding | Verified — and what was wider than reported | Fix |
+|---|---|---|
+| H1 (High) — identity reconciliation mutates the visit join after cache invalidation | Confirmed and wider. `reconcileParties` (`party.service.ts:140-267`) rewrites `crm_contacts.party_id`, `fin_clients.party_id` **and** `sched_bookings.party_id` and mints canonical CRM contacts, with **no invalidation at all**, and it has **four** production call sites, not one: `finance-sync.service.ts:159` and `crm-contacts.service.ts:185` both bust *before* it runs (the harvest one also only when `created > 0`), while `routes/api/crm/parties/reconcile/+server.ts:12` and `routes/api/finances/sync/daily/+server.ts:132` never bust. The convention is already in the same file at three smaller writers (`:393`, `:468`, `:557`). The review's claim that `linkContactParty` is a live "no race required" path is the one thing that is *narrower*: `rg` over the whole tree finds **no production caller**, so that half is trap-closing, not an outage — stated that way in §1 rather than oversold | D15 — post-commit `bustCrmList` + `bustFinanceCache` inside `reconcileParties` and `linkContactParty`, i.e. **in the writer**, which fixes all four call sites and every future one at once. Three tests: post-commit coherence, the refill-during-transaction race, and the same coherence driven through the call site that has no bust of its own (S1) |
+| M1 (Medium) — `start_time <= now()` changes cached truth with no invalidation event | Confirmed, and the census shows why it cannot be patched on the cache side: `sched_bookings.start_time` is written **once**, at insert (`:289`), and never updated anywhere (`rg` over both write forms; rescheduling is cancel-then-create). A row crossing its own start time is not a mutation, so no invalidation can be attached to it | D16 — enforce attendance at the **write**: `setBookingStatus` refuses `completed` while `start_time > now()`, atomically in the UPDATE, surfaced as 409 at all three entry points; the read then drops `now()` entirely and eligibility becomes purely mutation-driven. Closed by construction because `createBooking` inserts only `pending`/`accepted` (`:280`) and `setBookingStatus` is the only `status` writer. Two evidence queries gate the flip (legacy future-`completed` rows; whether any org completes bookings early) — the second is a **stop**, not a guess |
+| L1 (Low) — `visitDates` is not internal | Confirmed. `routes/api/crm/contacts/+server.ts:104` returns `{ contacts: withAutoTags, … }` — ranked rows verbatim — so `finance.visitDates` **and** D12's null-sentinel change are both wire-visible, and pass 6's §6 "no response-shape change" was false | D17 + invariant 12 — the API delta is declared additive, §6 gains a real row for the contacts route (and one for the new 409), and the existing strict `toEqual` assertion at `contacts.test.ts:177` is extended to invoice-only / booking-only / neither. Consumer sweep recorded: `export.csv`'s `valueOf` switch is closed, so it gains no column |
+
+**Disposition.** `status: review`, `verdict: pending` — unchanged posture from passes 5 and 6:
+corrected and internally consistent, approval belongs to an external reviewer. No hub product code
+has been written; the branch stays planning-only.
