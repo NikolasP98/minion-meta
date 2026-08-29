@@ -1,12 +1,65 @@
 ---
 spec: 2026-08-18-factory-orchestration-round7-spec
-pass: 2
-verdict: approved
+pass: 3
+verdict: revision-required
 reviewer: factory-review
 created: 2026-08-18
 ---
 
-# Pass 2 correctness review
+# Pass 3 disposition review (2026-08-29)
+
+**Verdict: revision-required.** The pass-2 `approved` verdict below is superseded — a 2026-08-28
+board audit had already found zero graph/profile/resolver deliverables and flipped `status` back to
+`draft` for redesign (`reconcile_ignore_reason`), but the review sidecar and `verdict` field were
+left at pass-2 `approved`, so the artifact contradicted itself (`status: draft`, `verdict: approved`)
+with no coherent disposition recorded. This pass records one: `status: review`,
+`verdict: revision-required`.
+
+## Evidence (verified 2026-08-29 against `NikolasP98/minion-factory` `main`/`dev` @
+`5db7d3919896042043e63da996d6441ec63db205`)
+
+- The spec's own storage design (Slice 3: new `executions`/`execution_nodes`/`execution_edges`
+  tables) assumes the DB "has no execution model" (§3.1). That premise is false: `runner/src/db.ts`
+  already defines immutable `pipeline_instances` (line 780), append-only
+  `pipeline_instance_relations`, and immutable `phase_requests` (~line 1317) with claim/lock/lease
+  semantics and real call sites. Implementing S3–S5 unchanged would build a second, competing
+  execution authority rather than extend the live one.
+- `runner/src/queue.ts` (~line 3500) already refuses multi-repo spec auto-dispatch
+  (`already_satisfied` / "multi-repo spec requires explicit per-repo queueing") instead of silently
+  picking `repos[0]` — one of this spec's own motivating problems is already partially mitigated
+  upstream and the AS-IS section should be read against that, not the 2026-08-18 baseline alone.
+- Prerequisite reality forbids approval as-is: durable-state (`2026-08-18-factory-durable-state-outbox-spec`)
+  is `status: implementing` / `verdict: changes_requested` with its factory PR
+  ([minion-factory#160](https://github.com/NikolasP98/minion-factory/pull/160)) draft and failing
+  `verify`/`label` checks. The WorkItem-handoff factory PR
+  ([minion-factory#159](https://github.com/NikolasP98/minion-factory/pull/159)) is open, not draft,
+  and also failing checks. No PR in `minion-factory` implements this spec's graph/profile/resolver
+  work; PR #41 (the only PR ever linked to this spec id) is confirmed unrelated.
+- `node scripts/spec-index.mjs --check` passes against the edited source (index regenerated).
+
+## Disposition and what changed this pass
+
+- Set `status: review` (was `draft`) and `verdict: revision-required` (was stale `approved`) so the
+  artifact is internally consistent and no longer blesses an architecture that conflicts with the
+  live orchestration substrate. `pass` bumped to 3, `updated` to 2026-08-29.
+- Added a dated "pass-3 revision-required gate" note in §2 with the current prerequisite PR/SHA
+  evidence above, and inline superseded-markers on the specific AS-IS bullet (§3.1) and Slice 3
+  heading that assumed no execution model exists. The affected sections (AS-IS, TO-BE point 2, DELTA
+  D2, Slice 3) are left otherwise intact — they are valuable prior work and the acceptance criteria
+  they encode (repo-slice fan-out, slice continuation, scenario profiles, relationship resolution)
+  remain worth keeping — but are explicitly marked not-approved-for-implementation until rebased onto
+  `pipeline_instances`/`phase_requests`/`pipeline_instance_relations` instead of duplicating them.
+- Did not attempt the full storage/DELTA rebase itself: doing so correctly requires implementer-level
+  familiarity with the live `phase_requests` claim/lock/`node_key`/`executor_role`/
+  `permissions_json` contract that this review pass, scoped to disposition and correctness, should
+  not guess at. Whoever picks this spec up next must rewrite §3.1/§3.2 point 2/§3.3 D2/Slice 3 (and
+  re-check Slices 4–8 for knock-on assumptions) against those tables, then request a fresh
+  independent pass-4 review before this can return to `approved`. Slices 1–2 (minion-meta authoring
+  contract; versioned scenario profiles) do not depend on the execution-table redesign and remain
+  candidate ship units once their own prerequisites land, but the spec as a whole stays
+  `revision-required` until the storage layer conflict is resolved.
+
+## Pass 2 correctness review (2026-08-18, superseded by the above — kept for history)
 
 ## Changes made
 

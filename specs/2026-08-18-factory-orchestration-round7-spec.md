@@ -2,17 +2,17 @@
 id: 2026-08-18-factory-orchestration-round7-spec
 title: Typed execution graph — repo fan-out, slice continuation, scenario profiles, relationship resolution
 stage: spec
-status: draft
-pass: 2
+status: review
+pass: 3
 created: 2026-08-18
-updated: 2026-08-28
+updated: 2026-08-29
 repos: [minion-factory, minion-meta]
 proposal: 2026-08-18-factory-orchestration-round7
-verdict: approved
+verdict: revision-required
 relationship: depends-on
 related: [2026-08-18-agent-instruction-parity-and-repo-policy, 2026-08-18-factory-topic-capability-manifest-spec, 2026-08-18-factory-durable-state-outbox-spec, 2026-08-18-factory-workitem-handoff-schema-spec, 2026-08-18-factory-orchestration-tests-spec, 2026-08-17-factory-capability-separation, 2026-08-17-factory-worker-containment, 2026-08-18-factory-browser-verification-stage, 2026-08-18-sdlc-transformation-roadmap]
 reconcile_ignore: true
-reconcile_ignore_reason: "Cancelled this stale shipment claim: PR #41 is not the typed execution graph. The 2026-08-28 audit found zero graph, profile, or resolver deliverables and returned the spec to draft for redesign on pipeline_instances and phase_requests."
+reconcile_ignore_reason: "G0 must still skip this: PR #41 is not the typed execution graph and no graph/profile/resolver PR exists in minion-factory as of 2026-08-29. The 2026-08-28 audit returned the spec to draft for redesign on pipeline_instances and phase_requests; the 2026-08-29 pass-3 review kept it out of approved (status: review, verdict: revision-required) with the same redesign requirement documented in §2 and §3.1 pending a full rebase of storage/DELTA onto the live authorities."
 ---
 
 # Typed execution graph — repo fan-out, slice continuation, scenario profiles, relationship resolution
@@ -89,6 +89,42 @@ The live factory baseline was inspected on `NikolasP98/minion-factory/main` on 2
 line numbers may drift; function/table names below are the stable anchors and must be re-read before
 implementation.
 
+**2026-08-29 pass-3 revision-required gate (record before any further work):** the prerequisite and
+baseline picture above is stale and the storage design in §3.3/Slice 3 is not implementable as
+written. Verified against `NikolasP98/minion-factory` at `main`/`dev` SHA
+`5db7d3919896042043e63da996d6441ec63db205`:
+
+- The durable-state prerequisite is `status: implementing`, `verdict: changes_requested` — still not
+  satisfied. Its factory-side implementation PR,
+  [minion-factory#160](https://github.com/NikolasP98/minion-factory/pull/160), is draft with failing
+  `verify`/`label` checks.
+- The WorkItem-handoff prerequisite's factory-side implementation PR,
+  [minion-factory#159](https://github.com/NikolasP98/minion-factory/pull/159), is open (not draft)
+  with failing `verify`/`label` checks — also not landed/tested/enabled.
+- No open or merged minion-factory PR implements this spec's graph, profile, or relationship-resolver
+  deliverables; the only PR ever tagged to this spec, #41, is unrelated (confirmed by the 2026-08-28
+  audit; `reconcile_ignore` above still applies).
+- **The AS-IS premise that the database has no execution model is false as of this baseline.**
+  `runner/src/db.ts` already defines immutable, append-preserving `pipeline_instances`
+  (`CREATE TABLE` at line 780, unique active-lineage index, no-update/no-delete triggers),
+  append-only `pipeline_instance_relations` (successor/follow-up edges), and immutable
+  `phase_requests` (line ~1317) with `idempotency_key`/`request_hash`/`plan_revision`/
+  `input_set_hash`/`node_key`/`lock_key`/`access`/`claim_generation` columns, a one-running-writer
+  unique index per `lock_key`, and immutable-request/no-delete triggers. `runner/src/queue.ts`
+  (~line 3500) also no longer silently dispatches `repos[0]`: a multi-repo spec now fails closed
+  with `already_satisfied`/`multi-repo spec requires explicit per-repo queueing` until a human or
+  orchestrator queues per-repo runs explicitly.
+- **Consequence:** §3.1's AS-IS, §3.2 TO-BE point 2, DELTA D2, and Slice 3's `executions` /
+  `execution_nodes` / `execution_edges` tables (below) describe a parallel execution/state-machine
+  authority that would compete with the live `pipeline_instances`/`phase_requests`/
+  `pipeline_instance_relations` lease, claim, and transition contracts instead of extending them.
+  This spec **must not proceed past Slice 2 as currently written.** Before Slice 3 can be approved,
+  a redesign pass must replace the new-table design with an integration that expresses graph
+  nodes/edges/joins as `phase_requests`/`pipeline_instances` records (or an additive extension of
+  them), reusing their claim/lock/transition semantics rather than adding a second one. Sections 3.1,
+  3.2 point 2, 3.3 (D2), and Slice 3 below are left intact as a record of the superseded design and
+  as source material for that redesign — they are not an approved implementation target.
+
 ## 3. AS-IS → TO-BE → DELTA
 
 ### 3.1 AS-IS — verified current behavior
@@ -103,6 +139,10 @@ implementation.
   transition.
 - `runner/src/db.ts` stores one row per run with `repo_id`, `spec_id`, `spec_sha`, tags, PR/head,
   and requeue lineage. It has no execution, node, edge, join, profile, or slice-completion tables.
+  **Superseded 2026-08-29 — see the pass-3 revision-required gate above:** the same file now also
+  defines `pipeline_instances`, `pipeline_instance_relations`, and `phase_requests` with their own
+  immutable/append-only lease and claim semantics; this bullet describes the 2026-08-18 baseline
+  only and must not be read as "still true today."
 - `runner/src/lifecycle.ts:specSweep()` promotes an approved spec through
   `queueDevForSpec()`. `transition()` patches one artifact and then best-effort patches its index;
   neither surface knows graph state or resolver decisions.
@@ -268,6 +308,13 @@ global caps and manifest-required gates can only be added; unavailable required 
 returns a typed non-dispatchable/non-merge-eligible result rather than a weaker profile.
 
 ### Slice 3 — Durable graph model and pinned resolution (minion-factory, 6–8h)
+
+> **NOT APPROVED — revision required (2026-08-29).** This slice as written adds parallel
+> `executions`/`execution_nodes`/`execution_edges` tables and a competing node-state machine beside
+> the live `pipeline_instances`/`phase_requests`/`pipeline_instance_relations` authorities (see the
+> pass-3 gate note in §2). Do not implement this slice until it is rebased onto those tables' lease,
+> claim, and transition APIs. Kept below as source material for that redesign, not as an
+> implementation target.
 
 **Files to touch:** new `runner/src/execution.ts`; new `runner/src/execution.test.ts`;
 `runner/src/db.ts`; `runner/src/github.ts`; `runner/src/queue.ts` only at the approved-spec entry
