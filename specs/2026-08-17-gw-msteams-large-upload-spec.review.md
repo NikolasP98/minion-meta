@@ -1,11 +1,24 @@
 ---
 spec: 2026-08-17-gw-msteams-large-upload-spec
-pass: 8
+pass: 9
 verdict: changes_requested
 reviewer: factory-review
 created: 2026-08-17
-updated: 2026-08-29
+updated: 2026-08-30
 ---
+
+# Pass 9 disposition — STILL REVIEW (changes_requested), unchanged
+
+The pass-9 revision closes all three findings from the cross-provider review of pass 8 without changing
+scope or approval state. First, S1 replaces the single scalar routing threshold with a helper-keyed
+record, requires both callers to select their own measured value, and adds an intentionally unequal
+OneDrive/SharePoint unit case. Second, the heap-policy gate is outcome-specific: only recorded operator
+acceptance or proposal option 1 shipping with every production override reader bounded can clear it;
+option 2 or a terminal disposition that leaves an override unbounded cannot. Third, G3 now requires a
+separate routing-delta red test at `threshold + 1` and a bug-reproduction red test at the smallest
+observed failing probe with its recorded simple-PUT response. Only the latter is evidence that the old
+code failed as reported. The controlled tenant experiment remains outstanding, so `status: draft` and
+`verdict: changes_requested` remain authoritative.
 
 # Pass 8 disposition — STILL REVIEW (changes_requested), unchanged
 
