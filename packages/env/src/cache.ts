@@ -381,7 +381,6 @@ function retireOldAuthenticatedGenerations(dir: string): void {
 }
 
 const LOCK_FILE_NAME = 'infisical-cache.lock';
-const LOCK_STALE_MS = 30_000;
 const LOCK_ACQUIRE_TIMEOUT_MS = 10_000;
 const LOCK_POLL_MS = 10;
 
@@ -406,10 +405,12 @@ function sleepSync(ms: number): void {
  *
  * Acquired with `wx` (atomic create-exclusive — the same primitive `getOrCreateMachineKeyFile` uses),
  * so two processes racing to acquire converge on whichever `openSync` wins; the loser polls. A lock
- * file older than `LOCK_STALE_MS` is assumed abandoned by a holder that crashed mid-transaction and is
- * reaped rather than blocking forever. Every other operation in this module is synchronous, so this
- * blocks via `sleepSync` rather than pulling in an async lock dependency that would force `writeCache`
- * (and every caller up to `fetchInfisicalSecrets`) to become async.
+ * Waiters never reap an existing lock based on age: a slow live holder is indistinguishable from a
+ * crashed one, and unlinking its pathname would allow overlapping read-merge-publish transactions.
+ * A waiter instead times out and lets the caller retain the fresh value memo-only. Every other
+ * operation in this module is synchronous, so this blocks via `sleepSync` rather than pulling in an
+ * async lock dependency that would force `writeCache` (and every caller up to
+ * `fetchInfisicalSecrets`) to become async.
  */
 function withCacheLock<T>(dir: string, fn: () => T): T {
 	const lp = lockFilePath(dir);
@@ -420,14 +421,6 @@ function withCacheLock<T>(dir: string, fn: () => T): T {
 			break;
 		} catch (err) {
 			if ((err as NodeJS.ErrnoException).code !== 'EEXIST') throw err;
-			try {
-				if (Date.now() - fs.statSync(lp).mtimeMs > LOCK_STALE_MS) {
-					fs.rmSync(lp, { force: true });
-					continue;
-				}
-			} catch {
-				continue; // the lock vanished between the EEXIST and this stat — retry the create
-			}
 			if (Date.now() > deadline) {
 				throw new Error(`timed out waiting for the sealed disk cache lock at ${lp}`);
 			}

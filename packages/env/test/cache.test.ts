@@ -570,6 +570,81 @@ describe('cache.ts', () => {
 			},
 			15_000,
 		);
+
+		it(
+			'does not reap an old live lock, then serializes the waiting writer and retains both entries',
+			async () => {
+				if (process.platform === 'win32') return;
+				const raceHome = fs.mkdtempSync(path.join(os.tmpdir(), 'minion-cache-old-live-lock-'));
+				const dir = path.join(raceHome, 'minion');
+				const fifo = path.join(dir, 'infisical-cache.json');
+				const lock = path.join(dir, 'infisical-cache.lock');
+				const ready = path.join(raceHome, 'go');
+				const outA = path.join(raceHome, 'a.json');
+				const outB = path.join(raceHome, 'b.json');
+
+				try {
+					fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
+					await new Promise<void>((resolve, reject) => {
+						const mkfifo = spawn('mkfifo', [fifo]);
+						mkfifo.on('error', reject);
+						mkfifo.on('exit', (code) =>
+							code === 0 ? resolve() : reject(new Error(`mkfifo exited ${code}`)),
+						);
+					});
+					fs.writeFileSync(ready, '');
+					const writerA = spawnTsx(helperScript, [raceHome, ready, outA, 'from-a', 'A-value']);
+					for (let attempt = 0; attempt < 500 && !fs.existsSync(lock); attempt += 1) {
+						await new Promise((resolve) => setTimeout(resolve, 10));
+					}
+					expect(fs.existsSync(lock)).toBe(true);
+					const liveLock = fs.statSync(lock);
+					const old = new Date(Date.now() - 60_000);
+					fs.utimesSync(lock, old, old);
+
+					let writerBFinished = false;
+					const writerB = spawnTsx(helperScript, [raceHome, ready, outB, 'from-b', 'B-value']).then(
+						() => {
+							writerBFinished = true;
+						},
+					);
+					await new Promise((resolve) => setTimeout(resolve, 250));
+					expect(writerBFinished).toBe(false);
+					expect(fs.statSync(lock).ino).toBe(liveLock.ino);
+
+					const fifoProducer = new Promise<void>((resolve, reject) => {
+						const producer = spawn(
+							'/bin/sh',
+							[
+								'-c',
+								'exec 3>"$1"; rm -f "$1"; printf %s "$2" >&3; exec 3>&-',
+								'sh',
+								fifo,
+								'blocked live holder may now finish',
+							],
+							{ stdio: 'ignore' },
+						);
+						producer.on('error', reject);
+						producer.on('exit', (code) =>
+							code === 0 ? resolve() : reject(new Error(`FIFO producer exited ${code}`)),
+						);
+					});
+					await Promise.all([fifoProducer, writerA, writerB]);
+
+					process.env.XDG_CONFIG_HOME = raceHome;
+					resetCacheStateForTests();
+					try {
+						expect(readCache('from-a')).toEqual({ env: { V: 'A-value' }, keyNames: ['V'] });
+						expect(readCache('from-b')).toEqual({ env: { V: 'B-value' }, keyNames: ['V'] });
+					} finally {
+						resetCacheStateForTests();
+					}
+				} finally {
+					fs.rmSync(raceHome, { recursive: true, force: true });
+				}
+			},
+			15_000,
+		);
 	});
 
 	describe('purgeLegacyCacheOnce', () => {
