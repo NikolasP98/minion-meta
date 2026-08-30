@@ -193,6 +193,8 @@ export function createCrmClient(opts: CrmClientOptions) {
     /**
      * Claim already-verified parties that predate identity enrichment (no
      * metadata.dni_registry yet) so a re-query backfill can fill name/sex.
+     * The returned claim token is required by enrichParty and expires when a
+     * later worker reclaims the row.
      */
     claimUnenriched(limit: number): Promise<{ id: string; doc_number: string; claimToken: string }[]> {
       const claimToken = randomUUID();
@@ -222,7 +224,9 @@ export function createCrmClient(opts: CrmClientOptions) {
      * Overwrite a party's canonical name from the registry parts (FIRST SECOND
      * LAST LAST2), store the raw payload (sex M/F canonical + verification code)
      * in metadata.dni_registry, and propagate the name to the linked CRM
-     * contact(s). Sex stays canonical M/F in the DB; the UI localizes it.
+     * contact(s). The write requires the current claim token, the verified
+     * party state, and a registry DNI equal to the party DNI. Sex stays
+     * canonical M/F in the DB; the UI localizes it.
      */
     async enrichParty(partyId: string, claimToken: string, person: PerudevsPerson): Promise<void> {
       if (typeof claimToken !== 'string' || !claimToken.trim()) {

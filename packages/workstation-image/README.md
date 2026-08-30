@@ -95,7 +95,9 @@ minion-preview run --port 4173 --ttl 2h --name app -- npm run dev
 
 Use `minion-preview status`, `url`, and `stop` to manage active previews. TTLs
 are limited to 30 seconds through 24 hours so forgotten draft servers do not
-consume CPU indefinitely. Port 8000 remains reserved for the GUI.
+consume CPU indefinitely. Cleanup verifies the saved Linux process birth
+identity before signaling it, so a recycled PID cannot terminate an unrelated
+process. Port 8000 remains reserved for the GUI.
 
 ## exe.dev provisioning
 
