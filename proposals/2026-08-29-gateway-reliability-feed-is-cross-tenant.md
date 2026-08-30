@@ -135,6 +135,11 @@ to an empty 200 that reads as "all healthy".
    an attributed event reaches only matching connections and a global event reaches only
    admins. Mind `orgScopeVisible`'s fail-open default: an admin/shared-token connection
    sees everything, so the hub paths must present the org JWT.
+   Partition every cached tenant-scoped aggregate by the validated org identity as well
+   as any gateway/server namespace required by the process-wide and shared Redis/Valkey
+   deployment. Admin/global results use a separate, explicit namespace; they must never
+   share a key with an org-scoped result. This applies to every cached alias in
+   `reliability.*` and `events.summary/timeline` (and to any newly cached alias).
 4. Preserve the same authoritative attribution across the durable boundary: include the
    originating org in `turso-sync`, migrate hub `unified_events` plus its dedupe/index
    contract, and scope `/api/reliability/insights` by the authorized active org. Keep
@@ -147,6 +152,9 @@ to an empty 200 that reads as "all healthy".
    `events.new` crosses orgs. Add an end-to-end producer → local store → Turso sync → hub
    Insights test proving org A cannot change org B's aggregate. Injecting tagged events
    directly into a store proves nothing about the producers or either sync boundary.
+   For every cached query alias, add a warm-cache regression in the same gateway/cache
+   instance: org A primes identical parameters, org B requests them within the TTL, and B
+   receives only B's aggregate without clearing or mocking the cache between requests.
 6. Coordinate with `2026-07-19-channel-scoping-fix-plan`: its parked P1 is the same identity
    surface, and its execution hold governs dispatch (coordinated gateway + hub work with
    deployment access, never a single-repository run).
@@ -165,6 +173,7 @@ The deployed topology is recorded; a human has chosen the operator-only or the t
 path; and either (a) every hub entry point, including Insights, sits behind an operator gate
 with the data labeled gateway-wide, or (b) DELTA 3–5 have shipped and deployed with
 attribution preserved across local storage, every query/live alias and durable sync. The
-same-gateway query, dual-event subscription and Insights isolation tests are green against
+same-gateway query, warm-cache-per-alias, dual-event subscription and Insights isolation
+tests are green against
 the gateway and hub SHAs that serve production. Both paths keep the `security` human gates
 at approval and merge.

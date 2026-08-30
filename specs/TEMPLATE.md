@@ -48,6 +48,46 @@ Flat scalars and string arrays only — no nesting (the parser is deliberately t
 strings (`tags: infra` is a scalar and fails the gate). Everything else is a scalar; bracket
 syntax on a scalar field fails the gate too.
 
+## Review sidecars (`<id>.review.md`)
+
+Every SDLC phase gate writes its judgement to a sidecar beside the artifact it judged —
+`specs/<id>.review.md` for the G2 spec gate, `proposals/<id>.review.md` for the G1 proposal
+gate (`2026-08-17-sdlc-phase-gates-scoring-spec` §2, §4). `scripts/review-sidecar.mjs`
+validates them; the validated result is published as the `review` object on that artifact's
+`index.json` entry, which is where the board reads the score chip from.
+
+Same flat-YAML dialect as above — scalars only.
+
+| Field | Required | Values |
+|---|---|---|
+| `spec` / `proposal` | yes | the reviewed artifact's id; must equal the filename minus `.review.md`. Use `spec:` under `specs/`, `proposal:` under `proposals/` |
+| `pass` | yes | integer ≥ 1 — which review pass this is |
+| `verdict` | yes | same enum as a spec's `verdict`: `pending` `approved` `changes_requested` `rejected` `revision-required` |
+| `reviewer` | yes | the agent or human that scored it, e.g. `factory-review` |
+| `created` | yes | ISO date of the review |
+| `reviewed_commit` | no | 7–40 char lowercase hex sha the scorer actually read |
+| `score_<axis>` | no | integer 0–10, one key per rubric axis. A sidecar scores its own gate's rubric and only that: **G2** (`specs/`) = `slice_size` `dod_verifiability` `scope_containment` `impact_zones` `collisions` `testability`; **G1** (`proposals/`) = `problem_clarity` `value` `dod_verifiability` `scope_containment` `dedupe` (aliases `dod` `out_of_scope` `impact` `motivation`). An axis from the other gate, or one that is not in the registry at all, fails the gate — add it to `SCORE_AXES` and to the subject's `RUBRICS` entry in `scripts/review-sidecar.mjs` first |
+
+`score`, `gate` and `chip` are **derived**, not authored. `score` is the weighted mean of the
+axes (one decimal) and is derived only once the subject's **complete** rubric is scored — a
+partial rubric is incomplete evidence, not a lower score, so it publishes no chip at all.
+`chip` is §4's universal colour scale for that number: green ≥ 7, amber 5–6.9, red < 5.
+`gate` is the promote decision of the gate that scored it, so the two gates band differently
+(§3): **G2** `pass` ≥ 7 / `warn` 5–6.9 / `block` < 5, **G1** `pass` ≥ 6 / `block` < 6 (the
+"threshold 6 to enable spec-it" rule — no warn band). The two are independent: a G1 score of 6
+is `gate: pass` with an amber chip. A vetoing `verdict` (`changes_requested`, `rejected`,
+`revision-required`) forces `block`/red however high the axes average. A `verdict: pending`
+sidecar has made no decision yet, so it publishes **no `score`, `gate`, `chip` or `axes` at
+all** — a complete, high-scoring rubric does not change that, and such a sidecar must not
+declare the three derived fields (doing so fails the build, naming `pending` as the reason).
+A sidecar with a decided verdict may still write these three fields, in which case they are
+cross-checked and a mismatch fails the build. A sidecar with no `score_*` axis, or with only
+part of its gate's rubric, is valid and simply publishes no chip.
+
+Every `*.review.md` file under `specs/` and `proposals/` must be a sidecar for an existing
+artifact — an orphan fails the gate rather than being skipped. Multi-spec audit memos that
+belong to no single artifact go in `specs/audits/` instead.
+
 ## Body convention
 
 Keep the existing house style: `# Title`, then `## 0. Product` (what and why, in the user's

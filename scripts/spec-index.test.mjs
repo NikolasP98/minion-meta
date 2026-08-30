@@ -8,7 +8,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { cpSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parseFrontmatter } from './spec-frontmatter.mjs';
@@ -26,7 +26,8 @@ import {
 	SCALAR_FIELDS,
 	ARRAY_FIELDS,
 	REQUIRED_INDEX_FIELDS,
-	OPTIONAL_INDEX_FIELDS
+	OPTIONAL_INDEX_FIELDS,
+	DERIVED_INDEX_FIELDS
 } from './spec-index.mjs';
 
 // A body with all three required sections present in real (heading) form —
@@ -370,7 +371,12 @@ function makeCliFixture() {
 	const root = mkdtempSync(join(tmpdir(), 'spec-index-cli-'));
 	mkdirSync(join(root, 'scripts'));
 	mkdirSync(join(root, 'specs'));
-	for (const name of ['spec-index.mjs', 'spec-frontmatter.mjs', 'topics.mjs'])
+	// Copy the whole non-test script set rather than an enumerated list: the CLI's
+	// import graph grows (review-sidecar.mjs was the last addition), and a missing
+	// module makes every integration case below fail as an unrelated crash.
+	for (const name of readdirSync(new URL('.', import.meta.url)).filter(
+		(f) => f.endsWith('.mjs') && !f.endsWith('.test.mjs')
+	))
 		cpSync(new URL(name, import.meta.url), join(root, 'scripts', name));
 	writeFixtureTopics(root);
 	const spec = `---\nid: fixture\ntitle: Fixture\nstage: spec\nstatus: draft\npass: 1\ncreated: 2026-08-18\nupdated: 2026-08-18\nrepos: [minion-meta]\n---\n\n# Fixture\n`;
@@ -513,6 +519,43 @@ test('M1: a projected field nothing validates is rejected', () => {
 		() => assertProjectionCoverage(['id'], ['id', 'invented']),
 		/published but never validated: invented/
 	);
+});
+
+// `review` is projected from the <id>.review.md gate sidecar, not from spec
+// frontmatter, so it is exempt from the coverage check above — but only as a
+// declared exemption. A derived name that collides with a real frontmatter
+// field would shadow it silently in specs/index.json.
+test('M1: a derived field that collides with a frontmatter field is rejected', () => {
+	assert.throws(
+		() => assertProjectionCoverage(['id'], ['id'], ['id']),
+		/derived field\(s\) also declared as frontmatter: id/
+	);
+	assert.throws(
+		() => assertProjectionCoverage(['id'], ['id', 'review'], ['review']),
+		/derived field\(s\) also declared as frontmatter: review/
+	);
+});
+
+test('M1: the declared derived fields do not collide with the frontmatter contract', () => {
+	const frontmatter = new Set([...SCALAR_FIELDS, ...ARRAY_FIELDS, ...REQUIRED_INDEX_FIELDS, ...OPTIONAL_INDEX_FIELDS]);
+	for (const key of DERIVED_INDEX_FIELDS)
+		assert.equal(frontmatter.has(key), false, `derived field "${key}" shadows a frontmatter field`);
+});
+
+test('M1: projectSpec attaches the review sidecar and omits it when there is none', () => {
+	const fm = {
+		id: 'x',
+		title: 'X',
+		stage: 'spec',
+		status: 'draft',
+		pass: 2,
+		created: '2026-08-28',
+		updated: '2026-08-28',
+		repos: ['minion-meta']
+	};
+	const review = { pass: 2, verdict: 'approved', reviewer: 'factory-review', created: '2026-08-28', score: 8.8 };
+	assert.deepEqual(projectSpec(fm, review).review, review);
+	assert.equal('review' in projectSpec(fm), false);
 });
 
 test('M1: projectSpec preserves relationship, related, retired_reason and next_slice', () => {

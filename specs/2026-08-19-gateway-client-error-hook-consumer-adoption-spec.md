@@ -5,10 +5,11 @@ stage: spec
 status: approved
 pass: 2
 created: 2026-08-19
-updated: 2026-08-19
+updated: 2026-08-29
 proposal: 2026-08-17-gateway-client-error-hook-consumer-adoption
 verdict: approved
 repos: [minion_hub, minion_site, paperclip]
+tags: [deps, logic]
 relationship: depends-on
 related: [2026-08-17-pkg-gateway-client-onevent-errors-spec, 2026-08-17-site-member-gateway-swallowed-errors-spec, 2026-08-19-gateway-client-lifecycle-swallows-handoff-spec]
 type: fix

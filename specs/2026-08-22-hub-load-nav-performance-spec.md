@@ -640,8 +640,13 @@ not found); an org-scoped or admin-only `events.stream`; guards for both `reliab
 its dedupe/index contract, and the active-org Insights API. Until the durable path ships,
 Insights is disabled or operator-gated on shared gateways. Tests run through at least one
 *real* producer per class — injecting tagged events into the store proves nothing about
-the 61 call sites. Same-gateway two-org tests exercise every query alias, both live event
-names, and producer → sync → Insights aggregate isolation. Note the fail-open default of
+the 61 call sites. Every cached tenant-scoped aggregate key includes the validated org
+identity plus any gateway/server namespace required by process-wide and shared
+Redis/Valkey caches; admin/global results use a distinct namespace. Same-gateway two-org
+tests exercise every query alias, both live event names, and producer → sync → Insights
+aggregate isolation. For every cached alias, org A primes identical parameters and org B
+requests within the TTL without clearing or mocking the cache; B receives only B's
+aggregate. Note the fail-open default of
 `orgScopeVisible`: an admin/shared-token connection sees everything, so 7b's server-side
 calls must present the org JWT or they will read as admin regardless.
 

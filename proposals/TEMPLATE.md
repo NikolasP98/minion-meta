@@ -10,7 +10,9 @@ repos: [minion-meta]
 # Proposal Template
 
 Copy to `proposals/YYYY-MM-DD-<slug>.md`. Proposals are the output of request-agent
-conversations (or written by hand). Run `node scripts/proposal-index.mjs` after edits.
+conversations (or written by hand). Run `node scripts/proposal-index.mjs` after edits — meta CI
+runs `node scripts/proposal-index.mjs --check`, which re-derives the index (including every
+`*.review.md` sidecar) read-only and fails if the committed `proposals/index.json` is stale.
 
 ## Frontmatter
 
@@ -25,9 +27,25 @@ conversations (or written by hand). Run `node scripts/proposal-index.mjs` after 
 | `possibly_reopens` | no | closed proposal id this may be a revival of (reconciler + human decide) |
 | `duplicate_candidate` | no | proposal id the reconciler suspects is the same idea |
 | `spawned_spec` | no | spec id once the spec stage picks this up |
-| `effort` | no | board sizing estimate — `S` `M` `L`; any other value (including a present-but-empty one) fails `scripts/proposal-index.mjs` |
-| `value` | no | board priority estimate; free-form today (numbers and `high`/`medium` are both in live use), rejected only when present-but-empty |
+| `value` | no | board scoring: relative payoff, integer |
+| `effort` | no | board scoring: `S` `M` `L` — `scripts/proposal-index.mjs` rejects any other value |
+| `source` | no | provenance of an auto-filed proposal, e.g. a review-fix run id |
 | `tags` | no | routing/classification labels, e.g. `[logic, test]`; every value must resolve (as a canonical name or an alias) via `specs/topics.json` — `scripts/proposal-index.mjs` rejects an unknown tag, naming the file and tag |
+| `value` | no | triage worth. **Two vocabularies are in use today** — a 1–10 integer (40 files) and `high`/`medium` (16 files); neither is validated. Prefer the integer |
+| `effort` | no | rough size: `S` `M` `L` |
+| `source` | no | what produced this proposal, e.g. `debt-sweep-2026-08-17`, `factory-run`, a spec id |
+
+Everything the index publishes must be listed above: `scripts/proposal-index.mjs` copies
+only the fields it knows about, so a frontmatter key that is not projected is silently
+dropped from `proposals/index.json` on the next regeneration (that is how `effort`
+disappeared until 2026-08-29).
+
+## Review sidecars
+
+The G1 proposal gate writes `proposals/<id>.review.md`. Schema, axes and the derived
+score/gate/chip are documented once, in `specs/TEMPLATE.md` § "Review sidecars" —
+`scripts/review-sidecar.mjs` validates both directories against the same contract, and the
+result is published as the `review` object on this proposal's `proposals/index.json` entry.
 
 ## Body convention
 
