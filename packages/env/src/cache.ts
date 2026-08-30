@@ -120,10 +120,14 @@ export function purgeLegacyCacheOnce(): void {
 	legacyPurged = true;
 
 	const p = cachePath();
+	const quarantined = quarantinePath(p);
+	if (!quarantined) return;
+
 	let raw: string;
 	try {
-		raw = fs.readFileSync(p, 'utf8');
+		raw = fs.readFileSync(quarantined.filePath, 'utf8');
 	} catch {
+		restoreQuarantinedPath(quarantined, p);
 		return;
 	}
 
@@ -131,15 +135,15 @@ export function purgeLegacyCacheOnce(): void {
 	try {
 		parsed = JSON.parse(raw);
 	} catch {
+		restoreQuarantinedPath(quarantined, p);
 		return;
 	}
-	if (!isLegacyCacheShape(parsed)) return;
+	if (!isLegacyCacheShape(parsed)) {
+		restoreQuarantinedPath(quarantined, p);
+		return;
+	}
 
-	try {
-		fs.rmSync(p);
-	} catch {
-		return;
-	}
+	removeQuarantinedPath(quarantined);
 
 	console.warn(
 		`[@minion-stack/env] Removed legacy plaintext secret cache at ${p} — it stored decrypted secret ` +
@@ -191,6 +195,63 @@ function linkNoClobber(from: string, to: string): boolean {
 	} catch (err) {
 		if ((err as NodeJS.ErrnoException).code === 'EEXIST') return false;
 		throw err;
+	}
+}
+
+interface QuarantinedPath {
+	dir: string;
+	filePath: string;
+}
+
+/** Move the object currently occupying `source` into a fresh private directory before inspecting it.
+ * The rename binds every later read/delete to that exact object: anything concurrently published at
+ * `source` after the rename is a different pathname and is never touched. The quarantine directory
+ * is created in the cache directory so the move cannot cross filesystems. */
+function quarantinePath(source: string): QuarantinedPath | null {
+	let dir: string;
+	try {
+		dir = fs.mkdtempSync(path.join(path.dirname(source), '.infisical-cache-quarantine-'));
+		fs.chmodSync(dir, 0o700);
+	} catch {
+		return null;
+	}
+	const filePath = path.join(dir, 'candidate');
+	try {
+		fs.renameSync(source, filePath);
+		return { dir, filePath };
+	} catch (err) {
+		try {
+			fs.rmdirSync(dir);
+		} catch {
+			/* an uncooperative actor occupied the private directory; preserve its evidence */
+		}
+		if ((err as NodeJS.ErrnoException).code === 'ENOENT') return null;
+		return null;
+	}
+}
+
+/** Restore a quarantined object without replacing anything that has since appeared at `destination`.
+ * If the destination is occupied, the object stays at its named quarantine path as evidence.
+ *
+ * TODO(handoff): S3's `minion doctor` cache row must report `.infisical-cache-quarantine-*`
+ * directories so an operator can disposition preserved rejected objects; automatic deletion cannot
+ * distinguish them safely. See the 2026-08-30 review-fix handoff in the source proposal. */
+function restoreQuarantinedPath(quarantined: QuarantinedPath, destination: string): void {
+	try {
+		if (!linkNoClobber(quarantined.filePath, destination)) return;
+	} catch {
+		return;
+	}
+	removeQuarantinedPath(quarantined);
+}
+
+/** Delete only the private pathname whose object has already been classified. */
+function removeQuarantinedPath(quarantined: QuarantinedPath): void {
+	try {
+		fs.rmSync(quarantined.filePath);
+		fs.rmdirSync(quarantined.dir);
+	} catch {
+		/* cleanup failure preserves the quarantined object; it never authorizes touching another path */
 	}
 }
 
@@ -247,6 +308,7 @@ function isValidDiskEntries(value: unknown): value is DiskEntries {
 const GENERATION_PREFIX = 'infisical-cache.g';
 const GENERATION_SUFFIX = '.json';
 const GENERATION_WIDTH = 16;
+const RETAINED_AUTHENTICATED_GENERATIONS = 2;
 
 function generationPath(dir: string, generation: number): string {
 	return path.join(
@@ -278,6 +340,44 @@ function diskGenerationCandidates(dir: string): Array<{ generation: number; file
 	});
 	if (fs.existsSync(cachePath())) candidates.push({ generation: 0, filePath: cachePath() });
 	return candidates.sort((a, b) => b.generation - a.generation);
+}
+
+/** Authenticate one already-isolated generation. This is intentionally narrower than
+ * `readDiskEntries`: retention only needs authority to delete the exact quarantined object and must
+ * not emit read-path warnings or repair modes. */
+function quarantinedGenerationIsAuthenticated(dir: string, filePath: string): boolean {
+	let parsed: unknown;
+	try {
+		parsed = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+	} catch {
+		return false;
+	}
+	if (!isEnvelopeShape(parsed)) return false;
+	const opened = open(dir, parsed as CacheEnvelope);
+	if (!opened.ok) return false;
+	let entries: unknown;
+	try {
+		entries = JSON.parse(opened.plaintext.toString('utf8'));
+	} catch {
+		return false;
+	}
+	return isValidDiskEntries(entries);
+}
+
+/** Bound normal refresh history without a check-then-unlink race. Each retirement first moves the
+ * selected pathname into quarantine; only an authenticated moved object is deleted. A replacement
+ * at the original pathname survives, and rejected/unreadable evidence is restored without clobbering
+ * anything (or remains visibly quarantined if its pathname was retaken). */
+function retireOldAuthenticatedGenerations(dir: string): void {
+	for (const candidate of diskGenerationCandidates(dir).slice(RETAINED_AUTHENTICATED_GENERATIONS)) {
+		const quarantined = quarantinePath(candidate.filePath);
+		if (!quarantined) continue;
+		if (quarantinedGenerationIsAuthenticated(dir, quarantined.filePath)) {
+			removeQuarantinedPath(quarantined);
+		} else {
+			restoreQuarantinedPath(quarantined, candidate.filePath);
+		}
+	}
 }
 
 const LOCK_FILE_NAME = 'infisical-cache.lock';
@@ -476,7 +576,10 @@ function writeDiskEntry(key: string, entry: CacheEntry): void {
 		for (;;) {
 			const latest = diskGenerationCandidates(dir)[0]?.generation ?? -1;
 			const nextPath = latest < 0 ? cachePath() : generationPath(dir, latest + 1);
-			if (commitSealedFile(nextPath, JSON.stringify(envelope))) break;
+			if (commitSealedFile(nextPath, JSON.stringify(envelope))) {
+				retireOldAuthenticatedGenerations(dir);
+				break;
+			}
 		}
 	});
 }

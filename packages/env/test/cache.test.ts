@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
+import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import {
 	cacheDir,
@@ -440,6 +441,20 @@ describe('cache.ts', () => {
 			vi.useRealTimers();
 		});
 
+		it('many completed refreshes retain only two authenticated generations and serve the newest', () => {
+			for (let generation = 0; generation < 50; generation += 1) {
+				resetCacheStateForTests();
+				writeCache('k', { A: String(generation) }, 300_000, ['A']);
+			}
+
+			const generations = fs
+				.readdirSync(cacheDir())
+				.filter((name) => name === 'infisical-cache.json' || /^infisical-cache\.g\d{16}\.json$/.test(name));
+			expect(generations).toHaveLength(2);
+			resetCacheStateForTests();
+			expect(readCache('k')).toEqual({ env: { A: '49' }, keyNames: ['A'] });
+		});
+
 		describe('a cache that could not be READ is evidence too, not an absent one', () => {
 			const asRoot = process.getuid?.() === 0;
 
@@ -615,5 +630,54 @@ describe('cache.ts', () => {
 			expect(() => purgeLegacyCacheOnce()).not.toThrow();
 			expect(fs.existsSync(legacyFile())).toBe(true);
 		});
+
+		it(
+			'preserves a replacement published after the legacy object is selected',
+			async () => {
+				if (process.platform === 'win32') return;
+				fs.mkdirSync(cacheDir(), { recursive: true });
+				const fifo = legacyFile();
+				const wrote = path.join(tmpHome, 'legacy-wrote');
+				const release = path.join(tmpHome, 'legacy-release');
+				fs.rmSync(wrote, { force: true });
+				fs.rmSync(release, { force: true });
+				await new Promise<void>((resolve, reject) => {
+					const mkfifo = spawn('mkfifo', [fifo]);
+					mkfifo.on('error', reject);
+					mkfifo.on('exit', (code) => (code === 0 ? resolve() : reject(new Error(`mkfifo exited ${code}`))));
+				});
+
+				const legacy = JSON.stringify({ k: { env: { X: 'leaked' }, fetchedAt: 1, ttlMs: 1 } });
+				const writer = spawn(
+					'/bin/sh',
+					[
+						'-c',
+						'exec 3>"$1"; printf %s "$4" >&3; : >"$2"; while [ ! -e "$3" ]; do sleep 0.01; done; exec 3>&-',
+						'sh',
+						fifo,
+						wrote,
+						release,
+						legacy,
+					],
+					{ stdio: 'ignore' },
+				);
+				const writerDone = new Promise<void>((resolve, reject) => {
+					writer.on('error', reject);
+					writer.on('exit', (code) => (code === 0 ? resolve() : reject(new Error(`writer exited ${code}`))));
+				});
+				const helper = path.join(path.dirname(fileURLToPath(import.meta.url)), 'helpers', 'purge-legacy.mjs');
+				const purge = spawnTsx(helper, [tmpHome]);
+				for (let attempt = 0; attempt < 500 && !fs.existsSync(wrote); attempt += 1) {
+					await new Promise((resolve) => setTimeout(resolve, 10));
+				}
+				expect(fs.existsSync(wrote)).toBe(true);
+				fs.writeFileSync(fifo, 'UNAUTHENTICATED-EVIDENCE');
+				fs.writeFileSync(release, '');
+				await purge;
+				await writerDone;
+				expect(fs.readFileSync(fifo, 'utf8')).toBe('UNAUTHENTICATED-EVIDENCE');
+			},
+			10_000,
+		);
 	});
 });

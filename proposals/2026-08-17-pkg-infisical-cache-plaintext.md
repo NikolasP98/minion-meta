@@ -159,8 +159,29 @@ delete bytes this process never authenticated. The supported-runtime protocol is
 replaced or unlinked. A refetched value remains available in the process memo. The focused regression
 hooks entry to `unlinkSync(cachePath())` and fails if that boundary is ever reached.
 
-**Open end (also `TODO(handoff)` in `commitSealedFile`):** an expired existing envelope cannot be
-refreshed on disk under this protocol, so later processes refetch until an operator removes the stale
-authenticated cache. S3's `minion doctor` cache row must expose that cleanup/disposition. A future
-automatic replacement requires a supported atomic exchange/no-replace primitive (for example a
-carefully wrapped `renameat2`), not a check-then-act or link-plus-unlink fallback.
+**Superseded by the next handoff:** immutable numbered generations now permit an expired envelope to
+be refreshed without replacing its pathname. The initial implementation's unbounded retention is
+addressed below.
+
+## Handoff — 2026-08-30 (S2 review-fix: quarantine-bound deletion and bounded retention)
+
+The immutable-generation refresh introduced in review-fix round 5 restored cross-process refreshes,
+but the next review proved two remaining defects: the S1 legacy purge still parsed a pathname and
+later unlinked whatever then occupied it, and every refresh retained another authenticated secret
+generation forever.
+
+Both cleanup paths now use the same delete-authority primitive. The selected pathname is first moved
+atomically into a fresh `0700` same-filesystem quarantine directory. Parsing/authentication and any
+deletion happen only at that private moved pathname, so a replacement published at the original path
+after selection is never touched. Non-legacy or rejected objects are restored with a no-clobber hard
+link; if the original path has been retaken, the object remains visibly quarantined as evidence.
+Normal refresh history is bounded to the newest two authenticated generations. Older candidates are
+retired only after the quarantined object authenticates; rejected/unreadable generations are never
+deleted. A real FIFO/path-swap regression proves a replacement survives byte-for-byte, and a
+50-refresh regression proves the newest value remains readable with exactly two authenticated cache
+files.
+
+**Open end (`TODO(handoff)` at `restoreQuarantinedPath`):** a rejected object can remain in a
+`.infisical-cache-quarantine-*` directory when its original pathname was concurrently retaken. S3's
+`minion doctor` cache row must list these directories for operator disposition. Silent automatic
+cleanup would recreate the evidence-deletion defect this protocol prevents.
