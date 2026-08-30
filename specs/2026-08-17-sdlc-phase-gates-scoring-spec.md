@@ -5,11 +5,12 @@ stage: spec
 status: approved
 pass: 1
 created: 2026-08-17
-updated: 2026-08-28
+updated: 2026-08-30
 repos: [minion-meta, minion-factory, minion-base]
 verdict: approved
 tags: [infra]
 type: infra
+possibly_shipped: https://github.com/NikolasP98/minion-meta/pull/263
 ---
 
 # SDLC phase gates & preemptive scoring
