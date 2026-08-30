@@ -1,11 +1,20 @@
 ---
 spec: 2026-08-17-gw-msteams-large-upload-spec
-pass: 6
+pass: 8
 verdict: changes_requested
 reviewer: factory-review
 created: 2026-08-17
 updated: 2026-08-29
 ---
+
+# Pass 8 disposition — STILL REVIEW (changes_requested), unchanged
+
+The pass-8 revision closes the two findings from the review of pass 7 without changing scope or
+approval state. First, the live matrix now follows the routing predicate exactly: the helper-specific
+largest passing probe is the derived threshold and therefore uses the SIMPLE path, while precisely
+`threshold + 1` exercises the SESSION path. Second, the artifact and this sidecar now record pass 8,
+and the generated spec index projects that same review/revise cycle. The controlled tenant experiment
+remains outstanding, so `status: draft` and `verdict: changes_requested` remain authoritative.
 
 # Pass 6 disposition — STILL REVIEW (changes_requested), unchanged
 

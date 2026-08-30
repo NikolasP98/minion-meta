@@ -3,7 +3,7 @@ id: 2026-08-17-gw-msteams-large-upload-spec
 title: "MS Teams attachments — route >4MB through a Graph resumable upload session (chunked PUT with resume, expiry and cancel)"
 stage: spec
 status: draft
-pass: 7
+pass: 8
 created: 2026-08-17
 updated: 2026-08-29
 proposal: 2026-08-17-gw-msteams-large-upload
@@ -13,7 +13,11 @@ tags: [logic, test]
 type: fix
 ---
 
-> **Pass 7 disposition: STILL REVIEW, not approved.** Pass 7 changes no disposition — it closes the two
+> **Pass 8 disposition: STILL REVIEW, not approved.** Pass 8 changes no disposition. It corrects the
+> final boundary contradiction found after the pass-7 revision: the derived threshold is the largest
+> passing probe, so a payload exactly equal to it must remain on the SIMPLE path under the specified
+> `size > threshold` predicate, while `threshold + 1` is the first SESSION-path fixture. The pass
+> counter and generated index now identify this eighth review/revise cycle. Pass 7 closed the two
 > defects the pass-6 review found surviving in *how* the artifacts state their own contracts.
 > (1) §3's explanation under the routing table was still the last active passage calling `4,000,000`
 > "Graph's documented 4 MB simple-upload cap" and warning that erring high "resends the reported bug",
@@ -627,10 +631,10 @@ stop promising a 4MB world, and every remaining open end is in the ledger.
      retry and resume above one chunk.
 - **Test the callers, not just the module.** S1/S2 prove the transfer; this slice proves the
   consequence. For **each of the two drive-path callers** (SharePoint and OneDrive), drive it with that
-  helper's own §3 **below-boundary** and **above-boundary** fixtures, derived from its §7 step 0c
+  helper's own §3 **at-boundary** and **above-boundary (`threshold + 1`)** fixtures, derived from its §7 step 0c
   measurement (§3's bracket rule) — never a fixed 1 MB / 12 MB pair, because the two helpers may bracket
-  the boundary at different sizes and the true boundary may sit above every size step 0 probed. Below
-  the boundary → simple path, attachment delivered. Above the boundary → session path, attachment
+  the boundary at different sizes and the true boundary may sit above every size step 0 probed. At
+  the boundary → simple path, attachment delivered. At `threshold + 1` → session path, attachment
   delivered. Above the boundary, transfer permanently fails → the send reports a typed error and does
   **not** post a card pointing at a nonexistent file. That last case is the one an implementer skips,
   and it is the one that produces a broken link in a real chat. For the SharePoint path specifically,
@@ -691,7 +695,7 @@ ceiling), their `*.test.ts`, `extensions/msteams/README.md` or the `upload-sessi
 cd minion
 pnpm vitest run extensions/msteams   # the ~143-case msteams baseline must not regress (count is not the gate)
 pnpm tsgo && pnpm check
-#   the below/above-boundary/permanent-failure cases above, each on its own helper's derived fixtures,
+#   the at-boundary/threshold+1/permanent-failure cases above, each on its own helper's derived fixtures,
 #   for the two drive call sites, plus:
 #   - a file above the effective mediaMax ceiling → rejected by loadWebMedia BEFORE any
 #         createUploadSession call, and the message names the effective limit
@@ -936,37 +940,35 @@ git diff --name-only <base>...HEAD          # → extensions/msteams/** only in 
 
 # 2. Live — the reported symptom, gone, on the path that actually matters
 #    Configure the msteams channel WITH a SharePoint site id, start the gateway (pnpm gateway:watch):
-#    a) Channel/group: send SharePoint's step-0-derived BELOW-boundary non-image fixture (§3 bracket rule)
+#    a) Channel/group: send SharePoint's step-0-derived boundary fixture — exactly the largest-passing
+#       probe (§3 bracket rule)
 #         → delivered. Debug log shows the SIMPLE path, exactly one PUT.   ← no regression
-#    b) Channel/group: send SharePoint's step-0-derived ABOVE-boundary fixture
+#    b) Channel/group: send SharePoint's first above-boundary fixture — exactly threshold + 1 byte
 #         → delivered as a native file card, opens correctly, byte size matches the source exactly.
 #         → debug log shows createUploadSession + N chunk PUTs; the LAST is short.  ← the bug, fixed
 #         → the file appears intact in the SharePoint drive (open it, don't just trust the card)
-#    c) Channel/group: send a file at SharePoint's derived boundary (the largest-passing probe from
-#       step 0 — §3 bracket rule)
-#         → delivered via the SESSION path.                                 ← the boundary, live
-#    d) Unconfigure sharePointSiteId; repeat (b) and (c) using OneDrive's OWN step-0-derived fixtures —
+#    c) Unconfigure sharePointSiteId; repeat (a) and (b) using OneDrive's OWN step-0-derived fixtures —
 #       do not reuse SharePoint's sizes, the two helpers may bracket differently (§7 step 0c)
 #         → delivered via the OneDrive fallback + markdown link.            ← the proposal's :27 site
-#    e) 1:1 chat: send a ~12MB file, accept the consent card
+#    d) 1:1 chat: send a ~12MB file, accept the consent card
 #         → delivered; debug log shows chunked PUTs to the TEAMS-supplied url,
 #           and ZERO createUploadSession calls.                             ← §1.2, live
-#    f) Mid-transfer of a large file, drop the network for a few seconds, restore it
+#    e) Mid-transfer of a large file, drop the network for a few seconds, restore it
 #         → the transfer resumes and completes; the log shows a nextExpectedRanges GET
 #           and a restart at that offset, not at byte zero.                 ← S2, proven live
-#    g) Revoke or corrupt the upload URL mid-transfer (or wait past expirationDateTime)
+#    f) Revoke or corrupt the upload URL mid-transfer (or wait past expirationDateTime)
 #         → the send fails with a typed, human-readable error; NO broken attachment card is posted;
 #           the log shows one best-effort DELETE attempt. If the URL is already invalid, cleanup is
 #           service-owned; no completed or user-visible partial item remains in the drive.
 #         → on the 1:1 path, the message posted into the chat contains NO url.     ← §1.4
-#    h) Attempt a file above the effective mediaMax ceiling
+#    g) Attempt a file above the effective mediaMax ceiling
 #         → rejected before any network call, with a message naming the effective limit.
-#    i) grep the run's logs for the upload URL's token and for 'Bearer'
+#    h) grep the run's logs for the upload URL's token and for 'Bearer'
 #         → ZERO hits.                                                      ← no-leak, proven live
 
 # 3. Tenant hygiene
-#    After the runs above, list the destination drive: exactly the files sent in (a)-(e),
-#    no zero-byte or partial items left by (f)/(g).
+#    After the runs above, list the destination drive: exactly the files sent in (a)-(d),
+#    no zero-byte or partial items left by (e)/(f).
 ```
 
 **Ship gate:** step 0 run with **passing controls on both helpers** and its full result table recorded,
@@ -976,7 +978,7 @@ a step 0 whose controls fail is not a result at all and blocks the gate either w
 1–3 green on **both** a SharePoint-configured conversation and a 1:1 chat; the proposal's DoD checked
 clause by clause (`createUploadSession` + chunked PUT path taken above each helper's own step-0-derived
 boundary — §3 bracket rule, never a fixed `4MB` — S1's `graph-upload.test.ts` mock-buffer case against
-*both* drive functions using each helper's own derived fixture, and step 2b/2d live); the S1 red-state failure pasted
+*both* drive functions using each helper's own derived fixture, and step 2b/2c live); the S1 red-state failure pasted
 into the PR, proving the old code failed the way the proposal reported; §4's unverified constants each
 checked and recorded as one line, including any that came back different — in particular the
 per-request fragment ceiling, since it determines whether the consent path had a second silent failure

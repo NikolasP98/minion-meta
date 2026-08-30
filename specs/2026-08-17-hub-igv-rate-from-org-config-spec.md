@@ -5,7 +5,7 @@ stage: spec
 status: implementing
 pass: 2
 created: 2026-08-17
-updated: 2026-08-28
+updated: 2026-08-29
 proposal: 2026-08-17-hub-igv-rate-from-org-config
 verdict: approved
 repos: [minion_hub]
@@ -298,8 +298,11 @@ just 18%; and a test fails if anyone reintroduces a hardcoded rate.
   a grep in a spec is a one-time check; a grep in a test is a permanent one.
 - **Live beta re-verification.** The 18%→parameterized change alters the `Percent` element and
   possibly line rounding, and the shipped specs' DoD was SUNAT's own validator returning
-  `ResponseCode 0`. Re-run the two live scripts (§6 step 3) — at 18% *and* at 10% — and paste the
-  four CDR descriptions into the PR. A green unit suite with a rejected document is not done.
+  `ResponseCode 0`. Re-run the two live scripts (§6 step 3) at 18% and at 10% and paste the CDR/fault
+  descriptions into the PR — **expect 18% to accept and 10% to be rejected with fault
+  `soap-env:Client.3462`** (SUNAT's validator only accepts a currently-vigente rate; a
+  `ResponseCode 0` at 10% would mean the fail-closed allowlist below has a gap, not that rounding
+  improved). A rejection at 18% is the real regression to chase.
 - Any transition still unsupported (e.g. exonerated/inafecta per A2) leaves a `TODO(handoff):` **and**
   an appended entry on the source proposal.
 
@@ -443,10 +446,18 @@ rg -n 'igvRate' src/server/finance/emission/types.ts                      # → 
 
 # 3. SUNAT's own validator still accepts what we build (the shipped specs' DoD, re-run)
 bun scripts/emit-beta-test.ts --rate 0.18       # boleta B999-x + factura F999-x → ResponseCode 0
-bun scripts/emit-beta-test.ts --rate 0.10       # SAME, at a non-statutory rate → ResponseCode 0
-bun scripts/summary-beta-test.ts --rate 0.10    # RC resumen with the 0.10 boletas → ResponseCode 0
-#    Paste all CDR descriptions into the PR. A rejection here (e.g. "totales no consistentes")
-#    means S3's rounding invariant is incomplete — fix it, do not retry at 18% and call it green.
+bun scripts/emit-beta-test.ts --rate 0.10       # SAME, at a non-vigente rate → EXPECT fault
+                                                 #   soap-env:Client.3462 ("...debe corresponder
+                                                 #   con una tasa vigente"). SUNAT rejects any rate
+                                                 #   that isn't currently in force — a
+                                                 #   ResponseCode 0 here means the fail-closed
+                                                 #   allowlist has a gap, not that rounding improved.
+bun scripts/summary-beta-test.ts --rate 0.10    # RC/RA come back ResponseCode 0 REGARDLESS — they
+                                                 #   don't re-validate the referenced document's
+                                                 #   rate, so this is NOT proof the 0.10 boleta was
+                                                 #   accepted; do not use it to sign off a rate.
+#    Paste the 18% CDR and the 10% fault into the PR. A rejection at 18% is the regression to chase;
+#    a rejection at 10% confirms the fail-closed design (SUNAT_VIGENTE_IGV_RATES) is correct.
 
 # 4. Org config actually drives a real ticket (shadow mode, dev org — never production)
 #    a. set the dev org's fin_settings taxRate to the non-18% value (in the unit S0 established)
