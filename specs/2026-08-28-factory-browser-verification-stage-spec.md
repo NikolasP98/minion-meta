@@ -3,7 +3,7 @@ id: 2026-08-28-factory-browser-verification-stage-spec
 title: Credential-free, loopback-isolated browser-verification stage for UI-topic factory runs
 stage: spec
 status: review
-pass: 5
+pass: 6
 created: 2026-08-28
 updated: 2026-08-29
 proposal: 2026-08-18-factory-browser-verification-stage
@@ -368,7 +368,11 @@ a security boundary" as applying identically to page-rendered text reaching a do
    The runner validates every path no-follow, hashes the validated files, and persists only the
    bounded summary/hashes in `phase_attempts.evidence`; the full artifacts remain in the
    phase-attempt-owned `/out` leaf. A passed attempt must bind the current `candidate_sha`, the
-   snapshotted `browserProfileHash`, and the inspected immutable browser image identity.
+   snapshotted `browserProfileHash`, the inspected immutable browser image identity, and the exact
+   dependency artifact's independently computed `artifactContentSha256` and byte size. The artifact
+   content digest is recomputed over the final no-follow regular file after dependency preparation is
+   proved stopped and again immediately before its read-only preview mount; the input-derived key is
+   only a cache key and can never substitute for attesting the bytes actually executed.
 8. **Stable profile binding.** When browser evidence first becomes required, the runner copies the
    validated server-owned profile to a runner-owned, read-only per-run input leaf and records a hash
    over canonical `{previewCommand, previewBaseUrl, profileBytes, browserImageIdentity}`. Retries and
@@ -434,18 +438,23 @@ a security boundary" as applying identically to page-rendered text reaching a do
     infrastructure failure, so a future Chrome build that stops exposing it cannot silently downgrade
     the boundary.
 12. **One attempt is one durably identified, group-recoverable authority unit.** Before creating the
-    network or launching any role, the runner persists the complete group identity into the attempt's
-    durable launch policy: `{network, roles: {preview: {containerName, image}, browser:
-    {containerName, image}}}`, with every name deterministic in `(phase, runId, attempt, role)` and
-    every image an immutable named digest. `containmentPolicy()` accepts both the legacy single-role
+    first per-attempt path, fetching candidate objects, creating the network, or launching any role,
+    the runner persists the complete resource manifest into the attempt's durable launch policy:
+    `{network, roles: {dependencyPrep, preview, browser}, paths: {mirror, previewTree, dependencyTree,
+    dependencyArtifact, out}}`, with every container/path name deterministic in
+    `(phase, runId, attempt, role)`, every image an immutable named digest, and every path constrained
+    to a no-follow child of the attempt root. `containmentPolicy()` accepts both the legacy single-role
     shape (unchanged for all eight existing phases) and this group shape, and rejects any deviation as
     malformed durable launch identity. Launch, timeout, cancellation, and boot recovery are **group**
-    operations: `stopAndCrashContainmentAttempts()` kills every persisted role, proves each stopped,
-    then removes the persisted network idempotently with the same inspect-assert-confirm discipline as
-    AS-IS item 18, and returns `false` (blocking dispatch) if it cannot prove any of that. Recovery is
-    correct at every failpoint — after network create, after either role launch, between browser exit
-    and seal, and during teardown — leaving no orphan container, no leaked network, no duplicate
-    launch, and no second writer to a sealed `/out`.
+    operations: `stopAndCrashContainmentAttempts()` kills every persisted role (including dependency
+    preparation), proves each stopped, removes the persisted network idempotently with the same
+    inspect-assert-confirm discipline as AS-IS item 18, and no-follow removes every persisted path
+    before sealing or retrying. It returns `false` (blocking dispatch) if it cannot prove any role
+    stopped, network absent, or path removed. Recovery is correct at every failpoint — during fetch,
+    after each path creation, during dependency preparation, before/after packing, after network
+    create, after either serving role launch, between browser exit and seal, and during teardown —
+    leaving no orphan container, leaked network/path, duplicate launch, or second writer to sealed
+    evidence.
 13. **The dependency artifact is produced by a controller-scheduled, credential-free install role —
     never by copying develop's `node_modules`.** After invariant 10 produces the tracked-only export
     and before the preview container is created, the runner launches a disposable **dependency-prep**
@@ -455,16 +464,19 @@ a security boundary" as applying identically to page-rendered text reaching a do
     same disposable-role posture as `self-test` (`github: null`, `model: forbidden`, `uid 1100`,
     read-only rootfs, no `/out`, no browser-profile mount, no candidate execution beyond the registered
     command). No new registry allowlist, proxy, or credential surface is introduced. On success the
-    runner packs the resulting dependency directory into a single immutable, read-only artifact file
-    named by a SHA-256 over `{candidate_sha, lockfile bytes, setup command, toolchain image digest}`,
-    stores it under a controller-owned per-attempt leaf, and mounts only that one file read-only into
+    runner deterministically packs the resulting dependency directory into a single immutable,
+    read-only artifact file. A SHA-256 over `{candidate_sha, lockfile bytes, setup command, toolchain
+    image digest}` is its cache key; a separate `artifactContentSha256` is computed over the packed
+    file's actual bytes, alongside its byte size, after the role is proved stopped. The runner stores
+    it under a controller-owned per-attempt leaf and mounts only that one file read-only into
     the preview container; the preview entrypoint unpacks it locally and opens no network of its own
     (invariant 10's "separately sealed... dependency artifact" is this producer). The dependency-prep
     role and its private copy of the export are deleted before the preview or browser role is created.
-    A missing, oversized (over a fixed byte ceiling), or hash-mismatched artifact fails the phase
-    closed rather than falling back to develop's dependency state; an unchanged candidate, lockfile,
-    setup command, and toolchain image produce a byte-identical artifact hash, and a changed dependency
-    produces a differently-hashed one.
+    A missing, oversized (over a fixed byte ceiling), non-regular, cache-key-mismatched, or
+    content-digest-mismatched artifact fails the phase closed rather than falling back to develop's
+    dependency state. The runner recomputes the content digest immediately before the mount and binds
+    the digest and size into `phase-result.json` and `phase_attempts.evidence`; altered output bytes
+    under identical input metadata are therefore distinguishable and rejected.
 
 ## 4. DELTA
 
@@ -506,8 +518,10 @@ a security boundary" as applying identically to page-rendered text reaching a do
   and prove it against a real restarted controller (S2 unit + S8 integration;
   T-GROUP-LAUNCH-IDENTITY, T-LEGACY-POLICY-COMPAT, T-GROUP-TEARDOWN-IDEMPOTENT, T-GROUP-RECOVERY-UNIT,
   T-GROUP-RECOVERY-FAILPOINTS, T-GROUP-CANCEL).
-- **D11** Add the dependency-artifact producer (disposable `setup`-network install role, hash-named
-  immutable artifact, read-only preview mount) and its size/hash fail-closed checks (S4;
+- **D11** Add the dependency-artifact producer as a persisted member of the attempt resource manifest
+  (disposable `setup`-network install role plus every prelaunch path), deterministically pack an
+  immutable artifact, bind its independently computed content digest/size into trusted evidence, and
+  mount it read-only into preview with size/cache-key/content-digest fail-closed checks (S2/S4/S5/S8;
   T-DEPENDENCY-ARTIFACT-PRODUCER, T-DEPENDENCY-ARTIFACT-BINDING, T-NO-DEVELOP-DEPENDENCY-LEAK).
 
 ## 5. Design decisions
@@ -601,18 +615,21 @@ a security boundary" as applying identically to page-rendered text reaching a do
     if that page is unavailable to an automated context — S3 determines which mechanism works and pins
     it) and exits nonzero if any layer is missing. `chrome --version` proves the binary is present and
     nothing about the boundary.
-11. **Make the phase group durable state, and reuse the shipped group-lifecycle discipline.** A phase
-    that owns two containers plus a network cannot be represented by the shipped single-container
+11. **Make every phase resource durable state, and reuse the shipped group-lifecycle discipline.** A
+    phase that owns three containers, a network, and prelaunch host paths cannot be represented by the
+    shipped single-container
     durable launch identity, active-run entry, or crash recovery (AS-IS item 17); a runner restart
     mid-launch would leave orphans while recovery still reported success. Rather than tracking the
-    group in memory or deriving names at recovery time, the group identity is written to
+    group in memory or deriving names at recovery time, the complete resource manifest is written to
     `phase_attempts.policy` **before** the first Docker object exists, so recovery reads the same truth
     the launcher wrote (operator memory ★★★: the controller owns truth). `containmentPolicy()` grows a
     second accepted shape instead of a looser one, so the eight legacy phases keep their exact
     single-name validation. Teardown reuses the inspect → assert-labels → refuse-stale-attachments →
     disconnect → `network rm` → confirm sequence the instance path already ships
     (`orchestrator-runtime.ts:270-296`), which is idempotent and therefore safe to re-run after a
-    partial failure. Failing to *prove* a clean group leaves `runDispatchBlocked = true`, matching the
+    partial failure. Teardown first proves all three roles stopped, then removes the network and every
+    no-follow attempt path; dependency preparation and materialization are not pre-attempt setup.
+    Failing to *prove* a clean group leaves `runDispatchBlocked = true`, matching the
     existing fail-closed recovery posture rather than inventing a new one.
 12. **The controller materializes from an independently verified source; the untrusted role only
     receives.** Invariant 10's tracked-only export must run in the runner, not in the preview
@@ -637,10 +654,13 @@ a security boundary" as applying identically to page-rendered text reaching a do
     role. `browser-verify`'s dependency-prep role runs the identical command under the identical
     posture against the tracked-only export instead of the mutable develop workspace, so no new
     registry allowlist, proxy, or credential surface is introduced. Packing the result into a single
-    hash-named artifact — rather than mounting the install role's writable directory directly — makes
+    deterministically packed artifact — rather than mounting the install role's writable directory
+    directly — makes
     "no develop residue crosses into preview" a property of the copy step, since the pack step reads
     only from the install role's own disposable output, and gives the preview and browser containers a
     stable, read-only, candidate-bound input consistent with invariant 8's profile-snapshot pattern.
+    The metadata-derived hash is only a cache key: the controller separately hashes the final packed
+    bytes after the prep role stops and binds that content digest and size into trusted evidence.
 
 ## 6. Slices
 
@@ -700,16 +720,18 @@ renders byte-identical argv. Reject `--no-sandbox` and `--disable-setuid-sandbox
 rendered command or policy-supplied argument.
 
 Make the durable launch identity and recovery group-aware (§5 Design decision 11, AS-IS item 17).
-Persist `{network, roles: {preview, browser}}` — deterministic names
+Persist `{network, roles: {dependencyPrep, preview, browser}, paths: {mirror, previewTree,
+dependencyTree, dependencyArtifact, out}}` — deterministic names
 (`factory-browser-verify-<role>-<runId>-<attempt>`, network `factory-browser-<runId>-<attempt>`) and
-immutable per-role image digests — into `phase_attempts.policy` **before** creating the network or
-launching a role. Teach `containmentPolicy()` to accept exactly two shapes: the untouched legacy
+immutable per-role image digests and bounded no-follow attempt paths — into `phase_attempts.policy`
+**before** creating any path, fetching candidate objects, creating the network, or launching a role.
+Teach `containmentPolicy()` to accept exactly two shapes: the untouched legacy
 single-role shape and this group shape; anything else stays `malformed durable launch identity`.
 Teach the `active` map entry and `stopAndCrashContainmentAttempts()` to operate on the whole group —
-kill every persisted role, prove each stopped, then remove the persisted network with the
+kill every persisted role, prove each stopped, then remove the persisted network and paths with the
 inspect → assert-labels → refuse-stale-attachments → disconnect → `network rm` → confirm sequence
 `orchestrator-runtime.ts:270-296` already ships — and to return `false` (leaving
-`runDispatchBlocked = true`) if any part cannot be proved.
+`runDispatchBlocked = true`) if any role stop, network removal, or path removal cannot be proved.
 
 Implement §5 Design decision 9 exactly: add `nextPhase(..., {conditionalPhases: []})`
 (byte-compatible default at every existing call site), have `advanceContainmentRun()`'s pump alone
@@ -736,14 +758,16 @@ Additionally: **T-SECURITY-OPT-POLICY** — the browser role renders
 `--security-opt no-new-privileges --security-opt seccomp=<pinned path>` with `--cap-drop ALL` intact,
 and a golden-argv fixture proves all eight existing phases are byte-identical to pre-slice output.
 **T-NO-SANDBOX-FLAGS** — a policy or command carrying `--no-sandbox`/`--disable-setuid-sandbox` is
-rejected by name. **T-GROUP-LAUNCH-IDENTITY** — the persisted policy round-trips both role names, both
-image digests, and the network; a wrong role name, a tag-shaped image, a missing role, or a missing
-network is `malformed durable launch identity`. **T-LEGACY-POLICY-COMPAT** — an unmodified legacy
+rejected by name. **T-GROUP-LAUNCH-IDENTITY** — the persisted policy round-trips all three role names
+and image digests, the network, and every bounded prelaunch/output path; a wrong role/path name, a
+path outside the attempt root, a tag-shaped image, a missing role/path, or a missing network is
+`malformed durable launch identity`. **T-LEGACY-POLICY-COMPAT** — an unmodified legacy
 single-role row from every existing phase still parses and still validates its one deterministic name.
 **T-GROUP-RECOVERY-UNIT** — with an injected Docker double, recovery from a policy row written at each
-failpoint (network created only; preview launched; both launched; browser exited unsealed; teardown
-half-done) kills every live role, removes the network, seals the row `crashed`, and leaves no orphan;
-if the double reports any role still running or the network still attached, recovery returns `false`
+failpoint (fetch/materialization active; dependency-prep launched; artifact packing; network created
+only; preview launched; both serving roles launched; browser exited unsealed; teardown half-done)
+kills every live role, removes the network and paths, seals the row `crashed`, and leaves no orphan;
+if the double reports any role still running, network attached, or path present, recovery returns `false`
 and dispatch stays blocked. **T-GROUP-TEARDOWN-IDEMPOTENT** — running teardown twice, and running it
 against an already-absent network, both succeed without error. **T-ENGINE-GATEWAY-MODE-PREFLIGHT** —
 with an injected Docker-version double reporting an engine below the isolated-gateway-mode minimum,
@@ -815,17 +839,20 @@ is never available to any container. The preview container receives no mirror pa
 Git object store, so `git archive` never runs inside an untrusted container and there is no archive
 transport to define.
 
-**Dependency-artifact production runs next, still before either container exists** (§5 Design
-decision 13, invariant 13): the runner copies the freshly archived tracked-only tree into a private
+**Dependency-artifact production runs next, still before either serving container exists** (§5 Design
+decision 13, invariant 13): this work is already inside the persisted attempt resource manifest; the
+runner copies the freshly archived tracked-only tree into a private
 `${root}/browser-deps-${attempt}` directory and launches the disposable dependency-prep role — the
 repo's existing `setup` command, under its existing `setupNetwork` egress, with the same
 `github: null`/`model: forbidden`/`uid 1100`/read-only-rootfs posture as `self-test`, no `/out`, no
 browser-profile mount, and no candidate execution beyond the registered command. On exit 0 the runner
-packs the resulting dependency directory into a single immutable file named
-`sha256(candidate_sha + lockfile bytes + setup command + toolchain image digest)`, deletes the private
-directory and the dependency-prep container, and mounts only that one file read-only into the preview
-role. A missing, oversized, or hash-mismatched artifact fails the phase closed before either the
-preview or browser role is created.
+deterministically packs the resulting dependency directory into a single immutable file keyed by
+`sha256(candidate_sha + lockfile bytes + setup command + toolchain image digest)`. After proving the
+dependency-prep role stopped, the runner separately computes `artifactContentSha256` and byte size
+over that final no-follow regular file, deletes the private directory and dependency-prep container,
+recomputes the content digest immediately before mount, and mounts only that one file read-only into
+the preview role. A missing, oversized, non-regular, cache-key-mismatched, or content-digest-mismatched
+artifact fails the phase closed before either the preview or browser role is created.
 
 Split entrypoints by role (§5 Design decision 2). **Preview entrypoint** (runs in the preview
 container): take the already-mounted tracked-only tree and the already-mounted dependency artifact as
@@ -864,11 +891,13 @@ preview role is created. **T-NO-REPLACE-REF-BYPASS** plants a `refs/replace` ent
 phase runs, and proves none of them can change the fetched commit id, the archived tree hash, or any
 emitted artifact — the fetch source is the controller's independent remote authority, never the
 develop-writable checkout. **T-DEPENDENCY-ARTIFACT-PRODUCER** proves the artifact is produced from the
-tracked-only export (never the develop workspace) by the disposable dependency-prep role, and that the
+tracked-only export (never the develop workspace) by the persisted dependency-prep role, and that the
 dependency-prep container and its private directory are gone before the preview role is created.
-**T-DEPENDENCY-ARTIFACT-BINDING** proves a missing/oversized/hash-mismatched artifact fails the phase
-closed, an unchanged candidate+lockfile+setup command+toolchain image reuses a byte-identical artifact
-hash, and a changed dependency produces a differently-hashed one.
+**T-DEPENDENCY-ARTIFACT-BINDING** proves a missing/oversized/non-regular/cache-key-mismatched/content-
+digest-mismatched artifact fails the phase closed; identical input metadata paired with altered packed
+bytes is rejected; and `artifactContentSha256` plus byte size in `phase-result.json` identify the exact
+read-only file mounted into preview. The expected digest is derived independently from the packed bytes,
+not from the cache-key implementation.
 **T-INTERNAL-NETWORK-ONLY** replaces the removed loopback-era wildcard-bind assertion, which was
 unsatisfiable once the roles became separate containers (`0.0.0.0` *is* the required listener):
 assert instead that neither role's rendered argv publishes a host port, that the attempt network
@@ -900,6 +929,10 @@ only: JSON/JSONL must be UTF-8 and structurally valid; allow 1 MiB each for JSON
 lines each for JSONL, at most 64 PNGs of at most 16 MiB each; reject symlinks, non-regular files,
 extra screenshot types, path traversal, missing files, or duplicate checkpoint names. Persist a
 bounded summary and SHA-256 for every artifact in `phase_attempts.evidence`, not raw screenshots.
+Also require `artifactContentSha256` and artifact byte size in `phase-result.json`, independently
+recompute them from the final no-follow dependency file immediately before preview mount, and persist
+them beside candidate/profile/browser-image bindings so the evidence identifies the exact dependency
+bytes executed.
 
 **DoD:** `cd runner && npm test -- --test-name-pattern='browser.?verify|profile snapshot|evidence' &&
 npm run typecheck`. Corrupt, oversized, symlinked, extra, missing, and binding-mismatch fixtures fail
@@ -997,22 +1030,27 @@ and sandbox-status suites all pass. No PR-artifact publication is claimed.
 Slice 2 proves the group policy and recovery algorithm against an injected Docker double; this slice
 proves them against the **real controller and the real Docker daemon** (§5 Design decision 11,
 invariant 12). Add a test-only failpoint hook that aborts the runner process at each boundary of the
-browser phase group: (a) after the attempt policy is persisted but before the network exists,
-(b) after network create, before any role launch, (c) after the preview role launches, before the
-browser role, (d) with both roles live, (e) after the browser container exits but before
-`finishPhaseAttempt()` seals the row, and (f) mid-teardown with one role removed. At each failpoint,
+browser phase group: (a) after the attempt policy is persisted but before the first path exists,
+(b) during candidate fetch, (c) after each mirror/preview/dependency/artifact directory or file is
+created, (d) while dependency-prep is executing, (e) before and after deterministic packing,
+(f) after network create before a serving-role launch, (g) after the preview role launches before the
+browser role, (h) with both serving roles live, (i) after the browser container exits but before
+`finishPhaseAttempt()` seals the row, and (j) mid-teardown with one role or path removed. At each
+failpoint,
 restart the controller and assert boot recovery leaves no orphan container, no leaked network, no
-duplicate launch, no second writer to `/out`, and either a sealed `crashed` row plus a resumable run
+surviving attempt path, no duplicate launch, no second writer to `/out`, and either a sealed `crashed` row plus a resumable run
 or a blocked dispatch with a named reason — never a silent pass. Do the same for an operator
-cancellation issued in states (b)–(e) (T-GROUP-CANCEL): cancellation finishes only after Docker proves
-every role stopped and the network is gone, matching the existing "finalize cancellation only after
+cancellation issued during materialization, dependency preparation, and serving-role states
+(T-GROUP-CANCEL): cancellation finishes only after Docker proves every role stopped and the network
+and all no-follow attempt paths are gone, matching the existing "finalize cancellation only after
 Docker proves the worker is not running" posture.
 
 **DoD:** `cd runner && npm test -- --test-name-pattern='group recovery failpoints|group cancel' && npm
 run typecheck`, plus the failpoint suite executed against a real daemon on the scratch box. Every
 failpoint case asserts, by direct `docker ps -a` / `docker network ls` inspection scoped to the
-attempt's deterministic names, that zero objects survive. A deliberately broken teardown (network left
-attached) must make recovery return `false` and leave dispatch blocked — proving the assertions are
+attempt's deterministic names, that zero Docker objects and zero persisted attempt paths survive. A
+deliberately broken teardown (dependency-prep left running, network left attached, or one path left
+present) must make recovery return `false` and leave dispatch blocked — proving the assertions are
 load-bearing. Non-browser phased runs are unaffected: the same failpoint harness run against a
 `self-test` attempt reproduces exactly the pre-slice single-container behavior.
 
@@ -1091,7 +1129,8 @@ enabled, the browser image reference is a named manifest digest, Chromium report
 sandbox under the production launch flags, the deployed Docker Engine passes the isolated-gateway-mode
 preflight and every attempt network inspects with `gateway_mode_ipv4=isolated`, every group-lifecycle
 failpoint leaves zero orphan containers and zero leaked networks, every browser-verify attempt's
-dependency artifact is produced from the tracked-only export and bound to
+dependency artifact is produced from the tracked-only export, every dependency-prep role and attempt
+path is recoverable, and the artifact's independently computed content digest/size is bound beside
 candidate+lockfile+toolchain, the hub success and site refusal canaries pass, the canonical `ui`
 policy is live, and a post-activation hub run produces validated candidate/profile/image-bound
 evidence before review. `FACTORY_AUTOMERGE=0`, provider independence,
@@ -1152,3 +1191,19 @@ adversarial testing respectively) rather than adding a new numbered slice, consi
 rounds folded the sandbox and group-lifecycle fixes into existing slices instead of renumbering. No
 slice's file list changed its owning repo; `runner/src/containers.ts` was already a Slice 2 file and is
 now also touched by Slice 7 for the single-line implemented-phases addition.
+
+**Pass 6 disposition: still-review (`status: review`, `verdict: pending`).** Pass 5 was independently
+reviewed with `VERDICT: FAIL` on PR #286 (2026-08-29). Both findings were re-verified against this
+spec's actual resource/evidence contracts before editing. The earlier network, trusted-materialization,
+sandbox, and conditional-readiness fixes remain unchanged because the pass-5 reviewer explicitly
+accepted them. This pass does not self-approve; the security-tagged spec still requires independent
+approval and a human merge gate.
+
+| Pass-5 finding | Re-verification | Resolution in pass 6 |
+|---|---|---|
+| **H1** Dependency preparation and prelaunch paths are outside durable recovery | Confirmed. Invariant 12 persisted only `{preview,browser,network}`, while invariant/Slice 4 created a dependency-prep container plus mirror, preview-tree, dependency-tree, artifact, and output paths before those recorded roles launched | Invariant 12 and Design decision 11 now persist `{dependencyPrep,preview,browser,network,paths}` before the first resource; D10/D11 and S2 make validation, active tracking, cancellation, and teardown cover all three roles and every no-follow path; S8 adds real-controller failpoints during fetch, each path creation, dependency execution, packing, and deletion and blocks sealing/retry until zero resources remain |
+| **M1** Evidence names an input cache key rather than the dependency bytes executed | Confirmed. The prior artifact name was derived only from candidate/lockfile/setup/toolchain metadata and the evidence binding omitted the packed file | Invariants 7/13, Design decision 13, D11, and S4/S5 separate the metadata cache key from `artifactContentSha256`; the controller deterministically packs, hashes the final no-follow file after prep stops, rechecks immediately before mount, and binds content digest plus size in `phase-result.json` and `phase_attempts.evidence`; the focused fixture alters bytes under identical metadata and must fail |
+
+**Not changed, and why:** slice count remains 9. S2 already owns durable policy/recovery, S4 owns
+dependency production, S5 owns evidence ingestion, and S8 owns real restart failpoints; extending
+those force-bearing seams is narrower and more independently landable than adding a tenth slice.
