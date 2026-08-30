@@ -1,7 +1,7 @@
 ---
 spec: 2026-08-26-spec-heading-lint-baseline-backfill-spec
 pass: 4
-verdict: changes_requested
+verdict: approved
 reviewer: factory-review
 created: 2026-08-26
 updated: 2026-08-30
@@ -205,9 +205,10 @@ approval is the authoring run's operator disposition, not a reviewer sign-off on
 if a subsequent review round raises a blocking finding, the spec returns to `status: review` /
 `verdict: pending` and this section records that instead.
 
-## Pass 4 — `changes_requested`
+## Pass 4 — `approved`
 
-Reviewer: cross-provider review. Date: 2026-08-30.
+Reviewer: cross-provider review. Date: 2026-08-30. Initial verdict: `changes_requested`; author
+resolution and current roll-up follow below.
 
 The branch was reconciled with `origin/dev@90ec190`. The review found that the strict Body grammar
 would force an unplanned corpus-wide migration: only 1 of 70 existing sidecars used it, while all
@@ -217,3 +218,17 @@ strict structured mode for new/updated records, accepts the measured legacy curr
 historical evidence, and creates the two missing sidecars before enabling the gate. The duplicate
 auto-triage proposal was removed after its distinct remaining writer-ownership work was preserved
 in the current-base proposal.
+
+### Author resolution after review
+
+Both pass-4 findings were fixed without widening the implementation slice. Legacy mode no longer
+infers a decision from prose: S3 freezes the 70 unchanged pre-contract files by path and whole-file
+SHA-256 in a removal-only manifest. Any edit, new sidecar, added manifest entry, or rewritten hash
+must use structured mode. The fixture contract includes the review's live contradictory example,
+so a superseded `approved` token cannot satisfy current `changes_requested` evidence (or vice
+versa). The reconciled AS-IS now consistently reports 70 present/current sidecars, 2 absent, and 0
+present freshness mismatches; the deleted orphan is no longer cited. The factory proposal also no
+longer describes the already-shipped proposal-index `--check` mode as parked.
+
+The author disposition is `approved`; an independent re-review still controls whether the PR may
+leave draft.

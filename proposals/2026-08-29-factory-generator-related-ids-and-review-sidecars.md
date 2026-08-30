@@ -99,8 +99,9 @@ wording here is the pre-implementation statement of intent, not the shipped cont
   2026-08-28 board audit). Named here only so the two are not confused.
 - **Creating the two missing sidecars** in minion-meta — that repair is S3 of the spec above and is
   a precondition of the rule landing there.
-- **Proposal-side link integrity** (`spawned_spec`, `merged_into`, `duplicate_candidate`) and a
-  `--check` mode for `scripts/proposal-index.mjs` — also parked by that spec's §10.
+- **Proposal-side link integrity** (`spawned_spec`, `merged_into`, `duplicate_candidate`) — the
+  generator's `--check` mode and CI wiring already exist; only link resolution remains outside this
+  proposal.
 
 ## Definition of done
 
