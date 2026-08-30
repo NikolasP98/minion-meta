@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-08-30)
 
-- `NikolasP98/minion-ai@DEV .github/workflows/ci.yml:399` — Reach Bun 1.4 parity before promoting it from shadow evidence
-  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/workflows/ci.yml#L399
+- `NikolasP98/minion-ai@DEV .github/workflows/ci.yml:412` — Reach Bun 1.4 parity before promoting it from shadow evidence
+  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/workflows/ci.yml#L412
