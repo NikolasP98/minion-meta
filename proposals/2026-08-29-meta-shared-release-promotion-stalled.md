@@ -1,7 +1,7 @@
 ---
 id: 2026-08-29-meta-shared-release-promotion-stalled
 title: "minion-meta dev→main promotion ownership/hold disposition undocumented — 13 changesets unpublished, @minion-stack consumers blocked"
-status: draft
+status: done
 created: 2026-08-29
 updated: 2026-08-29
 repos: [minion-meta]
@@ -9,6 +9,23 @@ tags: [deps, infra]
 ---
 
 # `minion-meta` dev→main promotion's ownership/hold disposition is undocumented, and it is blocking consumer work
+
+## Resolution — 2026-08-29
+
+Accepted and shipped. The human release operator owns manual `minion-meta` promotion when reviewed
+package changesets or their consumers require publication; it is not an unattended per-card merge.
+PR #299 promoted the reviewed train to `main`, and PR #300 versioned and published the package
+batch. GitHub Actions Release run `33284977124` completed successfully.
+
+Registry verification after the release:
+
+- `npm view @minion-stack/shared version` returned `0.11.0`;
+- `npm view @minion-stack/db version` returned `0.11.0`; and
+- the downloaded `@minion-stack/shared@0.11.0` tarball's
+  `dist/gateway/client.d.ts` declares `onEventError`, `onReconnectError`, and `onSocketError`.
+
+This proposal is complete. Any later branch-convergence or cadence change needs its own current
+evidence; it must not reopen this resolved package-publication incident by inference.
 
 Filed by the pass-3 re-review of `2026-08-19-gateway-client-error-hook-consumer-adoption-spec`,
 whose Slice 0 is a hard gate on a real npm publish. That gate has been red for ten days and the
