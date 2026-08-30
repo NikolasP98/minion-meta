@@ -8,6 +8,11 @@ repos: [minion-hub]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-hub-igv-rate-from-org-config
 closed_reason: "Auto-closed: no TODO(handoff): marker found in this file as of 2026-08-20 (see ## Closed (auto) below); supersedes the earlier dedup-review note."
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — src/server/services/pos-emission-mapping.ts

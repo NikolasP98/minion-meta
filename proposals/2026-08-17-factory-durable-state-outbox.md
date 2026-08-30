@@ -9,6 +9,10 @@ tags: [logic, infra]
 source: audit-2026-08-17
 value: high
 spawned_spec: 2026-08-18-factory-durable-state-outbox-spec
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Durable state machine + outbox for run side effects

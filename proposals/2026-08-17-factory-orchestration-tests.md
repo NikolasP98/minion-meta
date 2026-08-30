@@ -9,6 +9,10 @@ repos: [minion-factory]
 tags: [test]
 source: audit-2026-08-17
 value: high
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # The factory has no test suite

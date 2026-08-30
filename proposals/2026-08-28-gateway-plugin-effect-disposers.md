@@ -6,6 +6,11 @@ created: 2026-08-28
 updated: 2026-08-28
 repos: [minion]
 tags: [infra, logic]
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # Per-plugin effect disposers in the gateway plugin runtime

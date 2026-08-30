@@ -9,6 +9,10 @@ tags: [board, logic, infra]
 value: 5
 effort: S
 source: board-deployment-repair-df522951
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Reconciled (stale): minion-meta main reported as failing CI while its deploy-tip push runs were green

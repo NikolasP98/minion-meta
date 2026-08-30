@@ -7,6 +7,11 @@ updated: 2026-08-20
 repos: [minion-factory]
 tags: [handoff-sweep]
 closed_reason: "Self-referential: handoff.test.sh is the sweep test suite matching its own pattern strings."
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — agent/lib/handoff.test.sh

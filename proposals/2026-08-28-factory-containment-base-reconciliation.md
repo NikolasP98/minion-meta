@@ -7,6 +7,11 @@ updated: 2026-08-28
 spawned_spec: 2026-08-28-factory-containment-base-reconciliation-spec
 repos: [minion-factory]
 tags: [infra]
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # Containment base reconciliation — controller-owned merges for behind-base resumes

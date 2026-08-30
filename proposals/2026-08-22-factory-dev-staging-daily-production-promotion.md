@@ -7,6 +7,11 @@ updated: 2026-08-29
 repos: [minion-factory]
 spawned_spec: 2026-08-22-factory-dev-staging-daily-production-promotion-spec
 tags: [data, infra, logic, security, test]
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # Factory release train — dev staging candidates and daily production promotion

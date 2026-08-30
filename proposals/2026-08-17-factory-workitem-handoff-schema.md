@@ -9,6 +9,10 @@ repos: [minion-factory]
 tags: [logic]
 source: audit-2026-08-17
 value: medium
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoffs are mutable IDs, not contracts

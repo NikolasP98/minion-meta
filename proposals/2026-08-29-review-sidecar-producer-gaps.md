@@ -9,6 +9,10 @@ tags: [infra, docs]
 value: 6
 effort: M
 source: 2026-08-17-sdlc-phase-gates-scoring-spec
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Close the producer-side gaps the review-sidecar contract now exposes

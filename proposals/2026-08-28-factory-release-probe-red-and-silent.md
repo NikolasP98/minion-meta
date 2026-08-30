@@ -6,6 +6,11 @@ created: 2026-08-28
 updated: 2026-08-28
 repos: [minion-factory]
 tags: [infra, test]
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # Release probe fails every promotion, with zero diagnostics

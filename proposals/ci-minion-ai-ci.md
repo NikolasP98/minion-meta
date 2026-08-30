@@ -7,6 +7,11 @@ updated: 2026-08-18
 spawned_spec: 2026-08-18-ci-minion-ai-ci-spec
 repos: [minion-ai]
 tags: [test, logic]
+source: ci-watch
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # CI red — CI on NikolasP98/minion-ai@DEV

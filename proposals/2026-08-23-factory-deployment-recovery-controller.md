@@ -6,6 +6,11 @@ created: 2026-08-23
 updated: 2026-08-28
 repos: [minion-factory]
 tags: [infra, security]
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # Wire the Factory deployment recovery controller

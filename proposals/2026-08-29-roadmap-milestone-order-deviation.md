@@ -6,6 +6,11 @@ created: 2026-08-29
 updated: 2026-08-29
 repos: [minion-factory]
 tags: [infra, security]
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # M7/M8 shipped ahead of its M4/M5 prerequisites

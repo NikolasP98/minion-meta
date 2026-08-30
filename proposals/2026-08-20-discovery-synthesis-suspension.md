@@ -8,6 +8,10 @@ repos: [minion-factory]
 tags: [infra, board]
 source: cost-audit-2026-08-20
 closed_reason: "Decision record, not work to queue: synthesis stays suspended until the resume criteria are met."
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # Post-merge discovery synthesis: explicitly suspended

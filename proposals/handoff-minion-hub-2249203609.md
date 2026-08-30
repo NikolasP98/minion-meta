@@ -7,6 +7,11 @@ updated: 2026-08-28
 repos: [minion-hub]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-20-hub-datatable-server-mode-test-gap
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — src/lib/components/data-table/DataTable.svelte

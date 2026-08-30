@@ -9,6 +9,10 @@ tags: [ui, infra, test]
 value: 5
 effort: S
 source: site-release-review-2026-08-29
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Site content width — move `--page-max` into the shared contract

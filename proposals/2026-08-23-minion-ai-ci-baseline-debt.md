@@ -9,6 +9,11 @@ tags: [infra, test]
 value: 10
 effort: L
 duplicate_candidate: ci-minion-ai-ci
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # Restore the minion-ai DEV test baseline before daily promotion

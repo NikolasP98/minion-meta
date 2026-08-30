@@ -6,6 +6,11 @@ merged_into: 2026-08-20-factory-spec-heading-nomenclature
 created: 2026-08-20
 updated: 2026-08-20
 repos: []
+source: ci-watch
+source_trust: trusted-automation
+risk_class: unclassified
+priority: medium
+owner: factory
 ---
 
 # CI red — CI on NikolasP98/minion-meta@dev

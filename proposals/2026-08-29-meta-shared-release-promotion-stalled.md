@@ -6,6 +6,11 @@ created: 2026-08-29
 updated: 2026-08-29
 repos: [minion-meta]
 tags: [deps, infra]
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # `minion-meta` dev→main promotion's ownership/hold disposition is undocumented, and it is blocking consumer work

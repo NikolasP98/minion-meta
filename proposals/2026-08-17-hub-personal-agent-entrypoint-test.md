@@ -10,6 +10,10 @@ tags: [test]
 value: 4
 effort: S
 source: debt-sweep-2026-08-17
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Direct unit test for loadPersonalAgentForUser (untested layout-load entry point)

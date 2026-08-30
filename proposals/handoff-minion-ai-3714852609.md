@@ -7,6 +7,10 @@ updated: 2026-08-30
 repos: [minion-ai]
 tags: [hardcoded, logic]
 source: review-fix-4760b0de
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — scripts/pr base-selection hardcodes origin/main

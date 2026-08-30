@@ -6,6 +6,11 @@ created: 2026-08-30
 updated: 2026-08-30
 repos: [minion-factory]
 tags: [handoff-sweep]
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — scripts/promotion/authenticated-boundary-probe.sh

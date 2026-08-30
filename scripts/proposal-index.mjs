@@ -14,18 +14,11 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { parseFrontmatter } from './spec-frontmatter.mjs';
 import { loadTopics, resolveTag } from './topics.mjs';
 import { readReviewSidecars } from './review-sidecar.mjs';
+import { P_STATUSES, WORKITEM_FIELDS, validateWorkItem } from './workitem.mjs';
 
-export const P_STATUSES = [
-	'draft',      // being shaped in chat
-	'review',     // reconciler flagged something (duplicate_candidate etc.)
-	'approved',   // human gate 1 passed → eligible for the spec stage
-	'in-spec',    // spec pipeline has picked it up
-	'done',       // shipped end to end
-	'rejected',
-	'retired',
-	'merged',     // merged into another proposal (see merged_into)
-	'closed'
-];
+// Re-exported for compatibility: the lifecycle enum lives with the canonical
+// WorkItem contract.
+export { P_STATUSES };
 
 export const P_EFFORTS = ['S', 'M', 'L'];
 
@@ -61,9 +54,10 @@ function main() {
 			continue;
 		}
 		const { fm } = parsed;
-		for (const key of ['id', 'title', 'status', 'created']) {
+		for (const key of ['id', 'title', 'created']) {
 			if (!fm[key]) errors.push(`${name}: missing required field "${key}"`);
 		}
+		for (const message of validateWorkItem(fm)) errors.push(`${name}: ${message}`);
 		// id is the stable join key (proposals/TEMPLATE.md: "id equals the
 		// filename sans .md") — the sidecar join below looks reviews up by
 		// filename base and publishes the unrelated fm.id beside them, so an
@@ -77,7 +71,6 @@ function main() {
 			if (fmById.has(fm.id)) errors.push(`${name}: duplicate id "${fm.id}" (already used by another proposal)`);
 			else fmById.set(fm.id, fm);
 		}
-		if (fm.status && !P_STATUSES.includes(fm.status)) errors.push(`${name}: invalid status "${fm.status}"`);
 		if (fm.effort !== undefined && !P_EFFORTS.includes(fm.effort))
 			errors.push(`${name}: invalid effort "${fm.effort}" (allowed: ${P_EFFORTS.join(', ')})`);
 		// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).
@@ -113,7 +106,7 @@ function main() {
 
 	for (const { base, fm } of pending) {
 		const review = sidecars.byId.get(base);
-		proposals.push({
+		const entry = {
 			id: fm.id,
 			title: fm.title,
 			status: fm.status,
@@ -131,9 +124,18 @@ function main() {
 			// regeneration silently deleted it again. Same failure class as the spec
 			// index's dropped `relationship`/`related` fields.
 			...(fm.effort ? { effort: fm.effort } : {}),
-			...(fm.source ? { source: fm.source } : {}),
+			source: fm.source,
+			source_trust: fm.source_trust,
+			risk_class: fm.risk_class,
+			priority: fm.priority,
+			owner: fm.owner,
 			...(review ? { review } : {})
-		});
+		};
+		for (const field of WORKITEM_FIELDS) {
+			if (entry[field] === undefined)
+				errors.push(`${base}.md: WorkItem field "${field}" is not projected into the index`);
+		}
+		proposals.push(entry);
 	}
 
 	// TODO(handoff): this descending-id sort is not the order the out-of-band

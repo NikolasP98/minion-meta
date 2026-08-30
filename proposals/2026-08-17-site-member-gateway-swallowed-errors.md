@@ -10,6 +10,10 @@ tags: [ui, logic]
 value: 5
 effort: S
 source: debt-sweep-2-2026-08-17
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Member dashboard gateway failures silently swallowed (3 empty catches)

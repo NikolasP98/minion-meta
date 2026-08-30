@@ -10,6 +10,10 @@ tags: [infra, security]
 value: 4
 effort: M
 source: debt-sweep-2-2026-08-17
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Infisical secret cache stored plaintext on disk (0600 only)

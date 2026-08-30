@@ -8,6 +8,10 @@ repos: [minion-meta]
 spawned_spec: 2026-08-26-spec-heading-lint-baseline-backfill-spec
 tags: [infra, hygiene]
 source: factory-run-c6311188
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Backfill grandfathered spec headings + decide pass/revises presence policy

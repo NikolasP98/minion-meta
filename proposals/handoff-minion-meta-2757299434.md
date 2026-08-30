@@ -7,6 +7,11 @@ updated: 2026-08-30
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-20-hub-datatable-server-mode-test-gap
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — specs/2026-08-28-postmerge-minion-hub-6c679768db21-spec.md

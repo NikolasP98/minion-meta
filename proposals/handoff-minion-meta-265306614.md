@@ -8,6 +8,11 @@ repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-gateway-client-lifecycle-swallows-handoff
 closed_reason: "Marker lives in spec prose, not code; sweep should exclude specs/."
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — specs/2026-08-19-gateway-client-error-hook-consumer-adoption-spec.md

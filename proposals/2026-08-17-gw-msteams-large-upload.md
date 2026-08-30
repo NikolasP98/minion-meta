@@ -10,6 +10,10 @@ tags: [logic, edge-case]
 value: 6
 effort: M
 source: debt-sweep-2026-08-17
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # MS Teams uploads >4MB fail — resumable upload session never implemented

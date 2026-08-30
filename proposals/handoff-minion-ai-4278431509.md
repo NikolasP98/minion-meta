@@ -9,6 +9,11 @@ repos: [minion-ai]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-gw-defaces-crm-tools
 approved_reason: "Real marker in minion-tools.ts — same territory as the architect-pipeline regression (meta issue 85); resolving may fix both."
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — src/agents/minion-tools.ts

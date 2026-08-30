@@ -6,6 +6,11 @@ created: 2026-08-13
 updated: 2026-08-13
 repos: [minion-base]
 spawned_spec: 2026-08-13-minion-base-kanban-auto-refresh-spec
+source: human
+source_trust: human
+risk_class: unclassified
+priority: medium
+owner: human
 ---
 
 # Kanban board auto-refresh on a 5-minute visible-tab interval

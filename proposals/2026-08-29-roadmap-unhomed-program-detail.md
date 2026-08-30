@@ -6,6 +6,11 @@ created: 2026-08-29
 updated: 2026-08-29
 repos: [minion-meta, minion-factory]
 tags: [infra]
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # Roadmap program detail with no committed home

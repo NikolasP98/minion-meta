@@ -8,6 +8,11 @@ updated: 2026-08-28
 repos: [minion_hub]
 tags: [logic, data, edge-case]
 approved_reason: "Accepted: current master still validates warehouse existence without excluding archived_at, so direct API clients can reintroduce stock into an archived warehouse. This is a confirmed data-integrity defect with a bounded service guard and regression test; promote independently from the completed Picker program."
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # submitEntry accepts archived warehouses via direct API

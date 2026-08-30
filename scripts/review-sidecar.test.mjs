@@ -577,7 +577,7 @@ test('integration: proposal-index publishes a G1 sidecar under the same field na
 	try {
 		writeFileSync(
 			join(root, 'proposals', 'a-proposal.md'),
-			`---\nid: a-proposal\ntitle: A proposal\nstatus: draft\ncreated: 2026-08-28\nrepos: [minion-meta]\n---\n\n# A proposal\n`
+			PROPOSAL
 		);
 		writeFileSync(
 			join(root, 'proposals', 'a-proposal.review.md'),
@@ -608,7 +608,21 @@ test('integration: proposal-index publishes a G1 sidecar under the same field na
 	}
 });
 
-const PROPOSAL = `---\nid: a-proposal\ntitle: A proposal\nstatus: draft\ncreated: 2026-08-28\nrepos: [minion-meta]\n---\n\n# A proposal\n`;
+const PROPOSAL = `---
+id: a-proposal
+title: A proposal
+status: draft
+created: 2026-08-28
+repos: [minion-meta]
+source: human
+source_trust: human
+risk_class: unclassified
+priority: medium
+owner: human
+---
+
+# A proposal
+`;
 
 // M1 end to end: the board reads `review.gate` out of proposals/index.json, so
 // the G1 threshold has to survive the CLI, not just the helper.
@@ -752,9 +766,20 @@ const checkProposals = (root) =>
 test('M1: proposal-index --check passes on a valid, freshly generated corpus', () => {
 	const root = proposalRepo(VALID_PROPOSAL_SIDECAR);
 	try {
+		const sidecarPath = join(root, 'proposals', 'a-proposal.review.md');
+		const sidecarBefore = readFileSync(sidecarPath, 'utf8');
 		const result = checkProposals(root);
 		assert.equal(result.status, 0, result.stderr);
 		assert.match(result.stdout, /proposal-index --check passed: 1 proposals/);
+		const retrofit = spawnSync('node', ['scripts/proposal-workitem-retrofit.mjs', '--dry'], {
+			cwd: root,
+			encoding: 'utf8'
+		});
+		assert.equal(retrofit.status, 0, retrofit.stderr);
+		assert.match(retrofit.stdout, /would update 0 proposal\(s\); 1 already complete/);
+		assert.equal(readFileSync(sidecarPath, 'utf8'), sidecarBefore, 'retrofit must not touch review evidence');
+		const index = JSON.parse(readFileSync(join(root, 'proposals', 'index.json'), 'utf8'));
+		assert.equal(index.proposals.length, 1, 'proposal plus sidecar is exactly one WorkItem');
 	} finally {
 		rmSync(root, { recursive: true, force: true });
 	}

@@ -5,6 +5,11 @@ status: closed
 created: 2026-08-13
 updated: 2026-08-13
 repos: []
+source: ci-watch
+source_trust: trusted-automation
+risk_class: unclassified
+priority: medium
+owner: factory
 ---
 
 # CI red — Upstream Monitor on NikolasP98/minion-ai@main

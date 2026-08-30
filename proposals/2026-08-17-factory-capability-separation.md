@@ -9,6 +9,10 @@ repos: [minion-factory]
 tags: [security, infra]
 source: audit-2026-08-17
 value: high
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Per-run scoped credentials instead of one shared PAT

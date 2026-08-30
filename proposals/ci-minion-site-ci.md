@@ -6,6 +6,11 @@ created: 2026-08-13
 updated: 2026-08-13
 repos: []
 spawned_spec: 2026-08-13-ci-minion-site-ci-spec
+source: ci-watch
+source_trust: trusted-automation
+risk_class: unclassified
+priority: medium
+owner: factory
 ---
 
 # CI red — CI on NikolasP98/minion-site@master

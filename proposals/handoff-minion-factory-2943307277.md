@@ -7,6 +7,11 @@ updated: 2026-08-20
 repos: [minion-factory]
 tags: [handoff-sweep]
 closed_reason: "Self-referential: handoff.sh is the sweep implementation itself."
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — agent/lib/handoff.sh

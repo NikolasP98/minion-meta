@@ -8,6 +8,10 @@ repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
 closed_reason: "marker is absent and proposal is still draft — closing"
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Post-merge finding — todo-handoff in `src/routes/(app)/crm/customers/+page.svelte`

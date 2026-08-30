@@ -9,6 +9,10 @@ tags: [logic]
 value: 3
 effort: S
 source: handoff-2026-08-18-agent-instruction-parity-and-repo-policy-spec-slice-2
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # CLI subproject registry cannot project repo-policy packageManager 'none'

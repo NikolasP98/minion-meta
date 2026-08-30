@@ -6,6 +6,11 @@ created: 2026-08-28
 updated: 2026-08-28
 repos: [minion-base]
 tags: [merge-scan]
+source: merge-scan
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Merge-scan deficiencies — minion-base

@@ -34,7 +34,7 @@ function makeCliFixture() {
 	mkdirSync(join(root, 'scripts'));
 	mkdirSync(join(root, 'specs'));
 	mkdirSync(join(root, 'proposals'));
-	for (const name of ['proposal-index.mjs', 'review-sidecar.mjs', 'spec-frontmatter.mjs', 'topics.mjs'])
+	for (const name of ['proposal-index.mjs', 'review-sidecar.mjs', 'spec-frontmatter.mjs', 'topics.mjs', 'workitem.mjs'])
 		execFileSync('cp', [new URL(name, import.meta.url).pathname, join(root, 'scripts', name)]);
 	writeFileSync(join(root, 'specs', 'topics.json'), JSON.stringify(FIXTURE_TOPICS, null, '\t') + '\n');
 	return root;
@@ -49,6 +49,11 @@ status: approved
 created: 2026-08-29
 repos: [minion-meta]
 effort: S
+source: human
+source_trust: human
+risk_class: unclassified
+priority: medium
+owner: human
 ---
 
 # Fixture with effort
@@ -68,6 +73,11 @@ title: Fixture without effort
 status: approved
 created: 2026-08-29
 repos: [minion-meta]
+source: human
+source_trust: human
+risk_class: unclassified
+priority: medium
+owner: human
 ---
 
 # Fixture without effort
@@ -89,6 +99,11 @@ title: Fixture with invalid effort
 status: draft
 created: 2026-08-29
 effort: 0
+source: human
+source_trust: human
+risk_class: unclassified
+priority: medium
+owner: human
 ---
 
 # Invalid effort
@@ -109,6 +124,11 @@ title: Fixture with blank effort
 status: draft
 created: 2026-08-29
 effort:
+source: human
+source_trust: human
+risk_class: unclassified
+priority: medium
+owner: human
 ---
 
 # Blank effort
@@ -117,4 +137,38 @@ effort:
 	const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
 	assert.equal(result.status, 1, result.stdout);
 	assert.match(result.stderr, /fixture-blank-effort\.md: invalid effort ""/);
+});
+
+test('WorkItem validation rejects each missing required field by filename and field', () => {
+	for (const field of ['status', 'source', 'source_trust', 'risk_class', 'priority', 'owner']) {
+		const root = makeCliFixture();
+		const workItem = {
+			status: 'draft',
+			source: 'human',
+			source_trust: 'human',
+			risk_class: 'low',
+			priority: 'medium',
+			owner: 'human'
+		};
+		delete workItem[field];
+		const lines = Object.entries(workItem).map(([key, value]) => `${key}: ${value}`).join('\n');
+		writeFileSync(
+			join(root, 'proposals', 'missing.md'),
+			`---\nid: missing\ntitle: Missing field\ncreated: 2026-08-29\ntags: [docs]\n${lines}\n---\n`
+		);
+		const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+		assert.equal(result.status, 1, field);
+		assert.match(result.stderr, new RegExp(`missing\\.md: [^\\n]*"${field}"`), result.stderr);
+	}
+});
+
+test('WorkItem validation rejects a risk/tag mismatch by filename and risk_class', () => {
+	const root = makeCliFixture();
+	writeFileSync(
+		join(root, 'proposals', 'mismatch.md'),
+		`---\nid: mismatch\ntitle: Risk mismatch\nstatus: draft\ncreated: 2026-08-29\ntags: [infra]\nsource: human\nsource_trust: human\nrisk_class: low\npriority: medium\nowner: human\n---\n`
+	);
+	const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+	assert.equal(result.status, 1);
+	assert.match(result.stderr, /mismatch\.md: invalid risk_class "low"/);
 });

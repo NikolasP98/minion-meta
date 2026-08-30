@@ -9,6 +9,11 @@ tags: [handoff-sweep]
 duplicate_candidate: 2026-08-13-crm-customers-server-pagination
 approved_reason: "Real service-file marker (crm-contacts)."
 spawned_spec: 2026-08-20-handoff-minion-hub-3998033254-spec
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — src/server/services/crm-contacts.service.ts

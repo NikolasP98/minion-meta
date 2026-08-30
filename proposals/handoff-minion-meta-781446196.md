@@ -7,6 +7,11 @@ updated: 2026-08-30
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-pkg-infisical-cache-plaintext
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — packages/env/src/cache.ts

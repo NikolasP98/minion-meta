@@ -9,6 +9,11 @@ repos: [minion-meta, minion-hub, minion-site]
 tags: [security, data, migrations, logic, test]
 value: 10
 effort: L
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # Converge Hub and Site shared-database encryption with an explicit legacy-key migration

@@ -10,6 +10,10 @@ tags: [logic]
 value: 3
 effort: S
 source: review-fix-299e3f17
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Fix module-state stock-gate drift between /pos/appointments and /scheduling/bookings

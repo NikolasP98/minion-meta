@@ -8,6 +8,11 @@ repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: handoff-minion-hub-1323254565
 closed_reason: "Marker lives in spec prose, not code; sweep should exclude specs/."
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — specs/2026-08-20-handoff-minion-hub-1323254565-spec.md

@@ -10,6 +10,10 @@ tags: [logic, edge-case]
 value: 8
 effort: S
 source: debt-sweep-2026-08-17
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # updateSellable silently drops kind/trackStock/uom edits (200 OK no-op)

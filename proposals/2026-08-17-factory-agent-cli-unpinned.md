@@ -10,6 +10,10 @@ tags: [infra, deps]
 value: 5
 effort: S
 source: debt-sweep-2-2026-08-17
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Agent image installs claude-code/codex unpinned — parser contract can break silently

@@ -9,6 +9,10 @@ repos: [minion-factory]
 tags: [logic]
 source: audit-2026-08-18
 value: high
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # From single linear PR runs to a typed execution graph

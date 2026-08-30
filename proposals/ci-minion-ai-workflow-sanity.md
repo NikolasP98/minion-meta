@@ -6,6 +6,11 @@ created: 2026-08-19
 updated: 2026-08-20
 repos: []
 closed_reason: "Workflow healed: latest run on its watch branch is green post-billing-fix (verified 2026-08-20); red was the Actions billing outage, not code."
+source: ci-watch
+source_trust: trusted-automation
+risk_class: unclassified
+priority: medium
+owner: factory
 ---
 
 # CI red — Workflow Sanity on NikolasP98/minion-ai@DEV

@@ -10,6 +10,10 @@ value: 7
 effort: L
 source: crm-customers-scale-next
 duplicate_candidate: 2026-08-22-crm-rank-query-prod-latency
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # Replace CRM per-request message aggregation with a validated incremental activity rollup

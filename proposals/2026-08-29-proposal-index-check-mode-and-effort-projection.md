@@ -7,6 +7,10 @@ updated: 2026-08-29
 repos: [minion-meta]
 tags: [infra, test]
 source: review-fix-6f292604
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # proposal-index.mjs — read-only `--check` mode and projection parity

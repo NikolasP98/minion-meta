@@ -5,6 +5,11 @@ status: closed
 created: 2026-08-13
 updated: 2026-08-13
 repos: [minion-meta]
+source: human
+source_trust: human
+risk_class: unclassified
+priority: medium
+owner: human
 ---
 
 # Proposal Template
@@ -13,6 +18,13 @@ Copy to `proposals/YYYY-MM-DD-<slug>.md`. Proposals are the output of request-ag
 conversations (or written by hand). Run `node scripts/proposal-index.mjs` after edits — meta CI
 runs `node scripts/proposal-index.mjs --check`, which re-derives the index (including every
 `*.review.md` sidecar) read-only and fails if the committed `proposals/index.json` is stale.
+
+Every entry in `proposals/index.json` is a canonical **WorkItem** record (spec
+[`2026-08-18-factory-workitem-handoff-schema-spec`](../specs/2026-08-18-factory-workitem-handoff-schema-spec.md) §2.1):
+the six fields marked required below are validated by `scripts/workitem.mjs` and projected into
+every index entry. `node scripts/proposal-workitem-retrofit.mjs` fills them in for a file that is
+missing them, using an explicit provenance rule table — it fails and names the file rather than
+guessing an unknown source.
 
 ## Frontmatter
 
@@ -23,17 +35,18 @@ runs `node scripts/proposal-index.mjs --check`, which re-derives the index (incl
 | `status` | yes | `draft` `review` `approved` `in-spec` `done` `rejected` `merged` `closed` |
 | `created` / `updated` | yes | ISO dates |
 | `repos` | yes | target repo ids (may be empty `[]` if the spec agent should decide) |
+| `source` | yes | provenance slug — `human`, `ci-watch`, `monitor`, `audit-*`, … (lowercase, no spaces, ≤120 chars) |
+| `source_trust` | yes | `human` \| `trusted-automation` \| `untrusted-external` — whether automation may act without human gate 1. Only `trusted-automation` + `risk_class: low` can auto-approve; `human` and `untrusted-external` always keep the gate |
+| `risk_class` | yes | `high` \| `low` \| `unclassified` — **derived from `tags`**, never chosen: no tags → `unclassified`, any of `auth billing data infra migration(s) perms/permissions security` → `high`, otherwise `low`. A declared value that disagrees fails the index build |
+| `priority` | yes | `critical` \| `high` \| `medium` \| `low` — triage metadata only; it does **not** change FIFO dequeue order, and it is not an alias of `value` |
+| `owner` | yes | accountable person or role (`human` or `factory` by default), ≤120 chars |
 | `merged_into` | no | proposal id this was merged into (file stays as tombstone) |
 | `possibly_reopens` | no | closed proposal id this may be a revival of (reconciler + human decide) |
 | `duplicate_candidate` | no | proposal id the reconciler suspects is the same idea |
 | `spawned_spec` | no | spec id once the spec stage picks this up |
-| `value` | no | board scoring: relative payoff, integer |
-| `effort` | no | board scoring: `S` `M` `L` — `scripts/proposal-index.mjs` rejects any other value |
-| `source` | no | provenance of an auto-filed proposal, e.g. a review-fix run id |
 | `tags` | no | routing/classification labels, e.g. `[logic, test]`; every value must resolve (as a canonical name or an alias) via `specs/topics.json` — `scripts/proposal-index.mjs` rejects an unknown tag, naming the file and tag |
 | `value` | no | triage worth. **Two vocabularies are in use today** — a 1–10 integer (40 files) and `high`/`medium` (16 files); neither is validated. Prefer the integer |
-| `effort` | no | rough size: `S` `M` `L` |
-| `source` | no | what produced this proposal, e.g. `debt-sweep-2026-08-17`, `factory-run`, a spec id |
+| `effort` | no | rough size: `S` `M` `L`; other values fail the index build |
 
 Everything the index publishes must be listed above: `scripts/proposal-index.mjs` copies
 only the fields it knows about, so a frontmatter key that is not projected is silently

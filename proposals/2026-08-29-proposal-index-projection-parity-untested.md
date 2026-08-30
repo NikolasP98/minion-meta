@@ -8,6 +8,11 @@ repos: [minion-meta]
 tags: [test, infra]
 value: 2
 effort: S
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # `proposals/index.json` silently drops fields the projection forgets

@@ -5,6 +5,11 @@ status: closed
 created: 2026-08-18
 updated: 2026-08-18
 repos: []
+source: ci-watch
+source_trust: trusted-automation
+risk_class: unclassified
+priority: medium
+owner: factory
 ---
 
 # CI red — Thermonuclear Code Review on NikolasP98/minion-meta@dev

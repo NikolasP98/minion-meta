@@ -6,6 +6,11 @@ created: 2026-08-29
 updated: 2026-08-29
 repos: [minion-base]
 tags: [security, logic]
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # `POST /api/meta/status` must require the revision guard it advertises

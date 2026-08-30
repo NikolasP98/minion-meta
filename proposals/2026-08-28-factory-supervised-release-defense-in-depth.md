@@ -9,6 +9,10 @@ tags: [security, infra]
 value: 5
 effort: L
 source: supervised-autodeploy-audit-2026-08-28
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # Complete defense in depth for supervised Factory releases

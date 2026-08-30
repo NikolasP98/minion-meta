@@ -9,6 +9,11 @@ repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-gateway-client-error-hook-consumer-adoption
 approved_reason: "Real code marker in packages/shared gateway client; pipeline dedupe will flag overlap with error-hook adoption if any."
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — packages/shared/src/gateway/client.ts

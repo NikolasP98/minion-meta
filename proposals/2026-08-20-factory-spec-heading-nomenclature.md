@@ -6,6 +6,11 @@ created: 2026-08-20
 updated: 2026-08-28
 repos: [minion-meta]
 tags: [infra, hygiene]
+source: human
+source_trust: human
+risk_class: high
+priority: medium
+owner: human
 ---
 
 # The factory spec generator's section-0 heading does not match the heading gate

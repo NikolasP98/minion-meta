@@ -10,6 +10,10 @@ tags: [logic, security]
 value: 9
 effort: S
 source: debt-sweep-2-2026-08-17
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Device-identity sign endpoint lets any member self-assign role/scopes

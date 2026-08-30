@@ -8,6 +8,11 @@ repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-factory-postmerge-discovery-loop
 closed_reason: "Marker lives in spec prose (specs/*.md), not code — documentation of an open end, not the open end itself; sweep should exclude specs/."
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — specs/2026-08-18-factory-postmerge-discovery-loop-spec.md

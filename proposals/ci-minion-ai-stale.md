@@ -6,6 +6,11 @@ created: 2026-08-28
 updated: 2026-08-30
 repos: []
 duplicate_candidate: ci-minion-ai-auto-response
+source: ci-watch
+source_trust: trusted-automation
+risk_class: unclassified
+priority: medium
+owner: factory
 ---
 
 # CI red — Stale on NikolasP98/minion-ai@main
@@ -32,7 +37,7 @@ stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a25
 stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-30T03:28:24.8612968Z /home/runner/work/_actions/actions/create-github-app-token/d72941d797fd3113feb6b93fd0dec494b13a2547/dist/main.cjs:42559
 stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-30T03:28:24.8615165Z   throw new Error("Input required and not supplied: private-key");
 stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-30T03:28:24.8616299Z   ^
-stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-30T03:28:24.8616640Z 
+stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-30T03:28:24.8616640Z
 stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-30T03:28:24.8617080Z Error: Input required and not supplied: private-key
 stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-30T03:28:24.8619343Z     at Object.<anonymous> (/home/runner/work/_actions/actions/create-github-app-token/d72941d797fd3113feb6b93fd0dec494b13a2547/dist/main.cjs:42559:9)
 stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-30T03:28:24.8621873Z     at Module._compile (node:internal/modules/cjs/loader:1871:14)
@@ -42,6 +47,6 @@ stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a25
 stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-30T03:28:24.8626921Z     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
 stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-30T03:28:24.8628487Z     at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
 stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-30T03:28:24.8629842Z     at node:internal/main/run_main_module:33:47
-stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-30T03:28:24.8630242Z 
+stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-30T03:28:24.8630242Z
 stale	Run actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547	2026-08-30T03:28:24.8630431Z Node.js v24.18.0
 ```

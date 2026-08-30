@@ -7,6 +7,11 @@ updated: 2026-08-28
 repos: [minion-hub]
 tags: [handoff-sweep]
 retired_reason: "Retired by product decision: the Hub RUC endpoint is functional, authenticated, bounded, and tested in production use. Moving the helper into @minion-stack/crm-sdk has no current user-visible or correctness benefit and should wait for a future SDK release cycle rather than consume a standalone run."
+source: handoff-sweep
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Handoff marker — src/routes/api/crm/ruc-lookup/+server.ts

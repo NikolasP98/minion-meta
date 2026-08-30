@@ -6,6 +6,11 @@ created: 2026-08-28
 updated: 2026-08-28
 repos: []
 duplicate_candidate: ci-minion-ai-auto-response
+source: ci-watch
+source_trust: trusted-automation
+risk_class: unclassified
+priority: medium
+owner: factory
 ---
 
 # CI red — Labeler on NikolasP98/minion-ai@main

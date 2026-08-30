@@ -10,6 +10,10 @@ tags: [logic, test]
 value: 3
 effort: M
 source: 2026-08-17-pkg-gateway-client-onevent-errors-spec
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # GatewayClient: report the reconnect-failure and socket-error swallows

@@ -10,6 +10,10 @@ tags: [logic]
 value: 5
 effort: S
 source: debt-sweep-2-2026-08-17
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # workforce-client throws raw SyntaxError on non-JSON (proxy 502) responses

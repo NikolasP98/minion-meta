@@ -9,6 +9,10 @@ repos: [minion-factory]
 tags: [security, infra]
 source: audit-2026-08-17
 value: high
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Review must run where it cannot write, and setup must not run with secrets

@@ -10,6 +10,10 @@ tags: [logic, docs]
 value: 3
 effort: S
 source: 2026-08-17-pkg-gateway-client-onevent-errors-spec
+source_trust: trusted-automation
+risk_class: low
+priority: medium
+owner: factory
 ---
 
 # Adopt the `onEventError` hook in the three `@minion-stack/shared` consumers

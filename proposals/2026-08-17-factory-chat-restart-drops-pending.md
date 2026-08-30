@@ -10,6 +10,10 @@ tags: [logic, data]
 value: 4
 effort: S
 source: debt-sweep-2-2026-08-17
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Runner restart marks never-dispatched chat messages as errored

@@ -9,6 +9,10 @@ tags: [logic, infra]
 source: audit-2026-08-17
 value: medium
 spawned_spec: 2026-08-18-factory-deterministic-unstick-spec
+source_trust: trusted-automation
+risk_class: high
+priority: medium
+owner: factory
 ---
 
 # Known failures should not need an LLM
