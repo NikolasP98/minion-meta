@@ -1,3 +1,12 @@
+---
+spec: 2026-08-18-sdlc-transformation-roadmap
+pass: 2
+verdict: pending
+reviewer: factory-review
+created: 2026-08-29
+reviewed_commit: 3dbdcd95dc3acd21e6940f2a02c7715e0a4fc193
+---
+
 # Review — 2026-08-18-sdlc-transformation-roadmap (pass 1 → pass 2)
 
 Reviewed 2026-08-29 against meta blob `3dbdcd95dc3acd21e6940f2a02c7715e0a4fc193`
