@@ -1,9 +1,9 @@
 ---
 id: handoff-minion-ai-3714852609
 title: Handoff marker — scripts/pr base-selection hardcodes origin/main (minion-ai)
-status: review
+status: closed
 created: 2026-08-29
-updated: 2026-08-29
+updated: 2026-08-30
 repos: [minion-ai]
 tags: [hardcoded, logic]
 source: review-fix-4760b0de
@@ -49,3 +49,7 @@ trustworthy for base selection again.
   origin/main while the PR base is DEV — same open end as the marker in
   enter_worktree above.
   https://github.com/NikolasP98/minion-ai/blob/DEV/scripts/pr#L580
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-08-30; the sweep closed this proposal.
