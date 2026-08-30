@@ -122,8 +122,8 @@ export async function processMatchesState(state) {
   return (await processStartTicks(state.pid)) === state.processStartTicks;
 }
 
-function terminatePid(pid, expectedStartTicks = '') {
-  if (!Number.isInteger(pid) || pid <= 0 || typeof expectedStartTicks !== 'string') return false;
+function terminatePid(pid, expectedStartTicks) {
+  if (!Number.isInteger(pid) || pid <= 0 || !/^\d+$/.test(expectedStartTicks ?? '')) return false;
   const result = spawnSync('python3', ['-c', `
 import os
 import signal
@@ -138,12 +138,11 @@ except (AttributeError, OSError):
     sys.exit(1)
 
 try:
-    if expected:
-        with open(f'/proc/{pid}/stat', encoding='utf-8') as stat_file:
-            stat = stat_file.read()
-        fields = stat[stat.rfind(')') + 2:].split()
-        if len(fields) < 20 or fields[19] != expected:
-            sys.exit(1)
+    with open(f'/proc/{pid}/stat', encoding='utf-8') as stat_file:
+        stat = stat_file.read()
+    fields = stat[stat.rfind(')') + 2:].split()
+    if len(fields) < 20 or fields[19] != expected:
+        sys.exit(1)
     signal.pidfd_send_signal(pidfd, signal.SIGTERM)
 except (OSError, ValueError):
     sys.exit(1)
@@ -242,7 +241,6 @@ async function launch({ options, argv, directory, label }) {
   closeSync(logFd);
 
   if (!startTicks) {
-    terminatePid(child.pid);
     fail(`${label} process identity could not be recorded`);
   }
   const processState = { pid: child.pid, processStartTicks: startTicks };

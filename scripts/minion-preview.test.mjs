@@ -41,6 +41,7 @@ test('preview termination refuses a live PID with a different birth identity', a
     const stale = { pid: child.pid, processStartTicks: `${Number(ticks) + 1}` };
     assert.equal(await processMatchesState(stale), false);
     assert.equal(await terminateState(stale), false);
+    assert.equal(await terminateState({ pid: child.pid, processStartTicks: '' }), false);
     process.kill(child.pid, 0);
   } finally {
     try { process.kill(-child.pid, 'SIGKILL'); } catch { /* already stopped */ }
