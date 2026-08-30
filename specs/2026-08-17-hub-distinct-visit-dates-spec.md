@@ -106,7 +106,7 @@ the named call site each round is what guarantees a fifth round. So this pass st
 from memory and enumerates from the tree: §1 gains a **complete writer census** of every relation
 the visit SQL reads, produced at `1b47e8ce` by grepping both write forms for each relation — the
 Drizzle form (`.insert(T)` / `.update(T)` / `.delete(T)` for `crmContacts`, `finClients`,
-`finInvoices`, `schedBookings`, `finSettings`) and the raw-SQL form (`insert into` / `update` /
+`finInvoices`, `finInvoiceItems`, `schedBookings`, `finSettings`) and the raw-SQL form (`insert into` / `update` /
 `delete from` on each table name) — and invariant 7 is restated as a property of that census
 rather than as a list of remembered mutations.
 
@@ -171,6 +171,19 @@ workflow; and permits an operator-approved repair only inside a maintenance boun
 that exact set with pre-image guards and an exact returning-row assertion. The retained artifact
 is also the rollback input. A concurrency test must insert a newly matching row after capture and
 prove it is untouched. No other pass-8 decision is reopened.
+
+**Pass-10 fix (2026-08-30).** The next review found that pass 8's revised gate 2 still used
+`sched_bookings.updated_at` as though it were an immutable completion timestamp, but
+`reconcileParties` normally rewrites that column while changing only `party_id`
+(`party.service.ts:219-223`). A zero diagnostic count therefore cannot prove early completion is
+unused. D16 now requires an explicit operator policy decision **even when the diagnostic returns
+zero**; without an immutable status-transition/audit timestamp, database inference cannot
+authorize the new 409. The focused evidence test completes early, advances past `start_time`, runs
+party reconciliation, demonstrates that the old predicate loses the evidence, and proves the
+ship gate remains closed until that explicit decision is recorded. The same review found the
+writer census omitted `fin_invoice_items`, whose `description` controls `has_proc`; §1 now lists
+its delete-replace writer and post-commit D18 invalidation and requires both Drizzle and raw-SQL
+searches for that relation in every census rerun.
 
 **Design ancestors:**
 [`2026-08-13-crm-customers-server-pagination-spec`](2026-08-13-crm-customers-server-pagination-spec.md)
@@ -316,6 +329,7 @@ worse than none, because it re-warms the cache from the pre-mutation state.
 | Relation the visit SQL reads | Every writer at `1b47e8ce` | Invalidates today? | Disposition |
 |---|---|---|---|
 | `fin_invoices` (insert/upsert, `status` incl. `void`, `shadowed`) | `upsertInvoicesBatch` (`finance.service.ts:233,358`) — callers are `finance-sync.advanceJob`'s per-page loop (`finance-sync.service.ts:123`) and the exported `upsertInvoice` convenience wrapper; `rg 'upsertInvoicesBatch\|upsertInvoice('` finds no other production caller (POS only *mentions* it in a comment, `pos.service.ts:1367`) | **No, on the path that matters most.** `advanceJob` busts after its page loop and again on finish (`:133,140`), `finances` tag only — but it commits each page's `upsertInvoicesBatch` (`:123`) and can return at its per-run deadline (`:136`) *before* either bust runs. That is the ordinary multi-tick path for a sync too large for one run, not an edge case, and `upsertInvoice` shares the same gap | **D13** gives the roster that tag; **D18** (pass-8 H1) moves the bust into the writer itself so every committed page and every caller is covered; then covered |
+| `fin_invoice_items.description` (decides `has_proc`) | `upsertInvoicesBatch` delete-replaces each invoice's item rows (`finance.service.ts:314-334`) | **No independently.** It commits in the same writer/transaction as the invoice page, so the caller-level bust has the same budget-deadline hole as `fin_invoices` | **D18** moves the post-commit bust into `upsertInvoicesBatch`, covering both the invoice row and its item replacement on every committed page; then covered |
 | `crm_contacts.party_id`, `fin_clients.party_id`, `sched_bookings.party_id`, minted canonical `crm_contacts` | `reconcileParties` (`party.service.ts:140-267`, statements at `:196,202,207,213,220,243,255`) | **No — none at all.** Four production call sites: `finance-sync.service.ts:159` (`syncSource`, whose only bust is `advanceJob`'s, *before* it), `crm-contacts.service.ts:185` (`harvestContacts`, whose `bustCrmList` at `:173` is also *before* it **and** conditional on `created > 0`), `routes/api/crm/parties/reconcile/+server.ts:12` (manual/backfill, no bust), `routes/api/finances/sync/daily/+server.ts:132` (cron, no bust) | **D15** — pass-7 H1 |
 | `crm_contacts.party_id` | `linkContactParty` / `ensurePartyForContact` (`party.service.ts:329-351`) | **No.** `rg` over the whole tree finds **no production caller** — it is an exported trap, not a live path; stating this precisely matters, because the fix is trap-closing, not an outage fix | **D15** — same writer-level fix |
 | `crm_contacts` (create, patch, soft-delete, bulk soft-delete, hard delete, merge, harvest) | `crm-contacts.service.ts:124,138,149,1241,1488,1559,1623,1651,1682`; `crm-cleanup.service.ts:131,463,496,502` | **Yes** — every one is followed by `bustCrmList` (`:173,1511,1615,1642,1674,1684,1790,1839,1847,1862,1871,1959,2261`) or cleanup's local `invalidateTags(tenantDomain(…,'crm'))` (`crm-cleanup.service.ts:16`) | No change |
@@ -328,7 +342,8 @@ worse than none, because it re-warms the cache from the pre-mutation state.
 | deposit/procedure rule | `crm-settings.service` (owned by `2026-08-17-hub-reserva-keyword-config-spec`) | n/a — the rule's fingerprint is already part of the `crm-fin-map` cache key (§1, S1) | No change |
 
 **How to re-run this census** (it is the gate against a fifth round, and it belongs in the S1 PR
-body): for each of `crm_contacts`, `fin_clients`, `fin_invoices`, `sched_bookings`, `fin_settings`,
+body): for each of `crm_contacts`, `fin_clients`, `fin_invoices`, **`fin_invoice_items`**,
+`sched_bookings`, `fin_settings`,
 run `rg -n '\.(insert|update|delete)\(<drizzleTable>\)' src/` and
 `rg -n '(insert into|update|delete from) <table_name>' src/`, and confirm each hit is followed by a
 **post-commit** `bustCrmList` / `bustFinanceCache` / `invalidateTags(tenantDomain(…,'crm'))`.
@@ -455,7 +470,7 @@ slices below are the residue that is genuinely missing.
 | D13 | `rankContactsPageCached` gains the same conditional `finances` tag `getCrmDashboardStats` already carries (`...(finance.withFinance ? tags.tenantDomain(tenantId,'finances') : [])`), so a canonical invoice mutation (`bustFinanceCache` — invoice creation, sync, void) invalidates the roster exactly the way it already invalidates the dashboard (H1) | S1 | Test: warm the roster page for a contact, create a second procedure invoice through the production `finance-sync` invalidation path (not a test-only bust call), assert the very next roster read shows the changed Loyal set with no TTL wait; repeat for voiding an invoice |
 | D14 | `crmRevenueSummary`'s `buyers` rollup increments only when a `contactFinanceMap` row has `invoices > 0`, so a booking-only contact (S2's zero-invoice, two-completed-booking shape) is not counted as a finance buyer (M3) | S2 | Regression test: a fixture with one booking-only loyal contact and zero invoice-having contacts asserts `crmRevenueSummary().buyers === 0` |
 | D15 | The **identity** writers join the invalidation contract, at the writer rather than at their call sites: `reconcileParties` and `linkContactParty` each `await bustCrmList(ctx.tenantId)` **and** `await bustFinanceCache(ctx)` immediately after their `withOrgCore` transaction returns. This closes all four `reconcileParties` call sites at once — including the two whose existing bust runs *before* it (`syncSource`, `harvestContacts`) and the two that never bust (`POST /api/crm/parties/reconcile`, the daily finance cron) — and any caller added later (pass-7 H1) | S1 | Integration test: warm `crm-fin-map`, the roster page and the dashboard against the *pre*-reconciliation spine, run `reconcileParties`, and assert the very next read of each uses the new owner/visit set with no TTL wait. A second test drives the race explicitly: refill the three caches from inside the reconcile transaction (before it commits) and assert the post-commit bust still removes those entries. A third asserts the call-site fix is *not* what makes it pass — call `POST /api/crm/parties/reconcile` (which has no bust of its own) and assert the same coherence |
-| D16 | `setBookingStatus` refuses to move a booking into `completed` while `start_time > now()`, enforced in the same UPDATE (`… where id = $id and org_id = $org and start_time <= now()` for that status, zero rows affected ⇒ throw `BookingNotStartedError`), surfaced as HTTP 409 by the PATCH route, `/complete`, and the gateway `booking-complete` action. With that guard, the visit predicate is `b.status = 'completed'` with **no** `now()` term, so eligibility changes only through a mutation that busts caches (M1). `createBooking` cannot produce the state (it inserts only `pending`/`accepted`, `:280`) and `start_time` is never updated (§1), so the guarded set is closed | S2 | Postgres tests on both sides of the boundary **with warmed caches**: (a) a booking starting in 1 h cannot be completed — 409, status unchanged, and the three caches are untouched; (b) a booking that started 1 h ago completes, and the very next read of all three shows the new visit date with no TTL wait; (c) an already-`completed` past booking is idempotent. Plus the legacy census below |
+| D16 | After an **explicit operator policy decision that early completion must be rejected** (required regardless of diagnostic counts), `setBookingStatus` refuses to move a booking into `completed` while `start_time > now()`, enforced in the same UPDATE (`… where id = $id and org_id = $org and start_time <= now()` for that status, zero rows affected ⇒ throw `BookingNotStartedError`), surfaced as HTTP 409 by the PATCH route, `/complete`, and the gateway `booking-complete` action. With that guard, the visit predicate is `b.status = 'completed'` with **no** `now()` term, so eligibility changes only through a mutation that busts caches (M1). `createBooking` cannot produce the state (it inserts only `pending`/`accepted`, `:280`) and `start_time` is never updated (§1), so the guarded set is closed | S2 | Record the operator decision and its scope. Postgres tests on both sides of the boundary **with warmed caches**: (a) a booking starting in 1 h cannot be completed — 409, status unchanged, and the three caches are untouched; (b) a booking that started 1 h ago completes, and the very next read of all three shows the new visit date with no TTL wait; (c) an already-`completed` past booking is idempotent. Regression evidence also completes early, reconciles parties after `start_time`, proves `updated_at` no longer reveals the early transition, and proves a zero diagnostic cannot open the policy gate |
 | D17 | The `/api/crm/contacts` response contract is declared additive and covered: `contacts[].finance.visitDates` is a documented public numeric field, and `contacts[].finance` is documented as non-null whenever the contact has an invoice **or** a visit date (L1). `export.csv` gains no column (its `valueOf` switch is closed — §6) | S2 | Contract test in `routes/api/crm/contacts/contacts.test.ts` asserting the exact serialized `finance` object for an invoice-only, a booking-only and a neither row — the existing strict `expect(body.contacts[0].finance).toEqual(…)` assertion at `:177` is extended, not relaxed; plus `rg` over hub for every reader of `RankedContact['finance']` recorded in the PR body |
 | D18 | `upsertInvoicesBatch` (`finance.service.ts:233,358`) — the writer, not its callers — does `await bustFinanceCache(ctx)` itself, immediately after its own batch commits. Every committed page is covered whether the run continues, hits its per-run deadline and returns (`finance-sync.service.ts:136`), or the exported `upsertInvoice` convenience wrapper is the caller instead of `advanceJob`. `advanceJob`'s existing pre-loop/post-loop busts become redundant-but-harmless (idempotent) on a normal full pass and stay for the shadow/void paths outside the page loop (pass-8 H1) | S1 | Test: warm `crm-fin-map`, the roster and the dashboard for a contact, run a sync configured with a per-run deadline that expires immediately after exactly one page commits, and assert the very next read of all three reflects that page's invoice(s) without waiting for job completion or a TTL |
 
@@ -819,39 +834,45 @@ leaving any cached surface holding stale scheduling evidence.
   insert, and `setBookingStatus` is the only writer of `status`. So after this change the state
   "`completed` with a future `start_time`" is unreachable — which is what lets the read drop its
   `now()` term.
-  **Two evidence gates before flipping the read — read both together, before any write, and go in
-  the PR body (revised pass-8 M1: the pass-7 wording of gate 2 was not independent of gate 1 —
-  every row gate 1 targets also satisfies the old gate 2, because the sole writer of `status`
-  stamps `updated_at` at completion, so a still-future booking can only reach `completed` before
-  it starts and its `updated_at` is necessarily earlier than its `start_time`. Gate 2 is scoped
-  below to `start_time <= now()` so the two gates are disjoint by construction and gate 2 answers
-  the real workflow question instead of re-detecting gate 1's own residue):**
+  **One residue census plus one mandatory policy gate before flipping the read — perform them
+  before any write and put both in the PR body.** `updated_at` is mutable bookkeeping, not an
+  immutable status-transition timestamp: `reconcileParties` changes `party_id` and overwrites
+  `updated_at = now()` (`party.service.ts:219-223`) without changing `status`. Therefore the
+  second query below is useful only as a positive signal; zero is inconclusive and must never
+  authorize the guard:
   1. `select count(*) from sched_bookings where status = 'completed' and start_time > now();` —
      the legacy rows the old, unguarded writer allowed to sit with a still-future `start_time`.
      This is pure defect residue: nothing legitimate produces this state once the guard ships.
-  2. `select count(*) from sched_bookings where status = 'completed' and start_time <= now() and
+  2. **Diagnostic only:** `select count(*) from sched_bookings where status = 'completed' and start_time <= now() and
      updated_at < start_time;` — among bookings that have already happened, does this business
      *ever* complete one before its own scheduled start (a walk-in booked into the next slot and
-     closed out immediately)? The `start_time <= now()` clause makes this disjoint from gate 1 by
-     construction, so its answer never depends on how many gate-1 rows exist.
+     closed out immediately)? A positive result proves the workflow exists. A zero result proves
+     nothing because later reconciliation can erase the timestamp evidence.
+  3. **Mandatory operator policy decision, regardless of query 2's result:** record whether this
+     deployment permits completing an appointment before `start_time`. If the operator permits it
+     or does not decide, stop D16's guard/read change and every legacy status repair. Only an
+     explicit decision that early completion is forbidden authorizes the new 409 and the remainder
+     of D16. The record names the decision-maker, timestamp, deployment/org scope, and diagnostic
+     output; it does not describe a zero count as evidence of absence.
 
-  Decide from both results together. The evidence step must capture the exact gate-1 rows, not
+  Decide from both results and the mandatory policy decision together. The evidence step must capture the exact gate-1 rows, not
   merely their count: export `id`, `org_id`, `status`, `start_time`, and `updated_at` under a
   transaction-level `evidence_captured_at`, sort by `id`, and record the artifact's SHA-256 and
   row count in the PR/proposal ledger. Treat that immutable artifact as sensitive operational
   evidence: store it in the approved operator location, never commit it, and retain it as the
   rollback input.
 
-  - **If gate 2 is `> 0`, stop the guard/read change entirely** — the same workflow it found in
+  - **If diagnostic 2 is `> 0`, stop the guard/read change entirely** — the same workflow it found in
     the past will recur for future bookings once the guard ships, and it would 409 a real
     front-desk action. File a proposal describing the observed pattern (an operator must approve
     the guard's exact shape — e.g. a grace window — before this slice proceeds) and leave
     `VISIT_BOOKING_STATUSES` and the read on the old `start_time <= now()` filter for that org,
     the same rule §5 applies to widening the attended set. **Perform no gate-1 status repair on
-    this path.** A positive gate 2 proves the unguarded writer may represent an accepted business
+    this path.** A positive diagnostic 2 proves the unguarded writer may represent an accepted business
     workflow; predicate disjointness is not enough authority to rewrite adjacent attendance data.
-  - **Gate 1's residue, if any, is never normalized automatically**, independent of gate 2's
-    result. Only when gate 2 is zero may the operator approve a gate-1 repair, and that approval
+  - **Gate 1's residue, if any, is never normalized automatically**, independent of diagnostic 2's
+    result. Only after the operator explicitly decides that early completion is forbidden may the
+    operator approve a gate-1 repair, and that approval
     names the captured artifact checksum and exact IDs — never only a count. Run it under an
     announced maintenance boundary that pauses the booking-status writer. In one transaction,
     join `sched_bookings` to the captured approved set by `id`, require every captured pre-image
@@ -928,10 +949,14 @@ bun run vitest run src/server/services/crm-
 #     point is that no eligibility change can happen without a mutation. Also assert the generated
 #     read SQL contains no `now()`/`current_date` term, so a later pass cannot reintroduce the
 #     clock without failing a test
-#   - LEGACY CENSUS (D16): the two counting queries in the S2 "Do" bullet are run and their output
-#     pasted in the PR. The exact gate-1 IDs/pre-images are captured and checksummed. If gate 2 is
-#     > 0 the slice STOPS, files a proposal, and performs NO repair. If gate 2 is zero and gate 1
-#     is non-zero, an operator approves that exact artifact; the repair updates only matching
+#   - LEGACY/POLICY GATE (D16): the residue query and mutable-timestamp diagnostic in the S2 "Do"
+#     bullet are run and their output pasted in the PR. Complete a booking early, advance beyond
+#     start_time, run reconcileParties, and prove updated_at no longer detects that transition;
+#     a zero diagnostic must leave the ship gate CLOSED. Record an explicit operator decision on
+#     whether early completion is forbidden regardless of the count. If it is permitted or no
+#     decision exists, the slice STOPS, files a proposal, and performs NO repair. If it is
+#     explicitly forbidden and gate 1 is non-zero, an operator approves that exact artifact; the
+#     repair updates only matching
 #     approved pre-images, asserts the returned ID set before commit, and retains rollback data.
 #     A concurrency case creates another future-completed row after capture and proves the repair
 #     does not change it
@@ -1040,8 +1065,10 @@ bun run vitest run && bun run check
 - **Scheduling-only orgs.** The count rides the finance map's `crm × finances` gate; widening that
   gate touches revenue reads too. Recorded as a handoff, not fixed here.
 - **Persisting Loyal.** The floor stays read-time (TO-BE #6). No backfill, no cron, no
-  re-analysis pass over existing contacts. A gate-2-positive result forbids D16's optional legacy
-  status repair. Otherwise, an explicitly approved exact-set repair may correct
+  re-analysis pass over existing contacts. A positive diagnostic, a policy that permits early
+  completion, or a missing policy decision forbids D16's optional legacy status repair. Only
+  after an explicit decision that early completion is forbidden may an approved exact-set repair
+  correct
   `sched_bookings.status` rows that the unguarded writer should never have allowed; it writes
   nothing into `custom_fields._funnel` and is not a funnel backfill.
 - **Every other consequence of a booking's start time passing.** D16 removes the clock from the
@@ -1070,7 +1097,7 @@ bun run vitest run && bun run check
 | `@minion-stack/db`, `@minion-stack/shared`, gateway WS frames | **None** — server-side services only; no frame, no shared-package type, no DDL. `RankedContact` is declared in `crm-contacts.service.ts` and is not exported from any `@minion-stack/*` package | `rg -n 'RankedContact' src/` finds only hub-internal readers at `1b47e8ce` |
 | `GET /api/crm/contacts` (public REST) | **Declared additive change (D17/L1), not "none"** — `contacts[].finance` gains a numeric `visitDates`, and `contacts[].finance` becomes non-null for a contact with visit evidence but no invoice. Nothing removed, nothing retyped. Pass 6 asserted "no response-shape change" here; that was **false**, because the route serializes ranked rows verbatim (`routes/api/crm/contacts/+server.ts:104`) | Strict `toEqual` contract test over invoice-only / booking-only / neither (D17); consumer sweep `rg -n '\.finance\b' src/` recorded in the PR |
 | `POST /api/crm/contacts/[id]/funnel/analyze` | **None** — JSON keys unchanged; only the dead `loyal` early-return disappears | re-check `rg 'funnel/analyze' ~/work/minion/src` at PR time |
-| `PATCH /api/scheduling/bookings/[id]`, `…/complete`, gateway `booking-complete` | **New failure mode (D16)** — completing a booking before its `start_time` now returns **409** instead of silently succeeding. No success-path shape change | The two evidence queries in S2 gate this: if any org actually completes bookings early, the slice stops instead of shipping the guard |
+| `PATCH /api/scheduling/bookings/[id]`, `…/complete`, gateway `booking-complete` | **New failure mode (D16)** — completing a booking before its `start_time` now returns **409** instead of silently succeeding. No success-path shape change | An explicit operator decision that early completion is forbidden gates this regardless of the mutable-timestamp diagnostic; a positive diagnostic, permission, or no decision stops the guard |
 | `minion/` gateway CRM tools | **Alert, not a dependency** — if `crm_search`/`crm_insight` surface a funnel stage, they will see a slightly different Loyal set. A hit means an append to `proposals/2026-08-17-gw-defaces-crm-tools.md`, not a fix here | grep at PR time |
 | In-flight hub specs on the same files | **Coordination required** — `2026-08-17-hub-reserva-keyword-config-spec` S3 is open in hub PR #160 touching `crm-finance.service.ts`/`crm-settings.service.ts`, and `2026-08-13-crm-customers-server-pagination-spec` is `implementing` on `crm-contacts.service.ts`. Branch off current `origin/master`, rebase before opening the PR, scope commits narrowly, never `git add -A` | check open hub PRs on those paths before S1 |
 | `paperclip-minion`, `pixel-agents`, `minion_plugins` | **None** | — |
@@ -1149,12 +1176,17 @@ curl -s "$HUB/api/crm/contacts?funnelStage=loyal&limit=5" -H "$AUTH" | jq '.tota
 #     completion or a TTL, all three already reflect that page's invoices on the very next read
 ```
 
-**Ship gate:** §7 green; the §1 **writer census re-run** pasted in the S1 PR body (the `rg` recipe
+**Ship gate:** §7 green; the §1 **writer census re-run**, including both search forms for
+`fin_invoice_items`, pasted in the S1 PR body (the `rg` recipe
 in §1 — this is the gate that stops a fifth "one more writer" round, and it must show every hit
-followed by a post-commit bust); both D16 evidence queries and their output pasted in the S2 PR,
-plus the immutable gate-1 artifact's row count and checksum; if gate 2 is non-zero, the proposal
-link and a STOP on both the guard/read change and every status repair; otherwise, for a non-zero
-gate 1, operator sign-off naming the exact artifact, exact-set/pre-image/returned-ID assertions,
+followed by a post-commit bust); both D16 queries and their output pasted in the S2 PR,
+plus the immutable gate-1 artifact's row count and checksum and the reconciliation regression
+proving query 2 can return zero after early completion. The guard/read change remains stopped
+unless an operator explicitly records that early completion is forbidden, even when query 2 is
+zero; a positive query 2, permission for early completion, or no decision requires a proposal
+link and STOP on both the guard/read change and every status repair. For a non-zero gate 1 after
+that explicit policy decision, operator sign-off naming the exact artifact,
+exact-set/pre-image/returned-ID assertions,
 rollback evidence, and the concurrent-row exclusion test; the D17 consumer sweep pasted in the
 S2 PR;
 the EXPLAIN plan from S2 pasted in the PR; the `show timezone;` output
