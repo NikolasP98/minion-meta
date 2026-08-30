@@ -3,7 +3,7 @@ id: 2026-08-18-factory-capability-separation-spec
 title: Factory capability separation — purpose-scoped GitHub credentials, run-bound grants, and server-derived actors
 stage: spec
 status: review
-pass: 9
+pass: 10
 created: 2026-08-18
 updated: 2026-08-30
 proposal: 2026-08-17-factory-capability-separation
@@ -38,7 +38,8 @@ makes `github-branch`, `github-workspace-prepare`, and `github-merge` provider-c
 unless independently verified repository rulesets deny an action to that principal. The trusted adapter narrows
 normal calls but cannot constrain a stolen token used directly. Exact provider evidence makes these excess lifetime,
 ref, and action authorities visible; it does not remove them. The human approval gate must explicitly accept or
-reject each loss for all three target-repository write purposes (§2 invariant 1a and H4). Server-derived actor
+reject each applicable loss for all five target-repository write purposes, including the narrower Issues-only
+label and husk-PR principals (§2 invariant 1a and H4). Server-derived actor
 identity remains enforced and the product continues to require a human merge gate at the application layer.
 
 **Pass-3 respec note (2026-08-29).** Passes 1-2 designed this as a GitHub-Apps/installation-token architecture with
@@ -243,7 +244,9 @@ implementation; line numbers are anchors, not immutable coordinates.
    `CapabilityGrantEnvelope` table: `pipeline_instances` (run/attempt/lease/manifest-hash-bound row per run,
    `admission_key_hash` unique) and `phase_effects` (idempotent effect ledger keyed `{run_id, kind, key}`) —
    `runner/src/db.ts:757-813`. Any further authority/evidence record this spec's remaining slices need should be
-   additive to these tables, not a parallel schema.
+   additive to these tables, not a parallel schema. Lifecycle HTTP requests are the one non-run-bound exception:
+   they need the dedicated `lifecycle_requests` idempotency journal specified in invariant 6; they cannot be
+   represented honestly by either table without inventing a synthetic run identity.
 4. **Outside that one gated path, one process-wide `FACTORY_GH_TOKEN` serves every authority the factory has.**
    `runner/src/github.ts:6-16` binds a module-level `TOKEN` constant into every `gh()`/`ghStrict()` call, and that
    one transport is imported by nine runner modules with materially different authorities:
@@ -253,6 +256,9 @@ implementation; line numbers are anchors, not immutable coordinates.
    | `runner/src/lifecycle.ts:8,106,131-139,142-168` | meta `contents` read + PUT (spec/proposal frontmatter + `index.json`) | write, `minion-meta` only |
    | `runner/src/monitor.ts:6,69` | `POST /repos/<meta>/issues` (runtime-monitor intake) | write (issues), `minion-meta` only |
    | `runner/src/projections.ts:3-4`, `runner/src/queue.ts:78`, `runner/src/possibly-shipped.ts:20`, `runner/src/reconcile-detector.ts:15`, `runner/src/discovery.ts:11`, `runner/src/reclassify.ts:3`, `runner/src/topics.ts:20` | PR / check-run / commit / contents **reads** across the whole fleet | read, fleet-wide |
+   | `runner/src/projections.ts:48-109`, scheduled/executed by `runner/src/queue.ts:2689-2700,3340-3356` | create repository labels and add/remove project labels on ordinary dev PRs (`project_labels` outbox) | write (Issues), exactly one target repo selected from the canonical registry |
+   | `runner/src/queue.ts:2997-3020` | comment on and close an empty husk PR | write (Issues + Pull requests), exactly one target repo selected from the canonical registry |
+   | `runner/src/possibly-shipped.ts:139-206,280-358` | disposition and G0 sweep PUT the spec and `specs/index.json` | write (Contents), `minion-meta` only |
    | `runner/src/automerge.ts:532,632,680-681,706,720` | PR read, check reads, **`PUT /pulls/:n/merge`**, issue comment | write (merge), target repos — inert only because `FACTORY_AUTOMERGE=0` |
 
    The same PAT is additionally injected into containers and consumed by host scripts:
@@ -390,7 +396,7 @@ Hard constraints shaping this spec (unchanged from pass 2, reconfirmed 2026-08-2
 - Whether the private memory-quarantine repository exists yet. §2 invariant 4 stays dormant either way; repository
   creation is a human-gated provisioning step owned by the memory-governance spec.
 - Whether any lifecycle API caller other than minion-base and the factory's own sweeps exists in production.
-  Slice 3's DoD requires that inventory before `by` becomes a hard 400.
+  Slice 3 records that inventory; Slice 6 repeats it after Slice 5 is deployed before `by` becomes a hard 400.
 
 ## 2. TO-BE
 
@@ -411,6 +417,8 @@ landed code already states — *workers get read credentials, writes live in the
    | `github-checkout` (existing) | `FACTORY_GH_CHECKOUT_TOKEN` | read | fleet repos + `minion-meta`: Contents/Actions/Checks read | contained checkout phases; the runner's fleet reads (`projections.ts`, `queue.ts`, `possibly-shipped.ts`, `reconcile-detector.ts`, `discovery.ts`, `reclassify.ts`, `topics.ts`); after Slice 2, the *only* credential in spec/reconcile/discovery/chat containers |
    | `github-branch` (existing purpose, changed transport) | `FACTORY_GH_BRANCH_TOKENS` | write | JSON repository→token map; every token exactly one target repo: Contents write; all refs unless rulesets narrow them | runner adapter candidate push; token selected only after canonical repo lookup |
    | `github-workspace-prepare` (existing purpose, changed transport) | `FACTORY_GH_WORKSPACE_PREPARE_TOKENS` | write | JSON repository→token map; every token exactly one target repo: Contents + Pull requests write; all refs unless rulesets narrow them | runner adapter branch/draft-PR; token selected only after canonical repo lookup |
+   | `github-project-labels` (new) | `FACTORY_GH_PROJECT_LABEL_TOKENS` | write | JSON repository→token map; every token exactly one target repo: Issues write | `projections.ts:48-109` label creation/application/removal through the normal `project_labels` outbox |
+   | `github-husk-pr` (new) | `FACTORY_GH_HUSK_PR_TOKENS` | write | JSON repository→token map; every token exactly one target repo: Issues + Pull requests write | `queue.ts:2997-3020` empty-husk comment/close only |
    | `github-meta` (new) | `FACTORY_GH_META_TOKEN` | write | `NikolasP98/minion-meta` only: Contents + Issues write | `lifecycle.ts` transitions/dispositions; `monitor.ts:69` issue intake; the runner-side meta publication effect (Slice 2); `scripts/self-update.sh:58-60` issue filing |
    | `github-merge` (new) | `FACTORY_GH_MERGE_TOKENS` | write | JSON repository→token map; every token exactly one target repo: Contents + Pull requests write (merge endpoint + comment), all refs; provider-capable of push as well as merge unless rulesets deny it | `automerge.ts:706,720`; token selected only after canonical repo lookup. Inert while `FACTORY_AUTOMERGE=0`, but registered so §8's revocation cannot silently disarm it |
    | `github-factory-source` (new) | `FACTORY_GH_SOURCE_TOKEN` | read | `NikolasP98/minion-factory` only: Contents + Actions read | `scripts/self-update.sh:73,91` |
@@ -428,6 +436,11 @@ landed code already states — *workers get read credentials, writes live in the
    credential values, including values nested in maps, that are byte-identical. `runner/src/github.ts`'s
    module-level `TOKEN` is replaced by a purpose-and-canonical-repository-bound client factory; no module may
    construct an unlabelled transport or select a target token from caller-controlled text before registry lookup.
+   Classification is per call site, never per module: the read calls in `projections.ts`, `queue.ts`, and
+   `possibly-shipped.ts` use `github-checkout`; their label, husk-PR, and meta PUT calls use
+   `github-project-labels`, `github-husk-pr`, and `github-meta` respectively. Readiness push/PR calls in
+   `queue.ts` use the existing repository-bound `github-branch`/`github-workspace-prepare` purposes; no mixed
+   module receives a module-wide writer or a fallback credential.
 1a. **Purpose activation requires a provider-backed scope audit, not one negative sample.** This spec adopts the
    long-lived purpose-scoped PAT mechanism that already shipped in `minion-factory@5db7d391`, narrowed here to one
    repository per target-write token through runner-side purpose/repository lookup, rather than pass 2's
@@ -563,10 +576,14 @@ landed code already states — *workers get read credentials, writes live in the
    quarantine repository at `<run-id>/<candidate-id>.json`, consistent with the approved
    `2026-08-18-factory-memory-governance-spec`. It stays dormant (no production caller) until that spec's schema/
    scanner/promotion contract lands, and cannot reach canonical `minion-agent-memory`.
-5. **Server-derived actors only.** `by` is rejected (400) at the `/lifecycle/:kind/:id` HTTP boundary regardless of
-   caller capability, on both the `status` (`index.ts:715-719`) and `disposition` (`:700-704`) branches. Commit/
-   audit actor text is generated solely from `res.locals.capability`/the credential registry entry — never from
-   request JSON, even for the admin bearer.
+5. **Server-derived actors only, with an ordered compatibility window.** From Slice 3 onward, commit/audit actor
+   text is generated solely from `res.locals.capability`/the credential registry entry — never from request JSON,
+   even for the admin bearer. Slice 3 deliberately tolerates and ignores a legacy `by` field because the deployed
+   minion-base disposition client still sends it on every request (`spec-dispose.ts:103-116`). Slice 5 removes
+   `by` from that caller and is backward-compatible with the old runner, which already derives `api:admin` when the
+   field is absent. Only after Slice 5 is deployed does Slice 6 make `by` a hard 400 on both the `status`
+   (`index.ts:715-719`) and `disposition` (`:700-704`) branches. Thus every rollout pair — old base/new runner and
+   new base/old runner — remains functional, while no stage ever trusts the caller-supplied actor.
 6. **The factory lifecycle endpoint becomes a complete single writer *before* minion-base depends on it.** All of
    the following are factory-side work (§4 Slice 4), not minion-base work:
    - **A lifecycle-only principal.** `FACTORY_LIFECYCLE_SECRET` yields capability `lifecycle`, authorised for
@@ -599,6 +616,16 @@ landed code already states — *workers get read credentials, writes live in the
      pending request, even when the original write committed and its HTTP response was lost. A distinct request
      whose current status already equals the target answers 200
      `{outcome:'already_applied', revision}` with no write.
+     The durable representation is a dedicated `lifecycle_requests` table, explicitly authorised as the
+     non-run-bound idempotency journal rather than a second authority spine. Its canonical fresh-database
+     `CREATE TABLE` and upgraded-database migration both define: `principal`, `request_id`, immutable
+     `input_hash`, `state` (`pending | confirmed`), `commit_sha`, `index_synced`, `promotion_outcome`,
+     `canonical_response`, `created_at`, and `confirmed_at`, with `UNIQUE(principal, request_id)`, an index on
+     `(state, created_at)` for recovery, and an index on `confirmed_at` for retention. Pending rows are never
+     age-deleted; confirmed rows are retained for at least the maximum dashboard transport-retry horizon plus 30
+     days (configured explicitly, default 90 days), and pruning is a bounded transaction that cannot remove a
+     pending request. Startup `requireColumns` checks both upgraded and fresh schemas before serving lifecycle
+     traffic.
    - **An explicit source→target edge table.** The factory's target-only allowlist (`lifecycle.ts:34-43`) is
      replaced by the edge table minion-base already enforces (`meta-write.ts:64-78`), **adopted verbatim as the
      interim policy** because it is the behaviour humans use today; anything narrower silently removes live
@@ -669,8 +696,9 @@ landed code already states — *workers get read credentials, writes live in the
    an already-confirmed `{run_id,'meta-publish',candidate-hash}` key returns the same commit without a GitHub call.
 
    Lifecycle transitions are **not** run-bound, so they do not get a `phase_effects` row: their evidence is the git
-   commit itself (author = the credential-registry actor label, message, sha) plus the CAS-checked canonical
-   response (invariant 6) — a durable, queryable trail that already exists. Monitor issues already have a durable,
+   commit itself plus the dedicated `lifecycle_requests` replay journal in invariant 6. That table is narrowly
+   authorised because neither `pipeline_instances` nor non-null `{run_id,kind,key}` `phase_effects` can represent
+   a service request without the synthetic run identity this spec forbids. Monitor issues already have a durable,
    idempotent record of their own — `monitor_events` (fingerprint-keyed dedup, `runner/src/monitor.ts`), which
    predates this spec — that satisfies the same evidence requirement invariant 8 is after; a `phase_effects` row for
    the same event would duplicate it, not fill a gap, and inventing a synthetic run subject for a non-run event
@@ -687,8 +715,9 @@ landed code already states — *workers get read credentials, writes live in the
    merge gate is unchanged.
 
 Explicitly **not** proposed by this pass: standalone GitHub Apps, App JWT/installation-token minting infrastructure,
-or a new `CapabilityGrantEnvelope`/authority table. `pipeline_instances`/`phase_effects` are the authority/evidence
-spine; any additional record this spec's slices need must be additive columns/rows on those, not a parallel schema.
+or a new `CapabilityGrantEnvelope`/run-authority table. `pipeline_instances`/`phase_effects` remain the run-bound
+authority/evidence spine. The narrowly scoped `lifecycle_requests` journal authorised in invariant 6 is the sole
+non-run-bound exception; it stores replay state, not grants, and must not acquire run authority or effect kinds.
 
 ## 3. DELTA
 
@@ -697,8 +726,10 @@ transport the meta-writing agents have, the minion-base cutover depended on fact
 built, and the purpose registry did not cover its own consumers. The ordering below fixes exactly that — the
 registry closes first, the publication protocol precedes the credential downgrade, and the factory lifecycle
 contract precedes the minion-base cutover.
+The actor rollout is compatibility-ordered: ignore-but-never-trust the legacy field, remove it from minion-base,
+then reject it after that deployment.
 
-1. Close the purpose registry: add `github-meta`, `github-merge`, `github-factory-source`, `github-memory-read`,
+1. Close the purpose registry: add `github-project-labels`, `github-husk-pr`, `github-meta`, `github-merge`, `github-factory-source`, `github-memory-read`,
    `github-memory-candidate`, `github-train`; replace `github.ts`'s module `TOKEN` with purpose-bound clients for
    the runner's own calls; replace the shared branch/workspace-prepare values and new merge value with canonical
    repository→token maps whose individual tokens are provider-scoped to exactly one repository; add the startup
@@ -706,7 +737,9 @@ contract precedes the minion-base cutover.
    comparison, provider permission/ruleset evidence, disposable action canaries, and fingerprint-bound evidence
    (→ Slice 1; proves `T-PURPOSE-REGISTRY-CLOSED`, `T-PURPOSE-TOKENS-DISTINCT`, `T-META-PURPOSE-TOKEN`,
    `T-PURPOSE-PROVIDER-GRANT-EXACT`, `T-PURPOSE-ACTION-EVIDENCE`,
-   `T-PURPOSE-SCOPE-FINGERPRINT-BOUND`). No container or agent-script behaviour changes yet.
+   `T-PURPOSE-SCOPE-FINGERPRINT-BOUND`, `T-TARGET-MUTATION-PURPOSES`, `T-MAP-ONLY-CONTAINMENT-FLOW`). The
+   containment adapter, lineage transport, queue preflight/readiness, and canary resolve the new repository maps
+   in the same atomic deployment that removes the singular variables; agent-script behaviour is unchanged.
 2. Build the runner-owned meta publication protocol (writable, credential-free, remote-stripped worker git worktree
    running the scripts' existing survey/commit-checkpoint flow unmodified → bounded candidate artifact with explicit
    upsert/delete operations serialized from the worker's local commits → apply/commit/regenerate/push against a separate runner-private
@@ -719,9 +752,9 @@ contract precedes the minion-base cutover.
    `T-META-WORKTREE-WRITE-DENIED`, `T-META-PUBLISH-REBASE-RETRY`, `T-META-PUBLISH-RECEIPT`,
    `T-META-PUBLISH-CRASH-RECONCILE`, `T-WORKER-NO-WRITE-CREDENTIAL`, `T-LEGACY-PATH-READ-ONLY`,
    `T-DEV-V2-PUBLICATION-COMPLETE`, `T-DEV-CONTAINMENT-V2-REQUIRED`).
-3. Reject `by` unconditionally at the lifecycle HTTP boundary and derive the actor only from the credential
-   registry, on both the `status` and `disposition` routes (→ Slice 3; proves `T-BY-REJECTED`,
-   `T-ACTOR-SERVER-DERIVED`).
+3. Derive the actor only from the credential registry on both lifecycle request shapes, while temporarily accepting
+   and ignoring the deployed caller's legacy `by` field (→ Slice 3; proves `T-ACTOR-SERVER-DERIVED`,
+   `T-LEGACY-BY-IGNORED`).
 4. Make the factory lifecycle endpoint a complete writer, and register the two additional dashboard-scoped
    principals minion-base's non-lifecycle calls need: lifecycle-only principal with mandatory `expectedStatus`/
    `expectedRevision` CAS (400 on omission, 409 on mismatch), idempotent replay, explicit source→target edge table,
@@ -732,12 +765,12 @@ contract precedes the minion-base cutover.
    `T-DASHBOARD-RUN-SCOPED`).
 5. Cut minion-base over to all three factory principals (lifecycle, dashboard-read, dashboard-run) for every call
    `factory.ts` makes, including routing the provider-settings save to `dashboard-run`'s `PUT /providers`; delete its
-   Contents-API mutation path, its duplicate promotion call, and `FACTORY_SECRET` from its deployment entirely
+   Contents-API mutation path, its duplicate promotion call, caller-supplied `by`, and `FACTORY_SECRET` from its deployment entirely
    (→ Slice 5; proves `T-BASE-NO-META-WRITE`, `T-BASE-SERVICE-ACTOR`, `T-BASE-CONFLICT-SURFACED`,
    `T-BASE-NO-DOUBLE-PROMOTE`, `T-BASE-PROVIDERS-WRITE`, `T-BASE-NO-ADMIN-BEARER`).
-6. Delete `agent/run.sh`'s direct memory upload, stand up the dormant create-only quarantine publisher, and map
+6. After Slice 5 is deployed, reject caller-supplied `by`; delete `agent/run.sh`'s direct memory upload, stand up the dormant create-only quarantine publisher, and map
    every host-script operation to its purpose credential — including self-update's three distinct authorities
-   (→ Slice 6; proves `T-MEMORY-PATH`, `T-MEMORY-CREATE-ONLY`, `T-MEMORY-DORMANT`, `T-NO-HOST-SCRIPT-PAT`,
+   (→ Slice 6; proves `T-BY-REJECTED`, `T-ROLLOUT-BY-COMPAT`, `T-MEMORY-PATH`, `T-MEMORY-CREATE-ONLY`, `T-MEMORY-DORMANT`, `T-NO-HOST-SCRIPT-PAT`,
    `T-SELF-UPDATE-PURPOSE-MAP`, `T-TRAIN-FIXED-PAIRS`).
 
 ## 4. Approach — vertical slices
@@ -747,22 +780,30 @@ editing shared files, the implementer reconciles current HEAD with this spec and
 rather than duplicating the credential-boundary/adapter code that already exists for the containment-v2 path. Every
 named `T-*` control is an exact top-level test name; each slice's CI runs the full runner suite plus the focused
 pattern and retains output showing every named control executed. Slice order is a dependency chain, not a
-preference: **2 requires 1**, **5 requires 4**, and **§8's revocation requires all six**.
+preference: **2 requires 1**, **5 requires 4**, **6 requires Slice 5 deployed**, and **§8's revocation requires all six**.
 
 ### Slice 1 — close the purpose registry (5-7h)
 
-Adds credentials and a validator. Deliberately changes no container plan and no agent script, so it is safe to land
-while the meta-writing agents still hold the broad PAT.
+Adds credentials and a validator. It changes no worker-visible container plan or agent script, but it atomically
+migrates every trusted singular-token consumer before removing the singular variables; this is what makes the
+map-only deployment safe while the meta-writing agents still hold the broad PAT.
 
 **Files to touch:**
 
-- `runner/src/containers.ts` (`GITHUB_PURPOSES` `:201`, `GITHUB_CAPABILITY` `:204-208` — add the six new purposes
+- `runner/src/containers.ts` (`GITHUB_PURPOSES` `:201`, `GITHUB_CAPABILITY` `:204-208` — add the eight new purposes
   and their capability labels)
 - `runner/src/github.ts` (replace the module-level `TOKEN` `:6` with a purpose-and-repository-bound client factory;
   `gh`/`ghStrict` take the purpose and canonical registry repository from their caller; target-write purposes select
   only from their parsed repository→token map)
 - `runner/src/lifecycle.ts`, `runner/src/monitor.ts` (use `github-meta`), `runner/src/automerge.ts` (use
-  `github-merge`), and the seven fleet-read modules listed in §1 point 4 (use `github-checkout`)
+  `github-merge`), and each call site in the seven mixed fleet modules listed in §1 point 4: reads use
+  `github-checkout`; `projections.ts` label mutations use `github-project-labels`; `queue.ts` husk-PR mutations use
+  `github-husk-pr`; `possibly-shipped.ts` disposition and sweep PUTs use `github-meta`; queue readiness push/PR
+  calls retain the repository-bound branch/workspace-prepare purposes
+- `runner/src/containment-effects.ts`, `runner/src/lineage-phase-transports.ts`, and `runner/src/queue.ts` (move
+  every direct `FACTORY_GH_BRANCH_TOKEN` / `FACTORY_GH_WORKSPACE_PREPARE_TOKEN` read — trusted effect execution,
+  lineage staging, launch-plan preflight, and PR readiness — behind the same canonical-repository-bound map
+  resolver used by `github.ts`; no local parser or singular fallback)
 - `runner/src/index.ts` (extend the startup validator at `:164-190` to the credential registry)
 - `runner/src/scoped-github-canary.ts` (add the provider-backed activation audit alongside `verifyCommand`'s
   existing positive checks `:383-398`: paginate the credential's complete accessible-repository set or obtain its
@@ -770,10 +811,12 @@ while the meta-writing agents still hold the broad PAT.
   to the purpose allowlist; retain independently verified forbidden-target fixtures; collect provider permission/
   ruleset evidence and use disposable canaries for action probes; record the token fingerprint; fail closed when
   the grant is extra, incomplete, unavailable, or stale)
-- `runner/src/github.test.ts`, `runner/src/index.test.ts`, new `runner/src/github-purpose.test.ts`,
-  `runner/src/scoped-github-canary.test.ts`
+- `runner/src/github.test.ts`, `runner/src/index.test.ts`, `runner/src/containment-effects.test.ts`,
+  `runner/src/queue.test.ts`, `runner/src/lineage-phase-transports.test.ts`, new
+  `runner/src/github-purpose.test.ts`, `runner/src/scoped-github-canary.test.ts`
 - `.env.example`, `deploy.sh` (`:316`), `setup.sh` (`:102`), `deploy/k8s.yml` (`:18`), `README.md` — document and
-  write `FACTORY_GH_BRANCH_TOKENS`, `FACTORY_GH_WORKSPACE_PREPARE_TOKENS`, and `FACTORY_GH_MERGE_TOKENS` as secret
+  write `FACTORY_GH_BRANCH_TOKENS`, `FACTORY_GH_WORKSPACE_PREPARE_TOKENS`,
+  `FACTORY_GH_PROJECT_LABEL_TOKENS`, `FACTORY_GH_HUSK_PR_TOKENS`, and `FACTORY_GH_MERGE_TOKENS` as secret
   JSON maps in **all four** deployment writers; remove their singular predecessors rather than supporting a
   fleet-wide fallback; every other new env var is likewise documented and written by all four writers
 
@@ -781,12 +824,12 @@ while the meta-writing agents still hold the broad PAT.
 
 ```bash
 cd runner
-npm test -- --test-name-pattern='T-PURPOSE-REGISTRY-CLOSED|T-PURPOSE-TOKENS-DISTINCT|T-META-PURPOSE-TOKEN|T-PURPOSE-PROVIDER-GRANT-EXACT|T-PURPOSE-ACTION-EVIDENCE|T-PURPOSE-SCOPE-FINGERPRINT-BOUND'
+npm test -- --test-name-pattern='T-PURPOSE-REGISTRY-CLOSED|T-PURPOSE-TOKENS-DISTINCT|T-META-PURPOSE-TOKEN|T-TARGET-MUTATION-PURPOSES|T-MAP-ONLY-CONTAINMENT-FLOW|T-PURPOSE-PROVIDER-GRANT-EXACT|T-PURPOSE-ACTION-EVIDENCE|T-PURPOSE-SCOPE-FINGERPRINT-BOUND'
 npm test
 npx tsc --noEmit
 cd ..
 # every registry env var is written by every deployment writer, INCLUDING deploy/k8s.yml
-for v in FACTORY_GH_BRANCH_TOKENS FACTORY_GH_WORKSPACE_PREPARE_TOKENS FACTORY_GH_META_TOKEN FACTORY_GH_MERGE_TOKENS FACTORY_GH_SOURCE_TOKEN \
+for v in FACTORY_GH_BRANCH_TOKENS FACTORY_GH_WORKSPACE_PREPARE_TOKENS FACTORY_GH_PROJECT_LABEL_TOKENS FACTORY_GH_HUSK_PR_TOKENS FACTORY_GH_META_TOKEN FACTORY_GH_MERGE_TOKENS FACTORY_GH_SOURCE_TOKEN \
          FACTORY_GH_MEMORY_READ_TOKEN FACTORY_GH_MEMORY_CANDIDATE_TOKEN FACTORY_GH_TRAIN_TOKEN; do
   grep -q "$v" .env.example && grep -q "$v" deploy.sh && grep -q "$v" setup.sh && grep -q "$v" deploy/k8s.yml \
     || { echo "missing: $v"; exit 1; }
@@ -798,8 +841,16 @@ and no module can build an unlabelled transport; `T-PURPOSE-TOKENS-DISTINCT` —
 underlying token value, including nested map values, refuse startup; missing/extra/non-canonical repository keys
 refuse startup; singular fleet-wide target-write variables are ignored/rejected; and an unconfigured purpose that
 an enabled path exercises refuses startup;
-`T-META-PURPOSE-TOKEN` — a lifecycle commit and a monitor issue both carry the `github-meta` credential and never
-the target-purpose or checkout credential; `T-PURPOSE-NEGATIVE-SCOPE` — for a fixture purpose configured with an
+`T-META-PURPOSE-TOKEN` — a lifecycle commit, monitor issue, disposition PUT, and G0 sweep PUT carry the
+`github-meta` credential and never the target-purpose or checkout credential; `T-TARGET-MUTATION-PURPOSES` — with
+the broad token absent, the normal `project_labels` outbox creates/applies/removes labels through
+`github-project-labels`, the husk path comments/closes through `github-husk-pr`, readiness uses only the bound
+branch/workspace-prepare purpose, and each mixed module's neighbouring reads still use `github-checkout`;
+`T-MAP-ONLY-CONTAINMENT-FLOW` — with both singular variables absent and rejected, an existing containment-v2 dev
+fixture completes candidate push, draft PR, lineage staging, queue preflight, and readiness using only map entries
+selected after canonical repository lookup; removing any required map entry fails before the first remote effect.
+The singular variables are removed only in the same commit and deployment that makes this proof pass;
+`T-PURPOSE-NEGATIVE-SCOPE` — for a fixture purpose configured with an
 intentionally *over-broad* scope (denied on forbidden target A, but able to reach forbidden target B, and able to
 perform a forbidden action class on an allowed repository), the audit fails activation entirely — not merely
 logs a partial pass — and a purpose whose full audit has not yet run is reported as not-yet-active rather than
@@ -909,12 +960,12 @@ gate and the only evidence that refusing non-v2 dev leaves dev runs *working* ra
 Additionally attempt to dispatch a `dev` run with `FACTORY_CONTAINMENT_V2=0` and attach the resulting refusal (not a
 broken/partial run). Slice 2 does not merge on unit fixtures alone.
 
-### Slice 3 — reject caller-supplied `by`, server-derive actor (3-4h)
+### Slice 3 — server-derive actor while tolerating the legacy field (3-4h)
 
 **Files to touch:**
 
-- `runner/src/index.ts` (`:700-704`, `:715-719` — reject `by` for both branches; derive the actor solely from
-  `res.locals.capability`/the credential registry)
+- `runner/src/index.ts` (`:700-704`, `:715-719` — derive the actor solely from
+  `res.locals.capability`/the credential registry for both branches; parse but ignore legacy `by` until Slice 6)
 - `runner/src/index.test.ts` or the equivalent lifecycle route test file
 - `runner/README.md` (document the removed field)
 
@@ -922,16 +973,16 @@ broken/partial run). Slice 2 does not merge on unit fixtures alone.
 
 ```bash
 cd runner
-npm test -- --test-name-pattern='T-BY-REJECTED|T-ACTOR-SERVER-DERIVED'
+npm test -- --test-name-pattern='T-LEGACY-BY-IGNORED|T-ACTOR-SERVER-DERIVED'
 npm test
 npx tsc --noEmit
 ```
 
-Fixtures prove: a `status` transition request with `by` set returns 400 with no GitHub write, for both admin and
-non-admin bearers; a `disposition` request with `by` set returns 400; the resulting meta commit actor text always
-equals the registered credential-registry label for the authenticated capability. **Prerequisite check inside the
-slice:** inventory the live lifecycle callers (factory sweeps, minion-base, any cron) and confirm none sends `by`
-before the 400 becomes unconditional; record that inventory in the PR body.
+Fixtures prove: `status` and `disposition` requests with an arbitrary `by` value remain accepted for transport
+compatibility but the resulting meta commit actor always equals the registered credential-registry label for the
+authenticated capability; changing only `by` cannot change commit content, audit actor, or response. The PR body
+records the live-caller inventory and explicitly identifies minion-base `spec-dispose.ts:103-116` as the deployed
+legacy sender that prevents hard rejection in this slice.
 
 ### Slice 4 — factory lifecycle endpoint becomes a complete writer, and the two dashboard principals (6-9h, minion-factory only)
 
@@ -955,10 +1006,15 @@ must state that it transcribes rather than decides, and carry a human confirmati
   write when either is absent; return the canonical response; surface the promotion outcome)
 - `runner/src/lifecycle.ts` (source→target edge table replacing `:34-43`; blob-sha CAS; `already_applied` replay;
   typed outcome union replacing `TransitionResult` `:49`; `indexSynced` reported rather than swallowed `:142-168`)
-- `runner/src/db.ts` (durable `pending → confirmed` lifecycle-request storage, unique on
-  `{principal,request_id}`, carrying the canonical full-input hash, remote commit identity, index-sync outcome,
-  promotion outcome, and canonical response)
-- `runner/src/index.test.ts`, `runner/src/lifecycle.test.ts`
+- `runner/src/possibly-shipped.ts` (route the disposition writer at `:139-206` through the shared lifecycle request
+  state machine, removing its independent fetch→spec PUT→index PUT sequence so dispositions receive the same CAS,
+  commit marker, replay, and recovery semantics as status; route the separate G0 sweep PUTs at `:280-358` through
+  the purpose-bound `github-meta` client without claiming they are lifecycle HTTP requests)
+- `runner/src/db.ts` (add the dedicated `lifecycle_requests` table to both upgraded and fresh schema paths with
+  the columns, uniqueness, recovery/retention indexes, and bounded pruning rules in invariant 6; extend
+  `requireColumns`; expose reserve/reconcile/confirm APIs that are not run-bound)
+- `runner/src/index.test.ts`, `runner/src/lifecycle.test.ts`, `runner/src/possibly-shipped.test.ts`,
+  `runner/src/db.test.ts`
 - `.env.example`, `deploy.sh`, `setup.sh`, `deploy/k8s.yml`, `runner/README.md` (the three new secrets + the
   request/response contract, including required `requestId` and replay semantics)
 - `runner/src/lifecycle-contract.test.ts` (new): the shared contract fixture Slice 5 imports/mirrors, so both sides
@@ -979,11 +1035,15 @@ actor label; `T-LIFECYCLE-CAS` — a mismatching `expectedRevision` or `expected
 wrong) returns 409 with `{current:{status,revision}}` and performs no write; `T-LIFECYCLE-CAS-REQUIRED` — a request
 omitting `expectedStatus`, omitting `expectedRevision`, or omitting both returns 400 with no GitHub read or write,
 tested independently for each omission and for both the `status` and `disposition` shapes; `T-LIFECYCLE-IDEMPOTENT`
-— crashes are injected after the spec PUT, after index synchronization, and after approval queue creation. Each
+— against both the real status `transition()` path and the real `possibly-shipped.ts` `applyDisposition` path,
+crashes are injected after the spec PUT, after index synchronization, and after approval queue creation. Each
 retry first reconciles a `pending` request by its commit marker, then idempotently completes index sync and promotion,
 and converges to one transition, one promotion, and one canonical response without another PUT. Reusing a key with
 different input returns 409 before a GitHub call; fixtures include a reason-only change and a status↔disposition
-shape change. A distinct transition to the current status returns `already_applied` with no commit;
+shape change. A distinct transition to the current status returns `already_applied` with no commit. The same
+fixture runs once on a migrated database and once on a fresh database, proves `requireColumns` accepts both,
+proves `(state,created_at)` recovery finds pending requests after restart, and proves retention pruning never
+deletes pending rows or confirmed rows inside the configured window;
 `T-LIFECYCLE-EDGE-TABLE` — every edge minion-base's shipped table permits is accepted and every edge outside it is
 refused, enumerated from a table fixture; `T-LIFECYCLE-CANONICAL-RESPONSE` — a successful transition returns
 `{outcome, commit, revision, indexSynced, spec}`, and an index-patch failure returns `indexSynced: false` rather
@@ -1046,10 +1106,16 @@ the environment entirely — not just unused on one route. `by` is never sent. I
 scripts differ at implementation-time recon, use its documented equivalents and record the exact commands in the
 PR.
 
-### Slice 6 — memory upload cutover and host-script purpose map (5-7h)
+Before Slice 6 starts, deploy this slice and run an ordered compatibility fixture against both server generations:
+old base/new Slice-3 runner succeeds while its `by` is ignored, and new base/old runner succeeds with `by` absent.
+This deployment evidence is the prerequisite for hard rejection, not an inventory assertion.
+
+### Slice 6 — hard-reject legacy actor input, memory upload cutover, and host-script purpose map (5-7h; requires Slice 5 deployed)
 
 **Files to touch:**
 
+- `runner/src/index.ts` and lifecycle route tests (replace Slice 3's tolerate-and-ignore compatibility shim with
+  unconditional 400 for `by` on both request shapes; retain server-derived actor mapping)
 - `agent/run.sh` (delete the direct memory `gh api PUT`, lines `79-83`, and its now-resolved `TODO(handoff)`)
 - `runner/src/memory/candidate-publisher.ts` (new; purpose-bound transport only, create-only semantics; records a
   `phase_effects` row with kind `'memory-candidate'` — widen `PhaseEffectKind` `:1612` for this one addition,
@@ -1066,7 +1132,7 @@ PR.
 
 ```bash
 cd runner
-npm test -- --test-name-pattern='T-MEMORY-PATH|T-MEMORY-CREATE-ONLY|T-MEMORY-DORMANT|T-NO-HOST-SCRIPT-PAT|T-SELF-UPDATE-PURPOSE-MAP|T-TRAIN-FIXED-PAIRS'
+npm test -- --test-name-pattern='T-BY-REJECTED|T-ROLLOUT-BY-COMPAT|T-MEMORY-PATH|T-MEMORY-CREATE-ONLY|T-MEMORY-DORMANT|T-NO-HOST-SCRIPT-PAT|T-SELF-UPDATE-PURPOSE-MAP|T-TRAIN-FIXED-PAIRS'
 npm test
 npx tsc --noEmit
 cd ..
@@ -1074,7 +1140,10 @@ cd ..
 ! rg -n 'FACTORY_GH_TOKEN' scripts/
 ```
 
-Fixtures prove: `T-MEMORY-PATH`/`T-MEMORY-CREATE-ONLY`/`T-MEMORY-DORMANT` — the publisher accepts only an exact
+Fixtures prove: `T-BY-REJECTED` — after the deployed Slice-5 prerequisite, either lifecycle request shape carrying
+`by` returns 400 before any GitHub call, while actor text remains registry-derived; `T-ROLLOUT-BY-COMPAT` preserves
+the recorded old-base/new-runner and new-base/old-runner contract cases so future changes cannot reorder the
+cutover; `T-MEMORY-PATH`/`T-MEMORY-CREATE-ONLY`/`T-MEMORY-DORMANT` — the publisher accepts only an exact
 `<run-id>/<candidate-id>.json` path, refuses an overwrite and any canonical-`minion-agent-memory` target, and
 production run output (including `agent/run.sh`) cannot invoke it before memory-governance's validator exists;
 `T-NO-HOST-SCRIPT-PAT` — no script under `scripts/` reads `FACTORY_GH_TOKEN`; `T-SELF-UPDATE-PURPOSE-MAP` — a
@@ -1095,8 +1164,8 @@ push or merge, and rejects a pair injected through the environment.
 | `minion-factory` self-update | `scripts/self-update.sh` uses one token for three different authorities (private memory read, factory source + Actions read, meta issue write). A `minion-meta`-only credential cannot serve the first two. | Slice 6 maps each command to its own purpose. §8's revocation happens only after that map is exercised — otherwise self-update is a deterministic host-path outage. |
 | Promotion train | `scripts/train.sh` operates on **two** fixed pairs (`minion-ai@DEV→main`, `minion-site@dev→master`), not one. | Slice 6's `github-train` purpose is scoped to the declared pair set and cannot accept repo/ref input from the calling script. |
 | `minion-base` ← **cross-repo dependency** | The cutover needs factory-side authentication, revision CAS, an edge table, and a canonical response that do not exist today; minion-base additionally holds the factory **admin** bearer for *every* proxied call (`factory.ts:149`), not only lifecycle mutations — runs/history, stats, trigger-health, providers, `pipeline/spec`, `pipeline/reconcile`, `runs` creation, and `chat/*` all use it too — and enforces transitions the factory route would reject. | Slice 4 (minion-factory) lands and deploys **before** Slice 5 (minion-base) and registers `lifecycle`, `dashboard-read`, and `dashboard-run` as three separate principals (§2 invariant 7), not just `lifecycle`. Slice 5 removes `FACTORY_SECRET` from minion-base's deployment entirely and proves the app still operates without it (`T-BASE-NO-ADMIN-BEARER`). One shared contract fixture is authored in Slice 4 and mirrored in Slice 5. Read-only GitHub-access narrowing stays explicit later scope (§6). |
-| Other lifecycle API callers | Unknown fields including `by` become 400; server actor labels become credential-registry ids for every caller. | Slice 3 requires a caller inventory in its PR body before the 400 is unconditional; log rejected field names only, never body values. |
-| Deployment surface (`deploy.sh`, `setup.sh`, `deploy/k8s.yml`, `.env.example`) | Six new purpose credentials plus **three** new bearer secrets (`FACTORY_LIFECYCLE_SECRET`, `FACTORY_DASHBOARD_READ_SECRET`, `FACTORY_DASHBOARD_RUN_SECRET` — Slice 4), and one removal: `FACTORY_SECRET` leaves minion-base's deployment entirely (Slice 5). `deploy.sh` rewrites `/opt/factory/.env` **wholesale** (operator memory), so a variable absent from it is silently dropped on the next deploy. | Every slice that introduces a credential edits all four writers in the same PR; Slice 1's DoD greps for exactly that. |
+| Other lifecycle API callers | Server actor labels become credential-registry ids for every caller in Slice 3; `by` is tolerated-but-ignored until compatibility removal is deployed, then becomes 400 in Slice 6. | Slice 3 records the caller inventory. Slice 5 deploys the known minion-base removal and proves both mixed-version pairs; Slice 6 repeats the inventory before rejection. Log rejected field names only, never body values. |
+| Deployment surface (`deploy.sh`, `setup.sh`, `deploy/k8s.yml`, `.env.example`) | Eight new purpose credentials plus **three** new bearer secrets (`FACTORY_LIFECYCLE_SECRET`, `FACTORY_DASHBOARD_READ_SECRET`, `FACTORY_DASHBOARD_RUN_SECRET` — Slice 4), and one removal: `FACTORY_SECRET` leaves minion-base's deployment entirely (Slice 5). `deploy.sh` rewrites `/opt/factory/.env` **wholesale** (operator memory), so a variable absent from it is silently dropped on the next deploy. | Every slice that introduces a credential edits all four writers in the same PR; Slice 1's DoD greps for exactly that. |
 | Worker containment (separate spec) | Shares the deny-by-default credential boundary and the trusted adapter this spec extends with a meta publication binding. | Coordinate slice ordering with `2026-08-18-factory-worker-containment-spec` implementers so neither duplicates the other's boundary/adapter code (§0 relationship recommendation). |
 | Gateway protocol, shared DB, hub/site auth, UI | No protocol/schema/UI change. | Per the Cross-Project Impact Zones table, no fan-out to `@minion-stack/shared`, hub, site, paperclip, or gateway is required. |
 
@@ -1129,8 +1198,8 @@ push or merge, and rejects a pair injected through the environment.
    duplicated value. For every purpose, confirm its provider-backed activation audit (§2 invariant 1a) ran against
    the current token's fingerprint — the complete paginated provider-visible repository grant exactly matches the
    allowlist, permission/ruleset evidence is captured, disposable canaries establish the safe action probes, no
-   production PR was used, and every token in the `github-branch`, `github-workspace-prepare`, and `github-merge`
-   maps is proven provider-scoped to exactly its one canonical repository. Confirm each token's all-ref scope and
+   production PR was used, and every token in the `github-branch`, `github-workspace-prepare`,
+   `github-project-labels`, `github-husk-pr`, and `github-merge` maps is proven provider-scoped to exactly its one canonical repository. Confirm each applicable token's all-ref scope and
    effective push+merge authority are reported unless captured ruleset evidence removes a specific action — and
    that a purpose whose audit has not run, or whose token has rotated since, is reported not-yet-active.
 2. Queue one spec run, one reconcile run, one discovery run, and one chat turn with `FACTORY_GH_TOKEN` unset in the
@@ -1143,20 +1212,27 @@ push or merge, and rejects a pair injected through the environment.
    trailer rather than duplicating it. Publish one deletion and one rename candidate; verify deletion serialization
    never reads a nonexistent child blob, the runner-private checkout removes the old regular allowlisted path, and
    the rename lands as delete-old + upsert-new with regenerated indexes.
-3. With `FACTORY_GH_TOKEN` still unset, run one `dev` run under `FACTORY_CONTAINMENT_V2=1` through branch creation,
+3. With `FACTORY_GH_TOKEN` and both singular target-write variables unset, run one `dev` run under
+   `FACTORY_CONTAINMENT_V2=1` through branch creation,
    draft PR, a fix round, and a salvage exit; verify every publication landed through the trusted adapter and no
-   worker plan carried a write credential. Then dispatch a `dev` run with `FACTORY_CONTAINMENT_V2=0` and verify it
+   worker plan carried a write credential. Verify lineage staging, queue preflight, PR readiness, the normal
+   `project_labels` outbox, and husk comment/close all select their canonical-repository map entry, while
+   disposition and G0-sweep writes use `github-meta`. Then dispatch a `dev` run with
+   `FACTORY_CONTAINMENT_V2=0` and verify it
    is refused at admission with an error naming the missing prerequisite — no container started, no credential
    forwarded, no partial branch left behind.
-4. Execute one authenticated lifecycle transition without `by`; verify the meta commit/event actor equals the
-   credential-registry label. Repeat with `by` set (both `status` and `disposition` shapes); verify 400 with no
-   GitHub write, for admin and non-admin bearers.
+4. During Slice 3, execute authenticated `status` and `disposition` transitions with and without `by`; verify all
+   succeed and the meta commit/event actor always equals the credential-registry label. After Slice 5 deploys,
+   prove old-base/new-runner and new-base/old-runner requests both succeed. Only then activate Slice 6 and repeat
+   with `by` set; verify 400 with no GitHub write for admin and non-admin bearers.
 5. Exercise the lifecycle contract directly against the factory: the lifecycle bearer on a non-lifecycle route
    (403), a request omitting `expectedStatus`, `expectedRevision`, or both (400, no read/write), a mismatching
    `expectedRevision`/`expectedStatus` with both present (409 with the current status/revision), a repeat of an
    response-lost retry using the same `requestId` and original CAS (the original canonical response, no second
    write), a key-reuse request with changed input (409), a distinct already-applied transition (no commit), an edge outside the table (refused), and a success (canonical
    `{outcome, commit, revision, indexSynced, spec}` with exactly one queued run on approval).
+   Run the crash matrix through both `transition()` and the live `applyDisposition` writer, on both a migrated and
+   fresh database; verify recovery indexes find pending rows and retention never prunes pending/unexpired rows.
 6. Exercise the two dashboard principals the same way: the `dashboard-read` bearer reaches its GET routes
    (including `GET /runs/:id/log` and `GET /providers`) and 403s on every mutation (including `PUT /providers`) and on `/lifecycle/*`; the
    `dashboard-run` bearer reaches `pipeline/spec`, `runs`, `pipeline/reconcile`, `chat`, and `PUT /providers`
@@ -1287,6 +1363,15 @@ every mutation crash window; its key binds the complete audit-bearing request. T
 now carries the exact human-reviewed status/blob revision through `SpecWarning` and proves stale-page rejection.
 The `phase_effects` receipt migration now updates both ALTER and canonical CREATE paths and is tested from a fresh
 empty database. These are planning-contract changes only; no product code is introduced.
+
+**Pass 10** answers the subsequent exact-head review of pass 9 (two High and three Medium findings). The
+singular→map cutover now includes every live containment, lineage, queue, readiness, and canary consumer and proves
+the existing dev flow in a map-only environment before atomic removal. The purpose inventory is call-site-based:
+mixed modules keep reads on `github-checkout`, while labels, husk PRs, and disposition/sweep meta PUTs have explicit
+write purposes and broad-token-absent fixtures. Actor rollout now tolerates-but-ignores legacy `by`, removes it
+from minion-base, proves both mixed-version pairs, and only then hard-rejects it. The real disposition writer joins
+the lifecycle replay state machine, backed by an explicitly authorised `lifecycle_requests` journal with fresh and
+upgraded schemas, recovery indexes, and retention rules. These remain planning-contract changes only.
 
 **Disposition: `status: review`, `verdict: pending`.**
 

@@ -1,13 +1,13 @@
 ---
 spec: 2026-08-18-factory-capability-separation-spec
-pass: 9
+pass: 10
 verdict: pending
 reviewer: factory-review-fix
 created: 2026-08-18
 updated: 2026-08-30
 ---
 
-# Review sidecar — passes 4-9 (answers PR #271's six `VERDICT: FAIL` reviews)
+# Review sidecar — passes 4-10 (answers PR #271's seven `VERDICT: FAIL` reviews)
 
 ## Pass 4 review (executability fix — historical; superseded by pass 5 below)
 
@@ -213,6 +213,24 @@ their contracts and proof obligations:
 
 `status: review`, `verdict: pending`, `pass: 9`. The four executability blockers are closed in the plan. Security
 approval and merge remain human gates, including the unchanged PAT-deviation decision in flag 0.
+
+## Pass 10 review (atomic token cutover + call-site purposes + compatible lifecycle rollout)
+
+Review-fix run `6a0462ee`, round 1 identified two High and three Medium blockers. All five were re-verified against
+the cited live consumers before the planning contract changed:
+
+| Finding | Resolution |
+|---|---|
+| **H1 — map cutover omits singular-token consumers** | Slice 1 now includes containment effects, lineage phase transport, queue launch/preflight/readiness, and the canary behind one canonical repository-map resolver. `T-MAP-ONLY-CONTAINMENT-FLOW` proves the existing containment-v2 push/PR/readiness path with both singular variables absent before their atomic removal. |
+| **H2 — mixed modules classified as checkout-only** | The inventory is call-site-granular. Reads remain `github-checkout`; normal project-label outbox writes use `github-project-labels`; husk comment/close uses `github-husk-pr`; disposition and sweep meta PUTs use `github-meta`; readiness retains bound branch/workspace-prepare purposes. Broad-token-absent fixtures cover each mutation. |
+| **M1 — `by` rejection precedes caller removal** | Slice 3 derives the actor but tolerates/ignores legacy `by`; Slice 5 removes it from minion-base and proves both mixed-version pairs; Slice 6 hard-rejects only after Slice 5 deployment evidence. |
+| **M2 — disposition writer omitted from replay slice** | Slice 4 now includes `possibly-shipped.ts` and routes the real `applyDisposition` path through the shared lifecycle request state machine. Crash and stale-CAS fixtures execute that writer, not only `transition()` or a route mock. |
+| **M3 — durable request state contradicts schema rule** | The spec explicitly authorises one dedicated non-run-bound `lifecycle_requests` journal, with canonical CREATE and upgrade paths, immutable input hash, recovery and retention indexes, bounded pruning, and fresh/upgraded fixtures. It stores replay state, never run authority. |
+
+### Disposition after pass 10
+
+`status: review`, `verdict: pending`, `pass: 10`. These blockers are closed in the plan. Security approval and merge
+remain human gates, including the unchanged PAT-deviation decision in flag 0.
 
 ## Human flags
 
