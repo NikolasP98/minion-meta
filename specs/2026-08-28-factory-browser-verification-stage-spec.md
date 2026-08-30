@@ -3,7 +3,7 @@ id: 2026-08-28-factory-browser-verification-stage-spec
 title: Credential-free, loopback-isolated browser-verification stage for UI-topic factory runs
 stage: spec
 status: review
-pass: 8
+pass: 9
 created: 2026-08-28
 updated: 2026-08-30
 proposal: 2026-08-18-factory-browser-verification-stage
@@ -62,7 +62,8 @@ available and the production activation as an explicit S9 gate. §5 Design decis
 `runner/src/browser-verify.ts` (+ `.test.ts`, `.e2e.test.ts`, `.recovery.e2e.test.ts`),
 edits to `runner/src/topics.ts` (+ tests),
 `runner/src/containers.ts` (+ tests), `runner/src/repos.ts` (+ tests), `runner/src/manifest.ts`
-(+ tests), `runner/src/queue.ts` (+ tests), `runner/src/phase-executor.ts` (+ tests),
+(+ tests), `runner/src/queue.ts` (+ tests), `runner/src/phase-requests.ts` (+ tests),
+`runner/src/phase-executor.ts` (+ tests),
 `runner/src/lineage-phase-transports.ts` (+ tests), `runner/src/automerge.ts` (+ tests),
 `repos.example.json`, `runner/Dockerfile` (bakes the seccomp profile the Docker client must read),
 `docker-compose.yml`, `.env.example`, `deploy.sh`,
@@ -122,12 +123,19 @@ excerpts quoted below if a concurrent factory PR lands first.
    would therefore be a fleet-wide kill switch, not an additive change — the conditional phase must
    be elected by `nextPhase()` without joining that static array (§5 Design decision 9).
 4c. The typed lineage executor is a second, closed phase transport independent of the automatic
-   `nextPhase()` pump: `runner/src/phase-executor.ts` closes the request schema and worker-role policy,
-   `runner/src/lineage-phase-transports.ts` closes the adapter vocabulary, and `runner/src/queue.ts`
-   closes `LineageWorkerPhase`/`LINEAGE_PHASE_MAP`. Its `prepare-review` prerequisite currently checks
-   only for passed `self-test`, so changing the pump alone would let a manifest-required browser check
-   be bypassed by a direct typed `prepare-review` request. The new phase and prerequisite must be
-   enforced at both routing seams.
+   `nextPhase()` pump. Its first state-changing seam is `runner/src/phase-requests.ts`, not the phase
+   executor: `PHASE_REQUEST_PHASES` closes `PhaseRequestPhase`; the exhaustive `PHASE_POLICY`,
+   `PHASE_CURRENT_PHASES`, and `PHASE_STAGE` records bind each request's authority and stage;
+   `submitPhaseRequest()` calls `assertPhaseAdmission()` before enqueue; and
+   `advanceInstanceForAcceptedPhaseRequests()` calls the same guard and then writes
+   `current_phase='review'` before any transport or queue executor runs. At the live factory head
+   `a66ff146670603fde4a474f6002e080723b4e38d`, that guard requires only passed `self-test` for a
+   `test -> review` `prepare-review` transition. Downstream, `runner/src/phase-executor.ts` closes the
+   worker-role policy, `runner/src/lineage-phase-transports.ts` closes the adapter vocabulary, and
+   `runner/src/queue.ts` closes `LineageWorkerPhase`/`LINEAGE_PHASE_MAP`. A queue- or executor-only
+   prerequisite is too late: it can reject execution only after the pipeline has already left `test`.
+   The new request vocabulary and prerequisite must therefore be enforced at admission first and then
+   carried through every downstream routing seam.
 5. `canonicalMountSource()` (`containers.ts`, the `workspace` case) special-cases only `self-test`
    for a disposable per-attempt copy (`${root}/selftest-${attempt}`); every other phase shares the
    one `${root}/workspace` develop owns.
@@ -609,11 +617,21 @@ a security boundary" as applying identically to page-rendered text reaching a do
    global readiness byte-identical to pre-slice behavior, and must make any run whose manifest
    requires `browser-verify` fail closed with a distinct "browser-verify not yet implemented"
    readiness reason rather than hanging the pump or reporting a false pass.
-   The independent typed lineage path must express the same transition: `browser-verify` joins the
-   closed request/role/transport/queue vocabularies, and a `prepare-review` request re-reads the
-   persisted manifest and requires a current passed browser attempt bound to the same candidate,
-   profile, image, and dependency artifact whenever that manifest requires browser evidence. A
-   non-UI lineage remains byte-compatible and may still proceed directly from passed `self-test`.
+   The independent typed lineage path must express the same transition, beginning at its earliest
+   state-changing boundary in `phase-requests.ts`. Add `browser-verify` to
+   `PHASE_REQUEST_PHASES`; add the exact `PHASE_POLICY` entry
+   `{access: 'read', executorRole: 'worker', permissions: ['test-run'], requiresCandidate: true}`;
+   allow it only from `['test']` in `PHASE_CURRENT_PHASES`; and map it to the existing `'test'` stage
+   in `PHASE_STAGE`, so accepting the request cannot advance the pipeline. `assertPhaseAdmission()`
+   must re-read the current persisted manifest rather than trust dispatch-time manifest data. For a
+   `prepare-review` request from `test`, it first keeps the passed-`self-test` requirement, then, when
+   that current manifest requires browser evidence, also requires the current candidate/profile/image/
+   dependency-bound browser attempt **and its controller handoff** to have passed. This same guard is
+   used by both `submitPhaseRequest()` and `advanceInstanceForAcceptedPhaseRequests()`, so a rejected
+   request leaves `current_phase='test'` and `status='testing'` and creates no review-stage event or
+   barrier transition. The phase then joins the closed executor-role, transport, and queue
+   vocabularies; its worker execution remains deterministic and receives no model/provider credential.
+   A non-UI lineage remains byte-compatible and may still proceed directly from passed `self-test`.
 10. **Treat Chromium's renderer sandbox as a required boundary, not a container-level detail.** The
     container split (decision 2) removes candidate *process* authority over `/out` and the profile,
     but the browser container still executes candidate-authored HTML/CSS/JavaScript. Inside that
@@ -720,7 +738,8 @@ URL/host/port/path rejection.
 **Topics:** infra, logic, test
 
 **Files:** `runner/src/containers.ts`, `runner/src/containers.test.ts`, `runner/src/queue.ts`,
-`runner/src/queue.test.ts`, `runner/src/phase-executor.ts`, its tests,
+`runner/src/queue.test.ts`, `runner/src/phase-requests.ts`, `runner/src/phase-requests.test.ts`,
+`runner/src/phase-executor.ts`, its tests,
 `runner/src/lineage-phase-transports.ts`, its tests.
 
 Add the `browser-verify` worker phase as a two-container launch plan (§5 Design decision 2): a
@@ -785,12 +804,15 @@ non-browser run's sequence/readiness is byte-identical to pre-slice behavior, wh
 manifest requires `browser-verify` fails closed with the "browser-verify not yet implemented" reason
 instead of hanging or false-passing.
 
-Extend the typed lineage request/executor path at the same time: add `browser-verify` to the closed
-`PhaseRequestPhase` schema, role policy, lineage transport vocabulary, `LineageWorkerPhase`, and
-`LINEAGE_PHASE_MAP`. The executor accepts this deterministic phase without granting a model or
-provider credential. A required run may not execute `prepare-review` until its current persisted
-manifest has been re-read and the latest candidate/profile/image/dependency-bound browser attempt has
-passed; a non-required run keeps the existing passed-`self-test` prerequisite byte-compatible.
+Extend the typed lineage request/executor path at the same time. In `phase-requests.ts`, make the
+exact `PHASE_REQUEST_PHASES`, `PHASE_POLICY`, `PHASE_CURRENT_PHASES`, and `PHASE_STAGE` additions from
+Design decision 9. `assertPhaseAdmission()` re-reads the persisted manifest at each invocation and
+enforces the current bound browser attempt plus controller handoff before it admits `prepare-review`;
+both `submitPhaseRequest()` and `advanceInstanceForAcceptedPhaseRequests()` must use that result before
+any `test -> review` mutation. Then add `browser-verify` to the closed executor role policy, lineage
+transport vocabulary, `LineageWorkerPhase`, and `LINEAGE_PHASE_MAP`. The executor accepts this
+deterministic phase without granting a model or provider credential. A non-required run keeps the
+existing passed-`self-test` prerequisite byte-compatible.
 
 Additionally: **T-SECURITY-OPT-POLICY** — the browser role renders
 `--security-opt no-new-privileges --security-opt seccomp=<pinned path>` with `--cap-drop ALL` intact,
@@ -815,11 +837,17 @@ scheduling this phase refuses with the named infrastructure reason before any ne
 created; with a double reporting a supporting engine, the network-create call includes
 `gateway_mode_ipv4=isolated` and `--ipv6=false`; every other phase's scheduling is unaffected by the
 preflight.
-**T-TYPED-LINEAGE-BROWSER-ORDER** — drive the real typed request schema, transport adapter, queue map,
-and executor: a UI-effective run with passed self-test rejects `prepare-review` before browser
-evidence, accepts and executes `browser-verify`, then accepts `prepare-review` only after a current
-fully bound pass. A non-UI control still accepts `prepare-review` directly after self-test. Removing
-the phase from any one closed vocabulary or removing the prerequisite must fail this test.
+**T-TYPED-LINEAGE-BROWSER-ORDER** — drive the real typed path from admission to execution. Through
+`submitPhaseRequest()`, a UI-effective instance in `test` with passed self-test rejects
+`prepare-review` before browser evidence. Through `advanceInstanceForAcceptedPhaseRequests()`, the
+same premature queued request is rejected and an independent read proves `current_phase='test'`,
+`status='testing'`, and no review transition event/barrier mutation. The test then submits and accepts
+`browser-verify` without leaving `test`, claims it, carries it through the real transport adapter and
+queue map, executes it, records the fully candidate/profile/image/dependency-bound attempt and passed
+controller handoff, and only then submits/advances `prepare-review`. A non-UI control still accepts
+`prepare-review` directly after self-test. Removing the phase from any closed admission, role,
+transport, queue, or executor vocabulary, or moving the prerequisite downstream of admission, must
+fail this test.
 
 ### Slice 3 — pinned image supply chain (minion-factory, 4–6h)
 
@@ -868,7 +896,8 @@ is automated here; the final entrypoint/content and deployment digest assertions
 **Files:** `agent/factory-browser-verify-preview.sh`, `agent/factory-browser-verify.sh`,
 `agent/lib/browser-verify-flows.mjs`, fixture profile and preview app, shell/Node tests,
 `agent/Dockerfile.browser-verify`, `scripts/verify-image-pins.sh`, image-provenance/publication tests,
-`docker-compose.yml`, `.env.example`, and `deploy.sh`.
+`runner/src/browser-verify.ts`, focused controller materialization/dependency tests in
+`runner/src/browser-verify.test.ts`, `docker-compose.yml`, `.env.example`, and `deploy.sh`.
 
 **Controller-side materialization runs first** (§5 Design decision 12, invariant 10) and is *not* an
 entrypoint responsibility: in `runner/src/browser-verify.ts`, before the network or either container
@@ -933,7 +962,8 @@ non-root entrypoint, and completes the smoke flow. `T-DIGEST-DEPLOY` rejects a t
 digest, and any final digest whose entrypoint hashes differ; it accepts only this S4 publication.
 
 **DoD:** `bash -n agent/factory-browser-verify-preview.sh && bash -n agent/factory-browser-verify.sh`
-plus fixture tests prove profile actions and assertions execute, timeout/flow/axe failures are named,
+plus `cd runner && npm test -- --test-name-pattern='browser.?verify|clean materialization|dependency artifact'`
+and focused fixture tests prove profile actions and assertions execute, timeout/flow/axe failures are named,
 both containers' process groups are gone after success and failure, the preview→browser connection
 succeeds under `--network browser-internal`, non-`preview` `fetch`, WebSocket, EventSource and image
 requests issued from the browser container fail and appear in `network.jsonl`, and the complete fixed
@@ -982,6 +1012,9 @@ T-CLEAN-MATERIALIZATION-E2E, T-NO-MIRROR-REACHABILITY).
 **Topics:** data, infra, test
 
 **Files:** `runner/src/browser-verify.ts`, `runner/src/browser-verify.test.ts`, `runner/src/queue.ts`.
+This slice extends the controller module landed in Slice 4 only with profile snapshot and evidence
+validation/ingestion; clean materialization and dependency production remain Slice 4 behavior and
+must already pass its focused tests.
 
 Create a root-owned per-run profile input leaf without following links; copy the validated profile
 once when evidence first becomes required and compute the hash in invariant 8. Validate fixed names
@@ -1003,7 +1036,8 @@ with the offending path; retry uses the identical snapshot/hash after the source
 **Topics:** infra, security, test
 
 **Files:** `runner/src/manifest.ts`, its tests, `runner/src/queue.ts`, `runner/src/queue.test.ts`,
-`runner/src/phase-executor.ts`, its tests, `runner/src/lineage-phase-transports.ts`, its tests,
+`runner/src/phase-requests.ts`, `runner/src/phase-requests.test.ts`, `runner/src/phase-executor.ts`,
+its tests, `runner/src/lineage-phase-transports.ts`, its tests,
 `runner/src/automerge.ts`, `runner/src/automerge.test.ts`.
 
 At initial queue time, `enforceQueueRequirements()` rejects required browser evidence unless the
@@ -1019,7 +1053,9 @@ verdict.
 evidence, stale candidate/profile/image, and absent/failed attempts each have named fail-closed tests.
 The typed-lineage E2E from Slice 2 is extended here to mutate the persisted manifest after self-test:
 late-added browser evidence blocks a direct `prepare-review` request until the newly required,
-fully-bound browser attempt passes.
+fully-bound browser attempt and controller handoff pass. Exercise both `submitPhaseRequest()` and
+`advanceInstanceForAcceptedPhaseRequests()` and prove the rejected transition leaves the persisted
+instance in `test` before continuing through claim, transport, queue map, and executor.
 
 ### Slice 7 — minion-hub pilot and adversarial E2E (minion-factory, 6–8h)
 
@@ -1318,3 +1354,16 @@ the security-tagged spec remains pending independent approval and human merge.
 
 **Not changed, and why:** the accepted private-CDP, image-ordering, dependency binding, sandbox,
 network, and durable-resource fixes are unchanged. No package release surface or changeset is involved.
+
+**Pass 9 disposition: still-review (`status: review`, `verdict: pending`).** Pass 8 was independently
+reviewed with `VERDICT: FAIL` on PR #286 (2026-08-30). Both findings were re-verified against the live
+factory head `a66ff146670603fde4a474f6002e080723b4e38d` before editing. This pass does not self-approve;
+the security-tagged spec still requires independent approval and human merge gates.
+
+| Pass-8 finding | Re-verification | Resolution in pass 9 |
+|---|---|---|
+| **H1** Browser ordering is enforced after the typed pipeline has already advanced | Confirmed. `phase-requests.ts` owns the closed request vocabulary and `assertPhaseAdmission()`; both `submitPhaseRequest()` and `advanceInstanceForAcceptedPhaseRequests()` call it, and the latter writes the review stage before transport/queue execution. Its `prepare-review` branch requires only passed self-test | Owner surface and AS-IS 4c now name the admission owner and exact symbols. Design decision 9 and S2/S6 define the browser request's exact policy/stage records, require a current manifest read plus bound browser attempt/controller handoff in `assertPhaseAdmission()`, and extend T-TYPED-LINEAGE-BROWSER-ORDER through submit/advance with persisted `test`-state proof before claim, transport, queue, and execution |
+| **M1** Slice 4 cannot produce its assigned controller worker within its file scope | Confirmed. S4 assigns materialization and dependency production to `runner/src/browser-verify.ts`, while the file first appeared in S5's scope | S4 now owns `runner/src/browser-verify.ts`, its focused materialization/dependency tests, and the corresponding focused test command. S5 explicitly extends that landed module only with profile snapshot and evidence ingestion |
+
+**Not changed, and why:** no out-of-scope follow-up was identified. Existing network, sandbox,
+resource-lifecycle, evidence-retention, image-ordering, and activation contracts remain unchanged.
