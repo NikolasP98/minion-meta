@@ -42,12 +42,13 @@
 // validated but never copied into specs/index.json is invisible to the board
 // even though its frontmatter is correct.
 //
-// Both baseline files are meant as one-way ratchets: a PR may only shrink them
-// (delete an id, or in practice fix a spec's headings so it no longer needs
-// the exemption), never grow them or rewrite an existing hash. --check
-// enforces this against the comparison corpus, even when the baseline files did
-// not exist there. PRs use their merge base; pushes use the event's before SHA;
-// local runs use every parent of HEAD (both sides of a merge commit).
+// Both baseline files are meant as one-way ratchets: once this gate exists in a
+// comparison corpus, a PR may only shrink them (delete an id, or in practice
+// fix a spec's headings so it no longer needs the exemption), never grow them
+// or rewrite an existing hash. The first deployment of this gate may establish
+// its reviewed baseline; there is no earlier ratchet to compare at that point.
+// PRs use their merge base; pushes use the event's before SHA; local runs use
+// every parent of HEAD (both sides of a merge commit).
 //
 // Run from repo root: node scripts/spec-index.mjs [--check]
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -768,9 +769,18 @@ function main() {
 				`cannot resolve comparison revision to check the baseline ratchets (needs fetch-depth: 0)`
 			);
 		} else if (comparisonRevs !== null) {
-			const eligible = baselineEligibilityFromRevs(comparisonRevs);
-			errors.push(...checkHeadingBaselineRatchet(eligible.headings, headingBaseline));
-			errors.push(...checkSupersedeBaselineRatchet(eligible.supersedes, [...supersedeBaseline]));
+			// The initial gate deployment necessarily creates its reviewed baseline
+			// alongside the checker. Ratcheting begins as soon as any comparison
+			// corpus contains this executable gate; after that, a missing baseline
+			// file still means an empty baseline and additions remain forbidden.
+			const gatedRevs = comparisonRevs.filter(
+				(rev) => readFileAtRev(rev, 'scripts/spec-index.mjs') !== null
+			);
+			if (gatedRevs.length > 0) {
+				const eligible = baselineEligibilityFromRevs(gatedRevs);
+				errors.push(...checkHeadingBaselineRatchet(eligible.headings, headingBaseline));
+				errors.push(...checkSupersedeBaselineRatchet(eligible.supersedes, [...supersedeBaseline]));
+			}
 		}
 	}
 

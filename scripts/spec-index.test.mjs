@@ -381,6 +381,42 @@ function makeCliFixture() {
 	return root;
 }
 
+function makePreGateCliFixture() {
+	const root = mkdtempSync(join(tmpdir(), 'spec-index-pre-gate-cli-'));
+	mkdirSync(join(root, 'scripts'));
+	mkdirSync(join(root, 'specs'));
+	writeFixtureTopics(root);
+	const body = '# Fixture\n';
+	writeFileSync(join(root, 'specs', 'fixture.md'), body);
+	execFileSync('git', ['init', '-q'], { cwd: root });
+	execFileSync('git', ['add', '.'], { cwd: root });
+	execFileSync('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-qm', 'pre-gate base'], { cwd: root });
+	const spec = `---\nid: fixture\ntitle: Fixture\nstage: spec\nstatus: superseded\npass: 1\ncreated: 2026-08-18\nupdated: 2026-08-18\nrepos: [minion-meta]\n---\n\n${body}`;
+	writeFileSync(join(root, 'specs', 'fixture.md'), spec);
+	for (const name of ['spec-index.mjs', 'spec-frontmatter.mjs', 'topics.mjs'])
+		cpSync(new URL(name, import.meta.url), join(root, 'scripts', name));
+	writeFileSync(
+		join(root, 'scripts', 'spec-heading-lint-baseline.json'),
+		`${JSON.stringify({ fixture: createHash('sha256').update(parseFrontmatter(spec).body).digest('hex') })}\n`
+	);
+	writeFileSync(join(root, 'scripts', 'spec-supersede-baseline.json'), '["fixture"]\n');
+	execFileSync('node', ['scripts/spec-index.mjs'], { cwd: root });
+	execFileSync('git', ['add', '.'], { cwd: root });
+	execFileSync('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', 'commit', '-qm', 'introduce gate'], { cwd: root });
+	return root;
+}
+
+test('M1 integration: the first gate deployment may establish its reviewed debt baseline', () => {
+	const root = makePreGateCliFixture();
+	const result = spawnSync('node', ['scripts/spec-index.mjs', '--check'], {
+		cwd: root,
+		encoding: 'utf8',
+		env: { PATH: process.env.PATH }
+	});
+	assert.equal(result.status, 0, result.stderr);
+	assert.match(result.stdout, /spec-index --check passed: 1 specs/);
+});
+
 test('M1 integration: bootstrap baseline is checked against the base corpus when its file was absent', () => {
 	const root = makeCliFixture();
 	writeFileSync(join(root, 'scripts', 'spec-heading-lint-baseline.json'), '{}\n');
