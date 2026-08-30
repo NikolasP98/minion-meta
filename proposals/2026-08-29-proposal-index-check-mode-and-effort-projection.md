@@ -3,7 +3,7 @@ id: 2026-08-29-proposal-index-check-mode-and-effort-projection
 title: proposal-index.mjs — add a read-only --check mode and reconcile projection with the auto-triage index writer
 status: review
 created: 2026-08-29
-updated: 2026-08-29
+updated: 2026-08-30
 repos: [minion-meta]
 tags: [infra, test]
 source: review-fix-6f292604

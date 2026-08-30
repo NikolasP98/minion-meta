@@ -733,10 +733,12 @@ conflicts with a batch except on `specs/index.json` and `proposals/index.json` �
   needed.
 - **minion-factory (spec generator) — unavoidable, ALERT, and owned by an active proposal.** Two of
   the new rules add ways for a *factory-generated* spec to red meta CI: an invented `related` id
-  (S2) and a `pass: 2` spec whose review sidecar was not committed — **or was committed once and
-  then left behind by later in-place pass bumps**, which §2.6b measures as the more common of the
-  two failure modes (S3). Both are correct failures — the alternative is unverifiable links on the
-  board — but the generator must be told about them. **Owner:**
+  (S2) and a `pass: 2` spec whose review sidecar was not committed (S3). Missing sidecars are the
+  only current corpus violation measured in §2.6b: two are missing, while none of the 70 present
+  sidecars has a pass/verdict freshness mismatch. A sidecar left behind by a later in-place pass
+  bump remains a contractually possible failure that B2 and the producer proposal must prevent; it
+  is not ranked as a current observed failure. Both are correct failures — the alternative is
+  unverifiable links on the board — but the generator must be told about them. **Owner:**
   `proposals/2026-08-29-factory-generator-related-ids-and-review-sidecars.md`, filed by this
   spec's authoring run, `repos: [minion-factory]`, active. It could **not** be appended to
   `2026-08-20-factory-spec-heading-nomenclature`: that proposal is `status: done` (its 2026-08-28

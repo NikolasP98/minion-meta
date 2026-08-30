@@ -3,7 +3,7 @@ id: 2026-08-29-factory-generator-related-ids-and-review-sidecars
 title: "Teach the minion-factory spec generator the two new meta gate rules: `related` ids must resolve, and an in-place `pass` bump must refresh the review sidecar"
 status: draft
 created: 2026-08-29
-updated: 2026-08-29
+updated: 2026-08-30
 repos: [minion-factory]
 tags: [infra, hygiene, test]
 value: 3
