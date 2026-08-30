@@ -3,7 +3,7 @@ id: 2026-08-22-hub-load-nav-performance-spec
 title: Hub load & nav performance — prod config gap, layout decoupling, bundle diet, RUM monitoring
 stage: spec
 status: review
-pass: 7
+pass: 8
 next_slice: 5
 created: 2026-08-22
 updated: 2026-08-30
@@ -46,7 +46,7 @@ Relationship to existing board items (folded, not duplicated):
 - `2026-08-22-crm-rank-query-prod-latency` (proposal, draft) owns the CRM rank-query cost
   that Slice 5 of the pagination spec uncovered — deliberately NOT a slice here; see §0.1.
 
-## 0.1 Disposition (pass 7, 2026-08-30) — NOT approved; human approval gate required
+## 0.1 Disposition (pass 8, 2026-08-30) — NOT approved; human approval gate required
 
 **Verdict: revision-required — awaiting a human.** The program is real, already
 half-delivered, and the unshipped half is still the correct next work, but this spec may
@@ -167,6 +167,14 @@ packaging wall time, peak memory, output count and shared-function size. Once co
 is clean, do not repeat an unchanged local packaging attempt merely to reproduce the same
 resource ceiling; use the hosted exact-head build as release evidence and investigate the
 packaging metrics as their own performance result.
+
+**Pass 8** closes the two remaining exact-head review findings. Path T now resolves trusted
+event ownership before either process-global rate limiter and partitions both limiter keys,
+with cross-org and same-org real-producer proofs. Slice 7b no longer claims a presented JWT
+falls back to admin when no issuer accepts it: the server-side caller is independent of the
+browser-only public flag, requires a matching serving-gateway issuer, and fails closed with
+503 without retrying as shared-token admin. The DoD now proves a completed authenticated
+handshake yields the expected validated `orgId`, rather than checking only the connect schema.
 
 Slice ledger — verified 2026-08-29 against hub master `1b47e8ce` and the canonical gateway
 `NikolasP98/minion-ai` `DEV` `293a1aad1bd5609e94247067332a6a41eae7f6be` (**not**
@@ -556,11 +564,14 @@ identity rail exists end to end, which is the opposite of what pass 5 recorded:
 **What is still missing, and it is exactly the data this slice wants to serve.**
 Reliability is the one surface the org rail never reached:
 
-4. **No org attribution on the events.** `emitReliabilityEvent` (`src/logging/reliability.ts`)
-   rate-limits per event type, forwards to the unified event store (`emitEvent`), and also
-   broadcasts. Neither `src/events/store.ts` nor `src/events/types.ts` has any org column —
-   `grep -rn "orgId" src/events/` is empty — so nothing recorded there can be filtered by
-   tenant afterwards.
+4. **No org attribution before either suppression boundary.** `emitReliabilityEvent`
+   (`src/logging/reliability.ts:14-27,61-64`) rate-limits in one process-global map keyed
+   only by event type and returns before calling `emitEvent`. The unified emitter has a
+   second process-global limiter (`src/events/emitter.ts:34-58,120-129`) keyed only by
+   `category:event`, and it returns before storage too. Org A can therefore consume org B's
+   slot before attribution, persistence, broadcast or durable sync. Neither
+   `src/events/store.ts` nor `src/events/types.ts` has any org column — `grep -rn "orgId"
+   src/events/` is empty — so surviving records cannot be filtered by tenant afterwards.
 5. **The read handlers never look at the caller.** `src/gateway/server-methods/reliability.ts`
    answers `reliability.events` / `reliability.summary` from `getEventStore()` filtered by
    category, severity, event mode, time window and paging only; `client.orgId` is not read,
@@ -632,8 +643,11 @@ If the product decides tenants must see their own reliability data, the work is:
 column on the event store; a named trusted attribution source **per producer class** from
 item 7 (connection identity where the event is connection-scoped, the agent's/account's
 existing `orgIds` tag where it is agent- or channel-scoped, and an explicit `global` class
-for startup/cron/system events that no tenant owns, served only to a system-admin
-surface); equivalent filtering across `reliability.*` and every
+for startup/cron/system events that no tenant owns, served only to a system-admin surface),
+resolved before either process-global rate limiter. Tenant limiter keys include the
+canonical trusted org scope plus category/event; global/admin events use a distinct
+namespace, and multi-org resources have one deterministic canonical key. Apply equivalent
+filtering across `reliability.*` and every
 `events.list/get/summary/timeline` alias (cross-org `events.get` is indistinguishable from
 not found); an org-scoped or admin-only `events.stream`; guards for both `reliability` and
 `events.new`; and originating-org preservation through Turso sync, hub `unified_events`,
@@ -646,7 +660,10 @@ Redis/Valkey caches; admin/global results use a distinct namespace. Same-gateway
 tests exercise every query alias, both live event names, and producer → sync → Insights
 aggregate isolation. For every cached alias, org A primes identical parameters and org B
 requests within the TTL without clearing or mocking the cache; B receives only B's
-aggregate. Note the fail-open default of
+aggregate. In one gateway instance, a real org-A producer and org-B producer also emit the
+same event inside both limiter windows without clearing either map: both records survive
+and reach only their audiences, while a same-org duplicate remains suppressed. Note the
+fail-open default of
 `orgScopeVisible`: an admin/shared-token connection sees everything, so 7b's server-side
 calls must present the org JWT or they will read as admin regardless.
 
@@ -674,10 +691,13 @@ calls must present the org JWT or they will read as admin regardless.
    (`src/server/services/gateway-jwt.service.ts`, as `/api/gateway/jwt` does for the
    browser) and pass it as `opts.jwt`, so the connection carries a validated `orgId`
    instead of authenticating as a shared-token admin (`ws-jwt-auth.ts` Case 2). Verify
-   acceptance against the **serving** gateway SHA, not against a fork or a README: if
-   `PUBLIC_GATEWAY_JWT_AUTH` is off, or that deployment has no `oidcIssuers` configured,
-   the JWT is ignored and the call is admin-scoped — record which state prod is in, in the
-   PR, and treat the admin case as the reason clause 6's scope label is not optional.
+   acceptance against the **serving** gateway SHA, not against a fork or a README. This
+   server-side caller does not consult the browser-only `PUBLIC_GATEWAY_JWT_AUTH` flag. The
+   serving gateway must have a matching `oidcIssuers` entry: a presented JWT that no issuer
+   accepts is rejected (`jwt_validation_failed`), never ignored in favor of Case 2 admin.
+   JWT issuance or validation unavailability therefore returns 503 and must not retry
+   without the JWT or with shared-token admin credentials. Record the serving issuer state
+   in the PR.
 5. **Fail closed, and distinguish the two failures.** 404 = this org has no gateway for
    this channel; 503 = the registry/lease lookup failed. Never substitute another gateway,
    and never degrade to an empty 200 that the page renders as "all healthy".
@@ -696,8 +716,10 @@ distinct gateways, an org-A session's endpoints resolve org A's gateway credenti
 never the system/env pair — this proves *selection*, which under path G is the only org
 claim 7b makes about *which box*; (d) **audience**: a session lacking the ratified
 capability gets the route guard's denial, and the test names the capability actually
-shipped; (e) **claim carried**: the connect params sent by the endpoints include the hub
-JWT and validate against the serving gateway's `ConnectParamsSchema` at its pinned SHA;
+shipped; (e) **claim authenticated**: against the pinned serving-gateway configuration,
+the endpoints' hub JWT completes a real connect/auth handshake and the resulting connection
+carries the expected validated `orgId`; missing/mismatched issuer configuration yields 503
+and makes no JWT-less admin retry (schema acceptance alone is insufficient proof);
 (f) the response carries the gateway-wide scope marker of clause 6.
 
 **Human gates (required, `security`):** a human approves S7's path choice and design before

@@ -57,9 +57,13 @@ and hub `master` `1b47e8ced0751eeb301c9a24d16082f36fe48f78` — both heads on 20
 **The gap:**
 
 4. **No org attribution on reliability events.** `emitReliabilityEvent`
-   (`src/logging/reliability.ts`) rate-limits per event type and forwards to the unified
-   event store (`emitEvent`). Neither `src/events/store.ts` nor `src/events/types.ts` has an
-   org column — `grep -rn "orgId" src/events/` is empty — so nothing recorded can be
+   (`src/logging/reliability.ts:14-27,61-64`) rate-limits in one process-global map keyed
+   only by event type and returns before forwarding to the unified event store (`emitEvent`).
+   `emitEvent` has a second process-global limiter (`src/events/emitter.ts:34-58,120-129`)
+   keyed only by `category:event`, and it too returns before storage. Neither limiter knows
+   the producer's org, so org A can consume org B's slot before attribution, persistence,
+   broadcast or durable sync. Neither `src/events/store.ts` nor `src/events/types.ts` has an
+   org column — `grep -rn "orgId" src/events/` is empty — so surviving records cannot be
    filtered by tenant afterwards.
 5. **Every query alias ignores the caller.** `src/gateway/server-methods/reliability.ts`
    answers `reliability.events` / `reliability.summary` from `getEventStore()` filtered by
@@ -128,7 +132,11 @@ to an empty 200 that reads as "all healthy".
    connection-scoped, the agent's or channel account's existing `orgIds` tag
    (`org-scope.ts`, `account-scope.ts`) where it is agent- or channel-scoped, and an
    explicit `global` class for startup/cron/system events served only to a system-admin
-   surface. Apply that scope consistently to `reliability.*` and to every alias in
+   surface. Resolve that trusted scope **before either process-global rate limiter**.
+   Tenant-scoped limiter keys include the canonical org scope plus category/event; global
+   and admin events use a separate explicit namespace. Define one deterministic canonical
+   scope for resources belonging to multiple orgs rather than choosing an array member by
+   iteration order. Apply that scope consistently to `reliability.*` and to every alias in
    `events.list/get/summary/timeline`; a cross-org `events.get` returns the same not-found
    response as an unknown id, without an existence oracle. Scope `events.stream` to the
    validated org (or admin-gate it) and guard **both** `reliability` and `events.new`, so
@@ -155,6 +163,10 @@ to an empty 200 that reads as "all healthy".
    For every cached query alias, add a warm-cache regression in the same gateway/cache
    instance: org A primes identical parameters, org B requests them within the TTL, and B
    receives only B's aggregate without clearing or mocking the cache between requests.
+   Add a real-producer rate-limit regression in one gateway instance: org A and org B emit
+   the same event inside **both** limiter windows without clearing either map; both records
+   are stored and delivered only to their authorized audiences. A same-org duplicate in
+   the same windows is still suppressed, proving the intended throttle was preserved.
 6. Coordinate with `2026-07-19-channel-scoping-fix-plan`: its parked P1 is the same identity
    surface, and its execution hold governs dispatch (coordinated gateway + hub work with
    deployment access, never a single-repository run).
@@ -172,8 +184,8 @@ to an empty 200 that reads as "all healthy".
 The deployed topology is recorded; a human has chosen the operator-only or the tenant-scoped
 path; and either (a) every hub entry point, including Insights, sits behind an operator gate
 with the data labeled gateway-wide, or (b) DELTA 3–5 have shipped and deployed with
-attribution preserved across local storage, every query/live alias and durable sync. The
-same-gateway query, warm-cache-per-alias, dual-event subscription and Insights isolation
-tests are green against
+attribution preserved before both rate limiters and across local storage, every query/live
+alias and durable sync. The same-gateway rate-limit, query, warm-cache-per-alias, dual-event
+subscription and Insights isolation tests are green against
 the gateway and hub SHAs that serve production. Both paths keep the `security` human gates
 at approval and merge.
