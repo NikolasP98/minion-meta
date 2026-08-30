@@ -3,9 +3,9 @@ id: 2026-08-18-factory-capability-separation-spec
 title: Factory capability separation — purpose-scoped GitHub credentials, run-bound grants, and server-derived actors
 stage: spec
 status: review
-pass: 7
+pass: 8
 created: 2026-08-18
-updated: 2026-08-29
+updated: 2026-08-30
 proposal: 2026-08-17-factory-capability-separation
 verdict: pending
 repos: [minion-factory, minion-base]
@@ -28,15 +28,18 @@ From approved proposal `2026-08-17-factory-capability-separation`, verbatim:
 > to one repository/branch/action set; separate credentials for (a) target-code pushes, (b) meta lifecycle commits,
 > (c) memory candidate uploads; `by` derived server-side from the authenticating principal, never caller-supplied.
 
-The security outcome is *containment-equivalent, not identical* to pass 2's design: pass 3 adopted the long-lived
-purpose-scoped PATs that already shipped in `minion-factory@5db7d391` rather than pass 2's short-lived,
-run/repo/branch/action-bound grant, and passes 3-4 described that as an unchanged outcome. Pass 5 stops making that
-claim (§1 point 4, §2 invariant 1a) — a stolen long-lived purpose token is reusable until an operator rotates it, not
-until a run ends, and that gap is now named explicitly for the human approval gate rather than papered over. Within
-that constraint, compromise of one run or purpose-specific integration must still not be able to reuse a
-factory-wide credential to mutate unrelated repositories or impersonate another authenticated principal — enforced
-by GitHub's own per-purpose scope grant, proven by exact provider-visible grant evidence rather than assumed from token presence.
-This is M4 identity work. It retains the human merge gate.
+The interim security outcome is **not containment-equivalent** to pass 2's design. Pass 3 adopted long-lived purpose
+PATs rather than pass 2's short-lived, run/repo/branch/action-bound grant. This pass removes the fleet-wide write-PAT
+part of that deviation: each target-repository write purpose is configured as a runner-side repository→token map,
+and every mapped token must have a provider-visible grant for exactly one repository. The remaining losses are still
+material and explicit: a token is shared across runs for that repository, survives until operator rotation, is not
+provider-bound to the run's one ref, and permits every action GitHub derives from its permissions. Contents-write
+makes `github-branch`, `github-workspace-prepare`, and `github-merge` provider-capable of both pushing and merging
+unless independently verified repository rulesets deny an action to that principal. The trusted adapter narrows
+normal calls but cannot constrain a stolen token used directly. Exact provider evidence makes these excess lifetime,
+ref, and action authorities visible; it does not remove them. The human approval gate must explicitly accept or
+reject each loss for all three target-repository write purposes (§2 invariant 1a and H4). Server-derived actor
+identity remains enforced and the product continues to require a human merge gate at the application layer.
 
 **Pass-3 respec note (2026-08-29).** Passes 1-2 designed this as a GitHub-Apps/installation-token architecture with
 a new `CapabilityGrantEnvelope` authority table. That specific mechanism is superseded: `minion-factory@5db7d391`
@@ -406,10 +409,10 @@ landed code already states — *workers get read credentials, writes live in the
    | Purpose | Env var | Capability | Repository/ref scope | Consumers (§1 anchors) |
    |---|---|---|---|---|
    | `github-checkout` (existing) | `FACTORY_GH_CHECKOUT_TOKEN` | read | fleet repos + `minion-meta`: Contents/Actions/Checks read | contained checkout phases; the runner's fleet reads (`projections.ts`, `queue.ts`, `possibly-shipped.ts`, `reconcile-detector.ts`, `discovery.ts`, `reclassify.ts`, `topics.ts`); after Slice 2, the *only* credential in spec/reconcile/discovery/chat containers |
-   | `github-branch` (existing) | `FACTORY_GH_BRANCH_TOKEN` | write | target repos: Contents write | runner adapter candidate push |
-   | `github-workspace-prepare` (existing) | `FACTORY_GH_WORKSPACE_PREPARE_TOKEN` | write | target repos: Contents + Pull requests write | runner adapter branch/draft-PR |
+   | `github-branch` (existing purpose, changed transport) | `FACTORY_GH_BRANCH_TOKENS` | write | JSON repository→token map; every token exactly one target repo: Contents write; all refs unless rulesets narrow them | runner adapter candidate push; token selected only after canonical repo lookup |
+   | `github-workspace-prepare` (existing purpose, changed transport) | `FACTORY_GH_WORKSPACE_PREPARE_TOKENS` | write | JSON repository→token map; every token exactly one target repo: Contents + Pull requests write; all refs unless rulesets narrow them | runner adapter branch/draft-PR; token selected only after canonical repo lookup |
    | `github-meta` (new) | `FACTORY_GH_META_TOKEN` | write | `NikolasP98/minion-meta` only: Contents + Issues write | `lifecycle.ts` transitions/dispositions; `monitor.ts:69` issue intake; the runner-side meta publication effect (Slice 2); `scripts/self-update.sh:58-60` issue filing |
-   | `github-merge` (new) | `FACTORY_GH_MERGE_TOKEN` | write | target repos: Pull requests write (merge + comment) | `automerge.ts:706,720`. Inert while `FACTORY_AUTOMERGE=0`, but registered so §8's revocation cannot silently disarm it |
+   | `github-merge` (new) | `FACTORY_GH_MERGE_TOKENS` | write | JSON repository→token map; every token exactly one target repo: Contents + Pull requests write (merge endpoint + comment), all refs; provider-capable of push as well as merge unless rulesets deny it | `automerge.ts:706,720`; token selected only after canonical repo lookup. Inert while `FACTORY_AUTOMERGE=0`, but registered so §8's revocation cannot silently disarm it |
    | `github-factory-source` (new) | `FACTORY_GH_SOURCE_TOKEN` | read | `NikolasP98/minion-factory` only: Contents + Actions read | `scripts/self-update.sh:73,91` |
    | `github-memory-read` (new) | `FACTORY_GH_MEMORY_READ_TOKEN` | read | `NikolasP98/minion-agent-memory` only: Contents read | `scripts/self-update.sh:70-71` host memory pull (never enters a container) |
    | `github-memory-candidate` (new) | `FACTORY_GH_MEMORY_CANDIDATE_TOKEN` | write, adapter-restricted to create-only | the private quarantine repository only | Slice 6's dormant publisher. Must NOT be installed on canonical `minion-agent-memory` |
@@ -420,11 +423,14 @@ landed code already states — *workers get read credentials, writes live in the
    only path (it stops reading `FACTORY_GH_TOKEN`), so §8's revocation does not break it.
 
    A startup validator (extending the existing weak-secret/pairwise-distinct guard at `runner/src/index.ts:164-190`)
-   rejects: a purpose that any *enabled* code path exercises but which is unconfigured; and any two configured
-   credential values that are byte-identical. `runner/src/github.ts`'s module-level `TOKEN` is replaced by a
-   purpose-bound client factory; no module may construct an unlabelled GitHub transport.
+   rejects: a purpose that any *enabled* code path exercises but which is unconfigured; any target-repository map
+   missing or adding a registry repository; any malformed/non-canonical repository key; and any two configured
+   credential values, including values nested in maps, that are byte-identical. `runner/src/github.ts`'s
+   module-level `TOKEN` is replaced by a purpose-and-canonical-repository-bound client factory; no module may
+   construct an unlabelled transport or select a target token from caller-controlled text before registry lookup.
 1a. **Purpose activation requires a provider-backed scope audit, not one negative sample.** This spec adopts the
-   long-lived purpose-scoped PAT mechanism that already shipped in `minion-factory@5db7d391` rather than pass 2's
+   long-lived purpose-scoped PAT mechanism that already shipped in `minion-factory@5db7d391`, narrowed here to one
+   repository per target-write token through runner-side purpose/repository lookup, rather than pass 2's
    short-lived, run/repo/branch/action-bound grant design the source proposal's DoD specifies
    (`proposals/2026-08-17-factory-capability-separation.md:21-25`) — a recorded deviation, not a claimed equivalent
    (§0). `runner/src/scoped-github-canary.ts`'s `verifyCommand` performs only *positive* checks against the one
@@ -437,7 +443,8 @@ landed code already states — *workers get read credentials, writes live in the
    - **Compare the provider-visible repository grant to the exact allowlist.** Enumerate the complete paginated set
      of repositories accessible to the credential under test (or query the fine-grained-PAT grant through GitHub's
      organization PAT-administration API using an independently authenticated controller), and compare that set to
-     the purpose's declared repository allowlist. Any extra repository, incomplete pagination, unavailable grant
+     the purpose/token's declared repository allowlist. Every token nested in a target-write map has an allowlist
+     containing exactly its canonical map-key repository. Any extra repository, incomplete pagination, unavailable grant
      inventory, or unenumerable access fails activation. The fleet registry and named infrastructure repositories
      remain negative fixtures, but are defense in depth rather than the source of truth for what the token can reach.
    - **Verify existence independently before trusting a denial.** A forbidden target's existence is confirmed by a
@@ -448,12 +455,13 @@ landed code already states — *workers get read credentials, writes live in the
      other way, it does not silently pass.
    - **Use provider permission/ruleset evidence plus disposable canaries for action classes.** A read-capability
      purpose gets a non-destructive write probe on a disposable allowed canary and must be refused. Do **not** claim
-     that `github-branch` is provider-enforced write-but-not-merge: GitHub's merge endpoint accepts Contents-write,
-     which that purpose needs for branch pushes. Record the effective permission set and applicable repository
-     rulesets non-destructively, and exercise merge behavior only against a disposable canary PR. Never probe a
-     production PR. Unless an independently verified ruleset denies merge to this principal while permitting push,
-     activation records `github-branch` as merge-capable at the provider boundary; the trusted adapter's missing
-     merge operation is defense in depth, not an action-scope guarantee.
+     that any Contents-write target-repository purpose is provider-enforced to its adapter action set: GitHub's
+     merge endpoint accepts Contents-write, while `github-merge` needs Contents-write for that exact endpoint.
+     Record the effective permission set and applicable repository/ref rulesets non-destructively, and exercise
+     push and merge behavior for **each of** `github-branch`, `github-workspace-prepare`, and `github-merge` only
+     against disposable branches/PRs. Never probe a production PR. Unless an independently verified ruleset denies
+     an action to that principal, activation records all three as both push-capable and merge-capable at the provider
+     boundary; each trusted adapter's narrower operation surface is defense in depth, not an action-scope guarantee.
    - **Bind evidence to the token's fingerprint.** The provider-reported identity of the credential (fine-grained
      PAT id, or the last verifiable identifier GitHub's API exposes for it) is recorded with the audit result.
      Rotating a purpose's token invalidates its prior audit; the new value must pass its own audit before it backs
@@ -463,8 +471,9 @@ landed code already states — *workers get read credentials, writes live in the
      and the purpose is reported not-yet-active.
 
    A purpose is not eligible for §8's revocation gate, and may not back a real (non-canary) call, until its full
-   scope audit has run and passed against the current token's fingerprint. For `github-branch`, a passed audit does
-   not erase the provider-level merge authority just described. This is the compensating control the
+   scope audit has run and passed against the current token's fingerprint. For every Contents-write purpose, a
+   passed audit does not erase the shared-across-runs lifetime, all-ref scope, or push/merge authority just
+   described. This is the compensating control the
    human approval gate should weigh against the long-lived-token deviation named in §0 — it is not a substitute for
    asking the human whether the deviation itself is acceptable.
 2. **A runner-owned meta publication protocol replaces in-container clone-and-push, before any credential is
@@ -492,18 +501,24 @@ landed code already states — *workers get read credentials, writes live in the
      `git push` (there is no remote to push to). After the local commits are made, the script serializes them into
      the existing `/out` directory (`/out/meta-candidate.json`) using ordinary git plumbing against its own
      worktree — `git log`/`git diff-tree --no-commit-id --name-status -r`/`git show <sha>:<path>` — into ordered
-     commits of `{message, files[]}`, where **each file entry carries its own bounded byte content** (not a path
-     reference into the shared mount), every path passes the run kind's write allowlist (the same allowlist
-     `agent/spec.sh:51-74` already computes and enforced live via `require_exact_changes` before serialization), and
-     every entry is a regular file within declared size/count bounds — no symlinks, no path escapes, no `.git/` or
-     `scripts/` targets. The runner never reads, executes, or trusts anything from the worker's worktree itself
+     commits of `{message, files[]}`, where each file entry is a discriminated operation:
+     `{path, operation: 'upsert', content}` or `{path, operation: 'delete'}`. Upserts carry their own bounded byte
+     content (not a path reference into the shared mount); deletes carry no content and are emitted from `D` status
+     without calling `git show <sha>:<path>`. Renames are serialized as a delete of the old path plus an upsert of
+     the new path. Every path passes the run kind's write allowlist (the same allowlist
+     `agent/spec.sh:51-74` already computes and enforced live via `require_exact_changes` before serialization).
+     For an upsert, the child entry is a regular file within declared size/count bounds. For a delete, the runner
+     verifies against the pinned parent/base tree that the path existed as a regular allowlisted file; deleting a
+     missing path, directory, symlink, or non-allowlisted path fails closed. No operation may target a path escape,
+     `.git/`, or `scripts/`. The runner never reads, executes, or trusts anything from the worker's worktree itself
      after the worker exits — not its `.git/hooks`, not its `.git/config`, not a shadowed copy of
      `scripts/spec-index.mjs` the worker might have planted — only the bytes inside the validated artifact the
      worker emitted. The worker's local commits and its worktree's git history have no bearing on what the runner
      applies; they exist only so the scripts' own survey/checkpoint logic keeps working.
    - After the worker exits, the **runner** validates the artifact's bytes against that allowlist independently
      (rejecting on any violation with no GitHub call — `T-META-CANDIDATE-BOUNDED`), applies them onto its **own
-     private checkout** from the first bullet — never the worker's worktree — regenerates `specs/index.json` /
+     private checkout** from the first bullet — never the worker's worktree — applying upserts atomically and exact
+     deletes only after the parent-tree validation above, then regenerates `specs/index.json` /
      `proposals/index.json` by running the meta repo's own `scripts/spec-index.mjs` / `scripts/proposal-index.mjs`
      from that same runner-private checkout under a minimal allowlisted environment (so the committed index and the
      generator that produced it are never worker-influenced), commits with a server-derived author, and pushes with
@@ -678,14 +693,16 @@ contract precedes the minion-base cutover.
 
 1. Close the purpose registry: add `github-meta`, `github-merge`, `github-factory-source`, `github-memory-read`,
    `github-memory-candidate`, `github-train`; replace `github.ts`'s module `TOKEN` with purpose-bound clients for
-   the runner's own calls; add the startup validator; extend activation with exact provider-visible repository-grant
+   the runner's own calls; replace the shared branch/workspace-prepare values and new merge value with canonical
+   repository→token maps whose individual tokens are provider-scoped to exactly one repository; add the startup
+   validator; extend activation with exact provider-visible repository-grant
    comparison, provider permission/ruleset evidence, disposable action canaries, and fingerprint-bound evidence
    (→ Slice 1; proves `T-PURPOSE-REGISTRY-CLOSED`, `T-PURPOSE-TOKENS-DISTINCT`, `T-META-PURPOSE-TOKEN`,
    `T-PURPOSE-PROVIDER-GRANT-EXACT`, `T-PURPOSE-ACTION-EVIDENCE`,
    `T-PURPOSE-SCOPE-FINGERPRINT-BOUND`). No container or agent-script behaviour changes yet.
 2. Build the runner-owned meta publication protocol (writable, credential-free, remote-stripped worker git worktree
-   running the scripts' existing survey/commit-checkpoint flow unmodified → bounded candidate artifact with inline
-   bytes serialized from the worker's local commits → apply/commit/regenerate/push against a separate runner-private
+   running the scripts' existing survey/commit-checkpoint flow unmodified → bounded candidate artifact with explicit
+   upsert/delete operations serialized from the worker's local commits → apply/commit/regenerate/push against a separate runner-private
    checkout the worker never touches → trailer-marked `phase_effects` receipt reconciled by commit identity, not
    branch position), adopt it in `agent/spec.sh`, `agent/reconcile.sh`, `agent/discovery.sh`, `agent/chat.sh`;
    downgrade `legacyCredentialTransport` to the read-only `github-checkout` credential for those four launch paths;
@@ -734,8 +751,9 @@ while the meta-writing agents still hold the broad PAT.
 
 - `runner/src/containers.ts` (`GITHUB_PURPOSES` `:201`, `GITHUB_CAPABILITY` `:204-208` — add the six new purposes
   and their capability labels)
-- `runner/src/github.ts` (replace the module-level `TOKEN` `:6` with a purpose-bound client factory; `gh`/`ghStrict`
-  take the purpose from their caller)
+- `runner/src/github.ts` (replace the module-level `TOKEN` `:6` with a purpose-and-repository-bound client factory;
+  `gh`/`ghStrict` take the purpose and canonical registry repository from their caller; target-write purposes select
+  only from their parsed repository→token map)
 - `runner/src/lifecycle.ts`, `runner/src/monitor.ts` (use `github-meta`), `runner/src/automerge.ts` (use
   `github-merge`), and the seven fleet-read modules listed in §1 point 4 (use `github-checkout`)
 - `runner/src/index.ts` (extend the startup validator at `:164-190` to the credential registry)
@@ -747,8 +765,10 @@ while the meta-writing agents still hold the broad PAT.
   the grant is extra, incomplete, unavailable, or stale)
 - `runner/src/github.test.ts`, `runner/src/index.test.ts`, new `runner/src/github-purpose.test.ts`,
   `runner/src/scoped-github-canary.test.ts`
-- `.env.example`, `deploy.sh` (`:316`), `setup.sh` (`:102`), `deploy/k8s.yml` (`:18`), `README.md` — every new env
-  var documented and written by **all four** deployment writers
+- `.env.example`, `deploy.sh` (`:316`), `setup.sh` (`:102`), `deploy/k8s.yml` (`:18`), `README.md` — document and
+  write `FACTORY_GH_BRANCH_TOKENS`, `FACTORY_GH_WORKSPACE_PREPARE_TOKENS`, and `FACTORY_GH_MERGE_TOKENS` as secret
+  JSON maps in **all four** deployment writers; remove their singular predecessors rather than supporting a
+  fleet-wide fallback; every other new env var is likewise documented and written by all four writers
 
 **Definition of done (machine-checkable):**
 
@@ -759,7 +779,7 @@ npm test
 npx tsc --noEmit
 cd ..
 # every registry env var is written by every deployment writer, INCLUDING deploy/k8s.yml
-for v in FACTORY_GH_META_TOKEN FACTORY_GH_MERGE_TOKEN FACTORY_GH_SOURCE_TOKEN \
+for v in FACTORY_GH_BRANCH_TOKENS FACTORY_GH_WORKSPACE_PREPARE_TOKENS FACTORY_GH_META_TOKEN FACTORY_GH_MERGE_TOKENS FACTORY_GH_SOURCE_TOKEN \
          FACTORY_GH_MEMORY_READ_TOKEN FACTORY_GH_MEMORY_CANDIDATE_TOKEN FACTORY_GH_TRAIN_TOKEN; do
   grep -q "$v" .env.example && grep -q "$v" deploy.sh && grep -q "$v" setup.sh && grep -q "$v" deploy/k8s.yml \
     || { echo "missing: $v"; exit 1; }
@@ -768,7 +788,9 @@ done
 
 Fixtures prove: `T-PURPOSE-REGISTRY-CLOSED` — every consumer enumerated in §1 point 4 resolves to a registry purpose
 and no module can build an unlabelled transport; `T-PURPOSE-TOKENS-DISTINCT` — two purposes configured with the same
-underlying token value refuse startup, and an unconfigured purpose that an enabled path exercises refuses startup;
+underlying token value, including nested map values, refuse startup; missing/extra/non-canonical repository keys
+refuse startup; singular fleet-wide target-write variables are ignored/rejected; and an unconfigured purpose that
+an enabled path exercises refuses startup;
 `T-META-PURPOSE-TOKEN` — a lifecycle commit and a monitor issue both carry the `github-meta` credential and never
 the target-purpose or checkout credential; `T-PURPOSE-NEGATIVE-SCOPE` — for a fixture purpose configured with an
 intentionally *over-broad* scope (denied on forbidden target A, but able to reach forbidden target B, and able to
@@ -799,8 +821,9 @@ shipping the refusal ahead of its replacement.
   publication binding; add the multi-file commit + rebase-retry publish operation reusing `tokenFor`/
   `githubRequest`, run only against the runner-private checkout described below; add the trailer-marker
   `reconcile()` for `meta-publish` alongside `ensureExactPush`'s `observe`)
-- `runner/src/meta-publication.ts` (new: candidate-artifact schema carrying inline file bytes, allowlist/bounds
-  validation, writable credential-free worker-worktree preparation — checkout at the pinned base commit with every
+- `runner/src/meta-publication.ts` (new: candidate-artifact schema carrying discriminated `upsert | delete`
+  operations, inline bytes only for upserts, allowlist/bounds and pinned-parent delete validation, writable
+  credential-free worker-worktree preparation — checkout at the pinned base commit with every
   remote removed — runner-private apply-checkout preparation, index regeneration via the meta repo's own
   `scripts/spec-index.mjs`/`scripts/proposal-index.mjs` run under a minimal allowlisted environment against the
   apply checkout only, and the commit-trailer marker format `run:<run_id>:candidate:<candidate-hash>`)
@@ -813,8 +836,8 @@ shipping the refusal ahead of its replacement.
 - `agent/spec.sh`, `agent/reconcile.sh`, `agent/discovery.sh`, `agent/chat.sh` (drop `gh repo clone`/`git push`/
   `push_meta()` only — `require_exact_changes`/`git add`/`git commit` stay exactly as they are today, now running
   against the runner-provisioned worktree instead of a fresh clone; add the serialization step that reads the
-  worktree's local commits via `git log`/`git diff-tree`/`git show` into `/out/meta-candidate.json`, including file
-  bytes)
+  worktree's local commits via `git log`/`git diff-tree --name-status`; serialize upsert bytes with `git show`,
+  serialize `D` without a child blob, and normalize rename to delete+upsert in `/out/meta-candidate.json`)
 - `runner/src/meta-publication.test.ts` (new), `runner/src/queue.test.ts`, `runner/src/containment-effects.test.ts`,
   `agent/spec-integrity.test.sh`
 
@@ -834,7 +857,10 @@ rg -n 'require_exact_changes' agent/spec.sh agent/reconcile.sh agent/discovery.s
 ```
 
 Fixtures prove: `T-META-CANDIDATE-BOUNDED` — a candidate naming a path outside the run kind's allowlist, a symlink,
-a `.git/` entry, a `scripts/` target, or an over-bound file/byte count is rejected with no GitHub call;
+a `.git/` entry, a `scripts/` target, an over-bound file/byte count, an unknown operation, content on a delete, or
+a delete whose pinned parent is missing/not a regular allowlisted file is rejected with no GitHub call. Valid
+fixtures prove an intentional deletion is serialized without `git show <child>:<deleted-path>`, applied as an exact
+delete in the runner-private checkout, and published; a rename is preserved as delete-old + upsert-new;
 `T-META-APPLY-CHECKOUT-ISOLATED` — a worker that tampers with its worktree's `.git/hooks`, `.git/config`, or a
 shadowed copy of `scripts/spec-index.mjs` has zero effect on the apply/commit/push/index-regeneration phase, because
 that phase runs only against the separate runner-private checkout the worker was never given access to;
@@ -1082,7 +1108,9 @@ push or merge, and rejects a pair injected through the environment.
    duplicated value. For every purpose, confirm its provider-backed activation audit (§2 invariant 1a) ran against
    the current token's fingerprint — the complete paginated provider-visible repository grant exactly matches the
    allowlist, permission/ruleset evidence is captured, disposable canaries establish the safe action probes, no
-   production PR was used, and `github-branch`'s effective merge authority is reported rather than hidden — and
+   production PR was used, and every token in the `github-branch`, `github-workspace-prepare`, and `github-merge`
+   maps is proven provider-scoped to exactly its one canonical repository. Confirm each token's all-ref scope and
+   effective push+merge authority are reported unless captured ruleset evidence removes a specific action — and
    that a purpose whose audit has not run, or whose token has rotated since, is reported not-yet-active.
 2. Queue one spec run, one reconcile run, one discovery run, and one chat turn with `FACTORY_GH_TOKEN` unset in the
    runner process. Verify each launch plan and Docker argv carries only the read-only `github-checkout` credential,
@@ -1091,7 +1119,9 @@ push or merge, and rejects a pair injected through the environment.
    the run's trailer marker, and that each writes exactly one `phase_effects` receipt. Force one concurrent meta
    writer and verify the rebase-retry converges. Simulate a crash between an accepted push and `confirmPhaseEffect()`
    with a concurrent writer's commit landed on top, and verify reconciliation locates the original commit by its
-   trailer rather than duplicating it.
+   trailer rather than duplicating it. Publish one deletion and one rename candidate; verify deletion serialization
+   never reads a nonexistent child blob, the runner-private checkout removes the old regular allowlisted path, and
+   the rename lands as delete-old + upsert-new with regenerated indexes.
 3. With `FACTORY_GH_TOKEN` still unset, run one `dev` run under `FACTORY_CONTAINMENT_V2=1` through branch creation,
    draft PR, a fix round, and a salvage exit; verify every publication landed through the trusted adapter and no
    worker plan carried a write credential. Then dispatch a `dev` run with `FACTORY_CONTAINMENT_V2=0` and verify it
@@ -1219,6 +1249,17 @@ remote-stripped and write-credential-free, with required reconcile reads succeed
 denied. Slice 4 adds durable request-key replay so response loss after commit is idempotent despite stale original
 CAS, and Slices 4-5 add the live `GET /runs/:id/log` route to `dashboard-read` and its end-to-end coverage.
 
+**Pass 8** answers review-fix run `5b148f6c`, round 1 (two High, one Medium). H1 is resolved substantively and in
+the approval text: target-repository write credentials are no longer fleet-wide shared values; Slice 1 migrates
+branch, workspace-prepare, and merge to canonical repository→token maps, and activation proves every nested token's
+provider grant contains exactly one repository. The still-accepted lifetime, all-ref, and action-scope losses are
+enumerated for all three purposes. H2 is resolved in both directions: `github-merge` now has the Contents-write
+permission required by its exact REST consumer, while all three Contents-write principals are audited, canaried,
+and reported as push+merge capable unless rulesets independently deny an action. M1 is resolved by a discriminated
+`upsert | delete` candidate format, pinned-parent regular-file validation for deletes, exact apply semantics, and
+deletion plus rename-as-delete/upsert fixtures. These are spec corrections only; no product implementation is
+authorized before the security approval gate.
+
 **Disposition: `status: review`, `verdict: pending`.**
 
 - Not `approved`: this spec is `tags: [security, infra]`, and the SDLC contract keeps human gates at approval AND
@@ -1229,22 +1270,29 @@ CAS, and Slices 4-5 add the live `GET /runs/:id/log` route to `dashboard-read` a
 
 **Human decision required at the approval gate (H4).** The source proposal's DoD asks for *short-lived* credentials
 scoped to one repository/branch/action set (`proposals/2026-08-17-factory-capability-separation.md:21-25`). This
-spec instead extends the long-lived purpose-scoped PATs that landed in `minion-factory@5db7d391` (§0, §2 invariant
-1a). That is weaker in two specific ways: a stolen purpose token stays usable until an operator rotates it, not until
-the run ends; and `github-branch`'s required Contents-write permission can authorize merge at GitHub's API boundary
-unless an independently verified repository ruleset denies that principal. The compensating controls are exact
-provider-visible repository grants, disposable canaries, captured ruleset evidence, and the trusted runner adapter
-holding every write purpose while exposing no merge operation. A factory pass may not resolve this trade-off by
-itself, and no factory pass may amend the approved proposal to match the spec. So the human gate has two options,
-and picking one is part of approving:
+spec instead uses long-lived purpose PATs, with each target-write PAT provider-scoped to exactly one repository and
+selected from a runner-owned canonical repository map (§0, §2 invariant 1a). This restores the proposal's
+one-repository boundary but remains weaker on three axes for **each of** `github-branch`,
+`github-workspace-prepare`, and `github-merge`: (1) **lifetime** — the PAT is shared across runs for that repository
+and remains usable until operator rotation; (2) **ref scope** — GitHub exposes it to every repository ref unless a
+captured ruleset independently narrows that principal; and (3) **action scope** — Contents-write makes all three
+provider-capable of both direct push and PR merge, including `github-merge`, which needs Contents-write for its
+exact merge endpoint. Pull-requests write adds its own PR/comment actions where configured. The trusted adapters'
+narrower APIs constrain normal factory calls but do not constrain a stolen PAT used directly against GitHub.
+Compensating controls are exact one-repository provider-grant audits for every mapped token, disposable push/merge
+canaries for every Contents-write principal, captured ref-ruleset evidence, fingerprint-bound activation, and no
+write credential in workers. These controls expose and reduce the deviation; they do not make it run/ref/action
+bound. A factory pass may not resolve this trade-off or amend the approved proposal. The human gate has two options:
 
 1. **Accept the interim target.** Approve this spec as written and amend the source proposal's DoD to record
-   long-lived purpose PATs + provider-grant audits as the accepted M4 target, explicitly including the effective
-   `github-branch` merge authority when no verified ruleset removes it, with short-lived run-bound grants named as
-   later work.
+   long-lived, one-repository purpose PATs + provider-grant audits as the accepted M4 target, explicitly accepting
+   the shared-across-runs lifetime, all-ref scope, and push+merge authority of all three Contents-write purposes
+   wherever verified rulesets do not remove an action, with short-lived run/ref/action-bound grants named as later
+   work.
 2. **Hold the original contract.** Keep the proposal's DoD and require a controller-minted, run/repo/ref/action-bound
    credential — which means this spec needs a further pass adding that minting path (the trusted adapter and the
-   purpose registry both survive as defense in depth; the token lifetime is the part that changes).
+   purpose/repository registry both survive as defense in depth; lifetime, ref, and action binding are the parts
+   that change).
 - Not `changes_requested`: that verdict was pass 3's own request for the correctness pass this pass performed. The
   findings that motivated it are resolved above, and leaving it set would keep the spec behind the server-side
   `changes_requested` promotion gate for a reason that no longer holds.

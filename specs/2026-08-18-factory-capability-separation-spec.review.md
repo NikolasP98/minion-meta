@@ -1,13 +1,13 @@
 ---
 spec: 2026-08-18-factory-capability-separation-spec
-pass: 7
+pass: 8
 verdict: pending
 reviewer: factory-review-fix
 created: 2026-08-18
-updated: 2026-08-29
+updated: 2026-08-30
 ---
 
-# Review sidecar — passes 4-7 (answers PR #271's four `VERDICT: FAIL` reviews)
+# Review sidecar — passes 4-8 (answers PR #271's five `VERDICT: FAIL` reviews)
 
 ## Pass 4 review (executability fix — historical; superseded by pass 5 below)
 
@@ -180,11 +180,29 @@ the spec without repeating pass 6's negative-probe approach:
 remains conditional: approval must explicitly accept both PAT lifetime loss and `github-branch`'s provider-level
 merge authority when no independently verified repository ruleset denies it.
 
+## Pass 8 review (repository-bound write tokens + permission parity + deletion semantics)
+
+Review-fix run `5b148f6c`, round 1 identified two High and one Medium blocker. All three were re-verified against the
+current spec before editing and are resolved in the planning artifact only:
+
+| Finding | Resolution |
+|---|---|
+| **H1 — approval hides shared tokens' fleet/all-ref/action authority** | Target-write credentials change from singular shared PATs to canonical repository→token maps; provider activation proves each nested token reaches exactly one repository. The approval decision explicitly retains and enumerates shared-across-runs lifetime, all-ref scope, and excess action authority for branch, workspace-prepare, and merge. |
+| **H2 — merge permission is insufficient while workspace-prepare is undisclosed merge-capable** | `github-merge` gains Contents write for the exact merge endpoint. All three Contents-write principals are tested and reported as push+merge capable unless independent ruleset evidence removes an action; rollout and human-deviation text cover all three. |
+| **M1 — candidate protocol cannot preserve deletions** | Candidate entries become discriminated `upsert | delete` operations. Deletes carry no child content, require a regular allowlisted file at the pinned parent, and apply exactly in the runner-private checkout. Fixtures cover deletion and rename-as-delete/upsert. |
+
+### Disposition after pass 8
+
+`status: review`, `verdict: pending`, `pass: 8`. Security approval and merge remain human gates. Approval must
+explicitly accept the long-lived, all-ref, excess-action deviation for every one-repository target-write PAT, or
+hold the source proposal's run/repo/ref/action-bound contract and require a minting path.
+
 ## Human flags
 
 0. **The PAT deviation is a decision, not a note (H4).** Approving this spec means either amending the source
-   proposal's DoD to record long-lived purpose PATs + exact provider-grant audits as the accepted M4 target — also
-   accepting `github-branch`'s effective merge authority unless a verified ruleset denies it — or
+   proposal's DoD to record long-lived, one-repository purpose PATs + exact provider-grant audits as the accepted
+   M4 target — also accepting every target-write token's all-ref and push+merge authority unless a verified
+   ruleset denies an action — or
    holding the original short-lived run-bound contract and sending the spec back for a minting-path pass. The two
    options are written out at the end of the spec.
 1. **Slice 4 transcribes a policy decision that is formally open.** The interim source→target edge table is
