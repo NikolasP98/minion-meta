@@ -1,13 +1,13 @@
 ---
 spec: 2026-08-18-factory-capability-separation-spec
-pass: 8
+pass: 9
 verdict: pending
 reviewer: factory-review-fix
 created: 2026-08-18
 updated: 2026-08-30
 ---
 
-# Review sidecar — passes 4-8 (answers PR #271's five `VERDICT: FAIL` reviews)
+# Review sidecar — passes 4-9 (answers PR #271's six `VERDICT: FAIL` reviews)
 
 ## Pass 4 review (executability fix — historical; superseded by pass 5 below)
 
@@ -196,6 +196,23 @@ current spec before editing and are resolved in the planning artifact only:
 `status: review`, `verdict: pending`, `pass: 8`. Security approval and merge remain human gates. Approval must
 explicitly accept the long-lived, all-ref, excess-action deviation for every one-repository target-write PAT, or
 hold the source proposal's run/repo/ref/action-bound contract and require a minting path.
+
+## Pass 9 review (lifecycle recovery + disposition CAS + fresh-schema parity)
+
+Review run `5b148f6c` at exact head `d238656a` found four Medium blockers. Pass 9 accepts all four and changes only
+their contracts and proof obligations:
+
+| Finding | Resolution |
+|---|---|
+| **M1 — lifecycle PUT has an unknown-outcome window** | Slice 4 now reserves a `pending` request before PUT, marks the commit with `{principal,requestId}`, reconciles GitHub before retrying CAS, and durably/idempotently completes index sync and promotion before confirming the response. Tests crash after PUT, index sync, and queue creation. |
+| **M2 — disposition UI lacks required CAS inputs** | Slice 5 now includes `SpecWarning.svelte`, its projection/loader, route, and contract tests. The exact rendered status/blob revision and stable decision request id reach confirm/reject; stale-page conflict is proved without a write. |
+| **M3 — fresh databases omit receipt columns** | Slice 2 requires `purpose` and `target_repo` in both ALTER and canonical CREATE paths, plus `PhaseEffectRow`/`requireColumns`; the receipt fixture runs from an empty database as well as an upgraded schema. |
+| **M4 — request key omits audit-bearing input** | The binding is a canonical full-request hash including `reason` and the discriminated status/disposition shape. Reason-only and shape-only reuse return 409 before GitHub. |
+
+### Disposition after pass 9
+
+`status: review`, `verdict: pending`, `pass: 9`. The four executability blockers are closed in the plan. Security
+approval and merge remain human gates, including the unchanged PAT-deviation decision in flag 0.
 
 ## Human flags
 

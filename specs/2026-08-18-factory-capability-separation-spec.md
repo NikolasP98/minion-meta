@@ -3,7 +3,7 @@ id: 2026-08-18-factory-capability-separation-spec
 title: Factory capability separation — purpose-scoped GitHub credentials, run-bound grants, and server-derived actors
 stage: spec
 status: review
-pass: 8
+pass: 9
 created: 2026-08-18
 updated: 2026-08-30
 proposal: 2026-08-17-factory-capability-separation
@@ -586,11 +586,18 @@ landed code already states — *workers get read credentials, writes live in the
      `runner/src/lifecycle.ts:263,454` (auto-triage) and `runner/src/index.ts:106` (postmerge-close) — already
      construct and pass their own `expectedStatus` directly to the function, never through the HTTP body, so this
      requirement has no effect on them.
-   - **Idempotent replay, including response loss.** Every request carries a caller-generated `requestId`; the
-     server binds it to `{principal,kind,id,target,expectedStatus,expectedRevision}` and durably records the
-     canonical committed response. Reusing the key with different input is 409. An exact retry returns the recorded
-     response even when the original write committed and its HTTP response was lost, before re-evaluating now-stale
-     CAS fields. A distinct request whose current status already equals the target answers 200
+   - **Idempotent replay, including every mutation crash window.** Every request carries a caller-generated
+     `requestId`; before the GitHub write, the server durably reserves a `pending` lifecycle-request row keyed by
+     `{principal,requestId}` and bound to a canonical hash of the **entire** behavior- and audit-bearing request:
+     `kind`, `id`, the discriminated `status | disposition` shape and value, `reason`, `expectedStatus`, and
+     `expectedRevision`. The lifecycle commit carries a bounded `{principal,requestId}` marker. On retry/restart, a
+     pending request is reconciled against GitHub commit history before CAS is re-evaluated or another PUT is
+     attempted. Once the commit is found, index synchronization and approval promotion resume as idempotent durable
+     steps; only after both have a recorded outcome does the request become `confirmed` with its canonical response.
+     Reusing the key with any changed field — including reason-only changes or switching status/disposition shape —
+     is 409 with no GitHub call. An exact retry returns the confirmed response, or reconciles and completes a
+     pending request, even when the original write committed and its HTTP response was lost. A distinct request
+     whose current status already equals the target answers 200
      `{outcome:'already_applied', revision}` with no write.
    - **An explicit source→target edge table.** The factory's target-only allowlist (`lifecycle.ts:34-43`) is
      replaced by the edge table minion-base already enforces (`meta-write.ts:64-78`), **adopted verbatim as the
@@ -827,8 +834,9 @@ shipping the refusal ahead of its replacement.
   remote removed — runner-private apply-checkout preparation, index regeneration via the meta repo's own
   `scripts/spec-index.mjs`/`scripts/proposal-index.mjs` run under a minimal allowlisted environment against the
   apply checkout only, and the commit-trailer marker format `run:<run_id>:candidate:<candidate-hash>`)
-- `runner/src/db.ts` (migration: add nullable `purpose TEXT` and `target_repo TEXT` columns to `phase_effects`;
-  widen `PhaseEffectKind` `:1612` to add `'meta-publish'`)
+- `runner/src/db.ts` (add nullable `purpose TEXT` and `target_repo TEXT` columns to **both** the additive `ALTER
+  TABLE phase_effects` migration path and the canonical `CREATE TABLE IF NOT EXISTS phase_effects` definition;
+  update `PhaseEffectRow` and `requireColumns`; widen `PhaseEffectKind` `:1612` to add `'meta-publish'`)
 - `runner/src/queue.ts` (runner-side worker-worktree + private apply-checkout preparation for the four meta run
   kinds; `legacyCredentialTransport` `:2101-2113` forwards `github-checkout` only for `discovery`/`spec`/
   `reconcile`/`chat` `:2186-2231`, `:4038-4043`; `dispatchPreparedRun` `:439` fails a `dev`-kind dispatch closed with
@@ -874,7 +882,9 @@ fetch` fails locally; representative GitHub write APIs deny the read credential,
 regeneration, and a bounded retry that converges, matching today's `push_meta()` behaviour, entirely inside the
 runner-private checkout; `T-META-PUBLISH-RECEIPT` — publication writes exactly one `phase_effects` row per
 `{run_id,'meta-publish',candidate-hash}` with `purpose='github-meta'` and the target `minion-meta` slug recorded,
-and a replay is a no-op returning the same commit; `T-META-PUBLISH-CRASH-RECONCILE` — a fixture simulates a crash
+and a replay is a no-op returning the same commit; the fixture runs once from an upgraded schema and once from a
+fresh empty database, proving the canonical CREATE path includes both columns and `requireColumns` accepts them;
+`T-META-PUBLISH-CRASH-RECONCILE` — a fixture simulates a crash
 after the runner's push is accepted by GitHub but before `confirmPhaseEffect()` runs, injects a concurrent writer's
 commit on top of the pushed one, then restarts reconciliation: `reconcile()` locates the original commit by its
 trailer marker (not by branch HEAD, which has moved), confirms the effect with that commit's SHA, and a subsequent
@@ -945,7 +955,9 @@ must state that it transcribes rather than decides, and carry a human confirmati
   write when either is absent; return the canonical response; surface the promotion outcome)
 - `runner/src/lifecycle.ts` (source→target edge table replacing `:34-43`; blob-sha CAS; `already_applied` replay;
   typed outcome union replacing `TransitionResult` `:49`; `indexSynced` reported rather than swallowed `:142-168`)
-- `runner/src/db.ts` (durable lifecycle idempotency-key/result storage, unique on `{principal,request_id}`)
+- `runner/src/db.ts` (durable `pending → confirmed` lifecycle-request storage, unique on
+  `{principal,request_id}`, carrying the canonical full-input hash, remote commit identity, index-sync outcome,
+  promotion outcome, and canonical response)
 - `runner/src/index.test.ts`, `runner/src/lifecycle.test.ts`
 - `.env.example`, `deploy.sh`, `setup.sh`, `deploy/k8s.yml`, `runner/README.md` (the three new secrets + the
   request/response contract, including required `requestId` and replay semantics)
@@ -967,9 +979,11 @@ actor label; `T-LIFECYCLE-CAS` — a mismatching `expectedRevision` or `expected
 wrong) returns 409 with `{current:{status,revision}}` and performs no write; `T-LIFECYCLE-CAS-REQUIRED` — a request
 omitting `expectedStatus`, omitting `expectedRevision`, or omitting both returns 400 with no GitHub read or write,
 tested independently for each omission and for both the `status` and `disposition` shapes; `T-LIFECYCLE-IDEMPOTENT`
-— after a simulated commit followed by response loss, an exact retry with the same `requestId` and original CAS
-returns the recorded canonical response without another write, reusing a key with different input returns 409, and
-a distinct transition to the current status returns `already_applied` with no commit;
+— crashes are injected after the spec PUT, after index synchronization, and after approval queue creation. Each
+retry first reconciles a `pending` request by its commit marker, then idempotently completes index sync and promotion,
+and converges to one transition, one promotion, and one canonical response without another PUT. Reusing a key with
+different input returns 409 before a GitHub call; fixtures include a reason-only change and a status↔disposition
+shape change. A distinct transition to the current status returns `already_applied` with no commit;
 `T-LIFECYCLE-EDGE-TABLE` — every edge minion-base's shipped table permits is accepted and every edge outside it is
 refused, enumerated from a table fixture; `T-LIFECYCLE-CANONICAL-RESPONSE` — a successful transition returns
 `{outcome, commit, revision, indexSynced, spec}`, and an index-patch failure returns `indexSynced: false` rather
@@ -995,6 +1009,9 @@ on any `dashboard-read` route it does not also need (including `GET /providers`,
   across transport retries; drop the duplicate
   promotion calls `:38-61` in favour of the server's outcome, preserving the 202 partial-success semantics)
 - `src/lib/server/spec-dispose.ts` (relay uses the lifecycle bearer; update its contract note)
+- `src/lib/components/SpecWarning.svelte`, `src/lib/spec-warning.ts`, and the warning projection/loader and API
+  route that feed them (carry the exact status and blob revision the human reviewed into every disposition request;
+  generate one stable `requestId` per attempted decision and reuse it only for transport retries; remove `by`)
 - existing server tests for these modules, plus a mirror of the Slice 4 contract fixture
 - deployment/env documentation for the three new service bearers, with `FACTORY_SECRET` removed
 
@@ -1002,7 +1019,7 @@ on any `dashboard-read` route it does not also need (including `GET /providers`,
 
 ```bash
 cd <minion-base checkout>
-bun test --test-name-pattern='T-BASE-NO-META-WRITE|T-BASE-SERVICE-ACTOR|T-BASE-CONFLICT-SURFACED|T-BASE-NO-DOUBLE-PROMOTE|T-BASE-NO-ADMIN-BEARER|T-BASE-PROVIDERS-WRITE'
+bun test --test-name-pattern='T-BASE-NO-META-WRITE|T-BASE-SERVICE-ACTOR|T-BASE-CONFLICT-SURFACED|T-BASE-DISPOSITION-CAS|T-BASE-NO-DOUBLE-PROMOTE|T-BASE-NO-ADMIN-BEARER|T-BASE-PROVIDERS-WRITE'
 bun test
 bun run check
 ! rg -n "contents/|method: 'PUT'" src/lib/server/meta-write.ts
@@ -1014,6 +1031,10 @@ Tests prove: `T-BASE-NO-META-WRITE` — no production minion-base module can `PU
 `dashboard-run`), never `FACTORY_SECRET`, never `GITHUB_TOKEN`, and none of the three reaches browser/page
 data/logs; `T-BASE-CONFLICT-SURFACED` — a 409 from the factory renders the same `revision_conflict` outcome and
 current-state pair the UI renders today, and a stale page still cannot overwrite a newer human decision;
+`T-BASE-DISPOSITION-CAS` — the warning projection and component carry the exact status/blob revision rendered to
+the human; confirm/reject sends those values with a stable request id and no `by`. A matching decision succeeds,
+while a stale-page revision returns conflict and performs no write; this path is included in both
+`T-BASE-NO-ADMIN-BEARER` and the end-to-end UI gate;
 `T-BASE-NO-DOUBLE-PROMOTE` — approving a spec results in exactly one queued run, sourced from the lifecycle
 response; `T-BASE-PROVIDERS-WRITE` — a provider-settings save from `src/routes/settings/+page.svelte` reaches the
 factory's `PUT /providers` using `FACTORY_DASHBOARD_RUN_SECRET` (never `FACTORY_DASHBOARD_READ_SECRET`, never
@@ -1259,6 +1280,13 @@ and reported as push+merge capable unless rulesets independently deny an action.
 `upsert | delete` candidate format, pinned-parent regular-file validation for deletes, exact apply semantics, and
 deletion plus rename-as-delete/upsert fixtures. These are spec corrections only; no product implementation is
 authorized before the security approval gate.
+
+**Pass 9** answers the subsequent exact-head review of pass 8 (four Medium findings). Lifecycle idempotency is now
+a durable `pending → confirmed` protocol that reconciles the GitHub commit and resumes index/promotion steps after
+every mutation crash window; its key binds the complete audit-bearing request. The minion-base disposition slice
+now carries the exact human-reviewed status/blob revision through `SpecWarning` and proves stale-page rejection.
+The `phase_effects` receipt migration now updates both ALTER and canonical CREATE paths and is tested from a fresh
+empty database. These are planning-contract changes only; no product code is introduced.
 
 **Disposition: `status: review`, `verdict: pending`.**
 
