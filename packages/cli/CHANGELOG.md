@@ -1,5 +1,13 @@
 # @minion-stack/cli
 
+## 0.1.4
+
+### Patch Changes
+
+- 3409ffc: Propagate package-manager link failures, include the Infisical binary in doctor health, and support the documented mode-0600 Universal Auth credential file.
+- Updated dependencies [3409ffc]
+  - @minion-stack/env@1.1.1
+
 ## 0.1.3
 
 ### Patch Changes

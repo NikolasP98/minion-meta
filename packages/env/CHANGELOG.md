@@ -1,5 +1,11 @@
 # @minion-stack/env
 
+## 1.1.1
+
+### Patch Changes
+
+- 3409ffc: Propagate package-manager link failures, include the Infisical binary in doctor health, and support the documented mode-0600 Universal Auth credential file.
+
 ## 1.1.0
 
 ### Minor Changes
