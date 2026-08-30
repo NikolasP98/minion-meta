@@ -3,7 +3,7 @@ id: 2026-08-17-hub-distinct-visit-dates-spec
 title: "CRM funnel — one timezone-correct visit-date definition (invoices + completed bookings) behind the shipped Loyal floor"
 stage: spec
 status: review
-pass: 9
+pass: 10
 next_slice: 1
 created: 2026-08-17
 updated: 2026-08-30
@@ -185,6 +185,14 @@ writer census omitted `fin_invoice_items`, whose `description` controls `has_pro
 its delete-replace writer and post-commit D18 invalidation and requires both Drizzle and raw-SQL
 searches for that relation in every census rerun.
 
+The pass-10 re-review also found that the census gate treated every write to a read relation as a
+visit-truth mutation. That made the gate impossible to satisfy without needless invalidation:
+`crm-relationship-inference.service.ts` updates only the `_relationshipClaim` bookkeeping key in
+`crm_contacts.custom_fields`, which the visit query does not read. The census and ship gate now
+classify every search hit, require post-commit invalidation only for mutations that can change
+visit ownership, eligibility, day bucketing, or procedure classification, and retain the two
+relationship-claim lease writes as reviewed out-of-domain evidence.
+
 **Design ancestors:**
 [`2026-08-13-crm-customers-server-pagination-spec`](2026-08-13-crm-customers-server-pagination-spec.md)
 (`implementing` — its S2 landed: the SQL `funnel_stage` CASE and `crm-funnel-parity.sql.integration.test.ts`
@@ -318,13 +326,16 @@ but `show timezone;` is what tells you whether it is currently *firing*.
 | `contactFinanceMap` is **not** consumer-free: `crmRevenueSummary` calls it and loops `for (const f of Object.values(map)) { … buyers += 1; … }` — `buyers` increments once per map row with no `f.invoices > 0` guard, so a booking-only row (S2's `{revenue:0, invoices:0, loyal:true, visitDates:2}` shape) would count as a buyer | `crm-finance.service.ts:152-177`, esp. `:164` (`contactFinanceMap` call) and `:170` (`buyers += 1`) — pass-6 review M3, corrects the pass-5 §1 claim at (old) line 191 |
 | `sched_bookings.party_id` is populated by a **separate** reconciliation pass keyed on `attendee_phone` → `parties.phone9` (`party.service.ts:218-221`), independent of the linked `crm_contact_id` contact's own `party_id`. A directly-linked booking's `party_id` column can therefore differ from (or lag) the party its `crm_contact_id` contact belongs to — the M2 canonicalization must key off the **contact's** `party_id` (via `contact_target`), not the booking row's own `party_id`, when a direct link exists | `party.service.ts:218-221`; `pg-scheduling-schema.ts:199` — read while designing the pass-6 `booking_owner` fix |
 
-**Added in pass 7 — the complete writer census.** Passes 4–6 each patched the one mutation the
+**Added in pass 7 — the complete visit-truth writer census.** Passes 4–6 each patched the one mutation the
 round's review named. This table is the enumeration that ends that loop: every relation the visit
-SQL reads, every writer of it at `1b47e8ce`, and whether that writer invalidates today. It was
+SQL reads, every writer of visit-relevant fields at `1b47e8ce`, the reviewed out-of-domain hits
+returned by the same searches, and whether each in-domain writer invalidates today. It was
 built by grepping both write forms for each relation (`.insert(T)`/`.update(T)`/`.delete(T)` and
 raw `insert into`/`update`/`delete from <table>`), not from recall. **A row is "covered" only if
-the invalidation happens *after* the mutation commits** — a bust that runs before the write is
-worse than none, because it re-warms the cache from the pre-mutation state.
+an in-domain mutation's invalidation happens *after* the mutation commits** — a bust that runs
+before the write is worse than none, because it re-warms the cache from the pre-mutation state.
+Out-of-domain hits must be listed with the fields they change and the reason those fields cannot
+change visit truth; they do not require cache invalidation.
 
 | Relation the visit SQL reads | Every writer at `1b47e8ce` | Invalidates today? | Disposition |
 |---|---|---|---|
@@ -333,6 +344,7 @@ worse than none, because it re-warms the cache from the pre-mutation state.
 | `crm_contacts.party_id`, `fin_clients.party_id`, `sched_bookings.party_id`, minted canonical `crm_contacts` | `reconcileParties` (`party.service.ts:140-267`, statements at `:196,202,207,213,220,243,255`) | **No — none at all.** Four production call sites: `finance-sync.service.ts:159` (`syncSource`, whose only bust is `advanceJob`'s, *before* it), `crm-contacts.service.ts:185` (`harvestContacts`, whose `bustCrmList` at `:173` is also *before* it **and** conditional on `created > 0`), `routes/api/crm/parties/reconcile/+server.ts:12` (manual/backfill, no bust), `routes/api/finances/sync/daily/+server.ts:132` (cron, no bust) | **D15** — pass-7 H1 |
 | `crm_contacts.party_id` | `linkContactParty` / `ensurePartyForContact` (`party.service.ts:329-351`) | **No.** `rg` over the whole tree finds **no production caller** — it is an exported trap, not a live path; stating this precisely matters, because the fix is trap-closing, not an outage fix | **D15** — same writer-level fix |
 | `crm_contacts` (create, patch, soft-delete, bulk soft-delete, hard delete, merge, harvest) | `crm-contacts.service.ts:124,138,149,1241,1488,1559,1623,1651,1682`; `crm-cleanup.service.ts:131,463,496,502` | **Yes** — every one is followed by `bustCrmList` (`:173,1511,1615,1642,1674,1684,1790,1839,1847,1862,1871,1959,2261`) or cleanup's local `invalidateTags(tenantDomain(…,'crm'))` (`crm-cleanup.service.ts:16`) | No change |
+| `crm_contacts.custom_fields._relationshipClaim` (relationship-inference lease bookkeeping; not read by visit SQL) | Two raw `update crm_contacts` statements in `crm-relationship-inference.service.ts:420,440` | No | **Reviewed out of domain.** These writes change only `_relationshipClaim`; they cannot change contact membership, `party_id`, `deleted_at`, invoice/booking ownership, procedure classification, or timezone. Do not add visit-cache invalidation |
 | `crm_contacts` insert on the booking path (`ensureCrmContact`) | `scheduling-bookings.service.ts:173`, inside `createBooking` | **No** | **D8** (already specified) |
 | `sched_bookings` insert; `status` | `createBooking` (`:283`), `setBookingStatus` (`:377`) | **No** | **D8** (already specified) |
 | `sched_bookings.start_time` | **Nothing.** Written once at insert (`:289`); no `.update(schedBookings)` or raw `update sched_bookings` touches it anywhere (the only raw one is `party.service.ts:220`, `party_id`). Rescheduling is cancel-then-create (`routes/api/gateway/actions/booking-reschedule/+server.ts:64`) | n/a — immutable | The fact **D16** turns on: a row crossing its own `start_time` is not a mutation, so no invalidation can be attached to it |
@@ -345,8 +357,12 @@ worse than none, because it re-warms the cache from the pre-mutation state.
 body): for each of `crm_contacts`, `fin_clients`, `fin_invoices`, **`fin_invoice_items`**,
 `sched_bookings`, `fin_settings`,
 run `rg -n '\.(insert|update|delete)\(<drizzleTable>\)' src/` and
-`rg -n '(insert into|update|delete from) <table_name>' src/`, and confirm each hit is followed by a
-**post-commit** `bustCrmList` / `bustFinanceCache` / `invalidateTags(tenantDomain(…,'crm'))`.
+`rg -n '(insert into|update|delete from) <table_name>' src/`. Classify every hit by the fields it
+changes. Confirm every mutation that can change visit truth — row membership, `party_id`,
+`deleted_at`, invoice status/shadow/item description, booking ownership/status/start time, or the
+timezone parameter — is followed by a **post-commit** `bustCrmList` / `bustFinanceCache` /
+`invalidateTags(tenantDomain(…,'crm'))`. List out-of-domain hits separately with their changed
+fields and rationale; the two `_relationshipClaim` lease writes above are the pinned baseline.
 
 **Consequences for the pass-2 plan, stated plainly:** its S1 ("build a new `crm-visits.ts` and a
 second batched count") and S2 ("make the decision deterministic, add forward-only / manual-wins /
@@ -1176,10 +1192,11 @@ curl -s "$HUB/api/crm/contacts?funnelStage=loyal&limit=5" -H "$AUTH" | jq '.tota
 #     completion or a TTL, all three already reflect that page's invoices on the very next read
 ```
 
-**Ship gate:** §7 green; the §1 **writer census re-run**, including both search forms for
+**Ship gate:** §7 green; the §1 **visit-truth writer census re-run**, including both search forms for
 `fin_invoice_items`, pasted in the S1 PR body (the `rg` recipe
-in §1 — this is the gate that stops a fifth "one more writer" round, and it must show every hit
-followed by a post-commit bust); both D16 queries and their output pasted in the S2 PR,
+in §1 — this is the gate that stops a fifth "one more writer" round; it must classify every hit,
+show every in-domain mutation followed by a post-commit bust, and retain reviewed out-of-domain
+hits without requiring needless invalidation); both D16 queries and their output pasted in the S2 PR,
 plus the immutable gate-1 artifact's row count and checksum and the reconciliation regression
 proving query 2 can return zero after early completion. The guard/read change remains stopped
 unless an operator explicitly records that early completion is forbidden, even when query 2 is

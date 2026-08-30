@@ -1,15 +1,28 @@
 ---
 spec: 2026-08-17-hub-distinct-visit-dates-spec
-pass: 9
+pass: 10
 verdict: pending
 reviewer: factory-review
 created: 2026-08-17
 updated: 2026-08-30
 ---
 
-# Review record — disposition: STILL IN REVIEW (pass 9 awaiting re-review)
+# Review record — disposition: STILL IN REVIEW (pass 10 awaiting re-review)
 
-## Pass 9 — external review blocker fixed, awaiting re-review
+## Pass 10 — external review blockers fixed, awaiting re-review
+
+Pass 10 closes the latest machine-truth and census-gate findings. The spec and this sidecar now
+record pass 10. The writer census classifies every search hit and requires post-commit invalidation
+only for mutations that can change visit truth. Two raw `crm_contacts` relationship-inference
+writes are retained as reviewed out-of-domain hits because they change only
+`custom_fields._relationshipClaim`, which the visit definition does not read. This makes the
+mandatory rerun executable without adding unrelated cache churn.
+
+The earlier pass-10 corrections remain intact: `updated_at` is explicitly mutable, an operator
+policy decision is mandatory even when the early-completion diagnostic returns zero, and
+`fin_invoice_items` is included in both census search forms.
+
+## Pass 9 — external review blocker fixed, superseded by pass 10
 
 The pass-8 count-then-bulk-update repair was not bounded by the operator-reviewed row set. Pass 9
 replaces it with a checksummed exact-ID/pre-image artifact, forbids all repair when gate 2 is
