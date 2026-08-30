@@ -4,11 +4,13 @@ title: Base UI-004/011 — mobile attention queue, focused stages, responsive ru
 stage: spec
 status: approved
 pass: 5
+next_slice: 2
 created: 2026-08-18
-updated: 2026-08-20
+updated: 2026-08-29
 proposal: 2026-08-18-base-attention-queue-responsive-runs
 verdict: approved
 repos: [minion-base]
+tags: [ui, board, logic, auth, test]
 relationship: depends-on
 related: [2026-08-18-minion-base-mobile-hitl-ux-plan, 2026-08-18-base-ui-primitives-and-shell-spec, 2026-08-18-base-workdetail-summary-first-spec]
 approved_reason: "Pass-5 G2 by orchestrator: pass-4 FAIL findings resolved (membership now the full run-history listing w/ availability discrimination; outage-vs-decision rules were already fixed in the fix round)."
@@ -82,6 +84,61 @@ One open product parameter for the G2 reviewer to accept or set: `ATTENTION_STAL
 (§2 TO-BE 1). No staleness window is declared anywhere in `minion-base`, `minion-meta`, or
 `2026-08-17-sdlc-phase-gates-scoring-spec`, so this spec must declare one rather than infer it. It
 is a single named exported constant with a stated rationale, not a scattered heuristic.
+
+## Pass-5 metadata repair and evidence re-verification — 2026-08-29
+
+This section is a metadata repair with an evidence re-check, not a new review pass. No scope,
+contract, invariant, or definition of done below is changed; the pass counter stays at 5 and the
+`approved` verdict stands on its own pass-5 rationale.
+
+**Why:** the guarded implementation route refused this spec because it declared no canonical
+topics. Frontmatter `tags:` is what a spec-backed dev run resolves into its topic manifest
+(`2026-08-18-factory-topic-capability-manifest-spec` §Design decision 5 — an empty or unresolvable
+declaration fails closed), and this spec carried none.
+
+**What changed here, and nothing else:**
+
+- `tags: [ui, board, logic, auth, test]` — `ui`/`board` for the Base board surface and its
+  components, `logic` for the attention projection and URL-state modules, `test` for the unit,
+  endpoint, and browser suites each slice must ship, and `auth` for Slice 4's new authenticated
+  same-origin log endpoint, which must reject unauthenticated callers, enforce run-listing
+  membership, and never expose the factory bearer secret. `auth` is declared deliberately: it is
+  the topic that keeps the risk tier high and the merge gate human for the slice that adds a
+  server route. No slice here changes authentication policy itself (§5 keeps that out of scope).
+- A `**Topics:**` line under each slice heading, and removal of this spec's id from
+  `specs/topics.json` `sliceTopicValidation.grandfatheredSpecIds`, so the per-slice topic lint now
+  checks this file for real instead of exempting it.
+- `next_slice: 2`, because Slice 1 is merged (evidence below).
+- `updated: 2026-08-29`.
+
+**Disposition: still current, not stale and not superseded — scope narrows to Slices 2-4.**
+Re-verified 2026-08-29 against `minion-base@main` at `19531059cf42e352e35425dd3b3b71afa9eb540f`
+through the GitHub contents API:
+
+- **Slice 1 is merged.** PR [#39](https://github.com/NikolasP98/minion-base/pull/39) (merged
+  2026-08-28, the continuation of closed PRs #16/#31) landed `src/lib/board/attention.ts` +
+  `attention.test.ts`, `view-state.ts` + `view-state.test.ts`, `parse-feature-flag.ts` +
+  `feature-flag.ts` + tests, `src/lib/server/factory.ts` (`loadRunHistoryListing`,
+  `activeRunListingOf`, `loadActiveRunListing`, with `loadActiveRuns` kept as the wrapper) +
+  `factory.test.ts`, the `activeRunListing` key in `src/routes/kanban/+page.server.ts`, the
+  `attentionQueueV2Enabled` flag boundary in `src/routes/kanban/+page.svelte`, and both
+  `PUBLIC_ATTENTION_QUEUE_V2=0` / `PUBLIC_RESPONSIVE_RUNS_V2=0` in `.env.example`. `attention.ts`
+  exports the seven-group precedence, the `unclassified` residual, and a single
+  `ATTENTION_STALE_AFTER_MS`, exactly as specified.
+- **Slices 2-4 are not implemented.** `src/lib/components/board/`, `src/lib/runs/`,
+  `src/lib/components/runs/`, and `src/routes/api/runs/` do not exist on `main`;
+  `src/routes/api/` holds only `factory`, `health`, `meta`, and `models`.
+  `PUBLIC_RESPONSIVE_RUNS_V2` is reserved but inert, as its own `.env.example` comment says.
+- **Two shipped facts a Slice 2/3 implementer must absorb rather than re-derive:** (a) the merged
+  Slice 1 already renders a minimal inline attention ledger inside `+page.svelte` behind the flag —
+  Slice 2 must *replace* it with the named `AttentionSummary`/`AttentionGroup`/`WorkItemCard`/
+  `WorkItemList` components, never add a second summary surface beside it; (b) `view-state.ts`
+  already carries a third view (`view=lab`, from the merged board-traceability overhaul, PR #38)
+  alongside `board` and `factory`, and already exports the `StagePosition` "N of 5" helper Slice 3
+  needs, so route state must be preserved for `lab` as well as `factory`.
+
+Nothing in the AS-IS anchors below was contradicted by the re-check; where §2 or §3 describes a
+Slice 1 file as new, read it as the merged baseline.
 
 ## 0. Product
 
@@ -513,6 +570,11 @@ its tests and flag-off compatibility in the same change. No slice may add a boar
 
 ### Slice 1 — attention projection and shareable view state (4–6 h)
 
+**Topics:** `board`, `logic`, `ui`, `test`
+
+**Status: merged 2026-08-28** (minion-base PR #39, `19531059`). Kept for the record; the Factory's
+next implementable slice is Slice 2 (`next_slice: 2`).
+
 **User-visible outcome:** behind the off-by-default flag, board state has one deterministic answer
 for "what needs me, in which stage, under which shareable filters?"
 
@@ -574,6 +636,8 @@ is deliberately not touched (it keeps the unchanged `loadActiveRuns` wrapper).
 
 ### Slice 2 — attention queue and bounded-action WorkItemCard (6–8 h)
 
+**Topics:** `ui`, `board`, `test`
+
 **User-visible outcome:** a phone opens to a grouped, countable queue whose cards explain state,
 risk, and available proof before offering at most one currently resolvable route to detail.
 
@@ -605,6 +669,8 @@ risk, and available proof before offering at most one currently resolvable route
   off, the existing board behavior and `tests/e2e/board-ordering.spec.ts` remain unchanged.
 
 ### Slice 3 — focused stages, filter sheet, and desktop lane polish (6–8 h)
+
+**Topics:** `ui`, `board`, `test`
 
 **User-visible outcome:** every lifecycle stage is directly reachable on a phone without sideways
 scrolling, filters are shareable/recoverable, and desktop lanes remain efficient.
@@ -638,6 +704,8 @@ scrolling, filters are shareable/recoverable, and desktop lanes remain efficient
   exit 0.
 
 ### Slice 4 — responsive run cards and authenticated lazy logs (6–8 h)
+
+**Topics:** `ui`, `auth`, `logic`, `test`
 
 **User-visible outcome:** phone users can scan a run's state/stage/time in the existing Factory
 view and selectively inspect its logs without downloading every run's history.
