@@ -1,7 +1,7 @@
 ---
 id: 2026-08-29-proposal-index-check-mode-and-effort-projection
 title: proposal-index.mjs — add a read-only --check mode and reconcile projection with the auto-triage index writer
-status: draft
+status: review
 created: 2026-08-29
 updated: 2026-08-29
 repos: [minion-meta]
@@ -24,13 +24,10 @@ the user said.
 Two divergences between `scripts/proposal-index.mjs` and the out-of-band auto-triage writer
 that maintains the same file:
 
-1. **No read-only mode.** `scripts/spec-index.mjs:574` reads `--check` and compares without
-   writing. `scripts/proposal-index.mjs` has no equivalent: it always reaches
-   `writeFileSync('proposals/index.json', ...)`. Running it to verify the index therefore
-   mutates the working tree. Observed on PR #281 (2026-08-29): a reviewer ran
-   `node scripts/proposal-index.mjs --check`, the unknown flag was ignored, the file was
-   rewritten, and the reviewer had to restore it by hand. **Still open** — this proposal
-   remains the tracking artifact for it.
+1. **Read-only mode — fixed in the consolidated release.** `scripts/proposal-index.mjs`
+   now recognizes `--check`, compares the generated projection with the committed index,
+   exits non-zero on drift, and does not write. Focused tests cover both matching and drifted
+   indexes.
 
 2. **Field drift — fixed in review-fix-6f292604.** `proposals/index.json` at `6548c40` carried
    `"effort": "S"` on `2026-08-29-hub-pos-bookings-stock-gate-drift`, but the generator
@@ -61,19 +58,16 @@ read surface, and invalid frontmatter still exits 1.
 
 ## DELTA (exact transitions)
 
-1. Add `const check = process.argv.includes('--check')` and branch before `writeFileSync`,
-   mirroring `scripts/spec-index.mjs:574-...`. Test: run `--check` on a clean tree (exit 0,
-   `git status --porcelain proposals/` empty), then on a hand-perturbed index (exit 1, still
-   no write). **Still open.**
+1. ~~Add `const check = process.argv.includes('--check')` and branch before
+   `writeFileSync`, mirroring `scripts/spec-index.mjs`.~~ **Done** — matching and drifted
+   index cases prove the command is read-only.
 2. ~~Decide the `effort` question with whoever owns the auto-triage writer, then implement it in
    ONE place.~~ **Done** — the generator projects `effort` unconditionally when frontmatter
    declares it (`scripts/proposal-index.mjs`). Confirm separately whether the auto-triage
    writer's prepend-ordering still diverges from the generator's `b.id.localeCompare(a.id)`
    sort; if so, decide with whoever owns that writer which side changes.
-3. Extend `scripts/spec-index.test.mjs`'s sibling coverage (or a new
-   `scripts/proposal-index.test.mjs`) with both cases above. `scripts/proposal-index.test.mjs`
-   now exists and covers the `effort` projection (item 2); it does not yet cover `--check`
-   (item 1, still open).
+3. ~~Extend the sibling coverage with both cases above.~~ **Done** in
+   `scripts/proposal-index.test.mjs`.
 
 ## Out of scope
 
@@ -83,9 +77,8 @@ read surface, and invalid frontmatter still exits 1.
 
 ## Definition of done
 
-`--check` verifies without writing (proved by a test that fails if the write returns), and a
-regeneration run straight after an auto-triage index commit produces an empty diff. The
-`effort`-projection half of this is done; `--check` is not.
+`--check` verification and `effort` projection are complete. The remaining definition of done
+is a regeneration run straight after an auto-triage index commit producing an empty diff.
 
 ## Handoff note
 
@@ -100,8 +93,6 @@ as-is rather than hand-patched at the time.
 and `proposals/index.json` was regenerated. The `TODO(handoff)` comment for the dropped-effort
 site was removed from `scripts/proposal-index.mjs` since it no longer applies.
 
-**Update (review-fix-6f292604, round 2):** that removal also took the row-ordering half of the
-marker with it, leaving the ordering open end tracked in prose only. Both still-open ends now
-carry a marker at their exact site in `scripts/proposal-index.mjs`: ordering above the
-`proposals.sort(...)` call, `--check` above the `writeFileSync(...)` call. No functional
-change to ordering was made in this review-fix branch; this proposal stays `draft`.
+**Update (consolidated release, 2026-08-29):** read-only `--check`, its focused tests, effort
+projection, and effort validation are complete. Only the out-of-band auto-triage ordering
+contract remains open; its exact sort site retains the required `TODO(handoff)` marker.
