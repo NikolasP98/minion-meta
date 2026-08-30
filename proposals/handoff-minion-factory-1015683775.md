@@ -1,12 +1,11 @@
 ---
-id: handoff-minion-factory-1093105314
-title: Handoff marker — runner/src/memory/read.ts (minion-factory)
-status: review
-created: 2026-08-20
+id: handoff-minion-factory-1015683775
+title: Handoff marker — scripts/promotion/authenticated-boundary-probe.sh (minion-factory)
+status: draft
+created: 2026-08-30
 updated: 2026-08-30
 repos: [minion-factory]
 tags: [handoff-sweep]
-duplicate_candidate: 2026-08-17-factory-memory-governance
 source: handoff-sweep
 source_trust: trusted-automation
 risk_class: low
@@ -14,7 +13,7 @@ priority: medium
 owner: factory
 ---
 
-# Handoff marker — runner/src/memory/read.ts
+# Handoff marker — scripts/promotion/authenticated-boundary-probe.sh
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -32,5 +31,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-08-30)
 
-- `NikolasP98/minion-factory@dev runner/src/memory/read.ts:22` — spec 2026-08-18-factory-memory-governance Slice 2 remainder —
-  https://github.com/NikolasP98/minion-factory/blob/dev/runner/src/memory/read.ts#L22
+- `NikolasP98/minion-factory@dev scripts/promotion/authenticated-boundary-probe.sh:51` — replace this incident-derived bound with measured omission
+  https://github.com/NikolasP98/minion-factory/blob/dev/scripts/promotion/authenticated-boundary-probe.sh#L51

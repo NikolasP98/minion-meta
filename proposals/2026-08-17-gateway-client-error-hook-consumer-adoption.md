@@ -3,7 +3,7 @@ id: 2026-08-17-gateway-client-error-hook-consumer-adoption
 title: "Adopt the GatewayClient onEventError hook in hub, site and paperclip (S3 consumer handoff)"
 status: in-spec
 created: 2026-08-17
-updated: 2026-08-19
+updated: 2026-08-29
 spawned_spec: 2026-08-19-gateway-client-error-hook-consumer-adoption-spec
 repos: [minion_hub, minion_site, paperclip-minion]
 tags: [logic, docs]
@@ -31,14 +31,27 @@ splitting the decision across two adoption passes would mean bumping twice for o
 title above still names only `onEventError` because the frontmatter `id`/`title` are indexed
 machine state; read it as "the `GatewayClient` lifecycle-error hooks".
 
-> ⚠️ Known artifact tension for whoever picks this up: the spawned spec
+> ⚠️ **Artifact tension still open, re-checked 2026-08-29.** The spawned spec
 > `2026-08-19-gateway-client-error-hook-consumer-adoption-spec` (approved, pass 2) still scopes
 > itself to `onEventError` only and states that S2, if it shipped, would be "a **second**, separate
 > consumer-adoption pass, not an amendment to this one." S2 did ship, in the same unpublished
 > release, and the later spec `2026-08-19-gateway-client-lifecycle-swallows-handoff-spec` §2 Slice 2
-> directs this proposal be amended in place instead. That spec was not edited here (out of its own
-> declared scope). Reconcile before starting consumer work: either widen that spec to all three
-> hooks, or file its second pass and cross-link it here.
+> directs this proposal be amended in place instead. A 2026-08-29 attempt to widen that spec in place
+> as its pass 3 was reverted on re-review: the pass-2 review sidecar only approved the one-hook
+> contract, so widening it needs its own independent pass-3 review before it is implementation-eligible,
+> not a same-day metadata-repair edit. Reconcile before starting consumer work: either get that
+> widened pass reviewed and approved, or file the sibling hooks as a second, separate adoption pass
+> and cross-link it here.
+>
+> ⛔ **Also blocked on the release itself, re-verified 2026-08-29.** `main` carries no pending
+> changesets (only `.changeset/README.md` + `config.json`) while `dev` holds 13, npm's newest
+> `@minion-stack/shared` is `0.10.0` (published 2026-08-13), and the newest "Version Packages" PR is
+> **#18** (merged 2026-08-13) — none has opened since the S1 merge (#29, 2026-08-19) that carried
+> `.changeset/gateway-client-event-error-hook.md`. So DELTA step 1 below ("wait for the release to
+> actually publish") is unsatisfied and no consumer may bump regardless of how the tension above is
+> resolved.
+> The missing `minion-meta` dev→main promotion is filed separately as
+> `proposals/2026-08-29-meta-shared-release-promotion-stalled.md`.
 
 ## AS-IS
 

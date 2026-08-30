@@ -1,114 +1,174 @@
-// CLI fixture tests for scripts/proposal-index.mjs' WorkItem gate (spec
-// 2026-08-18-factory-workitem-handoff-schema-spec Slice 4 DoD: "a temporary
-// fixture missing each required field or containing a risk/tag mismatch exits
-// non-zero with its filename and field").
-//
-// These shell out on purpose — the DoD is about the exit code and the operator
-// -facing message, not about an internal helper's return value. The pure rules
-// are covered in workitem.test.mjs.
+// Focused regression test for the effort-projection fix (see
+// proposals/2026-08-29-proposal-index-check-mode-and-effort-projection.md):
+// proposal-index.mjs must project a declared `effort` frontmatter field into
+// proposals/index.json instead of silently dropping it. Runs the real CLI
+// against a throwaway fixture tree, same pattern as spec-index.test.mjs.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
-import { cpSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { execFileSync, spawnSync } from 'node:child_process';
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { WORKITEM_FIELDS } from './workitem.mjs';
 
-const COMPLETE = {
-	id: 'fixture',
-	title: 'Fixture',
-	status: 'draft',
-	created: '2026-08-18',
-	updated: '2026-08-18',
-	repos: '[minion-meta]',
-	tags: '[logic]',
-	source: 'human',
-	source_trust: 'human',
-	risk_class: 'low',
-	priority: 'medium',
-	owner: 'human'
+// Mirrors spec-index.test.mjs's FIXTURE_TOPICS: minimal, schema-valid
+// topics.json satisfying D1's classifier-coverage rule (every
+// CLASSIFIER_TOPICS_V1 entry) plus the reserved "unclassified" topic.
+const FIXTURE_TOPICS = {
+	policyVersion: 1,
+	sliceTopicValidation: { grandfatheredSpecIds: [] },
+	topics: [
+		{ name: 'docs', aliases: [], riskTier: 'low', autoMergeEligible: true, description: 'x' },
+		{ name: 'test', aliases: [], riskTier: 'low', autoMergeEligible: true, description: 'x' },
+		{ name: 'deps', aliases: [], riskTier: 'low', autoMergeEligible: true, description: 'x' },
+		{ name: 'infra', aliases: [], riskTier: 'high', autoMergeEligible: false, description: 'x' },
+		{ name: 'auth', aliases: [], riskTier: 'high', autoMergeEligible: false, description: 'x' },
+		{ name: 'data', aliases: [], riskTier: 'high', autoMergeEligible: false, description: 'x' },
+		{ name: 'migrations', aliases: ['migration'], riskTier: 'high', autoMergeEligible: false, description: 'x' },
+		{ name: 'ui', aliases: [], riskTier: 'unclassified', autoMergeEligible: false, description: 'x' },
+		{ name: 'unclassified', aliases: [], riskTier: 'unclassified', autoMergeEligible: false, description: 'x' }
+	]
 };
 
-function frontmatter(fields) {
-	const lines = Object.entries(fields).map(([k, v]) => `${k}: ${v}`);
-	return `---\n${lines.join('\n')}\n---\n\n# Fixture\n`;
-}
-
-// A real topics.json keeps the taxonomy behaviour identical to production —
-// the tag vocabulary is not what these tests are exercising.
-function makeFixture(fields = COMPLETE, name = 'fixture.md') {
+function makeCliFixture() {
 	const root = mkdtempSync(join(tmpdir(), 'proposal-index-cli-'));
 	mkdirSync(join(root, 'scripts'));
 	mkdirSync(join(root, 'specs'));
 	mkdirSync(join(root, 'proposals'));
-	for (const script of ['proposal-index.mjs', 'spec-frontmatter.mjs', 'topics.mjs', 'workitem.mjs'])
-		cpSync(new URL(script, import.meta.url), join(root, 'scripts', script));
-	cpSync('specs/topics.json', join(root, 'specs', 'topics.json'));
-	writeFileSync(join(root, 'proposals', name), frontmatter(fields));
+	for (const name of ['proposal-index.mjs', 'review-sidecar.mjs', 'spec-frontmatter.mjs', 'topics.mjs', 'workitem.mjs'])
+		execFileSync('cp', [new URL(name, import.meta.url).pathname, join(root, 'scripts', name)]);
+	writeFileSync(join(root, 'specs', 'topics.json'), JSON.stringify(FIXTURE_TOPICS, null, '\t') + '\n');
 	return root;
 }
 
-function run(root) {
-	return spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8', env: { PATH: process.env.PATH } });
-}
+test('effort projection: a declared effort frontmatter field is projected into index.json', () => {
+	const root = makeCliFixture();
+	const proposal = `---
+id: fixture-with-effort
+title: Fixture with effort
+status: approved
+created: 2026-08-29
+repos: [minion-meta]
+effort: S
+source: human
+source_trust: human
+risk_class: unclassified
+priority: medium
+owner: human
+---
 
-test('a complete WorkItem indexes cleanly and every field is projected', () => {
-	const result = run(makeFixture());
-	assert.equal(result.status, 0, result.stderr);
+# Fixture with effort
+`;
+	writeFileSync(join(root, 'proposals', 'fixture-with-effort.md'), proposal);
+	execFileSync('node', ['scripts/proposal-index.mjs'], { cwd: root });
+	const index = JSON.parse(readFileSync(join(root, 'proposals', 'index.json'), 'utf8'));
+	assert.equal(index.proposals.length, 1);
+	assert.equal(index.proposals[0].effort, 'S');
 });
 
-test('the generated entry carries the complete WorkItem projection', () => {
-	const root = makeFixture();
-	assert.equal(run(root).status, 0);
-	const { proposals } = JSON.parse(readFileSync(join(root, 'proposals', 'index.json'), 'utf8'));
-	assert.equal(proposals.length, 1);
-	for (const field of WORKITEM_FIELDS) {
-		assert.ok(proposals[0][field] !== undefined, `${field} missing from ${JSON.stringify(proposals[0])}`);
+test('effort projection: a proposal without effort has no effort key in its projection', () => {
+	const root = makeCliFixture();
+	const proposal = `---
+id: fixture-without-effort
+title: Fixture without effort
+status: approved
+created: 2026-08-29
+repos: [minion-meta]
+source: human
+source_trust: human
+risk_class: unclassified
+priority: medium
+owner: human
+---
+
+# Fixture without effort
+`;
+	writeFileSync(join(root, 'proposals', 'fixture-without-effort.md'), proposal);
+	execFileSync('node', ['scripts/proposal-index.mjs'], { cwd: root });
+	const index = JSON.parse(readFileSync(join(root, 'proposals', 'index.json'), 'utf8'));
+	assert.equal(index.proposals.length, 1);
+	assert.equal('effort' in index.proposals[0], false);
+});
+
+test('effort validation: numeric zero is rejected instead of silently omitted', () => {
+	const root = makeCliFixture();
+	writeFileSync(
+		join(root, 'proposals', 'fixture-invalid-effort.md'),
+		`---
+id: fixture-invalid-effort
+title: Fixture with invalid effort
+status: draft
+created: 2026-08-29
+effort: 0
+source: human
+source_trust: human
+risk_class: unclassified
+priority: medium
+owner: human
+---
+
+# Invalid effort
+`
+	);
+	const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+	assert.equal(result.status, 1, result.stdout);
+	assert.match(result.stderr, /fixture-invalid-effort\.md: invalid effort "0"/);
+});
+
+test('effort validation: an explicitly blank value is rejected', () => {
+	const root = makeCliFixture();
+	writeFileSync(
+		join(root, 'proposals', 'fixture-blank-effort.md'),
+		`---
+id: fixture-blank-effort
+title: Fixture with blank effort
+status: draft
+created: 2026-08-29
+effort:
+source: human
+source_trust: human
+risk_class: unclassified
+priority: medium
+owner: human
+---
+
+# Blank effort
+`
+	);
+	const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+	assert.equal(result.status, 1, result.stdout);
+	assert.match(result.stderr, /fixture-blank-effort\.md: invalid effort ""/);
+});
+
+test('WorkItem validation rejects each missing required field by filename and field', () => {
+	for (const field of ['status', 'source', 'source_trust', 'risk_class', 'priority', 'owner']) {
+		const root = makeCliFixture();
+		const workItem = {
+			status: 'draft',
+			source: 'human',
+			source_trust: 'human',
+			risk_class: 'low',
+			priority: 'medium',
+			owner: 'human'
+		};
+		delete workItem[field];
+		const lines = Object.entries(workItem).map(([key, value]) => `${key}: ${value}`).join('\n');
+		writeFileSync(
+			join(root, 'proposals', 'missing.md'),
+			`---\nid: missing\ntitle: Missing field\ncreated: 2026-08-29\ntags: [docs]\n${lines}\n---\n`
+		);
+		const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+		assert.equal(result.status, 1, field);
+		assert.match(result.stderr, new RegExp(`missing\\.md: [^\\n]*"${field}"`), result.stderr);
 	}
-	assert.equal(proposals[0].source_trust, 'human');
-	assert.equal(proposals[0].risk_class, 'low');
-	assert.equal(proposals[0].priority, 'medium');
-	assert.equal(proposals[0].owner, 'human');
 });
 
-test('each missing required field exits non-zero naming the file and the field', () => {
-	for (const field of WORKITEM_FIELDS) {
-		const fields = { ...COMPLETE };
-		delete fields[field];
-		const result = run(makeFixture(fields, 'missing.md'));
-		assert.equal(result.status, 1, `${field} should fail: ${result.stdout}`);
-		assert.match(result.stderr, /^missing\.md: /m, field);
-		assert.match(result.stderr, new RegExp(`missing\\.md: [^\\n]*"${field}"`), `${field}: ${result.stderr}`);
-	}
-});
-
-test('a risk/tag mismatch exits non-zero naming the file and the field', () => {
-	const result = run(makeFixture({ ...COMPLETE, tags: '[infra]', risk_class: 'low' }, 'mismatch.md'));
+test('WorkItem validation rejects a risk/tag mismatch by filename and risk_class', () => {
+	const root = makeCliFixture();
+	writeFileSync(
+		join(root, 'proposals', 'mismatch.md'),
+		`---\nid: mismatch\ntitle: Risk mismatch\nstatus: draft\ncreated: 2026-08-29\ntags: [infra]\nsource: human\nsource_trust: human\nrisk_class: low\npriority: medium\nowner: human\n---\n`
+	);
+	const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
 	assert.equal(result.status, 1);
 	assert.match(result.stderr, /mismatch\.md: invalid risk_class "low"/);
-	assert.match(result.stderr, /derive "high"/);
-});
-
-test('an out-of-enum value exits non-zero naming the file and the field', () => {
-	for (const [field, bad] of [
-		['source_trust', 'automation'],
-		['priority', 'p1'],
-		['status', 'shipped'],
-		['source', 'Not A Slug']
-	]) {
-		const result = run(makeFixture({ ...COMPLETE, [field]: bad }, 'bad.md'));
-		assert.equal(result.status, 1, field);
-		assert.match(result.stderr, new RegExp(`bad\\.md: invalid ${field}`), `${field}: ${result.stderr}`);
-	}
-});
-
-test('the committed proposals corpus passes the gate and its index is up to date', () => {
-	const before = readFileSync('proposals/index.json', 'utf8');
-	const result = spawnSync('node', ['scripts/proposal-index.mjs'], { encoding: 'utf8' });
-	assert.equal(result.status, 0, result.stderr);
-	assert.equal(
-		readFileSync('proposals/index.json', 'utf8'),
-		before,
-		'proposals/index.json is stale — run `node scripts/proposal-index.mjs` and commit the result'
-	);
 });

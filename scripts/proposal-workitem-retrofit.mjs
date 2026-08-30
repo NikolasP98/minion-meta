@@ -63,6 +63,8 @@ export const SOURCE_RULES = [
 	{ match: /^factory-review-/, ...TRUSTED, why: 'factory review stage (spec-named rule)' },
 	{ match: /^factory-run-/, ...TRUSTED, why: 'factory dev run open-items ledger' },
 	{ match: /^review-fix-/, ...TRUSTED, why: 'factory review-fix applier' },
+	{ match: /^board-deployment-repair-/, ...TRUSTED, why: 'factory deployment-repair run' },
+	{ match: /^site-release-review-/, ...TRUSTED, why: 'factory release-review run' },
 	{ match: /^postmerge-discovery$/, ...TRUSTED, why: 'factory post-merge discovery loop' },
 	{ match: /^handoff-/, ...TRUSTED, why: 'factory handoff-ledger sweep' },
 	{ match: /^merge-scan$/, ...TRUSTED, why: 'factory merge-scan lane' },
