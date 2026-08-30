@@ -60,8 +60,11 @@ A spec produced (or re-passed) by the factory pipeline passes `node scripts/spec
   equal the spec's current `pass`/`verdict`.
 
 Invariant that must not change: the sidecar keeps its per-pass history — the frontmatter is the
-**current-pass roll-up** and each pass keeps its own `## Pass N — <verdict>` section (or, for a
-pass whose record is genuinely unrecoverable, `## Pass N — record unavailable: <reason>`).
+**current-pass roll-up** and each pass keeps exactly one accepted `## Pass N — <verdict>` section
+(or, for a pass whose record is genuinely unrecoverable, `## Pass N — record unavailable:
+<non-empty reason>`). After optional surrounding backticks are normalized, `<verdict>` must be a
+member of the meta gate's `VERDICTS`; the current-pass verdict must equal the roll-up verdict.
+Arbitrary suffixes, a reasonless `record unavailable`, and duplicate accepted headings are invalid.
 Refreshing the roll-up must not overwrite or delete earlier passes' recorded findings, and a pass
 whose detail was never committed is named as such rather than reconstructed. This is a machine-
 checked requirement, not a convention: `2026-08-26-spec-heading-lint-baseline-backfill-spec` S3
@@ -85,7 +88,9 @@ alone is spotless.
    section for the new current pass rather than replacing the file.
    *Proves it:* after a factory re-pass, `sidecar.pass === spec.pass` and
    `sidecar.verdict === spec.verdict`, the prior pass's section is still present, and a `## Pass N`
-   section exists for the new current pass (the Body clause — see TO-BE above).
+   section exists for the new current pass and passes the exact Body grammar above. Generator tests
+   reject an arbitrary suffix, a verdict contradicting the current roll-up, reasonless
+   `record unavailable`, and duplicate current-pass headings.
 
 The exact rule semantics and error text that the generator must satisfy are appended to this
 proposal by slices S2 and S3 of

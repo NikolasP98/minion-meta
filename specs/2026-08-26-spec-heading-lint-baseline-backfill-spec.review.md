@@ -185,9 +185,22 @@ Round 5 — `M1`, `M2`, `L1`, all fixed in this pass without reopening pass 3:
   spec file, not merely on a generated index. Fixed by serializing S4 before S5–S17 in §7, naming the
   three colliding batches and ids, and removing the "index files only" independence claim.
 
+Round 6 — `M1`, `L1`, both fixed in this pass without reopening pass 3:
+
+- `M1` (medium) round 5 required a non-empty Body suffix but did not constrain its meaning, so
+  arbitrary text, a current-pass verdict contradicting the roll-up, and reasonless `record
+  unavailable` would all pass the prescribed regex. Fixed by replacing the loose regex with an
+  exact normalized grammar: precisely one accepted heading per required pass; suffix in `VERDICTS`
+  or `record unavailable: <non-empty reason>`; and a current-pass verdict equal to the roll-up.
+  S3 now requires negative controls for arbitrary, contradictory, reasonless, and duplicate cases,
+  and the factory-generator proposal carries the identical invariant and proving tests.
+- `L1` (low) D4 still named only B1+B2 and its fixtures omitted Body even though §5B and S3 made
+  all three clauses atomic. Fixed by naming B1+B2+Body in D4 and listing the same semantic Body
+  negatives and positives required by S3, leaving one binding transition and proof contract.
+
 ### Author's disposition
 
-`approved`. Every round-1 through round-5 finding is fixed on the branch; no finding was waived. The
+`approved`. Every round-1 through round-6 finding is fixed on the branch; no finding was waived. The
 approval is the authoring run's operator disposition, not a reviewer sign-off on this last fix round —
 if a subsequent review round raises a blocking finding, the spec returns to `status: review` /
 `verdict: pending` and this section records that instead.

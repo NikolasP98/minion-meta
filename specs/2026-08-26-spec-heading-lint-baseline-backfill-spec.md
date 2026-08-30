@@ -222,7 +222,7 @@ Invariants that must not change:
 | D1 | Baseline entries can go stale unnoticed → `--check` errors on any baseline id that passes the lint or names a missing spec (both files) | S1 | New fixtures in `scripts/spec-index.test.mjs`: a baselined-but-clean spec fails; a baseline id with no file fails; the real corpus still exits 0 |
 | D2 | No way to see what the baselined specs are missing → `node scripts/spec-heading-backfill.mjs --report` prints per-id missing sections + totals; `--verify` is the same check as D1 usable pre-commit | S1 | `--report` row count equals the baseline file's key count exactly (114 as measured 2026-08-29; totals 111/88/86 — dated orientation numbers per §2's drift note, not a binding count); `--verify` exits 0 today and 1 on a seeded stale entry |
 | D3 | `related` ids unresolved → every `related` id must resolve against specs ∪ proposals, via one shared loader | S2 | Fixtures: dangling id fails; proposal-only id passes; missing `proposals/` dir does not crash; corpus exits 0 with zero unresolvable ids (99 ids, 22 proposal-only, as measured 2026-08-29 — dated orientation numbers, not a binding count) |
-| D4 | `pass>1` policy undecided and TODO misstates the corpus → decision recorded, TODO removed, `pass>1 ⇒ a **parsed, current** review sidecar` enforced (§5B B1 **and** B2 together — there is no half-rule variant) | S3 | Fixtures: `pass: 2` with no sidecar fails; with an unparseable, wrong-`spec`, missing-field, `pass`-ahead, stale-`pass`, or verdict-contradicting sidecar fails; with a current sidecar passes; `pass: 1` unaffected; the one known stale sidecar is repaired in the same slice so the corpus exits 0 with no new baseline and the TODO is removed outright |
+| D4 | `pass>1` policy undecided and TODO misstates the corpus → decision recorded, TODO removed, `pass>1 ⇒ a **parsed, current** review sidecar` enforced (§5B B1, B2, **and Body** together — there is no partial-rule variant) | S3 | Fixtures: `pass: 2` with no sidecar fails; with an unparseable, wrong-`spec`, missing-field, `pass`-ahead, stale-`pass`, or verdict-contradicting sidecar fails; Body rejects an empty/missing-current-pass body, an arbitrary suffix, a current-pass verdict contradicting the roll-up, `record unavailable` without a non-empty reason, and duplicate accepted headings for one pass; positives cover exactly one normalized verdict or `record unavailable: <non-empty reason>` heading for every pass from 2 through current; `pass: 1` is unaffected; the one known stale sidecar is repaired in the same slice so the corpus exits 0 with no new baseline and the TODO is removed outright |
 | D5 | 5 orphan `superseded` specs → each linked from a real successor or flipped to `retired` + `retired_reason`, each with `updated` bumped; `scripts/spec-supersede-baseline.json` deleted | S4 | `--check` exits 0 with the file absent; `specs/index.json` regenerated with matching `updated` dates; each disposition justified in the PR body |
 | D6 | Heading-baseline range B1 grandfathered → backfilled and removed | S5 | `--check` exits 0; `--verify` exits 0; `--report --batch B1` prints 0 rows |
 | D7 | range B2 grandfathered → backfilled and removed | S6 | same, for B2 |
@@ -286,10 +286,14 @@ separately named so a failure message says which contract broke, but shipped in 
   equals the spec's `verdict` (the roll-up must not contradict its own evidence). The single known
   violation — `2026-08-18-base-attention-queue-responsive-runs-spec`, spec `pass: 5` / sidecar
   `pass: 2` — is repaired **inside S3, before the rule is enabled**, so B2 also lands at zero (I3).
-- **Body — per-pass record (binding, lands in S3).** For every integer N with `2 ≤ N ≤ spec.pass`,
-  the sidecar body contains a heading matching `^## Pass N — (\S.*)$` — normally `<verdict>`, or,
-  for a pass whose review record is genuinely unrecoverable, the literal `record unavailable`
-  followed by a one-sentence reason. Frontmatter validity is not sufficient: a sidecar with a
+- **Body — per-pass record (binding, lands in S3).** Parse second-level headings of the exact form
+  `## Pass N — <suffix>` (the repository's optional backticks around the whole suffix are removed
+  before validation). For every integer N with `2 ≤ N ≤ spec.pass`, there is **exactly one**
+  accepted heading. Its normalized suffix is either a member of `VERDICTS` or the literal
+  `record unavailable: <reason>`, where `<reason>` contains at least one non-whitespace character.
+  When N equals `spec.pass`, a verdict suffix must equal the sidecar/spec roll-up verdict; a
+  contradictory verdict is invalid. An arbitrary suffix, bare `record unavailable`, or duplicate
+  accepted heading for one pass is invalid. Frontmatter validity is not sufficient: a sidecar with a
   parseable, current, agreeing frontmatter (B1 and B2 both green) and an empty or sectionless body
   fails Body for every N in range, and a sidecar that has sections for passes `2..spec.pass-1` but
   is missing the section for `spec.pass` itself — the current pass — fails Body even though B1 and
@@ -523,9 +527,11 @@ orientation numbers, not a binding count) — so the next reader does not re-lit
    `sidecar.pass < spec.pass` (B2); with `sidecar.pass === spec.pass` but a contradicting `verdict`
    (B2); with a parseable, current, agreeing frontmatter and an empty/sectionless body (Body); with
    `pass: 3` and a `## Pass 2 — <verdict>` section present but no `## Pass 3` section for the
-   current pass (Body). Positives: a current, agreeing sidecar with a `## Pass N — <verdict>` (or
-   `record unavailable`) section for every N from 2 through the current pass passes, and `pass: 1`
-   with no sidecar passes;
+   current pass (Body); with an arbitrary suffix; with a current-pass verdict suffix contradicting
+   the roll-up; with bare `record unavailable`; or with duplicate accepted headings for one pass.
+   Positives: a current, agreeing sidecar with exactly one `## Pass N — <verdict>` or `## Pass N —
+   record unavailable: <non-empty reason>` section for every N from 2 through the current pass
+   passes (including the repository's optional backtick form), and `pass: 1` with no sidecar passes;
 3. each fixture fails if its control is reverted (fixtures that cannot fail prove nothing);
 4. `2026-08-18-base-attention-queue-responsive-runs-spec`'s sidecar satisfies B1, B2, **and** Body
    in the same commit that enables them, and every other pass>1 sidecar does too;
