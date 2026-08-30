@@ -111,6 +111,24 @@ repository pipeline remains the sole owner. A second unresolved blocking review 
 returns the findings to the normal spec lifecycle. It does not recursively rerun or raise the model
 tier.
 
+### 3.3 no-mistakes runtime preflight
+
+Before an eligible release gate starts, the operator must prove all of the following:
+
+- the installed no-mistakes version is the current reviewed stable release, or a specifically pinned
+  stable version whose custody-recovery behavior is accepted;
+- the chosen provider can start a bounded probe and is not already known to be quota-exhausted;
+- every configured fallback passed the same probe, otherwise it is removed for that run rather than
+  consuming one guaranteed failed invocation per phase;
+- the repository and Git signing process have a writable temporary directory with enough user quota;
+  global filesystem free space alone is not evidence; and
+- no other gate owns the submitted branch or candidate head.
+
+The operator sets a task-local `TMPDIR` outside a quota-limited mount when needed. A gate failure after
+fixer edits must recover or anchor the exact staged Git tree before cleanup. If custody recovery cannot
+prove that preservation, the release stops and the operator salvages the object graph before any retry.
+The gate is never restarted merely to repeat a completed review.
+
 ## 4. DELTA: how the decision is applied
 
 ### Slice 1 — record the routing decision
@@ -133,6 +151,11 @@ tier.
 - Record every accepted fix and verify the final exact head with Factory tests and hosted CI.
 - Stop after the bounded review contract; any further architectural finding becomes a normal
   follow-up rather than an unbounded fix loop.
+- Before later gates, apply the runtime preflight in section 3.3. The current evaluation exposed two
+  concrete waste/failure modes: a known-exhausted Claude fallback ran before Codex in every phase, and
+  a per-user `/tmp` quota blocked Git signing even though the host filesystem had free space.
+- Upgrade the local release operator from no-mistakes v1.48.0 to stable v1.57.0 before another gate;
+  that release includes custody-recovery fixes relevant to the observed stranded-branch failure.
 
 **Gate:** the Factory release evidence names the submitted and final heads, the fixed findings, the
 authoritative test/CI results, and any deliberately deferred item.
@@ -160,6 +183,8 @@ operator-controlled and conditional.
    either tool.
 5. No candidate is simultaneously controlled by Factory and no-mistakes.
 6. The Base board contains no extra card solely because a conditional tool produced internal steps.
+7. A known provider quota failure is excluded before the gate, and a quota-limited temporary mount
+   cannot destroy or hide fixer-authored work.
 
 ## 6. Out of scope
 
