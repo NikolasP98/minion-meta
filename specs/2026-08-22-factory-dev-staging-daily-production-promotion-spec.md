@@ -3,12 +3,12 @@ id: 2026-08-22-factory-dev-staging-daily-production-promotion-spec
 title: Factory release train — dev staging candidates and daily production promotion
 stage: spec
 status: review
-pass: 1
+pass: 2
 created: 2026-08-22
-updated: 2026-08-28
+updated: 2026-08-29
 repos: [minion-factory]
 proposal: 2026-08-22-factory-dev-staging-daily-production-promotion
-verdict: pending
+verdict: revision-required
 type: infra
 relationship: supersedes
 related: [2026-08-18-factory-release-rollback-spec, 2026-08-22-factory-lineage-orchestrator-instance-spec, 2026-08-22-ci-compute-savings-bun-test-roadmap]
@@ -743,4 +743,20 @@ production smoke receipt.
 ## Board audit 2026-08-28
 
 Audited against minion-factory@34a3b21 (4-agent evidence sweep, operator-applied).
-Largely shipped: promote-dev-daily.yml (event-driven on green dev CI, cron demoted to recovery) + 19 scripts/promotion/* + runbook. Remaining scope: §9 Slice 6 (retire/subordinate the main self-update poller — today it replays already-verified SHAs, which is safe) and Slice 7 (ruleset activation).
+Shipped and genuinely valuable: `promote-dev-daily.yml` (event-driven on green dev CI, cron
+demoted to recovery) plus `scripts/promotion/*` (candidate resolution, authenticated boundary
+probe, exact-SHA remote deploy, image-provenance verification, marker-based rollback) and a
+runbook. This is real production-promotion tooling and is preserved as unique WIP.
+
+**Correction (pass 2, 2026-08-29):** this paragraph's original closing claim — "largely shipped,
+only Slice 6/Slice 7 remain" — is false. Verified against minion-factory
+`0315707d8c8ffdfb024d2b97fa2eebf45c3b1914`: S1–S4 are absent, S5 is only partial (no build-once
+digest identity, no automatic DB restore), and S7's activation gate is not merely open but
+actively violated in the live repository (`dev`/`main` unprotected, rulesets 403, empty
+`production` protection, `FACTORY_AUTODEPLOY=1`). The shipped scripts are a single-track
+build-and-remote-deploy pipeline, not the isolated-staging, per-feature-agent,
+independent-verification, contract-registry, DB-restoring-rollback contract this spec requires,
+and the running workflow is not an approved implementation of this spec. Do not treat this
+paragraph as a completion signal for S1–S5. Disposition (`revision-required`), the SHA-anchored
+S1–S7 reconciliation, and the evidence transcript live in the pass-2 review sidecar
+[`2026-08-22-factory-dev-staging-daily-production-promotion-spec.review.md`](2026-08-22-factory-dev-staging-daily-production-promotion-spec.review.md).

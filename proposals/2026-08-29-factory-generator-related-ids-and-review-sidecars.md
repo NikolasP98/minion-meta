@@ -34,13 +34,10 @@ lifecycle item. This is that item.
    deliberately dangling id — and asserts `--check` exits 0. Across the corpus there are 99
    `related` ids on 35 specs; 0 are unresolvable today, 22 resolve only against `proposals/`.
 2. A spec's `pass` is bumped **in place on the same file** by the factory's review loop, and
-   the `specs/<id>.review.md` sidecar is not always updated with it. Parsing all 69 pass>1
-   sidecars found 2 whose `pass` lagged their spec's. One was the sidecar of the spec that
-   filed this proposal: the spec read `pass: 3` / `approved` while its sidecar still read
-   `pass: 2` / `changes_requested`. The other,
-   `2026-08-18-base-attention-queue-responsive-runs-spec`, is at spec `pass: 5` / sidecar
-   `pass: 2`. Structural sidecar validity was 69/69 — the failure mode is staleness, not
-   absence.
+   the sidecar is not always emitted. Re-measurement on reconciled `dev@90ec190` found 72 pass>1
+   specs, 70 sidecars whose current-pass legacy/structured bodies are compatible, and 2 missing
+   sidecars. The failure mode includes absence; a new strict body grammar must not rewrite the 70
+   preserved historical records.
 
 **Inferred, not evidenced — confirm this first.** The cause above is stated as a corpus
 observation. This run had no access to the minion-factory checkout, so *where* in the
@@ -59,18 +56,12 @@ A spec produced (or re-passed) by the factory pipeline passes `node scripts/spec
   `specs/<id>.review.md` parses, its `spec:` equals the spec id, and its `pass`/`verdict`
   equal the spec's current `pass`/`verdict`.
 
-Invariant that must not change: the sidecar keeps its per-pass history — the frontmatter is the
-**current-pass roll-up** and each pass keeps exactly one accepted `## Pass N — <verdict>` section
-(or, for a pass whose record is genuinely unrecoverable, `## Pass N — record unavailable:
-<non-empty reason>`). After optional surrounding backticks are normalized, `<verdict>` must be a
-member of the meta gate's `VERDICTS`; the current-pass verdict must equal the roll-up verdict.
-Arbitrary suffixes, a reasonless `record unavailable`, and duplicate accepted headings are invalid.
-Refreshing the roll-up must not overwrite or delete earlier passes' recorded findings, and a pass
-whose detail was never committed is named as such rather than reconstructed. This is a machine-
-checked requirement, not a convention: `2026-08-26-spec-heading-lint-baseline-backfill-spec` S3
-ships it as the Body clause of `node scripts/spec-index.mjs --check` — a sidecar with a current,
-agreeing frontmatter but no section for the current pass fails the gate even though its frontmatter
-alone is spotless.
+Invariant that must not change: new or updated producers write the structured per-pass history
+defined by `2026-08-26-spec-heading-lint-baseline-backfill-spec` S3. The canonical consumer in
+`scripts/review-sidecar.mjs` also accepts the measured legacy heading form so existing evidence is
+not rewritten merely to satisfy a new grammar; that compatibility is not permission for producers
+to keep emitting legacy records. Refreshing the roll-up must not overwrite earlier findings, and an
+unavailable pass is named honestly rather than reconstructed.
 
 ## DELTA
 
@@ -106,9 +97,8 @@ wording here is the pre-implementation statement of intent, not the shipped cont
 - **The `## 0. Product` heading fix** — owned and closed by
   `2026-08-20-factory-spec-heading-nomenclature` (DELTA 2, recorded addressed in its
   2026-08-28 board audit). Named here only so the two are not confused.
-- **Repairing the existing stale sidecar** in minion-meta
-  (`2026-08-18-base-attention-queue-responsive-runs-spec`) — that repair is S3 of the spec
-  above, in minion-meta, and is a precondition of the rule landing there.
+- **Creating the two missing sidecars** in minion-meta — that repair is S3 of the spec above and is
+  a precondition of the rule landing there.
 - **Proposal-side link integrity** (`spawned_spec`, `merged_into`, `duplicate_candidate`) and a
   `--check` mode for `scripts/proposal-index.mjs` — also parked by that spec's §10.
 

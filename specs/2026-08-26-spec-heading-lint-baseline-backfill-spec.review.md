@@ -1,10 +1,10 @@
 ---
 spec: 2026-08-26-spec-heading-lint-baseline-backfill-spec
-pass: 3
-verdict: approved
+pass: 4
+verdict: changes_requested
 reviewer: factory-review
 created: 2026-08-26
-updated: 2026-08-29
+updated: 2026-08-30
 score_slice_size: 8
 score_dod_verifiability: 9
 score_scope_containment: 9
@@ -204,3 +204,16 @@ Round 6 — `M1`, `L1`, both fixed in this pass without reopening pass 3:
 approval is the authoring run's operator disposition, not a reviewer sign-off on this last fix round —
 if a subsequent review round raises a blocking finding, the spec returns to `status: review` /
 `verdict: pending` and this section records that instead.
+
+## Pass 4 — `changes_requested`
+
+Reviewer: cross-provider review. Date: 2026-08-30.
+
+The branch was reconciled with `origin/dev@90ec190`. The review found that the strict Body grammar
+would force an unplanned corpus-wide migration: only 1 of 70 existing sidecars used it, while all
+70 existing bodies already named their current pass and represented the roll-up verdict; two more
+pass>1 specs had no sidecar. S3 now extends the base's canonical `scripts/review-sidecar.mjs`, uses
+strict structured mode for new/updated records, accepts the measured legacy current-pass form for
+historical evidence, and creates the two missing sidecars before enabling the gate. The duplicate
+auto-triage proposal was removed after its distinct remaining writer-ownership work was preserved
+in the current-base proposal.

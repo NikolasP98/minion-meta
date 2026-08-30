@@ -2,15 +2,14 @@
 id: 2026-08-26-spec-heading-lint-baseline-backfill-spec
 title: Drain the spec-gate debt — backfill the grandfathered spec headings, resolve 5 orphan superseded specs, resolve `related` ids, and settle the pass>1 link policy
 stage: spec
-status: approved
-pass: 3
+status: review
+pass: 4
 created: 2026-08-26
-updated: 2026-08-29
+updated: 2026-08-30
 repos: [minion-meta]
 proposal: 2026-08-18-spec-heading-lint-baseline-backfill
-verdict: approved
+verdict: changes_requested
 type: infra
-approved_reason: "Pass-3 revision on minion-meta@2c86617, corrected across four cross-provider review rounds. Round 1: the pass-2 blocker (rewrite S5-S9/D6-D10 into the 13 frozen ranges) is fully done, cleanup renumbered to Slice 18 with D19/§6/§7/§9 reconciled so no Slice-10 collision remains; every AS-IS claim re-measured 2026-08-29 (114 heading debt, 99 related ids/22 proposal-only, 69 pass>1 specs all with sidecars); binding DoDs are computed invariants with dated counts labeled non-binding orientation; the zero-TODO gate uses an unpiped negated `rg` instead of `grep -c`. Round 2: the §5B sidecar rule is no longer existence-only - it is a parsed contract split into B1 structural (0/69 violations, lands in S3) and B2 freshness (2 violations measured, this spec own sidecar repaired here, the last one repaired inside S3 before B2 is enabled, with a stated defer-B2 escape hatch so I3 never bends); and S18 now closes the source proposal in the committed board projection (proposals/index.json regenerated, `updated` bumped, DoD asserts status done) because proposal-index.mjs has no --check and no CI step. Round 3: the B1-only escape hatch is now conditional everywhere it is referenced (TO-BE, D4, S3's DoD, S18's DoD, end-to-end verification #4) instead of contradicting the same slice's unconditional zero-violation/zero-marker requirements; and S2/S3 — which both edit `proposals/2026-08-20-factory-spec-heading-nomenclature.md` — are serialized in §7 instead of declared independent, with both slices' files/DoD now requiring the proposal's `updated` bump and a `proposals/index.json` regeneration. Round 4: the B1-only escape hatch is WITHDRAWN rather than conditionalized a third time - two rounds of adding conditionals kept missing a site (this round it was D19 and, decisively, the handoff proposals own file-level auto-close contract at proposals/handoff-minion-meta-1883922325.md:24-26, which no in-spec conditional can satisfy while a marker remains), and the hatch guarded a condition that cannot arise because §5B already states an always-honest repair; B1+B2 now land together in S3 or S3 is blocked and merges nothing, mirroring §6 partial-ranges-do-not-merge, so TO-BE/D4/§5B/S3/S18/§9 each carry one contract. Also round 4: the two new generator failure modes are no longer appended to 2026-08-20-factory-spec-heading-nomenclature (status: done since its 2026-08-28 board audit, and proposal-index.mjs:59-72 projects status through unchanged, so a completed card cannot own new work) - they are owned by the new active proposal 2026-08-29-factory-generator-related-ids-and-review-sidecars (repos: [minion-factory]), which S2/S3/§1/§8/§10 and the related list now point at; proposals/index.json and specs/index.json are regenerated to match this disposition. Round 5: M1 - the shipped B1/B2 sidecar contract was frontmatter-only and would accept an empty-bodied sidecar as compliant, so §5B gained a third clause (Body) requiring a parsed `## Pass N — <verdict>` (or `record unavailable`) section for every reviewed pass through the current one, with S3's DoD, the repair-before-enable text, and the sibling factory-generator proposal's invariant/DELTA all updated to the three-clause contract. M2 - S4 changed successor/orphan lifecycle-lineage frontmatter without requiring the `updated` bump the template makes mandatory for a substantive change, so S4's instructions and DoD now require bumping `updated` on whichever spec it touches and assert the regenerated index matches. L1 - S4 was declared independent of the heading batches, but its permitted edits land on orphan specs individually owned by B1/B4/B6, so §7 now serializes S4 before S5-S17 instead of claiming only index files can collide."
 relationship: extends
 related: [2026-08-17-maintenance-lane-monitors-spec, 2026-08-17-sdlc-phase-gates-scoring-spec, 2026-08-20-factory-spec-heading-nomenclature, 2026-08-29-factory-generator-related-ids-and-review-sidecars, handoff-minion-meta-1883922325]
 tags: [infra, hygiene, docs, test]
@@ -76,7 +75,7 @@ leaves rules behind that stop them re-accumulating.
 
 Recommendation only — no lifecycle field on any of those four artifacts is changed by this spec.
 
-## 2. AS-IS (re-measured 2026-08-29 on `minion-meta@dev`, tip `2c86617`)
+## 2. AS-IS (re-measured 2026-08-30 on `minion-meta@dev`, tip `90ec190`)
 
 `node scripts/spec-index.mjs --check` → `198 specs`. Every number below was measured on that tree
 with the gate's own exported helpers (`missingRequiredHeadings`, `parseFrontmatter`); re-run
@@ -121,20 +120,24 @@ starting any slice; do not trust the numbers on this page.
    `scripts/spec-index.mjs:675`). Measured: 99 `related` ids across 35 specs; **0 are unresolvable**;
    77 resolve against the spec corpus and **22 resolve only against `proposals/`** (154 proposals).
    So the rule can land today with zero backlog and zero new baseline — but a spec-corpus-only
-   implementation would red 22 legitimate references. `scripts/proposal-index.mjs` has no `--check`
-   mode (it always writes) and is not run by CI, so it cannot host the rule.
-6. **The `pass > 1` TODO misstates the corpus** (`scripts/spec-index.mjs:704`, "51 specs violate
-   that today"). Measured: 69 specs have `pass > 1` and 68 carry neither `revises` nor `supersedes`.
+   implementation would red 22 legitimate references. Current `dev` now gives
+   `scripts/proposal-index.mjs` a read-only `--check` mode and runs it in CI; this slice still owns
+   only spec-side `related` resolution.
+6. **The `pass > 1` TODO misstates the corpus.** Measured on the reconciled base: 72 specs have
+   `pass > 1`; 70 have sidecars and 2 do not.
    But there are **zero pass-1/pass-2 file pairs**: no two specs share a title, and the only
    same-slug groups (`…-design`/`…-plan`) are all pass 1. The factory's 2-pass review bumps `pass`
    **in place on the same file**, so `revises` has no target to point at — those 68 specs are not
-   violating anything. Meanwhile **69 of 69 pass>1 specs have a `specs/<id>.review.md` sidecar, and
-   0 of 129 pass-1 specs do**: the corpus already satisfies an exact traceability invariant that the
-   proposed presence rule does not express. (This ratio held at 62/62 and 0/130 three days earlier —
-   the invariant is stable under corpus growth, which is why it is safe to enforce.)
+   violating anything. The two missing sidecars are
+   `2026-08-18-base-attention-queue-responsive-runs-spec` and
+   `2026-08-18-minion-base-mobile-hitl-ux-plan`; S3 must create honest records for both before the
+   presence rule can land.
 
-   **6b — sidecar *presence* is not sidecar *freshness*, and the two split cleanly.** Parsing all
-   69 sidecars (not just stat-ing them) on 2026-08-29 gives two very different populations:
+   **6b — body compatibility is a separate population.** Parsing all 70 existing sidecars on
+   2026-08-30 found 70/70 with a heading that names the current pass and 70/70 with the roll-up
+   verdict represented in the body. Only this spec uses the exact `## Pass N — <suffix>` history
+   grammar; requiring that grammar for every historical pass would create a 69-file body migration
+   in addition to the two missing sidecars.
 
    - **Structural: 0 violations of 69.** Every sidecar parses as flat frontmatter, its `spec:` field
      equals the spec's `id`, it carries `pass`, `verdict`, `reviewer` and `created`, its `verdict`
@@ -197,8 +200,8 @@ Invariants that must not change:
 - **I3 — every new rule is green on the corpus the day it lands.** Each new rule was measured at 0
   violations (§2.1, §2.5, §2.6/§2.6b) **as of the commit that lands it**, and a rule that would need
   its own baseline is not shipped. One rule is not green today: the sidecar *freshness* half of §5B
-  has exactly 1 remaining violation after this revision (§2.6b). I3 is satisfied not by exempting it
-  but by making the repair a precondition inside its own slice (S3) — repair first, then enable.
+  has two missing-sidecar violations on the reconciled base (§2.6b). I3 is satisfied by making both
+  repairs and the 72-spec compatibility scan preconditions inside S3 — repair first, then enable.
   §5B states the always-available honest repair (correct the roll-up to the spec's current
   pass/verdict and name the passes whose detail was never committed; invent nothing), so "repair
   impossible" is not a shippable branch: if it nonetheless happens, **S3 is blocked and merges
@@ -222,7 +225,7 @@ Invariants that must not change:
 | D1 | Baseline entries can go stale unnoticed → `--check` errors on any baseline id that passes the lint or names a missing spec (both files) | S1 | New fixtures in `scripts/spec-index.test.mjs`: a baselined-but-clean spec fails; a baseline id with no file fails; the real corpus still exits 0 |
 | D2 | No way to see what the baselined specs are missing → `node scripts/spec-heading-backfill.mjs --report` prints per-id missing sections + totals; `--verify` is the same check as D1 usable pre-commit | S1 | `--report` row count equals the baseline file's key count exactly (114 as measured 2026-08-29; totals 111/88/86 — dated orientation numbers per §2's drift note, not a binding count); `--verify` exits 0 today and 1 on a seeded stale entry |
 | D3 | `related` ids unresolved → every `related` id must resolve against specs ∪ proposals, via one shared loader | S2 | Fixtures: dangling id fails; proposal-only id passes; missing `proposals/` dir does not crash; corpus exits 0 with zero unresolvable ids (99 ids, 22 proposal-only, as measured 2026-08-29 — dated orientation numbers, not a binding count) |
-| D4 | `pass>1` policy undecided and TODO misstates the corpus → decision recorded, TODO removed, `pass>1 ⇒ a **parsed, current** review sidecar` enforced (§5B B1, B2, **and Body** together — there is no partial-rule variant) | S3 | Fixtures: `pass: 2` with no sidecar fails; with an unparseable, wrong-`spec`, missing-field, `pass`-ahead, stale-`pass`, or verdict-contradicting sidecar fails; Body rejects an empty/missing-current-pass body, an arbitrary suffix, a current-pass verdict contradicting the roll-up, `record unavailable` without a non-empty reason, and duplicate accepted headings for one pass; positives cover exactly one normalized verdict or `record unavailable: <non-empty reason>` heading for every pass from 2 through current; `pass: 1` is unaffected; the one known stale sidecar is repaired in the same slice so the corpus exits 0 with no new baseline and the TODO is removed outright |
+| D4 | `pass>1` policy undecided and TODO misstates the corpus → decision recorded, TODO removed, `pass>1 ⇒ a parsed, current review sidecar` enforced by canonical `review-sidecar.mjs` (§5B B1, B2, and Body together) | S3 | Fixtures cover structural/freshness errors plus both Body modes: structured mode keeps the exact per-pass grammar and semantic negatives; legacy mode requires one current-pass heading plus the roll-up verdict and rejects empty, wrong-pass, duplicate-current-pass, and missing-verdict bodies. A full-corpus control proves 70 existing legacy/structured sidecars pass unchanged, the 2 missing sidecars fail before repair, and all 72 pass after repair; `pass: 1` is unaffected. |
 | D5 | 5 orphan `superseded` specs → each linked from a real successor or flipped to `retired` + `retired_reason`, each with `updated` bumped; `scripts/spec-supersede-baseline.json` deleted | S4 | `--check` exits 0 with the file absent; `specs/index.json` regenerated with matching `updated` dates; each disposition justified in the PR body |
 | D6 | Heading-baseline range B1 grandfathered → backfilled and removed | S5 | `--check` exits 0; `--verify` exits 0; `--report --batch B1` prints 0 rows |
 | D7 | range B2 grandfathered → backfilled and removed | S6 | same, for B2 |
@@ -258,49 +261,48 @@ Resolution reads the **markdown**, not `index.json`.
 
 **B. `pass > 1` presence rule → NO. Do not add it, and correct the record.**
 The premise ("51 specs violate that") does not survive measurement (§2.6): the factory's 2-pass
-review bumps `pass` in place, so 68 of 69 specs (as measured 2026-08-29; see §2.6) have no second
+review bumps `pass` in place, and the reconciled corpus has no pass-1/pass-2 file pairs
 file to link to, and there are zero pass-1/pass-2 file pairs in the corpus. A blanket presence rule
 would demand a link that cannot exist and would be a permanent 68-file red. The genuine pair case —
 two files, two passes, no link — is already assigned to the G0 reconciler by
 `2026-08-17-sdlc-phase-gates-scoring-spec`, and it needs semantic pair detection (title/slug
-similarity), which is a heuristic that does not belong in a required CI gate. What *is* exact and
-already true of 69/69 specs is: a pass bump is evidence of a completed review, and a completed
-review leaves `specs/<id>.review.md`. Ship **that** traceability instead of the presence rule.
+similarity), which is a heuristic that does not belong in a required CI gate. What *is* exact is:
+a pass bump is evidence of a completed review, and a completed review should leave
+`specs/<id>.review.md`; S3 repairs the two missing records before enforcing that traceability.
 
-But "a file with that name exists" is the wrong test, and §2.6b shows why: 2 of 69 sidecars are
-behind their spec's pass, and this spec's own sidecar was one of them (`pass: 3`/`approved` spec,
-`pass: 2`/`changes_requested` sidecar) until this revision repaired it. An existence-only rule would
-have graded that as compliant, i.e. it would green-light a re-pass that no committed record shows
-was ever reviewed. So the rule is a **parsed** contract, in two named halves —
+But "a file with that name exists" is the wrong test: freshness and body evidence must also be
+validated. So the rule is a **parsed** contract, in two named halves —
 separately named so a failure message says which contract broke, but shipped in one commit (see
 "Landing rule" below):
 
-- **B1 — structural (binding, 0/69 violations today, lands in S3).** For every spec with `pass > 1`
+- **B1 — structural (binding after two repairs, lands in S3).** For every spec with `pass > 1`
   there is a `specs/<id>.review.md` that: (i) parses with `parseFrontmatter`; (ii) has
   `sidecar.spec === spec.id`; (iii) carries `pass`, `verdict`, `reviewer`, `created`; (iv) has an
   integer `pass ≥ 1`; (v) has `verdict` ∈ `VERDICTS` (`scripts/spec-index.mjs:81`); and (vi) has
   `sidecar.pass ≤ spec.pass` — a sidecar may lag, never lead. (vi) is the half that is a pure
   forgery check and is unconditionally safe to enable.
-- **B2 — freshness (binding once green; 1 violation remaining after this revision).**
+- **B2 — freshness (binding once green).**
   `sidecar.pass === spec.pass`, and when the sidecar records the spec's current pass its `verdict`
   equals the spec's `verdict` (the roll-up must not contradict its own evidence). The single known
-  violation — `2026-08-18-base-attention-queue-responsive-runs-spec`, spec `pass: 5` / sidecar
-  `pass: 2` — is repaired **inside S3, before the rule is enabled**, so B2 also lands at zero (I3).
-- **Body — per-pass record (binding, lands in S3).** Parse second-level headings of the exact form
-  `## Pass N — <suffix>` (the repository's optional backticks around the whole suffix are removed
-  before validation). For every integer N with `2 ≤ N ≤ spec.pass`, there is **exactly one**
-  accepted heading. Its normalized suffix is either a member of `VERDICTS` or the literal
-  `record unavailable: <reason>`, where `<reason>` contains at least one non-whitespace character.
-  When N equals `spec.pass`, a verdict suffix must equal the sidecar/spec roll-up verdict; a
-  contradictory verdict is invalid. An arbitrary suffix, bare `record unavailable`, or duplicate
-  accepted heading for one pass is invalid. Frontmatter validity is not sufficient: a sidecar with a
-  parseable, current, agreeing frontmatter (B1 and B2 both green) and an empty or sectionless body
-  fails Body for every N in range, and a sidecar that has sections for passes `2..spec.pass-1` but
-  is missing the section for `spec.pass` itself — the current pass — fails Body even though B1 and
-  B2 are both green. This is what makes the frontmatter roll-up prove there is an actual review
-  record behind it, not just matching metadata copied forward.
+  two missing sidecars named in §2.6 are created **inside S3, before the rule is enabled**, with
+  frontmatter matching their specs, so B1/B2 land at zero (I3).
+- **Body — backward-compatible current-pass evidence (binding, lands in S3).** Implement this in
+  the canonical `scripts/review-sidecar.mjs` parser, not in `spec-index.mjs`. A sidecar uses one of
+  two explicit modes. **Structured mode** applies when any exact `## Pass N — <suffix>` heading is
+  present and keeps the strict grammar already designed here: exactly one accepted heading per pass
+  from 2 through current; normalized suffix is a `VERDICTS` member or `record unavailable:
+  <non-empty reason>`; the current-pass verdict equals the roll-up. **Legacy mode** applies only
+  when there are no structured headings: the non-empty body must contain exactly one Markdown
+  heading at any level whose text names the current pass as a whole number (`Pass N`, case
+  insensitive), and the body must contain the normalized current roll-up verdict. This preserves
+  the 70 historical records without rewriting evidence while still rejecting empty bodies,
+  wrong-current-pass headings, and bodies that do not represent their roll-up. All newly written or
+  updated sidecars use structured mode; legacy mode is compatibility for pre-contract records, not
+  a producer option.
 
-**Landing rule: B1, B2, and Body land together in S3, or S3 lands nothing.** An earlier revision of
+**Landing rule: B1, B2, and Body land together in S3, or S3 lands nothing.** The full-corpus scan
+must prove all 72 current `pass > 1` specs compliant after the two missing sidecars are created;
+the validator must not require a corpus-wide rewrite of the other 70 records. An earlier revision of
 this spec authorized a B1-only fallback that deferred B2 behind a replacement `TODO(handoff)`. That
 branch is withdrawn, for two reasons that are facts about the repository rather than preferences.
 (a) `handoff-minion-meta-1883922325` closes on a *file-level* predicate — the sweep closes it "once
@@ -314,11 +316,8 @@ evidence beyond the spec's own frontmatter. If some future corpus state defeats 
 **blocked** and merges nothing — the same discipline §6 applies to a partially fixable heading
 range — and the spec is revised rather than a half-rule shipped.
 
-The sidecar shape B2 assumes, and Body formalizes above, is the one this spec's own sidecar now
-uses: frontmatter is the **current-pass roll-up**, and each pass keeps its own `## Pass N —
-<verdict>` section, newest last. That keeps prior-pass findings readable without letting the
-machine-checked fields go stale, and Body is what makes that shape a machine-checked requirement
-instead of a described convention.
+The canonical shape for new writes is the structured mode this spec's own sidecar uses. Legacy
+records remain evidence-preserving inputs; migrating them is not required by this slice.
 
 Only the forward direction is enforced (`pass>1 ⇒ sidecar`); the converse stays unenforced, and not
 merely out of caution — `specs/2026-08-28-factory-board-audit.review.md` is a real, legitimate
@@ -476,11 +475,14 @@ was re-run with `git diff --exit-code proposals/index.json` clean in the same co
 
 **Topics:** `infra`, `hygiene`, `docs`, `test`
 
-**Files:** `scripts/spec-index.mjs` (replace the TODO at :691 with the decision + the sidecar rule);
-`scripts/spec-index.test.mjs`; `specs/2026-08-18-base-attention-queue-responsive-runs-spec.review.md`
-(the one stale sidecar — repaired, see below); `specs/TEMPLATE.md` (`pass` and `revises` rows plus a
-new **review-sidecar** row: `pass` is bumped in place by a re-pass and requires a sidecar whose
-frontmatter is the current-pass roll-up, with one `## Pass N — <verdict>` section per pass; `revises`
+**Files:** `scripts/review-sidecar.mjs` (extend the canonical parser with B1/B2/Body);
+`scripts/review-sidecar.test.mjs`; `scripts/spec-index.mjs` (replace only the stale TODO and call
+the shared validator); `scripts/spec-index.test.mjs` (integration coverage);
+`specs/2026-08-18-base-attention-queue-responsive-runs-spec.review.md` and
+`specs/2026-08-18-minion-base-mobile-hitl-ux-plan.review.md` (the two missing sidecars — created,
+see below); `specs/TEMPLATE.md` (`pass` and `revises` rows plus a
+new **review-sidecar** row: new/updated producers use structured mode; legacy records remain valid
+under the compatibility rule; `revises`
 is only for the rare *new-file* re-pass); `proposals/2026-08-29-factory-generator-related-ids-and-review-sidecars.md`
 (append the as-shipped rule semantics and error text for the missing-/stale-sidecar failure mode
 required by §8; no lifecycle change — the proposal is already active — but bump `updated` to the
@@ -491,16 +493,11 @@ Implements decision B of §5: no presence rule; `pass > 1` requires a **parsed, 
 with a per-pass record. Ship B1, B2, and Body as separate, separately-named errors so a failure
 message says which contract broke.
 
-**Repair before enable (the I3 precondition).** §2.6b measured exactly one B2 violation left after
-this spec's own sidecar was repaired: `2026-08-18-base-attention-queue-responsive-runs-spec`, spec
-`pass: 5`, sidecar `pass: 2`. Re-measure first — it may have drained. If it is still there: recover
-the pass-3/4/5 review records from the run evidence (the spec's `approved_reason` names "Pass-5 G2
-by orchestrator" and a pass-4 FAIL, so the reviewing runs and their PR comments are findable) and
-append them as `## Pass N — <verdict>` sections. Where a pass's detail genuinely cannot be
-recovered, do **not** invent one: correct the frontmatter roll-up to the spec's current
-pass/verdict and append a `## Pass N — record unavailable: <reason>` section for that pass instead
-— this is what satisfies Body without fabricating findings. Fabricating review findings is a worse
-defect than the stale field.
+**Repair before enable (the I3 precondition).** Re-measure first. At `90ec190`, create honest
+structured sidecars for the two missing records named above. Recover review evidence where it
+exists; otherwise use `record unavailable: <specific reason>` without inventing findings. Do not
+rewrite the 70 existing sidecars: the compatibility fixtures and full-corpus scan prove them under
+legacy or structured mode before the rule lands.
 
 **There is no B1-only fallback** (§5B, "Landing rule"). The repair above always has an honest form —
 correcting the roll-up and naming the unrecoverable passes as `record unavailable` sections needs
@@ -511,30 +508,28 @@ the rule, does not leave a replacement `TODO(handoff)`, and does not create a th
 ranges do not merge".
 
 The comment must state the measured facts as of implementation — re-measure with §9's helper rather
-than copying stale numbers; as measured 2026-08-29 these are 69 pass>1, 68 without a link, 0 file
-pairs, 69/69 sidecars, 0/69 structural violations, 1 remaining freshness violation (dated
+than copying stale numbers; as measured 2026-08-30 these are 72 pass>1, 70 existing sidecars,
+2 missing sidecars, 70/70 existing bodies compatible, and only 1/70 using structured mode (dated
 orientation numbers, not a binding count) — so the next reader does not re-litigate from the old
 "51 violate" framing, and must hand the pair-detection case to
 `2026-08-17-sdlc-phase-gates-scoring-spec`'s G0 reconciler by name.
 
 **DoD (machine-checkable):**
 1. `node scripts/spec-index.mjs --check` exits 0 on the corpus, exit code captured unpiped, with
-   **zero** sidecar violations of any of B1, B2, or Body — no baseline, no exemption list, no skip
-   flag;
+   **zero** sidecar violations of any of B1, B2, or Body across all current pass>1 specs — no
+   baseline, exemption list, or skipped legacy files;
 2. `pnpm run test:scripts` green with fixtures proving each clause fails independently: `pass: 2`
    with **no** sidecar; with an unparseable/empty sidecar; with `sidecar.spec` naming a different
    id; with `pass`/`verdict`/`reviewer`/`created` missing; with `sidecar.pass > spec.pass`; with
    `sidecar.pass < spec.pass` (B2); with `sidecar.pass === spec.pass` but a contradicting `verdict`
-   (B2); with a parseable, current, agreeing frontmatter and an empty/sectionless body (Body); with
-   `pass: 3` and a `## Pass 2 — <verdict>` section present but no `## Pass 3` section for the
-   current pass (Body); with an arbitrary suffix; with a current-pass verdict suffix contradicting
-   the roll-up; with bare `record unavailable`; or with duplicate accepted headings for one pass.
-   Positives: a current, agreeing sidecar with exactly one `## Pass N — <verdict>` or `## Pass N —
-   record unavailable: <non-empty reason>` section for every N from 2 through the current pass
-   passes (including the repository's optional backtick form), and `pass: 1` with no sidecar passes;
+   (B2). Structured Body fixtures retain the arbitrary/contradictory/reasonless/duplicate negatives.
+   Legacy Body fixtures reject empty bodies, no current-pass heading, two current-pass headings, and
+   a body lacking the normalized roll-up verdict; representative `# Pass 2 review` and roadmap
+   `pass 1 → pass 2` headings pass. The full real corpus is exercised, and `pass: 1` with no sidecar
+   passes;
 3. each fixture fails if its control is reverted (fixtures that cannot fail prove nothing);
-4. `2026-08-18-base-attention-queue-responsive-runs-spec`'s sidecar satisfies B1, B2, **and** Body
-   in the same commit that enables them, and every other pass>1 sidecar does too;
+4. both missing sidecars satisfy B1, B2, and Body in the same commit that enables them, and all 70
+   pre-existing sidecars pass without body rewrites;
 5. no `TODO(handoff)` remains at the pass/revises site — it is deleted, not replaced, not commented
    out. S3 leaves no open end of its own, so it files no new handoff marker;
 6. `proposals/2026-08-29-factory-generator-related-ids-and-review-sidecars.md` names a missing
@@ -685,9 +680,8 @@ still an error, which is exactly the regression guard this whole effort earns.
 **Closing the proposal is two edits, not one.** `scripts/proposal-index.mjs:59-64` projects `status`
 and `updated` into the committed `proposals/index.json`, and `proposals/TEMPLATE.md:12-13` requires
 running the generator after any proposal edit. Unlike the spec side there is **no safety net**:
-`proposal-index.mjs` has no `--check` mode and no CI step (§2.5), so `pnpm run ci` stays green while
-the board keeps rendering this proposal as `in-spec` forever. Editing only the Markdown is therefore
-a silent failure of the very debt-drain this slice exists to finish.
+`proposal-index.mjs --check` now runs in CI on the reconciled base, so this slice must regenerate
+the projection in the same commit and leave that gate green.
 
 **DoD:** neither baseline file exists; `node scripts/spec-index.mjs --check` exits 0;
 `! rg -n 'TODO\(handoff\)' scripts/spec-index.mjs` exits 0, i.e. `rg` finds no match — `rg -n` alone
@@ -780,9 +774,8 @@ read directly, never through a pipe):
    `supersedes`, and every `pass > 1` spec has a `specs/<id>.review.md` that **parses**, whose
    `spec:` equals the spec id, whose `pass` equals the spec's `pass`, and whose `verdict` equals the
    spec's `verdict` → 0 exceptions.
-6. `node scripts/proposal-index.mjs && git diff --exit-code proposals/index.json` → exit 0, and the
-   entry for `2026-08-18-spec-heading-lint-baseline-backfill` reads `"status": "done"`. This is a
-   manual step by necessity: no CI gate covers `proposals/index.json` staleness (§2.5, §10).
+6. `node scripts/proposal-index.mjs && node scripts/proposal-index.mjs --check` → exit 0, and the
+   entry for `2026-08-18-spec-heading-lint-baseline-backfill` reads `"status": "done"`.
 7. Negative controls, each of which must make `--check` exit **1** (run on a scratch branch, then
    discard): (a) add `related: [does-not-exist]` to any spec; (b) create a spec with `pass: 2` and no
    sidecar; (c) take any `pass > 1` spec and lower its sidecar's `pass` by one; (d) re-create
@@ -803,22 +796,19 @@ read directly, never through a pipe):
   that proposal (§8); it does not touch minion-factory.
 - **A `pass > 1 ⇒ revises|supersedes` presence rule** — explicitly rejected in §5B; the pair case
   stays with the G0 reconciler under `2026-08-17-sdlc-phase-gates-scoring-spec`.
-- **G0 reconciler changes of any kind**, including having it *write* `revises`/`supersedes` onto the
-  68 in-place re-passed specs (as measured 2026-08-29). §2.6 shows there is nothing to write.
-- **Proposal-side link integrity** (`spawned_spec`, `merged_into`, `duplicate_candidate`) and giving
-  `scripts/proposal-index.mjs` a `--check` mode + a CI step. All 3 field types resolve cleanly today
+- **G0 reconciler changes of any kind**, including having it *write* `revises`/`supersedes` onto
+  in-place re-passed specs. §2.6 shows there is nothing to write.
+- **Proposal-side link integrity** (`spawned_spec`, `merged_into`, `duplicate_candidate`). The
+  `proposal-index.mjs --check` mode and CI step already exist on the reconciled base. All 3 field types resolve cleanly today
   (measured: 0 unresolvable), so this is a regression guard, not a debt — file it separately if
   wanted. `scripts/corpus.mjs` from S2 is the loader it would reuse. Note the cost of leaving it
-  out: S18 closes the source proposal by running `proposal-index.mjs` by hand, and nothing in CI
-  would catch it if a future editor forgot — which is why S18's DoD asserts the generated `done`
-  entry explicitly rather than trusting `pnpm run ci`.
+  out: S18 still regenerates explicitly and asserts the generated `done` entry.
 - **Rewriting or re-scoping any spec's content.** Backfill adds the missing sections and normalizes
   headings; it does not modernize stale specs, adjudicate whether an `unknown`-status spec is still
   live, or change any lifecycle field (I4). Two explicit exceptions: S4 may change only the five
   orphan specs from `superseded` to `retired` when evidence shows there is no successor; and S3 may
-  repair the frontmatter of the one stale `*.review.md` sidecar named in §2.6b, which is a review
-  record, not a spec. Reconstructing review *findings* that were never committed is out of scope and
-  forbidden — S3 corrects the roll-up and names the gap instead.
+  create the two missing `*.review.md` records named in §2.6b, which are review records, not specs.
+  Reconstructing review *findings* that were never committed is out of scope and forbidden.
 - **New lint rules beyond the three named** (e.g. AS-IS→TO-BE→DELTA as a lint, required frontmatter
   `type`, per-slice DoD checks). TEMPLATE.md keeps AS-IS→TO-BE→DELTA a review expectation.
 - **Any change to `REQUIRED_HEADINGS`, `stripNonDocumentMarkdown`, or the per-slice topics lint**

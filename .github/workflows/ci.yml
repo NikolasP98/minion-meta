@@ -57,6 +57,12 @@ jobs:
         env:
           GITHUB_EVENT_BEFORE: ${{ github.event.before }}
 
+      # The proposals/ half of the same contract: proposal frontmatter, its G1
+      # review sidecars, and the freshness of the committed proposals/index.json.
+      # Without this step nothing in CI ever read proposals/*.review.md.
+      - name: Proposal index check
+        run: node scripts/proposal-index.mjs --check
+
       - name: Changesets status (PR only)
         if: github.event_name == 'pull_request'
         run: pnpm run changeset:status
