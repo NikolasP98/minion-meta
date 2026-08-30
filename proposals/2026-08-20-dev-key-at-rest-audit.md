@@ -1,10 +1,10 @@
 ---
 id: 2026-08-20-dev-key-at-rest-audit
 title: Count what is already sealed under the source-visible dev crypto key
-status: closed
-closed_reason: "Audit executed against hub prod (shared DB) 2026-08-20 — results appended; zero dev-key rows, S3 unblocked; key-divergence finding filed to intake"
+status: approved
+reopened_reason: "2026-08-29 cross-provider review: the 2026-08-20 results only sampled 3 of 8 user_identities.secret_ciphertext rows in hub prod and never produced the required A1 inventory or unchecked-database list, so the DoD is unmet and S3 stays blocked"
 created: 2026-08-20
-updated: 2026-08-20
+updated: 2026-08-29
 repos: [minion-meta, minion_hub, minion_site]
 tags: [security, data]
 value: 8
@@ -109,6 +109,28 @@ Per sealed column (non-null ciphertext rows; sample test-decrypted under dev key
 | channels.credentials_ciphertext | column absent in prod | — |
 | server_provision_configs.api_key_ciphertext | column absent in prod | — |
 
-**Zero rows sealed under `minion-hub-dev-key`** — the A3 dev-key fear is clear; S3 (consumer fail-closed wiring + dependency bump) is unblocked.
-
 **New finding (filed to factory intake): hub and site carry DIFFERENT `ENCRYPTION_KEY` values against the SAME shared database.** 2 of 5 `gateway.token_ciphertext` rows decrypt only under site's key (hub reads fail), 3 decrypt under neither current key (orphaned — likely a rotated earlier key). Shared-DB sealed columns require ONE key (the shared Better-Auth/DB contract) or per-writer key registries; today's split silently partitions readability.
+
+## Reopened 2026-08-29 — DoD not actually met
+
+A 2026-08-29 cross-provider review of a downstream branch caught that this proposal's own
+results table does not support the "zero dev-key rows" line it used to carry, and that line has
+been removed above. Specifically:
+
+- **`user_identities.secret_ciphertext` has 8 non-null rows in hub prod; only 3 were sampled.**
+  The other 5 rows in that same production database were never test-decrypted under any key,
+  including the dev key. A sample of 3 says nothing about the other 5 — the DoD requires a
+  success/failure classification for every row, not a subset.
+- **The A1 environment inventory (per-deployment `ENCRYPTION_KEY`/`NODE_ENV` table) was never
+  produced.** No Vercel preview/production scope, self-hosted/Docker staging, or CI job is
+  listed anywhere in this file.
+- **The DoD's "explicit list of unchecked databases with the reason" was never produced either.**
+  Only hub's shared prod Supabase was ever reachable; every other database this proposal's own
+  problem statement names (any non-production database, any database outside the hub/site shared
+  one) is unaudited and unlisted.
+
+Until a follow-up completes all three — every `user_identities` row in hub prod classified, the
+A1 table, and the named unchecked-database list — this proposal stays open and
+`packages/db/src/crypto.ts`'s `TODO(handoff):` continues to say the at-rest question is unknown,
+not zero. **Do not re-derive a "zero dev-key rows" conclusion from the partial sample above** —
+that is exactly the inference this reopening corrects.

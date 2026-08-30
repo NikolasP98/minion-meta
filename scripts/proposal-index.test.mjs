@@ -5,7 +5,7 @@
 // against a throwaway fixture tree, same pattern as spec-index.test.mjs.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -34,7 +34,7 @@ function makeCliFixture() {
 	mkdirSync(join(root, 'scripts'));
 	mkdirSync(join(root, 'specs'));
 	mkdirSync(join(root, 'proposals'));
-	for (const name of ['proposal-index.mjs', 'spec-frontmatter.mjs', 'topics.mjs'])
+	for (const name of ['proposal-index.mjs', 'review-sidecar.mjs', 'spec-frontmatter.mjs', 'topics.mjs'])
 		execFileSync('cp', [new URL(name, import.meta.url).pathname, join(root, 'scripts', name)]);
 	writeFileSync(join(root, 'specs', 'topics.json'), JSON.stringify(FIXTURE_TOPICS, null, '\t') + '\n');
 	return root;
@@ -77,4 +77,44 @@ repos: [minion-meta]
 	const index = JSON.parse(readFileSync(join(root, 'proposals', 'index.json'), 'utf8'));
 	assert.equal(index.proposals.length, 1);
 	assert.equal('effort' in index.proposals[0], false);
+});
+
+test('effort validation: numeric zero is rejected instead of silently omitted', () => {
+	const root = makeCliFixture();
+	writeFileSync(
+		join(root, 'proposals', 'fixture-invalid-effort.md'),
+		`---
+id: fixture-invalid-effort
+title: Fixture with invalid effort
+status: draft
+created: 2026-08-29
+effort: 0
+---
+
+# Invalid effort
+`
+	);
+	const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+	assert.equal(result.status, 1, result.stdout);
+	assert.match(result.stderr, /fixture-invalid-effort\.md: invalid effort "0"/);
+});
+
+test('effort validation: an explicitly blank value is rejected', () => {
+	const root = makeCliFixture();
+	writeFileSync(
+		join(root, 'proposals', 'fixture-blank-effort.md'),
+		`---
+id: fixture-blank-effort
+title: Fixture with blank effort
+status: draft
+created: 2026-08-29
+effort:
+---
+
+# Blank effort
+`
+	);
+	const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+	assert.equal(result.status, 1, result.stdout);
+	assert.match(result.stderr, /fixture-blank-effort\.md: invalid effort ""/);
 });
