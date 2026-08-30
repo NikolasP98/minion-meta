@@ -1,13 +1,13 @@
 ---
 spec: 2026-08-18-factory-capability-separation-spec
-pass: 6
+pass: 7
 verdict: pending
 reviewer: factory-review-fix
 created: 2026-08-18
 updated: 2026-08-29
 ---
 
-# Review sidecar — passes 4-6 (answers PR #271's three `VERDICT: FAIL` reviews)
+# Review sidecar — passes 4-7 (answers PR #271's four `VERDICT: FAIL` reviews)
 
 ## Pass 4 review (executability fix — historical; superseded by pass 5 below)
 
@@ -161,10 +161,30 @@ recommendation is unchanged from pass 5: **approve the plan, and decide finding 
 deviation, flag 0 below) — this pass's findings were executability and evidence-completeness gaps in the plan, not
 new instances of the H4 trade-off itself.
 
+## Pass 7 review (provider-real scope evidence + replay-safe lifecycle — answers PR #271's fourth `VERDICT: FAIL`)
+
+The latest review identified three High and two Medium still-current blockers. All five are accepted and resolved in
+the spec without repeating pass 6's negative-probe approach:
+
+| Finding | Resolution |
+|---|---|
+| **H1 — Contents-write cannot be provider-denied for merge** | The spec no longer claims `github-branch` is write-but-not-merge. Activation captures effective permissions and rulesets non-destructively and uses only disposable canary PRs. Without a verified ruleset denial, merge authority is an explicit human-approved deviation. |
+| **H2 — local fleet inventory is not the token's full grant** | Activation now paginates the provider-visible accessible-repository set (or uses the organization PAT-admin grant through an independent controller) and compares it exactly to the purpose allowlist. Extra or unenumerable access fails closed. |
+| **H3 — no-egress contradicts reconcile reads** | The boundary is now remote-stripped and write-credential-free, not network-free. Remote push/fetch and representative API writes fail; reconcile's required Actions/compare reads must succeed. `T-META-WORKTREE-NO-EGRESS` is replaced by `T-META-WORKTREE-WRITE-DENIED`. |
+| **M1 — stale CAS breaks response-loss replay** | Lifecycle mutations require a durable `requestId` bound to principal and full request input. An exact retry returns the recorded canonical response before re-evaluating CAS; conflicting key reuse is 409. |
+| **M2 — run-log route omitted** | `GET /runs/:id/log` is added to `dashboard-read`, Slice 5 routing, scoped-route fixtures, and the no-admin-bearer end-to-end surface. |
+
+### Disposition after pass 7
+
+`status: review`, `verdict: pending`, `pass: 7`. Security approval and merge remain human gates. The recommendation
+remains conditional: approval must explicitly accept both PAT lifetime loss and `github-branch`'s provider-level
+merge authority when no independently verified repository ruleset denies it.
+
 ## Human flags
 
-0. **The long-lived-PAT deviation is a decision, not a note (H4).** Approving this spec means either amending the
-   source proposal's DoD to record long-lived purpose PATs + negative-scope canaries as the accepted M4 target, or
+0. **The PAT deviation is a decision, not a note (H4).** Approving this spec means either amending the source
+   proposal's DoD to record long-lived purpose PATs + exact provider-grant audits as the accepted M4 target — also
+   accepting `github-branch`'s effective merge authority unless a verified ruleset denies it — or
    holding the original short-lived run-bound contract and sending the spec back for a minting-path pass. The two
    options are written out at the end of the spec.
 1. **Slice 4 transcribes a policy decision that is formally open.** The interim source→target edge table is
