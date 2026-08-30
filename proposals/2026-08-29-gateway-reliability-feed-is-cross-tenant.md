@@ -89,8 +89,14 @@ and hub `master` `1b47e8ced0751eeb301c9a24d16082f36fe48f78` — both heads on 20
    `model-health-check.ts` ×3, `config-reload.ts` ×3, `server-plugins.ts` ×3),
    agent/session (`tool-loop-detection.ts` ×5, `pi-tools` ×3, `parallel-fanout.ts` ×2,
    `diagnostic.ts` ×3), and a handful inside a connected request
-   (`server-methods/browser.ts` ×3, parts of `server.impl.ts` ×4). One "use the connecting
-   client's org" rule does not fit most of them.
+   (`server-methods/browser.ts` ×3, parts of `server.impl.ts` ×4). That wrapper inventory is
+   not the complete producer boundary: `trackToolExecution`, `trackToolRepair` and
+   `trackSkillExecution` (`src/logging/reliability.ts:107-134,152-169,175-201`) and JWT
+   connect success/failure paths (`src/gateway/server/ws-jwt-auth.ts:68-76,94-102,122-130,
+   143-151`) call unified `emitEvent` directly. Because `reliability.events` reads the
+   unified store without a default category restriction, these records belong to both read
+   surfaces. One "use the connecting client's org" rule does not fit most producers, and
+   inventorying only wrapper callers leaves common tool/auth activity unattributed.
 8. **The hub audience is per-org, not operator.** `reliability:view` is a platform view
    permission any org's role matrix can grant (`src/lib/permissions.ts:85-90`), enforced by
    the central RBAC guard that `(app)/reliability/+page.server.ts:3-4` describes as
@@ -127,16 +133,23 @@ to an empty 200 that reads as "all healthy".
    with a human whether tenants need their own reliability data at all.
 2. **If not:** narrow the hub surface to an explicit platform/gateway-operator gate, label
    the data gateway-wide in API and UI, and stop. No gateway change.
-3. **If yes:** add an org column to the event store; give each producer class from AS-IS
-   item 7 a *named trusted attribution source* — connection identity where the event is
+3. **If yes:** make the unified `emitEvent` boundary require a discriminated trusted scope:
+   `{ kind: 'tenant', orgId }`, `{ kind: 'multi-org', orgIds }`, or
+   `{ kind: 'global' }`; no overload or default may permit omitted attribution. Inventory
+   **every direct `emitEvent` caller and every `emitReliabilityEvent` caller**, then give
+   each producer class from AS-IS item 7 a *named trusted attribution source* — connection
+   identity where the event is
    connection-scoped, the agent's or channel account's existing `orgIds` tag
    (`org-scope.ts`, `account-scope.ts`) where it is agent- or channel-scoped, and an
    explicit `global` class for startup/cron/system events served only to a system-admin
    surface. Resolve that trusted scope **before either process-global rate limiter**.
-   Tenant-scoped limiter keys include the canonical org scope plus category/event; global
-   and admin events use a separate explicit namespace. Define one deterministic canonical
-   scope for resources belonging to multiple orgs rather than choosing an array member by
-   iteration order. Apply that scope consistently to `reliability.*` and to every alias in
+   Tenant-scoped limiter keys include org plus category/event; a multi-org limiter uses a
+   canonical sorted, deduplicated org-set key; global/admin events use a separate explicit
+   namespace. Persistence retains every ownership membership (an `orgIds` representation,
+   or per-org fan-out carrying one stable logical-event id), so a resource owned by A and B
+   is visible to both without double-counting admin aggregates and remains invisible to C.
+   Never collapse plural `orgIds` ownership to one canonical org. Apply that scope
+   consistently to `reliability.*` and to every alias in
    `events.list/get/summary/timeline`; a cross-org `events.get` returns the same not-found
    response as an unknown id, without an existence oracle. Scope `events.stream` to the
    validated org (or admin-gate it) and guard **both** `reliability` and `events.new`, so
@@ -148,14 +161,22 @@ to an empty 200 that reads as "all healthy".
    deployment. Admin/global results use a separate, explicit namespace; they must never
    share a key with an org-scoped result. This applies to every cached alias in
    `reliability.*` and `events.summary/timeline` (and to any newly cached alias).
-4. Preserve the same authoritative attribution across the durable boundary: include the
+4. The local SQLite transition includes both the new fresh-database `CREATE TABLE` shape
+   and an idempotent upgrade that runs **before statements referencing the new field are
+   prepared** (`PRAGMA table_info` plus guarded `ALTER TABLE`, or a versioned equivalent).
+   Pre-existing unattributed rows are legacy-global/admin-only unless ownership is
+   independently provable; never backfill them to a guessed tenant or include them in a
+   tenant aggregate. Surface migration/store failures to health diagnostics rather than
+   silently converting an incompatible installed schema into event loss.
+5. Preserve the same authoritative attribution across the durable boundary: include the
    originating org in `turso-sync`, migrate hub `unified_events` plus its dedupe/index
    contract, and scope `/api/reliability/insights` by the authorized active org. Keep
    `global` records on an explicit admin-only query. Until that end-to-end path ships,
    disable or operator-gate Insights on a shared gateway rather than returning combined
    aggregates to tenants.
-5. Tests driven through *real* producers (at least one connection-scoped, one agent/session,
-   one global), plus same-gateway two-org isolation through **all** `reliability.*` and
+6. Tests driven through *real direct writers* (JWT connection/auth, tool/agent activity,
+   and an explicit global event) plus wrapper producers, and same-gateway two-org isolation
+   through **all** `reliability.*` and
    `events.*` query aliases, and subscriptions asserting that neither `reliability` nor
    `events.new` crosses orgs. Add an end-to-end producer → local store → Turso sync → hub
    Insights test proving org A cannot change org B's aggregate. Injecting tagged events
@@ -163,11 +184,16 @@ to an empty 200 that reads as "all healthy".
    For every cached query alias, add a warm-cache regression in the same gateway/cache
    instance: org A primes identical parameters, org B requests them within the TTL, and B
    receives only B's aggregate without clearing or mocking the cache between requests.
-   Add a real-producer rate-limit regression in one gateway instance: org A and org B emit
+   Add a three-org shared-resource regression: `[orgA, orgB]` is visible to A and B,
+   invisible to C, and counted once in admin aggregates. Add a real-producer rate-limit
+   regression in one gateway instance: org A and org B emit
    the same event inside **both** limiter windows without clearing either map; both records
    are stored and delivered only to their authorized audiences. A same-org duplicate in
-   the same windows is still suppressed, proving the intended throttle was preserved.
-6. Coordinate with `2026-07-19-channel-scoping-fix-plan`: its parked P1 is the same identity
+   the same windows is still suppressed, proving the intended throttle was preserved. Add
+   an upgrade test that opens a pre-change SQLite database, initializes twice, then inserts
+   and queries a newly scoped event; initialization is idempotent and no legacy row enters
+   any tenant aggregate.
+7. Coordinate with `2026-07-19-channel-scoping-fix-plan`: its parked P1 is the same identity
    surface, and its execution hold governs dispatch (coordinated gateway + hub work with
    deployment access, never a single-repository run).
 
@@ -183,7 +209,7 @@ to an empty 200 that reads as "all healthy".
 
 The deployed topology is recorded; a human has chosen the operator-only or the tenant-scoped
 path; and either (a) every hub entry point, including Insights, sits behind an operator gate
-with the data labeled gateway-wide, or (b) DELTA 3–5 have shipped and deployed with
+with the data labeled gateway-wide, or (b) DELTA 3–6 have shipped and deployed with
 attribution preserved before both rate limiters and across local storage, every query/live
 alias and durable sync. The same-gateway rate-limit, query, warm-cache-per-alias, dual-event
 subscription and Insights isolation tests are green against

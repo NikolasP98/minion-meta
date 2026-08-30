@@ -7,7 +7,7 @@ pass: 8
 next_slice: 5
 created: 2026-08-22
 updated: 2026-08-30
-repos: [minion_hub]
+repos: [minion_hub, minion-meta]
 type: infra
 relationship: extends
 related: [2026-07-17-hub-performance-optimization-plan, 2026-08-13-crm-customers-server-pagination-spec, 2026-07-06-hub-tanstack-consolidated-execution, 2026-08-21-hub-datatable-server-mode-test-gap-spec, 2026-08-22-crm-rank-query-prod-latency, 2026-07-19-channel-scoping-fix-plan]
@@ -175,6 +175,12 @@ falls back to admin when no issuer accepts it: the server-side caller is indepen
 browser-only public flag, requires a matching serving-gateway issuer, and fails closed with
 503 without retrying as shared-token admin. The DoD now proves a completed authenticated
 handshake yields the expected validated `orgId`, rather than checking only the connect schema.
+
+**Review-fix round 1** closes the remaining exact-head findings: Path T requires explicit
+trusted scope at the unified emission boundary, inventories direct writers, preserves
+multi-org membership, and specifies installed-SQLite migration and legacy-row safety. The
+unsupported Slice 6 build-time selector claim is removed, and Slice 8's `minion-meta`
+repository scope is declared in frontmatter.
 
 Slice ledger — verified 2026-08-29 against hub master `1b47e8ce` and the canonical gateway
 `NikolasP98/minion-ai` `DEV` `293a1aad1bd5609e94247067332a6a41eae7f6be` (**not**
@@ -471,16 +477,13 @@ for module-scope `window`/`document`/`localStorage` access and browser-only impo
 classic SPA-rot class) and fix with `browser` guards or `onMount`. This collapses the
 double round trip and makes every existing `streamed:` block pay off on cold load.
 
-**Rollback, stated accurately.** `PUBLIC_SSR_DISABLED` is a `PUBLIC_*` value inlined at
-build time, and Vercel env changes do not reach a running deployment without a redeploy
-(same constraint recorded in `proposals/2026-08-29-hub-prod-runtime-config-drift-check.md`)
-— so it is a *deploy-time selector*, not an instant switch, and pass 2's "rollback is an
-env flip" was wrong. The real escape hatch is promoting the previous production deployment
+**Rollback, stated accurately.** This slice creates no build-time SSR selector. The escape
+hatch is promoting the previous production deployment
 (`vercel rollback` / promote the prior build, which still carries `ssr = false`), verified
-by re-resolving the alias with `vercel inspect hub.minion-ai.org` afterwards; the flag's
-job is to let a *rebuild* opt out without reverting the code. Both paths need someone with
-Vercel access — record in the PR which one was rehearsed and how long it took. Remove the
-flag once S2's dashboard confirms FCP improvement.
+by re-resolving the alias with `vercel inspect hub.minion-ai.org` afterwards. A rebuild-based
+recovery requires reverting this slice and deploying that revert; changing an otherwise
+unused environment value has no effect. Record in the PR how long the previous-deployment
+promotion rehearsal took.
 
 **Human gates:** this slice requires a human merge gate — an app-wide render-mode flip is
 not an automatic merge regardless of green CI — and it may not start until S2's dashboard
@@ -639,28 +642,42 @@ proposal's ownership. Either way S7b must not *widen* it, which is what clauses 
 
 #### Path T — per-org reliability data (owned by the proposal, not by this spec)
 
-If the product decides tenants must see their own reliability data, the work is: an org
-column on the event store; a named trusted attribution source **per producer class** from
-item 7 (connection identity where the event is connection-scoped, the agent's/account's
-existing `orgIds` tag where it is agent- or channel-scoped, and an explicit `global` class
+If the product decides tenants must see their own reliability data, the work is: a required
+discriminated trusted scope (`tenant`, `multi-org`, or explicit `global`) at the unified
+`emitEvent` boundary, with no scope-omitting overload; an exhaustive inventory of direct
+`emitEvent` writers as well as wrapper callers; and a named trusted attribution source
+**per producer class** from item 7 (connection identity where the event is
+connection-scoped, the agent's/account's existing `orgIds` tag where it is agent- or
+channel-scoped, and an explicit `global` class
 for startup/cron/system events that no tenant owns, served only to a system-admin surface),
 resolved before either process-global rate limiter. Tenant limiter keys include the
-canonical trusted org scope plus category/event; global/admin events use a distinct
-namespace, and multi-org resources have one deterministic canonical key. Apply equivalent
+trusted org plus category/event; global/admin events use a distinct namespace, and a
+multi-org limiter uses a sorted, deduplicated org-set key. Persistence retains all org
+memberships (an `orgIds` representation or per-org fan-out with a stable logical-event id),
+so A and B both see their shared resource, C does not, and admin aggregates count it once.
+The local SQLite contract includes the fresh `CREATE TABLE` shape and an idempotent
+pre-prepare upgrade (`PRAGMA table_info` plus guarded `ALTER TABLE`, or versioned equivalent).
+Legacy unattributed rows remain legacy-global/admin-only unless ownership is independently
+provable and never enter tenant aggregates; store/migration failure is health-visible, not
+silently swallowed event loss. Apply equivalent
 filtering across `reliability.*` and every
 `events.list/get/summary/timeline` alias (cross-org `events.get` is indistinguishable from
 not found); an org-scoped or admin-only `events.stream`; guards for both `reliability` and
 `events.new`; and originating-org preservation through Turso sync, hub `unified_events`,
 its dedupe/index contract, and the active-org Insights API. Until the durable path ships,
 Insights is disabled or operator-gated on shared gateways. Tests run through at least one
-*real* producer per class — injecting tagged events into the store proves nothing about
-the 61 call sites. Every cached tenant-scoped aggregate key includes the validated org
+*real direct* producer for JWT auth/connection, tool/agent activity and global activity,
+plus wrapper producers — injecting tagged events into the store proves nothing about the
+full writer boundary. Every cached tenant-scoped aggregate key includes the validated org
 identity plus any gateway/server namespace required by process-wide and shared
 Redis/Valkey caches; admin/global results use a distinct namespace. Same-gateway two-org
 tests exercise every query alias, both live event names, and producer → sync → Insights
 aggregate isolation. For every cached alias, org A primes identical parameters and org B
 requests within the TTL without clearing or mocking the cache; B receives only B's
-aggregate. In one gateway instance, a real org-A producer and org-B producer also emit the
+aggregate. A three-org test proves `[A, B]` is visible to both, invisible to C, and counted
+once for admins. A pre-upgrade SQLite fixture is initialized twice, accepts new scoped
+inserts afterward, and contributes no legacy row to tenant aggregates. In one gateway
+instance, a real org-A producer and org-B producer also emit the
 same event inside both limiter windows without clearing either map: both records survive
 and reach only their audiences, while a same-org duplicate remains suppressed. Note the
 fail-open default of
