@@ -69,6 +69,7 @@ for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f
 		...(fm.spawned_spec ? { spawned_spec: fm.spawned_spec } : {}),
 		...(fm.tags ? { tags: fm.tags } : {}),
 		...(fm.value ? { value: fm.value } : {}),
+		...(fm.effort ? { effort: fm.effort } : {}),
 		...(fm.source ? { source: fm.source } : {})
 	});
 }
@@ -77,6 +78,16 @@ if (errors.length) {
 	console.error(errors.join('\n'));
 	process.exit(1);
 }
+// TODO(handoff): this descending-id sort is NOT the order the out-of-band
+// auto-triage index writer leaves behind — before this branch regenerated,
+// proposals/index.json led with the newest dated id, while this sort leads with
+// the `postmerge-*` ids, so a mandated regeneration right after an auto-triage
+// commit reorders rows. Which writer's order is canonical is undecided; see
+// proposals/2026-08-29-proposal-index-check-mode-and-effort-projection.md.
 proposals.sort((a, b) => b.id.localeCompare(a.id));
+// TODO(handoff): unlike spec-index.mjs this script has no read-only `--check`
+// mode, so verifying the index necessarily REWRITES proposals/index.json — a
+// reviewer cannot validate it without mutating the tree. See
+// proposals/2026-08-29-proposal-index-check-mode-and-effort-projection.md.
 writeFileSync('proposals/index.json', JSON.stringify({ proposals }, null, '\t') + '\n');
 console.log(`proposals/index.json written: ${proposals.length} proposals`);
