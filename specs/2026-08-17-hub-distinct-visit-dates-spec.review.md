@@ -1,13 +1,22 @@
 ---
 spec: 2026-08-17-hub-distinct-visit-dates-spec
-pass: 8
+pass: 9
 verdict: pending
 reviewer: factory-review
 created: 2026-08-17
-updated: 2026-08-29
+updated: 2026-08-30
 ---
 
-# Review record — disposition: STILL IN REVIEW (pass 8 awaiting re-review)
+# Review record — disposition: STILL IN REVIEW (pass 9 awaiting re-review)
+
+## Pass 9 — external review blocker fixed, awaiting re-review
+
+The pass-8 count-then-bulk-update repair was not bounded by the operator-reviewed row set. Pass 9
+replaces it with a checksummed exact-ID/pre-image artifact, forbids all repair when gate 2 is
+positive, and otherwise requires a maintenance boundary plus a transactional exact-set update
+whose returned IDs must equal the approved artifact before commit. The artifact is retained for
+rollback, and the slice must prove a newly matching row created after capture is untouched. This
+closes the latest review's concurrency/data-integrity trigger without reopening prior findings.
 
 ## Pass 3 — approved (rewritten against verified hub reality)
 

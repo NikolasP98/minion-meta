@@ -3,10 +3,10 @@ id: 2026-08-17-hub-distinct-visit-dates-spec
 title: "CRM funnel — one timezone-correct visit-date definition (invoices + completed bookings) behind the shipped Loyal floor"
 stage: spec
 status: review
-pass: 8
+pass: 9
 next_slice: 1
 created: 2026-08-17
-updated: 2026-08-29
+updated: 2026-08-30
 proposal: 2026-08-17-hub-distinct-visit-dates
 verdict: pending
 repos: [minion_hub, minion-meta]
@@ -161,6 +161,16 @@ had drifted upstream.
 §1's census row and §2 invariant 7 gain the D18 correction; §3 gains D18 and D16 is corrected in
 place; §4 Slice 1 gains the writer-level bust and Slice 2's evidence-gate instructions are
 rewritten; §7 gains a budget-limited-sync test and the ship gate's D16 language is corrected.
+
+**Pass-9 fix (2026-08-30).** The next external review found one still-current Medium defect in
+pass 8's legacy repair: the operator approved only a count, while the later broad `UPDATE`
+re-evaluated a moving `now()` predicate and could therefore downgrade a newly completed booking
+that was never in the reviewed census. D16 now makes the evidence an immutable, checksummed set
+of IDs plus pre-images; forbids every status repair when gate 2 proves early completion is a real
+workflow; and permits an operator-approved repair only inside a maintenance boundary, joined to
+that exact set with pre-image guards and an exact returning-row assertion. The retained artifact
+is also the rollback input. A concurrency test must insert a newly matching row after capture and
+prove it is untouched. No other pass-8 decision is reopened.
 
 **Design ancestors:**
 [`2026-08-13-crm-customers-server-pagination-spec`](2026-08-13-crm-customers-server-pagination-spec.md)
@@ -825,22 +835,32 @@ leaving any cached surface holding stale scheduling evidence.
      closed out immediately)? The `start_time <= now()` clause makes this disjoint from gate 1 by
      construction, so its answer never depends on how many gate-1 rows exist.
 
-  Decide from both results together:
+  Decide from both results together. The evidence step must capture the exact gate-1 rows, not
+  merely their count: export `id`, `org_id`, `status`, `start_time`, and `updated_at` under a
+  transaction-level `evidence_captured_at`, sort by `id`, and record the artifact's SHA-256 and
+  row count in the PR/proposal ledger. Treat that immutable artifact as sensitive operational
+  evidence: store it in the approved operator location, never commit it, and retain it as the
+  rollback input.
+
   - **If gate 2 is `> 0`, stop the guard/read change entirely** — the same workflow it found in
     the past will recur for future bookings once the guard ships, and it would 409 a real
     front-desk action. File a proposal describing the observed pattern (an operator must approve
     the guard's exact shape — e.g. a grace window — before this slice proceeds) and leave
     `VISIT_BOOKING_STATUSES` and the read on the old `start_time <= now()` filter for that org,
-    the same rule §5 applies to widening the attended set. This STOP does not, by itself, block
-    gate 1's repair below — gate 2's scoping guarantees its row set is disjoint from gate 1's.
+    the same rule §5 applies to widening the attended set. **Perform no gate-1 status repair on
+    this path.** A positive gate 2 proves the unguarded writer may represent an accepted business
+    workflow; predicate disjointness is not enough authority to rewrite adjacent attendance data.
   - **Gate 1's residue, if any, is never normalized automatically**, independent of gate 2's
-    result. If gate 1 is `> 0`, record the affected count and get explicit operator sign-off in
-    the proposal ledger before running the one-off
-    `update sched_bookings set status = 'accepted' where status = 'completed' and start_time >
-    now()` (a data repair on a status column, **not** a funnel backfill, which §5 still forbids).
-    That statement's own `where` clause is gate 1's predicate verbatim, so it structurally cannot
-    touch a row gate 2 flagged — the two predicates (`start_time > now()` vs `start_time <=
-    now()`) partition the table.
+    result. Only when gate 2 is zero may the operator approve a gate-1 repair, and that approval
+    names the captured artifact checksum and exact IDs — never only a count. Run it under an
+    announced maintenance boundary that pauses the booking-status writer. In one transaction,
+    join `sched_bookings` to the captured approved set by `id`, require every captured pre-image
+    (`org_id`, `status = 'completed'`, `start_time`, `updated_at`) still to match, update only those
+    joined rows to `accepted`, and use `RETURNING id` to prove the sorted returned IDs and count
+    equal the approved artifact before commit; otherwise roll back. Do not re-evaluate `now()` in
+    the mutation. Retain the pre-images until post-deploy verification so the same exact-ID join
+    can restore them. A booking that becomes future-completed after evidence capture is outside
+    the approved set and must remain untouched.
 - `const VISIT_BOOKING_STATUSES = ['completed'] as const`, with the reasoning in a comment:
   hub's own status domain (`scheduling-bookings.service.ts:370`) has a distinct `no_show`, so
   `accepted` is a *pre-visit* state, not attendance. **This is the resolution of the pass-2 human
@@ -909,8 +929,12 @@ bun run vitest run src/server/services/crm-
 #     read SQL contains no `now()`/`current_date` term, so a later pass cannot reintroduce the
 #     clock without failing a test
 #   - LEGACY CENSUS (D16): the two counting queries in the S2 "Do" bullet are run and their output
-#     pasted in the PR; if the first is > 0 the normalization statement and its affected-row count
-#     are in the PR too; if the second is > 0 the slice STOPS and files a proposal
+#     pasted in the PR. The exact gate-1 IDs/pre-images are captured and checksummed. If gate 2 is
+#     > 0 the slice STOPS, files a proposal, and performs NO repair. If gate 2 is zero and gate 1
+#     is non-zero, an operator approves that exact artifact; the repair updates only matching
+#     approved pre-images, asserts the returned ID set before commit, and retains rollback data.
+#     A concurrency case creates another future-completed row after capture and proves the repair
+#     does not change it
 #   - DEDUPE: invoice and completed booking on the SAME local day → 1 date → NOT loyal
 #   - EXCLUDED: no_show / cancelled / rejected / pending / accepted bookings → not counted
 #   - NULL STATUS: a procedure invoice with status IS NULL still counts as a visit date — R2-M1
@@ -1016,9 +1040,10 @@ bun run vitest run && bun run check
 - **Scheduling-only orgs.** The count rides the finance map's `crm × finances` gate; widening that
   gate touches revenue reads too. Recorded as a handoff, not fixed here.
 - **Persisting Loyal.** The floor stays read-time (TO-BE #6). No backfill, no cron, no
-  re-analysis pass over existing contacts. The D16 legacy normalization is not an exception: it
-  repairs `sched_bookings.status` rows that the unguarded writer should never have allowed, and
-  writes nothing into `custom_fields._funnel`.
+  re-analysis pass over existing contacts. A gate-2-positive result forbids D16's optional legacy
+  status repair. Otherwise, an explicitly approved exact-set repair may correct
+  `sched_bookings.status` rows that the unguarded writer should never have allowed; it writes
+  nothing into `custom_fields._funnel` and is not a funnel backfill.
 - **Every other consequence of a booking's start time passing.** D16 removes the clock from the
   *visit* read only. Reminders, slot computation and scheduling analytics keep their own
   time-dependent reads; they are not cached behind the CRM tags and are not this spec's problem.
@@ -1126,11 +1151,12 @@ curl -s "$HUB/api/crm/contacts?funnelStage=loyal&limit=5" -H "$AUTH" | jq '.tota
 
 **Ship gate:** §7 green; the §1 **writer census re-run** pasted in the S1 PR body (the `rg` recipe
 in §1 — this is the gate that stops a fifth "one more writer" round, and it must show every hit
-followed by a post-commit bust); the two D16 evidence queries (disjoint by construction, pass-8
-M1) and their output pasted in the S2 PR — the normalization statement, its affected-row count,
-and the operator sign-off recording it, if gate 1 is non-zero; the proposal link and a STOP on
-shipping the guard/read change (never on gate 1's repair, which cannot touch gate 2's row set) if
-gate 2 is non-zero; the D17 consumer sweep pasted in the S2 PR;
+followed by a post-commit bust); both D16 evidence queries and their output pasted in the S2 PR,
+plus the immutable gate-1 artifact's row count and checksum; if gate 2 is non-zero, the proposal
+link and a STOP on both the guard/read change and every status repair; otherwise, for a non-zero
+gate 1, operator sign-off naming the exact artifact, exact-set/pre-image/returned-ID assertions,
+rollback evidence, and the concurrent-row exclusion test; the D17 consumer sweep pasted in the
+S2 PR;
 the EXPLAIN plan from S2 pasted in the PR; the `show timezone;` output
 recorded (it is the evidence that D1 was a real defect, and the one §1 fact this spec could not
 prove without a database); the S2 handoff appends made to
