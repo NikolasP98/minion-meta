@@ -1,21 +1,45 @@
-# CLAUDE.md — Minion Meta-Repo Orchestrator Hub
+# AGENTS.md — Minion Meta-Repo Orchestrator Hub
 
-This is the **Minion meta-repo** — a self-hosted personal AI assistant platform with orchestration tooling, shared packages (`@minion-stack/*`), and specs at the root, wrapped around 7 independent subprojects. The agent operating from this directory is the **orchestrator**: it has full knowledge of every subdirectory, connects concepts cross-project, and dispatches subagents with the right context.
+This is the **Minion meta-repo** — a self-hosted personal AI assistant platform with orchestration tooling, shared packages (`@minion-stack/*`), and specs at the root, wrapped around six CLI-registered subprojects plus documentation trees. The agent operating from this directory is the **orchestrator**: it has full knowledge of every subdirectory, connects concepts cross-project, and dispatches subagents with the right context.
 
 ## Project Map
 
-| Directory | What | Stack | Git Branch | Own CLAUDE.md |
-|---|---|---|---|---|
-| `minion/` | Core gateway + CLI (pnpm monorepo) | pnpm 10.x, Node 22+, TS, tsdown | `DEV` | `.dmux-hooks/CLAUDE.md` |
-| `minion_hub/` | Web dashboard for gateway management | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `dev` | `CLAUDE.md` |
-| `minion_site/` | Marketing site + members dashboard | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `master` | `CLAUDE.md` |
-| `minion_plugins/` | Claude Code plugin marketplace | — | `main` | — |
-| `docs/` | Agent registry, profiles, docs, sprints | YAML + Markdown | `main` | `CLAUDE.md` |
-| `paperclip-minion/` | Control plane for AI-agent companies | pnpm, Express, React + Vite, Drizzle + PGlite | `minion-integration` | `AGENTS.md` |
-| `pixel-agents/` | VS Code extension — pixel art office for Claude agents | npm, esbuild, React webview | `main` | `CLAUDE.md` |
-| `ai-studio/` | Research/product studio (AI course workspace) | Docs only | — | `CLAUDE.md` |
+Directories, package managers, branch roles, and commands are **projections of `repo-policy.yaml`**,
+the canonical fleet registry. Never hand-edit a value inside a `repo-policy:*` block: change the
+registry, run `node scripts/repo-policy.mjs generate`, then `node scripts/check-agent-instructions.mjs`.
 
-**Always read the sub-project's CLAUDE.md (or AGENTS.md) before working in it.**
+<!-- repo-policy:project-map -->
+| Repo id | CLI id | Directory | Package manager | Development branch | PR base |
+|---|---|---|---|---|---|
+| `minion` | `minion` | `minion/` | `pnpm` | `DEV` | `DEV` |
+| `minion_hub` | `hub` | `minion_hub/` | `bun` | `master` | `master` |
+| `minion_plugins` | `plugins` | `minion_plugins/` | `none` | `main` | `main` |
+| `minion_site` | `site` | `minion_site/` | `bun` | `dev` | `dev` |
+| `paperclip` | `paperclip` | `paperclip-minion/` | `pnpm` | `minion-integration` | `minion-integration` |
+| `pixel-agents` | `pixel-agents` | `pixel-agents/` | `npm` | `main` | `main` |
+<!-- /repo-policy:project-map -->
+
+`minion-meta` (this repo), `minion-factory`, and `minion-base` are fleet rows too — they are just
+not CLI-registered subprojects of this checkout. Read any row with
+`node scripts/repo-policy.mjs show <id-or-alias>`.
+
+What each subproject is, and where its own instructions live:
+
+| Directory | What | Stack | Own Instructions |
+|---|---|---|---|
+| `minion/` | Core gateway + CLI (pnpm monorepo) | pnpm 10.x, Node 22+, TS, tsdown | `AGENTS.md` |
+| `minion_hub/` | Web dashboard for gateway management | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `CLAUDE.md` |
+| `minion_site/` | Marketing site + members dashboard | Bun, SvelteKit 2, Svelte 5, Tailwind 4 | `CLAUDE.md` |
+| `minion_plugins/` | Claude Code plugin marketplace | — | — |
+| `Minion Docs/` | Agent registry, profiles, docs, sprints (was `docs/`; renamed by Synology Drive sync 2026-08-05) | YAML + Markdown | `CLAUDE.md` |
+| `paperclip-minion/` | Control plane for AI-agent companies | pnpm, Express, React + Vite, Drizzle + PGlite | `AGENTS.md` |
+| `pixel-agents/` | VS Code extension — pixel art office for Claude agents | npm, esbuild, React webview | `CLAUDE.md` |
+| `ai-studio/` | Research/product studio (AI course workspace) | Docs only | `CLAUDE.md` |
+
+`Minion Docs/` and `ai-studio/` are documentation trees, not CLI-registered development
+repositories; they carry no registry row.
+
+**Always read the sub-project's CLAUDE.md or AGENTS.md before working in it.**
 
 ## Meta-repo Workflow
 
@@ -25,12 +49,22 @@ The `minion` CLI (`@minion-stack/cli` npm package, binary `minion`) orchestrates
 
 The canonical interactive bundle lives in `minion_plugins/plugins/minion-engineering/`. Run `scripts/sync-minion-engineering-skills.sh` after updating that released source to install the project-local skills for Claude, Cursor, and Codex and to copy the shared writing skill and advisory prose auditor into `minion_factory/agent/skills/`. The sync refuses dirty inputs and records the exact plugin commit in both distributions. Local project instructions always win; the prose auditor is advisory and has no rewrite, verdict, or merge authority.
 
+## Codex Memory Parity
+
+This repo carries Codex parity artifacts under `codex/` so Codex can use the same durable-memory patterns as Claude without changing Claude's workflow:
+
+- `codex/plugins/claude-mem/` wraps the existing `claude-mem` runtime for cross-session memory search through MCP and Codex root-level `hooks.json` lifecycle hooks.
+- `codex/skills/mempalace-memory/` documents the installed `mempalace` CLI workflow and this repo's `mempalace.yaml` room map.
+- `codex/skills/lessons-learned/` ports the post-task observation workflow.
+
+Use these when the user asks about prior-session context, durable memory, project wake-up context, or lessons learned. Do not save secrets, raw credentials, or unrelated transcript bulk into memory.
+
 ### Core commands
 
 | Command | Use |
 |---|---|
 | `minion list` | Print subproject registry (6 ids: minion, hub, site, paperclip, pixel-agents, plugins) |
-| `minion dev <id>` | Launch subproject's dev command with the 6-layer env merge applied |
+| `minion dev <id>` | Launch subproject's dev command with the current env merge applied |
 | `minion dev --all` | Parallel fanout (concurrently) across subprojects that declare a dev command |
 | `minion build <id>`, `minion test <id>`, `minion check <id>` | Same pattern for build/test/check |
 | `minion status` | Tabular git status across all subprojects |
@@ -40,16 +74,11 @@ The canonical interactive bundle lives in `minion_plugins/plugins/minion-enginee
 
 Full command reference: `minion --help` or the `@minion-stack/cli` README.
 
-### Env hierarchy (6 layers, lowest → highest precedence)
+### Environment resolution
 
-1. `AI/.env.defaults` — meta-repo shared non-secret defaults
-2. Infisical project `minion-core` — shared secrets (Anthropic, OpenRouter, GitHub PAT, etc.)
-3. `<subproject>/.env.defaults` — per-subproject non-secret defaults
-4. Infisical project `minion-<name>` — per-subproject secrets
-5. `<subproject>/.env.local` — gitignored dev escape hatch
-6. Shell `process.env` — wins
-
-Configure Infisical auth once via Universal Auth machine identity. Export `INFISICAL_UNIVERSAL_AUTH_CLIENT_ID` + `INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET` in your shell (or put in `~/.config/minion/infisical-auth.json`, mode 0600). The `minion doctor` command reports status.
+[`packages/env/README.md`](packages/env/README.md) owns the current precedence, secret-location,
+authentication, and cache contracts. Read it before changing environment resolution. The `minion
+doctor` command reports Infisical authentication status.
 
 ### Shared packages (`@minion-stack/*`)
 
@@ -58,10 +87,10 @@ Published to npm under the `@minion-stack` scope. Independent semver via Changes
 | Package | Purpose |
 |---|---|
 | `@minion-stack/cli` | The `minion` bin (this workflow's entrypoint) |
-| `@minion-stack/env` | 6-layer env resolver (wraps Infisical CLI) |
+| `@minion-stack/env` | Environment hierarchy resolver (wraps Infisical CLI) |
 | `@minion-stack/tsconfig` | Base / node / svelte / library TS configs |
 | `@minion-stack/lint-config` | oxlint + flat-ESLint + Prettier presets |
-| `@minion-stack/shared` | See [`README.md`](README.md#shared-packages) for the current public surface |
+| `@minion-stack/shared` | See [`README.md`](README.md#shared-packages) for the current public surface; gateway surfaces are consumed by hub, site, and paperclip |
 | `@minion-stack/db` | Canonical Drizzle schema (38 tables) + migration runner — consumed by hub + site |
 | `@minion-stack/auth` | Better Auth `createAuth()` factory — consumed by hub + site with shared session continuity |
 
@@ -73,7 +102,7 @@ The meta-repo ships two GitHub Actions workflows:
 
 | Workflow | Trigger | Purpose |
 |---|---|---|
-| `.github/workflows/ci.yml` | PR to main, push to main | Runs `pnpm run build-all`, `typecheck-all`, `lint-all`, `test-all`, and `changeset:status` on every PR |
+| `.github/workflows/ci.yml` | PR/push to `dev` or `main` | Runs the exact repository-policy, build, typecheck, lint, test, skill-bundle, spec-index, and PR changeset gates declared in the workflow |
 | `.github/workflows/release.yml` | Push to main | Uses `changesets/action@v1.7.0` to open a "Version Packages" PR when changesets are present; publishes `@minion-stack/*` to npm when that PR is merged |
 
 Root scripts that fan out across workspace packages:
@@ -84,7 +113,7 @@ Root scripts that fan out across workspace packages:
 | `pnpm run typecheck-all` | `pnpm -r --parallel --if-present run typecheck` |
 | `pnpm run lint-all` | `pnpm -r --parallel --if-present run lint` |
 | `pnpm run test-all` | `pnpm -r --parallel --if-present run test` |
-| `pnpm run ci` | build-all → typecheck-all → lint-all → test-all → changeset:status |
+| `pnpm run ci` | Run the complete local gate sequence declared in `package.json` |
 | `pnpm run changeset` | Interactive changeset authoring |
 
 Release tokens and secrets: `NPM_TOKEN` (automation type) must be set as a GitHub repo secret — see `.planning/phases/08-polish-automation/NPM_TOKEN-SETUP.md` for one-time setup.
@@ -189,7 +218,7 @@ bun run check        # Type-check
 ```
 
 
-### docs/ — Agent Registry + Project Docs
+### Minion Docs/ — Agent Registry + Project Docs
 
 Contains 1,350+ agent definitions across 5 scopes (voltagent, gsd, custom, superpowers, community), deployment profiles, architecture docs, competitive research, and sprint plans.
 
@@ -210,7 +239,7 @@ Paperclip is a control plane for AI-agent companies. Currently on `minion-integr
 **Server**: Express REST API + orchestration services (`server/`).
 **UI**: React + Vite board UI (`ui/`).
 **CLI**: `cli/` — Paperclip CLI tool.
-**Docs**: Mintlify-powered docs (`docs/`).
+**Docs**: Mintlify-powered docs — tracked in the docs project (`Minion Docs/paperclip/`), not in this repo.
 **Tests**: Vitest + Playwright E2E + Promptfoo evals.
 
 ```bash
@@ -241,7 +270,7 @@ Research workspace for an AI course. Docs-only — no production code. Uses the 
 |---|---|
 | `00_START_HERE.md` | Entry point for A3 retention research (March 2026) |
 | `A3_*.md`, `RETENTION_*.md`, `KPI_*.md` | One-time retention benchmark research artifacts |
-| `DOCS/` | Symlink to `~/Documents/VAULT/MINION` |
+| `Minion Docs/` | The docs project (own git repo) — formerly the `DOCS` symlink → `~/Documents/VAULT/MINION`; moved here by Synology Drive sync 2026-08-05. Per-project doc trees live at `Minion Docs/minion_site/` and `Minion Docs/paperclip/` |
 | `agents/` | Empty dir with `.claude/settings.local.json` |
 | `.env` | API keys (Anthropic, OpenRouter, GitHub PAT, gateway token) |
 | `mascot.png` | Project mascot image |
@@ -257,19 +286,49 @@ Research workspace for an AI course. Docs-only — no production code. Uses the 
 
 ## Commands Quick Reference
 
-| Project | Dev | Build | Test | Check |
-|---|---|---|---|---|
-| minion/ | `pnpm dev` | `pnpm build` | `pnpm test` | `pnpm check` |
-| minion_hub/ | `bun run dev` | `bun run build` | `bun run test` | `bun run check` |
-| minion_site/ | `bun dev` | `bun run build` | — | `bun run check` |
-| paperclip-minion/ | `pnpm dev` | `pnpm build` | `pnpm test:run` | `pnpm typecheck` |
+Run these from the subproject directory, or through the CLI (`minion dev|build|test|check <id>`),
+which applies the current env merge first. `—` means the repository declares no such command.
+
+<!-- repo-policy:commands -->
+| Repo id | Install | Dev | Build | Test | Check | Typecheck |
+|---|---|---|---|---|---|---|
+| `minion` | `pnpm install` | `pnpm dev` | `pnpm build` | `pnpm test` | `pnpm check` | `pnpm tsgo` |
+| `minion_hub` | `bun install` | `bun run dev` | `bun run build` | `bun run test` | `bun run check` | — |
+| `minion_plugins` | — | — | — | — | — | — |
+| `minion_site` | `bun install` | `bun dev` | `bun run build` | `bun run test` | `bun run check` | `bun run check` |
+| `paperclip` | `pnpm install` | `pnpm dev` | `pnpm build` | `pnpm test:run` | `pnpm typecheck` | `pnpm typecheck` |
+| `pixel-agents` | `npm install` | `npm run watch` | `npm run build` | `npm test` | `npm run lint` | `npm run check-types` |
+<!-- /repo-policy:commands -->
+
+Meta-repo fan-out scripts (`build-all`, `typecheck-all`, `lint-all`, `test-all`) are listed under
+CI & Release Automation above.
+
+## SDLC Contract (normative)
+
+Every product-building agent follows ONE lifecycle — the factory automates it,
+humans and ad-hoc agents follow the same states by hand:
+
+```
+proposal (proposals/*.md) → spec (specs/*.md, 2-pass review) → dev (slice-scoped
+branch + draft PR + self-test + independent review) → merge (human for anything
+non-trivial) → deploy (branch-triggered) → post-merge verification
+```
+
+- State lives in frontmatter (`status`, `verdict`) committed to minion-meta —
+  never only in chat, memory, or a dashboard.
+- Skipping a stage requires saying so in the artifact you DID produce (e.g. a
+  hotfix PR body must name the spec it bypassed and why).
+- Every spec and proposal states AS-IS (current observable behavior, with
+  anchors/evidence), TO-BE (desired observable behavior + invariants), and the
+  DELTA (exact transitions, tests proving each) — see the templates.
+- Security/data-tagged work always keeps human gates at approval AND merge.
 
 ## Orchestration Guide
 
 ### Dispatching Subagents
 
 When sending work to a subproject, always include:
-1. The subproject path and its CLAUDE.md location
+1. The subproject path and its CLAUDE.md or AGENTS.md location
 2. The current git branch (see Project Map above)
 3. Relevant cross-project context (e.g., "this touches the WS protocol — changes must be reflected in @minion-stack/shared, hub, site, and paperclip's minion_gateway adapter")
 
@@ -280,7 +339,7 @@ When sending work to a subproject, always include:
 | Gateway protocol (frame types, events) | `packages/shared/` → `minion_hub/` + `minion_site/` + `paperclip-minion/` (minion_gateway adapter) |
 | Channel extension (new/modify) | `minion/extensions/<channel>/` + `minion/src/channels/` |
 | DB schema change | `minion_hub/src/server/db/schema/` → `minion_site/src/server/db/` (shared DB) |
-| Agent definition format | `docs/agents/` → `minion_hub/` (marketplace) → `minion/` (runtime) |
+| Agent definition format | `Minion Docs/agents/` → `minion_hub/` (marketplace) → `minion/` (runtime) |
 | Auth changes | `minion_hub/src/lib/auth/` ↔ `minion_site/src/lib/auth/` (shared Better Auth) |
 | Workshop/canvas | `minion_hub/src/lib/workshop/` + `minion_hub/src/lib/components/workshop/` |
 | Pixel office | `pixel-agents/src/` (extension) + `pixel-agents/webview-ui/src/` (React) |
@@ -288,13 +347,26 @@ When sending work to a subproject, always include:
 
 ### Key Conventions
 
+- **UI design governance (hub + site)**: ALL UI work follows the design-token contract — `packages/design-tokens/contract.json` is machine truth, `specs/2026-07-13-hub-ui-coherence-implementation-spec.md` §D2 is naming law. Before touching any UI, invoke the `ui-design-governance` skill (`.claude/skills/ui-design-governance/SKILL.md`). Semantic tokens only; after UI edits run `bun run lint:design && bun run lint:tokens` (debt may only decrease).
 - **TypeScript** strict mode everywhere. Avoid `any`. Never add `@ts-nocheck`.
 - **Svelte 5 only** (hub + site): runes, snippets (`Snippet` type for children), `onclick={}` syntax. No legacy Svelte 4 patterns.
 - **Formatting**: minion/ uses oxlint + oxfmt. SvelteKit projects use svelte-check.
-- **Package managers**: pnpm for the meta-repo root, `minion/`, and `paperclip-minion/`. Bun for SvelteKit projects (`minion_hub/`, `minion_site/`). npm for `pixel-agents/`. Don't mix within a subproject.
+- **Package managers**: one per subproject, as declared in the Project Map block above (registry field `packageManager`); the meta-repo root itself is pnpm. Don't mix within a subproject.
 - **Naming**: "Minion" for product/docs headings; `minion` for CLI/package/paths.
-- **Git workflow**: Feature branches → dev/DEV → main/master. Use worktrees for isolation. Never commit directly to main.
+- **Git workflow**: feature branch → that repository's registry `PR base` → its release branch. Per-repo branch roles are in the Project Map block above (`node scripts/repo-policy.mjs show <id-or-alias>` prints the full row) — never restate them from memory. Use worktrees for isolation. Never commit directly to a default or release branch.
 - **Multi-agent safety**: Don't touch git stash, worktrees, or switch branches unless explicitly asked. Scope commits to your changes only.
+- **Open-items ledger (agent handoff)**: finishing a task while leaving ANY open end — unwired implementation, known bug, hardcoded value, missing edge-case handling, skipped/weak test — requires documenting it TWICE before you stop: (1) an in-code `TODO(handoff): <what, why, pointer>` comment at the exact site, and (2) a proposal in the meta-repo `proposals/` (new file or append to the matching open one). Undocumented open ends are defects, not shortcuts — the maintenance pipeline (base.minion-ai.org) consumes this ledger; what is not written down never gets fixed.
+
+## Browser automation
+
+- Use the `browser-harness` skill for every web interaction. Never launch visible Chromium or use `hyprctl dispatch workspace`, `focuswindow`, `grim`, `wtype`, or `ydotool` for browser inspection unless the user explicitly requests foreground control.
+- The invisible single-agent default is the dedicated headless Chromium at `BU_CDP_URL=http://127.0.0.1:9223`. Run `browser-harness-session background` if it is unavailable; do not fall back to the user's interactive browser.
+- The default local daemon is single-owner. When browser work is concurrent, when the user may need to watch or intervene, or when login is likely, start one isolated Browser Use cloud browser per agent with `browser-harness-session watch minion-<short-unique-task>`. Give the user the printed `LIVE_URL`; never open it automatically.
+- Use the same unique `BU_NAME` prefix on every Browser Harness call for that task. Never share a `BU_NAME`, tab, browser process, or default daemon between concurrent agents. Isolation is per browser, not merely per tab or tab group.
+- At a login, MFA, consent, or ambiguous account gate, pause browser actions, keep the named browser alive, and ask the user to intervene through its `LIVE_URL`. Continue in the same session after the user confirms.
+- Ask before stopping a cloud browser because its live intervention session will end; stop an approved session with `browser-harness-session stop <name>`. Treat live URLs as private ephemeral access links and never commit them.
+- Lightpanda is an explicit opt-in accelerator for DOM-first, screenshot-independent flows only. It is not the default or a drop-in replacement for Chromium: verify the target workflow first, and fall back to isolated Chromium for visual checks, unsupported Web APIs, complex authentication, or user intervention.
+- To redirect an already-running agent, run `browser-harness-session redirect <unique-name>` and send the resulting instruction to that agent. Existing sessions do not automatically reload changed instructions.
 
 ## Environment
 
@@ -317,3 +389,4 @@ You are committed to honesty and accuracy above all else. Follow these rules in 
 3. **STATISTICS & NUMBERS** — Flag any statistic you are not 100% confident in. Say "I believe this is approximately..." and recommend the user verify it from an official or primary source.
 4. **RECENT EVENTS** — Remind the user when a topic may have changed since your knowledge cutoff. Do not guess at current events or present outdated info as current.
 5. **PEOPLE & QUOTES** — Never attribute a quote to a real person unless you are certain they said it. If unsure, say "I cannot confirm this quote is accurate."
+

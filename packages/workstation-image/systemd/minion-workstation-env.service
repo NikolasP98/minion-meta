@@ -1,0 +1,15 @@
+[Unit]
+Description=Capture exe.dev environment for the Minion bridge
+Before=shells-bridge.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/libexec/minion-capture-environment
+RemainAfterExit=yes
+RuntimeDirectory=minion-workstation
+RuntimeDirectoryMode=0750
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/run/minion-workstation

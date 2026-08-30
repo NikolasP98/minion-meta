@@ -1,7 +1,8 @@
 # @minion-stack/ui
 
-Shared Svelte 5 UI primitives for the Minion platform — token-driven `Button`,
-`Badge`, `Card`, and `Input`. Consumed by `minion_hub` and `minion_site`.
+Portable Svelte 5 primitives for Minion products. Each primitive owns its token
+usage, interactive states, accessible naming/association, density, and reduced
+motion behavior. Hub domain composites stay in the Hub repository.
 
 ## Install
 
@@ -9,44 +10,86 @@ Shared Svelte 5 UI primitives for the Minion platform — token-driven `Button`,
 bun add @minion-stack/ui @minion-stack/design-tokens
 ```
 
-`svelte` and `lucide-svelte` are peer dependencies (provided by the app).
+Import the shared CSS and include the packaged components in Tailwind's scan:
 
-## Setup (consuming SvelteKit app)
+```css
+@import 'tailwindcss';
+@import '@minion-stack/design-tokens/tokens.css';
+@import '@minion-stack/design-tokens/utilities.css';
+@source '../node_modules/@minion-stack/ui/dist';
+```
 
-1. Import the design tokens in `src/app.css` and tell Tailwind to scan this
-   package so its utility classes are generated:
+For SvelteKit SSR, compile the package in the consuming Vite process:
 
-   ```css
-   @import 'tailwindcss';
-   @import '@minion-stack/design-tokens/tokens.css';
-   @import '@minion-stack/design-tokens/utilities.css';
+```ts
+export default defineConfig({
+  ssr: { noExternal: ['@minion-stack/ui'] },
+});
+```
 
-   /* generate the utilities used inside @minion-stack/ui components */
-   @source '../node_modules/@minion-stack/ui/dist';
-   ```
+## Primitive inventory
 
-2. The library ships uncompiled `.svelte` files, so Vite must compile them at
-   SSR time — add to `vite.config.ts`:
-
-   ```ts
-   ssr: { noExternal: ['@minion-stack/ui'] }
-   ```
+| Primitive | Contract |
+|---|---|
+| `Button` | primary/secondary/ghost/outline/danger; xs–touch sizes; safe disabled links; width-preserving loading |
+| `IconButton` | mandatory localized `label`; icon shape at any control height |
+| `Badge` | semantic/status triples, optional dot and pulse |
+| `Card` | four token-driven elevation levels and named padding |
+| `FormField` | generated/explicit ID, label, required, helper, error, and control association |
+| `Input`, `Textarea`, `Select` | shared field geometry and status behavior; bindable values |
+| `Checkbox`, `Radio`, `Toggle` | mandatory labels, keyboard-native behavior, bindable state |
+| `Spinner`, `Skeleton` | reduced-motion-safe loading feedback |
 
 ## Usage
 
 ```svelte
-<script>
-  import { Button, Badge, Card, Input } from '@minion-stack/ui';
+<script lang="ts">
+  import { Button, Card, Input, Select, Toggle } from '@minion-stack/ui';
+
+  let name = $state('');
+  let model = $state('');
+  let enabled = $state(true);
 </script>
 
 <Card elevation={2}>
-  <Button variant="primary">Save</Button>
-  <Badge variant="semantic" value="success" />
+  <Input bind:value={name} label="Agent name" required />
+  <Select
+    bind:value={model}
+    label="Model"
+    options={[{ value: 'default', label: 'Gateway default' }]}
+  />
+  <Toggle bind:pressed={enabled} label="Enable agent" />
+  <Button variant="primary">Save draft</Button>
 </Card>
 ```
 
-## Build
+### Disabled links
+
+`Button` renders an anchor when `href` is provided. If it becomes disabled or
+loading, it removes `href`, removes the tab stop, blocks the handler, and exposes
+`aria-disabled`. Feature code should not wrap a disabled Button in another link.
+
+### Accessible names
+
+Use a visible label for fields. If a compatibility call site omits `Input`,
+`Textarea`, or `Select`'s visible `label`, it must pass a localized `aria-label`
+or `aria-labelledby`. `IconButton` and `Toggle` make their accessible labels
+mandatory in TypeScript.
+
+### Hub-owned composites
+
+Dialogs, sheets, menus, popovers, tabs, async boundaries, app/page shells,
+tables, and draggable windows depend on Hub behavior and do not belong in this
+package.
+
+## Validation
 
 ```bash
-pnpm --filter @minion-stack/ui build   # svelte-package → dist/
+pnpm --filter @minion-stack/ui typecheck
+pnpm --filter @minion-stack/ui test
+pnpm --filter @minion-stack/ui build
 ```
+
+The package uses Svelte 5 runes/snippets only. Stable `data-part`, `data-variant`,
+`data-size`, and `data-state` hooks support consumer decoration without global
+element overrides.

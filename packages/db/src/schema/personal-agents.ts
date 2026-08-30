@@ -12,16 +12,7 @@ export const personalAgents = sqliteTable(
       .references(() => user.id, { onDelete: 'cascade' }),
     agentId: text('agent_id').notNull(),
     serverId: text('server_id').references(() => servers.id, { onDelete: 'set null' }),
-    displayName: text('display_name').notNull(),
-    conversationName: text('conversation_name'),
     avatarUrl: text('avatar_url'),
-    personalityPreset: text('personality_preset', {
-      enum: ['professional', 'casual', 'creative', 'technical'],
-    }),
-    personalityText: text('personality_text'),
-    personalityConfigured: integer('personality_configured', { mode: 'boolean' })
-      .notNull()
-      .default(false),
     provisioningStatus: text('provisioning_status', {
       enum: ['pending', 'provisioning', 'active', 'error'],
     })

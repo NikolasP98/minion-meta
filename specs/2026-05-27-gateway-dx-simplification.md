@@ -1,3 +1,14 @@
+---
+id: 2026-05-27-gateway-dx-simplification
+title: Gateway (`minion/`) DX Simplification Roadmap
+stage: spec
+status: unknown
+pass: 1
+created: 2026-05-27
+updated: 2026-05-28
+repos: [minion]
+---
+
 # Gateway (`minion/`) DX Simplification Roadmap
 
 **Date:** 2026-05-27

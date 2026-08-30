@@ -1,3 +1,14 @@
+---
+id: 2026-05-24-unified-user-identities-plan
+title: Unified User Identities — Implementation Plan
+stage: spec
+status: unknown
+pass: 1
+created: 2026-05-24
+updated: 2026-05-24
+repos: [minion-meta]
+---
+
 # Unified User Identities — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

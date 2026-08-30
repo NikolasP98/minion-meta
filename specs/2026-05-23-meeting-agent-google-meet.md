@@ -1,3 +1,14 @@
+---
+id: 2026-05-23-meeting-agent-google-meet
+title: Meeting Agent — Google Meet Participant — Design Spec
+stage: spec
+status: rejected
+pass: 1
+created: 2026-05-23
+updated: 2026-08-13
+repos: [minion-meta]
+---
+
 # Meeting Agent — Google Meet Participant — Design Spec
 
 **Status:** Draft

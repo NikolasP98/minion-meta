@@ -1,6 +1,7 @@
 # @minion-stack/cli
 
-The `minion` command — orchestrates subprojects via `minion.json`, wraps each invocation with 6-layer env resolution via [`@minion-stack/env`](../env/README.md).
+The `minion` command orchestrates subprojects via `minion.json` and wraps each invocation with
+[`@minion-stack/env`](../env/README.md) resolution.
 
 ## Install
 
@@ -50,7 +51,7 @@ Per [Phase 2 context decision D9](../../.planning/phases/02-foundation/02-CONTEX
 
 - Node 22+
 - `infisical` CLI (v0.x+) installed and in `PATH`
-- `INFISICAL_UNIVERSAL_AUTH_CLIENT_ID` + `INFISICAL_UNIVERSAL_AUTH_CLIENT_SECRET` set in the shell env (or `~/.config/minion/infisical-auth.json`)
+- Infisical Universal Auth configured as documented by [`@minion-stack/env`](../env/README.md#infisical-auth)
 - Subproject package managers on `PATH` as declared in `minion.json` (pnpm, bun, npm — whichever the target subproject uses)
 
 ## Link-drift detection (`doctor`)

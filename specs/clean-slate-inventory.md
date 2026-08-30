@@ -1,3 +1,14 @@
+---
+id: clean-slate-inventory
+title: Clean Slate Inventory
+stage: spec
+status: shipped
+pass: 1
+created: 2026-04-19
+updated: 2026-08-13
+repos: [minion-meta]
+---
+
 # Clean Slate Inventory
 
 **Generated:** 2026-04-19

@@ -3,7 +3,7 @@
  * Generated manually based on Better Auth 1.x field definitions.
  * Provider: sqlite, plugins: emailAndPassword, google OAuth, jwt, organization
  */
-import { sqliteTable, text, integer, index, uniqueIndex } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, index } from 'drizzle-orm/sqlite-core';
 
 // ── Core: user ──────────────────────────────────────────────────────────────
 export const user = sqliteTable('user', {

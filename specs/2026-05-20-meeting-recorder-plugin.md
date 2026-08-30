@@ -1,3 +1,14 @@
+---
+id: 2026-05-20-meeting-recorder-plugin
+title: "Meeting Recorder Plugin — Design Spec (v2: voxtype-as-daemon)"
+stage: spec
+status: rejected
+pass: 1
+created: 2026-05-20
+updated: 2026-08-13
+repos: [minion-meta]
+---
+
 # Meeting Recorder Plugin — Design Spec (v2: voxtype-as-daemon)
 
 **Status:** Draft

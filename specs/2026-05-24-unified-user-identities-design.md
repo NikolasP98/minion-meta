@@ -1,3 +1,14 @@
+---
+id: 2026-05-24-unified-user-identities-design
+title: Unified User Identities + Credential Storage
+stage: spec
+status: shipped
+pass: 1
+created: 2026-05-24
+updated: 2026-08-13
+repos: [minion-meta]
+---
+
 # Unified User Identities + Credential Storage
 
 **Date:** 2026-05-24

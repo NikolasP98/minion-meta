@@ -1,3 +1,14 @@
+---
+id: 2026-05-20-shells-golden-agents
+title: Shells — Golden Agents on exe.dev VMs
+stage: spec
+status: superseded
+pass: 1
+created: 2026-05-20
+updated: 2026-08-13
+repos: [minion-meta]
+---
+
 # Shells — Golden Agents on exe.dev VMs
 
 **Status:** Draft

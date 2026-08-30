@@ -19,7 +19,7 @@ graph TB
     end
 
     subgraph edge["Edge / Reverse Proxy"]
-        CADDY["Caddy<br/>(caddy/Caddyfile)"]
+        CADDY["Caddy<br/>(ops/caddy/Caddyfile)"]
     end
 
     subgraph core["Runtime Core - netcup VPS"]

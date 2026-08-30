@@ -8,7 +8,10 @@ Type=simple
 User=agent
 Group=agent
 WorkingDirectory=/home/agent
-EnvironmentFile=/etc/shells-bridge.env
+PassEnvironment=SHELLS_SHELL_ID SHELLS_ORG_ID SHELLS_GATEWAY_URL SHELLS_DEVICE_TOKEN
+PassEnvironment=SHELLS_HARNESS SHELLS_HARNESS_VERSION SHELLS_HARNESS_CMD SHELLS_HARNESS_WORKDIR
+PassEnvironment=SHELLS_RUNTIMES SHELLS_BACKUP_TARGET
+Environment=PATH=/opt/hermes-agent/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ExecStart=/usr/local/bin/shells-bridge
 Restart=always
 RestartSec=5s

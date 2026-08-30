@@ -1,3 +1,14 @@
+---
+id: 2026-07-11-universal-projects-module
+title: Universal Projects Module — Portfolio → Project → Pipeline
+stage: spec
+status: shipped
+pass: 1
+created: 2026-07-11
+updated: 2026-08-13
+repos: [minion-meta]
+---
+
 # Universal Projects Module — Portfolio → Project → Pipeline
 
 **Date:** 2026-07-11 · **Status:** SPEC + PLAN (approved for implementation by sonnet5 agents)

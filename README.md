@@ -2,7 +2,7 @@
 
 Orchestration tooling, shared packages, and specs for the Minion personal AI assistant platform.
 
-This is a **meta-repo** — a root git repo that owns the `minion` CLI, shared `@minion-stack/*` npm packages, and cross-cutting specs. It wraps 7 independent subprojects (each with its own remote, branch, package manager, and deploy pipeline) via a registry at `minion.json`.
+This is a **meta-repo** — a root git repo that owns the `minion` CLI, shared `@minion-stack/*` npm packages, and cross-cutting specs. The CLI registers six independent subprojects, each with its own remote, branch, package manager, and deploy pipeline.
 
 Design spec: [`specs/2026-04-19-minion-meta-repo-design.md`](specs/2026-04-19-minion-meta-repo-design.md).
 
@@ -51,18 +51,15 @@ minion dev hub
 
 ## CI & Releases
 
-Meta-repo PRs are gated by `.github/workflows/ci.yml`:
-- `pnpm install --frozen-lockfile`
-- `pnpm run build-all` (sequential — respects workspace dependency order)
-- `pnpm run typecheck-all`
-- `pnpm run lint-all`
-- `pnpm run test-all`
-- `pnpm run changeset:status` (PR only — blocks PRs missing a changeset)
+Pushes and pull requests to `dev` and `main` are gated by
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml), which owns the exact gate sequence.
 
 Releases are automated via `.github/workflows/release.yml` (changesets/action):
-1. Land a feature PR with a staged `.changeset/*.md` file
-2. On merge to main, a "Version Packages" PR opens automatically
-3. On merge of that PR, `@minion-stack/*` packages publish to npm
+
+1. Land feature PRs, including staged `.changeset/*.md` files, through `dev`.
+2. Promote reviewed `dev` changes to `main`.
+3. A push to `main` opens a "Version Packages" PR when changesets are present.
+4. Merging that PR publishes `@minion-stack/*` packages to npm.
 
 One-time setup: see [`.planning/phases/08-polish-automation/NPM_TOKEN-SETUP.md`](.planning/phases/08-polish-automation/NPM_TOKEN-SETUP.md) for `NPM_TOKEN` + Actions permissions.
 
@@ -84,7 +81,7 @@ minion doctor                   # env validation + Infisical auth + link drift +
 minion sync-env <id>            # write merged env to <sub>/.env.local
 minion rotate-env <id>          # wipe + re-pull .env.local
 minion infisical <id>           # open Infisical dashboard URL
-minion link <id>                # npm link @minion-stack/* into subproject (dev override)
+minion link <id>                # package-manager link @minion-stack/* into subproject
 minion unlink <id>               # revert
 minion list                     # print registry (also --json)
 minion branch <id>               # print current branch
@@ -94,22 +91,15 @@ Exit codes: 0 success, 1 generic, 2 config, 3 infisical auth, 4 subproject not f
 
 ## Env hierarchy
 
-Six layers, lowest → highest precedence:
+[`@minion-stack/env`](packages/env/README.md) owns the current precedence,
+secret-location, authentication, and cache contracts.
 
-1. `AI/.env.defaults` — shared non-secret defaults (committed)
-2. Infisical project `minion-core` — shared secrets
-3. `<subproject>/.env.defaults` — per-subproject non-secret defaults (committed in each subproject)
-4. Infisical project `minion-<name>` — per-subproject secrets
-5. `<subproject>/.env.local` — gitignored dev escape hatch
-6. Shell env (`process.env`) — wins
+## Repository policy and CLI registry
 
-Secrets never appear in committed files. `.env.defaults` is non-secret-only.
-
-## Subproject registry (`minion.json`)
-
-Each subproject declares: path, package manager, branch, Infisical project, git remote, primary commands.
-
-Edit `minion.json` to add or reconfigure a subproject. Validation schema: [`packages/cli/minion.schema.json`](packages/cli/minion.schema.json).
+[`repo-policy.yaml`](repo-policy.yaml) owns fleet-wide paths, package managers, branch roles, PR bases,
+remotes, and commands. `minion.json` is the CLI registry and carries its CLI-only Infisical metadata.
+Follow the generated-projection workflow in [`AGENTS.md`](AGENTS.md#project-map); validate the CLI
+shape with [`packages/cli/minion.schema.json`](packages/cli/minion.schema.json).
 
 ## Shared packages
 
@@ -118,7 +108,7 @@ Published to npm under `@minion-stack/*` with Changesets for independent version
 | Package | Description |
 |---------|-------------|
 | [`@minion-stack/cli`](packages/cli/) | The `minion` CLI |
-| [`@minion-stack/env`](packages/env/) | 6-layer env resolver |
+| [`@minion-stack/env`](packages/env/) | Environment hierarchy resolver |
 | [`@minion-stack/tsconfig`](packages/tsconfig/) | TS configs (base/node/svelte/library) |
 | [`@minion-stack/lint-config`](packages/lint-config/) | oxlint + ESLint + Prettier presets |
 | [`@minion-stack/shared`](packages/shared/) | Gateway protocol types, WS clients, utilities, and the versioned brain-vector contract |
@@ -143,8 +133,8 @@ Each has its own repository + README. See their own CLAUDE.md / AGENTS.md for pr
 
 1. Edit in `packages/*`, commit on a feature branch in this repo
 2. Run `pnpm changeset` to add a release note for any `@minion-stack/*` package change
-3. Open a PR against `main` — CI runs lint + type-check + `changeset:status` automatically
-4. Merge to main — `changesets/action` opens a "Version Packages" PR; merge that to publish
+3. Open a PR against `dev`; the repository workflow owns the required CI gates
+4. Follow [CI & Releases](#ci--releases) to promote reviewed changes and publish packages
 
 ## Links
 

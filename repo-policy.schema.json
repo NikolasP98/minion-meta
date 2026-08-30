@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://minion.ai/schemas/repo-policy-v1.json",
+  "title": "Minion repository policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "repositories"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "contentHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "repositories": { "type": "array", "items": { "$ref": "#/$defs/repository" } }
+  },
+  "$defs": {
+    "command": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^[A-Za-z0-9_./:@+-]+( [A-Za-z0-9_./:@=+-]+)*$" }
+      ]
+    },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "aliases", "checkout", "remote", "packageManager", "branches", "prBase", "commands", "requiredChecks"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
+        "aliases": { "type": "array", "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" }, "uniqueItems": true },
+        "checkout": {
+          "type": "string",
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[^\\r\\n]+$"
+        },
+        "remote": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+        "packageManager": { "enum": ["pnpm", "bun", "npm", "none"] },
+        "branches": {
+          "type": "object", "additionalProperties": false,
+          "required": ["development", "default", "release"],
+          "properties": { "development": { "type": "string", "minLength": 1 }, "default": { "type": "string", "minLength": 1 }, "release": { "type": "string", "minLength": 1 } }
+        },
+        "prBase": { "type": "string", "minLength": 1 },
+        "commands": {
+          "type": "object", "additionalProperties": false,
+          "required": ["install", "dev", "build", "test", "check", "typecheck"],
+          "properties": { "install": { "$ref": "#/$defs/command" }, "dev": { "$ref": "#/$defs/command" }, "build": { "$ref": "#/$defs/command" }, "test": { "$ref": "#/$defs/command" }, "check": { "$ref": "#/$defs/command" }, "typecheck": { "$ref": "#/$defs/command" } }
+        },
+        "requiredChecks": {
+          "type": "array", "uniqueItems": true,
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["name", "appId"],
+            "properties": { "name": { "type": "string", "minLength": 1 }, "appId": { "type": "integer", "minimum": 1 } }
+          }
+        }
+      }
+    }
+  }
+}

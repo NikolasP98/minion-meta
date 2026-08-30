@@ -4,6 +4,11 @@
 // minion_hub's crypto.ts (encrypt/decrypt/encryptToken/decryptToken) so there is
 // ONE implementation and one key-derivation path instead of byte-matched copies.
 //
+// Key resolution fails closed: without ENCRYPTION_KEY, production always throws
+// (unchanged), and every other environment throws too unless
+// MINION_ALLOW_DEV_CRYPTO_KEY=1 is set explicitly — the source-visible dev key is
+// never used silently. See cryptoKeyMode().
+//
 // Layout (MUST stay stable — existing ciphertext at rest depends on it):
 //   key        = scryptSync(ENCRYPTION_KEY, 'minion-hub-salt', 32)
 //   ciphertext = hex(encrypted || authTag)   (16-byte GCM tag LAST)
@@ -15,19 +20,78 @@ const ALGORITHM = "aes-256-gcm";
 const IV_BYTES = 12;
 const AUTH_TAG_BYTES = 16;
 
+export type CryptoKeyMode = "configured" | "dev-fallback";
+
+function isDevKeyOptIn(): boolean {
+  const raw = (process.env.MINION_ALLOW_DEV_CRYPTO_KEY ?? "").trim().toLowerCase();
+  return raw === "1" || raw === "true";
+}
+
+/**
+ * Resolve which key this process is entitled to use — or throw. No side
+ * effects, no secrets in the message.
+ */
+export function cryptoKeyMode(): CryptoKeyMode {
+  if (process.env.ENCRYPTION_KEY) return "configured";
+  if (process.env.NODE_ENV === "production") {
+    // UNCHANGED string — existing log alerting may match on it.
+    throw new Error("ENCRYPTION_KEY environment variable must be set in production");
+  }
+  if (!isDevKeyOptIn()) {
+    throw new Error(
+      "ENCRYPTION_KEY is not set. Refusing to seal or open secrets with the built-in, " +
+        "source-visible development key. Set ENCRYPTION_KEY, or — for local development only — " +
+        "set MINION_ALLOW_DEV_CRYPTO_KEY=1 to accept it.",
+    );
+  }
+  return "dev-fallback";
+}
+
+/**
+ * Call this ONCE at app startup so a missing key is a boot failure, not a
+ * runtime surprise on the first user who connects an OAuth account. Throws the
+ * same named errors as {@link cryptoKeyMode}; returns nothing on success.
+ */
+export function assertCryptoKeyConfigured(): void {
+  cryptoKeyMode();
+}
+
 let cachedKey: Buffer | null = null;
+let warnedDevFallback = false;
+
 function key(): Buffer {
   if (cachedKey) return cachedKey;
-  const raw = process.env.ENCRYPTION_KEY;
-  if (!raw) {
-    if (process.env.NODE_ENV === "production") {
-      throw new Error("ENCRYPTION_KEY environment variable must be set in production");
+  const mode = cryptoKeyMode();
+  if (mode === "dev-fallback") {
+    if (!warnedDevFallback) {
+      warnedDevFallback = true;
+      console.warn(
+        "MINION_ALLOW_DEV_CRYPTO_KEY is set — sealing/opening secrets with the built-in, " +
+          "source-visible development key. Never set this in a deployed environment.",
+      );
     }
-    // Dev-only fallback — never used in production.
+    // TODO(handoff): the at-rest audit this branch calls for (spec
+    // 2026-08-17-pkg-dev-crypto-failopen-spec S2 / ⚠️ A3 — count rows already
+    // sealed under this dev key, per sealed column) could NOT be run in the
+    // implementing environment: no database is reachable from the meta-repo
+    // checkout (no TURSO_DB_URL / SUPABASE_DB_URL / local .db file), and
+    // minion_hub/minion_site are not checked out. Until it runs, treat the
+    // dev-key exposure as UNKNOWN, not zero — S3 (consumer bump) must not be
+    // sequenced on an assumption. Column inventory + the exact procedure:
+    // proposals/2026-08-20-dev-key-at-rest-audit.md
+    //
+    // TODO(handoff): S3 of the same spec is UNLANDED — minion_hub and
+    // minion_site have neither the boot-time assertCryptoKeyConfigured() call
+    // nor a bumped @minion-stack/db, because neither repo is checked out in the
+    // meta-repo workspace (⚠️ A2). Until S3 lands, this package's stricter
+    // contract is inert for the two apps that consume it. Do NOT run
+    // `pnpm update @minion-stack/db` in either consumer before the environment
+    // work in the spec's S3 steps 1–4 is done and verified — the bump PR is the
+    // real deploy of this fix. Ledger entry: proposals/2026-08-17-pkg-dev-crypto-failopen.md
     cachedKey = scryptSync("minion-hub-dev-key", "minion-hub-salt", 32);
     return cachedKey;
   }
-  cachedKey = scryptSync(raw, "minion-hub-salt", 32);
+  cachedKey = scryptSync(process.env.ENCRYPTION_KEY as string, "minion-hub-salt", 32);
   return cachedKey;
 }
 
@@ -41,7 +105,10 @@ export function sealSecret(plaintext: string): { ciphertext: string; iv: string 
   return { ciphertext: combined.toString("hex"), iv: iv.toString("hex") };
 }
 
-/** Open hex(encrypted || authTag) + hex(iv) → plaintext. Throws on auth failure. */
+/**
+ * Open hex(encrypted || authTag) + hex(iv) → plaintext. Throws on auth failure,
+ * and — via key() — under the same no-key-configured conditions as sealSecret.
+ */
 export function openSecret(ciphertext: string, iv: string): string {
   const combined = Buffer.from(ciphertext, "hex");
   const encrypted = combined.subarray(0, combined.length - AUTH_TAG_BYTES);

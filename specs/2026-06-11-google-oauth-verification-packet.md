@@ -1,3 +1,14 @@
+---
+id: 2026-06-11-google-oauth-verification-packet
+title: Google OAuth Verification Packet — Minion (project `omega-mile-483509-e7`)
+stage: done
+status: shipped
+pass: 1
+created: 2026-06-11
+updated: 2026-06-16
+repos: [minion-meta]
+---
+
 # Google OAuth Verification Packet — Minion (project `omega-mile-483509-e7`)
 
 **Date:** 2026-06-11

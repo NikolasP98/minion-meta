@@ -1,3 +1,14 @@
+---
+id: ws-duplication-audit
+title: WS Client Duplication Audit
+stage: spec
+status: shipped
+pass: 1
+created: 2026-04-21
+updated: 2026-08-13
+repos: [minion-meta]
+---
+
 # WS Client Duplication Audit
 
 **Date:** 2026-04-21

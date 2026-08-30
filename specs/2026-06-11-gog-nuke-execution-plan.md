@@ -1,3 +1,14 @@
+---
+id: 2026-06-11-gog-nuke-execution-plan
+title: gog NUKE — execution plan (finish gws migration, spec A–F)
+stage: done
+status: shipped
+pass: 1
+created: 2026-06-11
+updated: 2026-06-16
+repos: [minion-meta]
+---
+
 # gog NUKE — execution plan (finish gws migration, spec A–F)
 
 **Date:** 2026-06-11

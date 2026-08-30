@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://minion-ai.org/schemas/design-token-contract.v1.json",
+  "title": "Minion design token contract",
+  "type": "object",
+  "required": [
+    "contractVersion",
+    "defaultTheme",
+    "foundations",
+    "responsive",
+    "typographyStyles",
+    "radiusScales",
+    "shadowStyles",
+    "statusRecipes",
+    "accentOptions",
+    "palettes",
+    "themes",
+    "aliases"
+  ],
+  "properties": {
+    "contractVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "defaultTheme": { "type": "string", "minLength": 1 },
+    "foundations": { "type": "object" },
+    "responsive": { "type": "object" },
+    "typographyStyles": { "type": "object", "minProperties": 1 },
+    "radiusScales": { "type": "object", "minProperties": 1 },
+    "shadowStyles": { "type": "object", "minProperties": 1 },
+    "statusRecipes": { "type": "object", "required": ["light", "dark"] },
+    "accentOptions": { "type": "object", "minProperties": 1 },
+    "palettes": { "type": "object" },
+    "themes": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name", "mode", "decoration", "radiusScale", "shadowStyle", "typographyStyle", "colors"],
+        "properties": {
+          "mode": { "enum": ["light", "dark"] },
+          "decoration": { "enum": ["none", "crt", "voxelized"] },
+          "colors": { "type": "object" }
+        }
+      }
+    },
+    "aliases": { "type": "object" },
+    "domainAliases": { "type": "object" }
+  }
+}

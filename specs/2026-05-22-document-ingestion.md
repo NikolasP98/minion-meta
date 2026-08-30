@@ -1,3 +1,15 @@
+---
+id: 2026-05-22-document-ingestion
+title: Document Ingestion Spec
+stage: spec
+status: retired
+pass: 1
+created: 2026-05-22
+updated: 2026-08-18
+repos: [minion-meta]
+retired_reason: "82 days stale in review; core document ingestion shipped via the brains/qdrant knowledge_documents pipeline; residual scope should be re-proposed fresh."
+---
+
 # Document Ingestion Spec
 
 **Author**: nikolas (drafted by Claude)

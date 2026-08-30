@@ -36,7 +36,7 @@ RUN useradd --create-home --shell /bin/bash agent \
 
 # Install shells-bridge globally so the `shells-bridge` bin is on PATH.
 # Pin to a specific version per image build for reproducibility.
-ARG SHELLS_BRIDGE_VERSION=0.1.0
+ARG SHELLS_BRIDGE_VERSION=0.1.4
 RUN npm install --global @minion-stack/shells-bridge@${SHELLS_BRIDGE_VERSION} \
   && ln -sf "$(npm bin -g)/shells-bridge" /usr/local/bin/shells-bridge \
   && /usr/local/bin/shells-bridge --version 2>/dev/null || true

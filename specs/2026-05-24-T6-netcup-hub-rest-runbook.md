@@ -1,3 +1,14 @@
+---
+id: 2026-05-24-T6-netcup-hub-rest-runbook
+title: T6 Ops Runbook — Activate the gateway↔hub REST credential path (netcup)
+stage: spec
+status: unknown
+pass: 1
+created: 2026-05-24
+updated: 2026-05-24
+repos: [minion_hub]
+---
+
 # T6 Ops Runbook — Activate the gateway↔hub REST credential path (netcup)
 
 **Goal:** Give the netcup gateway a valid hub REST config so the on-demand Google credential path (P2/P3) works. Today `gateway.hubMetrics` has `hubUrl`/`apiKey` absent → `REST valid:false` → the ADC client is null → Google-backed gws tools report "not connected". This makes them work.

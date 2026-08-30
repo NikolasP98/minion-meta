@@ -1,3 +1,14 @@
+---
+id: 2026-05-20-discord-telegram-plugin-extraction
+title: Discord + Telegram Plugin Extraction — Design
+stage: spec
+status: parked
+pass: 1
+created: 2026-05-20
+updated: 2026-08-17
+repos: [minion]
+---
+
 # Discord + Telegram Plugin Extraction — Design
 
 **Date:** 2026-05-20
@@ -153,3 +164,7 @@ WA spent ~5 sessions to reach "Phases 0+1+2-lite + asks 1+2 + AccountsPanel fix"
 - Each big-bang Phase 2: a single high-risk session per channel, only when the trigger arrives.
 
 Total to ship "discord + telegram on par with WA's current state": realistically 7–9 working sessions. Recommend treating each phase as its own PR for clean rollback.
+
+## Triage 2026-08-17
+
+Lite phases (registration bridge D-1..D-3/T-1..T-3) SHIPPED; full impl move (40k LOC) was explicitly deferred big-bang. Parked 2026-08-17 — reopen as a fresh spec only if reprioritized.

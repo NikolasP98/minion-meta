@@ -1,0 +1,23 @@
+[Unit]
+Description=Minion Xfce desktop on loopback-only TigerVNC
+After=network.target
+
+[Service]
+Type=simple
+User=exedev
+Group=exedev
+Environment=HOME=/home/exedev
+Environment=USER=exedev
+Environment=LOGNAME=exedev
+Environment=XDG_RUNTIME_DIR=/run/minion-vnc
+WorkingDirectory=/home/exedev
+RuntimeDirectory=minion-vnc
+RuntimeDirectoryMode=0700
+ExecStart=/usr/bin/tigervncserver :1 -fg -localhost yes -SecurityTypes None -geometry 1440x900 -depth 24 -xstartup /usr/local/libexec/minion-xstartup
+ExecStop=-/usr/bin/tigervncserver -kill :1
+Restart=on-failure
+RestartSec=3s
+TimeoutStopSec=15s
+
+[Install]
+WantedBy=multi-user.target

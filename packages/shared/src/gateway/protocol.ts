@@ -1,6 +1,6 @@
 import { uuid } from '../utils/uuid.js';
 import { newTraceparent } from './traceparent.js';
-import type { RequestFrame, ResponseFrame } from './types.js';
+import type { RequestFrame } from './types.js';
 
 /** Pending request tracker */
 export interface PendingRequest {

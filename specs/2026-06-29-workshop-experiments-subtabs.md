@@ -1,3 +1,14 @@
+---
+id: 2026-06-29-workshop-experiments-subtabs
+title: Workshop Experiments — Model Comparison, Group Chat & Leaderboard
+stage: spec
+status: shipped
+pass: 1
+created: 2026-06-29
+updated: 2026-08-13
+repos: [minion_hub]
+---
+
 # Workshop Experiments — Model Comparison, Group Chat & Leaderboard
 
 **Date:** 2026-06-29

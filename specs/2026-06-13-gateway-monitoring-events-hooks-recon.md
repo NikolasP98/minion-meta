@@ -1,3 +1,14 @@
+---
+id: 2026-06-13-gateway-monitoring-events-hooks-recon
+title: Gateway Monitoring Recon — Events, Hooks & the /reliability Page
+stage: spec
+status: unknown
+pass: 1
+created: 2026-06-13
+updated: 2026-06-16
+repos: [minion]
+---
+
 # Gateway Monitoring Recon — Events, Hooks & the /reliability Page
 
 **Date:** 2026-06-13

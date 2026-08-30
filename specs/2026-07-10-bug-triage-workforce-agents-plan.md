@@ -1,3 +1,14 @@
+---
+id: 2026-07-10-bug-triage-workforce-agents-plan
+title: Bug-Triage Workforce Agents Implementation Plan
+stage: spec
+status: unknown
+pass: 1
+created: 2026-07-10
+updated: 2026-07-10
+repos: [minion-meta]
+---
+
 # Bug-Triage Workforce Agents Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.

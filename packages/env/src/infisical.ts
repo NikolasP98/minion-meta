@@ -1,10 +1,20 @@
 import { spawnSync } from 'node:child_process';
 import { parseDotenv } from './dotenv.js';
-import { readCache, writeCache } from './cache.js';
+import { resolveInfisicalAuth } from './infisical-auth.js';
+import {
+	readCache,
+	writeCache,
+	resolveCacheMode,
+	purgeLegacyCacheOnce,
+	buildCacheKey,
+	canonicalizeDomain,
+} from './cache.js';
 
 export interface InfisicalFetchResult {
 	ok: boolean;
 	env: Record<string, string>;
+	/** Names of every key the fetch returned, even when `env` was narrowed by `cacheKeys`. */
+	keyNames?: string[];
 	error?: string;
 }
 
@@ -13,29 +23,45 @@ export interface InfisicalFetchOptions {
 	env?: string; // dev / prod — default 'dev'
 	noCache?: boolean;
 	ttlMs?: number;
+	/**
+	 * Only these keys are persisted to the cache; the value returned to this call is unaffected.
+	 * `[]` persists none (not "no allowlist" — that's `undefined`). The two are distinct cache
+	 * identities and never share a memo entry.
+	 */
+	cacheKeys?: string[];
 }
 
 /**
  * Fetch secrets for an Infisical project via the `infisical` CLI.
  *
  * Invokes `infisical secrets --projectSlug <slug> --env <env> [-domain <d>] -o dotenv --silent`,
- * captures stdout, parses it as dotenv. Results are cached under
- * `$XDG_CONFIG_HOME/minion/infisical-cache.json` (mode 0600) with a 5-minute TTL by default.
+ * captures stdout, parses it as dotenv. Successful results are memoized in-process (see `cache.ts`)
+ * for a 5-minute TTL by default. This release does not write a cache to disk;
+ * `MINION_ENV_CACHE=disk` warns and falls back to the process memo.
  *
- * Never logs secret VALUES; callers only see variable names via the returned env map
+ * Never logs secret VALUES; callers only see variable names via `keyNames` and the returned env map
  * (which the hierarchy resolver projects into `source[]` by name only).
  */
 export async function fetchInfisicalSecrets(
 	projectSlug: string,
 	opts: InfisicalFetchOptions = {},
 ): Promise<InfisicalFetchResult> {
+	// Security cleanup: runs unconditionally, even with caching off — see cache.ts.
+	purgeLegacyCacheOnce();
+
 	const envTier = opts.env ?? 'dev';
-	const cacheKey = `${projectSlug}|${envTier}`;
+	// Canonicalized once, then reused for both the cache identity and the actual CLI argument below —
+	// so a cache hit can never be returned for a domain other than the one that would actually be
+	// requested (see cache.ts `canonicalizeDomain`).
+	const domain = canonicalizeDomain(opts.domain);
+	const mode = resolveCacheMode();
+	const cacheKey = buildCacheKey(projectSlug, envTier, domain, opts.cacheKeys);
+	const cachingEnabled = !opts.noCache && mode !== 'off';
 
 	// Cache read
-	if (!opts.noCache) {
+	if (cachingEnabled) {
 		const cached = readCache(cacheKey);
-		if (cached) return { ok: true, env: cached };
+		if (cached) return { ok: true, env: cached.env, keyNames: cached.keyNames };
 	}
 
 	const args = [
@@ -48,9 +74,13 @@ export async function fetchInfisicalSecrets(
 		'dotenv',
 		'--silent',
 	];
-	if (opts.domain) args.push('--domain', opts.domain);
+	if (domain) args.push('--domain', domain);
 
-	const result = spawnSync('infisical', args, { encoding: 'buffer' });
+	const auth = resolveInfisicalAuth();
+	const result = spawnSync('infisical', args, {
+		encoding: 'buffer',
+		env: auth.configured ? { ...process.env, ...auth.env } : process.env,
+	});
 	if (result.status !== 0) {
 		const stderr = result.stderr?.toString('utf8').trim() ?? '';
 		return { ok: false, env: {}, error: stderr || `exit ${result.status}` };
@@ -62,9 +92,12 @@ export async function fetchInfisicalSecrets(
 	}
 
 	const env = parseDotenv(stdout);
+	const keyNames = Object.keys(env);
 
-	// Cache write — only on success and only if noCache not set
-	if (!opts.noCache) writeCache(cacheKey, env, opts.ttlMs ?? 300_000);
+	// Cache write — only on success and only when caching is enabled for this call
+	if (cachingEnabled) {
+		writeCache(cacheKey, env, opts.ttlMs ?? 300_000, keyNames, opts.cacheKeys);
+	}
 
-	return { ok: true, env };
+	return { ok: true, env, keyNames };
 }

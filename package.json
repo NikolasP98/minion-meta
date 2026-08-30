@@ -24,12 +24,23 @@
     "typecheck-all": "pnpm -r --parallel --if-present run typecheck",
     "lint-all": "pnpm -r --parallel --if-present run lint",
     "test-all": "pnpm -r --parallel --if-present run test",
-    "ci": "pnpm run build-all && pnpm run typecheck-all && pnpm run lint-all && pnpm run test-all && pnpm run changeset:status"
+    "test:scripts": "node --test scripts/*.test.mjs",
+    "repo-policy:validate": "node scripts/repo-policy.mjs validate && node scripts/repo-policy.mjs generate --check && node scripts/check-agent-instructions.mjs",
+    "repo-policy:test": "node scripts/repo-policy.test.mjs --parity && node scripts/check-agent-instructions.test.mjs",
+    "instructions:check": "node scripts/check-agent-instructions.mjs",
+    "instructions:test": "node scripts/check-agent-instructions.test.mjs",
+    "repo-policy:generate": "node scripts/repo-policy.mjs generate",
+    "repo-policy:verify-remote": "node scripts/repo-policy.mjs verify-remote",
+    "ci": "pnpm run build-all && pnpm run typecheck-all && pnpm run lint-all && pnpm run test-all && pnpm run test:scripts && pnpm run repo-policy:validate && pnpm run repo-policy:test && pnpm run changeset:status"
   },
   "devDependencies": {
     "@changesets/cli": "^2.31.0",
     "@libsql/client": "^0.17.3",
+    "ajv": "^8.20.0",
     "drizzle-kit": "^0.31.10",
+    "mdast-util-from-markdown": "^2.0.3",
+    "mdast-util-gfm-table": "^2.0.0",
+    "micromark-extension-gfm-table": "^2.1.1",
     "supabase": "^2.101.0"
   }
 }

@@ -1,3 +1,14 @@
+---
+id: 2026-07-11-hub-password-username-auth
+title: "Hub: Password auth + username login + account Security page"
+stage: done
+status: shipped
+pass: 1
+created: 2026-07-11
+updated: 2026-08-17
+repos: [minion_hub]
+---
+
 # Hub: Password auth + username login + account Security page
 
 **Date:** 2026-07-11 · **Repo:** `minion_hub/` (branch `dev`) · **Status:** APPROVED — execution in progress

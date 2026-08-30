@@ -1,3 +1,14 @@
+---
+id: 2026-05-21-gws-cli-replaces-gog
+title: Replace bespoke gog OAuth with gws CLI as auth source of truth
+stage: spec
+status: shipped
+pass: 1
+created: 2026-05-21
+updated: 2026-08-13
+repos: [minion-meta]
+---
+
 # Replace bespoke gog OAuth with gws CLI as auth source of truth
 
 **Date:** 2026-05-21

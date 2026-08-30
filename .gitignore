@@ -98,6 +98,8 @@ minion_plugins/
 paperclip-minion/
 pixel-agents/
 omnisearch/
+minion_base/
+minion_factory/
 # Post-Phase-1 worktrees (already removed — defensive anti-resurrection entries):
 paperclip-pi-fallback/
 paperclip-meta-repair/
@@ -108,6 +110,7 @@ paperclip-meta-repair/
 .claude/
 .claudian/
 .obsidian/
+/.firstmate/
 
 # ============================================================
 # Ephemeral / cloned projects inside meta-repo
@@ -135,7 +138,12 @@ nodes.md
 # ============================================================
 ai-studio
 docs
+Minion Docs/
 knowledge/
+
+# Synology Drive / rclone sync artifacts
+.SynologyWorkingDirectory/
+RCLONE_TEST
 
 # ============================================================
 # Root one-off state files NOT tracked in meta-repo
@@ -157,3 +165,16 @@ Historia Clinica (Respuestas).xlsx
 # ============================================================
 .playwright-mcp/
 .playwright-cli/
+
+# local business-data exports (FACES SUSII) — keep out of git
+export*.csv
+export (*.csv
+/.lavish/
+/.worktrees/
+
+# graphify render output — 131MB of generated artefacts, never a source input
+/graphify-out/
+# curl/httpie cookie jars: these hold live session credentials. Not ignoring
+# them means one `git add -A` publishes a working session to the remote.
+cookies.txt
+**/cookies.txt
