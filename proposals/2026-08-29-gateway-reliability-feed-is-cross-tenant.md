@@ -3,7 +3,7 @@ id: 2026-08-29-gateway-reliability-feed-is-cross-tenant
 title: "Reliability is the one gateway surface the org rail never reached — no attribution, no filtering, unguarded broadcast"
 status: draft
 created: 2026-08-29
-updated: 2026-08-29
+updated: 2026-08-30
 repos: [minion, minion_hub]
 tags: [security, permissions]
 effort: M
@@ -61,17 +61,24 @@ and hub `master` `1b47e8ced0751eeb301c9a24d16082f36fe48f78` — both heads on 20
    event store (`emitEvent`). Neither `src/events/store.ts` nor `src/events/types.ts` has an
    org column — `grep -rn "orgId" src/events/` is empty — so nothing recorded can be
    filtered by tenant afterwards.
-5. **The read handlers ignore the caller.** `src/gateway/server-methods/reliability.ts`
+5. **Every query alias ignores the caller.** `src/gateway/server-methods/reliability.ts`
    answers `reliability.events` / `reliability.summary` from `getEventStore()` filtered by
    category, severity, event mode, time window and paging only. `client.orgId` is never
-   read and `orgScopeVisible` is never applied.
-6. **The live broadcast has no guard.** `emitReliabilityEvent` also calls
+   read and `orgScopeVisible` is never applied. The same record is also exposed from the
+   unified store by `events.list`, `events.get`, `events.summary`, `events.timeline` and
+   `events.stream` (`src/gateway/server-methods/events.ts:18-123`). Those ordinary
+   `operator.read` handlers are also tenant-blind; filtering only `reliability.*` would
+   leave the record readable by list, id and aggregate through `events.*`.
+6. **Both live event names have no guard.** `emitReliabilityEvent` also calls
    `broadcastFn("reliability", …)`; `src/gateway/server-core/server-broadcast.ts` filters
    only by `EVENT_SCOPE_GUARDS` / `EVENT_PREFIX_SCOPE_GUARDS` (`exec.approval.*`,
    `device.pair.*`, `node.pair.*`, `debug.step.*` — no `reliability` entry) and by
    `assignedAgentIds`, where events without an `agentId` pass through. Most reliability
    events have none. Hub appends the frame straight to the displayed feed and KPIs
-   (`gateway.svelte.ts:852-855` → `pushReliabilityEvent`).
+   (`gateway.svelte.ts:852-855` → `pushReliabilityEvent`). In addition, `emitEvent`
+   broadcasts the inserted record as `events.new`, and `events.stream` tells clients to
+   subscribe to that name. The broadcaster allows unknown names, so guarding only the
+   legacy `reliability` frame leaves the same record live on `events.new`.
 7. **No single write seam to attribute at.** ~61 production `emitReliabilityEvent` call
    sites across ~30 files: startup (`server-startup.ts` ×5, `auth-profiles/startup-check.ts`
    ×4, `boot.ts` ×2), scheduled/system (`server-cron.ts` ×4, `refresh-scheduler.ts` ×3,
@@ -84,6 +91,13 @@ and hub `master` `1b47e8ced0751eeb301c9a24d16082f36fe48f78` — both heads on 20
    permission any org's role matrix can grant (`src/lib/permissions.ts:85-90`), enforced by
    the central RBAC guard that `(app)/reliability/+page.server.ts:3-4` describes as
    "replacing the old admin-only super-view check".
+9. **The durable path discards originating-org identity.** `src/events/turso-sync.ts`
+   resolves one `tenantId` from `servers` for the gateway process and writes every local
+   record under that server-level tenant. Hub `unified_events` has no originating-org
+   column, and `/api/reliability/insights` deliberately queries the gateway server's
+   telemetry tenant rather than the viewer's active org. On a shared gateway, every
+   linked tenant's Insights aggregates therefore fold in every org's records even after
+   the in-memory store is partitioned.
 
 **The one premise not verified here:** that two or more orgs are in fact served by one
 gateway process in production. Hub's code assumes it ("the gateway is multi-tenant",
@@ -96,8 +110,9 @@ wrong" (item 8) and the rest is hardening. Confirm first; it sets the urgency.
 ## TO-BE
 
 A tenant sees reliability events and aggregates for their own organization and nothing
-else, on both the query and the live path — or the surface is honestly restricted to
-operators of the gateway. Invariants: `orgId` still comes only from a validated JWT claim,
+else across every query alias, both live event names, and the durable Insights path — or
+the entire surface is honestly restricted to operators of the gateway. Invariants:
+`orgId` still comes only from a validated JWT claim,
 never a caller-asserted connect field (`minion-ai` PR #237 FAILed that shape CRITICAL);
 events no tenant owns are never folded into a tenant response; and the page never degrades
 to an empty 200 that reads as "all healthy".
@@ -113,15 +128,26 @@ to an empty 200 that reads as "all healthy".
    connection-scoped, the agent's or channel account's existing `orgIds` tag
    (`org-scope.ts`, `account-scope.ts`) where it is agent- or channel-scoped, and an
    explicit `global` class for startup/cron/system events served only to a system-admin
-   surface; filter `server-methods/reliability.ts` by `client.orgId`; and add a
-   `reliability` entry to the broadcast guards so an attributed event reaches only matching
-   connections. Mind `orgScopeVisible`'s fail-open default: an admin/shared-token
-   connection sees everything, so the hub paths must present the org JWT.
-4. Tests driven through *real* producers (at least one connection-scoped, one agent/session,
-   one global), plus a same-gateway two-org **query** isolation test and a same-gateway
-   two-org **subscription** test where org A never receives org B's frame. Injecting tagged
-   events into the store proves nothing about the 61 call sites.
-5. Coordinate with `2026-07-19-channel-scoping-fix-plan`: its parked P1 is the same identity
+   surface. Apply that scope consistently to `reliability.*` and to every alias in
+   `events.list/get/summary/timeline`; a cross-org `events.get` returns the same not-found
+   response as an unknown id, without an existence oracle. Scope `events.stream` to the
+   validated org (or admin-gate it) and guard **both** `reliability` and `events.new`, so
+   an attributed event reaches only matching connections and a global event reaches only
+   admins. Mind `orgScopeVisible`'s fail-open default: an admin/shared-token connection
+   sees everything, so the hub paths must present the org JWT.
+4. Preserve the same authoritative attribution across the durable boundary: include the
+   originating org in `turso-sync`, migrate hub `unified_events` plus its dedupe/index
+   contract, and scope `/api/reliability/insights` by the authorized active org. Keep
+   `global` records on an explicit admin-only query. Until that end-to-end path ships,
+   disable or operator-gate Insights on a shared gateway rather than returning combined
+   aggregates to tenants.
+5. Tests driven through *real* producers (at least one connection-scoped, one agent/session,
+   one global), plus same-gateway two-org isolation through **all** `reliability.*` and
+   `events.*` query aliases, and subscriptions asserting that neither `reliability` nor
+   `events.new` crosses orgs. Add an end-to-end producer → local store → Turso sync → hub
+   Insights test proving org A cannot change org B's aggregate. Injecting tagged events
+   directly into a store proves nothing about the producers or either sync boundary.
+6. Coordinate with `2026-07-19-channel-scoping-fix-plan`: its parked P1 is the same identity
    surface, and its execution hold governs dispatch (coordinated gateway + hub work with
    deployment access, never a single-repository run).
 
@@ -130,13 +156,15 @@ to an empty 200 that reads as "all healthy".
 - Hub `/reliability` performance work (HTTP-first loading) — owned by
   `2026-08-22-hub-load-nav-performance-spec` S7, scoped to not widen this.
 - Reliability data retention/storage policy and the dead `reliability-events` table.
-- Every other unguarded broadcast event; they deserve the same audit, but this proposal is
-  about the one with a verified tenant-facing consumer.
+- Unrelated unguarded broadcast payloads. `events.new` is explicitly in scope because it
+  is a second live alias of the reliability record under review.
 
 ## Definition of done
 
 The deployed topology is recorded; a human has chosen the operator-only or the tenant-scoped
-path; and either (a) the hub surface sits behind an operator gate with the data labeled
-gateway-wide, or (b) DELTA 3–4 have shipped and deployed with their attribution,
-query-isolation and subscription tests green in the gateway's own suite against the SHA that
-serves hub traffic. Both paths keep the `security` human gates at approval and merge.
+path; and either (a) every hub entry point, including Insights, sits behind an operator gate
+with the data labeled gateway-wide, or (b) DELTA 3–5 have shipped and deployed with
+attribution preserved across local storage, every query/live alias and durable sync. The
+same-gateway query, dual-event subscription and Insights isolation tests are green against
+the gateway and hub SHAs that serve production. Both paths keep the `security` human gates
+at approval and merge.

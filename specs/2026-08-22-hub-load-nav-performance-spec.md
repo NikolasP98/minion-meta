@@ -3,10 +3,10 @@ id: 2026-08-22-hub-load-nav-performance-spec
 title: Hub load & nav performance — prod config gap, layout decoupling, bundle diet, RUM monitoring
 stage: spec
 status: review
-pass: 6
+pass: 7
 next_slice: 5
 created: 2026-08-22
-updated: 2026-08-29
+updated: 2026-08-30
 repos: [minion_hub]
 type: infra
 relationship: extends
@@ -46,7 +46,7 @@ Relationship to existing board items (folded, not duplicated):
 - `2026-08-22-crm-rank-query-prod-latency` (proposal, draft) owns the CRM rank-query cost
   that Slice 5 of the pagination spec uncovered — deliberately NOT a slice here; see §0.1.
 
-## 0.1 Disposition (pass 6, 2026-08-29) — NOT approved; human approval gate required
+## 0.1 Disposition (pass 7, 2026-08-30) — NOT approved; human approval gate required
 
 **Verdict: revision-required — awaiting a human.** The program is real, already
 half-delivered, and the unshipped half is still the correct next work, but this spec may
@@ -149,6 +149,24 @@ pre-existing: it ships now through the browser WS path this slice inherits, and 
 widen it. `repos` drops back to `[minion_hub]` because no gateway change is owned here; if
 the human ratifies path T instead, the gateway repo (`minion-ai`, id `minion`) goes back in
 and that work is handed to the proposal before any dev run.
+
+**Pass 7** closes the remaining blast-radius gaps found at exact PR head `508da0d6`.
+Every reliability record is also exposed through the unified `events.*` methods and
+`events.new`, while the Turso sync and hub Insights path collapse records under one
+server-level telemetry tenant. The security proposal now owns every query alias, both live
+event names, and the producer → local store → durable sync → active-org Insights boundary;
+its tests traverse real producers instead of proving only a tagged-store happy path.
+Path G here remains unchanged and honest: it does not claim tenant partitioning.
+
+Pass 7 also records the operator's 2026-08-30 build-cost evidence for future performance
+work. Svelte server/client compilation completed locally, but adapter-vercel packaging
+exceeded Node's default ~4 GB heap; an 8 GB retry reached ~7.1 GB RSS and was stopped after
+~9 minutes. The exact-head hosted check completed in 2m45s and Vercel emitted 1,078 output
+items with shared functions around 17.13 MB. Future S5/S9 measurement must record adapter
+packaging wall time, peak memory, output count and shared-function size. Once compilation
+is clean, do not repeat an unchanged local packaging attempt merely to reproduce the same
+resource ceiling; use the hosted exact-head build as release evidence and investigate the
+packaging metrics as their own performance result.
 
 Slice ledger — verified 2026-08-29 against hub master `1b47e8ce` and the canonical gateway
 `NikolasP98/minion-ai` `DEV` `293a1aad1bd5609e94247067332a6a41eae7f6be` (**not**
@@ -567,9 +585,20 @@ Reliability is the one surface the org rail never reached:
    events could instead inherit the `orgIds` tag their agent/account already carries
    (`org-scope.ts`, `account-scope.ts`), and genuinely global ones need an explicit class.
 
+8. **The same records have generic query and live aliases.** `emitEvent` inserts the
+   reliability record and broadcasts it as `events.new`; `events.list/get/summary/timeline`
+   read the same tenant-blind store, and `events.stream` explicitly points clients at that
+   unguarded event name. Filtering only `reliability.*` and the legacy `reliability` frame
+   would therefore preserve both a query bypass and a subscription bypass.
+9. **Durable Insights loses originating-org identity.** `src/events/turso-sync.ts` writes
+   all records from one gateway under the server's single telemetry tenant. Hub
+   `unified_events` has no originating-org column, and `/api/reliability/insights` queries
+   by that server tenant rather than the active viewer org. A local-only org column cannot
+   satisfy tenant isolation on a shared gateway.
+
 So the exposure is real but the delta is much smaller than passes 4–6 assumed: identity,
 validation and a resource-scoping helper all exist; reliability events are simply not
-attributed and its two read paths plus the legacy broadcast are not scoped. Hub's own code
+attributed and their query, live, and durable aliases are not scoped. Hub's own code
 already knows how sharp this edge is — `gateway.svelte.ts:200-205` notes that permanently
 disabling the JWT would leave the connection on shared-token auth, where org scoping
 "fails open and other orgs' accounts leak in".
@@ -604,13 +633,15 @@ column on the event store; a named trusted attribution source **per producer cla
 item 7 (connection identity where the event is connection-scoped, the agent's/account's
 existing `orgIds` tag where it is agent- or channel-scoped, and an explicit `global` class
 for startup/cron/system events that no tenant owns, served only to a system-admin
-surface); `orgScopeVisible`-equivalent filtering in `server-methods/reliability.ts`; a
-`reliability` entry in the broadcast guards so an attributed event reaches only matching
-connections and `global` events reach only admin ones; and tests driven through at least
-one *real* producer per class — injecting tagged events into the store proves nothing about
-the 61 call sites. A same-gateway two-org **query** isolation test and a same-gateway
-two-org **subscription** test (both clients connected, org A never receives org B's frame)
-are both required; either alone leaves the other path open. Note the fail-open default of
+surface); equivalent filtering across `reliability.*` and every
+`events.list/get/summary/timeline` alias (cross-org `events.get` is indistinguishable from
+not found); an org-scoped or admin-only `events.stream`; guards for both `reliability` and
+`events.new`; and originating-org preservation through Turso sync, hub `unified_events`,
+its dedupe/index contract, and the active-org Insights API. Until the durable path ships,
+Insights is disabled or operator-gated on shared gateways. Tests run through at least one
+*real* producer per class — injecting tagged events into the store proves nothing about
+the 61 call sites. Same-gateway two-org tests exercise every query alias, both live event
+names, and producer → sync → Insights aggregate isolation. Note the fail-open default of
 `orgScopeVisible`: an admin/shared-token connection sees everything, so 7b's server-side
 calls must present the org JWT or they will read as admin regardless.
 
@@ -719,8 +750,9 @@ evidence-backed target written back into this spec — not a number gamed to fit
 - Gateway-side performance, minion_site performance, dev-machine DX beyond the
   `optimizeDeps` line in S4.
 - The gateway's tenant model — validated org identity on the socket, per-org attribution
-  of reliability events, and filtering of the buffered, broadcast and hub-metrics-push
-  paths — owned by proposal `2026-08-29-gateway-reliability-feed-is-cross-tenant` and, for
+  of reliability events, and filtering of every query alias, both broadcast names and the
+  durable Turso/Insights path — owned by proposal
+  `2026-08-29-gateway-reliability-feed-is-cross-tenant` and, for
   the identity half, by the parked `2026-07-19-channel-scoping-fix-plan`.
 - New storage for perf metrics (the dead `reliability-events` table stays dead; PostHog +
   Speed Insights are the stores).
