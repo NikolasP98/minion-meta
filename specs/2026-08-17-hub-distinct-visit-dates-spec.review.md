@@ -1,15 +1,26 @@
 ---
 spec: 2026-08-17-hub-distinct-visit-dates-spec
-pass: 10
+pass: 11
 verdict: pending
 reviewer: factory-review
 created: 2026-08-17
 updated: 2026-08-30
 ---
 
-# Review record — disposition: STILL IN REVIEW (pass 10 awaiting re-review)
+# Review record — disposition: STILL IN REVIEW (pass 11 awaiting re-review)
 
-## Pass 10 — external review blockers fixed, awaiting re-review
+## Pass 11 — external review blocker fixed, awaiting re-review
+
+Pass 11 makes the visit-truth census closed under one consistent rule. Invariant 7 now quantifies
+only over in-domain mutations that can change visit ownership, eligibility, day bucketing, or
+procedure classification, while requiring every out-of-domain production search hit to remain
+classified with exact changed fields and an exemption rationale. A fresh run of both prescribed
+search forms at pinned hub commit `1b47e8ce` added the omitted `finClients` non-party upsert and
+also retained the raw invoice source-overlay and CRM display-name enrichment hits. None changes a
+field the visit definition reads; D18 already covers the invoice transaction containing the first
+two hits.
+
+## Pass 10 — external review blockers fixed, superseded by pass 11
 
 Pass 10 closes the latest machine-truth and census-gate findings. The spec and this sidecar now
 record pass 10. The writer census classifies every search hit and requires post-commit invalidation

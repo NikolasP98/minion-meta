@@ -3,7 +3,7 @@ id: 2026-08-17-hub-distinct-visit-dates-spec
 title: "CRM funnel — one timezone-correct visit-date definition (invoices + completed bookings) behind the shipped Loyal floor"
 stage: spec
 status: review
-pass: 10
+pass: 11
 next_slice: 1
 created: 2026-08-17
 updated: 2026-08-30
@@ -193,6 +193,16 @@ classify every search hit, require post-commit invalidation only for mutations t
 visit ownership, eligibility, day bucketing, or procedure classification, and retain the two
 relationship-claim lease writes as reviewed out-of-domain evidence.
 
+**Pass-11 fix (2026-08-30).** Re-running both mandatory census search forms against the pinned
+hub commit showed that pass 10 had made the acceptance rule scoped but had not applied that scope
+to invariant 7's normative quantifier. It also exposed three production hits absent from the
+pinned baseline: `upsertInvoicesBatch`'s `finClients` upsert, its metadata-only
+`fin_invoices` source-overlay update, and DNI enrichment's display-name-only `crm_contacts`
+update. The census now retains and classifies all three with their exact changed fields. Invariant
+7 now requires post-commit invalidation only from in-domain mutations that can change visit
+ownership, eligibility, day bucketing, or procedure classification; every out-of-domain hit must
+still remain visible and justified in the census.
+
 **Design ancestors:**
 [`2026-08-13-crm-customers-server-pagination-spec`](2026-08-13-crm-customers-server-pagination-spec.md)
 (`implementing` — its S2 landed: the SQL `funnel_stage` CASE and `crm-funnel-parity.sql.integration.test.ts`
@@ -339,12 +349,15 @@ change visit truth; they do not require cache invalidation.
 
 | Relation the visit SQL reads | Every writer at `1b47e8ce` | Invalidates today? | Disposition |
 |---|---|---|---|
-| `fin_invoices` (insert/upsert, `status` incl. `void`, `shadowed`) | `upsertInvoicesBatch` (`finance.service.ts:233,358`) — callers are `finance-sync.advanceJob`'s per-page loop (`finance-sync.service.ts:123`) and the exported `upsertInvoice` convenience wrapper; `rg 'upsertInvoicesBatch\|upsertInvoice('` finds no other production caller (POS only *mentions* it in a comment, `pos.service.ts:1367`) | **No, on the path that matters most.** `advanceJob` busts after its page loop and again on finish (`:133,140`), `finances` tag only — but it commits each page's `upsertInvoicesBatch` (`:123`) and can return at its per-run deadline (`:136`) *before* either bust runs. That is the ordinary multi-tick path for a sync too large for one run, not an edge case, and `upsertInvoice` shares the same gap | **D13** gives the roster that tag; **D18** (pass-8 H1) moves the bust into the writer itself so every committed page and every caller is covered; then covered |
+| `fin_clients` non-visit fields | `upsertInvoicesBatch` (`finance.service.ts:199-227`) inserts `org_id`, `provider`, `provider_ref`, `name`, `doc_type`, `doc_number`, `email`, `phone`, and `metadata`; on conflict it updates only `name`, `doc_type`, `doc_number`, `email`, `phone`, and `metadata`. It neither inserts nor updates `party_id` | No independently; D18's post-commit bust covers the containing invoice-page transaction anyway | **Reviewed out of domain.** With `party_id` omitted, this upsert cannot change visit ownership or eligibility. Retain this row because the mandatory Drizzle search returns it; do not require a visit-cache bust for this mutation by itself |
+| `fin_invoices` visit fields (insert/upsert, `status` incl. `void`, `shadowed`) | `upsertInvoicesBatch` (`finance.service.ts:233,358`) — callers are `finance-sync.advanceJob`'s per-page loop (`finance-sync.service.ts:123`) and the exported `upsertInvoice` convenience wrapper; `rg 'upsertInvoicesBatch\|upsertInvoice('` finds no other production caller (POS only *mentions* it in a comment, `pos.service.ts:1367`) | **No, on the path that matters most.** `advanceJob` busts after its page loop and again on finish (`:133,140`), `finances` tag only — but it commits each page's `upsertInvoicesBatch` (`:123`) and can return at its per-run deadline (`:136`) *before* either bust runs. That is the ordinary multi-tick path for a sync too large for one run, not an edge case, and `upsertInvoice` shares the same gap | **D13** gives the roster that tag; **D18** (pass-8 H1) moves the bust into the writer itself so every committed page and every caller is covered; then covered |
+| `fin_invoices.metadata`, `synced_at` only | `upsertInvoicesBatch` raw source-overlay update (`finance.service.ts:149`) | No independently; D18 covers the containing invoice-page transaction | **Reviewed out of domain.** The statement changes only `metadata` and `synced_at`; the visit SQL reads neither. Retain the raw-SQL hit, but do not require invalidation for this mutation by itself |
 | `fin_invoice_items.description` (decides `has_proc`) | `upsertInvoicesBatch` delete-replaces each invoice's item rows (`finance.service.ts:314-334`) | **No independently.** It commits in the same writer/transaction as the invoice page, so the caller-level bust has the same budget-deadline hole as `fin_invoices` | **D18** moves the post-commit bust into `upsertInvoicesBatch`, covering both the invoice row and its item replacement on every committed page; then covered |
 | `crm_contacts.party_id`, `fin_clients.party_id`, `sched_bookings.party_id`, minted canonical `crm_contacts` | `reconcileParties` (`party.service.ts:140-267`, statements at `:196,202,207,213,220,243,255`) | **No — none at all.** Four production call sites: `finance-sync.service.ts:159` (`syncSource`, whose only bust is `advanceJob`'s, *before* it), `crm-contacts.service.ts:185` (`harvestContacts`, whose `bustCrmList` at `:173` is also *before* it **and** conditional on `created > 0`), `routes/api/crm/parties/reconcile/+server.ts:12` (manual/backfill, no bust), `routes/api/finances/sync/daily/+server.ts:132` (cron, no bust) | **D15** — pass-7 H1 |
 | `crm_contacts.party_id` | `linkContactParty` / `ensurePartyForContact` (`party.service.ts:329-351`) | **No.** `rg` over the whole tree finds **no production caller** — it is an exported trap, not a live path; stating this precisely matters, because the fix is trap-closing, not an outage fix | **D15** — same writer-level fix |
 | `crm_contacts` (create, patch, soft-delete, bulk soft-delete, hard delete, merge, harvest) | `crm-contacts.service.ts:124,138,149,1241,1488,1559,1623,1651,1682`; `crm-cleanup.service.ts:131,463,496,502` | **Yes** — every one is followed by `bustCrmList` (`:173,1511,1615,1642,1674,1684,1790,1839,1847,1862,1871,1959,2261`) or cleanup's local `invalidateTags(tenantDomain(…,'crm'))` (`crm-cleanup.service.ts:16`) | No change |
 | `crm_contacts.custom_fields._relationshipClaim` (relationship-inference lease bookkeeping; not read by visit SQL) | Two raw `update crm_contacts` statements in `crm-relationship-inference.service.ts:420,440` | No | **Reviewed out of domain.** These writes change only `_relationshipClaim`; they cannot change contact membership, `party_id`, `deleted_at`, invoice/booking ownership, procedure classification, or timezone. Do not add visit-cache invalidation |
+| `crm_contacts.display_name`, `updated_at` only | DNI enrichment raw update in `party.service.ts:516` | No | **Reviewed out of domain.** The statement changes only presentation/bookkeeping fields; the visit SQL reads neither. Retain the raw-SQL hit, but do not add visit-cache invalidation |
 | `crm_contacts` insert on the booking path (`ensureCrmContact`) | `scheduling-bookings.service.ts:173`, inside `createBooking` | **No** | **D8** (already specified) |
 | `sched_bookings` insert; `status` | `createBooking` (`:283`), `setBookingStatus` (`:377`) | **No** | **D8** (already specified) |
 | `sched_bookings.start_time` | **Nothing.** Written once at insert (`:289`); no `.update(schedBookings)` or raw `update sched_bookings` touches it anywhere (the only raw one is `party.service.ts:220`, `party_id`). Rescheduling is cancel-then-create (`routes/api/gateway/actions/booking-reschedule/+server.ts:64`) | n/a — immutable | The fact **D16** turns on: a row crossing its own `start_time` is not a mutation, so no invalidation can be attached to it |
@@ -357,12 +370,16 @@ change visit truth; they do not require cache invalidation.
 body): for each of `crm_contacts`, `fin_clients`, `fin_invoices`, **`fin_invoice_items`**,
 `sched_bookings`, `fin_settings`,
 run `rg -n '\.(insert|update|delete)\(<drizzleTable>\)' src/` and
-`rg -n '(insert into|update|delete from) <table_name>' src/`. Classify every hit by the fields it
-changes. Confirm every mutation that can change visit truth — row membership, `party_id`,
+`rg -n '(insert into|update|delete from) <table_name>' src/`. Classify every production hit by
+the fields it changes; test-fixture writes returned under `src/` are evidence setup, not production
+writers, and must be separated explicitly rather than silently mixed into the production census.
+Confirm every mutation that can change visit truth — row membership, `party_id`,
 `deleted_at`, invoice status/shadow/item description, booking ownership/status/start time, or the
 timezone parameter — is followed by a **post-commit** `bustCrmList` / `bustFinanceCache` /
 `invalidateTags(tenantDomain(…,'crm'))`. List out-of-domain hits separately with their changed
-fields and rationale; the two `_relationshipClaim` lease writes above are the pinned baseline.
+fields and rationale; the pinned baseline includes the `finClients` non-party upsert, invoice
+source-overlay update, two `_relationshipClaim` lease writes, CRM display-name enrichment, and
+`fin_settings.fx*` refresh above.
 
 **Consequences for the pass-2 plan, stated plainly:** its S1 ("build a new `crm-visits.ts` and a
 second batched count") and S2 ("make the decision deterministic, add forward-only / manual-wins /
@@ -421,9 +438,12 @@ slices below are the residue that is genuinely missing.
    is persisted into `custom_fields._funnel`. Evidence disappearing (a voided invoice, a booking
    flipped to `no_show`) self-corrects.
 7. **Cache coherence is a closed property over the writer census, not a list of remembered
-   mutations.** Stated so it can actually be checked: *for every relation the visit SQL reads,
-   every writer of that relation invalidates every visit-dependent cache **after** its own
-   mutation commits.* The census in §1 is the domain of that quantifier, and re-running it (the
+   mutations.** Stated so it can actually be checked: *every in-domain mutation returned by the
+   census — one that can change visit ownership, eligibility, day bucketing, or procedure
+   classification — invalidates every visit-dependent cache **after** its own mutation commits.*
+   Every out-of-domain production hit remains classified in the census with its exact changed
+   fields and exemption rationale, but does not require invalidation. The census in §1 is the
+   domain of that quantifier, and re-running it (the
    `rg` recipe printed there) is how a reviewer or a future agent falsifies this invariant instead
    of trusting it. Three properties follow, and each is where a previous pass failed:
    - **Coverage.** Booking creation and every booking status mutation bust the same tags a
