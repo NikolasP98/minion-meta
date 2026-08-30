@@ -210,7 +210,11 @@ test('retrofit derives risk from tags, defaults priority, and is idempotent', ()
 test('the retrofitted corpus is complete, self-consistent, and a re-run is a no-op', async () => {
 	const { readdirSync, readFileSync } = await import('node:fs');
 	const { parseFrontmatter } = await import('./spec-frontmatter.mjs');
-	const names = readdirSync('proposals').filter((f) => f.endsWith('.md') && f !== 'TEMPLATE.md');
+	// proposal-index.mjs owns *.review.md as separately validated G1 evidence;
+	// only proposal documents are WorkItems.
+	const names = readdirSync('proposals').filter(
+		(f) => f.endsWith('.md') && f !== 'TEMPLATE.md' && !f.endsWith('.review.md')
+	);
 	assert.ok(names.length > 100, 'expected the real proposals corpus');
 	for (const name of names) {
 		const { fm } = parseFrontmatter(readFileSync(`proposals/${name}`, 'utf8'));

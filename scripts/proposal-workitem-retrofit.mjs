@@ -141,7 +141,12 @@ function main() {
 	let untouched = 0;
 	const byRule = new Map();
 
-	for (const name of readdirSync('proposals').filter((f) => f.endsWith('.md') && f !== 'TEMPLATE.md').sort()) {
+	// Review sidecars are gate evidence for a proposal, not WorkItems. Keep this
+	// suffix contract aligned with proposal-index.mjs, which validates sidecars
+	// separately through readReviewSidecars().
+	for (const name of readdirSync('proposals')
+		.filter((f) => f.endsWith('.md') && f !== 'TEMPLATE.md' && !f.endsWith('.review.md'))
+		.sort()) {
 		const path = `proposals/${name}`;
 		const src = readFileSync(path, 'utf8');
 		const parsed = parseFrontmatter(src);

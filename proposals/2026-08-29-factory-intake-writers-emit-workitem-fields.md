@@ -3,7 +3,7 @@ id: 2026-08-29-factory-intake-writers-emit-workitem-fields
 title: Factory proposal writers must emit the required WorkItem fields (ci-watch, handoff-sweep, merge-scan, postmerge, auto-triage)
 status: draft
 created: 2026-08-29
-updated: 2026-08-29
+updated: 2026-08-30
 repos: [minion-factory]
 tags: [infra, logic]
 source: factory-run-48d75f6a
@@ -32,11 +32,11 @@ one-time retrofit's rule table (`scripts/proposal-workitem-retrofit.mjs`):
 
 | Writer | Files it creates | Fields emitted today |
 |---|---|---|
-| CI watch | `proposals/ci-*.md` (19) | none of the five (Slice 5 fixes this) |
-| Handoff-ledger sweep | `proposals/handoff-<repo>-<n>.md` (49) | none of the five |
-| Merge-scan lane | `proposals/merge-scan-*.md` (2) | none of the five |
-| Post-merge discovery | `source: postmerge-discovery` (4) | `source` only |
-| Review-fix applier | `source: review-fix-<sha>` (1) | `source` only |
+| CI watch | `proposals/ci-*.md` | none of the five (Slice 5 fixes this) |
+| Handoff-ledger sweep | `proposals/handoff-<repo>-<n>.md` | none of the five |
+| Merge-scan lane | `proposals/merge-scan-*.md` | none of the five |
+| Post-merge discovery | `source: postmerge-discovery` | `source` only |
+| Review-fix applier | `source: review-fix-<sha>` | `source` only |
 | Auto-triage | edits `proposals/index.json` in place | n/a — see below |
 
 As of this proposal, `node scripts/proposal-index.mjs` exits 1 on any proposal
@@ -50,7 +50,7 @@ complete WorkItem, so the meta index regenerates cleanly without human repair:
 - **handoff-sweep** → `source: handoff-sweep`, `source_trust: trusted-automation`, `owner: factory`, `priority: medium`, `risk_class` derived from the tags it already writes;
 - **merge-scan** → same shape with `source: merge-scan`;
 - **postmerge-discovery** and **review-fix-\*** → add the four missing fields alongside the `source` they already write;
-- **auto-triage** → when it edits `proposals/index.json` in place it must carry the WorkItem fields through, and it must not reintroduce keys the generator does not project (it currently emits `effort`, which `proposal-index.mjs` has never projected).
+- **auto-triage** → when it edits `proposals/index.json` in place it must carry the WorkItem fields through.
 
 Invariant that must not change: risk is **derived** from tags, never declared
 independently — a writer that hardcodes `risk_class: low` on `[infra]` work is

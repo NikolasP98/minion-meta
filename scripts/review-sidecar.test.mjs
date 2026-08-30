@@ -766,9 +766,20 @@ const checkProposals = (root) =>
 test('M1: proposal-index --check passes on a valid, freshly generated corpus', () => {
 	const root = proposalRepo(VALID_PROPOSAL_SIDECAR);
 	try {
+		const sidecarPath = join(root, 'proposals', 'a-proposal.review.md');
+		const sidecarBefore = readFileSync(sidecarPath, 'utf8');
 		const result = checkProposals(root);
 		assert.equal(result.status, 0, result.stderr);
 		assert.match(result.stdout, /proposal-index --check passed: 1 proposals/);
+		const retrofit = spawnSync('node', ['scripts/proposal-workitem-retrofit.mjs', '--dry'], {
+			cwd: root,
+			encoding: 'utf8'
+		});
+		assert.equal(retrofit.status, 0, retrofit.stderr);
+		assert.match(retrofit.stdout, /would update 0 proposal\(s\); 1 already complete/);
+		assert.equal(readFileSync(sidecarPath, 'utf8'), sidecarBefore, 'retrofit must not touch review evidence');
+		const index = JSON.parse(readFileSync(join(root, 'proposals', 'index.json'), 'utf8'));
+		assert.equal(index.proposals.length, 1, 'proposal plus sidecar is exactly one WorkItem');
 	} finally {
 		rmSync(root, { recursive: true, force: true });
 	}

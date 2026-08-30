@@ -157,13 +157,13 @@ This deliberately selects the proposal's allowed **fail loudly** outcome. It is 
 
 **Files:** `runner/src/lifecycle.ts`, `runner/src/automerge.ts`, shared risk helper + tests, `agent/reconcile.sh`, `playbooks/request-agent.md`.
 
-- Model the §2.1 index entry as a TypeScript `WorkItem`; validate untrusted index JSON before using it.
+- Model the §2.1 index entry as a TypeScript `WorkItem`; validate untrusted index JSON before using it. Missing or invalid trust/risk fields fail closed and make the entry ineligible for automatic promotion, including while Slice 5 is deployed against the pre-Slice-4 index.
 - Replace both local high-stakes sets with one `classifyRisk()` helper. Untagged input returns `unclassified`.
 - Change `promoteSweep()` to require `source_trust === 'trusted-automation' && risk_class === 'low'` in addition to its existing status/duplicate/reopen guards. It must not infer trust from non-empty `source`.
 - Keep `automerge.ts`'s existing low-stakes/double-pass behavior, but use the shared risk helper for the high-stakes decision.
 - New CI-watch proposals include `source: ci-watch`, `source_trust: trusted-automation`, derived `risk_class`, `priority: medium`, and `owner: factory`. The request-agent playbook writes human trust/ownership unless the user explicitly supplies another owner.
 
-**Definition of done:** tests prove a low-risk trusted automation may auto-approve, while otherwise-identical `human` and `untrusted-external` items may not; unclassified and high-risk work remain gated. Lifecycle and automerge have zero local high-stakes set declarations. Existing lifecycle transition tests remain green.
+**Definition of done:** tests prove a low-risk trusted automation may auto-approve, while otherwise-identical `human` and `untrusted-external` items may not; an explicit `{ source: "human", source_trust: "human", risk_class: "low" }` regression remains ineligible; and missing/invalid trust or risk, unclassified work, and high-risk work remain gated. Lifecycle and automerge have zero local high-stakes set declarations. Existing lifecycle transition tests remain green.
 
 ### Slice 6 — Monitor intake writes a typed proposal (minion-factory, 6–8h)
 
@@ -183,8 +183,8 @@ This deliberately selects the proposal's allowed **fail loudly** outcome. It is 
 ## 4. Cross-repo ordering and impact
 
 1. Slice 1 lands before any spec-backed run relies on `spec_sha`.
-2. Slice 4 (meta schema + complete retrofit) lands atomically before Slice 5 enables factory consumers that require the new fields.
-3. Slice 5 lands before Slice 6, so monitor-created records are interpreted with the new trust gate from their first release.
+2. Slice 5's fail-closed factory consumer must merge and deploy before Slice 4's meta schema + complete retrofit may merge or expose `source: human` in the live proposal index. The operator must verify the live consumer revision and the executable human/trusted-automation regression before releasing Slice 4. Deploying Slice 5 first may conservatively pause auto-promotion for legacy entries that lack the new fields; it must never infer trust from `source`.
+3. After that live-consumer verification, Slice 4 lands atomically. Slice 5 also lands before Slice 6, so monitor-created records are interpreted with the new trust gate from their first release.
 4. Slice 6 should precede Slice 3 in deployment if fail-loud dispatch alerts must be typed proposals immediately; reversing those two temporarily produces a legacy issue but never silently dispatches work.
 
 No minion-base code is required: it already reads `proposals/index.json`. Adding fields is backward-compatible. Board rendering of trust/risk/priority and `review.json` scores remains outside this spec; data availability is covered here, UI presentation by the phase-gates spec.
