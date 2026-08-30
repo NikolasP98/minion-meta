@@ -3,9 +3,9 @@ id: 2026-08-28-factory-browser-verification-stage-spec
 title: Credential-free, loopback-isolated browser-verification stage for UI-topic factory runs
 stage: spec
 status: review
-pass: 6
+pass: 7
 created: 2026-08-28
-updated: 2026-08-29
+updated: 2026-08-30
 proposal: 2026-08-18-factory-browser-verification-stage
 verdict: pending
 repos: [minion-factory, minion-meta]
@@ -316,8 +316,11 @@ a security boundary" as applying identically to page-rendered text reaching a do
      its process group is always killed and reaped at phase exit regardless of its own exit status.
    - **Browser (verifier) container**: the pinned `FACTORY_BROWSER_VERIFY_IMAGE`, under a distinct uid.
      It exclusively owns `/out` (rw) and a read-only snapshot of the browser profile; it never mounts
-     candidate source of any kind. Chrome's DevTools Protocol binds to this container's own loopback
-     only and is never exposed on the per-attempt network, so the preview container cannot reach it.
+     candidate source of any kind. Playwright controls Chromium exclusively through its private,
+     inherited debugging pipe: no TCP remote-debugging address or port is configured and no TCP CDP
+     listener may exist in the container. This removes CDP from every network namespace, including
+     the browser container's own loopback, so neither the preview process nor candidate-rendered page
+     JavaScript can address it.
      Inside this container Chromium runs with its own renderer sandbox enabled and proved
      (invariant 11) — the container boundary protects the host, the Chromium sandbox protects the
      verifier process, profile snapshot and `/out` from candidate-rendered content.
@@ -448,13 +451,22 @@ a security boundary" as applying identically to page-rendered text reaching a do
     malformed durable launch identity. Launch, timeout, cancellation, and boot recovery are **group**
     operations: `stopAndCrashContainmentAttempts()` kills every persisted role (including dependency
     preparation), proves each stopped, removes the persisted network idempotently with the same
-    inspect-assert-confirm discipline as AS-IS item 18, and no-follow removes every persisted path
-    before sealing or retrying. It returns `false` (blocking dispatch) if it cannot prove any role
-    stopped, network absent, or path removed. Recovery is correct at every failpoint — during fetch,
+    inspect-assert-confirm discipline as AS-IS item 18. It returns `false` (blocking dispatch) if it
+    cannot prove any role stopped, the network absent, or every path in its required terminal state.
+    Persisted paths have two explicit classes; success never applies crash cleanup to retained evidence:
+
+    | Terminal transition | Preconditions | Ephemeral `mirror`, `previewTree`, `dependencyTree`, `dependencyArtifact` | Retained `out` |
+    |---|---|---|---|
+    | passed/failed evidence seal | all roles stopped; network absent; evidence validated and hashed; row unsealed | remove and confirm absent before the single seal | retain as the immutable attempt-output leaf after the single seal; reopen read-only only |
+    | crash/cancel before seal | all roles stopped; network absent | remove and confirm absent | remove and confirm absent only after every possible writer is proved stopped |
+    | restart of sealed attempt | sealed identity and retained-output hashes revalidate | must be absent; remove idempotently if residue exists | retain read-only; never relaunch a writer or delete it as crash residue |
+
+    Recovery is correct at every failpoint — during fetch,
     after each path creation, during dependency preparation, before/after packing, after network
     create, after either serving role launch, between browser exit and seal, and during teardown —
-    leaving no orphan container, leaked network/path, duplicate launch, or second writer to sealed
-    evidence.
+    leaving no orphan container, leaked network/ephemeral path, duplicate launch, or second writer to
+    sealed evidence. A successful transition leaves exactly one retained `out` leaf; crash/cancel
+    leaves no attempt path.
 13. **The dependency artifact is produced by a controller-scheduled, credential-free install role —
     never by copying develop's `node_modules`.** After invariant 10 produces the tracked-only export
     and before the preview container is created, the runner launches a disposable **dependency-prep**
@@ -487,9 +499,11 @@ a security boundary" as applying identically to page-rendered text reaching a do
   `DEV_PHASE_SEQUENCE`, phase-specific image selection per role, and the host-isolated network's
   minimum-Engine-version preflight (S2; T-PHASE-POLICY-BROWSER, T-CONTAINER-SPLIT,
   T-SEQUENCE-CONDITIONAL, T-IMAGE-SELECTION, T-NO-PUBLISHED-PORTS, T-ENGINE-GATEWAY-MODE-PREFLIGHT).
-- **D3** Build and publish an immutable browser image from pinned inputs, including exact Chrome for
-  Testing archive version+checksum and exact Playwright, axe-core, chrome-devtools-mcp, Bun, pnpm,
-  npm, and Node/base-image identities (S3; T-IMAGE-PINS-BROWSER, T-DIGEST-DEPLOY).
+- **D3** Build an immutable browser toolchain from pinned inputs, then build and publish the final
+  worker only after its entrypoints exist, including exact Chrome for Testing archive
+  version+checksum and exact Playwright, axe-core, chrome-devtools-mcp, Bun, pnpm, npm, and
+  Node/base-image identities (S3 toolchain + S4 final worker; T-IMAGE-PINS-BROWSER,
+  T-FINAL-IMAGE-CONTENTS, T-DIGEST-DEPLOY).
 - **D4** Implement controller-side tracked-only candidate materialization from an independently-fetched
   bare object store with replacement-object processing disabled, deterministic profile execution under
   an enabled Chromium sandbox, per-attempt host-isolated-network reachability enforcement, capture,
@@ -766,8 +780,10 @@ single-role row from every existing phase still parses and still validates its o
 **T-GROUP-RECOVERY-UNIT** — with an injected Docker double, recovery from a policy row written at each
 failpoint (fetch/materialization active; dependency-prep launched; artifact packing; network created
 only; preview launched; both serving roles launched; browser exited unsealed; teardown half-done)
-kills every live role, removes the network and paths, seals the row `crashed`, and leaves no orphan;
-if the double reports any role still running, network attached, or path present, recovery returns `false`
+kills every live role, removes the network and every attempt path, seals the row `crashed`, and leaves
+no orphan. A separate successful-seal case proves the ephemeral paths are removed but the validated,
+hash-bound `out` leaf remains read-only; if the double reports any role still running, network
+attached, or a path in the wrong terminal state, recovery returns `false`
 and dispatch stays blocked. **T-GROUP-TEARDOWN-IDEMPOTENT** — running teardown twice, and running it
 against an already-absent network, both succeed without error. **T-ENGINE-GATEWAY-MODE-PREFLIGHT** —
 with an injected Docker-version double reporting an engine below the isolated-gateway-mode minimum,
@@ -782,14 +798,15 @@ preflight.
 
 **Files:** `agent/Dockerfile.browser-verify`, browser-image lock/package files,
 `agent/seccomp/browser-verify.json` (new, committed), `runner/Dockerfile`,
-`scripts/verify-image-pins.sh`, `docker-compose.yml`, `.env.example`, `deploy.sh`.
+`scripts/verify-image-pins.sh` and image-supply-chain tests. Slice 3 deliberately does **not** own
+`docker-compose.yml`, `.env.example`, `deploy.sh`, or the production image binding.
 
 Build from a digest-pinned base. Download an exact Chrome for Testing build with a committed SHA-256
 check; install dependencies through a committed lockfile and `npm ci`, not floating global installs.
 Write `/etc/factory-browser-toolchain.json` and smoke-test the Chrome binary and
-`chrome-devtools-mcp --version`. Publish/promote a named `repository@sha256:<manifest-digest>` and
-emit it as `FACTORY_BROWSER_VERIFY_IMAGE` from `deploy.sh`; a mutable tag or bare local image ID is
-not production-ready.
+`chrome-devtools-mcp --version`. Build and attest a named immutable **toolchain/base** manifest digest
+for Slice 4 to consume. This is not yet `FACTORY_BROWSER_VERIFY_IMAGE` and cannot be selected by a
+runtime plan, because neither final entrypoint exists in this slice.
 
 **Determine and pin the sandbox configuration empirically** (§5 Design decision 10). Starting from
 Docker's default seccomp profile plus the namespace-clone syscalls Playwright's published Docker
@@ -804,9 +821,8 @@ Slice 4 consumes the one that works. **Adding `--cap-add SYS_ADMIN` is out of bo
 reaches a fully enabled sandbox under those constraints, stop: record the negative result, open a
 proposal, and do not proceed to Slice 4 with `--no-sandbox`.
 
-**DoD:** `scripts/verify-image-pins.sh`; two clean builds produce identical toolchain manifests;
-`docker inspect` shows the fixed non-root entrypoint; a deployment fixture rejects a tag and accepts
-a named digest. **T-SECCOMP-PINNED** — the committed profile's digest matches both the runner image's recorded digest
+**DoD:** `scripts/verify-image-pins.sh`; two clean builds produce identical toolchain manifests, and
+the resulting named toolchain digest is recorded for Slice 4. **T-SECCOMP-PINNED** — the committed profile's digest matches both the runner image's recorded digest
 and the browser toolchain manifest, a build whose profile digest drifts fails, and a runner image
 missing the profile at its fixed path fails. **T-SANDBOX-ENFORCED (image level)** — an automated
 test launches Chromium inside the real image under the exact production flags
@@ -814,14 +830,16 @@ test launches Chromium inside the real image under the exact production flags
 the launched argv contains neither `--no-sandbox` nor `--disable-setuid-sandbox`, and asserts the
 reported sandbox status shows every expected layer enabled; the same test run with the seccomp profile
 removed must **fail**, proving the assertion is load-bearing rather than vacuous. T-IMAGE-PINS-BROWSER
-and T-DIGEST-DEPLOY are automated tests, not manual diff review.
+is automated here; the final entrypoint/content and deployment digest assertions belong to Slice 4.
 
 ### Slice 4 — deterministic browser worker (minion-factory, 6–8h)
 
 **Topics:** infra, logic, security, test
 
 **Files:** `agent/factory-browser-verify-preview.sh`, `agent/factory-browser-verify.sh`,
-`agent/lib/browser-verify-flows.mjs`, fixture profile and preview app, shell/Node tests.
+`agent/lib/browser-verify-flows.mjs`, fixture profile and preview app, shell/Node tests,
+`agent/Dockerfile.browser-verify`, `scripts/verify-image-pins.sh`, image-provenance/publication tests,
+`docker-compose.yml`, `.env.example`, and `deploy.sh`.
 
 **Controller-side materialization runs first** (§5 Design decision 12, invariant 10) and is *not* an
 entrypoint responsibility: in `runner/src/browser-verify.ts`, before the network or either container
@@ -867,14 +885,23 @@ status through the mechanism Slice 3 pinned, exiting nonzero if any layer is mis
 unreadable (invariant 11); poll `http://preview:<declared port>` (the fixed per-attempt network alias)
 with a fixed timeout before starting Chrome; launch Playwright with `chromiumSandbox: true` and
 neither `--no-sandbox` nor `--disable-setuid-sandbox` in the launch options or the profile's allowed
-argument set; import the read-only profile, run its Playwright flows against that address, inject
-axe-core, capture CDP full AX trees (CDP bound to this container's own loopback only, never exposed on
-the per-attempt network), checkpoint PNGs, console events, and request/response/failure events. Flow
+argument set; require Playwright's inherited private debugging pipe and reject every
+`--remote-debugging-port`, `--remote-debugging-address`, or equivalent TCP transport option; import
+the read-only profile, run its Playwright flows against that address, inject axe-core, capture full AX
+trees over that private CDP pipe, checkpoint PNGs, console events, and request/response/failure events. Flow
 assertion failure, critical/serious axe violations, or configured console errors fail.
 Only the browser entrypoint writes browser result files and `/out/phase-result.json`; gate failures
 return a valid `{status:'failed'}` phase artifact with process exit 0 so `nextPhase()` can enter its
 bounded fix loop, while launch/infrastructure failures — including an absent or unprovable Chromium
 sandbox — exit nonzero and remain crash/retry events.
+
+After both entrypoints and their fixed paths exist, rebuild the final browser image from Slice 3's
+attested toolchain digest, verify its provenance, publish/promote its named manifest digest, and only
+then emit that digest as `FACTORY_BROWSER_VERIFY_IMAGE` through `deploy.sh`. No later slice owns an
+implicit rebuild. `T-FINAL-IMAGE-CONTENTS` starts the published digest and proves it contains and
+executes the exact committed S4 entrypoint bytes (hashes match the source blobs), uses the fixed
+non-root entrypoint, and completes the smoke flow. `T-DIGEST-DEPLOY` rejects a tag, the S3 toolchain
+digest, and any final digest whose entrypoint hashes differ; it accepts only this S4 publication.
 
 **DoD:** `bash -n agent/factory-browser-verify-preview.sh && bash -n agent/factory-browser-verify.sh`
 plus fixture tests prove profile actions and assertions execute, timeout/flow/axe failures are named,
@@ -913,6 +940,10 @@ load-bearing rather than vacuous.
 **T-SANDBOX-ENFORCED (entrypoint level)** asserts the entrypoint refuses to run flows when the
 sandbox status reports any disabled layer or cannot be read, and that a profile attempting to inject
 `--no-sandbox` is rejected by name.
+**T-PRIVATE-CDP-PIPE** runs the real final image and asserts Chromium/Playwright expose no TCP
+debugging listener at any point (`ss`/`/proc/net/{tcp,tcp6}` plus effective argv), while the trusted
+verifier still creates its CDP session and captures the AX tree through the inherited pipe. A control
+build forced to use a remote-debugging port must fail the assertion.
 Full container-boundary adversarial proof (candidate code attempting to reach `/out`, the profile,
 CDP, the mirror, or another ref) is Slice 7's job (T-CONTAINER-ISOLATION,
 T-CLEAN-MATERIALIZATION-E2E, T-NO-MIRROR-REACHABILITY).
@@ -965,8 +996,8 @@ evidence, stale candidate/profile/image, and absent/failed attempts each have na
 `browser-profiles/minion-hub.mjs`, `runner/src/browser-verify.e2e.test.ts`, `README.md`.
 
 **Add `browser-verify` to `CONTAINMENT_IMPLEMENTED_PHASES`** (`runner/src/containers.ts`) as this
-slice's own change (§5 Design decision 9), only after the entrypoints (Slice 4), the pinned image
-(Slice 3), and evidence ingestion (Slice 5) all exist and this slice's own hub profile is registered:
+slice's own change (§5 Design decision 9), only after the entrypoints and final published image
+(Slice 4), the pinned toolchain (Slice 3), and evidence ingestion (Slice 5) all exist and this slice's own hub profile is registered:
 `browserVerifyReadiness()` is what actually gates execution, so this membership addition is what turns
 "browser-verify not yet implemented" into "implemented, subject to `browserVerifyReadiness()`." Add a
 before/after readiness regression test extending Slice 2's intermediate-state fixture
@@ -984,9 +1015,16 @@ under `browser-internal`.
 
 Add the container-isolation adversarial suite required by pass-2 review finding H1 (T-CONTAINER-ISOLATION):
 a preview fixture that attempts to write into `/out`, open/inspect/signal the browser container's
-process, escape its own process group, and connect to the browser container's CDP port — every
-attempt must be denied while the preview's normal ability to serve HTTP to the browser container over
-`browser-internal` is unaffected.
+process, and escape its own process group — every attempt must be denied while the preview's normal
+ability to serve HTTP to the browser container over `browser-internal` is unaffected.
+
+Add T-CANDIDATE-PAGE-NO-CDP against the actual final image: candidate page JavaScript probes the
+browser container's real `127.0.0.1` HTTP and WebSocket surfaces, including `/json/version`,
+`/json/list`, and candidate-chosen well-known debugging ports, while the harness continuously records
+the effective socket table. Every probe must fail because no TCP CDP endpoint exists, not because the
+preview container is isolated; in the same run the trusted verifier must create a CDP session over
+the inherited pipe and capture the expected AX tree. A control image with a TCP debugging listener
+must make this test fail.
 
 Add the clean-materialization adversarial fixture required by pass-2 review finding H3
 (T-CLEAN-MATERIALIZATION-E2E): seed an untracked, secret-shaped file (e.g. `model-auth-copy`) in the
@@ -1018,7 +1056,7 @@ The runner-owned attempt directory contains valid artifacts bound to the real ca
 the DB row contains only the bounded summary/hashes. A second canary requiring browser evidence for
 unregistered `minion-site` refuses before any worker starts. The container-isolation,
 clean-materialization, dependency-artifact-leak, mirror-unreachability, implemented-phases-transition,
-and sandbox-status suites all pass. No PR-artifact publication is claimed.
+private-CDP-pipe, candidate-page-no-CDP, and sandbox-status suites all pass. No PR-artifact publication is claimed.
 
 ### Slice 8 — group lifecycle failpoints and restart recovery (minion-factory, 6–8h)
 
@@ -1045,13 +1083,20 @@ cancellation issued during materialization, dependency preparation, and serving-
 and all no-follow attempt paths are gone, matching the existing "finalize cancellation only after
 Docker proves the worker is not running" posture.
 
-**DoD:** `cd runner && npm test -- --test-name-pattern='group recovery failpoints|group cancel' && npm
+Add T-SUCCESS-OUTPUT-RETENTION: complete a successful real-image attempt, prove all roles stopped and
+the network plus four ephemeral paths absent before sealing, then prove the sealed attempt retains
+exactly its immutable `out` leaf with matching evidence hashes across controller restart. The crash
+and cancellation cases continue to prove `out` is removed, but only after all writers stop.
+
+**DoD:** `cd runner && npm test -- --test-name-pattern='group recovery failpoints|group cancel|success output retention' && npm
 run typecheck`, plus the failpoint suite executed against a real daemon on the scratch box. Every
 failpoint case asserts, by direct `docker ps -a` / `docker network ls` inspection scoped to the
-attempt's deterministic names, that zero Docker objects and zero persisted attempt paths survive. A
-deliberately broken teardown (dependency-prep left running, network left attached, or one path left
-present) must make recovery return `false` and leave dispatch blocked — proving the assertions are
-load-bearing. Non-browser phased runs are unaffected: the same failpoint harness run against a
+attempt's deterministic names, that zero Docker objects survive; crash/cancel leaves zero attempt
+paths, while success leaves only the hash-valid read-only `out` leaf. A deliberately broken teardown
+(dependency-prep left running, network left attached, an ephemeral path left, success output missing,
+or crash output retained) must make recovery return `false` and leave dispatch blocked. A path-class
+mismatch is therefore load-bearing rather than silently normalized. Non-browser phased runs are
+unaffected: the same failpoint harness run against a
 `self-test` attempt reproduces exactly the pre-slice single-container behavior.
 
 ### Slice 9 — canonical UI activation (minion-meta, 4–6h)
@@ -1077,7 +1122,7 @@ the phase, and one normal unregistered-repo UI run refuses with the expected rea
 | Canonical topic policy | `minion-meta/specs/topics.json` → every factory fleet repo | Activate last; `ui` runs on unregistered repos intentionally refuse |
 | Registered UI applications | `minion-hub` pilot; behavior impact on `minion-base` and `minion-site` | Hub gets the only profile in scope; base/site refusal is verified and called out, not treated as compatibility |
 | Other fleet repos that may declare/derive `ui` | `minion-ai`, `minion-meta`, `minion-factory` | Same fail-closed behavior until separate per-repo profiles exist |
-| Deployment/env | `minion-factory/docker-compose.yml`, `deploy.sh`, `runner/Dockerfile`, production `.env` | `FACTORY_BROWSER_VERIFY_IMAGE` is a named immutable digest and is emitted by `deploy.sh`, per `/memory/MINION/index-archive.md`'s ★★★ wholesale-rewrite constraint. The seccomp profile ships **inside the runner image** (the Docker client reads it), so a runner redeploy — not only a browser-image publish — is part of the S3 rollout |
+| Deployment/env | `minion-factory/docker-compose.yml`, `deploy.sh`, `runner/Dockerfile`, production `.env` | `FACTORY_BROWSER_VERIFY_IMAGE` is the S4 final worker's named immutable digest and is emitted by `deploy.sh`, per `/memory/MINION/index-archive.md`'s ★★★ wholesale-rewrite constraint. The seccomp profile ships **inside the runner image** (the Docker client reads it), so a runner redeploy is part of the S3 toolchain/S4 final-image rollout |
 | Automerge | `minion-factory` only | New evidence predicate; `FACTORY_AUTOMERGE=0` remains untouched per `/memory/MINION/sdlc-board-triage-and-phase-gates.md` |
 | AGENTS.md named product impact zones | shared WS protocol, channel extensions, shared DB, agent definitions, auth, workshop, pixel office, paperclip adapters | None entered; no code or contract in those zones changes |
 | Existing hub live-preview subsystem | `minion_hub` + gateway plugin | No dependency or change; operator memory records it as inert until `PREVIEW_RUNNER_URL/_SECRET` is configured |
@@ -1207,3 +1252,18 @@ approval and a human merge gate.
 **Not changed, and why:** slice count remains 9. S2 already owns durable policy/recovery, S4 owns
 dependency production, S5 owns evidence ingestion, and S8 owns real restart failpoints; extending
 those force-bearing seams is narrower and more independently landable than adding a tenth slice.
+
+**Pass 7 disposition: still-review (`status: review`, `verdict: pending`).** Pass 6 was independently
+reviewed with `VERDICT: FAIL` on PR #286 (2026-08-30). All four findings were re-verified against the
+current pass-6 text and hosted-check evidence before editing. This pass does not self-approve; the
+security-tagged spec still requires an independent pass-7 review and human approval/merge gates.
+
+| Pass-6 finding | Re-verification | Resolution in pass 7 |
+|---|---|---|
+| **H1** Candidate page shares the browser namespace with loopback TCP CDP | Confirmed. Invariant 3 and S4 explicitly placed CDP on browser-container loopback, while S7's only CDP-specific attacker was the preview container | Invariant 3 and S4 require Playwright's inherited private debugging pipe and prohibit every TCP remote-debugging option/listener; S4 adds T-PRIVATE-CDP-PIPE with a TCP-listener control, and S7 adds T-CANDIDATE-PAGE-NO-CDP in which candidate page JavaScript probes the actual browser-container loopback while the trusted verifier proves pipe CDP still works |
+| **M1** Pass-2 approval sidecar mismatches current pass | Confirmed. The committed sidecar declared `pass: 2`/`approved` beside a pass-6 pending spec, matching hosted run `33306948344`'s required-gate failure | Obsolete approval sidecar removed, spec advanced to pass 7/pending, and `specs/index.json` regenerated; the exact changed-head check is required before commit |
+| **M2** S3 publishes an image before S4 creates its entrypoints | Confirmed. S3 owned publication/deploy binding, S4 created both scripts but owned no rebuild or digest transition | S3 now produces only an attested, non-runnable toolchain/base digest. S4 owns the Dockerfile, pin/provenance checks, compose/env/deploy binding, final rebuild/publication, T-FINAL-IMAGE-CONTENTS, and T-DIGEST-DEPLOY. No later slice may rebuild implicitly |
+| **M3** `/out` both retained and deleted before seal | Confirmed. Invariant 7 promised retention while invariant 12 and S8 required every persisted path absent | Invariant 12 now classifies four ephemeral paths versus retained `out` and defines success/crash/cancel/restart transitions. S2 proves both terminal classes with a double; S8 adds T-SUCCESS-OUTPUT-RETENTION and retains `out` only for a sealed success/failure evidence attempt after every writer stops |
+
+**Not changed, and why:** no out-of-scope follow-up was needed. The fixes remain inside the existing
+security boundary, image-supply, and lifecycle slices; slice count and activation scope stay unchanged.
