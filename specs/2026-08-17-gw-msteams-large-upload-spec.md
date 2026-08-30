@@ -3,7 +3,7 @@ id: 2026-08-17-gw-msteams-large-upload-spec
 title: "MS Teams attachments — route >4MB through a Graph resumable upload session (chunked PUT with resume, expiry and cancel)"
 stage: spec
 status: draft
-pass: 9
+pass: 10
 created: 2026-08-17
 updated: 2026-08-30
 proposal: 2026-08-17-gw-msteams-large-upload
@@ -13,7 +13,11 @@ tags: [logic, test]
 type: fix
 ---
 
-> **Pass 9 disposition: STILL REVIEW, not approved.** Pass 9 changes no disposition. It closes three
+> **Pass 10 disposition: STILL REVIEW, not approved.** Pass 10 changes no disposition. It removes the
+> last contradictory 4 MB threshold rule, represents mixed per-helper results explicitly, treats
+> Graph `416` as a status-reconciliation response, and makes both typed-error and chat-message tests
+> assert absence of the complete upload credential and its unique token. **Pass 9 disposition: STILL
+> REVIEW, not approved.** Pass 9 changes no disposition. It closes three
 > contract defects found in cross-provider review: S1 now represents OneDrive and SharePoint
 > thresholds independently and tests deliberately unequal values; the heap gate requires option 1 to
 > ship with every production override reader bounded; and red-state evidence separates routing delta
@@ -93,10 +97,11 @@ spec asserts `src/` is read-only and treats any need to edit it as a finding (§
 **Gate conventions:** [`2026-08-17-sdlc-phase-gates-scoring-spec`](2026-08-17-sdlc-phase-gates-scoring-spec.md)
 §4b — slices are tagged `logic` / `test`. The proposal's `edge-case` tag has no slot in the §4b enum
 (`ui logic data infra docs test security perf deps`); it is carried here as `logic` + `test`, which is
-what it routes to anyway. Red-state TDD (G3) is mandatory: for each helper, the routing-delta fixture at
-`threshold + 1` and the failure-reproduction fixture at the smallest observed failing probe are written
-and shown failing against today's simple-PUT-only code before the fix lands — only after step 0 records
-both values (§1.1a). **No UI governance applies** — zero
+what it routes to anyway. Red-state TDD (G3) is mandatory for each helper whose measured policy is
+`session-above`: the routing-delta fixture at `threshold + 1` and the failure-reproduction fixture at
+the smallest observed failing probe are written and shown failing against today's simple-PUT-only code
+before the fix lands — only after step 0 records both values (§1.1a). A `simple-only` helper instead
+gets an all-probes-simple regression. **No UI governance applies** — zero
 `.svelte` files, zero design or token lint, in any slice.
 
 **Prior art consulted.** `rg -li 'msteams|createUploadSession|graph-upload' specs/ proposals/` finds no
@@ -404,11 +409,9 @@ to today.
   /** UNVERIFIED pending §7 step 0 (§1.1a): the in-repo TODO this spec started from claims Graph's
    *  simple PUT /content is capped at 4MB; current primary Microsoft documentation instead states a
    *  250 MB ceiling for this exact call shape, and no live PUT has confirmed either number. Do not
-   *  read this comment as a verified fact. If step 0 confirms a real size-dependent failure, take the
-   *  smaller reading between 4,000,000 and 4,194,304, so a simple PUT is never attempted where Graph
-   *  would reject under either — routing extra files through the session path is harmless. If step 0
-   *  confirms the 250 MB ceiling instead, this constant and the routing split it drives must be
-   *  removed, not kept.
+   *  read this comment as a verified fact. Step 0 selects each helper's policy from controlled
+   *  evidence: all probes passing means simple-only; a size-specific failure means session-above the
+   *  exact largest passing probe. No documented, decimal, or binary 4 MB value is a fallback.
    *
    *  DELIBERATELY NOT the same number as FILE_CONSENT_THRESHOLD_BYTES (4 * 1024 * 1024, send.ts:41 /
    *  messenger.ts:35). That constant answers "does Teams require a consent card in a 1:1 chat"; this
@@ -416,12 +419,11 @@ to today.
    *  owners. Do not unify them. */
   export type DriveUploadHelper = "oneDrive" | "sharePoint";
 
-  /** Replace each placeholder with that helper's largest passing step-0 probe. The values are keyed
-   * because step 0 permits the helpers to disagree; neither may inherit the other's boundary. */
-  export const SIMPLE_UPLOAD_MAX_BYTES: Readonly<Record<DriveUploadHelper, number>> = {
-    oneDrive: 4_000_000,
-    sharePoint: 4_000_000,
-  };
+  export type DriveUploadPolicy =
+    | { readonly kind: "simple-only" }
+    | { readonly kind: "session-above"; readonly maxSimpleBytes: number };
+
+  export type DriveUploadPolicies = Readonly<Record<DriveUploadHelper, DriveUploadPolicy>>;
 
   /** Graph requires every chunk except the last to be a multiple of 320 KiB (327,680 B).
    *  5 MiB is exactly 16 x 320 KiB — one constant that satisfies both the alignment rule and
@@ -430,9 +432,13 @@ to today.
   export const CHUNK_BYTES = 5_242_880;
   ```
 
-- **Route on size, in one place, with a helper-specific threshold.** The shared routing helper takes a
-  `DriveUploadHelper` key (or its explicitly selected threshold):
-  `size > SIMPLE_UPLOAD_MAX_BYTES[helper]` → session path; `<=` → the existing simple PUT, unchanged.
+- **Route in one place with a helper-specific discriminated policy.** The shared routing helper takes a
+  `DriveUploadHelper` key and a `DriveUploadPolicies` record populated only after step 0. `simple-only`
+  always preserves the existing simple PUT for accepted payloads;
+  `session-above` takes the session path only when
+  `size > policies[helper].maxSimpleBytes`, and otherwise preserves the simple PUT. Do not commit a
+  numeric placeholder: the implementation record must contain the exact measured disposition for each
+  helper.
   Both `uploadToOneDrive` (`graph-upload.ts:29`) and `uploadToSharePoint` (`:171`) call that helper but
   select their own keyed measurement. They differ in both base URL (`/me/drive/root:` vs
   `/sites/{siteId}/drive/root:`) and potentially the measured boundary; sharing the branch must not
@@ -493,14 +499,16 @@ to today.
   per whole-file upload; do not repeat it once per chunk.) Add a regression test that mutates the source
   buffer after slicing and asserts the chunk body did or did not change, rather than asserting
   "zero-copy" from a comment.
-- **Red-state first (G3), with two distinct proofs per helper.** First write the **routing-delta** test
+- **Red-state first (G3), with two distinct proofs per `session-above` helper.** First write the **routing-delta** test
   at that helper's `threshold + 1`; against today's code it is red because old code chooses SIMPLE
   where the new policy requires SESSION. That proves routing only. Separately write the
   **bug-reproduction** test at that helper's smallest observed failing step-0 probe, with the mocked
   simple `PUT` returning the recorded size-specific status/body; against today's code it must fail as
   step 0 recorded. Paste both failures into the PR with labels. Only the second proves that old code
   failed as reported. Do not use `4,000,000`, and do neither until step 0 establishes a threshold and
-  failing probe for that helper. The existing ~143-test suite cannot serve as red-state proof.
+  failing probe for that helper. For a `simple-only` helper, add an all-controlled-probes-simple green
+  regression and require no fabricated routing-delta or failure reproduction. The existing ~143-test
+  suite cannot serve as red-state proof.
 
 **Files:** `extensions/msteams/src/upload-session.ts` (new),
 `extensions/msteams/src/upload-session.test.ts` (new),
@@ -513,24 +521,24 @@ outside `extensions/msteams/`.
 ```bash
 cd minion
 pnpm vitest run extensions/msteams          # or: pnpm --filter <msteams-pkg-from-package.json> test
-#   red-state first (G3), separately for each helper:
+#   red-state first (G3), separately for each session-above helper:
 #   - routing delta at that helper's threshold + 1: old code chooses SIMPLE, expected SESSION
 #   - bug reproduction at that helper's smallest observed failing probe: mocked simple PUT returns
 #         the recorded size-specific status/body and old code fails as step 0 observed
 #     Only this second test may be labelled "old code failed as reported".
-#   The four byte sizes below are written against the 4,000,000 PLACEHOLDER (§3). Before running them,
-#   substitute the threshold §7 step 0c measured for this helper — or delete this slice if step 0
-#   showed no size-dependent failure.
-#   graph-upload.test.ts — run EVERY case against BOTH uploadToOneDrive AND uploadToSharePoint:
-#   - upload(<Buffer.alloc(5_000_000)>) → createUploadSession called exactly once
+#   Express boundary cases as measuredThreshold and measuredThreshold + 1; do not substitute fixed
+#   placeholder literals. For a simple-only helper, assert every controlled probe stays SIMPLE.
+#   graph-upload.test.ts — parameterize by each helper's measured policy:
+#   - upload(<Buffer.alloc(measuredThreshold + 1)>) → createUploadSession called exactly once
 #         AND >=1 PUT to the returned uploadUrl AND zero PUTs to /content
 #         ← the proposal's DoD sentence, literally
-#   - upload(<Buffer.alloc(1_000_000)>) → one PUT to /content, zero createUploadSession calls
-#   - upload(<Buffer.alloc(4_000_001)>) → session path       ← the boundary, from above
-#   - upload(<Buffer.alloc(4_000_000)>) → simple path        ← the boundary, from below
+#   - upload(<Buffer.alloc(measuredThreshold)>) → simple path ← exact largest passing probe
+#   - upload(<Buffer.alloc(measuredThreshold + 1)>) → session path ← routing boundary
 #   - unequal-boundary case: set OneDrive and SharePoint thresholds to intentionally different
 #         measured fixtures; at a size between them, one helper takes SESSION and the other SIMPLE
 #         ← proves the shared router preserves helper-specific thresholds instead of one scalar
+#   - mixed-policy case (test-only fixture): one helper simple-only, one session-above; every controlled
+#         probe stays SIMPLE for the former while measuredThreshold + 1 takes SESSION for the latter
 #   - the COMPLETE createUploadSession URL is asserted for each helper, string-equal to:
 #         https://graph.microsoft.com/v1.0/me/drive/root:/MinionShared/<enc>:/createUploadSession
 #         https://graph.microsoft.com/v1.0/sites/<siteId>/drive/root:/MinionShared/<enc>:/createUploadSession
@@ -577,7 +585,11 @@ nothing logs a credential.
   `504`, and network-level rejects. Honour `Retry-After` when present; otherwise exponential backoff
   with jitter. Cap at a named constant (default **5 attempts per chunk**) and a **total wall-clock
   budget** (default **10 min**) so a wedged transfer cannot pin the gateway forever. Do **not** retry
-  `4xx` other than `429` — those are contract errors and retrying them just burns the budget.
+  other `4xx` except **`416`** — those are contract errors and retrying them just burns the budget.
+  A `416 Requested Range Not Satisfiable` can mean the service already accepted the fragment: do not
+  blindly resend or terminate. `GET` the pre-authenticated upload URL, validate a non-empty,
+  well-formed `nextExpectedRanges`, and resume at the server-reported offset under the same attempt and
+  wall-clock budgets. A missing/malformed range is a typed terminal protocol failure.
 - **`404` on the upload URL means the session is gone** (expired or cancelled). Treat it as terminal for
   that session. Re-creating the session and restarting from byte zero is permitted **at most once**, and
   only where a session *can* be created — i.e. the drive path. **The consent path cannot re-create**
@@ -622,6 +634,8 @@ pnpm vitest run extensions/msteams
 #   - 429 with Retry-After: 2 → the wait is >= 2s (fake timers; assert the scheduled delay, not a sleep)
 #   - 5 consecutive 503s on one chunk → rejects with a typed 'network' failure after exactly 5 attempts
 #   - 403 → rejects immediately, ZERO retries
+#   - chunk PUT returns 416; status GET reports nextExpectedRanges ['10485760-']
+#         → next PUT starts at 10485760, without blindly resending the rejected range
 #   - 404 on a chunk PUT, recreate callback PRESENT → at most ONE recreation, then terminal; never a loop
 #   - 404 on a chunk PUT, recreate callback ABSENT (consent path) → typed 'session-expired', no crash
 #   - permanent failure → exactly one DELETE to the uploadUrl (cancel)
@@ -629,7 +643,8 @@ pnpm vitest run extensions/msteams
 #   - success → ZERO DELETE calls
 #   - abort mid-transfer → no further PUTs are issued, session cancelled
 #   - the injected logger receives no string containing the uploadUrl token fixture   ← no-leak
-#   - String(<every typed error>) contains no 'http' substring from the uploadUrl     ← chat-safe (§1.4)
+#   - String(<every typed error>) and monitor-handler's final chat message contain neither the complete
+#         uploadUrl nor its unique token fixture; the no-'http' assertion is supplemental ← chat-safe
 #   - a 20-chunk upload emits <= 20 debug lines and exactly 1 info line
 pnpm tsgo && pnpm check
 if rg -n 'uploadUrl' extensions/msteams/src/upload-session.ts | rg -n 'log|console'; then echo "FAIL: uploadUrl passed near a logger/console call"; exit 1; fi
@@ -779,10 +794,9 @@ The row above has two possible fates, and §7 step 0 decides between them, not t
   may differ between OneDrive and SharePoint. `4,000,000` is not a floor, a default, or a safety
   margin to fall back on when the measurement is inconvenient.
 
-Only in that second case do the two readings of a "4 MB" cap (`4,000,000` vs `4,194,304`) matter at
-all, and then only if the measurement lands between them — in which case take the smaller and lock
-both sides with tests (S1 DoD). Do **not** write those boundary tests before step 0's result is
-recorded in the PR: a test asserting an unmeasured threshold is what makes a placeholder permanent.
+The two readings of "4 MB" (`4,000,000` and `4,194,304`) never select the implementation boundary.
+Only controlled probes do. Do **not** write boundary tests before step 0's result is recorded in the
+PR: a test asserting an unmeasured threshold is what makes a placeholder permanent.
 
 **The general bracket rule, beyond the two 4 MB readings.** Step 0 only probes four fixed sizes (§7 step
 0b: ~1 MiB, 4.1 MiB, 12 MiB, ~99 MiB), so its result usually *brackets* the true boundary rather than
@@ -942,7 +956,8 @@ cd minion
 #          approve S1, to justify the routing split, or to derive any byte threshold. If the control
 #          cannot be made to pass, say so and stop — "we could not upload at all" is the finding.
 #        - CONTROL PASSES, all three probes succeed -> the ">4MB fails" premise is disproved for that
-#          helper. If both runs read this way: do not proceed to S1 as scoped; reject/archive the
+#          helper; record its policy as simple-only. If both runs read this way: do not proceed to S1
+#          as scoped; reject/archive the
 #          proposal's drive-path claim, and file a narrower proposal for whatever of §1.2/§4's
 #          independently-evidenced findings (consent-URL fragment ceiling, resumability) remain.
 #        - CONTROL PASSES, some probe fails -> a size-dependent failure exists. Record the exact
@@ -953,7 +968,10 @@ cd minion
 #          re-run that single payload before treating it as such.
 #        - The two runs may disagree (OneDrive is labelled "deprecated for bot use" in the source's
 #          own header comment, graph-upload.ts:4-7). A per-helper result is a per-helper finding;
-#          do not average them into one threshold.
+#          do not average them into one threshold. If exactly one helper has a size-specific failure,
+#          implement only that helper as session-above and keep the other simple-only. Routing-delta
+#          and bug-reproduction gates apply only to session-above; the simple-only helper must prove
+#          all controlled probes remain SIMPLE.
 #
 #    This step is the pass-4 blocker, restated as a controlled experiment in pass 5 (top-of-file
 #    disposition banner). Do not run steps 1-3 until it
@@ -966,48 +984,47 @@ git diff --name-only <base>...HEAD          # → extensions/msteams/** only in 
 
 # 2. Live — the reported symptom, gone, on the path that actually matters
 #    Configure the msteams channel WITH a SharePoint site id, start the gateway (pnpm gateway:watch):
-#    a) Channel/group: send SharePoint's step-0-derived boundary fixture — exactly the largest-passing
-#       probe (§3 bracket rule)
-#         → delivered. Debug log shows the SIMPLE path, exactly one PUT.   ← no regression
-#    b) Channel/group: send SharePoint's first above-boundary fixture — exactly threshold + 1 byte
-#         → delivered as a native file card, opens correctly, byte size matches the source exactly.
-#         → debug log shows createUploadSession + N chunk PUTs; the LAST is short.  ← the bug, fixed
+#    a) Channel/group, SharePoint policy:
+#       - session-above: send the exact largest-passing probe, then threshold + 1. The former uses one
+#         SIMPLE PUT; the latter produces an intact native card via createUploadSession + N chunk PUTs.
+#       - simple-only: repeat every controlled probe; each remains one SIMPLE PUT and delivers intact.
 #         → the file appears intact in the SharePoint drive (open it, don't just trust the card)
-#    c) Unconfigure sharePointSiteId; repeat (a) and (b) using OneDrive's OWN step-0-derived fixtures —
-#       do not reuse SharePoint's sizes, the two helpers may bracket differently (§7 step 0c)
+#    b) Unconfigure sharePointSiteId; repeat (a) using OneDrive's OWN measured policy and fixtures —
+#       do not reuse SharePoint's disposition or sizes; the helpers may differ (§7 step 0c)
 #         → delivered via the OneDrive fallback + markdown link.            ← the proposal's :27 site
-#    d) 1:1 chat: send a ~12MB file, accept the consent card
+#    c) 1:1 chat: send a ~12MB file, accept the consent card
 #         → delivered; debug log shows chunked PUTs to the TEAMS-supplied url,
 #           and ZERO createUploadSession calls.                             ← §1.2, live
-#    e) Mid-transfer of a large file, drop the network for a few seconds, restore it
+#    d) Mid-transfer of a large file, drop the network for a few seconds, restore it
 #         → the transfer resumes and completes; the log shows a nextExpectedRanges GET
 #           and a restart at that offset, not at byte zero.                 ← S2, proven live
-#    f) Revoke or corrupt the upload URL mid-transfer (or wait past expirationDateTime)
+#    e) Revoke or corrupt the upload URL mid-transfer (or wait past expirationDateTime)
 #         → the send fails with a typed, human-readable error; NO broken attachment card is posted;
 #           the log shows one best-effort DELETE attempt. If the URL is already invalid, cleanup is
 #           service-owned; no completed or user-visible partial item remains in the drive.
 #         → on the 1:1 path, the message posted into the chat contains NO url.     ← §1.4
-#    g) Attempt a file above the effective mediaMax ceiling
+#    f) Attempt a file above the effective mediaMax ceiling
 #         → rejected before any network call, with a message naming the effective limit.
-#    h) grep the run's logs for the upload URL's token and for 'Bearer'
+#    g) grep the run's logs for the upload URL's token and for 'Bearer'
 #         → ZERO hits.                                                      ← no-leak, proven live
 
 # 3. Tenant hygiene
-#    After the runs above, list the destination drive: exactly the files sent in (a)-(d),
+#    After the runs above, list the destination drive: exactly the files sent in (a)-(c),
 #    no zero-byte or partial items left by (e)/(f).
 ```
 
 **Ship gate:** step 0 run with **passing controls on both helpers** and its full result table recorded,
-confirming there is still a fix to make (§1.1a) — a step 0 whose controls pass and whose probes all
+confirming at least one helper still has a fix to make (§1.1a) — a step 0 whose controls pass and whose probes all
 succeed disproves the premise, which is a valid outcome and means this spec, as scoped, does not ship;
 a step 0 whose controls fail is not a result at all and blocks the gate either way; §7 steps
 1–3 green on **both** a SharePoint-configured conversation and a 1:1 chat; the proposal's DoD checked
 clause by clause (`createUploadSession` + chunked PUT path taken above each helper's own step-0-derived
 boundary — §3 bracket rule, never a fixed `4MB` — S1's `graph-upload.test.ts` mock-buffer case against
-*both* drive functions using each helper's own derived fixture, and step 2b/2c live); both S1 red-state
-failures pasted into the PR for each helper: the `threshold + 1` routing-delta failure, and the smallest
+*both* drive functions using each helper's own derived policy, and step 2a/2b live); both S1 red-state
+failures pasted into the PR for each `session-above` helper: the `threshold + 1` routing-delta failure, and the smallest
 observed failing-probe reproduction whose mocked simple-PUT status/body matches step 0. Only the latter
-proves the old code failed the way the proposal reported; §4's unverified constants each
+proves the old code failed the way the proposal reported. Each `simple-only` helper instead has an
+all-controlled-probes-simple regression and no fabricated failure fixture; §4's unverified constants each
 checked and recorded as one line, including any that came back different — in particular the
 per-request fragment ceiling, since it determines whether the consent path had a second silent failure
 band (§4); the same-name parity case (§2 S1) passing on both the simple and session paths with

@@ -1,11 +1,21 @@
 ---
 spec: 2026-08-17-gw-msteams-large-upload-spec
-pass: 9
+pass: 10
 verdict: changes_requested
 reviewer: factory-review
 created: 2026-08-17
 updated: 2026-08-30
 ---
+
+# Pass 10 disposition — STILL REVIEW (changes_requested), unchanged
+
+The pass-10 revision closes the four still-current findings after pass 9. Threshold selection now has
+one rule: controlled probes produce either `simple-only` or `session-above(largestPassingProbe)` for
+each helper, including a mixed result. Graph `416` reconciles against validated server session status
+instead of being treated as a terminal `4xx`. Boundary DoD uses formulas rather than fixed 4 MB
+fixtures. Typed-error and final-chat assertions both reject the complete upload URL and its unique token
+fixture. The controlled tenant experiment and heap-policy gate remain outstanding, so `status: draft`
+and `verdict: changes_requested` remain authoritative.
 
 # Pass 9 disposition — STILL REVIEW (changes_requested), unchanged
 
