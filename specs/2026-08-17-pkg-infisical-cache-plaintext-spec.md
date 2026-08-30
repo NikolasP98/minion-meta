@@ -283,19 +283,10 @@ on disk is AES-256-GCM ciphertext bound to this machine and this user, written a
   file you could not authenticate beyond the one legacy-plaintext case S1 already handles — an
   unreadable file is evidence. “Discarded” here means ignored as a cache entry, not deleted from disk.
 - **Write atomically and enforce the mode.** `writeFileSync(tmp, data, { mode: 0o600, flag: 'wx' })`
-  where `tmp` = `<path>.<pid>.<random>.tmp`, then commit that staged inode onto `path`. Committing
-  carries the tmp file's `0600` onto the destination — which is precisely what fixes §0 fact 3 (an
-  existing `0644` file keeps `0644` under a plain `writeFileSync`) and §0 fact 4 (torn concurrent
-  writes) in one move. Clean up the tmp file on any failure.
-  **Implementation note (2026-08-30, S2 review round 4):** the commit is `fs.linkSync`, not
-  `fs.renameSync` as this bullet originally prescribed. `rename(2)` replaces its destination
-  unconditionally, so it cannot honour the preceding bullet's "never delete a file you could not
-  authenticate" invariant: any check before it is check-then-act, and a writer landing in that window
-  loses its file. A hard-link followed by a pathname unlink is not an atomic move either: the pathname
-  can be replaced between those syscalls. `link(2)` therefore publishes only to a provably absent
-  path and fails with `EEXIST` against a concurrent creator; an existing authenticated cache is never
-  replaced, and a fresh refetch remains memo-only. Authenticated loose modes are tightened in place.
-  Readers only ever observe a complete file. Do not restore rename or link-plus-unlink displacement.
+  where `tmp` = `<path>.<pid>.<counter>.tmp`, then `fs.renameSync(tmp, path)`. Rename is atomic within
+  a directory and carries the tmp file's `0600` onto the destination — which is precisely what fixes
+  §0 fact 3 (an existing `0644` file keeps `0644` under a plain `writeFileSync`) and §0 fact 4 (torn
+  concurrent writes) in one move. Clean up the tmp file on any failure.
 - **Enforce the directory mode too.** After `mkdirSync(dir, {recursive:true, mode:0o700})`, `statSync`
   the dir; if the mode has any group/other bits set, `chmodSync(dir, 0o700)` and warn once. The
   directory is ours and already holds `infisical-auth.json` — but do not touch anything else in it.

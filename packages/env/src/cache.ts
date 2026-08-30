@@ -156,15 +156,6 @@ function warnDiskDiscarded(reason: string): void {
 	);
 }
 
-function warnDiskWriteRetained(): void {
-	if (diskWriteWarned) return;
-	diskWriteWarned = true;
-	console.warn(
-		'[@minion-stack/env] Retained the existing sealed disk cache; the fresh value is memory-only ' +
-			'because this runtime has no safe atomic primitive for replacing an occupied cache path.',
-	);
-}
-
 /** `mkdirSync`'s `mode` only applies at creation, so a pre-existing looser directory is checked and
  *  tightened explicitly — the same "mode isn't retroactive" bug §0 documents for the cache file
  *  itself. Warns once per process; never touches any other file already in the directory (it also
@@ -214,28 +205,14 @@ function bestEffortUnlink(p: string): void {
 	}
 }
 
-/**
- * Publish `data` at `filePath` without ever destroying bytes this process did not authenticate.
- *
- * Node exposes no atomic exchange/no-replace primitive for replacing an existing pathname. A
- * hard-link followed by a pathname unlink is not a move: an uncooperative writer can replace the
- * pathname between those calls and make the unlink delete bytes this process never authenticated.
- * Consequently an existing cache is never replaced. The fresh value remains available in the
- * process memo; only a provably absent path is populated with `link(2)`, whose `EEXIST` result closes
- * the last race without clobbering its winner.
- *
- * Returns `true` only when the sealed envelope is live at `filePath`.
- */
-function commitSealedFile(filePath: string, data: string, identity: FileIdentity): boolean {
-	// TODO(handoff): Node cannot safely replace an occupied pathname without renameat2 exchange/no-replace.
-	// Until a supported binding exists, an expired existing disk envelope remains in place and the
-	// refetched value is memo-only. Track operator-visible cleanup in the S3 handoff at
-	// proposals/2026-08-17-pkg-infisical-cache-plaintext.md.
+/** Publish one immutable generation with create-exclusive hard-linking. No existing pathname is
+ * replaced or removed: the generation number is selected while holding the cooperative write lock,
+ * and `link(2)` closes the race against an uncooperative creator without clobbering its bytes. */
+function commitSealedFile(filePath: string, data: string): boolean {
 	const tmp = `${filePath}.${process.pid}.${crypto.randomBytes(8).toString('hex')}.tmp`;
 	try {
-		// `wx` so two processes never share a tmp path even if one ignores the lock.
 		fs.writeFileSync(tmp, data, { mode: 0o600, flag: 'wx' });
-		return identity.existed ? false : linkNoClobber(tmp, filePath);
+		return linkNoClobber(tmp, filePath);
 	} finally {
 		bestEffortUnlink(tmp);
 	}
@@ -267,9 +244,41 @@ function isValidDiskEntries(value: unknown): value is DiskEntries {
 	return Object.values(value as Record<string, unknown>).every(isValidCacheEntry);
 }
 
-/** Whether the cache pathname was provably absent when classified. `existed: false` is only ever
- * produced by `ENOENT`; every occupied path is immutable to the conservative commit protocol. */
-type FileIdentity = { existed: boolean };
+const GENERATION_PREFIX = 'infisical-cache.g';
+const GENERATION_SUFFIX = '.json';
+const GENERATION_WIDTH = 16;
+
+function generationPath(dir: string, generation: number): string {
+	return path.join(
+		dir,
+		`${GENERATION_PREFIX}${generation.toString().padStart(GENERATION_WIDTH, '0')}${GENERATION_SUFFIX}`,
+	);
+}
+
+function generationNumber(name: string): number | null {
+	if (!name.startsWith(GENERATION_PREFIX) || !name.endsWith(GENERATION_SUFFIX)) return null;
+	const raw = name.slice(GENERATION_PREFIX.length, -GENERATION_SUFFIX.length);
+	if (!/^\d{16}$/.test(raw)) return null;
+	const value = Number(raw);
+	return Number.isSafeInteger(value) ? value : null;
+}
+
+/** The legacy single-file sealed cache is generation zero. New writes are immutable numbered
+ * generations, so refreshing never requires replacing a pathname and rejected bytes remain intact. */
+function diskGenerationCandidates(dir: string): Array<{ generation: number; filePath: string }> {
+	let names: string[];
+	try {
+		names = fs.readdirSync(dir);
+	} catch {
+		return [];
+	}
+	const candidates = names.flatMap((name) => {
+		const generation = generationNumber(name);
+		return generation === null ? [] : [{ generation, filePath: path.join(dir, name) }];
+	});
+	if (fs.existsSync(cachePath())) candidates.push({ generation: 0, filePath: cachePath() });
+	return candidates.sort((a, b) => b.generation - a.generation);
+}
 
 const LOCK_FILE_NAME = 'infisical-cache.lock';
 const LOCK_STALE_MS = 30_000;
@@ -293,7 +302,7 @@ function sleepSync(ms: number): void {
  * cooperating writers never interleave their transactions (and never race over each other's staging
  * files). It is a coordination convenience, NOT the safety property: a process that does
  * not take this lock — a backup restore, a file sync, an operator's editor — is unaffected by it, so
- * `commitSealedFile` is what actually guarantees such a writer's bytes are never destroyed.
+ * immutable generation publication is what guarantees such a writer's bytes are never destroyed.
  *
  * Acquired with `wx` (atomic create-exclusive — the same primitive `getOrCreateMachineKeyFile` uses),
  * so two processes racing to acquire converge on whichever `openSync` wins; the loser polls. A lock
@@ -337,9 +346,8 @@ function withCacheLock<T>(dir: string, fn: () => T): T {
 }
 
 /**
- * Discriminated result of reading the sealed disk cache file. Exactly one status — `'missing'`,
- * meaning `ENOENT`: the cache directory is usable and there is provably no file at the cache path —
- * lets a write fill the path in with a fresh entry and an empty map.
+ * Discriminated result of reading the latest sealed disk-cache generation. `'missing'` means the
+ * secured cache directory contains neither the legacy generation-zero path nor a numbered generation.
  *
  * `'rejected'` means a file exists but could not be authenticated: corrupt JSON, wrong envelope
  * shape, unsupported version, foreign-machine binding, an unrecognized alg/kdf, or a GCM auth
@@ -347,17 +355,15 @@ function withCacheLock<T>(dir: string, fn: () => T): T {
  * the config root cannot host the cache directory, its mode could not be secured, or the file exists
  * but could not be read (`EACCES`, `EISDIR`, …).
  *
- * Both are read as "no cache entry" AND "do not persist here". Neither may be collapsed into
- * `'missing'`: a file that could not be authenticated *or* could not be read is evidence (possible
- * tamper, possible a copy from another machine, possible a permissions change someone made on
- * purpose) that the spec requires preserving, not replacing with whatever this process happens to
- * fetch next. Absence of proof that the path is empty is not proof that it is.
+ * Both are read as "no cache entry" and the observed pathname is always preserved. A rejected
+ * generation can be followed by a new immutable generation after refetch; an unavailable directory
+ * cannot be written at all. Neither status authorizes replacing or deleting observed bytes.
  */
 type DiskReadResult =
-	| { status: 'missing'; identity: FileIdentity }
+	| { status: 'missing' }
 	| { status: 'unavailable' }
-	| { status: 'rejected'; identity: FileIdentity }
-	| { status: 'authenticated'; entries: DiskEntries; identity: FileIdentity };
+	| { status: 'rejected' }
+	| { status: 'authenticated'; entries: DiskEntries };
 
 /**
  * Read and open the sealed disk cache file. Every failure short of `InvalidCacheKeyError` (an
@@ -385,30 +391,29 @@ function readDiskEntries(): DiskReadResult {
 		return { status: 'unavailable' };
 	}
 
+	const candidate = diskGenerationCandidates(dir)[0];
+	if (!candidate) return { status: 'missing' };
+
 	let raw: Buffer;
 	try {
-		raw = fs.readFileSync(cachePath());
-	} catch (err) {
-		// ENOENT is the one error that proves the path is empty. Anything else (EACCES, EISDIR, EIO)
-		// means a file we could not read is sitting there — a cache miss that must not be written over.
-		if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
-			return { status: 'missing', identity: { existed: false } };
-		}
+		raw = fs.readFileSync(candidate.filePath);
+	} catch {
+		// A candidate can disappear only through an uncooperative actor. Treat that as unavailable for
+		// this read; the writer will publish a new immutable generation without touching that pathname.
 		warnDiskDiscarded('unreadable');
 		return { status: 'unavailable' };
 	}
-	const identity: FileIdentity = { existed: true };
 
 	let parsed: unknown;
 	try {
 		parsed = JSON.parse(raw.toString('utf8'));
 	} catch {
 		warnDiskDiscarded('corrupt or tampered');
-		return { status: 'rejected', identity };
+		return { status: 'rejected' };
 	}
 	if (!isEnvelopeShape(parsed)) {
 		warnDiskDiscarded('corrupt or tampered');
-		return { status: 'rejected', identity };
+		return { status: 'rejected' };
 	}
 
 	const result = open(dir, parsed as CacheEnvelope);
@@ -420,7 +425,7 @@ function readDiskEntries(): DiskReadResult {
 					? 'unsupported envelope version'
 					: 'corrupt or tampered',
 		);
-		return { status: 'rejected', identity };
+		return { status: 'rejected' };
 	}
 
 	let entries: unknown;
@@ -428,31 +433,28 @@ function readDiskEntries(): DiskReadResult {
 		entries = JSON.parse(result.plaintext.toString('utf8'));
 	} catch {
 		warnDiskDiscarded('corrupt or tampered');
-		return { status: 'rejected', identity };
+		return { status: 'rejected' };
 	}
 	if (!isValidDiskEntries(entries)) {
 		warnDiskDiscarded('corrupt or tampered');
-		return { status: 'rejected', identity };
+		return { status: 'rejected' };
 	}
 	try {
-		if ((fs.statSync(cachePath()).mode & 0o077) !== 0) fs.chmodSync(cachePath(), 0o600);
+		if ((fs.statSync(candidate.filePath).mode & 0o077) !== 0)
+			fs.chmodSync(candidate.filePath, 0o600);
 	} catch {
 		warnDiskDiscarded('permissions could not be secured');
 		return { status: 'unavailable' };
 	}
-	return { status: 'authenticated', entries, identity };
+	return { status: 'authenticated', entries };
 }
 
-/** Merge `entry` into the existing sealed disk cache (best-effort read of whatever is there) and
- *  publish the result sealed, via `commitSealedFile` — readers only ever observe a complete file,
- *  and a writer that never took `withCacheLock` never has its bytes overwritten.
+/** Merge `entry` into the latest authenticated disk generation (or start a clean generation after a
+ * rejected one) and publish the sealed result at a new create-exclusive pathname. Readers only ever
+ * observe complete files, and a writer that never took `withCacheLock` never has its bytes overwritten.
  *
- *  Only a provably absent (`'missing'`) or successfully authenticated file is written to. A
- *  `'rejected'` or `'unavailable'` one is left exactly as it is and the fresh entry is skipped for
- *  disk persistence — it still stands in the in-process memo, which the caller already updated —
- *  rather than destroying evidence we could neither authenticate nor even read. The read runs first
- *  so a config root that cannot host the cache directory is answered by that same early return
- *  instead of throwing out of here. */
+ * A rejected generation remains byte-for-byte intact while the refetched value is published beside
+ * it. An unavailable directory is left alone and the fresh value remains memo-only. */
 function writeDiskEntry(key: string, entry: CacheEntry): void {
 	let dir: string;
 	try {
@@ -466,15 +468,15 @@ function writeDiskEntry(key: string, entry: CacheEntry): void {
 		// Re-read and re-classify while holding the lock (M2 fix) — a classification taken before the
 		// lock was acquired could already be stale by the time this runs.
 		const result = readDiskEntries();
-		if (result.status === 'rejected' || result.status === 'unavailable') return;
+		if (result.status === 'unavailable') return;
 		const entries: DiskEntries = result.status === 'authenticated' ? { ...result.entries } : {};
 		entries[key] = entry;
 		const plaintext = Buffer.from(JSON.stringify(entries), 'utf8');
 		const envelope = seal(dir, plaintext);
-		const committed = commitSealedFile(cachePath(), JSON.stringify(envelope), result.identity);
-		if (!committed) {
-			if (result.identity.existed) warnDiskWriteRetained();
-			else warnDiskDiscarded('changed on disk during the write');
+		for (;;) {
+			const latest = diskGenerationCandidates(dir)[0]?.generation ?? -1;
+			const nextPath = latest < 0 ? cachePath() : generationPath(dir, latest + 1);
+			if (commitSealedFile(nextPath, JSON.stringify(envelope))) break;
 		}
 	});
 }

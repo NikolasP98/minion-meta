@@ -418,12 +418,27 @@ describe('cache.ts', () => {
 
 				const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 				writeCache('k', { A: '1' }, 300_000, ['A']); // must NOT clobber the swapped-in bytes
-				expect(warnSpy.mock.calls.some((c) => String(c[0]).includes('memory-only'))).toBe(true);
 				warnSpy.mockRestore();
 
 				expect(fs.readFileSync(cachePath()).equals(swapped)).toBe(true);
+				resetCacheStateForTests();
+				expect(readCache('k')).toEqual({ env: { A: '1' }, keyNames: ['A'] });
 			},
 		);
+
+		it('an expired entry can be refreshed and read after process state is reset', () => {
+			vi.useFakeTimers();
+			vi.setSystemTime(new Date('2026-08-30T00:00:00Z'));
+			writeCache('k', { A: 'old' }, 300_000, ['A']);
+			resetCacheStateForTests();
+			vi.advanceTimersByTime(301_000);
+			expect(readCache('k')).toBeNull();
+
+			writeCache('k', { A: 'fresh' }, 300_000, ['A']);
+			resetCacheStateForTests();
+			expect(readCache('k')).toEqual({ env: { A: 'fresh' }, keyNames: ['A'] });
+			vi.useRealTimers();
+		});
 
 		describe('a cache that could not be READ is evidence too, not an absent one', () => {
 			const asRoot = process.getuid?.() === 0;
@@ -505,7 +520,7 @@ describe('cache.ts', () => {
 		);
 
 		it(
-			'two interleaved writers publish one complete no-clobber winner, and the file opens cleanly afterward',
+			'two interleaved writers publish complete generations and the later generation contains both writes',
 			async () => {
 				const raceHome = fs.mkdtempSync(path.join(os.tmpdir(), 'minion-cache-race-'));
 				const barrier = path.join(raceHome, 'go');
@@ -527,16 +542,10 @@ describe('cache.ts', () => {
 					process.env.XDG_CONFIG_HOME = raceHome;
 					resetCacheStateForTests();
 					try {
-						// The first successful link wins. The loser keeps its fresh value only in its own
-						// memo; the shared file remains a complete, decryptable envelope from one writer.
 						const fromA = readCache('from-a');
 						const fromB = readCache('from-b');
-						expect([fromA, fromB].filter((entry) => entry !== null)).toHaveLength(1);
-						expect(fromA ?? fromB).toEqual(
-							fromA
-								? { env: { V: 'A-value' }, keyNames: ['V'] }
-								: { env: { V: 'B-value' }, keyNames: ['V'] },
-						);
+						expect(fromA).toEqual({ env: { V: 'A-value' }, keyNames: ['V'] });
+						expect(fromB).toEqual({ env: { V: 'B-value' }, keyNames: ['V'] });
 					} finally {
 						resetCacheStateForTests();
 					}

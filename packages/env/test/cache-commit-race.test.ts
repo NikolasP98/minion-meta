@@ -11,9 +11,8 @@ import {
 } from '../src/cache.js';
 
 /**
- * Node has no atomic exchange/no-replace primitive for replacing a pathname. These probes enforce
- * the conservative protocol: an existing cache object is never unlinked or replaced, while an
- * absent path is published with link(2) and loses safely to a concurrent creator.
+ * The immutable-generation protocol never replaces a pathname. These probes enforce that existing
+ * authenticated or rejected bytes survive while a later generation becomes readable.
  */
 const hooks = vi.hoisted(() => ({
 	onLink: null as null | ((from: string, to: string) => void),
@@ -38,7 +37,7 @@ vi.mock('node:fs', async (importOriginal) => {
 
 const EVIDENCE = Buffer.from('UNAUTHENTICATED-EVIDENCE-AT-UNLINK');
 
-describe('sealed disk cache: conservative no-clobber commit', () => {
+describe('sealed disk cache: immutable-generation commit', () => {
 	const tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), 'minion-commit-race-'));
 	const prevXdg = process.env.XDG_CONFIG_HOME;
 	const prevMode = process.env.MINION_ENV_CACHE;
@@ -88,7 +87,17 @@ describe('sealed disk cache: conservative no-clobber commit', () => {
 		writeCache('fresh', { A: '1' }, 300_000, ['A']);
 
 		expect(fs.readFileSync(cachePath()).equals(before)).toBe(true);
+		resetCacheStateForTests();
 		expect(readCache('fresh')).toEqual({ env: { A: '1' }, keyNames: ['A'] });
+	});
+
+	it('completed A then B writes leave B readable from fresh process state', () => {
+		writeCache('same-key', { VALUE: 'A' }, 300_000, ['VALUE']);
+		resetCacheStateForTests();
+		writeCache('same-key', { VALUE: 'B' }, 300_000, ['VALUE']);
+		resetCacheStateForTests();
+
+		expect(readCache('same-key')).toEqual({ env: { VALUE: 'B' }, keyNames: ['VALUE'] });
 	});
 
 	it('a concurrent creator wins the first-write link without being clobbered', () => {
