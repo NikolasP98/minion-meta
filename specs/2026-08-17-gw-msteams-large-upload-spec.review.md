@@ -1,11 +1,24 @@
 ---
 spec: 2026-08-17-gw-msteams-large-upload-spec
-pass: 10
+pass: 11
 verdict: changes_requested
 reviewer: factory-review
 created: 2026-08-17
 updated: 2026-08-30
 ---
+
+# Pass 11 disposition — STILL REVIEW (changes_requested), unchanged
+
+The pass-11 revision closes the three still-current findings after pass 10 without changing scope or
+approval state. S3 and the ship gate now branch caller proofs on `DriveUploadPolicy`, so only
+`session-above` requires a boundary, SESSION failure, and terminal session id, while `simple-only`
+requires SIMPLE success/failure behavior through its recorded accepted ceiling. Policy derivation now
+includes the effective `mediaMaxMb` ceiling: a ceiling above the repeatably verified simple range,
+including above Graph's documented 250,000,000-byte simple limit, cannot compile as `simple-only`.
+Finally, step 0 repeats an ascending matrix and rejects pass-after-fail or non-reproducing observations
+as inconclusive instead of converting them into a threshold. The controlled tenant experiment and
+heap-policy gate remain outstanding, so `status: draft` and `verdict: changes_requested` remain
+authoritative.
 
 # Pass 10 disposition — STILL REVIEW (changes_requested), unchanged
 

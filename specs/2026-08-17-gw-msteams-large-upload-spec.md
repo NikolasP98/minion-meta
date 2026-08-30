@@ -3,7 +3,7 @@ id: 2026-08-17-gw-msteams-large-upload-spec
 title: "MS Teams attachments — route >4MB through a Graph resumable upload session (chunked PUT with resume, expiry and cancel)"
 stage: spec
 status: draft
-pass: 10
+pass: 11
 created: 2026-08-17
 updated: 2026-08-30
 proposal: 2026-08-17-gw-msteams-large-upload
@@ -13,7 +13,12 @@ tags: [logic, test]
 type: fix
 ---
 
-> **Pass 10 disposition: STILL REVIEW, not approved.** Pass 10 changes no disposition. It removes the
+> **Pass 11 disposition: STILL REVIEW, not approved.** Pass 11 changes no disposition. It makes every
+> caller/ship-gate assertion conditional on the selected per-helper policy, makes `simple-only` legal
+> only when the effective runtime ceiling is within the repeatably verified simple range, adds an
+> above-250 MB configuration case, and forbids deriving a threshold from non-monotonic or
+> non-reproducible probes. **Pass 10 disposition: STILL REVIEW, not approved.** Pass 10 changes no
+> disposition. It removes the
 > last contradictory 4 MB threshold rule, represents mixed per-helper results explicitly, treats
 > Graph `416` as a status-reconciliation response, and makes both typed-error and chat-message tests
 > assert absence of the complete upload credential and its unique token. **Pass 9 disposition: STILL
@@ -65,17 +70,21 @@ type: fix
 > consent-URL fragment-ceiling concern is untouched). **Before this spec can move to `approved`**, run a
 > **controlled** live simple `PUT` matrix (§7 step 0) on a real tenant. Controlled means: for **each**
 > of `uploadToOneDrive` and `uploadToSharePoint`, a known-good **~1 MiB non-image control** succeeds
-> first, and only then 4.1 MiB, 12 MiB and near-ceiling (~99 MiB) payloads run through the *same*
-> tenant, identity, destination folder and channel configuration — status and body recorded for every
-> request. The control is the discriminator, not a formality: without it, a 401/403 from the app-only
+> first, and only then an ascending, repeated matrix including 4.1 MiB, 12 MiB, ~99 MiB, the effective
+> runtime ceiling, and (when accepted) Graph's documented 250,000,000-byte limit runs through the
+> *same* tenant, identity, destination folder and channel configuration — status and body recorded for
+> every attempt. Results must be monotonic and reproducible; pass-after-fail or non-reproducing failure
+> is inconclusive and cannot approve S1. The control is the discriminator, not a formality: without it,
+> a 401/403 from the app-only
 > identity, a missing `MinionShared` parent, a wrong site id or any other path/configuration fault makes
 > all three large probes fail while proving nothing whatsoever about a byte ceiling. **A failing control
 > is an auth/path/configuration finding, is not evidence about size, and may not be used to approve S1
 > or to derive any threshold.** The two helpers also cannot both be reached from one send configuration
 > — `send.ts:204-222` takes SharePoint whenever `sharePointSiteId` is set and reaches OneDrive only when
 > it is absent (`:267-278`) — so the matrix runs twice, or the helpers are invoked directly (§7 step 0).
-> If every control passes and the large payloads pass too, the original ">4 MB fails" premise
-> is disproved — reject/archive it and, if the surviving findings are valuable, spin them into a
+> If every control passes and the effective accepted ceiling itself is within the verified simple
+> range, the original ">4 MB fails" premise is disproved — reject/archive it and, if the surviving
+> findings are valuable, spin them into a
 > narrower proposal (resumability above Microsoft's own >10 MiB recommendation, and chunking the Teams
 > consent-URL upload below its <60 MiB per-request fragment limit — §4). If runtime contradicts the
 > docs — controls green on both helpers, larger payloads rejected with a size-specific response — record
@@ -410,8 +419,9 @@ to today.
    *  simple PUT /content is capped at 4MB; current primary Microsoft documentation instead states a
    *  250 MB ceiling for this exact call shape, and no live PUT has confirmed either number. Do not
    *  read this comment as a verified fact. Step 0 selects each helper's policy from controlled
-   *  evidence: all probes passing means simple-only; a size-specific failure means session-above the
-   *  exact largest passing probe. No documented, decimal, or binary 4 MB value is a fallback.
+   *  evidence plus the effective runtime ceiling: simple-only requires every accepted size to be
+   *  within the repeatably verified simple range; otherwise session-above uses a safe numeric
+   *  boundary. No documented, decimal, or binary 4 MB value is a fallback.
    *
    *  DELIBERATELY NOT the same number as FILE_CONSENT_THRESHOLD_BYTES (4 * 1024 * 1024, send.ts:41 /
    *  messenger.ts:35). That constant answers "does Teams require a consent card in a 1:1 chat"; this
@@ -420,7 +430,7 @@ to today.
   export type DriveUploadHelper = "oneDrive" | "sharePoint";
 
   export type DriveUploadPolicy =
-    | { readonly kind: "simple-only" }
+    | { readonly kind: "simple-only"; readonly maxAcceptedBytes: number }
     | { readonly kind: "session-above"; readonly maxSimpleBytes: number };
 
   export type DriveUploadPolicies = Readonly<Record<DriveUploadHelper, DriveUploadPolicy>>;
@@ -434,7 +444,9 @@ to today.
 
 - **Route in one place with a helper-specific discriminated policy.** The shared routing helper takes a
   `DriveUploadHelper` key and a `DriveUploadPolicies` record populated only after step 0. `simple-only`
-  always preserves the existing simple PUT for accepted payloads;
+  is legal only when the effective runtime ceiling is no greater than the highest size that passed the
+  repeatable monotonic simple-PUT experiment; `maxAcceptedBytes` records that ceiling and makes the
+  invariant executable. It always preserves the existing simple PUT for accepted payloads;
   `session-above` takes the session path only when
   `size > policies[helper].maxSimpleBytes`, and otherwise preserves the simple PUT. Do not commit a
   numeric placeholder: the implementation record must contain the exact measured disposition for each
@@ -506,8 +518,9 @@ to today.
   simple `PUT` returning the recorded size-specific status/body; against today's code it must fail as
   step 0 recorded. Paste both failures into the PR with labels. Only the second proves that old code
   failed as reported. Do not use `4,000,000`, and do neither until step 0 establishes a threshold and
-  failing probe for that helper. For a `simple-only` helper, add an all-controlled-probes-simple green
-  regression and require no fabricated routing-delta or failure reproduction. The existing ~143-test
+  failing probe for that helper. For a `simple-only` helper, add an all-accepted-sizes-simple green
+  regression through `maxAcceptedBytes` and require no fabricated routing-delta or failure
+  reproduction. The existing ~143-test
   suite cannot serve as red-state proof.
 
 **Files:** `extensions/msteams/src/upload-session.ts` (new),
@@ -527,7 +540,8 @@ pnpm vitest run extensions/msteams          # or: pnpm --filter <msteams-pkg-fro
 #         the recorded size-specific status/body and old code fails as step 0 observed
 #     Only this second test may be labelled "old code failed as reported".
 #   Express boundary cases as measuredThreshold and measuredThreshold + 1; do not substitute fixed
-#   placeholder literals. For a simple-only helper, assert every controlled probe stays SIMPLE.
+#   placeholder literals. For a simple-only helper, assert every accepted controlled size through
+#   maxAcceptedBytes stays SIMPLE.
 #   graph-upload.test.ts — parameterize by each helper's measured policy:
 #   - upload(<Buffer.alloc(measuredThreshold + 1)>) → createUploadSession called exactly once
 #         AND >=1 PUT to the returned uploadUrl AND zero PUTs to /content
@@ -538,7 +552,11 @@ pnpm vitest run extensions/msteams          # or: pnpm --filter <msteams-pkg-fro
 #         measured fixtures; at a size between them, one helper takes SESSION and the other SIMPLE
 #         ← proves the shared router preserves helper-specific thresholds instead of one scalar
 #   - mixed-policy case (test-only fixture): one helper simple-only, one session-above; every controlled
-#         probe stays SIMPLE for the former while measuredThreshold + 1 takes SESSION for the latter
+#         accepted size through maxAcceptedBytes stays SIMPLE for the former while measuredThreshold
+#         + 1 takes SESSION for the latter
+#   - configured-ceiling case: set mediaMaxMb above Graph's documented 250,000,000-byte simple-PUT
+#         limit; policy compilation produces session-above (or configuration is rejected before
+#         payload allocation with a clear effective-limit error), never simple-only
 #   - the COMPLETE createUploadSession URL is asserted for each helper, string-equal to:
 #         https://graph.microsoft.com/v1.0/me/drive/root:/MinionShared/<enc>:/createUploadSession
 #         https://graph.microsoft.com/v1.0/sites/<siteId>/drive/root:/MinionShared/<enc>:/createUploadSession
@@ -670,16 +688,20 @@ stop promising a 4MB world, and every remaining open end is in the ledger.
      recreation callback**. This is a strict upgrade: same wire protocol for a one-chunk file, plus
      retry and resume above one chunk.
 - **Test the callers, not just the module.** S1/S2 prove the transfer; this slice proves the
-  consequence. For **each of the two drive-path callers** (SharePoint and OneDrive), drive it with that
-  helper's own §3 **at-boundary** and **above-boundary (`threshold + 1`)** fixtures, derived from its §7 step 0c
-  measurement (§3's bracket rule) — never a fixed 1 MB / 12 MB pair, because the two helpers may bracket
-  the boundary at different sizes and the true boundary may sit above every size step 0 probed. At
-  the boundary → simple path, attachment delivered. At `threshold + 1` → session path, attachment
-  delivered. Above the boundary, transfer permanently fails → the send reports a typed error and does
-  **not** post a card pointing at a nonexistent file. That last case is the one an implementer skips,
-  and it is the one that produces a broken link in a real chat. For the SharePoint path specifically,
-  assert that `getDriveItemProperties` is called with the id returned by the *session* terminal response
-  (§1.1) — a native file card built from a stale or missing id is a broken card.
+  consequence. Branch each drive-path caller's fixtures on its own `DriveUploadPolicy`; a mixed result
+  must exercise both kinds in the same parameterized suite:
+  - `session-above`: use that helper's §3 **at-boundary** and **above-boundary (`threshold + 1`)**
+    fixtures, derived from §7 step 0c (§3's bracket rule), never a fixed 1 MB / 12 MB pair. At the
+    boundary → SIMPLE and delivered; at `threshold + 1` → SESSION and delivered. On permanent session
+    failure, the send reports a typed error and does **not** post a card pointing at a nonexistent
+    file. For SharePoint, assert `getDriveItemProperties` receives the id from the session's terminal
+    response (§1.1).
+  - `simple-only`: it has no threshold and never creates a session. Exercise every accepted controlled
+    size through `maxAcceptedBytes`, assert SIMPLE delivery and zero `createUploadSession` calls, then
+    make the simple PUT permanently fail and assert the typed caller error plus no broken card/link.
+    Do not invent a terminal-session-id assertion for this policy.
+  The helpers may bracket at different sizes or select different kinds; caller coverage is complete
+  only when it follows the selected kind rather than forcing both through SESSION.
   **The consent-path caller (§1.2) is separate and keeps its literal 12MB case** (§7 step 2e): it is
   handed a Teams-supplied `uploadUrl` and always chunks regardless of size, so it never evaluates the
   drive simple/session threshold and has nothing to derive from step 0.
@@ -736,8 +758,8 @@ ceiling), their `*.test.ts`, `extensions/msteams/README.md` or the `upload-sessi
 cd minion
 pnpm vitest run extensions/msteams   # the ~143-case msteams baseline must not regress (count is not the gate)
 pnpm tsgo && pnpm check
-#   the at-boundary/threshold+1/permanent-failure cases above, each on its own helper's derived fixtures,
-#   for the two drive call sites, plus:
+#   policy-branched caller cases above for both drive call sites: boundary/threshold+1/session failure
+#   only for session-above; all accepted sizes/simple failure only for simple-only; plus:
 #   - a file above the effective mediaMax ceiling → rejected by loadWebMedia BEFORE any
 #         createUploadSession call, and the message names the effective limit
 #   - consent path, 12MB → chunked PUTs to the Teams-supplied uploadUrl, zero createUploadSession calls
@@ -798,8 +820,9 @@ The two readings of "4 MB" (`4,000,000` and `4,194,304`) never select the implem
 Only controlled probes do. Do **not** write boundary tests before step 0's result is recorded in the
 PR: a test asserting an unmeasured threshold is what makes a placeholder permanent.
 
-**The general bracket rule, beyond the two 4 MB readings.** Step 0 only probes four fixed sizes (§7 step
-0b: ~1 MiB, 4.1 MiB, 12 MiB, ~99 MiB), so its result usually *brackets* the true boundary rather than
+**The general bracket rule, beyond the two 4 MB readings.** Step 0 begins with four fixed sizes (§7 step
+0b: ~1 MiB, 4.1 MiB, 12 MiB, ~99 MiB) and extends through the effective accepted ceiling, so its result
+usually *brackets* the true boundary rather than
 pinning it exactly — the largest probe that passes and the smallest probe that fails are not adjacent
 bytes. In that case the routing threshold to implement, and the boundary fixtures S3 and §7 steps 2b–2d
 test against, is the **largest passing probe size for that helper** — not the midpoint of the bracket
@@ -808,7 +831,11 @@ the smallest failing probe is unknown, and the conservative reading (same reason
 above: routing extra bytes through the session path when they might have fit in a simple `PUT` is
 harmless; the reverse is not) treats that whole gap as "route through session." This derived value, not
 `4,000,000`, is what every remaining "over-threshold" fixture in this spec must use, and it may differ
-between OneDrive and SharePoint (§7 step 0c).
+between OneDrive and SharePoint (§7 step 0c). A bracket is valid only when repeated results are
+monotonic: every tested size at or below `maxSimpleBytes` passes on every required repetition, and
+every size-specific failure above it reproduces. A pass after any lower-size failure, or a failure that
+does not reproduce, is inconclusive noise; re-run or refine the matrix and do not compile a policy or
+approve S1 from it.
 
 Independently of all of the above, `FILE_CONSENT_THRESHOLD_BYTES` *is* `4 * 1024 * 1024`,
 deliberately, and answers a different question (S1) — do not unify the two whatever step 0 returns.
@@ -925,7 +952,8 @@ cd minion
 
 # 0. PREREQUISITE, pre-implementation (§1.1a) — do this BEFORE S1, against TODAY's unmodified code.
 #    This is a CONTROLLED experiment, not a smoke test: its only job is to decide whether the drive
-#    endpoints have a SIZE-dependent failure below the gateway's accepted ceiling. Every other kind of
+#    endpoints have a SIZE-dependent failure below the gateway's accepted ceiling and to compile a
+#    policy safe for that exact ceiling. Every other kind of
 #    failure (identity, permission, path, destination, configuration) must be excluded first, or a
 #    401/403/404 that happens to hit all three large payloads reads as "proof" of a byte ceiling.
 #
@@ -942,30 +970,50 @@ cd minion
 #        Do NOT use a 1:1 chat for this step — personal chats route to the consent card (§1.2), a
 #        different code path with a different (Teams-supplied) URL.
 #
-#    0b. Per run, in this order, through the SAME tenant, identity, /MinionShared destination and
-#        configuration — record method, full URL, HTTP status, response body and byte size for EACH:
+#    0b. First resolve and record the effective runtime ceiling for this run from mediaMaxMb. Per run,
+#        through the SAME tenant, identity, /MinionShared destination and configuration, test the
+#        ascending matrix below. Run every included size at least twice under those same conditions;
+#        record method, full URL, HTTP status, response body and byte size for every attempt:
 #          1. CONTROL   ~1 MiB non-image  -> MUST succeed (2xx, item id returned)
-#          2. PROBE     4.1 MiB           -> record
-#          3. PROBE     12 MiB            -> record
-#          4. PROBE     ~99 MiB (near the 100 MiB ceiling, §1.5) -> record
-#        Changing tenant, identity, folder or config between the control and its probes voids the run.
+#          2. PROBE     4.1 MiB           -> include when accepted by the effective ceiling
+#          3. PROBE     12 MiB            -> include when accepted by the effective ceiling
+#          4. PROBE     ~99 MiB           -> include when accepted by the effective ceiling
+#          5. PROBE     effective runtime ceiling exactly
+#          6. PROBE     250,000,000 B exactly when accepted (Graph's documented simple-PUT maximum)
+#        De-duplicate equal sizes and execute in strictly ascending byte order. If the effective
+#        ceiling exceeds 250,000,000 B, do not issue a knowingly out-of-contract simple PUT above that
+#        limit merely to rediscover the documented rejection: this fact itself forbids simple-only and
+#        requires session-above with maxSimpleBytes no greater than the largest repeatably passing
+#        in-contract probe (or a clear configuration rejection before payload allocation). Changing
+#        tenant, identity, folder or config between attempts voids the run.
 #
 #    0c. Reading the result — per run, and both runs must be read before any disposition:
 #        - CONTROL FAILS -> this run proves NOTHING about size. Record it as an auth / permission /
 #          path / configuration finding, fix the environment, and re-run. It may NOT be used to
 #          approve S1, to justify the routing split, or to derive any byte threshold. If the control
 #          cannot be made to pass, say so and stop — "we could not upload at all" is the finding.
-#        - CONTROL PASSES, all three probes succeed -> the ">4MB fails" premise is disproved for that
-#          helper; record its policy as simple-only. If both runs read this way: do not proceed to S1
+#        - CONTROL PASSES, every accepted size through the effective ceiling passes repeatedly, and the
+#          ceiling is <= the highest verified passing simple size -> the ">4MB fails" premise is
+#          disproved for that helper; record simple-only with maxAcceptedBytes equal to that ceiling.
+#          If both runs read this way: do not proceed to S1
 #          as scoped; reject/archive the
 #          proposal's drive-path claim, and file a narrower proposal for whatever of §1.2/§4's
 #          independently-evidenced findings (consent-URL fragment ceiling, resumability) remain.
-#        - CONTROL PASSES, some probe fails -> a size-dependent failure exists. Record the exact
+#        - CONTROL PASSES, but the effective ceiling is above the verified simple range (including any
+#          ceiling above 250,000,000 B) -> simple-only is forbidden even if every in-contract probe
+#          passed. Record session-above with maxSimpleBytes no greater than the largest repeatably
+#          passing in-contract size, or reject that configuration before reading the payload. The S1
+#          test matrix must include mediaMaxMb above the documented simple limit.
+#        - CONTROL PASSES, some probe fails reproducibly -> a size-dependent failure exists. Record the exact
 #          status/body/tenant/cloud/identity and the smallest failing and largest passing size; the
 #          threshold in §3 must be DERIVED from those measurements, not from the 4,000,000 already
 #          written there and not from documentation. Note that a failure whose body names an auth,
 #          scope or path problem rather than size is NOT size evidence even with a green control —
 #          re-run that single payload before treating it as such.
+#        - MONOTONICITY IS REQUIRED -> after repetitions, all passing sizes must precede all
+#          size-specific failing sizes. A pass after a lower-size failure, or a failure that does not
+#          reproduce, is noisy/inconclusive. Re-run or refine the matrix under unchanged conditions;
+#          do not select the largest pass, compile either policy, or approve S1 from that run.
 #        - The two runs may disagree (OneDrive is labelled "deprecated for bot use" in the source's
 #          own header comment, graph-upload.ts:4-7). A per-helper result is a per-helper finding;
 #          do not average them into one threshold. If exactly one helper has a size-specific failure,
@@ -987,7 +1035,8 @@ git diff --name-only <base>...HEAD          # → extensions/msteams/** only in 
 #    a) Channel/group, SharePoint policy:
 #       - session-above: send the exact largest-passing probe, then threshold + 1. The former uses one
 #         SIMPLE PUT; the latter produces an intact native card via createUploadSession + N chunk PUTs.
-#       - simple-only: repeat every controlled probe; each remains one SIMPLE PUT and delivers intact.
+#       - simple-only: repeat every accepted controlled size through maxAcceptedBytes; each remains one
+#         SIMPLE PUT and delivers intact.
 #         → the file appears intact in the SharePoint drive (open it, don't just trust the card)
 #    b) Unconfigure sharePointSiteId; repeat (a) using OneDrive's OWN measured policy and fixtures —
 #       do not reuse SharePoint's disposition or sizes; the helpers may differ (§7 step 0c)
@@ -1013,18 +1062,24 @@ git diff --name-only <base>...HEAD          # → extensions/msteams/** only in 
 #    no zero-byte or partial items left by (e)/(f).
 ```
 
-**Ship gate:** step 0 run with **passing controls on both helpers** and its full result table recorded,
-confirming at least one helper still has a fix to make (§1.1a) — a step 0 whose controls pass and whose probes all
-succeed disproves the premise, which is a valid outcome and means this spec, as scoped, does not ship;
+**Ship gate:** step 0 run with **passing controls on both helpers**, repeatable monotonic observations,
+the effective runtime ceiling, and its full result table recorded, confirming at least one helper still
+has a fix to make (§1.1a). A step 0 whose controls pass and whose probes cover every accepted size with
+repeatable success disproves the premise, which is a valid outcome and means this spec, as scoped, does not ship;
 a step 0 whose controls fail is not a result at all and blocks the gate either way; §7 steps
 1–3 green on **both** a SharePoint-configured conversation and a 1:1 chat; the proposal's DoD checked
-clause by clause (`createUploadSession` + chunked PUT path taken above each helper's own step-0-derived
-boundary — §3 bracket rule, never a fixed `4MB` — S1's `graph-upload.test.ts` mock-buffer case against
-*both* drive functions using each helper's own derived policy, and step 2a/2b live); both S1 red-state
+clause by clause against *both* drive functions using each helper's own derived policy: for
+`session-above`, `createUploadSession` + chunked PUT above that helper's step-0-derived boundary (§3
+bracket rule, never fixed `4MB`), at-boundary SIMPLE behavior, permanent-failure behavior and the
+session-terminal-id assertion where applicable; for `simple-only`, every accepted controlled size
+through `maxAcceptedBytes` remains SIMPLE, success and permanent-failure caller behavior are covered,
+and there is no SESSION or terminal-id requirement. The test suite includes an effective `mediaMaxMb`
+above 250,000,000 bytes and proves it cannot compile as `simple-only`. Both S1 red-state
 failures pasted into the PR for each `session-above` helper: the `threshold + 1` routing-delta failure, and the smallest
 observed failing-probe reproduction whose mocked simple-PUT status/body matches step 0. Only the latter
 proves the old code failed the way the proposal reported. Each `simple-only` helper instead has an
-all-controlled-probes-simple regression and no fabricated failure fixture; §4's unverified constants each
+all-accepted-sizes-simple regression through `maxAcceptedBytes` and no fabricated failure fixture;
+§4's unverified constants each
 checked and recorded as one line, including any that came back different — in particular the
 per-request fragment ceiling, since it determines whether the consent path had a second silent failure
 band (§4); the same-name parity case (§2 S1) passing on both the simple and session paths with
@@ -1033,9 +1088,12 @@ path, and it does **not** get closed with `uploadToSharePoint` still on the simp
 
 **Approval gate (spec, not code):** this spec itself may not move to `approved` until step 0 above has
 been run **with a passing ~1 MiB control for each of `uploadToOneDrive` and `uploadToSharePoint`** and
-its per-request result table recorded (§1.1a, top-of-file disposition banner). An uncontrolled matrix,
-or one whose controls failed, is an environment finding and may not be converted into a size threshold
-or into an approval. That is a pass-4/pass-5 finding, not a pre-existing part of this section — do not
+its repeated per-request result table, effective runtime ceiling, and monotonicity determination
+recorded (§1.1a, top-of-file disposition banner). An uncontrolled matrix, one whose controls failed,
+or a noisy/non-monotonic matrix is an environment finding and may not be converted into a size
+threshold or into an approval. A configured ceiling above the verified simple range must select
+`session-above` or be rejected before allocation; it cannot be approved as `simple-only`. That is a
+pass-4/pass-5 finding, not a pre-existing part of this section — do not
 treat its absence as an earlier oversight to silently backfill.
 
 **Heap-policy gate (spec, not code):** independently of step 0, the pass-2 question "is the byte ceiling
