@@ -27,6 +27,9 @@ runs `node scripts/proposal-index.mjs --check`, which re-derives the index (incl
 | `possibly_reopens` | no | closed proposal id this may be a revival of (reconciler + human decide) |
 | `duplicate_candidate` | no | proposal id the reconciler suspects is the same idea |
 | `spawned_spec` | no | spec id once the spec stage picks this up |
+| `value` | no | board scoring: relative payoff, integer |
+| `effort` | no | board scoring: `S` `M` `L` — `scripts/proposal-index.mjs` rejects any other value |
+| `source` | no | provenance of an auto-filed proposal, e.g. a review-fix run id |
 | `tags` | no | routing/classification labels, e.g. `[logic, test]`; every value must resolve (as a canonical name or an alias) via `specs/topics.json` — `scripts/proposal-index.mjs` rejects an unknown tag, naming the file and tag |
 | `value` | no | triage worth. **Two vocabularies are in use today** — a 1–10 integer (40 files) and `high`/`medium` (16 files); neither is validated. Prefer the integer |
 | `effort` | no | rough size: `S` `M` `L` |

@@ -27,6 +27,8 @@ export const P_STATUSES = [
 	'closed'
 ];
 
+export const P_EFFORTS = ['S', 'M', 'L'];
+
 export const OUT_PATH = 'proposals/index.json';
 
 function main() {
@@ -76,6 +78,8 @@ function main() {
 			else fmById.set(fm.id, fm);
 		}
 		if (fm.status && !P_STATUSES.includes(fm.status)) errors.push(`${name}: invalid status "${fm.status}"`);
+		if (fm.effort !== undefined && !P_EFFORTS.includes(fm.effort))
+			errors.push(`${name}: invalid effort "${fm.effort}" (allowed: ${P_EFFORTS.join(', ')})`);
 		// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).
 		if (fm.status === 'retired' && !(fm.retired_reason && fm.retired_reason.length >= 20))
 			errors.push(`${name}: status "retired" requires retired_reason (>=20 chars)`);
