@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T14:24:48.219Z",
+	"generatedAt": "2026-08-31T14:54:38.953Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1313,6 +1313,39 @@
 			"scoredAt": "2026-08-31T08:01:35.926Z"
 		},
 		{
+			"key": "pr:paperclip#12560",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12560 fix(openclaw): persist gateway credentials as secret refs",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12560",
+			"sourceUpdatedAt": "2026-08-31T14:48:21Z",
+			"sourceFingerprint": "2756f9fafa3e65978adf1aa82a90c63ccdce1ba08f34974d12dae63a5c214e7c",
+			"score": 85,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 9,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because legacy OpenClaw credentials can be exposed and persisted as plaintext configuration, while the proposed bounded migration uses the existing secret-reference system and has focused regression coverage.",
+			"evidence": [
+				"Legacy authorization headers can expose tokens in the edit form and persist them again during edit, invite replay, or join.",
+				"The change removes known credential headers and persists only secret references.",
+				"Adapter, UI, server, secrets, and invite-replay checks passed, although the full wrapper could not run without Cargo."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T14:54:38.867Z"
+		},
+		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1683,39 +1716,6 @@
 			"scoredAt": "2026-08-31T08:31:21.054Z"
 		},
 		{
-			"key": "pr:paperclip#12560",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12560 fix(openclaw): persist gateway credentials as secret refs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12560",
-			"sourceUpdatedAt": "2026-08-31T11:34:29Z",
-			"sourceFingerprint": "090b4e64137a45997b2c2486db9fc3ac47824aee1f2bcd6e777255d20bdffbf3",
-			"score": 82,
-			"band": "high",
-			"axes": {
-				"criticality": 9,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because this addresses reproducible plaintext credential persistence across multiple OpenClaw workflows with a bounded secret-reference migration and strong focused verification.",
-			"evidence": [
-				"Legacy OpenClaw token headers can be exposed and persisted again during edit, invite replay, or join flows.",
-				"The change migrates credentials to secret_ref storage and removes legacy secret headers before persistence.",
-				"Verification reports targeted typechecks plus passing adapter, server-secrets, UI/server, and invite-replay tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T11:54:20.473Z"
-		},
-		{
 			"key": "spec:2026-08-18-factory-orchestration-round7-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1784,39 +1784,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:39:38.888Z"
-		},
-		{
-			"key": "pr:paperclip#12548",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T14:11:25Z",
-			"sourceFingerprint": "c7946d4db0834bb8d2df91d7610d2dcbfecf7b974e7a499828d1bfd2728d0347",
-			"score": 81,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because it restores a security-sensitive human confirmation path with narrow authorization, idempotency, and strong verification evidence.",
-			"evidence": [
-				"Pending secret proposals can remain without linked human confirmation.",
-				"Recovery is board-only and returns no secret material.",
-				"Targeted tests passed 102 cases and server type-checking passed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T14:24:48.142Z"
 		},
 		{
 			"key": "pr:paperclip#12579",
@@ -3920,6 +3887,39 @@
 			"scoredAt": "2026-08-31T07:33:47.470Z"
 		},
 		{
+			"key": "pr:paperclip#12548",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
+			"sourceUpdatedAt": "2026-08-31T14:53:10Z",
+			"sourceFingerprint": "6909c5629547d1fe641648168585a08898a26b89ef064a352a33474b318bbeba",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because this narrowly scoped recovery API restores a blocked human-governance path with strong authorization, idempotency, and test evidence.",
+			"evidence": [
+				"Pending secret proposals can remain without a linked human confirmation after a partial failure.",
+				"The route is board-only, requires target-agent authorization, and returns no secret material.",
+				"Focused verification passed 102 tests plus server TypeScript checking."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T14:54:38.867Z"
+		},
+		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4396,8 +4396,8 @@
 			"repo": "paperclip",
 			"title": "#12587 fix(heartbeat): make workspace_busy retry scheduling priority- and age-aware",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12587",
-			"sourceUpdatedAt": "2026-08-31T14:21:24Z",
-			"sourceFingerprint": "9bf77c14a9f8d0a22045c831ee708b2730cb49c6973f56d9e5ccaf845f47ca3d",
+			"sourceUpdatedAt": "2026-08-31T14:30:19Z",
+			"sourceFingerprint": "deea8f2ebc3d0b92fac6a699bd73b35ed299bee233ecb41355e266fe553943d9",
 			"score": 69,
 			"band": "medium",
 			"axes": {
@@ -4410,17 +4410,17 @@
 				"implementation": 7
 			},
 			"confidence": 8,
-			"recommendation": "reframe",
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Reframe around an explicit bounded queue or scheduling contract because disjoint retry-delay bands improve priority behavior but do not resolve unbounded retries or guarantee durable fairness.",
+			"rationale": "Execute the bounded fairness fix because random retry ordering can repeatedly starve high-priority work in serialized shared workspaces, while the remaining retry-ceiling and escalation defects are explicitly outside this change.",
 			"evidence": [
-				"A high-priority run reportedly retried dozens of times over roughly an hour.",
-				"Current workspace-busy retries use a flat 60–120 second window.",
-				"The proposal explicitly retains unbounded retries while the holder is live."
+				"All workspace-busy retries currently use the same randomized 60–120 second window regardless of issue priority or waiting age.",
+				"The reported high-priority run retried dozens of times over roughly an hour while medium-priority work acquired the workspace.",
+				"The change introduces disjoint priority delay bands and an aging discount but retains unbounded retries while the holder remains live."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T14:24:48.142Z"
+			"scoredAt": "2026-08-31T14:54:38.867Z"
 		},
 		{
 			"key": "proposal:ci-minion-ai-ci",
@@ -8598,8 +8598,8 @@
 			"repo": "paperclip",
 			"title": "#12558 feat(skills-catalog): import ECC skills, agent personas, commands, and rules",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12558",
-			"sourceUpdatedAt": "2026-08-31T14:12:12Z",
-			"sourceFingerprint": "f769075c44d6f8d4b9be5af577fa8f0ac2f71d7e168b7ce2ca249a6297b2ff71",
+			"sourceUpdatedAt": "2026-08-31T14:26:53Z",
+			"sourceFingerprint": "1da6e33cce2aae7ece5e9665ab172159a625b2067d2b3074e401f4d69b0d0772",
 			"score": 42,
 			"band": "low",
 			"axes": {
@@ -8609,22 +8609,20 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 8
+				"implementation": 7
 			},
 			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12559"
-			],
-			"rationale": "Group the catalog import with its explicit Hermes memory follow-up so ECC adoption is reviewed as one bounded integration goal with combined dependency and supply-chain implications.",
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate because the broad catalog expansion may improve capability coverage, but the catalog demonstrates no urgent dependency or measured demand and introduces substantial third-party content surface.",
 			"evidence": [
-				"Imports 470 optional ECC catalog entries.",
-				"Adds caching for 193 GitHub-referenced skills pinned to one commit.",
-				"PR #12559 is described as its follow-up."
+				"The change imports 470 optional entries with defaultInstall disabled.",
+				"It includes 193 GitHub references pinned to one fork commit and 93 locally vendored skills.",
+				"Catalog, typecheck, service, portability, and Hermes test suites passed."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T14:24:48.142Z"
+			"scoredAt": "2026-08-31T14:54:38.867Z"
 		},
 		{
 			"key": "pr:pixel-agents#327",
