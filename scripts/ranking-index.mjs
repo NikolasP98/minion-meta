@@ -11,6 +11,7 @@ import {
 
 const command = process.argv[2] ?? 'validate';
 const indexPath = process.argv[3] ?? 'rankings/index.json';
+const REEVALUATE_AFTER_MS = 7 * 24 * 60 * 60 * 1_000;
 
 function readJson(path) {
 	return JSON.parse(readFileSync(path, 'utf8'));
@@ -18,6 +19,13 @@ function readJson(path) {
 
 function readIndex(path) {
 	return validateRankingIndex(readJson(path));
+}
+
+export function dueForReevaluation(entry, now = Date.now()) {
+	if (entry.score < 80 || entry.recommendation !== 'execute' || entry.readiness.specification < 6 || entry.readiness.implementation < 6) {
+		return now - Date.parse(entry.scoredAt) >= REEVALUATE_AFTER_MS;
+	}
+	return false;
 }
 
 if (command === 'validate') {
@@ -34,7 +42,7 @@ if (command === 'validate') {
 	const existing = new Map(index.rankings.map((entry) => [entry.key, entry]));
 	const pending = candidates.filter((candidate) => {
 		const prior = existing.get(candidate.key);
-		return !prior || prior.sourceFingerprint !== candidate.sourceFingerprint || prior.rubricVersion !== RANKING_RUBRIC_VERSION;
+		return !prior || prior.sourceFingerprint !== candidate.sourceFingerprint || prior.rubricVersion !== RANKING_RUBRIC_VERSION || dueForReevaluation(prior);
 	});
 	writeFileSync(outputPath, `${JSON.stringify({ schemaVersion: RANKING_SCHEMA_VERSION, candidates: pending }, null, '\t')}\n`);
 	console.log(`ranking candidates pending: ${pending.length}/${candidates.length}`);

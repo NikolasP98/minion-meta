@@ -1,9 +1,11 @@
 import { createHash } from 'node:crypto';
 
 export const RANKING_SCHEMA_VERSION = 1;
-export const RANKING_RUBRIC_VERSION = 'board-goal-v1';
+export const RANKING_RUBRIC_VERSION = 'board-goal-v2';
 export const RANKING_WEIGHTS = Object.freeze({ criticality: 0.45, importance: 0.3, impact: 0.25 });
 export const RANKING_AXES = Object.freeze(Object.keys(RANKING_WEIGHTS));
+export const RANKING_READINESS_AXES = Object.freeze(['specification', 'implementation']);
+export const RANKING_RECOMMENDATIONS = Object.freeze(['execute', 'reevaluate', 'group', 'prune', 'reframe']);
 export const RANKING_KINDS = Object.freeze(['proposal', 'issue', 'spec', 'pr', 'run', 'deploy']);
 
 function object(value, label) {
@@ -84,15 +86,27 @@ export function validateCandidate(value) {
 
 export function validateAgentScore(value, allowedKeys) {
 	const score = object(value, 'agent score');
-	exactKeys(score, ['key', 'criticality', 'importance', 'impact', 'confidence', 'rationale', 'evidence'], 'agent score');
+	exactKeys(score, ['key', 'criticality', 'importance', 'impact', 'specification', 'implementation', 'confidence', 'recommendation', 'relatedKeys', 'rationale', 'evidence'], 'agent score');
 	const key = boundedText(score.key, 'agent score.key', 300);
 	if (!allowedKeys.has(key)) throw new Error(`agent returned unknown key ${key}`);
 	const axes = Object.fromEntries(RANKING_AXES.map((axis) => [axis, integerScore(score[axis], `${key}.${axis}`)]));
+	const readiness = Object.fromEntries(RANKING_READINESS_AXES.map((axis) => [axis, integerScore(score[axis], `${key}.${axis}`)]));
 	const confidence = integerScore(score.confidence, `${key}.confidence`);
+	if (!RANKING_RECOMMENDATIONS.includes(score.recommendation)) throw new Error(`${key}.recommendation is unsupported`);
+	if (!Array.isArray(score.relatedKeys) || score.relatedKeys.length > 3) throw new Error(`${key}.relatedKeys must contain at most 3 keys`);
+	const relatedKeys = score.relatedKeys.map((related, index) => {
+		const checked = boundedText(related, `${key}.relatedKeys[${index}]`, 300);
+		if (checked === key || !allowedKeys.has(checked)) throw new Error(`${key}.relatedKeys contains an unavailable key`);
+		return checked;
+	});
+	if (new Set(relatedKeys).size !== relatedKeys.length) throw new Error(`${key}.relatedKeys contains duplicates`);
 	return {
 		key,
 		axes,
+		readiness,
 		confidence,
+		recommendation: score.recommendation,
+		relatedKeys,
 		rationale: boundedText(score.rationale, `${key}.rationale`, 800),
 		evidence: Array.isArray(score.evidence) && score.evidence.length >= 1 && score.evidence.length <= 3
 			? score.evidence.map((entry, index) => boundedText(entry, `${key}.evidence[${index}]`, 300))
@@ -114,7 +128,10 @@ export function rankingEntry(candidate, agentScore, scoredAt) {
 		score: aggregate,
 		band: rankingBand(aggregate),
 		axes: agentScore.axes,
+		readiness: agentScore.readiness,
 		confidence: agentScore.confidence,
+		recommendation: agentScore.recommendation,
+		relatedKeys: agentScore.relatedKeys,
 		rationale: agentScore.rationale,
 		evidence: agentScore.evidence,
 		evaluator: 'factory-ranking-agent',
@@ -131,7 +148,7 @@ export function validateRankingIndex(value) {
 	const seen = new Set();
 	for (const [position, entryValue] of index.rankings.entries()) {
 		const entry = object(entryValue, `rankings[${position}]`);
-		exactKeys(entry, ['key', 'kind', 'stage', 'repo', 'title', 'sourceUrl', 'sourceUpdatedAt', 'sourceFingerprint', 'score', 'band', 'axes', 'confidence', 'rationale', 'evidence', 'evaluator', 'rubricVersion', 'scoredAt'], `rankings[${position}]`);
+		exactKeys(entry, ['key', 'kind', 'stage', 'repo', 'title', 'sourceUrl', 'sourceUpdatedAt', 'sourceFingerprint', 'score', 'band', 'axes', 'readiness', 'confidence', 'recommendation', 'relatedKeys', 'rationale', 'evidence', 'evaluator', 'rubricVersion', 'scoredAt'], `rankings[${position}]`);
 		const key = boundedText(entry.key, `rankings[${position}].key`, 300);
 		if (seen.has(key)) throw new Error(`duplicate ranking key ${key}`);
 		seen.add(key);
@@ -143,10 +160,15 @@ export function validateRankingIndex(value) {
 		if (!/^https:\/\//.test(sourceUrl)) throw new Error(`${key}.sourceUrl must be HTTPS`);
 		if (!Number.isFinite(Date.parse(entry.sourceUpdatedAt))) throw new Error(`${key}.sourceUpdatedAt is invalid`);
 		exactKeys(object(entry.axes, `${key}.axes`), RANKING_AXES, `${key}.axes`);
+		exactKeys(object(entry.readiness, `${key}.readiness`), RANKING_READINESS_AXES, `${key}.readiness`);
+		RANKING_READINESS_AXES.forEach((axis) => integerScore(entry.readiness[axis], `${key}.readiness.${axis}`));
 		const expected = aggregateRanking(entry.axes);
 		if (entry.score !== expected) throw new Error(`${key} aggregate ${entry.score} does not match trusted calculation ${expected}`);
 		if (entry.band !== rankingBand(expected)) throw new Error(`${key} band does not match score`);
 		integerScore(entry.confidence, `${key}.confidence`);
+		if (!RANKING_RECOMMENDATIONS.includes(entry.recommendation)) throw new Error(`${key}.recommendation is unsupported`);
+		if (!Array.isArray(entry.relatedKeys) || entry.relatedKeys.length > 3 || new Set(entry.relatedKeys).size !== entry.relatedKeys.length) throw new Error(`${key}.relatedKeys is invalid`);
+		entry.relatedKeys.forEach((related, relatedIndex) => boundedText(related, `${key}.relatedKeys[${relatedIndex}]`, 300));
 		boundedText(entry.rationale, `${key}.rationale`, 800);
 		if (!Array.isArray(entry.evidence) || entry.evidence.length < 1 || entry.evidence.length > 3) throw new Error(`${key}.evidence must contain 1 to 3 facts`);
 		entry.evidence.forEach((fact, factIndex) => boundedText(fact, `${key}.evidence[${factIndex}]`, 300));
