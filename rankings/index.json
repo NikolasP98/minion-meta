@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T08:01:36.021Z",
+	"generatedAt": "2026-08-31T08:14:27.714Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -169,39 +169,6 @@
 			"scoredAt": "2026-08-31T07:43:57.675Z"
 		},
 		{
-			"key": "spec:2026-08-17-site-device-identity-role-escalation-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_site",
-			"title": "device-identity/sign — sign the caller's real grant, never the body's role/scopes",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-17-site-device-identity-role-escalation-spec.md",
-			"sourceUpdatedAt": "2026-08-31",
-			"sourceFingerprint": "16a3794971ce70e4361b0822125aec377c036ad88b275c8a9529c24804afe0c3",
-			"score": 98,
-			"band": "critical",
-			"axes": {
-				"criticality": 10,
-				"importance": 10,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 7
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Any authenticated member can reportedly obtain an admin-signed device credential, making this an immediate privilege-escalation fix despite checkout-dependent assumptions that must be verified during implementation.",
-			"evidence": [
-				"Client-supplied role and scopes are signed with only a session check.",
-				"The signed credential can claim role admin for the organization.",
-				"Definition of done requires refusing a non-admin requesting admin."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:52:28.694Z"
-		},
-		{
 			"key": "spec:2026-08-18-factory-m0-safety-foundation-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -303,14 +270,14 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
-			"key": "pr:minion-factory#161",
+			"key": "pr:minion-factory#163",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion-factory",
-			"title": "#161 factory: Worker containment S5: adversarial E2E and supervised canary activation",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/161",
-			"sourceUpdatedAt": "2026-08-29T16:37:37Z",
-			"sourceFingerprint": "d7f0ca40fd39b159dffc948b94c3bd9278f92f7b6868f42c2c73555a22f2be50",
+			"title": "#163 factory: containment-base-reconciliation S3: bind {testedBase, testedCandidate} through review and publish",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/163",
+			"sourceUpdatedAt": "2026-08-31T08:13:05Z",
+			"sourceFingerprint": "c05574f68cf2fbf71fd4f01bbbab86715ad398cd0a130cb954654acec1268119",
 			"score": 93,
 			"band": "critical",
 			"axes": {
@@ -325,48 +292,15 @@
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "The final containment validation slice directly reduces credential, mutation, and release-integrity risks, with only the supervised activation gate remaining externally dependent.",
+			"rationale": "Cryptographically binding the tested base and candidate through review and publication closes a central containment integrity gap with a sharply bounded implementation.",
 			"evidence": [
-				"Slices 1-4 are reported merged",
-				"Production reportedly keeps FACTORY_CONTAINMENT_V2=0",
-				"Slice 5 enumerates adversarial tests and reversible canary evidence"
+				"The slice binds testedBaseSha and testedCandidateSha atomically.",
+				"Review and publication must assert the current candidate matches the tested candidate.",
+				"Slices 1 and 2 are already merged."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:33:08.870Z"
-		},
-		{
-			"key": "pr:minion-factory#163",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#163 factory: containment-base-reconciliation S3: bind {testedBase, testedCandidate} through review and publish",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/163",
-			"sourceUpdatedAt": "2026-08-31T04:06:09Z",
-			"sourceFingerprint": "29c6cccc9953e9799d67e892d1bd88f89aa66e529d8f42eff3f77d40cdb58ebc",
-			"score": 93,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 10,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 10,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Binding the tested base and candidate through review and publication closes a concrete high-severity integrity gap with tightly bounded implementation steps.",
-			"evidence": [
-				"Scope is limited to Slice 3 covering D7 and D8",
-				"Review and publish must assert testedCandidateSha",
-				"Slices 1 and 2 are already merged"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:33:08.870Z"
+			"scoredAt": "2026-08-31T08:14:05.520Z"
 		},
 		{
 			"key": "pr:minion-meta#271",
@@ -507,6 +441,39 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
+			"key": "spec:2026-08-17-site-device-identity-role-escalation-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_site",
+			"title": "device-identity/sign — sign the caller's real grant, never the body's role/scopes",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-17-site-device-identity-role-escalation-spec.md",
+			"sourceUpdatedAt": "2026-08-31",
+			"sourceFingerprint": "cbff94bb03e532e487cac95003b5752a2b01fd729c891d3e2609e25b4b6e81b4",
+			"score": 92,
+			"band": "critical",
+			"axes": {
+				"criticality": 10,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A logged-in member can reportedly obtain an admin-signed device credential, making this a high-criticality privilege escalation with a concrete server-side authorization fix and testable outcome.",
+			"evidence": [
+				"Client-supplied role and scopes are signed with only a session check.",
+				"The Ed25519 signature is the authorization ticket accepted by the gateway.",
+				"The definition of done requires refusing a non-admin request for role admin."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:14:27.632Z"
+		},
+		{
 			"key": "spec:2026-08-28-shared-db-encryption-key-convergence-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -612,8 +579,8 @@
 			"repo": "minion-factory",
 			"title": "#160 factory: implementing spec: Durable state — transactional outbox for postFinish side effects, guarded lifecycle edges, append-onl",
 			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/160",
-			"sourceUpdatedAt": "2026-08-31T03:14:12Z",
-			"sourceFingerprint": "d0432e55d9090e53792b27ee7528a98b8d6d9e16f8399a75c61237da6e46320e",
+			"sourceUpdatedAt": "2026-08-31T08:04:00Z",
+			"sourceFingerprint": "6660bad893c7ec82a7c367dcf6f138a54f6aaa14ef880648f9913d1f2db8251e",
 			"score": 89,
 			"band": "critical",
 			"axes": {
@@ -623,20 +590,20 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 7
+				"implementation": 6
 			},
 			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Transactional side-effect delivery and guarded lifecycle transitions address high-consequence factory reliability risks and are actionable as the next bounded spec slice.",
+			"rationale": "Transactional side effects and guarded lifecycle state address central durability risks, though the exact remaining slice must first be reconciled from repository evidence.",
 			"evidence": [
-				"Targets a transactional outbox for postFinish side effects",
-				"Targets guarded lifecycle edges and append-only state",
-				"Open high-risk factory PR"
+				"The spec covers a transactional outbox and guarded lifecycle edges.",
+				"The task says to implement only the next genuinely incomplete slice.",
+				"Existing merged work and terminal runs must be reconciled first."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:33:08.870Z"
+			"scoredAt": "2026-08-31T08:14:05.520Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-durable-state-outbox",
@@ -774,72 +741,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "pr:minion_hub#200",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#200 factory: approved spec: 2026-08-17-pkg-dev-crypto-failopen-spec",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/200",
-			"sourceUpdatedAt": "2026-08-31T02:51:59Z",
-			"sourceFingerprint": "01e893bc01c2f8e61782f549be366d838d6203524e77f14e6a620f223bf30d01",
-			"score": 88,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A high-risk cryptographic fail-open issue warrants immediate execution because authentication or security failure behavior can have severe consequences.",
-			"evidence": [
-				"Spec is named pkg-dev-crypto-failopen.",
-				"Tagged risk:high, topic:security, and topic:auth.",
-				"Approved spec is embedded in FACTORY_SPEC.md with a recorded SHA and commit."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:31:58.286Z"
-		},
-		{
-			"key": "pr:minion-meta#247",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#247 factory: Env cache S2: machine-sealed cross-process cache",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/247",
-			"sourceUpdatedAt": "2026-08-31T01:14:10Z",
-			"sourceFingerprint": "40becdc8a58759ded5c345322ce919284fee28a5f1b6339db920a90faeb9fa96",
-			"score": 88,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A machine-sealed cross-process cache is a security-sensitive and clearly bounded follow-up that restores offline behavior without returning decrypted secrets to disk.",
-			"evidence": [
-				"Slice 1 already deleted the plaintext cache",
-				"Slice 2 requires fail-closed tamper and identity behavior",
-				"Focused crypto and cache tests are specified"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:33:08.870Z"
 		},
 		{
 			"key": "pr:paperclip#12530",
@@ -1142,39 +1043,6 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
-			"key": "spec:2026-08-17-sdlc-phase-gates-scoring-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion-meta",
-			"title": "SDLC phase gates & preemptive scoring — anti-slop checks at every boundary + backward reconciliation",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-17-sdlc-phase-gates-scoring-spec.md",
-			"sourceUpdatedAt": "2026-08-30",
-			"sourceFingerprint": "30016b6e3f83fccce975bda1a031fdcbc375c065cfc5aca8dc5bc8943a5ed385",
-			"score": 87,
-			"band": "critical",
-			"axes": {
-				"criticality": 7,
-				"importance": 10,
-				"impact": 10
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute the reconciler-first slice because stale lifecycle state is a measured fleet-wide control failure that distorts subsequent planning and execution.",
-			"evidence": [
-				"21 of 32 active cards were already merged and deployed.",
-				"The spec identifies G0 staleness reconciliation as the first build.",
-				"Gate state is derived from committed artifacts and sidecars."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:48:02.540Z"
-		},
-		{
 			"key": "deploy:minion (gateway)",
 			"kind": "deploy",
 			"stage": "deployment",
@@ -1239,6 +1107,72 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:40:17.097Z"
+		},
+		{
+			"key": "pr:minion-factory#155",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-factory",
+			"title": "#155 factory: M0 safety S2: spec rehash and trusted check-app identity",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/155",
+			"sourceUpdatedAt": "2026-08-31T08:11:54Z",
+			"sourceFingerprint": "f6a22817cca349546da2452c7e0b7fb9a4684ee87f855fb620a878bb9a371bfa",
+			"score": 86,
+			"band": "critical",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Binding automerge to an unchanged spec and trusted check identity is a high-leverage safety control with precise tests and boundaries.",
+			"evidence": [
+				"The task adds pre-automerge spec rehash verification.",
+				"Required checks can enforce a GitHub App identity.",
+				"Focused T-REHASH and T-APPID tests are required."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:14:05.520Z"
+		},
+		{
+			"key": "pr:minion-factory#161",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-factory",
+			"title": "#161 factory: Worker containment S5: adversarial E2E and supervised canary activation",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/161",
+			"sourceUpdatedAt": "2026-08-31T08:08:10Z",
+			"sourceFingerprint": "02f10a24ad144236460af5ef10ba7a37df1384417748bceaef99284f50dac632",
+			"score": 86,
+			"band": "critical",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The adversarial containment suite and reversible canary support are strategically important, while final activation remains correctly gated on supervised evidence.",
+			"evidence": [
+				"Production currently has FACTORY_CONTAINMENT_V2=0.",
+				"Slice 5 covers theft, mutation, staging, push, crash, and restart cases.",
+				"Activation requires a supervised low-stakes canary with automerge off."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:14:05.520Z"
 		},
 		{
 			"key": "pr:paperclip#12549",
@@ -1408,105 +1342,6 @@
 			"scoredAt": "2026-08-31T07:42:55.201Z"
 		},
 		{
-			"key": "spec:2026-08-18-agent-instruction-parity-and-repo-policy-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion-meta",
-			"title": "Provider-neutral agent instructions and canonical repository policy",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-18-agent-instruction-parity-and-repo-policy-spec.md",
-			"sourceUpdatedAt": "2026-08-29",
-			"sourceFingerprint": "e2a3958f35fb0c0ad48a5167bf0920441f7d8853cc8337e87f8ead6b5943e086",
-			"score": 84,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 10,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because one validated fleet policy removes contradictory routing facts and directly unblocks later orchestration work.",
-			"evidence": [
-				"The audit reported instruction alignment of 62/100.",
-				"Branch and package-policy contradictions exist across instruction files.",
-				"The orchestration graph consumes the proposed canonical registry and alias API."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:48:02.540Z"
-		},
-		{
-			"key": "pr:minion-factory#154",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#154 factory: repair Factory PR #103 exact head: post-transition spec validity",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/154",
-			"sourceUpdatedAt": "2026-08-31T01:09:06Z",
-			"sourceFingerprint": "b567da328e739223b2cf91243ef225561cbd33f61d4869ee94a86f9b4d775336",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the remaining approval-integrity defect can permit invalid lifecycle transitions and the exact branch, head, failure mode, and regressions are specified.",
-			"evidence": [
-				"Prospective frontmatter must be validated before any PUT.",
-				"Missing or body-only status cases require zero PUTs and zero run inserts.",
-				"The task continues PR #103 from an exact head commit."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:32:33.271Z"
-		},
-		{
-			"key": "pr:minion-factory#155",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#155 factory: M0 safety S2: spec rehash and trusted check-app identity",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/155",
-			"sourceUpdatedAt": "2026-08-31T08:00:29Z",
-			"sourceFingerprint": "e79b8b80cf8b5998fc1197353efa94115fb0dc13b73b70e41e390439a3e9548e",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This bounded safety slice directly strengthens pre-automerge integrity and trusted check identity across multiple repositories.",
-			"evidence": [
-				"Adds runner-side pre-automerge spec rehash verification.",
-				"Enforces declared GitHub App identity.",
-				"Focused T-REHASH/T-APPID tests are required."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:01:14.069Z"
-		},
-		{
 			"key": "pr:minion-factory#159",
 			"kind": "pr",
 			"stage": "development",
@@ -1538,39 +1373,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
-		},
-		{
-			"key": "pr:paperclip#12518",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12518 fix(codex-local): complete managed HTTP MCP authentication",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12518",
-			"sourceUpdatedAt": "2026-08-29T20:28:21Z",
-			"sourceFingerprint": "86dc5842af1a811e85a536443b9badcf60aba5a2ecdcbb278da3dbcddc2d95d5",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The change repairs a broken managed MCP authentication path and has direct deployed acceptance evidence, making it both central and actionable.",
-			"evidence": [
-				"Generated config used `headers` instead of required `http_headers`.",
-				"Actor-JWT middleware rejected Paperclip's own gateway bearer.",
-				"Deployed acceptance completed a managed HTTP MCP tool call with exit code 0."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:33:47.470Z"
 		},
 		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
@@ -1978,6 +1780,39 @@
 			"scoredAt": "2026-08-31T07:38:58.989Z"
 		},
 		{
+			"key": "pr:minion-meta#247",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#247 factory: Env cache S2: machine-sealed cross-process cache",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/247",
+			"sourceUpdatedAt": "2026-08-31T08:04:30Z",
+			"sourceFingerprint": "84798097624fd294ddaa38c80467879eb8c777dc1d4cc4060dc680ea41c02a9f",
+			"score": 80,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A machine-sealed cross-process cache directly reduces secret-exposure risk and has explicit tamper, identity, permission, and offline requirements.",
+			"evidence": [
+				"Slice 1 already removed the plaintext cache.",
+				"Decrypted secrets must remain absent from disk.",
+				"Tamper and identity failures must fail closed."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:14:05.520Z"
+		},
+		{
 			"key": "pr:paperclip#12531",
 			"kind": "pr",
 			"stage": "development",
@@ -2042,6 +1877,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:23.880Z"
+		},
+		{
+			"key": "pr:minion-factory#154",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-factory",
+			"title": "#154 factory: repair Factory PR #103 exact head: post-transition spec validity",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/154",
+			"sourceUpdatedAt": "2026-08-31T08:12:16Z",
+			"sourceFingerprint": "3ce25bef8285b827ffdc5961a69fa21de84c1918577a2464391608fd9e5fe961",
+			"score": 79,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The narrowly scoped approval-integrity repair is actionable now and protects Factory lifecycle writes from invalid post-transition state.",
+			"evidence": [
+				"The remaining defect is explicitly limited to approval integrity.",
+				"Missing or body-only status must produce zero PUTs and zero run inserts.",
+				"A complete registered Factory self-test is required."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:14:05.520Z"
 		},
 		{
 			"key": "pr:minion-meta#273",
@@ -2174,6 +2042,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:49:02.226Z"
+		},
+		{
+			"key": "issue:minion-meta#306",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#306 [monitor:auto-fix] retry stopped: board PR minion_hub#200: factory: approved spec: 2026-08-17-pkg-dev-crypto-failopen-spec — circuit-open",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/306",
+			"sourceUpdatedAt": "2026-08-31T08:06:04Z",
+			"sourceFingerprint": "b0f1c51ccc1b502e45dc32efcaf1d2c7c089ab974b337bf877e35e3faea090d2",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 9,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#200"
+			],
+			"rationale": "This monitor alert is the operational recovery facet of the same failed security PR and should not compete as a separate goal.",
+			"evidence": [
+				"The alert links directly to minion_hub PR #200.",
+				"The retry stopped because the circuit is open.",
+				"The latest review verdict is FAIL and requires human judgment."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:14:05.520Z"
+		},
+		{
+			"key": "pr:minion_hub#200",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#200 factory: approved spec: 2026-08-17-pkg-dev-crypto-failopen-spec",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/200",
+			"sourceUpdatedAt": "2026-08-31T08:06:06Z",
+			"sourceFingerprint": "5b8891553de73c62211b1a81033d22c74ad7c6f808f4b4b14028813fe3f590e2",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#306"
+			],
+			"rationale": "The security-related implementation and its circuit-open human-review alert are one blocked recovery objective that should be handled together.",
+			"evidence": [
+				"The approved spec concerns crypto fail-open behavior.",
+				"The PR is open and tagged risk:high and security.",
+				"Its latest review verdict failed and retries stopped."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:14:05.520Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -3159,39 +3097,6 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:minion-meta#351",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#351 fix(spec): restore changes-requested review gate",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/351",
-			"sourceUpdatedAt": "2026-08-31T07:59:29Z",
-			"sourceFingerprint": "43e14c07fff60c45a103feeb87d88f4818cf86e5c93651537fccb60b77c0d2cb",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 10
-			},
-			"confidence": 10,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The change restores an authoritative reviewer veto that currently blocks unsafe lifecycle advancement and is already fully verified.",
-			"evidence": [
-				"Restores the spec to review after changes_requested.",
-				"Factory admission already refused implementation.",
-				"151/151 script tests passed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:01:14.069Z"
-		},
-		{
 			"key": "pr:paperclip#12526",
 			"kind": "pr",
 			"stage": "development",
@@ -3489,6 +3394,41 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
+			"key": "spec:2026-08-17-sdlc-phase-gates-scoring-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion-meta",
+			"title": "SDLC phase gates & preemptive scoring — anti-slop checks at every boundary + backward reconciliation",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-17-sdlc-phase-gates-scoring-spec.md",
+			"sourceUpdatedAt": "2026-08-31",
+			"sourceFingerprint": "a66eb4bb3136a051157348dd9a3ba8e16fe5d68265504aed68f9456600bdae43",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 5,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-08-18-agent-instruction-parity-and-repo-policy-spec"
+			],
+			"rationale": "The spec addresses measured fleet-wide state decay and weak promotion gates, with G0 providing a clearly prioritized first slice despite the broader program's substantial scope.",
+			"evidence": [
+				"The audit found 21 of 32 active cards already merged and deployed.",
+				"The design says to build the staleness reconciler first.",
+				"Gate state is derived from artifact sidecars rather than a database column."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:14:27.632Z"
+		},
+		{
 			"key": "issue:paperclip#12538",
 			"kind": "issue",
 			"stage": "proposal",
@@ -3561,8 +3501,8 @@
 			"repo": "paperclip",
 			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T07:45:38Z",
-			"sourceFingerprint": "1fde8dbbbabd0cafec2afc93ac68b9159425297d53c1f1bdc8bc992bf14a0d5a",
+			"sourceUpdatedAt": "2026-08-31T08:11:10Z",
+			"sourceFingerprint": "022440f754767decdc8bdce997b8e11cf3b9bb51c8b12a4a36a3f42c3cfab389",
 			"score": 71,
 			"band": "high",
 			"axes": {
@@ -3577,15 +3517,15 @@
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "The change restores a missing human-controlled secret decision path with bounded, idempotent recovery behavior and strong focused verification.",
+			"rationale": "The PR provides a bounded, tested recovery path for otherwise unresolvable human-controlled secret proposals without exposing secret material.",
 			"evidence": [
-				"A pending secret proposal can remain without a linked human confirmation.",
-				"The recovery route is board-only and returns no secret material.",
-				"Focused verification passed 102 tests and server typechecking."
+				"Pending proposals can remain without a linked human confirmation.",
+				"The recovery operation is board-only and idempotent.",
+				"Targeted tests passed 102 tests and server type-check passed."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:52:28.694Z"
+			"scoredAt": "2026-08-31T08:14:05.520Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -4391,6 +4331,74 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
+			"key": "spec:2026-08-18-agent-instruction-parity-and-repo-policy-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion-meta",
+			"title": "Provider-neutral agent instructions and canonical repository policy",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-18-agent-instruction-parity-and-repo-policy-spec.md",
+			"sourceUpdatedAt": "2026-08-29",
+			"sourceFingerprint": "dd010eed0651673a670745fe4e55969803c4dfc28ea495e9983fc37e55d56dd5",
+			"score": 67,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-08-17-sdlc-phase-gates-scoring-spec"
+			],
+			"rationale": "Canonical repository policy and provider-neutral instructions are central dependencies for reliable cross-repository orchestration, though live checkout verification remains a prerequisite.",
+			"evidence": [
+				"The audit reported materially different Claude and Codex instructions.",
+				"Branch and package-management policies contradict across files.",
+				"The canonical registry is a required dependency for later orchestration work."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:14:27.632Z"
+		},
+		{
+			"key": "deploy:minion_hub",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion_hub",
+			"title": "minion_hub deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/commit/f0ba8a3647695e279727304e467bd107f90b7710",
+			"sourceUpdatedAt": "2026-08-31T08:06:00Z",
+			"sourceFingerprint": "62e54ca2ddbe479450a6b079954dd8663b5758698fffd1e774c5250d78793277",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Gateway authentication and canonical writes are consequential, but unknown deployment status and absent health evidence prevent immediate execution.",
+			"evidence": [
+				"Deployment status is unknown.",
+				"The commit hardens gateway auth and canonical writes.",
+				"No failure or verification result is supplied."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:14:05.520Z"
+		},
+		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -5137,14 +5145,14 @@
 			"scoredAt": "2026-08-31T07:40:57.095Z"
 		},
 		{
-			"key": "deploy:minion_hub",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion_hub",
-			"title": "minion_hub deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/commit/f0ba8a3647695e279727304e467bd107f90b7710",
-			"sourceUpdatedAt": "2026-08-31T04:08:13Z",
-			"sourceFingerprint": "efb9165f3c020189d0bf05c951e498127fc726f13198426bb0e9eb113361bd17",
+			"key": "issue:paperclip#12574",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12574 Secret redaction (redactSensitiveText/COMMAND_AUTHORIZATION_BEARER_RE) unconditionally strips inert Bearer-header placeholders — silently corrupts human-facing interaction/comment text",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12574",
+			"sourceUpdatedAt": "2026-08-31T08:03:44Z",
+			"sourceFingerprint": "8e17d86f6c41c62b73e13ed3a99b17e6f1f6e384f353daf81e4e3404a59d9788",
 			"score": 61,
 			"band": "medium",
 			"axes": {
@@ -5153,21 +5161,21 @@
 				"impact": 7
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 2
+				"specification": 8,
+				"implementation": 7
 			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
+			"confidence": 8,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Unknown health on the management dashboard merits verification, but there is not enough evidence to define executable repair work.",
+			"rationale": "This deterministic redaction defect silently damages recurring human-facing authorization templates and has a localized implementation surface suitable for immediate work.",
 			"evidence": [
-				"Status is unknown.",
-				"Repository is minion_hub.",
-				"Latest change hardens gateway auth and canonical writes."
+				"The regex replaces any non-whitespace value after Authorization: Bearer.",
+				"A request_confirmation card's inert <PILOT_TOKEN> placeholder was corrupted.",
+				"The exact interaction-create call site was not pinned."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:31:23.880Z"
+			"scoredAt": "2026-08-31T08:14:27.632Z"
 		},
 		{
 			"key": "pr:paperclip#12557",
@@ -6612,14 +6620,14 @@
 			"scoredAt": "2026-08-31T07:38:21.867Z"
 		},
 		{
-			"key": "issue:paperclip#12519",
+			"key": "issue:minion-meta#352",
 			"kind": "issue",
 			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12519 Flaky test: legacy /heartbeat/invoke cases in agent-live-run-routes return 500 instead of 202 in Verify serialized server suites (1/5)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12519",
-			"sourceUpdatedAt": "2026-08-30T00:13:59Z",
-			"sourceFingerprint": "49b899c4923b142f5046e73c33805a4f22064fd76fc8ddaa73b84825e8c220e5",
+			"repo": "minion-meta",
+			"title": "#352 [monitor:auto-fix] retry stopped: ranked board PR minion-factory#155: factory: M0 safety S2: spec rehash and trusted check-app identity — circuit-open",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/352",
+			"sourceUpdatedAt": "2026-08-31T08:00:27Z",
+			"sourceFingerprint": "fe2b037724638dbb395ba6d65bab54b8ab46e4db949d1f39c762ee2684803e89",
 			"score": 53,
 			"band": "medium",
 			"axes": {
@@ -6628,21 +6636,21 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 4
+				"specification": 3,
+				"implementation": 2
 			},
-			"confidence": 8,
+			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The reproducible CI flake merits investigation, but the low occurrence rate and uncaptured underlying exception leave paid implementation insufficiently bounded.",
+			"rationale": "The stopped safety-related factory run warrants human triage, but the catalog does not establish the underlying defect, consequence, or a bounded next implementation.",
 			"evidence": [
-				"Observed 1 failure in 25 clean-checkout runs",
-				"Failing requests return 500 instead of 202",
-				"Underlying error has not yet been captured"
+				"The automated run stopped after one terminal attempt.",
+				"The reported class is unknown and the reason is circuit-open.",
+				"The latest develop attempt made no changes."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:38:58.989Z"
+			"scoredAt": "2026-08-31T08:14:27.632Z"
 		},
 		{
 			"key": "pr:paperclip#12564",
@@ -7759,6 +7767,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:35:03.762Z"
+		},
+		{
+			"key": "pr:paperclip#12575",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
+			"sourceUpdatedAt": "2026-08-31T08:11:17Z",
+			"sourceFingerprint": "054b9608e7433c773740037546fb76a50a51a66e5348f69a9722e448050bf10d",
+			"score": 47,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Deterministic project inference fixes recurring attribution gaps and is implementation-ready, although the catalog shows no urgent release or reliability threat.",
+			"evidence": [
+				"Agent-created top-level tasks can receive projectId null.",
+				"The change preserves explicit project signals and returns null on disagreement.",
+				"It adds 15 unit tests and 10 integration tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:14:05.520Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-pos-appointments-fork",
@@ -9182,39 +9223,6 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
-			"key": "deploy:minion-meta",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion-meta",
-			"title": "minion-meta deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/commit/59c4b56c192a730dbd63bb8e51dd8305eb2ad424",
-			"sourceUpdatedAt": "2026-08-31T07:53:26Z",
-			"sourceFingerprint": "13d230c06332329946abd1293541bfcc4ae4343e782b425c9e5acd87be3dde26",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Deployment health may matter broadly, but an unknown status and commit-only summary provide no failure evidence or bounded action.",
-			"evidence": [
-				"Status is unknown.",
-				"The source is commit 59c4b56.",
-				"Only the deployment tag is provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:01:14.069Z"
-		},
-		{
 			"key": "pr:pixel-agents#374",
 			"kind": "pr",
 			"stage": "development",
@@ -9611,6 +9619,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:19.199Z"
+		},
+		{
+			"key": "deploy:minion-meta",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion-meta",
+			"title": "minion-meta deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/commit/59c4b56c192a730dbd63bb8e51dd8305eb2ad424",
+			"sourceUpdatedAt": "2026-08-31T08:06:09Z",
+			"sourceFingerprint": "ee0c78ae394d8dbe5e5af3abfcc37c4828ee67943ca95c2e08666f19f80e1696",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The deployment may affect Factory quality-gate behavior, but the catalog identifies neither a concrete failure nor an actionable verification target.",
+			"evidence": [
+				"Deployment status is unknown.",
+				"The commit concerns conditional quality gates.",
+				"No outage or failed check is reported."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:14:05.520Z"
 		},
 		{
 			"key": "pr:paperclip#12568",
