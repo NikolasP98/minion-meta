@@ -1,11 +1,12 @@
 ---
 id: 2026-08-22-ci-compute-savings-bun-test-roadmap
 title: CI and Factory compute savings — evidence-first roadmap including Bun 1.4 test evaluation
-status: review
+status: approved
 created: 2026-08-22
-updated: 2026-08-28
+updated: 2026-08-31
 repos: [minion, minion_hub, minion_site, minion-factory, minion-meta, minion-base, paperclip]
 tags: [infra, test]
+approved_reason: "Ranked-queue supervisor approval: board-goal-v2 score 90/100, recommendation execute, readiness specification 9/10 and implementation 8/10; live admission threshold 80/100 and readiness threshold 6/10."
 ---
 
 # CI and Factory compute savings — evidence-first roadmap including Bun 1.4 test evaluation
