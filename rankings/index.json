@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T21:57:47.577Z",
+	"generatedAt": "2026-08-31T22:27:54.266Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1577,6 +1577,39 @@
 			"scoredAt": "2026-08-31T21:27:58.345Z"
 		},
 		{
+			"key": "pr:paperclip#12614",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12614 fix(tool-access): mark catalog entries removed when they drop out of an upstream refresh",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12614",
+			"sourceUpdatedAt": "2026-08-31T22:18:05Z",
+			"sourceFingerprint": "64d116df1daf14ad617186df75353fd1fab2e397ecb2048d675cd79fb3a4f7c3",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A root-caused production reliability defect repeatedly exposes dead tools to agents, and the existing status model enables a focused, tested correction.",
+			"evidence": [
+				"The bug was root-caused against a live production incident.",
+				"Stale entries remain active indefinitely and every attempted call fails.",
+				"The existing catalog status type already includes \"removed\"."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T22:27:54.178Z"
+		},
+		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2254,39 +2287,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:01:14.069Z"
-		},
-		{
-			"key": "pr:paperclip#12550",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12550 Prevent checkout from reopening terminal issues",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12550",
-			"sourceUpdatedAt": "2026-08-31T00:09:43Z",
-			"sourceFingerprint": "daa93effb9895b89d605cd6e1ef20a745a1d2b0b985f5f1de6617b82f7b3997c",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because checkout can violate terminal-state integrity and reopen completed work, while the service-level rejection is small and covered by regression tests.",
-			"evidence": [
-				"A caller can include `done` in `expectedStatuses` and change completed work to `in_progress`.",
-				"The fix excludes `done` and `cancelled` from both atomic checkout paths.",
-				"All 123 focused service tests passed, though full CI remains pending."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:34:26.538Z"
 		},
 		{
 			"key": "pr:paperclip#12552",
@@ -6247,6 +6247,39 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
+			"key": "pr:paperclip#12608",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12608 feat(runner): add SDK, labs, and developer tooling",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12608",
+			"sourceUpdatedAt": "2026-08-31T22:26:41Z",
+			"sourceFingerprint": "ddf96e520c43eb4d4e43f1fca29a6bcbeaaac98a6c2d72e2ae6376624d2e25b4",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The developer platform is strategically broad and well specified, but its large change surface and reliance on pending CI make immediate execution readiness uncertain.",
+			"evidence": [
+				"Adds SDK, conformance, replay, evaluation, and inspection surfaces.",
+				"Production server integration is explicitly deferred to the next stack item.",
+				"Local test suites were not run; GitHub Actions is the stated verification authority."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T22:27:54.178Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6346,6 +6379,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:46:38.665Z"
+		},
+		{
+			"key": "pr:paperclip#12613",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12613 Onboarding: model source tiles, one input canvas, and Storybook coverage for the agent arc",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12613",
+			"sourceUpdatedAt": "2026-08-31T22:24:50Z",
+			"sourceFingerprint": "298c09be112ad5bc4dabefb08df20e85388b04c82ca380d5a8df24de7756abc1",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The work addresses a key onboarding dependency with inspectable fixtures and substantial verification, making the proposed improvement actionable now.",
+			"evidence": [
+				"The connect-model step determines whether the new agent can run.",
+				"Storybook coverage is added for all three agent-arc steps.",
+				"Touched suites passed 139 tests and UI typecheck was clean."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T22:27:54.178Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-gateway-client-onevent-errors",
@@ -7290,6 +7356,39 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
+			"key": "issue:minion-meta#362",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#362 [monitor:unstick] Run 05da2dd1: fallback agent stalled until 90m wall-clock kill",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/362",
+			"sourceUpdatedAt": "2026-08-31T22:17:42Z",
+			"sourceFingerprint": "f0ae3cbf9fa5a2121c5dd71d584212c570d21bec2fbee48af4d0315a206c23ff",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The 90-minute fallback stall merits monitoring, but the catalog characterizes it as transient and provides neither recurrence evidence nor a bounded corrective implementation.",
+			"evidence": [
+				"The run ended with exit 137 after almost exactly 90 minutes.",
+				"No fallback completion or later stage event was recorded.",
+				"The diagnosis calls it a transient infrastructure stall and suggests inspecting telemetry if it repeats."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T22:27:54.178Z"
+		},
+		{
 			"key": "issue:pixel-agents#380",
 			"kind": "issue",
 			"stage": "proposal",
@@ -7425,37 +7524,37 @@
 			"scoredAt": "2026-08-31T07:33:08.870Z"
 		},
 		{
-			"key": "pr:paperclip#12608",
+			"key": "pr:paperclip#12612",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
-			"title": "#12608 feat(runner): add SDK, labs, and developer tooling",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12608",
-			"sourceUpdatedAt": "2026-08-31T21:56:46Z",
-			"sourceFingerprint": "83eb6616e8e95144a0831113d1c1570b5d86e2bd09cf610865e71a9ba6ac6ab9",
+			"title": "#12612 fix(workspaces): enable UI hot reload by default",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12612",
+			"sourceUpdatedAt": "2026-08-31T22:16:03Z",
+			"sourceFingerprint": "c01afb0614839f714455a71cbd3e4c73b0a723564da06538f5ffb9dd806494ce",
 			"score": 51,
 			"band": "medium",
 			"axes": {
-				"criticality": 2,
-				"importance": 8,
-				"impact": 7
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 5
+				"specification": 9,
+				"implementation": 9
 			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
+			"confidence": 9,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Reevaluate after exact-head verification because this strategically central developer platform is a large greenfield change whose stated CI authority has not yet supplied results.",
+			"rationale": "This bounded, low-risk fix removes recurring managed-worktree friction and has direct regression, typecheck, build, and broad test evidence.",
 			"evidence": [
-				"Adds SDK, conformance, replay, and evaluation surfaces",
-				"Production server integration is explicitly next",
-				"Local test suites were not run"
+				"UI changes currently require a manual build in new managed worktrees.",
+				"An explicit false value remains supported as an opt-out.",
+				"The new regression test passed and 5,397 tests passed overall."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T21:57:47.501Z"
+			"scoredAt": "2026-08-31T22:27:54.178Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-722867358",
@@ -9113,39 +9212,6 @@
 			"scoredAt": "2026-08-31T12:54:59.710Z"
 		},
 		{
-			"key": "pr:paperclip#12612",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12612 fix(workspaces): enable UI hot reload by default",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12612",
-			"sourceUpdatedAt": "2026-08-31T21:56:11Z",
-			"sourceFingerprint": "4de8f69f22a87e304c80ef59c5873a58bea6bc6bf167afdf018e7cb3a8c07cf2",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the localized development-runtime regression has a clear opt-out, passing targeted coverage, and low contract risk despite pending final CI gates.",
-			"evidence": [
-				"UI changes currently require a manual build",
-				"Explicit false continues to disable middleware",
-				"The new regression test passed separately"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T21:57:47.501Z"
-		},
-		{
 			"key": "pr:pixel-agents#356",
 			"kind": "pr",
 			"stage": "development",
@@ -9982,39 +10048,6 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
-			"key": "deploy:minion-meta",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion-meta",
-			"title": "minion-meta deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/commit/59c4b56c192a730dbd63bb8e51dd8305eb2ad424",
-			"sourceUpdatedAt": "2026-08-31T20:17:40Z",
-			"sourceFingerprint": "58c5cee04a8c3464a4b48f83ec052429eb961bbe81b829db72694d3cab77db61",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Deployment health may matter, but the unknown status and documentation-only summary provide no concrete failure, scope, or verifiable remediation target.",
-			"evidence": [
-				"Status is unknown.",
-				"The summary describes preflight conditional quality-gate documentation.",
-				"No outage or failed deployment is identified."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T20:31:59.677Z"
-		},
-		{
 			"key": "proposal:ci-minion-ai-stale",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10844,39 +10877,6 @@
 			"scoredAt": "2026-08-31T07:31:58.286Z"
 		},
 		{
-			"key": "pr:paperclip#12593",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12593 chore(lockfile): refresh pnpm-lock.yaml",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12593",
-			"sourceUpdatedAt": "2026-08-31T21:44:17Z",
-			"sourceFingerprint": "e73cff231e1bd0ccddd7bbca1541613ae93286a518d4dfb4038ef721446bb1a2",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate because the lockfile refresh is narrowly actionable but the catalog does not identify the dependency changes, failure it resolves, or verification evidence.",
-			"evidence": [
-				"Only pnpm-lock.yaml is updated",
-				"Refresh follows dependency changes on master",
-				"No verification outcome is provided"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T21:57:47.501Z"
-		},
-		{
 			"key": "pr:pixel-agents#294",
 			"kind": "pr",
 			"stage": "development",
@@ -10908,6 +10908,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:36:18.083Z"
+		},
+		{
+			"key": "deploy:minion-meta",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion-meta",
+			"title": "minion-meta deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/commit/59c4b56c192a730dbd63bb8e51dd8305eb2ad424",
+			"sourceUpdatedAt": "2026-08-31T22:17:47Z",
+			"sourceFingerprint": "f02b4702ed74568fd1b5670c85160e303f45df49d1a30bcc035b0caea80b2915",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The deployment record lacks enough health or failure evidence to justify action beyond checking its unknown status.",
+			"evidence": [
+				"Deployment status is \"unknown\".",
+				"The summary describes documentation for conditional quality gates.",
+				"No outage, failed gate, or affected service is identified."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T22:27:54.178Z"
 		},
 		{
 			"key": "pr:pixel-agents#284",
