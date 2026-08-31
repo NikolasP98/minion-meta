@@ -3,17 +3,25 @@ id: 2026-08-17-gw-msteams-large-upload-spec
 title: "MS Teams attachments — route >4MB through a Graph resumable upload session (chunked PUT with resume, expiry and cancel)"
 stage: spec
 status: draft
-pass: 11
+pass: 12
 created: 2026-08-17
-updated: 2026-08-30
+updated: 2026-08-31
 proposal: 2026-08-17-gw-msteams-large-upload
 verdict: changes_requested
 repos: [minion]
-tags: [logic, test]
+tags: [logic, test, security]
 type: fix
 ---
 
-> **Pass 11 disposition: STILL REVIEW, not approved.** Pass 11 changes no disposition. It makes every
+> **Pass 12 disposition: STILL REVIEW, not approved.** Pass 12 changes no disposition. It adds the
+> missing app-only permission gate for `createUploadSession`: administrator-consented
+> `Sites.ReadWrite.All` must be verified on the real bot registration and both exact helper endpoints
+> must pass a create-then-cancel live preflight before S1 can be approved. It also makes the runtime
+> configuration seam executable: each send compiles its helper policy from the current effective
+> `mediaMaxMb` ceiling and the recorded verified-simple maximum *before* `loadWebMedia`; a later ceiling
+> increase therefore selects `session-above` or is rejected before allocation, never leaks past a
+> stale `simple-only` record. **Pass 11 disposition: STILL REVIEW, not approved.** Pass 11 changes no
+> disposition. It makes every
 > caller/ship-gate assertion conditional on the selected per-helper policy, makes `simple-only` legal
 > only when the effective runtime ceiling is within the repeatably verified simple range, adds an
 > above-250 MB configuration case, and forbids deriving a threshold from non-monotonic or
@@ -104,9 +112,10 @@ this change** (§1.6) — nothing under `src/channels/` references the msteams u
 spec asserts `src/` is read-only and treats any need to edit it as a finding (§5).
 
 **Gate conventions:** [`2026-08-17-sdlc-phase-gates-scoring-spec`](2026-08-17-sdlc-phase-gates-scoring-spec.md)
-§4b — slices are tagged `logic` / `test`. The proposal's `edge-case` tag has no slot in the §4b enum
-(`ui logic data infra docs test security perf deps`); it is carried here as `logic` + `test`, which is
-what it routes to anyway. Red-state TDD (G3) is mandatory for each helper whose measured policy is
+§4b — slices are tagged `logic` / `test` / `security`. The `security` tag is required because the
+session path needs an app-only Graph permission that the simple path does not (§2 S1). The proposal's
+`edge-case` tag has no slot in the §4b enum (`ui logic data infra docs test security perf deps`); it is
+carried here as `logic` + `test`, while recon adds `security`. Red-state TDD (G3) is mandatory for each helper whose measured policy is
 `session-above`: the routing-delta fixture at `threshold + 1` and the failure-reproduction fixture at
 the smallest observed failing probe are written and shown failing against today's simple-PUT-only code
 before the fix lands — only after step 0 records both values (§1.1a). A `simple-only` helper instead
@@ -442,11 +451,19 @@ to today.
   export const CHUNK_BYTES = 5_242_880;
   ```
 
-- **Route in one place with a helper-specific discriminated policy.** The shared routing helper takes a
-  `DriveUploadHelper` key and a `DriveUploadPolicies` record populated only after step 0. `simple-only`
-  is legal only when the effective runtime ceiling is no greater than the highest size that passed the
-  repeatable monotonic simple-PUT experiment; `maxAcceptedBytes` records that ceiling and makes the
-  invariant executable. It always preserves the existing simple PUT for accepted payloads;
+- **Route in one place with a helper-specific discriminated policy, compiled for every send.** Step 0
+  records each helper's highest repeatably verified simple size; it does **not** freeze one deployment's
+  `mediaMaxMb` as a forever-valid runtime policy. `send.ts` and `messenger.ts` already resolve the
+  effective ceiling from live configuration for every send (§1.5). At that same call site, before
+  `loadWebMedia` can allocate the payload, compile the selected helper's `DriveUploadPolicy` from
+  `(helper, effectiveMediaMaxBytes, verifiedSimpleMaximum)`, and pass the result into the drive upload
+  call. `simple-only` is legal only when `effectiveMediaMaxBytes <= verifiedSimpleMaximum`;
+  `maxAcceptedBytes` equals that send's effective ceiling and preserves the existing simple PUT only
+  through that value. If a configuration reload raises the ceiling above the verified simple maximum,
+  the compiler must select `session-above` at that maximum when the session permission/preflight gate
+  below is satisfied, or reject the unsupported ceiling **before** calling `loadWebMedia`. It may never
+  reuse a previously compiled `simple-only` policy, and the upload helper must reject rather than simple-
+  PUT any buffer beyond the policy's recorded bound as defense in depth.
   `session-above` takes the session path only when
   `size > policies[helper].maxSimpleBytes`, and otherwise preserves the simple PUT. Do not commit a
   numeric placeholder: the implementation record must contain the exact measured disposition for each
@@ -482,6 +499,19 @@ to today.
   any other collision policy) is wanted, it needs its own explicit operator approval and must apply
   uniformly to both the simple and session paths, not just the one this spec happens to touch. The
   response yields `uploadUrl` and `expirationDateTime`; keep both.
+- **App-only permission and deployment prerequisite.** Recon shows the real callers obtain a Graph
+  token from `sdk.MsalTokenProvider` using the bot app id/password/tenant (`send-context.ts:126-130`),
+  so this is an **application-permission** flow. Microsoft's current v1.0 contracts differ:
+  simple `PUT .../content` permits application `Files.ReadWrite.All`, while
+  `createUploadSession` requires application `Sites.ReadWrite.All`. A green simple-PUT step 0 therefore
+  does not prove the session path is authorized. Before approval, inspect the real bot app registration
+  and record that administrator consent for `Sites.ReadWrite.All` is present, then use that same app
+  identity to POST each exact OneDrive and SharePoint session URL above with a disposable filename;
+  require `200` plus an `uploadUrl`, and immediately DELETE that URL, requiring `204` or recording the
+  cleanup failure. Do not upload bytes in this preflight. If the grant is absent, stop: add the required
+  app-registration/onboarding/operator-consent change to the approved scope, including its security
+  review and tenant-admin instructions, before S1. Never silently broaden permissions in code or treat
+  a `403` as evidence of a byte threshold.
 - **⚠️ Send **no** `Authorization` header on the chunk `PUT`s.** The `uploadUrl` is pre-authenticated
   and Microsoft documents that attaching the bearer token can cause the request to fail. This is the
   single most common way this feature is implemented wrong, and it is invisible in review because the
@@ -555,8 +585,10 @@ pnpm vitest run extensions/msteams          # or: pnpm --filter <msteams-pkg-fro
 #         accepted size through maxAcceptedBytes stays SIMPLE for the former while measuredThreshold
 #         + 1 takes SESSION for the latter
 #   - configured-ceiling case: set mediaMaxMb above Graph's documented 250,000,000-byte simple-PUT
-#         limit; policy compilation produces session-above (or configuration is rejected before
-#         payload allocation with a clear effective-limit error), never simple-only
+#         limit, and a configuration-reload case that first sends under a simple-only ceiling and then
+#         raises mediaMaxMb above maxAcceptedBytes; per-send policy compilation produces session-above
+#         (or rejects before loadWebMedia/payload allocation with a clear effective-limit error), never
+#         reuses stale simple-only, and no above-bound buffer reaches PUT /content
 #   - the COMPLETE createUploadSession URL is asserted for each helper, string-equal to:
 #         https://graph.microsoft.com/v1.0/me/drive/root:/MinionShared/<enc>:/createUploadSession
 #         https://graph.microsoft.com/v1.0/sites/<siteId>/drive/root:/MinionShared/<enc>:/createUploadSession
@@ -702,6 +734,10 @@ stop promising a 4MB world, and every remaining open end is in the ledger.
     Do not invent a terminal-session-id assertion for this policy.
   The helpers may bracket at different sizes or select different kinds; caller coverage is complete
   only when it follows the selected kind rather than forcing both through SESSION.
+  Add a configuration-reload caller test: resolve a ceiling within the verified simple range and send
+  once, raise `mediaMaxMb` above that range without restarting, then send again. Assert the second call
+  recompiles the policy and either takes SESSION or rejects before `loadWebMedia`; it must not reuse the
+  first call's `simple-only` policy or issue simple `PUT /content` above `maxAcceptedBytes`.
   **The consent-path caller (§1.2) is separate and keeps its literal 12MB case** (§7 step 2e): it is
   handed a Teams-supplied `uploadUrl` and always chunks regardless of size, so it never evaluates the
   drive simple/session threshold and has nothing to derive from step 0.
@@ -888,6 +924,7 @@ claim pass 2 could only assert.
 | Other channel extensions (slack, discord, telegram, whatsapp, …) | **None from this diff.** Each has its own upload ceiling and its own API; a shared abstraction is not justified by one instance | §1.6 found no other `Content-Range` user in the fleet. §6 excludes the sweep |
 | Gateway process memory | ⚠️ **Real, and pre-existing, and worse for local files than pass 3 claimed.** A 100MB attachment is 100MB of heap. For **remote** media, `loadWebMedia` bounds the read to the cap while fetching. For **local** media it does not: `fs.readFile` reads the whole file before the cap is checked (§1.3a) — so an oversized local file is briefly fully allocated before rejection, which is a heap-bound gap this spec does not close. Chunking itself adds no *new* allocation as long as chunks are sliced with `subarray()` and never wrapped in `new Uint8Array(...)` (§1.3a) | The ceiling that bounds the accepted size is configurable (§1.5), but the pre-check local-read gap is unresolved — see §1.3a's disposition and the heap-policy gate in §7. Filed as `proposals/2026-08-29-gw-local-media-read-before-cap-check.md`; a ledger item, not a silent omission |
 | Microsoft Graph / SharePoint (external) | **More requests per large file**: 1 create + ⌈size/5 MiB⌉ PUTs + status/retry/cancel requests when needed, versus 1 failed request today. Files land in the destination drive and consume tenant storage | Sequential chunks (no fan-out), bounded retries with `Retry-After` honoured, `429` respected — S2. This is the intended cost of the feature |
+| Microsoft Entra bot app registration | **Security/deployment prerequisite.** The app-only session API requires administrator-consented `Sites.ReadWrite.All`; today's simple upload may work with only `Files.ReadWrite.All` | Verify the real grant and run create-then-cancel preflights against both exact helper endpoints before approval (§7 step 0a). If absent, rescope onboarding/operator consent and security review; do not silently add privilege |
 | `Minion Docs/`, `minion_plugins`, `pixel-agents` | **None** | No dependency on this extension |
 
 ### Assumptions A1–A4 — all resolved by recon
@@ -969,6 +1006,12 @@ cd minion
 #        configured, so an image in RUN B never reaches OneDrive at all.
 #        Do NOT use a 1:1 chat for this step — personal chats route to the consent card (§1.2), a
 #        different code path with a different (Teams-supplied) URL.
+#        Before reading any size result, verify the real bot app registration has administrator-
+#        consented Sites.ReadWrite.All. With that same app identity, POST createUploadSession for a
+#        disposable filename to BOTH exact helper URLs, require 200 + uploadUrl, then DELETE each
+#        uploadUrl and require 204 (or record cleanup failure). A 403 blocks approval as an auth/
+#        deployment finding; it is not size evidence. If the grant is absent, scope and security-review
+#        the app-registration/onboarding/admin-consent change before continuing.
 #
 #    0b. First resolve and record the effective runtime ceiling for this run from mediaMaxMb. Per run,
 #        through the SAME tenant, identity, /MinionShared destination and configuration, test the
@@ -1054,6 +1097,10 @@ git diff --name-only <base>...HEAD          # → extensions/msteams/** only in 
 #         → on the 1:1 path, the message posted into the chat contains NO url.     ← §1.4
 #    f) Attempt a file above the effective mediaMax ceiling
 #         → rejected before any network call, with a message naming the effective limit.
+#    f2) Raise mediaMaxMb above the previously verified simple-only ceiling without restarting, then
+#         attempt a newly accepted payload above maxAcceptedBytes
+#         → policy is recompiled for this send and uses SESSION, or configuration is rejected before
+#           loadWebMedia; ZERO out-of-policy simple PUT /content calls.
 #    g) grep the run's logs for the upload URL's token and for 'Bearer'
 #         → ZERO hits.                                                      ← no-leak, proven live
 
@@ -1062,7 +1109,9 @@ git diff --name-only <base>...HEAD          # → extensions/msteams/** only in 
 #    no zero-byte or partial items left by (e)/(f).
 ```
 
-**Ship gate:** step 0 run with **passing controls on both helpers**, repeatable monotonic observations,
+**Ship gate:** the real bot app registration has recorded administrator consent for
+`Sites.ReadWrite.All`, and create-then-cancel session preflights pass on both exact helper endpoints;
+step 0 then runs with **passing controls on both helpers**, repeatable monotonic observations,
 the effective runtime ceiling, and its full result table recorded, confirming at least one helper still
 has a fix to make (§1.1a). A step 0 whose controls pass and whose probes cover every accepted size with
 repeatable success disproves the premise, which is a valid outcome and means this spec, as scoped, does not ship;
@@ -1092,7 +1141,13 @@ its repeated per-request result table, effective runtime ceiling, and monotonici
 recorded (§1.1a, top-of-file disposition banner). An uncontrolled matrix, one whose controls failed,
 or a noisy/non-monotonic matrix is an environment finding and may not be converted into a size
 threshold or into an approval. A configured ceiling above the verified simple range must select
-`session-above` or be rejected before allocation; it cannot be approved as `simple-only`. That is a
+`session-above` or be rejected before allocation; it cannot be approved as `simple-only`. Production
+callers must compile that policy from the current effective ceiling on every send before `loadWebMedia`,
+with a configuration-reload caller test proving that a later ceiling increase cannot reuse stale
+`simple-only` or reach simple PUT above `maxAcceptedBytes`. Approval also requires recorded
+administrator consent for `Sites.ReadWrite.All` on the real bot registration and successful
+create-then-cancel preflights for both helper endpoints; a green simple-PUT matrix alone is insufficient.
+That is a
 pass-4/pass-5 finding, not a pre-existing part of this section — do not
 treat its absence as an earlier oversight to silently backfill.
 

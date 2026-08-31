@@ -1,11 +1,26 @@
 ---
 spec: 2026-08-17-gw-msteams-large-upload-spec
-pass: 11
+pass: 12
 verdict: changes_requested
 reviewer: factory-review
 created: 2026-08-17
-updated: 2026-08-30
+updated: 2026-08-31
 ---
+
+# Pass 12 disposition — STILL REVIEW (changes_requested), unchanged
+
+The pass-12 revision closes the two still-current findings after pass 11 without manufacturing an
+approval. First, it records the real app-only authorization boundary: the bot identity must have
+administrator-consented `Sites.ReadWrite.All`, and both exact helper endpoints must pass a live
+create-then-cancel upload-session preflight before S1 can be approved. A working simple PUT no longer
+stands in as proof that session creation is deployable. If the grant is absent, the spec must absorb
+the app-registration/onboarding/operator-consent work and security review before implementation.
+Second, policy is now compiled at the production caller on every send from the current effective
+`mediaMaxMb` ceiling and the helper's verified-simple maximum, before `loadWebMedia`. A configuration
+reload that raises the ceiling must select `session-above` or reject before allocation; it cannot reuse
+a stale `simple-only` record, and the upload helper rejects an above-bound buffer as defense in depth.
+The controlled tenant experiment, permission preflights, and heap-policy gate remain outstanding, so
+`status: draft` and `verdict: changes_requested` remain authoritative.
 
 # Pass 11 disposition — STILL REVIEW (changes_requested), unchanged
 
