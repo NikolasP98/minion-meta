@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T11:54:20.554Z",
+	"generatedAt": "2026-08-31T12:25:32.952Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1346,6 +1346,39 @@
 			"scoredAt": "2026-08-31T10:54:32.091Z"
 		},
 		{
+			"key": "issue:paperclip#12580",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12580 security: sanitize agent-authored comment bodies at the egress boundary",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12580",
+			"sourceUpdatedAt": "2026-08-31T12:04:42Z",
+			"sourceFingerprint": "2dad86653692134592844f91c2cce1a90ddf7ab0225dd3d7b29ec998f49eedd3",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A mandatory server-side sanitization boundary addresses a concrete credential-exposure path with clear scope, testable controls, and immediately actionable acceptance criteria.",
+			"evidence": [
+				"Agent-authored comments can reach the API without mandatory redaction",
+				"Sanitization is required immediately before persistence or egress",
+				"Synthetic regression coverage must contain no live values"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T12:25:32.859Z"
+		},
+		{
 			"key": "pr:minion-factory#154",
 			"kind": "pr",
 			"stage": "development",
@@ -1718,39 +1751,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:39:38.888Z"
-		},
-		{
-			"key": "pr:paperclip#12552",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12552 fix(heartbeat): suppress recovery after operator cancellation",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12552",
-			"sourceUpdatedAt": "2026-08-31T06:03:47Z",
-			"sourceFingerprint": "b9d4f265ce7a172e79d724c181afb5aca930e4525643833de4125e7de43fc340",
-			"score": 81,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because an operator’s exact cancellation can immediately create a replacement run, directly defeating control-plane intent, and the opt-in suppression is well isolated.",
-			"evidence": [
-				"Exact board cancellation currently creates a successor run.",
-				"Suppression is enabled only for the board exact-run cancellation route and defaults to false.",
-				"A database-backed regression test fails on the base commit and the focused suite passes 167 tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:34:26.538Z"
 		},
 		{
 			"key": "pr:paperclip#12579",
@@ -3452,6 +3452,39 @@
 			"scoredAt": "2026-08-31T07:33:47.470Z"
 		},
 		{
+			"key": "pr:paperclip#12552",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12552 fix(heartbeat): suppress recovery after operator cancellation",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12552",
+			"sourceUpdatedAt": "2026-08-31T12:15:41Z",
+			"sourceFingerprint": "1278ade783afb0398a3eb1176fa0b2f4b44cd480e3ea95142881f94c53585bc9",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because operator cancellation currently can trigger the opposite operational outcome—a successor run—and the narrowly scoped regression fix is well verified.",
+			"evidence": [
+				"Exact-run cancellation can create a successor run after the operator stops the selected run.",
+				"A database-backed test reproduces one successor on the base commit and asserts zero after the change.",
+				"Targeted tests pass 167 tests; the option defaults to false and is enabled only for the board route."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T12:25:12.391Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3885,6 +3918,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:47.470Z"
+		},
+		{
+			"key": "pr:paperclip#12548",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
+			"sourceUpdatedAt": "2026-08-31T12:05:42Z",
+			"sourceFingerprint": "e7ae13257ffbca54efcdf6da10b6fde492e24fb19ba12a4f2f5a2ae1efa1d926",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because this bounded core-API fix restores a missing human-controlled secret decision path and has strong authorization, concurrency, and safety verification.",
+			"evidence": [
+				"A pending secret binding proposal can remain without a linked human confirmation.",
+				"The route is board-only, idempotent, and returns no secret material.",
+				"Targeted tests passed 102 tests and server TypeScript checking passed."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T12:25:12.391Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -4866,39 +4932,6 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 72509 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-08-31T06:27:28Z",
-			"sourceFingerprint": "b30aa05efaf8b4fe8074ef27830cb8e03813caa216b55f043311b87afd15c422",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 8,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 8,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The upstream divergence is strategically significant, but a raw queue of 72,509 commits is not a bounded or verifiable delivery goal.",
-			"evidence": [
-				"The issue reports 72,509 new upstream commits.",
-				"The summary is primarily a commit listing.",
-				"No reconciliation scope, dependency analysis, acceptance criteria, or execution boundary is stated."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:37:34.863Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5543,8 +5576,8 @@
 			"repo": "paperclip",
 			"title": "#12565 chore(deps): bump better-auth from 1.7.0 to 1.7.2",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12565",
-			"sourceUpdatedAt": "2026-08-31T06:20:00Z",
-			"sourceFingerprint": "f5fe9a9dc5746b4d25f4977e13a65715c95cff2535e679b9199c10a48d20a387",
+			"sourceUpdatedAt": "2026-08-31T12:22:58Z",
+			"sourceFingerprint": "1eeda068d0fe08aad5226fbe51b681c67ac825ef36277384ba2d0c41d0a4e6e2",
 			"score": 61,
 			"band": "medium",
 			"axes": {
@@ -5553,21 +5586,21 @@
 				"impact": 7
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 6,
+				"implementation": 5
 			},
-			"confidence": 7,
+			"confidence": 8,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Reevaluate after authentication and migration suites run because auth is a central dependency and the patch contains relevant security-boundary fixes, but repository compatibility is not demonstrated.",
+			"rationale": "Reevaluate promptly with auth and migration tests because the patch affects a central security boundary but no Paperclip-specific exposure or verification is supplied.",
 			"evidence": [
-				"The update improves callback and redirect URL validation.",
-				"It preserves rejection of untrusted form origins.",
-				"No Paperclip-specific verification is supplied."
+				"The update moves better-auth from 1.7.0 to 1.7.2.",
+				"Release notes include redirect validation, signed-session warnings, origin handling, bans, and migration fixes.",
+				"No Paperclip-specific test results are provided."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:03.762Z"
+			"scoredAt": "2026-08-31T12:25:12.391Z"
 		},
 		{
 			"key": "pr:pixel-agents#285",
@@ -6412,39 +6445,6 @@
 			"scoredAt": "2026-08-31T07:31:58.286Z"
 		},
 		{
-			"key": "pr:paperclip#12548",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T10:58:49Z",
-			"sourceFingerprint": "70010b9149127572c194e948e50f0e8a2e833368686b63981714b3bed8b85a1b",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because this bounded, tested recovery operation restores a blocked human-governance path with strong implementation evidence and limited migration risk.",
-			"evidence": [
-				"Pending binding proposals can remain without a linked human confirmation after a partial failure.",
-				"The route is board-only, idempotent, and returns no secret material.",
-				"Focused tests passed 102 tests and the server TypeScript check passed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T11:24:32.326Z"
-		},
-		{
 			"key": "pr:paperclip#12551",
 			"kind": "pr",
 			"stage": "development",
@@ -7012,39 +7012,6 @@
 			"scoredAt": "2026-08-31T08:14:27.632Z"
 		},
 		{
-			"key": "pr:paperclip#12564",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12564 chore(deps): bump @mdxeditor/editor from 4.2.1 to 4.2.3",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12564",
-			"sourceUpdatedAt": "2026-08-31T06:22:08Z",
-			"sourceFingerprint": "39e9630c9278962913b4851eb08b5e6a84f60aaaf36535d1a8eb4e0e41b92aef",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate with editor-focused tests because the update fixes two crash conditions but the catalog does not show that Paperclip exercises or validates the affected paths.",
-			"evidence": [
-				"The update fixes stale table-action crashes.",
-				"It also prevents JSX kind mismatches from crashing the editor.",
-				"No Paperclip test results are included."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:03.762Z"
-		},
-		{
 			"key": "pr:pixel-agents#383",
 			"kind": "pr",
 			"stage": "development",
@@ -7251,6 +7218,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:46:38.665Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 72613 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-08-31T12:23:52Z",
+			"sourceFingerprint": "0da746c65ff631e1e6d8bbbf49caf71e0a77be9cd64501ef7d541e18b12b8301",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The upstream gap may contain valuable reliability and security fixes, but a 72,613-commit inventory without compatibility analysis, bounded scope, or acceptance criteria cannot produce an effective execution outcome.",
+			"evidence": [
+				"Reports 72,613 new upstream commits",
+				"The excerpt mixes fixes, tests, refactors, and performance changes",
+				"No migration scope or verifiable outcome is specified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T12:25:32.859Z"
 		},
 		{
 			"key": "issue:pixel-agents#380",
@@ -8328,6 +8328,39 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
+			"key": "pr:paperclip#12564",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12564 chore(deps): bump @mdxeditor/editor from 4.2.1 to 4.2.3",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12564",
+			"sourceUpdatedAt": "2026-08-31T12:22:57Z",
+			"sourceFingerprint": "378fc0c00a981b6d0a3805db3005eeded63a091de9b91108bae942050f1b944f",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate with editor regression tests because the update fixes two crash cases but the catalog does not show that Paperclip encounters them or that its suite passes.",
+			"evidence": [
+				"The update moves @mdxeditor/editor from 4.2.1 to 4.2.3.",
+				"The releases fix stale-table-action and JSX-kind-mismatch crashes.",
+				"No repository-specific verification is listed."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T12:25:12.391Z"
+		},
+		{
 			"key": "spec:2026-08-17-gw-msteams-large-upload-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -9018,8 +9051,8 @@
 			"repo": "paperclip",
 			"title": "#12570 chore(deps-dev): bump rollup from 4.62.4 to 4.63.1",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12570",
-			"sourceUpdatedAt": "2026-08-31T06:27:26Z",
-			"sourceFingerprint": "39a402402367788aa351db578c072a139810d979ad5b522b57e1ff5e545745f5",
+			"sourceUpdatedAt": "2026-08-31T12:22:48Z",
+			"sourceFingerprint": "7c70ef4604f984f72b3dc7e16a421e237bfcec6b4b1d77670725c03b429a226c",
 			"score": 41,
 			"band": "low",
 			"axes": {
@@ -9028,21 +9061,21 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 7
+				"specification": 6,
+				"implementation": 5
 			},
-			"confidence": 7,
+			"confidence": 8,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "A build-tool fix for potentially invalid module output has meaningful reliability value, but the catalog does not establish that Paperclip is affected or blocked.",
+			"rationale": "Reevaluate after full production builds because the update fixes invalid compact output but includes a feature later reverted due to an unresolved issue.",
 			"evidence": [
-				"Bumps development dependency rollup from 4.62.4 to 4.63.1.",
-				"Version 4.62.5 fixes invalid module concatenations in compact mode.",
+				"The update moves rollup from 4.62.4 to 4.63.1.",
+				"Version 4.62.5 fixes invalid module concatenation in compact mode.",
 				"Version 4.63.1 reverts return-value tracking while an issue is investigated."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:42.200Z"
+			"scoredAt": "2026-08-31T12:25:12.391Z"
 		},
 		{
 			"key": "pr:pixel-agents#356",
@@ -9382,39 +9415,6 @@
 			"scoredAt": "2026-08-31T07:45:19.199Z"
 		},
 		{
-			"key": "pr:paperclip#12563",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12563 chore(deps): bump sharp from 0.35.3 to 0.35.4",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12563",
-			"sourceUpdatedAt": "2026-08-31T06:21:28Z",
-			"sourceFingerprint": "1f3d7479a4ef9ed82db60adea375c00b405ed780027a3dfe8f648fe67a5fb2d9",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate after image-processing regression tests because the patch contains useful correctness and bounds fixes but no evidence connects them to an active Paperclip failure.",
-			"evidence": [
-				"The bump is from sharp 0.35.3 to 0.35.4.",
-				"The release bounds resize and composite coordinates.",
-				"No Paperclip-specific verification is shown."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:03.762Z"
-		},
-		{
 			"key": "pr:minion-base#41",
 			"kind": "pr",
 			"stage": "development",
@@ -9446,6 +9446,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
+		},
+		{
+			"key": "pr:paperclip#12568",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12568 chore(deps): bump @tanstack/react-query from 5.101.4 to 5.102.8",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12568",
+			"sourceUpdatedAt": "2026-08-31T12:23:02Z",
+			"sourceFingerprint": "917c51eb0b7646095438486c85d1c679d21c34b95058da95a0f9ab8fe76fcbe4",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate after UI query-state tests because this central client-state dependency receives several patches whose Paperclip effects are unspecified.",
+			"evidence": [
+				"The update moves @tanstack/react-query from 5.101.4 to 5.102.8.",
+				"The visible notes mostly state query-core dependency updates.",
+				"No Paperclip-specific outcome or test result is given."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T12:25:12.391Z"
 		},
 		{
 			"key": "pr:pixel-agents#298",
@@ -9580,6 +9613,72 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
+		},
+		{
+			"key": "pr:paperclip#12563",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12563 chore(deps): bump sharp from 0.35.3 to 0.35.4",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12563",
+			"sourceUpdatedAt": "2026-08-31T12:22:56Z",
+			"sourceFingerprint": "6f2f8f1303a6a914ffd6ab106f9ed2bd293bf06c00d497fe199600d82ba223db",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate once repository checks establish whether the image-processing bug fixes affect Paperclip and remain compatible.",
+			"evidence": [
+				"The update moves sharp from 0.35.3 to 0.35.4.",
+				"The release includes bounds checks and fixes for TIFF, page ranges, streams, PNG, and GIF behavior.",
+				"No Paperclip-specific verification is provided."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T12:25:12.391Z"
+		},
+		{
+			"key": "pr:paperclip#12569",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12569 chore(deps): bump mermaid from 11.16.1 to 11.17.2",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12569",
+			"sourceUpdatedAt": "2026-08-31T12:23:02Z",
+			"sourceFingerprint": "54a21a4546689d97b1e62412837068b59186b886cb9ec35e4329137182af19fa",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate with diagram snapshot and rendering tests because the release fixes several visual defects but also changes C4 rendering behavior.",
+			"evidence": [
+				"The update moves mermaid from 11.16.1 to 11.17.2.",
+				"Patch notes fix edge classes, label wrapping, markers, and dark-theme rendering.",
+				"Version 11.17.0 changes C4 elements to a unified shape system."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T12:25:12.391Z"
 		},
 		{
 			"key": "pr:pixel-agents#374",
@@ -9848,39 +9947,6 @@
 			"scoredAt": "2026-08-31T07:40:17.097Z"
 		},
 		{
-			"key": "pr:paperclip#12566",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12566 chore(deps-dev): bump @vitejs/plugin-react from 5.2.0 to 6.1.1",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12566",
-			"sourceUpdatedAt": "2026-08-31T06:22:33Z",
-			"sourceFingerprint": "b69a17ef5c0989c7b91464812842247d817bc711c757a5f01b39ab8965be1ffb",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate after build, development-server, and compiler checks because this is a major development-tool upgrade with no Paperclip compatibility evidence.",
-			"evidence": [
-				"The bump crosses from major version 5 to 6.",
-				"Version 6 adds experimental native React Compiler support.",
-				"No repository-specific test results are shown."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:03.762Z"
-		},
-		{
 			"key": "proposal:2026-08-22-crm-rank-query-prod-latency",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9980,14 +10046,14 @@
 			"scoredAt": "2026-08-31T07:45:19.199Z"
 		},
 		{
-			"key": "pr:paperclip#12568",
+			"key": "pr:paperclip#12566",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
-			"title": "#12568 chore(deps): bump @tanstack/react-query from 5.101.4 to 5.102.8",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12568",
-			"sourceUpdatedAt": "2026-08-31T06:25:35Z",
-			"sourceFingerprint": "4eeda21c8882eac6e4d6fe46d00d8f0b7cb9f14ea37c0a2f8d09147ebb511526",
+			"title": "#12566 chore(deps-dev): bump @vitejs/plugin-react from 5.2.0 to 6.1.1",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12566",
+			"sourceUpdatedAt": "2026-08-31T12:23:00Z",
+			"sourceFingerprint": "08fb2e706cd61876f896717c0670cbfb8a41e1275e921bab0fcf94e9086fab8d",
 			"score": 31,
 			"band": "low",
 			"axes": {
@@ -9996,21 +10062,54 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 7
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate after build and development-workflow validation because this is a multi-major tooling jump with changed compiler diagnostic behavior and no local evidence.",
+			"evidence": [
+				"The update moves @vitejs/plugin-react from 5.2.0 to 6.1.1.",
+				"Recoverable React Compiler diagnostics are no longer logged by default.",
+				"No Paperclip-specific verification is included."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T12:25:12.391Z"
+		},
+		{
+			"key": "pr:paperclip#12567",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12567 chore(deps): bump @aws-sdk/client-s3 from 3.1115.0 to 3.1120.0",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12567",
+			"sourceUpdatedAt": "2026-08-31T12:22:59Z",
+			"sourceFingerprint": "c3ae30f949c0619d1fc8833f7c2160b88b3b3b6f5b030bebe1e25f18554561ae",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
 			},
 			"confidence": 7,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The bounded patch upgrade is actionable, but the catalog shows no outage, deadline, security fix, or project-specific failure that warrants immediate execution.",
+			"rationale": "Reevaluate after storage integration tests because the catalog shows a routine S3 SDK increment without a Paperclip-relevant fix or demonstrated urgency.",
 			"evidence": [
-				"Bumps @tanstack/react-query from 5.101.4 to 5.102.8.",
-				"The release notes include a useQueries/useSuspenseQueries error-handling fix.",
-				"The PR is open and tagged dependencies."
+				"The update moves @aws-sdk/client-s3 from 3.1115.0 to 3.1120.0.",
+				"The visible release notes primarily describe changes to other AWS clients.",
+				"No repository-specific verification is provided."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:42.200Z"
+			"scoredAt": "2026-08-31T12:25:12.391Z"
 		},
 		{
 			"key": "pr:pixel-agents#367",
@@ -10611,39 +10710,6 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
-			"key": "pr:paperclip#12561",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12561 chore(deps): bump @lexical/link from 0.48.0 to 0.49.0",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12561",
-			"sourceUpdatedAt": "2026-08-31T06:19:42Z",
-			"sourceFingerprint": "989d2ab27fb35a4d758f6ddca638a93c359484bd21ea234d98e3d13ee1fb008f",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate after compatibility and repository test evidence is available because this minor dependency bump includes breaking API changes but the catalog gives no project-specific validation.",
-			"evidence": [
-				"The bump is from 0.48.0 to 0.49.0.",
-				"The release notes identify breaking changes.",
-				"No Paperclip test results are included."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:03.762Z"
-		},
-		{
 			"key": "pr:minion_hub#196",
 			"kind": "pr",
 			"stage": "development",
@@ -10677,14 +10743,14 @@
 			"scoredAt": "2026-08-31T07:31:58.286Z"
 		},
 		{
-			"key": "pr:paperclip#12546",
+			"key": "pr:paperclip#12561",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
-			"title": "#12546 chore(lockfile): refresh pnpm-lock.yaml",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12546",
-			"sourceUpdatedAt": "2026-08-31T09:13:07Z",
-			"sourceFingerprint": "5c568004a7d51d59e5d3483cda38100d85b3550926901677a6545d24b151e38e",
+			"title": "#12561 chore(deps): bump @lexical/link from 0.48.0 to 0.49.0",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12561",
+			"sourceUpdatedAt": "2026-08-31T12:22:55Z",
+			"sourceFingerprint": "4d42d517f051b11d501f7a755dadcccb81f1209c3a8455c0e1d6df4d6a814c74",
 			"score": 26,
 			"band": "low",
 			"axes": {
@@ -10693,54 +10759,21 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 8
+				"specification": 5,
+				"implementation": 3
 			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The narrowly bounded lockfile refresh is ready to process, though the catalog provides no evidence that it blocks builds or releases.",
-			"evidence": [
-				"The PR is open.",
-				"Only pnpm-lock.yaml is updated.",
-				"It follows dependency changes on master."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T09:24:43.768Z"
-		},
-		{
-			"key": "pr:paperclip#12569",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12569 chore(deps): bump mermaid from 11.16.1 to 11.17.2",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12569",
-			"sourceUpdatedAt": "2026-08-31T06:23:05Z",
-			"sourceFingerprint": "c6f28e4d9d5c3f004b7d32a83539c615fdd3e0f42dceae3ccf59bba4d58f8c4d",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 7,
+			"confidence": 8,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The Mermaid update contains useful rendering fixes but no evidence connects them to a current Paperclip defect or time-sensitive need.",
+			"rationale": "Reevaluate after rebase and compatibility validation because this dependency update contains documented breaking API changes but no repository-specific test evidence.",
 			"evidence": [
-				"Bumps mermaid from 11.16.1 to 11.17.2.",
-				"The release notes describe fixes for C4 labels, arrowheads, and relation markers.",
-				"The update also changes default class-diagram rendering."
+				"The update moves @lexical/link from 0.48.0 to 0.49.0.",
+				"The release notes identify breaking changes to built-in node classes and command typing.",
+				"Dependabot reports that the PR is rebasing."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:42.200Z"
+			"scoredAt": "2026-08-31T12:25:12.391Z"
 		},
 		{
 			"key": "pr:pixel-agents#294",
@@ -10840,39 +10873,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T09:24:43.768Z"
-		},
-		{
-			"key": "pr:paperclip#12567",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12567 chore(deps): bump @aws-sdk/client-s3 from 3.1115.0 to 3.1120.0",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12567",
-			"sourceUpdatedAt": "2026-08-31T06:23:04Z",
-			"sourceFingerprint": "2196b451ed4f61881eb612bc50e550bc6bd27e69098550868ca626e6ffe8d02e",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate after S3-focused compatibility tests because the catalog shows a routine SDK update without an identified S3 fix, active defect, or repository validation.",
-			"evidence": [
-				"The bump is from 3.1115.0 to 3.1120.0.",
-				"The shown 3.1120.0 features concern other AWS clients.",
-				"No Paperclip-specific verification is included."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:03.762Z"
 		},
 		{
 			"key": "pr:pixel-agents#284",
@@ -11341,38 +11341,6 @@
 			"scoredAt": "2026-08-31T07:31:23.880Z"
 		},
 		{
-			"key": "deploy:pixel-agents",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "pixel-agents",
-			"title": "pixel-agents deployment health",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/commit/3537e140c2094761beae748592aeb92ece8edfdd",
-			"sourceUpdatedAt": "2026-08-31T00:05:02Z",
-			"sourceFingerprint": "475bd18f27d16bdf24cdbac6779f9ed3b59cb633d0320b91cd1a139f5ffd1b0f",
-			"score": 14,
-			"band": "low",
-			"axes": {
-				"criticality": 0,
-				"importance": 2,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 9,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The passing release deployment does not present unfinished or failing work.",
-			"evidence": [
-				"Status is passing.",
-				"Latest change bumps the version to v1.4.1."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:31:23.880Z"
-		},
-		{
 			"key": "deploy:minion_plugins",
 			"kind": "deploy",
 			"stage": "deployment",
@@ -11437,6 +11405,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:36:18.083Z"
+		},
+		{
+			"key": "deploy:pixel-agents",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "pixel-agents",
+			"title": "pixel-agents deployment health",
+			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/commit/3537e140c2094761beae748592aeb92ece8edfdd",
+			"sourceUpdatedAt": "2026-08-31T12:17:46Z",
+			"sourceFingerprint": "72ec02b156446635bace58b86cc1def57d66fa95f1f508f16827ff1b415cd2c1",
+			"score": 6,
+			"band": "low",
+			"axes": {
+				"criticality": 0,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 10
+			},
+			"confidence": 9,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The deployment-health item is already passing, so the catalog provides no unresolved outcome to execute.",
+			"evidence": [
+				"Status is passing.",
+				"The recorded change is a version bump to v1.4.1.",
+				"Kind is deploy and stage is deployment."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T12:25:12.391Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-1962723814",
