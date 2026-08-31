@@ -3,7 +3,7 @@ id: 2026-08-17-hub-distinct-visit-dates-spec
 title: "CRM funnel — one timezone-correct visit-date definition (invoices + completed bookings) behind the shipped Loyal floor"
 stage: spec
 status: review
-pass: 12
+pass: 13
 next_slice: 1
 created: 2026-08-17
 updated: 2026-08-31
@@ -211,6 +211,18 @@ retained. A non-null direct contact ID is authoritative evidence; if it no longe
 live same-org contact, silently reassigning the booking through an independently reconciled party
 would hide stale or cross-org linkage. Invariant 5 and D3 now say `IS NULL` explicitly and name
 unresolved non-null IDs as excluded, matching the SQL, consequence text, and acceptance test.
+
+**Pass-13 capability-review audit (2026-08-31).** The bounded failure evidence supplied to this
+run repeats the four pass-4 High findings against the superseded pass-3 design. Each was checked
+against the current normative DELTA and Slice 2 instructions rather than closed by historical
+assertion: booking-only contacts are emitted by the independent `contact_visit_agg` joined at the
+contact spine (D2, D11, D12); partyless direct links resolve through `contact_target`, without
+starting from `CONTACT_PARTY` (D3); booking create/status mutations invalidate all three cached
+consumers immediately, under the wider relation-writer and cache-tag census (D8, invariant 7);
+and invoice visit evidence uses the nullable-safe `status is distinct from 'void'` predicate
+(invariant 3, D2). The reported line anchors (`:207`, `:216-220`, `:226`, `:245-247`) no longer
+describe the current 1,200+ line spec. No still-current in-scope blocker or new out-of-scope work
+was found, so this pass changes no product requirement and files no follow-up.
 
 **Design ancestors:**
 [`2026-08-13-crm-customers-server-pagination-spec`](2026-08-13-crm-customers-server-pagination-spec.md)

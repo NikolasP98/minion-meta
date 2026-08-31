@@ -1,13 +1,31 @@
 ---
 spec: 2026-08-17-hub-distinct-visit-dates-spec
-pass: 12
+pass: 13
 verdict: pending
 reviewer: factory-review
 created: 2026-08-17
 updated: 2026-08-31
 ---
 
-# Review record — disposition: STILL IN REVIEW (pass 12 awaiting re-review)
+# Review record — disposition: STILL IN REVIEW (pass 13 awaiting re-review)
+
+## Pass 13 — repeated capability-review evidence audited against current requirements
+
+The latest bounded failure evidence repeated the four High findings originally raised against
+pass 3. They remain valid historical findings but are not current blockers:
+
+| Repeated finding | Current normative closure |
+|---|---|
+| Booking-only contacts cannot emit a finance/roster row | D2 independently aggregates `contact_visit_agg`; D11 joins it at the live-contact spine without changing invoice-derived `fin` membership; D12 defines the booking-only serialized finance shape and requires the zero-invoice/two-booking case. |
+| `CONTACT_PARTY` excludes the normal partyless direct-link shape | D3 starts ownership from `contact_target`, which includes every live contact, preserves a direct partyless contact as its own owner, and uses `CONTACT_PARTY` only for canonicalizing party-linked ownership. |
+| Booking status changes leave cached consumers stale | D8 requires both `createBooking` and every `setBookingStatus` transition to invalidate the finance map, roster, and dashboard, with warm-cache `accepted → completed → no_show` proof. Invariant 7 and the writer census broaden this from one call site to every in-domain visit-truth mutation. |
+| Void invoices remain visit evidence | Invariant 3, D2, and Slice 2 require `status is distinct from 'void'`, preserving nullable non-void statuses while removing void evidence. |
+
+This audit deliberately differs from the earlier failed approach: it checks row-emission
+cardinality, identity reachability, and invalidation as closed properties, rather than adding one
+more named call-site fix. The cited old line numbers no longer correspond to the current spec.
+No still-current in-scope blocker and no new out-of-scope follow-up were found. The disposition
+remains `pending`; an independent reviewer, not this repair run, owns approval.
 
 ## Pass 12 — external review blocker fixed, awaiting re-review
 
