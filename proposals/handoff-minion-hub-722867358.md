@@ -1,12 +1,13 @@
 ---
 id: handoff-minion-hub-722867358
 title: Handoff marker — src/server/services/server.service.ts (minion_hub)
-status: review
+status: approved
 duplicate_candidate: 2026-08-17-hub-updateserver-tenant-scope
 created: 2026-08-28
 updated: 2026-08-31
 repos: [minion-hub]
 tags: [handoff-sweep]
+approved_reason: "Ranked-queue supervisor approval: board-goal-v2 score 93/100, recommendation execute, readiness specification 8/10 and implementation 9/10; live admission threshold 80/100 and readiness threshold 6/10."
 ---
 
 # Handoff marker — src/server/services/server.service.ts
