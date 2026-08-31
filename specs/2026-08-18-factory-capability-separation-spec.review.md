@@ -1,13 +1,13 @@
 ---
 spec: 2026-08-18-factory-capability-separation-spec
-pass: 10
+pass: 11
 verdict: pending
 reviewer: factory-review-fix
 created: 2026-08-18
-updated: 2026-08-30
+updated: 2026-08-31
 ---
 
-# Review sidecar — passes 4-10 (answers PR #271's seven `VERDICT: FAIL` reviews)
+# Review sidecar — passes 4-11 (answers PR #271's eight `VERDICT: FAIL` reviews)
 
 ## Pass 4 review (executability fix — historical; superseded by pass 5 below)
 
@@ -232,12 +232,29 @@ the cited live consumers before the planning contract changed:
 `status: review`, `verdict: pending`, `pass: 10`. These blockers are closed in the plan. Security approval and merge
 remain human gates, including the unchanged PAT-deviation decision in flag 0.
 
+## Pass 11 review (map-only shell cutover + complete principal and memory inventory)
+
+The exact-head pass-10 review found two High and one Medium blockers. All three were re-verified against the cited
+planning contract and current runtime anchors before changing the spec:
+
+| Finding | Resolution |
+|---|---|
+| **H1 — map cutover omits production promotion/activation entrypoints** | Slice 1 now includes the activation wrapper and promotion library/deploy/verification scripts. `T-MAP-ONLY-PROMOTION-ACTIVATION` proves the complete shell path resolves canonical map entries with singular variables absent and rejects malformed maps before deployment. |
+| **H2 — approval omits label and husk-PR principals** | H4 now enumerates all five principals and requires an accept/reject decision for each applicable loss: lifetime for all five, ref/push/merge breadth for the three Contents writers, and provider-exposed Issues/Pull-request action breadth for label/husk. |
+| **M1 — canonical-memory client omitted** | The AS-IS inventory and registry now include `memory/snapshot.ts`; Slice 1 binds every call to `github-memory-read` plus the canonical memory slug and proves it with `T-MEMORY-SNAPSHOT-PURPOSE`. |
+
+### Disposition after pass 11
+
+`status: review`, `verdict: pending`, `pass: 11`. The pass-10 blockers are closed in the plan. Security approval and
+merge remain human gates, and the five-principal PAT deviation still requires an explicit human decision.
+
 ## Human flags
 
 0. **The PAT deviation is a decision, not a note (H4).** Approving this spec means either amending the source
    proposal's DoD to record long-lived, one-repository purpose PATs + exact provider-grant audits as the accepted
-   M4 target — also accepting every target-write token's all-ref and push+merge authority unless a verified
-   ruleset denies an action — or
+   M4 target — explicitly accepting or rejecting, principal by principal, shared-across-runs lifetime for all five
+   target writers; all-ref and push+merge authority for the three Contents writers unless a verified ruleset denies
+   an action; and provider-exposed Issues/Pull-request action breadth for label and husk-PR — or
    holding the original short-lived run-bound contract and sending the spec back for a minting-path pass. The two
    options are written out at the end of the spec.
 1. **Slice 4 transcribes a policy decision that is formally open.** The interim source→target edge table is

@@ -3,9 +3,9 @@ id: 2026-08-18-factory-capability-separation-spec
 title: Factory capability separation — purpose-scoped GitHub credentials, run-bound grants, and server-derived actors
 stage: spec
 status: review
-pass: 10
+pass: 11
 created: 2026-08-18
-updated: 2026-08-30
+updated: 2026-08-31
 proposal: 2026-08-17-factory-capability-separation
 verdict: pending
 repos: [minion-factory, minion-base]
@@ -249,7 +249,7 @@ implementation; line numbers are anchors, not immutable coordinates.
    represented honestly by either table without inventing a synthetic run identity.
 4. **Outside that one gated path, one process-wide `FACTORY_GH_TOKEN` serves every authority the factory has.**
    `runner/src/github.ts:6-16` binds a module-level `TOKEN` constant into every `gh()`/`ghStrict()` call, and that
-   one transport is imported by nine runner modules with materially different authorities:
+   one transport is imported by ten runner modules with materially different authorities:
 
    | Consumer | Operation | Authority actually needed |
    |---|---|---|
@@ -260,6 +260,7 @@ implementation; line numbers are anchors, not immutable coordinates.
    | `runner/src/queue.ts:2997-3020` | comment on and close an empty husk PR | write (Issues + Pull requests), exactly one target repo selected from the canonical registry |
    | `runner/src/possibly-shipped.ts:139-206,280-358` | disposition and G0 sweep PUT the spec and `specs/index.json` | write (Contents), `minion-meta` only |
    | `runner/src/automerge.ts:532,632,680-681,706,720` | PR read, check reads, **`PUT /pulls/:n/merge`**, issue comment | write (merge), target repos — inert only because `FACTORY_AUTOMERGE=0` |
+   | `runner/src/memory/snapshot.ts:1-14,31,37-45,214-251` | resolve the canonical memory commit, recursive tree, and blobs used to build each run's immutable memory snapshot | read, `minion-agent-memory` only |
 
    The same PAT is additionally injected into containers and consumed by host scripts:
    - `runner/src/queue.ts:2101-2113` (`legacyCredentialTransport`) forwards it as `GH_TOKEN` into **five** launch
@@ -422,7 +423,7 @@ landed code already states — *workers get read credentials, writes live in the
    | `github-meta` (new) | `FACTORY_GH_META_TOKEN` | write | `NikolasP98/minion-meta` only: Contents + Issues write | `lifecycle.ts` transitions/dispositions; `monitor.ts:69` issue intake; the runner-side meta publication effect (Slice 2); `scripts/self-update.sh:58-60` issue filing |
    | `github-merge` (new) | `FACTORY_GH_MERGE_TOKENS` | write | JSON repository→token map; every token exactly one target repo: Contents + Pull requests write (merge endpoint + comment), all refs; provider-capable of push as well as merge unless rulesets deny it | `automerge.ts:706,720`; token selected only after canonical repo lookup. Inert while `FACTORY_AUTOMERGE=0`, but registered so §8's revocation cannot silently disarm it |
    | `github-factory-source` (new) | `FACTORY_GH_SOURCE_TOKEN` | read | `NikolasP98/minion-factory` only: Contents + Actions read | `scripts/self-update.sh:73,91` |
-   | `github-memory-read` (new) | `FACTORY_GH_MEMORY_READ_TOKEN` | read | `NikolasP98/minion-agent-memory` only: Contents read | `scripts/self-update.sh:70-71` host memory pull (never enters a container) |
+   | `github-memory-read` (new) | `FACTORY_GH_MEMORY_READ_TOKEN` | read | `NikolasP98/minion-agent-memory` only: Contents read | `scripts/self-update.sh:70-71` host memory pull and `runner/src/memory/snapshot.ts:31,37-45,214-251` controller-owned immutable snapshot reads; never enters a container |
    | `github-memory-candidate` (new) | `FACTORY_GH_MEMORY_CANDIDATE_TOKEN` | write, adapter-restricted to create-only | the private quarantine repository only | Slice 6's dormant publisher. Must NOT be installed on canonical `minion-agent-memory` |
    | `github-train` (new) | `FACTORY_GH_TRAIN_TOKEN` | write | exactly the registry-declared promotion pairs (today `NikolasP98/minion-ai@DEV→main`, `NikolasP98/minion-site@dev→master`): Contents read + Pull requests read/create | `scripts/train.sh:19,25,29` |
 
@@ -800,6 +801,8 @@ map-only deployment safe while the meta-writing agents still hold the broad PAT.
   `github-checkout`; `projections.ts` label mutations use `github-project-labels`; `queue.ts` husk-PR mutations use
   `github-husk-pr`; `possibly-shipped.ts` disposition and sweep PUTs use `github-meta`; queue readiness push/PR
   calls retain the repository-bound branch/workspace-prepare purposes
+- `runner/src/memory/snapshot.ts` and its tests (bind every commit/tree/blob request to the canonical,
+  registry-validated memory slug and `github-memory-read`; no implicit or checkout-purpose fallback)
 - `runner/src/containment-effects.ts`, `runner/src/lineage-phase-transports.ts`, and `runner/src/queue.ts` (move
   every direct `FACTORY_GH_BRANCH_TOKEN` / `FACTORY_GH_WORKSPACE_PREPARE_TOKEN` read — trusted effect execution,
   lineage staging, launch-plan preflight, and PR readiness — behind the same canonical-repository-bound map
@@ -813,7 +816,12 @@ map-only deployment safe while the meta-writing agents still hold the broad PAT.
   the grant is extra, incomplete, unavailable, or stale)
 - `runner/src/github.test.ts`, `runner/src/index.test.ts`, `runner/src/containment-effects.test.ts`,
   `runner/src/queue.test.ts`, `runner/src/lineage-phase-transports.test.ts`, new
-  `runner/src/github-purpose.test.ts`, `runner/src/scoped-github-canary.test.ts`
+  `runner/src/github-purpose.test.ts`, `runner/src/scoped-github-canary.test.ts`, and the existing
+  `runner/src/memory/snapshot.test.ts`
+- `scripts/activation/run-scoped-github-canary.sh`, `scripts/promotion/lib.sh`,
+  `scripts/promotion/deploy-exact.sh`, and `scripts/promotion/verify-production.sh` plus their focused shell tests
+  (resolve the canonical repository's branch/workspace-prepare entries through the same map contract, with no
+  singular fallback; reject missing, extra, and non-canonical entries before promotion or activation)
 - `.env.example`, `deploy.sh` (`:316`), `setup.sh` (`:102`), `deploy/k8s.yml` (`:18`), `README.md` — document and
   write `FACTORY_GH_BRANCH_TOKENS`, `FACTORY_GH_WORKSPACE_PREPARE_TOKENS`,
   `FACTORY_GH_PROJECT_LABEL_TOKENS`, `FACTORY_GH_HUSK_PR_TOKENS`, and `FACTORY_GH_MERGE_TOKENS` as secret
@@ -824,7 +832,7 @@ map-only deployment safe while the meta-writing agents still hold the broad PAT.
 
 ```bash
 cd runner
-npm test -- --test-name-pattern='T-PURPOSE-REGISTRY-CLOSED|T-PURPOSE-TOKENS-DISTINCT|T-META-PURPOSE-TOKEN|T-TARGET-MUTATION-PURPOSES|T-MAP-ONLY-CONTAINMENT-FLOW|T-PURPOSE-PROVIDER-GRANT-EXACT|T-PURPOSE-ACTION-EVIDENCE|T-PURPOSE-SCOPE-FINGERPRINT-BOUND'
+npm test -- --test-name-pattern='T-PURPOSE-REGISTRY-CLOSED|T-PURPOSE-TOKENS-DISTINCT|T-META-PURPOSE-TOKEN|T-TARGET-MUTATION-PURPOSES|T-MAP-ONLY-CONTAINMENT-FLOW|T-MAP-ONLY-PROMOTION-ACTIVATION|T-MEMORY-SNAPSHOT-PURPOSE|T-PURPOSE-PROVIDER-GRANT-EXACT|T-PURPOSE-ACTION-EVIDENCE|T-PURPOSE-SCOPE-FINGERPRINT-BOUND'
 npm test
 npx tsc --noEmit
 cd ..
@@ -849,7 +857,13 @@ branch/workspace-prepare purpose, and each mixed module's neighbouring reads sti
 `T-MAP-ONLY-CONTAINMENT-FLOW` — with both singular variables absent and rejected, an existing containment-v2 dev
 fixture completes candidate push, draft PR, lineage staging, queue preflight, and readiness using only map entries
 selected after canonical repository lookup; removing any required map entry fails before the first remote effect.
-The singular variables are removed only in the same commit and deployment that makes this proof pass;
+`T-MAP-ONLY-PROMOTION-ACTIVATION` — with both singular variables absent, the production promotion validator,
+deploy-exact path, post-deploy verification, and activation wrapper resolve the canonical repository's map entries
+and reach the map-aware canary; missing, extra, or non-canonical entries fail before deployment. The singular
+variables are removed only in the same commit and deployment that makes both map-only proofs pass;
+`T-MEMORY-SNAPSHOT-PURPOSE` — every direct `gh`/`ghStrict` call in `memory/snapshot.ts` supplies
+`github-memory-read` and the canonical memory slug, succeeds with the broad token absent, and cannot resolve a
+fleet checkout or implicit-default credential;
 `T-PURPOSE-NEGATIVE-SCOPE` — for a fixture purpose configured with an
 intentionally *over-broad* scope (denied on forbidden target A, but able to reach forbidden target B, and able to
 perform a forbidden action class on an allowed repository), the audit fails activation entirely — not merely
@@ -1199,8 +1213,7 @@ push or merge, and rejects a pair injected through the environment.
    the current token's fingerprint — the complete paginated provider-visible repository grant exactly matches the
    allowlist, permission/ruleset evidence is captured, disposable canaries establish the safe action probes, no
    production PR was used, and every token in the `github-branch`, `github-workspace-prepare`,
-   `github-project-labels`, `github-husk-pr`, and `github-merge` maps is proven provider-scoped to exactly its one canonical repository. Confirm each applicable token's all-ref scope and
-   effective push+merge authority are reported unless captured ruleset evidence removes a specific action — and
+   `github-project-labels`, `github-husk-pr`, and `github-merge` maps is proven provider-scoped to exactly its one canonical repository. Confirm all five tokens' shared-across-runs lifetime is reported; confirm the three Contents-write tokens' all-ref and effective push+merge authority is reported unless captured ruleset evidence removes a specific action; and confirm the label/husk tokens' provider-exposed Issues/Pull-request action breadth is reported — and
    that a purpose whose audit has not run, or whose token has rotated since, is reported not-yet-active.
 2. Queue one spec run, one reconcile run, one discovery run, and one chat turn with `FACTORY_GH_TOKEN` unset in the
    runner process. Verify each launch plan and Docker argv carries only the read-only `github-checkout` credential,
@@ -1271,7 +1284,7 @@ before the flip converts dev-run capacity to zero — the correct rollback for t
 previous runner image, not restoring a worker write token.
 
 Revocation of the broad `FACTORY_GH_TOKEN` is the last step, and it is gated on a closed map, not on a slice count:
-after Slice 6 lands and §7 is green, confirm that every consumer inventoried in §1 point 4 — the nine runner modules,
+after Slice 6 lands and §7 is green, confirm that every consumer inventoried in §1 point 4 — the ten runner modules,
 all five container launch paths, `self-update.sh`'s three authorities, `train.sh`'s pair set, and
 `provision-webhooks.sh`'s operator fallback — has an exercised purpose credential *and* a passed provider-backed
    provider-backed activation audit (§2 invariant 1a) bound to its currently-deployed token fingerprint. Only then revoke the PAT, remove it from
@@ -1373,6 +1386,13 @@ from minion-base, proves both mixed-version pairs, and only then hard-rejects it
 the lifecycle replay state machine, backed by an explicitly authorised `lifecycle_requests` journal with fresh and
 upgraded schemas, recovery indexes, and retention rules. These remain planning-contract changes only.
 
+**Pass 11** answers the exact-head review of pass 10 (two High and one Medium finding). Slice 1's atomic map cutover
+now includes the production promotion and activation shell entrypoints and proves both from a map-only environment.
+The closed inventory now includes the controller-owned canonical-memory snapshot client, binds it to
+`github-memory-read`, and adds a broad-token-absent fixture. The mandatory human decision now enumerates all five
+target-write principals and each principal's actual residual provider authority. These remain planning-contract
+changes only.
+
 **Disposition: `status: review`, `verdict: pending`.**
 
 - Not `approved`: this spec is `tags: [security, infra]`, and the SDLC contract keeps human gates at approval AND
@@ -1385,12 +1405,14 @@ upgraded schemas, recovery indexes, and retention rules. These remain planning-c
 scoped to one repository/branch/action set (`proposals/2026-08-17-factory-capability-separation.md:21-25`). This
 spec instead uses long-lived purpose PATs, with each target-write PAT provider-scoped to exactly one repository and
 selected from a runner-owned canonical repository map (§0, §2 invariant 1a). This restores the proposal's
-one-repository boundary but remains weaker on three axes for **each of** `github-branch`,
-`github-workspace-prepare`, and `github-merge`: (1) **lifetime** — the PAT is shared across runs for that repository
-and remains usable until operator rotation; (2) **ref scope** — GitHub exposes it to every repository ref unless a
-captured ruleset independently narrows that principal; and (3) **action scope** — Contents-write makes all three
-provider-capable of both direct push and PR merge, including `github-merge`, which needs Contents-write for its
-exact merge endpoint. Pull-requests write adds its own PR/comment actions where configured. The trusted adapters'
+one-repository boundary but remains weaker on provider-enforced lifetime for **all five** target-write principals:
+`github-branch`, `github-workspace-prepare`, `github-project-labels`, `github-husk-pr`, and `github-merge` are each
+shared across runs for that repository and remain usable until operator rotation. The three Contents-write
+principals (`github-branch`, `github-workspace-prepare`, and `github-merge`) additionally retain all-ref scope unless
+a captured ruleset independently narrows that principal, and Contents-write makes all three provider-capable of
+both direct push and PR merge. The two narrower principals still retain provider-exposed action breadth beyond the
+adapter: `github-project-labels` can perform the Issues-write actions its provider grant exposes, while
+`github-husk-pr` can perform the Issues- and Pull-request-write actions its provider grant exposes. The trusted adapters'
 narrower APIs constrain normal factory calls but do not constrain a stolen PAT used directly against GitHub.
 Compensating controls are exact one-repository provider-grant audits for every mapped token, disposable push/merge
 canaries for every Contents-write principal, captured ref-ruleset evidence, fingerprint-bound activation, and no
@@ -1399,9 +1421,10 @@ bound. A factory pass may not resolve this trade-off or amend the approved propo
 
 1. **Accept the interim target.** Approve this spec as written and amend the source proposal's DoD to record
    long-lived, one-repository purpose PATs + provider-grant audits as the accepted M4 target, explicitly accepting
-   the shared-across-runs lifetime, all-ref scope, and push+merge authority of all three Contents-write purposes
-   wherever verified rulesets do not remove an action, with short-lived run/ref/action-bound grants named as later
-   work.
+   the shared-across-runs lifetime of all five principals; the all-ref scope and push+merge authority of the three
+   Contents-write principals wherever verified rulesets do not remove an action; and the provider-exposed
+   Issues/Pull-request action breadth of the label and husk-PR principals, with short-lived run/ref/action-bound
+   grants named as later work. The approval record must accept or reject each applicable loss for each principal.
 2. **Hold the original contract.** Keep the proposal's DoD and require a controller-minted, run/repo/ref/action-bound
    credential — which means this spec needs a further pass adding that minting path (the trusted adapter and the
    purpose/repository registry both survive as defense in depth; lifetime, ref, and action binding are the parts
@@ -1410,7 +1433,7 @@ bound. A factory pass may not resolve this trade-off or amend the approved propo
   findings that motivated it are resolved above, and leaving it set would keep the spec behind the server-side
   `changes_requested` promotion gate for a reason that no longer holds.
 - Not `rejected`/`archived`: the source proposal's security gap is real, current, and verified at HEAD — one
-  process-wide PAT still serves nine runner modules, five container launch paths, and four host scripts (§1 point
+  process-wide PAT still serves ten runner modules, five container launch paths, and four host scripts (§1 point
   4); `by` is still caller-supplied for admin bearers (§1 point 6); and minion-base still writes `minion-meta` with
   a raw PAT while holding the factory admin secret (§1 point 8).
 
