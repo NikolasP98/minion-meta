@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T14:54:38.953Z",
+	"generatedAt": "2026-08-31T15:24:35.673Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -474,39 +474,6 @@
 			"scoredAt": "2026-08-31T07:49:02.226Z"
 		},
 		{
-			"key": "pr:paperclip#12529",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12529 fix(heartbeat): stop and disclose stalled issue re-wakes, and hand workspace warnings to the agent",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12529",
-			"sourceUpdatedAt": "2026-08-30T10:02:08Z",
-			"sourceFingerprint": "0af64a8820bc98a56fa02263101af60e809d89ec3a7a1564dac14fe2800c5867",
-			"score": 90,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This directly curbs a severe recurring resource loop while preserving recovery paths and surfacing actionable diagnostics to agents.",
-			"evidence": [
-				"One issue caused 42 runs and 281k input tokens in three hours.",
-				"The policy discloses once, then blocks the issue after another no-progress run.",
-				"Fresh activity, human wakes, forced sessions, and event-carrying reasons bypass throttling."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:33:47.470Z"
-		},
-		{
 			"key": "spec:2026-08-17-pkg-dev-crypto-failopen-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -710,39 +677,6 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
-			"key": "pr:paperclip#12530",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12530 Fix JSON truncation in command-redaction when secrets are escaped-quoted",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12530",
-			"sourceUpdatedAt": "2026-08-30T13:33:44Z",
-			"sourceFingerprint": "41ec056a720942a6eb4a588ec3b6ced82f6e163f01d362c425074a1c9eded758",
-			"score": 88,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This shared redaction fix prevents both malformed diagnostics and partial secret disclosure, with focused red/green evidence across the affected patterns.",
-			"evidence": [
-				"The prior approach could expose secret suffixes after a literal backslash.",
-				"The shared helper feeds logs, summaries, and displays.",
-				"All 34 focused tests passed, and five new regression tests failed on the prior head."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:33:47.470Z"
-		},
-		{
 			"key": "pr:paperclip#12554",
 			"kind": "pr",
 			"stage": "development",
@@ -807,6 +741,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T13:24:31.579Z"
+		},
+		{
+			"key": "pr:paperclip#12589",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12589 fix(server): prevent startup failure on large decision histories",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12589",
+			"sourceUpdatedAt": "2026-08-31T15:17:14Z",
+			"sourceFingerprint": "62ee35ea015fb415dedbd55e32767a3b4eb352aff2bda3b87247bb35e01eda12",
+			"score": 88,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the current parameter-limit failure can stop server startup for installations with large decision histories and the bounded batching fix has focused regression evidence.",
+			"evidence": [
+				"The failed startup sync stopped server startup on large histories.",
+				"PostgreSQL rejected statements above 65,534 bound parameters.",
+				"A regression test covers 16,384 unique items."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T15:24:35.598Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-capability-separation",
@@ -3386,39 +3353,6 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:paperclip#12528",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12528 fix(recovery): do not auto-assign an orphaned blocker back to its creator when that would create a self-check",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12528",
-			"sourceUpdatedAt": "2026-08-30T11:10:49Z",
-			"sourceFingerprint": "bb1ef909fa3c15aa3343e9afbf3471d5a0f6df4bfb6a05c8b476539c4757d651",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The guard preserves independent review ownership in a repeatedly observed production recovery path and is narrowly scoped to a clear relationship check.",
-			"evidence": [
-				"Recovery can assign an independent-check issue back to the agent whose work it reviews.",
-				"The behavior was observed repeatedly in production use.",
-				"The guard only applies when the creator already owns an issue that the blocker blocks."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:33:47.470Z"
-		},
-		{
 			"key": "pr:paperclip#12552",
 			"kind": "pr",
 			"stage": "development",
@@ -3893,8 +3827,8 @@
 			"repo": "paperclip",
 			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T14:53:10Z",
-			"sourceFingerprint": "6909c5629547d1fe641648168585a08898a26b89ef064a352a33474b318bbeba",
+			"sourceUpdatedAt": "2026-08-31T14:56:58Z",
+			"sourceFingerprint": "375adfa529059c5f9c5d517d95d031fbd0c6264fe1ff0deeb0ca00c81e110770",
 			"score": 71,
 			"band": "high",
 			"axes": {
@@ -3909,15 +3843,15 @@
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute because this narrowly scoped recovery API restores a blocked human-governance path with strong authorization, idempotency, and test evidence.",
+			"rationale": "Execute because this closes a security-sensitive recovery gap with a narrow, idempotent, well-tested operation that preserves human authorization controls.",
 			"evidence": [
-				"Pending secret proposals can remain without a linked human confirmation after a partial failure.",
-				"The route is board-only, requires target-agent authorization, and returns no secret material.",
-				"Focused verification passed 102 tests plus server TypeScript checking."
+				"Pending secret proposals can remain without a linked human confirmation.",
+				"The route is board-only and requires target-agent authorization.",
+				"Focused verification passed 102 tests and TypeScript checking."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T14:54:38.867Z"
+			"scoredAt": "2026-08-31T15:24:35.598Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -5772,39 +5706,6 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
-			"key": "pr:paperclip#12575",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
-			"sourceUpdatedAt": "2026-08-31T14:21:41Z",
-			"sourceFingerprint": "c8cf8c2a6c83c6f1122ddd5de1421a97085047401e54031d6eb2e4fa7f8abc31",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because deterministic project attribution repairs recurring task routing, filtering, cost rollups, and workspace selection without overriding explicit input.",
-			"evidence": [
-				"17 of 172 measured agent-created issues lacked a project.",
-				"Uses deterministic signals and returns null on disagreement.",
-				"Adds 15 unit tests and 10 route integration tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T14:24:48.142Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6577,6 +6478,41 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
+			"key": "pr:paperclip#12590",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12590 feat(runner): activate qualified Pi and Claude ACPX runtimes",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12590",
+			"sourceUpdatedAt": "2026-08-31T15:22:38Z",
+			"sourceFingerprint": "f2e5e7ce8977b0fc6efc9a22f756e37d7b4a6d3366422d7440a452852e81fb6c",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:paperclip#12588"
+			],
+			"rationale": "Reevaluate once its OpenCode base and CI evidence are settled because this stacked provider activation is broad but currently lacks local verification and completed gates.",
+			"evidence": [
+				"The PR is a provider-layer delta above the OpenCode runtime.",
+				"Local tests were not run due to resource constraints.",
+				"Runtime packages and patches are pinned with integrity checks."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T15:24:35.598Z"
+		},
+		{
 			"key": "pr:pixel-agents#388",
 			"kind": "pr",
 			"stage": "development",
@@ -7183,6 +7119,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:19.199Z"
+		},
+		{
+			"key": "pr:paperclip#12575",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
+			"sourceUpdatedAt": "2026-08-31T15:22:29Z",
+			"sourceFingerprint": "02288ecdd3114228b0779193986291360ccfcab66dac3d5777ac6e80f369978d",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because deterministic project inference addresses a measured recurring attribution gap affecting filtering, cost rollups, and workspace selection.",
+			"evidence": [
+				"17 of 172 measured agent-created issues had no project.",
+				"Explicit project signals are never overridden.",
+				"The change includes 15 unit tests and 10 integration tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T15:24:35.598Z"
+		},
+		{
+			"key": "pr:paperclip#12588",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12588 feat(runner): add qualified OpenCode runtime",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12588",
+			"sourceUpdatedAt": "2026-08-31T15:22:25Z",
+			"sourceFingerprint": "56453eaf2122105e3616f3c155c6884c32db42b19d6e007f8190d8c10f829685",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:paperclip#12590"
+			],
+			"rationale": "Reevaluate after authoritative CI because the provider expansion is strategically useful but has no local test result and its required gates remain incomplete.",
+			"evidence": [
+				"The production backend cannot start a qualified OpenCode session.",
+				"Local tests were not run due to resource constraints.",
+				"All Paperclip CI gates are not yet green."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T15:24:35.598Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1883922325",
