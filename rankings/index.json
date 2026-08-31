@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T07:49:02.305Z",
+	"generatedAt": "2026-08-31T07:52:28.769Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -175,8 +175,8 @@
 			"repo": "minion_site",
 			"title": "device-identity/sign — sign the caller's real grant, never the body's role/scopes",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-17-site-device-identity-role-escalation-spec.md",
-			"sourceUpdatedAt": "2026-08-28",
-			"sourceFingerprint": "df4cf130eb14b5c4c2680a696e9518b66a92c8e4f6bf8d47cab4bb5b4548512e",
+			"sourceUpdatedAt": "2026-08-31",
+			"sourceFingerprint": "16a3794971ce70e4361b0822125aec377c036ad88b275c8a9529c24804afe0c3",
 			"score": 98,
 			"band": "critical",
 			"axes": {
@@ -185,21 +185,21 @@
 				"impact": 9
 			},
 			"readiness": {
-				"specification": 9,
+				"specification": 10,
 				"implementation": 7
 			},
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute after the mandatory live-checkout verification because the endpoint reportedly lets any authenticated member obtain an admin-signed device credential.",
+			"rationale": "Any authenticated member can reportedly obtain an admin-signed device credential, making this an immediate privilege-escalation fix despite checkout-dependent assumptions that must be verified during implementation.",
 			"evidence": [
-				"Client-supplied role and scopes are signed after only a session check.",
-				"The Ed25519 signature is the gateway authorization ticket.",
-				"The spec requires Slice 0 verification because the site checkout was unavailable when authored."
+				"Client-supplied role and scopes are signed with only a session check.",
+				"The signed credential can claim role admin for the organization.",
+				"Definition of done requires refusing a non-admin requesting admin."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:48:02.540Z"
+			"scoredAt": "2026-08-31T07:52:28.694Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-m0-safety-foundation-spec",
@@ -1112,8 +1112,8 @@
 			"repo": "paperclip",
 			"title": "#12560 fix(openclaw): persist gateway credentials as secret refs",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12560",
-			"sourceUpdatedAt": "2026-08-31T07:27:46Z",
-			"sourceFingerprint": "d848525ac5fc58dbd7adb0fb51fd26d5a9b31f8911008ee4c75e92550be56bc0",
+			"sourceUpdatedAt": "2026-08-31T07:35:40Z",
+			"sourceFingerprint": "ced66a20aa3fda93905f81b175612ce8be788d940ad672e806b8064f3df47105",
 			"score": 88,
 			"band": "critical",
 			"axes": {
@@ -1128,15 +1128,15 @@
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute promptly because legacy OpenClaw credentials can be exposed and persisted in plaintext across multiple operational flows, while the PR supplies a tested secret-reference migration.",
+			"rationale": "Persisting gateway credentials in plain adapter configuration is a concrete security exposure across several workflows, and the proposed secret-reference migration is thoroughly scoped and tested.",
 			"evidence": [
-				"Legacy token headers can appear in the edit form.",
-				"Edit, invite replay, or join can persist the token again.",
-				"The change persists only secret_ref and removes legacy secret headers."
+				"Legacy OpenClaw tokens can be exposed and persisted in adapter configuration.",
+				"The change covers edit, invite replay, and join flows.",
+				"Secret, replay, adapter, UI, and server checks passed."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:03.762Z"
+			"scoredAt": "2026-08-31T07:52:28.694Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-capability-separation",
@@ -3524,8 +3524,8 @@
 			"repo": "paperclip",
 			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T06:59:51Z",
-			"sourceFingerprint": "64eb5cf9466f3cf1faca6f75711cdbd734a2763a0a4b72a7419bc2898d644c18",
+			"sourceUpdatedAt": "2026-08-31T07:45:38Z",
+			"sourceFingerprint": "1fde8dbbbabd0cafec2afc93ac68b9159425297d53c1f1bdc8bc992bf14a0d5a",
 			"score": 71,
 			"band": "high",
 			"axes": {
@@ -3540,15 +3540,15 @@
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute because an unrecoverable governance-link failure blocks human secret decisions, while the board-only idempotent recovery operation is narrowly scoped and tested.",
+			"rationale": "The change restores a missing human-controlled secret decision path with bounded, idempotent recovery behavior and strong focused verification.",
 			"evidence": [
-				"A pending secret proposal can remain without the human confirmation required to execute it.",
-				"The route is board-only, target-authorized, and returns no secret material.",
-				"Concurrent retry and approval/rejection lifecycle tests are included among 102 passing tests."
+				"A pending secret proposal can remain without a linked human confirmation.",
+				"The recovery route is board-only and returns no secret material.",
+				"Focused verification passed 102 tests and server typechecking."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:34:26.538Z"
+			"scoredAt": "2026-08-31T07:52:28.694Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -6105,6 +6105,39 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
+			"key": "pr:minion-meta#350",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#350 factory: Implement the approved spec 2026-08-18-agent-instruction-par",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/350",
+			"sourceUpdatedAt": "2026-08-31T07:51:05Z",
+			"sourceFingerprint": "614c0f577aff89b960347e4d9cff489d0c6d267ee593c521336e28b2c303f8e9",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Instruction parity and repository policy are central governance infrastructure, but readiness cannot be established from an autonomous-run manifest without implementation or verification results.",
+			"evidence": [
+				"Implements an approved agent-instruction parity and repo-policy spec.",
+				"Topics: infra.",
+				"The PR is draft until gates pass."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T07:52:28.694Z"
+		},
+		{
 			"key": "pr:pixel-agents#388",
 			"kind": "pr",
 			"stage": "development",
@@ -6777,6 +6810,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:19.199Z"
+		},
+		{
+			"key": "pr:minion-meta#349",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#349 factory: Implement the approved spec 2026-08-17-sdlc-phase-gates-scor",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/349",
+			"sourceUpdatedAt": "2026-08-31T07:51:05Z",
+			"sourceFingerprint": "4ec5ef0d3306e85f74ee1d56985cafbc84466063dbce508d79d9c10491ced744",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The phase-gate scoring work appears strategically useful, but the catalog provides no gate results, implementation details, or verification evidence showing that this draft is ready to advance.",
+			"evidence": [
+				"Implements an approved SDLC phase-gates scoring spec.",
+				"Topics: infra.",
+				"The PR is draft until gates pass."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T07:52:28.694Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1883922325",
@@ -7852,39 +7918,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
-		},
-		{
-			"key": "pr:paperclip#12546",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12546 chore(lockfile): refresh pnpm-lock.yaml",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12546",
-			"sourceUpdatedAt": "2026-08-31T07:20:07Z",
-			"sourceFingerprint": "9c6b9ab4430a6a0304fbe164f47a1b595e63f7423336dd3707caf6dc50cb3d68",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate because lockfile consistency can affect reproducible installs, but the catalog gives no failing-build evidence, dependency delta, or verification result.",
-			"evidence": [
-				"The PR only refreshes `pnpm-lock.yaml`.",
-				"It follows dependency changes on master.",
-				"No test, install, or CI outcome is provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:34:26.538Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-msteams-large-upload-spec",
@@ -10234,6 +10267,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:58.286Z"
+		},
+		{
+			"key": "pr:paperclip#12546",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12546 chore(lockfile): refresh pnpm-lock.yaml",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12546",
+			"sourceUpdatedAt": "2026-08-31T07:39:46Z",
+			"sourceFingerprint": "2c06573a0d1a2c58fd5a97a429b82c90b01acb21f4bdcc1a2273fce3476aacf4",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is low-consequence maintenance, but it is narrowly scoped and immediately actionable as a lockfile-only refresh.",
+			"evidence": [
+				"Dependencies changed on master.",
+				"Only pnpm-lock.yaml is updated.",
+				"Status is open."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T07:52:28.694Z"
 		},
 		{
 			"key": "pr:paperclip#12569",
