@@ -1,10 +1,11 @@
 ---
 id: 2026-08-20-dev-key-at-rest-audit
 title: Count what is already sealed under the source-visible dev crypto key
-status: approved
+status: in-spec
+spawned_spec: 2026-08-31-dev-key-at-rest-audit-spec
 reopened_reason: "2026-08-29 cross-provider review: the 2026-08-20 results only sampled 3 of 8 user_identities.secret_ciphertext rows in hub prod and never produced the required A1 inventory or unchecked-database list, so the DoD is unmet and S3 stays blocked"
 created: 2026-08-20
-updated: 2026-08-29
+updated: 2026-08-31
 repos: [minion-meta, minion_hub, minion_site]
 tags: [security, data]
 value: 8
