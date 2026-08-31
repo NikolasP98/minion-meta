@@ -1,14 +1,15 @@
 ---
 id: 2026-08-23-minion-ai-ci-baseline-debt
 title: Restore the minion-ai DEV test baseline before daily promotion
-status: review
+status: approved
 created: 2026-08-23
-updated: 2026-08-28
+updated: 2026-08-31
 repos: [minion-meta, minion]
 tags: [infra, test]
 value: 10
 effort: L
 duplicate_candidate: ci-minion-ai-ci
+approved_reason: "Ranked-queue supervisor approval: board-goal-v2 score 90/100, recommendation execute, readiness specification 9/10 and implementation 6/10; live admission threshold 80/100 and readiness threshold 6/10."
 ---
 
 # Restore the minion-ai DEV test baseline before daily promotion
