@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T08:54:21.864Z",
+	"generatedAt": "2026-08-31T09:24:43.852Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -2641,39 +2641,6 @@
 			"scoredAt": "2026-08-31T07:40:17.097Z"
 		},
 		{
-			"key": "pr:paperclip#12525",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12525 fix(server): suppress watchdog interaction wait loops",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12525",
-			"sourceUpdatedAt": "2026-08-30T05:14:17Z",
-			"sourceFingerprint": "992fd2e89fb47bd442500d8ecf588fa5f8908c51dc27b1fc0021c72b6ff90110",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The fix addresses recurring watchdog churn around valid human waits and has exact-head CI plus focused behavioral coverage.",
-			"evidence": [
-				"Reconciliation repeatedly reopened reusable watchdogs during valid pending interactions.",
-				"Exact-head CI passed, including server and E2E shards.",
-				"Focused classifier and scheduler coverage passed 45 tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:33:47.470Z"
-		},
-		{
 			"key": "pr:paperclip#12555",
 			"kind": "pr",
 			"stage": "development",
@@ -3045,6 +3012,114 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:21:50.290Z"
+		},
+		{
+			"key": "issue:minion-meta#358",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#358 [monitor:unstick] Run d36336e5: invalid spec review verdict",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/358",
+			"sourceUpdatedAt": "2026-08-31T09:17:57Z",
+			"sourceFingerprint": "8981853f3358d5d2f6efa12d4c9b27771a1558f189d719adcf7a3dff99b2387e",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#359",
+				"issue:minion-meta#360"
+			],
+			"rationale": "Three runs exhibit the same terminal output-contract failure and should become one higher-impact goal covering the shared defect and separate permission warning.",
+			"evidence": [
+				"Pass2 emitted the invalid verdict \"degraded\".",
+				"The failure is classified as recurring.",
+				"The /out permission denial is identified as separate."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T09:24:43.768Z"
+		},
+		{
+			"key": "issue:minion-meta#359",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#359 [monitor:unstick] Run 879cc5bb: invalid spec review verdict",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/359",
+			"sourceUpdatedAt": "2026-08-31T09:17:57Z",
+			"sourceFingerprint": "efd142a0f62c09ed4d707ab150cd008b816056ee2c9f3200cc383cacd53a0532",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#358",
+				"issue:minion-meta#360"
+			],
+			"rationale": "This duplicate manifestation should be consolidated with the other invalid-verdict runs into one goal addressing the recurring contract failure.",
+			"evidence": [
+				"The run ended in terminal failure.",
+				"The verdict violates the allowed enum.",
+				"A separate /out permission warning also occurred."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T09:24:43.768Z"
+		},
+		{
+			"key": "issue:minion-meta#360",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#360 [monitor:unstick] Run 9de9a37d: invalid spec review verdict",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/360",
+			"sourceUpdatedAt": "2026-08-31T09:17:58Z",
+			"sourceFingerprint": "33a1e9353dfad9c69ac2bfb777a33e9685416b0a7aef1a678de96fb076f5936c",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#358",
+				"issue:minion-meta#359"
+			],
+			"rationale": "This third matching failure strengthens the case for one consolidated remediation goal rather than independently executing duplicate monitor intakes.",
+			"evidence": [
+				"Pass2 reported rc=0.",
+				"Index validation rejected the verdict.",
+				"The catalog calls this a recurring stall class."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T09:24:43.768Z"
 		},
 		{
 			"key": "issue:paperclip#12547",
@@ -5697,6 +5772,39 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
+			"key": "pr:paperclip#12575",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
+			"sourceUpdatedAt": "2026-08-31T08:56:06Z",
+			"sourceFingerprint": "00368154dc62a3d9613b022041232ff78911cbf4ea0eadb5d280bf30a5ce33d6",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is actionable reliability work that prevents agent-created tasks from losing project filtering, cost attribution, and workspace selection.",
+			"evidence": [
+				"17 of 172 measured agent-created issues had no project.",
+				"The change adds 15 unit tests and 10 integration tests.",
+				"Explicit project IDs are never overridden."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T09:24:43.768Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7178,39 +7286,6 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
-			"key": "deploy:minion-meta",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion-meta",
-			"title": "minion-meta deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/commit/59c4b56c192a730dbd63bb8e51dd8305eb2ad424",
-			"sourceUpdatedAt": "2026-08-31T08:17:39Z",
-			"sourceFingerprint": "ae006f653ebcee15ec73dc5021675bee3460e82ccd44db0b07112b4e1f83c0bf",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Deployment health could affect the orchestration fleet, but an unknown status and commit summary provide no evidence of an actual failure or actionable remediation.",
-			"evidence": [
-				"status is unknown",
-				"The source is a minion-meta commit",
-				"The commit concerns conditional quality gates"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:21:50.290Z"
-		},
-		{
 			"key": "issue:pixel-agents#380",
 			"kind": "issue",
 			"stage": "proposal",
@@ -7344,39 +7419,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
-		},
-		{
-			"key": "pr:paperclip#12575",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
-			"sourceUpdatedAt": "2026-08-31T08:26:54Z",
-			"sourceFingerprint": "6422fe177173ff12dc280c2243b9d1d575b59f89fb24f1d143dab43fc295e3ce",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The bounded, tested change addresses recurring project-attribution failures and appears actionable now, though the catalog shows no outage, release block, or urgent deadline.",
-			"evidence": [
-				"17 of 172 measured agent-created issues had no project",
-				"Missing projects break filters, cost rollups, and workspace defaults",
-				"The PR includes 15 unit tests and 10 integration tests"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:31:21.054Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-722867358",
@@ -7713,6 +7755,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:58.286Z"
+		},
+		{
+			"key": "pr:paperclip#12577",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12577 ci: refresh general-server shard duration manifest",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12577",
+			"sourceUpdatedAt": "2026-08-31T09:17:36Z",
+			"sourceFingerprint": "e65ffd97830a56de03c169395a96562b207f4a72665366bc8d000fa980aa3ebb",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The verified data-only change offers a recurring CI throughput improvement with low stated risk and bounded scope.",
+			"evidence": [
+				"The observed server-shard spread was 73 seconds.",
+				"The new partition predicts about 287 seconds per shard.",
+				"All 443 current suites are covered exactly once."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T09:24:43.768Z"
 		},
 		{
 			"key": "pr:pixel-agents#396",
@@ -9872,39 +9947,6 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
-			"key": "pr:paperclip#12546",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12546 chore(lockfile): refresh pnpm-lock.yaml",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12546",
-			"sourceUpdatedAt": "2026-08-31T08:34:08Z",
-			"sourceFingerprint": "c92518f3195cb240bb7c7af3faff0e14863112568d9de680bdc9eb3307d5e36a",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the narrowly bounded lockfile synchronization is immediately actionable and helps preserve reproducible dependency installation, although no outage, release block, or broad user impact is documented.",
-			"evidence": [
-				"Dependencies changed on master.",
-				"Only pnpm-lock.yaml is updated.",
-				"The PR is open."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:54:21.789Z"
-		},
-		{
 			"key": "proposal:ci-minion-ai-stale",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10635,6 +10677,39 @@
 			"scoredAt": "2026-08-31T07:31:58.286Z"
 		},
 		{
+			"key": "pr:paperclip#12546",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12546 chore(lockfile): refresh pnpm-lock.yaml",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12546",
+			"sourceUpdatedAt": "2026-08-31T09:13:07Z",
+			"sourceFingerprint": "5c568004a7d51d59e5d3483cda38100d85b3550926901677a6545d24b151e38e",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The narrowly bounded lockfile refresh is ready to process, though the catalog provides no evidence that it blocks builds or releases.",
+			"evidence": [
+				"The PR is open.",
+				"Only pnpm-lock.yaml is updated.",
+				"It follows dependency changes on master."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T09:24:43.768Z"
+		},
+		{
 			"key": "pr:paperclip#12569",
 			"kind": "pr",
 			"stage": "development",
@@ -10732,6 +10807,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
+		},
+		{
+			"key": "deploy:minion-meta",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion-meta",
+			"title": "minion-meta deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/commit/59c4b56c192a730dbd63bb8e51dd8305eb2ad424",
+			"sourceUpdatedAt": "2026-08-31T09:18:07Z",
+			"sourceFingerprint": "cf0e1dfa4f9deff0cf9c9717ee5ad5f8b4db5beedc3f8a5fb110bfd0ffcbdf11",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Deployment health may matter, but the unknown status and documentation-only commit summary do not establish a failure, urgency, or actionable remedy.",
+			"evidence": [
+				"Status is unknown.",
+				"The source is a single minion-meta commit.",
+				"The summary describes preflight conditional quality gates."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T09:24:43.768Z"
 		},
 		{
 			"key": "pr:paperclip#12567",
