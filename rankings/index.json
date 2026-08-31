@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T16:54:56.051Z",
+	"generatedAt": "2026-08-31T17:24:37.223Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -35,39 +35,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
-		},
-		{
-			"key": "pr:paperclip#12539",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12539 fix(server): redact heartbeat adapter output before persistence",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12539",
-			"sourceUpdatedAt": "2026-08-30T19:30:31Z",
-			"sourceFingerprint": "1730de3ddf81ae4237a39d2111e26458f9bf42178eb389f6cae873caf63f0554",
-			"score": 98,
-			"band": "critical",
-			"axes": {
-				"criticality": 10,
-				"importance": 10,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute with highest urgency because credential-shaped output can reach durable storage and live publication, and the narrow boundary defense is already verified.",
-			"evidence": [
-				"Heartbeat results, errors, events, stdout, and stderr can contain credential-shaped free text.",
-				"The patch redacts data before database insertion, durable log append, and live publication.",
-				"Focused tests and server TypeScript checks passed, with no schema or API-shape change."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:34:26.538Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1280,39 +1247,6 @@
 			"scoredAt": "2026-08-31T08:01:35.926Z"
 		},
 		{
-			"key": "issue:paperclip#12535",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12535 [Bug] `project_workspaces.cwd = null` (git_repo source, never realized) crashes isolated_workspace/agent_default heartbeats — validation layer never checks workspace realizability",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12535",
-			"sourceUpdatedAt": "2026-08-30T14:05:45Z",
-			"sourceFingerprint": "6909f8e41b278b4e078ab6437cac8375f249457734b8886c81393135608ec2f8",
-			"score": 85,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because a validated-but-unrealizable workspace causes repeatable production heartbeat crashes, automatic blocking, and a recovery loop that consumes resources without progress.",
-			"evidence": [
-				"Two production incidents hit the same null-cwd root cause across agent_default and isolated_workspace modes.",
-				"Every recovery wake re-crashes during workspace setup and can burn tokens repeatedly.",
-				"The issue identifies the unchecked assumption in resolveGitOwnerRepoRoot and the missing realizability validation."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:54:55.969Z"
-		},
-		{
 			"key": "pr:paperclip#12560",
 			"kind": "pr",
 			"stage": "development",
@@ -1817,6 +1751,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T11:24:32.326Z"
+		},
+		{
+			"key": "pr:paperclip#12598",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12598 Fix governed secret binding acceptance through gateway",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12598",
+			"sourceUpdatedAt": "2026-08-31T17:17:12Z",
+			"sourceFingerprint": "b9ea02d29becf09a514fa0139c1d4dbb283c3ae98730225154bcb1aff998d987",
+			"score": 81,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:paperclip#12548"
+			],
+			"rationale": "Execute because supported approval paths currently diverge on whether an accepted governed secret binding is actually applied, undermining a core human-control invariant.",
+			"evidence": [
+				"Gateway acceptance could leave proposals pending and agent configuration unchanged.",
+				"The change unifies REST and gateway execution with cascade approval and replay receipts.",
+				"Three targeted test files passed with 132 tests, but repository type-checking could not start."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T17:24:37.139Z"
 		},
 		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
@@ -3725,39 +3694,6 @@
 			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
-			"key": "issue:paperclip#12538",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12538 Cost telemetry collapses cache read/write tokens into one field, making costs uncomputable on cache-heavy installs (12.5x price spread lost)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12538",
-			"sourceUpdatedAt": "2026-08-30T16:15:06Z",
-			"sourceFingerprint": "8efaaad4f040dd37af07839ba20f9051dbb88e1b9c1f564aae221300abbae6ec",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the irreversible loss of distinct cache-token classes prevents accurate cost accounting and blocks accurate model-based pricing while the proposed backward-compatible path is concrete.",
-			"evidence": [
-				"The server persists cache read and write tokens as one collapsed value.",
-				"The reported installation has 97.8% cached input tokens and a 7.15x reconstructed cost uncertainty band.",
-				"The proposal identifies fields, persistence flow, aggregate APIs, and backward compatibility."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:39:38.888Z"
-		},
-		{
 			"key": "pr:minion-meta#286",
 			"kind": "pr",
 			"stage": "development",
@@ -3797,8 +3733,8 @@
 			"repo": "paperclip",
 			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T16:52:05Z",
-			"sourceFingerprint": "67f4f229be677ed5162f167cd61478b57799a76d8cf762f2905bb8bcad80a479",
+			"sourceUpdatedAt": "2026-08-31T17:17:12Z",
+			"sourceFingerprint": "df6d59783b577372f62b1e0bb89468f0a840d45d0d00c4af4b944756e38b041f",
 			"score": 71,
 			"band": "high",
 			"axes": {
@@ -3812,16 +3748,18 @@
 			},
 			"confidence": 9,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because this bounded, tested recovery operation restores a blocked human-governance path for pending secret proposals without exposing secret material.",
+			"relatedKeys": [
+				"pr:paperclip#12598"
+			],
+			"rationale": "Execute because this closes a governance recovery gap for stranded secret-binding proposals with a narrow, tested, idempotent operation.",
 			"evidence": [
-				"An older partial failure can leave a pending binding proposal without its human confirmation link.",
-				"The route is board-only, idempotent, and returns linkage metadata without secret material.",
+				"Pending binding proposals can remain without a linked human confirmation.",
+				"The recovery route is board-only and returns no secret material.",
 				"Targeted verification passed 102 tests and server type-checking."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:54:55.969Z"
+			"scoredAt": "2026-08-31T17:24:37.139Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -4391,6 +4329,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:56.597Z"
+		},
+		{
+			"key": "issue:paperclip#12599",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12599 Company discussion-rooms/discussion-threads REST API disappeared from live instance (404, zero trace in openapi.json)",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12599",
+			"sourceUpdatedAt": "2026-08-31T17:14:43Z",
+			"sourceFingerprint": "60b7ecfc71078989e17dd423266e0aba5d10cc6fd6aefdd2be5022f4a85c10ba",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 7,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Reframe as a bounded provenance-and-supported-replacement investigation because the reported operational loss is real but the catalog provides no upstream evidence that these routes ever belonged to the public product.",
+			"evidence": [
+				"A live instance reportedly returns 404 for all discussion-room endpoints.",
+				"The live OpenAPI document reportedly contains none of the relevant paths.",
+				"Public master reportedly has no route file or commit history for the claimed implementation."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T17:24:37.139Z"
 		},
 		{
 			"key": "pr:paperclip#12592",
@@ -8599,6 +8570,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T14:54:38.867Z"
+		},
+		{
+			"key": "pr:paperclip#12597",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12597 refactor: rename product workspaces to worktrees",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12597",
+			"sourceUpdatedAt": "2026-08-31T17:01:20Z",
+			"sourceFingerprint": "a391b76f822f0d1ea05cc37db54bd5a46788867e858f417d346429a5a05a64e6",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate because the terminology improvement is broad and well prepared but has low urgency and carries substantial contract-regression risk relative to its immediate benefit.",
+			"evidence": [
+				"The change spans UI, CLI, server, packages, adapters, and documentation.",
+				"Persisted names and public wire contracts intentionally remain unchanged.",
+				"Four fixed-port tests were not run successfully on the local host."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T17:24:37.139Z"
 		},
 		{
 			"key": "pr:pixel-agents#327",
