@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T16:24:54.403Z",
+	"generatedAt": "2026-08-31T16:54:56.051Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1280,6 +1280,39 @@
 			"scoredAt": "2026-08-31T08:01:35.926Z"
 		},
 		{
+			"key": "issue:paperclip#12535",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12535 [Bug] `project_workspaces.cwd = null` (git_repo source, never realized) crashes isolated_workspace/agent_default heartbeats — validation layer never checks workspace realizability",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12535",
+			"sourceUpdatedAt": "2026-08-30T14:05:45Z",
+			"sourceFingerprint": "6909f8e41b278b4e078ab6437cac8375f249457734b8886c81393135608ec2f8",
+			"score": 85,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 9,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because a validated-but-unrealizable workspace causes repeatable production heartbeat crashes, automatic blocking, and a recovery loop that consumes resources without progress.",
+			"evidence": [
+				"Two production incidents hit the same null-cwd root cause across agent_default and isolated_workspace modes.",
+				"Every recovery wake re-crashes during workspace setup and can burn tokens repeatedly.",
+				"The issue identifies the unchecked assumption in resolveGitOwnerRepoRoot and the missing realizability validation."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T16:54:55.969Z"
+		},
+		{
 			"key": "pr:paperclip#12560",
 			"kind": "pr",
 			"stage": "development",
@@ -1476,39 +1509,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:21:50.290Z"
-		},
-		{
-			"key": "pr:paperclip#12595",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12595 fix: guarantee deferred wake promotion",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12595",
-			"sourceUpdatedAt": "2026-08-31T16:23:56Z",
-			"sourceFingerprint": "bb50c6aa865605abb1896a8875b9b29b6305e4617034f5be92bc7d817c1210b9",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 3
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate immediately after implementation evidence is available because the specified scheduler failure can indefinitely strand older deferred work, but the current artifact is proposal-only.",
-			"evidence": [
-				"A deferred wake can remain without a run or terminal error while newer wakes execute.",
-				"The proposal defines atomic promotion, fairness, bounded reconciliation, and a 15-minute diagnostic.",
-				"All four specification artifacts validate, but implementation tests are explicitly pending."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:24:54.315Z"
 		},
 		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
@@ -2777,6 +2777,42 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
+			"key": "pr:paperclip#12591",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12591 feat(runner): integrate native execution with the application",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12591",
+			"sourceUpdatedAt": "2026-08-31T16:53:57Z",
+			"sourceFingerprint": "46dea707eccc6e348fcd744c22c89dad6da8068ce2b41fef5662f394ba356d4a",
+			"score": 75,
+			"band": "high",
+			"axes": {
+				"criticality": 5,
+				"importance": 10,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12592",
+				"pr:paperclip#12594"
+			],
+			"rationale": "Group the three dependent runner-stack entries into one native-runner platform goal because application integration, task experience, and production-provider operations form a single ordered outcome.",
+			"evidence": [
+				"This PR adds the native application lifecycle boundary behind a default-off experimental setting.",
+				"It changes central heartbeat and agent-route code across persistence, transport, authorization, and recovery.",
+				"The task-experience and managed-provider PRs explicitly depend on lower runner-stack contracts."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T16:54:55.969Z"
+		},
+		{
 			"key": "pr:minion-factory#158",
 			"kind": "pr",
 			"stage": "development",
@@ -3761,8 +3797,8 @@
 			"repo": "paperclip",
 			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T15:54:24Z",
-			"sourceFingerprint": "3813097a6cb9f6e61888297e4698d0bf8af31cbc1c68e4c602602437271aca5b",
+			"sourceUpdatedAt": "2026-08-31T16:52:05Z",
+			"sourceFingerprint": "67f4f229be677ed5162f167cd61478b57799a76d8cf762f2905bb8bcad80a479",
 			"score": 71,
 			"band": "high",
 			"axes": {
@@ -3777,15 +3813,15 @@
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute because this is a narrowly bounded recovery fix for a governed secret-change workflow with strong authorization, idempotency, and test evidence.",
+			"rationale": "Execute because this bounded, tested recovery operation restores a blocked human-governance path for pending secret proposals without exposing secret material.",
 			"evidence": [
-				"Pending secret proposals can remain without a linked human confirmation after a partial failure.",
-				"The route is board-only, returns no secret material, and fails closed on invalid states.",
-				"Focused tests passed: 102 tests plus server TypeScript checking."
+				"An older partial failure can leave a pending binding proposal without its human confirmation link.",
+				"The route is board-only, idempotent, and returns linkage metadata without secret material.",
+				"Targeted verification passed 102 tests and server type-checking."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:24:54.315Z"
+			"scoredAt": "2026-08-31T16:54:55.969Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -3920,6 +3956,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:01:35.926Z"
+		},
+		{
+			"key": "pr:paperclip#12596",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12596 test(runner): bound codex provider exit polls by wall clock",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12596",
+			"sourceUpdatedAt": "2026-08-31T16:35:09Z",
+			"sourceFingerprint": "8c25590f96b91415a19eda1894944413f5fa3c466a8035c524f807b3e2285657",
+			"score": 70,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 10
+			},
+			"confidence": 10,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because this low-risk test-only fix removes demonstrated random CI failures using an already-established bounded-wait pattern.",
+			"evidence": [
+				"The two tests failed 8/25 and 9/25 times before the change, then 0/25 after it.",
+				"The full codex_provider suite passed 12 consecutive runs after the change.",
+				"No production code changes are included."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T16:54:55.969Z"
 		},
 		{
 			"key": "pr:pixel-agents#300",
@@ -4322,6 +4391,78 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:56.597Z"
+		},
+		{
+			"key": "pr:paperclip#12592",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12592 feat(runner): add task experience and developer SDKs",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
+			"sourceUpdatedAt": "2026-08-31T16:47:56Z",
+			"sourceFingerprint": "e1b3cb23ee29e125a63177ab58b09d0c5b36926602e37191cc5d79ecf5ab31b4",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12591",
+				"pr:paperclip#12594"
+			],
+			"rationale": "Group this broad user and SDK layer with its prerequisite application integration and succeeding platform layer so readiness is evaluated against the complete runner outcome.",
+			"evidence": [
+				"This PR depends on the native application contracts in the preceding stack entry.",
+				"The stacked delta spans 379 files.",
+				"Local tests were not run; GitHub Actions and Greptile review remain authoritative gates."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T16:54:55.969Z"
+		},
+		{
+			"key": "pr:paperclip#12594",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12594 feat(runner): add managed providers and evaluation platform",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12594",
+			"sourceUpdatedAt": "2026-08-31T16:28:11Z",
+			"sourceFingerprint": "dc8d2e476a3138f8b5308e0f2c2bfb1958571f7eba535b58e4d6f753e331c073",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12591",
+				"pr:paperclip#12592"
+			],
+			"rationale": "Group this final platform layer with the lower runner integration and task-experience entries because its managed-provider, evaluation, deployment, and release outcomes depend on that shared stack.",
+			"evidence": [
+				"The summary calls this the final entry in the runner stack.",
+				"The stacked delta spans 387 files and includes managed providers, evaluation, deployment, and release checks.",
+				"Full build, migration, security, browser, and release verification is deferred to GitHub Actions."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T16:54:55.969Z"
 		},
 		{
 			"key": "proposal:2026-08-18-factory-orchestration-round7",
@@ -4798,43 +4939,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
-		},
-		{
-			"key": "pr:paperclip#12591",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12591 feat(runner): integrate native execution with the application",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12591",
-			"sourceUpdatedAt": "2026-08-31T16:23:06Z",
-			"sourceFingerprint": "be2f050199fa3c01bfa1fa4ac96ab07674bfdebe9f5f80d1fd821a0d80f08ab5",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:paperclip#12590",
-				"pr:paperclip#12592",
-				"pr:paperclip#12594"
-			],
-			"rationale": "Reevaluate after its lower-stack dependency and full CI pass because this is central integration work touching execution, persistence, authorization, transport, and recovery without local verification.",
-			"evidence": [
-				"The change adds the end-to-end native-run lifecycle across shared contracts, database, adapters, and server services.",
-				"It changes central heartbeat and agent-route code while remaining behind a default-off setting.",
-				"Local tests were not run, and review must account for the preceding provider branch."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:24:54.315Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -6183,6 +6287,39 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
+			"key": "pr:paperclip#12575",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
+			"sourceUpdatedAt": "2026-08-31T16:53:19Z",
+			"sourceFingerprint": "ce3fd15e00ebbb67d95f62efc59bc28bf842d69aacfa776f2b683a42432e4e67",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because deterministic project inference addresses recurring attribution gaps that impair project filters, cost rollups, and workspace selection.",
+			"evidence": [
+				"17 of 172 measured agent-created issues had no project, including 11 top-level issues filed during runs.",
+				"Explicit project signals are preserved and conflicting inference signals return null.",
+				"The change includes 15 unit tests and 10 route-level integration tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T16:54:55.969Z"
+		},
+		{
 			"key": "proposal:2026-08-17-pkg-gateway-client-onevent-errors",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6884,43 +7021,6 @@
 			"scoredAt": "2026-08-31T08:14:27.632Z"
 		},
 		{
-			"key": "pr:paperclip#12594",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12594 feat(runner): add SDK managed provider and evaluation surfaces",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12594",
-			"sourceUpdatedAt": "2026-08-31T16:23:59Z",
-			"sourceFingerprint": "8342a95df441d5352afd8b4859ec5db3c942faa56006350f266a639ddfd08491",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 2,
-				"importance": 7,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 2
-			},
-			"confidence": 8,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"pr:paperclip#12590",
-				"pr:paperclip#12591",
-				"pr:paperclip#12592"
-			],
-			"rationale": "Reframe into smaller independently verifiable goals because a 629-file boundary spanning providers, SDKs, evaluations, deployments, migrations, tests, and documentation is not an effective review or delivery unit.",
-			"evidence": [
-				"The pull request delta is 629 files.",
-				"It combines managed providers, multiple SDK surfaces, evaluation tooling, deployment assets, migrations, tests, and documentation.",
-				"No local tests were run; full build, migration, security, and browser gates remain for CI."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:24:54.315Z"
-		},
-		{
 			"key": "pr:pixel-agents#383",
 			"kind": "pr",
 			"stage": "development",
@@ -7396,43 +7496,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "pr:paperclip#12590",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12590 feat(runner): activate qualified Claude ACPX runtime",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12590",
-			"sourceUpdatedAt": "2026-08-31T16:18:53Z",
-			"sourceFingerprint": "695e0a5bab6353b6245b8387b4cefdcea48fb2c0df85ee205ceda946e0e874b1",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:paperclip#12591",
-				"pr:paperclip#12592",
-				"pr:paperclip#12594"
-			],
-			"rationale": "Reevaluate after authoritative CI because the provider expansion is strategically useful and security-conscious, but no local tests were run and it forms the base of a substantial dependent stack.",
-			"evidence": [
-				"The change activates only the qualified Claude profile and rejects Pi before process creation.",
-				"Package, patch, and model admission are pinned or exact-profile checked.",
-				"Local tests were not run; GitHub Actions is stated as authoritative."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:24:54.315Z"
 		},
 		{
 			"key": "pr:pixel-agents#246",
@@ -8074,39 +8137,6 @@
 			"scoredAt": "2026-08-31T07:35:03.762Z"
 		},
 		{
-			"key": "pr:paperclip#12575",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
-			"sourceUpdatedAt": "2026-08-31T15:46:50Z",
-			"sourceFingerprint": "2ce0df92cf75812c020f7831958a6bad928104ce9890b95cc162b1ccfcad9507",
-			"score": 47,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Deterministic project inference addresses recurring attribution and filtering errors through a bounded implementation with substantial targeted coverage.",
-			"evidence": [
-				"Agent-created top-level tasks can receive projectId null.",
-				"Missing projects affect filters, cost rollups, and workspace defaults.",
-				"The change adds 15 unit and 10 integration tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T15:55:06.484Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-pos-appointments-fork",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8371,43 +8401,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
-		},
-		{
-			"key": "pr:paperclip#12592",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12592 feat(ui): add the runner-aware task experience",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
-			"sourceUpdatedAt": "2026-08-31T16:23:50Z",
-			"sourceFingerprint": "69e12126de7a07c8fd057ed33c667586c03569ff18911e7ac9d16a4f2efbabab",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 6,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:paperclip#12590",
-				"pr:paperclip#12591",
-				"pr:paperclip#12594"
-			],
-			"rationale": "Reevaluate once the server contracts and CI are proven because the UI has broad regression exposure, cannot build independently on master, and lacks local test evidence.",
-			"evidence": [
-				"The task page is described as a broad, frequently used surface.",
-				"The PR depends on the preceding native application integration and does not build independently on master.",
-				"Local UI, browser, typecheck, and build verification was deferred to GitHub Actions."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:24:54.315Z"
 		},
 		{
 			"key": "proposal:2026-08-30-site-page-max-shared-token",
@@ -9092,6 +9085,39 @@
 			"scoredAt": "2026-08-31T12:54:59.710Z"
 		},
 		{
+			"key": "pr:paperclip#12593",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12593 chore(lockfile): refresh pnpm-lock.yaml",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12593",
+			"sourceUpdatedAt": "2026-08-31T16:26:41Z",
+			"sourceFingerprint": "5b020e5d4a9eb413e3853261d031ff6dabb4f8fc1280c2c22f35b2659165c366",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate because a lockfile refresh is bounded and actionable, but the catalog does not identify the dependency changes it supports or evidence that the current lockfile blocks builds or releases.",
+			"evidence": [
+				"The PR only updates pnpm-lock.yaml.",
+				"The refresh follows dependency changes on master.",
+				"No verification results or blocked workflow are stated."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T16:54:55.969Z"
+		},
+		{
 			"key": "pr:pixel-agents#356",
 			"kind": "pr",
 			"stage": "development",
@@ -9427,39 +9453,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T14:24:48.142Z"
-		},
-		{
-			"key": "pr:paperclip#12593",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12593 chore(lockfile): refresh pnpm-lock.yaml",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12593",
-			"sourceUpdatedAt": "2026-08-31T15:44:10Z",
-			"sourceFingerprint": "878f60d9a67a5d2fec0020a68e33b207cba40f030d757ef8e026ceee9f9ff472",
-			"score": 37,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The bounded generated lockfile update is actionable and may be needed to keep dependency state reproducible, although no explicit release blocker is documented.",
-			"evidence": [
-				"The PR only updates pnpm-lock.yaml.",
-				"It follows dependency changes on master.",
-				"Status is open."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T15:55:06.484Z"
 		},
 		{
 			"key": "pr:pixel-agents#298",
