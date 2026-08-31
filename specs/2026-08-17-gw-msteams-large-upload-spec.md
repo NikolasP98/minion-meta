@@ -783,8 +783,10 @@ stop promising a 4MB world, and every remaining open end is in the ledger.
 **Files:** `extensions/msteams/src/graph-upload.ts` (typed error mapping),
 `extensions/msteams/src/file-consent.ts` (`uploadToConsentUrl` delegates to the chunk loop),
 `extensions/msteams/src/monitor-handler.ts` (only if the typed error changes what it posts),
-`extensions/msteams/src/send.ts` and `messenger.ts` (typed error handling only — **not** a new
-ceiling), their `*.test.ts`, `extensions/msteams/README.md` or the `upload-session.ts` header, plus any
+`extensions/msteams/src/send.ts` and `messenger.ts` (typed error handling plus per-send
+`DriveUploadPolicy` compilation/pass-through and unsupported-ceiling rejection before `loadWebMedia`
+— **not** a new ceiling constant), their `*.test.ts` including the configuration-reload caller case,
+`extensions/msteams/README.md` or the `upload-session.ts` header, plus any
 `TODO(handoff):` lines and `proposals/*.md` the sweep produces in **minion-meta** (**never**
 `proposals/index.json` — the generator owns it).
 
@@ -798,6 +800,8 @@ pnpm tsgo && pnpm check
 #   only for session-above; all accepted sizes/simple failure only for simple-only; plus:
 #   - a file above the effective mediaMax ceiling → rejected by loadWebMedia BEFORE any
 #         createUploadSession call, and the message names the effective limit
+#   - mediaMaxMb raised after a simple-only send → policy recompiled; SESSION or rejection before
+#         loadWebMedia, and zero above-bound simple PUT /content calls
 #   - consent path, 12MB → chunked PUTs to the Teams-supplied uploadUrl, zero createUploadSession calls
 if git diff --name-only <base>...HEAD | rg -v '^extensions/msteams/'; then echo "FAIL: diff touches files outside extensions/msteams/"; exit 1; fi
 git diff --name-only <base>...HEAD | rg '\.svelte$'   && echo "FAIL: UI out of scope"           && exit 1

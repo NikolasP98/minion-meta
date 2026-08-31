@@ -19,6 +19,9 @@ Second, policy is now compiled at the production caller on every send from the c
 `mediaMaxMb` ceiling and the helper's verified-simple maximum, before `loadWebMedia`. A configuration
 reload that raises the ceiling must select `session-above` or reject before allocation; it cannot reuse
 a stale `simple-only` record, and the upload helper rejects an above-bound buffer as defense in depth.
+Independent review found and pass 12 also repairs one contradictory binding file clause: S3 now
+explicitly permits that compiler/pass-through and pre-`loadWebMedia` rejection in `send.ts` and
+`messenger.ts`, while retaining the ban on a second ceiling constant and naming the reload caller test.
 The controlled tenant experiment, permission preflights, and heap-policy gate remain outstanding, so
 `status: draft` and `verdict: changes_requested` remain authoritative.
 
