@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T08:14:27.714Z",
+	"generatedAt": "2026-08-31T08:21:50.376Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -268,39 +268,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:02.540Z"
-		},
-		{
-			"key": "pr:minion-factory#163",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#163 factory: containment-base-reconciliation S3: bind {testedBase, testedCandidate} through review and publish",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/163",
-			"sourceUpdatedAt": "2026-08-31T08:13:05Z",
-			"sourceFingerprint": "c05574f68cf2fbf71fd4f01bbbab86715ad398cd0a130cb954654acec1268119",
-			"score": 93,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 10,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Cryptographically binding the tested base and candidate through review and publication closes a central containment integrity gap with a sharply bounded implementation.",
-			"evidence": [
-				"The slice binds testedBaseSha and testedCandidateSha atomically.",
-				"Review and publication must assert the current candidate matches the tested candidate.",
-				"Slices 1 and 2 are already merged."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:14:05.520Z"
 		},
 		{
 			"key": "pr:minion-meta#271",
@@ -941,39 +908,6 @@
 			"scoredAt": "2026-08-31T07:42:10.731Z"
 		},
 		{
-			"key": "proposal:2026-08-20-dev-key-at-rest-audit",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Count what is already sealed under the source-visible dev crypto key",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-20-dev-key-at-rest-audit.md",
-			"sourceUpdatedAt": "2026-08-29",
-			"sourceFingerprint": "389fea6dfcd3522e5133bf8df54ac5be46a5ba6cfb653c11fd090c4ca8808f1e",
-			"score": 88,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This approved, read-only audit should execute promptly because an unknown population of ciphertext may become unreadable when environments adopt the real encryption key.",
-			"evidence": [
-				"Which environments wrote rows under the source-visible development key is unknown.",
-				"Setting a real key where development-key rows exist causes authentication failures on read.",
-				"The consumer dependency bump cannot be sequenced safely without the audit."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:42:55.201Z"
-		},
-		{
 			"key": "proposal:2026-08-23-factory-deployment-recovery-controller",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1342,14 +1276,14 @@
 			"scoredAt": "2026-08-31T07:42:55.201Z"
 		},
 		{
-			"key": "pr:minion-factory#159",
+			"key": "pr:minion-factory#154",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion-factory",
-			"title": "#159 factory: WorkItem handoff S2: structured commit-bound review artifact",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/159",
-			"sourceUpdatedAt": "2026-08-31T03:00:15Z",
-			"sourceFingerprint": "d5d42a96d9fd76544bba5701c5a35a8b628a94043db8ee08f4621f65d84ab3ec",
+			"title": "#154 factory: repair Factory PR #103 exact head: post-transition spec validity",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/154",
+			"sourceUpdatedAt": "2026-08-31T08:15:49Z",
+			"sourceFingerprint": "ffbeb783e358848d465ba79a5aadb5bb4558a62929b66e24487c36c55e15ba2c",
 			"score": 83,
 			"band": "high",
 			"axes": {
@@ -1364,15 +1298,48 @@
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute because a fail-closed, commit-bound review artifact strengthens the review and automerge control path with tightly specified integration gates.",
+			"rationale": "The remaining approval-integrity defect can permit invalid lifecycle transitions, while the exact branch, defect, invariants, and regression expectations make the work immediately actionable.",
 			"evidence": [
-				"The artifact must bind reviewedCommit and runId.",
-				"Stale artifacts must be removed on every review or fix iteration.",
-				"Pass, fail, and error control flow must be JSON-driven and fail closed."
+				"The task identifies one remaining approval-integrity defect",
+				"Missing or body-only status must cause zero PUTs and zero run inserts",
+				"Work continues PR #103 from an exact head"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:32:33.271Z"
+			"scoredAt": "2026-08-31T08:21:50.290Z"
+		},
+		{
+			"key": "pr:minion-meta#247",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#247 factory: Env cache S2: machine-sealed cross-process cache",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/247",
+			"sourceUpdatedAt": "2026-08-31T08:16:49Z",
+			"sourceFingerprint": "3636ccfe1a614bf849f6a48a58789ef5d0a35ffd4426ce3baa73bd9a1e02ed55",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A machine-sealed cache removes recurring secret-fetch cost without restoring plaintext-at-rest exposure, and the task supplies a narrow security-focused slice with testable invariants.",
+			"evidence": [
+				"Decrypted secrets must remain absent from disk",
+				"Tamper and identity behavior must fail closed",
+				"Slice 1 already delivered plaintext deletion and memory fallback"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
@@ -1541,6 +1508,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:44:37.861Z"
+		},
+		{
+			"key": "spec:2026-08-31-dev-key-at-rest-audit-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion-meta",
+			"title": "Complete the source-visible dev-key at-rest audit",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-31-dev-key-at-rest-audit-spec.md",
+			"sourceUpdatedAt": "2026-08-31",
+			"sourceFingerprint": "6f60a5231f03d93000f73576f2bc8a454f075b13cec1d56c95a4dc4aade6d349",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Unknown production ciphertext provenance can block safe key activation and cause authentication failures, while the spec defines read-only boundaries, ownership, evidence gaps, and verifiable completion criteria.",
+			"evidence": [
+				"Five of eight production ciphertext rows remain unclassified",
+				"Consumer activation requires the audit evidence",
+				"No autonomous step may change a deployment, secret, database row, or key"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-orchestration-round7-spec",
@@ -1780,39 +1780,6 @@
 			"scoredAt": "2026-08-31T07:38:58.989Z"
 		},
 		{
-			"key": "pr:minion-meta#247",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#247 factory: Env cache S2: machine-sealed cross-process cache",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/247",
-			"sourceUpdatedAt": "2026-08-31T08:04:30Z",
-			"sourceFingerprint": "84798097624fd294ddaa38c80467879eb8c777dc1d4cc4060dc680ea41c02a9f",
-			"score": 80,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A machine-sealed cross-process cache directly reduces secret-exposure risk and has explicit tamper, identity, permission, and offline requirements.",
-			"evidence": [
-				"Slice 1 already removed the plaintext cache.",
-				"Decrypted secrets must remain absent from disk.",
-				"Tamper and identity failures must fail closed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:14:05.520Z"
-		},
-		{
 			"key": "pr:paperclip#12531",
 			"kind": "pr",
 			"stage": "development",
@@ -1879,14 +1846,14 @@
 			"scoredAt": "2026-08-31T07:31:23.880Z"
 		},
 		{
-			"key": "pr:minion-factory#154",
+			"key": "pr:minion-factory#163",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion-factory",
-			"title": "#154 factory: repair Factory PR #103 exact head: post-transition spec validity",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/154",
-			"sourceUpdatedAt": "2026-08-31T08:12:16Z",
-			"sourceFingerprint": "3ce25bef8285b827ffdc5961a69fa21de84c1918577a2464391608fd9e5fe961",
+			"title": "#163 factory: containment-base-reconciliation S3: bind {testedBase, testedCandidate} through review and publish",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/163",
+			"sourceUpdatedAt": "2026-08-31T08:16:13Z",
+			"sourceFingerprint": "18375b04194d243d1df79e3c8168a5eef301d4bb0d6a635696ce73197edebed3",
 			"score": 79,
 			"band": "high",
 			"axes": {
@@ -1898,18 +1865,18 @@
 				"specification": 9,
 				"implementation": 8
 			},
-			"confidence": 8,
+			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "The narrowly scoped approval-integrity repair is actionable now and protects Factory lifecycle writes from invalid post-transition state.",
+			"rationale": "Binding the exact tested base and candidate through review and publishing is central containment work with a bounded slice and established prerequisites.",
 			"evidence": [
-				"The remaining defect is explicitly limited to approval integrity.",
-				"Missing or body-only status must produce zero PUTs and zero run inserts.",
-				"A complete registered Factory self-test is required."
+				"Slice 3 covers D7 and D8",
+				"Slices 1 and 2 are already merged",
+				"Review and push must assert the tested candidate pair"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:14:05.520Z"
+			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
 			"key": "pr:minion-meta#273",
@@ -2899,6 +2866,76 @@
 			"scoredAt": "2026-08-31T07:38:21.867Z"
 		},
 		{
+			"key": "issue:minion-meta#354",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#354 [monitor:unstick] Unstick diagnosis for run 60bca3bb",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/354",
+			"sourceUpdatedAt": "2026-08-31T08:17:28Z",
+			"sourceFingerprint": "c009a91bfec059cc4d46d741159d84709a3c53733ac317a0794a4610807a6662",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#355"
+			],
+			"rationale": "Two runs exhibit the same spec-pass output-contract and permission failure, so one root-cause goal should cover the shared defect and both regressions.",
+			"evidence": [
+				"Spec pass 2 produced an unsupported degraded verdict",
+				"The output reports permission denied for /out/unslop-spec.json",
+				"Issue #355 reports the same failure class"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:21:50.290Z"
+		},
+		{
+			"key": "issue:minion-meta#355",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#355 [monitor:unstick] Unstick diagnosis for run b725b5a9",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/355",
+			"sourceUpdatedAt": "2026-08-31T08:17:29Z",
+			"sourceFingerprint": "f90825a0b795ac316a03e932dd607cf69aea0a754f8756094baaf18600ac4154",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#354"
+			],
+			"rationale": "This is a second occurrence of the same blocked spec-pass failure and should be consolidated into one permission and verdict-contract repair goal.",
+			"evidence": [
+				"Spec pass 2 produced an unsupported degraded verdict",
+				"The output reports permission denied for /out/unslop-spec.json",
+				"Issue #354 reports the same failure class"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:21:50.290Z"
+		},
+		{
 			"key": "issue:paperclip#12547",
 			"kind": "issue",
 			"stage": "proposal",
@@ -3196,6 +3233,39 @@
 			"scoredAt": "2026-08-31T07:41:32.788Z"
 		},
 		{
+			"key": "proposal:2026-08-20-dev-key-at-rest-audit",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Count what is already sealed under the source-visible dev crypto key",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-20-dev-key-at-rest-audit.md",
+			"sourceUpdatedAt": "2026-08-31",
+			"sourceFingerprint": "29bf42d5dda5a5196a62f96a9608f7d111a8eb80d5467d6c2ce2ffc24ae559fa",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 9,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The underlying security audit remains important, but this proposal has been superseded by a newer dedicated specification that defines the authoritative completion work.",
+			"evidence": [
+				"The proposal says the audit was not run when S2 landed",
+				"Database reachability was previously unavailable",
+				"The 2026-08-31 specification explicitly completes this deferred audit"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:21:50.290Z"
+		},
+		{
 			"key": "proposal:2026-08-28-factory-release-probe-red-and-silent",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3427,6 +3497,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:14:27.632Z"
+		},
+		{
+			"key": "issue:minion-meta#356",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#356 [monitor:unstick] Unstick diagnosis for run 7469491e",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/356",
+			"sourceUpdatedAt": "2026-08-31T08:17:29Z",
+			"sourceFingerprint": "c0e7a8635db9284b34b1dd14005496cf01dbbad72dc7d44585aee76269d0e24e",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#357"
+			],
+			"rationale": "Repeated rank batches exhausting both providers indicate one shared resilience and diagnostics problem that is stronger as a single investigated goal.",
+			"evidence": [
+				"Both bounded providers failed or returned invalid JSON",
+				"The exact terminal provider cause is not exposed",
+				"Issue #357 reports the same recurring class"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:21:50.290Z"
+		},
+		{
+			"key": "issue:minion-meta#357",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#357 [monitor:unstick] Unstick diagnosis for run 4b6c0602",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/357",
+			"sourceUpdatedAt": "2026-08-31T08:17:29Z",
+			"sourceFingerprint": "366985723786e3c076a42aee4eb9c2f1bff720661c0afe1304383029255266d3",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#356"
+			],
+			"rationale": "This duplicate failure signature should join the other provider-exhaustion incident so diagnosis, classification, repair, and regression coverage are handled once.",
+			"evidence": [
+				"Both bounded providers failed or returned invalid JSON",
+				"No finer fallback-provider error is available",
+				"Issue #356 reports the same recurring class"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
 			"key": "issue:paperclip#12538",
@@ -4912,6 +5052,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:01:14.069Z"
+		},
+		{
+			"key": "issue:paperclip#12576",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12576 Hermes execute_code: nested terminal() RPC redaction corrupts JSON output (sibling of #9856, different component)",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12576",
+			"sourceUpdatedAt": "2026-08-31T08:15:52Z",
+			"sourceFingerprint": "811ab271931cd809b63b955c37b1e56b3e0109aa9abcd2e2c0f1a016bd72087c",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Corrupting machine-readable command output breaks a documented bounded-processing workflow and may undermine safe secret handling, while the report identifies concrete components and a testable fix shape.",
+			"evidence": [
+				"Nested terminal output can fail JSON parsing after redaction",
+				"The report identifies agent/redact.py and both tool paths",
+				"Structural redaction is proposed for detectably JSON output"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updatesellable-silent-drop",
@@ -6894,6 +7067,39 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
+			"key": "deploy:minion-meta",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion-meta",
+			"title": "minion-meta deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/commit/59c4b56c192a730dbd63bb8e51dd8305eb2ad424",
+			"sourceUpdatedAt": "2026-08-31T08:17:39Z",
+			"sourceFingerprint": "ae006f653ebcee15ec73dc5021675bee3460e82ccd44db0b07112b4e1f83c0bf",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Deployment health could affect the orchestration fleet, but an unknown status and commit summary provide no evidence of an actual failure or actionable remediation.",
+			"evidence": [
+				"status is unknown",
+				"The source is a minion-meta commit",
+				"The commit concerns conditional quality gates"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T08:21:50.290Z"
+		},
+		{
 			"key": "issue:pixel-agents#380",
 			"kind": "issue",
 			"stage": "proposal",
@@ -7029,14 +7235,14 @@
 			"scoredAt": "2026-08-31T07:33:08.870Z"
 		},
 		{
-			"key": "pr:paperclip#12520",
+			"key": "pr:paperclip#12575",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
-			"title": "#12520 fix(test): use IPv4 when IPv6 loopback is disabled",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12520",
-			"sourceUpdatedAt": "2026-08-29T22:43:48Z",
-			"sourceFingerprint": "8066811023d060766e7e6bfbaff093da5f6ace86b5e43b1795efedd69f499f5b",
+			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
+			"sourceUpdatedAt": "2026-08-31T08:15:59Z",
+			"sourceFingerprint": "4bfc268cf9f17201dcbbcaae310b84368bf8636dd0f3c59b1f179bbeb8aecf7f",
 			"score": 51,
 			"band": "medium",
 			"axes": {
@@ -7051,15 +7257,15 @@
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "The focused harness fix prevents deterministic hangs on IPv6-disabled hosts and is supported by a clear failing-before, passing-after regression.",
+			"rationale": "Incorrect project attribution has meaningful recurring workflow and accounting effects, and the change is already bounded, documented, and supported by route-level tests.",
 			"evidence": [
-				"Requests hang where IPv6 loopback is disabled.",
-				"The new test failed before the change with a 5-second timeout and passed after.",
-				"The ownership-route suite passed 87 tests."
+				"17 of 172 measured agent-created issues had no project",
+				"Missing projects affect filters, cost rollups, and workspace defaults",
+				"The PR adds 15 unit tests and 10 integration tests"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:33:47.470Z"
+			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-722867358",
@@ -7767,39 +7973,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:35:03.762Z"
-		},
-		{
-			"key": "pr:paperclip#12575",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
-			"sourceUpdatedAt": "2026-08-31T08:11:17Z",
-			"sourceFingerprint": "054b9608e7433c773740037546fb76a50a51a66e5348f69a9722e448050bf10d",
-			"score": 47,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Deterministic project inference fixes recurring attribution gaps and is implementation-ready, although the catalog shows no urgent release or reliability threat.",
-			"evidence": [
-				"Agent-created top-level tasks can receive projectId null.",
-				"The change preserves explicit project signals and returns null on disagreement.",
-				"It adds 15 unit tests and 10 integration tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:14:05.520Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-pos-appointments-fork",
@@ -9619,39 +9792,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:19.199Z"
-		},
-		{
-			"key": "deploy:minion-meta",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion-meta",
-			"title": "minion-meta deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/commit/59c4b56c192a730dbd63bb8e51dd8305eb2ad424",
-			"sourceUpdatedAt": "2026-08-31T08:06:09Z",
-			"sourceFingerprint": "ee0c78ae394d8dbe5e5af3abfcc37c4828ee67943ca95c2e08666f19f80e1696",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The deployment may affect Factory quality-gate behavior, but the catalog identifies neither a concrete failure nor an actionable verification target.",
-			"evidence": [
-				"Deployment status is unknown.",
-				"The commit concerns conditional quality gates.",
-				"No outage or failed check is reported."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:14:05.520Z"
 		},
 		{
 			"key": "pr:paperclip#12568",
