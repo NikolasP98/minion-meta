@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T13:54:26.863Z",
+	"generatedAt": "2026-08-31T14:24:48.219Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1786,6 +1786,39 @@
 			"scoredAt": "2026-08-31T07:39:38.888Z"
 		},
 		{
+			"key": "pr:paperclip#12548",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
+			"sourceUpdatedAt": "2026-08-31T14:11:25Z",
+			"sourceFingerprint": "c7946d4db0834bb8d2df91d7610d2dcbfecf7b974e7a499828d1bfd2728d0347",
+			"score": 81,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because it restores a security-sensitive human confirmation path with narrow authorization, idempotency, and strong verification evidence.",
+			"evidence": [
+				"Pending secret proposals can remain without linked human confirmation.",
+				"Recovery is board-only and returns no secret material.",
+				"Targeted tests passed 102 cases and server type-checking passed."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T14:24:48.142Z"
+		},
+		{
 			"key": "pr:paperclip#12579",
 			"kind": "pr",
 			"stage": "development",
@@ -3386,39 +3419,6 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:paperclip#12526",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12526 fix(server): allow same-assignee mutations on the checked-out issue",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12526",
-			"sourceUpdatedAt": "2026-08-30T18:34:00Z",
-			"sourceFingerprint": "9c4b7cf57da1b2e03e8768a11171a8ef330fbbd973d5fae55ade67c2ca370818",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 10
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the defect blocks agents from completing or releasing their assigned work, while the bounded fix has strong verification and explicit concurrency safeguards.",
-			"evidence": [
-				"Timer heartbeats can fail to patch their own checked-out issue.",
-				"A later same-assignee run cannot release a finished checkout lock.",
-				"Three focused test files passed with 152 tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T13:54:26.779Z"
-		},
-		{
 			"key": "pr:paperclip#12528",
 			"kind": "pr",
 			"stage": "development",
@@ -4357,6 +4357,72 @@
 			"scoredAt": "2026-08-31T07:35:03.762Z"
 		},
 		{
+			"key": "pr:paperclip#12586",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12586 fix(server): honour blockParentUntilDone on company issue create",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12586",
+			"sourceUpdatedAt": "2026-08-31T14:04:52Z",
+			"sourceFingerprint": "56068ccb878450ad25e302887f2a6ce22338dcd2b5a801373b59f89ac6772b88",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because silently discarded dependency and acceptance fields can corrupt workflow semantics, while the proposed transactional fix is narrow and test-covered.",
+			"evidence": [
+				"Validators silently stripped blockParentUntilDone and acceptanceCriteria.",
+				"The missing blocker forced callers to issue follow-up mutations.",
+				"The fix synchronizes the parent blocking edge in the create transaction."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T14:24:48.142Z"
+		},
+		{
+			"key": "pr:paperclip#12587",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12587 fix(heartbeat): make workspace_busy retry scheduling priority- and age-aware",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12587",
+			"sourceUpdatedAt": "2026-08-31T14:21:24Z",
+			"sourceFingerprint": "9bf77c14a9f8d0a22045c831ee708b2730cb49c6973f56d9e5ccaf845f47ca3d",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Reframe around an explicit bounded queue or scheduling contract because disjoint retry-delay bands improve priority behavior but do not resolve unbounded retries or guarantee durable fairness.",
+			"evidence": [
+				"A high-priority run reportedly retried dozens of times over roughly an hour.",
+				"Current workspace-busy retries use a flat 60–120 second window.",
+				"The proposal explicitly retains unbounded retries while the holder is live."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T14:24:48.142Z"
+		},
+		{
 			"key": "proposal:ci-minion-ai-ci",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4831,39 +4897,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
-		},
-		{
-			"key": "pr:paperclip#12548",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T13:52:45Z",
-			"sourceFingerprint": "20ebb0fdb34483f43a6ad11f9eefea7634633671ec81d25b060b0018f403b529",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because this restores a missing human-governance recovery path for secret proposals through a narrowly authorized, idempotent, and already-tested operation.",
-			"evidence": [
-				"Pending secret proposals can remain without a linked human confirmation.",
-				"The public API previously had no supported recovery operation.",
-				"The route is board-only, fails closed, and passed 102 focused tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T13:54:26.779Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
@@ -5737,6 +5770,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:02.540Z"
+		},
+		{
+			"key": "pr:paperclip#12575",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
+			"sourceUpdatedAt": "2026-08-31T14:21:41Z",
+			"sourceFingerprint": "c8cf8c2a6c83c6f1122ddd5de1421a97085047401e54031d6eb2e4fa7f8abc31",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because deterministic project attribution repairs recurring task routing, filtering, cost rollups, and workspace selection without overriding explicit input.",
+			"evidence": [
+				"17 of 172 measured agent-created issues lacked a project.",
+				"Uses deterministic signals and returns null on disagreement.",
+				"Adds 15 unit tests and 10 route integration tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T14:24:48.142Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
@@ -7117,39 +7183,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:19.199Z"
-		},
-		{
-			"key": "pr:paperclip#12575",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
-			"sourceUpdatedAt": "2026-08-31T13:14:07Z",
-			"sourceFingerprint": "98844bd23c5834b357ca56b1f0172dd98ffb28fc3d37b4b3b0d14d1dd79d1a2e",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This bounded change addresses recurring project-attribution failures that disrupt filters, cost rollups, and workspace selection, with deterministic resolution rules and substantial test coverage.",
-			"evidence": [
-				"17 of 172 agent-created issues had no project on one measured instance.",
-				"Missing projects affect filters, cost attribution, and workspace selection.",
-				"The change adds 15 unit tests and 10 integration tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T13:24:31.579Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1883922325",
@@ -8565,8 +8598,8 @@
 			"repo": "paperclip",
 			"title": "#12558 feat(skills-catalog): import ECC skills, agent personas, commands, and rules",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12558",
-			"sourceUpdatedAt": "2026-08-31T04:51:15Z",
-			"sourceFingerprint": "a05f767909666f6f7d86634198c4bfc52e305acf2b5dd473cad0b426b551b831",
+			"sourceUpdatedAt": "2026-08-31T14:12:12Z",
+			"sourceFingerprint": "f769075c44d6f8d4b9be5af577fa8f0ac2f71d7e168b7ce2ca249a6297b2ff71",
 			"score": 42,
 			"band": "low",
 			"axes": {
@@ -8583,15 +8616,15 @@
 			"relatedKeys": [
 				"pr:paperclip#12559"
 			],
-			"rationale": "Group this catalog import with its explicit Hermes Memory Vault follow-up so the combined goal can verify the ECC offering, runtime integration, provenance, and operational boundaries together.",
+			"rationale": "Group the catalog import with its explicit Hermes memory follow-up so ECC adoption is reviewed as one bounded integration goal with combined dependency and supply-chain implications.",
 			"evidence": [
 				"Imports 470 optional ECC catalog entries.",
-				"The entries do not install automatically.",
-				"PR #12559 is identified as its follow-up."
+				"Adds caching for 193 GitHub-referenced skills pinned to one commit.",
+				"PR #12559 is described as its follow-up."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:03.762Z"
+			"scoredAt": "2026-08-31T14:24:48.142Z"
 		},
 		{
 			"key": "pr:pixel-agents#327",
@@ -9144,41 +9177,6 @@
 			"scoredAt": "2026-08-31T07:45:56.597Z"
 		},
 		{
-			"key": "pr:paperclip#12559",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12559 feat(hermes-adapter): add ECC Memory Vault bridge for cross-agent handoffs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12559",
-			"sourceUpdatedAt": "2026-08-31T05:11:09Z",
-			"sourceFingerprint": "948bf86f6f375a736e6b9acb394c09d9b2b39c38c938890dbdb1a8f2fe8250ee",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12558"
-			],
-			"rationale": "Group this adapter-specific bridge with the ECC catalog import it follows because its value and validation depend on the same external toolchain and integration objective.",
-			"evidence": [
-				"The summary calls this a follow-up to #12558.",
-				"The bridge is limited to hermes_local and defaults off.",
-				"Adapter tests report 78 of 78 passing."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:03.762Z"
-		},
-		{
 			"key": "pr:pixel-agents#390",
 			"kind": "pr",
 			"stage": "development",
@@ -9281,39 +9279,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:38:21.867Z"
-		},
-		{
-			"key": "pr:paperclip#12527",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12527 feat(cli): add deepseek, glm, kimi LLM providers",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12527",
-			"sourceUpdatedAt": "2026-08-30T09:32:10Z",
-			"sourceFingerprint": "9a48355d99a8be44031f4212182a7d5c0627761a95b3345bbad26f6949f02524",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Provider expansion has useful reach, but it is a partial step toward broader provider-registry work and lacks a completed repository-wide test run.",
-			"evidence": [
-				"The change adds DeepSeek, GLM, and Kimi to CLI configuration and health checks.",
-				"Custom provider registry and base-URL support remain out of scope.",
-				"The repository-wide test run did not complete within ten minutes."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:33:47.470Z"
 		},
 		{
 			"key": "proposal:2026-08-18-spec-heading-lint-baseline-backfill",
@@ -9446,6 +9411,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
+		},
+		{
+			"key": "pr:paperclip#12559",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12559 feat(hermes-adapter): add ECC Memory Vault bridge for cross-agent handoffs",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12559",
+			"sourceUpdatedAt": "2026-08-31T14:13:13Z",
+			"sourceFingerprint": "3eaad19fd960c0bb4b31fce91fe2fd0a24ff79a057aa605d6034f4c97eb1d10d",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12558"
+			],
+			"rationale": "Group this adapter-specific bridge with the ECC catalog import because its value, provenance, and deployment assumptions are directly tied to that same adoption effort.",
+			"evidence": [
+				"Explicitly described as a follow-up to #12558.",
+				"Limited to hermes_local and disabled by default.",
+				"Adapter tests passed 78 cases."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T14:24:48.142Z"
 		},
 		{
 			"key": "pr:pixel-agents#298",
