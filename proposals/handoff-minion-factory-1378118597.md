@@ -1,12 +1,13 @@
 ---
 id: handoff-minion-factory-1378118597
 title: Handoff marker — runner/src/queue.ts (minion-factory)
-status: review
+status: approved
 created: 2026-08-20
 updated: 2026-08-31
 repos: [minion-factory]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-factory-chat-restart-drops-pending
+approved_reason: "Ranked-queue supervisor approval: board-goal-v2 score 83/100, recommendation execute, readiness specification 7/10 and implementation 6/10; live admission threshold 80/100 and readiness threshold 6/10."
 ---
 
 # Handoff marker — runner/src/queue.ts
