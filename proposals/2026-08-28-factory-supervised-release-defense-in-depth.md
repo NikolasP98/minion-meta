@@ -1,14 +1,15 @@
 ---
 id: 2026-08-28-factory-supervised-release-defense-in-depth
 title: Complete defense in depth for supervised Factory releases
-status: draft
+status: approved
 created: 2026-08-28
-updated: 2026-08-28
+updated: 2026-08-31
 repos: [minion-factory, minion-meta]
 tags: [security, infra]
 value: 5
 effort: L
 source: supervised-autodeploy-audit-2026-08-28
+approved_reason: "Ranked-queue supervisor approval: board-goal-v2 score 83/100, recommendation execute, readiness specification 9/10 and implementation 6/10; live admission threshold 80/100 and readiness threshold 6/10."
 ---
 
 # Complete defense in depth for supervised Factory releases
