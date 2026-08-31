@@ -2,7 +2,7 @@
 id: 2026-08-17-site-device-identity-role-escalation-spec
 title: "device-identity/sign — sign the caller's real grant, never the body's role/scopes"
 stage: spec
-status: approved
+status: review
 pass: 2
 created: 2026-08-17
 updated: 2026-08-31
@@ -12,7 +12,6 @@ review_reason: "Invalid approval corrected after guarded Factory admission refus
 repos: [minion_site]
 tags: [security, logic, test]
 type: fix
-approved_reason: "Ranked-queue supervisor approval: board-goal-v2 score 98/100, recommendation execute, readiness specification 9/10 and implementation 7/10; live admission threshold 80/100 and readiness threshold 6/10."
 ---
 
 # `device-identity/sign` — sign the caller's real grant
