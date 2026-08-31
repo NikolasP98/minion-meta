@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T10:54:32.176Z",
+	"generatedAt": "2026-08-31T11:24:32.402Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -774,39 +774,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:34:26.538Z"
-		},
-		{
-			"key": "pr:paperclip#12560",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12560 fix(openclaw): persist gateway credentials as secret refs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12560",
-			"sourceUpdatedAt": "2026-08-31T10:52:59Z",
-			"sourceFingerprint": "bac40cbad00e62a980622a31a03d371e3e706e3fbc10ac85aba3de4601009c55",
-			"score": 88,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because legacy OpenClaw credentials can be exposed and persisted in plaintext configuration, while the proposed secret-reference migration is comprehensive and strongly verified.",
-			"evidence": [
-				"Legacy OpenClaw authorization headers can expose tokens in the edit form and persist them again.",
-				"The change removes known credential headers and persists only a secret_ref.",
-				"Adapter, UI, server, secrets, and invite-replay checks passed; the full wrapper alone was limited by missing cargo."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T10:54:32.091Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-capability-separation",
@@ -1753,6 +1720,39 @@
 			"scoredAt": "2026-08-31T07:34:26.538Z"
 		},
 		{
+			"key": "pr:paperclip#12579",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12579 KOMAA-183: activate RTB execution control v2 on live master (port of KOMAA-167)",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12579",
+			"sourceUpdatedAt": "2026-08-31T11:06:45Z",
+			"sourceFingerprint": "90d47ac83b512e6e29cf412b06d4364aae32837ad7d401574b695086bfc113b0",
+			"score": 81,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the change addresses multiple central runtime-failure modes and has board-approved activation, although the remaining failed test requires verification in a fully prepared environment.",
+			"evidence": [
+				"Scope covers watchdog recovery, workspace validation, durable reconciliation, budgets, telemetry, and context narrowing.",
+				"Board activation was approved via confirmation ef8e6456.",
+				"One watchdog test remains failing in the current worktree, attributed to a missing acpx package."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T11:24:32.326Z"
+		},
+		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2285,6 +2285,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:34:26.538Z"
+		},
+		{
+			"key": "pr:paperclip#12560",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12560 fix(openclaw): persist gateway credentials as secret refs",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12560",
+			"sourceUpdatedAt": "2026-08-31T11:20:23Z",
+			"sourceFingerprint": "a02bdfafc6bae058fdc41603d7ec48e84df034cde3eaf205a1f4921cd005980b",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because plaintext credential persistence is a security-sensitive recurring path and the proposed secret-reference migration is actionable with substantial regression coverage.",
+			"evidence": [
+				"Legacy OpenClaw tokens can be exposed in editing and persisted again during edit, replay, or join flows.",
+				"The change removes known credential headers and persists only secret references.",
+				"Adapter, UI, server, secrets, and invite-replay checks are reported passing, while the full wrapper lacked cargo."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T11:24:32.326Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -3854,39 +3887,6 @@
 			"scoredAt": "2026-08-31T07:33:47.470Z"
 		},
 		{
-			"key": "pr:paperclip#12548",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T10:48:04Z",
-			"sourceFingerprint": "ca8a2fb56d5dce6552e094a68a28866fec4cf75b97e878e5b939e138917116f1",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because this tested, bounded core-API change restores an otherwise unavailable human-governed recovery path without exposing secret material or requiring a schema migration.",
-			"evidence": [
-				"A pending secret binding proposal can remain without a linked human confirmation after a partial failure.",
-				"The change adds a narrow, idempotent, board-only recovery operation.",
-				"Focused verification passed 102 tests and the server TypeScript check."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T10:54:32.091Z"
-		},
-		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4388,39 +4388,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:56.597Z"
-		},
-		{
-			"key": "pr:paperclip#12522",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12522 fix(test): stop concurrent vi.importActual() from dropping factory mocks",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12522",
-			"sourceUpdatedAt": "2026-08-30T01:37:45Z",
-			"sourceFingerprint": "aaac49213bdb93a69259a4ceeb10fb0cc9fdf2546f2b85144ba36f3f6df79cd7",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This repository-wide correction removes a demonstrated intermittent CI failure mechanism and adds a guard against recurrence.",
-			"evidence": [
-				"The concurrent import pattern appeared at 38 repository sites.",
-				"Controlled runs observed 4 failures in 300 concurrent iterations and 0 in 300 sequential iterations.",
-				"A repository-wide guard test prevents the pattern from returning."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:33:47.470Z"
 		},
 		{
 			"key": "proposal:2026-08-18-factory-orchestration-round7",
@@ -6443,6 +6410,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:58.286Z"
+		},
+		{
+			"key": "pr:paperclip#12548",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
+			"sourceUpdatedAt": "2026-08-31T10:58:49Z",
+			"sourceFingerprint": "70010b9149127572c194e948e50f0e8a2e833368686b63981714b3bed8b85a1b",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because this bounded, tested recovery operation restores a blocked human-governance path with strong implementation evidence and limited migration risk.",
+			"evidence": [
+				"Pending binding proposals can remain without a linked human confirmation after a partial failure.",
+				"The route is board-only, idempotent, and returns no secret material.",
+				"Focused tests passed 102 tests and the server TypeScript check passed."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T11:24:32.326Z"
 		},
 		{
 			"key": "pr:paperclip#12551",
