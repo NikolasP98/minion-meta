@@ -1,9 +1,10 @@
 ---
 id: 2026-08-28-factory-supervised-release-defense-in-depth
 title: Complete defense in depth for supervised Factory releases
-status: approved
+status: in-spec
 created: 2026-08-28
 updated: 2026-08-31
+spawned_spec: 2026-08-31-factory-supervised-release-defense-in-depth-spec
 repos: [minion-factory, minion-meta]
 tags: [security, infra]
 value: 5
