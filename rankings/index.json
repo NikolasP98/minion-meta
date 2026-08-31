@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T20:15:47.327Z",
+	"generatedAt": "2026-08-31T20:31:59.768Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -2289,6 +2289,39 @@
 			"scoredAt": "2026-08-31T16:24:54.315Z"
 		},
 		{
+			"key": "pr:paperclip#12607",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12607 fix(codex-local): require safe live onboarding proof",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12607",
+			"sourceUpdatedAt": "2026-08-31T20:23:33Z",
+			"sourceFingerprint": "36df501faeda116fa1e531a1649e9c9633c4de26006ca1a33b14caa4f30d7870",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fail-closed onboarding proof addresses a credential and unsafe-execution boundary with clear invariants and broad passing checks, while draft review gates remain necessary.",
+			"evidence": [
+				"The current setup check can pass without a fresh selected-adapter response.",
+				"Both onboarding hire paths are blocked on absent or unsafe proof.",
+				"The listed tests, typechecks, builds, and token checks passed."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T20:31:59.677Z"
+		},
+		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2423,39 +2456,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
-		},
-		{
-			"key": "pr:paperclip#12594",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12594 feat(runner): add managed providers and evaluation platform",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12594",
-			"sourceUpdatedAt": "2026-08-31T19:43:40Z",
-			"sourceFingerprint": "70efa8643e562110a37910e000aba4c9dc1535bf3594e0deaa8d5206f2c91ecc",
-			"score": 77,
-			"band": "high",
-			"axes": {
-				"criticality": 6,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The production platform layer is highly central and security-sensitive, but the 387-file stacked boundary, absent local tests, and reliance on full CI leave execution readiness uncertain.",
-			"evidence": [
-				"The PR is the final entry in the runner stack.",
-				"The stacked delta is 387 files.",
-				"Local tests were not run; GitHub Actions is authoritative for full gates."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T19:54:52.242Z"
 		},
 		{
 			"key": "issue:minion-meta#329",
@@ -2674,6 +2674,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:38:58.989Z"
+		},
+		{
+			"key": "issue:minion-meta#361",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#361 [monitor:unstick] Run 04b8ae73: self-test stalled until 90m wall-clock kill",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/361",
+			"sourceUpdatedAt": "2026-08-31T20:17:36Z",
+			"sourceFingerprint": "9c0e9f73c053430950e135de96a979f24aadb3816a659017e3f28b95bb369367",
+			"score": 76,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A 90-minute self-test stall wastes factory capacity and obscures diagnosis, and the proposed per-command timing, timeouts, and classifier evidence provide a practical investigation path.",
+			"evidence": [
+				"The runner was killed after a 90-minute wall-clock budget.",
+				"No self-test subcommand result identified the hanging command.",
+				"The fallback completed successfully before the stall."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T20:31:59.677Z"
 		},
 		{
 			"key": "issue:pixel-agents#332",
@@ -3456,6 +3489,39 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
+			"key": "pr:paperclip#12606",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12606 fix(server): verify embedded postgres is reachable before reusing its pidfile",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12606",
+			"sourceUpdatedAt": "2026-08-31T20:20:33Z",
+			"sourceFingerprint": "614dfea3e86dc79c31cdcb6b8340518a7b91228d5e3018eba5dc00f8ceaa9a19",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The change addresses a production startup failure with a bounded reuse of an existing reachability check, though the lack of dedicated automated coverage raises residual delivery risk.",
+			"evidence": [
+				"Container recreation can exit on ECONNREFUSED.",
+				"Recovery currently depends on Docker restart retries.",
+				"The proposed check was verified against a deployment."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T20:31:59.677Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3652,6 +3718,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
+		},
+		{
+			"key": "pr:paperclip#12594",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12594 feat(runner): add managed providers and evaluation platform",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12594",
+			"sourceUpdatedAt": "2026-08-31T20:16:47Z",
+			"sourceFingerprint": "2432c7cf75e2b4008794f571b0709b598a676580d2a80c3560b880c3933bcd13",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 5,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "This is a central platform-completion layer with substantial reach, but its 387-file stacked dependency boundary is not ready to execute until lower work and authoritative gates pass.",
+			"evidence": [
+				"The PR is stacked on the task-thread experience.",
+				"The delta spans 387 files.",
+				"Full build, migration, security, browser, and release gates are deferred to GitHub Actions."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T20:31:59.677Z"
 		},
 		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
@@ -4025,39 +4124,6 @@
 			"scoredAt": "2026-08-31T08:01:35.926Z"
 		},
 		{
-			"key": "pr:paperclip#12596",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12596 test(runner): bound codex provider exit polls by wall clock",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12596",
-			"sourceUpdatedAt": "2026-08-31T16:35:09Z",
-			"sourceFingerprint": "8c25590f96b91415a19eda1894944413f5fa3c466a8035c524f807b3e2285657",
-			"score": 70,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 10
-			},
-			"confidence": 10,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because this low-risk test-only fix removes demonstrated random CI failures using an already-established bounded-wait pattern.",
-			"evidence": [
-				"The two tests failed 8/25 and 9/25 times before the change, then 0/25 after it.",
-				"The full codex_provider suite passed 12 consecutive runs after the change.",
-				"No production code changes are included."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:54:55.969Z"
-		},
-		{
 			"key": "pr:pixel-agents#300",
 			"kind": "pr",
 			"stage": "development",
@@ -4159,39 +4225,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
-		},
-		{
-			"key": "issue:paperclip#12545",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12545 Add support for idempotency keys on issue-creation and comment-creation POST requests",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12545",
-			"sourceUpdatedAt": "2026-08-30T17:16:24Z",
-			"sourceFingerprint": "a3e3be537042ba2e89ec29101796e3f3754a7d68eeeb00dd86ca7b2b1cb4b969",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Server-side idempotency addresses a real correctness dependency for autonomous clients, but current applicability and persistence semantics need confirmation before implementation is fully actionable.",
-			"evidence": [
-				"Retries can create duplicate issues or comments.",
-				"The requested behavior names an Idempotency-Key header and resource replay.",
-				"The report is not yet re-verified against latest master."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T19:54:52.242Z"
 		},
 		{
 			"key": "pr:minion_hub#197",
@@ -4936,6 +4969,39 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
+			"key": "pr:paperclip#12596",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12596 test(runner): bound codex provider exit polls by wall clock",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12596",
+			"sourceUpdatedAt": "2026-08-31T20:25:18Z",
+			"sourceFingerprint": "efa5b933b827e8828e5860ba9b34206e384aecd431eaaa12d68de2b1b2b15bc9",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 10
+			},
+			"confidence": 10,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The bounded test-only fix has strong reproduction and verification evidence and directly removes recurring false CI failures.",
+			"evidence": [
+				"The two tests failed 8/25 and 9/25 times before the change.",
+				"Both tests passed 25/25 times after the change.",
+				"The full suite passed 12 repeated runs."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T20:31:59.677Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5000,39 +5066,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
-		},
-		{
-			"key": "pr:paperclip#12592",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12592 feat(runner): add task experience, SDKs, and executor",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
-			"sourceUpdatedAt": "2026-08-31T20:12:10Z",
-			"sourceFingerprint": "02b7bcf7265f75620f2112e136e76abf8c1724e9177aa6481dfc0bf22d5408a7",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 8,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The user-facing runner work is strategically broad, but a 441-file change spanning UI, SDKs, executors, transports, and labs is insufficiently bounded for reliable delivery as one goal.",
-			"evidence": [
-				"The rebased delta contains 441 files.",
-				"The change spans the task page, multiple SDKs, executor, remote transport, scenarios, and development labs.",
-				"Local tests were not run because the checkout was resource constrained."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T20:15:47.241Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -5572,6 +5605,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
+		},
+		{
+			"key": "pr:paperclip#12592",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12592 feat(ui): add provider-neutral task experience",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
+			"sourceUpdatedAt": "2026-08-31T20:20:27Z",
+			"sourceFingerprint": "7f98fa642ef49e8dff4cd038c6d3853a858e33355ebdee8bee7a7311c1696bc1",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The provider-neutral task experience is strategically broad and well specified, but its 149-file frequently used UI delta still depends on unreported CI and review results.",
+			"evidence": [
+				"The delta spans 149 UI files.",
+				"The task page is described as broad and frequently used.",
+				"Local test suites were not run."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T20:31:59.677Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -7288,39 +7354,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:46:38.665Z"
-		},
-		{
-			"key": "issue:paperclip#12544",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12544 Assignee semantics (\"current ball-holder,\" not \"owner\") are unlabeled, making it impossible for a human operator to tell who is being waited on",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12544",
-			"sourceUpdatedAt": "2026-08-30T17:16:22Z",
-			"sourceFingerprint": "b27c50c89fd8b95d09e59b7dcc39c797ca02f28c7e7c4fc96c472038e3bb9da0",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The operator ambiguity is concrete and recurring, but the report has not been checked against current master and does not yet define a bounded interface-level solution or verification target.",
-			"evidence": [
-				"Operators cannot tell who is expected to act from the UI alone.",
-				"An internal comment and card-visibility convention compensates for the gap.",
-				"The behavior is not yet re-verified against latest master."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T19:54:52.242Z"
 		},
 		{
 			"key": "issue:pixel-agents#380",
@@ -9982,6 +10015,39 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
+			"key": "deploy:minion-meta",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion-meta",
+			"title": "minion-meta deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/commit/59c4b56c192a730dbd63bb8e51dd8305eb2ad424",
+			"sourceUpdatedAt": "2026-08-31T20:17:40Z",
+			"sourceFingerprint": "58c5cee04a8c3464a4b48f83ec052429eb961bbe81b829db72694d3cab77db61",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Deployment health may matter, but the unknown status and documentation-only summary provide no concrete failure, scope, or verifiable remediation target.",
+			"evidence": [
+				"Status is unknown.",
+				"The summary describes preflight conditional quality-gate documentation.",
+				"No outage or failed deployment is identified."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T20:31:59.677Z"
+		},
+		{
 			"key": "proposal:ci-minion-ai-stale",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10508,39 +10574,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:36:55.886Z"
-		},
-		{
-			"key": "deploy:minion-meta",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion-meta",
-			"title": "minion-meta deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/commit/59c4b56c192a730dbd63bb8e51dd8305eb2ad424",
-			"sourceUpdatedAt": "2026-08-31T19:54:09Z",
-			"sourceFingerprint": "0179e2754ace156224632cf6fef3eed3328592e7d33b1d80b511fe1b9fc2e9d9",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The catalog reports unknown deployment health without evidence of a failed deployment, affected service, or actionable remediation.",
-			"evidence": [
-				"Status is unknown.",
-				"The referenced change is documentation for conditional quality gates.",
-				"No outage or failed check is reported."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T20:15:47.241Z"
 		},
 		{
 			"key": "pr:minion_hub#207",
