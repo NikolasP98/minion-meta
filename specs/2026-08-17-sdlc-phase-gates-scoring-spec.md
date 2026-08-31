@@ -2,12 +2,13 @@
 id: 2026-08-17-sdlc-phase-gates-scoring-spec
 title: SDLC phase gates & preemptive scoring — anti-slop checks at every boundary + backward reconciliation
 stage: spec
-status: approved
+status: review
 pass: 1
 created: 2026-08-17
-updated: 2026-08-30
+updated: 2026-08-31
 repos: [minion-meta, minion-factory, minion-base]
-verdict: approved
+verdict: revision-required
+review_reason: "Factory run 3e983ef4 and empty PR #349 produced no changes and no satisfaction evidence. Re-approval requires a bounded remaining slice or exact current-default commit, test, and runtime evidence proving the spec is already shipped."
 tags: [infra]
 type: infra
 possibly_shipped: https://github.com/NikolasP98/minion-meta/pull/263
