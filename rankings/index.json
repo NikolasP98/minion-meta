@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T17:54:59.910Z",
+	"generatedAt": "2026-08-31T18:24:45.908Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -507,39 +507,6 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
-			"key": "pr:minion-factory#160",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#160 factory: implementing spec: Durable state — transactional outbox for postFinish side effects, guarded lifecycle edges, append-onl",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/160",
-			"sourceUpdatedAt": "2026-08-31T08:04:00Z",
-			"sourceFingerprint": "6660bad893c7ec82a7c367dcf6f138a54f6aaa14ef880648f9913d1f2db8251e",
-			"score": 89,
-			"band": "critical",
-			"axes": {
-				"criticality": 8,
-				"importance": 10,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Transactional side effects and guarded lifecycle state address central durability risks, though the exact remaining slice must first be reconciled from repository evidence.",
-			"evidence": [
-				"The spec covers a transactional outbox and guarded lifecycle edges.",
-				"The task says to implement only the next genuinely incomplete slice.",
-				"Existing merged work and terminal runs must be reconciled first."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:14:05.520Z"
-		},
-		{
 			"key": "proposal:2026-08-17-factory-durable-state-outbox",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -675,6 +642,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
+		},
+		{
+			"key": "pr:minion-factory#154",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-factory",
+			"title": "#154 factory: repair Factory PR #103 exact head: post-transition spec validity",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/154",
+			"sourceUpdatedAt": "2026-08-31T18:03:06Z",
+			"sourceFingerprint": "98f8bdc0bc06dd565630aac3db2bc951e87213857dadaf4adc71d2711026681a",
+			"score": 88,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the narrowly bounded approval-integrity defect can permit invalid lifecycle transitions and already has exact regression and verification requirements.",
+			"evidence": [
+				"Remaining defect is approval-integrity related.",
+				"Required regressions demand zero PUTs and zero run inserts.",
+				"Exact branch head and complete self-test are specified."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T18:24:45.803Z"
 		},
 		{
 			"key": "pr:paperclip#12554",
@@ -1478,39 +1478,6 @@
 			"scoredAt": "2026-08-31T17:54:59.834Z"
 		},
 		{
-			"key": "pr:minion-factory#154",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#154 factory: repair Factory PR #103 exact head: post-transition spec validity",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/154",
-			"sourceUpdatedAt": "2026-08-31T08:15:49Z",
-			"sourceFingerprint": "ffbeb783e358848d465ba79a5aadb5bb4558a62929b66e24487c36c55e15ba2c",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The remaining approval-integrity defect can permit invalid lifecycle transitions, while the exact branch, defect, invariants, and regression expectations make the work immediately actionable.",
-			"evidence": [
-				"The task identifies one remaining approval-integrity defect",
-				"Missing or body-only status must cause zero PUTs and zero run inserts",
-				"Work continues PR #103 from an exact head"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:21:50.290Z"
-		},
-		{
 			"key": "pr:minion-meta#247",
 			"kind": "pr",
 			"stage": "development",
@@ -1786,6 +1753,41 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
+			"key": "pr:minion-factory#160",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-factory",
+			"title": "#160 factory: implementing spec: Durable state — transactional outbox for postFinish side effects, guarded lifecycle edges, append-onl",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/160",
+			"sourceUpdatedAt": "2026-08-31T18:15:59Z",
+			"sourceFingerprint": "d09534bfd66806bf60d80dc325d14a00b76a990635ac8064fd7e7e56e6ae30e0",
+			"score": 81,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion-factory#154"
+			],
+			"rationale": "Reevaluate after reconciling shipped slices because durable state is highly central but the catalog does not identify the next incomplete implementation slice.",
+			"evidence": [
+				"Scope covers transactional outbox and guarded lifecycle edges.",
+				"Task says to find the next genuinely incomplete slice.",
+				"Existing PRs, terminal runs, and spec history must first be reconciled."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T18:24:45.803Z"
+		},
+		{
 			"key": "pr:paperclip#12579",
 			"kind": "pr",
 			"stage": "development",
@@ -1817,6 +1819,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T11:24:32.326Z"
+		},
+		{
+			"key": "pr:paperclip#12591",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12591 feat(runner): add Codex-native application integration",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12591",
+			"sourceUpdatedAt": "2026-08-31T18:18:48Z",
+			"sourceFingerprint": "aa2c42996905d4290a34aecd3cc13c6c56873252e609dcabe7734caeeeb8b9b2",
+			"score": 81,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:paperclip#12592"
+			],
+			"rationale": "Execute as the prerequisite native-runtime boundary because it supplies guarded persistence, authorization, recovery, and finalization required by the dependent task experience.",
+			"evidence": [
+				"PR adds durable native-run state and recovery.",
+				"Runtime remains Codex-only and default-off.",
+				"PR #12592 depends on these application contracts."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T18:24:45.803Z"
 		},
 		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
@@ -2775,6 +2812,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:02.540Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 72744 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-08-31T18:17:58Z",
+			"sourceFingerprint": "8c7dfbfcf71863b727cd4caea1f2b2d1cfaf6acb972873708669dbcd087f37d7",
+			"score": 74,
+			"band": "high",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 9,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Reframe into bounded, risk-prioritized sync goals because a raw backlog of 72,744 upstream commits is not an actionable or verifiable unit of delivery.",
+			"evidence": [
+				"Issue reports 72,744 new upstream commits.",
+				"Summary mixes fixes, performance work, tests, refactors, and features.",
+				"No bounded sync scope or acceptance outcome is stated."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T18:24:45.803Z"
 		},
 		{
 			"key": "pr:minion-factory#158",
@@ -3825,6 +3895,39 @@
 			"scoredAt": "2026-08-31T17:54:59.834Z"
 		},
 		{
+			"key": "pr:paperclip#12600",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12600 feat(apps): add Paperclip Cloud managed OAuth connector",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12600",
+			"sourceUpdatedAt": "2026-08-31T18:16:53Z",
+			"sourceFingerprint": "d3177c9aada8fd3f7992bf9d0f2906501138a9b8a2b44772e8368210f5a3b5a5",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate when the companion Cloud protocol and provider approval are ready because the instance implementation cannot deliver its real managed profiles independently.",
+			"evidence": [
+				"Depends on paperclip-cloud PR #312.",
+				"Real profiles remain disabled pending Cloud deployment and provider approval.",
+				"Customer-created OAuth clients remain available."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T18:24:45.803Z"
+		},
+		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4293,6 +4396,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T14:54:38.867Z"
+		},
+		{
+			"key": "pr:paperclip#12592",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12592 feat(runner): add task experience and developer SDKs",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
+			"sourceUpdatedAt": "2026-08-31T18:15:33Z",
+			"sourceFingerprint": "d3b424beb8ffac1c81fe2f0f658550397e519611ec5c1fb4c2f5c56acb074e82",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:paperclip#12591"
+			],
+			"rationale": "Reevaluate after the preceding native application integration passes because this broad 379-file user and SDK layer is explicitly dependent on it and lacks local test execution.",
+			"evidence": [
+				"PR depends on the preceding stack entry.",
+				"Stacked delta is 379 files.",
+				"Local tests were not run."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T18:24:45.803Z"
 		},
 		{
 			"key": "proposal:ci-minion-ai-ci",
@@ -4904,41 +5042,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
-		},
-		{
-			"key": "pr:paperclip#12591",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12591 feat(runner): add Codex-native application integration",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12591",
-			"sourceUpdatedAt": "2026-08-31T17:33:17Z",
-			"sourceFingerprint": "d20377db70ecf63ed137eb668494a84d0b5890b3c1cd3ede2b682673062283cd",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12592"
-			],
-			"rationale": "Group the native application boundary with its dependent task and SDK experience as one staged Runner goal with explicit integration gates.",
-			"evidence": [
-				"This adds the application boundary required to exercise the existing Runner package.",
-				"The change spans 126 files and central heartbeat and agent-route code.",
-				"Local tests, build, and typecheck were not run."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T17:54:59.834Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -5748,41 +5851,6 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
-			"key": "pr:paperclip#12592",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12592 feat(runner): add task experience and developer SDKs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
-			"sourceUpdatedAt": "2026-08-31T17:29:08Z",
-			"sourceFingerprint": "135cefac9946f11f6770bbf6a24c08025ed7c129616938e35cd261d6b8974e24",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 8,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12591"
-			],
-			"rationale": "Group this dependent 379-file user and developer surface with the native Runner integration so readiness and regression risk are managed as one staged outcome.",
-			"evidence": [
-				"This PR depends on the native application contracts in the preceding stack entry.",
-				"The stacked delta contains 379 changed files.",
-				"Local tests were not run."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T17:54:59.834Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6186,39 +6254,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "pr:paperclip#12600",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12600 feat(apps): add Paperclip Cloud managed OAuth connector",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12600",
-			"sourceUpdatedAt": "2026-08-31T17:51:13Z",
-			"sourceFingerprint": "49bb44c57b36a7bb583eeef52111934c3839cc90133997bc1a9dccff9526b4fb",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate after the companion Cloud protocol and provider approval are available because the implementation cannot yet deliver an operational managed OAuth flow.",
-			"evidence": [
-				"The managed flow depends on paperclip-cloud PR 312.",
-				"Real provider profiles remain disabled until Cloud deployment and provider approval.",
-				"Customer-created OAuth clients remain available as a fallback."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T17:54:59.834Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
@@ -7231,39 +7266,6 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 72613 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-08-31T12:23:52Z",
-			"sourceFingerprint": "0da746c65ff631e1e6d8bbbf49caf71e0a77be9cd64501ef7d541e18b12b8301",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The upstream gap may contain valuable reliability and security fixes, but a 72,613-commit inventory without compatibility analysis, bounded scope, or acceptance criteria cannot produce an effective execution outcome.",
-			"evidence": [
-				"Reports 72,613 new upstream commits",
-				"The excerpt mixes fixes, tests, refactors, and performance changes",
-				"No migration scope or verifiable outcome is specified"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T12:25:32.859Z"
-		},
-		{
 			"key": "issue:pixel-agents#380",
 			"kind": "issue",
 			"stage": "proposal",
@@ -7766,6 +7768,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T09:24:43.768Z"
+		},
+		{
+			"key": "pr:paperclip#12597",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12597 refactor: rename product workspaces to worktrees",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12597",
+			"sourceUpdatedAt": "2026-08-31T18:12:11Z",
+			"sourceFingerprint": "9cd2ef48ccd17e37f4bcac0d29c7ce84b443171f2f45ead4e4331def00388a95",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 10
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the compatibility-preserving terminology change is extensively verified and immediately actionable, although deferral has limited operational consequence.",
+			"evidence": [
+				"Public wire and persisted names remain unchanged.",
+				"5,243 local tests passed.",
+				"GitHub Actions passed the full matrix on the cited head."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T18:24:45.803Z"
 		},
 		{
 			"key": "pr:pixel-agents#396",
@@ -8601,39 +8636,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T14:54:38.867Z"
-		},
-		{
-			"key": "pr:paperclip#12597",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12597 refactor: rename product workspaces to worktrees",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12597",
-			"sourceUpdatedAt": "2026-08-31T17:01:20Z",
-			"sourceFingerprint": "a391b76f822f0d1ea05cc37db54bd5a46788867e858f417d346429a5a05a64e6",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate because the terminology improvement is broad and well prepared but has low urgency and carries substantial contract-regression risk relative to its immediate benefit.",
-			"evidence": [
-				"The change spans UI, CLI, server, packages, adapters, and documentation.",
-				"Persisted names and public wire contracts intentionally remain unchanged.",
-				"Four fixed-port tests were not run successfully on the local host."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T17:24:37.139Z"
 		},
 		{
 			"key": "pr:pixel-agents#327",
