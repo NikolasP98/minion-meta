@@ -1,9 +1,10 @@
 ---
 id: 2026-08-29-base-meta-status-revision-binding-required
 title: "Base gate endpoint accepts unbound mutations — make expectedStatus + expectedRevision mandatory"
-status: approved
+status: in-spec
 created: 2026-08-29
 updated: 2026-08-31
+spawned_spec: 2026-08-31-base-meta-status-revision-binding-required-spec
 repos: [minion-base]
 tags: [security, logic]
 approved_reason: "Ranked-queue supervisor approval: board-goal-v2 score 81/100, recommendation execute, readiness specification 10/10 and implementation 9/10; live admission threshold 80/100 and readiness threshold 6/10."
