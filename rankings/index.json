@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T19:54:52.327Z",
+	"generatedAt": "2026-08-31T20:15:47.327Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -3864,8 +3864,8 @@
 			"repo": "paperclip",
 			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T17:36:01Z",
-			"sourceFingerprint": "a042990525b5de580f4727b6bb4dfbe4f306e6dd4ffecb28502595d3df2003a6",
+			"sourceUpdatedAt": "2026-08-31T20:04:16Z",
+			"sourceFingerprint": "b57c122c36e56b623f09958eafa441a7cf46b944fb2d5f1cd5aed45b652daec2",
 			"score": 71,
 			"band": "high",
 			"axes": {
@@ -3880,15 +3880,15 @@
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute because this provides a narrowly scoped, tested recovery path for a security-sensitive governance failure that otherwise leaves human confirmation unavailable.",
+			"rationale": "This is a bounded, tested recovery fix for a core authorization-controlled secret workflow that currently lacks a supported repair path.",
 			"evidence": [
-				"Pending binding proposals can remain without a linked human confirmation.",
-				"The route is board-only, idempotent, and returns no secret material.",
-				"Targeted verification passed 102 tests and TypeScript checking."
+				"Pending secret proposals can remain without a linked human confirmation.",
+				"The route is board-only and requires target-agent authorization.",
+				"Targeted tests passed 102 tests and server type-checking passed."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T17:54:59.834Z"
+			"scoredAt": "2026-08-31T20:15:47.241Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -4460,6 +4460,39 @@
 			"scoredAt": "2026-08-31T07:45:56.597Z"
 		},
 		{
+			"key": "issue:minion-meta#280",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#280 [monitor:auto-fix] escalation: auto-fix (escalated): Worker containment S5: adversarial E2E and sup — 3 attempts exhausted (review verdict: FAIL)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/280",
+			"sourceUpdatedAt": "2026-08-31T19:54:04Z",
+			"sourceFingerprint": "6841faceb129cf52e0bc0bb533335f716013d6c96e553f29fea52e6849ce2026",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Three exhausted automated attempts and a failed review justify immediate human triage, although the catalog does not provide enough failure detail to begin a bounded code fix directly.",
+			"evidence": [
+				"The worker-containment work failed its gates three times.",
+				"The latest review verdict is FAIL.",
+				"The intake explicitly says human judgment is needed."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T20:15:47.241Z"
+		},
+		{
 			"key": "issue:paperclip#12599",
 			"kind": "issue",
 			"stage": "proposal",
@@ -4973,10 +5006,10 @@
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
-			"title": "#12592 feat(runner): add task experience and developer SDKs",
+			"title": "#12592 feat(runner): add task experience, SDKs, and executor",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
-			"sourceUpdatedAt": "2026-08-31T19:47:00Z",
-			"sourceFingerprint": "ed80411eb574bb0b08009648564d9ebcdf9e8798778daee366e1d34b9e25f1bb",
+			"sourceUpdatedAt": "2026-08-31T20:12:10Z",
+			"sourceFingerprint": "02b7bcf7265f75620f2112e136e76abf8c1724e9177aa6481dfc0bf22d5408a7",
 			"score": 65,
 			"band": "medium",
 			"axes": {
@@ -4985,21 +5018,21 @@
 				"impact": 9
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 5
+				"specification": 6,
+				"implementation": 3
 			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
+			"confidence": 7,
+			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "The task experience and SDK boundary is strategically broad, but its 378-file delta, unverified local state, and dependency on a preceding stack entry make immediate paid execution insufficiently ready.",
+			"rationale": "The user-facing runner work is strategically broad, but a 441-file change spanning UI, SDKs, executors, transports, and labs is insufficiently bounded for reliable delivery as one goal.",
 			"evidence": [
-				"The rebased delta is 378 files.",
-				"Local tests were not run because the checkout is resource constrained.",
-				"The PR depends on native application contracts in the preceding stack entry."
+				"The rebased delta contains 441 files.",
+				"The change spans the task page, multiple SDKs, executor, remote transport, scenarios, and development labs.",
+				"Local tests were not run because the checkout was resource constrained."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T19:54:52.242Z"
+			"scoredAt": "2026-08-31T20:15:47.241Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -10477,6 +10510,39 @@
 			"scoredAt": "2026-08-31T07:36:55.886Z"
 		},
 		{
+			"key": "deploy:minion-meta",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion-meta",
+			"title": "minion-meta deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/commit/59c4b56c192a730dbd63bb8e51dd8305eb2ad424",
+			"sourceUpdatedAt": "2026-08-31T19:54:09Z",
+			"sourceFingerprint": "0179e2754ace156224632cf6fef3eed3328592e7d33b1d80b511fe1b9fc2e9d9",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The catalog reports unknown deployment health without evidence of a failed deployment, affected service, or actionable remediation.",
+			"evidence": [
+				"Status is unknown.",
+				"The referenced change is documentation for conditional quality gates.",
+				"No outage or failed check is reported."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T20:15:47.241Z"
+		},
+		{
 			"key": "pr:minion_hub#207",
 			"kind": "pr",
 			"stage": "development",
@@ -10809,39 +10875,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:36:18.083Z"
-		},
-		{
-			"key": "deploy:minion-meta",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion-meta",
-			"title": "minion-meta deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/commit/59c4b56c192a730dbd63bb8e51dd8305eb2ad424",
-			"sourceUpdatedAt": "2026-08-31T09:18:07Z",
-			"sourceFingerprint": "cf0e1dfa4f9deff0cf9c9717ee5ad5f8b4db5beedc3f8a5fb110bfd0ffcbdf11",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Deployment health may matter, but the unknown status and documentation-only commit summary do not establish a failure, urgency, or actionable remedy.",
-			"evidence": [
-				"Status is unknown.",
-				"The source is a single minion-meta commit.",
-				"The summary describes preflight conditional quality gates."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T09:24:43.768Z"
 		},
 		{
 			"key": "pr:pixel-agents#284",
