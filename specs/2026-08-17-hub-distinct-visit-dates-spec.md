@@ -429,8 +429,8 @@ slices below are the residue that is genuinely missing.
    bookings is aggregated independently, one row per contact each, then combined — never by
    filtering bookings through an invoice-anchored relation. A contact with zero invoices and two
    `completed` bookings is exactly as eligible as one with zero bookings and two invoices.
-5. **Every live contact identity shape is reachable, and every booking has exactly one owner, and
-   that owner agrees with the invoice attribution for the same party (M2).** Reachability: a
+5. **Every live contact identity shape is reachable, and every booking has at most one owner, and
+   any owner agrees with the invoice attribution for the same party (M2).** Reachability: a
    contact with no `party_id` at all is still reachable through `crm_contact_id` (the shape
    `createBooking` normally produces). Ownership resolves in this order: (a) `crm_contact_id`
    names a live contact in the org **and** that contact has a `party_id` → canonicalize through
