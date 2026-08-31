@@ -1,13 +1,24 @@
 ---
 spec: 2026-08-17-hub-distinct-visit-dates-spec
-pass: 11
+pass: 12
 verdict: pending
 reviewer: factory-review
 created: 2026-08-17
-updated: 2026-08-30
+updated: 2026-08-31
 ---
 
-# Review record — disposition: STILL IN REVIEW (pass 11 awaiting re-review)
+# Review record — disposition: STILL IN REVIEW (pass 12 awaiting re-review)
+
+## Pass 12 — external review blocker fixed, awaiting re-review
+
+Pass 12 resolves the sole pass-11 re-review finding by choosing the policy the prescribed SQL,
+its explanation, and the DANGLING acceptance test already shared. Party fallback applies only
+when `crm_contact_id IS NULL`. A non-null direct ID that no longer resolves to a live same-org
+contact is excluded rather than silently reassigned through the booking's independently
+reconciled `party_id`. Invariant 5 and D3 now state that exact rule, including the zero-owner
+outcome; no SQL or test behavior changed. Hub `master` advanced from the pinned `1b47e8ce` to
+`f0ba8a36`, but its intervening relevant changes do not alter the nullable/no-FK scheduling
+bridges or CRM soft-delete path that make this identity shape reachable.
 
 ## Pass 11 — external review blocker fixed, awaiting re-review
 

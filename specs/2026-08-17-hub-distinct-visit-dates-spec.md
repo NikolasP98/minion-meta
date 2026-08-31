@@ -3,10 +3,10 @@ id: 2026-08-17-hub-distinct-visit-dates-spec
 title: "CRM funnel — one timezone-correct visit-date definition (invoices + completed bookings) behind the shipped Loyal floor"
 stage: spec
 status: review
-pass: 11
+pass: 12
 next_slice: 1
 created: 2026-08-17
-updated: 2026-08-30
+updated: 2026-08-31
 proposal: 2026-08-17-hub-distinct-visit-dates
 verdict: pending
 repos: [minion_hub, minion-meta]
@@ -202,6 +202,15 @@ update. The census now retains and classifies all three with their exact changed
 7 now requires post-commit invalidation only from in-domain mutations that can change visit
 ownership, eligibility, day bucketing, or procedure classification; every out-of-domain hit must
 still remain visible and justified in the census.
+
+**Pass-12 fix (2026-08-31).** The pass-11 re-review found one ownership-policy contradiction,
+not an SQL defect: invariant 5 and D3 said a booking falls back through its own `party_id` when
+there is "no live `crm_contact_id`," while the prescribed `booking_owner` CTE and DANGLING test
+already deliberately restrict that fallback to `crm_contact_id IS NULL`. The latter policy is
+retained. A non-null direct contact ID is authoritative evidence; if it no longer resolves to a
+live same-org contact, silently reassigning the booking through an independently reconciled party
+would hide stale or cross-org linkage. Invariant 5 and D3 now say `IS NULL` explicitly and name
+unresolved non-null IDs as excluded, matching the SQL, consequence text, and acceptance test.
 
 **Design ancestors:**
 [`2026-08-13-crm-customers-server-pagination-spec`](2026-08-13-crm-customers-server-pagination-spec.md)
@@ -429,11 +438,13 @@ slices below are the residue that is genuinely missing.
    canonical pick the invoice bridge already attributes that party's invoices to, so a booking
    directly linked to a non-canonical sibling still lands on the contact holding that party's
    invoice history; (b) `crm_contact_id` names a live, **partyless** contact → that contact
-   directly, unchanged; (c) no live `crm_contact_id` → fall back to the booking's own `party_id`
+   directly, unchanged; (c) `crm_contact_id IS NULL` → fall back to the booking's own `party_id`
    (independently reconciled from `attendee_phone`, per §1), resolved through the same
-   `CONTACT_PARTY` pick. Two contacts sharing one party therefore never inherit each other's
-   *distinct* appointments, but every appointment on that party — however it was linked — reaches
-   the one canonical contact, and a doubly-linked booking still counts once.
+   `CONTACT_PARTY` pick; (d) a non-null `crm_contact_id` that does not resolve to a live same-org
+   contact → no owner and no party fallback, because the stale or foreign direct link is
+   authoritative missing-data evidence rather than permission to reassign the visit. Two contacts
+   sharing one party therefore never inherit each other's *distinct* appointments, and a
+   doubly-linked booking still counts once.
 6. **Loyal stays read-time.** `visitDates >= 2` remains a *floor* derived at read time; nothing new
    is persisted into `custom_fields._funnel`. Evidence disappearing (a voided invoice, a booking
    flipped to `no_show`) self-corrects.
@@ -493,7 +504,7 @@ slices below are the residue that is genuinely missing.
 |---|---|---|---|
 | D1 | `issued_at::date` → `(issued_at at time zone $tz)::date`, `$tz` from `fin_settings` | S1 | Postgres test: two invoices at 18:00 and 20:00 Lima on one day ⇒ `loyal=false`; 18:00 Lima on two different days ⇒ `loyal=true` |
 | D2 | The loyal predicate stops being invoice-only: distinct dates over (procedure invoices that are non-void **by `status is distinct from 'void'`** ∪ `completed` bookings, with attendance enforced at the write per D16 rather than by a `now()` filter in the read), deduped across sources, aggregated as an **independent** per-contact relation that is left-joined onto the contact spine — never by filtering bookings through `contact_invoice_class`, and never by re-anchoring `fin` | S2 | Tests: invoice day A + completed booking day B ⇒ loyal; invoice and booking on the same local day ⇒ 1 date, not loyal; `no_show`/`cancelled`/`accepted` bookings ⇒ not counted (a *future-dated* `completed` booking is unreachable by construction — D16); **zero invoices + two completed bookings ⇒ loyal, and revenue fields stay `0`/unset, not thrown**; a procedure invoice with `status IS NULL` still counts (R2-M1) |
-| D3 | Each booking gets **exactly one** owner, and that owner agrees with invoice attribution for the same party (M2): `crm_contact_id` **canonicalized through `CONTACT_PARTY` on that contact's own `party_id`** when it names a live, party-linked contact in the org; the live contact itself, unchanged, when it is partyless; otherwise the booking's own `party_id` resolved through the same canonical `CONTACT_PARTY` pick. Partyless contacts stay reachable; a booking directly linked to a non-canonical sibling still lands on the party's canonical contact — the same one the invoice bridge attributes that party's invoices to | S2 | Tests over all three link shapes, **including a `party_id IS NULL` contact whose only link is `crm_contact_id`**; a doubly-linked booking ⇒ counted once, for the canonical contact only; **two live contacts A (canonical) and B share one party ⇒ a direct-link booking on B and a party-only booking both credit A, the same contact an invoice on that party is attributed to — one invoice-day on A plus one booking-day directly linked to B combine into 2 dates on A and reach loyal (M2, extends R2-M2)** |
+| D3 | Each booking gets **at most one** owner, and any owner agrees with invoice attribution for the same party (M2): `crm_contact_id` **canonicalized through `CONTACT_PARTY` on that contact's own `party_id`** when it names a live, party-linked contact in the org; the live contact itself, unchanged, when it is partyless; the booking's own `party_id` resolved through the same canonical `CONTACT_PARTY` pick only when `crm_contact_id IS NULL`. A non-null direct ID that does not resolve to a live same-org contact gets no owner and never falls back. Partyless contacts stay reachable; a booking directly linked to a non-canonical sibling still lands on the party's canonical contact — the same one the invoice bridge attributes that party's invoices to | S2 | Tests over all three valid link shapes, **including a `party_id IS NULL` contact whose only link is `crm_contact_id`**; a doubly-linked booking ⇒ counted once, for the canonical contact only; a dangling/foreign non-null direct ID plus a valid party ID ⇒ counted for nobody; **two live contacts A (canonical) and B share one party ⇒ a direct-link booking on B and a party-only booking both credit A, the same contact an invoice on that party is attributed to — one invoice-day on A plus one booking-day directly linked to B combine into 2 dates on A and reach loyal (M2, extends R2-M2)** |
 | D4 | The finance-map cache key gains the timezone (and the visit-source shape) (S1); `updateFinSettings` invalidates every visit-dependent cache — `crm-fin-map`, the roster, and the dashboard — after any settings write, so a timezone change cannot serve a stale Loyal set past that one write (M1, extends D4) | S1 | Unit test on the key builder; integration test warming all three caches, calling `updateFinSettings({timezone: …})`, and asserting the very next read of each reflects the new zone without a TTL wait |
 | D5 | Roster SQL and TS derivations still agree, now including the visit axis | S1, S2 | `crm-funnel-parity.sql.integration.test.ts` extended with 0/1/2 visit dates × source mix |
 | D6 | `distinctVisitDates` and the analyze route's `visits >= 2` write branch are deleted; the route documents the floor as the Loyal source | S3 | `rg distinctVisitDates src/` is empty; route test: a model answering `loyal` still cannot set it, and no `_funnel` write happens on the Loyal path |
