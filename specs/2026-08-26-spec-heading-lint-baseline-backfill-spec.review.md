@@ -4,7 +4,7 @@ pass: 4
 verdict: approved
 reviewer: factory-review
 created: 2026-08-26
-updated: 2026-08-30
+updated: 2026-08-31
 score_slice_size: 8
 score_dod_verifiability: 9
 score_scope_containment: 9
@@ -222,13 +222,25 @@ in the current-base proposal.
 ### Author resolution after review
 
 Both pass-4 findings were fixed without widening the implementation slice. Legacy mode no longer
-infers a decision from prose: S3 freezes the 70 unchanged pre-contract files by path and whole-file
-SHA-256 in a removal-only manifest. Any edit, new sidecar, added manifest entry, or rewritten hash
-must use structured mode. The fixture contract includes the review's live contradictory example,
-so a superseded `approved` token cannot satisfy current `changes_requested` evidence (or vice
-versa). The reconciled AS-IS now consistently reports 70 present/current sidecars, 2 absent, and 0
+infers a decision from prose: S3 freezes the unchanged pre-contract unstructured files by path and
+whole-file SHA-256 in a removal-only manifest. Any edit, new sidecar, added manifest entry, or
+rewritten hash must use structured mode. The fixture contract includes the review's live
+contradictory example, so a superseded `approved` token cannot satisfy current `changes_requested`
+evidence (or vice versa). The reconciled AS-IS now consistently reports 70 present/current sidecars, 2 absent, and 0
 present freshness mismatches; the deleted orphan is no longer cited. The factory proposal also no
 longer describes the already-shipped proposal-index `--check` mode as parked.
 
 The author disposition is `approved`; an independent re-review still controls whether the PR may
 leave draft.
+
+### Bootstrap/recreation re-review resolution
+
+The 2026-08-30 re-review rejected an allow-all-when-missing bootstrap because deleting and later
+recreating the manifest could re-admit changed evidence. The author fixed the contract on
+2026-08-31: initial entries are derived from exact unstructured path/hash pairs at every resolved
+comparison revision; later candidates may only remove exact pairs; the manifest remains committed
+when empty; and merge-parent, deletion, and delete/recreate controls are required. The sibling
+minion-factory proposal now carries the same exact-hash rule. `origin/dev@d1df86e` was merged before
+this resolution; its two commits changed handoff proposal projections only, so the measured
+spec/sidecar corpus is unchanged. This records the author's resolution, not an independent
+re-review verdict.

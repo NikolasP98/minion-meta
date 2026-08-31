@@ -3,7 +3,7 @@ id: 2026-08-29-factory-generator-related-ids-and-review-sidecars
 title: "Teach the minion-factory spec generator the two new meta gate rules: `related` ids must resolve, and an in-place `pass` bump must refresh the review sidecar"
 status: draft
 created: 2026-08-29
-updated: 2026-08-30
+updated: 2026-08-31
 repos: [minion-factory]
 tags: [infra, hygiene, test]
 value: 3
@@ -34,7 +34,7 @@ lifecycle item. This is that item.
    deliberately dangling id — and asserts `--check` exits 0. Across the corpus there are 99
    `related` ids on 35 specs; 0 are unresolvable today, 22 resolve only against `proposals/`.
 2. A spec's `pass` is bumped **in place on the same file** by the factory's review loop, and
-   the sidecar is not always emitted. Re-measurement on reconciled `dev@90ec190` found 72 pass>1
+   the sidecar is not always emitted. Re-verification on reconciled `dev@d1df86e` found 72 pass>1
    specs, 70 sidecars whose current-pass legacy/structured bodies are compatible, and 2 missing
    sidecars. The failure mode includes absence; a new strict body grammar must not rewrite the 70
    preserved historical records.
@@ -58,8 +58,11 @@ A spec produced (or re-passed) by the factory pipeline passes `node scripts/spec
 
 Invariant that must not change: new or updated producers write the structured per-pass history
 defined by `2026-08-26-spec-heading-lint-baseline-backfill-spec` S3. The canonical consumer in
-`scripts/review-sidecar.mjs` also accepts the measured legacy heading form so existing evidence is
-not rewritten merely to satisfy a new grammar; that compatibility is not permission for producers
+`scripts/review-sidecar.mjs` accepts a historical unstructured record only when its exact
+repo-relative path and whole-file SHA-256 appear in the permanently committed, removal-only legacy
+manifest. Initial entries are derived from the unstructured sidecars at every resolved comparison
+revision; after bootstrap the manifest may only shrink, and it remains committed when empty so
+delete-then-recreate cannot re-admit evidence. That compatibility is not permission for producers
 to keep emitting legacy records. Refreshing the roll-up must not overwrite earlier findings, and an
 unavailable pass is named honestly rather than reconstructed.
 
