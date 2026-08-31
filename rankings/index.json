@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T13:24:31.650Z",
+	"generatedAt": "2026-08-31T13:54:26.863Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -2052,39 +2052,6 @@
 			"scoredAt": "2026-08-31T07:33:08.870Z"
 		},
 		{
-			"key": "pr:paperclip#12571",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12571 fix(issues): enforce native Spark assignment fence",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12571",
-			"sourceUpdatedAt": "2026-08-31T06:51:05Z",
-			"sourceFingerprint": "cb740f9a06ac43805f1730785ca7bcb73667712a061254467f7071f246454e30",
-			"score": 79,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This is a cross-lifecycle authorization control with fail-closed behavior, durable provenance, broad regression coverage, and only remaining review and CI gates before delivery.",
-			"evidence": [
-				"Assignment enforcement covers create, update, checkout, release, and recovery paths.",
-				"Receipts require fresh successful native runs and durable finalization.",
-				"Forty-six targeted tests, server type-checking, and an independent exact-head review passed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:42.200Z"
-		},
-		{
 			"key": "proposal:2026-08-17-factory-workitem-handoff-schema",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3419,6 +3386,39 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
+			"key": "pr:paperclip#12526",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12526 fix(server): allow same-assignee mutations on the checked-out issue",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12526",
+			"sourceUpdatedAt": "2026-08-30T18:34:00Z",
+			"sourceFingerprint": "9c4b7cf57da1b2e03e8768a11171a8ef330fbbd973d5fae55ade67c2ca370818",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 10
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the defect blocks agents from completing or releasing their assigned work, while the bounded fix has strong verification and explicit concurrency safeguards.",
+			"evidence": [
+				"Timer heartbeats can fail to patch their own checked-out issue.",
+				"A later same-assignee run cannot release a finished checkout lock.",
+				"Three focused test files passed with 152 tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T13:54:26.779Z"
+		},
+		{
 			"key": "pr:paperclip#12528",
 			"kind": "pr",
 			"stage": "development",
@@ -3918,39 +3918,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:47.470Z"
-		},
-		{
-			"key": "pr:paperclip#12548",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T12:05:42Z",
-			"sourceFingerprint": "e7ae13257ffbca54efcdf6da10b6fde492e24fb19ba12a4f2f5a2ae1efa1d926",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because this bounded core-API fix restores a missing human-controlled secret decision path and has strong authorization, concurrency, and safety verification.",
-			"evidence": [
-				"A pending secret binding proposal can remain without a linked human confirmation.",
-				"The route is board-only, idempotent, and returns no secret material.",
-				"Targeted tests passed 102 tests and server TypeScript checking passed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T12:25:12.391Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -4864,6 +4831,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
+		},
+		{
+			"key": "pr:paperclip#12548",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
+			"sourceUpdatedAt": "2026-08-31T13:52:45Z",
+			"sourceFingerprint": "20ebb0fdb34483f43a6ad11f9eefea7634633671ec81d25b060b0018f403b529",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because this restores a missing human-governance recovery path for secret proposals through a narrowly authorized, idempotent, and already-tested operation.",
+			"evidence": [
+				"Pending secret proposals can remain without a linked human confirmation.",
+				"The public API previously had no supported recovery operation.",
+				"The route is board-only, fails closed, and passed 102 focused tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T13:54:26.779Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
