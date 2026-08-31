@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T10:24:19.183Z",
+	"generatedAt": "2026-08-31T10:54:32.176Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -782,8 +782,8 @@
 			"repo": "paperclip",
 			"title": "#12560 fix(openclaw): persist gateway credentials as secret refs",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12560",
-			"sourceUpdatedAt": "2026-08-31T07:35:40Z",
-			"sourceFingerprint": "ced66a20aa3fda93905f81b175612ce8be788d940ad672e806b8064f3df47105",
+			"sourceUpdatedAt": "2026-08-31T10:52:59Z",
+			"sourceFingerprint": "bac40cbad00e62a980622a31a03d371e3e706e3fbc10ac85aba3de4601009c55",
 			"score": 88,
 			"band": "critical",
 			"axes": {
@@ -798,15 +798,15 @@
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Persisting gateway credentials in plain adapter configuration is a concrete security exposure across several workflows, and the proposed secret-reference migration is thoroughly scoped and tested.",
+			"rationale": "Execute because legacy OpenClaw credentials can be exposed and persisted in plaintext configuration, while the proposed secret-reference migration is comprehensive and strongly verified.",
 			"evidence": [
-				"Legacy OpenClaw tokens can be exposed and persisted in adapter configuration.",
-				"The change covers edit, invite replay, and join flows.",
-				"Secret, replay, adapter, UI, and server checks passed."
+				"Legacy OpenClaw authorization headers can expose tokens in the edit form and persist them again.",
+				"The change removes known credential headers and persists only a secret_ref.",
+				"Adapter, UI, server, secrets, and invite-replay checks passed; the full wrapper alone was limited by missing cargo."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:52:28.694Z"
+			"scoredAt": "2026-08-31T10:54:32.091Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-capability-separation",
@@ -1344,6 +1344,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:42:55.201Z"
+		},
+		{
+			"key": "issue:paperclip#12578",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12578 cross-issue-influence guard (assertCrossIssueInfluenceWithinRunCap) is never called on PUT /issues/:id/documents/:key or POST /issues/:id/interactions (create) — undocumented scope gap",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12578",
+			"sourceUpdatedAt": "2026-08-31T10:26:09Z",
+			"sourceFingerprint": "3fcf2865028094eb5faf38e320d6d984265c3d3b2a00cd4c2e7e71d627611be0",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 8,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Reframe this as a decision-backed enforcement goal with one explicit desired scope, because the documented blind spot is consequential but the current proposal accepts two materially different outcomes: adding enforcement or merely documenting its absence.",
+			"evidence": [
+				"Two agent-mutating routes never call the cross-issue-influence guard or write its audit events.",
+				"The gap was reproduced on release 2026.824.1 and current master.",
+				"The requested outcome permits either enforcing the cap or documenting that the routes are intentionally uncapped."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T10:54:32.091Z"
 		},
 		{
 			"key": "pr:minion-factory#154",
@@ -3821,6 +3854,39 @@
 			"scoredAt": "2026-08-31T07:33:47.470Z"
 		},
 		{
+			"key": "pr:paperclip#12548",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
+			"sourceUpdatedAt": "2026-08-31T10:48:04Z",
+			"sourceFingerprint": "ca8a2fb56d5dce6552e094a68a28866fec4cf75b97e878e5b939e138917116f1",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because this tested, bounded core-API change restores an otherwise unavailable human-governed recovery path without exposing secret material or requiring a schema migration.",
+			"evidence": [
+				"A pending secret binding proposal can remain without a linked human confirmation after a partial failure.",
+				"The change adds a narrow, idempotent, board-only recovery operation.",
+				"Focused verification passed 102 tests and the server TypeScript check."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T10:54:32.091Z"
+		},
+		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3953,39 +4019,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:01:35.926Z"
-		},
-		{
-			"key": "issue:paperclip#12521",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12521 `agentCommand` passed to acpx unquoted — install paths containing a space fail to spawn (and `error_meta` is dropped)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12521",
-			"sourceUpdatedAt": "2026-08-30T00:08:14Z",
-			"sourceFingerprint": "5babef3dfa72d0ed65b41a7e26193856bb200f5db77c2fca2f0fd251b8f21e43",
-			"score": 70,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The catalog provides a concrete path-tokenization defect, production-loss evidence, and a narrowly identified correction surface suitable for immediate work.",
-			"evidence": [
-				"57 runs were lost over five days",
-				"Space-containing paths are split before spawn",
-				"45 failures hit codex-acp and 12 hit claude-agent-acp"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:38:58.989Z"
 		},
 		{
 			"key": "pr:pixel-agents#300",
@@ -4256,39 +4289,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:34:26.538Z"
-		},
-		{
-			"key": "pr:paperclip#12548",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T09:40:37Z",
-			"sourceFingerprint": "4c5e5b103f09ef911db3c7bf7eb9da1ef9e44d15b5c492b2deb6756c03b481c2",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This bounded core-API recovery fix restores a governed human decision path for stranded secret proposals and has strong authorization, concurrency, and verification evidence.",
-			"evidence": [
-				"existing pending secret proposals can remain without a linked human confirmation",
-				"route is board-only and requires target-specific authorization",
-				"102 tests and server TypeScript checking passed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T09:54:20.792Z"
 		},
 		{
 			"key": "pr:paperclip#12556",
