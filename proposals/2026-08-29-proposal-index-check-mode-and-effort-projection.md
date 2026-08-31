@@ -3,7 +3,7 @@ id: 2026-08-29-proposal-index-check-mode-and-effort-projection
 title: proposal-index.mjs — add a read-only --check mode and reconcile projection with the auto-triage index writer
 status: review
 created: 2026-08-29
-updated: 2026-08-29
+updated: 2026-08-30
 repos: [minion-meta]
 tags: [infra, test]
 source: review-fix-6f292604
@@ -64,8 +64,11 @@ read surface, and invalid frontmatter still exits 1.
 2. ~~Decide the `effort` question with whoever owns the auto-triage writer, then implement it in
    ONE place.~~ **Done** — the generator projects `effort` unconditionally when frontmatter
    declares it (`scripts/proposal-index.mjs`). Confirm separately whether the auto-triage
-   writer's prepend-ordering still diverges from the generator's `b.id.localeCompare(a.id)`
-   sort; if so, decide with whoever owns that writer which side changes.
+   writer edits proposal frontmatter and invokes the generator rather than mutating
+   `proposals/index.json` directly, and whether its prepend-ordering still diverges from the
+   generator's `b.id.localeCompare(a.id)` sort; if so, decide with whoever owns that writer which
+   side changes. This preserves the distinct unresolved work formerly recorded in the removed
+   duplicate `2026-08-29-proposal-index-auto-triage-drift` proposal.
 3. ~~Extend the sibling coverage with both cases above.~~ **Done** in
    `scripts/proposal-index.test.mjs`.
 
@@ -78,7 +81,8 @@ read surface, and invalid frontmatter still exits 1.
 ## Definition of done
 
 `--check` verification and `effort` projection are complete. The remaining definition of done
-is a regeneration run straight after an auto-triage index commit producing an empty diff.
+is an auto-triage run that changes proposal frontmatter, regenerates the projection, and leaves an
+immediate `proposal-index.mjs --check` green with no follow-up diff.
 
 ## Handoff note
 
