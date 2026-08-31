@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T18:54:33.369Z",
+	"generatedAt": "2026-08-31T19:24:31.957Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -2019,6 +2019,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
+		},
+		{
+			"key": "pr:paperclip#12591",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12591 feat(runner): add Codex-native application integration",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12591",
+			"sourceUpdatedAt": "2026-08-31T19:21:14Z",
+			"sourceFingerprint": "8fbd0481fa16e9d2fc3d1ee3f339f45b7f7b275bc99e534d008c89e7190af85f",
+			"score": 79,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:paperclip#12592"
+			],
+			"rationale": "The security- and recovery-sensitive native Codex boundary is strategically central and well specified, but its 133-file change lacks executed local tests and still awaits authoritative CI and review evidence.",
+			"evidence": [
+				"Touches central heartbeat and agent-route code across 133 changed files.",
+				"Adds authorization, SSRF protection, recovery, finalization, and replay-safe persistence.",
+				"Local tests, build, and typecheck were not run; full CI and security review remain pending."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T19:24:31.880Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-workitem-handoff-schema",
@@ -5511,39 +5546,39 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
-			"key": "pr:paperclip#12591",
+			"key": "pr:paperclip#12592",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
-			"title": "#12591 feat(runner): add Codex-native application integration",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12591",
-			"sourceUpdatedAt": "2026-08-31T18:53:08Z",
-			"sourceFingerprint": "27e19db27a3a6077556d25ae5e8e820e20382b44283303325a87fa04e7856083",
+			"title": "#12592 feat(runner): add task experience and developer SDKs",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
+			"sourceUpdatedAt": "2026-08-31T19:02:38Z",
+			"sourceFingerprint": "79a31b837ff671bd56ec1394dcbe2594bb291f76beb9842e77cd9a03fde9a4fa",
 			"score": 62,
 			"band": "medium",
 			"axes": {
 				"criticality": 4,
-				"importance": 8,
-				"impact": 8
+				"importance": 7,
+				"impact": 9
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 5
+				"implementation": 4
 			},
-			"confidence": 7,
+			"confidence": 8,
 			"recommendation": "reevaluate",
 			"relatedKeys": [
-				"pr:paperclip#12592"
+				"pr:paperclip#12591"
 			],
-			"rationale": "The Codex-native application boundary is strategically central and well specified, but its 133-file change across critical routing and persistence paths lacks completed test, build, and typecheck evidence.",
+			"rationale": "The task experience and SDK surfaces have broad potential impact, but the 379-file stacked change depends on #12591 and lacks local verification, making execution readiness weak.",
 			"evidence": [
-				"Adds durable native-run state, authorization, recovery, and finalization.",
-				"Touches central heartbeat and agent-route code across 133 files.",
-				"Local tests, build, and typecheck were not run."
+				"Depends on the native application contracts in the preceding stack entry.",
+				"Changes 379 files relative to the native-app-integration branch.",
+				"Local tests were not run, and full CI plus Greptile review remain pending."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T18:54:33.296Z"
+			"scoredAt": "2026-08-31T19:24:31.880Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -6551,41 +6586,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
-		},
-		{
-			"key": "pr:paperclip#12592",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12592 feat(runner): add task experience and developer SDKs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
-			"sourceUpdatedAt": "2026-08-31T18:52:33Z",
-			"sourceFingerprint": "73c8372cade88bcf55b6fe9804b194bcc94726e9955cc8c827073b6fae161094",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 7,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:paperclip#12591"
-			],
-			"rationale": "The user-facing runner and SDK work has broad potential impact, but it depends on the preceding integration and is too large and insufficiently verified to be immediately actionable.",
-			"evidence": [
-				"Depends on native application contracts in the preceding stack entry.",
-				"The stacked delta changes 379 files.",
-				"Local tests were not run."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T18:54:33.296Z"
 		},
 		{
 			"key": "pr:pixel-agents#388",
@@ -7774,8 +7774,8 @@
 			"repo": "paperclip",
 			"title": "#12597 refactor: rename product workspaces to worktrees",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12597",
-			"sourceUpdatedAt": "2026-08-31T18:12:11Z",
-			"sourceFingerprint": "9cd2ef48ccd17e37f4bcac0d29c7ce84b443171f2f45ead4e4331def00388a95",
+			"sourceUpdatedAt": "2026-08-31T19:23:16Z",
+			"sourceFingerprint": "02b578c8a44951ec25c046cb9661c2dc8b439776451c3098b4a7df3ab61908f0",
 			"score": 49,
 			"band": "low",
 			"axes": {
@@ -7790,15 +7790,15 @@
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute because the compatibility-preserving terminology change is extensively verified and immediately actionable, although deferral has limited operational consequence.",
+			"rationale": "Although the terminology cleanup is not urgent, its cross-product consistency benefit is concrete and the change is highly actionable because compatibility boundaries and comprehensive verification are already documented.",
 			"evidence": [
-				"Public wire and persisted names remain unchanged.",
-				"5,243 local tests passed.",
-				"GitHub Actions passed the full matrix on the cited head."
+				"Renames terminology across UI, CLI, server, packages, adapters, and documentation while freezing persisted and wire contracts.",
+				"Old CLI names remain aliases and old UI routes redirect.",
+				"Full GitHub Actions matrix passed, alongside 5,243 local tests and targeted contract-freeze checks."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T18:24:45.803Z"
+			"scoredAt": "2026-08-31T19:24:31.880Z"
 		},
 		{
 			"key": "pr:pixel-agents#396",
