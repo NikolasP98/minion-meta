@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v1",
-	"generatedAt": "2026-08-31T06:22:10.134Z",
+	"generatedAt": "2026-08-31T06:27:01.880Z",
 	"rankings": [
 		{
 			"key": "pr:paperclip#12539",
@@ -652,33 +652,6 @@
 			"scoredAt": "2026-08-31T06:11:46.792Z"
 		},
 		{
-			"key": "pr:paperclip#12560",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12560 fix(openclaw): persist gateway credentials as secret refs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12560",
-			"sourceUpdatedAt": "2026-08-31T06:08:15Z",
-			"sourceFingerprint": "6dfa18b94cb566b7f6210aba29598fc00825b3a8525cbcad7dae9777f591a065",
-			"score": 88,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 8
-			},
-			"confidence": 9,
-			"rationale": "Preventing gateway credentials from persisting in editable headers is a high-priority security and data-handling correction with coverage across adapter, server, UI, and replay paths.",
-			"evidence": [
-				"Migrates legacy auth headers to the native `authToken` secret field",
-				"Preserves `secret_ref` values through join replay",
-				"No runtime deployment or restart was performed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:12:14.575Z"
-		},
-		{
 			"key": "proposal:2026-08-17-factory-memory-governance",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1192,33 +1165,6 @@
 			"scoredAt": "2026-08-31T06:10:15.622Z"
 		},
 		{
-			"key": "pr:paperclip#12512",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12512 ci: add GitHub-hosted fail-safe for trusted PR jobs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12512",
-			"sourceUpdatedAt": "2026-08-29T16:48:55Z",
-			"sourceFingerprint": "3a66cda12e4549dbee1addff4db006d6c28878f1ec9dab9b35f1f046969269da",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"confidence": 9,
-			"rationale": "Keeping required checks independent of an unhealthy external runner fleet directly reduces multi-hour CI blockage across trusted pull requests and protects the repository’s required validation path.",
-			"evidence": [
-				"Required checks can remain queued for many hours",
-				"Policy and aggregate jobs depended on Fleet capacity",
-				"Fail-safe defaults affected jobs to GitHub-hosted runners"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:10:49.615Z"
-		},
-		{
 			"key": "pr:paperclip#12518",
 			"kind": "pr",
 			"stage": "development",
@@ -1460,33 +1406,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
 			"scoredAt": "2026-08-31T06:18:47.389Z"
-		},
-		{
-			"key": "proposal:handoff-minion-factory-1378118597",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Handoff marker — runner/src/queue.ts (minion-factory)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-factory-1378118597.md",
-			"sourceUpdatedAt": "2026-08-31",
-			"sourceFingerprint": "63db168a2b5052c46195d26ca8279f63365af0187ab95236ed585b94bf35ac5e",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"confidence": 9,
-			"rationale": "The factory queue has documented restart and session-state defects that can rerun work or discard completed work, creating recurring reliability and throughput harm.",
-			"evidence": [
-				"A failed turn can leave message_count unchanged and rerun against an existing session UUID",
-				"A live container's completed work is discarded",
-				"Production activation is kept off pending validation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:19:17.030Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-igv-rate-from-org-config-spec",
@@ -1785,33 +1704,6 @@
 			"scoredAt": "2026-08-31T06:16:05.768Z"
 		},
 		{
-			"key": "issue:paperclip#12500",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12500 perf: attention feed `failed_run` builder scans every run since the oldest exhausted failure (unbounded window)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12500",
-			"sourceUpdatedAt": "2026-08-29T12:16:53Z",
-			"sourceFingerprint": "8af0704ae884bb461ba9b740cb81e74b6c06f0b14b3cb546b5413bdf5d5eed35",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 9
-			},
-			"confidence": 9,
-			"rationale": "An unbounded core feed query repeatedly imposes multi-second to 40-second database work during routine polling, with cost growing as historical runs accumulate.",
-			"evidence": [
-				"Feed is rebuilt about every 30 seconds while an Inbox tab is open",
-				"Query returned 13,452 rows and took 3.57 seconds idle",
-				"Companion join reached 40 seconds under fleet load"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:14:23.837Z"
-		},
-		{
 			"key": "pr:minion_hub#191",
 			"kind": "pr",
 			"stage": "development",
@@ -1864,6 +1756,33 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
 			"scoredAt": "2026-08-31T06:11:17.560Z"
+		},
+		{
+			"key": "pr:paperclip#12560",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12560 fix(openclaw): persist gateway credentials as secret refs",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12560",
+			"sourceUpdatedAt": "2026-08-31T06:15:27Z",
+			"sourceFingerprint": "a82a47c914ce91cbfafc41b30286252564b330cceba1c6c75b034ba8cf376a9b",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"confidence": 9,
+			"rationale": "Preventing gateway credentials from persisting in editable header JSON is a security-sensitive improvement across OpenClaw onboarding and replay paths.",
+			"evidence": [
+				"migrates legacy auth headers to native authToken secret field",
+				"keeps legacy credentials out of editable header JSON",
+				"adds replay-to-persistence regression coverage"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:17.386Z"
 		},
 		{
 			"key": "proposal:2026-08-17-site-vendored-tgz-untracked",
@@ -1920,14 +1839,14 @@
 			"scoredAt": "2026-08-31T06:21:19.205Z"
 		},
 		{
-			"key": "issue:paperclip#12504",
+			"key": "issue:minion-meta#344",
 			"kind": "issue",
 			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12504 Unvalidated X-Paperclip-Run-Id → 500 on issue mutation POSTs (uuid syntax / heartbeat_runs FK)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12504",
-			"sourceUpdatedAt": "2026-08-29T13:16:15Z",
-			"sourceFingerprint": "88baecd415cfd33ed936873a3498bb093d3e50239803a27f318be07d64bdafa6",
+			"repo": "minion-meta",
+			"title": "#344 [monitor:unstick] Run 1e9fe1e0: rank jq slice expression failed to compile",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/344",
+			"sourceUpdatedAt": "2026-08-31T06:18:19Z",
+			"sourceFingerprint": "0a763b64a27208cb69fcfc2e5f9fbae3381c3811703b38640311bc9b99362579",
 			"score": 76,
 			"band": "high",
 			"axes": {
@@ -1936,15 +1855,42 @@
 				"impact": 8
 			},
 			"confidence": 9,
-			"rationale": "Unvalidated client run IDs cause production mutation requests to return 500 across numerous FK-backed insert sites, making this a broad core API reliability defect.",
+			"rationale": "A deterministic jq compilation defect breaks the ranking script after catalog generation and can repeatedly block ranking batches until corrected.",
 			"evidence": [
-				"Observed in production as 62 hits",
-				"Non-UUID and unknown UUID values both surface as generic 500s",
-				"Pattern remains at numerous non-comment mutation insert sites"
+				"Catalog contained 318 goals",
+				"jq could not compile the candidate-slice expression",
+				"Identified as a genuine ranking-script failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:14:23.837Z"
+			"scoredAt": "2026-08-31T06:26:46.508Z"
+		},
+		{
+			"key": "issue:minion-meta#346",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#346 [monitor:unstick] Run ae218fcf: rank jq slice expression failed to compile",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/346",
+			"sourceUpdatedAt": "2026-08-31T06:18:20Z",
+			"sourceFingerprint": "2072fba13b0ccba37be16d6c2470c0f63c62af6e8a4f9ebea7bd6cbbbd41e5e3",
+			"score": 76,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 8
+			},
+			"confidence": 9,
+			"rationale": "The reproducible jq syntax failure prevents a large ranking catalog from being processed and represents a central script defect rather than transient provider trouble.",
+			"evidence": [
+				"Catalog contained 317 goals",
+				"jq could not compile the candidate-slice expression",
+				"Identified as a genuine ranking-script failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:46.508Z"
 		},
 		{
 			"key": "issue:pixel-agents#332",
@@ -1972,33 +1918,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
 			"scoredAt": "2026-08-31T06:15:26.345Z"
-		},
-		{
-			"key": "pr:paperclip#12499",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12499 perf(db): index context_snapshot->'paperclipIssue'->>'id' lookups on heartbeat_runs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12499",
-			"sourceUpdatedAt": "2026-08-29T12:28:46Z",
-			"sourceFingerprint": "10537df974a264e3a772f19a2f5c4542a81e49f59761bfe5a64dfe4c454b5e4b",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 8
-			},
-			"confidence": 9,
-			"rationale": "This addresses a measured production-scale database bottleneck on every issue-comments request with a narrowly scoped index that substantially reduces recurring latency and resource consumption.",
-			"evidence": [
-				"Comments request took 26 seconds with five threads",
-				"Query used 216,145 buffers and 6.5 seconds",
-				"Indexed request measured 0.24–0.57 seconds"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:10:49.615Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1637616237",
@@ -2432,33 +2351,6 @@
 			"scoredAt": "2026-08-31T06:09:47.160Z"
 		},
 		{
-			"key": "pr:paperclip#12515",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12515 fix(claude_local): recover accumulated usage on error_max_turns",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12515",
-			"sourceUpdatedAt": "2026-08-29T19:06:45Z",
-			"sourceFingerprint": "b5a565d43aef35c7f3c88f7ec3c547d0e23153f74621131febe5469f426511a5",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"confidence": 9,
-			"rationale": "Recovering real token usage on max-turn failures restores a core resource-governance signal and prevents systematic undercounting whenever this recurring termination mode occurs.",
-			"evidence": [
-				"Max-turn runs reported zero usage despite spending tokens",
-				"Weighted token governor consumed the incorrect value",
-				"New accumulator and end-to-end tests cover the fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:10:49.615Z"
-		},
-		{
 			"key": "pr:paperclip#12525",
 			"kind": "pr",
 			"stage": "development",
@@ -2648,6 +2540,33 @@
 			"scoredAt": "2026-08-31T06:18:47.389Z"
 		},
 		{
+			"key": "proposal:handoff-minion-factory-1378118597",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Handoff marker — runner/src/queue.ts (minion-factory)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-factory-1378118597.md",
+			"sourceUpdatedAt": "2026-08-31",
+			"sourceFingerprint": "c8f4cb3b97b842174ebebbe205c9df3ef4a6f22fd26a0f0102f8b6b133a45e28",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"confidence": 8,
+			"rationale": "The queue contains multiple reliability gaps affecting production activation, chat recovery, and preservation of completed container work, making it central to factory execution integrity.",
+			"evidence": [
+				"Production activation remains off pending disposable-repo work",
+				"A failed turn can cause the next turn to reuse an existing session incorrectly",
+				"A live container's completed work is discarded during restart handling"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:27:01.801Z"
+		},
+		{
 			"key": "pr:minion-factory#158",
 			"kind": "pr",
 			"stage": "development",
@@ -2783,31 +2702,31 @@
 			"scoredAt": "2026-08-31T06:10:15.622Z"
 		},
 		{
-			"key": "pr:paperclip#12513",
+			"key": "pr:paperclip#12548",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
-			"title": "#12513 ci: activate PR fail-safe after parent squash merge",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12513",
-			"sourceUpdatedAt": "2026-08-29T16:59:48Z",
-			"sourceFingerprint": "d3d93cea7289ccf40c9431bbcc52f913f2e6f676567b4c0decdbcc6da6ad726a",
+			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
+			"sourceUpdatedAt": "2026-08-31T06:19:43Z",
+			"sourceFingerprint": "7bcd7234cc47c42d9a7bcfda6404101169e77e9339ef3769531d2afceb3872aa",
 			"score": 71,
 			"band": "high",
 			"axes": {
-				"criticality": 6,
+				"criticality": 7,
 				"importance": 8,
-				"impact": 8
+				"impact": 6
 			},
 			"confidence": 9,
-			"rationale": "This is necessary to activate the CI fail-safe’s repository-wide benefit, but it is deliberately blocked until its parent merges and the placeholder SHA is replaced.",
+			"rationale": "This addresses a core API recovery gap that can strand governed secret-change decisions after partial failures, with meaningful security and operational relevance.",
 			"evidence": [
-				"Activates the contract introduced by #12512",
-				"Must not merge before #12512",
-				"Current immutable pin is only a template"
+				"pending secret proposals can remain without linked confirmation",
+				"public API had no supported recovery operation",
+				"adds board-only idempotent recovery with authorization checks"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:10:49.615Z"
+			"scoredAt": "2026-08-31T06:26:17.386Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
@@ -3674,33 +3593,6 @@
 			"scoredAt": "2026-08-31T06:08:52.140Z"
 		},
 		{
-			"key": "pr:paperclip#12505",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12505 fix(server): normalize created_by_run_id before heartbeat_runs FK inserts",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12505",
-			"sourceUpdatedAt": "2026-08-29T13:18:28Z",
-			"sourceFingerprint": "4af3d4e112e06894a4656ce7dec977a842fb02bd3098dea7100a21b782e86805",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"confidence": 8,
-			"rationale": "Normalizing untrusted run identifiers prevents reproducible server errors across four issue-route insert paths, although several service-level paths explicitly remain unresolved.",
-			"evidence": [
-				"Malformed or unknown run IDs cause HTTP 500 errors",
-				"Fix covers four direct insert sites",
-				"Multiple service-level insert sites remain out of scope"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:10:49.615Z"
-		},
-		{
 			"key": "pr:paperclip#12516",
 			"kind": "pr",
 			"stage": "development",
@@ -3863,31 +3755,31 @@
 			"scoredAt": "2026-08-31T06:08:52.140Z"
 		},
 		{
-			"key": "pr:paperclip#12548",
+			"key": "pr:paperclip#12562",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
-			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T05:02:13Z",
-			"sourceFingerprint": "4baf1fe07a7e77e73124960263c9a875fe0a78caea52ecf9a917c79c40224c2d",
+			"title": "#12562 chore(deps): bump paperclipai/paperclip/.github/workflows/pr-trusted.yml from 39b8ee2960541d14b380f95365deecba6723d9bd to f038633bf5b04163ff985ef0542876bd9f455379",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12562",
+			"sourceUpdatedAt": "2026-08-31T06:15:48Z",
+			"sourceFingerprint": "d0a3a3a68b18fca060999145c0a59d91957c91503d866b871747dfca7a99c0ef",
 			"score": 61,
 			"band": "medium",
 			"axes": {
-				"criticality": 6,
+				"criticality": 5,
 				"importance": 7,
-				"impact": 5
+				"impact": 7
 			},
-			"confidence": 8,
-			"rationale": "This restores a missing human-governance path for secret proposals, but the catalog does not establish how frequently the partial-failure state occurs.",
+			"confidence": 6,
+			"rationale": "A reusable trusted workflow can affect release automation broadly, although the catalog does not identify a current release failure or deadline.",
 			"evidence": [
-				"Pending proposals can remain unlinked after an older partial failure",
-				"Generic confirmation cannot execute the proposal",
-				"Recovery returns no secret material"
+				"tagged github_actions",
+				"referenced workflow covers canaries and stable promotion",
+				"publishing uses GitHub OIDC"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:11:46.792Z"
+			"scoredAt": "2026-08-31T06:26:17.386Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -4187,6 +4079,33 @@
 			"scoredAt": "2026-08-31T06:11:46.792Z"
 		},
 		{
+			"key": "pr:paperclip#12565",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12565 chore(deps): bump better-auth from 1.7.0 to 1.7.2",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12565",
+			"sourceUpdatedAt": "2026-08-31T06:20:00Z",
+			"sourceFingerprint": "f5fe9a9dc5746b4d25f4977e13a65715c95cff2535e679b9199c10a48d20a387",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"confidence": 7,
+			"rationale": "Authentication is a central dependency and the patch improves validation and session handling, but no confirmed vulnerability or current Paperclip failure is stated.",
+			"evidence": [
+				"improves callback and redirect URL validation",
+				"warns on invalid signed session data",
+				"fixes permanent-ban expiration handling"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:17.386Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2988591151",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4238,6 +4157,114 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
 			"scoredAt": "2026-08-31T06:20:15.769Z"
+		},
+		{
+			"key": "issue:minion-meta#338",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#338 [monitor:unstick] Run b81ca51a: rank blocked before provider by spend gate",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/338",
+			"sourceUpdatedAt": "2026-08-31T06:18:17Z",
+			"sourceFingerprint": "0d50449221747ccdad0108bddb000a7843a1f73deb8119be3c3aa454fdc9ff11",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 7
+			},
+			"confidence": 8,
+			"rationale": "A spend gate prevented an entire 316-goal ranking batch, creating broad throughput loss despite being characterized as transient rather than a content failure.",
+			"evidence": [
+				"Catalog contained 316 goals",
+				"All 316 candidates remained pending",
+				"Blocked before provider invocation by the spend gate"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:46.508Z"
+		},
+		{
+			"key": "issue:minion-meta#339",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#339 [monitor:unstick] Run a8b21384: rank exited 78 with all candidates pending",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/339",
+			"sourceUpdatedAt": "2026-08-31T06:18:17Z",
+			"sourceFingerprint": "149ccb2e3f49f60d278306431c75683db45c541831bbbc8a51d6db7d38d55af9",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 7
+			},
+			"confidence": 8,
+			"rationale": "The pre-provider gate stopped ranking across all 317 candidates, materially affecting board throughput even though adjacent runs suggest a transient cause.",
+			"evidence": [
+				"Catalog contained 317 goals",
+				"317/317 candidates remained pending",
+				"Exited before any provider output"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:46.508Z"
+		},
+		{
+			"key": "issue:minion-meta#342",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#342 [monitor:unstick] Run 33df03d4: rank exited 78 with all candidates pending",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/342",
+			"sourceUpdatedAt": "2026-08-31T06:18:18Z",
+			"sourceFingerprint": "f356c00da97cce991eb20d21a0967b4f8ef27be99de41970cca8bbb7d8bcde6d",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 7
+			},
+			"confidence": 8,
+			"rationale": "The gate left a full 317-goal batch unranked, broadly interrupting prioritization while remaining a potentially transient capacity problem.",
+			"evidence": [
+				"Catalog contained 317 goals",
+				"317/317 candidates remained pending",
+				"No provider output was produced"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:46.508Z"
+		},
+		{
+			"key": "issue:minion-meta#343",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#343 [monitor:unstick] Run f3af7546: rank exited 78 with all candidates pending",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/343",
+			"sourceUpdatedAt": "2026-08-31T06:18:18Z",
+			"sourceFingerprint": "526637b2ce7534fdf7889dcbf1a7fbd5152b3c914a52fd8dfd8b427b8bbd5d0c",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 7
+			},
+			"confidence": 8,
+			"rationale": "This failure prevented ranking of every candidate in a large batch, imposing broad workflow impact despite evidence pointing to a transient gate.",
+			"evidence": [
+				"Catalog contained 317 goals",
+				"317/317 candidates remained pending",
+				"Exited before provider output"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:46.508Z"
 		},
 		{
 			"key": "pr:pixel-agents#347",
@@ -4400,33 +4427,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
 			"scoredAt": "2026-08-31T06:10:15.622Z"
-		},
-		{
-			"key": "pr:paperclip#12506",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12506 test(e2e): shorten and split Smoke Lab coverage",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12506",
-			"sourceUpdatedAt": "2026-08-29T14:44:49Z",
-			"sourceFingerprint": "46fca7b8266a483b31c5dd36e24086a37f2b4590f0a2685eddf0a1a16d67d401",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 7
-			},
-			"confidence": 9,
-			"rationale": "Splitting and shortening a critical browser-test suite improves recurring CI throughput and runner balance without reducing scenario coverage, but no release-blocking incident is documented.",
-			"evidence": [
-				"Smoke Lab was one indivisible 168-second spec",
-				"Local wall time fell from 57.68 to 37.04 seconds",
-				"All seven scenarios and eight lifecycle steps remain"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:10:49.615Z"
 		},
 		{
 			"key": "pr:pixel-agents#285",
@@ -5050,33 +5050,6 @@
 			"scoredAt": "2026-08-31T06:20:15.769Z"
 		},
 		{
-			"key": "deploy:minion-meta",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion-meta",
-			"title": "minion-meta deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/commit/59c4b56c192a730dbd63bb8e51dd8305eb2ad424",
-			"sourceUpdatedAt": "2026-08-31T05:17:57Z",
-			"sourceFingerprint": "25cf2a5757af4b747087a7f1cde33bc9cf33c5cf1435767ee4a9368a776cec15",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"confidence": 4,
-			"rationale": "Unknown health around factory quality-gate documentation merits validation because meta-repo policy can affect multiple projects, but no failure is confirmed.",
-			"evidence": [
-				"status: unknown",
-				"preflight conditional quality gates",
-				"repo: minion-meta"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:08:52.140Z"
-		},
-		{
 			"key": "issue:minion-meta#328",
 			"kind": "issue",
 			"stage": "proposal",
@@ -5347,6 +5320,33 @@
 			"scoredAt": "2026-08-31T06:20:15.769Z"
 		},
 		{
+			"key": "pr:paperclip#12564",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12564 chore(deps): bump @mdxeditor/editor from 4.2.1 to 4.2.3",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12564",
+			"sourceUpdatedAt": "2026-08-31T06:22:08Z",
+			"sourceFingerprint": "39e9630c9278962913b4851eb08b5e6a84f60aaaf36535d1a8eb4e0e41b92aef",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"confidence": 8,
+			"rationale": "The patch prevents two editor crash modes, giving moderate reliability value without evidence that either is currently blocking Paperclip users.",
+			"evidence": [
+				"prevents JSX kind mismatches from crashing the editor",
+				"prevents stale table actions from crashing",
+				"upgrade is 4.2.1 to 4.2.3"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:17.386Z"
+		},
+		{
 			"key": "pr:pixel-agents#246",
 			"kind": "pr",
 			"stage": "development",
@@ -5426,60 +5426,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
 			"scoredAt": "2026-08-31T06:09:47.160Z"
-		},
-		{
-			"key": "pr:paperclip#12503",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12503 Adding agy (antigravity)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12503",
-			"sourceUpdatedAt": "2026-08-29T14:04:44Z",
-			"sourceFingerprint": "b39bcc36d0016f2c1562e17b088241461b79e5b9b83ba94e40614f6832eb5848",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"confidence": 4,
-			"rationale": "A replacement adapter may preserve executor compatibility if Gemini CLI retirement is imminent, but the catalog supplies limited verification and indicates several overlapping issues and pull requests.",
-			"evidence": [
-				"Adds the Antigravity local agent adapter",
-				"Claims Gemini CLI is being retired",
-				"Lists multiple related issues and prior pull requests"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:10:49.615Z"
-		},
-		{
-			"key": "pr:paperclip#12510",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12510 feat(server): SPA-5175 R1 server-emitted BUILD-RECEIPT row bound to tree SHA",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12510",
-			"sourceUpdatedAt": "2026-08-30T18:56:33Z",
-			"sourceFingerprint": "41f3b09b32d04fe4803b68c9d5cf74dd8f81d87aa888f019d060d34d29cb1f8c",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"confidence": 3,
-			"rationale": "A server-emitted build receipt tied to a tree SHA appears relevant to cross-repository build integrity, but the sparse catalog entry does not establish current failure consequences, breadth, or verification.",
-			"evidence": [
-				"Implements ADR-0058 Decision 5 Phase 2 R1",
-				"Receipt is bound to tree SHA",
-				"Has a companion internal pull request"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:10:49.615Z"
 		},
 		{
 			"key": "pr:pixel-agents#385",
@@ -5885,6 +5831,33 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
 			"scoredAt": "2026-08-31T06:09:17.884Z"
+		},
+		{
+			"key": "pr:paperclip#12563",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12563 chore(deps): bump sharp from 0.35.3 to 0.35.4",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12563",
+			"sourceUpdatedAt": "2026-08-31T06:21:28Z",
+			"sourceFingerprint": "1f3d7479a4ef9ed82db60adea375c00b405ed780027a3dfe8f648fe67a5fb2d9",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"confidence": 7,
+			"rationale": "The image-processing patch fixes several boundary and stream-handling defects, but no active Paperclip incident or affected workflow is documented.",
+			"evidence": [
+				"bounds resize and composite coordinates",
+				"improves early-finishing input stream support",
+				"upgrades sharp from 0.35.3 to 0.35.4"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:17.386Z"
 		},
 		{
 			"key": "pr:pixel-agents#335",
@@ -6562,6 +6535,33 @@
 			"scoredAt": "2026-08-31T06:10:15.622Z"
 		},
 		{
+			"key": "pr:paperclip#12568",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12568 chore(deps): bump @tanstack/react-query from 5.101.4 to 5.102.8",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12568",
+			"sourceUpdatedAt": "2026-08-31T06:21:57Z",
+			"sourceFingerprint": "bb233de8338c449d8737ca6baa44f2e377a4363b1efb4775c9aaba90f9700cf6",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"confidence": 7,
+			"rationale": "React Query is broadly used application infrastructure and includes an error-handling fix, though no catalog evidence ties it to a current Paperclip failure.",
+			"evidence": [
+				"upgrades react-query from 5.101.4 to 5.102.8",
+				"includes a useQueries error-handling fix",
+				"multiple releases are patch changes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:17.386Z"
+		},
+		{
 			"key": "pr:pixel-agents#293",
 			"kind": "pr",
 			"stage": "development",
@@ -7074,6 +7074,33 @@
 			"scoredAt": "2026-08-31T06:13:18.037Z"
 		},
 		{
+			"key": "pr:paperclip#12561",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12561 chore(deps): bump @lexical/link from 0.48.0 to 0.49.0",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12561",
+			"sourceUpdatedAt": "2026-08-31T06:19:42Z",
+			"sourceFingerprint": "989d2ab27fb35a4d758f6ddca638a93c359484bd21ea234d98e3d13ee1fb008f",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"confidence": 7,
+			"rationale": "The update contains breaking upstream changes and fixes, but the catalog identifies no current Paperclip defect or urgent dependency.",
+			"evidence": [
+				"upgrade is 0.48.0 to 0.49.0",
+				"release includes breaking changes",
+				"includes compiled-build stack-overflow fixes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:17.386Z"
+		},
+		{
 			"key": "proposal:2026-08-29-hub-pos-bookings-stock-gate-drift",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7425,6 +7452,33 @@
 			"scoredAt": "2026-08-31T06:14:54.866Z"
 		},
 		{
+			"key": "pr:paperclip#12567",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12567 chore(deps): bump @aws-sdk/client-s3 from 3.1115.0 to 3.1120.0",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12567",
+			"sourceUpdatedAt": "2026-08-31T06:23:04Z",
+			"sourceFingerprint": "2196b451ed4f61881eb612bc50e550bc6bd27e69098550868ca626e6ffe8d02e",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"confidence": 6,
+			"rationale": "The S3 SDK update may affect storage infrastructure, but the supplied release facts show no S3-specific fix or existing Paperclip problem.",
+			"evidence": [
+				"upgrades client-s3 from 3.1115.0 to 3.1120.0",
+				"listed release changes are largely for other AWS clients",
+				"status is open"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:17.386Z"
+		},
+		{
 			"key": "pr:pixel-agents#298",
 			"kind": "pr",
 			"stage": "development",
@@ -7667,6 +7721,33 @@
 			"scoredAt": "2026-08-31T06:19:17.030Z"
 		},
 		{
+			"key": "proposal:ci-minion-ai-stale",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Stale on minion-ai main",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-stale.md",
+			"sourceUpdatedAt": "2026-08-31",
+			"sourceFingerprint": "ac6a2034d20b1ef33c5f044733fa47d866849bc85c1791571d231f7b3983978e",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"confidence": 9,
+			"rationale": "A deploy-branch maintenance workflow is currently broken by a missing credential, but the catalog provides no evidence that releases, production service, or core CI are blocked.",
+			"evidence": [
+				"Most recent completed Stale workflow run on main failed",
+				"Failure says: Input required and not supplied: private-key",
+				"Definition of done permits deliberately removing or disabling the workflow"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:27:01.801Z"
+		},
+		{
 			"key": "issue:pixel-agents#278",
 			"kind": "issue",
 			"stage": "proposal",
@@ -7719,6 +7800,33 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
 			"scoredAt": "2026-08-31T06:09:47.160Z"
+		},
+		{
+			"key": "pr:paperclip#12546",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12546 chore(lockfile): refresh pnpm-lock.yaml",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12546",
+			"sourceUpdatedAt": "2026-08-31T06:21:11Z",
+			"sourceFingerprint": "025357a24cfcde20f83a68a32be6bebafedbf1abadb7ce373be30198af5a63fd",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"confidence": 7,
+			"rationale": "A lockfile refresh supports reproducible dependency installation but has no stated failure, deadline, or direct user impact.",
+			"evidence": [
+				"only updates pnpm-lock.yaml",
+				"generated after dependencies changed on master",
+				"status is open"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:17.386Z"
 		},
 		{
 			"key": "pr:pixel-agents#250",
@@ -7937,6 +8045,60 @@
 			"scoredAt": "2026-08-31T06:09:17.884Z"
 		},
 		{
+			"key": "pr:paperclip#12566",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12566 chore(deps-dev): bump @vitejs/plugin-react from 5.2.0 to 6.1.1",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12566",
+			"sourceUpdatedAt": "2026-08-31T06:22:33Z",
+			"sourceFingerprint": "b69a17ef5c0989c7b91464812842247d817bc711c757a5f01b39ab8965be1ffb",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"confidence": 7,
+			"rationale": "This development-tool major upgrade offers compiler and build fixes but lacks evidence of a current production or release blocker.",
+			"evidence": [
+				"development dependency upgrade from 5.2.0 to 6.1.1",
+				"adds experimental native React Compiler support",
+				"fixes a development-mode runtime error"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:17.386Z"
+		},
+		{
+			"key": "pr:paperclip#12570",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12570 chore(deps-dev): bump rollup from 4.62.4 to 4.63.1",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12570",
+			"sourceUpdatedAt": "2026-08-31T06:23:33Z",
+			"sourceFingerprint": "59083255db9740d791fe46383c3c9d718d56329c1870c21046fd22c06cb444f7",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"confidence": 7,
+			"rationale": "The Rollup update may improve build correctness, but the catalog does not establish that Paperclip uses the affected compact-mode path or is currently blocked.",
+			"evidence": [
+				"Bumps Rollup from 4.62.4 to 4.63.1",
+				"4.62.5 fixed invalid module concatenations in compact mode",
+				"Dependency is classified as development-only"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:46.508Z"
+		},
+		{
 			"key": "pr:pixel-agents#397",
 			"kind": "pr",
 			"stage": "development",
@@ -8041,6 +8203,141 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
 			"scoredAt": "2026-08-31T06:08:52.140Z"
+		},
+		{
+			"key": "deploy:minion-meta",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion-meta",
+			"title": "minion-meta deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/commit/59c4b56c192a730dbd63bb8e51dd8305eb2ad424",
+			"sourceUpdatedAt": "2026-08-31T06:18:32Z",
+			"sourceFingerprint": "c0c3de9774bde2b0151c9d2c155f8d953077cadfe3e481f24ba8631193ec96d1",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"confidence": 3,
+			"rationale": "The deployment state is unknown, but the catalog provides no evidence of an outage, failed release, or user-facing consequence.",
+			"evidence": [
+				"status is unknown",
+				"latest commit concerns conditional quality gates",
+				"repo is minion-meta"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:17.386Z"
+		},
+		{
+			"key": "issue:minion-meta#337",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#337 [monitor:unstick] Run fac84a58: reconcile exited 78 after deferred merge-scan gap",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/337",
+			"sourceUpdatedAt": "2026-08-31T06:18:16Z",
+			"sourceFingerprint": "bb7f6e62cc5fe67d81fa7e30868925c58dd6f827e72a2cfd53e07cdcaeace2cf",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"confidence": 8,
+			"rationale": "The reconcile run lost comparison coverage for one fleet branch, but refresh work completed and the outcome is described as deferred and retryable.",
+			"evidence": [
+				"Reconcile completed its refresh work",
+				"Compare-coverage gap affected minion-base:main",
+				"Process ended with exit 78"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:46.508Z"
+		},
+		{
+			"key": "issue:minion-meta#340",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#340 [monitor:unstick] Run 8c389ac0: reconcile exited 78 after deferred merge-scan gap",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/340",
+			"sourceUpdatedAt": "2026-08-31T06:18:17Z",
+			"sourceFingerprint": "80d4d8469410ef103941eb995be721ebc89cc49b0e2bc797c7a93ce63c9c9ff5",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"confidence": 8,
+			"rationale": "This is a retryable reconcile coverage gap limited to minion-base:main, with no evidence of a genuine proposal failure or wider outage.",
+			"evidence": [
+				"Handoffs were refreshed",
+				"Coverage gap concerned minion-base:main",
+				"Outcome was deferred with exit 78"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:46.508Z"
+		},
+		{
+			"key": "issue:minion-meta#341",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#341 [monitor:unstick] Run a210aeff: reconcile exited 78 after deferred merge-scan gap",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/341",
+			"sourceUpdatedAt": "2026-08-31T06:18:18Z",
+			"sourceFingerprint": "b39b139b0d18e279c40c1e6f24d95174e596989506c11b148851688765ddf62b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"confidence": 8,
+			"rationale": "The run completed handoff refresh before deferring a single-repository comparison gap, so present consequence and breadth appear limited.",
+			"evidence": [
+				"Handoffs were refreshed",
+				"FACTORY_SPEC.md had no patch",
+				"Coverage gap concerned minion-base:main"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:46.508Z"
+		},
+		{
+			"key": "issue:minion-meta#345",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#345 [monitor:unstick] Run c66c6b18: reconcile exited 78 after deferred merge-scan gap",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/345",
+			"sourceUpdatedAt": "2026-08-31T06:18:19Z",
+			"sourceFingerprint": "5422518e3b136f9ba49dec10140aef72718251d39bfc479932e5c37d4a93ccec",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"confidence": 8,
+			"rationale": "The catalog describes a deferred comparison gap after successful refresh work, with limited scope and no established persistent failure.",
+			"evidence": [
+				"Handoffs were refreshed",
+				"Coverage gap concerned minion-base:main",
+				"Process ended with exit 78"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:26:46.508Z"
 		},
 		{
 			"key": "pr:pixel-agents#232",
@@ -8258,33 +8555,6 @@
 			"scoredAt": "2026-08-31T06:13:18.037Z"
 		},
 		{
-			"key": "proposal:ci-minion-ai-stale",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Stale on minion-ai main",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-stale.md",
-			"sourceUpdatedAt": "2026-08-30",
-			"sourceFingerprint": "54ff5b049ba529d01e4ac9447cde4189a9ca39fc16bdb60c6e36c91b3b1ae429",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"confidence": 9,
-			"rationale": "The stale-item maintenance workflow is repeatedly unable to authenticate, but no production or release consequence is documented.",
-			"evidence": [
-				"Latest completed Stale run on main failed",
-				"Failure: Input required and not supplied: private-key",
-				"Workflow may be removed or disabled with rationale"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:19:17.030Z"
-		},
-		{
 			"key": "deploy:pixel-agents",
 			"kind": "deploy",
 			"stage": "deployment",
@@ -8309,6 +8579,33 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
 			"scoredAt": "2026-08-31T06:08:52.140Z"
+		},
+		{
+			"key": "issue:minion-meta#347",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#347 [monitor:unstick] Run 071ee51e: reconcile exited 78 after deferred merge-scan gap",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/347",
+			"sourceUpdatedAt": "2026-08-31T06:18:20Z",
+			"sourceFingerprint": "8d8ec0f2a772551b4422114b4bb22fd0ce681ee6a04c5bfcb93a9b0a8c048ef4",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"confidence": 8,
+			"rationale": "This is documented as a transient reconcile deferral suitable for retry, with remediation warranted only if it becomes persistent.",
+			"evidence": [
+				"Reconcile ended with exit 78 after a compare-coverage gap",
+				"Described as a transient/deferred outcome",
+				"Recommendation says to retry or allow the next sweep"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:27:01.801Z"
 		},
 		{
 			"key": "issue:pixel-agents#263",
@@ -8338,14 +8635,14 @@
 			"scoredAt": "2026-08-31T06:15:26.345Z"
 		},
 		{
-			"key": "pr:paperclip#12546",
+			"key": "pr:paperclip#12569",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
-			"title": "#12546 chore(lockfile): refresh pnpm-lock.yaml",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12546",
-			"sourceUpdatedAt": "2026-08-31T06:04:08Z",
-			"sourceFingerprint": "cb0cf08172dce3a45bc8f11a0bab4c0f29d4e65b5b71c0aea2145a7864f43592",
+			"title": "#12569 chore(deps): bump mermaid from 11.16.1 to 11.17.2",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12569",
+			"sourceUpdatedAt": "2026-08-31T06:23:05Z",
+			"sourceFingerprint": "c6f28e4d9d5c3f004b7d32a83539c615fdd3e0f42dceae3ccf59bba4d58f8c4d",
 			"score": 16,
 			"band": "low",
 			"axes": {
@@ -8353,15 +8650,16 @@
 				"importance": 2,
 				"impact": 2
 			},
-			"confidence": 9,
-			"rationale": "A lockfile-only refresh has limited standalone urgency or strategic effect without evidence that it blocks installation, CI, or a release.",
+			"confidence": 7,
+			"rationale": "This routine Mermaid update contains useful rendering fixes but has no catalog evidence of an active Paperclip defect, release block, or deadline.",
 			"evidence": [
-				"Only updates pnpm-lock.yaml",
-				"Dependencies changed on master"
+				"Bumps Mermaid from 11.16.1 to 11.17.2",
+				"Release notes describe SVG and diagram-rendering fixes",
+				"Status is open"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:11:46.792Z"
+			"scoredAt": "2026-08-31T06:26:46.508Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-2704064834",
