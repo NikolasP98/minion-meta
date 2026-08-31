@@ -1,11 +1,12 @@
 ---
 id: 2026-08-29-roadmap-milestone-order-deviation
 title: M7/M8 factory work shipped ahead of its M4/M5 prerequisites
-status: draft
+status: approved
 created: 2026-08-29
-updated: 2026-08-29
+updated: 2026-08-31
 repos: [minion-factory]
 tags: [infra, security]
+approved_reason: "Ranked-queue supervisor approval: board-goal-v2 score 89/100, recommendation execute, readiness specification 8/10 and implementation 6/10; live admission threshold 80/100 and readiness threshold 6/10."
 ---
 
 # M7/M8 shipped ahead of its M4/M5 prerequisites
