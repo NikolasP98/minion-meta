@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v1",
-	"generatedAt": "2026-08-31T06:27:01.880Z",
+	"generatedAt": "2026-08-31T06:43:57.896Z",
 	"rankings": [
 		{
 			"key": "pr:paperclip#12539",
@@ -650,6 +650,33 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
 			"scoredAt": "2026-08-31T06:11:46.792Z"
+		},
+		{
+			"key": "pr:paperclip#12560",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12560 fix(openclaw): persist gateway credentials as secret refs",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12560",
+			"sourceUpdatedAt": "2026-08-31T06:29:28Z",
+			"sourceFingerprint": "ca975d57bb6a1157264934aad23998cbc84ffabd9424ef07f6e595559a800d55",
+			"score": 88,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 9,
+				"impact": 8
+			},
+			"confidence": 9,
+			"rationale": "This addresses recurring plaintext credential persistence and UI exposure across several OpenClaw configuration flows, making it the catalog's clearest security-sensitive item.",
+			"evidence": [
+				"Legacy gateway tokens can be exposed in the edit form.",
+				"Edit, invite replay, or join can persist tokens as plain adapter configuration.",
+				"The change routes all OpenClaw credential fields through secret references."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:43:57.818Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-memory-governance",
@@ -1758,33 +1785,6 @@
 			"scoredAt": "2026-08-31T06:11:17.560Z"
 		},
 		{
-			"key": "pr:paperclip#12560",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12560 fix(openclaw): persist gateway credentials as secret refs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12560",
-			"sourceUpdatedAt": "2026-08-31T06:15:27Z",
-			"sourceFingerprint": "a82a47c914ce91cbfafc41b30286252564b330cceba1c6c75b034ba8cf376a9b",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"confidence": 9,
-			"rationale": "Preventing gateway credentials from persisting in editable header JSON is a security-sensitive improvement across OpenClaw onboarding and replay paths.",
-			"evidence": [
-				"migrates legacy auth headers to native authToken secret field",
-				"keeps legacy credentials out of editable header JSON",
-				"adds replay-to-persistence regression coverage"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:26:17.386Z"
-		},
-		{
 			"key": "proposal:2026-08-17-site-vendored-tgz-untracked",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2702,33 +2702,6 @@
 			"scoredAt": "2026-08-31T06:10:15.622Z"
 		},
 		{
-			"key": "pr:paperclip#12548",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T06:19:43Z",
-			"sourceFingerprint": "7bcd7234cc47c42d9a7bcfda6404101169e77e9339ef3769531d2afceb3872aa",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"confidence": 9,
-			"rationale": "This addresses a core API recovery gap that can strand governed secret-change decisions after partial failures, with meaningful security and operational relevance.",
-			"evidence": [
-				"pending secret proposals can remain without linked confirmation",
-				"public API had no supported recovery operation",
-				"adds board-only idempotent recovery with authorization checks"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:26:17.386Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3161,6 +3134,33 @@
 			"scoredAt": "2026-08-31T06:18:14.836Z"
 		},
 		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 72509 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-08-31T06:27:28Z",
+			"sourceFingerprint": "b30aa05efaf8b4fe8074ef27830cb8e03813caa216b55f043311b87afd15c422",
+			"score": 67,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 8
+			},
+			"confidence": 5,
+			"rationale": "The exceptionally large upstream divergence spans core gateway, ownership, sessions, plugins, channels, UI, and security-adjacent behavior, but the catalog gives no compatibility assessment or deadline.",
+			"evidence": [
+				"72,509 new upstream commits are reported.",
+				"Listed fixes span plugins, workers, sessions, ownership, channels, CLI, and UI.",
+				"The item provides no stated release blocker or external deadline."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:43:57.818Z"
+		},
+		{
 			"key": "pr:minion (gateway)#257",
 			"kind": "pr",
 			"stage": "development",
@@ -3348,6 +3348,33 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
 			"scoredAt": "2026-08-31T06:10:49.615Z"
+		},
+		{
+			"key": "pr:paperclip#12548",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
+			"sourceUpdatedAt": "2026-08-31T06:42:58Z",
+			"sourceFingerprint": "082e3bfe5728d83e3efc2f94a6c1938ba4076e245bd655765d9a5fa636f4a740",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 6
+			},
+			"confidence": 8,
+			"rationale": "This fixes a core API recovery gap in a security-governed human confirmation path, but the catalog shows neither an active outage nor an external deadline.",
+			"evidence": [
+				"Pending secret proposals can remain unlinked after a partial failure.",
+				"No supported public API recovery operation existed.",
+				"The route is board-only, idempotent, and covered by 102 passing tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:43:57.818Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
@@ -3938,33 +3965,6 @@
 				"Exact DEV CI run initially failed only checks",
 				"Same exact SHA passed on rerun",
 				"May be a real atomic rollback race"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:13:49.219Z"
-		},
-		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 72368 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-08-31T00:39:19Z",
-			"sourceFingerprint": "ab88e71d54d28bf1d62c3ec88901120410028fa3036541260aef15817bef4e44",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 8
-			},
-			"confidence": 5,
-			"rationale": "The very large upstream divergence potentially spans core reliability, release, and performance fixes, but the catalog does not establish which commits apply or whether Minion is currently harmed.",
-			"evidence": [
-				"72368 new commit(s) available",
-				"Includes release and gateway fixes",
-				"Includes atomic subagent persistence fix"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
@@ -6535,33 +6535,6 @@
 			"scoredAt": "2026-08-31T06:10:15.622Z"
 		},
 		{
-			"key": "pr:paperclip#12568",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12568 chore(deps): bump @tanstack/react-query from 5.101.4 to 5.102.8",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12568",
-			"sourceUpdatedAt": "2026-08-31T06:21:57Z",
-			"sourceFingerprint": "bb233de8338c449d8737ca6baa44f2e377a4363b1efb4775c9aaba90f9700cf6",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"confidence": 7,
-			"rationale": "React Query is broadly used application infrastructure and includes an error-handling fix, though no catalog evidence ties it to a current Paperclip failure.",
-			"evidence": [
-				"upgrades react-query from 5.101.4 to 5.102.8",
-				"includes a useQueries error-handling fix",
-				"multiple releases are patch changes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:26:17.386Z"
-		},
-		{
 			"key": "pr:pixel-agents#293",
 			"kind": "pr",
 			"stage": "development",
@@ -8078,8 +8051,8 @@
 			"repo": "paperclip",
 			"title": "#12570 chore(deps-dev): bump rollup from 4.62.4 to 4.63.1",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12570",
-			"sourceUpdatedAt": "2026-08-31T06:23:33Z",
-			"sourceFingerprint": "59083255db9740d791fe46383c3c9d718d56329c1870c21046fd22c06cb444f7",
+			"sourceUpdatedAt": "2026-08-31T06:27:26Z",
+			"sourceFingerprint": "39a402402367788aa351db578c072a139810d979ad5b522b57e1ff5e545745f5",
 			"score": 26,
 			"band": "low",
 			"axes": {
@@ -8088,15 +8061,15 @@
 				"impact": 3
 			},
 			"confidence": 7,
-			"rationale": "The Rollup update may improve build correctness, but the catalog does not establish that Paperclip uses the affected compact-mode path or is currently blocked.",
+			"rationale": "The Rollup update includes build-tool fixes but the catalog does not show that Paperclip is affected by them or that any release is blocked.",
 			"evidence": [
-				"Bumps Rollup from 4.62.4 to 4.63.1",
-				"4.62.5 fixed invalid module concatenations in compact mode",
-				"Dependency is classified as development-only"
+				"Bumps development dependency Rollup from 4.62.4 to 4.63.1.",
+				"4.62.5 fixes invalid module concatenations in compact mode.",
+				"4.63.1 reverts return-value tracking while an issue is investigated."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
-			"scoredAt": "2026-08-31T06:26:46.508Z"
+			"scoredAt": "2026-08-31T06:43:57.818Z"
 		},
 		{
 			"key": "pr:pixel-agents#397",
@@ -8633,6 +8606,33 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v1",
 			"scoredAt": "2026-08-31T06:15:26.345Z"
+		},
+		{
+			"key": "pr:paperclip#12568",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12568 chore(deps): bump @tanstack/react-query from 5.101.4 to 5.102.8",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12568",
+			"sourceUpdatedAt": "2026-08-31T06:25:35Z",
+			"sourceFingerprint": "4eeda21c8882eac6e4d6fe46d00d8f0b7cb9f14ea37c0a2f8d09147ebb511526",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"confidence": 8,
+			"rationale": "The catalog describes a routine patch dependency update without evidence of a security fix, blocked release, production failure, or significant user-facing benefit.",
+			"evidence": [
+				"Bumps @tanstack/react-query from 5.101.4 to 5.102.8.",
+				"The listed releases are patch changes.",
+				"Most listed changes update dependencies."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v1",
+			"scoredAt": "2026-08-31T06:43:57.818Z"
 		},
 		{
 			"key": "pr:paperclip#12569",
