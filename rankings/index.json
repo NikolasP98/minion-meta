@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T22:57:40.603Z",
+	"generatedAt": "2026-08-31T23:27:50.289Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -309,8 +309,8 @@
 			"repo": "paperclip",
 			"title": "#12579 KOMAA-183: activate RTB execution control v2 on live master (port of KOMAA-167)",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12579",
-			"sourceUpdatedAt": "2026-08-31T22:57:01Z",
-			"sourceFingerprint": "da2f665633a540f0d86ffd8d1514aacd28dc928d21bd52c7cec6f9a563b506fe",
+			"sourceUpdatedAt": "2026-08-31T22:59:15Z",
+			"sourceFingerprint": "92b6d4c232a35c95dde7ab8a3619e348fe1eaa33f31d914429f89391ec53b69f",
 			"score": 93,
 			"band": "critical",
 			"axes": {
@@ -319,21 +319,21 @@
 				"impact": 9
 			},
 			"readiness": {
-				"specification": 10,
-				"implementation": 9
+				"specification": 9,
+				"implementation": 8
 			},
-			"confidence": 9,
+			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute because this board-approved reliability control addresses zombie runs, workspace failures, duplicate recovery behavior, and uncontrolled model work with strong implementation and test evidence.",
+			"rationale": "Execute because the change addresses zombie runs, invalid workspaces, runaway recovery, and recurring AI-generated meta-work across the core execution-control path.",
 			"evidence": [
-				"Board-approved for activation via confirmation ef8e6456.",
-				"RTB control tests pass; watchdog tests pass 28/29 with one attributed environment failure.",
-				"Post-merge activation requires a runtime restart and two specified smoke checks."
+				"Persisted running states are reconciled against process and workspace existence.",
+				"Missing or orphaned workspaces fail before model launch.",
+				"Suspicious silence creates no model call or new meta issue."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T22:57:40.510Z"
+			"scoredAt": "2026-08-31T23:27:50.199Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-capability-separation-spec",
@@ -3423,6 +3423,39 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
+			"key": "pr:paperclip#12552",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12552 fix(heartbeat): suppress recovery after operator cancellation",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12552",
+			"sourceUpdatedAt": "2026-08-31T16:16:05Z",
+			"sourceFingerprint": "e819fcf2dd142e3a1ad0e1a9c7cb2f3cfc45c1a1baac48ded57fad95481c4144",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because exact operator cancellation currently triggers the opposite operational outcome, while the narrowly scoped fix has strong regression evidence and bounded risk.",
+			"evidence": [
+				"Exact board cancellation can create a successor run.",
+				"The database-backed test fails on the base commit with one successor.",
+				"The focused suite passes 167 tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T23:27:50.199Z"
+		},
+		{
 			"key": "pr:paperclip#12606",
 			"kind": "pr",
 			"stage": "development",
@@ -3652,39 +3685,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "pr:paperclip#12594",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12594 feat(runner): add managed providers and evaluation platform",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12594",
-			"sourceUpdatedAt": "2026-08-31T20:16:47Z",
-			"sourceFingerprint": "2432c7cf75e2b4008794f571b0709b598a676580d2a80c3560b880c3933bcd13",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 5,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a central platform-completion layer with substantial reach, but its 387-file stacked dependency boundary is not ready to execute until lower work and authoritative gates pass.",
-			"evidence": [
-				"The PR is stacked on the task-thread experience.",
-				"The delta spans 387 files.",
-				"Full build, migration, security, browser, and release gates are deferred to GitHub Actions."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T20:31:59.677Z"
 		},
 		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
@@ -4975,8 +4975,8 @@
 			"repo": "paperclip",
 			"title": "#12616 feat(runner): integrate Codex native execution",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12616",
-			"sourceUpdatedAt": "2026-08-31T22:57:15Z",
-			"sourceFingerprint": "31e7f736eb5b2d72f45f5722a6cf0fb06bd79a29ce25f6a2053f39a9ed298f28",
+			"sourceUpdatedAt": "2026-08-31T23:06:20Z",
+			"sourceFingerprint": "bbc45f1e1dfe61b3c6e83a763b65d1c562b50e806ae6af6d42b72f08790549fd",
 			"score": 65,
 			"band": "medium",
 			"axes": {
@@ -4985,24 +4985,24 @@
 				"impact": 8
 			},
 			"readiness": {
-				"specification": 9,
+				"specification": 8,
 				"implementation": 6
 			},
-			"confidence": 8,
+			"confidence": 7,
 			"recommendation": "group",
 			"relatedKeys": [
 				"pr:paperclip#12608",
 				"pr:paperclip#12617"
 			],
-			"rationale": "Group with its package prerequisite and UI successor because this is the middle production vertical slice of one explicitly dependent runner rollout.",
+			"rationale": "Group this server integration with its runner package prerequisite and UI consumer because it is the middle dependency in a single default-off Codex native-execution slice.",
 			"evidence": [
-				"The runner package cannot yet start and recover a governed Codex run through the server.",
-				"This is stack item 2 after #12608 and before #12617.",
-				"The integration is hidden, Codex-only, and default-off."
+				"The runner package cannot yet execute a real provider through the server.",
+				"The adapter is Codex-only, hidden, and default-off.",
+				"This PR is second in a three-PR stack."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T22:57:40.510Z"
+			"scoredAt": "2026-08-31T23:27:50.199Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -5542,39 +5542,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
-		},
-		{
-			"key": "pr:paperclip#12592",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12592 feat(ui): add provider-neutral task experience",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
-			"sourceUpdatedAt": "2026-08-31T20:20:27Z",
-			"sourceFingerprint": "7f98fa642ef49e8dff4cd038c6d3853a858e33355ebdee8bee7a7311c1696bc1",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The provider-neutral task experience is strategically broad and well specified, but its 149-file frequently used UI delta still depends on unreported CI and review results.",
-			"evidence": [
-				"The delta spans 149 UI files.",
-				"The task page is described as broad and frequently used.",
-				"Local test suites were not run."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T20:31:59.677Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -6223,8 +6190,8 @@
 			"repo": "paperclip",
 			"title": "#12608 feat(runner): add SDK and developer tooling",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12608",
-			"sourceUpdatedAt": "2026-08-31T22:56:48Z",
-			"sourceFingerprint": "4b60102f1cb0bf132aa1205c295c865ed1a4554ed9d1037d11757200ca6e8f8f",
+			"sourceUpdatedAt": "2026-08-31T23:11:39Z",
+			"sourceFingerprint": "8093edef96908afbca1d80018d9ee9246b4499e986893b913f22566ed95bf731",
 			"score": 58,
 			"band": "medium",
 			"axes": {
@@ -6233,24 +6200,24 @@
 				"impact": 8
 			},
 			"readiness": {
-				"specification": 9,
+				"specification": 8,
 				"implementation": 6
 			},
-			"confidence": 8,
+			"confidence": 7,
 			"recommendation": "group",
 			"relatedKeys": [
 				"pr:paperclip#12616",
 				"pr:paperclip#12617"
 			],
-			"rationale": "Group the explicitly ordered runner stack into one goal because this package boundary supplies the SDK and contracts required by the production integration and task-thread projection.",
+			"rationale": "Group the runner SDK, production integration, and task-thread projection as one governed native-runner vertical slice because their stated stack and shared contracts make their value and verification interdependent.",
 			"evidence": [
-				"The PR is stack item 1 before #12616 and #12617.",
-				"It adds SDK, conformance, replay, evaluation, and generated-contract drift checks.",
-				"Local suites were not run; GitHub Actions is designated as verification authority."
+				"This PR is first in a three-PR runner stack.",
+				"The surfaces share generated contracts and package exports.",
+				"Local test suites were not run."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T22:57:40.510Z"
+			"scoredAt": "2026-08-31T23:27:50.199Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
@@ -6822,14 +6789,14 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:paperclip#12575",
+			"key": "pr:paperclip#12553",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
-			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
-			"sourceUpdatedAt": "2026-08-31T21:29:27Z",
-			"sourceFingerprint": "feb1eaaa1430f0e0c156e3d9852ad24fbaa556fee46a5ac1d720a90aba9158be",
+			"title": "#12553 feat(server): SPA-5177 R3 signed (tamper-evident) BUILD-RECEIPT",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12553",
+			"sourceUpdatedAt": "2026-08-31T04:31:39Z",
+			"sourceFingerprint": "ad13c0f08acf7df762ba270d880b84bfec366704d2145fbc27fb07d7011615f9",
 			"score": 54,
 			"band": "medium",
 			"axes": {
@@ -6838,21 +6805,21 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 9,
-				"implementation": 9
+				"specification": 8,
+				"implementation": 6
 			},
-			"confidence": 9,
-			"recommendation": "execute",
+			"confidence": 7,
+			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "Execute because the bounded attribution defect affects recurring project-scoped workflows and has deterministic resolution rules plus substantial route-level test coverage.",
+			"rationale": "Reframe the signing design around durable key management and verification because a process-local keypair may not provide an effective long-lived receipt trust boundary.",
 			"evidence": [
-				"17 of 172 agent-created issues had no project",
-				"Missing projects break filters, cost rollups, and workspace defaults",
-				"15 unit tests and 10 integration tests were added"
+				"The Ed25519 keypair is process-local.",
+				"The private key never leaves process memory.",
+				"The verifier requires a public-key path."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T21:57:47.501Z"
+			"scoredAt": "2026-08-31T23:27:50.199Z"
 		},
 		{
 			"key": "pr:pixel-agents#385",
@@ -7201,8 +7168,8 @@
 			"repo": "paperclip",
 			"title": "#12617 feat(ui): project native runner turns into task chat",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12617",
-			"sourceUpdatedAt": "2026-08-31T22:57:14Z",
-			"sourceFingerprint": "f5f3427c6a3f4b6c2c68c82abe41e029e7b5084e27d4e0e878ae6ff172b132f7",
+			"sourceUpdatedAt": "2026-08-31T22:59:50Z",
+			"sourceFingerprint": "5d103fa7be9b9b53bb695178325f2399695eb3ebd75f3d78fc53e14c3402b502",
 			"score": 52,
 			"band": "medium",
 			"axes": {
@@ -7211,24 +7178,24 @@
 				"impact": 7
 			},
 			"readiness": {
-				"specification": 9,
-				"implementation": 7
+				"specification": 8,
+				"implementation": 6
 			},
-			"confidence": 8,
+			"confidence": 7,
 			"recommendation": "group",
 			"relatedKeys": [
 				"pr:paperclip#12608",
 				"pr:paperclip#12616"
 			],
-			"rationale": "Group with the two preceding runner changes because this UI projection is the final dependent layer needed to expose native runs through the established task thread.",
+			"rationale": "Group this UI projection with the runner package and server integration because it is the user-facing completion of the same native-runner capability and has no independent production path.",
 			"evidence": [
-				"This is stack item 3 after #12608 and #12616.",
-				"Rendering is gated on native runtime mode and the paperclip_runner adapter.",
-				"Unsupported protocol versions, event types, schemas, and identity fields fail closed."
+				"The server records native events that the existing task page cannot render.",
+				"Rendering is gated to native paperclip_runner runs.",
+				"This PR is third in a three-PR stack."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T22:57:40.510Z"
+			"scoredAt": "2026-08-31T23:27:50.199Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1883922325",
@@ -7500,39 +7467,6 @@
 			"scoredAt": "2026-08-31T22:27:54.178Z"
 		},
 		{
-			"key": "pr:paperclip#12613",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12613 Onboarding: model source tiles, one input canvas, and Storybook coverage for the agent arc",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12613",
-			"sourceUpdatedAt": "2026-08-31T22:39:22Z",
-			"sourceFingerprint": "7cf65c456a810d97ee79ada7762d57f8a3d72a8c0e4cf76520fd109766cc9de4",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the bounded onboarding improvement removes a model-connection usability and inspection gap and already has substantial focused verification.",
-			"evidence": [
-				"The connect step determines whether an onboarding agent can run.",
-				"Storybook coverage now exposes all three agent-arc steps without a provisioned stack.",
-				"Touched suites report 139 passing tests and UI typecheck is clean."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T22:57:40.510Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-722867358",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7632,6 +7566,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
+		},
+		{
+			"key": "pr:paperclip#12575",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
+			"sourceUpdatedAt": "2026-08-31T23:27:09Z",
+			"sourceFingerprint": "8bcba92d5c5ae019e90bcabc401dbf355613a713e28059872ebfddfed424899e",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because deterministic project inference repairs recurring attribution and filtering failures with explicit precedence, ambiguity handling, and route-level coverage.",
+			"evidence": [
+				"17 of 172 measured agent-created issues had no project.",
+				"Missing projects affect filters, cost rollups, and workspace defaults.",
+				"The change adds 15 unit tests and 10 integration tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T23:27:50.199Z"
 		},
 		{
 			"key": "pr:pixel-agents#246",
@@ -8271,6 +8238,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:35:03.762Z"
+		},
+		{
+			"key": "pr:paperclip#12613",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12613 Onboarding: model source tiles, one input canvas, and Storybook coverage for the agent arc",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12613",
+			"sourceUpdatedAt": "2026-08-31T23:18:53Z",
+			"sourceFingerprint": "869042b4cab50831c54f31ac5c388b3cbe98a84d9818da041200d920784a4f68",
+			"score": 47,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because onboarding model connection gates whether a new agent can run, and the change adds inspectable coverage while preserving existing authentication behavior.",
+			"evidence": [
+				"The connect step decides whether the agent can run.",
+				"The three agent-arc steps previously required a provisioned stack.",
+				"Touched suites passed 139 tests and UI typecheck was clean."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T23:27:50.199Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-pos-appointments-fork",
