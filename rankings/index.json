@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T18:24:45.908Z",
+	"generatedAt": "2026-08-31T18:54:33.369Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -235,6 +235,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T17:54:59.834Z"
+		},
+		{
+			"key": "pr:paperclip#12605",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12605 fix(docker): install rust via rustup — Debian's 1.85 no longer builds the runner",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12605",
+			"sourceUpdatedAt": "2026-08-31T18:37:29Z",
+			"sourceFingerprint": "97e92b2d317fff17feb0c1c1747f853a79a0169fb3bdf59ea590abb2b3f65dbd",
+			"score": 95,
+			"band": "critical",
+			"axes": {
+				"criticality": 10,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 10
+			},
+			"confidence": 10,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is an active release-blocking Docker failure with a narrow, reproduced, and end-to-end verified toolchain fix.",
+			"evidence": [
+				"Every master Docker build fails and no current image is published.",
+				"Runner dependencies require rustc 1.88 or newer, while Debian provides 1.85.",
+				"Pinned rustc 1.89 successfully builds the runner in the exact base image."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T18:54:33.296Z"
 		},
 		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
@@ -1821,41 +1854,6 @@
 			"scoredAt": "2026-08-31T11:24:32.326Z"
 		},
 		{
-			"key": "pr:paperclip#12591",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12591 feat(runner): add Codex-native application integration",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12591",
-			"sourceUpdatedAt": "2026-08-31T18:18:48Z",
-			"sourceFingerprint": "aa2c42996905d4290a34aecd3cc13c6c56873252e609dcabe7734caeeeb8b9b2",
-			"score": 81,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:paperclip#12592"
-			],
-			"rationale": "Execute as the prerequisite native-runtime boundary because it supplies guarded persistence, authorization, recovery, and finalization required by the dependent task experience.",
-			"evidence": [
-				"PR adds durable native-run state and recovery.",
-				"Runtime remains Codex-only and default-off.",
-				"PR #12592 depends on these application contracts."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T18:24:45.803Z"
-		},
-		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3425,41 +3423,6 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:paperclip#12604",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12604 fix(heartbeat): carry the successful-run handoff instruction into the wake",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12604",
-			"sourceUpdatedAt": "2026-08-31T17:52:19Z",
-			"sourceFingerprint": "d4dd8df96178c77cfda94a3ff9787f16abe54bd3c83a99d035dbf88edd2b2b6d",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 10,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"issue:paperclip#12603"
-			],
-			"rationale": "Execute because it directly fixes the documented payload mismatch that wastes the only corrective attempt and includes bounded producer-to-renderer coverage.",
-			"evidence": [
-				"The wake builder drops the successful-run handoff instruction.",
-				"The missing instruction causes the corrective run to repeat prior work.",
-				"The PR adds seven focused test cases across adapter utilities and heartbeat behavior."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T17:54:59.834Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4398,41 +4361,6 @@
 			"scoredAt": "2026-08-31T14:54:38.867Z"
 		},
 		{
-			"key": "pr:paperclip#12592",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12592 feat(runner): add task experience and developer SDKs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
-			"sourceUpdatedAt": "2026-08-31T18:15:33Z",
-			"sourceFingerprint": "d3b424beb8ffac1c81fe2f0f658550397e519611ec5c1fb4c2f5c56acb074e82",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:paperclip#12591"
-			],
-			"rationale": "Reevaluate after the preceding native application integration passes because this broad 379-file user and SDK layer is explicitly dependent on it and lacks local test execution.",
-			"evidence": [
-				"PR depends on the preceding stack entry.",
-				"Stacked delta is 379 files.",
-				"Local tests were not run."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T18:24:45.803Z"
-		},
-		{
 			"key": "proposal:ci-minion-ai-ci",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5218,39 +5146,6 @@
 			"scoredAt": "2026-08-31T07:38:58.989Z"
 		},
 		{
-			"key": "issue:paperclip#12545",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12545 Add support for idempotency keys on issue-creation and comment-creation POST requests",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12545",
-			"sourceUpdatedAt": "2026-08-30T17:16:24Z",
-			"sourceFingerprint": "a3e3be537042ba2e89ec29101796e3f3754a7d68eeeb00dd86ca7b2b1cb4b969",
-			"score": 64,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because server-side idempotency is a central correctness primitive for autonomous clients using retries, and the requested endpoint behavior is bounded and verifiable.",
-			"evidence": [
-				"Issue-create and comment-create retries can produce duplicate resources after ambiguous outcomes.",
-				"Client-side locking could not eliminate concurrent or resumed-process races.",
-				"The requested behavior is to return the existing resource for a repeated idempotency key."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:39:38.888Z"
-		},
-		{
 			"key": "pr:minion-meta#285",
 			"kind": "pr",
 			"stage": "development",
@@ -5383,6 +5278,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:21:50.290Z"
+		},
+		{
+			"key": "pr:paperclip#12604",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12604 fix(heartbeat): carry the successful-run handoff instruction into the wake",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12604",
+			"sourceUpdatedAt": "2026-08-31T18:37:56Z",
+			"sourceFingerprint": "887f62f82db6f5f96e81c2be107b80b10c748a8c99010f968d87744488b65c09",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This bounded fix addresses a recurring recovery failure that wastes corrective runs, with a precise causal chain and targeted automated coverage.",
+			"evidence": [
+				"The missing handoff payload makes the single corrective wake ineffective.",
+				"The change adds the payload, prompt rendering, and recovery classification.",
+				"Seven targeted test cases were added."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T18:54:33.296Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updatesellable-silent-drop",
@@ -5581,6 +5509,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
+		},
+		{
+			"key": "pr:paperclip#12591",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12591 feat(runner): add Codex-native application integration",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12591",
+			"sourceUpdatedAt": "2026-08-31T18:53:08Z",
+			"sourceFingerprint": "27e19db27a3a6077556d25ae5e8e820e20382b44283303325a87fa04e7856083",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:paperclip#12592"
+			],
+			"rationale": "The Codex-native application boundary is strategically central and well specified, but its 133-file change across critical routing and persistence paths lacks completed test, build, and typecheck evidence.",
+			"evidence": [
+				"Adds durable native-run state, authorization, recovery, and finalization.",
+				"Touches central heartbeat and agent-route code across 133 files.",
+				"Local tests, build, and typecheck were not run."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T18:54:33.296Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -6588,6 +6551,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
+		},
+		{
+			"key": "pr:paperclip#12592",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12592 feat(runner): add task experience and developer SDKs",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
+			"sourceUpdatedAt": "2026-08-31T18:52:33Z",
+			"sourceFingerprint": "73c8372cade88bcf55b6fe9804b194bcc94726e9955cc8c827073b6fae161094",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:paperclip#12591"
+			],
+			"rationale": "The user-facing runner and SDK work has broad potential impact, but it depends on the preceding integration and is too large and insufficiently verified to be immediately actionable.",
+			"evidence": [
+				"Depends on native application contracts in the preceding stack entry.",
+				"The stacked delta changes 379 files.",
+				"Local tests were not run."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T18:54:33.296Z"
 		},
 		{
 			"key": "pr:pixel-agents#388",
