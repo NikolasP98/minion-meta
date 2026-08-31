@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T12:54:59.788Z",
+	"generatedAt": "2026-08-31T13:24:31.650Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -68,39 +68,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:34:26.538Z"
-		},
-		{
-			"key": "pr:paperclip#12581",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12581 fix(server): fail closed on secret-shaped issue comments",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12581",
-			"sourceUpdatedAt": "2026-08-31T12:53:42Z",
-			"sourceFingerprint": "76ec6f07c51ba40017558010cb9cd6c0c08e09d71b427f8f53c3d49b1828523e",
-			"score": 98,
-			"band": "critical",
-			"axes": {
-				"criticality": 10,
-				"importance": 10,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 10,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This security fix closes durable secret-egress paths at both persistence and service-read boundaries with focused passing tests, making completion urgent and actionable.",
-			"evidence": [
-				"Issue comments are a durable output surface that can expose secret-shaped values.",
-				"The sanitizer is applied before persistence and when comments leave the service.",
-				"Focused tests and workspace typecheck passed, while full CI is not yet green."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T12:54:59.710Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -807,6 +774,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:34:26.538Z"
+		},
+		{
+			"key": "pr:paperclip#12581",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12581 fix(server): fail closed on secret-shaped issue comments",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12581",
+			"sourceUpdatedAt": "2026-08-31T13:08:44Z",
+			"sourceFingerprint": "a617966657deef1d4ce007e4675bc590b7a7adf962c9ac6f704d908e448c52b1",
+			"score": 88,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Preventing durable issue comments from persisting or exposing secret-shaped values is time-sensitive security work with write- and read-boundary defenses already tested, though remaining review gates must still pass.",
+			"evidence": [
+				"Existing redaction misses provider tokens, database URLs, and unknown high-entropy values.",
+				"Sanitization is applied before persistence and when comments leave the service.",
+				"Targeted tests and workspace typecheck passed, but CI and Greptile gates are not yet green."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T13:24:31.579Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-capability-separation",
@@ -6779,39 +6779,6 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:paperclip#12565",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12565 chore(deps): bump better-auth from 1.7.0 to 1.7.2",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12565",
-			"sourceUpdatedAt": "2026-08-31T12:24:54Z",
-			"sourceFingerprint": "2bef30686fd994a3f61de6172fdc41b31f937e7eaef363b0c6184c1af45210a9",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Authentication is dependency-central and the patch includes validation fixes, but catalog evidence does not show which fixes apply or that Paperclip's auth flows pass.",
-			"evidence": [
-				"Bumps better-auth from 1.7.0 to 1.7.2.",
-				"Improves callback and redirect URL validation.",
-				"No Paperclip-specific verification is provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T12:54:59.710Z"
-		},
-		{
 			"key": "pr:pixel-agents#385",
 			"kind": "pr",
 			"stage": "development",
@@ -7152,6 +7119,39 @@
 			"scoredAt": "2026-08-31T07:45:19.199Z"
 		},
 		{
+			"key": "pr:paperclip#12575",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
+			"sourceUpdatedAt": "2026-08-31T13:14:07Z",
+			"sourceFingerprint": "98844bd23c5834b357ca56b1f0172dd98ffb28fc3d37b4b3b0d14d1dd79d1a2e",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This bounded change addresses recurring project-attribution failures that disrupt filters, cost rollups, and workspace selection, with deterministic resolution rules and substantial test coverage.",
+			"evidence": [
+				"17 of 172 agent-created issues had no project on one measured instance.",
+				"Missing projects affect filters, cost attribution, and workspace selection.",
+				"The change adds 15 unit tests and 10 integration tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T13:24:31.579Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-1883922325",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7487,39 +7487,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "pr:paperclip#12575",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
-			"sourceUpdatedAt": "2026-08-31T09:58:16Z",
-			"sourceFingerprint": "d402f181ef1234d32fce62b00afcf1272b19e892a840850d41b861386b19e172",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the bounded change addresses recurring project-attribution failures that disrupt filtering, cost rollups, and workspace selection, with deterministic behavior and substantial test coverage already described.",
-			"evidence": [
-				"17 of 172 measured agent-created issues had no project.",
-				"Null projects are excluded from project filters, cost rollups, and project-scoped workspace defaults.",
-				"The change includes 15 unit tests and 10 route-level integration tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T10:24:19.095Z"
 		},
 		{
 			"key": "pr:pixel-agents#246",
@@ -10011,6 +9978,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T12:54:59.710Z"
+		},
+		{
+			"key": "pr:paperclip#12565",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12565 chore(deps): bump better-auth from 1.7.0 to 1.7.2",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12565",
+			"sourceUpdatedAt": "2026-08-31T13:12:08Z",
+			"sourceFingerprint": "fb9b3d3d12bb6f6e3b2ae37b2b85b00894332c557d9d75e23b2e4842aa39c296",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The patch release contains potentially useful auth fixes, but the catalog establishes neither an affected production path nor verification results that justify prioritizing it now.",
+			"evidence": [
+				"Bumps better-auth from 1.7.0 to 1.7.2.",
+				"Release notes list callback-validation, migration, session-data, and type fixes.",
+				"No project-specific tests or affected behavior are described."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T13:24:31.579Z"
 		},
 		{
 			"key": "pr:paperclip#12566",
