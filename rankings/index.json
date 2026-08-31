@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T15:55:06.580Z",
+	"generatedAt": "2026-08-31T16:24:54.403Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1478,6 +1478,39 @@
 			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
+			"key": "pr:paperclip#12595",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12595 fix: guarantee deferred wake promotion",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12595",
+			"sourceUpdatedAt": "2026-08-31T16:23:56Z",
+			"sourceFingerprint": "bb50c6aa865605abb1896a8875b9b29b6305e4617034f5be92bc7d817c1210b9",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 3
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate immediately after implementation evidence is available because the specified scheduler failure can indefinitely strand older deferred work, but the current artifact is proposal-only.",
+			"evidence": [
+				"A deferred wake can remain without a run or terminal error while newer wakes execute.",
+				"The proposal defines atomic promotion, fairness, bounded reconciliation, and a 15-minute diagnostic.",
+				"All four specification artifacts validate, but implementation tests are explicitly pending."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T16:24:54.315Z"
+		},
+		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1854,39 +1887,6 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
-			"key": "issue:paperclip#12535",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12535 [Bug] `project_workspaces.cwd = null` (git_repo source, never realized) crashes isolated_workspace/agent_default heartbeats — validation layer never checks workspace realizability",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12535",
-			"sourceUpdatedAt": "2026-08-30T14:05:45Z",
-			"sourceFingerprint": "6909f8e41b278b4e078ab6437cac8375f249457734b8886c81393135608ec2f8",
-			"score": 80,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A validated workspace state repeatedly crashes setup and defeats recovery across two execution modes, making realizability validation an actionable reliability fix.",
-			"evidence": [
-				"Two production incidents share the null-cwd root cause",
-				"Both agent_default and isolated_workspace are affected",
-				"Recovery retries the identical setup failure and blocks the issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:38:58.989Z"
-		},
-		{
 			"key": "pr:minion (gateway)#255",
 			"kind": "pr",
 			"stage": "development",
@@ -2219,6 +2219,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:34:26.538Z"
+		},
+		{
+			"key": "pr:paperclip#12552",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12552 fix(heartbeat): suppress recovery after operator cancellation",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12552",
+			"sourceUpdatedAt": "2026-08-31T16:16:05Z",
+			"sourceFingerprint": "e819fcf2dd142e3a1ad0e1a9c7cb2f3cfc45c1a1baac48ded57fad95481c4144",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because operator cancellation currently can trigger the opposite outcome—a successor run—and the narrowly scoped fix has a reproducing regression test.",
+			"evidence": [
+				"Exact-run cancellation can create a successor run after an operator stops the selected run.",
+				"The database-backed test reproduces one successor on the base commit and asserts zero after the fix.",
+				"The suppression option defaults to false and is enabled only by the exact-run board route."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T16:24:54.315Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -3287,39 +3320,6 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:paperclip#12552",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12552 fix(heartbeat): suppress recovery after operator cancellation",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12552",
-			"sourceUpdatedAt": "2026-08-31T15:52:49Z",
-			"sourceFingerprint": "abfbbdb8ccb1f7d346524c8bb84c2c771654ecf204526630ba568cb0b8f5be05",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Preventing an operator-cancelled run from immediately restarting is a core control-plane correctness fix with a reproduced regression and focused passing tests.",
-			"evidence": [
-				"Exact-run cancellation currently creates a successor run.",
-				"The new database test fails on the base commit.",
-				"167 focused tests pass."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T15:55:06.484Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3761,8 +3761,8 @@
 			"repo": "paperclip",
 			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T15:51:29Z",
-			"sourceFingerprint": "00815f8508f797665dd57a0f4b702b850814ad817f19ddb56b3086619dc3e012",
+			"sourceUpdatedAt": "2026-08-31T15:54:24Z",
+			"sourceFingerprint": "3813097a6cb9f6e61888297e4698d0bf8af31cbc1c68e4c602602437271aca5b",
 			"score": 71,
 			"band": "high",
 			"axes": {
@@ -3771,21 +3771,21 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 10,
+				"specification": 9,
 				"implementation": 9
 			},
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "This bounded security-governance recovery fix closes a real failure path and has strong verification evidence with limited migration risk.",
+			"rationale": "Execute because this is a narrowly bounded recovery fix for a governed secret-change workflow with strong authorization, idempotency, and test evidence.",
 			"evidence": [
-				"Pending secret proposals can remain without a linked human confirmation.",
-				"The route is board-only and returns no secret material.",
-				"102 focused tests and server typechecking passed."
+				"Pending secret proposals can remain without a linked human confirmation after a partial failure.",
+				"The route is board-only, returns no secret material, and fails closed on invalid states.",
+				"Focused tests passed: 102 tests plus server TypeScript checking."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T15:55:06.484Z"
+			"scoredAt": "2026-08-31T16:24:54.315Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -4806,8 +4806,8 @@
 			"repo": "paperclip",
 			"title": "#12591 feat(runner): integrate native execution with the application",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12591",
-			"sourceUpdatedAt": "2026-08-31T15:46:37Z",
-			"sourceFingerprint": "0578dcfbcca2bea0d6d8d710fe0d24c311a36f759c573cf988339a07f7235f5a",
+			"sourceUpdatedAt": "2026-08-31T16:23:06Z",
+			"sourceFingerprint": "be2f050199fa3c01bfa1fa4ac96ab07674bfdebe9f5f80d1fd821a0d80f08ab5",
 			"score": 65,
 			"band": "medium",
 			"axes": {
@@ -4820,21 +4820,21 @@
 				"implementation": 5
 			},
 			"confidence": 7,
-			"recommendation": "group",
+			"recommendation": "reevaluate",
 			"relatedKeys": [
 				"pr:paperclip#12590",
 				"pr:paperclip#12592",
 				"pr:paperclip#12594"
 			],
-			"rationale": "Native application integration is the central runner dependency and should be assessed together with its provider, interface, and platform layers rather than as an isolated goal.",
+			"rationale": "Reevaluate after its lower-stack dependency and full CI pass because this is central integration work touching execution, persistence, authorization, transport, and recovery without local verification.",
 			"evidence": [
-				"The change spans persistence, authorization, transport, recovery, and tools.",
-				"It remains behind a default-off experimental setting.",
-				"Local tests were not run."
+				"The change adds the end-to-end native-run lifecycle across shared contracts, database, adapters, and server services.",
+				"It changes central heartbeat and agent-route code while remaining behind a default-off setting.",
+				"Local tests were not run, and review must account for the preceding provider branch."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T15:55:06.484Z"
+			"scoredAt": "2026-08-31T16:24:54.315Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -6350,43 +6350,6 @@
 			"scoredAt": "2026-08-31T07:34:26.538Z"
 		},
 		{
-			"key": "pr:paperclip#12594",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12594 feat(runner): add SDK managed provider and evaluation surfaces",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12594",
-			"sourceUpdatedAt": "2026-08-31T15:49:30Z",
-			"sourceFingerprint": "052114d66cc6850b8e74f29d5cf6cf9b7ec8c0e6fb05ea91e239d40db76e28ae",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 2,
-				"importance": 8,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12590",
-				"pr:paperclip#12591",
-				"pr:paperclip#12592"
-			],
-			"rationale": "This very broad final runner layer should be managed with the preceding stack because its value and verification depend on those lower layers and it is not independently ready.",
-			"evidence": [
-				"The delta contains 629 files.",
-				"It adds managed providers, SDKs, evaluations, deployment assets, and migrations.",
-				"Local tests were not run."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T15:55:06.484Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6451,43 +6414,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
-		},
-		{
-			"key": "pr:paperclip#12590",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12590 feat(runner): activate qualified Pi and Claude ACPX runtimes",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12590",
-			"sourceUpdatedAt": "2026-08-31T15:49:08Z",
-			"sourceFingerprint": "42dfb7860cea349863e2a01cb85bb80bec7948170c62217af310ff90e160ad0f",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12591",
-				"pr:paperclip#12592",
-				"pr:paperclip#12594"
-			],
-			"rationale": "Provider activation is one dependent layer of the same native-runner outcome and should be governed with the application, UI, and platform layers as a single program goal.",
-			"evidence": [
-				"The change activates qualified Pi and Claude ACPX runtimes.",
-				"Local tests were not run.",
-				"The subsequent runner PRs explicitly build on this stack."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T15:55:06.484Z"
 		},
 		{
 			"key": "pr:pixel-agents#388",
@@ -6956,6 +6882,43 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:14:27.632Z"
+		},
+		{
+			"key": "pr:paperclip#12594",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12594 feat(runner): add SDK managed provider and evaluation surfaces",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12594",
+			"sourceUpdatedAt": "2026-08-31T16:23:59Z",
+			"sourceFingerprint": "8342a95df441d5352afd8b4859ec5db3c942faa56006350f266a639ddfd08491",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 2,
+				"importance": 7,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 8,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"pr:paperclip#12590",
+				"pr:paperclip#12591",
+				"pr:paperclip#12592"
+			],
+			"rationale": "Reframe into smaller independently verifiable goals because a 629-file boundary spanning providers, SDKs, evaluations, deployments, migrations, tests, and documentation is not an effective review or delivery unit.",
+			"evidence": [
+				"The pull request delta is 629 files.",
+				"It combines managed providers, multiple SDK surfaces, evaluation tooling, deployment assets, migrations, tests, and documentation.",
+				"No local tests were run; full build, migration, security, and browser gates remain for CI."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T16:24:54.315Z"
 		},
 		{
 			"key": "pr:pixel-agents#383",
@@ -7435,41 +7398,41 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
-			"key": "pr:paperclip#12592",
+			"key": "pr:paperclip#12590",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
-			"title": "#12592 feat(ui): add the runner-aware task experience",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
-			"sourceUpdatedAt": "2026-08-31T15:45:54Z",
-			"sourceFingerprint": "49324d032581caf741b31e83a09e621d8e4d77da5a39b1a7d08d559c8f1eacdb",
+			"title": "#12590 feat(runner): activate qualified Claude ACPX runtime",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12590",
+			"sourceUpdatedAt": "2026-08-31T16:18:53Z",
+			"sourceFingerprint": "695e0a5bab6353b6245b8387b4cefdcea48fb2c0df85ee205ceda946e0e874b1",
 			"score": 50,
 			"band": "medium",
 			"axes": {
-				"criticality": 2,
+				"criticality": 3,
 				"importance": 7,
-				"impact": 8
+				"impact": 6
 			},
 			"readiness": {
 				"specification": 8,
 				"implementation": 5
 			},
 			"confidence": 7,
-			"recommendation": "group",
+			"recommendation": "reevaluate",
 			"relatedKeys": [
-				"pr:paperclip#12590",
 				"pr:paperclip#12591",
+				"pr:paperclip#12592",
 				"pr:paperclip#12594"
 			],
-			"rationale": "The runner-aware task experience cannot deliver independently and belongs in the same outcome-level goal as the lower runtime and server stack.",
+			"rationale": "Reevaluate after authoritative CI because the provider expansion is strategically useful and security-conscious, but no local tests were run and it forms the base of a substantial dependent stack.",
 			"evidence": [
-				"The PR does not build independently on master.",
-				"It depends on native application contracts.",
-				"The task page is described as a broad, frequently used surface."
+				"The change activates only the qualified Claude profile and rejects Pi before process creation.",
+				"Package, patch, and model admission are pinned or exact-profile checked.",
+				"Local tests were not run; GitHub Actions is stated as authoritative."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T15:55:06.484Z"
+			"scoredAt": "2026-08-31T16:24:54.315Z"
 		},
 		{
 			"key": "pr:pixel-agents#246",
@@ -8408,6 +8371,43 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
+		},
+		{
+			"key": "pr:paperclip#12592",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12592 feat(ui): add the runner-aware task experience",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
+			"sourceUpdatedAt": "2026-08-31T16:23:50Z",
+			"sourceFingerprint": "69e12126de7a07c8fd057ed33c667586c03569ff18911e7ac9d16a4f2efbabab",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 6,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:paperclip#12590",
+				"pr:paperclip#12591",
+				"pr:paperclip#12594"
+			],
+			"rationale": "Reevaluate once the server contracts and CI are proven because the UI has broad regression exposure, cannot build independently on master, and lacks local test evidence.",
+			"evidence": [
+				"The task page is described as a broad, frequently used surface.",
+				"The PR depends on the preceding native application integration and does not build independently on master.",
+				"Local UI, browser, typecheck, and build verification was deferred to GitHub Actions."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T16:24:54.315Z"
 		},
 		{
 			"key": "proposal:2026-08-30-site-page-max-shared-token",
