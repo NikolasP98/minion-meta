@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T20:31:59.768Z",
+	"generatedAt": "2026-08-31T20:57:42.681Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -241,10 +241,10 @@
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
-			"title": "#12605 fix(docker): install rust via rustup — Debian's 1.85 no longer builds the runner",
+			"title": "#12605 refactor(docker): install rust via a verified rustup, pinned by rust-toolchain.toml",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12605",
-			"sourceUpdatedAt": "2026-08-31T18:37:29Z",
-			"sourceFingerprint": "97e92b2d317fff17feb0c1c1747f853a79a0169fb3bdf59ea590abb2b3f65dbd",
+			"sourceUpdatedAt": "2026-08-31T20:47:08Z",
+			"sourceFingerprint": "ad49ca6c1109405d9f47fda2301ee419344eb36095bd9e8c6d9974a01ce164db",
 			"score": 95,
 			"band": "critical",
 			"axes": {
@@ -259,15 +259,15 @@
 			"confidence": 10,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "This is an active release-blocking Docker failure with a narrow, reproduced, and end-to-end verified toolchain fix.",
+			"rationale": "This directly repairs a reproducible master build failure that has stopped Docker image publication and therefore blocks deployments from receiving current builds.",
 			"evidence": [
-				"Every master Docker build fails and no current image is published.",
-				"Runner dependencies require rustc 1.88 or newer, while Debian provides 1.85.",
-				"Pinned rustc 1.89 successfully builds the runner in the exact base image."
+				"Every master Docker build fails because apt provides rustc 1.85 while dependencies require a newer compiler.",
+				"No image has been published since the dependency refresh.",
+				"The pinned, checksum-verified toolchain path was verified in the exact base image and exercised by Docker builds."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T18:54:33.296Z"
+			"scoredAt": "2026-08-31T20:57:42.592Z"
 		},
 		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
@@ -6414,39 +6414,6 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
-			"key": "pr:paperclip#12575",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
-			"sourceUpdatedAt": "2026-08-31T16:53:19Z",
-			"sourceFingerprint": "ce3fd15e00ebbb67d95f62efc59bc28bf842d69aacfa776f2b683a42432e4e67",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because deterministic project inference addresses recurring attribution gaps that impair project filters, cost rollups, and workspace selection.",
-			"evidence": [
-				"17 of 172 measured agent-created issues had no project, including 11 top-level issues filed during runs.",
-				"Explicit project signals are preserved and conflicting inference signals return null.",
-				"The change includes 15 unit tests and 10 route-level integration tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:54:55.969Z"
-		},
-		{
 			"key": "proposal:2026-08-17-pkg-gateway-client-onevent-errors",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6913,6 +6880,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
+		},
+		{
+			"key": "pr:paperclip#12575",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
+			"sourceUpdatedAt": "2026-08-31T20:44:42Z",
+			"sourceFingerprint": "91641d32c0ec6ab38d3bb272d73eddfd04b831c5284e8a86656bdfd4dd983439",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is a bounded, well-tested reliability improvement that restores deterministic project attribution for a recurring subset of agent-created tasks.",
+			"evidence": [
+				"17 of 172 measured agent-created issues had no project.",
+				"Missing projects break project filters, cost rollups, and project-scoped workspace defaults.",
+				"The change includes 15 unit tests and 10 integration tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T20:57:42.592Z"
 		},
 		{
 			"key": "pr:pixel-agents#385",
@@ -9146,39 +9146,6 @@
 			"scoredAt": "2026-08-31T12:54:59.710Z"
 		},
 		{
-			"key": "pr:paperclip#12593",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12593 chore(lockfile): refresh pnpm-lock.yaml",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12593",
-			"sourceUpdatedAt": "2026-08-31T19:39:08Z",
-			"sourceFingerprint": "8d2794a57e784078a0a967102c256caf67a076c5e1b2706f6ff5a3b75c1d4235",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The lockfile-only refresh is narrowly specified and directly actionable, with moderate dependency hygiene value but no stated urgent failure.",
-			"evidence": [
-				"The PR only updates pnpm-lock.yaml.",
-				"It refreshes the lockfile after dependencies changed on master.",
-				"Status is open."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T19:54:52.242Z"
-		},
-		{
 			"key": "pr:pixel-agents#356",
 			"kind": "pr",
 			"stage": "development",
@@ -9648,6 +9615,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
+		},
+		{
+			"key": "pr:paperclip#12593",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12593 chore(lockfile): refresh pnpm-lock.yaml",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12593",
+			"sourceUpdatedAt": "2026-08-31T20:42:14Z",
+			"sourceFingerprint": "71ef89d46a62b432fe2f0564aa11ac6a7c5bf0720b77071087bddd6d05c531c2",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The lockfile refresh is actionable but the catalog does not establish whether it fixes a failing build, blocks a release, or is already covered by another dependency change.",
+			"evidence": [
+				"The PR only updates pnpm-lock.yaml.",
+				"The refresh follows dependency changes on master."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T20:57:42.592Z"
 		},
 		{
 			"key": "pr:pixel-agents#374",
