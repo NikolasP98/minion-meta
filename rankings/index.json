@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T11:24:32.402Z",
+	"generatedAt": "2026-08-31T11:54:20.554Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1617,6 +1617,39 @@
 			"scoredAt": "2026-08-31T08:31:21.054Z"
 		},
 		{
+			"key": "pr:paperclip#12560",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12560 fix(openclaw): persist gateway credentials as secret refs",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12560",
+			"sourceUpdatedAt": "2026-08-31T11:34:29Z",
+			"sourceFingerprint": "090b4e64137a45997b2c2486db9fc3ac47824aee1f2bcd6e777255d20bdffbf3",
+			"score": 82,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because this addresses reproducible plaintext credential persistence across multiple OpenClaw workflows with a bounded secret-reference migration and strong focused verification.",
+			"evidence": [
+				"Legacy OpenClaw token headers can be exposed and persisted again during edit, invite replay, or join flows.",
+				"The change migrates credentials to secret_ref storage and removes legacy secret headers before persistence.",
+				"Verification reports targeted typechecks plus passing adapter, server-secrets, UI/server, and invite-replay tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T11:54:20.473Z"
+		},
+		{
 			"key": "spec:2026-08-18-factory-orchestration-round7-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -2285,39 +2318,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:34:26.538Z"
-		},
-		{
-			"key": "pr:paperclip#12560",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12560 fix(openclaw): persist gateway credentials as secret refs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12560",
-			"sourceUpdatedAt": "2026-08-31T11:20:23Z",
-			"sourceFingerprint": "a02bdfafc6bae058fdc41603d7ec48e84df034cde3eaf205a1f4921cd005980b",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because plaintext credential persistence is a security-sensitive recurring path and the proposed secret-reference migration is actionable with substantial regression coverage.",
-			"evidence": [
-				"Legacy OpenClaw tokens can be exposed in editing and persisted again during edit, replay, or join flows.",
-				"The change removes known credential headers and persists only secret references.",
-				"Adapter, UI, server, secrets, and invite-replay checks are reported passing, while the full wrapper lacked cargo."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T11:24:32.326Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
