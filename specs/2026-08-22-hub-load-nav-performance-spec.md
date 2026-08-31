@@ -3,14 +3,14 @@ id: 2026-08-22-hub-load-nav-performance-spec
 title: Hub load & nav performance — prod config gap, layout decoupling, bundle diet, RUM monitoring
 stage: spec
 status: review
-pass: 8
+pass: 9
 next_slice: 5
 created: 2026-08-22
-updated: 2026-08-30
-repos: [minion_hub, minion-meta]
+updated: 2026-08-31
+repos: [minion_hub]
 type: infra
 relationship: extends
-related: [2026-07-17-hub-performance-optimization-plan, 2026-08-13-crm-customers-server-pagination-spec, 2026-07-06-hub-tanstack-consolidated-execution, 2026-08-21-hub-datatable-server-mode-test-gap-spec, 2026-08-22-crm-rank-query-prod-latency, 2026-07-19-channel-scoping-fix-plan]
+related: [2026-07-17-hub-performance-optimization-plan, 2026-08-13-crm-customers-server-pagination-spec, 2026-07-06-hub-tanstack-consolidated-execution, 2026-08-21-hub-datatable-server-mode-test-gap-spec, 2026-08-22-crm-rank-query-prod-latency, 2026-07-19-channel-scoping-fix-plan, 2026-08-31-hub-performance-board-reconciliation-spec]
 verdict: revision-required
 tags: [infra, ux, security]
 ---
@@ -40,7 +40,8 @@ Relationship to existing board items (folded, not duplicated):
   evidence-gated. Slice 2 here produces that evidence; Phase 3 items graduate into work
   only if RUM data implicates them.
 - `2026-07-06-hub-tanstack-consolidated-execution` (+ virtual/query/pacer children) have
-  `status: unknown` — Slice 8 reconciles them so the pagination train stops guessing.
+  `status: unknown`. Their reconciliation is meta-repository governance work and is now
+  owned by `2026-08-31-hub-performance-board-reconciliation-spec`, not by this hub spec.
 - `2026-08-21-hub-datatable-server-mode-test-gap-spec` (approved) owns the DataTable
   server-mode test debt this program's CRM work exposed.
 - `2026-08-22-crm-rank-query-prod-latency` (proposal, draft) owns the CRM rank-query cost
@@ -71,7 +72,7 @@ found, each re-verified against that same `master` SHA before editing:
    and both human gates.
 2. Slice 5's `≤ 450 KB` budget was arithmetically unreachable from this spec's own
    measurements (`1,538 − 815 = 723`). Re-staged in §Slice 5; the 450 KB goal moves to the
-   new §Slice 9, gated on evidence that it is reachable.
+   new §Slice 8, gated on evidence that it is reachable.
 3. Slice 2 was recorded as shipped while its decision dashboard — the surface S5/S6 are
    supposed to be judged by — does not exist. Now `shipped in part`, with the dashboard a
    named prerequisite of Slice 5.
@@ -162,7 +163,7 @@ Pass 7 also records the operator's 2026-08-30 build-cost evidence for future per
 work. Svelte server/client compilation completed locally, but adapter-vercel packaging
 exceeded Node's default ~4 GB heap; an 8 GB retry reached ~7.1 GB RSS and was stopped after
 ~9 minutes. The exact-head hosted check completed in 2m45s and Vercel emitted 1,078 output
-items with shared functions around 17.13 MB. Future S5/S9 measurement must record adapter
+items with shared functions around 17.13 MB. Future S5/S8 measurement must record adapter
 packaging wall time, peak memory, output count and shared-function size. Once compilation
 is clean, do not repeat an unchanged local packaging attempt merely to reproduce the same
 resource ceiling; use the hosted exact-head build as release evidence and investigate the
@@ -182,6 +183,13 @@ multi-org membership, and specifies installed-SQLite migration and legacy-row sa
 unsupported Slice 6 build-time selector claim is removed, and Slice 8's `minion-meta`
 repository scope is declared in frontmatter.
 
+**Review-fix round 2** closes the two exact-head findings at `2791569a`. The
+meta-repository board reconciliation is split into its own single-repository spec, so this
+spec's selected hub-only Slice 5 is queueable under the Factory's one-repository dispatch
+contract. Slice 7b now requires all initial reliability RPCs to share one authenticated
+transient gateway session and proves the connection and health-probe bound at the lowest
+supported per-user connection cap.
+
 Slice ledger — verified 2026-08-29 against hub master `1b47e8ce` and the canonical gateway
 `NikolasP98/minion-ai` `DEV` `293a1aad1bd5609e94247067332a6a41eae7f6be` (**not**
 `NikolasP98/minion`, the April fork passes 4–5 read):
@@ -191,11 +199,11 @@ Slice ledger — verified 2026-08-29 against hub master `1b47e8ce` and the canon
 | S1 prod config gap | **shipped (code); env half unverified from here** | `src/server/db/with-org-core.ts:61-64` = ONE `select set_config(...)×4`; `pg-pool.ts` `DEFAULT_POOL_SIZE = 5`, prod `idle_timeout: 120`. hub PR #162 `14bfce72`. Vercel prod env (`SUPABASE_DB_RLS_POOL_SIZE=5`, `SUPABASE_DB_POOL_SIZE=8`) was set on 2026-08-22 per the session record but **cannot be re-verified without Vercel access** — see the S1 residual below. |
 | S2 RUM + server timing | **shipped in part — dashboard outstanding** | `src/lib/server/server-timing.ts` (`createServerTimingHandle`) wired at `hooks.server.ts:12,503,528`; it since grew a request-local stage recorder + `PerformanceSample` persistence. `hooks.client.ts:33` `capture_performance: { web_vitals: true }`; `+layout.svelte:71` `nav_timing`. hub PR #162 `14bfce72`. **NOT done:** the before/after PostHog dashboard — the surface §5 step 1 and S6 use to decide whether a slice helped — does not exist. A code search of `master` finds the capture sites but no dashboard URL, and #162's file list contains no dashboard artifact. It is now a named prerequisite of S5 (see §Slice 2 and §Slice 5). Events are flowing; only the decision surface is missing. |
 | S3 layout↔nav decoupling | **shipped, with one deliberate divergence** | `applyRouteAccessGuard` lives in `hooks.server.ts:201` and runs at both auth call sites (`:186`, `:358`); `(app)/+layout.server.ts:68` reads the pathname under `untrack`, `:157` records the guard's move. hub PR #166 `1988ef09`. **Divergence:** S3 specified `data-sveltekit-preload-data="tap"`; `src/app.html:9` is back to `"hover"` — tap measurably delayed the click-to-content path (prefetch-then-click rendered in 0.35 s vs 1.5 s cold). Hover is the accepted end state; the pass-1 text was wrong. |
-| S4 shell diet | **shipped in part — DoD unmet, remainder moved into S5** | Supabase browser client dynamic-imported inside `signOut()` (`user.svelte.ts:94-97`); FloatingAssistant/carta-md moved behind the layout's idle `{#await import}`; `vite.config.ts:82-90` `optimizeDeps.include` incl. `lucide-svelte`. hub PR #162 `14bfce72`. **NOT done:** no `manualChunks` pass in `vite.config.ts`, no committed shell-size measurement script in `scripts/`, and the ≤700 KB target was not reached — the post-S4 ad-hoc measurement was 1,538 KB, of which 815 KB is the both-locale Paraglide chunk. The script and `manualChunks` are now S5's DoD; the byte target is split across S5's staged budget and S9. |
-| S5 one-locale Paraglide | **open — next slice** | `package.json:18` still `@inlang/paraglide-sveltekit: ^0.16.1` (the package is deprecated; `svelte.config.js` already carries a manual preprocessor shim for it). The catalog is build-generated (`i18n:compile` → `src/lib/paraglide/`, untracked), so the byte claims must be re-measured, not assumed. **Budget re-staged in pass 4:** the pass-2 `≤ 450 KB` DoD was unreachable from this spec's own numbers (`1,538 − 815 = 723 KB` remains after deleting the entire catalog), so S5 now carries a staged, ratcheted budget and the 450 KB goal moved to S9. |
+| S4 shell diet | **shipped in part — DoD unmet, remainder moved into S5** | Supabase browser client dynamic-imported inside `signOut()` (`user.svelte.ts:94-97`); FloatingAssistant/carta-md moved behind the layout's idle `{#await import}`; `vite.config.ts:82-90` `optimizeDeps.include` incl. `lucide-svelte`. hub PR #162 `14bfce72`. **NOT done:** no `manualChunks` pass in `vite.config.ts`, no committed shell-size measurement script in `scripts/`, and the ≤700 KB target was not reached — the post-S4 ad-hoc measurement was 1,538 KB, of which 815 KB is the both-locale Paraglide chunk. The script and `manualChunks` are now S5's DoD; the byte target is split across S5's staged budget and S8. |
+| S5 one-locale Paraglide | **open — next slice** | `package.json:18` still `@inlang/paraglide-sveltekit: ^0.16.1` (the package is deprecated; `svelte.config.js` already carries a manual preprocessor shim for it). The catalog is build-generated (`i18n:compile` → `src/lib/paraglide/`, untracked), so the byte claims must be re-measured, not assumed. **Budget re-staged in pass 4:** the pass-2 `≤ 450 KB` DoD was unreachable from this spec's own numbers (`1,538 − 815 = 723 KB` remains after deleting the entire catalog), so S5 now carries a staged, ratcheted budget and the 450 KB goal moved to S8. |
 | S6 SSR re-enable | **open — human merge gate** | `src/routes/+layout.ts:17` still `export const ssr = false` (`:18` is `prerender = false`; the pass-2 `:18` anchor was off by one). Seven `(app)` page opt-outs exist on `master`, not the two pass 2 named — enumerated in §Slice 6. |
 | S7 HTTP-first WS routes | **open — re-scoped in pass 6 to a `minion_hub` slice (7b), path G** | `/reliability` gained a trivial `+page.server.ts` (RBAC comment only, returns `{}`); the RPCs moved out of the page into `$lib/state/reliability/*`, but every load is still gated on `conn.connected` (`reliability/+page.svelte:1159,1170,1188`). The premise holds; the pass-1 line/RPC-count anchor does not. **`security`-tagged since pass 4. Pass 5's gateway evidence is VOID** — it was read from `NikolasP98/minion`, a fork last pushed 2026-04-11, not from the registry's canonical `NikolasP98/minion-ai`. On canonical `DEV` `293a1aad` the JWT rail exists (`jwt` accepted by `ConnectParamsSchema`, validated by `server/ws-jwt-auth.ts` → `orgId` from claims, `org-scope.ts` gating org-tagged resources). What is missing is reliability-specific: no org column in `src/events/store.ts`, `server-methods/reliability.ts` ignores `client.orgId`, and the legacy `reliability` broadcast has no scope guard — so the feed is gateway-wide on both paths. That partitioning is proposal `2026-08-29-gateway-reliability-feed-is-cross-tenant`, not a slice here; S7b is hub-only and scoped to not widen it. |
-| S8 reconcile stale statuses | **open** | `specs/index.json` still carries `status: unknown` for `2026-07-05-hub-tanstack-virtual`, `2026-07-06-hub-tanstack-{consolidated-execution,query,pacer,ai-assessment,db-store-assessment}` and `2026-07-17-hub-performance-optimization-plan`. |
+| S8 remaining shell bytes | **open — after S5 evidence** | S5's committed measurement and per-chunk attribution must establish the executable removal/lazy-loading scope before this slice starts. |
 
 Work that shipped under this program but was never specced (recorded here so the program's
 history is honest, no action implied):
@@ -240,8 +248,9 @@ environment). Filed as `proposals/2026-08-29-hub-prod-runtime-config-drift-check
    budget, so S4's ≤700 KB claim is unfalsifiable as it stands. The only measurement that
    exists is the ad-hoc post-S4 count: 1,538 KB of static-import closure, 815 KB of it the
    both-locale Paraglide chunk — i.e. 723 KB that is *not* Paraglide and that no named
-   work in this spec removes. (S5 owns the script and the locale split, S9 the rest)
-5. Five perf-adjacent specs still carry `status: unknown` in `specs/index.json`. (S8)
+   work in this spec removes. (S5 owns the script and the locale split, S8 the rest)
+5. Five perf-adjacent specs still carry `status: unknown` in `specs/index.json`; their
+   evidence reconciliation is owned by the related single-repository meta spec.
 6. S2's events flow but its dashboard does not exist: no PostHog dashboard URL appears in
    hub `master` or in #162, so the program currently has no surface on which to compare a
    slice's before and after. Every DoD below that says "the S2 dashboard shows …" is
@@ -291,7 +300,7 @@ Remaining:
   the existing per-route opt-outs).
 - One locale's catalog only, and a committed measurement script that makes the shell's
   byte budget machine-checkable and ratcheted instead of an ad-hoc count (S5). ≤ 450 KB
-  uncompressed remains the program's shell goal, but it is S9's target and is contingent
+  uncompressed remains the program's shell goal, but it is S8's target and is contingent
   on S5's per-chunk attribution showing it is reachable — S5's own arithmetic
   (`1,538 − 815 = 723 KB` of non-catalog bytes) says the locale work alone cannot get
   there.
@@ -315,10 +324,10 @@ credential resolver that fails open across tenants and on a shared-token admin c
 validates, and fails closed. The reliability feed's own lack of org partitioning — which
 makes it gateway-wide on every path, including the browser one in use today — is not fixed
 here: it is proposal `2026-08-29-gateway-reliability-feed-is-cross-tenant`, and S7 is
-scoped so it does not widen it. (8) perf spec
-statuses unknown →
-S8. (9) the shell is still above the program's 450 KB goal after S5's locale work, by at
-least the 723 KB of non-catalog bytes S5 does not touch → S9. CRM roster payload (the 10th
+scoped so it does not widen it. (8) perf-spec status reconciliation is owned by the
+related meta-only spec. (9) the shell is still above the program's 450 KB goal after S5's
+locale work, by at least the 723 KB of non-catalog bytes S5 does not touch → S8. CRM
+roster payload (the 10th
 delta) is owned by the pagination spec; the CRM rank-query cost (11th, surfaced by that
 work) is owned by proposal `2026-08-22-crm-rank-query-prod-latency`.
 
@@ -398,10 +407,10 @@ with `lucide-svelte`.
 
 Not done, and re-homed in pass 4 so nothing here is an undocumented open end: the
 `manualChunks` pass and the committed build-output measurement script go to **S5**; the
-shell *target* itself goes to **S5's staged budget and then S9**, because S4's ≤700 KB
+shell *target* itself goes to **S5's staged budget and then S8**, because S4's ≤700 KB
 number shared the same flaw as S5's ≤450 KB one — it was never derived from an
 attribution of the 1,538 KB the shell actually measured. Of that, 815 KB is the
-both-locale Paraglide catalog, which is what S5 removes; the other 723 KB is S9's.
+both-locale Paraglide catalog, which is what S5 removes; the other 723 KB is S8's.
 
 ### Slice 5 — Ship one locale, not two (and put the shell on a measured, ratcheted budget)
 
@@ -444,7 +453,7 @@ S5's budget is therefore the reachable one:
   locale), ≤ 800 KB if the Paraglide 2 upgrade lands and tree-shakes. Whichever path is
   taken, the achieved total is recorded in the PR and written into the script's budget
   constant as a ratchet, so no later PR can regress past it.
-- The program's ≤ 450 KB goal moves to **S9**, which is scoped from Gate A's per-chunk
+- The program's ≤ 450 KB goal moves to **S8**, which is scoped from Gate A's per-chunk
   breakdown rather than from a number nobody has attributed.
 
 **Prerequisite:** S2's decision dashboard (see §Slice 2) ships in this PR — durable URL,
@@ -722,6 +731,12 @@ calls must present the org JWT or they will read as admin regardless.
    gateway URL or token in their responses, and add no gateway RPC method the WS path did
    not already call. Each response marks its data gateway-wide (e.g. `scope: 'gateway'`)
    and the page says so, until the proposal's partitioning work makes it org-scoped.
+7. **One bounded initial gateway session.** The server-side loader opens at most one
+   authenticated transient gateway WebSocket for the complete initial reliability RPC
+   set, reuses that session for every call, and closes it after the batch settles. Eight
+   independent `gatewayCallAsUser` calls are not acceptable. The batch must not replace
+   or disconnect the browser's persistent socket, and partial RPC failure must settle and
+   close the transient session without leaking it.
 
 DoD (7b): `/reliability` renders populated KPIs with WS blocked (devtools offline-WS test);
 no duplicate fetch when WS connects (guard test); and these tests exist and pass —
@@ -737,26 +752,18 @@ shipped; (e) **claim authenticated**: against the pinned serving-gateway configu
 the endpoints' hub JWT completes a real connect/auth handshake and the resulting connection
 carries the expected validated `orgId`; missing/mismatched issuer configuration yields 503
 and makes no JWT-less admin retry (schema acceptance alone is insufficient proof);
-(f) the response carries the gateway-wide scope marker of clause 6.
+(f) the response carries the gateway-wide scope marker of clause 6; (g) a focused runtime
+test loads the full initial reliability dataset at the lowest supported per-user
+connection cap while a persistent browser socket is already connected, observes no more
+than one transient authenticated gateway session and one associated health probe, keeps
+the persistent socket connected, and proves the transient session closes after both
+success and partial failure. The PR records observed connection and health-probe counts.
 
 **Human gates (required, `security`):** a human approves S7's path choice and design before
 any dev run, and a human merges the PR. Neither gate is satisfiable by green CI or by an
 agent review verdict.
 
-### Slice 8 — Reconcile stale perf-spec statuses (board hygiene)
-
-**Topics:** `board`, `hygiene`
-
-Resolve `status: unknown` on `2026-07-05-hub-tanstack-virtual`,
-`2026-07-06-hub-tanstack-{consolidated-execution,query,pacer,ai-assessment,db-store-assessment}`
-and `2026-07-17-hub-performance-optimization-plan` by inspecting master for each spec's
-landmarks (T1–T10; Phases 0–2 markers), then set `shipped`/`superseded`/`parked` with
-`evidence` links and regenerate `specs/index.json`.
-
-DoD: none of those specs carries `status: unknown`; the pagination spec's "if T2 landed"
-uncertainty is answered in its sidecar or body.
-
-### Slice 9 — Close the remaining shell bytes to the 450 KB goal
+### Slice 8 — Close the remaining shell bytes to the 450 KB goal
 
 **Topics:** `deps`, `ui`
 
@@ -815,7 +822,7 @@ previous deployment.
    p75 warm nav server time < 500 ms and cold-load LCP p75 < 2.5 s on /home, /crm,
    /finances, read against the baseline window S5 records.
 2. Shell budget: the S5 measurement script's total is at or below the ratchet constant
-   committed with it (S5's staged budget, then S9's ≤ 450 KB), and the `/en/...` graph is
+   committed with it (S5's staged budget, then S8's ≤ 450 KB), and the `/en/...` graph is
    free of `es` catalog bytes (script-verified, not string-grepped).
 3. `Server-Timing` per route (the header shipped in S2 is now the cheapest measurement
    tool: `curl -sI https://hub.minion-ai.org/en/<route>` → `server-timing: app;dur=…`),
