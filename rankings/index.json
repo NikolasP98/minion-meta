@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T22:27:54.266Z",
+	"generatedAt": "2026-08-31T22:57:40.603Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -301,6 +301,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
+		},
+		{
+			"key": "pr:paperclip#12579",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12579 KOMAA-183: activate RTB execution control v2 on live master (port of KOMAA-167)",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12579",
+			"sourceUpdatedAt": "2026-08-31T22:57:01Z",
+			"sourceFingerprint": "da2f665633a540f0d86ffd8d1514aacd28dc928d21bd52c7cec6f9a563b506fe",
+			"score": 93,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 10,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because this board-approved reliability control addresses zombie runs, workspace failures, duplicate recovery behavior, and uncontrolled model work with strong implementation and test evidence.",
+			"evidence": [
+				"Board-approved for activation via confirmation ef8e6456.",
+				"RTB control tests pass; watchdog tests pass 28/29 with one attributed environment failure.",
+				"Post-merge activation requires a runtime restart and two specified smoke checks."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T22:57:40.510Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-capability-separation-spec",
@@ -1887,39 +1920,6 @@
 			"scoredAt": "2026-08-31T18:24:45.803Z"
 		},
 		{
-			"key": "pr:paperclip#12579",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12579 KOMAA-183: activate RTB execution control v2 on live master (port of KOMAA-167)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12579",
-			"sourceUpdatedAt": "2026-08-31T11:06:45Z",
-			"sourceFingerprint": "90d47ac83b512e6e29cf412b06d4364aae32837ad7d401574b695086bfc113b0",
-			"score": 81,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the change addresses multiple central runtime-failure modes and has board-approved activation, although the remaining failed test requires verification in a fully prepared environment.",
-			"evidence": [
-				"Scope covers watchdog recovery, workspace validation, durable reconciliation, budgets, telemetry, and context narrowing.",
-				"Board activation was approved via confirmation ef8e6456.",
-				"One watchdog test remains failing in the current worktree, attributed to a missing acpx package."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T11:24:32.326Z"
-		},
-		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2287,39 +2287,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:01:14.069Z"
-		},
-		{
-			"key": "pr:paperclip#12552",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12552 fix(heartbeat): suppress recovery after operator cancellation",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12552",
-			"sourceUpdatedAt": "2026-08-31T16:16:05Z",
-			"sourceFingerprint": "e819fcf2dd142e3a1ad0e1a9c7cb2f3cfc45c1a1baac48ded57fad95481c4144",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because operator cancellation currently can trigger the opposite outcome—a successor run—and the narrowly scoped fix has a reproducing regression test.",
-			"evidence": [
-				"Exact-run cancellation can create a successor run after an operator stops the selected run.",
-				"The database-backed test reproduces one successor on the base commit and asserts zero after the fix.",
-				"The suppression option defaults to false and is enabled only by the exact-run board route."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:24:54.315Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -5002,6 +4969,42 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
+			"key": "pr:paperclip#12616",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12616 feat(runner): integrate Codex native execution",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12616",
+			"sourceUpdatedAt": "2026-08-31T22:57:15Z",
+			"sourceFingerprint": "31e7f736eb5b2d72f45f5722a6cf0fb06bd79a29ce25f6a2053f39a9ed298f28",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12608",
+				"pr:paperclip#12617"
+			],
+			"rationale": "Group with its package prerequisite and UI successor because this is the middle production vertical slice of one explicitly dependent runner rollout.",
+			"evidence": [
+				"The runner package cannot yet start and recover a governed Codex run through the server.",
+				"This is stack item 2 after #12608 and before #12617.",
+				"The integration is hidden, Codex-only, and default-off."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T22:57:40.510Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6082,39 +6085,6 @@
 			"scoredAt": "2026-08-31T07:31:23.880Z"
 		},
 		{
-			"key": "pr:paperclip#12553",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12553 feat(server): SPA-5177 R3 signed (tamper-evident) BUILD-RECEIPT",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12553",
-			"sourceUpdatedAt": "2026-08-31T04:31:39Z",
-			"sourceFingerprint": "ad13c0f08acf7df762ba270d880b84bfec366704d2145fbc27fb07d7011615f9",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate after validating the prerequisite stack and key-lifecycle design because the feature is dependency-ordered and a process-local signing key may limit durable verification.",
-			"evidence": [
-				"The PR sits on prerequisite R1 and R2 work and requires ordered merging.",
-				"The Ed25519 private key exists only in process memory.",
-				"A migration, read-contract version change, verifier, and 21 tests are reported."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:34:26.538Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-distinct-visit-dates",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6251,10 +6221,10 @@
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
-			"title": "#12608 feat(runner): add SDK, labs, and developer tooling",
+			"title": "#12608 feat(runner): add SDK and developer tooling",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12608",
-			"sourceUpdatedAt": "2026-08-31T22:26:41Z",
-			"sourceFingerprint": "ddf96e520c43eb4d4e43f1fca29a6bcbeaaac98a6c2d72e2ae6376624d2e25b4",
+			"sourceUpdatedAt": "2026-08-31T22:56:48Z",
+			"sourceFingerprint": "4b60102f1cb0bf132aa1205c295c865ed1a4554ed9d1037d11757200ca6e8f8f",
 			"score": 58,
 			"band": "medium",
 			"axes": {
@@ -6263,21 +6233,24 @@
 				"impact": 8
 			},
 			"readiness": {
-				"specification": 8,
+				"specification": 9,
 				"implementation": 6
 			},
 			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The developer platform is strategically broad and well specified, but its large change surface and reliance on pending CI make immediate execution readiness uncertain.",
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12616",
+				"pr:paperclip#12617"
+			],
+			"rationale": "Group the explicitly ordered runner stack into one goal because this package boundary supplies the SDK and contracts required by the production integration and task-thread projection.",
 			"evidence": [
-				"Adds SDK, conformance, replay, evaluation, and inspection surfaces.",
-				"Production server integration is explicitly deferred to the next stack item.",
-				"Local test suites were not run; GitHub Actions is the stated verification authority."
+				"The PR is stack item 1 before #12616 and #12617.",
+				"It adds SDK, conformance, replay, evaluation, and generated-contract drift checks.",
+				"Local suites were not run; GitHub Actions is designated as verification authority."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T22:27:54.178Z"
+			"scoredAt": "2026-08-31T22:57:40.510Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
@@ -6381,39 +6354,6 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
-			"key": "pr:paperclip#12613",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12613 Onboarding: model source tiles, one input canvas, and Storybook coverage for the agent arc",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12613",
-			"sourceUpdatedAt": "2026-08-31T22:24:50Z",
-			"sourceFingerprint": "298c09be112ad5bc4dabefb08df20e85388b04c82ca380d5a8df24de7756abc1",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The work addresses a key onboarding dependency with inspectable fixtures and substantial verification, making the proposed improvement actionable now.",
-			"evidence": [
-				"The connect-model step determines whether the new agent can run.",
-				"Storybook coverage is added for all three agent-arc steps.",
-				"Touched suites passed 139 tests and UI typecheck was clean."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T22:27:54.178Z"
-		},
-		{
 			"key": "proposal:2026-08-17-pkg-gateway-client-onevent-errors",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6513,39 +6453,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:58.286Z"
-		},
-		{
-			"key": "pr:paperclip#12551",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12551 fix(install): accept single-version npm array responses",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12551",
-			"sourceUpdatedAt": "2026-08-31T00:16:20Z",
-			"sourceFingerprint": "0c1be545ea96328a4f62a35610c938d49e3e04e0226a063c031a06e27411411f",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate after CI because the parser fix is precise and useful, but no executable tests or lint were run and roadmap duplication was not checked.",
-			"evidence": [
-				"A valid single-version npm array can stop managed installation.",
-				"Only one-string arrays are newly accepted; ambiguous arrays remain rejected.",
-				"Tests were added but not executed locally, and CI is still required."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:34:26.538Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
@@ -7288,6 +7195,42 @@
 			"scoredAt": "2026-08-31T07:45:19.199Z"
 		},
 		{
+			"key": "pr:paperclip#12617",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12617 feat(ui): project native runner turns into task chat",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12617",
+			"sourceUpdatedAt": "2026-08-31T22:57:14Z",
+			"sourceFingerprint": "f5f3427c6a3f4b6c2c68c82abe41e029e7b5084e27d4e0e878ae6ff172b132f7",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12608",
+				"pr:paperclip#12616"
+			],
+			"rationale": "Group with the two preceding runner changes because this UI projection is the final dependent layer needed to expose native runs through the established task thread.",
+			"evidence": [
+				"This is stack item 3 after #12608 and #12616.",
+				"Rendering is gated on native runtime mode and the paperclip_runner adapter.",
+				"Unsupported protocol versions, event types, schemas, and identity fields fail closed."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T22:57:40.510Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-1883922325",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7555,6 +7498,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T22:27:54.178Z"
+		},
+		{
+			"key": "pr:paperclip#12613",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12613 Onboarding: model source tiles, one input canvas, and Storybook coverage for the agent arc",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12613",
+			"sourceUpdatedAt": "2026-08-31T22:39:22Z",
+			"sourceFingerprint": "7cf65c456a810d97ee79ada7762d57f8a3d72a8c0e4cf76520fd109766cc9de4",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the bounded onboarding improvement removes a model-connection usability and inspection gap and already has substantial focused verification.",
+			"evidence": [
+				"The connect step determines whether an onboarding agent can run.",
+				"Storybook coverage now exposes all three agent-arc steps without a provisioned stack.",
+				"Touched suites report 139 passing tests and UI typecheck is clean."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T22:57:40.510Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-722867358",
@@ -9479,6 +9455,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:19.199Z"
+		},
+		{
+			"key": "issue:paperclip#12615",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12615 Onboarding motion constants bypass the token layer",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12615",
+			"sourceUpdatedAt": "2026-08-31T22:28:00Z",
+			"sourceFingerprint": "a2cbdf4161ea8ba107d90a56eb2bec7474e91c01ecbc5fb26e42b49d5cf657b3",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute as a bounded token-governance refactor because the exact violations, conversion precedent, intended invariant, and optional enforcement gate are identified.",
+			"evidence": [
+				"Two easing constants exactly duplicate existing motion tokens.",
+				"Literal durations bypass token-level reduced-motion behavior.",
+				"parseCssTimeMs and MOTION_TOKENS provide an existing conversion precedent."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T22:57:40.510Z"
 		},
 		{
 			"key": "pr:minion-base#41",
