@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T09:24:43.852Z",
+	"generatedAt": "2026-08-31T09:54:20.866Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -3821,39 +3821,6 @@
 			"scoredAt": "2026-08-31T07:33:47.470Z"
 		},
 		{
-			"key": "pr:paperclip#12548",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T08:11:10Z",
-			"sourceFingerprint": "022440f754767decdc8bdce997b8e11cf3b9bb51c8b12a4a36a3f42c3cfab389",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The PR provides a bounded, tested recovery path for otherwise unresolvable human-controlled secret proposals without exposing secret material.",
-			"evidence": [
-				"Pending proposals can remain without a linked human confirmation.",
-				"The recovery operation is board-only and idempotent.",
-				"Targeted tests passed 102 tests and server type-check passed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:14:05.520Z"
-		},
-		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4289,6 +4256,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:34:26.538Z"
+		},
+		{
+			"key": "pr:paperclip#12548",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
+			"sourceUpdatedAt": "2026-08-31T09:40:37Z",
+			"sourceFingerprint": "4c5e5b103f09ef911db3c7bf7eb9da1ef9e44d15b5c492b2deb6756c03b481c2",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This bounded core-API recovery fix restores a governed human decision path for stranded secret proposals and has strong authorization, concurrency, and verification evidence.",
+			"evidence": [
+				"existing pending secret proposals can remain without a linked human confirmation",
+				"route is board-only and requires target-specific authorization",
+				"102 tests and server TypeScript checking passed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T09:54:20.792Z"
 		},
 		{
 			"key": "pr:paperclip#12556",
@@ -10980,30 +10980,31 @@
 			"repo": "minion-factory",
 			"title": "minion-factory deployment health",
 			"sourceUrl": "https://github.com/NikolasP98/minion-factory/commit/b70fbe6186d037275c40d1ea11c923d382224a92",
-			"sourceUpdatedAt": "2026-08-31T07:30:07Z",
-			"sourceFingerprint": "37bacb23b00a388a204e18eae41815da185a911d7984f2aaca61ec7aca75cfe1",
-			"score": 22,
+			"sourceUpdatedAt": "2026-08-31T09:34:34Z",
+			"sourceFingerprint": "ebae6234e2542a75afe4d95d2124d401b6398a6e46492a89b66e0ade1e028470",
+			"score": 21,
 			"band": "low",
 			"axes": {
-				"criticality": 0,
-				"importance": 4,
-				"impact": 4
+				"criticality": 1,
+				"importance": 3,
+				"impact": 3
 			},
 			"readiness": {
-				"specification": 1,
+				"specification": 2,
 				"implementation": 1
 			},
 			"confidence": 9,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Although the factory is operationally central, its passing deployment leaves no stated problem to execute.",
+			"rationale": "The deployment is already passing and the catalog identifies no remaining failure or actionable outcome.",
 			"evidence": [
-				"Status is passing.",
-				"Latest change retries transient Codex capacity failures."
+				"status is passing",
+				"fix retries transient Codex capacity failures",
+				"stage is deployment"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:31:23.880Z"
+			"scoredAt": "2026-08-31T09:54:20.792Z"
 		},
 		{
 			"key": "issue:pixel-agents#263",
