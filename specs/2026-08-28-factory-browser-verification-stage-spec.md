@@ -3,9 +3,9 @@ id: 2026-08-28-factory-browser-verification-stage-spec
 title: Credential-free, loopback-isolated browser-verification stage for UI-topic factory runs
 stage: spec
 status: review
-pass: 9
+pass: 10
 created: 2026-08-28
-updated: 2026-08-30
+updated: 2026-08-31
 proposal: 2026-08-18-factory-browser-verification-stage
 verdict: pending
 repos: [minion-factory, minion-meta]
@@ -60,6 +60,7 @@ available and the production activation as an explicit S9 gate. §5 Design decis
 `agent/seccomp/browser-verify.json` (new committed seccomp profile),
 `agent/lib/browser-verify-flows.mjs`, browser-image package/lock files,
 `runner/src/browser-verify.ts` (+ `.test.ts`, `.e2e.test.ts`, `.recovery.e2e.test.ts`),
+`runner/src/dependency-egress-proxy.ts` (+ tests),
 edits to `runner/src/topics.ts` (+ tests),
 `runner/src/containers.ts` (+ tests), `runner/src/repos.ts` (+ tests), `runner/src/manifest.ts`
 (+ tests), `runner/src/queue.ts` (+ tests), `runner/src/phase-requests.ts` (+ tests),
@@ -459,16 +460,16 @@ a security boundary" as applying identically to page-rendered text reaching a do
 12. **One attempt is one durably identified, group-recoverable authority unit.** Before creating the
     first per-attempt path, fetching candidate objects, creating the network, or launching any role,
     the runner persists the complete resource manifest into the attempt's durable launch policy:
-    `{network, roles: {dependencyPrep, preview, browser}, paths: {mirror, previewTree, dependencyTree,
+    `{networks: {dependencyFetch, browserInternal}, roles: {dependencyPrep, preview, browser}, paths: {mirror, previewTree, dependencyTree,
     dependencyArtifact, out}}`, with every container/path name deterministic in
     `(phase, runId, attempt, role)`, every image an immutable named digest, and every path constrained
     to a no-follow child of the attempt root. `containmentPolicy()` accepts both the legacy single-role
     shape (unchanged for all eight existing phases) and this group shape, and rejects any deviation as
     malformed durable launch identity. Launch, timeout, cancellation, and boot recovery are **group**
     operations: `stopAndCrashContainmentAttempts()` kills every persisted role (including dependency
-    preparation), proves each stopped, removes the persisted network idempotently with the same
+    preparation), proves each stopped, removes both persisted networks idempotently with the same
     inspect-assert-confirm discipline as AS-IS item 18. It returns `false` (blocking dispatch) if it
-    cannot prove any role stopped, the network absent, or every path in its required terminal state.
+    cannot prove any role stopped, both networks absent, or every path in its required terminal state.
     Persisted paths have two explicit classes; success never applies crash cleanup to retained evidence:
 
     | Terminal transition | Preconditions | Ephemeral `mirror`, `previewTree`, `dependencyTree`, `dependencyArtifact` | Retained `out` |
@@ -483,15 +484,24 @@ a security boundary" as applying identically to page-rendered text reaching a do
     leaving no orphan container, leaked network/ephemeral path, duplicate launch, or second writer to
     sealed evidence. A successful transition leaves exactly one retained `out` leaf; crash/cancel
     leaves no attempt path.
-13. **The dependency artifact is produced by a controller-scheduled, credential-free install role —
-    never by copying develop's `node_modules`.** After invariant 10 produces the tracked-only export
-    and before the preview container is created, the runner launches a disposable **dependency-prep**
-    role: the repo's already-registered `setup` command runs once, against a private copy of that same
-    export, under the repo's already-registered `setupNetwork` egress (AS-IS item 6/21) — the closed,
-    per-repo opt-in network already used to install `develop`'s dependencies, default `none` — with the
-    same disposable-role posture as `self-test` (`github: null`, `model: forbidden`, `uid 1100`,
-    read-only rootfs, no `/out`, no browser-profile mount, no candidate execution beyond the registered
-    command). No new registry allowlist, proxy, or credential surface is introduced. On success the
+13. **The dependency artifact is produced by a controller-scheduled, credential-free, script-free
+    frozen install role — never by copying develop's `node_modules` or invoking the candidate's setup
+    command.** After invariant 10 produces the tracked-only export and before the preview container is
+    created, the runner launches a disposable **dependency-prep** role. The controller selects a fixed,
+    package-manager-specific command from a closed server-owned policy; for the Bun pilot it is exactly
+    `bun install --frozen-lockfile --ignore-scripts`. Candidate manifests cannot replace or append to
+    that command. The role runs against a private copy of the tracked-only export and reaches package
+    registries only through a controller-owned destination-enforcing proxy on a per-attempt internal
+    dependency-fetch network. The proxy is the only dual-homed principal; dependency prep has no direct
+    egress route. The policy allowlists the exact HTTPS registry origins required by the pinned pilot
+    lockfile, rejects redirects outside that set, and denies direct DNS, raw-IP, alternate-port, Docker-
+    host, link-local, and private-address destinations. It never reuses unrestricted `setupNetwork`
+    `bridge` egress. The role otherwise has the disposable posture of `self-test` (`github: null`,
+    `model: forbidden`, `uid 1100`, read-only rootfs, no `/out`, no browser-profile mount). Root and
+    dependency lifecycle scripts are disabled; a package that requires one fails closed and needs a
+    separately reviewed policy change, not an escape hatch. The controller snapshots every dependency
+    manifest and lockfile before install, requires a committed lockfile, and rejects the run if the
+    command changes any snapshot byte. On success the
     runner deterministically packs the resulting dependency directory into a single immutable,
     read-only artifact file. A SHA-256 over `{candidate_sha, lockfile bytes, setup command, toolchain
     image digest}` is its cache key; a separate `artifactContentSha256` is computed over the packed
@@ -501,8 +511,9 @@ a security boundary" as applying identically to page-rendered text reaching a do
     (invariant 10's "separately sealed... dependency artifact" is this producer). The dependency-prep
     role and its private copy of the export are deleted before the preview or browser role is created.
     A missing, oversized (over a fixed byte ceiling), non-regular, cache-key-mismatched, or
-    content-digest-mismatched artifact fails the phase closed rather than falling back to develop's
-    dependency state. The runner recomputes the content digest immediately before the mount and binds
+    content-digest-mismatched artifact, mutable/missing lockfile, lifecycle-script attempt, or denied
+    destination fails the phase closed rather than falling back to develop's dependency state or a
+    broader network. The runner recomputes the content digest immediately before the mount and binds
     the digest and size into `phase-result.json` and `phase_attempts.evidence`; altered output bytes
     under identical input metadata are therefore distinguishable and rejected.
 
@@ -549,10 +560,12 @@ a security boundary" as applying identically to page-rendered text reaching a do
   T-GROUP-LAUNCH-IDENTITY, T-LEGACY-POLICY-COMPAT, T-GROUP-TEARDOWN-IDEMPOTENT, T-GROUP-RECOVERY-UNIT,
   T-GROUP-RECOVERY-FAILPOINTS, T-GROUP-CANCEL).
 - **D11** Add the dependency-artifact producer as a persisted member of the attempt resource manifest
-  (disposable `setup`-network install role plus every prelaunch path), deterministically pack an
-  immutable artifact, bind its independently computed content digest/size into trusted evidence, and
-  mount it read-only into preview with size/cache-key/content-digest fail-closed checks (S2/S4/S5/S8;
-  T-DEPENDENCY-ARTIFACT-PRODUCER, T-DEPENDENCY-ARTIFACT-BINDING, T-NO-DEVELOP-DEPENDENCY-LEAK).
+  (server-owned script-free frozen install role plus every prelaunch path), restrict registry fetching
+  through a destination-enforcing proxy, deterministically pack an immutable artifact, bind its
+  independently computed content digest/size into trusted evidence, and mount it read-only into preview
+  with manifest/lockfile/cache-key/content-digest fail-closed checks (S2/S4/S5/S8;
+  T-DEPENDENCY-ARTIFACT-PRODUCER, T-DEPENDENCY-FROZEN-INSTALL, T-DEPENDENCY-EGRESS-DENY,
+  T-DEPENDENCY-ARTIFACT-BINDING, T-NO-DEVELOP-DEPENDENCY-LEAK).
 
 ## 5. Design decisions
 
@@ -695,20 +708,24 @@ a security boundary" as applying identically to page-rendered text reaching a do
     both properties of the container spec and the fetch protocol — inspectable and testable, not a
     promise about entrypoint behavior or a hash computed from a source that could itself have been
     tampered with.
-13. **Reuse the existing `setup` phase's egress and credential posture for dependency install, rather
-    than inventing a new registry proxy.** The repo already declares a `setup` command and a
-    `setupNetwork` opt-in egress (AS-IS item 6) used to install `develop`'s dependencies; pass-4 review
-    finding H3 showed no slice ever produces the dependency artifact invariant 10 promised the preview
-    role. `browser-verify`'s dependency-prep role runs the identical command under the identical
-    posture against the tracked-only export instead of the mutable develop workspace, so no new
-    registry allowlist, proxy, or credential surface is introduced. Packing the result into a single
+13. **Use a closed frozen-install policy and destination-enforcing registry proxy for dependency
+    preparation.** Reusing the repo's candidate-controlled `setup` command and unrestricted
+    `setupNetwork` would create a pre-preview exfiltration path: the pilot's plain `bun install` can
+    run candidate-authored lifecycle scripts on `bridge` and can rewrite `bun.lock`. The browser
+    dependency producer therefore has a distinct controller-owned policy: a closed package-manager
+    command (`bun install --frozen-lockfile --ignore-scripts` for the pilot), byte-for-byte manifest and
+    lockfile immutability checks, and a proxy whose fixed HTTPS-origin allowlist is derived and reviewed
+    from the pinned pilot lockfile. Candidate configuration cannot widen the command, destinations,
+    ports, redirects, or DNS behavior. Packing the result into a single
     deterministically packed artifact — rather than mounting the install role's writable directory
     directly — makes
     "no develop residue crosses into preview" a property of the copy step, since the pack step reads
     only from the install role's own disposable output, and gives the preview and browser containers a
     stable, read-only, candidate-bound input consistent with invariant 8's profile-snapshot pattern.
     The metadata-derived hash is only a cache key: the controller separately hashes the final packed
-    bytes after the prep role stops and binds that content digest and size into trusted evidence.
+    bytes after the prep role stops and binds that content digest and size into trusted evidence. A
+    dependency that cannot install without lifecycle scripts or an approved origin fails closed and
+    requires an explicit policy/spec revision; it never falls back to `setupNetwork: bridge`.
 
 ## 6. Slices
 
@@ -896,7 +913,8 @@ is automated here; the final entrypoint/content and deployment digest assertions
 **Files:** `agent/factory-browser-verify-preview.sh`, `agent/factory-browser-verify.sh`,
 `agent/lib/browser-verify-flows.mjs`, fixture profile and preview app, shell/Node tests,
 `agent/Dockerfile.browser-verify`, `scripts/verify-image-pins.sh`, image-provenance/publication tests,
-`runner/src/browser-verify.ts`, focused controller materialization/dependency tests in
+`runner/src/browser-verify.ts`, `runner/src/dependency-egress-proxy.ts`, focused controller
+materialization/dependency/proxy tests in
 `runner/src/browser-verify.test.ts`, `docker-compose.yml`, `.env.example`, and `deploy.sh`.
 
 **Controller-side materialization runs first** (§5 Design decision 12, invariant 10) and is *not* an
@@ -919,9 +937,12 @@ transport to define.
 decision 13, invariant 13): this work is already inside the persisted attempt resource manifest; the
 runner copies the freshly archived tracked-only tree into a private
 `${root}/browser-deps-${attempt}` directory and launches the disposable dependency-prep role — the
-repo's existing `setup` command, under its existing `setupNetwork` egress, with the same
-`github: null`/`model: forbidden`/`uid 1100`/read-only-rootfs posture as `self-test`, no `/out`, no
-browser-profile mount, and no candidate execution beyond the registered command. On exit 0 the runner
+controller's closed Bun-pilot command `bun install --frozen-lockfile --ignore-scripts`, never the
+repo's `setup` command, with the same `github: null`/`model: forbidden`/`uid 1100`/read-only-rootfs
+posture as `self-test`, no `/out`, and no browser-profile mount. Registry access goes only through the
+controller-owned dependency proxy and its exact HTTPS-origin allowlist; the role has no direct
+`bridge` egress. The controller snapshots dependency manifests and the committed lockfile before
+launch and rejects missing/mismatched lockfiles or any post-install byte change. On exit 0 the runner
 deterministically packs the resulting dependency directory into a single immutable file keyed by
 `sha256(candidate_sha + lockfile bytes + setup command + toolchain image digest)`. After proving the
 dependency-prep role stopped, the runner separately computes `artifactContentSha256` and byte size
@@ -979,6 +1000,16 @@ emitted artifact — the fetch source is the controller's independent remote aut
 develop-writable checkout. **T-DEPENDENCY-ARTIFACT-PRODUCER** proves the artifact is produced from the
 tracked-only export (never the develop workspace) by the persisted dependency-prep role, and that the
 dependency-prep container and its private directory are gone before the preview role is created.
+**T-DEPENDENCY-FROZEN-INSTALL** exercises the real rendered command and proves it is server-owned,
+contains both `--frozen-lockfile` and `--ignore-scripts`, rejects a manifest/lockfile mismatch before
+artifact creation, rejects any manifest or lockfile mutation, and produces the same content digest in
+two clean installs from identical candidate/toolchain inputs. Fixtures with root `preinstall`,
+`postinstall`, and `prepare` scripts and dependency lifecycle scripts prove none execute.
+**T-DEPENDENCY-EGRESS-DENY** uses those adversarial scripts plus a direct helper process to attempt
+DNS, an external hostname, raw external IP, redirect to an unlisted origin, alternate port, link-local,
+private-address, and Docker bridge-host access; every attempt is denied while the exact allowlisted
+registry fetch succeeds. The test inspects the production launch/network/proxy plan and proves removing
+the proxy policy makes the negative control detect broader reachability.
 **T-DEPENDENCY-ARTIFACT-BINDING** proves a missing/oversized/non-regular/cache-key-mismatched/content-
 digest-mismatched artifact fails the phase closed; identical input metadata paired with altered packed
 bytes is rejected; and `artifactContentSha256` plus byte size in `phase-result.json` identify the exact
@@ -1198,9 +1229,12 @@ the phase, and one normal unregistered-repo UI run refuses with the expected rea
 | AGENTS.md named product impact zones | shared WS protocol, channel extensions, shared DB, agent definitions, auth, workshop, pixel office, paperclip adapters | None entered; no code or contract in those zones changes |
 | Existing hub live-preview subsystem | `minion_hub` + gateway plugin | No dependency or change; operator memory records it as inert until `PREVIEW_RUNNER_URL/_SECRET` is configured |
 
-**Residual risk:** none for external egress — the per-attempt `--internal` network (§5 Design
-decision 4) has no route to any external destination, no role publishes a host port, and there is no
-configurable escape hatch. Host-boundary isolation, unlike external egress, is not free by construction
+**Residual risk:** browser/preview external egress is eliminated by the per-attempt `--internal`
+network (§5 Design decision 4); dependency fetching is separately limited to the controller-owned
+proxy's reviewed HTTPS registry-origin allowlist and has no direct-network escape hatch. Slice 4's
+`T-DEPENDENCY-EGRESS-DENY` must prove that enforcement against DNS, raw-IP, redirect, alternate-port,
+link-local, private-address, and Docker-host attempts before this claim is treated as verified.
+Host-boundary isolation, unlike browser external egress, is not free by construction
 under a plain `--internal` bridge (AS-IS item 19) and is instead a gated, proved property: Slice 2's
 Docker-Engine-version preflight and the exact-options network inspection (invariant 5) must both pass
 before the phase schedules at all, and Slice 4's `T-HOST-ISOLATED-NETWORK` proves the host cannot
@@ -1247,7 +1281,8 @@ preflight and every attempt network inspects with `gateway_mode_ipv4=isolated`, 
 failpoint leaves zero orphan containers and zero leaked networks, every browser-verify attempt's
 dependency artifact is produced from the tracked-only export, every dependency-prep role and attempt
 path is recoverable, and the artifact's independently computed content digest/size is bound beside
-candidate+lockfile+toolchain, the hub success and site refusal canaries pass, the canonical `ui`
+candidate+lockfile+toolchain, its install is frozen and script-free, and its only egress is the proved
+destination-enforcing registry proxy, the hub success and site refusal canaries pass, the canonical `ui`
 policy is live, and a post-activation hub run produces validated candidate/profile/image-bound
 evidence before review. `FACTORY_AUTOMERGE=0`, provider independence,
 the human merge gate, and reviewer read-only authority remain unchanged.
@@ -1367,3 +1402,20 @@ the security-tagged spec still requires independent approval and human merge gat
 
 **Not changed, and why:** no out-of-scope follow-up was identified. Existing network, sandbox,
 resource-lifecycle, evidence-retention, image-ordering, and activation contracts remain unchanged.
+
+**Pass 10 disposition: still-review (`status: review`, `verdict: pending`).** Pass 9 was independently
+reviewed with `VERDICT: FAIL` on PR #286 (2026-08-30). Both findings were re-verified against the pass-9
+text and the cited live factory registration before editing. The default branch was re-fetched and
+merged at `d1df86ebe8b3fa736f8538ed7ec9433c4ab9c5b0` without rebasing or discarding retained WIP. This
+pass does not self-approve; the security-tagged spec still requires independent approval and human
+merge gates.
+
+| Pass-9 finding | Re-verification | Resolution in pass 10 |
+|---|---|---|
+| **H1** Dependency preparation executes candidate lifecycle scripts with unrestricted bridge egress | Confirmed. Invariant 13, Design decision 13, and S4 delegated the repo's plain `setup` command to its existing `setupNetwork`; for the pilot that is candidate-controlled `bun install` on `bridge` | Invariant 13, D11, Design decision 13, and S4 now require a server-owned `bun install --frozen-lockfile --ignore-scripts` command and a destination-enforcing registry proxy with no direct bridge route. T-DEPENDENCY-EGRESS-DENY covers DNS, host, raw-IP, redirect, alternate-port, private/link-local, and Docker-host attempts; lifecycle-script fixtures prove scripts never execute |
+| **M1** Mutable install can rewrite the lockfile bound by the cache key | Confirmed. Plain `bun install` may resolve a manifest/lockfile mismatch and mutate `bun.lock`, so identical pre-install key inputs need not produce deterministic dependency bytes | The fixed pilot command is frozen; a committed matching lockfile is mandatory; pre/post manifest and lockfile snapshots must match byte-for-byte. T-DEPENDENCY-FROZEN-INSTALL rejects mismatch/mutation and repeats clean installs to prove stable content digests |
+
+**Not changed, and why:** the accepted typed-lineage admission, sandbox, private-CDP, clean-
+materialization, group-recovery, evidence-retention, image-ordering, and activation contracts are
+unchanged. The dependency fix stays within S4's existing producer and S7/S8's adversarial/recovery
+proof surfaces; no tenth slice or product-code change is introduced.
