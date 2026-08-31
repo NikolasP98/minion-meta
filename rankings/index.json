@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T19:24:31.957Z",
+	"generatedAt": "2026-08-31T19:54:52.327Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -710,6 +710,39 @@
 			"scoredAt": "2026-08-31T18:24:45.803Z"
 		},
 		{
+			"key": "pr:minion-factory#161",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-factory",
+			"title": "#161 factory: Worker containment S5: adversarial E2E and supervised canary activation",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/161",
+			"sourceUpdatedAt": "2026-08-31T19:53:59Z",
+			"sourceFingerprint": "0e7e4f7c3224780bc0d250fa04531aa1588fdc0dd01fafedc693286e05322ba6",
+			"score": 88,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 8
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is a well-bounded security and containment slice with extensive negative-test requirements, while production still has the new containment mode disabled pending supervised canary evidence.",
+			"evidence": [
+				"Tags include risk:high and topic:security.",
+				"Production runs with FACTORY_CONTAINMENT_V2=0.",
+				"Activation requires a supervised low-stakes canary with phase/image/SHA evidence."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T19:54:52.242Z"
+		},
+		{
 			"key": "pr:paperclip#12554",
 			"kind": "pr",
 			"stage": "development",
@@ -1173,39 +1206,6 @@
 				"The task adds pre-automerge spec rehash verification.",
 				"Required checks can enforce a GitHub App identity.",
 				"Focused T-REHASH and T-APPID tests are required."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:14:05.520Z"
-		},
-		{
-			"key": "pr:minion-factory#161",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#161 factory: Worker containment S5: adversarial E2E and supervised canary activation",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/161",
-			"sourceUpdatedAt": "2026-08-31T08:08:10Z",
-			"sourceFingerprint": "02f10a24ad144236460af5ef10ba7a37df1384417748bceaef99284f50dac632",
-			"score": 86,
-			"band": "critical",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The adversarial containment suite and reversible canary support are strategically important, while final activation remains correctly gated on supervised evidence.",
-			"evidence": [
-				"Production currently has FACTORY_CONTAINMENT_V2=0.",
-				"Slice 5 covers theft, mutation, staging, push, crash, and restart cases.",
-				"Activation requires a supervised low-stakes canary with automerge off."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -2021,41 +2021,6 @@
 			"scoredAt": "2026-08-31T07:33:08.870Z"
 		},
 		{
-			"key": "pr:paperclip#12591",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12591 feat(runner): add Codex-native application integration",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12591",
-			"sourceUpdatedAt": "2026-08-31T19:21:14Z",
-			"sourceFingerprint": "8fbd0481fa16e9d2fc3d1ee3f339f45b7f7b275bc99e534d008c89e7190af85f",
-			"score": 79,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:paperclip#12592"
-			],
-			"rationale": "The security- and recovery-sensitive native Codex boundary is strategically central and well specified, but its 133-file change lacks executed local tests and still awaits authoritative CI and review evidence.",
-			"evidence": [
-				"Touches central heartbeat and agent-route code across 133 changed files.",
-				"Adds authorization, SSRF protection, recovery, finalization, and replay-safe persistence.",
-				"Local tests, build, and typecheck were not run; full CI and security review remain pending."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T19:24:31.880Z"
-		},
-		{
 			"key": "proposal:2026-08-17-factory-workitem-handoff-schema",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2458,6 +2423,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
+		},
+		{
+			"key": "pr:paperclip#12594",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12594 feat(runner): add managed providers and evaluation platform",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12594",
+			"sourceUpdatedAt": "2026-08-31T19:43:40Z",
+			"sourceFingerprint": "70efa8643e562110a37910e000aba4c9dc1535bf3594e0deaa8d5206f2c91ecc",
+			"score": 77,
+			"band": "high",
+			"axes": {
+				"criticality": 6,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The production platform layer is highly central and security-sensitive, but the 387-file stacked boundary, absent local tests, and reliance on full CI leave execution readiness uncertain.",
+			"evidence": [
+				"The PR is the final entry in the runner stack.",
+				"The stacked delta is 387 files.",
+				"Local tests were not run; GitHub Actions is authoritative for full gates."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T19:54:52.242Z"
 		},
 		{
 			"key": "issue:minion-meta#329",
@@ -3893,39 +3891,6 @@
 			"scoredAt": "2026-08-31T17:54:59.834Z"
 		},
 		{
-			"key": "pr:paperclip#12600",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12600 feat(apps): add Paperclip Cloud managed OAuth connector",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12600",
-			"sourceUpdatedAt": "2026-08-31T18:16:53Z",
-			"sourceFingerprint": "d3177c9aada8fd3f7992bf9d0f2906501138a9b8a2b44772e8368210f5a3b5a5",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate when the companion Cloud protocol and provider approval are ready because the instance implementation cannot deliver its real managed profiles independently.",
-			"evidence": [
-				"Depends on paperclip-cloud PR #312.",
-				"Real profiles remain disabled pending Cloud deployment and provider approval.",
-				"Customer-created OAuth clients remain available."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T18:24:45.803Z"
-		},
-		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4194,6 +4159,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
+		},
+		{
+			"key": "issue:paperclip#12545",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12545 Add support for idempotency keys on issue-creation and comment-creation POST requests",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12545",
+			"sourceUpdatedAt": "2026-08-30T17:16:24Z",
+			"sourceFingerprint": "a3e3be537042ba2e89ec29101796e3f3754a7d68eeeb00dd86ca7b2b1cb4b969",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Server-side idempotency addresses a real correctness dependency for autonomous clients, but current applicability and persistence semantics need confirmation before implementation is fully actionable.",
+			"evidence": [
+				"Retries can create duplicate issues or comments.",
+				"The requested behavior names an Idempotency-Key header and resource replay.",
+				"The report is not yet re-verified against latest master."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T19:54:52.242Z"
 		},
 		{
 			"key": "pr:minion_hub#197",
@@ -4493,42 +4491,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T17:24:37.139Z"
-		},
-		{
-			"key": "pr:paperclip#12594",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12594 feat(runner): add managed providers and evaluation platform",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12594",
-			"sourceUpdatedAt": "2026-08-31T16:28:11Z",
-			"sourceFingerprint": "dc8d2e476a3138f8b5308e0f2c2bfb1958571f7eba535b58e4d6f753e331c073",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12591",
-				"pr:paperclip#12592"
-			],
-			"rationale": "Group this final platform layer with the lower runner integration and task-experience entries because its managed-provider, evaluation, deployment, and release outcomes depend on that shared stack.",
-			"evidence": [
-				"The summary calls this the final entry in the runner stack.",
-				"The stacked delta spans 387 files and includes managed providers, evaluation, deployment, and release checks.",
-				"Full build, migration, security, browser, and release verification is deferred to GitHub Actions."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:54:55.969Z"
 		},
 		{
 			"key": "proposal:2026-08-18-factory-orchestration-round7",
@@ -5005,6 +4967,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
+		},
+		{
+			"key": "pr:paperclip#12592",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12592 feat(runner): add task experience and developer SDKs",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
+			"sourceUpdatedAt": "2026-08-31T19:47:00Z",
+			"sourceFingerprint": "ed80411eb574bb0b08009648564d9ebcdf9e8798778daee366e1d34b9e25f1bb",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 8,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The task experience and SDK boundary is strategically broad, but its 378-file delta, unverified local state, and dependency on a preceding stack entry make immediate paid execution insufficiently ready.",
+			"evidence": [
+				"The rebased delta is 378 files.",
+				"Local tests were not run because the checkout is resource constrained.",
+				"The PR depends on native application contracts in the preceding stack entry."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T19:54:52.242Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -5544,41 +5539,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
-		},
-		{
-			"key": "pr:paperclip#12592",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12592 feat(runner): add task experience and developer SDKs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
-			"sourceUpdatedAt": "2026-08-31T19:02:38Z",
-			"sourceFingerprint": "79a31b837ff671bd56ec1394dcbe2594bb291f76beb9842e77cd9a03fde9a4fa",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:paperclip#12591"
-			],
-			"rationale": "The task experience and SDK surfaces have broad potential impact, but the 379-file stacked change depends on #12591 and lacks local verification, making execution readiness weak.",
-			"evidence": [
-				"Depends on the native application contracts in the preceding stack entry.",
-				"Changes 379 files relative to the native-app-integration branch.",
-				"Local tests were not run, and full CI plus Greptile review remain pending."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T19:24:31.880Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -7196,6 +7156,39 @@
 			"scoredAt": "2026-08-31T07:45:19.199Z"
 		},
 		{
+			"key": "pr:paperclip#12597",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12597 refactor: rename product workspaces to worktrees",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12597",
+			"sourceUpdatedAt": "2026-08-31T19:31:55Z",
+			"sourceFingerprint": "95558e5d0ae5e03020d1f728312933325d774e8dfdb2fbf46c73ba3dd400889f",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 10
+			},
+			"confidence": 10,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The cross-system terminology change is broad but compatibility-preserving, and comprehensive local and CI verification makes it ready for the remaining review and merge workflow.",
+			"evidence": [
+				"Old commands and routes remain as aliases and redirects.",
+				"pnpm test:run passed 5,243 tests locally.",
+				"GitHub Actions passed the full matrix on the stated head."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T19:54:52.242Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-1883922325",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7262,6 +7255,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:46:38.665Z"
+		},
+		{
+			"key": "issue:paperclip#12544",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12544 Assignee semantics (\"current ball-holder,\" not \"owner\") are unlabeled, making it impossible for a human operator to tell who is being waited on",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12544",
+			"sourceUpdatedAt": "2026-08-30T17:16:22Z",
+			"sourceFingerprint": "b27c50c89fd8b95d09e59b7dcc39c797ca02f28c7e7c4fc96c472038e3bb9da0",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The operator ambiguity is concrete and recurring, but the report has not been checked against current master and does not yet define a bounded interface-level solution or verification target.",
+			"evidence": [
+				"Operators cannot tell who is expected to act from the UI alone.",
+				"An internal comment and card-visibility convention compensates for the gap.",
+				"The behavior is not yet re-verified against latest master."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T19:54:52.242Z"
 		},
 		{
 			"key": "issue:pixel-agents#380",
@@ -7766,39 +7792,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T09:24:43.768Z"
-		},
-		{
-			"key": "pr:paperclip#12597",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12597 refactor: rename product workspaces to worktrees",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12597",
-			"sourceUpdatedAt": "2026-08-31T19:23:16Z",
-			"sourceFingerprint": "02b578c8a44951ec25c046cb9661c2dc8b439776451c3098b4a7df3ab61908f0",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 10
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Although the terminology cleanup is not urgent, its cross-product consistency benefit is concrete and the change is highly actionable because compatibility boundaries and comprehensive verification are already documented.",
-			"evidence": [
-				"Renames terminology across UI, CLI, server, packages, adapters, and documentation while freezing persisted and wire contracts.",
-				"Old CLI names remain aliases and old UI routes redirect.",
-				"Full GitHub Actions matrix passed, alongside 5,243 local tests and targeted contract-freeze checks."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T19:24:31.880Z"
 		},
 		{
 			"key": "pr:pixel-agents#396",
@@ -9093,8 +9086,8 @@
 			"repo": "paperclip",
 			"title": "#12593 chore(lockfile): refresh pnpm-lock.yaml",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12593",
-			"sourceUpdatedAt": "2026-08-31T16:26:41Z",
-			"sourceFingerprint": "5b020e5d4a9eb413e3853261d031ff6dabb4f8fc1280c2c22f35b2659165c366",
+			"sourceUpdatedAt": "2026-08-31T19:39:08Z",
+			"sourceFingerprint": "8d2794a57e784078a0a967102c256caf67a076c5e1b2706f6ff5a3b75c1d4235",
 			"score": 41,
 			"band": "low",
 			"axes": {
@@ -9103,21 +9096,21 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 8
+				"specification": 9,
+				"implementation": 9
 			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
+			"confidence": 9,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Reevaluate because a lockfile refresh is bounded and actionable, but the catalog does not identify the dependency changes it supports or evidence that the current lockfile blocks builds or releases.",
+			"rationale": "The lockfile-only refresh is narrowly specified and directly actionable, with moderate dependency hygiene value but no stated urgent failure.",
 			"evidence": [
 				"The PR only updates pnpm-lock.yaml.",
-				"The refresh follows dependency changes on master.",
-				"No verification results or blocked workflow are stated."
+				"It refreshes the lockfile after dependencies changed on master.",
+				"Status is open."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:54:55.969Z"
+			"scoredAt": "2026-08-31T19:54:52.242Z"
 		},
 		{
 			"key": "pr:pixel-agents#356",
@@ -11422,8 +11415,8 @@
 			"repo": "pixel-agents",
 			"title": "pixel-agents deployment health",
 			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/commit/3537e140c2094761beae748592aeb92ece8edfdd",
-			"sourceUpdatedAt": "2026-08-31T15:28:59Z",
-			"sourceFingerprint": "c4fcfbefd006dbb4525fcf31065de0e93db692b268f7a5c600c612ecc9a41be0",
+			"sourceUpdatedAt": "2026-08-31T19:45:51Z",
+			"sourceFingerprint": "1042700c805873351c667c30c66a6f9e22e098b9c95765aec522859efa6412d1",
 			"score": 6,
 			"band": "low",
 			"axes": {
@@ -11432,20 +11425,21 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 3,
+				"specification": 9,
 				"implementation": 10
 			},
 			"confidence": 10,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The deployment-health item is already passing and presents no unresolved work or adverse consequence to prioritize.",
+			"rationale": "The deployment is already passing, so the catalog shows no unresolved work or adverse consequence requiring a board goal.",
 			"evidence": [
 				"Status is passing.",
-				"The recorded change is a v1.4.1 version bump."
+				"The recorded change is a version bump to v1.4.1.",
+				"Candidate kind is deployment health."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T15:55:06.484Z"
+			"scoredAt": "2026-08-31T19:54:52.242Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-1962723814",
