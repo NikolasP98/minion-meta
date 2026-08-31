@@ -2,14 +2,15 @@
 id: 2026-08-18-agent-instruction-parity-and-repo-policy-spec
 title: Provider-neutral agent instructions and canonical repository policy
 stage: spec
-status: approved
+status: review
 pass: 2
 next_slice: 3
 created: 2026-08-18
 updated: 2026-08-29
 repos: [minion-meta, minion, minion_hub, minion_site, minion_plugins, paperclip, pixel-agents, minion-factory, minion-base]
 proposal: 2026-08-18-agent-instruction-parity-and-repo-policy
-verdict: approved
+verdict: revision-required
+review_reason: "Factory run bb9616b0 and empty PR #350 produced no changes and no satisfaction evidence. Re-approval requires a bounded remaining slice or exact per-repository commit and policy-check evidence proving the requested parity is already shipped."
 type: infra
 tags: [infra]
 relationship: depends-on
