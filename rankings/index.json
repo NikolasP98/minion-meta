@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-08-31T17:24:37.223Z",
+	"generatedAt": "2026-08-31T17:54:59.910Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -202,6 +202,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
+		},
+		{
+			"key": "issue:paperclip#12602",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12602 A status write from an already-cancelled run still lands, reversing a user's cancel and clearing cancelledAt",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12602",
+			"sourceUpdatedAt": "2026-08-31T17:42:04Z",
+			"sourceFingerprint": "b9b7a564f13b30aab5919a74ea0cade0909dd9b4850d60c42a813116c8f19541",
+			"score": 95,
+			"band": "critical",
+			"axes": {
+				"criticality": 10,
+				"importance": 10,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because stale writes from cancelled runs can reverse explicit user decisions, erase cancellation metadata, and propagate incorrect state to external systems.",
+			"evidence": [
+				"An agent write changed an issue from cancelled to done 1.82 seconds after the user cancellation.",
+				"The stale write cleared cancelledAt to null.",
+				"The incorrect done state was mirrored to an external integration."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T17:54:59.834Z"
 		},
 		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
@@ -741,6 +774,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T15:24:35.598Z"
+		},
+		{
+			"key": "pr:paperclip#12598",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12598 Fix governed secret binding acceptance through gateway",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12598",
+			"sourceUpdatedAt": "2026-08-31T17:35:56Z",
+			"sourceFingerprint": "1b020261308a08bf5041801f2f827e3b8acba86a4ce5af56b42ab449e1711a7e",
+			"score": 88,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because supported approval paths currently can record human acceptance without applying the governed secret change, creating a high-severity correctness failure.",
+			"evidence": [
+				"Gateway acceptance can leave proposals pending and agent configuration unchanged.",
+				"The change unifies REST and plugin-gateway execution with idempotent receipts.",
+				"Three targeted test files passed 132 tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T17:54:59.834Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-capability-separation",
@@ -1379,6 +1445,39 @@
 			"scoredAt": "2026-08-31T12:25:32.859Z"
 		},
 		{
+			"key": "issue:paperclip#12601",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12601 Child-completion wake is silently coalesced into an unrelated in-flight run — payload (childIssueIds) dropped, reason renamed",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12601",
+			"sourceUpdatedAt": "2026-08-31T17:42:02Z",
+			"sourceFingerprint": "710ffcdb8c43049e555dc6b8d03392848cde4556f48764f24159c6c97cd30093",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because a core delegation event is silently lost during ordinary run overlap, leaving parent work incorrectly unfinished with no visible failure signal.",
+			"evidence": [
+				"Child-completion payloads were lost in 3 of 6 observed occurrences.",
+				"Coalescing renames the reason and does not independently deliver the payload.",
+				"A heartbeat-generated run was observed swallowing the completion event."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T17:54:59.834Z"
+		},
+		{
 			"key": "pr:minion-factory#154",
 			"kind": "pr",
 			"stage": "development",
@@ -1687,39 +1786,6 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
-			"key": "issue:paperclip#12542",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12542 Issue status can revert/resurrect (e.g. `blocked` -> `in_progress`) across a crash/recovery cycle without a corresponding action",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12542",
-			"sourceUpdatedAt": "2026-08-30T17:16:02Z",
-			"sourceFingerprint": "8735c1b0cce568551e47b561da68ecd04bfe50ec626dd0d65660043e04294259",
-			"score": 81,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Reframe as an evidence-gathering durability investigation because unauthorized status resurrection is a serious control-plane defect, but one unisolated incident does not yet define an actionable implementation.",
-			"evidence": [
-				"A blocked issue was observed reverting to in_progress after a host crash and reboot.",
-				"No corresponding blocker-resolution action was observed.",
-				"The event occurred once and the reproduction conditions are not isolated."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:39:38.888Z"
-		},
-		{
 			"key": "pr:paperclip#12579",
 			"kind": "pr",
 			"stage": "development",
@@ -1751,41 +1817,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T11:24:32.326Z"
-		},
-		{
-			"key": "pr:paperclip#12598",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12598 Fix governed secret binding acceptance through gateway",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12598",
-			"sourceUpdatedAt": "2026-08-31T17:17:12Z",
-			"sourceFingerprint": "b9ea02d29becf09a514fa0139c1d4dbb283c3ae98730225154bcb1aff998d987",
-			"score": 81,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:paperclip#12548"
-			],
-			"rationale": "Execute because supported approval paths currently diverge on whether an accepted governed secret binding is actually applied, undermining a core human-control invariant.",
-			"evidence": [
-				"Gateway acceptance could leave proposals pending and agent configuration unchanged.",
-				"The change unifies REST and gateway execution with cascade approval and replay receipts.",
-				"Three targeted test files passed with 132 tests, but repository type-checking could not start."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T17:24:37.139Z"
 		},
 		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
@@ -2746,42 +2777,6 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
-			"key": "pr:paperclip#12591",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12591 feat(runner): integrate native execution with the application",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12591",
-			"sourceUpdatedAt": "2026-08-31T16:53:57Z",
-			"sourceFingerprint": "46dea707eccc6e348fcd744c22c89dad6da8068ce2b41fef5662f394ba356d4a",
-			"score": 75,
-			"band": "high",
-			"axes": {
-				"criticality": 5,
-				"importance": 10,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12592",
-				"pr:paperclip#12594"
-			],
-			"rationale": "Group the three dependent runner-stack entries into one native-runner platform goal because application integration, task experience, and production-provider operations form a single ordered outcome.",
-			"evidence": [
-				"This PR adds the native application lifecycle boundary behind a default-off experimental setting.",
-				"It changes central heartbeat and agent-route code across persistence, transport, authorization, and recovery.",
-				"The task-experience and managed-provider PRs explicitly depend on lower runner-stack contracts."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:54:55.969Z"
-		},
-		{
 			"key": "pr:minion-factory#158",
 			"kind": "pr",
 			"stage": "development",
@@ -3160,6 +3155,41 @@
 			"scoredAt": "2026-08-31T07:39:38.888Z"
 		},
 		{
+			"key": "issue:paperclip#12603",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12603 Successful-run handoff wake drops its remediation instruction, so the corrective run repeats the previous run",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12603",
+			"sourceUpdatedAt": "2026-08-31T17:48:30Z",
+			"sourceFingerprint": "fba3445d4e35a481370171816c625372e7355811a4b552a293963f00391326f0",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 10
+			},
+			"confidence": 10,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:paperclip#12604"
+			],
+			"rationale": "Prune this issue as a separate board goal because PR #12604 already implements and tests the exact producer-consumer payload fix it specifies.",
+			"evidence": [
+				"The issue identifies the missing successful-run handoff payload block.",
+				"PR #12604 explicitly fixes this issue.",
+				"The PR adds payload rendering, recovery classification, and focused tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T17:54:59.834Z"
+		},
+		{
 			"key": "issue:pixel-agents#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -3323,6 +3353,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
+		},
+		{
+			"key": "pr:paperclip#12604",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12604 fix(heartbeat): carry the successful-run handoff instruction into the wake",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12604",
+			"sourceUpdatedAt": "2026-08-31T17:52:19Z",
+			"sourceFingerprint": "d4dd8df96178c77cfda94a3ff9787f16abe54bd3c83a99d035dbf88edd2b2b6d",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 10,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"issue:paperclip#12603"
+			],
+			"rationale": "Execute because it directly fixes the documented payload mismatch that wastes the only corrective attempt and includes bounded producer-to-renderer coverage.",
+			"evidence": [
+				"The wake builder drops the successful-run handoff instruction.",
+				"The missing instruction causes the corrective run to repeat prior work.",
+				"The PR adds seven focused test cases across adapter utilities and heartbeat behavior."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T17:54:59.834Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -3733,8 +3798,8 @@
 			"repo": "paperclip",
 			"title": "#12548 Fix recovery for unlinked secret proposal confirmations",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12548",
-			"sourceUpdatedAt": "2026-08-31T17:17:12Z",
-			"sourceFingerprint": "df6d59783b577372f62b1e0bb89468f0a840d45d0d00c4af4b944756e38b041f",
+			"sourceUpdatedAt": "2026-08-31T17:36:01Z",
+			"sourceFingerprint": "a042990525b5de580f4727b6bb4dfbe4f306e6dd4ffecb28502595d3df2003a6",
 			"score": 71,
 			"band": "high",
 			"axes": {
@@ -3748,18 +3813,16 @@
 			},
 			"confidence": 9,
 			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:paperclip#12598"
-			],
-			"rationale": "Execute because this closes a governance recovery gap for stranded secret-binding proposals with a narrow, tested, idempotent operation.",
+			"relatedKeys": [],
+			"rationale": "Execute because this provides a narrowly scoped, tested recovery path for a security-sensitive governance failure that otherwise leaves human confirmation unavailable.",
 			"evidence": [
 				"Pending binding proposals can remain without a linked human confirmation.",
-				"The recovery route is board-only and returns no secret material.",
-				"Targeted verification passed 102 tests and server type-checking."
+				"The route is board-only, idempotent, and returns no secret material.",
+				"Targeted verification passed 102 tests and TypeScript checking."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T17:24:37.139Z"
+			"scoredAt": "2026-08-31T17:54:59.834Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -4030,39 +4093,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
-		},
-		{
-			"key": "issue:paperclip#12543",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12543 Issue can land permanently blocked on a \"recovery owner\"/disposition state when the run that created it terminates",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12543",
-			"sourceUpdatedAt": "2026-08-30T17:16:21Z",
-			"sourceFingerprint": "e82d05241ed6b634b1623eaa945f453aaed60391d53ec08b505d1f9731ed8ea4",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Reframe around a single defined recovery-state invariant and deterministic reproduction because recurring permanent stalls matter, but the two message variants and unresolved trigger leave the implementation target ambiguous.",
-			"evidence": [
-				"Issues created by terminating runs reportedly become permanently blocked.",
-				"At least two different recovery-owner or disposition messages describe the stall.",
-				"An external detector and auto-recovery mechanism was required."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:39:38.888Z"
 		},
 		{
 			"key": "pr:minion_hub#197",
@@ -4362,42 +4392,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T17:24:37.139Z"
-		},
-		{
-			"key": "pr:paperclip#12592",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12592 feat(runner): add task experience and developer SDKs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
-			"sourceUpdatedAt": "2026-08-31T16:47:56Z",
-			"sourceFingerprint": "e1b3cb23ee29e125a63177ab58b09d0c5b36926602e37191cc5d79ecf5ab31b4",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12591",
-				"pr:paperclip#12594"
-			],
-			"rationale": "Group this broad user and SDK layer with its prerequisite application integration and succeeding platform layer so readiness is evaluated against the complete runner outcome.",
-			"evidence": [
-				"This PR depends on the native application contracts in the preceding stack entry.",
-				"The stacked delta spans 379 files.",
-				"Local tests were not run; GitHub Actions and Greptile review remain authoritative gates."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T16:54:55.969Z"
 		},
 		{
 			"key": "pr:paperclip#12594",
@@ -4910,6 +4904,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
+		},
+		{
+			"key": "pr:paperclip#12591",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12591 feat(runner): add Codex-native application integration",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12591",
+			"sourceUpdatedAt": "2026-08-31T17:33:17Z",
+			"sourceFingerprint": "d20377db70ecf63ed137eb668494a84d0b5890b3c1cd3ede2b682673062283cd",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12592"
+			],
+			"rationale": "Group the native application boundary with its dependent task and SDK experience as one staged Runner goal with explicit integration gates.",
+			"evidence": [
+				"This adds the application boundary required to exercise the existing Runner package.",
+				"The change spans 126 files and central heartbeat and agent-route code.",
+				"Local tests, build, and typecheck were not run."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T17:54:59.834Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -5719,6 +5748,41 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
+			"key": "pr:paperclip#12592",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12592 feat(runner): add task experience and developer SDKs",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12592",
+			"sourceUpdatedAt": "2026-08-31T17:29:08Z",
+			"sourceFingerprint": "135cefac9946f11f6770bbf6a24c08025ed7c129616938e35cd261d6b8974e24",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 8,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12591"
+			],
+			"rationale": "Group this dependent 379-file user and developer surface with the native Runner integration so readiness and regression risk are managed as one staged outcome.",
+			"evidence": [
+				"This PR depends on the native application contracts in the preceding stack entry.",
+				"The stacked delta contains 379 changed files.",
+				"Local tests were not run."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T17:54:59.834Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5891,39 +5955,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:38:21.867Z"
-		},
-		{
-			"key": "issue:paperclip#12540",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12540 Issue list endpoint omits `executionPolicy` that is present on the issue",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12540",
-			"sourceUpdatedAt": "2026-08-30T17:16:00Z",
-			"sourceFingerprint": "1aa8fe7aaf44bfbcd67e2c57f46197bf937b94ef7aedeb2bc5ead412b9b9faa2",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate against current master before funding because the behavior can bypass workflow-policy interpretation and causes request amplification, but the observation comes from an older commit without current verification.",
-			"evidence": [
-				"The list API reportedly returns executionPolicy null while detail fetch returns its value.",
-				"Clients may incorrectly conclude that no review or approval stage exists.",
-				"The issue was observed at commit 19be4cf92 and is not re-verified against latest master."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:39:38.888Z"
 		},
 		{
 			"key": "issue:pixel-agents#355",
@@ -6157,6 +6188,39 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
+			"key": "pr:paperclip#12600",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12600 feat(apps): add Paperclip Cloud managed OAuth connector",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12600",
+			"sourceUpdatedAt": "2026-08-31T17:51:13Z",
+			"sourceFingerprint": "49bb44c57b36a7bb583eeef52111934c3839cc90133997bc1a9dccff9526b4fb",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate after the companion Cloud protocol and provider approval are available because the implementation cannot yet deliver an operational managed OAuth flow.",
+			"evidence": [
+				"The managed flow depends on paperclip-cloud PR 312.",
+				"Real provider profiles remain disabled until Cloud deployment and provider approval.",
+				"Customer-created OAuth clients remain available as a fallback."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-08-31T17:54:59.834Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6357,39 +6421,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:38:21.867Z"
-		},
-		{
-			"key": "issue:paperclip#12541",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12541 Comments API/response does not guarantee chronological ordering",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12541",
-			"sourceUpdatedAt": "2026-08-30T17:16:01Z",
-			"sourceFingerprint": "af797c374c4f959c50889ce3d7e1df0bc4f9e7b6e3d256a842f1fd9b4fff3bdd",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate on the latest version and clarify the intended ordering contract because silent misinterpretation is consequential but clients can sort by createdAt and current behavior is unverified.",
-			"evidence": [
-				"An automated process reportedly treated an older comment as the latest and inferred a compliance violation.",
-				"Client-side sorting by createdAt is an available workaround.",
-				"The observation is not re-verified against latest master."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:39:38.888Z"
 		},
 		{
 			"key": "pr:minion_hub#201",
@@ -8817,39 +8848,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:38:58.989Z"
-		},
-		{
-			"key": "issue:paperclip#12544",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12544 Assignee semantics (\"current ball-holder,\" not \"owner\") are unlabeled, making it impossible for a human operator to tell who is being waited on",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12544",
-			"sourceUpdatedAt": "2026-08-30T17:16:22Z",
-			"sourceFingerprint": "b27c50c89fd8b95d09e59b7dcc39c797ca02f28c7e7c4fc96c472038e3bb9da0",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate after choosing whether the product contract should expose a next-actor field or merely relabel assignee, as the operator confusion is real but mitigated and the desired semantic surface is not settled.",
-			"evidence": [
-				"Assignee reportedly changes with the party expected to act next.",
-				"The UI does not explain that current-ball-holder meaning.",
-				"Operators adopted card-visibility and comment conventions as a workaround."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:39:38.888Z"
 		},
 		{
 			"key": "issue:pixel-agents#272",
