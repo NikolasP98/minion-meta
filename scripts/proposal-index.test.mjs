@@ -118,3 +118,40 @@ effort:
 	assert.equal(result.status, 1, result.stdout);
 	assert.match(result.stderr, /fixture-blank-effort\.md: invalid effort ""/);
 });
+
+test('value projection: zero survives regeneration and an explicitly blank value is rejected', () => {
+	const root = makeCliFixture();
+	writeFileSync(
+		join(root, 'proposals', 'fixture-zero-value.md'),
+		`---
+id: fixture-zero-value
+title: Fixture with zero value
+status: draft
+created: 2026-08-29
+value: 0
+---
+
+# Zero value
+`
+	);
+	execFileSync('node', ['scripts/proposal-index.mjs'], { cwd: root });
+	const index = JSON.parse(readFileSync(join(root, 'proposals', 'index.json'), 'utf8'));
+	assert.equal(index.proposals[0].value, 0);
+
+	writeFileSync(
+		join(root, 'proposals', 'fixture-blank-value.md'),
+		`---
+id: fixture-blank-value
+title: Fixture with blank value
+status: draft
+created: 2026-08-29
+value:
+---
+
+# Blank value
+`
+	);
+	const result = spawnSync('node', ['scripts/proposal-index.mjs'], { cwd: root, encoding: 'utf8' });
+	assert.equal(result.status, 1, result.stdout);
+	assert.match(result.stderr, /fixture-blank-value\.md: empty value/);
+});

@@ -80,6 +80,8 @@ function main() {
 		if (fm.status && !P_STATUSES.includes(fm.status)) errors.push(`${name}: invalid status "${fm.status}"`);
 		if (fm.effort !== undefined && !P_EFFORTS.includes(fm.effort))
 			errors.push(`${name}: invalid effort "${fm.effort}" (allowed: ${P_EFFORTS.join(', ')})`);
+		if (Object.hasOwn(fm, 'value') && fm.value === '')
+			errors.push(`${name}: empty value (drop the key or give it a value)`);
 		// Retiring is a justified act, never a silent flip (lifecycle-tools mandate).
 		if (fm.status === 'retired' && !(fm.retired_reason && fm.retired_reason.length >= 20))
 			errors.push(`${name}: status "retired" requires retired_reason (>=20 chars)`);
@@ -125,12 +127,12 @@ function main() {
 			...(fm.duplicate_candidate ? { duplicate_candidate: fm.duplicate_candidate } : {}),
 			...(fm.spawned_spec ? { spawned_spec: fm.spawned_spec } : {}),
 			...(fm.tags ? { tags: fm.tags } : {}),
-			...(fm.value ? { value: fm.value } : {}),
+			...(Object.hasOwn(fm, 'value') ? { value: fm.value } : {}),
 			// `effort` sits in 40 proposals' frontmatter and in the auto-triage tool's
 			// hand-written index entries, but was never projected here — so every
 			// regeneration silently deleted it again. Same failure class as the spec
 			// index's dropped `relationship`/`related` fields.
-			...(fm.effort ? { effort: fm.effort } : {}),
+			...(Object.hasOwn(fm, 'effort') ? { effort: fm.effort } : {}),
 			...(fm.source ? { source: fm.source } : {}),
 			...(review ? { review } : {})
 		});
