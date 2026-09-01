@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T02:27:41.342Z",
+	"generatedAt": "2026-09-01T02:57:45.039Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -2878,6 +2878,41 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
+			"key": "pr:paperclip#12616",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12616 feat(runner): integrate Codex native execution",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12616",
+			"sourceUpdatedAt": "2026-09-01T02:44:54Z",
+			"sourceFingerprint": "c939bc2967c1844d62c7ad87cb1df6686d1188972baf813b5eba22364009ba5f",
+			"score": 75,
+			"band": "high",
+			"axes": {
+				"criticality": 5,
+				"importance": 10,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12617"
+			],
+			"rationale": "Group with the native-runner task-thread projection because together they form the server-to-user production vertical slice, while this integration alone leaves native runs without their intended supervisory interface.",
+			"evidence": [
+				"The runner package cannot yet execute a governed Codex run through the server.",
+				"The path is Codex-only, hidden, and default-off.",
+				"The PR stack places the task-thread UI immediately after this server integration."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T02:57:44.950Z"
+		},
+		{
 			"key": "pr:paperclip#12618",
 			"kind": "pr",
 			"stage": "development",
@@ -4196,6 +4231,39 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
+			"key": "pr:paperclip#12556",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12556 fix(issues): expire pending interactions when a blocked issue's status resets",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12556",
+			"sourceUpdatedAt": "2026-08-31T03:58:03Z",
+			"sourceFingerprint": "171676d5c1115ed8af8aecc20699752ca26718e0715b9dcf7a5465a9058b5774",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because unresolved interaction records can silently diverge from issue state across several status-reset paths, undermining reliable continuation behavior.",
+			"evidence": [
+				"Leaving blocked can leave an interaction pending indefinitely.",
+				"Generic PATCH, force-release, and direct service callers can trigger the drift.",
+				"The change extends an existing terminal-transition expiry pattern."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T02:57:44.950Z"
+		},
+		{
 			"key": "pr:paperclip#12586",
 			"kind": "pr",
 			"stage": "development",
@@ -4565,8 +4633,8 @@
 			"repo": "paperclip",
 			"title": "#12625 feat(http-adapter): poll remote runs for completion and render payload templates",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12625",
-			"sourceUpdatedAt": "2026-09-01T02:26:09Z",
-			"sourceFingerprint": "33a5e24454e06ce82a3c30641b88262571a4b0d39f60da9243c177a69e0d80c1",
+			"sourceUpdatedAt": "2026-09-01T02:28:53Z",
+			"sourceFingerprint": "860a2802d1bb9b8f5259171ae04b6fd935cb14b4be8325ee4fe96f11b920f34a",
 			"score": 67,
 			"band": "medium",
 			"axes": {
@@ -4581,15 +4649,15 @@
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "The bounded adapter change closes a fundamental delegation gap with strong compatibility, secrecy, and terminal-state test coverage.",
+			"rationale": "Execute because it converts the HTTP adapter from notification-only dispatch into bounded remote-work delegation while preserving its existing default behavior and limiting credential exposure.",
 			"evidence": [
-				"HTTP dispatch cannot currently collect remote results",
-				"The change preserves fire-and-forget behavior when polling is absent",
-				"Adapter tests pass 42/42"
+				"The adapter currently cannot collect remote results and sends payload templates verbatim.",
+				"Optional polling preserves the prior fire-and-forget contract when absent.",
+				"Ten tests cover rendering, polling, failures, exhaustion, and data-leak prevention."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T02:27:41.262Z"
+			"scoredAt": "2026-09-01T02:57:44.950Z"
 		},
 		{
 			"key": "pr:pixel-agents#240",
@@ -4903,6 +4971,39 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
+			"key": "pr:paperclip#12555",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12555 fix(create-paperclip-plugin): plugin init fails on the published CLI — scaffold against the npm SDK when no checkout exists",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12555",
+			"sourceUpdatedAt": "2026-08-31T02:56:08Z",
+			"sourceFingerprint": "09804e651ed5f1550b0eb5c6e99136f5bd0ab3b050675961b52bec4f30bc6de5",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because a reproduced packaging defect blocks the documented plugin-development path for published-CLI users and has a bounded, compatibility-preserving fix with direct verification.",
+			"evidence": [
+				"Published CLI plugin initialization fails without a monorepo checkout.",
+				"Reproduced on paperclipai@2026.824.1 in two installation layouts.",
+				"Tests cover npm fallback, in-repo behavior, and invalid --sdk-path."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T02:57:44.950Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5000,42 +5101,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
-		},
-		{
-			"key": "pr:paperclip#12616",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12616 feat(runner): integrate Codex native execution",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12616",
-			"sourceUpdatedAt": "2026-08-31T23:06:20Z",
-			"sourceFingerprint": "bbc45f1e1dfe61b3c6e83a763b65d1c562b50e806ae6af6d42b72f08790549fd",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12608",
-				"pr:paperclip#12617"
-			],
-			"rationale": "Group this server integration with its runner package prerequisite and UI consumer because it is the middle dependency in a single default-off Codex native-execution slice.",
-			"evidence": [
-				"The runner package cannot yet execute a real provider through the server.",
-				"The adapter is Codex-only, hidden, and default-off.",
-				"This PR is second in a three-PR stack."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T23:27:50.199Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -5577,6 +5642,41 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
+			"key": "pr:paperclip#12617",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12617 feat(ui): project native runner turns into task chat",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12617",
+			"sourceUpdatedAt": "2026-09-01T02:33:40Z",
+			"sourceFingerprint": "0e1400b0c14417d0389ff6a3e5eb9d413a9271f2a0237b40762badc915a5ba8a",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12616"
+			],
+			"rationale": "Group with the Codex server integration because its value depends on native runner records existing and the pair delivers one coherent, user-visible execution capability.",
+			"evidence": [
+				"The existing task page cannot render native runner records safely.",
+				"Rendering is gated to native paperclip_runner runs.",
+				"The PR is the third item in the same runner integration stack."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T02:57:44.950Z"
+		},
+		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5674,6 +5774,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:35:03.762Z"
+		},
+		{
+			"key": "pr:paperclip#12596",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12596 test(runner): bound codex provider exit polls by wall clock",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12596",
+			"sourceUpdatedAt": "2026-09-01T02:47:56Z",
+			"sourceFingerprint": "3ae86379041b8aa3029e75e014fc64d656b7612f6049d022137fcda4c163270d",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 10
+			},
+			"confidence": 10,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the narrowly scoped test-only change removes a measured source of random CI failures with strong repeated-run evidence and low production risk.",
+			"evidence": [
+				"The two tests failed in 8/25 and 9/25 runs before the change.",
+				"Both passed 25/25 afterward, and the full suite passed 12 repeated runs.",
+				"Only test wait loops change; production code is untouched."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T02:57:44.950Z"
 		},
 		{
 			"key": "pr:pixel-agents#285",
@@ -6250,39 +6383,6 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
-			"key": "pr:paperclip#12608",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12608 feat(runner): add SDK and developer tooling",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12608",
-			"sourceUpdatedAt": "2026-09-01T02:26:08Z",
-			"sourceFingerprint": "1dd70e1791ab82cd0c1fe9cc235191f8139388579727e75f37112d2da2590dc3",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The SDK platform has broad strategic value, but its large greenfield scope and reliance on pending CI make immediate paid execution insufficiently bounded.",
-			"evidence": [
-				"Adds SDK, conformance, replay, evaluation, examples, and drift checks",
-				"Production application routing remains unchanged",
-				"Local test suites were not run"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T02:27:41.262Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6483,39 +6583,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:58.286Z"
-		},
-		{
-			"key": "pr:paperclip#12596",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12596 test(runner): bound codex provider exit polls by wall clock",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12596",
-			"sourceUpdatedAt": "2026-09-01T01:48:17Z",
-			"sourceFingerprint": "4abb136f40bdabfa210f27cb0816b1ae57cb45e4c8df66c989fc2a792079bf81",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 10
-			},
-			"confidence": 10,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the PR presents a bounded, low-risk test-only fix with strong reproduction, root-cause, and repeated verification evidence for recurring CI failures.",
-			"evidence": [
-				"Two Codex provider tests failed randomly on branches with no Rust changes.",
-				"Before the change, 8/25 and 9/25 runs failed; afterward, both had 0/25 failures.",
-				"The full codex_provider suite passed 12 times after the change."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T01:57:33.099Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
@@ -7118,42 +7185,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:36:55.886Z"
-		},
-		{
-			"key": "pr:paperclip#12617",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12617 feat(ui): project native runner turns into task chat",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12617",
-			"sourceUpdatedAt": "2026-08-31T22:59:50Z",
-			"sourceFingerprint": "5d103fa7be9b9b53bb695178325f2399695eb3ebd75f3d78fc53e14c3402b502",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12608",
-				"pr:paperclip#12616"
-			],
-			"rationale": "Group this UI projection with the runner package and server integration because it is the user-facing completion of the same native-runner capability and has no independent production path.",
-			"evidence": [
-				"The server records native events that the existing task page cannot render.",
-				"Rendering is gated to native paperclip_runner runs.",
-				"This PR is third in a three-PR stack."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T23:27:50.199Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1883922325",
@@ -8765,39 +8796,6 @@
 			"scoredAt": "2026-08-31T07:36:18.083Z"
 		},
 		{
-			"key": "pr:paperclip#12558",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12558 feat(skills-catalog): import ECC skills, agent personas, commands, and rules",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12558",
-			"sourceUpdatedAt": "2026-08-31T14:26:53Z",
-			"sourceFingerprint": "1da6e33cce2aae7ece5e9665ab172159a625b2067d2b3074e401f4d69b0d0772",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate because the broad catalog expansion may improve capability coverage, but the catalog demonstrates no urgent dependency or measured demand and introduces substantial third-party content surface.",
-			"evidence": [
-				"The change imports 470 optional entries with defaultInstall disabled.",
-				"It includes 193 GitHub references pinned to one fork commit and 93 locally vendored skills.",
-				"Catalog, typecheck, service, portability, and Hermes test suites passed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T14:54:38.867Z"
-		},
-		{
 			"key": "pr:pixel-agents#327",
 			"kind": "pr",
 			"stage": "development",
@@ -9249,6 +9247,39 @@
 			"scoredAt": "2026-08-31T12:54:59.710Z"
 		},
 		{
+			"key": "pr:paperclip#12626",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12626 chore(lockfile): refresh pnpm-lock.yaml",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12626",
+			"sourceUpdatedAt": "2026-09-01T02:33:49Z",
+			"sourceFingerprint": "899394700d94eb71796a81071ef30252e531754e7eedc292f7a1a3df13dbcffc",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate because the change is mechanically bounded but the catalog does not establish which dependency changes require it, what failure it fixes, or whether the generated lockfile is verified.",
+			"evidence": [
+				"The PR changes only pnpm-lock.yaml.",
+				"The summary says dependencies changed on master.",
+				"No affected dependency, failing command, or verification result is provided."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T02:57:44.950Z"
+		},
+		{
 			"key": "pr:pixel-agents#356",
 			"kind": "pr",
 			"stage": "development",
@@ -9549,41 +9580,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
-		},
-		{
-			"key": "pr:paperclip#12559",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12559 feat(hermes-adapter): add ECC Memory Vault bridge for cross-agent handoffs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12559",
-			"sourceUpdatedAt": "2026-08-31T14:13:13Z",
-			"sourceFingerprint": "3eaad19fd960c0bb4b31fce91fe2fd0a24ff79a057aa605d6034f4c97eb1d10d",
-			"score": 37,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12558"
-			],
-			"rationale": "Group this adapter-specific bridge with the ECC catalog import because its value, provenance, and deployment assumptions are directly tied to that same adoption effort.",
-			"evidence": [
-				"Explicitly described as a follow-up to #12558.",
-				"Limited to hermes_local and disabled by default.",
-				"Adapter tests passed 78 cases."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T14:24:48.142Z"
 		},
 		{
 			"key": "pr:pixel-agents#298",
