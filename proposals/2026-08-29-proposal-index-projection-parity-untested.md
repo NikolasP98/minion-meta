@@ -1,13 +1,14 @@
 ---
 id: 2026-08-29-proposal-index-projection-parity-untested
 title: proposals/index.json silently drops frontmatter fields the projection forgets
-status: draft
+status: review
 created: 2026-08-29
-updated: 2026-08-29
+updated: 2026-09-01
 repos: [minion-meta]
 tags: [test, infra]
 value: 2
 effort: S
+duplicate_candidate: 2026-08-29-proposal-index-check-mode-and-effort-projection
 ---
 
 # `proposals/index.json` silently drops fields the projection forgets

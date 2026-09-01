@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-451096235
 title: Handoff marker — scripts/proposal-index.mjs (minion-meta)
-status: draft
+status: review
 created: 2026-08-30
 updated: 2026-09-01
 repos: [minion-meta]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-08-29-proposal-index-check-mode-and-effort-projection
 ---
 
 # Handoff marker — scripts/proposal-index.mjs

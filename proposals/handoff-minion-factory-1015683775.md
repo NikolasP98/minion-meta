@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-factory-1015683775
 title: Handoff marker — scripts/promotion/authenticated-boundary-probe.sh (minion-factory)
-status: draft
+status: review
 created: 2026-08-30
 updated: 2026-09-01
 repos: [minion-factory]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-08-28-factory-release-probe-red-and-silent
 ---
 
 # Handoff marker — scripts/promotion/authenticated-boundary-probe.sh
