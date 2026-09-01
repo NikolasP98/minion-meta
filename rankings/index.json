@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T00:58:20.405Z",
+	"generatedAt": "2026-09-01T01:27:35.941Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -743,39 +743,6 @@
 			"scoredAt": "2026-08-31T19:54:52.242Z"
 		},
 		{
-			"key": "pr:paperclip#12554",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12554 fix(issues): stop silently dropping run-scoped workspace inheritance",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12554",
-			"sourceUpdatedAt": "2026-08-31T02:43:23Z",
-			"sourceFingerprint": "1329f06e18393b4d660f479050fde6f5a21c94376d1b6dac1a0c47c25fe8703b",
-			"score": 88,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because silently missing workspace inheritance bypasses serialization and can corrupt concurrent work in a shared checkout, while the identified inheritance defects have direct integration coverage.",
-			"evidence": [
-				"Unbound runs can write concurrently into the same working directory and corrupt both runs.",
-				"Two inheritance conditions silently prevent `projectWorkspaceId` propagation.",
-				"Database-backed HTTP tests cover both defects and guard cases, with a dispatch warning added."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:34:26.538Z"
-		},
-		{
 			"key": "pr:paperclip#12581",
 			"kind": "pr",
 			"stage": "development",
@@ -1476,6 +1443,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T17:54:59.834Z"
+		},
+		{
+			"key": "issue:paperclip#12622",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12622 reuse_existing execution-workspace bindings get no dispatch-time mutual exclusion (unlike shared_workspace's holder-check)",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12622",
+			"sourceUpdatedAt": "2026-09-01T01:06:54Z",
+			"sourceFingerprint": "c88ceb41bdd835c73fc5e82922c18804c1d3a720bb5c794f48c9dcf11b62561a",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Concurrent dispatch into one reused worktree creates a credible data-loss hazard in a central execution path, warranting immediate implementation work despite unresolved fix placement.",
+			"evidence": [
+				"Two independently observed incidents allowed concurrent runs in the same working directory.",
+				"One run's staged file was exposed to another run's commit.",
+				"No lock, queue, workspace-busy deferral, or warning was emitted."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T01:27:35.836Z"
 		},
 		{
 			"key": "pr:minion-meta#247",
@@ -2775,39 +2775,6 @@
 			"scoredAt": "2026-08-31T07:40:17.097Z"
 		},
 		{
-			"key": "pr:paperclip#12555",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12555 fix(create-paperclip-plugin): plugin init fails on the published CLI — scaffold against the npm SDK when no checkout exists",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12555",
-			"sourceUpdatedAt": "2026-08-31T02:56:08Z",
-			"sourceFingerprint": "09804e651ed5f1550b0eb5c6e99136f5bd0ab3b050675961b52bec4f30bc6de5",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the documented published-CLI plugin initialization path fails for users without a monorepo checkout, and the three-tier resolution preserves existing local behavior.",
-			"evidence": [
-				"`paperclipai plugin init` fails on the published CLI by resolving a nonexistent monorepo path.",
-				"The fallback uses the published SDK pinned to the running CLI version.",
-				"The catalog reports end-to-end npm-mode verification plus tests for in-repo and invalid explicit-path modes."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:34:26.538Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-afd023b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3520,6 +3487,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T20:31:59.677Z"
+		},
+		{
+			"key": "pr:paperclip#12621",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12621 fix: count writes from unscoped heartbeat runs against the cross-issue cap instead of rejecting them",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12621",
+			"sourceUpdatedAt": "2026-09-01T01:00:12Z",
+			"sourceFingerprint": "0396ca4de83f079ee69fe779a0ce3be41856a60435457f1f6de1633bf86c5b22",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 10
+			},
+			"confidence": 10,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is a reproduced core-agent write-path defect with a bounded fix, passing targeted tests, and preserved anti-spray controls, making it ready for immediate delivery.",
+			"evidence": [
+				"Unscoped heartbeat runs receive 403 on every issue comment and update.",
+				"The fix counts each write against the existing cross-issue cap.",
+				"Nineteen targeted Vitest cases pass, with a successful manual verification described."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T01:27:35.836Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -6283,39 +6283,6 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
-			"key": "pr:paperclip#12608",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12608 feat(runner): add SDK and developer tooling",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12608",
-			"sourceUpdatedAt": "2026-09-01T00:51:38Z",
-			"sourceFingerprint": "cafbf7bde1700aaf30c5c1909e3dacd7bdad999a7084df8ce5807233c0540ceb",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The PR defines an actionable developer-platform boundary with broad integration value, explicit risks, and concrete automated verification despite no stated urgent deadline.",
-			"evidence": [
-				"adds SDK, conformance, replay, and evaluation surfaces",
-				"shared exports and fixtures make separate PRs non-building intermediate states",
-				"CI and package checks are identified as verification authority"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T00:57:50.010Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7118,6 +7085,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:36:55.886Z"
+		},
+		{
+			"key": "pr:paperclip#12608",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12608 feat(runner): add SDK and developer tooling",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12608",
+			"sourceUpdatedAt": "2026-09-01T01:24:30Z",
+			"sourceFingerprint": "5be254d16bf684532342063c8e8bd0a15e541be92a0f75c71a06d9594bf5b404",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The SDK platform work is strategically useful and broad, but no outage, deadline, or release blocker is shown and the large change still depends entirely on exact-head CI verification.",
+			"evidence": [
+				"Adds SDK, conformance, replay, evaluation, examples, and drift-check surfaces.",
+				"Production application routing remains unchanged.",
+				"Local test suites were not run; GitHub Actions is the verification authority."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T01:27:35.836Z"
 		},
 		{
 			"key": "pr:paperclip#12617",
