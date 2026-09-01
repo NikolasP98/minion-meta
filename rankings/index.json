@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T01:57:33.177Z",
+	"generatedAt": "2026-09-01T02:27:41.342Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -2087,39 +2087,6 @@
 			"scoredAt": "2026-08-31T07:33:08.870Z"
 		},
 		{
-			"key": "pr:paperclip#12610",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12610 docs(release): stable notes for the 2026.828.0-beta.0 soak (v2026.831.0)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12610",
-			"sourceUpdatedAt": "2026-09-01T00:05:10Z",
-			"sourceFingerprint": "4908d6bc97678cc5551fb139bbf7ac9a61815717419ada3ddab5e6a0814fa63b",
-			"score": 79,
-			"band": "high",
-			"axes": {
-				"criticality": 9,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 10
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This bounded documentation change directly unblocks a time-sensitive stable promotion and has detailed source-level verification.",
-			"evidence": [
-				"Stable preflight fails without the merged file.",
-				"The planned promotion version is v2026.831.0.",
-				"Only one Markdown file changes."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T00:27:33.759Z"
-		},
-		{
 			"key": "proposal:2026-08-17-factory-workitem-handoff-schema",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2320,6 +2287,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:01:14.069Z"
+		},
+		{
+			"key": "pr:paperclip#12624",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12624 fix(claude-local): require safe live hello probes for ACP checks",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12624",
+			"sourceUpdatedAt": "2026-09-01T02:25:18Z",
+			"sourceFingerprint": "2702c3f4dcc5f9b33a59f6dcd1536281548a94ee8223a84d04cbf19cc438fb8d",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is an actionable fail-closed security and reliability fix for readiness probes, with focused coverage despite unresolved full-suite verification.",
+			"evidence": [
+				"Previous probes could pass without a positive provider reply",
+				"Sandbox probing could use --dangerously-skip-permissions",
+				"Five focused files pass 83 tests, while the full run has 22 failures"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T02:27:41.262Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -4196,39 +4196,6 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:paperclip#12556",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12556 fix(issues): expire pending interactions when a blocked issue's status resets",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12556",
-			"sourceUpdatedAt": "2026-08-31T03:58:03Z",
-			"sourceFingerprint": "171676d5c1115ed8af8aecc20699752ca26718e0715b9dcf7a5465a9058b5774",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because this closes a reproducible state-consistency gap that can leave blocked-work interactions pending indefinitely across several status-change paths.",
-			"evidence": [
-				"Leaving blocked does not expire pending interactions.",
-				"The generic update and force-release paths can trigger the drift.",
-				"The PR extends an existing terminal-transition expiry pattern."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:03.762Z"
-		},
-		{
 			"key": "pr:paperclip#12586",
 			"kind": "pr",
 			"stage": "development",
@@ -4590,6 +4557,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:23.880Z"
+		},
+		{
+			"key": "pr:paperclip#12625",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12625 feat(http-adapter): poll remote runs for completion and render payload templates",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12625",
+			"sourceUpdatedAt": "2026-09-01T02:26:09Z",
+			"sourceFingerprint": "33a5e24454e06ce82a3c30641b88262571a4b0d39f60da9243c177a69e0d80c1",
+			"score": 67,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The bounded adapter change closes a fundamental delegation gap with strong compatibility, secrecy, and terminal-state test coverage.",
+			"evidence": [
+				"HTTP dispatch cannot currently collect remote results",
+				"The change preserves fire-and-forget behavior when polling is absent",
+				"Adapter tests pass 42/42"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T02:27:41.262Z"
 		},
 		{
 			"key": "pr:pixel-agents#240",
@@ -6256,8 +6256,8 @@
 			"repo": "paperclip",
 			"title": "#12608 feat(runner): add SDK and developer tooling",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12608",
-			"sourceUpdatedAt": "2026-09-01T01:39:45Z",
-			"sourceFingerprint": "199e76b9317ed48ecba6bcbc97c6f4b2c27163a9dda7e10d01c15dda54fe7c17",
+			"sourceUpdatedAt": "2026-09-01T02:26:08Z",
+			"sourceFingerprint": "1dd70e1791ab82cd0c1fe9cc235191f8139388579727e75f37112d2da2590dc3",
 			"score": 58,
 			"band": "medium",
 			"axes": {
@@ -6267,20 +6267,20 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 7,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Reevaluate after exact-head CI results are available because the strategically broad developer platform is well scoped but large, greenfield, and lacks completed local or catalog-reported verification.",
+			"rationale": "The SDK platform has broad strategic value, but its large greenfield scope and reliance on pending CI make immediate paid execution insufficiently bounded.",
 			"evidence": [
-				"The PR adds SDK, conformance, replay, evaluation, transport, example, and drift-check surfaces.",
-				"It is the first item in a three-PR stack that precedes production server integration and task-thread UI.",
-				"Local test suites were not run; GitHub Actions is designated as the verification authority."
+				"Adds SDK, conformance, replay, evaluation, examples, and drift checks",
+				"Production application routing remains unchanged",
+				"Local test suites were not run"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T01:57:33.099Z"
+			"scoredAt": "2026-09-01T02:27:41.262Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
