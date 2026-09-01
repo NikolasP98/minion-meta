@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T08:27:37.540Z",
+	"generatedAt": "2026-09-01T08:57:43.437Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -305,6 +305,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T04:27:44.645Z"
+		},
+		{
+			"key": "pr:paperclip#12649",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12649 fix(server): redact agent profile configuration by default",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12649",
+			"sourceUpdatedAt": "2026-09-01T08:50:57Z",
+			"sourceFingerprint": "a4f1100484d5e5db240aa3e2319fd6bcd2ea0ddc636fcea6ac6014cbbb38922f",
+			"score": 95,
+			"band": "critical",
+			"axes": {
+				"criticality": 10,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A demonstrated API path for exposing nested plaintext credentials warrants immediate completion despite unresolved workspace and CI verification blockers.",
+			"evidence": [
+				"Profile routes could serialize plaintext adapterConfig and runtimeConfig values.",
+				"The change applies deny-by-default recursive redaction across profile and snapshot responses.",
+				"One test suite passes, but the HTTP suite and frozen install are blocked."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T08:57:43.357Z"
 		},
 		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
@@ -2738,6 +2771,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T02:27:41.262Z"
+		},
+		{
+			"key": "pr:paperclip#12650",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12650 Fix checked-out run binding on first write",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12650",
+			"sourceUpdatedAt": "2026-09-01T08:56:24Z",
+			"sourceFingerprint": "91767063843a4fee2fc16e69d8ed563c8816af79e1643e5d4442f514db0082e4",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Failing closed on unproven first-write ownership protects audited run isolation, while remaining test and CI gaps should be resolved before merge.",
+			"evidence": [
+				"The first write could bind context without a persisted checkout.",
+				"The patch requires matching company, agent, and run ownership.",
+				"Local tests and all CI gates are not confirmed passing."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T08:57:43.357Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -5728,39 +5794,6 @@
 			"scoredAt": "2026-08-31T07:33:08.870Z"
 		},
 		{
-			"key": "pr:paperclip#12641",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12641 feat(runner): add administration and observability",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12641",
-			"sourceUpdatedAt": "2026-09-01T08:08:34Z",
-			"sourceFingerprint": "ce9bc259a9b1b8578b0726ba3e0c0391b6f1dd8a32cc3dbc03b79c5a75c01d99",
-			"score": 64,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The operational surface is strategically valuable and well scoped, but its three-PR dependency stack, 54-file delta, and absence of local verification make execution readiness contingent on CI and lower-stack validation.",
-			"evidence": [
-				"Final feature PR in the Codex production stack",
-				"Depends on base PR #12640 and lower PRs #12639 and #12638",
-				"Local tests were not run"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T08:27:37.455Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7302,39 +7335,6 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:paperclip#12575",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
-			"sourceUpdatedAt": "2026-09-01T05:05:09Z",
-			"sourceFingerprint": "25b63727c1a90a03ab9f3c5a96bedf7eb7cc410e0376b6875ccba88cab9c6763",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the bounded attribution defect has measured recurring effects, deterministic resolution rules, and route-level test coverage, although no outage or deadline is identified.",
-			"evidence": [
-				"17 of 172 measured agent-created issues had no project",
-				"Missing projects affect filters, cost rollups, and workspace defaults",
-				"15 unit tests and 10 integration tests were added"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T05:27:37.929Z"
-		},
-		{
 			"key": "pr:pixel-agents#385",
 			"kind": "pr",
 			"stage": "development",
@@ -8680,39 +8680,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:36:55.886Z"
-		},
-		{
-			"key": "proposal:ci-minion-ai-stale",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Stale on minion-ai main",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-stale.md",
-			"sourceUpdatedAt": "2026-09-01",
-			"sourceFingerprint": "29a32d6263ba349961bdcc803e2af91583bad452a63f5e0fb5b6702a6bf1cb7e",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute the CI repair because the deploy-branch workflow is observably red with a precise failure, although resolution may require unavailable credential administration.",
-			"evidence": [
-				"The latest completed Stale workflow run on main failed.",
-				"The action reports Input required and not supplied: private-key.",
-				"Done means restoring green status or deliberately retiring the workflow."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T04:57:38.732Z"
 		},
 		{
 			"key": "pr:minion-meta#255",
@@ -10266,6 +10233,39 @@
 			"scoredAt": "2026-08-31T07:42:55.201Z"
 		},
 		{
+			"key": "proposal:ci-minion-ai-stale",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Stale on minion-ai main",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-stale.md",
+			"sourceUpdatedAt": "2026-09-01",
+			"sourceFingerprint": "d91f53f8b6fbac91ab4bf6b5b055a64c9e5bab0889c702537b73232d522e9640",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The failure has a concrete missing-input cause and bounded success condition, though the affected stale workflow is not shown to block releases or production.",
+			"evidence": [
+				"The latest completed Stale workflow run on main failed.",
+				"The action reports: Input required and not supplied: private-key.",
+				"Done means restoring green status or deliberately retiring the workflow."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T08:57:43.357Z"
+		},
+		{
 			"key": "pr:paperclip#12620",
 			"kind": "pr",
 			"stage": "development",
@@ -10662,6 +10662,39 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
+			"key": "pr:paperclip#12626",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12626 chore(lockfile): refresh pnpm-lock.yaml",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12626",
+			"sourceUpdatedAt": "2026-09-01T08:42:02Z",
+			"sourceFingerprint": "a14ea0284ba5f2d93cb467af035ef9c7ef28ffd09fb3b177fa07eb810e3ec593",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The lockfile refresh is bounded and actionable, but the catalog does not establish a blocked build, failing installation, or other urgent consequence.",
+			"evidence": [
+				"Only pnpm-lock.yaml is updated.",
+				"The refresh follows dependency changes on master.",
+				"The PR is open."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T08:57:43.357Z"
+		},
+		{
 			"key": "pr:pixel-agents#232",
 			"kind": "pr",
 			"stage": "development",
@@ -10961,39 +10994,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T22:27:54.178Z"
-		},
-		{
-			"key": "pr:paperclip#12626",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12626 chore(lockfile): refresh pnpm-lock.yaml",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12626",
-			"sourceUpdatedAt": "2026-09-01T07:44:51Z",
-			"sourceFingerprint": "7d509792a07928db3b33c5ee8b162a9ff8c2e8218cc01e14422aa0902ddaef10",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate because the lockfile refresh is immediately actionable but the catalog does not identify the dependency changes, failure mode, or outcome that makes it necessary.",
-			"evidence": [
-				"The PR only updates pnpm-lock.yaml.",
-				"It follows dependency changes on master.",
-				"No verification or affected behavior is described."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T07:57:43.390Z"
 		},
 		{
 			"key": "pr:pixel-agents#284",
