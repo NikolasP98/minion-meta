@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T04:57:38.818Z",
+	"generatedAt": "2026-09-01T05:27:38.007Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -4304,6 +4304,43 @@
 			"scoredAt": "2026-08-31T08:01:35.926Z"
 		},
 		{
+			"key": "pr:paperclip#12639",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12639 feat(runner): add secure remote transport",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12639",
+			"sourceUpdatedAt": "2026-09-01T05:22:38Z",
+			"sourceFingerprint": "4189c808c4564022edba6b919b15bb3dc0fdc04c58f141cf42b7ef0f4db59366",
+			"score": 70,
+			"band": "high",
+			"axes": {
+				"criticality": 5,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12638",
+				"pr:paperclip#12640",
+				"pr:paperclip#12641"
+			],
+			"rationale": "Group with its base and upper stack because secure transport is a trust-boundary dependency for remote Codex but does not independently provide the complete user or operator outcome.",
+			"evidence": [
+				"Base PR is #12638",
+				"Adds WSS dialing and authenticated provider-ingress listener mode",
+				"Local tests were not run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T05:27:37.929Z"
+		},
+		{
 			"key": "pr:pixel-agents#300",
 			"kind": "pr",
 			"stage": "development",
@@ -4904,6 +4941,43 @@
 			"scoredAt": "2026-09-01T02:57:44.950Z"
 		},
 		{
+			"key": "pr:paperclip#12641",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12641 feat(runner): add administration and observability",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12641",
+			"sourceUpdatedAt": "2026-09-01T05:22:08Z",
+			"sourceFingerprint": "512d1b118936faee21430f02b39fe597480a5a6b730f7b898568282d346be545",
+			"score": 67,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 9,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12638",
+				"pr:paperclip#12639",
+				"pr:paperclip#12640"
+			],
+			"rationale": "Group this final operational layer with the lower stack because administration and sensitive-trace controls are necessary for a governed production goal but are not independently deliverable from their prerequisites.",
+			"evidence": [
+				"This is the final feature PR in the Codex production stack",
+				"Raw provider traces can contain sensitive provider data",
+				"All new instance settings remain off by default"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T05:27:37.929Z"
+		},
+		{
 			"key": "pr:pixel-agents#240",
 			"kind": "pr",
 			"stage": "development",
@@ -5312,6 +5386,43 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
+		},
+		{
+			"key": "pr:paperclip#12638",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12638 feat(runner): add remote execution substrate",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12638",
+			"sourceUpdatedAt": "2026-09-01T05:25:13Z",
+			"sourceFingerprint": "bc371547de401c0eff4f854a056a2fb608e82525a4293bc0e3abac89049601f4",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12639",
+				"pr:paperclip#12640",
+				"pr:paperclip#12641"
+			],
+			"rationale": "Group the four dependent runner PRs as one remote-Codex production goal because this substrate is strategically central but explicitly incomplete and only delivers its outcome with the transport, workspace, and operations layers.",
+			"evidence": [
+				"This PR is the base for later remote runner transport work",
+				"It does not yet make remote Codex runnable",
+				"Local tests were not run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T05:27:37.929Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -6121,39 +6232,6 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
-			"key": "pr:paperclip#12638",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12638 feat(runner): add remote execution substrate",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12638",
-			"sourceUpdatedAt": "2026-09-01T04:55:49Z",
-			"sourceFingerprint": "b80246e0ca5c5ccbe2cc06b6715ebd6ce253606c0cc89a75e71ddf31054bb947",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The remote-execution foundation is strategically central, but it remains default-off, does not yet make remote Codex runnable, and lacks local verification.",
-			"evidence": [
-				"The change touches runner transport, orchestration, plugin contracts, and shared settings.",
-				"The rollout controls remain off by default.",
-				"The next PR is required for Rust WSS and TLS transport."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T04:57:38.732Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6557,6 +6635,43 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
+		},
+		{
+			"key": "pr:paperclip#12640",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12640 feat(ui): complete the task workspace",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12640",
+			"sourceUpdatedAt": "2026-09-01T05:21:28Z",
+			"sourceFingerprint": "bb4ae477b1e8978d8afd45f4fe3b901cab9efb529ba7cbe5e6b21447474c977e",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12638",
+				"pr:paperclip#12639",
+				"pr:paperclip#12641"
+			],
+			"rationale": "Group this workspace with the runner stack because its broad user experience depends on both lower PRs and carries elevated delivery uncertainty from a 118-file UI delta without local verification.",
+			"evidence": [
+				"Base PR is #12639 and lower PR is #12638",
+				"The delta contains 118 UI-only files",
+				"Local tests were not run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T05:27:37.929Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
@@ -7167,8 +7282,8 @@
 			"repo": "paperclip",
 			"title": "#12575 feat(issues): infer a project for agent-created tasks from the repo they affect",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12575",
-			"sourceUpdatedAt": "2026-08-31T23:29:01Z",
-			"sourceFingerprint": "af4287db47d0dde6537ab01a85ec92b4bf3b89ea0a8fc58275691a5f091a207e",
+			"sourceUpdatedAt": "2026-09-01T05:05:09Z",
+			"sourceFingerprint": "25b63727c1a90a03ab9f3c5a96bedf7eb7cc410e0376b6875ccba88cab9c6763",
 			"score": 54,
 			"band": "medium",
 			"axes": {
@@ -7178,20 +7293,20 @@
 			},
 			"readiness": {
 				"specification": 9,
-				"implementation": 9
+				"implementation": 8
 			},
-			"confidence": 9,
+			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute because the bounded change corrects recurring project-attribution failures that affect filtering, cost accounting, and workspace selection, with extensive route-level verification already described.",
+			"rationale": "Execute because the bounded attribution defect has measured recurring effects, deterministic resolution rules, and route-level test coverage, although no outage or deadline is identified.",
 			"evidence": [
 				"17 of 172 measured agent-created issues had no project",
-				"Missing projects break project filters, cost rollups, and workspace defaults",
+				"Missing projects affect filters, cost rollups, and workspace defaults",
 				"15 unit tests and 10 integration tests were added"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T23:57:38.549Z"
+			"scoredAt": "2026-09-01T05:27:37.929Z"
 		},
 		{
 			"key": "pr:pixel-agents#385",
@@ -9357,39 +9472,6 @@
 			"scoredAt": "2026-08-31T07:31:58.286Z"
 		},
 		{
-			"key": "pr:paperclip#12568",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12568 chore(deps): bump @tanstack/react-query from 5.101.4 to 5.102.8",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12568",
-			"sourceUpdatedAt": "2026-08-31T12:25:07Z",
-			"sourceFingerprint": "0c5f5b32b2699b956b4de77a9f63ab29ad0a194bbb782be0e2f92a4c7dc4555b",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A core query-state dependency can have broad UI effects, but the catalog gives little applicable change detail and no regression evidence.",
-			"evidence": [
-				"Bumps @tanstack/react-query from 5.101.4 to 5.102.8.",
-				"The notes include a fix for throwing falsy errors from query hooks.",
-				"No Paperclip-specific verification is provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T12:54:59.710Z"
-		},
-		{
 			"key": "pr:paperclip#12570",
 			"kind": "pr",
 			"stage": "development",
@@ -10189,39 +10271,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:42:55.201Z"
-		},
-		{
-			"key": "pr:paperclip#12569",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12569 chore(deps): bump mermaid from 11.16.1 to 11.17.2",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12569",
-			"sourceUpdatedAt": "2026-08-31T12:25:15Z",
-			"sourceFingerprint": "b01f313d78bd300332826a200c6ef62d8656f774b4315f6d1c78b752c91fd17d",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The renderer update addresses several diagram defects but needs evidence that Paperclip uses affected paths and preserves existing diagrams.",
-			"evidence": [
-				"Bumps mermaid from 11.16.1 to 11.17.2.",
-				"The release changes the default class-diagram renderer.",
-				"No Paperclip-specific verification is provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T12:54:59.710Z"
 		},
 		{
 			"key": "pr:paperclip#12620",
@@ -11084,39 +11133,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:39:38.888Z"
-		},
-		{
-			"key": "pr:paperclip#12567",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12567 chore(deps): bump @aws-sdk/client-s3 from 3.1115.0 to 3.1120.0",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12567",
-			"sourceUpdatedAt": "2026-08-31T12:25:22Z",
-			"sourceFingerprint": "804612a5bc9d2c842657a63712d0f644f6c6322f2a0bbd7515fde41f2bab28db",
-			"score": 21,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The S3 SDK update is bounded but the supplied notes do not identify a relevant S3 fix, operational need, or validation result.",
-			"evidence": [
-				"Bumps @aws-sdk/client-s3 from 3.1115.0 to 3.1120.0.",
-				"The displayed features concern other AWS clients.",
-				"No Paperclip-specific verification is provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T12:54:59.710Z"
 		},
 		{
 			"key": "pr:pixel-agents#258",
