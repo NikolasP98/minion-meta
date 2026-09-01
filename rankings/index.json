@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T23:27:49.806Z",
+	"generatedAt": "2026-09-01T23:57:55.985Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1317,42 +1317,6 @@
 			"scoredAt": "2026-08-31T07:42:55.201Z"
 		},
 		{
-			"key": "issue:paperclip#12633",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12633 Composio broker connections never leave draft status — every child toolkit's tools are invisible to the tool gateway",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12633",
-			"sourceUpdatedAt": "2026-09-01T04:16:37Z",
-			"sourceFingerprint": "5b6c726e7454fba57e71f910d794590ff3d998d328094d18dc684b0ce4033192",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 3
-			},
-			"confidence": 9,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:paperclip#12634",
-				"pr:paperclip#12632"
-			],
-			"rationale": "Prune this duplicate execution target because PR #12634 already implements the specified status promotion and reports successful CI verification.",
-			"evidence": [
-				"Draft applications are excluded by the tool gateway's active-status filter.",
-				"PR #12634 promotes both the broker connection and application after a healthy check.",
-				"The issue describes this as the third blocker after the authentication fixes."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T04:27:44.645Z"
-		},
-		{
 			"key": "pr:minion-meta#247",
 			"kind": "pr",
 			"stage": "development",
@@ -1799,42 +1763,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T05:57:50.490Z"
-		},
-		{
-			"key": "pr:paperclip#12634",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12634 fix(tools): promote Composio broker connections out of draft after a healthy connect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12634",
-			"sourceUpdatedAt": "2026-09-01T06:52:22Z",
-			"sourceFingerprint": "ab20e0fbf67538fa9277a67e0af06af8c8ebdd1ffa80e0c0c3cc6d1c03a958b6",
-			"score": 80,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12630",
-				"pr:paperclip#12632"
-			],
-			"rationale": "Group with the other Composio fixes because healthy connections remain unusable until broker status and application transport metadata are corrected together with earlier blockers.",
-			"evidence": [
-				"Healthy broker connections remain in draft status.",
-				"The mcp_stdio type mismatch silently excludes every child connection.",
-				"Real child tool calls returned tool_not_found."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T06:57:55.880Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2988591151",
@@ -4340,6 +4268,39 @@
 			"scoredAt": "2026-08-31T20:15:47.241Z"
 		},
 		{
+			"key": "issue:paperclip#12704",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12704 An agent that moves its own in-flight issue to `cancelled` is SIGTERMed mid-run, lands in `error` via a cancel-vs-exit race, and the kill is misfiled as `claude_transient_upstream`",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12704",
+			"sourceUpdatedAt": "2026-09-01T23:44:43Z",
+			"sourceFingerprint": "c3817919191b52347ed2e72bdd044554ad2573d9f2f2422ec0efb86a4f862b9b",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Real measured production bug causing self-cancelling agents to be killed and misclassified, but the author explicitly could not confirm the race still exists after a since-reworked heartbeat exit path on master.",
+			"evidence": [
+				"25 of 25 non-succeeded runs for the busiest agent tied to the self-cancel race",
+				"author states 'I could not tell from reading whether the race in (2) still exists' on current master",
+				"only 1 genuine transient upstream failure occurred fleet-wide that month versus 8 misclassified as such"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T23:57:55.908Z"
+		},
+		{
 			"key": "pr:paperclip#12647",
 			"kind": "pr",
 			"stage": "development",
@@ -5690,6 +5651,39 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
+			"key": "pr:paperclip#12705",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12705 feat: add sealed autonomous Formal-QA reviews",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12705",
+			"sourceUpdatedAt": "2026-09-01T23:57:05Z",
+			"sourceFingerprint": "51be5d9405b1d428e89950adff0fe76493dd1a661715f3aa00e975ce1f79c065",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Large roadmap-aligned autonomous review-gate feature with substantial cross-package test verification, though its scope (six new authority tables) carries integration risk.",
+			"evidence": [
+				"implements ROADMAP section Enforced Outcomes (watchdogs, recovery actions, review gates)",
+				"adds six authority tables and one scheduler-state table with migration guard triggers",
+				"189 tests pass in the Codex driver suite plus eight Formal-QA server suites (66 tests)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T23:57:55.908Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5961,6 +5955,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:23.880Z"
+		},
+		{
+			"key": "pr:paperclip#12698",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12698 fix: add fail-closed branch freshness status",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12698",
+			"sourceUpdatedAt": "2026-09-01T23:56:16Z",
+			"sourceFingerprint": "24725e7c22d6f4ad4aa09ae594126b711933d0fd86788e9097b7c3b482627025",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fail-closed branch-freshness status check is broadly protective infrastructure with extensive automated test coverage, though it still needs an admin to enable it in the ruleset.",
+			"evidence": [
+				"139 tests passed in .github/scripts/tests",
+				"publishes success only on a live behind_by:0 comparison",
+				"repository administrator must separately add branch-freshness to the protected ruleset"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T23:57:55.908Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-distinct-visit-dates",
@@ -7090,39 +7117,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T12:27:40.259Z"
-		},
-		{
-			"key": "pr:paperclip#12698",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12698 fix: add fail-closed branch freshness status",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12698",
-			"sourceUpdatedAt": "2026-09-01T23:10:07Z",
-			"sourceFingerprint": "b89c8edc61d13fc3f96d8a620ee974b967c7edb87c831261d187d821557e40d5",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-tested fail-closed branch-freshness status closes a real staleness gap in merge protection, though it requires a separate admin step to become enforced.",
-			"evidence": [
-				"139 tests passing via node --test",
-				"typecheck and build pass",
-				"admin must still add branch-freshness to protected ruleset for it to take effect"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T23:27:49.716Z"
 		},
 		{
 			"key": "pr:pixel-agents#383",
@@ -8803,6 +8797,39 @@
 			"scoredAt": "2026-09-01T20:28:19.924Z"
 		},
 		{
+			"key": "pr:paperclip#12689",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12689 Log issue write denial code, issueId, actorAgentId, runId",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12689",
+			"sourceUpdatedAt": "2026-09-01T23:30:05Z",
+			"sourceFingerprint": "99f777332bd817d9461ec478f2026792a06a2e94d39c7898c77826343d0b7b3d",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, well-verified, additive logging fix directly addresses a measured diagnosability gap that stranded ~10 issues over three days.",
+			"evidence": [
+				"about ten issues stranded this way over three days",
+				"denyIssueWrite never wrote the denial code to logs before this change",
+				"targeted server route suite passes with new log-field test"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T23:57:55.908Z"
+		},
+		{
 			"key": "pr:pixel-agents#293",
 			"kind": "pr",
 			"stage": "development",
@@ -9455,39 +9482,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:19.199Z"
-		},
-		{
-			"key": "pr:paperclip#12689",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12689 Log issue write denial code, issueId, actorAgentId, runId",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12689",
-			"sourceUpdatedAt": "2026-09-01T23:21:36Z",
-			"sourceFingerprint": "ddb36f9811171be5568ad77903859cc44ed6fc2a7384b3e54a753d8e90fc83db",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, tested, additive logging fix that makes a recurring undiagnosable 403 class observable from logs alone.",
-			"evidence": [
-				"adds logger.warn with denial code, issue id, actor agent id, run id",
-				"targeted test asserts the log fires and fails if removed",
-				"no production behavior change per verification section"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T23:27:49.716Z"
 		},
 		{
 			"key": "pr:minion-base#41",
@@ -11551,31 +11545,30 @@
 			"repo": "pixel-agents",
 			"title": "pixel-agents deployment health",
 			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/commit/3537e140c2094761beae748592aeb92ece8edfdd",
-			"sourceUpdatedAt": "2026-09-01T17:30:44Z",
-			"sourceFingerprint": "b263093cdeb4d507b9ca0d004ce6e984cfe636fd7adcb9f3273c289ad1e64b8d",
-			"score": 6,
+			"sourceUpdatedAt": "2026-09-01T23:42:13Z",
+			"sourceFingerprint": "8eac3b92c4c8764a4d6fd2189fada6443e2338ea0daa05cf94237ef7497062ae",
+			"score": 10,
 			"band": "low",
 			"axes": {
-				"criticality": 0,
+				"criticality": 1,
 				"importance": 1,
 				"impact": 1
 			},
 			"readiness": {
 				"specification": 2,
-				"implementation": 1
+				"implementation": 2
 			},
-			"confidence": 9,
+			"confidence": 7,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The deployment is already passing, so the catalog provides no unresolved outcome that warrants paid execution.",
+			"rationale": "Deployment is passing and the only change was a routine version bump commit.",
 			"evidence": [
-				"Status is passing.",
-				"Candidate is deployment health for v1.4.1.",
-				"No failure or follow-up work is described."
+				"status: passing",
+				"summary: chore: bump to v1.4.1"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T17:57:37.997Z"
+			"scoredAt": "2026-09-01T23:57:55.908Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-1962723814",
