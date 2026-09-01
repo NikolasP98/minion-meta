@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T16:27:33.724Z",
+	"generatedAt": "2026-09-01T16:57:38.735Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -2608,6 +2608,39 @@
 			"scoredAt": "2026-09-01T02:27:41.262Z"
 		},
 		{
+			"key": "pr:paperclip#12671",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12671 fix(heartbeat): promote handoff after stale comment retry",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12671",
+			"sourceUpdatedAt": "2026-09-01T16:33:21Z",
+			"sourceFingerprint": "27d3d433d41dbff9c2fd27423b31151cdf1c4d6da0233a11410ea65b0e613a7b",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because a reproducible core-heartbeat defect can strand valid agent handoffs, while the proposed fix is narrowly scoped and supported by focused passing tests.",
+			"evidence": [
+				"A stale retry can leave the new assignee's valid handoff queued.",
+				"The fault is in the core heartbeat service and is not adapter-specific.",
+				"Focused integration, stale-queue, batching, and start-lock tests passed."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T16:57:38.662Z"
+		},
+		{
 			"key": "pr:paperclip#12672",
 			"kind": "pr",
 			"stage": "development",
@@ -3940,39 +3973,6 @@
 			"scoredAt": "2026-09-01T09:27:45.298Z"
 		},
 		{
-			"key": "pr:paperclip#12671",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12671 fix(heartbeat): promote handoff after stale comment retry",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12671",
-			"sourceUpdatedAt": "2026-09-01T15:46:36Z",
-			"sourceFingerprint": "d289bc597535064ded85dae8d657c4f04e766b6e047c7b66086b2d2711ee29b0",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This bounded core-heartbeat fix should execute because the reproduced race can strand valid reassigned work, while focused suites and type checking provide strong implementation evidence despite unrelated CI instability.",
-			"evidence": [
-				"A stale retry can leave the new assignee handoff queued.",
-				"Focused integration test passed; related heartbeat suites report 45 tests passed.",
-				"Native runner build was not run locally because Cargo was unavailable."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T15:57:39.830Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4136,6 +4136,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
+		},
+		{
+			"key": "pr:paperclip#12669",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12669 Add end-to-end session goals to Paperclip Runner",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12669",
+			"sourceUpdatedAt": "2026-09-01T16:56:30Z",
+			"sourceFingerprint": "6ee7a4adf12882f183d0e710c2fbcae7794a1e6e871e9981602e15d95521c69a",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 5,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate because the provider-neutral goal capability is strategically central and broad, but the cross-layer implementation is large and the catalog lists verification commands without reporting their results.",
+			"evidence": [
+				"Paperclip currently cannot discover or control provider-owned durable goals.",
+				"The change spans protocol, harnesses, orchestration, persistence, realtime events, and UI.",
+				"Verification steps are specified, but no passing results are reported."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T16:57:38.662Z"
 		},
 		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
@@ -5994,39 +6027,6 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
-			"key": "pr:paperclip#12669",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12669 Add end-to-end session goals to Paperclip Runner",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12669",
-			"sourceUpdatedAt": "2026-09-01T16:21:51Z",
-			"sourceFingerprint": "6171e5cc9d70357ed3b8d204dd880420537d440dbc74309a6ab17c7280ee9737",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because this is well-specified, actionable cross-layer work that advances durable provider-session control, although the catalog shows no outage or external deadline.",
-			"evidence": [
-				"Paperclip cannot discover, display, or control durable harness-owned goals.",
-				"The change spans protocol, persistence, orchestration, realtime events, and UI.",
-				"Verification includes typecheck, tests, build, migration checks, protocol suites, and manual scenarios."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T16:27:33.641Z"
-		},
-		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7814,8 +7814,8 @@
 			"repo": "paperclip",
 			"title": "#12613 Onboarding: model source tiles, one input canvas, and Storybook coverage for the agent arc",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12613",
-			"sourceUpdatedAt": "2026-09-01T07:50:11Z",
-			"sourceFingerprint": "17f36622492506fd0d88aa97f234da1ad4aa2af1d9893b0e734a4926e7421331",
+			"sourceUpdatedAt": "2026-09-01T16:33:23Z",
+			"sourceFingerprint": "295d78a69d4265b80d24e4bea953a6830f71fbb47a350e6e8f7fa6c3e5ed3b3e",
 			"score": 51,
 			"band": "medium",
 			"axes": {
@@ -7827,18 +7827,18 @@
 				"specification": 9,
 				"implementation": 9
 			},
-			"confidence": 8,
+			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute because the bounded onboarding change removes a signup-path regression risk and adds strong pre-release inspection coverage with completed verification.",
+			"rationale": "Execute because the onboarding regression risk is clearly bounded, locally inspectable, and backed by substantial passing verification, although no outage or deadline is identified.",
 			"evidence": [
-				"The connect step determines whether an agent can run.",
-				"Storybook coverage was added for all three agent-arc steps.",
-				"Touched suites passed 139 tests and UI typecheck was clean."
+				"The connect-model step determines whether a new agent can run.",
+				"Storybook coverage now spans all three agent-arc steps.",
+				"Touched suites report 139 passing tests and UI typecheck is clean."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T07:57:43.390Z"
+			"scoredAt": "2026-09-01T16:57:38.662Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-722867358",
