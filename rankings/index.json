@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T13:27:33.178Z",
+	"generatedAt": "2026-09-01T13:57:39.093Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -811,39 +811,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T19:54:52.242Z"
-		},
-		{
-			"key": "pr:paperclip#12589",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12589 fix(server): prevent startup failure on large decision histories",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12589",
-			"sourceUpdatedAt": "2026-08-31T15:17:14Z",
-			"sourceFingerprint": "62ee35ea015fb415dedbd55e32767a3b4eb352aff2bda3b87247bb35e01eda12",
-			"score": 88,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the current parameter-limit failure can stop server startup for installations with large decision histories and the bounded batching fix has focused regression evidence.",
-			"evidence": [
-				"The failed startup sync stopped server startup on large histories.",
-				"PostgreSQL rejected statements above 65,534 bound parameters.",
-				"A regression test covers 16,384 unique items."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T15:24:35.598Z"
 		},
 		{
 			"key": "pr:paperclip#12651",
@@ -3092,6 +3059,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T04:57:38.732Z"
+		},
+		{
+			"key": "issue:paperclip#12665",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12665 OpenAPI x-paperclip-authorization contradicts assertBoard on 48 operations",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12665",
+			"sourceUpdatedAt": "2026-09-01T13:54:06Z",
+			"sourceFingerprint": "a03883c4b2929fca29b8217b4ebef2f228658dd21fc41af0d5ed47e6e3b5d30e",
+			"score": 76,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A systematically inaccurate authorization contract affects many operations and future routes, making this a well-evidenced security and integration reliability defect ready for corrective work.",
+			"evidence": [
+				"OpenAPI advertises agent access for 48 operations whose handlers reject agents with 403.",
+				"Six advertised read operations were tested with a valid agent token and all returned 403.",
+				"Authorization documentation and runtime enforcement use independent sources of truth."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T13:57:39.021Z"
 		},
 		{
 			"key": "issue:pixel-agents#332",
@@ -8210,6 +8210,39 @@
 			"scoredAt": "2026-09-01T00:58:20.326Z"
 		},
 		{
+			"key": "issue:paperclip#12664",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12664 No agent-writable field on the heartbeat run record",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12664",
+			"sourceUpdatedAt": "2026-09-01T13:54:04Z",
+			"sourceFingerprint": "bacd635192559e2f6b98be4b13dc3d32363617f5670af2b87fca29855a04e1ed",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The verified API gap weakens heartbeat trust diagnostics and has a concrete, testable scope, although the catalog shows no outage, deadline, or blocked release requiring urgent delivery.",
+			"evidence": [
+				"Agents cannot attach structured annotations or health signals to their heartbeat run.",
+				"The gap was verified in server versions 2026.817.0 and 2026.824.0.",
+				"Existing adjacent surfaces are read-only, board-only, or written only during harness finalization."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T13:57:39.021Z"
+		},
+		{
 			"key": "pr:minion (gateway)#262",
 			"kind": "pr",
 			"stage": "development",
@@ -9868,39 +9901,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "pr:paperclip#12626",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12626 chore(lockfile): refresh pnpm-lock.yaml",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12626",
-			"sourceUpdatedAt": "2026-09-01T10:58:12Z",
-			"sourceFingerprint": "4b0992c0824f6e20d9259fd236f730dc00b8bb41510f3d4ce46051434d0cbbac",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate after confirming the dependency changes, generated diff, and validation results because the catalog does not show whether this refresh fixes a current build or install failure.",
-			"evidence": [
-				"Dependencies changed on master",
-				"Only pnpm-lock.yaml is updated",
-				"No verification results are provided"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T11:27:38.486Z"
 		},
 		{
 			"key": "pr:pixel-agents#374",
