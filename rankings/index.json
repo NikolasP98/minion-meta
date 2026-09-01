@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T09:57:38.263Z",
+	"generatedAt": "2026-09-01T10:27:38.166Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -404,39 +404,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
-		},
-		{
-			"key": "pr:paperclip#12579",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12579 KOMAA-183: activate RTB execution control v2 on live master (port of KOMAA-167)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12579",
-			"sourceUpdatedAt": "2026-08-31T22:59:15Z",
-			"sourceFingerprint": "92b6d4c232a35c95dde7ab8a3619e348fe1eaa33f31d914429f89391ec53b69f",
-			"score": 93,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 10,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the change addresses zombie runs, invalid workspaces, runaway recovery, and recurring AI-generated meta-work across the core execution-control path.",
-			"evidence": [
-				"Persisted running states are reconciled against process and workspace existence.",
-				"Missing or orphaned workspaces fail before model launch.",
-				"Suspicious silence creates no model call or new meta issue."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T23:27:50.199Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-capability-separation-spec",
@@ -2057,39 +2024,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T18:24:45.803Z"
-		},
-		{
-			"key": "pr:paperclip#12646",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12646 fix(runner): accept the indeterminate command result after a runner restart",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12646",
-			"sourceUpdatedAt": "2026-09-01T09:19:11Z",
-			"sourceFingerprint": "ef7057a2246327f54acbbc047536031743df0adbeb7edf23932c2200cfbffeda",
-			"score": 81,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because this bounded compatibility fix addresses a deterministic crash-recovery loop that prevents live sessions from resuming and includes targeted persistence and replay coverage.",
-			"evidence": [
-				"A runner restart can cause the control plane to reject `indeterminate` and reconnect forever.",
-				"The defect reproduces consistently in a named integration test.",
-				"The patch covers acceptance, persistence, restart reload, and duplicate replay."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T09:27:45.298Z"
 		},
 		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
@@ -4037,6 +3971,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T01:27:35.836Z"
+		},
+		{
+			"key": "pr:paperclip#12646",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12646 fix(runner): accept the indeterminate command result after a runner restart",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12646",
+			"sourceUpdatedAt": "2026-09-01T10:21:38Z",
+			"sourceFingerprint": "2bdbe42416e7ae539badac84371c0c554124f13c79f9cf84e3e53748aefd1690",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 10,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is a bounded and reproducible crash-recovery fix that prevents an infinite reconnect loop and preserves the runner's at-most-once command contract, with direct integration coverage.",
+			"evidence": [
+				"Runner restart causes the control plane to reject a valid indeterminate result and reconnect forever.",
+				"The defect reproduces consistently and stalls sessions until a 30-second deadline.",
+				"Integration coverage checks persistence, restart reload, duplicate replay, and continued command delivery."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T10:27:38.094Z"
 		},
 		{
 			"key": "pr:paperclip#12650",
@@ -6328,6 +6295,39 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
+			"key": "pr:paperclip#12579",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12579 KOMAA-183: activate RTB execution control v2 on live master (port of KOMAA-167)",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12579",
+			"sourceUpdatedAt": "2026-09-01T10:26:50Z",
+			"sourceFingerprint": "0733c59993da2559ff29d6f307f7444556784b9f9221c85a3d4ba4996d760fb4",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The reliability and observability work is strategically valuable and well tested, but the stated absence of live-watchdog wiring means the current PR cannot yet deliver its central production outcome.",
+			"evidence": [
+				"Adds deterministic watchdog, budget, compaction, and telemetry mechanisms.",
+				"New module is not wired into the live heartbeat watchdog path.",
+				"Unit tests and relevant typechecks pass."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T10:27:38.094Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6500,6 +6500,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:38:21.867Z"
+		},
+		{
+			"key": "issue:paperclip#12655",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12655 Scheduled jobs cannot read the company scope they are held to — refusal is the only signal, and it is not discriminable",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12655",
+			"sourceUpdatedAt": "2026-09-01T09:58:33Z",
+			"sourceFingerprint": "96bd3b37f48948aed42f6758efa93423f22aae99f650732ad9fbf4190a718932",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 5
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The issue documents a credible silent-omission risk for scheduled plugins, but a broader referenced fix may supersede it and the catalog does not bound an implementation or establish affected-plugin breadth.",
+			"evidence": [
+				"Scheduled jobs cannot directly enumerate their proactive company scope.",
+				"Out-of-scope config access is discovered only through a non-discriminable rejection.",
+				"The report says broader issue #12109 may make this issue dissolve."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T10:27:38.094Z"
 		},
 		{
 			"key": "issue:pixel-agents#355",
@@ -6731,39 +6764,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "pr:paperclip#12653",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12653 feat(runner): add offline evaluation tooling",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12653",
-			"sourceUpdatedAt": "2026-09-01T09:54:45Z",
-			"sourceFingerprint": "146b2cc2d485954c37e29ee618ebe0f0fa2831edbd5f6a930ba073a51b0dcd7c",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The evaluation tooling is strategically broad and well specified, but its 51-file surface lacks local verification and still has incomplete CI and review gates.",
-			"evidence": [
-				"deterministic evaluation without credentials or paid provider calls",
-				"large greenfield review surface with 51 files",
-				"no local test command was run"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T09:57:38.190Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
@@ -10239,8 +10239,8 @@
 			"repo": "paperclip",
 			"title": "#12626 chore(lockfile): refresh pnpm-lock.yaml",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12626",
-			"sourceUpdatedAt": "2026-09-01T09:48:43Z",
-			"sourceFingerprint": "d17a82c2348123f515460a8ab07dbda3dd9620bcc54083075790b0443546baca",
+			"sourceUpdatedAt": "2026-09-01T10:20:19Z",
+			"sourceFingerprint": "ebf367ad0f536ff768ee8d70e561b307a05eb6719bfd64deb80af0fc874fb276",
 			"score": 33,
 			"band": "low",
 			"axes": {
@@ -10249,21 +10249,21 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 8
+				"specification": 4,
+				"implementation": 5
 			},
-			"confidence": 7,
-			"recommendation": "execute",
+			"confidence": 5,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The narrowly scoped lockfile refresh is actionable now, though the catalog does not establish that it blocks a release or currently failing build.",
+			"rationale": "A lockfile refresh may restore dependency reproducibility, but the catalog gives no failing install, blocked build, dependency delta, or verification evidence establishing urgency or safe execution.",
 			"evidence": [
-				"only updates pnpm-lock.yaml",
-				"auto-generated after dependencies changed",
-				"status is open"
+				"Only updates pnpm-lock.yaml.",
+				"Described as generated after dependencies changed on master.",
+				"No verification results or blocked workflow are stated."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T09:57:38.190Z"
+			"scoredAt": "2026-09-01T10:27:38.094Z"
 		},
 		{
 			"key": "proposal:ci-minion-ai-stale",
