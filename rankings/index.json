@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T12:57:37.909Z",
+	"generatedAt": "2026-09-01T13:27:33.178Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -2474,6 +2474,39 @@
 			"scoredAt": "2026-09-01T07:57:43.390Z"
 		},
 		{
+			"key": "issue:paperclip#12662",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12662 checkout accepts terminal run IDs, leaving issues ownerless and in_progress",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12662",
+			"sourceUpdatedAt": "2026-09-01T13:13:33Z",
+			"sourceFingerprint": "7cdbb9d313eb21f43a57b2e02f8de1f8df9e08c42b30be4f754a4342f3900100",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because a reproducible lifecycle race corrupts issue ownership state and blocks normal updates, while the affected paths, desired safeguards, and verification outcome are sufficiently bounded for implementation.",
+			"evidence": [
+				"A succeeded run continued API calls for more than five minutes and checked out a completed issue.",
+				"The stale-lock sweep left the issue in_progress without an owner, after which run-scoped writes failed with 409.",
+				"The normal checkout() path reportedly lacks the terminal-run guard already present in adoptUnownedCheckoutRun()."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T13:27:33.081Z"
+		},
+		{
 			"key": "pr:minion_hub#200",
 			"kind": "pr",
 			"stage": "development",
@@ -4579,39 +4612,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
-		},
-		{
-			"key": "pr:paperclip#12587",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12587 fix(heartbeat): make workspace_busy retry scheduling priority- and age-aware",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12587",
-			"sourceUpdatedAt": "2026-08-31T14:30:19Z",
-			"sourceFingerprint": "deea8f2ebc3d0b92fac6a699bd73b35ed299bee233ecb41355e266fe553943d9",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute the bounded fairness fix because random retry ordering can repeatedly starve high-priority work in serialized shared workspaces, while the remaining retry-ceiling and escalation defects are explicitly outside this change.",
-			"evidence": [
-				"All workspace-busy retries currently use the same randomized 60–120 second window regardless of issue priority or waiting age.",
-				"The reported high-priority run retried dozens of times over roughly an hour while medium-priority work acquired the workspace.",
-				"The change introduces disjoint priority delay bands and an aging discount but retains unbounded retries while the holder remains live."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T14:54:38.867Z"
 		},
 		{
 			"key": "proposal:ci-minion-ai-ci",
