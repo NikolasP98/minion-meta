@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T15:27:38.910Z",
+	"generatedAt": "2026-09-01T15:57:39.922Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1452,39 +1452,6 @@
 			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
-			"key": "pr:paperclip#12598",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12598 Fix governed secret binding acceptance through gateway",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12598",
-			"sourceUpdatedAt": "2026-09-01T12:40:51Z",
-			"sourceFingerprint": "87484141b85e8e7cb1da3c4c6fb5261b3267e5d694148762651852dd11dd73a1",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the open PR fixes a security-sensitive governed-action path that can accept approval without applying the authorized configuration change, with bounded implementation and strong targeted verification already present.",
-			"evidence": [
-				"Plugin-gateway acceptance left proposals pending and agent configuration unchanged.",
-				"One executor now covers REST and plugin-gateway acceptance with cascade approval and idempotent replay.",
-				"Three targeted test files passed with 133 tests; full TypeScript checking remains for CI."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T12:57:37.827Z"
-		},
-		{
 			"key": "pr:paperclip#12607",
 			"kind": "pr",
 			"stage": "development",
@@ -2142,39 +2109,6 @@
 			"scoredAt": "2026-09-01T06:57:55.880Z"
 		},
 		{
-			"key": "pr:paperclip#12670",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12670 fix(runner): keep agents running when app connections expire",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12670",
-			"sourceUpdatedAt": "2026-09-01T15:21:58Z",
-			"sourceFingerprint": "fc9b4db09636472651f18eec69fa0cc7b1cd884309e309528c7f9130db857511",
-			"score": 80,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because an optional expired or unhealthy app currently prevents unrelated agent work, while the bounded fix has targeted regression evidence and preserves fail-closed access behavior.",
-			"evidence": [
-				"One unavailable assigned app connection could stop a native agent run before it started.",
-				"Targeted regression tests pass for disabled, degraded, mixed-health, and assignment-drift cases.",
-				"Typecheck, token-gate checks, and build pass; unrelated host-specific failures prevented full-suite confirmation."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T15:27:38.829Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-2988591151",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2639,6 +2573,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T02:27:41.262Z"
+		},
+		{
+			"key": "pr:paperclip#12672",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12672 fix(approvals): wake non-requester task assignees on card approval (INUA-6044)",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12672",
+			"sourceUpdatedAt": "2026-09-01T15:55:38Z",
+			"sourceFingerprint": "0a5836b50a319a8c1974a1ae6e2f4e056702373653ba591fa51dfd2ea3771e9a",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This focused approval-wake correction should execute because catalog evidence shows a silent 112-hour workflow stall and the idempotent fix is covered by targeted passing tests.",
+			"evidence": [
+				"A CEO task stayed in_review for 112 hours with no wake.",
+				"The fix wakes linked non-requester task assignees after approve and reject resolution.",
+				"All 14 approval route idempotency tests pass."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T15:57:39.830Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -3938,6 +3905,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T09:27:45.298Z"
+		},
+		{
+			"key": "pr:paperclip#12671",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12671 fix(heartbeat): promote handoff after stale comment retry",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12671",
+			"sourceUpdatedAt": "2026-09-01T15:46:36Z",
+			"sourceFingerprint": "d289bc597535064ded85dae8d657c4f04e766b6e047c7b66086b2d2711ee29b0",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This bounded core-heartbeat fix should execute because the reproduced race can strand valid reassigned work, while focused suites and type checking provide strong implementation evidence despite unrelated CI instability.",
+			"evidence": [
+				"A stale retry can leave the new assignee handoff queued.",
+				"Focused integration test passed; related heartbeat suites report 45 tests passed.",
+				"Native runner build was not run locally because Cargo was unavailable."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T15:57:39.830Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -5994,39 +5994,6 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
-			"key": "pr:paperclip#12669",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12669 Add end-to-end session goals to Paperclip Runner",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12669",
-			"sourceUpdatedAt": "2026-09-01T15:15:57Z",
-			"sourceFingerprint": "d91a68ac1cc9624d6d9670142c4a1b7316b6b154c40e46686be97c0ef3a58a89",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The provider-neutral goal contract is strategically broad and well specified, but the catalog shows no outage, deadline, or completed verification evidence sufficient to prioritize this large cross-cutting change for immediate execution.",
-			"evidence": [
-				"Affects the runner protocol, persistence, orchestration, database state, realtime events, and issue composer.",
-				"Adds durable goal projection, an action outbox, recovery, REST controls, and cross-layer tests.",
-				"Verification is presented as commands and manual confirmation steps rather than recorded results."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T15:27:38.829Z"
-		},
-		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6665,6 +6632,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
+		},
+		{
+			"key": "pr:paperclip#12669",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12669 Add end-to-end session goals to Paperclip Runner",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12669",
+			"sourceUpdatedAt": "2026-09-01T15:54:39Z",
+			"sourceFingerprint": "8c075869ed2f2c03d5a40c7e1265d4084245c89ce21bc51af201f90962c6e5d7",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The provider-neutral goal contract is strategically broad and well specified, but no outage or deadline is evidenced and its cross-cutting scope plus incomplete reported execution results warrant readiness reevaluation before paid work proceeds.",
+			"evidence": [
+				"Affects runner protocol, harnesses, orchestration, database state, realtime events, and issue composer.",
+				"Version negotiation keeps v1 runners connected.",
+				"Verification lists repository, migration, Rust, and manual integration checks without reporting results."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T15:57:39.830Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
