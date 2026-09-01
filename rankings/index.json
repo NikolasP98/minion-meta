@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T07:27:53.796Z",
+	"generatedAt": "2026-09-01T07:57:43.466Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1716,6 +1716,39 @@
 			"scoredAt": "2026-08-31T22:27:54.178Z"
 		},
 		{
+			"key": "pr:paperclip#12646",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12646 fix(runner): accept the indeterminate command result after a runner restart",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12646",
+			"sourceUpdatedAt": "2026-09-01T07:44:18Z",
+			"sourceFingerprint": "fe6446e0040b7b5399a77abaf203f9707c94c09202340fd2c833f2a620d36419",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the narrowly identified crash-recovery contract defect can trap sessions in a permanent reconnect loop and has a precise fix with direct integration coverage.",
+			"evidence": [
+				"A runner restart can cause the same indeterminate result to replay forever.",
+				"Affected sessions hang until a 30-second deadline expires.",
+				"The added integration test covers persistence, restart, replay absorption, and continued command delivery."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T07:57:43.390Z"
+		},
+		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1991,39 +2024,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T18:24:45.803Z"
-		},
-		{
-			"key": "pr:paperclip#12646",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12646 fix(runner): accept the indeterminate command result after a runner restart",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12646",
-			"sourceUpdatedAt": "2026-09-01T07:27:16Z",
-			"sourceFingerprint": "f8e29798c80b623f6b7786bc64502f4563700b2975e963159936be05f9a9fce9",
-			"score": 81,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The PR fixes a deterministic crash-recovery protocol defect that can trap resumed sessions in an endless reconnect loop and provides exact reproduction and persistence coverage.",
-			"evidence": [
-				"The reconnect loop repeats forever.",
-				"Affected sessions hang until a 30-second deadline.",
-				"The defect reproduces every time on an idle machine."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T07:27:53.716Z"
 		},
 		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
@@ -2571,6 +2571,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T03:27:31.030Z"
+		},
+		{
+			"key": "issue:paperclip#12648",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12648 POST /api/tool-gateway/sessions leaks raw heartbeat_runs SQL query in 500 for non-UUID runId",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12648",
+			"sourceUpdatedAt": "2026-09-01T07:51:26Z",
+			"sourceFingerprint": "9c910badc8b559cc0a474eea2a0122ab87ba9e600ef3d7108dad1453108dc3c3",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because a reproducible unauthenticated-input validation gap exposes database structure and echoed input through client-facing 500 responses, with a clear bounded remediation.",
+			"evidence": [
+				"Malformed runId values return raw SQL, table names, column names, and the supplied input.",
+				"The behavior reproduced with multiple invalid shapes, including a 5,000-character string.",
+				"UUID validation before lookup and generic database-error handling are identified fixes."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T07:57:43.390Z"
 		},
 		{
 			"key": "pr:minion_hub#200",
@@ -3395,6 +3428,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
+		},
+		{
+			"key": "pr:paperclip#12641",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12641 feat(runner): add administration and observability",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12641",
+			"sourceUpdatedAt": "2026-09-01T07:56:45Z",
+			"sourceFingerprint": "d801dbabea62c487191aa0fc878318c113953c1c2492f82dd602f9ade3c3a6be",
+			"score": 74,
+			"band": "high",
+			"axes": {
+				"criticality": 6,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate pending stack and CI evidence because this strategically central production-control surface is large, security-sensitive, dependent on three lower PRs, and lacks local test results.",
+			"evidence": [
+				"It is the final feature PR in a stacked Codex production series.",
+				"The delta spans 54 files and depends on PRs #12638, #12639, and #12640.",
+				"Raw traces may contain sensitive provider data, and local tests were not run."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T07:57:43.390Z"
 		},
 		{
 			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
@@ -4680,41 +4746,6 @@
 			"scoredAt": "2026-08-31T14:54:38.867Z"
 		},
 		{
-			"key": "pr:paperclip#12641",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12641 feat(runner): add administration and observability",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12641",
-			"sourceUpdatedAt": "2026-09-01T07:22:21Z",
-			"sourceFingerprint": "2d6e051155e7dfeae507edd76b1530567d63581ad8417c2037be2cf91061cc48",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:paperclip#12640"
-			],
-			"rationale": "Production administration and trace controls are important for safely operating the runner stack, though stack dependencies and pending CI make execution readiness moderate.",
-			"evidence": [
-				"Raw traces can contain sensitive provider data.",
-				"New instance settings remain off by default.",
-				"Base PR is #12640."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T07:27:53.716Z"
-		},
-		{
 			"key": "proposal:ci-minion-ai-ci",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4880,6 +4911,39 @@
 			"scoredAt": "2026-08-31T17:24:37.139Z"
 		},
 		{
+			"key": "pr:paperclip#12647",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12647 perf(server): index-friendly issue cost-summary & runs queries (drop OR EXISTS full scan)",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12647",
+			"sourceUpdatedAt": "2026-09-01T07:47:33Z",
+			"sourceFingerprint": "adcb2c5adff1e979b35e9dbb86dadc4bb977dfcf6b183c1bd38caa06240f1475",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because two recurring issue-page queries impose seconds of latency across a core board view and the bounded rewrite has strong performance and equivalence evidence.",
+			"evidence": [
+				"The current predicates sequentially scan about 22,000 company runs per request.",
+				"Measured latency was about 3.9 seconds and 2.5 seconds before the rewrite.",
+				"Result-set equivalence showed zero differences across issues with 2 to 487 runs."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T07:57:43.390Z"
+		},
+		{
 			"key": "proposal:2026-08-18-factory-orchestration-round7",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5010,41 +5074,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T02:57:44.950Z"
-		},
-		{
-			"key": "pr:paperclip#12640",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12640 feat(ui): complete the task workspace",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12640",
-			"sourceUpdatedAt": "2026-09-01T07:27:07Z",
-			"sourceFingerprint": "074c6cc0b3362eb71cd102ff3c8ebc6ce40b79bac24b14623fdf144ec645098f",
-			"score": 67,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:paperclip#12641"
-			],
-			"rationale": "This strategically central task-workspace change has broad compatibility coverage, but its large stacked delta and absence of local test results reduce delivery confidence.",
-			"evidence": [
-				"The task page is the main agent-work surface.",
-				"The delta contains 119 UI-only files.",
-				"Local tests were not run."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T07:27:53.716Z"
 		},
 		{
 			"key": "pr:pixel-agents#240",
@@ -7777,6 +7806,39 @@
 			"scoredAt": "2026-08-31T22:27:54.178Z"
 		},
 		{
+			"key": "pr:paperclip#12613",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12613 Onboarding: model source tiles, one input canvas, and Storybook coverage for the agent arc",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12613",
+			"sourceUpdatedAt": "2026-09-01T07:50:11Z",
+			"sourceFingerprint": "17f36622492506fd0d88aa97f234da1ad4aa2af1d9893b0e734a4926e7421331",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the bounded onboarding change removes a signup-path regression risk and adds strong pre-release inspection coverage with completed verification.",
+			"evidence": [
+				"The connect step determines whether an agent can run.",
+				"Storybook coverage was added for all three agent-arc steps.",
+				"Touched suites passed 139 tests and UI typecheck was clean."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T07:57:43.390Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-722867358",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8684,39 +8746,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
-		},
-		{
-			"key": "pr:paperclip#12613",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12613 Onboarding: model source tiles, one input canvas, and Storybook coverage for the agent arc",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12613",
-			"sourceUpdatedAt": "2026-09-01T06:31:40Z",
-			"sourceFingerprint": "78d5c8c1e9b7f158c8ce74501b8dc36ba6d3e2bdadc156ec6c33ee6cbfe8ffeb",
-			"score": 47,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the bounded onboarding improvement is thoroughly specified and tested, reducing signup regression risk across three agent-arc steps.",
-			"evidence": [
-				"Connect-model defects were previously found only through real signups.",
-				"Storybook coverage now spans all three agent-arc steps.",
-				"Touched suites report 139 passing tests and clean typecheck."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T06:57:55.880Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-pos-appointments-fork",
@@ -10940,8 +10969,8 @@
 			"repo": "paperclip",
 			"title": "#12626 chore(lockfile): refresh pnpm-lock.yaml",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12626",
-			"sourceUpdatedAt": "2026-09-01T07:19:52Z",
-			"sourceFingerprint": "a519794a1f5186db66333adbfb0a8500edb426fb8fb691243951bf43d61dc27e",
+			"sourceUpdatedAt": "2026-09-01T07:44:51Z",
+			"sourceFingerprint": "7d509792a07928db3b33c5ee8b162a9ff8c2e8218cc01e14422aa0902ddaef10",
 			"score": 23,
 			"band": "low",
 			"axes": {
@@ -10950,21 +10979,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 8,
+				"specification": 5,
 				"implementation": 8
 			},
-			"confidence": 8,
+			"confidence": 6,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The lockfile refresh is bounded and actionable, but the catalog shows no outage, blocked release, or concrete dependency failure that makes it urgent.",
+			"rationale": "Reevaluate because the lockfile refresh is immediately actionable but the catalog does not identify the dependency changes, failure mode, or outcome that makes it necessary.",
 			"evidence": [
-				"Only pnpm-lock.yaml changes.",
-				"Dependencies changed on master.",
-				"Status is open."
+				"The PR only updates pnpm-lock.yaml.",
+				"It follows dependency changes on master.",
+				"No verification or affected behavior is described."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T07:27:53.716Z"
+			"scoredAt": "2026-09-01T07:57:43.390Z"
 		},
 		{
 			"key": "pr:pixel-agents#284",
@@ -11268,41 +11297,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
-		},
-		{
-			"key": "pr:paperclip#12647",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12647 perf(server): index-friendly issue cost-summary & runs queries (drop OR EXISTS full scan)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12647",
-			"sourceUpdatedAt": "2026-09-01T07:24:52Z",
-			"sourceFingerprint": "009a05962cd1997c56bce9708eee40adc5954ca1137528af0a9ff3f35d2506e4",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 9,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"issue:paperclip#12645"
-			],
-			"rationale": "The catalog title describes a Paperclip query optimization while the summary describes unrelated dispute tests and payment mechanics, so the current entry cannot support an effective delivery decision.",
-			"evidence": [
-				"Title claims issue-query performance work.",
-				"Summary describes 22 dispute-resolution tests.",
-				"Verification references web/src payment tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T07:27:53.716Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1447734948",
