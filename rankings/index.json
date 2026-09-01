@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T05:27:38.007Z",
+	"generatedAt": "2026-09-01T05:57:50.573Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1683,6 +1683,43 @@
 			"scoredAt": "2026-08-31T22:27:54.178Z"
 		},
 		{
+			"key": "pr:paperclip#12632",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12632 fix(tools): fall back to the parent API key when Composio omits mcp.headers.x-api-key",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12632",
+			"sourceUpdatedAt": "2026-09-01T05:56:05Z",
+			"sourceFingerprint": "f323573455fab8ccea4fedd5e6f7de4e1a35c59d4ddf6301a6a79acc4bdf0d5e",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12630",
+				"pr:paperclip#12634",
+				"issue:paperclip#12643"
+			],
+			"rationale": "Group this authentication and tool-scoping repair with the other Composio blockers because all must land coherently to restore actual tool execution.",
+			"evidence": [
+				"Composio may omit MCP headers, causing calls without x-api-key to return HTTP 401.",
+				"Meta-tools scoped under a child toolkit are rejected with HTTP 400.",
+				"Live Google Ads execution succeeded with the complete fix chain applied."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T05:57:50.490Z"
+		},
+		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2098,49 +2135,14 @@
 			"scoredAt": "2026-09-01T04:27:44.645Z"
 		},
 		{
-			"key": "pr:paperclip#12630",
-			"kind": "pr",
-			"stage": "development",
+			"key": "issue:paperclip#12643",
+			"kind": "issue",
+			"stage": "proposal",
 			"repo": "paperclip",
-			"title": "#12630 fix(tools): use toolkits.enable, not toolkits.enabled, in Composio session requests",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12630",
-			"sourceUpdatedAt": "2026-09-01T03:52:12Z",
-			"sourceFingerprint": "ea8a3996ece9bd3f0e1cf080e4ac9c5a23e18165e6aa84d73e698e8dd2ee3dd3",
-			"score": 80,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 10
-			},
-			"confidence": 10,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"issue:paperclip#12628"
-			],
-			"rationale": "Execute because a tested one-field correction restores a currently broken integration path for every Composio-brokered toolkit with low stated change risk.",
-			"evidence": [
-				"Every Composio toolkit session request currently fails with HTTP 400.",
-				"The corrected enable field succeeded against the live v3.1 API.",
-				"All reported CI checks are green."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T03:57:41.744Z"
-		},
-		{
-			"key": "pr:paperclip#12632",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12632 fix(tools): fall back to the parent API key when Composio omits mcp.headers.x-api-key",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12632",
-			"sourceUpdatedAt": "2026-09-01T04:03:08Z",
-			"sourceFingerprint": "1980c60f0cb79f6da7e5f4befcbd5a786647e1059a5fa25ebc73d5f289ff4c49",
+			"title": "#12643 Composio meta-tool test calls fail: session-minting scopes meta-tools under the child toolkit's own allowlist",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12643",
+			"sourceUpdatedAt": "2026-09-01T05:48:14Z",
+			"sourceFingerprint": "df45c587920f970664f28692e7e230746cf6f4b94fcd1e4684f4f89380035510",
 			"score": 80,
 			"band": "high",
 			"axes": {
@@ -2153,19 +2155,91 @@
 				"implementation": 9
 			},
 			"confidence": 9,
-			"recommendation": "execute",
+			"recommendation": "prune",
 			"relatedKeys": [
-				"issue:paperclip#12631"
+				"pr:paperclip#12632"
 			],
-			"rationale": "Execute because this narrowly scoped fallback fixes an evidenced authentication failure that prevents every affected Composio session from discovering or calling tools.",
+			"rationale": "Prune this issue as a separate board goal because the catalog states its exact fix is already incorporated into PR #12632.",
 			"evidence": [
-				"MCP calls without x-api-key returned HTTP 401.",
-				"Adding the resolved project API key returned HTTP 200.",
-				"The change preserves any x-api-key already supplied by Composio."
+				"The issue says every Composio child catalog call fails with HTTP 400.",
+				"Its proposed fix is to filter COMPOSIO_ meta-tools in mint().",
+				"The issue states the fix will be committed to PR #12632."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T04:27:44.645Z"
+			"scoredAt": "2026-09-01T05:57:50.490Z"
+		},
+		{
+			"key": "pr:paperclip#12630",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12630 fix(tools): use toolkits.enable, not toolkits.enabled, in Composio session requests",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12630",
+			"sourceUpdatedAt": "2026-09-01T05:49:45Z",
+			"sourceFingerprint": "3cd26e5227bf395ce9ea3277cf879483145e1f143fb45408ec20387cc5f09807",
+			"score": 80,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12632",
+				"pr:paperclip#12634"
+			],
+			"rationale": "Group the three dependent Composio fixes into one end-to-end restoration goal because correcting session creation alone does not make brokered tools usable.",
+			"evidence": [
+				"The wrong toolkits field causes Composio session requests to return HTTP 400.",
+				"The corrected field succeeded against the live v3.1 API.",
+				"Every Composio toolkit is described as affected."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T05:57:50.490Z"
+		},
+		{
+			"key": "pr:paperclip#12634",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12634 fix(tools): promote Composio broker connections out of draft after a healthy connect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12634",
+			"sourceUpdatedAt": "2026-09-01T05:56:34Z",
+			"sourceFingerprint": "689e49a03215cce00c64599881aeceb127117ceab3186876e480f9757b72e547",
+			"score": 80,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12630",
+				"pr:paperclip#12632"
+			],
+			"rationale": "Group this activation-state repair with the preceding Composio fixes because healthy-looking connections remain unusable until all database eligibility fields are corrected.",
+			"evidence": [
+				"Healthy broker connections remain in draft status.",
+				"The application type mismatch excludes child connections from the tool gateway query.",
+				"Real tool calls returned tool_not_found despite a healthy 22-entry catalog."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T05:57:50.490Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2988591151",
@@ -2566,39 +2640,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T02:27:41.262Z"
-		},
-		{
-			"key": "pr:paperclip#12634",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12634 fix(tools): promote Composio broker connections out of draft after a healthy connect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12634",
-			"sourceUpdatedAt": "2026-09-01T04:29:08Z",
-			"sourceFingerprint": "3b36d01286c16e0698aa71910aef1969e091156ee10d3162454e7fb54e7e0479",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because verified field mismatches make healthy Composio connections unusable for every real tool call, while the fix is narrowly scoped and tested by CI.",
-			"evidence": [
-				"Every tested Composio tool call returned tool_not_found.",
-				"The broker remains draft and has an incompatible mcp_stdio application type.",
-				"All CI checks were green after the first commit."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T04:57:38.732Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -4310,8 +4351,8 @@
 			"repo": "paperclip",
 			"title": "#12639 feat(runner): add secure remote transport",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12639",
-			"sourceUpdatedAt": "2026-09-01T05:22:38Z",
-			"sourceFingerprint": "4189c808c4564022edba6b919b15bb3dc0fdc04c58f141cf42b7ef0f4db59366",
+			"sourceUpdatedAt": "2026-09-01T05:56:30Z",
+			"sourceFingerprint": "692654ff192768b71c50eb8ad37eca0008310d34c8375d2d80b887688a907082",
 			"score": 70,
 			"band": "high",
 			"axes": {
@@ -4320,25 +4361,25 @@
 				"impact": 8
 			},
 			"readiness": {
-				"specification": 9,
+				"specification": 8,
 				"implementation": 6
 			},
-			"confidence": 8,
+			"confidence": 7,
 			"recommendation": "group",
 			"relatedKeys": [
 				"pr:paperclip#12638",
 				"pr:paperclip#12640",
 				"pr:paperclip#12641"
 			],
-			"rationale": "Group with its base and upper stack because secure transport is a trust-boundary dependency for remote Codex but does not independently provide the complete user or operator outcome.",
+			"rationale": "Group this trust-boundary transport layer with its stacked runner work because it depends on the substrate and does not independently deliver the complete remote execution experience.",
 			"evidence": [
-				"Base PR is #12638",
-				"Adds WSS dialing and authenticated provider-ingress listener mode",
-				"Local tests were not run"
+				"This PR is based on #12638.",
+				"It adds authenticated WSS and provider-ingress listener behavior.",
+				"Local tests were not run; verification is delegated to GitHub Actions."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T05:27:37.929Z"
+			"scoredAt": "2026-09-01T05:57:50.490Z"
 		},
 		{
 			"key": "pr:pixel-agents#300",
@@ -4947,8 +4988,8 @@
 			"repo": "paperclip",
 			"title": "#12641 feat(runner): add administration and observability",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12641",
-			"sourceUpdatedAt": "2026-09-01T05:22:08Z",
-			"sourceFingerprint": "512d1b118936faee21430f02b39fe597480a5a6b730f7b898568282d346be545",
+			"sourceUpdatedAt": "2026-09-01T05:56:56Z",
+			"sourceFingerprint": "ac753d662e70be03ccadbd6e6115cc6b51582a8844486c47501443b6bd6aba28",
 			"score": 67,
 			"band": "medium",
 			"axes": {
@@ -4957,25 +4998,25 @@
 				"impact": 7
 			},
 			"readiness": {
-				"specification": 9,
+				"specification": 8,
 				"implementation": 6
 			},
-			"confidence": 8,
+			"confidence": 7,
 			"recommendation": "group",
 			"relatedKeys": [
 				"pr:paperclip#12638",
 				"pr:paperclip#12639",
 				"pr:paperclip#12640"
 			],
-			"rationale": "Group this final operational layer with the lower stack because administration and sensitive-trace controls are necessary for a governed production goal but are not independently deliverable from their prerequisites.",
+			"rationale": "Group this final operational layer with the remote-runner stack because safe administration and trace controls are necessary for governed rollout but do not stand alone.",
 			"evidence": [
-				"This is the final feature PR in the Codex production stack",
-				"Raw provider traces can contain sensitive provider data",
-				"All new instance settings remain off by default"
+				"This is identified as the final feature PR in the Codex production stack.",
+				"Raw traces may contain sensitive provider data.",
+				"All new instance settings remain off by default."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T05:27:37.929Z"
+			"scoredAt": "2026-09-01T05:57:50.490Z"
 		},
 		{
 			"key": "pr:pixel-agents#240",
@@ -5289,6 +5330,39 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
+			"key": "pr:paperclip#12596",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12596 test(runner): bound codex provider exit polls by wall clock",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12596",
+			"sourceUpdatedAt": "2026-09-01T05:45:35Z",
+			"sourceFingerprint": "48f7b33680e3808b068a2988a7a0a10ae6a198357d55f0d19a94083655b9820b",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute this bounded, test-only fix because a reproducible CI flake obscures real defects and the proposed wall-clock waits have strong repeated-run evidence.",
+			"evidence": [
+				"Two integration tests failed randomly on branches with no Rust changes.",
+				"Before the fix, 8/25 and 9/25 runs failed; after it, 0/25 failed.",
+				"The full codex_provider suite passed 12 repeated runs after the change."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T05:57:50.490Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5394,8 +5468,8 @@
 			"repo": "paperclip",
 			"title": "#12638 feat(runner): add remote execution substrate",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12638",
-			"sourceUpdatedAt": "2026-09-01T05:25:13Z",
-			"sourceFingerprint": "bc371547de401c0eff4f854a056a2fb608e82525a4293bc0e3abac89049601f4",
+			"sourceUpdatedAt": "2026-09-01T05:38:45Z",
+			"sourceFingerprint": "9c559f3d1e0410369b1846b2609b6e02f37411886a7e947b408b51b067d6aec7",
 			"score": 65,
 			"band": "medium",
 			"axes": {
@@ -5414,15 +5488,15 @@
 				"pr:paperclip#12640",
 				"pr:paperclip#12641"
 			],
-			"rationale": "Group the four dependent runner PRs as one remote-Codex production goal because this substrate is strategically central but explicitly incomplete and only delivers its outcome with the transport, workspace, and operations layers.",
+			"rationale": "Group the four stacked runner PRs as one remote-execution vertical slice because this substrate is explicitly incomplete without transport, workspace, and operational controls.",
 			"evidence": [
-				"This PR is the base for later remote runner transport work",
-				"It does not yet make remote Codex runnable",
-				"Local tests were not run"
+				"The change spans runner transport, orchestration, plugin contracts, and settings.",
+				"Rollout controls remain off by default.",
+				"The PR explicitly says remote Codex is not yet runnable."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T05:27:37.929Z"
+			"scoredAt": "2026-09-01T05:57:50.490Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -6030,39 +6104,6 @@
 			"scoredAt": "2026-08-31T08:14:27.632Z"
 		},
 		{
-			"key": "pr:paperclip#12596",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12596 test(runner): bound codex provider exit polls by wall clock",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12596",
-			"sourceUpdatedAt": "2026-09-01T02:47:56Z",
-			"sourceFingerprint": "3ae86379041b8aa3029e75e014fc64d656b7612f6049d022137fcda4c163270d",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 10
-			},
-			"confidence": 10,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the narrowly scoped test-only change removes a measured source of random CI failures with strong repeated-run evidence and low production risk.",
-			"evidence": [
-				"The two tests failed in 8/25 and 9/25 runs before the change.",
-				"Both passed 25/25 afterward, and the full suite passed 12 repeated runs.",
-				"Only test wait loops change; production code is untouched."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T02:57:44.950Z"
-		},
-		{
 			"key": "pr:pixel-agents#285",
 			"kind": "pr",
 			"stage": "development",
@@ -6643,8 +6684,8 @@
 			"repo": "paperclip",
 			"title": "#12640 feat(ui): complete the task workspace",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12640",
-			"sourceUpdatedAt": "2026-09-01T05:21:28Z",
-			"sourceFingerprint": "bb4ae477b1e8978d8afd45f4fe3b901cab9efb529ba7cbe5e6b21447474c977e",
+			"sourceUpdatedAt": "2026-09-01T05:57:00Z",
+			"sourceFingerprint": "37b7e9b735daa809fd8e4de5b8f2985b8ee08c063f8e7c43f05b1f91f499170a",
 			"score": 58,
 			"band": "medium",
 			"axes": {
@@ -6653,25 +6694,25 @@
 				"impact": 8
 			},
 			"readiness": {
-				"specification": 8,
+				"specification": 7,
 				"implementation": 5
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
 				"pr:paperclip#12638",
 				"pr:paperclip#12639",
 				"pr:paperclip#12641"
 			],
-			"rationale": "Group this workspace with the runner stack because its broad user experience depends on both lower PRs and carries elevated delivery uncertainty from a 118-file UI delta without local verification.",
+			"rationale": "Group this large workspace delta with the runner stack because its value and compatibility requirements depend on the lower execution layers and final administrative surface.",
 			"evidence": [
-				"Base PR is #12639 and lower PR is #12638",
-				"The delta contains 118 UI-only files",
-				"Local tests were not run"
+				"The PR is a 119-file UI-only delta.",
+				"It depends on #12639 and #12638.",
+				"Local tests were not run despite broad task-page compatibility risk."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T05:27:37.929Z"
+			"scoredAt": "2026-09-01T05:57:50.490Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
@@ -9470,39 +9511,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:58.286Z"
-		},
-		{
-			"key": "pr:paperclip#12570",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12570 chore(deps-dev): bump rollup from 4.62.4 to 4.63.1",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12570",
-			"sourceUpdatedAt": "2026-08-31T12:24:09Z",
-			"sourceFingerprint": "e6a618782826596c096ad332343669d96ebc175e8b7cc628c66b1c10f8989aef",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The build-tool patch fixes invalid output risk, but readiness remains limited without Paperclip build and test results.",
-			"evidence": [
-				"Bumps rollup from 4.62.4 to 4.63.1.",
-				"Version 4.62.5 fixes invalid module concatenations in compact mode.",
-				"No Paperclip-specific verification is provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T12:54:59.710Z"
 		},
 		{
 			"key": "pr:pixel-agents#356",
