@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T07:57:43.466Z",
+	"generatedAt": "2026-09-01T08:27:37.540Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1716,39 +1716,6 @@
 			"scoredAt": "2026-08-31T22:27:54.178Z"
 		},
 		{
-			"key": "pr:paperclip#12646",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12646 fix(runner): accept the indeterminate command result after a runner restart",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12646",
-			"sourceUpdatedAt": "2026-09-01T07:44:18Z",
-			"sourceFingerprint": "fe6446e0040b7b5399a77abaf203f9707c94c09202340fd2c833f2a620d36419",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the narrowly identified crash-recovery contract defect can trap sessions in a permanent reconnect loop and has a precise fix with direct integration coverage.",
-			"evidence": [
-				"A runner restart can cause the same indeterminate result to replay forever.",
-				"Affected sessions hang until a 30-second deadline expires.",
-				"The added integration test covers persistence, restart, replay absorption, and continued command delivery."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T07:57:43.390Z"
-		},
-		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2024,6 +1991,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T18:24:45.803Z"
+		},
+		{
+			"key": "pr:paperclip#12646",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12646 fix(runner): accept the indeterminate command result after a runner restart",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12646",
+			"sourceUpdatedAt": "2026-09-01T08:03:24Z",
+			"sourceFingerprint": "38f06f1b054762e66dbc5684123ef47d466e3a872bf393e8baacabfb820a5b19",
+			"score": 81,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is an actionable core crash-recovery fix for a deterministic reconnect loop that can prevent live sessions from resuming and already has a bounded implementation and exact integration coverage.",
+			"evidence": [
+				"Runner restart causes the same indeterminate result to replay forever",
+				"The session hangs until a 30 second deadline expires",
+				"An integration test covers persistence, restart, duplicate replay, and continued command delivery"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T08:27:37.455Z"
 		},
 		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
@@ -3428,39 +3428,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
-		},
-		{
-			"key": "pr:paperclip#12641",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12641 feat(runner): add administration and observability",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12641",
-			"sourceUpdatedAt": "2026-09-01T07:56:45Z",
-			"sourceFingerprint": "d801dbabea62c487191aa0fc878318c113953c1c2492f82dd602f9ade3c3a6be",
-			"score": 74,
-			"band": "high",
-			"axes": {
-				"criticality": 6,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate pending stack and CI evidence because this strategically central production-control surface is large, security-sensitive, dependent on three lower PRs, and lacks local test results.",
-			"evidence": [
-				"It is the final feature PR in a stacked Codex production series.",
-				"The delta spans 54 files and depends on PRs #12638, #12639, and #12640.",
-				"Raw traces may contain sensitive provider data, and local tests were not run."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T07:57:43.390Z"
 		},
 		{
 			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
@@ -5759,6 +5726,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
+		},
+		{
+			"key": "pr:paperclip#12641",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12641 feat(runner): add administration and observability",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12641",
+			"sourceUpdatedAt": "2026-09-01T08:08:34Z",
+			"sourceFingerprint": "ce9bc259a9b1b8578b0726ba3e0c0391b6f1dd8a32cc3dbc03b79c5a75c01d99",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The operational surface is strategically valuable and well scoped, but its three-PR dependency stack, 54-file delta, and absence of local verification make execution readiness contingent on CI and lower-stack validation.",
+			"evidence": [
+				"Final feature PR in the Codex production stack",
+				"Depends on base PR #12640 and lower PRs #12639 and #12638",
+				"Local tests were not run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T08:27:37.455Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
