@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T06:57:55.959Z",
+	"generatedAt": "2026-09-01T07:27:53.796Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1993,6 +1993,39 @@
 			"scoredAt": "2026-08-31T18:24:45.803Z"
 		},
 		{
+			"key": "pr:paperclip#12646",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12646 fix(runner): accept the indeterminate command result after a runner restart",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12646",
+			"sourceUpdatedAt": "2026-09-01T07:27:16Z",
+			"sourceFingerprint": "f8e29798c80b623f6b7786bc64502f4563700b2975e963159936be05f9a9fce9",
+			"score": 81,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The PR fixes a deterministic crash-recovery protocol defect that can trap resumed sessions in an endless reconnect loop and provides exact reproduction and persistence coverage.",
+			"evidence": [
+				"The reconnect loop repeats forever.",
+				"Affected sessions hang until a 30-second deadline.",
+				"The defect reproduces every time on an idle machine."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T07:27:53.716Z"
+		},
+		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3364,78 +3397,6 @@
 			"scoredAt": "2026-08-31T07:33:08.870Z"
 		},
 		{
-			"key": "pr:paperclip#12639",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12639 feat(runner): add secure remote transport",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12639",
-			"sourceUpdatedAt": "2026-09-01T06:32:03Z",
-			"sourceFingerprint": "3cb4aa5d47081de5f5e219d30ff2a7348e84ae02f18d0b89a1a5dea0548ebcd8",
-			"score": 74,
-			"band": "high",
-			"axes": {
-				"criticality": 6,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12640",
-				"pr:paperclip#12641"
-			],
-			"rationale": "Group the three stacked runner PRs as one Codex remote-execution delivery goal because transport, workspace, and administration form a dependent production vertical slice.",
-			"evidence": [
-				"This PR is based on #12638 and later stack PRs add workspace and administration.",
-				"It adds authenticated WSS and provider-ingress listener mode.",
-				"Local tests were not run."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T06:57:55.880Z"
-		},
-		{
-			"key": "pr:paperclip#12641",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12641 feat(runner): add administration and observability",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12641",
-			"sourceUpdatedAt": "2026-09-01T06:32:00Z",
-			"sourceFingerprint": "bc38f0dcb98df5d2741b0253c395ccb10e15554e1d2c48a2e068d8dc8e018763",
-			"score": 74,
-			"band": "high",
-			"axes": {
-				"criticality": 6,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12639",
-				"pr:paperclip#12640"
-			],
-			"rationale": "Group with the lower runner stack because safe rollout and diagnosis depend on the transport and task workspace delivered beneath this final operational layer.",
-			"evidence": [
-				"This is the final feature PR in the Codex production stack.",
-				"New instance settings remain off by default.",
-				"Raw provider traces can contain sensitive data."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T06:57:55.880Z"
-		},
-		{
 			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3979,39 +3940,6 @@
 			"scoredAt": "2026-09-01T01:27:35.836Z"
 		},
 		{
-			"key": "pr:paperclip#12644",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12644 fix(issues): keep comment creation successful when reference sync fails",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12644",
-			"sourceUpdatedAt": "2026-09-01T06:55:00Z",
-			"sourceFingerprint": "cf77548c4f58a3256591260b0cf56588e3e008a0e4334552fc84ec740b748387",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the focused change prevents false HTTP 500 failures after durable comment creation and has direct rollback and route-failure coverage.",
-			"evidence": [
-				"The comment commits before reference indexing begins.",
-				"An index error can return HTTP 500 after the comment was saved.",
-				"Seven focused tests, typecheck, and build passed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T06:57:55.880Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4175,42 +4103,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "pr:paperclip#12640",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12640 feat(ui): complete the task workspace",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12640",
-			"sourceUpdatedAt": "2026-09-01T06:29:15Z",
-			"sourceFingerprint": "84a3f1abf7c1a18190016e1c751f1454332a469ec390d1468d751979341771a7",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 5,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12639",
-				"pr:paperclip#12641"
-			],
-			"rationale": "Group with its transport and administration dependencies because this broad 119-file workspace delta is one layer of the same runner production stack rather than an independently deployable outcome.",
-			"evidence": [
-				"The PR is based on #12639 and #12638.",
-				"The delta contains 119 UI-only files.",
-				"Local tests were not run."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T06:57:55.880Z"
 		},
 		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
@@ -4788,6 +4680,41 @@
 			"scoredAt": "2026-08-31T14:54:38.867Z"
 		},
 		{
+			"key": "pr:paperclip#12641",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12641 feat(runner): add administration and observability",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12641",
+			"sourceUpdatedAt": "2026-09-01T07:22:21Z",
+			"sourceFingerprint": "2d6e051155e7dfeae507edd76b1530567d63581ad8417c2037be2cf91061cc48",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:paperclip#12640"
+			],
+			"rationale": "Production administration and trace controls are important for safely operating the runner stack, though stack dependencies and pending CI make execution readiness moderate.",
+			"evidence": [
+				"Raw traces can contain sensitive provider data.",
+				"New instance settings remain off by default.",
+				"Base PR is #12640."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T07:27:53.716Z"
+		},
+		{
 			"key": "proposal:ci-minion-ai-ci",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5083,6 +5010,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T02:57:44.950Z"
+		},
+		{
+			"key": "pr:paperclip#12640",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12640 feat(ui): complete the task workspace",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12640",
+			"sourceUpdatedAt": "2026-09-01T07:27:07Z",
+			"sourceFingerprint": "074c6cc0b3362eb71cd102ff3c8ebc6ce40b79bac24b14623fdf144ec645098f",
+			"score": 67,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:paperclip#12641"
+			],
+			"rationale": "This strategically central task-workspace change has broad compatibility coverage, but its large stacked delta and absence of local test results reduce delivery confidence.",
+			"evidence": [
+				"The task page is the main agent-work surface.",
+				"The delta contains 119 UI-only files.",
+				"Local tests were not run."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T07:27:53.716Z"
 		},
 		{
 			"key": "pr:pixel-agents#240",
@@ -5702,6 +5664,41 @@
 			"scoredAt": "2026-08-31T07:38:58.989Z"
 		},
 		{
+			"key": "issue:paperclip#12645",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12645 Issue detail page slow (~7s): cost-summary & runs full-scan heartbeat_runs (OR EXISTS defeats index)",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12645",
+			"sourceUpdatedAt": "2026-09-01T07:20:43Z",
+			"sourceFingerprint": "918ec9bab030d330d01fade42cb1dead9cda1d9feea019ff2575cfddbd55612f",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:paperclip#12647"
+			],
+			"rationale": "The issue documents a recurring user-facing latency problem with query-plan evidence, existing indexes, a bounded fix, and measured improvements, making implementation actionable now.",
+			"evidence": [
+				"Issue pages take about 7 seconds to load.",
+				"One query scans 21,090 rows to return 9.",
+				"Measured cost-summary time falls from 3,927 ms to 56 ms."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T07:27:53.716Z"
+		},
+		{
 			"key": "pr:minion-meta#285",
 			"kind": "pr",
 			"stage": "development",
@@ -5770,39 +5767,6 @@
 			"scoredAt": "2026-08-31T07:40:57.095Z"
 		},
 		{
-			"key": "issue:paperclip#12573",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12573 POST /api/issues/:id/comments — issueReferencesSvc.syncComment() unguarded post-commit, can 500 after comment already inserted (same shape as #12093, sibling route)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12573",
-			"sourceUpdatedAt": "2026-08-31T07:55:03Z",
-			"sourceFingerprint": "a7dbcbd1ad17c7ad1721459cd67181f2b49e4a1491307871e38d896d23502c33",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A confirmed unguarded post-commit failure path can misreport successful comment writes as failures and has a focused transactional hardening plan.",
-			"evidence": [
-				"The comment is committed before syncComment runs.",
-				"syncComment is unguarded and non-transactional.",
-				"The exact live incident trigger is unconfirmed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:01:14.069Z"
-		},
-		{
 			"key": "issue:paperclip#12576",
 			"kind": "issue",
 			"stage": "proposal",
@@ -5867,6 +5831,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T18:54:33.296Z"
+		},
+		{
+			"key": "pr:paperclip#12644",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12644 fix(issues): keep comment creation successful when reference sync fails",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12644",
+			"sourceUpdatedAt": "2026-09-01T06:57:44Z",
+			"sourceFingerprint": "58cdda74adf08a9300f2ed95381636257bf512bc4927c223a80f6bad3a11d560",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is a focused reliability fix for a persisted-success-but-reported-failure condition with strong targeted verification and a bounded low-risk change.",
+			"evidence": [
+				"A saved comment can currently return HTTP 500.",
+				"Focused tests passed 7 of 7.",
+				"Typecheck and build passed."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T07:27:53.716Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updatesellable-silent-drop",
@@ -6098,39 +6095,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:40:57.095Z"
-		},
-		{
-			"key": "issue:paperclip#12574",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12574 Secret redaction (redactSensitiveText/COMMAND_AUTHORIZATION_BEARER_RE) unconditionally strips inert Bearer-header placeholders — silently corrupts human-facing interaction/comment text",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12574",
-			"sourceUpdatedAt": "2026-08-31T08:03:44Z",
-			"sourceFingerprint": "8e17d86f6c41c62b73e13ed3a99b17e6f1f6e384f353daf81e4e3404a59d9788",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This deterministic redaction defect silently damages recurring human-facing authorization templates and has a localized implementation surface suitable for immediate work.",
-			"evidence": [
-				"The regex replaces any non-whitespace value after Authorization: Bearer.",
-				"A request_confirmation card's inert <PILOT_TOKEN> placeholder was corrupted.",
-				"The exact interaction-create call site was not pinned."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:14:27.632Z"
 		},
 		{
 			"key": "pr:pixel-agents#285",
@@ -9941,38 +9905,6 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
-			"key": "pr:paperclip#12626",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12626 chore(lockfile): refresh pnpm-lock.yaml",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12626",
-			"sourceUpdatedAt": "2026-09-01T06:29:47Z",
-			"sourceFingerprint": "bed4e7eddba8de820ff6bcb0d82e747689120613a53e238fc9612cf5bb314a6c",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate because lockfile consistency may affect builds, but the catalog provides no affected dependency list, failure evidence, or verification outcome.",
-			"evidence": [
-				"The PR only updates pnpm-lock.yaml.",
-				"The refresh follows dependency changes on master."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T06:57:55.880Z"
-		},
-		{
 			"key": "pr:pixel-agents#374",
 			"kind": "pr",
 			"stage": "development",
@@ -11002,6 +10934,39 @@
 			"scoredAt": "2026-08-31T22:27:54.178Z"
 		},
 		{
+			"key": "pr:paperclip#12626",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12626 chore(lockfile): refresh pnpm-lock.yaml",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12626",
+			"sourceUpdatedAt": "2026-09-01T07:19:52Z",
+			"sourceFingerprint": "a519794a1f5186db66333adbfb0a8500edb426fb8fb691243951bf43d61dc27e",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The lockfile refresh is bounded and actionable, but the catalog shows no outage, blocked release, or concrete dependency failure that makes it urgent.",
+			"evidence": [
+				"Only pnpm-lock.yaml changes.",
+				"Dependencies changed on master.",
+				"Status is open."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T07:27:53.716Z"
+		},
+		{
 			"key": "pr:pixel-agents#284",
 			"kind": "pr",
 			"stage": "development",
@@ -11303,6 +11268,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
+		},
+		{
+			"key": "pr:paperclip#12647",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12647 perf(server): index-friendly issue cost-summary & runs queries (drop OR EXISTS full scan)",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12647",
+			"sourceUpdatedAt": "2026-09-01T07:24:52Z",
+			"sourceFingerprint": "009a05962cd1997c56bce9708eee40adc5954ca1137528af0a9ff3f35d2506e4",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 9,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"issue:paperclip#12645"
+			],
+			"rationale": "The catalog title describes a Paperclip query optimization while the summary describes unrelated dispute tests and payment mechanics, so the current entry cannot support an effective delivery decision.",
+			"evidence": [
+				"Title claims issue-query performance work.",
+				"Summary describes 22 dispute-resolution tests.",
+				"Verification references web/src payment tests."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T07:27:53.716Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1447734948",
