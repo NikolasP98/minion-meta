@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T17:27:40.281Z",
+	"generatedAt": "2026-09-01T17:57:38.085Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -338,39 +338,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T08:57:43.357Z"
-		},
-		{
-			"key": "pr:paperclip#12673",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12673 refactor(docker): declare the build stage's C toolchain explicitly",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12673",
-			"sourceUpdatedAt": "2026-09-01T16:19:48Z",
-			"sourceFingerprint": "7378030c6f4038076595e918ccaa6ed42789bd7249e269c4fda27da1f58de48f",
-			"score": 95,
-			"band": "critical",
-			"axes": {
-				"criticality": 10,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute immediately because every master Docker build reportedly fails, blocking image publication, while the small build-stage-only correction has direct reproduction evidence.",
-			"evidence": [
-				"Every master Docker build fails with linker `cc` not found and exits with code 101.",
-				"The expected pipeline outcome is to compile the runner and publish images.",
-				"The exact package sequence was replicated successfully with the runner reaching `Finished release`."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T16:27:33.641Z"
 		},
 		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
@@ -877,6 +844,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T09:27:45.298Z"
+		},
+		{
+			"key": "pr:paperclip#12679",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12679 fix: ignore hidden files during migration discovery",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12679",
+			"sourceUpdatedAt": "2026-09-01T17:54:04Z",
+			"sourceFingerprint": "13fc66f9c758a4eac05c7d270d8dd4b4b0c836fdeb5c2c0d5ad47709220e94cf",
+			"score": 88,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This directly fixes a reproducible production-candidate startup failure affecting Docker deployments and has focused regression coverage.",
+			"evidence": [
+				"The image reported 218 false pending migrations and failed startup.",
+				"Invalid AppleDouble resource-fork bytes were treated as SQL migrations.",
+				"The fix aligns runtime, validation, plugin discovery, and Docker metadata filtering."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T17:57:37.997Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-capability-separation",
@@ -3946,8 +3946,8 @@
 			"repo": "paperclip",
 			"title": "#12676 fix(runner): stop capability live-session tests from failing on unhandled turn-timeout rejections",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12676",
-			"sourceUpdatedAt": "2026-09-01T17:16:24Z",
-			"sourceFingerprint": "6da56bdaa82777cb23b22c2097305464b5d31c5ad15222f47df4c68412daf2be",
+			"sourceUpdatedAt": "2026-09-01T17:32:54Z",
+			"sourceFingerprint": "6540e688718919a0586b7462a7a50af65a1f70d1a30fa0c9ee7d562fbb1c890e",
 			"score": 73,
 			"band": "high",
 			"axes": {
@@ -3962,15 +3962,15 @@
 			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute because the bounded changes address recurring runner-test failures and stalled recovery while already carrying targeted stress and persistence tests.",
+			"rationale": "The bounded fix addresses intermittent CI failures and stalled recovery after runner restarts, with focused evidence showing it is actionable now.",
 			"evidence": [
-				"Loaded CI hosts intermittently expose an unhandled turn-timeout rejection.",
-				"A resumed session can stall on an indeterminate recovered command result.",
-				"The live-session file passed 10 of 10 runs with 30 competing workers."
+				"Unhandled turn-timeout rejections can make capability live-session tests fail intermittently.",
+				"A resumed session can stall after a runner restart on an indeterminate command result.",
+				"Focused tests passed, including 10 of 10 loaded-host runs."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T17:27:40.203Z"
+			"scoredAt": "2026-09-01T17:57:37.997Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -4136,39 +4136,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "pr:paperclip#12669",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12669 Add end-to-end session goals to Paperclip Runner",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12669",
-			"sourceUpdatedAt": "2026-09-01T16:56:30Z",
-			"sourceFingerprint": "6ee7a4adf12882f183d0e710c2fbcae7794a1e6e871e9981602e15d95521c69a",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 5,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate because the provider-neutral goal capability is strategically central and broad, but the cross-layer implementation is large and the catalog lists verification commands without reporting their results.",
-			"evidence": [
-				"Paperclip currently cannot discover or control provider-owned durable goals.",
-				"The change spans protocol, harnesses, orchestration, persistence, realtime events, and UI.",
-				"Verification steps are specified, but no passing results are reported."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T16:57:38.662Z"
 		},
 		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
@@ -4843,6 +4810,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T07:57:43.390Z"
+		},
+		{
+			"key": "pr:paperclip#12669",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12669 Add end-to-end session goals to Paperclip Runner",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12669",
+			"sourceUpdatedAt": "2026-09-01T17:49:22Z",
+			"sourceFingerprint": "20277f43fc6095efe335191d8c978c52d32f0e01573e86072fcfe05f58fca87e",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This well-verified cross-layer capability is highly central to durable multi-turn agent operation, although the catalog does not establish an outage or external deadline.",
+			"evidence": [
+				"Paperclip cannot discover, display, or control harness-owned durable goals.",
+				"The change spans protocol, persistence, orchestration, realtime events, and the issue composer.",
+				"Verification includes cross-layer tests and browser acceptance on the final local build."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T17:57:37.997Z"
 		},
 		{
 			"key": "proposal:2026-08-18-factory-orchestration-round7",
@@ -6058,39 +6058,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:40:57.095Z"
-		},
-		{
-			"key": "pr:paperclip#12618",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12618 feat(grok-local): stage a curated Grok home into remote subscription runs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12618",
-			"sourceUpdatedAt": "2026-09-01T17:20:20Z",
-			"sourceFingerprint": "f412292fabac74b10dfc2d17c689de486b6b39e6c9f9fa2f4e9613b6d9cba150",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because it fixes broken remote Grok subscription authentication with tightly constrained credential handling and strong verification evidence.",
-			"evidence": [
-				"Remote Grok subscription runs lacked the credential file in the sandbox.",
-				"Only auth.json is staged with mode 0600, and the API-key lane does not stage credentials.",
-				"Targeted tests and typecheck pass, and all CI gates are reported green."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T17:27:40.203Z"
 		},
 		{
 			"key": "pr:pixel-agents#285",
@@ -9769,6 +9736,39 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
+			"key": "pr:paperclip#12678",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12678 feat(server): split the Sentry DSN into front-end and backend variables",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12678",
+			"sourceUpdatedAt": "2026-09-01T17:52:07Z",
+			"sourceFingerprint": "a74b02c96bc581fcc5de3c0d9493640b171d437971733f6d533ec578b9a1523a",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 10
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The change is fully prepared and backward-compatible, but it improves monitoring control rather than resolving a demonstrated operational failure.",
+			"evidence": [
+				"One SENTRY_DSN currently supplies both server and browser clients.",
+				"Separate frontend and backend variables retain SENTRY_DSN as fallback.",
+				"All required GitHub Actions checks pass."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T17:57:37.997Z"
+		},
+		{
 			"key": "pr:pixel-agents#298",
 			"kind": "pr",
 			"stage": "development",
@@ -11536,8 +11536,8 @@
 			"repo": "pixel-agents",
 			"title": "pixel-agents deployment health",
 			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/commit/3537e140c2094761beae748592aeb92ece8edfdd",
-			"sourceUpdatedAt": "2026-09-01T10:52:29Z",
-			"sourceFingerprint": "c46d5a82a3bac5a2e40f7cd5657d190cfd11de40c89a321c81e34795c8c665c9",
+			"sourceUpdatedAt": "2026-09-01T17:30:44Z",
+			"sourceFingerprint": "b263093cdeb4d507b9ca0d004ce6e984cfe636fd7adcb9f3273c289ad1e64b8d",
 			"score": 6,
 			"band": "low",
 			"axes": {
@@ -11552,15 +11552,15 @@
 			"confidence": 9,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The deployment-health item is already passing and contains no unresolved problem or actionable outcome.",
+			"rationale": "The deployment is already passing, so the catalog provides no unresolved outcome that warrants paid execution.",
 			"evidence": [
 				"Status is passing.",
-				"The summary only records a version bump to v1.4.1.",
-				"No failure, deadline, or follow-up work is identified."
+				"Candidate is deployment health for v1.4.1.",
+				"No failure or follow-up work is described."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T10:57:34.094Z"
+			"scoredAt": "2026-09-01T17:57:37.997Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-1962723814",
