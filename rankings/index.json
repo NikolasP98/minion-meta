@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T13:57:39.093Z",
+	"generatedAt": "2026-09-01T14:57:41.174Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1582,6 +1582,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T22:27:54.178Z"
+		},
+		{
+			"key": "pr:paperclip#12667",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12667 fix(onboarding): restore browser launch and gate canaries",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12667",
+			"sourceUpdatedAt": "2026-09-01T14:47:03Z",
+			"sourceFingerprint": "6195e51273c69638a2cdfbf945dee7aa9a63e1c56c69c5bbbbe34971523478d6",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 10
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because it repairs the primary onboarding path and adds a post-publish canary gate that reduces repeated release regressions.",
+			"evidence": [
+				"Interactive onboarding stopped opening the browser and could remain stuck after organization creation.",
+				"The exact published canary is tested in a clean environment through the Connect a model step.",
+				"Unit, workflow, Playwright, typecheck, build, and published-package smoke checks pass."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T14:57:41.086Z"
 		},
 		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
@@ -3228,39 +3261,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:02.540Z"
-		},
-		{
-			"key": "pr:paperclip#12618",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12618 feat(grok-local): stage a curated Grok home into remote subscription runs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12618",
-			"sourceUpdatedAt": "2026-09-01T00:23:19Z",
-			"sourceFingerprint": "dcd253389002e5a3efc3032380f4be6cf758bcf16b8c8fa134a20f5078cd2c4d",
-			"score": 75,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 10
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The change fixes a concrete authentication failure in remote Grok subscription runs with narrow credential exposure and strong completed verification.",
-			"evidence": [
-				"Remote subscription sandboxes lacked the Grok credential file.",
-				"Only auth.json is staged with mode 0600.",
-				"Local tests, typecheck, CI, and review gates pass."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T00:27:33.759Z"
 		},
 		{
 			"key": "pr:minion-factory#158",
@@ -5288,37 +5288,37 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
-			"key": "pr:paperclip#12596",
-			"kind": "pr",
-			"stage": "development",
+			"key": "issue:paperclip#12668",
+			"kind": "issue",
+			"stage": "proposal",
 			"repo": "paperclip",
-			"title": "#12596 test(runner): bound codex provider exit polls by wall clock",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12596",
-			"sourceUpdatedAt": "2026-09-01T11:17:30Z",
-			"sourceFingerprint": "6ea3249c2cfd30e3173814c90bac6390bdbc5b30cf7596990dff4ae6561211d7",
+			"title": "#12668 runtimeConfig.modelProfiles secret_ref has no native binding or approval path",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12668",
+			"sourceUpdatedAt": "2026-09-01T14:57:09Z",
+			"sourceFingerprint": "91fa81d1acf20411546493563cd3540f0984ab2bd2c87f64a8f4bbbcaa0ce234",
 			"score": 66,
 			"band": "medium",
 			"axes": {
 				"criticality": 6,
-				"importance": 7,
-				"impact": 7
+				"importance": 8,
+				"impact": 6
 			},
 			"readiness": {
-				"specification": 10,
-				"implementation": 10
+				"specification": 9,
+				"implementation": 5
 			},
-			"confidence": 10,
-			"recommendation": "execute",
+			"confidence": 8,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Execute this bounded test-only fix because it addresses a reproduced CI flake with strong before-and-after evidence and low delivery risk.",
+			"rationale": "Reevaluate after selecting the native profile-qualified binding design or the rejection fallback, since the defect is well evidenced but execution is not yet bounded to one approach.",
 			"evidence": [
-				"Two integration tests fail at random on branches with no Rust changes",
-				"Before: 8/25 and 9/25 failed; after: 0/25 failed",
-				"The change touches test code only"
+				"Profile-only secret references are validated at dispatch but are not synchronized by the agent update path.",
+				"The approval implementation cannot address the documented nested model-profile path.",
+				"Seven acceptance cases define resolution, isolation, persistence, approval, and failure behavior."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T11:27:38.486Z"
+			"scoredAt": "2026-09-01T14:57:41.086Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
@@ -5418,6 +5418,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
+		},
+		{
+			"key": "pr:paperclip#12618",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12618 feat(grok-local): stage a curated Grok home into remote subscription runs",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12618",
+			"sourceUpdatedAt": "2026-09-01T14:55:02Z",
+			"sourceFingerprint": "a5a76735a56494ce9e7aa45c5eccf9c6b95fd9ef55905c006c7672226cce7a0a",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because it fixes a reproducible remote-subscription authentication failure with narrowly scoped credential handling and strong completed verification.",
+			"evidence": [
+				"Remote Grok subscription runs lacked the credential file required in the sandbox.",
+				"Only auth.json is staged with mode 0600, and temporary data is removed before teardown.",
+				"Adapter tests and typecheck pass, and all CI gates are reported green."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T14:57:41.086Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -6900,39 +6933,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T12:27:40.259Z"
-		},
-		{
-			"key": "pr:paperclip#12597",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12597 refactor: rename product workspaces to worktrees",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12597",
-			"sourceUpdatedAt": "2026-08-31T21:45:04Z",
-			"sourceFingerprint": "1c36b968d718daf8721daf4e5898dd463dbbaa365a0d5317e63e870e51ac64b5",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 7,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the cross-system terminology change is comprehensively bounded by preserved contracts, compatibility aliases, dedicated gates, and green required CI.",
-			"evidence": [
-				"Touches UI, CLI, server, packages, adapters, and documentation",
-				"Persisted and public wire names remain stable",
-				"Required verify and e2e contexts are green"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T21:57:47.501Z"
 		},
 		{
 			"key": "pr:pixel-agents#388",
