@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T02:57:45.039Z",
+	"generatedAt": "2026-09-01T03:27:31.112Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -2188,6 +2188,39 @@
 			"scoredAt": "2026-08-31T08:14:05.520Z"
 		},
 		{
+			"key": "issue:paperclip#12627",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12627 Session resets on projectWorkspace and last-used-model: ~47% of fleet input tokens spent re-establishing sessions that did not change",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12627",
+			"sourceUpdatedAt": "2026-09-01T03:15:44Z",
+			"sourceFingerprint": "6e5976ce223333ac9c3b21d7b32495c39b55ba5b5e8777407bcb49c6b0190332",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the reported false session invalidations impose a large recurring fleet-wide token cost and the issue identifies two concrete mechanisms with testable expected behavior.",
+			"evidence": [
+				"Fresh sessions accounted for 3,511 of 4,175 runs and 1,537.6M input tokens.",
+				"Comparable reused sessions averaged about 143k fewer input tokens.",
+				"Project switching and last-used-model comparisons are identified as independent reset causes."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T03:27:31.030Z"
+		},
+		{
 			"key": "pr:minion_hub#200",
 			"kind": "pr",
 			"stage": "development",
@@ -2876,41 +2909,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:02.540Z"
-		},
-		{
-			"key": "pr:paperclip#12616",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12616 feat(runner): integrate Codex native execution",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12616",
-			"sourceUpdatedAt": "2026-09-01T02:44:54Z",
-			"sourceFingerprint": "c939bc2967c1844d62c7ad87cb1df6686d1188972baf813b5eba22364009ba5f",
-			"score": 75,
-			"band": "high",
-			"axes": {
-				"criticality": 5,
-				"importance": 10,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12617"
-			],
-			"rationale": "Group with the native-runner task-thread projection because together they form the server-to-user production vertical slice, while this integration alone leaves native runs without their intended supervisory interface.",
-			"evidence": [
-				"The runner package cannot yet execute a governed Codex run through the server.",
-				"The path is Codex-only, hidden, and default-off.",
-				"The PR stack places the task-thread UI immediately after this server integration."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T02:57:44.950Z"
 		},
 		{
 			"key": "pr:paperclip#12618",
@@ -4027,6 +4025,39 @@
 			"scoredAt": "2026-08-31T08:01:35.926Z"
 		},
 		{
+			"key": "pr:paperclip#12616",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12616 feat(runner): integrate Codex native execution",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12616",
+			"sourceUpdatedAt": "2026-09-01T03:21:53Z",
+			"sourceFingerprint": "c0e3c081269361da44e916c1005f9ea62464118d097011e8304a933c13f7b05d",
+			"score": 70,
+			"band": "high",
+			"axes": {
+				"criticality": 5,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because this is a bounded, guarded production integration that unlocks real Codex runner execution while preserving legacy adapter behavior and recoverability.",
+			"evidence": [
+				"The runner package cannot yet execute a real provider through the server.",
+				"The path is Codex-only, hidden, and default-off.",
+				"Focused recovery, cancellation, compatibility, and conformance coverage is included."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T03:27:31.030Z"
+		},
+		{
 			"key": "pr:pixel-agents#300",
 			"kind": "pr",
 			"stage": "development",
@@ -4969,39 +5000,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
-		},
-		{
-			"key": "pr:paperclip#12555",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12555 fix(create-paperclip-plugin): plugin init fails on the published CLI — scaffold against the npm SDK when no checkout exists",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12555",
-			"sourceUpdatedAt": "2026-08-31T02:56:08Z",
-			"sourceFingerprint": "09804e651ed5f1550b0eb5c6e99136f5bd0ab3b050675961b52bec4f30bc6de5",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because a reproduced packaging defect blocks the documented plugin-development path for published-CLI users and has a bounded, compatibility-preserving fix with direct verification.",
-			"evidence": [
-				"Published CLI plugin initialization fails without a monorepo checkout.",
-				"Reproduced on paperclipai@2026.824.1 in two installation layouts.",
-				"Tests cover npm fallback, in-repo behavior, and invalid --sdk-path."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T02:57:44.950Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
