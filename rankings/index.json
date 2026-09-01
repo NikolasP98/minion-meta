@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T19:57:47.873Z",
+	"generatedAt": "2026-09-01T20:28:20.003Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1419,105 +1419,6 @@
 			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
-			"key": "pr:paperclip#12607",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12607 fix(codex-local): require safe live onboarding proof",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12607",
-			"sourceUpdatedAt": "2026-08-31T21:00:50Z",
-			"sourceFingerprint": "df0bb71a9ac7c57c58429ae2e4de9cb3a592cc590d33eeabf42092e2f723afed",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A false-positive onboarding check can hire an unverified agent under unsafe credential and execution conditions, while the proposed fail-closed proof is extensively verified.",
-			"evidence": [
-				"Current setup can pass without a fresh response from the selected configuration",
-				"Both onboarding hire paths are blocked when proof is unsafe or invalid",
-				"Adapter, UI, typecheck, and build checks passed before final rebase"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T21:27:58.345Z"
-		},
-		{
-			"key": "pr:paperclip#12611",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12611 fix(tool-gateway): stop mapping application-level tools/call errors to raw HTTP 404/400 on the named MCP gateway",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12611",
-			"sourceUpdatedAt": "2026-08-31T21:26:58Z",
-			"sourceFingerprint": "6cb87c725f35add460cbd786501988397d903b51b6daf3f67b11936daedfbe7b",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Incorrect HTTP status mapping repeatedly converts ordinary tool errors into apparent session loss for external MCP clients, directly harming core agent reliability.",
-			"evidence": [
-				"HTTP 404 and 400 carry protocol-level session meanings",
-				"The named gateway is stateless and has no mcp-session-id concept",
-				"Live logs linked failing calls to raw HTTP 404 responses from this route"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T21:27:58.345Z"
-		},
-		{
-			"key": "pr:paperclip#12614",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12614 fix(tool-access): mark catalog entries removed when they drop out of an upstream refresh",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12614",
-			"sourceUpdatedAt": "2026-08-31T22:18:05Z",
-			"sourceFingerprint": "64d116df1daf14ad617186df75353fd1fab2e397ecb2048d675cd79fb3a4f7c3",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A root-caused production reliability defect repeatedly exposes dead tools to agents, and the existing status model enables a focused, tested correction.",
-			"evidence": [
-				"The bug was root-caused against a live production incident.",
-				"Stale entries remain active indefinitely and every attempted call fails.",
-				"The existing catalog status type already includes \"removed\"."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T22:27:54.178Z"
-		},
-		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1721,6 +1622,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:31:21.054Z"
+		},
+		{
+			"key": "issue:paperclip#12686",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12686 Agent's own terminal-status PATCH returns 403, stranding issues as blocked",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12686",
+			"sourceUpdatedAt": "2026-09-01T19:57:48Z",
+			"sourceFingerprint": "b10b655256e6999c37bdcbafc0a387e4825251aecd47ee7f13e26d6d1a6f3cce",
+			"score": 82,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"issue:paperclip#12687",
+				"pr:paperclip#12689"
+			],
+			"rationale": "Actively recurring production incident (own-assignee PATCH 403 looping issues into blocked) with a code-level root cause narrowed to the authorization.decide policy path.",
+			"evidence": [
+				"\"~10 incident issues have been stranded this way since 8/31\"",
+				"\"re-stranded by 19:24Z — a repeating loop, not a one-off\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T20:28:19.924Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-orchestration-round7-spec",
@@ -3771,72 +3707,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
-		},
-		{
-			"key": "pr:paperclip#12606",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12606 fix(server): verify embedded postgres is reachable before reusing its pidfile",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12606",
-			"sourceUpdatedAt": "2026-08-31T20:20:33Z",
-			"sourceFingerprint": "614dfea3e86dc79c31cdcb6b8340518a7b91228d5e3018eba5dc00f8ceaa9a19",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The change addresses a production startup failure with a bounded reuse of an existing reachability check, though the lack of dedicated automated coverage raises residual delivery risk.",
-			"evidence": [
-				"Container recreation can exit on ECONNREFUSED.",
-				"Recovery currently depends on Docker restart retries.",
-				"The proposed check was verified against a deployment."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T20:31:59.677Z"
-		},
-		{
-			"key": "pr:paperclip#12621",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12621 fix: count writes from unscoped heartbeat runs against the cross-issue cap instead of rejecting them",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12621",
-			"sourceUpdatedAt": "2026-09-01T01:00:12Z",
-			"sourceFingerprint": "0396ca4de83f079ee69fe779a0ce3be41856a60435457f1f6de1633bf86c5b22",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 10
-			},
-			"confidence": 10,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This is a reproduced core-agent write-path defect with a bounded fix, passing targeted tests, and preserved anti-spray controls, making it ready for immediate delivery.",
-			"evidence": [
-				"Unscoped heartbeat runs receive 403 on every issue comment and update.",
-				"The fix counts each write against the existing cross-issue cap.",
-				"Nineteen targeted Vitest cases pass, with a successful manual verification described."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T01:27:35.836Z"
 		},
 		{
 			"key": "pr:paperclip#12650",
@@ -6532,14 +6402,46 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
+			"key": "issue:paperclip#12692",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12692 [hermes_local] Issues cycle in_progress→blocked without a disposition; provider forced to 'auto' despite provider=custom",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12692",
+			"sourceUpdatedAt": "2026-09-01T20:11:23Z",
+			"sourceFingerprint": "c94410688bbbf5a18ecb54e28e18d9bedcd535089e5dfb247ff147628c922b89",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Reports a real broken execution loop (runs complete without disposition, provider forced to auto) but is posed as open diagnostic questions rather than a bounded, actionable fix.",
+			"evidence": [
+				"\"ciclan in_progress → blocked sin que se produzca un run agéntico que escriba la disposición\"",
+				"\"Preguntas exactas\" section lists four unresolved root-cause questions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T20:28:19.924Z"
+		},
+		{
 			"key": "pr:paperclip#12685",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
 			"title": "#12685 fix(runner): restore task runtime parity",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12685",
-			"sourceUpdatedAt": "2026-09-01T19:57:10Z",
-			"sourceFingerprint": "4cce392c2fd5468aefefc5d8e1cdaafd7b4b4d9f42b63c88fc1b6cddd4be99a6",
+			"sourceUpdatedAt": "2026-09-01T20:09:50Z",
+			"sourceFingerprint": "71c7e6d8307da3b0ed2bf771c103f9c47286cb0e6d2816d1645e0001c6d823d8",
 			"score": 58,
 			"band": "medium",
 			"axes": {
@@ -6554,14 +6456,46 @@
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Restores a regression where the merged runner stack hid live reasoning and broke message steering for the experimental native runner, with focused passing tests.",
+			"rationale": "Well-specified regression fix restoring steering, reasoning display, and instruction-bundle support lost in the merged runner stack, with 140+12 tests passing.",
 			"evidence": [
-				"steering action failed because the server route was absent on master",
-				"seven focused test files passed with 140 tests, steering regression file passed with 12 tests"
+				"\"queued message steering had no server route on master\"",
+				"\"Seven focused test files passed with 140 tests\""
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T19:57:47.791Z"
+			"scoredAt": "2026-09-01T20:28:19.924Z"
+		},
+		{
+			"key": "pr:paperclip#12690",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12690 fix(adapter-pi-local): surface model-level stopReason=error as adapter failure",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12690",
+			"sourceUpdatedAt": "2026-09-01T20:09:44Z",
+			"sourceFingerprint": "5cb3c02dd41bbdf649f5eed48017bf9c35050cf7438f97600fd65f61cbc1362a",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes a silent-failure bug where model errors were reported as successful runs, with clear repro and full regression coverage (17/17 tests).",
+			"evidence": [
+				"\"errors: [] → exit code 0 → the harness reported the run as succeeded\"",
+				"\"17/17 pass\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T20:28:19.924Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
@@ -6764,38 +6698,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:58.286Z"
-		},
-		{
-			"key": "pr:paperclip#12683",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12683 Remove cheap model profiles",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12683",
-			"sourceUpdatedAt": "2026-09-01T19:48:02Z",
-			"sourceFingerprint": "70cd92a5aa9e28e58ad599528006b6be78d60adbc82c47d1ac0534409863aee5",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Intentional breaking removal of cheap-model profiles across adapters/API/UI, backed by an idempotent migration and a large test run.",
-			"evidence": [
-				"API rejects legacy model-profile configuration, migration removes stored values idempotently",
-				"pnpm test:run completed with 5,607 passing tests, 8 unrelated environment-sensitive failures"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T19:57:47.791Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
@@ -7704,6 +7606,75 @@
 			"scoredAt": "2026-08-31T07:33:08.870Z"
 		},
 		{
+			"key": "pr:paperclip#12682",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12682 Improve native runner recovery and workspace controls",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12682",
+			"sourceUpdatedAt": "2026-09-01T20:02:10Z",
+			"sourceFingerprint": "37a05dc374ed18154f5cfcec86cdef806645b662d08d226b3f1a6f6d0b6e7106",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12693"
+			],
+			"rationale": "Cross-cutting runner-recovery PR that also claims to add a shared workspace-selection module and gated properties-pane picker, duplicating #12693's stated scope.",
+			"evidence": [
+				"\"Added a shared issue workspace selection module\"",
+				"\"Added a gated two-step workspace picker to the task properties pane\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T20:28:19.924Z"
+		},
+		{
+			"key": "pr:paperclip#12689",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12689 Log issue write denial code, issueId, actorAgentId, runId",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12689",
+			"sourceUpdatedAt": "2026-09-01T20:03:59Z",
+			"sourceFingerprint": "b374869ad2d48e5eea41f415f24b0fab1121e4973004a958ee4cf467f6a0ba0b",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"issue:paperclip#12687",
+				"issue:paperclip#12686"
+			],
+			"rationale": "Small, well-tested logging fix that is the concrete prerequisite for root-causing the #12686 incident loop.",
+			"evidence": [
+				"\"Fixes #12687. Surfaced while investigating #12686\"",
+				"\"96 passed, and the new log line fires with the expected fields\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T20:28:19.924Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-722867358",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8507,6 +8478,38 @@
 			"scoredAt": "2026-09-01T18:27:31.061Z"
 		},
 		{
+			"key": "issue:paperclip#12688",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12688 Agent stuck in status:error on stale worktree (workspace_validation_failed / git_worktree_not_reusable)",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12688",
+			"sourceUpdatedAt": "2026-09-01T19:58:08Z",
+			"sourceFingerprint": "aa9566b010bedbf5f74132e562d3997a37de5ce25956157bfaa64accbbb3bf70",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Recurring stale-worktree failure requiring manual agent resume, with a clear, bounded ask for auto re-provisioning on a known error code.",
+			"evidence": [
+				"\"Hit twice today (2026-09-01) on the Watchdog agent\"",
+				"\"errorCode: workspace_validation_failed is a known/tested code path\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T20:28:19.924Z"
+		},
+		{
 			"key": "pr:pixel-agents#389",
 			"kind": "pr",
 			"stage": "development",
@@ -8877,6 +8880,38 @@
 			"scoredAt": "2026-09-01T19:27:42.888Z"
 		},
 		{
+			"key": "pr:paperclip#12691",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12691 feat(runner): activate qualified OpenCode and ACPX providers",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12691",
+			"sourceUpdatedAt": "2026-09-01T20:14:50Z",
+			"sourceFingerprint": "ae19d9b9ab00ae8302b34204ef43bf184cf0ee7b1ca8badc02ed9863fca969f8",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Substantial, well-tested feature enabling stored OpenCode/ACPX provider contracts through runnerd, gated behind the existing experimental flag.",
+			"evidence": [
+				"\"274 tests\" across focused suites",
+				"\"Rust unit suite passed 91 tests\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T20:28:19.924Z"
+		},
+		{
 			"key": "proposal:2026-08-30-site-page-max-shared-token",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8974,6 +9009,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:38:21.867Z"
+		},
+		{
+			"key": "issue:paperclip#12687",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12687 issue write-denial code (denyIssueWrite) is never logged server-side",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12687",
+			"sourceUpdatedAt": "2026-09-01T19:57:59Z",
+			"sourceFingerprint": "f68d5b33dd1deb6e54b809b5e5448bb7398452489be72affec1aea5224818b53",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:paperclip#12689"
+			],
+			"rationale": "The exact fix this issue requests (logging code/issueId/actorAgentId/runId in denyIssueWrite) is already implemented and tested in open PR #12689 within this same batch.",
+			"evidence": [
+				"\"Adds a logger.warn call with code, issueId, actorAgentId, runId\" (12689)",
+				"\"Fixes #12687\" (12689)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T20:28:19.924Z"
 		},
 		{
 			"key": "pr:pixel-agents#293",
@@ -9394,38 +9463,6 @@
 			"scoredAt": "2026-08-31T07:31:58.286Z"
 		},
 		{
-			"key": "pr:paperclip#12682",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12682 Improve native runner recovery and workspace controls",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12682",
-			"sourceUpdatedAt": "2026-09-01T19:52:37Z",
-			"sourceFingerprint": "69de8262784c571bd05f8e8da9973222c595afed01a553433c0185a878ca698d",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Cross-cutting UI/runner enhancement with passing tests but an incomplete local full build and a noted inconsistency between old and new workspace-picker default behavior.",
-			"evidence": [
-				"local full build reached runner binary staging but did not complete due to a held binary",
-				"old workspace card still writes shared_workspace while new picker clears the override by default"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T19:57:47.791Z"
-		},
-		{
 			"key": "pr:pixel-agents#356",
 			"kind": "pr",
 			"stage": "development",
@@ -9563,6 +9600,40 @@
 			"scoredAt": "2026-08-31T07:38:21.867Z"
 		},
 		{
+			"key": "pr:paperclip#12693",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12693 Add task workspace picker to properties pane",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12693",
+			"sourceUpdatedAt": "2026-09-01T20:24:53Z",
+			"sourceFingerprint": "e2f93e6ee6e4942861755dd0b0d74003efb5963d433e065b472a70fd0dd22bae",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12682"
+			],
+			"rationale": "Adds a gated workspace property picker via a shared selection module that overlaps directly with #12682's claimed workspace-picker work, needing reconciliation before merge.",
+			"evidence": [
+				"\"Added shared helpers for the current workspace selection and its issue update payload\"",
+				"\"Added a gated workspace property picker with mode and workspace search steps\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T20:28:19.924Z"
+		},
+		{
 			"key": "proposal:2026-08-18-spec-heading-lint-baseline-backfill",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9660,39 +9731,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:19.199Z"
-		},
-		{
-			"key": "issue:paperclip#12615",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12615 Onboarding motion constants bypass the token layer",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12615",
-			"sourceUpdatedAt": "2026-08-31T22:28:00Z",
-			"sourceFingerprint": "a2cbdf4161ea8ba107d90a56eb2bec7474e91c01ecbc5fb26e42b49d5cf657b3",
-			"score": 37,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute as a bounded token-governance refactor because the exact violations, conversion precedent, intended invariant, and optional enforcement gate are identified.",
-			"evidence": [
-				"Two easing constants exactly duplicate existing motion tokens.",
-				"Literal durations bypass token-level reduced-motion behavior.",
-				"parseCssTimeMs and MOTION_TOKENS provide an existing conversion precedent."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T22:57:40.510Z"
 		},
 		{
 			"key": "pr:minion-base#41",
@@ -10225,39 +10263,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T08:57:43.357Z"
-		},
-		{
-			"key": "pr:paperclip#12620",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12620 feat: add read-only BrainPulse Mission Control sidecar",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12620",
-			"sourceUpdatedAt": "2026-09-01T00:16:25Z",
-			"sourceFingerprint": "59c9367fc314d597ace5658666a53588140f971eb2b4cb5439c8366bd4d63705",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The sidecar is test-backed and bounded, but it is an optional undeployed monitoring view that does not alter core operations or resolve an urgent failure.",
-			"evidence": [
-				"The existing board remains the source of truth.",
-				"The sidecar is local-only and read-only.",
-				"It is not deployed by this PR."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T00:27:33.759Z"
 		},
 		{
 			"key": "pr:pixel-agents#367",
