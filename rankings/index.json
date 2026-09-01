@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T20:58:04.256Z",
+	"generatedAt": "2026-09-01T21:27:46.413Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1317,39 +1317,6 @@
 			"scoredAt": "2026-08-31T07:42:55.201Z"
 		},
 		{
-			"key": "issue:paperclip#12622",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12622 reuse_existing execution-workspace bindings get no dispatch-time mutual exclusion (unlike shared_workspace's holder-check)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12622",
-			"sourceUpdatedAt": "2026-09-01T01:06:54Z",
-			"sourceFingerprint": "c88ceb41bdd835c73fc5e82922c18804c1d3a720bb5c794f48c9dcf11b62561a",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Concurrent dispatch into one reused worktree creates a credible data-loss hazard in a central execution path, warranting immediate implementation work despite unresolved fix placement.",
-			"evidence": [
-				"Two independently observed incidents allowed concurrent runs in the same working directory.",
-				"One run's staged file was exposed to another run's commit.",
-				"No lock, queue, workspace-busy deferral, or warning was emitted."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T01:27:35.836Z"
-		},
-		{
 			"key": "issue:paperclip#12633",
 			"kind": "issue",
 			"stage": "proposal",
@@ -2445,39 +2412,6 @@
 			"scoredAt": "2026-08-31T08:01:14.069Z"
 		},
 		{
-			"key": "pr:paperclip#12624",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12624 fix(claude-local): require safe live hello probes for ACP checks",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12624",
-			"sourceUpdatedAt": "2026-09-01T02:25:18Z",
-			"sourceFingerprint": "2702c3f4dcc5f9b33a59f6dcd1536281548a94ee8223a84d04cbf19cc438fb8d",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This is an actionable fail-closed security and reliability fix for readiness probes, with focused coverage despite unresolved full-suite verification.",
-			"evidence": [
-				"Previous probes could pass without a positive provider reply",
-				"Sandbox probing could use --dangerously-skip-permissions",
-				"Five focused files pass 83 tests, while the full run has 22 failures"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T02:27:41.262Z"
-		},
-		{
 			"key": "pr:paperclip#12671",
 			"kind": "pr",
 			"stage": "development",
@@ -3197,6 +3131,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:02.540Z"
+		},
+		{
+			"key": "issue:paperclip#12694",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12694 Bare heartbeat/on-demand runs get a deterministic 403 on every issue write (`cross_issue_influence_run_context_required`), and the error's own sanctioned path cannot succeed",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12694",
+			"sourceUpdatedAt": "2026-09-01T21:14:51Z",
+			"sourceFingerprint": "5c386a7a8b45e206907f0d738ba2e1fefe6e877c8722e309ae5230fee280634a",
+			"score": 75,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Deterministic bug fully blocks issue writes for any heartbeat/on-demand-triggered agent run, with a root-caused, locally-verified proposed fix ready to implement.",
+			"evidence": [
+				"PATCH /api/issues/{id} and POST comments both return 403 ... deterministic, not intermittent",
+				"We're running exactly this locally; the cap still enforces (verified allowed:false at count 21/cap 20)",
+				"Three separate agents on our side burned runs retrying that header before someone read the source"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T21:27:46.337Z"
 		},
 		{
 			"key": "pr:minion-factory#158",
@@ -4711,39 +4678,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:23.880Z"
-		},
-		{
-			"key": "pr:paperclip#12625",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12625 feat(http-adapter): poll remote runs for completion and render payload templates",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12625",
-			"sourceUpdatedAt": "2026-09-01T02:28:53Z",
-			"sourceFingerprint": "860a2802d1bb9b8f5259171ae04b6fd935cb14b4be8325ee4fe96f11b920f34a",
-			"score": 67,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because it converts the HTTP adapter from notification-only dispatch into bounded remote-work delegation while preserving its existing default behavior and limiting credential exposure.",
-			"evidence": [
-				"The adapter currently cannot collect remote results and sends payload templates verbatim.",
-				"Optional polling preserves the prior fire-and-forget contract when absent.",
-				"Ten tests cover rendering, polling, failures, exhaustion, and data-leak prevention."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T02:57:44.950Z"
 		},
 		{
 			"key": "pr:pixel-agents#240",
@@ -6463,6 +6397,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T20:28:19.924Z"
+		},
+		{
+			"key": "pr:paperclip#12695",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12695 fix: limit plan-to-auto transition to plan confirmation",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12695",
+			"sourceUpdatedAt": "2026-09-01T21:24:07Z",
+			"sourceFingerprint": "6d209961777a2bd3d378445950b949f5f453f92cb411f67f2b3eaad99e0b8702",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-tested fix for a work-mode safety bug where a checkbox confirmation could incorrectly trigger automatic agent work.",
+			"evidence": [
+				"Only acceptance of a current full-plan confirmation starts automatic agent work",
+				"140 tests pass; pnpm -r typecheck and pnpm build pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T21:27:46.337Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
@@ -10131,6 +10097,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:42:55.201Z"
+		},
+		{
+			"key": "pr:paperclip#12696",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12696 feat(grok-local): copy a refreshed sandbox credential back to the host",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12696",
+			"sourceUpdatedAt": "2026-09-01T21:25:28Z",
+			"sourceFingerprint": "4d482e277a06531443e62735f8ca3eb222a06dad5904795b189b1c4b62bb1b00",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Narrow adapter convenience feature with fail-closed design, but verification checklist boxes are unchecked despite claiming tests pass, undermining confidence in readiness.",
+			"evidence": [
+				"Verification section shows unchecked '- [ ]' items while text asserts '114 tests in 12 files pass'",
+				"Grok local adapter only; avoids re-login rather than fixing an outage or data-loss risk"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T21:27:46.337Z"
 		},
 		{
 			"key": "proposal:ci-minion-ai-stale",
