@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T22:57:52.329Z",
+	"generatedAt": "2026-09-01T23:27:49.806Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -6325,6 +6325,39 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
+			"key": "pr:paperclip#12700",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12700 test(runner): add full-stack acceptance and eval gates",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12700",
+			"sourceUpdatedAt": "2026-09-01T23:00:21Z",
+			"sourceFingerprint": "fe46799a64c6c97734e3ffb9afb6dece2066c1918fda97680a976d5e460b47c7",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Large, broadly verified acceptance/eval/chaos gate suite for the restored runner stack, with strong local test evidence but real review-size and stacked-dependency risk.",
+			"evidence": [
+				"57-cell full-stack catalog, 56 unit tests, native runner kept off by default",
+				"full pnpm test:run shows 5,635 passing with failures attributed to pre-existing inherited issues",
+				"depends on lower stack PRs #12699, #12691, #12685 not in this batch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T23:27:49.716Z"
+		},
+		{
 			"key": "proposal:2026-08-17-pkg-gateway-client-onevent-errors",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7059,6 +7092,39 @@
 			"scoredAt": "2026-09-01T12:27:40.259Z"
 		},
 		{
+			"key": "pr:paperclip#12698",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12698 fix: add fail-closed branch freshness status",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12698",
+			"sourceUpdatedAt": "2026-09-01T23:10:07Z",
+			"sourceFingerprint": "b89c8edc61d13fc3f96d8a620ee974b967c7edb87c831261d187d821557e40d5",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-tested fail-closed branch-freshness status closes a real staleness gap in merge protection, though it requires a separate admin step to become enforced.",
+			"evidence": [
+				"139 tests passing via node --test",
+				"typecheck and build pass",
+				"admin must still add branch-freshness to protected ruleset for it to take effect"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T23:27:49.716Z"
+		},
+		{
 			"key": "pr:pixel-agents#383",
 			"kind": "pr",
 			"stage": "development",
@@ -7366,41 +7432,6 @@
 			"scoredAt": "2026-09-01T20:28:19.924Z"
 		},
 		{
-			"key": "pr:paperclip#12689",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12689 Log issue write denial code, issueId, actorAgentId, runId",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12689",
-			"sourceUpdatedAt": "2026-09-01T20:03:59Z",
-			"sourceFingerprint": "b374869ad2d48e5eea41f415f24b0fab1121e4973004a958ee4cf467f6a0ba0b",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"issue:paperclip#12687",
-				"issue:paperclip#12686"
-			],
-			"rationale": "Small, well-tested logging fix that is the concrete prerequisite for root-causing the #12686 incident loop.",
-			"evidence": [
-				"\"Fixes #12687. Surfaced while investigating #12686\"",
-				"\"96 passed, and the new log line fires with the expected fields\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T20:28:19.924Z"
-		},
-		{
 			"key": "proposal:2026-08-29-proposal-index-projection-parity-untested",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7535,6 +7566,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
+		},
+		{
+			"key": "issue:paperclip#12697",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12697 Remote MCP session detection only retries on HTTP 400, so servers that answer 404 never connect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12697",
+			"sourceUpdatedAt": "2026-09-01T23:04:58Z",
+			"sourceFingerprint": "33c3f9611f6fa17bdadfa463bdbcb40f0a016f300789573d23ecaa1f42ed1ffb",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Precisely diagnosed bug with exact code location and concrete repro showing MCP servers returning 404 never get session detection, with clear candidate fixes ready to implement.",
+			"evidence": [
+				"detection only retries on response.status === 400 in tool-access.ts",
+				"curl repro shows mark3labs/mcp-go server returns 404 Invalid session ID, not 400",
+				"issue proposes three concrete fix options plus a tool-gateway.ts recovery path"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T23:27:49.716Z"
 		},
 		{
 			"key": "pr:pixel-agents#246",
@@ -8236,72 +8300,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T20:28:19.924Z"
-		},
-		{
-			"key": "issue:paperclip#12697",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12697 Remote MCP session detection only retries on HTTP 400, so servers that answer 404 never connect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12697",
-			"sourceUpdatedAt": "2026-09-01T21:30:39Z",
-			"sourceFingerprint": "0329d6cb8bd86ff77cf80f5f32e59deaf3215c77c07ee43165a0f2c41a43db67",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Clearly reproduced bug where MCP session detection only retries on HTTP 400, permanently breaking connectivity for servers signaling via 404, with concrete proposed fixes.",
-			"evidence": [
-				"health-check returns 502 and catalog stays empty for 404-signaling servers",
-				"mcpSessionRequired flag never set, blocking recovery on both discovery and execution paths",
-				"confirmed still present on current master despite prior partial fix in #12346"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T21:57:52.513Z"
-		},
-		{
-			"key": "pr:paperclip#12698",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12698 fix: add fail-closed branch freshness status",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12698",
-			"sourceUpdatedAt": "2026-09-01T22:49:48Z",
-			"sourceFingerprint": "23a23c2a241e02cec5d38a268e2ab824e4a265fab059c7f809a1a8341baabaad",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Adds a durable fail-closed branch-freshness status that closes a real merge-protection gap and is already fully tested.",
-			"evidence": [
-				"139 node tests pass",
-				"typecheck and build pass",
-				"requires admin to add status to ruleset, a known non-blocking follow-up"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T22:57:52.252Z"
 		},
 		{
 			"key": "pr:pixel-agents#389",
@@ -9256,39 +9254,6 @@
 			"scoredAt": "2026-08-31T07:36:18.083Z"
 		},
 		{
-			"key": "pr:paperclip#12700",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12700 test(runner): add full-stack acceptance and eval gates",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12700",
-			"sourceUpdatedAt": "2026-09-01T22:49:18Z",
-			"sourceFingerprint": "9c31bb7fe845361605309c05e8e9edd8ea392dcef641d868035fb6a3ea32ed32",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Adds acceptance and eval gating for the runner stack with thorough local verification and no change to the experimental flag's default state.",
-			"evidence": [
-				"56 acceptance unit tests plus 15 eval tests pass",
-				"5,635 of 5,656 full-suite tests pass with pre-existing unrelated failures",
-				"enableNativeRunner remains off outside isolated test instance"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T22:57:52.252Z"
-		},
-		{
 			"key": "pr:pixel-agents#390",
 			"kind": "pr",
 			"stage": "development",
@@ -9490,6 +9455,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:19.199Z"
+		},
+		{
+			"key": "pr:paperclip#12689",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12689 Log issue write denial code, issueId, actorAgentId, runId",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12689",
+			"sourceUpdatedAt": "2026-09-01T23:21:36Z",
+			"sourceFingerprint": "ddb36f9811171be5568ad77903859cc44ed6fc2a7384b3e54a753d8e90fc83db",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, tested, additive logging fix that makes a recurring undiagnosable 403 class observable from logs alone.",
+			"evidence": [
+				"adds logger.warn with denial code, issue id, actor agent id, run id",
+				"targeted test asserts the log fires and fails if removed",
+				"no production behavior change per verification section"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T23:27:49.716Z"
 		},
 		{
 			"key": "pr:minion-base#41",
