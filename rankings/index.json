@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T10:57:34.171Z",
+	"generatedAt": "2026-09-01T11:27:38.573Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -5043,39 +5043,6 @@
 			"scoredAt": "2026-08-31T07:31:23.880Z"
 		},
 		{
-			"key": "pr:paperclip#12579",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12579 KOMAA-183: activate RTB execution control v2 on live master (port of KOMAA-167)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12579",
-			"sourceUpdatedAt": "2026-09-01T10:29:38Z",
-			"sourceFingerprint": "deca703adf282dda2578b197e00646770bef1a11ba1cccc87f917c4c7ec5651d",
-			"score": 67,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The reliability problem and tested components are substantial, but the goal should be reframed around completing live watchdog integration because this port does not yet activate its central control mechanism.",
-			"evidence": [
-				"Suspicious silence currently creates stale-run and productivity-review issues.",
-				"The change adds deterministic watchdog decisions, run-budget evaluation, telemetry, and 17 unit tests.",
-				"The new module is not wired into the live heartbeat watchdog path and does not change production watchdog behavior."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T10:57:34.094Z"
-		},
-		{
 			"key": "pr:paperclip#12625",
 			"kind": "pr",
 			"stage": "development",
@@ -5426,8 +5393,8 @@
 			"repo": "paperclip",
 			"title": "#12596 test(runner): bound codex provider exit polls by wall clock",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12596",
-			"sourceUpdatedAt": "2026-09-01T06:25:32Z",
-			"sourceFingerprint": "575c8d2df8d92491e8fe75706d003e3738cc00e01e3b5948ee81fd47eae2075c",
+			"sourceUpdatedAt": "2026-09-01T11:17:30Z",
+			"sourceFingerprint": "6ea3249c2cfd30e3173814c90bac6390bdbc5b30cf7596990dff4ae6561211d7",
 			"score": 66,
 			"band": "medium",
 			"axes": {
@@ -5442,48 +5409,15 @@
 			"confidence": 10,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute because this bounded, test-only change removes a repeatedly reproduced source of false CI failures with strong verification and low stated risk.",
+			"rationale": "Execute this bounded test-only fix because it addresses a reproduced CI flake with strong before-and-after evidence and low delivery risk.",
 			"evidence": [
-				"Two integration tests failed in 8/25 and 9/25 runs before the change.",
-				"Both tests passed 25/25 times after the change.",
-				"The full codex_provider suite passed 12 runs after the change."
+				"Two integration tests fail at random on branches with no Rust changes",
+				"Before: 8/25 and 9/25 failed; after: 0/25 failed",
+				"The change touches test code only"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T06:27:45.815Z"
-		},
-		{
-			"key": "pr:paperclip#12656",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12656 Gate Paperclip Runner setup behind an experimental flag",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12656",
-			"sourceUpdatedAt": "2026-09-01T10:49:53Z",
-			"sourceFingerprint": "d05b6fc6d807102b8dd07303ed125c1f9cc8f5922664a79b88ff04c6e1148a59",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This is a bounded rollout-safety change with clear flag behavior, broad setup-path coverage, and focused tests, although CI verification remains outstanding.",
-			"evidence": [
-				"Paperclip Runner is experimental and is intended to remain opt-in.",
-				"The change covers Settings, onboarding, agent creation, invite setup, import setup, and server-seeded onboarding.",
-				"Focused regression tests were added, but no local test suite was run."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T10:57:34.094Z"
+			"scoredAt": "2026-09-01T11:27:38.486Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
@@ -5825,6 +5759,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
+		},
+		{
+			"key": "pr:paperclip#12579",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12579 KOMAA-183: activate RTB execution control v2 on live master (port of KOMAA-167)",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12579",
+			"sourceUpdatedAt": "2026-09-01T11:20:24Z",
+			"sourceFingerprint": "2e121ab6cac211579a5138384a140615e188f32b0b055e76be382cc9b18c71c0",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12657"
+			],
+			"rationale": "Combine the overlapping RTB ports into one activation goal because this broader, tested port still does not change the live watchdog behavior.",
+			"evidence": [
+				"Ports RTB Execution Control v2 onto current master",
+				"17 unit tests are reported",
+				"The module is not wired into the live heartbeat watchdog path"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T11:27:38.486Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
@@ -7366,6 +7335,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
+		},
+		{
+			"key": "pr:paperclip#12657",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12657 KOMAA-183 port RTB execution control v2 core (KOMAA-167) onto current master",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12657",
+			"sourceUpdatedAt": "2026-09-01T11:10:12Z",
+			"sourceFingerprint": "51834e911329769b2586ba1f95f68881eb638da4db3e75e50a8e33139e11fd6e",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12579"
+			],
+			"rationale": "Fold this partial core port into the broader RTB activation goal because substantial production wiring remains and the same mechanisms are already represented by another PR in the batch.",
+			"evidence": [
+				"Ports KOMAA-167 RTB execution control mechanisms",
+				"17/17 unit tests pass in the source branch",
+				"Watchdog suppression, durable reconciliation, budget activation, and supportedObservability remain"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T11:27:38.486Z"
 		},
 		{
 			"key": "pr:pixel-agents#385",
@@ -9901,6 +9905,39 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
+			"key": "pr:paperclip#12626",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12626 chore(lockfile): refresh pnpm-lock.yaml",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12626",
+			"sourceUpdatedAt": "2026-09-01T10:58:12Z",
+			"sourceFingerprint": "4b0992c0824f6e20d9259fd236f730dc00b8bb41510f3d4ce46051434d0cbbac",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate after confirming the dependency changes, generated diff, and validation results because the catalog does not show whether this refresh fixes a current build or install failure.",
+			"evidence": [
+				"Dependencies changed on master",
+				"Only pnpm-lock.yaml is updated",
+				"No verification results are provided"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T11:27:38.486Z"
+		},
+		{
 			"key": "pr:pixel-agents#374",
 			"kind": "pr",
 			"stage": "development",
@@ -10231,39 +10268,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:42:55.201Z"
-		},
-		{
-			"key": "pr:paperclip#12626",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12626 chore(lockfile): refresh pnpm-lock.yaml",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12626",
-			"sourceUpdatedAt": "2026-09-01T10:20:19Z",
-			"sourceFingerprint": "ebf367ad0f536ff768ee8d70e561b307a05eb6719bfd64deb80af0fc874fb276",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A lockfile refresh may restore dependency reproducibility, but the catalog gives no failing install, blocked build, dependency delta, or verification evidence establishing urgency or safe execution.",
-			"evidence": [
-				"Only updates pnpm-lock.yaml.",
-				"Described as generated after dependencies changed on master.",
-				"No verification results or blocked workflow are stated."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T10:27:38.094Z"
 		},
 		{
 			"key": "proposal:ci-minion-ai-stale",
