@@ -3,7 +3,7 @@ id: ci-minion-ai-stale
 title: CI red — Stale on minion-ai main
 status: review
 created: 2026-08-28
-updated: 2026-08-31
+updated: 2026-09-01
 repos: []
 duplicate_candidate: ci-minion-ai-auto-response
 ---
@@ -20,7 +20,7 @@ green, or the workflow is deliberately removed/disabled with rationale.
 ## Latest failure
 
 - run: https://github.com/NikolasP98/minion-ai/actions/runs/33354092822
-- checked: 2026-08-31
+- checked: 2026-09-01
 
 ```
 stale	UNKNOWN STEP	2026-08-31T03:31:15.4172432Z Getting action download info
