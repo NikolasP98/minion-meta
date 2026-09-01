@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T14:57:41.174Z",
+	"generatedAt": "2026-09-01T15:27:38.910Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1584,39 +1584,6 @@
 			"scoredAt": "2026-08-31T22:27:54.178Z"
 		},
 		{
-			"key": "pr:paperclip#12667",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12667 fix(onboarding): restore browser launch and gate canaries",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12667",
-			"sourceUpdatedAt": "2026-09-01T14:47:03Z",
-			"sourceFingerprint": "6195e51273c69638a2cdfbf945dee7aa9a63e1c56c69c5bbbbe34971523478d6",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 10
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because it repairs the primary onboarding path and adds a post-publish canary gate that reduces repeated release regressions.",
-			"evidence": [
-				"Interactive onboarding stopped opening the browser and could remain stuck after organization creation.",
-				"The exact published canary is tested in a clean environment through the Connect a model step.",
-				"Unit, workflow, Playwright, typecheck, build, and published-package smoke checks pass."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T14:57:41.086Z"
-		},
-		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2173,6 +2140,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T06:57:55.880Z"
+		},
+		{
+			"key": "pr:paperclip#12670",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12670 fix(runner): keep agents running when app connections expire",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12670",
+			"sourceUpdatedAt": "2026-09-01T15:21:58Z",
+			"sourceFingerprint": "fc9b4db09636472651f18eec69fa0cc7b1cd884309e309528c7f9130db857511",
+			"score": 80,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because an optional expired or unhealthy app currently prevents unrelated agent work, while the bounded fix has targeted regression evidence and preserves fail-closed access behavior.",
+			"evidence": [
+				"One unavailable assigned app connection could stop a native agent run before it started.",
+				"Targeted regression tests pass for disabled, degraded, mixed-health, and assignment-drift cases.",
+				"Typecheck, token-gate checks, and build pass; unrelated host-specific failures prevented full-suite confirmation."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T15:27:38.829Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2988591151",
@@ -5994,6 +5994,39 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
+			"key": "pr:paperclip#12669",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12669 Add end-to-end session goals to Paperclip Runner",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12669",
+			"sourceUpdatedAt": "2026-09-01T15:15:57Z",
+			"sourceFingerprint": "d91a68ac1cc9624d6d9670142c4a1b7316b6b154c40e46686be97c0ef3a58a89",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The provider-neutral goal contract is strategically broad and well specified, but the catalog shows no outage, deadline, or completed verification evidence sufficient to prioritize this large cross-cutting change for immediate execution.",
+			"evidence": [
+				"Affects the runner protocol, persistence, orchestration, database state, realtime events, and issue composer.",
+				"Adds durable goal projection, an action outbox, recovery, REST controls, and cross-layer tests.",
+				"Verification is presented as commands and manual confirmation steps rather than recorded results."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T15:27:38.829Z"
+		},
+		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7773,39 +7806,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
-		},
-		{
-			"key": "pr:paperclip#12612",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12612 fix(workspaces): enable UI hot reload by default",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12612",
-			"sourceUpdatedAt": "2026-08-31T22:16:03Z",
-			"sourceFingerprint": "c01afb0614839f714455a71cbd3e4c73b0a723564da06538f5ffb9dd806494ce",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This bounded, low-risk fix removes recurring managed-worktree friction and has direct regression, typecheck, build, and broad test evidence.",
-			"evidence": [
-				"UI changes currently require a manual build in new managed worktrees.",
-				"An explicit false value remains supported as an opt-out.",
-				"The new regression test passed and 5,397 tests passed overall."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T22:27:54.178Z"
 		},
 		{
 			"key": "pr:paperclip#12613",
