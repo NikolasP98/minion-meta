@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T18:27:31.144Z",
+	"generatedAt": "2026-09-01T18:57:39.670Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -2744,38 +2744,6 @@
 			"scoredAt": "2026-08-31T08:31:21.054Z"
 		},
 		{
-			"key": "issue:paperclip#12602",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12602 A status write from an already-cancelled run still lands, reversing a user's cancel and clearing cancelledAt",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12602",
-			"sourceUpdatedAt": "2026-08-31T17:42:04Z",
-			"sourceFingerprint": "b9b7a564f13b30aab5919a74ea0cade0909dd9b4850d60c42a813116c8f19541",
-			"score": 77,
-			"band": "high",
-			"axes": {
-				"criticality": 9,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Data-integrity bug where a user's cancel is silently reversed and cancelledAt is erased, mirrored to external systems, with concrete timestamped evidence and a related duplicate-billing case on reassignment.",
-			"evidence": [
-				"agent write at 14:35:28.652 reversed status to done and cleared cancelledAt 1.838s after host recorded cancellation",
-				"reassignment case caused duplicate billed work (22¢ + 19¢) same family of bug"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T18:27:31.061Z"
-		},
-		{
 			"key": "pr:minion-factory#162",
 			"kind": "pr",
 			"stage": "development",
@@ -3638,41 +3606,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T09:24:43.768Z"
-		},
-		{
-			"key": "issue:paperclip#12603",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12603 Successful-run handoff wake drops its remediation instruction, so the corrective run repeats the previous run",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12603",
-			"sourceUpdatedAt": "2026-08-31T17:48:30Z",
-			"sourceFingerprint": "fba3445d4e35a481370171816c625372e7355811a4b552a293963f00391326f0",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 10
-			},
-			"confidence": 10,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:paperclip#12604"
-			],
-			"rationale": "Prune this issue as a separate board goal because PR #12604 already implements and tests the exact producer-consumer payload fix it specifies.",
-			"evidence": [
-				"The issue identifies the missing successful-run handoff payload block.",
-				"PR #12604 explicitly fixes this issue.",
-				"The PR adds payload rendering, recovery classification, and focused tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T17:54:59.834Z"
 		},
 		{
 			"key": "issue:pixel-agents#333",
@@ -7504,6 +7437,38 @@
 			"scoredAt": "2026-08-31T07:36:55.886Z"
 		},
 		{
+			"key": "pr:paperclip#12669",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12669 Add end-to-end session goals to Paperclip Runner",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12669",
+			"sourceUpdatedAt": "2026-09-01T18:55:07Z",
+			"sourceFingerprint": "22474350d20ff6283d63eb0b7af03eface85f41ed61eac104f316e46d415a3d8",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-specified, provider-neutral session goal contract with extensive cross-layer verification is ready to ship and unblocks durable multi-turn agent work.",
+			"evidence": [
+				"adds PRP v2 schemas, native Codex app-server and ACP goal support, durable projection and issue composer widget",
+				"verified via typescript build, 101+96 vitest/cargo tests, full server typecheck, and browser acceptance test"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T18:57:39.586Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-1883922325",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8881,38 +8846,6 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:paperclip#12669",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12669 Add end-to-end session goals to Paperclip Runner",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12669",
-			"sourceUpdatedAt": "2026-09-01T18:21:52Z",
-			"sourceFingerprint": "33abfd299703a0bf953d5d02104e280d55eba18629de1328bf6e98bf6f41ffd4",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Large cross-cutting feature PR with claimed verification and self-reported review, but scope and risk warrant scrutiny before merge rather than immediate execution.",
-			"evidence": [
-				"adds session goal contract across runner protocol, persistence, orchestration, composer",
-				"claims typecheck/vitest/cargo test passes and browser acceptance run"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T18:27:31.061Z"
-		},
-		{
 			"key": "proposal:2026-08-30-site-page-max-shared-token",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9010,6 +8943,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:38:21.867Z"
+		},
+		{
+			"key": "pr:paperclip#12681",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12681 Clean up experimental settings features",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12681",
+			"sourceUpdatedAt": "2026-09-01T18:56:49Z",
+			"sourceFingerprint": "0081dbf435312d350a3072df552af9b3e9fcd7505389357ed09302d217c3d7e1",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, well-verified cleanup that also fixes a real workspace-link routing bug sending users to the wrong company.",
+			"evidence": [
+				"fixes workspace links resolving from selected company instead of workspace owner",
+				"5,620 passing tests with full GitHub CI matrix passing, 4 unrelated pre-existing failures"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T18:57:39.586Z"
 		},
 		{
 			"key": "pr:pixel-agents#293",
@@ -9664,6 +9629,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:19.199Z"
+		},
+		{
+			"key": "pr:paperclip#12682",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12682 Improve native runner recovery and workspace controls",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12682",
+			"sourceUpdatedAt": "2026-09-01T18:56:38Z",
+			"sourceFingerprint": "01b9e4a97a9b12cfda85fa5e9a2f84b5f4752b7a1526deec6f40536a62afc8c1",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Gated, low-risk improvement to runner failure diagnostics and a new workspace picker with solid unit/component test coverage.",
+			"evidence": [
+				"picker is behind existing isolated-workspaces and project-policy gates, no breaking changes",
+				"verified via -r typecheck, test:run, and targeted vitest suites; full local build blocked only by a busy preview binary lock"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T18:57:39.586Z"
 		},
 		{
 			"key": "issue:paperclip#12615",
