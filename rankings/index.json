@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T04:27:44.743Z",
+	"generatedAt": "2026-09-01T04:57:38.818Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1683,42 +1683,6 @@
 			"scoredAt": "2026-08-31T22:27:54.178Z"
 		},
 		{
-			"key": "pr:paperclip#12634",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12634 fix(tools): promote Composio broker connections out of draft after a healthy connect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12634",
-			"sourceUpdatedAt": "2026-09-01T04:27:03Z",
-			"sourceFingerprint": "6d8bcc65bc1f0f44259e5969c824fed38a64e3b74fd3215268ef4c3c128f2bb8",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"issue:paperclip#12633",
-				"pr:paperclip#12632"
-			],
-			"rationale": "Execute because healthy Composio integrations remain wholly unusable until their shared application and broker connection leave draft status, although an automated regression test is absent.",
-			"evidence": [
-				"The gateway requires toolApplications.status to be active.",
-				"Every Composio child shares the parent's applicationId.",
-				"All reported CI checks are green, but the connect branch lacks an automated test."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T04:27:44.645Z"
-		},
-		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2604,6 +2568,39 @@
 			"scoredAt": "2026-09-01T02:27:41.262Z"
 		},
 		{
+			"key": "pr:paperclip#12634",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12634 fix(tools): promote Composio broker connections out of draft after a healthy connect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12634",
+			"sourceUpdatedAt": "2026-09-01T04:29:08Z",
+			"sourceFingerprint": "3b36d01286c16e0698aa71910aef1969e091156ee10d3162454e7fb54e7e0479",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because verified field mismatches make healthy Composio connections unusable for every real tool call, while the fix is narrowly scoped and tested by CI.",
+			"evidence": [
+				"Every tested Composio tool call returned tool_not_found.",
+				"The broker remains draft and has an incompatible mcp_stdio application type.",
+				"All CI checks were green after the first commit."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T04:57:38.732Z"
+		},
+		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3022,6 +3019,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T20:31:59.677Z"
+		},
+		{
+			"key": "issue:paperclip#12637",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12637 Cross-issue writes fail with 403 for any caller lacking a heartbeat run context, including direct API/board callers  Body:",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12637",
+			"sourceUpdatedAt": "2026-09-01T04:48:29Z",
+			"sourceFingerprint": "d195b4ed7f5aa70e42d3c930ea50ecaa0148e13d609436f712d3a8cc56cf6a7c",
+			"score": 76,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute investigation and repair because a core authorization rule blocks all no-run API and MCP callers from updating existing issues and creates recurring workflow overhead.",
+			"evidence": [
+				"PATCH status changes and comments fail with 403 without a valid issue-scoped run ID.",
+				"Both direct board callers and agents are affected.",
+				"The workaround creates additional issues to request later updates."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T04:57:38.732Z"
 		},
 		{
 			"key": "issue:pixel-agents#332",
@@ -5491,39 +5521,6 @@
 			"scoredAt": "2026-08-31T07:33:08.870Z"
 		},
 		{
-			"key": "pr:paperclip#12617",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12617 feat(ui): project native runner turns into task chat",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12617",
-			"sourceUpdatedAt": "2026-09-01T04:21:19Z",
-			"sourceFingerprint": "dc6204ef82f65234bac40b1d5a24a5891d57fa7ef9527632ea25c11e6f389687",
-			"score": 64,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the bounded UI projection unlocks native-runner task threads while explicitly preserving legacy adapter behavior, though it depends on earlier stack PRs.",
-			"evidence": [
-				"The task page cannot safely render recorded native runner events.",
-				"Rendering is gated by native runtime mode and the paperclip_runner adapter.",
-				"The PR is third in a three-PR stack."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T04:27:44.645Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6122,6 +6119,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:02.540Z"
+		},
+		{
+			"key": "pr:paperclip#12638",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12638 feat(runner): add remote execution substrate",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12638",
+			"sourceUpdatedAt": "2026-09-01T04:55:49Z",
+			"sourceFingerprint": "b80246e0ca5c5ccbe2cc06b6715ebd6ce253606c0cc89a75e71ddf31054bb947",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The remote-execution foundation is strategically central, but it remains default-off, does not yet make remote Codex runnable, and lacks local verification.",
+			"evidence": [
+				"The change touches runner transport, orchestration, plugin contracts, and shared settings.",
+				"The rollout controls remain off by default.",
+				"The next PR is required for Rust WSS and TLS transport."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T04:57:38.732Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
@@ -8511,6 +8541,39 @@
 			"scoredAt": "2026-08-31T07:36:55.886Z"
 		},
 		{
+			"key": "proposal:ci-minion-ai-stale",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Stale on minion-ai main",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-stale.md",
+			"sourceUpdatedAt": "2026-09-01",
+			"sourceFingerprint": "29a32d6263ba349961bdcc803e2af91583bad452a63f5e0fb5b6702a6bf1cb7e",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute the CI repair because the deploy-branch workflow is observably red with a precise failure, although resolution may require unavailable credential administration.",
+			"evidence": [
+				"The latest completed Stale workflow run on main failed.",
+				"The action reports Input required and not supplied: private-key.",
+				"Done means restoring green status or deliberately retiring the workflow."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T04:57:38.732Z"
+		},
+		{
 			"key": "pr:minion-meta#255",
 			"kind": "pr",
 			"stage": "development",
@@ -9497,38 +9560,6 @@
 			"scoredAt": "2026-08-31T07:38:21.867Z"
 		},
 		{
-			"key": "pr:paperclip#12626",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12626 chore(lockfile): refresh pnpm-lock.yaml",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12626",
-			"sourceUpdatedAt": "2026-09-01T03:51:53Z",
-			"sourceFingerprint": "38a53d531acea2819e9a22d8f68e1388f8828c9c9031ed6e923a90987213795f",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate because the refresh is immediately actionable but the catalog does not establish that the current lockfile mismatch blocks builds, releases, or users.",
-			"evidence": [
-				"The PR only updates pnpm-lock.yaml.",
-				"The refresh follows dependency changes on master."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T03:57:41.744Z"
-		},
-		{
 			"key": "proposal:2026-08-18-spec-heading-lint-baseline-backfill",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10158,72 +10189,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:42:55.201Z"
-		},
-		{
-			"key": "proposal:ci-minion-ai-stale",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Stale on minion-ai main",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-stale.md",
-			"sourceUpdatedAt": "2026-09-01",
-			"sourceFingerprint": "7dbce7963752c0cbf00633c6970734679634849efed545daec44e5ee532dfc3a",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The failed workflow has a precise missing-secret error and a verifiable resolution path, making it ready work even though the catalog shows no release blockage.",
-			"evidence": [
-				"latest completed run on main failed",
-				"error says private-key input was not supplied",
-				"definition of done permits fixing or deliberately retiring the workflow"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T00:57:50.010Z"
-		},
-		{
-			"key": "pr:paperclip#12566",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12566 chore(deps-dev): bump @vitejs/plugin-react from 5.2.0 to 6.1.1",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12566",
-			"sourceUpdatedAt": "2026-08-31T12:24:52Z",
-			"sourceFingerprint": "74b0f1cb537571fc94a9c1f208edfc42d45bfaf1ae20e51700c8a36c69f71627",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The major build-plugin upgrade lacks migration, compatibility, and repository test evidence needed to justify immediate paid execution.",
-			"evidence": [
-				"Bumps @vitejs/plugin-react from 5.2.0 to 6.1.1.",
-				"The upgrade crosses a major version.",
-				"No Paperclip-specific verification is provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T12:54:59.710Z"
 		},
 		{
 			"key": "pr:paperclip#12569",
@@ -10888,6 +10853,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:58.286Z"
+		},
+		{
+			"key": "pr:paperclip#12626",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12626 chore(lockfile): refresh pnpm-lock.yaml",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12626",
+			"sourceUpdatedAt": "2026-09-01T04:32:44Z",
+			"sourceFingerprint": "cde63e96ed826ab2f0e2e0afbac0902f4044b46cba332544bc1564aa275ced0d",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is a bounded, actionable dependency-consistency repair with modest consequences and scope.",
+			"evidence": [
+				"Only pnpm-lock.yaml is updated.",
+				"The refresh follows dependency changes on master.",
+				"The PR is open."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T04:57:38.732Z"
 		},
 		{
 			"key": "pr:pixel-agents#294",
