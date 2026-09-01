@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T03:57:41.829Z",
+	"generatedAt": "2026-09-01T04:27:44.743Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -235,6 +235,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T17:54:59.834Z"
+		},
+		{
+			"key": "issue:paperclip#12635",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12635 Docker image build fails with `linker cc not found` while compiling the Rust runner",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12635",
+			"sourceUpdatedAt": "2026-09-01T04:20:12Z",
+			"sourceFingerprint": "4e4c820199e5b97f2df040936deef48ee12ad1056333b0b668f33b07ee9c3145",
+			"score": 95,
+			"band": "critical",
+			"axes": {
+				"criticality": 10,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 3
+			},
+			"confidence": 9,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:paperclip#12636"
+			],
+			"rationale": "Prune this separate board item because PR #12636 directly addresses the fully reproduced Docker publication blocker with the specified C-toolchain addition.",
+			"evidence": [
+				"The Docker build fails at cargo build with linker cc not found.",
+				"The expected workflow publishes no images when the build fails.",
+				"PR #12636 adds build-essential to the build stage."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T04:27:44.645Z"
+		},
+		{
+			"key": "pr:paperclip#12636",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12636 build(docker): add a C toolchain for the Rust runner build",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12636",
+			"sourceUpdatedAt": "2026-09-01T04:25:02Z",
+			"sourceFingerprint": "db19c3bb438916171895f1a424b8334faa43a76d59a24782648c77a12fd6d31e",
+			"score": 95,
+			"band": "critical",
+			"axes": {
+				"criticality": 10,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"issue:paperclip#12635"
+			],
+			"rationale": "Execute first because the current missing linker blocks Docker image compilation and publication across both stated architectures, with a small build-stage-only fix.",
+			"evidence": [
+				"Cargo exits with code 101 because linker cc is absent.",
+				"The failure means docker.yml publishes no image.",
+				"build-essential is added only to the build stage."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T04:27:44.645Z"
 		},
 		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
@@ -1280,39 +1350,6 @@
 			"scoredAt": "2026-08-31T08:01:35.926Z"
 		},
 		{
-			"key": "pr:paperclip#12560",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12560 fix(openclaw): persist gateway credentials as secret refs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12560",
-			"sourceUpdatedAt": "2026-08-31T14:48:21Z",
-			"sourceFingerprint": "2756f9fafa3e65978adf1aa82a90c63ccdce1ba08f34974d12dae63a5c214e7c",
-			"score": 85,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because legacy OpenClaw credentials can be exposed and persisted as plaintext configuration, while the proposed bounded migration uses the existing secret-reference system and has focused regression coverage.",
-			"evidence": [
-				"Legacy authorization headers can expose tokens in the edit form and persist them again during edit, invite replay, or join.",
-				"The change removes known credential headers and persists only secret references.",
-				"Adapter, UI, server, secrets, and invite-replay checks passed, although the full wrapper could not run without Cargo."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T14:54:38.867Z"
-		},
-		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1478,6 +1515,42 @@
 			"scoredAt": "2026-09-01T01:27:35.836Z"
 		},
 		{
+			"key": "issue:paperclip#12633",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12633 Composio broker connections never leave draft status — every child toolkit's tools are invisible to the tool gateway",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12633",
+			"sourceUpdatedAt": "2026-09-01T04:16:37Z",
+			"sourceFingerprint": "5b6c726e7454fba57e71f910d794590ff3d998d328094d18dc684b0ce4033192",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 3
+			},
+			"confidence": 9,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:paperclip#12634",
+				"pr:paperclip#12632"
+			],
+			"rationale": "Prune this duplicate execution target because PR #12634 already implements the specified status promotion and reports successful CI verification.",
+			"evidence": [
+				"Draft applications are excluded by the tool gateway's active-status filter.",
+				"PR #12634 promotes both the broker connection and application after a healthy check.",
+				"The issue describes this as the third blocker after the authentication fixes."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T04:27:44.645Z"
+		},
+		{
 			"key": "pr:minion-meta#247",
 			"kind": "pr",
 			"stage": "development",
@@ -1608,6 +1681,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T22:27:54.178Z"
+		},
+		{
+			"key": "pr:paperclip#12634",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12634 fix(tools): promote Composio broker connections out of draft after a healthy connect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12634",
+			"sourceUpdatedAt": "2026-09-01T04:27:03Z",
+			"sourceFingerprint": "6d8bcc65bc1f0f44259e5969c824fed38a64e3b74fd3215268ef4c3c128f2bb8",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"issue:paperclip#12633",
+				"pr:paperclip#12632"
+			],
+			"rationale": "Execute because healthy Composio integrations remain wholly unusable until their shared application and broker connection leave draft status, although an automated regression test is absent.",
+			"evidence": [
+				"The gateway requires toolApplications.status to be active.",
+				"Every Composio child shares the parent's applicationId.",
+				"All reported CI checks are green, but the connect branch lacks an automated test."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T04:27:44.645Z"
 		},
 		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
@@ -1990,6 +2099,41 @@
 			"scoredAt": "2026-09-01T03:57:41.744Z"
 		},
 		{
+			"key": "issue:paperclip#12631",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12631 Composio hosted MCP session calls return 401: session.mcp.headers omits x-api-key",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12631",
+			"sourceUpdatedAt": "2026-09-01T03:59:30Z",
+			"sourceFingerprint": "529dc889d4f5c4245695db82692a9751cd84751793d3f90c78bbd9deb9c35def",
+			"score": 80,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 3
+			},
+			"confidence": 9,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:paperclip#12632"
+			],
+			"rationale": "Prune this board goal as separately executable work because the same batch contains an open PR implementing and live-verifying its stated fix.",
+			"evidence": [
+				"The issue says a follow-up PR will add the parent-key fallback.",
+				"PR #12632 implements that exact x-api-key fallback.",
+				"The reported failure affects every Composio-brokered toolkit past session creation."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T04:27:44.645Z"
+		},
+		{
 			"key": "pr:paperclip#12630",
 			"kind": "pr",
 			"stage": "development",
@@ -2023,6 +2167,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T03:57:41.744Z"
+		},
+		{
+			"key": "pr:paperclip#12632",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12632 fix(tools): fall back to the parent API key when Composio omits mcp.headers.x-api-key",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12632",
+			"sourceUpdatedAt": "2026-09-01T04:03:08Z",
+			"sourceFingerprint": "1980c60f0cb79f6da7e5f4befcbd5a786647e1059a5fa25ebc73d5f289ff4c49",
+			"score": 80,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"issue:paperclip#12631"
+			],
+			"rationale": "Execute because this narrowly scoped fallback fixes an evidenced authentication failure that prevents every affected Composio session from discovering or calling tools.",
+			"evidence": [
+				"MCP calls without x-api-key returned HTTP 401.",
+				"Adding the resolved project API key returned HTTP 200.",
+				"The change preserves any x-api-key already supplied by Composio."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T04:27:44.645Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2988591151",
@@ -5318,8 +5497,8 @@
 			"repo": "paperclip",
 			"title": "#12617 feat(ui): project native runner turns into task chat",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12617",
-			"sourceUpdatedAt": "2026-09-01T03:54:30Z",
-			"sourceFingerprint": "091fa8364f09d0bb87eeb84cbde50651b908dc59c6dab717f1b3198e8cafe13e",
+			"sourceUpdatedAt": "2026-09-01T04:21:19Z",
+			"sourceFingerprint": "dc6204ef82f65234bac40b1d5a24a5891d57fa7ef9527632ea25c11e6f389687",
 			"score": 64,
 			"band": "medium",
 			"axes": {
@@ -5329,20 +5508,20 @@
 			},
 			"readiness": {
 				"specification": 9,
-				"implementation": 7
+				"implementation": 8
 			},
 			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute because this bounded UI projection completes a dependency stack for native runner visibility while explicitly preserving legacy adapter behavior.",
+			"rationale": "Execute because the bounded UI projection unlocks native-runner task threads while explicitly preserving legacy adapter behavior, though it depends on earlier stack PRs.",
 			"evidence": [
 				"The task page cannot safely render recorded native runner events.",
-				"The change is third in a three-PR runner integration stack.",
-				"Focused native and direct-adapter regression tests are included."
+				"Rendering is gated by native runtime mode and the paperclip_runner adapter.",
+				"The PR is third in a three-PR stack."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T03:57:41.744Z"
+			"scoredAt": "2026-09-01T04:27:44.645Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
@@ -8365,39 +8544,6 @@
 			"scoredAt": "2026-08-31T07:33:08.870Z"
 		},
 		{
-			"key": "pr:paperclip#12562",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12562 chore(deps): bump paperclipai/paperclip/.github/workflows/pr-trusted.yml from 39b8ee2960541d14b380f95365deecba6723d9bd to f038633bf5b04163ff985ef0542876bd9f455379",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12562",
-			"sourceUpdatedAt": "2026-08-31T06:15:48Z",
-			"sourceFingerprint": "d0a3a3a68b18fca060999145c0a59d91957c91503d866b871747dfca7a99c0ef",
-			"score": 47,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate once the exact workflow delta and CI validation are established because release infrastructure is central but the supplied summary mostly lists unrelated commits and setup documentation.",
-			"evidence": [
-				"The target is a trusted PR workflow reference.",
-				"The referenced commit range includes runner feature commits.",
-				"No workflow-specific verification result is provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:03.762Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-pos-appointments-fork",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8563,39 +8709,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
-		},
-		{
-			"key": "pr:paperclip#12564",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12564 chore(deps): bump @mdxeditor/editor from 4.2.1 to 4.2.3",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12564",
-			"sourceUpdatedAt": "2026-08-31T12:25:18Z",
-			"sourceFingerprint": "ce431a14c83d41e886f6e8eac483f0e3782ada4b10353561073040a0cd609bb3",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This bounded patch directly prevents two documented editor crash modes and is sufficiently clear to validate and deliver.",
-			"evidence": [
-				"Bumps @mdxeditor/editor from 4.2.1 to 4.2.3.",
-				"Prevents JSX kind mismatches from crashing the editor.",
-				"Prevents stale table actions from crashing."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T12:54:59.710Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-msteams-large-upload-spec",
@@ -10080,72 +10193,6 @@
 			"scoredAt": "2026-09-01T00:57:50.010Z"
 		},
 		{
-			"key": "pr:paperclip#12561",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12561 chore(deps): bump @lexical/link from 0.48.0 to 0.49.0",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12561",
-			"sourceUpdatedAt": "2026-08-31T12:24:59Z",
-			"sourceFingerprint": "0b78b358d139396c8d18f90b41bfe59b3a06a4a66d69648412647fc50d75ac2f",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The breaking editor dependency upgrade may matter strategically but needs compatibility and test evidence before it is actionable.",
-			"evidence": [
-				"Bumps @lexical/link from 0.48.0 to 0.49.0.",
-				"The release includes breaking changes to built-in node classes.",
-				"No Paperclip-specific verification is provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T12:54:59.710Z"
-		},
-		{
-			"key": "pr:paperclip#12565",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12565 chore(deps): bump better-auth from 1.7.0 to 1.7.2",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12565",
-			"sourceUpdatedAt": "2026-08-31T13:12:08Z",
-			"sourceFingerprint": "fb9b3d3d12bb6f6e3b2ae37b2b85b00894332c557d9d75e23b2e4842aa39c296",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The patch release contains potentially useful auth fixes, but the catalog establishes neither an affected production path nor verification results that justify prioritizing it now.",
-			"evidence": [
-				"Bumps better-auth from 1.7.0 to 1.7.2.",
-				"Release notes list callback-validation, migration, session-data, and type fixes.",
-				"No project-specific tests or affected behavior are described."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T13:24:31.579Z"
-		},
-		{
 			"key": "pr:paperclip#12566",
 			"kind": "pr",
 			"stage": "development",
@@ -10808,39 +10855,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
-		},
-		{
-			"key": "pr:paperclip#12563",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12563 chore(deps): bump sharp from 0.35.3 to 0.35.4",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12563",
-			"sourceUpdatedAt": "2026-08-31T12:25:43Z",
-			"sourceFingerprint": "6766f9b31714767efb3fa6a24ad3731ad56e8339e9bfb72739c8d4d7352ea684",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The image-processing patch contains useful correctness fixes, but the catalog does not establish affected Paperclip behavior or successful validation.",
-			"evidence": [
-				"Bumps sharp from 0.35.3 to 0.35.4.",
-				"The release bounds resize and composite coordinates.",
-				"No Paperclip-specific test results are provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T12:54:59.710Z"
 		},
 		{
 			"key": "pr:minion_hub#196",
