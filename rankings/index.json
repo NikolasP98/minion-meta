@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T16:57:38.735Z",
+	"generatedAt": "2026-09-01T17:27:40.281Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -35,6 +35,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
+		},
+		{
+			"key": "issue:paperclip#12677",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12677 Docker image build broken since 2026-08-30: cargo has no linker (`cc` not found)",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12677",
+			"sourceUpdatedAt": "2026-09-01T17:20:58Z",
+			"sourceFingerprint": "18077af0769b60ba8da60ab55033df6159c196321e194b548faf8070510fbce7",
+			"score": 98,
+			"band": "critical",
+			"axes": {
+				"criticality": 10,
+				"importance": 10,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 10,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute immediately because the broken image pipeline blocks all staging deployment of merged work and the missing build toolchain is directly evidenced and narrowly remediable.",
+			"evidence": [
+				"Both Docker image jobs have failed on every master commit since 2026-08-30.",
+				"No tenant or cloud image has been published in three days, blocking staging updates.",
+				"Build logs report linker cc not found and make absent after Rust compilation begins."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T17:27:40.203Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -202,39 +235,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "issue:paperclip#12602",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12602 A status write from an already-cancelled run still lands, reversing a user's cancel and clearing cancelledAt",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12602",
-			"sourceUpdatedAt": "2026-08-31T17:42:04Z",
-			"sourceFingerprint": "b9b7a564f13b30aab5919a74ea0cade0909dd9b4850d60c42a813116c8f19541",
-			"score": 95,
-			"band": "critical",
-			"axes": {
-				"criticality": 10,
-				"importance": 10,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because stale writes from cancelled runs can reverse explicit user decisions, erase cancellation metadata, and propagate incorrect state to external systems.",
-			"evidence": [
-				"An agent write changed an issue from cancelled to done 1.82 seconds after the user cancellation.",
-				"The stale write cleared cancelledAt to null.",
-				"The incorrect done state was mirrored to an external integration."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T17:54:59.834Z"
 		},
 		{
 			"key": "issue:paperclip#12635",
@@ -1348,39 +1348,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:42:55.201Z"
-		},
-		{
-			"key": "issue:paperclip#12601",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12601 Child-completion wake is silently coalesced into an unrelated in-flight run — payload (childIssueIds) dropped, reason renamed",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12601",
-			"sourceUpdatedAt": "2026-08-31T17:42:02Z",
-			"sourceFingerprint": "710ffcdb8c43049e555dc6b8d03392848cde4556f48764f24159c6c97cd30093",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because a core delegation event is silently lost during ordinary run overlap, leaving parent work incorrectly unfinished with no visible failure signal.",
-			"evidence": [
-				"Child-completion payloads were lost in 3 of 6 observed occurrences.",
-				"Coalescing renames the reason and does not independently deliver the payload.",
-				"A heartbeat-generated run was observed swallowing the completion event."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T17:54:59.834Z"
 		},
 		{
 			"key": "issue:paperclip#12622",
@@ -3160,6 +3127,39 @@
 			"scoredAt": "2026-09-01T13:57:39.021Z"
 		},
 		{
+			"key": "issue:paperclip#12674",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12674 Server test shard 1/5 fails intermittently on database teardown",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12674",
+			"sourceUpdatedAt": "2026-09-01T17:08:04Z",
+			"sourceFingerprint": "1334a620b24f916fd279bd943dce10ba53ee77030e01621d4dbea03b2e2ed745",
+			"score": 76,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate after isolating the specific background-work lifecycle leak, since the recurring CI cost is substantial but the proposed cause remains a well-supported hypothesis rather than a bounded fix.",
+			"evidence": [
+				"The shard reportedly fails roughly one run in four and affects unrelated branches.",
+				"Failures occur during teardown as deadlocks or foreign-key violations after test assertions pass.",
+				"The issue describes leftover application work as the likelier cause."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T17:27:40.203Z"
+		},
+		{
 			"key": "issue:pixel-agents#332",
 			"kind": "issue",
 			"stage": "proposal",
@@ -3907,39 +3907,6 @@
 			"scoredAt": "2026-09-01T01:27:35.836Z"
 		},
 		{
-			"key": "pr:paperclip#12646",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12646 fix(runner): accept the indeterminate command result after a runner restart",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12646",
-			"sourceUpdatedAt": "2026-09-01T12:00:14Z",
-			"sourceFingerprint": "423172004679d1fd3248d8823ef4d810cad5fdea946c701403e868a4b8faf99e",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because this bounded fix addresses a reproducible crash-recovery loop that blocks live-session resumption and already includes targeted persistence and replay coverage.",
-			"evidence": [
-				"A runner restart can cause the same recovery result to replay forever.",
-				"The resumed session waits 30 seconds and then fails.",
-				"The change adds an integration test covering persistence, restart, and duplicate replay."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T12:27:40.259Z"
-		},
-		{
 			"key": "pr:paperclip#12650",
 			"kind": "pr",
 			"stage": "development",
@@ -3971,6 +3938,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T09:27:45.298Z"
+		},
+		{
+			"key": "pr:paperclip#12676",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12676 fix(runner): stop capability live-session tests from failing on unhandled turn-timeout rejections",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12676",
+			"sourceUpdatedAt": "2026-09-01T17:16:24Z",
+			"sourceFingerprint": "6da56bdaa82777cb23b22c2097305464b5d31c5ad15222f47df4c68412daf2be",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the bounded changes address recurring runner-test failures and stalled recovery while already carrying targeted stress and persistence tests.",
+			"evidence": [
+				"Loaded CI hosts intermittently expose an unhandled turn-timeout rejection.",
+				"A resumed session can stall on an indeterminate recovered command result.",
+				"The live-session file passed 10 of 10 runs with 30 competing workers."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T17:27:40.203Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -5354,6 +5354,39 @@
 			"scoredAt": "2026-09-01T14:57:41.086Z"
 		},
 		{
+			"key": "issue:paperclip#12675",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12675 Onboarding API keys need server-owned user-secret definitions, like the Claude token",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12675",
+			"sourceUpdatedAt": "2026-09-01T17:09:46Z",
+			"sourceFingerprint": "72a4bc97ea7f3aaea1fc39966bb34d788186180c63b0724184e95d99af80dde8",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because server-owned definitions close a credential-policy inconsistency and remove an unnecessary administrative dependency from onboarding.",
+			"evidence": [
+				"The client currently chooses the API-key definition's key, provider, and managed mode.",
+				"The Claude credential path already uses a fixed server-owned definition.",
+				"The proposed definitions cover ANTHROPIC_API_KEY and OPENAI_API_KEY, with migration compatibility requiring confirmation."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T17:27:40.203Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5451,39 +5484,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
-		},
-		{
-			"key": "pr:paperclip#12618",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12618 feat(grok-local): stage a curated Grok home into remote subscription runs",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12618",
-			"sourceUpdatedAt": "2026-09-01T14:55:02Z",
-			"sourceFingerprint": "a5a76735a56494ce9e7aa45c5eccf9c6b95fd9ef55905c006c7672226cce7a0a",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because it fixes a reproducible remote-subscription authentication failure with narrowly scoped credential handling and strong completed verification.",
-			"evidence": [
-				"Remote Grok subscription runs lacked the credential file required in the sandbox.",
-				"Only auth.json is staged with mode 0600, and temporary data is removed before teardown.",
-				"Adapter tests and typecheck pass, and all CI gates are reported green."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T14:57:41.086Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -6058,6 +6058,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:40:57.095Z"
+		},
+		{
+			"key": "pr:paperclip#12618",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12618 feat(grok-local): stage a curated Grok home into remote subscription runs",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12618",
+			"sourceUpdatedAt": "2026-09-01T17:20:20Z",
+			"sourceFingerprint": "f412292fabac74b10dfc2d17c689de486b6b39e6c9f9fa2f4e9613b6d9cba150",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because it fixes broken remote Grok subscription authentication with tightly constrained credential handling and strong verification evidence.",
+			"evidence": [
+				"Remote Grok subscription runs lacked the credential file in the sandbox.",
+				"Only auth.json is staged with mode 0600, and the API-key lane does not stage credentials.",
+				"Targeted tests and typecheck pass, and all CI gates are reported green."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T17:27:40.203Z"
 		},
 		{
 			"key": "pr:pixel-agents#285",
@@ -7806,39 +7839,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
-		},
-		{
-			"key": "pr:paperclip#12613",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12613 Onboarding: model source tiles, one input canvas, and Storybook coverage for the agent arc",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12613",
-			"sourceUpdatedAt": "2026-09-01T16:33:23Z",
-			"sourceFingerprint": "295d78a69d4265b80d24e4bea953a6830f71fbb47a350e6e8f7fa6c3e5ed3b3e",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the onboarding regression risk is clearly bounded, locally inspectable, and backed by substantial passing verification, although no outage or deadline is identified.",
-			"evidence": [
-				"The connect-model step determines whether a new agent can run.",
-				"Storybook coverage now spans all three agent-arc steps.",
-				"Touched suites report 139 passing tests and UI typecheck is clean."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T16:57:38.662Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-722867358",
