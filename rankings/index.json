@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T03:27:31.112Z",
+	"generatedAt": "2026-09-01T03:57:41.829Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1953,6 +1953,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:46:38.665Z"
+		},
+		{
+			"key": "issue:paperclip#12628",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12628 Composio tool_router/session requests fail with 400: toolkits.enabled should be toolkits.enable",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12628",
+			"sourceUpdatedAt": "2026-09-01T03:36:20Z",
+			"sourceFingerprint": "1dfce25f3f3a1d3482db59de650f3552b5ef02b1ab7876dd4aa447b0082edbde",
+			"score": 80,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 10
+			},
+			"confidence": 10,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:paperclip#12630"
+			],
+			"rationale": "Prune this board goal as redundant because the same defect, fix, and verification are already represented by the actionable implementation PR in this batch.",
+			"evidence": [
+				"The issue identifies enabled → enable as the fix.",
+				"PR #12630 states that it fixes #12628.",
+				"The issue says a follow-up PR will provide the change."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T03:57:41.744Z"
+		},
+		{
+			"key": "pr:paperclip#12630",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12630 fix(tools): use toolkits.enable, not toolkits.enabled, in Composio session requests",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12630",
+			"sourceUpdatedAt": "2026-09-01T03:52:12Z",
+			"sourceFingerprint": "ea8a3996ece9bd3f0e1cf080e4ac9c5a23e18165e6aa84d73e698e8dd2ee3dd3",
+			"score": 80,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 10
+			},
+			"confidence": 10,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"issue:paperclip#12628"
+			],
+			"rationale": "Execute because a tested one-field correction restores a currently broken integration path for every Composio-brokered toolkit with low stated change risk.",
+			"evidence": [
+				"Every Composio toolkit session request currently fails with HTTP 400.",
+				"The corrected enable field succeeded against the live v3.1 API.",
+				"All reported CI checks are green."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T03:57:41.744Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2988591151",
@@ -4025,39 +4095,6 @@
 			"scoredAt": "2026-08-31T08:01:35.926Z"
 		},
 		{
-			"key": "pr:paperclip#12616",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12616 feat(runner): integrate Codex native execution",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12616",
-			"sourceUpdatedAt": "2026-09-01T03:21:53Z",
-			"sourceFingerprint": "c0e3c081269361da44e916c1005f9ea62464118d097011e8304a933c13f7b05d",
-			"score": 70,
-			"band": "high",
-			"axes": {
-				"criticality": 5,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because this is a bounded, guarded production integration that unlocks real Codex runner execution while preserving legacy adapter behavior and recoverability.",
-			"evidence": [
-				"The runner package cannot yet execute a real provider through the server.",
-				"The path is Codex-only, hidden, and default-off.",
-				"Focused recovery, cancellation, compatibility, and conformance coverage is included."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T03:27:31.030Z"
-		},
-		{
 			"key": "pr:pixel-agents#300",
 			"kind": "pr",
 			"stage": "development",
@@ -4260,39 +4297,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
-		},
-		{
-			"key": "pr:paperclip#12556",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12556 fix(issues): expire pending interactions when a blocked issue's status resets",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12556",
-			"sourceUpdatedAt": "2026-08-31T03:58:03Z",
-			"sourceFingerprint": "171676d5c1115ed8af8aecc20699752ca26718e0715b9dcf7a5465a9058b5774",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because unresolved interaction records can silently diverge from issue state across several status-reset paths, undermining reliable continuation behavior.",
-			"evidence": [
-				"Leaving blocked can leave an interaction pending indefinitely.",
-				"Generic PATCH, force-release, and direct service callers can trigger the drift.",
-				"The change extends an existing terminal-transition expiry pattern."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T02:57:44.950Z"
 		},
 		{
 			"key": "pr:paperclip#12586",
@@ -5308,6 +5312,39 @@
 			"scoredAt": "2026-08-31T07:33:08.870Z"
 		},
 		{
+			"key": "pr:paperclip#12617",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12617 feat(ui): project native runner turns into task chat",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12617",
+			"sourceUpdatedAt": "2026-09-01T03:54:30Z",
+			"sourceFingerprint": "091fa8364f09d0bb87eeb84cbde50651b908dc59c6dab717f1b3198e8cafe13e",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because this bounded UI projection completes a dependency stack for native runner visibility while explicitly preserving legacy adapter behavior.",
+			"evidence": [
+				"The task page cannot safely render recorded native runner events.",
+				"The change is third in a three-PR runner integration stack.",
+				"Focused native and direct-adapter regression tests are included."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T03:57:41.744Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5640,41 +5677,6 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
-			"key": "pr:paperclip#12617",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12617 feat(ui): project native runner turns into task chat",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12617",
-			"sourceUpdatedAt": "2026-09-01T02:33:40Z",
-			"sourceFingerprint": "0e1400b0c14417d0389ff6a3e5eb9d413a9271f2a0237b40762badc915a5ba8a",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12616"
-			],
-			"rationale": "Group with the Codex server integration because its value depends on native runner records existing and the pair delivers one coherent, user-visible execution capability.",
-			"evidence": [
-				"The existing task page cannot render native runner records safely.",
-				"Rendering is gated to native paperclip_runner runs.",
-				"The PR is the third item in the same runner integration stack."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T02:57:44.950Z"
-		},
-		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5739,39 +5741,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:14:27.632Z"
-		},
-		{
-			"key": "pr:paperclip#12557",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12557 fix(ui): stabilize onboarding final route handoff",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12557",
-			"sourceUpdatedAt": "2026-08-31T04:24:43Z",
-			"sourceFingerprint": "1b7ce98ecd6182bcd1ebb5eec7502daceaccf7fed95019c1846414d3bc3b5ed9",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because unstable completion of first-company onboarding affects a central activation path and the bounded fix has broad verification evidence.",
-			"evidence": [
-				"The final handoff can reopen the wizard at Step 3.",
-				"The change dismisses the route before resetting state and navigating.",
-				"Typecheck, build, CI gates, and browser restart checks passed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:03.762Z"
 		},
 		{
 			"key": "pr:paperclip#12596",
@@ -6816,6 +6785,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:46:38.665Z"
+		},
+		{
+			"key": "issue:paperclip#12629",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12629 Issue-thread interaction continuation cannot target a different issue's assignee",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12629",
+			"sourceUpdatedAt": "2026-09-01T03:36:57Z",
+			"sourceFingerprint": "2ab85666a57be57cb4d6686f54c4021b09d88858218a365e966a7f715fa102d5",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate because the coordination defect is reproducible and strategically relevant, but the catalog presents multiple solution directions without bounding compatibility, authorization, or continuation-routing semantics.",
+			"evidence": [
+				"Cross-issue continuation cannot wake the different issue's assignee.",
+				"The current workaround requires a manual comment and later handoff.",
+				"Two alternative API and behavior changes are proposed."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T03:57:41.744Z"
 		},
 		{
 			"key": "issue:pixel-agents#251",
@@ -9245,39 +9247,6 @@
 			"scoredAt": "2026-08-31T12:54:59.710Z"
 		},
 		{
-			"key": "pr:paperclip#12626",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12626 chore(lockfile): refresh pnpm-lock.yaml",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12626",
-			"sourceUpdatedAt": "2026-09-01T02:33:49Z",
-			"sourceFingerprint": "899394700d94eb71796a81071ef30252e531754e7eedc292f7a1a3df13dbcffc",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate because the change is mechanically bounded but the catalog does not establish which dependency changes require it, what failure it fixes, or whether the generated lockfile is verified.",
-			"evidence": [
-				"The PR changes only pnpm-lock.yaml.",
-				"The summary says dependencies changed on master.",
-				"No affected dependency, failing command, or verification result is provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T02:57:44.950Z"
-		},
-		{
 			"key": "pr:pixel-agents#356",
 			"kind": "pr",
 			"stage": "development",
@@ -9413,6 +9382,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:38:21.867Z"
+		},
+		{
+			"key": "pr:paperclip#12626",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12626 chore(lockfile): refresh pnpm-lock.yaml",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12626",
+			"sourceUpdatedAt": "2026-09-01T03:51:53Z",
+			"sourceFingerprint": "38a53d531acea2819e9a22d8f68e1388f8828c9c9031ed6e923a90987213795f",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 9
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate because the refresh is immediately actionable but the catalog does not establish that the current lockfile mismatch blocks builds, releases, or users.",
+			"evidence": [
+				"The PR only updates pnpm-lock.yaml.",
+				"The refresh follows dependency changes on master."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T03:57:41.744Z"
 		},
 		{
 			"key": "proposal:2026-08-18-spec-heading-lint-baseline-backfill",
