@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T12:27:40.334Z",
+	"generatedAt": "2026-09-01T12:57:37.909Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -846,39 +846,6 @@
 			"scoredAt": "2026-08-31T15:24:35.598Z"
 		},
 		{
-			"key": "pr:paperclip#12598",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12598 Fix governed secret binding acceptance through gateway",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12598",
-			"sourceUpdatedAt": "2026-08-31T17:35:56Z",
-			"sourceFingerprint": "1b020261308a08bf5041801f2f827e3b8acba86a4ce5af56b42ab449e1711a7e",
-			"score": 88,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because supported approval paths currently can record human acceptance without applying the governed secret change, creating a high-severity correctness failure.",
-			"evidence": [
-				"Gateway acceptance can leave proposals pending and agent configuration unchanged.",
-				"The change unifies REST and plugin-gateway execution with idempotent receipts.",
-				"Three targeted test files passed 132 tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T17:54:59.834Z"
-		},
-		{
 			"key": "pr:paperclip#12651",
 			"kind": "pr",
 			"stage": "development",
@@ -1516,6 +1483,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:21:50.290Z"
+		},
+		{
+			"key": "pr:paperclip#12598",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12598 Fix governed secret binding acceptance through gateway",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12598",
+			"sourceUpdatedAt": "2026-09-01T12:40:51Z",
+			"sourceFingerprint": "87484141b85e8e7cb1da3c4c6fb5261b3267e5d694148762651852dd11dd73a1",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the open PR fixes a security-sensitive governed-action path that can accept approval without applying the authorized configuration change, with bounded implementation and strong targeted verification already present.",
+			"evidence": [
+				"Plugin-gateway acceptance left proposals pending and agent configuration unchanged.",
+				"One executor now covers REST and plugin-gateway acceptance with cascade approval and idempotent replay.",
+				"Three targeted test files passed with 133 tests; full TypeScript checking remains for CI."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T12:57:37.827Z"
 		},
 		{
 			"key": "pr:paperclip#12607",
@@ -4581,39 +4581,6 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:paperclip#12586",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12586 fix(server): honour blockParentUntilDone on company issue create",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12586",
-			"sourceUpdatedAt": "2026-08-31T14:04:52Z",
-			"sourceFingerprint": "56068ccb878450ad25e302887f2a6ce22338dcd2b5a801373b59f89ac6772b88",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because silently discarded dependency and acceptance fields can corrupt workflow semantics, while the proposed transactional fix is narrow and test-covered.",
-			"evidence": [
-				"Validators silently stripped blockParentUntilDone and acceptanceCriteria.",
-				"The missing blocker forced callers to issue follow-up mutations.",
-				"The fix synchronizes the parent blocking edge in the create transaction."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T14:24:48.142Z"
-		},
-		{
 			"key": "pr:paperclip#12587",
 			"kind": "pr",
 			"stage": "development",
@@ -4909,6 +4876,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:43:57.675Z"
+		},
+		{
+			"key": "issue:paperclip#12661",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12661 OpenAPI x-paperclip-authorization contradicts assertBoard on 48 operations",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12661",
+			"sourceUpdatedAt": "2026-09-01T12:27:14Z",
+			"sourceFingerprint": "ca0edabf4d45e9615d5393cbf6cdbe513ac602463b854a6f7d66576e3f8308a6",
+			"score": 67,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the published authorization contract systematically advertises unsupported agent access across many operations, and the documented dual-source mechanism makes recurrence likely without a structural fix.",
+			"evidence": [
+				"The OpenAPI document labels 48 runtime board-only operations as callable with AgentBearerAuth.",
+				"Six read-only operations probed with a valid agent token all returned 403.",
+				"Authorization documentation uses a hand-maintained operation table independent of the handlers' assertBoard guard."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T12:57:37.827Z"
 		},
 		{
 			"key": "pr:minion (gateway)#257",
