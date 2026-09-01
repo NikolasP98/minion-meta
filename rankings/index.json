@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T15:57:39.922Z",
+	"generatedAt": "2026-09-01T16:27:33.724Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -338,6 +338,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T08:57:43.357Z"
+		},
+		{
+			"key": "pr:paperclip#12673",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12673 refactor(docker): declare the build stage's C toolchain explicitly",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12673",
+			"sourceUpdatedAt": "2026-09-01T16:19:48Z",
+			"sourceFingerprint": "7378030c6f4038076595e918ccaa6ed42789bd7249e269c4fda27da1f58de48f",
+			"score": 95,
+			"band": "critical",
+			"axes": {
+				"criticality": 10,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute immediately because every master Docker build reportedly fails, blocking image publication, while the small build-stage-only correction has direct reproduction evidence.",
+			"evidence": [
+				"Every master Docker build fails with linker `cc` not found and exits with code 101.",
+				"The expected pipeline outcome is to compile the runner and publish images.",
+				"The exact package sequence was replicated successfully with the runner reaching `Finished release`."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T16:27:33.641Z"
 		},
 		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
@@ -2581,8 +2614,8 @@
 			"repo": "paperclip",
 			"title": "#12672 fix(approvals): wake non-requester task assignees on card approval (INUA-6044)",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12672",
-			"sourceUpdatedAt": "2026-09-01T15:55:38Z",
-			"sourceFingerprint": "0a5836b50a319a8c1974a1ae6e2f4e056702373653ba591fa51dfd2ea3771e9a",
+			"sourceUpdatedAt": "2026-09-01T15:58:46Z",
+			"sourceFingerprint": "f942128a7d64e85cbc5db907fe6185536f5bc23792649d221dedd392e6cf0384",
 			"score": 78,
 			"band": "high",
 			"axes": {
@@ -2597,15 +2630,15 @@
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "This focused approval-wake correction should execute because catalog evidence shows a silent 112-hour workflow stall and the idempotent fix is covered by targeted passing tests.",
+			"rationale": "Execute because the identified wake-path defect can silently strand assigned work for days and the bounded, idempotent fix already has focused passing tests.",
 			"evidence": [
-				"A CEO task stayed in_review for 112 hours with no wake.",
-				"The fix wakes linked non-requester task assignees after approve and reject resolution.",
-				"All 14 approval route idempotency tests pass."
+				"A non-requester assignee task remained in review for 112 hours with no wake.",
+				"The fix wakes linked task assignees after approval or rejection using a deterministic idempotency key.",
+				"All 14 approval-route idempotency tests pass, including two new targeted cases."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T15:57:39.830Z"
+			"scoredAt": "2026-09-01T16:27:33.641Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -4746,39 +4779,6 @@
 			"scoredAt": "2026-08-31T20:15:47.241Z"
 		},
 		{
-			"key": "issue:paperclip#12599",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12599 Company discussion-rooms/discussion-threads REST API disappeared from live instance (404, zero trace in openapi.json)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12599",
-			"sourceUpdatedAt": "2026-08-31T17:14:43Z",
-			"sourceFingerprint": "60b7ecfc71078989e17dd423266e0aba5d10cc6fd6aefdd2be5022f4a85c10ba",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Reframe as a bounded provenance-and-supported-replacement investigation because the reported operational loss is real but the catalog provides no upstream evidence that these routes ever belonged to the public product.",
-			"evidence": [
-				"A live instance reportedly returns 404 for all discussion-room endpoints.",
-				"The live OpenAPI document reportedly contains none of the relevant paths.",
-				"Public master reportedly has no route file or commit history for the claimed implementation."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T17:24:37.139Z"
-		},
-		{
 			"key": "pr:paperclip#12647",
 			"kind": "pr",
 			"stage": "development",
@@ -5994,6 +5994,39 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
+			"key": "pr:paperclip#12669",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12669 Add end-to-end session goals to Paperclip Runner",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12669",
+			"sourceUpdatedAt": "2026-09-01T16:21:51Z",
+			"sourceFingerprint": "6171e5cc9d70357ed3b8d204dd880420537d440dbc74309a6ab17c7280ee9737",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because this is well-specified, actionable cross-layer work that advances durable provider-session control, although the catalog shows no outage or external deadline.",
+			"evidence": [
+				"Paperclip cannot discover, display, or control durable harness-owned goals.",
+				"The change spans protocol, persistence, orchestration, realtime events, and UI.",
+				"Verification includes typecheck, tests, build, migration checks, protocol suites, and manual scenarios."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T16:27:33.641Z"
+		},
+		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6632,39 +6665,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "pr:paperclip#12669",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12669 Add end-to-end session goals to Paperclip Runner",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12669",
-			"sourceUpdatedAt": "2026-09-01T15:54:39Z",
-			"sourceFingerprint": "8c075869ed2f2c03d5a40c7e1265d4084245c89ce21bc51af201f90962c6e5d7",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The provider-neutral goal contract is strategically broad and well specified, but no outage or deadline is evidenced and its cross-cutting scope plus incomplete reported execution results warrant readiness reevaluation before paid work proceeds.",
-			"evidence": [
-				"Affects runner protocol, harnesses, orchestration, database state, realtime events, and issue composer.",
-				"Version negotiation keeps v1 runners connected.",
-				"Verification lists repository, migration, Rust, and manual integration checks without reporting results."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T15:57:39.830Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
