@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T08:57:43.437Z",
+	"generatedAt": "2026-09-01T09:27:45.379Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -945,6 +945,39 @@
 			"scoredAt": "2026-08-31T17:54:59.834Z"
 		},
 		{
+			"key": "pr:paperclip#12651",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12651 fix(recovery): treat a dependency-blocked continuation as a wait, not a strand",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12651",
+			"sourceUpdatedAt": "2026-09-01T09:19:23Z",
+			"sourceFingerprint": "d9b59eb4bae2f8a41434b6f19238417fc4036586211ef9ee6bad42f5270d3351",
+			"score": 88,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 10
+			},
+			"confidence": 9,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the fix prevents a production-observed recovery path from repeatedly stripping ownership and restarting valid work while preserving genuine termination guards.",
+			"evidence": [
+				"The defect was observed in production and repeatedly restarted work from scratch.",
+				"An open dependency currently causes reassignment, escalation, and loss of provider-session resumption.",
+				"The focused recovery suite reports 122 passing tests, and the equivalent change is live downstream."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T09:27:45.298Z"
+		},
+		{
 			"key": "proposal:2026-08-17-factory-capability-separation",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1447,39 +1480,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:42:55.201Z"
-		},
-		{
-			"key": "issue:paperclip#12578",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12578 cross-issue-influence guard (assertCrossIssueInfluenceWithinRunCap) is never called on PUT /issues/:id/documents/:key or POST /issues/:id/interactions (create) — undocumented scope gap",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12578",
-			"sourceUpdatedAt": "2026-08-31T10:26:09Z",
-			"sourceFingerprint": "3fcf2865028094eb5faf38e320d6d984265c3d3b2a00cd4c2e7e71d627611be0",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 8,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Reframe this as a decision-backed enforcement goal with one explicit desired scope, because the documented blind spot is consequential but the current proposal accepts two materially different outcomes: adding enforcement or merely documenting its absence.",
-			"evidence": [
-				"Two agent-mutating routes never call the cross-issue-influence guard or write its audit events.",
-				"The gap was reproduced on release 2026.824.1 and current master.",
-				"The requested outcome permits either enforcing the cap or documenting that the routes are intentionally uncapped."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T10:54:32.091Z"
 		},
 		{
 			"key": "issue:paperclip#12580",
@@ -2032,8 +2032,8 @@
 			"repo": "paperclip",
 			"title": "#12646 fix(runner): accept the indeterminate command result after a runner restart",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12646",
-			"sourceUpdatedAt": "2026-09-01T08:03:24Z",
-			"sourceFingerprint": "38f06f1b054762e66dbc5684123ef47d466e3a872bf393e8baacabfb820a5b19",
+			"sourceUpdatedAt": "2026-09-01T09:19:11Z",
+			"sourceFingerprint": "ef7057a2246327f54acbbc047536031743df0adbeb7edf23932c2200cfbffeda",
 			"score": 81,
 			"band": "high",
 			"axes": {
@@ -2048,15 +2048,15 @@
 			"confidence": 9,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "This is an actionable core crash-recovery fix for a deterministic reconnect loop that can prevent live sessions from resuming and already has a bounded implementation and exact integration coverage.",
+			"rationale": "Execute because this bounded compatibility fix addresses a deterministic crash-recovery loop that prevents live sessions from resuming and includes targeted persistence and replay coverage.",
 			"evidence": [
-				"Runner restart causes the same indeterminate result to replay forever",
-				"The session hangs until a 30 second deadline expires",
-				"An integration test covers persistence, restart, duplicate replay, and continued command delivery"
+				"A runner restart can cause the control plane to reject `indeterminate` and reconnect forever.",
+				"The defect reproduces consistently in a named integration test.",
+				"The patch covers acceptance, persistence, restart reload, and duplicate replay."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T08:27:37.455Z"
+			"scoredAt": "2026-09-01T09:27:45.298Z"
 		},
 		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
@@ -2771,39 +2771,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T02:27:41.262Z"
-		},
-		{
-			"key": "pr:paperclip#12650",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12650 Fix checked-out run binding on first write",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12650",
-			"sourceUpdatedAt": "2026-09-01T08:56:24Z",
-			"sourceFingerprint": "91767063843a4fee2fc16e69d8ed563c8816af79e1643e5d4442f514db0082e4",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Failing closed on unproven first-write ownership protects audited run isolation, while remaining test and CI gaps should be resolved before merge.",
-			"evidence": [
-				"The first write could bind context without a persisted checkout.",
-				"The patch requires matching company, agent, and run ownership.",
-				"Local tests and all CI gates are not confirmed passing."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T08:57:43.357Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -4037,6 +4004,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T01:27:35.836Z"
+		},
+		{
+			"key": "pr:paperclip#12650",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12650 Fix checked-out run binding on first write",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12650",
+			"sourceUpdatedAt": "2026-09-01T09:15:01Z",
+			"sourceFingerprint": "0e94d9d856c1ad8e585ab87e89adc2357b2828cd45721c56738506650afe8182",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute after completing verification because fail-closed ownership proof protects audited run-context boundaries, although passing tests and CI are not yet evidenced.",
+			"evidence": [
+				"First-write binding previously could occur without a persisted checkout.",
+				"The patch requires matching company, agent, and run ownership and returns HTTP 403 otherwise.",
+				"Local tests and CI are not reported as passing."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T09:27:45.298Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -5829,39 +5829,6 @@
 			"scoredAt": "2026-08-31T07:40:57.095Z"
 		},
 		{
-			"key": "issue:paperclip#12576",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12576 Hermes execute_code: nested terminal() RPC redaction corrupts JSON output (sibling of #9856, different component)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12576",
-			"sourceUpdatedAt": "2026-08-31T08:15:52Z",
-			"sourceFingerprint": "811ab271931cd809b63b955c37b1e56b3e0109aa9abcd2e2c0f1a016bd72087c",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Corrupting machine-readable command output breaks a documented bounded-processing workflow and may undermine safe secret handling, while the report identifies concrete components and a testable fix shape.",
-			"evidence": [
-				"Nested terminal output can fail JSON parsing after redaction",
-				"The report identifies agent/redact.py and both tool paths",
-				"Structural redaction is proposed for detectably JSON output"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:21:50.290Z"
-		},
-		{
 			"key": "pr:paperclip#12604",
 			"kind": "pr",
 			"stage": "development",
@@ -7537,6 +7504,39 @@
 			"scoredAt": "2026-08-31T07:36:55.886Z"
 		},
 		{
+			"key": "pr:paperclip#12652",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12652 test(runner): add credential-free acceptance foundation",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12652",
+			"sourceUpdatedAt": "2026-09-01T09:25:00Z",
+			"sourceFingerprint": "7236d93f70fb364df46b82de1b4a586ef20d38c91620bf1e925c13d95b53148d",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate after CI evidence and a concrete executor plan because the compatibility foundation is strategically useful but deliberately defers execution authority and has not been locally verified.",
+			"evidence": [
+				"The change adds a credential-free compatibility catalog and fail-closed result helpers.",
+				"Live execution work is explicitly deferred.",
+				"No local test command was run, and CI gates are not yet reported green."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T09:27:45.298Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-1883922325",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7940,6 +7940,39 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
+			"key": "pr:paperclip#12653",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12653 feat(runner): add offline evaluation tooling",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12653",
+			"sourceUpdatedAt": "2026-09-01T09:26:33Z",
+			"sourceFingerprint": "63386d0c691ccb9d6944745197d5a2cf443c2dc08412c272393148c9a1974c2c",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Reevaluate after automated verification and review-surface reduction because deterministic offline evaluation is valuable but the 51-file greenfield change lacks current passing-test evidence.",
+			"evidence": [
+				"The change adds deterministic offline evaluation contracts, fixtures, scoring, and reports.",
+				"It is a 51-file greenfield review surface.",
+				"No local tests were run, and CI gates are not yet reported green."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T09:27:45.298Z"
+		},
+		{
 			"key": "pr:pixel-agents#246",
 			"kind": "pr",
 			"stage": "development",
@@ -8239,39 +8272,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:58.286Z"
-		},
-		{
-			"key": "pr:paperclip#12577",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12577 ci: refresh general-server shard duration manifest",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12577",
-			"sourceUpdatedAt": "2026-08-31T09:17:36Z",
-			"sourceFingerprint": "e65ffd97830a56de03c169395a96562b207f4a72665366bc8d000fa980aa3ebb",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The verified data-only change offers a recurring CI throughput improvement with low stated risk and bounded scope.",
-			"evidence": [
-				"The observed server-shard spread was 73 seconds.",
-				"The new partition predicts about 287 seconds per shard.",
-				"All 443 current suites are covered exactly once."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T09:24:43.768Z"
 		},
 		{
 			"key": "pr:pixel-agents#396",
