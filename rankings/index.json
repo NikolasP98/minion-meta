@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T05:57:50.573Z",
+	"generatedAt": "2026-09-01T06:27:45.904Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1348,6 +1348,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:01:35.926Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 73097 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-09-01T06:23:52Z",
+			"sourceFingerprint": "2341f492b8a734207c6eeb791002b11a3c929a52e4c2640b1a7aba9aacea89e8",
+			"score": 84,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 9,
+				"impact": 10
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Reframe the enormous upstream-sync alert into prioritized, dependency-aware integration slices because a raw backlog of 73,097 commits is strategically significant but not bounded or directly executable.",
+			"evidence": [
+				"The issue reports 73,097 upstream commits available.",
+				"The listed commits span gateway, security, plugins, channels, UI, release, and platform code.",
+				"No scoped dependency analysis, acceptance criteria, or verification plan is provided."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T06:27:45.815Z"
 		},
 		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
@@ -3332,6 +3365,43 @@
 			"scoredAt": "2026-08-31T07:33:08.870Z"
 		},
 		{
+			"key": "pr:paperclip#12641",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12641 feat(runner): add administration and observability",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12641",
+			"sourceUpdatedAt": "2026-09-01T06:26:21Z",
+			"sourceFingerprint": "13b353a1b9e872040dc15a98eb32f8804780fe2a030a55da9b20e2436bf57100",
+			"score": 74,
+			"band": "high",
+			"axes": {
+				"criticality": 6,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12638",
+				"pr:paperclip#12639",
+				"pr:paperclip#12640"
+			],
+			"rationale": "Group this final administration and observability layer with the three lower stack PRs because it supplies the operational controls and diagnosis needed for their production outcome.",
+			"evidence": [
+				"This is identified as the final feature PR in the Codex production stack.",
+				"It adds administrator trace controls, run inspection, and Codex lifecycle settings.",
+				"Raw traces may contain sensitive provider data and all new settings remain default-off."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T06:27:45.815Z"
+		},
+		{
 			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4351,8 +4421,8 @@
 			"repo": "paperclip",
 			"title": "#12639 feat(runner): add secure remote transport",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12639",
-			"sourceUpdatedAt": "2026-09-01T05:56:30Z",
-			"sourceFingerprint": "692654ff192768b71c50eb8ad37eca0008310d34c8375d2d80b887688a907082",
+			"sourceUpdatedAt": "2026-09-01T06:07:24Z",
+			"sourceFingerprint": "19ea6d2df13d37931fd1e4a72c2025e35395a863c518a591ab665edef7de7d5e",
 			"score": 70,
 			"band": "high",
 			"axes": {
@@ -4361,25 +4431,25 @@
 				"impact": 8
 			},
 			"readiness": {
-				"specification": 8,
+				"specification": 9,
 				"implementation": 6
 			},
-			"confidence": 7,
+			"confidence": 8,
 			"recommendation": "group",
 			"relatedKeys": [
 				"pr:paperclip#12638",
 				"pr:paperclip#12640",
 				"pr:paperclip#12641"
 			],
-			"rationale": "Group this trust-boundary transport layer with its stacked runner work because it depends on the substrate and does not independently deliver the complete remote execution experience.",
+			"rationale": "Group this secure transport layer with its substrate and downstream product surfaces because it is an explicit middle layer rather than a standalone deliverable.",
 			"evidence": [
-				"This PR is based on #12638.",
-				"It adds authenticated WSS and provider-ingress listener behavior.",
-				"Local tests were not run; verification is delegated to GitHub Actions."
+				"The PR is based on #12638 and contains a 12-file delta.",
+				"It adds authenticated WSS dialing and a run-bound ingress listener.",
+				"Later stack PRs add the task workspace and administrator UI."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T05:57:50.490Z"
+			"scoredAt": "2026-09-01T06:27:45.815Z"
 		},
 		{
 			"key": "pr:pixel-agents#300",
@@ -4817,6 +4887,43 @@
 			"scoredAt": "2026-08-31T17:24:37.139Z"
 		},
 		{
+			"key": "pr:paperclip#12638",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12638 feat(runner): add remote execution substrate",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12638",
+			"sourceUpdatedAt": "2026-09-01T06:24:36Z",
+			"sourceFingerprint": "8f793a27cb91d6e68a6b24190d5289b0ac35882e588af535bb767cf75ce865fe",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 9,
+				"impact": 9
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:paperclip#12639",
+				"pr:paperclip#12640",
+				"pr:paperclip#12641"
+			],
+			"rationale": "Group the four explicitly stacked PRs into one remote-runner production goal because this substrate is not independently outcome-complete and the combined work spans transport, workspace, and operations.",
+			"evidence": [
+				"The PR adds a provider-neutral remote execution substrate across 52 files.",
+				"It remains default-off and does not yet make remote Codex runnable.",
+				"PRs #12639, #12640, and #12641 are described as later layers of the same stack."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T06:27:45.815Z"
+		},
+		{
 			"key": "proposal:2026-08-18-factory-orchestration-round7",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4883,39 +4990,6 @@
 			"scoredAt": "2026-08-31T07:43:57.675Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 72894 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-09-01T00:41:40Z",
-			"sourceFingerprint": "d018e82f2f931266a17671884378bd12474b9a6ccbd473d05d8a9288ddd75a30",
-			"score": 67,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "A 72,894-commit upstream gap is strategically significant but must be decomposed into compatibility, security, and selected-sync outcomes before it can produce an effective execution plan.",
-			"evidence": [
-				"72,894 new commits are reported",
-				"listed commits span gateway, plugins, CI, mobile, security, and UI",
-				"no bounded sync scope or definition of done is supplied"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T00:57:50.010Z"
-		},
-		{
 			"key": "pr:minion (gateway)#257",
 			"kind": "pr",
 			"stage": "development",
@@ -4980,43 +5054,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T02:57:44.950Z"
-		},
-		{
-			"key": "pr:paperclip#12641",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12641 feat(runner): add administration and observability",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12641",
-			"sourceUpdatedAt": "2026-09-01T05:56:56Z",
-			"sourceFingerprint": "ac753d662e70be03ccadbd6e6115cc6b51582a8844486c47501443b6bd6aba28",
-			"score": 67,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12638",
-				"pr:paperclip#12639",
-				"pr:paperclip#12640"
-			],
-			"rationale": "Group this final operational layer with the remote-runner stack because safe administration and trace controls are necessary for governed rollout but do not stand alone.",
-			"evidence": [
-				"This is identified as the final feature PR in the Codex production stack.",
-				"Raw traces may contain sensitive provider data.",
-				"All new instance settings remain off by default."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T05:57:50.490Z"
 		},
 		{
 			"key": "pr:pixel-agents#240",
@@ -5336,8 +5373,8 @@
 			"repo": "paperclip",
 			"title": "#12596 test(runner): bound codex provider exit polls by wall clock",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12596",
-			"sourceUpdatedAt": "2026-09-01T05:45:35Z",
-			"sourceFingerprint": "48f7b33680e3808b068a2988a7a0a10ae6a198357d55f0d19a94083655b9820b",
+			"sourceUpdatedAt": "2026-09-01T06:25:32Z",
+			"sourceFingerprint": "575c8d2df8d92491e8fe75706d003e3738cc00e01e3b5948ee81fd47eae2075c",
 			"score": 66,
 			"band": "medium",
 			"axes": {
@@ -5346,21 +5383,21 @@
 				"impact": 7
 			},
 			"readiness": {
-				"specification": 9,
-				"implementation": 9
+				"specification": 10,
+				"implementation": 10
 			},
-			"confidence": 9,
+			"confidence": 10,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute this bounded, test-only fix because a reproducible CI flake obscures real defects and the proposed wall-clock waits have strong repeated-run evidence.",
+			"rationale": "Execute because this bounded, test-only change removes a repeatedly reproduced source of false CI failures with strong verification and low stated risk.",
 			"evidence": [
-				"Two integration tests failed randomly on branches with no Rust changes.",
-				"Before the fix, 8/25 and 9/25 runs failed; after it, 0/25 failed.",
-				"The full codex_provider suite passed 12 repeated runs after the change."
+				"Two integration tests failed in 8/25 and 9/25 runs before the change.",
+				"Both tests passed 25/25 times after the change.",
+				"The full codex_provider suite passed 12 runs after the change."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T05:57:50.490Z"
+			"scoredAt": "2026-09-01T06:27:45.815Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
@@ -5462,41 +5499,41 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
-			"key": "pr:paperclip#12638",
+			"key": "pr:paperclip#12640",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "paperclip",
-			"title": "#12638 feat(runner): add remote execution substrate",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12638",
-			"sourceUpdatedAt": "2026-09-01T05:38:45Z",
-			"sourceFingerprint": "9c559f3d1e0410369b1846b2609b6e02f37411886a7e947b408b51b067d6aec7",
+			"title": "#12640 feat(ui): complete the task workspace",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12640",
+			"sourceUpdatedAt": "2026-09-01T06:06:33Z",
+			"sourceFingerprint": "dcf00c765a1588cd08c3c0d068abda27a45ad99981e68efe8b9591e037e08908",
 			"score": 65,
 			"band": "medium",
 			"axes": {
 				"criticality": 4,
-				"importance": 9,
-				"impact": 8
+				"importance": 8,
+				"impact": 9
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 7,
 			"recommendation": "group",
 			"relatedKeys": [
+				"pr:paperclip#12638",
 				"pr:paperclip#12639",
-				"pr:paperclip#12640",
 				"pr:paperclip#12641"
 			],
-			"rationale": "Group the four stacked runner PRs as one remote-execution vertical slice because this substrate is explicitly incomplete without transport, workspace, and operational controls.",
+			"rationale": "Group this large task-workspace delta with the remote-runner stack because its runtime-dependent controls and compatibility requirements rely on the lower layers and culminate in the administration layer.",
 			"evidence": [
-				"The change spans runner transport, orchestration, plugin contracts, and settings.",
-				"Rollout controls remain off by default.",
-				"The PR explicitly says remote Codex is not yet runnable."
+				"The PR is stacked on #12639 and #12638.",
+				"Its delta contains 119 UI-only files.",
+				"Local tests were not run; verification is deferred to GitHub Actions."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T05:57:50.490Z"
+			"scoredAt": "2026-09-01T06:27:45.815Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -6678,43 +6715,6 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
-			"key": "pr:paperclip#12640",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12640 feat(ui): complete the task workspace",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12640",
-			"sourceUpdatedAt": "2026-09-01T05:57:00Z",
-			"sourceFingerprint": "37b7e9b735daa809fd8e4de5b8f2985b8ee08c063f8e7c43f05b1f91f499170a",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12638",
-				"pr:paperclip#12639",
-				"pr:paperclip#12641"
-			],
-			"rationale": "Group this large workspace delta with the runner stack because its value and compatibility requirements depend on the lower execution layers and final administrative surface.",
-			"evidence": [
-				"The PR is a 119-file UI-only delta.",
-				"It depends on #12639 and #12638.",
-				"Local tests were not run despite broad task-page compatibility risk."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T05:57:50.490Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6814,6 +6814,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:46:38.665Z"
+		},
+		{
+			"key": "pr:paperclip#12613",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12613 Onboarding: model source tiles, one input canvas, and Storybook coverage for the agent arc",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12613",
+			"sourceUpdatedAt": "2026-09-01T06:25:52Z",
+			"sourceFingerprint": "08440184ffd0e2dab2e6f3e7ed411dd683b75462e3c126f3ddfd9cca4fd8564c",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Execute because the onboarding model-connection step is required for agents to run and the change is supported by broad component tests, typechecking, and inspectable Storybook states.",
+			"evidence": [
+				"The connect-a-model step determines whether the agent can run.",
+				"The change adds Storybook coverage for all three agent-arc steps.",
+				"Verification reports 139 touched-suite tests and a clean UI typecheck."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T06:27:45.815Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-gateway-client-onevent-errors",
@@ -7819,39 +7852,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T22:27:54.178Z"
-		},
-		{
-			"key": "pr:paperclip#12613",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12613 Onboarding: model source tiles, one input canvas, and Storybook coverage for the agent arc",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12613",
-			"sourceUpdatedAt": "2026-08-31T23:43:39Z",
-			"sourceFingerprint": "1ef4db503642f9d8836074d7b696493d6ecbb470cae4e0bc3a52d6ab3c1e2c11",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because it addresses a release-facing onboarding regression surface with a clearly bounded UI change and strong automated and inspectable coverage.",
-			"evidence": [
-				"The connect step determines whether an agent can run",
-				"The three agent-arc steps previously required a provisioned cloud stack to inspect",
-				"139 touched-suite tests and a clean UI typecheck are reported"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T23:57:38.549Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-722867358",
