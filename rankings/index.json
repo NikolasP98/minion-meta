@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T10:27:38.166Z",
+	"generatedAt": "2026-09-01T10:57:34.171Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1447,39 +1447,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:42:55.201Z"
-		},
-		{
-			"key": "issue:paperclip#12578",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12578 cross-issue-influence guard (assertCrossIssueInfluenceWithinRunCap) is never called on PUT /issues/:id/documents/:key or POST /issues/:id/interactions (create) — undocumented scope gap",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12578",
-			"sourceUpdatedAt": "2026-08-31T10:26:09Z",
-			"sourceFingerprint": "3fcf2865028094eb5faf38e320d6d984265c3d3b2a00cd4c2e7e71d627611be0",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The reproducible enforcement and audit gap affects two mutating routes in a core cross-issue safety control and presents a bounded fix-or-document decision.",
-			"evidence": [
-				"reproduced on latest released version and current master",
-				"two mutating routes are not guarded at all",
-				"gap has been live and unaudited since 2026-08-11"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T09:57:38.190Z"
 		},
 		{
 			"key": "issue:paperclip#12580",
@@ -5076,6 +5043,39 @@
 			"scoredAt": "2026-08-31T07:31:23.880Z"
 		},
 		{
+			"key": "pr:paperclip#12579",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12579 KOMAA-183: activate RTB execution control v2 on live master (port of KOMAA-167)",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12579",
+			"sourceUpdatedAt": "2026-09-01T10:29:38Z",
+			"sourceFingerprint": "deca703adf282dda2578b197e00646770bef1a11ba1cccc87f917c4c7ec5651d",
+			"score": 67,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The reliability problem and tested components are substantial, but the goal should be reframed around completing live watchdog integration because this port does not yet activate its central control mechanism.",
+			"evidence": [
+				"Suspicious silence currently creates stale-run and productivity-review issues.",
+				"The change adds deterministic watchdog decisions, run-budget evaluation, telemetry, and 17 unit tests.",
+				"The new module is not wired into the live heartbeat watchdog path and does not change production watchdog behavior."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T10:57:34.094Z"
+		},
+		{
 			"key": "pr:paperclip#12625",
 			"kind": "pr",
 			"stage": "development",
@@ -5451,6 +5451,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T06:27:45.815Z"
+		},
+		{
+			"key": "pr:paperclip#12656",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12656 Gate Paperclip Runner setup behind an experimental flag",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12656",
+			"sourceUpdatedAt": "2026-09-01T10:49:53Z",
+			"sourceFingerprint": "d05b6fc6d807102b8dd07303ed125c1f9cc8f5922664a79b88ff04c6e1148a59",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is a bounded rollout-safety change with clear flag behavior, broad setup-path coverage, and focused tests, although CI verification remains outstanding.",
+			"evidence": [
+				"Paperclip Runner is experimental and is intended to remain opt-in.",
+				"The change covers Settings, onboarding, agent creation, invite setup, import setup, and server-seeded onboarding.",
+				"Focused regression tests were added, but no local test suite was run."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-01T10:57:34.094Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
@@ -6293,39 +6326,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:02.540Z"
-		},
-		{
-			"key": "pr:paperclip#12579",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12579 KOMAA-183: activate RTB execution control v2 on live master (port of KOMAA-167)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12579",
-			"sourceUpdatedAt": "2026-09-01T10:26:50Z",
-			"sourceFingerprint": "0733c59993da2559ff29d6f307f7444556784b9f9221c85a3d4ba4996d760fb4",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The reliability and observability work is strategically valuable and well tested, but the stated absence of live-watchdog wiring means the current PR cannot yet deliver its central production outcome.",
-			"evidence": [
-				"Adds deterministic watchdog, budget, compaction, and telemetry mechanisms.",
-				"New module is not wired into the live heartbeat watchdog path.",
-				"Unit tests and relevant typechecks pass."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T10:27:38.094Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
@@ -11534,8 +11534,8 @@
 			"repo": "pixel-agents",
 			"title": "pixel-agents deployment health",
 			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/commit/3537e140c2094761beae748592aeb92ece8edfdd",
-			"sourceUpdatedAt": "2026-09-01T00:55:13Z",
-			"sourceFingerprint": "6478a2f84b852f861fa00670a3d5d4c8b323b6daf055ee9914cafc984a6f6ab7",
+			"sourceUpdatedAt": "2026-09-01T10:52:29Z",
+			"sourceFingerprint": "c46d5a82a3bac5a2e40f7cd5657d190cfd11de40c89a321c81e34795c8c665c9",
 			"score": 6,
 			"band": "low",
 			"axes": {
@@ -11547,18 +11547,18 @@
 				"specification": 2,
 				"implementation": 1
 			},
-			"confidence": 10,
+			"confidence": 9,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The deployment-health item is already passing and contains no unresolved work to execute.",
+			"rationale": "The deployment-health item is already passing and contains no unresolved problem or actionable outcome.",
 			"evidence": [
-				"status is passing",
-				"title is deployment health",
-				"summary records a v1.4.1 version bump"
+				"Status is passing.",
+				"The summary only records a version bump to v1.4.1.",
+				"No failure, deadline, or follow-up work is identified."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T00:57:50.010Z"
+			"scoredAt": "2026-09-01T10:57:34.094Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-1962723814",
