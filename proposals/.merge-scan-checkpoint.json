@@ -16,7 +16,7 @@
   "NikolasP98/minion-factory:dev": {
     "cursor": "a84c95b7527d38850e3dd41c96b6982e32e40a69",
     "head": "02900306a1fcc7b182bae726a24260d08467f81e",
-    "done": 9,
+    "done": 18,
     "kept": [
       {
         "file": "agent/discovery.sh",
@@ -38,6 +38,48 @@
         "severity": "medium",
         "category": "unchecked-access",
         "line": 88
+      },
+      {
+        "file": "agent/lib/cost.sh",
+        "desc": "Pricing rates (0.45, 0.18, 0.04 for Claude; 0.20, 0.10, 0.05 for Codex) are hardcoded; they should be environment variables so pricing changes do not require code edits.",
+        "severity": "medium",
+        "category": "hardcoded-config",
+        "line": 30
+      },
+      {
+        "file": "agent/lib/discovery.sh",
+        "desc": "$today parameter used in sed replacement without escaping; if containing / or & characters, will break sed syntax or cause unintended substitutions",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 110
+      },
+      {
+        "file": "agent/lib/unslop.test.sh",
+        "desc": "Bare grep commands at lines 63-64 lack error handling; test proceeds to report success (line 65) even if assertions fail, silently masking missing or incorrect run.sh/spec.sh content",
+        "severity": "high",
+        "category": "missing-handoff",
+        "line": 63
+      },
+      {
+        "file": "agent/rank.sh",
+        "desc": "jq '.candidates' output is used in for-loop arithmetic (line 77) without null/missing-field validation; missing field silently becomes 0, loop doesn't run",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 71
+      },
+      {
+        "file": "agent/rank.sh",
+        "desc": "FACTORY_RANK_BATCH_SIZE env var used in for-loop arithmetic without validation; non-numeric or zero value causes infinite loop (start+=0 never increments start)",
+        "severity": "high",
+        "category": "unvalidated-input",
+        "line": 74
+      },
+      {
+        "file": "agent/reconcile.sh",
+        "desc": "Environment variables FACTORY_ACTIONS_BUDGET_ATTEMPT, FACTORY_ACTIONS_BUDGET_REASON, FACTORY_ACTIONS_BUDGET_EVIDENCE are used without validation that factory_actions_budget_probe set them, potentially embedding empty values into the proposal YAML file.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 156
       }
     ]
   }
