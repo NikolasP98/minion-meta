@@ -1,15 +1,14 @@
 ---
-id: handoff-minion-hub-4274754053
-title: Handoff marker — src/routes/(app)/crm/customers/+page.svelte (minion_hub)
+id: handoff-minion-hub-1694852142
+title: Handoff marker — src/lib/assistant/ui-blocks.ts (minion_hub)
 status: draft
-created: 2026-08-22
+created: 2026-09-02
 updated: 2026-09-02
 repos: [minion-hub]
 tags: [handoff-sweep]
-duplicate_candidate: 2026-08-13-crm-customers-server-pagination
 ---
 
-# Handoff marker — src/routes/(app)/crm/customers/+page.svelte
+# Handoff marker — src/lib/assistant/ui-blocks.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -27,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-02)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/crm/customers/+page.svelte:167` — the assistant opens this party form via ?new=1, but POST
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/customers/+page.svelte#L167
+- `NikolasP98/minion_hub@master src/lib/assistant/ui-blocks.ts:15` — prompt-driven protocol instead of native tool_use — replace
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/assistant/ui-blocks.ts#L15
