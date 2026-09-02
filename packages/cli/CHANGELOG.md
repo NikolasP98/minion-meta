@@ -1,5 +1,16 @@
 # @minion-stack/cli
 
+## 0.1.6
+
+### Patch Changes
+
+- 04cc725: `minion doctor`'s `(meta)` row now reports the active `@minion-stack/env` cache mode, whether a
+  legacy plaintext cache was purged, whether the config directory permissions had to be tightened, and
+  whether any quarantined cache objects are waiting for operator review. Warnings column only — the
+  command's exit code is unchanged.
+- Updated dependencies [04cc725]
+  - @minion-stack/env@1.3.0
+
 ## 0.1.5
 
 ### Patch Changes

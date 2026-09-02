@@ -1,5 +1,12 @@
 # @minion-stack/env
 
+## 1.3.0
+
+### Minor Changes
+
+- 04cc725: Export `cacheStatus()` so operators can inspect the active cache mode, legacy-cache removal,
+  directory security, and quarantined cache objects without fetching or exposing secret values.
+
 ## 1.2.0
 
 ### Minor Changes
