@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T05:58:29.930Z",
+	"generatedAt": "2026-09-02T06:25:18.095Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -167,39 +167,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:43:57.675Z"
-		},
-		{
-			"key": "spec:2026-08-18-factory-m0-safety-foundation-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion-factory",
-			"title": "M0 — safety freeze and regression foundation",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-18-factory-m0-safety-foundation-spec.md",
-			"sourceUpdatedAt": "2026-08-28",
-			"sourceFingerprint": "406e49b097f189ed0eef9c2703a017010facd24834bb3dfed54c2c31688f657b",
-			"score": 96,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 10,
-				"impact": 10
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 10,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute as the highest-leverage factory foundation because it closes active integrity and release-control gaps while adding enforced regression coverage.",
-			"evidence": [
-				"Spec publishing uses git add -A.",
-				"Trusted checks are matched by name without App identity.",
-				"The factory has no first-party CI enforcing its regression suite."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
 			"key": "spec:2026-08-22-factory-dev-staging-daily-production-promotion-spec",
@@ -2749,6 +2716,39 @@
 			"scoredAt": "2026-09-01T21:27:46.337Z"
 		},
 		{
+			"key": "proposal:2026-08-28-factory-release-probe-red-and-silent",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Factory release probe can omit the required posture MCP call and force a full replay",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-28-factory-release-probe-red-and-silent.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "04364791fc671127426ad1e81990aaa6ec3fa3b95473a8c1139a176c6be208c5",
+			"score": 75,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The probe still gates the only sanctioned production route, but the update shows the silent-failure defect is fixed and a mitigation (PR #147) already landed, leaving only a narrower observability ask.",
+			"evidence": [
+				"while the probe is red, dev cannot promote at all",
+				"current logs identify the exact failure as posture MCP call missing",
+				"PR #147 raises the bounded in-job allowance from two attempts to three"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:25:18.017Z"
+		},
+		{
 			"key": "pr:minion-factory#158",
 			"kind": "pr",
 			"stage": "development",
@@ -2815,39 +2815,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
-		},
-		{
-			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Close the producer-side gaps the review-sidecar contract now exposes",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-review-sidecar-producer-gaps.md",
-			"sourceUpdatedAt": "2026-08-29",
-			"sourceFingerprint": "ac1d8bfe25b26fb1ebd661631a32a52c3a853694449bf8fc1dbaf9645d074d0c",
-			"score": 74,
-			"band": "high",
-			"axes": {
-				"criticality": 6,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because incomplete and absent producers prevent the live review consumer from publishing traceable gate results across a broad portion of the SDLC.",
-			"evidence": [
-				"The G2 writer omits two of six required axes, so its sidecars derive no score or gate.",
-				"No G1 producer exists.",
-				"129 of 198 specs have no sidecar."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:44:37.861Z"
 		},
 		{
 			"key": "spec:2026-08-13-crm-customers-server-pagination-spec",
@@ -3356,39 +3323,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:21:50.290Z"
-		},
-		{
-			"key": "proposal:2026-08-28-factory-release-probe-red-and-silent",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Factory release probe can omit the required posture MCP call and force a full replay",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-28-factory-release-probe-red-and-silent.md",
-			"sourceUpdatedAt": "2026-08-28",
-			"sourceFingerprint": "2edaefd3bfb34386d25d837e88adc8c912b905f8bad8a10bc5c9bbe104beff65",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate the remaining omission telemetry as a smaller follow-up because diagnostics were restored and an unchanged candidate subsequently completed the supervised release path.",
-			"evidence": [
-				"The earlier silent-failure problem is resolved.",
-				"A sealed rerun of the unchanged candidate passed deployment and verification.",
-				"PR #147 increased the bounded in-job attempt allowance from two to three."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:43:57.675Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-1378118597",
@@ -4129,6 +4063,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:56.597Z"
+		},
+		{
+			"key": "spec:2026-08-18-factory-m0-safety-foundation-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion-factory",
+			"title": "M0 — safety freeze and regression foundation",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-18-factory-m0-safety-foundation-spec.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "f1e7b1425a4a0cd7184c9d5b395c5c5a38eb3449b5df47b64c8cc22a937e2c3c",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 9,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Core security/release-integrity controls for the factory pipeline, with two slices already shipped and one remaining regression-coverage slice clearly scoped.",
+			"evidence": [
+				"S1 shipped in PR #21, S2 shipped in PR #155",
+				"remaining M0 gap: startup-secret validation, normalizeStages provider independence, maxTurns validation, corrupt result.json still lack regression coverage"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:25:18.017Z"
 		},
 		{
 			"key": "issue:minion-meta#280",
@@ -5113,6 +5079,39 @@
 			"scoredAt": "2026-08-31T07:33:08.870Z"
 		},
 		{
+			"key": "pr:paperclip#12700",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12700 test(runner): add full-stack acceptance and eval gates",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12700",
+			"sourceUpdatedAt": "2026-09-02T06:02:42Z",
+			"sourceFingerprint": "ee9fc532785af119879478df195d1435a340770e851fcc6cc3f3e0a6a7a1437f",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A near-complete, well-tested PR that adds acceptance/eval/chaos/release gates needed to safely ship the restored runner stack across roadmap milestones.",
+			"evidence": [
+				"adds acceptance, live evaluation, chaos, and release gates for the restored runner stack",
+				"verification passed locally across dozens of test suites",
+				"supports shipped Cloud/Sandbox agents and Agent evals milestones in ROADMAP.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:25:18.017Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5146,6 +5145,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:40:57.095Z"
+		},
+		{
+			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Close the producer-side gaps the review-sidecar contract now exposes",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-review-sidecar-producer-gaps.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "ccd90c11b47f13a79ae85314b6e457461bf0834bcbfa50d1cc2da7944016aef8",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Concrete, well-evidenced gaps in the SDLC scoring/gating pipeline (missing G1 producer, incomplete G2 axes, 129/198 specs unscored) undermine trust in gates that the whole factory relies on.",
+			"evidence": [
+				"G2 reviewer only scores 4 of 6 required axes so specs derive no score/gate/chip",
+				"no G1 producer exists for proposals",
+				"129 of 198 specs have no sidecar at all"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:25:18.017Z"
 		},
 		{
 			"key": "pr:paperclip#12644",
@@ -7721,38 +7753,6 @@
 			"scoredAt": "2026-08-31T07:31:58.286Z"
 		},
 		{
-			"key": "pr:paperclip#12700",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12700 test(runner): add full-stack acceptance and eval gates",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12700",
-			"sourceUpdatedAt": "2026-09-02T05:54:49Z",
-			"sourceFingerprint": "720bbf65d8b0c6056a8b33ea43476c18708e3bb6fb4c80975303e7437ee64e30",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Large, thoroughly verified acceptance and eval-gate addition that closes a real release-safety gap for the runner stack.",
-			"evidence": [
-				"57-cell full-stack catalog, 60 unit tests",
-				"many pnpm test suites passed locally"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T05:57:36.152Z"
-		},
-		{
 			"key": "pr:pixel-agents#396",
 			"kind": "pr",
 			"stage": "development",
@@ -8646,37 +8646,6 @@
 			"scoredAt": "2026-08-31T07:36:18.083Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-3748809828",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — scripts/review-sidecar.mjs (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-3748809828.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "bc5ab2f662936bf1eaa3466fb3891fa06d204c7621dd77cb468c04eb4eed2e89",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The review-sidecar module used by the factory pipeline is missing its producer-side half per its own spec, which affects internal tooling completeness but has undefined remediation scope.",
-			"evidence": [
-				"review-sidecar.mjs:194 'producer-side halves of §4 are still absent'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T00:58:57.715Z"
-		},
-		{
 			"key": "pr:pixel-agents#327",
 			"kind": "pr",
 			"stage": "development",
@@ -9157,37 +9126,6 @@
 			"scoredAt": "2026-09-02T00:58:16.105Z"
 		},
 		{
-			"key": "proposal:handoff-minion-factory-1015683775",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Handoff marker — scripts/promotion/authenticated-boundary-probe.sh (minion-factory)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-factory-1015683775.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "bfef3dcc3b2cbe2b9c22741e26cb13d20bb86587dec013101a61062739073203",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Marker calls for replacing an incident-derived security heuristic with measured data but does not define the measurement method or threshold.",
-			"evidence": [
-				"TODO(handoff) at authenticated-boundary-probe.sh:51: replace this incident-derived bound with measured omission"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T00:58:16.105Z"
-		},
-		{
 			"key": "pr:pixel-agents#390",
 			"kind": "pr",
 			"stage": "development",
@@ -9222,41 +9160,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:36:55.886Z"
-		},
-		{
-			"key": "proposal:ci-minion-ai-auto-response",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Auto response on minion-ai main",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-auto-response.md",
-			"sourceUpdatedAt": "2026-08-28",
-			"sourceFingerprint": "cfe282e98ac825944df6655c96aa0acd81255ce9be2d434afae55b4634cd8e8c",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:ci-minion-ai-labeler"
-			],
-			"rationale": "Group with the Labeler failure because both workflows fail at the same GitHub App token step from the same missing private-key input and likely require one credential-or-retirement decision.",
-			"evidence": [
-				"The latest run failed before workflow logic at create-github-app-token.",
-				"The reported error is Input required and not supplied: private-key.",
-				"The Labeler candidate reports the same action and error."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:44:37.861Z"
 		},
 		{
 			"key": "issue:minion-meta#327",
@@ -9358,38 +9261,6 @@
 			"scoredAt": "2026-08-31T07:44:37.861Z"
 		},
 		{
-			"key": "proposal:ci-minion-ai-stale",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Stale on minion-ai main",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-stale.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "84e806d78e399262831094505a56c7d669090614f33077eddb9088e538fad114",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Root cause is clearly diagnosed as a missing private-key input, making this a quick, low-risk fix or workflow removal.",
-			"evidence": [
-				"error: Input required and not supplied: private-key",
-				"clear definition of done: latest run green or workflow disabled with rationale"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T04:57:42.677Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-4278431509",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9421,6 +9292,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:19.199Z"
+		},
+		{
+			"key": "proposal:ci-minion-ai-auto-response",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Auto response on minion-ai main",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-auto-response.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "488a8f89387aba404437491c63fbd64b79e5b6c7f82fc020938085743abfaf4f",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A small, precisely diagnosed CI failure (missing private-key input) with a clear fix and definition of done.",
+			"evidence": [
+				"Error: Input required and not supplied: private-key",
+				"Definition of done: workflow's latest completed run on main is green or deliberately removed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:25:18.017Z"
 		},
 		{
 			"key": "pr:minion-base#41",
@@ -9522,41 +9425,6 @@
 			"scoredAt": "2026-08-31T07:41:32.788Z"
 		},
 		{
-			"key": "proposal:2026-08-29-proposal-index-check-mode-and-effort-projection",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "proposal-index.mjs — add a read-only --check mode and reconcile projection with the auto-triage index writer",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-proposal-index-check-mode-and-effort-projection.md",
-			"sourceUpdatedAt": "2026-08-29",
-			"sourceFingerprint": "5301f04d4b39dd93189ebd89189b32b3c46e74aa5b9a11d467bb509a0aacb577",
-			"score": 37,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 9,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-08-29-proposal-index-projection-parity-untested"
-			],
-			"rationale": "Group with the projection-parity proposal because most named work is already complete and both remaining concerns concern making the same generated index lossless and writer-consistent.",
-			"evidence": [
-				"Read-only --check mode and effort projection are described as done.",
-				"Row ordering still diverges between the generator and auto-triage writer.",
-				"The related proposal targets projection coverage and the same two-writer defect."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:44:37.861Z"
-		},
-		{
 			"key": "spec:2026-08-26-spec-heading-lint-baseline-backfill-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -9653,41 +9521,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:36:55.886Z"
-		},
-		{
-			"key": "proposal:ci-minion-ai-labeler",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Labeler on minion-ai main",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-labeler.md",
-			"sourceUpdatedAt": "2026-08-28",
-			"sourceFingerprint": "fa18310ccdb61182af1d4239bd3f49d7111c9b79070f9f3618b618aa49d4ab0f",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:ci-minion-ai-auto-response"
-			],
-			"rationale": "Group with Auto response because both automation failures share the same missing GitHub App private key and should be resolved through one scoped authentication or retirement goal.",
-			"evidence": [
-				"Labeler fails in create-github-app-token before labeling logic runs.",
-				"The exact error is Input required and not supplied: private-key.",
-				"Auto response shows the same action revision and missing input."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:44:37.861Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-3238987400",
@@ -10944,6 +10777,39 @@
 			"scoredAt": "2026-08-31T07:36:55.886Z"
 		},
 		{
+			"key": "proposal:2026-08-29-proposal-index-check-mode-and-effort-projection",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "proposal-index.mjs — add a read-only --check mode and reconcile projection with the auto-triage index writer",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-proposal-index-check-mode-and-effort-projection.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "839dfa51667837dd4a0e21ac215338756ac0b4be3d7b38dc0c5ceea12c0e1518",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Every substantive delta item is already marked done, leaving only a minor unresolved ordering-confirmation detail not worth a standalone goal.",
+			"evidence": [
+				"--check mode: Done — matching and drifted index cases prove read-only",
+				"effort projection: Done — generator projects effort unconditionally",
+				"remaining ask is only to confirm auto-triage writer insertion order"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:25:18.017Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-2877399286",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11176,37 +11042,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-451096235",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — scripts/proposal-index.mjs (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-451096235.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "d76a862ecb8f871419f7f79113afbc857aa061fd245a9fa86331be7ddaa80124",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A descending-id sort mismatch in an internal indexing script is a minor cosmetic ordering issue with no material consequence.",
-			"evidence": [
-				"proposal-index.mjs:139 'this descending-id sort is not the order the out-of-band'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T00:58:57.715Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1447734948",
