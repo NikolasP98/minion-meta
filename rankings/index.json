@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T06:45:23.987Z",
+	"generatedAt": "2026-09-02T06:56:49.569Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1183,39 +1183,6 @@
 			"scoredAt": "2026-08-31T07:42:55.201Z"
 		},
 		{
-			"key": "pr:minion-meta#247",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#247 factory: Env cache S2: machine-sealed cross-process cache",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/247",
-			"sourceUpdatedAt": "2026-08-31T08:16:49Z",
-			"sourceFingerprint": "3636ccfe1a614bf849f6a48a58789ef5d0a35ffd4426ce3baa73bd9a1e02ed55",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A machine-sealed cache removes recurring secret-fetch cost without restoring plaintext-at-rest exposure, and the task supplies a narrow security-focused slice with testable invariants.",
-			"evidence": [
-				"Decrypted secrets must remain absent from disk",
-				"Tamper and identity behavior must fail closed",
-				"Slice 1 already delivered plaintext deletion and memory fallback"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:21:50.290Z"
-		},
-		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1928,39 +1895,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
-		},
-		{
-			"key": "pr:minion-factory#168",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#168 factory: board issue minion-factory#107: security(factory): remove credentials from worker process arguments",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/168",
-			"sourceUpdatedAt": "2026-08-31T07:57:01Z",
-			"sourceFingerprint": "097aa65ed67b5c85de21e31ec6726d52e93c5c670c708936ecd25106657f66c9",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Removing credentials from process arguments addresses a high-risk security exposure with a bounded fix and runtime-test requirement.",
-			"evidence": [
-				"Task is to remove credentials from worker process arguments.",
-				"Tagged risk:high and topic:security.",
-				"PR is currently draft."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:01:14.069Z"
 		},
 		{
 			"key": "pr:paperclip#12671",
@@ -3661,6 +3595,38 @@
 			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
+			"key": "pr:minion-meta#247",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#247 feat(env): seal the cross-process secret cache",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/247",
+			"sourceUpdatedAt": "2026-09-02T06:54:40Z",
+			"sourceFingerprint": "c7edb7eabc07b2d1f49f56c970a8bc6e265783b73ccb294a4c24d6a946e4fed4",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A core cross-project secret-cache PR is scoped and partially validated but its own risk assessment flags unresolved crash and tamper paths that block safe merge.",
+			"evidence": [
+				"🚨 High: ... leaves concrete crash, PID-reuse, and tampered-generation paths that disable or hang the durable cross-process cache",
+				"status: draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:56:49.490Z"
+		},
+		{
 			"key": "pr:minion-meta#286",
 			"kind": "pr",
 			"stage": "development",
@@ -4129,40 +4095,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T23:57:55.908Z"
-		},
-		{
-			"key": "pr:paperclip#12632",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12632 fix(tools): fall back to the parent API key when Composio omits mcp.headers.x-api-key",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12632",
-			"sourceUpdatedAt": "2026-09-01T06:51:54Z",
-			"sourceFingerprint": "b10f51f400c84b1e0c43e43e6d258918a7e9e4b6817f5fc44b7b311afedb00b8",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"issue:paperclip#12633"
-			],
-			"rationale": "Well-specified, live-verified fix for two chained bugs blocking every real Composio tool call end-to-end.",
-			"evidence": [
-				"fixes #12631, #12643",
-				"verified against live Google Ads connection returning real customer data"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T05:57:36.152Z"
 		},
 		{
 			"key": "pr:paperclip#12647",
@@ -7151,6 +7083,39 @@
 			"scoredAt": "2026-08-31T07:40:17.097Z"
 		},
 		{
+			"key": "pr:minion_hub#213",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#213 feat(scheduling): services view driven by the POS catalog + service picker in booking forms",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/213",
+			"sourceUpdatedAt": "2026-09-02T06:56:00Z",
+			"sourceFingerprint": "9a891cdd2a170b127bbf3b766af4506df6a3b2be40ac853a41a9e22c0f5c0e59",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Open PR with passing checks and unit tests is scoped and ready to merge, only lacking browser verification.",
+			"evidence": [
+				"bun run check → 0 errors, 0 warnings",
+				"vitest scheduling + bookings characterization → 17 passed",
+				"Not browser-verified: local QA stack was not running"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:56:49.490Z"
+		},
+		{
 			"key": "pr:minion-base#45",
 			"kind": "pr",
 			"stage": "development",
@@ -8348,41 +8313,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
-		},
-		{
-			"key": "pr:minion_hub#213",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#213 feat(scheduling): services view driven by the POS catalog + service picker in booking forms",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/213",
-			"sourceUpdatedAt": "2026-09-02T06:43:45Z",
-			"sourceFingerprint": "1ab6b00f89531224c312099c73e26ae4ce8153cfe011e58ef832dcfb192aa515",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"deploy:minion_hub"
-			],
-			"rationale": "Open PR with clear scope, passing gates, and unit test coverage is ready to review and merge.",
-			"evidence": [
-				"check: 0 errors, 0 warnings",
-				"vitest scheduling+bookings 17 passed",
-				"lint:design/tokens clean"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T06:45:23.912Z"
 		},
 		{
 			"key": "pr:paperclip#12669",
@@ -9987,40 +9917,6 @@
 			"scoredAt": "2026-09-01T20:58:04.154Z"
 		},
 		{
-			"key": "deploy:minion_hub",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion_hub",
-			"title": "minion_hub deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/commit/3310334d4ff8e5b68cc9e0d1b06aec9f59ddffbe",
-			"sourceUpdatedAt": "2026-09-02T06:42:32Z",
-			"sourceFingerprint": "d09c012ca764ce9220f59123a9587cbdcee546de338c75463dbec7ca1c59ddf6",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#213"
-			],
-			"rationale": "Passing deployment health with a merged UI fix; no urgency signal but worth periodic monitoring.",
-			"evidence": [
-				"status: passing",
-				"commit is a picker UX fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T06:45:23.912Z"
-		},
-		{
 			"key": "pr:pixel-agents#367",
 			"kind": "pr",
 			"stage": "development",
@@ -10349,40 +10245,6 @@
 			"scoredAt": "2026-09-02T00:58:57.715Z"
 		},
 		{
-			"key": "run:minion_hub#33600052035",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/33600052035",
-			"sourceUpdatedAt": "2026-09-02T06:42:29Z",
-			"sourceFingerprint": "8184d8c84e18185dae302125abc52f87e189097b336089894ceb24c904caa083",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"deploy:minion_hub"
-			],
-			"rationale": "CI run is in progress on master with no indication of failure yet, so no action needed beyond monitoring.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T06:45:23.912Z"
-		},
-		{
 			"key": "pr:minion_hub#207",
 			"kind": "pr",
 			"stage": "development",
@@ -10414,6 +10276,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
+		},
+		{
+			"key": "pr:paperclip#12711",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12711 test(tool-access): cover archived pasted-link app recovery on re-connect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12711",
+			"sourceUpdatedAt": "2026-09-02T06:55:43Z",
+			"sourceFingerprint": "6db07d7d1c0081eb60f08701ec9c1f963502ccbeddd75d02dedb414ba7b27415",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Test-only regression coverage for a previously-fixed bug is fully scoped, low risk, and passing.",
+			"evidence": [
+				"Full file passes: 210/210",
+				"Test-only change; no source modified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:56:49.490Z"
 		},
 		{
 			"key": "pr:pixel-agents#232",
@@ -10585,6 +10479,38 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
+			"key": "deploy:minion_hub",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion_hub",
+			"title": "minion_hub deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/commit/7012cd5591f5550f6857a18cfe2082bff5edfe9a",
+			"sourceUpdatedAt": "2026-09-02T06:56:06Z",
+			"sourceFingerprint": "cb0a13f388c82a63ae83ba9b68d6a2f0127133fe0fd075087af07b66879d198a",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Deployment health entry shows a successful merge with running status and no reported failure, leaving nothing actionable.",
+			"evidence": [
+				"status: running",
+				"merged PR #213 feat(scheduling)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:56:49.490Z"
+		},
+		{
 			"key": "deploy:minion-base",
 			"kind": "deploy",
 			"stage": "deployment",
@@ -10623,8 +10549,8 @@
 			"repo": "minion-factory",
 			"title": "minion-factory deployment health",
 			"sourceUrl": "https://github.com/NikolasP98/minion-factory/commit/e72cf115a5ba8619111ae480b78f796d0ac854b3",
-			"sourceUpdatedAt": "2026-09-02T06:29:10Z",
-			"sourceFingerprint": "9015af66b4ac13d570ccf17058f8c787f5e9df972443c1f77bfaa7b0335c21a2",
+			"sourceUpdatedAt": "2026-09-02T06:53:01Z",
+			"sourceFingerprint": "2ba4cdf34923257e80d5294406b2d3d661613fd2d0a77ac9febfaa55dab21b89",
 			"score": 26,
 			"band": "low",
 			"axes": {
@@ -10633,20 +10559,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 6
+				"specification": 2,
+				"implementation": 2
 			},
 			"confidence": 4,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "A passing deployment health record for an already-merged PR provides no further actionable work.",
+			"rationale": "Routine deployment health status for a merged PR with no indication of failure or required action.",
 			"evidence": [
-				"status: passing",
-				"Merge pull request #182 ... M0 S3: complete safety regression foundation"
+				"status: running",
+				"merged PR #182 M0 S3 safety regression"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T06:33:08.824Z"
+			"scoredAt": "2026-09-02T06:56:49.490Z"
 		},
 		{
 			"key": "pr:minion_hub#196",
@@ -10976,6 +10902,38 @@
 			"scoredAt": "2026-09-02T00:58:16.105Z"
 		},
 		{
+			"key": "proposal:handoff-minion-factory-1962723814",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Handoff marker — runner/src/queue.test.ts (minion-factory)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-factory-1962723814.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "2ff8e7a29f48051ce3bb2b4bd573235c94c1a94d85ff4159e2db786635d9f290",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The handoff marker text is truncated/garbled in the catalog, so the actual open end and its scope cannot be confidently assessed.",
+			"evidence": [
+				"`TODO(handoff):` marker",
+				"x', 'x', 'new', ?, ?)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:56:49.490Z"
+		},
+		{
 			"key": "issue:pixel-agents#263",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11145,6 +11103,102 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
+		},
+		{
+			"key": "run:minion_hub#33601112265",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/33601112265",
+			"sourceUpdatedAt": "2026-09-02T06:56:02Z",
+			"sourceFingerprint": "3ebe949ca0d9812bba8660cb0b189400c742f514128b0b89434f692984b1b31c",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Queued routine CI run with no failure signal is not itself actionable work.",
+			"evidence": [
+				"status: queued",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:56:49.490Z"
+		},
+		{
+			"key": "run:minion_hub#33601112268",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "Factory Notify",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/33601112268",
+			"sourceUpdatedAt": "2026-09-02T06:56:06Z",
+			"sourceFingerprint": "aa0ffa68b430ba4e50793659e73d2ba08feacd77e33fefe08cf367a87d0dabb0",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "In-progress routine notification workflow run with no reported issue.",
+			"evidence": [
+				"status: in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:56:49.490Z"
+		},
+		{
+			"key": "run:minion-factory#33600863311",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion-factory",
+			"title": "Running Copilot Code Review",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/actions/runs/33600863311",
+			"sourceUpdatedAt": "2026-09-02T06:53:01Z",
+			"sourceFingerprint": "81e3b9a29bdc5f17981fb3192feb9a28e005621997d5e1c70e213576b7ef7b29",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "In-progress automated code review run is routine CI activity, not a standalone actionable goal.",
+			"evidence": [
+				"status: in_progress",
+				"dynamic on main"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:56:49.490Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1447734948",
@@ -11341,37 +11395,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T23:57:55.908Z"
-		},
-		{
-			"key": "proposal:handoff-minion-factory-1962723814",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Handoff marker — runner/src/queue.test.ts (minion-factory)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-factory-1962723814.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "32def61f8883c8be28271a31849e505e17d4b996016eda1fdae3d2cd8330c0e6",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The extracted marker text is a garbled SQL fragment rather than a description of real open work, indicating a parsing artifact.",
-			"evidence": [
-				"marker text reads \"x', 'x', 'new', ?, ?)\" with no discernible task description"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T00:58:16.105Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-2704064834",
