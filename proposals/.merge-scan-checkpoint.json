@@ -16,7 +16,7 @@
   "NikolasP98/minion-factory:dev": {
     "cursor": "a84c95b7527d38850e3dd41c96b6982e32e40a69",
     "head": "02900306a1fcc7b182bae726a24260d08467f81e",
-    "done": 25,
+    "done": 34,
     "kept": [
       {
         "file": "agent/discovery.sh",
@@ -87,6 +87,27 @@
         "severity": "medium",
         "category": "unchecked-access",
         "line": 267
+      },
+      {
+        "file": "agent/skills/minion-unslop/scripts/validate_preservation.py",
+        "desc": "JSON data not validated to be a dict before .get() call; will crash with AttributeError if constraints.json contains non-dict JSON",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 429
+      },
+      {
+        "file": "agent/skills/minion-unslop/tests/test_audit.py",
+        "desc": "Accessing report[\"files\"][0] without verifying the list is non-empty; will raise IndexError if audit.py produces unexpected output structure",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 68
+      },
+      {
+        "file": "deploy.sh",
+        "desc": "IMAGE_REGISTRY is read from environment/remote without default fallback or validation before export to .env; if not validated in downstream scripts, empty or malformed values may cause silent failures",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 170
       }
     ]
   }
