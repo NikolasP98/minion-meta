@@ -23,10 +23,12 @@ describe('cache.ts', () => {
 	const tmpHome = fs.mkdtempSync(path.join(os.tmpdir(), 'minion-cache-'));
 	const prevXdg = process.env.XDG_CONFIG_HOME;
 	const prevMode = process.env.MINION_ENV_CACHE;
+	const prevKey = process.env.MINION_ENV_CACHE_KEY;
 
 	beforeEach(() => {
 		process.env.XDG_CONFIG_HOME = tmpHome;
 		delete process.env.MINION_ENV_CACHE;
+		delete process.env.MINION_ENV_CACHE_KEY;
 		fs.rmSync(path.join(tmpHome, 'minion'), { recursive: true, force: true });
 		resetCacheStateForTests();
 	});
@@ -35,6 +37,8 @@ describe('cache.ts', () => {
 		else process.env.XDG_CONFIG_HOME = prevXdg;
 		if (prevMode === undefined) delete process.env.MINION_ENV_CACHE;
 		else process.env.MINION_ENV_CACHE = prevMode;
+		if (prevKey === undefined) delete process.env.MINION_ENV_CACHE_KEY;
+		else process.env.MINION_ENV_CACHE_KEY = prevKey;
 	});
 
 	describe('resolveCacheMode', () => {
@@ -331,14 +335,20 @@ describe('cache.ts', () => {
 			process.env.MINION_ENV_CACHE_KEY = 'not-base64-!!';
 			try {
 				expect(() => writeCache('k', { A: '1' }, 300_000, ['A'])).toThrow(InvalidCacheKeyError);
-				// The failed write must not leave the fetched secret reachable from the memo fast path.
-				expect(readCache('k')).toBeNull();
+				expect(() => readCache('k')).toThrow(InvalidCacheKeyError);
 				expect(() => writeCache('k', { A: '1' }, 300_000, ['A'])).toThrow(InvalidCacheKeyError);
-				expect(readCache('k')).toBeNull();
+				expect(() => readCache('k')).toThrow(InvalidCacheKeyError);
 				expect(fs.existsSync(cachePath())).toBe(false);
 			} finally {
 				delete process.env.MINION_ENV_CACHE_KEY;
 			}
+		});
+
+		it('rejects a malformed operator key before returning a populated memo entry', () => {
+			writeCache('k', { A: '1' }, 300_000, ['A']);
+			process.env.MINION_ENV_CACHE_KEY = 'not-base64-!!';
+
+			expect(() => readCache('k')).toThrow(InvalidCacheKeyError);
 		});
 
 		it('a valid disk hit enforces the 0700 directory mode too, not only a write', () => {

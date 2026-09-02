@@ -47,4 +47,5 @@ then age. Rank is advisory: trusted code owns thresholds and lifecycle mutations
 policy gates, and independent review keep their existing authority.
 
 Canonical keys cover every board lane: `proposal:<id>`, `issue:<repo>#<n>`, `spec:<id>`,
-`pr:<repo>#<n>`, `run:<repo>#<id>`, and `deploy:<repo>`.
+`pr:<repo>#<n>`, `run:<repo>#<id>`, and `deploy:<repo>`. A deployment candidate exists only when
+`rankings/repos.json` names the exact deployment workflow path for that repository.

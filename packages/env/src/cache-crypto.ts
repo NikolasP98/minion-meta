@@ -109,6 +109,15 @@ function readExistingMachineKey(p: string): Buffer {
 	return data;
 }
 
+function fsyncDirectory(dir: string): void {
+	const fd = fs.openSync(dir, 'r');
+	try {
+		fs.fsyncSync(fd);
+	} finally {
+		fs.closeSync(fd);
+	}
+}
+
 /**
  * Machine-local key file, created on demand. Concurrency- and crash-safe: each creator writes and
  * fsyncs a private 0600 inode before publishing it with a no-clobber hard link. Racing creators
@@ -130,6 +139,7 @@ export function getOrCreateMachineKeyFile(dir: string): Buffer {
 		fd = undefined;
 		try {
 			fs.linkSync(tmp, p);
+			fsyncDirectory(dir);
 			return candidate;
 		} catch (err) {
 			if ((err as NodeJS.ErrnoException).code !== 'EEXIST') throw err;
@@ -154,6 +164,11 @@ export function resolveKeyMaterial(dir: string): Buffer {
 	const operatorKey = process.env.MINION_ENV_CACHE_KEY;
 	if (operatorKey !== undefined) return decodeOperatorKey(operatorKey);
 	return getOrCreateMachineKeyFile(dir);
+}
+
+export function validateOperatorCacheKey(): void {
+	const operatorKey = process.env.MINION_ENV_CACHE_KEY;
+	if (operatorKey !== undefined) decodeOperatorKey(operatorKey);
 }
 
 /** Stable per-machine+user binding material: `/etc/machine-id` if readable, else hostname, mixed

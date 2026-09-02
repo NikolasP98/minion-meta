@@ -7,6 +7,7 @@ import {
 	open,
 	isEnvelopeShape,
 	InvalidCacheKeyError,
+	validateOperatorCacheKey,
 	type CacheEnvelope,
 } from './cache-crypto.js';
 
@@ -387,7 +388,7 @@ const LOCK_POLL_MS = 10;
 interface CacheLockOwner {
 	pid: number;
 	token: string;
-	processIdentity: ProcessIdentity | null;
+	processIdentity: ProcessIdentity;
 }
 
 interface ProcessIdentity {
@@ -445,7 +446,7 @@ function isCacheLockOwner(value: unknown): value is CacheLockOwner {
 		(owner.pid as number) > 0 &&
 		typeof owner.token === 'string' &&
 		/^[0-9a-f]{32}$/.test(owner.token) &&
-		(owner.processIdentity === null || isProcessIdentity(owner.processIdentity))
+		isProcessIdentity(owner.processIdentity)
 	);
 }
 
@@ -459,14 +460,12 @@ function readCacheLockOwner(filePath: string): CacheLockOwner | null {
 }
 
 function cacheLockOwnerIsAlive(owner: CacheLockOwner): boolean {
-	if (owner.processIdentity !== null) {
-		const currentIdentity = processIdentity(owner.pid);
-		if (currentIdentity !== null) {
-			return (
-				currentIdentity.bootId === owner.processIdentity.bootId &&
-				currentIdentity.startTicks === owner.processIdentity.startTicks
-			);
-		}
+	const currentIdentity = processIdentity(owner.pid);
+	if (currentIdentity !== null) {
+		return (
+			currentIdentity.bootId === owner.processIdentity.bootId &&
+			currentIdentity.startTicks === owner.processIdentity.startTicks
+		);
 	}
 	try {
 		process.kill(owner.pid, 0);
@@ -534,10 +533,14 @@ function releaseCacheLock(filePath: string, owner: CacheLockOwner): void {
  */
 function withCacheLock<T>(dir: string, fn: () => T): T {
 	const lp = lockFilePath(dir);
+	const identity = processIdentity(process.pid);
+	if (identity === null) {
+		throw new Error('sealed disk cache locking requires Linux procfs process identity');
+	}
 	const owner: CacheLockOwner = {
 		pid: process.pid,
 		token: crypto.randomBytes(16).toString('hex'),
-		processIdentity: processIdentity(process.pid),
+		processIdentity: identity,
 	};
 	const deadline = Date.now() + LOCK_ACQUIRE_TIMEOUT_MS;
 	for (;;) {
@@ -706,6 +709,9 @@ function writeDiskEntry(key: string, entry: CacheEntry): void {
  *  first; on a miss, in `disk` mode, falls through to the sealed on-disk cache and promotes a hit
  *  back into the memo so later calls in this process never touch disk again. */
 export function readCache(key: string): { env: Record<string, string>; keyNames: string[] } | null {
+	const mode = resolveCacheMode();
+	if (mode === 'disk') validateOperatorCacheKey();
+
 	const memoHit = memo.get(key);
 	if (memoHit) {
 		if (Date.now() - memoHit.fetchedAt <= memoHit.ttlMs) {
@@ -714,7 +720,7 @@ export function readCache(key: string): { env: Record<string, string>; keyNames:
 		memo.delete(key);
 	}
 
-	if (resolveCacheMode() !== 'disk') return null;
+	if (mode !== 'disk') return null;
 
 	const result = readDiskEntries();
 	if (result.status !== 'authenticated') return null;

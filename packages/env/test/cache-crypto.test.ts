@@ -19,6 +19,7 @@ import {
 
 const hooks = vi.hoisted(() => ({
 	onLinkSync: null as null | ((from: string, to: string) => void),
+	onFsyncSync: null as null | ((fd: number) => void),
 }));
 
 vi.mock('node:fs', async (importOriginal) => {
@@ -28,6 +29,10 @@ vi.mock('node:fs', async (importOriginal) => {
 		linkSync(...args: Parameters<typeof real.linkSync>): ReturnType<typeof real.linkSync> {
 			hooks.onLinkSync?.(String(args[0]), String(args[1]));
 			return real.linkSync(...args);
+		},
+		fsyncSync(...args: Parameters<typeof real.fsyncSync>): ReturnType<typeof real.fsyncSync> {
+			hooks.onFsyncSync?.(args[0]);
+			return real.fsyncSync(...args);
 		},
 	};
 	return { ...patched, default: patched };
@@ -41,9 +46,11 @@ describe('cache-crypto.ts', () => {
 		dir = fs.mkdtempSync(path.join(os.tmpdir(), 'minion-cache-crypto-'));
 		delete process.env.MINION_ENV_CACHE_KEY;
 		hooks.onLinkSync = null;
+		hooks.onFsyncSync = null;
 	});
 	afterEach(() => {
 		hooks.onLinkSync = null;
+		hooks.onFsyncSync = null;
 		fs.rmSync(dir, { recursive: true, force: true });
 		if (prevKey === undefined) delete process.env.MINION_ENV_CACHE_KEY;
 		else process.env.MINION_ENV_CACHE_KEY = prevKey;
@@ -180,6 +187,21 @@ describe('cache-crypto.ts', () => {
 			expect(stagedModeAtPublication).toBe(0o600);
 			expect(material.length).toBe(32);
 			expect(fs.readFileSync(path.join(dir, 'cache.key')).equals(material)).toBe(true);
+		});
+
+		it('syncs the cache directory after publishing the final key name', () => {
+			let published = false;
+			let directorySyncedAfterPublication = false;
+			hooks.onLinkSync = (_from, to) => {
+				if (to === path.join(dir, 'cache.key')) published = true;
+			};
+			hooks.onFsyncSync = (fd) => {
+				if (fs.fstatSync(fd).isDirectory() && published) directorySyncedAfterPublication = true;
+			};
+
+			getOrCreateMachineKeyFile(dir);
+
+			expect(directorySyncedAfterPublication).toBe(true);
 		});
 
 		it('two racing creators converge on one winning key — the loser reads it back, not its own candidate', () => {

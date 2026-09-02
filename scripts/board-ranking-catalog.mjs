@@ -31,6 +31,18 @@ async function github(fetchFn, token, path) {
 	}
 }
 
+async function githubPages(fetchFn, token, path, select) {
+	const items = [];
+	for (let page = 1; ; page += 1) {
+		const separator = path.includes('?') ? '&' : '?';
+		const payload = await github(fetchFn, token, `${path}${separator}per_page=100&page=${page}`);
+		const batch = select(payload);
+		if (!Array.isArray(batch)) return null;
+		items.push(...batch);
+		if (batch.length < 100) return items;
+	}
+}
+
 function localArtifactCandidates(root, generatedAt) {
 	const proposals = JSON.parse(readFileSync(`${root}/proposals/index.json`, 'utf8')).proposals ?? [];
 	const specs = JSON.parse(readFileSync(`${root}/specs/index.json`, 'utf8')).specs ?? [];
@@ -64,8 +76,9 @@ function latestRunsByWorkflow(runs) {
 	const latest = new Map();
 	for (const run of runs ?? []) {
 		if (run.event === 'pull_request' || run.event === 'pull_request_target') continue;
-		const previous = latest.get(run.name);
-		if (!previous || Date.parse(run.updated_at) > Date.parse(previous.updated_at)) latest.set(run.name, run);
+		const workflow = run.path ?? run.name;
+		const previous = latest.get(workflow);
+		if (!previous || Date.parse(run.updated_at) > Date.parse(previous.updated_at)) latest.set(workflow, run);
 	}
 	return [...latest.values()];
 }
@@ -78,12 +91,17 @@ export async function buildRankingCatalog({ root = '.', fetchFn = fetch, token =
 	for (const repo of repos) {
 		const slug = repo.slug.split('/').map(encodeURIComponent).join('/');
 		const branch = encodeURIComponent(repo.branch);
-		const [issues, commits, workflowPayload] = await Promise.all([
-			github(fetchFn, token, `/repos/${slug}/issues?state=open&per_page=50`),
+		const [issues, commits, workflowRuns] = await Promise.all([
+			githubPages(fetchFn, token, `/repos/${slug}/issues?state=open`, (payload) => payload),
 			github(fetchFn, token, `/repos/${slug}/commits?sha=${branch}&per_page=1`),
-			github(fetchFn, token, `/repos/${slug}/actions/runs?branch=${branch}&per_page=30`)
+			githubPages(
+				fetchFn,
+				token,
+				`/repos/${slug}/actions/runs?branch=${branch}`,
+				(payload) => payload?.workflow_runs
+			)
 		]);
-		if (!Array.isArray(issues) || (!Array.isArray(commits) && !repo.allowMissingBranch) || !Array.isArray(workflowPayload?.workflow_runs)) {
+		if (!Array.isArray(issues) || (!Array.isArray(commits) && !repo.allowMissingBranch) || !Array.isArray(workflowRuns)) {
 			throw new Error(`ranking catalog source unavailable for ${repo.id}; refusing a partial catalog`);
 		}
 		const branchCommits = Array.isArray(commits) ? commits : [];
@@ -100,7 +118,7 @@ export async function buildRankingCatalog({ root = '.', fetchFn = fetch, token =
 			});
 		}
 
-		const latestRuns = latestRunsByWorkflow(workflowPayload.workflow_runs);
+		const latestRuns = latestRunsByWorkflow(workflowRuns);
 		for (const run of latestRuns.filter((item) => item.status !== 'completed' || item.conclusion === 'failure')) {
 			candidates.push({
 				key: `run:${repo.id}#${run.id}`, kind: 'run', stage: 'testing', repo: repo.id,
@@ -110,18 +128,20 @@ export async function buildRankingCatalog({ root = '.', fetchFn = fetch, token =
 			});
 		}
 
-		const latestBranchRun = latestRuns.sort((a, b) => Date.parse(b.updated_at) - Date.parse(a.updated_at))[0];
-		const deployStatus = !latestBranchRun ? 'unknown'
-			: latestBranchRun.status !== 'completed' ? 'running'
-			: latestBranchRun.conclusion === 'success' ? 'passing'
-			: latestBranchRun.conclusion === 'failure' ? 'failing' : 'unknown';
+		const deploymentRun = repo.deploymentWorkflow
+			? latestRuns.find((run) => run.path === repo.deploymentWorkflow)
+			: undefined;
+		const deployStatus = !deploymentRun ? 'unknown'
+			: deploymentRun.status !== 'completed' ? 'running'
+			: deploymentRun.conclusion === 'success' ? 'passing'
+			: deploymentRun.conclusion === 'failure' ? 'failing' : 'unknown';
 		const head = branchCommits[0];
-		if (head) {
+		if (head && repo.deploymentWorkflow) {
 			candidates.push({
 				key: `deploy:${repo.id}`, kind: 'deploy', stage: 'deployment', repo: repo.id,
 				title: `${repo.id} deployment health`, summary: excerpt(head.commit?.message), status: deployStatus,
-				updatedAt: date(latestBranchRun?.updated_at ?? head.commit?.author?.date, generatedAt),
-				tags: ['deployment'], sourceUrl: head.html_url
+				updatedAt: date(deploymentRun?.updated_at ?? head.commit?.author?.date, generatedAt),
+				tags: ['deployment'], sourceUrl: deploymentRun?.html_url ?? head.html_url
 			});
 		}
 	}
