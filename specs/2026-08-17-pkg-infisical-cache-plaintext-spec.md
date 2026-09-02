@@ -4,6 +4,7 @@ title: "@minion-stack/env — stop leaving the gateway vault master key in a pla
 stage: spec
 status: approved
 pass: 2
+next_slice: 3
 created: 2026-08-17
 updated: 2026-09-02
 proposal: 2026-08-17-pkg-infisical-cache-plaintext
