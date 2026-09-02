@@ -15,22 +15,29 @@
   },
   "NikolasP98/minion-factory:dev": {
     "cursor": "a84c95b7527d38850e3dd41c96b6982e32e40a69",
-    "head": "19b18a0beb8e4dde197d7a8ebd6e8505bb178da9",
-    "done": 11,
+    "head": "02900306a1fcc7b182bae726a24260d08467f81e",
+    "done": 9,
     "kept": [
       {
-        "file": "agent/lib/cost.sh",
-        "desc": "Billing rates (0.45, 0.18, 0.04, etc.) hardcoded in case statement; should use environment variables for configurability and inflation adjustments.",
+        "file": "agent/discovery.sh",
+        "desc": "JSON field extracted without validation; missing .mergeEvent.repoSlug would assign the string 'null' to repo_slug and pass it to discovery_repo_id without checking.",
         "severity": "medium",
-        "category": "hardcoded-config",
-        "line": 46
+        "category": "unchecked-access",
+        "line": 85
       },
       {
-        "file": "agent/lib/discovery.sh",
-        "desc": "The ${today} parameter is used in sed replacement text without escaping; special characters (/, &, \\) will break the command or corrupt the file silently.",
-        "severity": "high",
-        "category": "unvalidated-input",
-        "line": 129
+        "file": "agent/factory-prepare-workspace.sh",
+        "desc": "Refactored error handling delegates to factory_workspace_resume_fetch but error message propagation is incomplete — note initialized empty on line 67 but never set by the helper, so fail \"$note\" will produce a blank error if the helper fails.",
+        "severity": "medium",
+        "category": "missing-handoff",
+        "line": 68
+      },
+      {
+        "file": "agent/factory-prepare-workspace.test.sh",
+        "desc": "jq commands parsing JSON output don't check for success; if the output file is missing or invalid, variables silently become empty strings, causing confusing test failures",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 88
       }
     ]
   }
