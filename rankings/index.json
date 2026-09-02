@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T04:57:42.754Z",
+	"generatedAt": "2026-09-02T05:27:23.371Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -4837,39 +4837,6 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
-			"key": "issue:paperclip#12633",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12633 Composio broker connections never leave draft status — every child toolkit's tools are invisible to the tool gateway",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12633",
-			"sourceUpdatedAt": "2026-09-01T04:16:37Z",
-			"sourceFingerprint": "5b6c726e7454fba57e71f910d794590ff3d998d328094d18dc684b0ce4033192",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A precisely located root cause leaves every Composio-brokered toolkit connection permanently invisible to tool execution despite passing health checks, and this is the third bug found in the same end-to-end chain.",
-			"evidence": [
-				"toolApplications rows for Composio connections never leave status draft, and connectedMcpToolsForCompany filters on status active",
-				"reproduction confirms 404 tool_not_found even after #12628 and #12631 fixes",
-				"fix location identified: promote applicationRow/connectionRow to active after checkConnectionHealth succeeds"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T02:27:48.038Z"
-		},
-		{
 			"key": "pr:paperclip#12679",
 			"kind": "pr",
 			"stage": "development",
@@ -5210,6 +5177,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T07:27:53.716Z"
+		},
+		{
+			"key": "pr:paperclip#12709",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12709 feat(codex-local): give each Codex account its own home and path secret",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12709",
+			"sourceUpdatedAt": "2026-09-02T05:02:13Z",
+			"sourceFingerprint": "0b93a59c75331c23de8a064efc69c708c6415d4458c2367f7a883ef54ba5e66d",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Adds per-account credential isolation for the Codex local adapter with tests passing and a completed security review, unblocking multi-account usage.",
+			"evidence": [
+				"security review returned approve with no blocking finding",
+				"adapter suite passes with 343 and 25 tests",
+				"strict allowlist and root containment check reduce path traversal risk"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T05:27:23.288Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updatesellable-silent-drop",
@@ -7785,39 +7785,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:58.286Z"
-		},
-		{
-			"key": "pr:paperclip#12709",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12709 feat(codex-local): give each Codex account its own home and path secret",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12709",
-			"sourceUpdatedAt": "2026-09-02T04:36:11Z",
-			"sourceFingerprint": "6375c63b1cc39bb5f1046272e4d6c58a6f8489a93a051d00bf7752a0bd2aa575",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-scoped, security-reviewed PR with passing tests is ready to land pending final CI/Greptile sign-off.",
-			"evidence": [
-				"security review approved with no blocking finding",
-				"adapter-codex-local suite passes 343 tests",
-				"CI gates and Greptile checklist items still unchecked"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T04:57:42.677Z"
 		},
 		{
 			"key": "pr:pixel-agents#396",
@@ -11244,6 +11211,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
+		},
+		{
+			"key": "pr:paperclip#12710",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12710 docs(release): add v2026.831.1 stable notes to master",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12710",
+			"sourceUpdatedAt": "2026-09-02T05:08:54Z",
+			"sourceFingerprint": "f4a9761bcd0dac54ad1e74a15117de03dc0f4aa50b004a8c076f6c10039c6a63",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Low-risk docs-only PR that closes a gap in the stable-notes history on master by adding a verbatim copy of an already-published release note.",
+			"evidence": [
+				"diff against published tag is empty",
+				"docs-only change, no code or config affected"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T05:27:23.288Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-451096235",
