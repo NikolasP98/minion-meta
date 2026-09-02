@@ -15,8 +15,37 @@
   },
   "NikolasP98/minion-factory:dev": {
     "cursor": "a84c95b7527d38850e3dd41c96b6982e32e40a69",
-    "head": "b70fbe6186d037275c40d1ea11c923d382224a92",
-    "done": 5,
-    "kept": []
+    "head": "e6c2aa3b26db0d829ca2246fd24e4365d591e75c",
+    "done": 11,
+    "kept": [
+      {
+        "file": "agent/factory-prepare-workspace.test.sh",
+        "desc": "jq command result used without checking if it succeeded; if phase-result.json doesn't exist or is invalid JSON, jq fails silently and variables are assigned empty strings, causing unclear test failures",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 76
+      },
+      {
+        "file": "agent/factory-review.sh",
+        "desc": "factory_review_clear is called without a type check, unlike factory_review_conclude (line 11) and functions in factory-resolve-conflict.sh; if the function is missing, the error is not caught and the cleanup may fail silently.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 64
+      },
+      {
+        "file": "agent/lib/ciwatch.sh",
+        "desc": "Result of jq -r .workflowName is used without checking if it is 'null', which silently occurs if the field is missing and causes incorrect slug generation.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 45
+      },
+      {
+        "file": "agent/lib/discovery.sh",
+        "desc": "The ${today} parameter is used directly in sed replacement without escaping; if empty or contains /, &, or \\ it breaks the substitution or corrupts output.",
+        "severity": "high",
+        "category": "unvalidated-input",
+        "line": 139
+      }
+    ]
   }
 }
