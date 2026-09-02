@@ -645,6 +645,71 @@ describe('cache.ts', () => {
 			},
 			15_000,
 		);
+
+		it(
+			'recovers a lock whose writer crashed and persists the next cross-process value',
+			async () => {
+				if (process.platform === 'win32') return;
+				const raceHome = fs.mkdtempSync(path.join(os.tmpdir(), 'minion-cache-crashed-lock-'));
+				const dir = path.join(raceHome, 'minion');
+				const fifo = path.join(dir, 'infisical-cache.json');
+				const lock = path.join(dir, 'infisical-cache.lock');
+				const ready = path.join(raceHome, 'go');
+				const out = path.join(raceHome, 'crashed.json');
+				const tsxBin = path.resolve(
+					path.dirname(fileURLToPath(import.meta.url)),
+					'..',
+					'node_modules',
+					'.bin',
+					'tsx',
+				);
+
+				try {
+					fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
+					await new Promise<void>((resolve, reject) => {
+						const mkfifo = spawn('mkfifo', [fifo]);
+						mkfifo.on('error', reject);
+						mkfifo.on('exit', (code) =>
+							code === 0 ? resolve() : reject(new Error(`mkfifo exited ${code}`)),
+						);
+					});
+					fs.writeFileSync(ready, '');
+					const crashedWriter = spawn(
+						tsxBin,
+						[helperScript, raceHome, ready, out, 'crashed', 'uncommitted'],
+						{ stdio: 'ignore' },
+					);
+					const crashedWriterExit = new Promise<void>((resolve, reject) => {
+						crashedWriter.on('error', reject);
+						crashedWriter.on('exit', () => resolve());
+					});
+					for (let attempt = 0; attempt < 500 && !fs.existsSync(lock); attempt += 1) {
+						await new Promise((resolve) => setTimeout(resolve, 10));
+					}
+					expect(fs.existsSync(lock)).toBe(true);
+					const lockOwner = JSON.parse(fs.readFileSync(lock, 'utf8')) as { pid: number };
+					expect(Number.isInteger(lockOwner.pid)).toBe(true);
+					process.kill(lockOwner.pid, 'SIGKILL');
+					await crashedWriterExit;
+					fs.rmSync(fifo);
+
+					process.env.XDG_CONFIG_HOME = raceHome;
+					resetCacheStateForTests();
+					writeCache('after-crash', { V: 'persisted' }, 300_000, ['V']);
+					resetCacheStateForTests();
+
+					expect(fs.existsSync(lock)).toBe(false);
+					expect(readCache('after-crash')).toEqual({
+						env: { V: 'persisted' },
+						keyNames: ['V'],
+					});
+				} finally {
+					resetCacheStateForTests();
+					fs.rmSync(raceHome, { recursive: true, force: true });
+				}
+			},
+			15_000,
+		);
 	});
 
 	describe('purgeLegacyCacheOnce', () => {

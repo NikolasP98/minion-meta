@@ -384,6 +384,11 @@ const LOCK_FILE_NAME = 'infisical-cache.lock';
 const LOCK_ACQUIRE_TIMEOUT_MS = 10_000;
 const LOCK_POLL_MS = 10;
 
+interface CacheLockOwner {
+	pid: number;
+	token: string;
+}
+
 function lockFilePath(dir: string): string {
 	return path.join(dir, LOCK_FILE_NAME);
 }
@@ -395,6 +400,76 @@ function sleepSync(ms: number): void {
 	Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 }
 
+function isCacheLockOwner(value: unknown): value is CacheLockOwner {
+	if (typeof value !== 'object' || value === null || Array.isArray(value)) return false;
+	const owner = value as Record<string, unknown>;
+	return (
+		Number.isInteger(owner.pid) &&
+		(owner.pid as number) > 0 &&
+		typeof owner.token === 'string' &&
+		/^[0-9a-f]{32}$/.test(owner.token)
+	);
+}
+
+function readCacheLockOwner(filePath: string): CacheLockOwner | null {
+	try {
+		const parsed: unknown = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+		return isCacheLockOwner(parsed) ? parsed : null;
+	} catch {
+		return null;
+	}
+}
+
+function cacheLockOwnerIsAlive(owner: CacheLockOwner): boolean {
+	try {
+		process.kill(owner.pid, 0);
+		return true;
+	} catch (err) {
+		return (err as NodeJS.ErrnoException).code !== 'ESRCH';
+	}
+}
+
+function sameCacheLockOwner(a: CacheLockOwner | null, b: CacheLockOwner): boolean {
+	return a?.pid === b.pid && a.token === b.token;
+}
+
+function tryAcquireCacheLock(filePath: string, owner: CacheLockOwner): boolean {
+	const tmp = `${filePath}.${owner.pid}.${owner.token}.tmp`;
+	try {
+		fs.writeFileSync(tmp, JSON.stringify(owner), { mode: 0o600, flag: 'wx' });
+		return linkNoClobber(tmp, filePath);
+	} finally {
+		bestEffortUnlink(tmp);
+	}
+}
+
+function reapDeadCacheLock(filePath: string): boolean {
+	const observed = readCacheLockOwner(filePath);
+	if (!observed || cacheLockOwnerIsAlive(observed)) return false;
+
+	const quarantined = quarantinePath(filePath);
+	if (!quarantined) return !fs.existsSync(filePath);
+
+	const moved = readCacheLockOwner(quarantined.filePath);
+	if (!sameCacheLockOwner(moved, observed) || cacheLockOwnerIsAlive(observed)) {
+		restoreQuarantinedPath(quarantined, filePath);
+		return false;
+	}
+
+	removeQuarantinedPath(quarantined);
+	return true;
+}
+
+function releaseCacheLock(filePath: string, owner: CacheLockOwner): void {
+	const quarantined = quarantinePath(filePath);
+	if (!quarantined) return;
+	if (sameCacheLockOwner(readCacheLockOwner(quarantined.filePath), owner)) {
+		removeQuarantinedPath(quarantined);
+	} else {
+		restoreQuarantinedPath(quarantined, filePath);
+	}
+}
+
 /**
  * Cross-process mutex for the sealed disk cache's read-classify-commit transaction.
  * `writeDiskEntry` re-reads and re-classifies the cache file while holding this lock, so two
@@ -403,38 +478,36 @@ function sleepSync(ms: number): void {
  * not take this lock — a backup restore, a file sync, an operator's editor — is unaffected by it, so
  * immutable generation publication is what guarantees such a writer's bytes are never destroyed.
  *
- * Acquired with `wx` (atomic create-exclusive — the same primitive `getOrCreateMachineKeyFile` uses),
- * so two processes racing to acquire converge on whichever `openSync` wins; the loser polls. A lock
- * Waiters never reap an existing lock based on age: a slow live holder is indistinguishable from a
- * crashed one, and unlinking its pathname would allow overlapping read-merge-publish transactions.
- * A waiter instead times out and lets the caller retain the fresh value memo-only. Every other
- * operation in this module is synchronous, so this blocks via `sleepSync` rather than pulling in an
- * async lock dependency that would force `writeCache` (and every caller up to
+ * Acquired by create-exclusive hard-linking a complete owner record, so a waiter can distinguish a
+ * slow live holder from a crashed one without relying on lock age. A dead holder's exact lock object
+ * is quarantined and its owner record rechecked before removal; a replaced or live lock is restored.
+ * Every other operation in this module is synchronous, so this blocks via `sleepSync` rather than
+ * pulling in an async lock dependency that would force `writeCache` (and every caller up to
  * `fetchInfisicalSecrets`) to become async.
  */
 function withCacheLock<T>(dir: string, fn: () => T): T {
 	const lp = lockFilePath(dir);
+	const owner: CacheLockOwner = {
+		pid: process.pid,
+		token: crypto.randomBytes(16).toString('hex'),
+	};
 	const deadline = Date.now() + LOCK_ACQUIRE_TIMEOUT_MS;
 	for (;;) {
 		try {
-			fs.closeSync(fs.openSync(lp, 'wx', 0o600));
-			break;
+			if (tryAcquireCacheLock(lp, owner)) break;
 		} catch (err) {
 			if ((err as NodeJS.ErrnoException).code !== 'EEXIST') throw err;
-			if (Date.now() > deadline) {
-				throw new Error(`timed out waiting for the sealed disk cache lock at ${lp}`);
-			}
-			sleepSync(LOCK_POLL_MS);
 		}
+		if (reapDeadCacheLock(lp)) continue;
+		if (Date.now() > deadline) {
+			throw new Error(`timed out waiting for the sealed disk cache lock at ${lp}`);
+		}
+		sleepSync(LOCK_POLL_MS);
 	}
 	try {
 		return fn();
 	} finally {
-		try {
-			fs.rmSync(lp, { force: true });
-		} catch {
-			/* best-effort release */
-		}
+		releaseCacheLock(lp, owner);
 	}
 }
 
