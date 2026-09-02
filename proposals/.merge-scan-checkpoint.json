@@ -16,7 +16,7 @@
   "NikolasP98/minion-ai:DEV": {
     "cursor": "00cf3e4c166ee99ef4ac04da4c0f95b0e7e36f2d",
     "head": "1d40d9a77164ea3461884f1a4e56296e94305a4c",
-    "done": 4,
+    "done": 18,
     "kept": [
       {
         "file": ".github/workflows/ci.yml",
@@ -24,6 +24,48 @@
         "severity": "medium",
         "category": "missing-handoff",
         "line": 321
+      },
+      {
+        "file": "extensions/llm-task/src/llm-task-tool.test.ts",
+        "desc": "Test \"enforces allowedModels\" creates a tool but has no assertions or execution; the assertion checking rejection of invalid models was removed.",
+        "severity": "high",
+        "category": "weakened-test",
+        "line": 101
+      },
+      {
+        "file": "extensions/meta-graph/src/graph-client.ts",
+        "desc": "readBody() function has empty catch blocks (lines 157, 163) that silently swallow errors from res.text() and JSON.parse() without preserving diagnostic information, complicating debugging of network or parsing failures.",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 157
+      },
+      {
+        "file": "src/agents/sections/custom/__tests__/tokenizer.test.ts",
+        "desc": "Test input reduced from 10,000 to 512 characters and assertion changed from range check (>1000) to exact value (=64), making it brittle to tokenizer implementation changes",
+        "severity": "medium",
+        "category": "weakened-test",
+        "line": 15
+      },
+      {
+        "file": "src/channels/impl/telegram/bot-message-context.test-harness.ts",
+        "desc": "Changed allowFrom from [] (restrictive) to [\"*\"] (permissive) in test helper, potentially weakening authorization rejection tests",
+        "severity": "medium",
+        "category": "weakened-test",
+        "line": 54
+      },
+      {
+        "file": "src/config/types.gateway.ts",
+        "desc": "Dormant profiles map lacks TODO(handoff) marker despite documented incomplete state",
+        "severity": "medium",
+        "category": "missing-handoff",
+        "line": 362
+      },
+      {
+        "file": "src/docs/slash-commands-doc.test.ts",
+        "desc": "Test file deleted without explanation, removing documentation-sync verification that all slash command aliases are documented.",
+        "severity": "medium",
+        "category": "weakened-test",
+        "line": 1
       }
     ]
   }
