@@ -16,7 +16,7 @@
   "NikolasP98/minion-factory:dev": {
     "cursor": "a84c95b7527d38850e3dd41c96b6982e32e40a69",
     "head": "6204960e9371bc1c9bb2377a20a458841b2f6029",
-    "done": 14,
+    "done": 26,
     "kept": [
       {
         "file": "agent/lib/discovery.sh",
@@ -31,6 +31,41 @@
         "severity": "medium",
         "category": "empty-catch",
         "line": 15
+      },
+      {
+        "file": "agent/lib/review-artifact.test.sh",
+        "desc": "Case pattern *) matches empty string; test should verify rendered output is not empty before asserting backticks are stripped.",
+        "severity": "medium",
+        "category": "weakened-test",
+        "line": 232
+      },
+      {
+        "file": "agent/rank.sh",
+        "desc": "jq output unchecked; if ranking_slice_candidates produces no file or invalid JSON, count becomes empty, causing line 170's arithmetic comparison to fail with unclear bash 'unary operator expected' error",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 82
+      },
+      {
+        "file": "agent/reconcile.sh",
+        "desc": "factory_actions_observation_is_newer is called without validating existence; negation of 127 exit code at line 163 inverts intended control flow if the function is missing",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 119
+      },
+      {
+        "file": "agent/run.sh",
+        "desc": "budget_verdict is assigned from factory_review_publish_budget_findings but never used; no TODO documenting whether result should be checked or assignment removed",
+        "severity": "medium",
+        "category": "missing-handoff",
+        "line": 115
+      },
+      {
+        "file": "agent/skills/minion-unslop/scripts/silhouette_scan.py",
+        "desc": "load_reference() accesses data['metrics'] without validating the key exists; malformed reference JSON will raise unhandled KeyError despite docstring's error-handling contract.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 297
       }
     ]
   }

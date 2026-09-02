@@ -27,5 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-02)
 
-- `NikolasP98/minion-meta@dev packages/env/src/cache.ts:32` — 'disk' currently degrades to 'memory' with a warning — S2
-  https://github.com/NikolasP98/minion-meta/blob/dev/packages/env/src/cache.ts#L32
+- `NikolasP98/minion-meta@dev packages/env/src/cache.ts:15` — S1+S2 of 2026-08-17-pkg-infisical-cache-plaintext-spec.md are implemented (no
+  https://github.com/NikolasP98/minion-meta/blob/dev/packages/env/src/cache.ts#L15
+- `NikolasP98/minion-meta@dev packages/env/src/cache.ts:237` — S3's minion doctor cache row must report .infisical-cache-quarantine-*
+  https://github.com/NikolasP98/minion-meta/blob/dev/packages/env/src/cache.ts#L237

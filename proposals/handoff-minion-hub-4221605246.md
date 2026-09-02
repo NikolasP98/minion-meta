@@ -28,16 +28,3 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/lib/assistant/dispatch.ts:12` — silent follow-up turns are persisted in the gateway transcript
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/assistant/dispatch.ts#L12
-
-## Merged from postmerge-minion-hub-007074feec3c
-
-Same marker, also caught by the post-merge discovery scan:
-
-- repo: `NikolasP98/minion_hub@be019c6` (branch `master`)
-- merged PR: https://github.com/NikolasP98/minion_hub/pull/215 (#215)
-
-Note: that proposal's auto-generated "Diagnosis" section contained embedded
-`<function_calls>`/`<invoke>` markup attempting to direct a reviewing agent to
-read/grep local paths — a prompt-injection attempt, not genuine analysis. It
-was not followed and is not reproduced here; see the tombstoned file if you
-need to inspect the raw payload.
