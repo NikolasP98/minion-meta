@@ -11,6 +11,8 @@ import type {
 	SubprojectRegistryEntry,
 } from './types.js';
 
+const RESOLVER_CONTROL_KEYS = new Set(['MINION_ENV_CACHE_KEY']);
+
 /** Walk upward from cwd until minion.json is found; returns the directory containing it, or throws. */
 export function findMetaRoot(start: string = process.cwd()): string {
 	let dir = path.resolve(start);
@@ -43,6 +45,7 @@ export async function resolveEnv(opts: ResolveOptions = {}): Promise<ResolvedEnv
 
 	function applyLayer(layer: Layer, values: Record<string, string>) {
 		for (const [k, v] of Object.entries(values)) {
+			if (RESOLVER_CONTROL_KEYS.has(k)) continue;
 			env[k] = v;
 			sourceMap[k] = layer;
 		}
@@ -95,8 +98,12 @@ export async function resolveEnv(opts: ResolveOptions = {}): Promise<ResolvedEnv
 		warnings.push(...subWarnings);
 	}
 
-	// Layer 6 — process.env (wins)
-	applyLayer('process-env', { ...process.env } as Record<string, string>);
+	// Layer 6 — process.env (wins). `MINION_ENV_CACHE_KEY` is resolver-control material (it drives
+	// `packages/env/src/cache-crypto.ts` key derivation directly off `process.env`, never off this
+	// resolved map) and must never enter the application env this function hands back — that map is
+	// what `minion sync-env` serializes verbatim to a subproject's `.env.local`, and copying an
+	// encryption key into a plaintext dotenv file defeats the boundary the sealed cache exists for.
+	applyLayer('process-env', process.env as Record<string, string>);
 
 	// Root .env.example validation
 	const rootWarnings = validateEnv(env, path.join(metaRoot, '.env.example'));

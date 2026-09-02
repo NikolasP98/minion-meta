@@ -75,4 +75,25 @@ describe('resolveEnv — 6-layer precedence', () => {
 			'root-defaults',
 		);
 	});
+
+	it('never copies MINION_ENV_CACHE_KEY from any layer into the resolved application env', async () => {
+		fs.writeFileSync(path.join(metaRoot, '.env.defaults'), 'MINION_ENV_CACHE_KEY=root-file-key');
+		fs.writeFileSync(path.join(subRoot, '.env.local'), 'MINION_ENV_CACHE_KEY=subproject-file-key');
+		const prev = process.env.MINION_ENV_CACHE_KEY;
+		process.env.MINION_ENV_CACHE_KEY = Buffer.alloc(32, 9).toString('base64');
+		try {
+			const result = await resolveEnv({ subprojectId: 'hub', cwd: metaRoot });
+			expect(result.env.MINION_ENV_CACHE_KEY).toBeUndefined();
+			expect(result.source.some((s: ResolvedVarSource) => s.name === 'MINION_ENV_CACHE_KEY')).toBe(
+				false,
+			);
+			const serialized = JSON.stringify(result);
+			expect(serialized).not.toContain(process.env.MINION_ENV_CACHE_KEY);
+			expect(serialized).not.toContain('root-file-key');
+			expect(serialized).not.toContain('subproject-file-key');
+		} finally {
+			if (prev === undefined) delete process.env.MINION_ENV_CACHE_KEY;
+			else process.env.MINION_ENV_CACHE_KEY = prev;
+		}
+	});
 });
