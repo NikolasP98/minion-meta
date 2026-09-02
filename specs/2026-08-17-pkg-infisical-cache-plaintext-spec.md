@@ -329,7 +329,7 @@ rg -n 'writeFileSync' packages/env/src/    # → only inside the atomic writer, 
 
 ---
 
-### S3 — The published contract: docs, changeset, doctor probe, anti-recurrence
+### Slice 3 — The published contract: docs, changeset, doctor probe, anti-recurrence
 
 **Tags:** `security`, `docs`, `infra`, `test` · **Estimate:** 3–5 h
 
