@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T06:59:46.053Z",
+	"generatedAt": "2026-09-02T07:06:05.361Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -4646,8 +4646,8 @@
 			"repo": "minion-meta",
 			"title": "#247 feat(env): seal the cross-process secret cache",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/247",
-			"sourceUpdatedAt": "2026-09-02T06:59:01Z",
-			"sourceFingerprint": "aa5fdf2a56569dcdd8ac910e460a6805aee93a13e9a597ad0e8d6581b661bf96",
+			"sourceUpdatedAt": "2026-09-02T07:04:01Z",
+			"sourceFingerprint": "5fc3ef575d07ef3be16e684d692a09dc72e3adff929dd520113f7ff1add0dd19",
 			"score": 65,
 			"band": "medium",
 			"axes": {
@@ -4657,20 +4657,19 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 4
+				"implementation": 3
 			},
 			"confidence": 6,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Security-critical secret-cache work remains draft with self-reported unresolved crash, PID-reuse, and tamper risks despite passing focused tests.",
+			"rationale": "Independent review found the sealed cache still violates strict key-handling requirements and leaves unresolved crash/tamper paths, so it is not merge-ready.",
 			"evidence": [
-				"status: draft",
-				"Risk Assessment: 🚨 High - still violates strict operator-key handling",
-				"leaves concrete crash, PID-reuse, and tampered-generation paths"
+				"Risk Assessment 🚨 High",
+				"still violates strict operator-key handling and leaves concrete crash, PID-reuse, and tampered-generation paths"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T06:59:45.975Z"
+			"scoredAt": "2026-09-02T07:06:05.275Z"
 		},
 		{
 			"key": "pr:paperclip#12679",
@@ -5376,39 +5375,6 @@
 			"scoredAt": "2026-09-02T00:58:57.715Z"
 		},
 		{
-			"key": "pr:minion-factory#183",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#183 fix(queue): recover breaker and suppress duplicate issue runs",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/183",
-			"sourceUpdatedAt": "2026-09-02T06:59:02Z",
-			"sourceFingerprint": "8c40f0d8d7e0bffff87487fff18b87435fe650e10327804f8b48a613b96b5cd7",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes a demonstrated breaker recovery bug and duplicate-run suppression in the factory's own pipeline with a full regression suite passing.",
-			"evidence": [
-				"106/106 focused and 1141/1141 full suite passed",
-				"fixes breaker rate stuck at 7/10 despite a passing canary",
-				"prevents repeated no-change PRs for issue #107"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T06:59:45.975Z"
-		},
-		{
 			"key": "pr:pixel-agents#285",
 			"kind": "pr",
 			"stage": "development",
@@ -5981,6 +5947,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
+		},
+		{
+			"key": "deploy:minion-factory",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion-factory",
+			"title": "minion-factory deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/commit/2d2aa0d8c5709770e2f4d49802d8e631e0b7ec8f",
+			"sourceUpdatedAt": "2026-09-02T07:05:25Z",
+			"sourceFingerprint": "0c39a945c51cc9dd51761a2b3a254646710c7cd54ff624f70751e8741bd0b110",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"run:minion-factory#33601795727"
+			],
+			"rationale": "A security-fix deploy to production is currently running and duplicates the paired CI promotion run for the same repo.",
+			"evidence": [
+				"status running",
+				"security(factory): remove credentials from worker process arguments (#168)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T07:06:05.275Z"
 		},
 		{
 			"key": "issue:paperclip#12692",
@@ -7123,8 +7123,8 @@
 			"repo": "minion_hub",
 			"title": "#215 feat(assistant): navigate, guide and fill hub forms from chat (WebMCP-shaped)",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/215",
-			"sourceUpdatedAt": "2026-09-02T06:57:29Z",
-			"sourceFingerprint": "415ca3ea2b14772e3925c00fd8c84f9d8ef2f92b7552fedecf5bbc5b26964bf8",
+			"sourceUpdatedAt": "2026-09-02T07:03:28Z",
+			"sourceFingerprint": "ce583a93983db0e20ec443fe9cd5a3dcf71a7f91d1a57afa246f74b9a2edf9e0",
 			"score": 51,
 			"band": "medium",
 			"axes": {
@@ -7139,15 +7139,15 @@
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A large, thoroughly verified assistant feature PR with documented scope and handoff gaps is ready for review.",
+			"rationale": "Large, well-specified feature PR with unit, e2e, and live-model verification is ready for review/merge.",
 			"evidence": [
-				"bun run check 0 errors, build ok, lint clean",
-				"unit, e2e, and live model-contract tests run",
-				"known gaps documented via TODO(handoff) and a follow-up proposal"
+				"bun run check 0 errors · bun run build ok",
+				"53-case EN/ES corpus tests",
+				"known gaps documented as handoff"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T06:59:45.975Z"
+			"scoredAt": "2026-09-02T07:06:05.275Z"
 		},
 		{
 			"key": "pr:minion-base#45",
@@ -8116,6 +8116,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-02T00:58:57.715Z"
+		},
+		{
+			"key": "run:minion-factory#33601795727",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion-factory",
+			"title": "Promote Factory dev to production",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/actions/runs/33601795727",
+			"sourceUpdatedAt": "2026-09-02T07:05:25Z",
+			"sourceFingerprint": "87027966dd51aed4804e9cc108e07a1163c812871b1a387cf3008a7620dad3d0",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 5
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"deploy:minion-factory"
+			],
+			"rationale": "This CI run is the automated production promotion paired with the same-repo deploy-health entry, not an independent goal.",
+			"evidence": [
+				"workflow_run on main",
+				"in_progress",
+				"Promote Factory dev to production"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T07:06:05.275Z"
 		},
 		{
 			"key": "pr:minion-meta#255",
@@ -9789,40 +9824,6 @@
 			"scoredAt": "2026-08-31T07:42:55.201Z"
 		},
 		{
-			"key": "deploy:minion-factory",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion-factory",
-			"title": "minion-factory deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/commit/e72cf115a5ba8619111ae480b78f796d0ac854b3",
-			"sourceUpdatedAt": "2026-09-02T06:58:46Z",
-			"sourceFingerprint": "19f1365c31e84c441c54055047e2ae300a89c623e728ed8ebcc68ec820bacf8a",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"run:minion-factory#33601140346"
-			],
-			"rationale": "This is a routine in-progress deployment status for an already-merged safety-regression PR, duplicating the linked workflow run.",
-			"evidence": [
-				"status: running",
-				"summary is merge of already-merged PR #182"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T06:59:45.975Z"
-		},
-		{
 			"key": "issue:paperclip#12702",
 			"kind": "issue",
 			"stage": "proposal",
@@ -10346,38 +10347,6 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:paperclip#12711",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12711 test(tool-access): cover archived pasted-link app recovery on re-connect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12711",
-			"sourceUpdatedAt": "2026-09-02T06:55:43Z",
-			"sourceFingerprint": "6db07d7d1c0081eb60f08701ec9c1f963502ccbeddd75d02dedb414ba7b27415",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Test-only regression coverage for a previously-fixed bug is fully scoped, low risk, and passing.",
-			"evidence": [
-				"Full file passes: 210/210",
-				"Test-only change; no source modified"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T06:56:49.490Z"
-		},
-		{
 			"key": "pr:pixel-agents#232",
 			"kind": "pr",
 			"stage": "development",
@@ -10708,6 +10677,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T20:58:04.154Z"
+		},
+		{
+			"key": "pr:paperclip#12711",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12711 test(tool-access): cover archived pasted-link app recovery on re-connect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12711",
+			"sourceUpdatedAt": "2026-09-02T07:03:41Z",
+			"sourceFingerprint": "b160951ce50b77ab5af5c0d947353bd8b6dbcbcd2d52c9899251c95e3c8423e1",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Low-risk, test-only PR that closes a verified regression-coverage gap and is confirmed to catch the original bug on revert.",
+			"evidence": [
+				"test-only PR, no source file changes",
+				"All 210 tests pass",
+				"fails with duplicate-key error when the fix is reverted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T07:06:05.275Z"
 		},
 		{
 			"key": "pr:pixel-agents#294",
@@ -11139,40 +11141,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
-		},
-		{
-			"key": "run:minion-factory#33601140346",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion-factory",
-			"title": "Promote Factory dev to production",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/actions/runs/33601140346",
-			"sourceUpdatedAt": "2026-09-02T06:58:46Z",
-			"sourceFingerprint": "52505789e37c4066e34befece2937bd501738f1a9a9b9324463dad95fb1cc856",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"deploy:minion-factory"
-			],
-			"rationale": "An in-progress promotion CI run with no independent spec, already reflected by the linked deployment health candidate.",
-			"evidence": [
-				"workflow_run on main, status in_progress",
-				"duplicates deploy:minion-factory signal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T06:59:45.975Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1447734948",
