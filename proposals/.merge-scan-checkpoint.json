@@ -16,7 +16,7 @@
   "NikolasP98/minion-factory:dev": {
     "cursor": "a84c95b7527d38850e3dd41c96b6982e32e40a69",
     "head": "6204960e9371bc1c9bb2377a20a458841b2f6029",
-    "done": 26,
+    "done": 38,
     "kept": [
       {
         "file": "agent/lib/discovery.sh",
@@ -66,6 +66,62 @@
         "severity": "medium",
         "category": "unchecked-access",
         "line": 297
+      },
+      {
+        "file": "agent/skills/minion-unslop/scripts/validate_preservation.py",
+        "desc": "File read and JSON parsing for optional constraints.json (args[2]) are outside the try-except block; malformed or missing file will raise unhandled exception instead of exiting gracefully with error code 2 like args[0] and args[1].",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 451
+      },
+      {
+        "file": "agent/skills/minion-unslop/tests/test_audit.py",
+        "desc": "report[\"files\"][0][\"scans\"] accessed without checking if \"files\" exists or has at least one element; will crash with KeyError/IndexError if structure is unexpected.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 76
+      },
+      {
+        "file": "cli/factory",
+        "desc": "--source-created-at used without documented ISO-8601 format validation",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 54
+      },
+      {
+        "file": "runner/src/actions-blocker.ts",
+        "desc": "Catch block swallows fetchAnnotations errors silently without logging; network failures are indistinguishable from failed validation despite being distinct failure modes.",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 106
+      },
+      {
+        "file": "runner/src/actions-blocker.test.ts",
+        "desc": "Accessing .state on .get() result without null check; cast as {...} is TypeScript-only and does not prevent undefined at runtime, would throw if row missing.",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 75
+      },
+      {
+        "file": "runner/src/activity.ts",
+        "desc": "JSON.parse error silently swallowed in projectClaudeStream without logging or indicating malformed lines",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 89
+      },
+      {
+        "file": "runner/src/activity.ts",
+        "desc": "JSON.parse error silently swallowed in projectCodexJsonl without logging or indicating malformed lines",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 111
+      },
+      {
+        "file": "runner/src/automerge.ts",
+        "desc": "selected.run.status and selected.run.conclusion are optional in WorkflowRunShape but accessed without null/undefined checks",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 350
       }
     ]
   }

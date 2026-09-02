@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-meta-781446196
 title: Handoff marker — packages/env/src/cache.ts (minion-meta)
-status: review
+status: closed
 created: 2026-08-20
 updated: 2026-09-02
 repos: [minion-meta]
@@ -31,3 +31,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/packages/env/src/cache.ts#L15
 - `NikolasP98/minion-meta@dev packages/env/src/cache.ts:237` — S3's minion doctor cache row must report .infisical-cache-quarantine-*
   https://github.com/NikolasP98/minion-meta/blob/dev/packages/env/src/cache.ts#L237
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-09-02; the sweep closed this proposal.
