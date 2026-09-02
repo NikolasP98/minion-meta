@@ -61,7 +61,14 @@ if (command === 'validate') {
 	if (scores.length !== candidates.length) throw new Error(`agent returned ${scores.length} scores for ${candidates.length} candidates`);
 	if (new Set(scores.map((score) => score.key)).size !== scores.length) throw new Error('agent returned duplicate score keys');
 	const scoredAt = new Date().toISOString();
-	const merged = new Map(index.rankings.map((entry) => [entry.key, entry]));
+	// Deployment candidates are derived entirely from explicitly configured workflow evidence. Once
+	// the catalog no longer emits one, retaining its old score would fabricate current deployment
+	// health forever. Other absent entries remain historical until the explicit `prune` command.
+	const merged = new Map(
+		index.rankings
+			.filter((entry) => entry.kind !== 'deploy' || allowedKeys.has(entry.key))
+			.map((entry) => [entry.key, entry])
+	);
 	for (const score of scores) merged.set(score.key, rankingEntry(candidateByKey.get(score.key), score, scoredAt));
 	const next = {
 		schemaVersion: RANKING_SCHEMA_VERSION,

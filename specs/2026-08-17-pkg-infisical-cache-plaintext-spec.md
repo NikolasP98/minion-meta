@@ -5,7 +5,7 @@ stage: spec
 status: implementing
 pass: 2
 created: 2026-08-17
-updated: 2026-08-28
+updated: 2026-09-02
 proposal: 2026-08-17-pkg-infisical-cache-plaintext
 verdict: approved
 repos: [minion-meta]
@@ -13,7 +13,7 @@ tags: [security, infra, logic, test]
 type: fix
 approved_reason: "G2 verdict already approved in sidecar; security tag kept merge human-gated — dev run may proceed under overnight mandate."
 reconcile_ignore: true
-reconcile_ignore_reason: "Denied: PR #94 is explicitly S1 only. Current dev still warns that MINION_ENV_CACHE=disk has no sealed implementation, and S3 docs, changeset, doctor probe, and anti-recurrence work are not complete."
+reconcile_ignore_reason: "Denied: S1 and S2 are implemented, and S3 documentation plus the env changeset are present; the doctor probe and anti-recurrence guard remain incomplete."
 ---
 
 # Stop leaving the gateway vault master key in a plaintext cache file

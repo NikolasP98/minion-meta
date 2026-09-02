@@ -31,3 +31,36 @@ test('pending and apply form a strict, idempotent ranking pipeline', () => {
 	assert.equal(spawnSync(process.execPath, [script, 'pending', index, catalog, pending]).status, 0);
 	assert.equal(JSON.parse(readFileSync(pending)).candidates.length, 1, 'unchanged deferred work is re-evaluated weekly');
 });
+
+test('apply retires deployment scores absent from the authoritative catalog', () => {
+	const dir = mkdtempSync(join(tmpdir(), 'ranking-index-derived-'));
+	const index = join(dir, 'index.json');
+	const catalog = join(dir, 'catalog.json');
+	const scores = join(dir, 'scores.json');
+	const prior = {
+		schemaVersion: 1,
+		rubricVersion: 'board-goal-v2',
+		generatedAt: '2026-08-31T00:00:00.000Z',
+		rankings: [],
+	};
+	writeFileSync(index, JSON.stringify(prior));
+	writeFileSync(catalog, JSON.stringify({ candidates: [candidate] }));
+	writeFileSync(scores, JSON.stringify({ scores: [{ key: candidate.key, criticality: 8, importance: 7, impact: 6, specification: 8, implementation: 7, confidence: 9, recommendation: 'execute', relatedKeys: [], rationale: 'Blocks an important release.', evidence: ['status:draft'] }] }));
+	assert.equal(spawnSync(process.execPath, [script, 'apply', index, catalog, scores]).status, 0);
+	const ranked = JSON.parse(readFileSync(index));
+	const staleDeployment = {
+		...ranked.rankings[0],
+		key: 'deploy:minion_hub',
+		kind: 'deploy',
+		stage: 'deployment',
+		repo: 'minion_hub',
+		title: 'minion_hub deployment health',
+	};
+	ranked.rankings.push(staleDeployment);
+	writeFileSync(index, JSON.stringify(ranked));
+
+	assert.equal(spawnSync(process.execPath, [script, 'apply', index, catalog, scores]).status, 0);
+	const next = JSON.parse(readFileSync(index));
+	assert.equal(next.rankings.some((entry) => entry.key === staleDeployment.key), false);
+	assert.equal(next.rankings.some((entry) => entry.key === candidate.key), true);
+});

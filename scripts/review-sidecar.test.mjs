@@ -10,6 +10,7 @@ import { spawnSync } from 'node:child_process';
 import { cpSync, existsSync, mkdtempSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { parse as parseYaml } from 'yaml';
 import {
 	CHIP_BANDS,
 	REQUIRED_SIDECAR_FIELDS,
@@ -813,13 +814,51 @@ test('M1: an orphan G1 sidecar fails --check even though the index itself is fre
 });
 
 test('M1: meta CI and the root ci script both run the proposal gate', () => {
-	// The finding this fixture exists for was "the validator has no call site in
-	// CI" — so assert the call sites, not just the flag.
-	const workflow = readFileSync(join(REPO, '.github', 'workflows', 'ci.yml'), 'utf8');
-	assert.match(workflow, /node scripts\/proposal-index\.mjs --check/);
-	const pkg = JSON.parse(readFileSync(join(REPO, 'package.json'), 'utf8'));
-	assert.match(pkg.scripts['index:check'], /proposal-index\.mjs --check/);
-	assert.match(pkg.scripts.ci, /index:check/);
+	const workflow = parseYaml(readFileSync(join(REPO, '.github', 'workflows', 'ci.yml'), 'utf8'));
+	const verify = workflow.jobs?.verify;
+	assert.equal(verify?.if, undefined);
+	const proposalStep = verify?.steps?.find((step) => step.name === 'Proposal index check');
+	assert.equal(proposalStep?.if, undefined);
+	assert.equal(typeof proposalStep?.run, 'string');
+
+	const workflowRoot = proposalRepo(VALID_PROPOSAL_SIDECAR);
+	try {
+		writeFileSync(join(workflowRoot, 'proposals', 'a-proposal.md'), PROPOSAL.replace('title: A proposal', 'title: Renamed'));
+		const workflowResult = spawnSync('/bin/sh', ['-e', '-c', proposalStep.run], { cwd: workflowRoot, encoding: 'utf8' });
+		assert.equal(workflowResult.status, 1);
+		assert.match(workflowResult.stderr, /proposals\/index\.json is stale/);
+	} finally {
+		rmSync(workflowRoot, { recursive: true, force: true });
+	}
+
+	const root = mkdtempSync(join(tmpdir(), 'root-ci-wiring-'));
+	try {
+		mkdirSync(join(root, 'scripts'));
+		const pkg = JSON.parse(readFileSync(join(REPO, 'package.json'), 'utf8'));
+		const scripts = Object.fromEntries(
+			Object.keys(pkg.scripts).map((name) => [
+				name,
+				name === 'ci' || name === 'index:check' ? pkg.scripts[name] : `node record.mjs ${name}`
+			])
+		);
+		writeFileSync(join(root, 'package.json'), JSON.stringify({ name: 'ci-wiring-fixture', private: true, scripts }));
+		writeFileSync(
+			join(root, 'record.mjs'),
+			"import { appendFileSync } from 'node:fs'; appendFileSync('calls.jsonl', `${JSON.stringify(process.argv.slice(2))}\\n`);\n"
+		);
+		for (const name of ['spec-index', 'proposal-index', 'ranking-index']) {
+			writeFileSync(
+				join(root, 'scripts', `${name}.mjs`),
+				`import { appendFileSync } from 'node:fs'; appendFileSync('calls.jsonl', JSON.stringify([${JSON.stringify(name)}, ...process.argv.slice(2)]) + '\\n');\n`
+			);
+		}
+		const result = spawnSync('pnpm', ['run', 'ci'], { cwd: root, encoding: 'utf8' });
+		assert.equal(result.status, 0, result.stderr);
+		const calls = readFileSync(join(root, 'calls.jsonl'), 'utf8').trim().split('\n').map(JSON.parse);
+		assert.ok(calls.some((call) => JSON.stringify(call) === JSON.stringify(['proposal-index', '--check'])));
+	} finally {
+		rmSync(root, { recursive: true, force: true });
+	}
 });
 
 // ---- L1: a null score has three causes; the diagnostic must name the right one ----
