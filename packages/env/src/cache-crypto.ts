@@ -143,6 +143,9 @@ export function getOrCreateMachineKeyFile(dir: string): Buffer {
 			return candidate;
 		} catch (err) {
 			if ((err as NodeJS.ErrnoException).code !== 'EEXIST') throw err;
+			// The winning creator may have linked the inode but not yet synced the directory entry.
+			// Every process that accepts the winner makes that publication durable before using it.
+			fsyncDirectory(dir);
 			return readExistingMachineKey(p);
 		}
 	} finally {

@@ -93,9 +93,11 @@ generations. The directory is restricted to mode `0700`; the key and cache files
 authentication. Corrupt, tampered, foreign-machine, or unsupported generations are preserved as
 evidence, warned about once per process, and treated as cache misses before Infisical is queried.
 
-Cross-process writes currently require Linux with readable procfs process identity and a filesystem
-that supports hard links. If either requirement is unavailable, persistence warns once and the
-fresh result remains in the process memo.
+Cross-process writes require a filesystem that supports hard links. Lock recovery binds owners to a
+kernel-observed process start identity from Linux procfs, POSIX `ps`, or Windows PowerShell. If that
+identity cannot be observed, normal locking remains available and recovery fails safe: an ambiguous
+live PID is never reaped, so a timed-out write warns once and leaves the fresh result in the process
+memo instead of allowing overlapping writers.
 
 ## Security
 

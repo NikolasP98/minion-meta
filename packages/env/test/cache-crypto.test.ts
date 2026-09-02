@@ -204,6 +204,20 @@ describe('cache-crypto.ts', () => {
 			expect(directorySyncedAfterPublication).toBe(true);
 		});
 
+		it('syncs the cache directory before accepting another creator\'s winning key', () => {
+			const winner = Buffer.alloc(32, 6);
+			fs.writeFileSync(path.join(dir, 'cache.key'), winner, { mode: 0o600, flag: 'wx' });
+			let directorySynced = false;
+			hooks.onFsyncSync = (fd) => {
+				if (fs.fstatSync(fd).isDirectory()) directorySynced = true;
+			};
+
+			const material = getOrCreateMachineKeyFile(dir);
+
+			expect(directorySynced).toBe(true);
+			expect(material.equals(winner)).toBe(true);
+		});
+
 		it('two racing creators converge on one winning key — the loser reads it back, not its own candidate', () => {
 			// Simulate the race deterministically: seed the file as another "process" would (flag 'wx'),
 			// then call getOrCreateMachineKeyFile and assert it reads the winner back instead of

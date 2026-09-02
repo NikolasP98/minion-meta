@@ -1,4 +1,5 @@
 import * as crypto from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
@@ -387,12 +388,12 @@ const LOCK_POLL_MS = 10;
 interface CacheLockOwner {
 	pid: number;
 	token: string;
-	processIdentity: ProcessIdentity;
+	processIdentity: ProcessIdentity | null;
 }
 
 interface ProcessIdentity {
-	bootId: string;
-	startTicks: string;
+	source: 'linux-proc' | 'ps-lstart' | 'windows-powershell';
+	value: string;
 }
 
 function lockFilePath(dir: string): string {
@@ -406,34 +407,73 @@ function sleepSync(ms: number): void {
 	Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 }
 
-/** Linux exposes a boot-scoped process start tick in procfs. Pairing it with the boot ID prevents a
- * stale lock from treating an unrelated process that later reused the same PID as its original
- * holder. On platforms without this evidence we deliberately return `null`; such locks can time out
- * but are never reaped from PID liveness alone. */
+function boundedIdentityValue(value: string): string | null {
+	const normalized = value.trim().replace(/\s+/g, ' ');
+	return normalized.length > 0 && normalized.length <= 256 ? normalized : null;
+}
+
+function processCommandIdentity(
+	source: ProcessIdentity['source'],
+	command: string,
+	args: string[],
+): ProcessIdentity | null {
+	const result = spawnSync(command, args, {
+		encoding: 'utf8',
+		timeout: 1_000,
+		windowsHide: true,
+	});
+	if (result.status !== 0) return null;
+	const value = boundedIdentityValue(result.stdout);
+	return value === null ? null : { source, value };
+}
+
+/** Resolve a kernel-observed process start identity, not merely a PID. Linux procfs includes a
+ * boot-scoped start tick; macOS and other POSIX systems expose an absolute start time through `ps`;
+ * Windows exposes UTC creation ticks through PowerShell. This prevents a stale lock from treating a
+ * later process that reused the PID as the original holder. If a platform cannot provide the
+ * identity, normal locking still works, but crash recovery fails safe: PID liveness may retain the
+ * stale lock and persistence falls back to the process memo rather than overlapping writers. */
 function processIdentity(pid: number): ProcessIdentity | null {
-	if (process.platform !== 'linux') return null;
-	try {
-		const bootId = fs.readFileSync('/proc/sys/kernel/random/boot_id', 'utf8').trim();
-		const stat = fs.readFileSync(`/proc/${pid}/stat`, 'utf8');
-		const commEnd = stat.lastIndexOf(')');
-		if (commEnd < 0) return null;
-		const fieldsAfterComm = stat.slice(commEnd + 2).trim().split(/\s+/);
-		const startTicks = fieldsAfterComm[19];
-		if (!/^[0-9a-f-]{36}$/i.test(bootId) || !startTicks || !/^\d+$/.test(startTicks)) return null;
-		return { bootId, startTicks };
-	} catch {
-		return null;
+	if (process.platform === 'linux') {
+		try {
+			const bootId = fs.readFileSync('/proc/sys/kernel/random/boot_id', 'utf8').trim();
+			const stat = fs.readFileSync(`/proc/${pid}/stat`, 'utf8');
+			const commEnd = stat.lastIndexOf(')');
+			if (commEnd >= 0) {
+				const fieldsAfterComm = stat.slice(commEnd + 2).trim().split(/\s+/);
+				const startTicks = fieldsAfterComm[19];
+				if (/^[0-9a-f-]{36}$/i.test(bootId) && startTicks && /^\d+$/.test(startTicks)) {
+					return { source: 'linux-proc', value: `${bootId}:${startTicks}` };
+				}
+			}
+		} catch {
+			/* fall through to the portable POSIX probe */
+		}
 	}
+	if (process.platform === 'win32') {
+		return processCommandIdentity(
+			'windows-powershell',
+			'powershell.exe',
+			[
+				'-NoProfile',
+				'-NonInteractive',
+				'-Command',
+				`(Get-Process -Id ${pid} -ErrorAction Stop).StartTime.ToUniversalTime().Ticks.ToString()`,
+			],
+		);
+	}
+	return processCommandIdentity('ps-lstart', 'ps', ['-o', 'lstart=', '-p', String(pid)]);
 }
 
 function isProcessIdentity(value: unknown): value is ProcessIdentity {
 	if (typeof value !== 'object' || value === null || Array.isArray(value)) return false;
 	const identity = value as Record<string, unknown>;
 	return (
-		typeof identity.bootId === 'string' &&
-		/^[0-9a-f-]{36}$/i.test(identity.bootId) &&
-		typeof identity.startTicks === 'string' &&
-		/^\d+$/.test(identity.startTicks)
+		(identity.source === 'linux-proc' ||
+			identity.source === 'ps-lstart' ||
+			identity.source === 'windows-powershell') &&
+		typeof identity.value === 'string' &&
+		boundedIdentityValue(identity.value) === identity.value
 	);
 }
 
@@ -445,7 +485,7 @@ function isCacheLockOwner(value: unknown): value is CacheLockOwner {
 		(owner.pid as number) > 0 &&
 		typeof owner.token === 'string' &&
 		/^[0-9a-f]{32}$/.test(owner.token) &&
-		isProcessIdentity(owner.processIdentity)
+		(owner.processIdentity === null || isProcessIdentity(owner.processIdentity))
 	);
 }
 
@@ -460,10 +500,10 @@ function readCacheLockOwner(filePath: string): CacheLockOwner | null {
 
 function cacheLockOwnerIsAlive(owner: CacheLockOwner): boolean {
 	const currentIdentity = processIdentity(owner.pid);
-	if (currentIdentity !== null) {
+	if (owner.processIdentity !== null && currentIdentity !== null) {
 		return (
-			currentIdentity.bootId === owner.processIdentity.bootId &&
-			currentIdentity.startTicks === owner.processIdentity.startTicks
+			currentIdentity.source === owner.processIdentity.source &&
+			currentIdentity.value === owner.processIdentity.value
 		);
 	}
 	try {
@@ -533,9 +573,6 @@ function releaseCacheLock(filePath: string, owner: CacheLockOwner): void {
 function withCacheLock<T>(dir: string, fn: () => T): T {
 	const lp = lockFilePath(dir);
 	const identity = processIdentity(process.pid);
-	if (identity === null) {
-		throw new Error('sealed disk cache locking requires Linux procfs process identity');
-	}
 	const owner: CacheLockOwner = {
 		pid: process.pid,
 		token: crypto.randomBytes(16).toString('hex'),

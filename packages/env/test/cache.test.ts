@@ -731,8 +731,8 @@ describe('cache.ts', () => {
 					pid: process.pid,
 					token: '0'.repeat(32),
 					processIdentity: {
-						bootId: '00000000-0000-0000-0000-000000000000',
-						startTicks: '0',
+						source: 'linux-proc',
+						value: '00000000-0000-0000-0000-000000000000:0',
 					},
 				}),
 				{ mode: 0o600 },
@@ -743,6 +743,26 @@ describe('cache.ts', () => {
 
 			expect(fs.existsSync(lock)).toBe(false);
 			expect(readCache('after-pid-reuse')).toEqual({
+				env: { V: 'persisted' },
+				keyNames: ['V'],
+			});
+		});
+
+		it('uses the safe PID-only fallback when process-start identity is unavailable', () => {
+			if (process.platform === 'win32') return;
+			fs.mkdirSync(cacheDir(), { recursive: true, mode: 0o700 });
+			const lock = path.join(cacheDir(), 'infisical-cache.lock');
+			fs.writeFileSync(
+				lock,
+				JSON.stringify({ pid: 2_147_483_647, token: '1'.repeat(32), processIdentity: null }),
+				{ mode: 0o600 },
+			);
+
+			writeCache('after-identity-fallback', { V: 'persisted' }, 300_000, ['V']);
+			resetCacheStateForTests();
+
+			expect(fs.existsSync(lock)).toBe(false);
+			expect(readCache('after-identity-fallback')).toEqual({
 				env: { V: 'persisted' },
 				keyNames: ['V'],
 			});
