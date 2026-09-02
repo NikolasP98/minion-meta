@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T05:27:23.371Z",
+	"generatedAt": "2026-09-02T05:57:36.237Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -712,39 +712,6 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
-			"key": "pr:minion-factory#154",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#154 factory: repair Factory PR #103 exact head: post-transition spec validity",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/154",
-			"sourceUpdatedAt": "2026-08-31T18:03:06Z",
-			"sourceFingerprint": "98f8bdc0bc06dd565630aac3db2bc951e87213857dadaf4adc71d2711026681a",
-			"score": 88,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the narrowly bounded approval-integrity defect can permit invalid lifecycle transitions and already has exact regression and verification requirements.",
-			"evidence": [
-				"Remaining defect is approval-integrity related.",
-				"Required regressions demand zero PUTs and zero run inserts.",
-				"Exact branch head and complete self-test are specified."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T18:24:45.803Z"
-		},
-		{
 			"key": "pr:minion-factory#161",
 			"kind": "pr",
 			"stage": "development",
@@ -1113,39 +1080,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:40:17.097Z"
-		},
-		{
-			"key": "pr:minion-factory#155",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#155 factory: M0 safety S2: spec rehash and trusted check-app identity",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/155",
-			"sourceUpdatedAt": "2026-08-31T08:11:54Z",
-			"sourceFingerprint": "f6a22817cca349546da2452c7e0b7fb9a4684ee87f855fb620a878bb9a371bfa",
-			"score": 86,
-			"band": "critical",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Binding automerge to an unchanged spec and trusted check identity is a high-leverage safety control with precise tests and boundaries.",
-			"evidence": [
-				"The task adds pre-automerge spec rehash verification.",
-				"Required checks can enforce a GitHub App identity.",
-				"Focused T-REHASH and T-APPID tests are required."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:14:05.520Z"
 		},
 		{
 			"key": "proposal:2026-08-23-minion-ai-ci-baseline-debt",
@@ -3523,6 +3457,40 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
+			"key": "issue:paperclip#12633",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12633 Composio broker connections never leave draft status — every child toolkit's tools are invisible to the tool gateway",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12633",
+			"sourceUpdatedAt": "2026-09-01T04:16:37Z",
+			"sourceFingerprint": "5b6c726e7454fba57e71f910d794590ff3d998d328094d18dc684b0ce4033192",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:paperclip#12632"
+			],
+			"rationale": "Root-caused bug leaves every fully healthy Composio toolkit connection invisible to the tool gateway, blocking all real tool calls, with a clear proposed fix.",
+			"evidence": [
+				"404 tool_not_found despite ACTIVE connected account and refreshed catalog",
+				"toolApplications status stuck at draft, filtered by connectedMcpToolsForCompany"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T05:57:36.152Z"
+		},
+		{
 			"key": "issue:paperclip#12686",
 			"kind": "issue",
 			"stage": "proposal",
@@ -4227,6 +4195,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T23:57:55.908Z"
+		},
+		{
+			"key": "pr:paperclip#12632",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12632 fix(tools): fall back to the parent API key when Composio omits mcp.headers.x-api-key",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12632",
+			"sourceUpdatedAt": "2026-09-01T06:51:54Z",
+			"sourceFingerprint": "b10f51f400c84b1e0c43e43e6d258918a7e9e4b6817f5fc44b7b311afedb00b8",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"issue:paperclip#12633"
+			],
+			"rationale": "Well-specified, live-verified fix for two chained bugs blocking every real Composio tool call end-to-end.",
+			"evidence": [
+				"fixes #12631, #12643",
+				"verified against live Google Ads connection returning real customer data"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T05:57:36.152Z"
 		},
 		{
 			"key": "pr:paperclip#12647",
@@ -5377,39 +5379,6 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
-			"key": "pr:paperclip#12699",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12699 feat(runner): add managed provider backends",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12699",
-			"sourceUpdatedAt": "2026-09-02T04:12:21Z",
-			"sourceFingerprint": "0c12283ec8b8a2d216f80c6a36aacdf50a7eee7de06403c7ef4db6c2f4c21c80",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Large but well-scoped PR adding managed provider backends behind a default-off flag, with stated verification passing and prior stack merged.",
-			"evidence": [
-				"Based on merged #12691 and #12685 stack",
-				"Keep enableNativeRunner default-off",
-				"Focused test suites and typecheck/build passed per verification section"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T04:27:26.094Z"
-		},
-		{
 			"key": "pr:paperclip#12707",
 			"kind": "pr",
 			"stage": "development",
@@ -6376,41 +6345,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:58.286Z"
-		},
-		{
-			"key": "pr:paperclip#12700",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12700 test(runner): add full-stack acceptance and eval gates",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12700",
-			"sourceUpdatedAt": "2026-09-02T02:54:52Z",
-			"sourceFingerprint": "acfcd21fb3ce2e1a58ff84ce8f74c387129eb47014337a22ac5eff38a969104e",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:paperclip#12699"
-			],
-			"rationale": "Adds acceptance/eval/release gates for the runner stack that #12699 depends on, with reported test evidence.",
-			"evidence": [
-				"57-cell full-stack catalog, 60 unit tests",
-				"depends on #12699 and #12691",
-				"5,635 passing tests locally, failures categorized as pre-existing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T02:57:27.114Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
@@ -7785,6 +7719,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:58.286Z"
+		},
+		{
+			"key": "pr:paperclip#12700",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12700 test(runner): add full-stack acceptance and eval gates",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12700",
+			"sourceUpdatedAt": "2026-09-02T05:54:49Z",
+			"sourceFingerprint": "720bbf65d8b0c6056a8b33ea43476c18708e3bb6fb4c80975303e7437ee64e30",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Large, thoroughly verified acceptance and eval-gate addition that closes a real release-safety gap for the runner stack.",
+			"evidence": [
+				"57-cell full-stack catalog, 60 unit tests",
+				"many pnpm test suites passed locally"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T05:57:36.152Z"
 		},
 		{
 			"key": "pr:pixel-agents#396",
@@ -11009,39 +10975,6 @@
 			"scoredAt": "2026-09-02T00:58:16.105Z"
 		},
 		{
-			"key": "deploy:minion-factory",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion-factory",
-			"title": "minion-factory deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/commit/b70fbe6186d037275c40d1ea11c923d382224a92",
-			"sourceUpdatedAt": "2026-09-01T09:30:40Z",
-			"sourceFingerprint": "6ddac21081d0d81e95d9d7b5a2edcbac57a39dbbe9ebfab7b5a5e1122897bcbc",
-			"score": 21,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 9,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The deployment is already passing, so the catalog provides no unresolved outcome for paid execution.",
-			"evidence": [
-				"status is passing",
-				"deployment health entry",
-				"retry transient Codex capacity failures"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T09:57:38.190Z"
-		},
-		{
 			"key": "issue:pixel-agents#263",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11143,6 +11076,38 @@
 			"scoredAt": "2026-08-31T07:42:10.731Z"
 		},
 		{
+			"key": "deploy:minion-factory",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion-factory",
+			"title": "minion-factory deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/commit/e6c2aa3b26db0d829ca2246fd24e4365d591e75c",
+			"sourceUpdatedAt": "2026-09-02T05:54:43Z",
+			"sourceFingerprint": "739222a4cc1f8583fca346cfb1800aedda2eb1beded5df1156124a6e91766165",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Deployment status is already passing with a merged repair commit, leaving no actionable work.",
+			"evidence": [
+				"status: passing",
+				"Merge pull request #154 ... repair Factory PR #103"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T05:57:36.152Z"
+		},
+		{
 			"key": "issue:minion-meta#322",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11211,38 +11176,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
-		},
-		{
-			"key": "pr:paperclip#12710",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12710 docs(release): add v2026.831.1 stable notes to master",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12710",
-			"sourceUpdatedAt": "2026-09-02T05:08:54Z",
-			"sourceFingerprint": "f4a9761bcd0dac54ad1e74a15117de03dc0f4aa50b004a8c076f6c10039c6a63",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Low-risk docs-only PR that closes a gap in the stable-notes history on master by adding a verbatim copy of an already-published release note.",
-			"evidence": [
-				"diff against published tag is empty",
-				"docs-only change, no code or config affected"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T05:27:23.288Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-451096235",
