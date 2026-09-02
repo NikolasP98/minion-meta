@@ -16,7 +16,7 @@
   "NikolasP98/minion-factory:dev": {
     "cursor": "a84c95b7527d38850e3dd41c96b6982e32e40a69",
     "head": "02900306a1fcc7b182bae726a24260d08467f81e",
-    "done": 34,
+    "done": 41,
     "kept": [
       {
         "file": "agent/discovery.sh",
@@ -108,6 +108,34 @@
         "severity": "medium",
         "category": "unvalidated-input",
         "line": 170
+      },
+      {
+        "file": "runner/src/actions-blocker.test.ts",
+        "desc": ".get() result cast and accessed for .state property without null/undefined check — will crash if query returns no rows",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 83
+      },
+      {
+        "file": "runner/src/activity.ts",
+        "desc": "catch block silently skips malformed JSON lines without logging or indication, hindering debugging of log file processing issues",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 88
+      },
+      {
+        "file": "runner/src/activity.ts",
+        "desc": "catch block silently skips malformed JSON lines without logging or indication, hindering debugging of log file processing issues",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 110
+      },
+      {
+        "file": "runner/src/automerge.ts",
+        "desc": "fetchMetaFile async call in sweep loop is unguarded; throws would crash loop instead of gracefully skipping runs",
+        "severity": "high",
+        "category": "missing-handoff",
+        "line": 622
       }
     ]
   }
