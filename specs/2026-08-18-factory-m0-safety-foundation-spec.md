@@ -2,10 +2,10 @@
 id: 2026-08-18-factory-m0-safety-foundation-spec
 title: M0 — safety freeze and regression foundation
 stage: spec
-status: implementing
-pass: 1
+status: approved
+pass: 2
 created: 2026-08-18
-updated: 2026-08-28
+updated: 2026-09-02
 repos: [minion-factory]
 type: infra
 tags: [test, logic]
@@ -13,7 +13,7 @@ verdict: approved
 relationship: depends-on
 related: [2026-08-18-sdlc-transformation-roadmap]
 reconcile_ignore: true
-reconcile_ignore_reason: "Denied: PR #21 implemented only M0 S1. Current dev still lacks the D5 trusted GitHub App/check identity binding; that separate provenance change has not landed, so the safety foundation is not complete."
+reconcile_ignore_reason: "M0 S1 shipped in PR #21 and S2 shipped in PR #155. S3 remains: preserve the live CI workflow and add the missing startup-secret, normalizeStages independence, maxTurns, and corrupt result.json regression coverage before marking this spec done."
 ---
 
 # M0 — safety freeze and regression foundation
@@ -28,17 +28,17 @@ The safety foundation turns those M0 security and release invariants into execut
 
 ## AS-IS
 
-- `agent/spec.sh` publishes with `git add -A` (any stray file the planner
-  writes gets committed); spec-pass providers are NOT recorded, so a fallback
-  that makes planner and reviewer the same provider still yields an
-  "independent" approved verdict; the review sidecar's existence/schema is
-  unvalidated; spec content is hashed once at dev-queue time only.
-- Merge safety: automerge now requires non-empty `requiredChecks` and
-  same-repo PRs (shipped ahead as commit "M0 merge safety"), but checks are
-  matched by NAME only (no App identity), and none of the Round-2..5 controls
-  have regression tests.
-- The factory has NO first-party CI: `runner/src/queue.test.ts` (PR #17) and
-  the S2 port exist as PRs but no workflow runs them.
+- S1 shipped in PR #21: `agent/spec.sh` records actual providers, rejects a
+  same-provider review as degraded, publishes from exact allowlists, and
+  validates the review sidecar.
+- S2 shipped in PR #155: automerge re-hashes the queued spec and required
+  checks can bind both check name and GitHub App identity.
+- First-party CI is live on pull requests and pushes and runs TypeScript,
+  shell, and the full runner suite. Existing tests cover lifecycle transitions,
+  reason normalization, spec re-hashing, the automerge matrix, and requeue
+  idempotency. The remaining M0 gap is narrower: startup-secret validation,
+  `normalizeStages` provider independence, `maxTurns` validation, and corrupt
+  `result.json` still lack direct regression coverage.
 
 ## TO-BE
 
@@ -67,7 +67,7 @@ The safety foundation turns those M0 security and release invariants into execut
 
 ## Slices
 
-### S1 — spec-stage integrity (agent/spec.sh)
+### S1 — spec-stage integrity (agent/spec.sh) — shipped in PR #21
 
 Record `ACTUAL_HARNESS` per pass into the result note; if pass-1 and pass-2
 resolved to the SAME provider after fallbacks, write `verdict: degraded` into
@@ -80,7 +80,7 @@ Validate the sidecar frontmatter fields after pass 2.
 **DoD:** `bash -n` green; a seeded stray file aborts the stage in a dry-run
 container; a forced same-provider fallback produces degraded+failed.
 
-### S2 — runner-side verification (runner/src)
+### S2 — runner-side verification (runner/src) — shipped in PR #155
 
 `queueDevForSpec` + `/runs` already hash the spec at queue time; add a rehash
 in the automerge sweep (fetch spec at `run.spec_id`, compare to
@@ -91,18 +91,17 @@ Extend `RepoDef.requiredChecks` to `{name: string, appId?: number}[]`
 hub/site/meta (GitHub Actions app id 15368).
 **DoD:** tsc green; unit tests T-REHASH + T-APPID pass.
 
-### S3 — CI + regression suites (.github/workflows + runner tests)
+### S3 — complete the CI regression foundation (.github/workflows + runner tests)
 
-Add `.github/workflows/ci.yml`: on PR + push to main — `npx tsc --noEmit`,
-`bash -n` all agent/ + scripts/ files, `node --test runner/src` (or vitest).
-Write regression tests for: secret validation (weak/default/pairwise),
-normalizeStages provider independence, lifecycle transition table + reason
-whitespace collapse, spec-hash spawn invariant, automerge eligibility matrix
-(empty checks, foreign PR, sha mismatch, degraded note, snapshot tags,
-high-stakes, appId mismatch), requeue idempotency (requeue_of guard),
-maxTurns validation, finish() status matrix incl. corrupt result.json.
-**DoD:** workflow green on a no-op PR; every listed control has ≥1 test that
-FAILS when the control is reverted.
+Preserve the live `.github/workflows/ci.yml` pull-request and push gates,
+including TypeScript, shell syntax, and the full runner suite. Recon the tests
+already present and add only the missing direct regressions for: secret
+validation (weak/default/pairwise), `normalizeStages` provider independence,
+`maxTurns` validation, and `finish()` with a corrupt `result.json`. Do not
+duplicate the existing lifecycle transition/reason-normalization, spec-rehash,
+automerge eligibility, or requeue-idempotency tests.
+**DoD:** the focused new tests and the existing full workflow are green; every
+new test fails when its corresponding guard is reverted.
 
 ## Out of scope
 
@@ -112,8 +111,9 @@ develop/review stages in run.sh beyond what S2 touches in the runner.
 
 ## End-to-end verification
 
-Open a PR with the S3 workflow; observe CI green; revert one control (e.g.
-re-add `git add -A`) in a scratch branch and observe the matching test fail.
+Open the S3 PR and observe the existing CI workflow green. For each newly
+covered guard, verify in a scratch worktree that reverting the guard makes its
+focused regression fail.
 
 ## Rollback
 
