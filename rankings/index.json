@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T22:05:08.738Z",
+	"generatedAt": "2026-09-02T22:34:24.695Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -4486,39 +4486,6 @@
 			"scoredAt": "2026-09-02T09:09:49.277Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1d40d9a77164ea3461884f1a4e56296e94305a4c",
-			"sourceUpdatedAt": "2026-08-30T23:26:06Z",
-			"sourceFingerprint": "87059168be0433dabf795cb5c55e379712a0972b390a21d889eae2dd3423bfe4",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Gateway deployment health is strategically broad, but the unknown status and lack of a stated failure or verifiable target do not support immediate execution.",
-			"evidence": [
-				"Status is unknown.",
-				"The referenced commit scopes platform validation and adds DEV audits.",
-				"No outage, failed deployment, or blocked release is reported."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T22:05:08.659Z"
-		},
-		{
 			"key": "issue:minion-meta#265",
 			"kind": "issue",
 			"stage": "proposal",
@@ -7668,7 +7635,7 @@
 			"title": "Handoff marker — src/routes/(app)/pos/appointments/+page.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3035029616.md",
 			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "51b3c481d1fc0ca5c5a12dace29124f14d5e5a0b1c5a1ff015bae8bbce2a8090",
+			"sourceFingerprint": "b3afe73ad43322230806f86e2d4988766c050df14999a16012033362c7675949",
 			"score": 23,
 			"band": "low",
 			"axes": {
@@ -7678,22 +7645,19 @@
 			},
 			"readiness": {
 				"specification": 4,
-				"implementation": 3
+				"implementation": 5
 			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-38e0a3c5f572"
-			],
-			"rationale": "This automated handoff marker describes the same unresolved source comment as the post-merge proposal and should be consolidated into one goal.",
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A bounded, single-file TODO(handoff) marker about the booking form's route move is low urgency but has a clear file/line target for resolution.",
 			"evidence": [
-				"The marker is at src/routes/(app)/pos/appointments/+page.svelte:168.",
-				"The open end concerns scheduling's booking form moving to the in-page route.",
-				"Completion requires resolving the open end and removing the marker."
+				"marker at +page.svelte:168: 'scheduling's booking form moved to the in-page route'",
+				"status: review"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T22:05:08.659Z"
+			"scoredAt": "2026-09-02T22:34:24.629Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-38e0a3c5f572",
@@ -7867,6 +7831,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:56.597Z"
+		},
+		{
+			"key": "issue:minion-meta#373",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#373 [monitor:unstick] Requeued transient failure of run 99a3bcf3",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/373",
+			"sourceUpdatedAt": "2026-09-02T22:17:02Z",
+			"sourceFingerprint": "71b558d0c71ae098a761ca35a0c20d72a2a090d6d2937b15f317b120176c172d",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated monitor intake for a class-C transient push failure that was already successfully requeued, leaving no actionable follow-up.",
+			"evidence": [
+				"class=C note=push failed; requeue -> 201",
+				"fingerprint: unstick-transient-99a3bcf3"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T22:34:24.629Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-2704064834",
