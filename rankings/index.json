@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-01T23:57:55.985Z",
+	"generatedAt": "2026-09-02T00:27:24.333Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -3627,6 +3627,39 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
+			"key": "pr:paperclip#12634",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12634 fix(tools): promote Composio broker connections out of draft after a healthy connect",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12634",
+			"sourceUpdatedAt": "2026-09-01T06:52:22Z",
+			"sourceFingerprint": "ab20e0fbf67538fa9277a67e0af06af8c8ebdd1ffa80e0c0c3cc6d1c03a958b6",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes two concrete field mismatches that silently break end-to-end Composio tool calls despite healthy status, blocking real integration usage.",
+			"evidence": [
+				"toolConnections/toolApplications never promoted out of draft in Composio branch",
+				"toolApplications.type mismatch causes connectedMcpToolsForCompany() to silently exclude all children",
+				"confirmed via live API reproduction and traced to exact filter logic"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T00:27:24.253Z"
+		},
+		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5651,39 +5684,6 @@
 			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
-			"key": "pr:paperclip#12705",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12705 feat: add sealed autonomous Formal-QA reviews",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12705",
-			"sourceUpdatedAt": "2026-09-01T23:57:05Z",
-			"sourceFingerprint": "51be5d9405b1d428e89950adff0fe76493dd1a661715f3aa00e975ce1f79c065",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Large roadmap-aligned autonomous review-gate feature with substantial cross-package test verification, though its scope (six new authority tables) carries integration risk.",
-			"evidence": [
-				"implements ROADMAP section Enforced Outcomes (watchdogs, recovery actions, review gates)",
-				"adds six authority tables and one scheduler-state table with migration guard triggers",
-				"189 tests pass in the Codex driver suite plus eight Formal-QA server suites (66 tests)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T23:57:55.908Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5955,39 +5955,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:23.880Z"
-		},
-		{
-			"key": "pr:paperclip#12698",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12698 fix: add fail-closed branch freshness status",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12698",
-			"sourceUpdatedAt": "2026-09-01T23:56:16Z",
-			"sourceFingerprint": "24725e7c22d6f4ad4aa09ae594126b711933d0fd86788e9097b7c3b482627025",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fail-closed branch-freshness status check is broadly protective infrastructure with extensive automated test coverage, though it still needs an admin to enable it in the ruleset.",
-			"evidence": [
-				"139 tests passed in .github/scripts/tests",
-				"publishes success only on a live behind_by:0 comparison",
-				"repository administrator must separately add branch-freshness to the protected ruleset"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T23:57:55.908Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-distinct-visit-dates",
@@ -8828,6 +8795,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T23:57:55.908Z"
+		},
+		{
+			"key": "pr:paperclip#12698",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12698 fix: add fail-closed branch freshness status",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12698",
+			"sourceUpdatedAt": "2026-09-02T00:18:34Z",
+			"sourceFingerprint": "a420d8f151c8424b3bafc27e23113ccab1de308810bf4991c0f1bb4c251850d0",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Adds a useful fail-closed branch-freshness CI status but requires manual admin ruleset changes to take effect and has unrelated pre-existing test failures noted.",
+			"evidence": [
+				"status producer does not enforce itself; admin must add to protected ruleset",
+				"2,799 passing tests with 21 pre-existing failures unrelated to change",
+				"139 focused tests passed for new workflow logic"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T00:27:24.253Z"
 		},
 		{
 			"key": "pr:pixel-agents#293",
