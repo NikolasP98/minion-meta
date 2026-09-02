@@ -812,6 +812,16 @@ test('M1: an orphan G1 sidecar fails --check even though the index itself is fre
 	}
 });
 
+test('M1: meta CI and the root ci script both run the proposal gate', () => {
+	// The finding this fixture exists for was "the validator has no call site in
+	// CI" — so assert the call sites, not just the flag.
+	const workflow = readFileSync(join(REPO, '.github', 'workflows', 'ci.yml'), 'utf8');
+	assert.match(workflow, /node scripts\/proposal-index\.mjs --check/);
+	const pkg = JSON.parse(readFileSync(join(REPO, 'package.json'), 'utf8'));
+	assert.match(pkg.scripts['index:check'], /proposal-index\.mjs --check/);
+	assert.match(pkg.scripts.ci, /index:check/);
+});
+
 // ---- L1: a null score has three causes; the diagnostic must name the right one ----
 
 test('L1: a pending sidecar declaring a derived field is told pending suppressed it', () => {
