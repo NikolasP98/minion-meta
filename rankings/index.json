@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T21:07:32.775Z",
+	"generatedAt": "2026-09-02T21:34:47.813Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -3650,6 +3650,39 @@
 			"scoredAt": "2026-08-31T07:41:32.788Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-factory-0290030",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-located, concrete defects in the factory's own automation scripts include a potential infinite loop in rank.sh, directly threatening pipeline reliability.",
+			"evidence": [
+				"agent/rank.sh:74 unvalidated batch size could cause infinite loop",
+				"agent/rank.sh:71 unchecked jq access could silently skip the loop",
+				"15 findings across rank.sh, reconcile.sh, discovery.sh, cost.sh, and tests with exact file:line locations"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T21:34:47.734Z"
+		},
+		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -7206,6 +7239,38 @@
 			"scoredAt": "2026-09-02T00:58:57.715Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-29ee60e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 29ee60e",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-29ee60e.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "0801b1505825de9297db2705ab04c8eb04746bef373cb47832e27eab50ba96d9",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, well-specified fix for silent localStorage failures degrading chat session persistence in one component.",
+			"evidence": [
+				"FloatingAssistant.svelte:119 and 142 silently fail on getItem/setItem for session restore/persist",
+				"3 findings confined to a single component with exact line numbers"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T21:34:47.734Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-7854cfd",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7335,39 +7400,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
-		},
-		{
-			"key": "run:minion_hub#33683219919",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/33683219919",
-			"sourceUpdatedAt": "2026-09-02T21:06:23Z",
-			"sourceFingerprint": "c82fe0599f042d2c702026b2ae5ef975050414549bd9e86b63981ecc470092f2",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single in-progress CI run on master has no actionable failure or scope detail to justify treating it as a goal yet.",
-			"evidence": [
-				"status: in_progress",
-				"push on master",
-				"kind: run/stage: testing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T21:07:32.705Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
@@ -7596,6 +7628,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:42:10.731Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1d40d9a77164ea3461884f1a4e56296e94305a4c",
+			"sourceUpdatedAt": "2026-08-30T23:26:06Z",
+			"sourceFingerprint": "87059168be0433dabf795cb5c55e379712a0972b390a21d889eae2dd3423bfe4",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Entry only describes an already-merged CI fix commit with no outstanding actionable item.",
+			"evidence": [
+				"summary describes merged PR #263 CI platform validation fixes",
+				"status: unknown with no open task described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T21:34:47.734Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
