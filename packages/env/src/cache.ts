@@ -387,6 +387,12 @@ const LOCK_POLL_MS = 10;
 interface CacheLockOwner {
 	pid: number;
 	token: string;
+	processIdentity: ProcessIdentity | null;
+}
+
+interface ProcessIdentity {
+	bootId: string;
+	startTicks: string;
 }
 
 function lockFilePath(dir: string): string {
@@ -400,6 +406,37 @@ function sleepSync(ms: number): void {
 	Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
 }
 
+/** Linux exposes a boot-scoped process start tick in procfs. Pairing it with the boot ID prevents a
+ * stale lock from treating an unrelated process that later reused the same PID as its original
+ * holder. On platforms without this evidence we deliberately return `null`; such locks can time out
+ * but are never reaped from PID liveness alone. */
+function processIdentity(pid: number): ProcessIdentity | null {
+	if (process.platform !== 'linux') return null;
+	try {
+		const bootId = fs.readFileSync('/proc/sys/kernel/random/boot_id', 'utf8').trim();
+		const stat = fs.readFileSync(`/proc/${pid}/stat`, 'utf8');
+		const commEnd = stat.lastIndexOf(')');
+		if (commEnd < 0) return null;
+		const fieldsAfterComm = stat.slice(commEnd + 2).trim().split(/\s+/);
+		const startTicks = fieldsAfterComm[19];
+		if (!/^[0-9a-f-]{36}$/i.test(bootId) || !startTicks || !/^\d+$/.test(startTicks)) return null;
+		return { bootId, startTicks };
+	} catch {
+		return null;
+	}
+}
+
+function isProcessIdentity(value: unknown): value is ProcessIdentity {
+	if (typeof value !== 'object' || value === null || Array.isArray(value)) return false;
+	const identity = value as Record<string, unknown>;
+	return (
+		typeof identity.bootId === 'string' &&
+		/^[0-9a-f-]{36}$/i.test(identity.bootId) &&
+		typeof identity.startTicks === 'string' &&
+		/^\d+$/.test(identity.startTicks)
+	);
+}
+
 function isCacheLockOwner(value: unknown): value is CacheLockOwner {
 	if (typeof value !== 'object' || value === null || Array.isArray(value)) return false;
 	const owner = value as Record<string, unknown>;
@@ -407,7 +444,8 @@ function isCacheLockOwner(value: unknown): value is CacheLockOwner {
 		Number.isInteger(owner.pid) &&
 		(owner.pid as number) > 0 &&
 		typeof owner.token === 'string' &&
-		/^[0-9a-f]{32}$/.test(owner.token)
+		/^[0-9a-f]{32}$/.test(owner.token) &&
+		(owner.processIdentity === null || isProcessIdentity(owner.processIdentity))
 	);
 }
 
@@ -421,6 +459,15 @@ function readCacheLockOwner(filePath: string): CacheLockOwner | null {
 }
 
 function cacheLockOwnerIsAlive(owner: CacheLockOwner): boolean {
+	if (owner.processIdentity !== null) {
+		const currentIdentity = processIdentity(owner.pid);
+		if (currentIdentity !== null) {
+			return (
+				currentIdentity.bootId === owner.processIdentity.bootId &&
+				currentIdentity.startTicks === owner.processIdentity.startTicks
+			);
+		}
+	}
 	try {
 		process.kill(owner.pid, 0);
 		return true;
@@ -490,6 +537,7 @@ function withCacheLock<T>(dir: string, fn: () => T): T {
 	const owner: CacheLockOwner = {
 		pid: process.pid,
 		token: crypto.randomBytes(16).toString('hex'),
+		processIdentity: processIdentity(process.pid),
 	};
 	const deadline = Date.now() + LOCK_ACQUIRE_TIMEOUT_MS;
 	for (;;) {
@@ -641,6 +689,9 @@ function writeDiskEntry(key: string, entry: CacheEntry): void {
 		const envelope = seal(dir, plaintext);
 		for (;;) {
 			const latest = diskGenerationCandidates(dir)[0]?.generation ?? -1;
+			if (latest >= Number.MAX_SAFE_INTEGER) {
+				throw new Error('sealed disk cache generation space is exhausted');
+			}
 			const nextPath = latest < 0 ? cachePath() : generationPath(dir, latest + 1);
 			if (commitSealedFile(nextPath, JSON.stringify(envelope))) {
 				retireOldAuthenticatedGenerations(dir);

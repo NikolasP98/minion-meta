@@ -23,18 +23,6 @@ const KEY_LEN = 32;
 const IV_LEN = 12;
 const HKDF_INFO = Buffer.from('minion-env-cache-v1', 'utf8');
 const KEY_FILE_NAME = 'cache.key';
-/** Bound on how long an `EEXIST` loser waits for a winner's in-progress `cache.key` write to reach
- *  `KEY_LEN` bytes before giving up on it as genuinely corrupt (see `readExistingMachineKey`). */
-const MACHINE_KEY_WAIT_MS = 1000;
-const MACHINE_KEY_POLL_MS = 5;
-
-/** Blocks the calling thread for `ms` without a JS busy-spin. Duplicated from `cache.ts`'s
- *  `sleepSync` (same `Atomics.wait`-on-a-private-buffer trick) rather than shared, because `cache.ts`
- *  already imports from this module — a shared helper would need a third file for one three-line
- *  function. */
-function sleepSync(ms: number): void {
-	Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
-}
 
 /** Thrown when `MINION_ENV_CACHE_KEY` is set but malformed. Never caught as a tamper/miss signal —
  *  an operator who supplied their own key gets a loud, named failure, not a silent fallback to the
@@ -103,57 +91,58 @@ function decodeOperatorKey(raw: string): Buffer {
 	return decoded;
 }
 
-/** Validate and return the bytes of a pre-existing `cache.key`. `lstat` (not `stat`) so a symlink is
- *  identified as such and rejected rather than followed — `isFile()` is false for a symlink's own
- *  lstat entry even when its target is a regular file; that check is instant, never retried, since a
- *  symlink cannot become a regular file by waiting. A file whose length is not yet `KEY_LEN`, though,
- *  is ambiguous: `getOrCreateMachineKeyFile`'s winner creates the file (`open(O_CREAT|O_EXCL)`) and
- *  writes its bytes as two separate operations, so a loser landing here in that window would otherwise
- *  see a transient empty (or, in principle, partial) file and reject it as corrupt even though the
- *  winner is about to complete a perfectly valid key. So a short read is retried — re-`lstat`, re-read
- *  — until it either reaches exactly `KEY_LEN` bytes or `MACHINE_KEY_WAIT_MS` elapses; only past that
- *  bound is it treated as genuinely corrupt (a crash-partial write, tampering — there is no way to
- *  distinguish those from each other, so both are rejected identically: never derive from it). */
+/** Validate and return the bytes of a pre-existing `cache.key`. `lstat` (not `stat`) rejects a
+ * symlink rather than following it. A short file is always corrupt: creators publish only a fully
+ * written temporary inode, so the final pathname never has an in-progress state. */
 function readExistingMachineKey(p: string): Buffer {
-	const deadline = Date.now() + MACHINE_KEY_WAIT_MS;
-	for (;;) {
-		const st = fs.lstatSync(p);
-		if (!st.isFile()) {
-			throw new CorruptMachineKeyFileError(`${p} is not a regular file.`);
-		}
-		if ((st.mode & 0o777) !== 0o600) fs.chmodSync(p, 0o600);
-		const data = fs.readFileSync(p);
-		if (data.length === KEY_LEN) return data;
-		if (Date.now() >= deadline) {
-			throw new CorruptMachineKeyFileError(
-				`${p} does not contain a ${KEY_LEN}-byte key (found ${data.length} byte(s)).`,
-			);
-		}
-		sleepSync(MACHINE_KEY_POLL_MS);
+	const st = fs.lstatSync(p);
+	if (!st.isFile()) {
+		throw new CorruptMachineKeyFileError(`${p} is not a regular file.`);
 	}
+	if ((st.mode & 0o777) !== 0o600) fs.chmodSync(p, 0o600);
+	const data = fs.readFileSync(p);
+	if (data.length !== KEY_LEN) {
+		throw new CorruptMachineKeyFileError(
+			`${p} does not contain a ${KEY_LEN}-byte key (found ${data.length} byte(s)).`,
+		);
+	}
+	return data;
 }
 
 /**
- * Machine-local key file, created on demand. Concurrency-safe: the winning candidate is created with
- * `flag: 'wx'` (O_CREAT|O_EXCL) at its final path directly — no rename race — so two processes
- * racing to create it converge on whichever's `writeFileSync` lands first; the loser reads that file
- * back instead of using its own (discarded) candidate. `writeFileSync`'s `O_CREAT|O_EXCL` open and its
- * subsequent write are not one atomic step, though, so the loser's `EEXIST` can land while the file
- * exists but is still short of its final 32 bytes — `readExistingMachineKey` waits out that window
- * instead of rejecting it. An existing valid key file has its mode enforced to 0600 before use; an
- * existing invalid one (wrong length past the wait, directory, symlink) throws
+ * Machine-local key file, created on demand. Concurrency- and crash-safe: each creator writes and
+ * fsyncs a private 0600 inode before publishing it with a no-clobber hard link. Racing creators
+ * converge on the linked winner, and a crash before publication leaves only an ignorable temporary
+ * file—never a partial final `cache.key`. An existing valid key file has its mode enforced to 0600
+ * before use; an existing invalid one (wrong length, directory, symlink) throws
  * `CorruptMachineKeyFileError` rather than being read and used as-is.
  */
 export function getOrCreateMachineKeyFile(dir: string): Buffer {
 	const p = keyFilePath(dir);
 	const candidate = crypto.randomBytes(KEY_LEN);
+	const tmp = `${p}.${process.pid}.${crypto.randomBytes(8).toString('hex')}.tmp`;
+	let fd: number | undefined;
 	try {
-		fs.writeFileSync(p, candidate, { mode: 0o600, flag: 'wx' });
-		return candidate;
-	} catch (err) {
-		if ((err as NodeJS.ErrnoException).code !== 'EEXIST') throw err;
+		fd = fs.openSync(tmp, 'wx', 0o600);
+		fs.writeFileSync(fd, candidate);
+		fs.fsyncSync(fd);
+		fs.closeSync(fd);
+		fd = undefined;
+		try {
+			fs.linkSync(tmp, p);
+			return candidate;
+		} catch (err) {
+			if ((err as NodeJS.ErrnoException).code !== 'EEXIST') throw err;
+			return readExistingMachineKey(p);
+		}
+	} finally {
+		if (fd !== undefined) fs.closeSync(fd);
+		try {
+			fs.rmSync(tmp, { force: true });
+		} catch {
+			/* a private leftover staging inode is harmless and never used as key material */
+		}
 	}
-	return readExistingMachineKey(p);
 }
 
 /**
@@ -163,9 +152,7 @@ export function getOrCreateMachineKeyFile(dir: string): Buffer {
  */
 export function resolveKeyMaterial(dir: string): Buffer {
 	const operatorKey = process.env.MINION_ENV_CACHE_KEY;
-	if (operatorKey !== undefined && operatorKey.trim() !== '') {
-		return decodeOperatorKey(operatorKey.trim());
-	}
+	if (operatorKey !== undefined) return decodeOperatorKey(operatorKey);
 	return getOrCreateMachineKeyFile(dir);
 }
 

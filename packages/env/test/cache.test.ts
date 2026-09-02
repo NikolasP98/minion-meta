@@ -710,6 +710,53 @@ describe('cache.ts', () => {
 			},
 			15_000,
 		);
+
+		it('reaps a stale lock when its PID was reused by a different process identity', () => {
+			if (process.platform !== 'linux') return;
+			fs.mkdirSync(cacheDir(), { recursive: true, mode: 0o700 });
+			const lock = path.join(cacheDir(), 'infisical-cache.lock');
+			fs.writeFileSync(
+				lock,
+				JSON.stringify({
+					pid: process.pid,
+					token: '0'.repeat(32),
+					processIdentity: {
+						bootId: '00000000-0000-0000-0000-000000000000',
+						startTicks: '0',
+					},
+				}),
+				{ mode: 0o600 },
+			);
+
+			writeCache('after-pid-reuse', { V: 'persisted' }, 300_000, ['V']);
+			resetCacheStateForTests();
+
+			expect(fs.existsSync(lock)).toBe(false);
+			expect(readCache('after-pid-reuse')).toEqual({
+				env: { V: 'persisted' },
+				keyNames: ['V'],
+			});
+		});
+	});
+
+	it('fails soft instead of looping when the safe generation space is exhausted', () => {
+		fs.mkdirSync(cacheDir(), { recursive: true, mode: 0o700 });
+		const exhausted = path.join(
+			cacheDir(),
+			`infisical-cache.g${String(Number.MAX_SAFE_INTEGER).padStart(16, '0')}.json`,
+		);
+		const evidence = Buffer.from('UNAUTHENTICATED-EVIDENCE');
+		fs.writeFileSync(exhausted, evidence, { mode: 0o600 });
+		const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+		expect(() => writeCache('memo-only', { V: 'fresh' }, 300_000, ['V'])).not.toThrow();
+		expect(readCache('memo-only')).toEqual({ env: { V: 'fresh' }, keyNames: ['V'] });
+		expect(warnSpy.mock.calls.some(([message]) => String(message).includes('generation space is exhausted'))).toBe(true);
+		expect(fs.readFileSync(exhausted).equals(evidence)).toBe(true);
+		expect(
+			fs.existsSync(path.join(cacheDir(), 'infisical-cache.g9007199254740992.json')),
+		).toBe(false);
+		warnSpy.mockRestore();
 	});
 
 	describe('purgeLegacyCacheOnce', () => {

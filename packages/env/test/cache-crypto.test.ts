@@ -17,21 +17,17 @@ import {
 	type CacheEnvelope,
 } from '../src/cache-crypto.js';
 
-/** Lets a single test observe (and react to) the exact instant `readExistingMachineKey` reads
- *  `cache.key` — used by the L1 regression below to prove an `EEXIST` loser waits out a winner's
- *  transient empty file instead of rejecting it. `vi.hoisted` is required because `vi.mock`'s factory
- *  is hoisted above the imports; the hook box has to exist before it runs. */
 const hooks = vi.hoisted(() => ({
-	onReadFileSync: null as null | ((p: string) => void),
+	onLinkSync: null as null | ((from: string, to: string) => void),
 }));
 
 vi.mock('node:fs', async (importOriginal) => {
 	const real = await importOriginal<typeof import('node:fs')>();
 	const patched = {
 		...real,
-		readFileSync(...args: Parameters<typeof real.readFileSync>): ReturnType<typeof real.readFileSync> {
-			hooks.onReadFileSync?.(String(args[0]));
-			return real.readFileSync(...args);
+		linkSync(...args: Parameters<typeof real.linkSync>): ReturnType<typeof real.linkSync> {
+			hooks.onLinkSync?.(String(args[0]), String(args[1]));
+			return real.linkSync(...args);
 		},
 	};
 	return { ...patched, default: patched };
@@ -44,10 +40,10 @@ describe('cache-crypto.ts', () => {
 	beforeEach(() => {
 		dir = fs.mkdtempSync(path.join(os.tmpdir(), 'minion-cache-crypto-'));
 		delete process.env.MINION_ENV_CACHE_KEY;
-		hooks.onReadFileSync = null;
+		hooks.onLinkSync = null;
 	});
 	afterEach(() => {
-		hooks.onReadFileSync = null;
+		hooks.onLinkSync = null;
 		fs.rmSync(dir, { recursive: true, force: true });
 		if (prevKey === undefined) delete process.env.MINION_ENV_CACHE_KEY;
 		else process.env.MINION_ENV_CACHE_KEY = prevKey;
@@ -169,6 +165,23 @@ describe('cache-crypto.ts', () => {
 			expect(a.equals(b)).toBe(true);
 		});
 
+		it('publishes a fully written 0600 inode and leaves no staging file', () => {
+			let stagedAtPublication: Buffer | undefined;
+			let stagedModeAtPublication: number | undefined;
+			hooks.onLinkSync = (from, to) => {
+				if (to !== path.join(dir, 'cache.key')) return;
+				stagedAtPublication = fs.readFileSync(from);
+				stagedModeAtPublication = fs.statSync(from).mode & 0o777;
+			};
+			const material = getOrCreateMachineKeyFile(dir);
+			const names = fs.readdirSync(dir);
+			expect(names).toEqual(['cache.key']);
+			expect(stagedAtPublication?.equals(material)).toBe(true);
+			expect(stagedModeAtPublication).toBe(0o600);
+			expect(material.length).toBe(32);
+			expect(fs.readFileSync(path.join(dir, 'cache.key')).equals(material)).toBe(true);
+		});
+
 		it('two racing creators converge on one winning key — the loser reads it back, not its own candidate', () => {
 			// Simulate the race deterministically: seed the file as another "process" would (flag 'wx'),
 			// then call getOrCreateMachineKeyFile and assert it reads the winner back instead of
@@ -252,6 +265,17 @@ describe('cache-crypto.ts', () => {
 			expect(() => resolveKeyMaterial(dir)).toThrow(InvalidCacheKeyError);
 		});
 
+		it.each([
+			['empty', ''],
+			['whitespace-only', '   \t'],
+			['leading whitespace', ` ${Buffer.alloc(32, 5).toString('base64')}`],
+			['trailing whitespace', `${Buffer.alloc(32, 5).toString('base64')} `],
+		])('rejects a defined %s operator key without creating a machine key', (_label, value) => {
+			process.env.MINION_ENV_CACHE_KEY = value;
+			expect(() => resolveKeyMaterial(dir)).toThrow(InvalidCacheKeyError);
+			expect(fs.existsSync(path.join(dir, 'cache.key'))).toBe(false);
+		});
+
 		it('falls back to the machine key file when unset', () => {
 			delete process.env.MINION_ENV_CACHE_KEY;
 			const material = resolveKeyMaterial(dir);
@@ -295,49 +319,4 @@ describe('cache-crypto.ts', () => {
 		);
 	});
 
-	describe('EEXIST loser vs. a transient empty winner file (L1 — real OS process)', () => {
-		const winnerScript = path.join(
-			path.dirname(fileURLToPath(import.meta.url)),
-			'helpers',
-			'winner-hold-key-file.mjs',
-		);
-
-		it(
-			'waits for the winner to finish writing instead of rejecting the file it created but has not written yet',
-			async () => {
-				const p = path.join(dir, 'cache.key');
-				const readyPath = path.join(dir, 'winner-ready');
-				const goPath = path.join(dir, 'loser-observed-empty');
-				const winnerBytes = Buffer.alloc(32, 8);
-
-				const winnerDone = spawnTsx(winnerScript, [dir, readyPath, goPath]);
-
-				// Wait for the winner to have created (but not yet written) the key file — our own `wx`
-				// create attempt inside `getOrCreateMachineKeyFile` below is guaranteed to see `EEXIST`.
-				const readyDeadline = Date.now() + 5000;
-				while (!fs.existsSync(readyPath)) {
-					if (Date.now() > readyDeadline) {
-						throw new Error('timed out waiting for the winner to create the key file');
-					}
-				}
-
-				// Fires from inside `readExistingMachineKey`'s first read — the loser has now provably
-				// observed the file still empty. Only then do we let the winner complete its write; a
-				// version that rejected on the first short read (the L1 bug) would already have thrown
-				// by the time this signal is sent.
-				hooks.onReadFileSync = (readPath) => {
-					if (readPath !== p) return;
-					hooks.onReadFileSync = null;
-					fs.writeFileSync(goPath, '');
-				};
-
-				const result = getOrCreateMachineKeyFile(dir);
-				await winnerDone;
-
-				expect(result.equals(winnerBytes)).toBe(true);
-				expect(fs.readFileSync(p).equals(winnerBytes)).toBe(true);
-			},
-			10_000,
-		);
-	});
 });
