@@ -1,6 +1,11 @@
 import * as path from 'node:path';
 import { execa } from 'execa';
-import { resolveEnv, type SubprojectRegistryEntry } from '@minion-stack/env';
+import {
+	resolveEnv,
+	cacheStatus,
+	type SubprojectRegistryEntry,
+	type CacheStatus,
+} from '@minion-stack/env';
 import { findMetaRoot, loadRegistry } from '../registry.js';
 import { printTable, printJson } from '../lib/output.js';
 import { detectLinkDrift, renderDriftLine, hasDrift } from '../lib/link-drift.js';
@@ -18,10 +23,19 @@ export async function doctorCommand(json: boolean): Promise<number> {
 			? 'ok'
 			: 'missing';
 	const infisicalBin = await hasBin('infisical');
+	// `cacheStatus()` runs the same once-per-process legacy purge + directory sealing the resolve
+	// path does, without fetching a secret, so this row is truthful even when no subproject is
+	// cloned. Warnings column only, per spec — never changes doctor's exit code.
+	const cache = cacheStatus();
 	rows.push({
 		id: '(meta)',
 		vars: infisicalBin ? 'infisical-cli-ok' : 'infisical-cli-MISSING',
-		warnings: infisicalAuth === 'ok' ? '' : 'INFISICAL_* auth env vars missing',
+		warnings: [
+			infisicalAuth === 'ok' ? '' : 'INFISICAL_* auth env vars missing',
+			renderCacheWarning(cache),
+		]
+			.filter(Boolean)
+			.join('; '),
 		links: '-',
 		git: '-',
 	});
@@ -75,6 +89,32 @@ export async function doctorCommand(json: boolean): Promise<number> {
 	if (authFailure || infisicalAuth === 'missing') return 3;
 	if (anyDrift) return 1;
 	return 0;
+}
+
+/**
+ * Render `@minion-stack/env`'s cache status into the `(meta)` row's warnings column. Always names
+ * the active mode; the other clauses only appear when there is something for an operator to act on.
+ * `quarantineDirs` are `.infisical-cache-quarantine-*` directories preserving objects `cache.ts`
+ * could not authenticate (foreign-machine binding, corruption, a lost commit race) — this is the
+ * only surface that reports them, so an operator can inspect and clear them by hand.
+ */
+export function renderCacheWarning(status: CacheStatus): string {
+	const parts = [`cache:${status.mode}`];
+	if (status.legacyRemoved) parts.push('legacy plaintext cache removed this run');
+	if (status.dirSecureFailed) {
+		parts.push(
+			status.dirModeLoose
+				? 'config dir permissions are looser than 0700 and could NOT be secured — fix manually'
+				: 'config dir could not be created/secured — disk caching may be unavailable',
+		);
+	} else if (status.dirModeLoose) {
+		parts.push('config dir permissions were looser than 0700 (now fixed)');
+	}
+	if (status.quarantineDirs.length > 0) {
+		const n = status.quarantineDirs.length;
+		parts.push(`${n} quarantined cache ${n === 1 ? 'object needs' : 'objects need'} review`);
+	}
+	return parts.join('; ');
 }
 
 /**

@@ -197,3 +197,35 @@ advice.
 **Still open:** the `minion doctor` cache-mode/quarantine probe and behavioral
 `no-plaintext-write.test.ts` anti-recurrence guard remain S3 implementation work. The source
 `TODO(handoff)` continues to point here until both ship.
+
+## Handoff — 2026-09-02 (S3 complete: doctor probe + anti-recurrence guard)
+
+`packages/env/src/cache.ts` exports `cacheStatus()` — mode, `legacyRemoved`, `dirModeLoose`, and
+`quarantineDirs` (the `.infisical-cache-quarantine-*` list the 2026-08-30 review-fix handoff asked
+S3 to surface), status only, never entries or values. It runs the same once-per-process legacy purge
+and directory sealing the resolve path does, without fetching a secret, so the probe is truthful even
+when no subproject is cloned. `packages/cli/src/commands/doctor.ts`'s `(meta)` row calls it and
+renders the result through a new pure `renderCacheWarning()` helper into the warnings column only —
+`doctor`'s exit code is unchanged (still driven solely by auth failure / link drift).
+
+`packages/env/test/no-plaintext-write.test.ts` is the behavioral anti-recurrence guard: it drives
+`fetchInfisicalSecrets` with a sentinel secret value across all three `MINION_ENV_CACHE` modes and
+walks the config directory's raw bytes afterward. Proven during this run: temporarily changing
+`commitSealedFile`'s caller to pass the unsealed `entries` object instead of the sealed `envelope`
+made the `disk`-mode case fail immediately (`expected true to be false` on the sentinel-bytes check);
+reverted once the failure was confirmed. `packages/cli/test/doctor-integration.test.ts` covers
+`renderCacheWarning`'s clauses (mode-only, legacy-removed, dir-loose, singular/plural quarantine
+count, all-combined) directly, since it is a pure function of `CacheStatus`.
+
+Both TODO(handoff) markers this proposal's S3 work depended on are resolved: the top-of-file summary
+in `cache.ts` is removed (nothing left to hand off), and `restoreQuarantinedPath`'s comment now points
+at `cacheStatus().quarantineDirs` instead of asking for it. A new `.changeset/doctor-cache-probe.md`
+(`@minion-stack/cli`: patch) covers the CLI-side change; `@minion-stack/env`'s existing minor
+changeset from the S1+S2 handoff already covers this package.
+
+**This closes all three slices of `2026-08-17-pkg-infisical-cache-plaintext-spec`.** §6's
+end-to-end verification steps were exercised at the unit level (see `cache.test.ts`'s new
+`cacheStatus` suite and the anti-recurrence guard above); a full clean-checkout run against a
+throwaway `XDG_CONFIG_HOME` with live Infisical credentials was not re-run in this sandbox (no
+Infisical auth available here — same limitation the 2026-08-20 handoff recorded for S0's per-machine
+inventory) and is worth doing once before the release PR merges, per the ship gate in spec §6.

@@ -13,6 +13,7 @@ import {
 	readCache,
 	writeCache,
 	purgeLegacyCacheOnce,
+	cacheStatus,
 	resetCacheStateForTests,
 } from '../src/cache.js';
 import { InvalidCacheKeyError, seal as realSeal } from '../src/cache-crypto.js';
@@ -896,5 +897,64 @@ describe('cache.ts', () => {
 			},
 			10_000,
 		);
+	});
+
+	describe('cacheStatus (S3 doctor probe: mode/legacyRemoved/dirModeLoose/quarantineDirs only)', () => {
+		it('reports the active mode and no findings on a clean, unused config dir', () => {
+			const status = cacheStatus();
+			expect(status.mode).toBe('disk');
+			expect(status.legacyRemoved).toBe(false);
+			expect(status.dirModeLoose).toBe(false);
+			expect(status.quarantineDirs).toEqual([]);
+		});
+
+		it('reflects a non-default mode', () => {
+			process.env.MINION_ENV_CACHE = 'memory';
+			expect(cacheStatus().mode).toBe('memory');
+		});
+
+		it('reports legacyRemoved after purging a pre-existing legacy plaintext cache', () => {
+			fs.mkdirSync(cacheDir(), { recursive: true });
+			fs.writeFileSync(
+				cachePath(),
+				JSON.stringify({ 'minion-core|dev': { env: { X: 'leaked' }, fetchedAt: 1, ttlMs: 1 } }),
+			);
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			expect(cacheStatus().legacyRemoved).toBe(true);
+			warnSpy.mockRestore();
+		});
+
+		it('reports dirModeLoose when the config dir had group/other bits set, and seals it', () => {
+			// mkdirSync's requested mode is reduced by the process umask (e.g. 0755 becomes 0700 under
+			// umask 077), which would make this assertion pass or fail depending on the host's umask
+			// without ever exercising the permission-repair path. chmod explicitly afterward so the
+			// fixture's mode is deterministic regardless of umask.
+			fs.mkdirSync(cacheDir(), { recursive: true, mode: 0o755 });
+			fs.chmodSync(cacheDir(), 0o755);
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			const status = cacheStatus();
+			expect(status.dirModeLoose).toBe(true);
+			expect(status.dirSecureFailed).toBe(false);
+			warnSpy.mockRestore();
+			expect(fs.statSync(cacheDir()).mode & 0o777).toBe(0o700);
+		});
+
+		it('lists quarantine directories left behind for operator disposition', () => {
+			fs.mkdirSync(cacheDir(), { recursive: true, mode: 0o700 });
+			const quarantine = path.join(cacheDir(), '.infisical-cache-quarantine-abc123');
+			fs.mkdirSync(quarantine);
+			expect(cacheStatus().quarantineDirs).toEqual([quarantine]);
+		});
+
+		it('never throws when the config dir cannot be secured, and reports dirSecureFailed instead of a silent false', () => {
+			// A file occupying the would-be config dir path makes mkdirSync/statSync fail.
+			fs.mkdirSync(path.dirname(cacheDir()), { recursive: true });
+			fs.writeFileSync(cacheDir(), 'not a directory');
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			let status: ReturnType<typeof cacheStatus> | undefined;
+			expect(() => (status = cacheStatus())).not.toThrow();
+			warnSpy.mockRestore();
+			expect(status?.dirSecureFailed).toBe(true);
+		});
 	});
 });
