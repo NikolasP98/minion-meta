@@ -548,7 +548,7 @@ describe('cache.ts', () => {
 						spawnTsx(helperScript, [raceHome, barrier, outB, 'from-b', 'B-value']),
 					]);
 					// Give both processes time to reach the spin-wait before releasing them together —
-					// this is what makes the read-merge-seal-atomic-rename cycle in `writeDiskEntry`
+					// this is what makes the read-merge-seal-publish transaction in `writeDiskEntry`
 					// actually overlap, rather than the two writes happening safely one after another.
 					await new Promise((resolve) => setTimeout(resolve, 300));
 					fs.writeFileSync(barrier, '');
