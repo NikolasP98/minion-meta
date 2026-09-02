@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T08:08:00.684Z",
+	"generatedAt": "2026-09-02T08:49:50.443Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -35,39 +35,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
-		},
-		{
-			"key": "issue:paperclip#12677",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12677 Docker image build broken since 2026-08-30: cargo has no linker (`cc` not found)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12677",
-			"sourceUpdatedAt": "2026-09-01T17:20:58Z",
-			"sourceFingerprint": "18077af0769b60ba8da60ab55033df6159c196321e194b548faf8070510fbce7",
-			"score": 98,
-			"band": "critical",
-			"axes": {
-				"criticality": 10,
-				"importance": 10,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 10,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute immediately because the broken image pipeline blocks all staging deployment of merged work and the missing build toolchain is directly evidenced and narrowly remediable.",
-			"evidence": [
-				"Both Docker image jobs have failed on every master commit since 2026-08-30.",
-				"No tenant or cloud image has been published in three days, blocking staging updates.",
-				"Build logs report linker cc not found and make absent after Rust compilation begins."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T17:27:40.203Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -202,107 +169,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "pr:paperclip#12636",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12636 build(docker): add a C toolchain for the Rust runner build",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12636",
-			"sourceUpdatedAt": "2026-09-01T04:25:02Z",
-			"sourceFingerprint": "db19c3bb438916171895f1a424b8334faa43a76d59a24782648c77a12fd6d31e",
-			"score": 95,
-			"band": "critical",
-			"axes": {
-				"criticality": 10,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"issue:paperclip#12635"
-			],
-			"rationale": "Execute first because the current missing linker blocks Docker image compilation and publication across both stated architectures, with a small build-stage-only fix.",
-			"evidence": [
-				"Cargo exits with code 101 because linker cc is absent.",
-				"The failure means docker.yml publishes no image.",
-				"build-essential is added only to the build stage."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T04:27:44.645Z"
-		},
-		{
-			"key": "pr:paperclip#12649",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12649 fix(server): redact agent profile configuration by default",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12649",
-			"sourceUpdatedAt": "2026-09-01T08:50:57Z",
-			"sourceFingerprint": "a4f1100484d5e5db240aa3e2319fd6bcd2ea0ddc636fcea6ac6014cbbb38922f",
-			"score": 95,
-			"band": "critical",
-			"axes": {
-				"criticality": 10,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A demonstrated API path for exposing nested plaintext credentials warrants immediate completion despite unresolved workspace and CI verification blockers.",
-			"evidence": [
-				"Profile routes could serialize plaintext adapterConfig and runtimeConfig values.",
-				"The change applies deny-by-default recursive redaction across profile and snapshot responses.",
-				"One test suite passes, but the HTTP suite and frozen install are blocked."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T08:57:43.357Z"
-		},
-		{
-			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion-meta",
-			"title": "@minion-stack/env — stop leaving the gateway vault master key in a plaintext cache file",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-17-pkg-infisical-cache-plaintext-spec.md",
-			"sourceUpdatedAt": "2026-08-28",
-			"sourceFingerprint": "251c17c989afc366c08be57cd32938aa6c3d0d60821be9b6b293f1668ab28066",
-			"score": 95,
-			"band": "critical",
-			"axes": {
-				"criticality": 10,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 10,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute now because the cache exposes the gateway vault master key and unnecessary legacy secrets through a well-bounded package change.",
-			"evidence": [
-				"The plaintext cache contains MINION_SECRETS_KEY, which decrypts the gateway vault.",
-				"The full Infisical response is cached before key narrowing.",
-				"Existing cache files may retain permissions broader than 0600."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:48:02.540Z"
 		},
 		{
 			"key": "pr:minion-meta#271",
@@ -679,72 +545,6 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
-			"key": "pr:minion-factory#161",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#161 factory: Worker containment S5: adversarial E2E and supervised canary activation",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/161",
-			"sourceUpdatedAt": "2026-08-31T19:53:59Z",
-			"sourceFingerprint": "0e7e4f7c3224780bc0d250fa04531aa1588fdc0dd01fafedc693286e05322ba6",
-			"score": 88,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This is a well-bounded security and containment slice with extensive negative-test requirements, while production still has the new containment mode disabled pending supervised canary evidence.",
-			"evidence": [
-				"Tags include risk:high and topic:security.",
-				"Production runs with FACTORY_CONTAINMENT_V2=0.",
-				"Activation requires a supervised low-stakes canary with phase/image/SHA evidence."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T19:54:52.242Z"
-		},
-		{
-			"key": "pr:paperclip#12651",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12651 fix(recovery): treat a dependency-blocked continuation as a wait, not a strand",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12651",
-			"sourceUpdatedAt": "2026-09-01T09:19:23Z",
-			"sourceFingerprint": "d9b59eb4bae2f8a41434b6f19238417fc4036586211ef9ee6bad42f5270d3351",
-			"score": 88,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 10
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the fix prevents a production-observed recovery path from repeatedly stripping ownership and restarting valid work while preserving genuine termination guards.",
-			"evidence": [
-				"The defect was observed in production and repeatedly restarted work from scratch.",
-				"An open dependency currently causes reassignment, escalation, and loss of provider-session resumption.",
-				"The focused recovery suite reports 122 passing tests, and the equivalent change is live downstream."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T09:27:45.298Z"
-		},
-		{
 			"key": "proposal:2026-08-17-factory-capability-separation",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -981,72 +781,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:31:21.054Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1d40d9a77164ea3461884f1a4e56296e94305a4c",
-			"sourceUpdatedAt": "2026-08-31T00:03:55Z",
-			"sourceFingerprint": "40ad228fce1e3812154141ba4fc4981468f75908df095f5606973fb70633da9b",
-			"score": 86,
-			"band": "critical",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The gateway's explicitly failing deployment health warrants immediate diagnosis because it is a central runtime, although the catalog does not identify the failed check or remediation.",
-			"evidence": [
-				"Status is failing.",
-				"Repository is minion (gateway).",
-				"Latest change concerns CI platform validation gaps and audits."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:31:23.880Z"
-		},
-		{
-			"key": "issue:pixel-agents#334",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#334 Restored agents (existingAgents) never render as characters — only live-created agents do",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/334",
-			"sourceUpdatedAt": "2026-07-15T18:21:02Z",
-			"sourceFingerprint": "18e8c914808af91ced19c0f1236933cd92b66ed6d95f51bf7ddb539175b3eb17",
-			"score": 86,
-			"band": "critical",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 10
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This breaks the primary visualization on every restored connection and already has a locally verified, order-independent fix.",
-			"evidence": [
-				"existingAgents arrives after the sole layoutLoaded buffer flush.",
-				"Restored agent IDs enter React state but OfficeState.addAgent is never called.",
-				"The proposed immediate-or-buffer fix was implemented and confirmed locally."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:40:17.097Z"
 		},
 		{
 			"key": "proposal:2026-08-23-minion-ai-ci-baseline-debt",
@@ -1528,41 +1262,6 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
-			"key": "issue:paperclip#12643",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12643 Composio meta-tool test calls fail: session-minting scopes meta-tools under the child toolkit's own allowlist",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12643",
-			"sourceUpdatedAt": "2026-09-01T05:48:14Z",
-			"sourceFingerprint": "df45c587920f970664f28692e7e230746cf6f4b94fcd1e4684f4f89380035510",
-			"score": 80,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:paperclip#12632"
-			],
-			"rationale": "Prune this issue as a separate board goal because the catalog states its exact fix is already incorporated into PR #12632.",
-			"evidence": [
-				"The issue says every Composio child catalog call fails with HTTP 400.",
-				"Its proposed fix is to filter COMPOSIO_ meta-tools in mint().",
-				"The issue states the fix will be committed to PR #12632."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T05:57:50.490Z"
-		},
-		{
 			"key": "pr:minion (gateway)#255",
 			"kind": "pr",
 			"stage": "development",
@@ -1763,72 +1462,6 @@
 			"scoredAt": "2026-08-31T08:14:05.520Z"
 		},
 		{
-			"key": "issue:paperclip#12648",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12648 POST /api/tool-gateway/sessions leaks raw heartbeat_runs SQL query in 500 for non-UUID runId",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12648",
-			"sourceUpdatedAt": "2026-09-01T07:51:26Z",
-			"sourceFingerprint": "9c910badc8b559cc0a474eea2a0122ab87ba9e600ef3d7108dad1453108dc3c3",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because a reproducible unauthenticated-input validation gap exposes database structure and echoed input through client-facing 500 responses, with a clear bounded remediation.",
-			"evidence": [
-				"Malformed runId values return raw SQL, table names, column names, and the supplied input.",
-				"The behavior reproduced with multiple invalid shapes, including a 5,000-character string.",
-				"UUID validation before lookup and generic database-error handling are identified fixes."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T07:57:43.390Z"
-		},
-		{
-			"key": "issue:paperclip#12662",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12662 checkout accepts terminal run IDs, leaving issues ownerless and in_progress",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12662",
-			"sourceUpdatedAt": "2026-09-01T13:13:33Z",
-			"sourceFingerprint": "7cdbb9d313eb21f43a57b2e02f8de1f8df9e08c42b30be4f754a4342f3900100",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because a reproducible lifecycle race corrupts issue ownership state and blocks normal updates, while the affected paths, desired safeguards, and verification outcome are sufficiently bounded for implementation.",
-			"evidence": [
-				"A succeeded run continued API calls for more than five minutes and checked out a completed issue.",
-				"The stale-lock sweep left the issue in_progress without an owner, after which run-scoped writes failed with 409.",
-				"The normal checkout() path reportedly lacks the terminal-run guard already present in adoptUnownedCheckoutRun()."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T13:27:33.081Z"
-		},
-		{
 			"key": "pr:minion_hub#200",
 			"kind": "pr",
 			"stage": "development",
@@ -1895,105 +1528,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
-		},
-		{
-			"key": "pr:paperclip#12671",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12671 fix(heartbeat): promote handoff after stale comment retry",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12671",
-			"sourceUpdatedAt": "2026-09-01T16:33:21Z",
-			"sourceFingerprint": "27d3d433d41dbff9c2fd27423b31151cdf1c4d6da0233a11410ea65b0e613a7b",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because a reproducible core-heartbeat defect can strand valid agent handoffs, while the proposed fix is narrowly scoped and supported by focused passing tests.",
-			"evidence": [
-				"A stale retry can leave the new assignee's valid handoff queued.",
-				"The fault is in the core heartbeat service and is not adapter-specific.",
-				"Focused integration, stale-queue, batching, and start-lock tests passed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T16:57:38.662Z"
-		},
-		{
-			"key": "pr:paperclip#12672",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12672 fix(approvals): wake non-requester task assignees on card approval (INUA-6044)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12672",
-			"sourceUpdatedAt": "2026-09-01T15:58:46Z",
-			"sourceFingerprint": "f942128a7d64e85cbc5db907fe6185536f5bc23792649d221dedd392e6cf0384",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the identified wake-path defect can silently strand assigned work for days and the bounded, idempotent fix already has focused passing tests.",
-			"evidence": [
-				"A non-requester assignee task remained in review for 112 hours with no wake.",
-				"The fix wakes linked task assignees after approval or rejection using a deterministic idempotency key.",
-				"All 14 approval-route idempotency tests pass, including two new targeted cases."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T16:27:33.641Z"
-		},
-		{
-			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Infisical secret cache stored plaintext on disk (0600 only)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-17-pkg-infisical-cache-plaintext.md",
-			"sourceUpdatedAt": "2026-08-20",
-			"sourceFingerprint": "756eba04808972606f7f458c1c7d4efa1f5ad32c0310fa50241321baa6034a37",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Plaintext secret persistence is a serious cross-process security concern, and the remaining encrypted-cache slice should proceed before the interim no-disk regression can ship.",
-			"evidence": [
-				"Resolved secret values were cached plaintext",
-				"S1 removed all disk persistence",
-				"S1 and S2 must ship in the same release"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:42:10.731Z"
 		},
 		{
 			"key": "proposal:2026-08-29-base-meta-status-revision-binding-required",
@@ -2350,170 +1884,6 @@
 			"scoredAt": "2026-08-31T20:31:59.677Z"
 		},
 		{
-			"key": "issue:paperclip#12635",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12635 Docker image build fails with `linker cc not found` while compiling the Rust runner",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12635",
-			"sourceUpdatedAt": "2026-09-01T04:20:12Z",
-			"sourceFingerprint": "4e4c820199e5b97f2df040936deef48ee12ad1056333b0b668f33b07ee9c3145",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 9,
-				"importance": 6,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Docker production image build is completely broken with a clearly diagnosed root cause (missing cc linker after rustup switch), blocking all Docker deployments.",
-			"evidence": [
-				"linker `cc` not found, exit code 101, traced to PR #12605 removing gcc-bundled rustc package",
-				"reproduces on any Docker build host including CI"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T01:27:26.572Z"
-		},
-		{
-			"key": "issue:paperclip#12637",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12637 Cross-issue writes fail with 403 for any caller lacking a heartbeat run context, including direct API/board callers  Body:",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12637",
-			"sourceUpdatedAt": "2026-09-01T04:48:29Z",
-			"sourceFingerprint": "d195b4ed7f5aa70e42d3c930ea50ecaa0148e13d609436f712d3a8cc56cf6a7c",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute investigation and repair because a core authorization rule blocks all no-run API and MCP callers from updating existing issues and creates recurring workflow overhead.",
-			"evidence": [
-				"PATCH status changes and comments fail with 403 without a valid issue-scoped run ID.",
-				"Both direct board callers and agents are affected.",
-				"The workaround creates additional issues to request later updates."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T04:57:38.732Z"
-		},
-		{
-			"key": "issue:paperclip#12665",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12665 OpenAPI x-paperclip-authorization contradicts assertBoard on 48 operations",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12665",
-			"sourceUpdatedAt": "2026-09-01T13:54:06Z",
-			"sourceFingerprint": "a03883c4b2929fca29b8217b4ebef2f228658dd21fc41af0d5ed47e6e3b5d30e",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A systematically inaccurate authorization contract affects many operations and future routes, making this a well-evidenced security and integration reliability defect ready for corrective work.",
-			"evidence": [
-				"OpenAPI advertises agent access for 48 operations whose handlers reject agents with 403.",
-				"Six advertised read operations were tested with a valid agent token and all returned 403.",
-				"Authorization documentation and runtime enforcement use independent sources of truth."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T13:57:39.021Z"
-		},
-		{
-			"key": "issue:paperclip#12674",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12674 Server test shard 1/5 fails intermittently on database teardown",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12674",
-			"sourceUpdatedAt": "2026-09-01T17:08:04Z",
-			"sourceFingerprint": "1334a620b24f916fd279bd943dce10ba53ee77030e01621d4dbea03b2e2ed745",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate after isolating the specific background-work lifecycle leak, since the recurring CI cost is substantial but the proposed cause remains a well-supported hypothesis rather than a bounded fix.",
-			"evidence": [
-				"The shard reportedly fails roughly one run in four and affects unrelated branches.",
-				"Failures occur during teardown as deadlocks or foreign-key violations after test assertions pass.",
-				"The issue describes leftover application work as the likelier cause."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T17:27:40.203Z"
-		},
-		{
-			"key": "issue:pixel-agents#332",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#332 npx pixel-agents fails: published npm package (1.0.2) is stale, has no bin entry",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/332",
-			"sourceUpdatedAt": "2026-07-09T23:02:49Z",
-			"sourceFingerprint": "873b725154fe91c9cd742c455cbe0fb01022e8f1b36a2ad0e1dd1c6ad230af3a",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Repairing the documented zero-install path is release-critical distribution work with a diagnosed packaging cause and bounded remedy.",
-			"evidence": [
-				"npx pixel-agents fails because published version 1.0.2 has no bin entry.",
-				"The README documents npx as an intended path.",
-				"Current source version 1.3.0 declares dist/cli.js as the executable."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:40:17.097Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-afd023b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2615,39 +1985,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:02.540Z"
-		},
-		{
-			"key": "issue:paperclip#12694",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12694 Bare heartbeat/on-demand runs get a deterministic 403 on every issue write (`cross_issue_influence_run_context_required`), and the error's own sanctioned path cannot succeed",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12694",
-			"sourceUpdatedAt": "2026-09-01T21:14:51Z",
-			"sourceFingerprint": "5c386a7a8b45e206907f0d738ba2e1fefe6e877c8722e309ae5230fee280634a",
-			"score": 75,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Deterministic bug fully blocks issue writes for any heartbeat/on-demand-triggered agent run, with a root-caused, locally-verified proposed fix ready to implement.",
-			"evidence": [
-				"PATCH /api/issues/{id} and POST comments both return 403 ... deterministic, not intermittent",
-				"We're running exactly this locally; the cap still enforces (verified allowed:false at count 21/cap 20)",
-				"Three separate agents on our side burned runs retrying that header before someone read the source"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T21:27:46.337Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-release-probe-red-and-silent",
@@ -2995,39 +2332,6 @@
 			"scoredAt": "2026-08-31T09:24:43.768Z"
 		},
 		{
-			"key": "issue:pixel-agents#333",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#333 Standalone CLI: copyHookScript() double-joins 'dist', so hook script is never copied but CLI logs false success",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/333",
-			"sourceUpdatedAt": "2026-07-09T23:02:57Z",
-			"sourceFingerprint": "4d7ee6212cbc6e0f48ed33a5503827ac88428ac4a6fe778c08e30f5e785e896d",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The standalone CLI installs globally broken hook references while reporting success, and the exact path-contract defect and fix surface are identified.",
-			"evidence": [
-				"The source path resolves to dist/dist/hooks/claude-hook.js.",
-				"Settings are written to invoke a hook script that was not copied.",
-				"The caller logs success after the copy function warns and returns."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:40:17.097Z"
-		},
-		{
 			"key": "pr:minion_hub#191",
 			"kind": "pr",
 			"stage": "development",
@@ -3160,14 +2464,14 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:paperclip#12650",
+			"key": "pr:minion-factory#161",
 			"kind": "pr",
 			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12650 Fix checked-out run binding on first write",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12650",
-			"sourceUpdatedAt": "2026-09-01T09:15:01Z",
-			"sourceFingerprint": "0e94d9d856c1ad8e585ab87e89adc2357b2828cd45721c56738506650afe8182",
+			"repo": "minion-factory",
+			"title": "#161 factory: Worker containment S5: adversarial E2E and supervised canary activation",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/161",
+			"sourceUpdatedAt": "2026-09-02T08:39:37Z",
+			"sourceFingerprint": "c3a441435f5fe7dfa3f054ce4f6950f1808fea3eb0eab4c8ee4d983b83acac99",
 			"score": 73,
 			"band": "high",
 			"axes": {
@@ -3176,21 +2480,21 @@
 				"impact": 7
 			},
 			"readiness": {
-				"specification": 9,
+				"specification": 7,
 				"implementation": 6
 			},
-			"confidence": 8,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Execute after completing verification because fail-closed ownership proof protects audited run-context boundaries, although passing tests and CI are not yet evidenced.",
+			"rationale": "A well-scoped, risk:high security containment slice with explicit fail-closed activation gates is ready for bounded execution now.",
 			"evidence": [
-				"First-write binding previously could occur without a persisted checkout.",
-				"The patch requires matching company, agent, and run ownership and returns HTTP 403 otherwise.",
-				"Local tests and CI are not reported as passing."
+				"tags include risk:high, topic:security",
+				"task requires supervised canary evidence before activation, else 'leave activation fail-closed'",
+				"status: draft, updated 2026-09-02"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T09:27:45.298Z"
+			"scoredAt": "2026-09-02T08:49:50.360Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -3323,138 +2627,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "issue:paperclip#12633",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12633 Composio broker connections never leave draft status — every child toolkit's tools are invisible to the tool gateway",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12633",
-			"sourceUpdatedAt": "2026-09-01T04:16:37Z",
-			"sourceFingerprint": "5b6c726e7454fba57e71f910d794590ff3d998d328094d18dc684b0ce4033192",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:paperclip#12632"
-			],
-			"rationale": "Root-caused bug leaves every fully healthy Composio toolkit connection invisible to the tool gateway, blocking all real tool calls, with a clear proposed fix.",
-			"evidence": [
-				"404 tool_not_found despite ACTIVE connected account and refreshed catalog",
-				"toolApplications status stuck at draft, filtered by connectedMcpToolsForCompany"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T05:57:36.152Z"
-		},
-		{
-			"key": "issue:paperclip#12686",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12686 Agent's own terminal-status PATCH returns 403, stranding issues as blocked",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12686",
-			"sourceUpdatedAt": "2026-09-02T03:16:06Z",
-			"sourceFingerprint": "50842141e25bd97cc0e0cb229f445a01bf0213eb4da41341f2f919b8a0bcbad0",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Confirmed authorization bug repeatedly strands agent-owned issues in a loop and has an actionable exemption fix even without the logging prerequisite.",
-			"evidence": [
-				"~10 incident issues stranded since 8/31",
-				"root cause traced to issues.ts:4098 running before assignee check at 4105",
-				"re-stranded within 14 minutes of manual recovery"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T03:27:39.538Z"
-		},
-		{
-			"key": "pr:minion-meta#247",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#247 feat(env): add machine-sealed cross-process caching",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/247",
-			"sourceUpdatedAt": "2026-09-02T08:02:14Z",
-			"sourceFingerprint": "df301bd0e7b994cf1cab2039eb7e94052bf71ff43417920bee4cbfb71de984fc",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "PR self-reports a concrete high-risk gap (non-Linux hosts and a concurrent key-publication crash window) in a security-relevant cache rewrite, so it should not merge as-is despite otherwise solid focused test evidence.",
-			"evidence": [
-				"Risk Assessment: 'durable cache contract remains violated on non-Linux hosts and during a concrete concurrent key-publication crash window'",
-				"Broad root CI, lint, typecheck, push, PR, and remote CI were intentionally left to the outer pipeline phases",
-				"Replaces legacy plaintext Infisical cache with machine-sealed, immutable cross-process generations"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T08:07:59.787Z"
-		},
-		{
-			"key": "pr:paperclip#12634",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12634 fix(tools): promote Composio broker connections out of draft after a healthy connect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12634",
-			"sourceUpdatedAt": "2026-09-01T06:52:22Z",
-			"sourceFingerprint": "ab20e0fbf67538fa9277a67e0af06af8c8ebdd1ffa80e0c0c3cc6d1c03a958b6",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Open PR with verified root cause and traced fix makes Composio tool connections actually callable end-to-end, closing a full feature path.",
-			"evidence": [
-				"confirmed toolApplications.type mismatch excludes mcp_remote children",
-				"live API repro shows tool_not_found despite healthStatus ok"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T01:27:26.572Z"
 		},
 		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
@@ -3762,76 +2934,6 @@
 			"scoredAt": "2026-08-31T08:01:35.926Z"
 		},
 		{
-			"key": "pr:pixel-agents#300",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#300 feat(jetbrains): add JetBrains IDE plugin + npm/build/refresh fixes",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/300",
-			"sourceUpdatedAt": "2026-06-04T14:53:41Z",
-			"sourceFingerprint": "2ba6764ff5f983cafc651759cac6f7bb6f21bac424757ec81e0d5d45323b2c01",
-			"score": 70,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 8,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"pr:pixel-agents#302"
-			],
-			"rationale": "Reframe into separate release-blocking portability/package fixes and JetBrains integration work because the bundled scope has different risks and incomplete acceptance testing.",
-			"evidence": [
-				"A missing npm files whitelist can ship a non-functional binary.",
-				"The PR combines JetBrains support with npm, Windows-build, compatibility, and refresh changes.",
-				"All four listed test-plan checks remain unchecked."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:18.083Z"
-		},
-		{
-			"key": "pr:pixel-agents#302",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#302 Windows portability fixes + interact with agents from the office window",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/302",
-			"sourceUpdatedAt": "2026-06-07T12:00:45Z",
-			"sourceFingerprint": "74744a06231a2037b93d33ab4bf16c34b6d26fc120e5a8e780c3a5ae09a62e21",
-			"score": 70,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"pr:pixel-agents#300"
-			],
-			"rationale": "Reframe the Windows portability fixes separately from interactive prompting and approval features so urgent build/runtime corrections can ship without coupling to higher-risk control functionality.",
-			"evidence": [
-				"The build was broken on Windows.",
-				"The standalone hook path resolves to dist/dist/hooks and misses the script.",
-				"Approval handling can block hook responses for up to nine minutes."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:18.083Z"
-		},
-		{
 			"key": "spec:2026-08-17-gw-whatsapp-cloud-template-fallback-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -4065,72 +3167,6 @@
 			"scoredAt": "2026-08-31T20:15:47.241Z"
 		},
 		{
-			"key": "issue:paperclip#12704",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12704 An agent that moves its own in-flight issue to `cancelled` is SIGTERMed mid-run, lands in `error` via a cancel-vs-exit race, and the kill is misfiled as `claude_transient_upstream`",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12704",
-			"sourceUpdatedAt": "2026-09-01T23:44:43Z",
-			"sourceFingerprint": "c3817919191b52347ed2e72bdd044554ad2573d9f2f2422ec0efb86a4f862b9b",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Real measured production bug causing self-cancelling agents to be killed and misclassified, but the author explicitly could not confirm the race still exists after a since-reworked heartbeat exit path on master.",
-			"evidence": [
-				"25 of 25 non-succeeded runs for the busiest agent tied to the self-cancel race",
-				"author states 'I could not tell from reading whether the race in (2) still exists' on current master",
-				"only 1 genuine transient upstream failure occurred fleet-wide that month versus 8 misclassified as such"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T23:57:55.908Z"
-		},
-		{
-			"key": "pr:paperclip#12647",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12647 perf(server): index-friendly issue cost-summary & runs queries (drop OR EXISTS full scan)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12647",
-			"sourceUpdatedAt": "2026-09-01T07:47:33Z",
-			"sourceFingerprint": "adcb2c5adff1e979b35e9dbb86dadc4bb977dfcf6b183c1bd38caa06240f1475",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because two recurring issue-page queries impose seconds of latency across a core board view and the bounded rewrite has strong performance and equivalence evidence.",
-			"evidence": [
-				"The current predicates sequentially scan about 22,000 company runs per request.",
-				"Measured latency was about 3.9 seconds and 2.5 seconds before the rewrite.",
-				"Result-set equivalence showed zero differences across issues with 2 to 487 runs."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T07:57:43.390Z"
-		},
-		{
 			"key": "proposal:2026-08-18-factory-orchestration-round7",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4197,39 +3233,6 @@
 			"scoredAt": "2026-08-31T07:43:57.675Z"
 		},
 		{
-			"key": "issue:paperclip#12661",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12661 OpenAPI x-paperclip-authorization contradicts assertBoard on 48 operations",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12661",
-			"sourceUpdatedAt": "2026-09-01T12:27:14Z",
-			"sourceFingerprint": "ca0edabf4d45e9615d5393cbf6cdbe513ac602463b854a6f7d66576e3f8308a6",
-			"score": 67,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the published authorization contract systematically advertises unsupported agent access across many operations, and the documented dual-source mechanism makes recurrence likely without a structural fix.",
-			"evidence": [
-				"The OpenAPI document labels 48 runtime board-only operations as callable with AgentBearerAuth.",
-				"Six read-only operations probed with a valid agent token all returned 403.",
-				"Authorization documentation uses a hand-maintained operation table independent of the handlers' assertBoard guard."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T12:57:37.827Z"
-		},
-		{
 			"key": "pr:minion (gateway)#257",
 			"kind": "pr",
 			"stage": "development",
@@ -4261,72 +3264,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:23.880Z"
-		},
-		{
-			"key": "pr:pixel-agents#240",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#240 feat: worktree agents — isolated branch per agent",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/240",
-			"sourceUpdatedAt": "2026-04-19T20:03:46Z",
-			"sourceFingerprint": "fb8495fe5dca18bfcbaef677a2e24f298ee4435329a452b2d4bbd69387885d3f",
-			"score": 67,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Isolated worktrees directly reduce parallel-agent interference and the included restore fix addresses accidental termination, making this strategically central once its destructive cleanup paths are verified.",
-			"evidence": [
-				"Each agent can run in a fresh git worktree and isolated branch.",
-				"The PR fixes a restore cleanup that could kill a newly launched agent after panel refocus.",
-				"All eight test-plan items remain unchecked."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:42.200Z"
-		},
-		{
-			"key": "pr:pixel-agents#347",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#347 feat: standalone embedded terminal — launch and drive agents from the browser",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/347",
-			"sourceUpdatedAt": "2026-07-17T16:01:27Z",
-			"sourceFingerprint": "4b53210b603715669b2020f7b6575a39f935254b201e7bea0f3fdddbb35d27b6",
-			"score": 67,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because this turns the standalone product into an operational agent surface while explicitly addressing authentication, reattachment, opt-out behavior, and end-to-end testing.",
-			"evidence": [
-				"The browser can launch, drive, reattach to, and close PTY-backed agents.",
-				"Terminal WebSockets require bearer authentication and origin/Host checks.",
-				"Unit and end-to-end coverage is described; Windows PTY spawning remains untested."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:18.083Z"
 		},
 		{
 			"key": "proposal:2026-08-18-factory-browser-verification-stage",
@@ -4541,72 +3478,6 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
-			"key": "issue:paperclip#12668",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12668 runtimeConfig.modelProfiles secret_ref has no native binding or approval path",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12668",
-			"sourceUpdatedAt": "2026-09-01T14:57:09Z",
-			"sourceFingerprint": "91fa81d1acf20411546493563cd3540f0984ab2bd2c87f64a8f4bbbcaa0ce234",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 5
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate after selecting the native profile-qualified binding design or the rejection fallback, since the defect is well evidenced but execution is not yet bounded to one approach.",
-			"evidence": [
-				"Profile-only secret references are validated at dispatch but are not synchronized by the agent update path.",
-				"The approval implementation cannot address the documented nested model-profile path.",
-				"Seven acceptance cases define resolution, isolation, persistence, approval, and failure behavior."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T14:57:41.086Z"
-		},
-		{
-			"key": "issue:paperclip#12675",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12675 Onboarding API keys need server-owned user-secret definitions, like the Claude token",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12675",
-			"sourceUpdatedAt": "2026-09-01T17:09:46Z",
-			"sourceFingerprint": "72a4bc97ea7f3aaea1fc39966bb34d788186180c63b0724184e95d99af80dde8",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because server-owned definitions close a credential-policy inconsistency and remove an unnecessary administrative dependency from onboarding.",
-			"evidence": [
-				"The client currently chooses the API-key definition's key, provider, and managed mode.",
-				"The Claude credential path already uses a fixed server-owned definition.",
-				"The proposed definitions cover ANTHROPIC_API_KEY and OPENAI_API_KEY, with migration compatibility requiring confirmation."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T17:27:40.203Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4671,38 +3542,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
-		},
-		{
-			"key": "pr:paperclip#12679",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12679 fix: ignore hidden files during migration discovery",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12679",
-			"sourceUpdatedAt": "2026-09-01T19:47:29Z",
-			"sourceFingerprint": "82d0b8310b87cad7c02bcf613d853031dbd44ab7c206abb3f203bb5e0b4faf4c",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes a Docker startup failure where AppleDouble files were misread as migrations, with clear repro steps and two independent approved reviews.",
-			"evidence": [
-				"reported 218 fake pending migrations and failed startup with PostgreSQL 08P01",
-				"two independent adversarial reviews both APPROVED (96/100, 90/100)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T19:57:47.791Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -4879,41 +3718,6 @@
 			"scoredAt": "2026-08-31T07:38:58.989Z"
 		},
 		{
-			"key": "issue:paperclip#12645",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12645 Issue detail page slow (~7s): cost-summary & runs full-scan heartbeat_runs (OR EXISTS defeats index)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12645",
-			"sourceUpdatedAt": "2026-09-01T07:20:43Z",
-			"sourceFingerprint": "918ec9bab030d330d01fade42cb1dead9cda1d9feea019ff2575cfddbd55612f",
-			"score": 64,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:paperclip#12647"
-			],
-			"rationale": "The issue documents a recurring user-facing latency problem with query-plan evidence, existing indexes, a bounded fix, and measured improvements, making implementation actionable now.",
-			"evidence": [
-				"Issue pages take about 7 seconds to load.",
-				"One query scans 21,090 rows to return 9.",
-				"Measured cost-summary time falls from 3,927 ms to 56 ms."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T07:27:53.716Z"
-		},
-		{
 			"key": "pr:minion-meta#285",
 			"kind": "pr",
 			"stage": "development",
@@ -4945,39 +3749,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
-		},
-		{
-			"key": "pr:paperclip#12700",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12700 test(runner): add full-stack acceptance and eval gates",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12700",
-			"sourceUpdatedAt": "2026-09-02T06:02:42Z",
-			"sourceFingerprint": "ee9fc532785af119879478df195d1435a340770e851fcc6cc3f3e0a6a7a1437f",
-			"score": 64,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A near-complete, well-tested PR that adds acceptance/eval/chaos/release gates needed to safely ship the restored runner stack across roadmap milestones.",
-			"evidence": [
-				"adds acceptance, live evaluation, chaos, and release gates for the restored runner stack",
-				"verification passed locally across dozens of test suites",
-				"supports shipped Cloud/Sandbox agents and Agent evals milestones in ROADMAP.md"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T06:25:18.017Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
@@ -5048,47 +3819,14 @@
 			"scoredAt": "2026-09-02T06:25:18.017Z"
 		},
 		{
-			"key": "pr:paperclip#12644",
+			"key": "pr:minion-meta#369",
 			"kind": "pr",
 			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12644 fix(issues): keep comment creation successful when reference sync fails",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12644",
-			"sourceUpdatedAt": "2026-09-01T06:57:44Z",
-			"sourceFingerprint": "58cdda74adf08a9300f2ed95381636257bf512bc4927c223a80f6bad3a11d560",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This is a focused reliability fix for a persisted-success-but-reported-failure condition with strong targeted verification and a bounded low-risk change.",
-			"evidence": [
-				"A saved comment can currently return HTTP 500.",
-				"Focused tests passed 7 of 7.",
-				"Typecheck and build passed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T07:27:53.716Z"
-		},
-		{
-			"key": "pr:paperclip#12709",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12709 feat(codex-local): give each Codex account its own home and path secret",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12709",
-			"sourceUpdatedAt": "2026-09-02T05:02:13Z",
-			"sourceFingerprint": "0b93a59c75331c23de8a064efc69c708c6415d4458c2367f7a883ef54ba5e66d",
+			"repo": "minion-meta",
+			"title": "#369 factory: auto: pkg-infisical-cache-plaintext-spec S3",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/369",
+			"sourceUpdatedAt": "2026-09-02T08:41:34Z",
+			"sourceFingerprint": "1c9d06e4ce92b8d0730befbb6f003810f0f07a7211680b5788c6a869bed6155a",
 			"score": 63,
 			"band": "medium",
 			"axes": {
@@ -5098,20 +3836,19 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 8
+				"implementation": 7
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Adds per-account credential isolation for the Codex local adapter with tests passing and a completed security review, unblocking multi-account usage.",
+			"rationale": "A tightly scoped slice of an approved security spec with clear boundaries (implement only Slice 3) is actionable now.",
 			"evidence": [
-				"security review returned approve with no blocking finding",
-				"adapter suite passes with 343 and 25 tests",
-				"strict allowlist and root containment check reduce path traversal risk"
+				"Spec-Commit references approved spec 0beb030b02cfcac94c3dbe854f02d5a7da83ab11",
+				"review effort: high, status: draft"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T05:27:23.288Z"
+			"scoredAt": "2026-09-02T08:49:50.360Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updatesellable-silent-drop",
@@ -5147,14 +3884,14 @@
 			"scoredAt": "2026-08-31T07:41:32.788Z"
 		},
 		{
-			"key": "run:minion (gateway)#33341809815",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/33341809815",
-			"sourceUpdatedAt": "2026-08-31T00:03:55Z",
-			"sourceFingerprint": "1b319f4812bd0c686aee94e4a15e12c094d2b46d5baf4252bbb923978ad2b95d",
+			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion-meta",
+			"title": "@minion-stack/env — stop leaving the gateway vault master key in a plaintext cache file",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-17-pkg-infisical-cache-plaintext-spec.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "845defe93b439ce9cba22a9845c8e238d0a36b806d63c1a1ab12deb1a944f6b7",
 			"score": 63,
 			"band": "medium",
 			"axes": {
@@ -5163,21 +3900,21 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 1,
-				"implementation": 1
+				"specification": 9,
+				"implementation": 7
 			},
-			"confidence": 5,
-			"recommendation": "reframe",
+			"confidence": 7,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Reframe the failed run as a diagnosed, bounded repair goal because the catalog establishes a current DEV CI failure but provides no failing job, error, regression scope, or verifiable remedy.",
+			"rationale": "An approved, thoroughly evidenced security spec covering a plaintext master-key exposure is already mid-execution across scoped slices.",
 			"evidence": [
-				"CI run 33341809815 has status failure",
-				"The run was triggered by a push on DEV",
-				"No failure diagnostics or affected checks are included"
+				"status: approved",
+				"identifies MINION_SECRETS_KEY as 'the master key for the gateway's libsodium crypto_secretbox vault'",
+				"gate conventions mandate human sign-off per 2026-08-17-sdlc-phase-gates-scoring-spec"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:49:02.226Z"
+			"scoredAt": "2026-09-02T08:49:50.360Z"
 		},
 		{
 			"key": "spec:2026-08-18-sdlc-transformation-roadmap",
@@ -5279,39 +4016,6 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
-			"key": "pr:paperclip#12707",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12707 fix(server): reject stale run checkouts",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12707",
-			"sourceUpdatedAt": "2026-09-02T01:29:08Z",
-			"sourceFingerprint": "c7b1cb1a8ad445e6d99a61d14b6c8f1372dd5fd412296124c277694dce2e2744",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Open PR fixes a checkout ownership race that breaks review handoff, with reproduction steps and passing regression tests.",
-			"evidence": [
-				"Terminal run received 200 checkout then stale-lock cleanup removed ownership causing conflicts",
-				"13+19 tests passed per verification log",
-				"No duplicate public issue or active PR found"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T01:57:22.879Z"
-		},
-		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5374,72 +4078,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-02T00:58:57.715Z"
-		},
-		{
-			"key": "pr:pixel-agents#285",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#285 feat: improve Copilot agent discovery, activity status handling, and model visibility",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/285",
-			"sourceUpdatedAt": "2026-05-23T17:32:50Z",
-			"sourceFingerprint": "8a01f71daf6ef27a1a6bb5031bf991fe9453df90079beddd1bb811c3093396eb",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Correct Copilot discovery and activity transitions address recurring operational accuracy across a supported agent source, with a bounded implementation that has passed local static and build checks.",
-			"evidence": [
-				"Additional Copilot session roots are scanned globally.",
-				"Parser support prevents Copilot activity from remaining incorrectly idle.",
-				"Type checking, linting, and compilation succeeded locally."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:42.200Z"
-		},
-		{
-			"key": "pr:pixel-agents#366",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#366 fix: attribute /clear transcript to the agent whose activity stopped, not the active terminal",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/366",
-			"sourceUpdatedAt": "2026-07-28T04:46:32Z",
-			"sourceFingerprint": "cdc2cca553fd148b50dde1455814d4b8988fc7e4ae9db7df91cb120f2438fad5",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because crossed terminal bindings are a concrete multi-session correctness failure with a focused attribution fix and strong regression coverage.",
-			"evidence": [
-				"Running /clear can swap two characters' terminal bindings.",
-				"The fix attributes the new transcript by activity-stop proximity rather than terminal focus.",
-				"Five new cases pass within a 283-test server suite."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:18.083Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-defaces-crm-tools-spec",
@@ -5719,72 +4357,6 @@
 			"scoredAt": "2026-08-31T07:38:21.867Z"
 		},
 		{
-			"key": "issue:paperclip#12655",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12655 Scheduled jobs cannot read the company scope they are held to — refusal is the only signal, and it is not discriminable",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12655",
-			"sourceUpdatedAt": "2026-09-01T09:58:33Z",
-			"sourceFingerprint": "96bd3b37f48948aed42f6758efa93423f22aae99f650732ad9fbf4190a718932",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 5
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The issue documents a credible silent-omission risk for scheduled plugins, but a broader referenced fix may supersede it and the catalog does not bound an implementation or establish affected-plugin breadth.",
-			"evidence": [
-				"Scheduled jobs cannot directly enumerate their proactive company scope.",
-				"Out-of-scope config access is discovered only through a non-discriminable rejection.",
-				"The report says broader issue #12109 may make this issue dissolve."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T10:27:38.094Z"
-		},
-		{
-			"key": "issue:pixel-agents#355",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#355 Licensing: does MIT cover the art under webview-ui/public/assets/**?",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/355",
-			"sourceUpdatedAt": "2026-07-25T10:08:35Z",
-			"sourceFingerprint": "26284123ab3dad21c8f105a23ac928d03be3489ce9b1420696d9e477ad7d3398",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The licensing ambiguity is consequential, but the effective goal must first establish asset provenance and rights-holder confirmation before prescribing an MIT notice.",
-			"evidence": [
-				"About 40 non-character assets lack per-asset licensing or attribution metadata.",
-				"A commercial internal user is waiting for clarification.",
-				"The character sheets are separately credited as CC0."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:40:17.097Z"
-		},
-		{
 			"key": "pr:minion (gateway)#254",
 			"kind": "pr",
 			"stage": "development",
@@ -5948,70 +4520,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "issue:paperclip#12692",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12692 [hermes_local] Issues cycle in_progress→blocked without a disposition; provider forced to 'auto' despite provider=custom",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12692",
-			"sourceUpdatedAt": "2026-09-01T20:11:23Z",
-			"sourceFingerprint": "c94410688bbbf5a18ecb54e28e18d9bedcd535089e5dfb247ff147628c922b89",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Reports a real broken execution loop (runs complete without disposition, provider forced to auto) but is posed as open diagnostic questions rather than a bounded, actionable fix.",
-			"evidence": [
-				"\"ciclan in_progress → blocked sin que se produzca un run agéntico que escriba la disposición\"",
-				"\"Preguntas exactas\" section lists four unresolved root-cause questions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T20:28:19.924Z"
-		},
-		{
-			"key": "pr:paperclip#12690",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12690 fix(adapter-pi-local): surface model-level stopReason=error as adapter failure",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12690",
-			"sourceUpdatedAt": "2026-09-01T20:09:44Z",
-			"sourceFingerprint": "5cb3c02dd41bbdf649f5eed48017bf9c35050cf7438f97600fd65f61cbc1362a",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes a silent-failure bug where model errors were reported as successful runs, with clear repro and full regression coverage (17/17 tests).",
-			"evidence": [
-				"\"errors: [] → exit code 0 → the harness reported the run as succeeded\"",
-				"\"17/17 pass\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T20:28:19.924Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
@@ -6345,76 +4853,6 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
-			"key": "pr:pixel-agents#388",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#388 refactor(server): resolve hook provider by providerId",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/388",
-			"sourceUpdatedAt": "2026-08-14T19:56:47Z",
-			"sourceFingerprint": "228220e2ba0b34859fbba6e88226a4b475e894e3420cdf88518515bcbee547d4",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:pixel-agents#383",
-				"pr:pixel-agents#389",
-				"pr:pixel-agents#390"
-			],
-			"rationale": "Provider-id routing is foundational to several same-batch provider additions and should be integrated as part of one reviewed multi-provider architecture goal.",
-			"evidence": [
-				"Current providerId is never consumed downstream",
-				"Adds provider registry and per-event resolution",
-				"435 tests reported passing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:55.886Z"
-		},
-		{
-			"key": "pr:pixel-agents#399",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#399 feat(server): add native Hermes provider",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/399",
-			"sourceUpdatedAt": "2026-08-29T01:11:38Z",
-			"sourceFingerprint": "3cdacbab95d49ee7dcd5719ef3f21d29dba0f2c858153fa83c768019ea8c1ce3",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The native Hermes integration is strategically broad and supported by unusually complete implementation, security, review, and end-to-end evidence.",
-			"evidence": [
-				"It adds a native Hermes provider and generalizes the runtime for concurrent providers.",
-				"Ingress includes HMAC verification, replay rejection, freshness checks, and body limits.",
-				"The catalog reports 92/92 E2E passes and an independent exact-head review with no findings."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:37:34.863Z"
-		},
-		{
 			"key": "proposal:2026-08-18-base-attention-queue-responsive-runs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6481,105 +4919,6 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
-			"key": "issue:paperclip#12660",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12660 No agent-writable field on the heartbeat run record",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12660",
-			"sourceUpdatedAt": "2026-09-01T12:27:12Z",
-			"sourceFingerprint": "2370522d2e4b8417876bb06456876fe477704251f65aabaa3453fd0869bbece2",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate after selecting a concrete writable surface and authorization contract, since the observability gap is well evidenced but the implementation path is not yet bounded.",
-			"evidence": [
-				"Authenticated agents cannot attach structured annotations to their heartbeat run.",
-				"Existing run routes are read-only or serve unrelated fixed-purpose actions.",
-				"The report identifies resultJson, activity, and status fields but none currently provides the required write path."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T12:27:40.259Z"
-		},
-		{
-			"key": "issue:pixel-agents#251",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#251 [Bug]: Clicking agent character opens wrong terminal after /clear in another session",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/251",
-			"sourceUpdatedAt": "2026-04-25T10:03:10Z",
-			"sourceFingerprint": "529c6487890193496a8e7d831c1dcec9a2d18c6d9bafe77a6c3b3251eca722ed",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the reproducible session-to-terminal identity corruption breaks a core interaction and the report narrows the likely lifecycle path and supplies a focused diagnostic test.",
-			"evidence": [
-				"Running clear in one of two sessions reportedly swaps the characters' terminal click targets.",
-				"The trigger creates a new session ID and JSONL without replacing the VS Code terminal.",
-				"The report identifies SessionStart, onSessionClear, and terminalRef mappings as suspicious paths."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:39:38.888Z"
-		},
-		{
-			"key": "issue:pixel-agents#260",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#260 [Bug]: Agents from Claude Code vscode extension are not showing",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/260",
-			"sourceUpdatedAt": "2026-05-03T10:30:51Z",
-			"sourceFingerprint": "be48e214970c745c8feb6a0052c5ad53c6f0eaf5545b2d4b894e0642fa077c50",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Reframe as a compatibility investigation with logs, supported-session boundaries, and a minimal fixture because complete agent absence is important but the catalog provides no diagnostic evidence or bounded fix.",
-			"evidence": [
-				"Claude Code VS Code extension sessions reportedly do not appear in Pixel Agents.",
-				"The report supplies three reproduction steps.",
-				"No logs, screenshots, root-cause evidence, or proposed outcome boundary are provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:39:38.888Z"
-		},
-		{
 			"key": "pr:minion_hub#194",
 			"kind": "pr",
 			"stage": "development",
@@ -6644,74 +4983,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
-		},
-		{
-			"key": "pr:paperclip#12657",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12657 KOMAA-183 port RTB execution control v2 core (KOMAA-167) onto current master",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12657",
-			"sourceUpdatedAt": "2026-09-01T11:10:12Z",
-			"sourceFingerprint": "51834e911329769b2586ba1f95f68881eb638da4db3e75e50a8e33139e11fd6e",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12579"
-			],
-			"rationale": "Fold this partial core port into the broader RTB activation goal because substantial production wiring remains and the same mechanisms are already represented by another PR in the batch.",
-			"evidence": [
-				"Ports KOMAA-167 RTB execution control mechanisms",
-				"17/17 unit tests pass in the source branch",
-				"Watchdog suppression, durable reconciliation, budget activation, and supportedObservability remain"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T11:27:38.486Z"
-		},
-		{
-			"key": "pr:pixel-agents#385",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#385 feat: support CLAUDE_CONFIG_DIR override via Settings",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/385",
-			"sourceUpdatedAt": "2026-08-19T16:21:39Z",
-			"sourceFingerprint": "fc9a32b03ee1f15ea64d25757eb1b3beddd6c83fc8ce7d0d5c6dd7ff16102660",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This solves a concrete multi-profile configuration problem and includes extensive cross-platform validation plus a tested DNS-rebinding hardening fix.",
-			"evidence": [
-				"Supports persisted CLAUDE_CONFIG_DIR override",
-				"Adds server-side path validation",
-				"Includes DNS-rebinding regression coverage"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:55.886Z"
 		},
 		{
 			"key": "proposal:2026-08-28-meta-routing-pr100-recovery",
@@ -6846,76 +5117,6 @@
 			"scoredAt": "2026-08-31T08:14:27.632Z"
 		},
 		{
-			"key": "pr:paperclip#12659",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12659 Prevent self-addressed blocked wakes and clarify issue write denials",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12659",
-			"sourceUpdatedAt": "2026-09-01T12:14:39Z",
-			"sourceFingerprint": "5908a92abaaeadd8399edc834177af73bb0a621de5b7dd7274d2378a1d382c33",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the PR targets two bounded coordination defects with regression coverage, although incomplete test execution lowers delivery confidence.",
-			"evidence": [
-				"It prevents waking an issue back to the assignee that recorded the unblock descriptor.",
-				"It clarifies denials for unheld issues versus active checkout locks.",
-				"Focused checkout tests were not runnable in the isolated clone."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T12:27:40.259Z"
-		},
-		{
-			"key": "pr:pixel-agents#383",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#383 Add Hermes Agent and Codex CLI providers (multi-provider runtime support)",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/383",
-			"sourceUpdatedAt": "2026-08-29T01:10:55Z",
-			"sourceFingerprint": "07129242607ad5a35b8df73306eff91c48dc7c0eab30285fea86ec427580e428",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 2,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:pixel-agents#388",
-				"pr:pixel-agents#390",
-				"pr:pixel-agents#394"
-			],
-			"rationale": "Its broad multi-provider runtime overlaps the registry groundwork and additional provider adapters, so these should become one coherent multi-provider goal.",
-			"evidence": [
-				"Adds Codex CLI and Hermes providers",
-				"Runtime hosts multiple providers simultaneously",
-				"419 tests reported passing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:55.886Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-1637616237",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7015,75 +5216,6 @@
 			"scoredAt": "2026-08-31T22:27:54.178Z"
 		},
 		{
-			"key": "issue:pixel-agents#380",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#380 [Bug]: Named sub-agents (Teammates) don't get their own seat, contradicting documented behavior",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/380",
-			"sourceUpdatedAt": "2026-08-30T07:15:21Z",
-			"sourceFingerprint": "505af8ba0773b37173b7c07b944cdc212faf0bfcc511dfc6de03459edf29d1c3",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:pixel-agents#272",
-				"issue:pixel-agents#379"
-			],
-			"rationale": "Use this documented named-versus-unnamed distinction as the behavioral anchor for a consolidated sub-agent placement and label-legibility goal.",
-			"evidence": [
-				"Named sub-agents cluster despite free seats.",
-				"CLAUDE.md reportedly says teammates receive their own seated character.",
-				"Three parallel named agents reproduce overlapping labels."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:40:17.097Z"
-		},
-		{
-			"key": "issue:pixel-agents#381",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#381 Standalone CLI derives wrong agent labels from the encoded project dir",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/381",
-			"sourceUpdatedAt": "2026-08-07T07:09:07Z",
-			"sourceFingerprint": "7c9c63eba590c699df8116fbaed29857b886f84493a4ab4eca16b81c26c3c805",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The standalone label resolver has a precisely diagnosed lossy fallback and a bounded source of authoritative folder names.",
-			"evidence": [
-				"Encoded directory names replace both separators and underscores with hyphens.",
-				"Several unrelated sessions can receive the same final-segment label.",
-				"Transcript records contain the real cwd needed for a correct basename."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:40:17.097Z"
-		},
-		{
 			"key": "pr:minion-base#45",
 			"kind": "pr",
 			"stage": "development",
@@ -7148,40 +5280,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:33:08.870Z"
-		},
-		{
-			"key": "pr:paperclip#12682",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12682 Improve native runner recovery and workspace controls",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12682",
-			"sourceUpdatedAt": "2026-09-01T20:02:10Z",
-			"sourceFingerprint": "37a05dc374ed18154f5cfcec86cdef806645b662d08d226b3f1a6f6d0b6e7106",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:paperclip#12693"
-			],
-			"rationale": "Cross-cutting runner-recovery PR that also claims to add a shared workspace-selection module and gated properties-pane picker, duplicating #12693's stated scope.",
-			"evidence": [
-				"\"Added a shared issue workspace selection module\"",
-				"\"Added a gated two-step workspace picker to the task properties pane\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T20:28:19.924Z"
 		},
 		{
 			"key": "proposal:2026-08-29-proposal-index-projection-parity-untested",
@@ -7320,105 +5418,6 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
-			"key": "issue:paperclip#12697",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12697 Remote MCP session detection only retries on HTTP 400, so servers that answer 404 never connect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12697",
-			"sourceUpdatedAt": "2026-09-01T23:04:58Z",
-			"sourceFingerprint": "33c3f9611f6fa17bdadfa463bdbcb40f0a016f300789573d23ecaa1f42ed1ffb",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Precisely diagnosed bug with exact code location and concrete repro showing MCP servers returning 404 never get session detection, with clear candidate fixes ready to implement.",
-			"evidence": [
-				"detection only retries on response.status === 400 in tool-access.ts",
-				"curl repro shows mark3labs/mcp-go server returns 404 Invalid session ID, not 400",
-				"issue proposes three concrete fix options plus a tool-gateway.ts recovery path"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T23:27:49.716Z"
-		},
-		{
-			"key": "pr:pixel-agents#246",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#246 feat: adopt @minion-stack shared configs + env files",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/246",
-			"sourceUpdatedAt": "2026-05-30T23:13:00Z",
-			"sourceFingerprint": "d42f330f7a903e16288cbe1841418956afd2401d48e53545c9946da0a355061f",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Shared configuration adoption improves fleet consistency and is locally verified, while remaining CI and secret checks provide a clear bounded path to completion.",
-			"evidence": [
-				"The PR adopts @minion-stack TypeScript and lint configurations.",
-				"Local type, lint, format, and compile checks passed.",
-				"CI gates and the no-secrets check remain unchecked."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:42.200Z"
-		},
-		{
-			"key": "pr:pixel-agents#335",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#335 feat: add basic Codex hook provider (presence + turn-end + Bash events)",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/335",
-			"sourceUpdatedAt": "2026-07-10T19:39:28Z",
-			"sourceFingerprint": "15406cde2eb4ff5e36478b327e75a2c5419b2b6f6152eed744c26a562b86e002",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because minimal Codex presence is strategically central to multi-provider support and the additive integration has strong test and smoke-test evidence.",
-			"evidence": [
-				"Codex support covers presence, turn-end, and Bash events.",
-				"The full server suite reports 227 passing tests.",
-				"The installer was tested against existing hooks and preserved them."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:18.083Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-msteams-large-upload",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7555,39 +5554,6 @@
 			"scoredAt": "2026-08-31T07:42:55.201Z"
 		},
 		{
-			"key": "issue:paperclip#12664",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12664 No agent-writable field on the heartbeat run record",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12664",
-			"sourceUpdatedAt": "2026-09-01T13:54:04Z",
-			"sourceFingerprint": "bacd635192559e2f6b98be4b13dc3d32363617f5670af2b87fca29855a04e1ed",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The verified API gap weakens heartbeat trust diagnostics and has a concrete, testable scope, although the catalog shows no outage, deadline, or blocked release requiring urgent delivery.",
-			"evidence": [
-				"Agents cannot attach structured annotations or health signals to their heartbeat run.",
-				"The gap was verified in server versions 2026.817.0 and 2026.824.0.",
-				"Existing adjacent surfaces are read-only, board-only, or written only during harness finalization."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T13:57:39.021Z"
-		},
-		{
 			"key": "pr:minion (gateway)#262",
 			"kind": "pr",
 			"stage": "development",
@@ -7619,39 +5585,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:58.286Z"
-		},
-		{
-			"key": "pr:pixel-agents#396",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#396 fix: agentSelected canvas fix + deselect + headless override",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/396",
-			"sourceUpdatedAt": "2026-08-24T20:58:34Z",
-			"sourceFingerprint": "d9a852575145c11bc8bd58ca9c2124248dcebaba7a0d075a923f19e4686f64dc",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The protocol and selection fixes are bounded, tested, and useful to a production consumer, though no outage or deadline is evidenced.",
-			"evidence": [
-				"A production third-party consumer uses this protocol.",
-				"The change adds race-safe deselection and explicit headless overrides.",
-				"Type, lint, webview, and targeted E2E checks passed; live integration verification remains pending."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
@@ -7852,142 +5785,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:43:57.675Z"
-		},
-		{
-			"key": "issue:paperclip#12680",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12680 Issue can be blocked on an unblock condition only its own assignee can satisfy (deadlock, undetected)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12680",
-			"sourceUpdatedAt": "2026-09-01T18:20:43Z",
-			"sourceFingerprint": "671125a503bbd8eeb677bccc236bae6b8f574b308a7aca8f2f6dc6aa4f858297",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Real deadlock pattern in autonomous operation with clear repro and two proposed fixes, but impact is currently mitigated by an authoring rule and not yet re-verified on the current release.",
-			"evidence": [
-				"observed on commit 19be4cf92 (2026-08-07), not re-verified on newer tag v2026.824.1",
-				"mitigated via authoring rule 'never block an issue on its own assignee'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T18:27:31.061Z"
-		},
-		{
-			"key": "issue:paperclip#12688",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12688 Agent stuck in status:error on stale worktree (workspace_validation_failed / git_worktree_not_reusable)",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12688",
-			"sourceUpdatedAt": "2026-09-01T19:58:08Z",
-			"sourceFingerprint": "aa9566b010bedbf5f74132e562d3997a37de5ce25956157bfaa64accbbb3bf70",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Recurring stale-worktree failure requiring manual agent resume, with a clear, bounded ask for auto re-provisioning on a known error code.",
-			"evidence": [
-				"\"Hit twice today (2026-09-01) on the Watchdog agent\"",
-				"\"errorCode: workspace_validation_failed is a known/tested code path\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T20:28:19.924Z"
-		},
-		{
-			"key": "pr:pixel-agents#389",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#389 feat(server): add web (REST) hook provider",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/389",
-			"sourceUpdatedAt": "2026-08-14T20:53:09Z",
-			"sourceFingerprint": "8eebd54646fd36a8fbd1989604f60c27063a3b364bcf247648c89c3bea7a4a03",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:pixel-agents#388",
-				"pr:pixel-agents#383"
-			],
-			"rationale": "The REST provider has broad integration potential but is explicitly stacked on the provider-routing change and belongs in the same multi-provider goal.",
-			"evidence": [
-				"Explicitly stacked on #388",
-				"Allows agents to be driven by HTTP",
-				"Includes real-browser lifecycle coverage"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:55.886Z"
-		},
-		{
-			"key": "pr:pixel-agents#394",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#394 Add VS Code Copilot OTel provider",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/394",
-			"sourceUpdatedAt": "2026-08-17T13:23:46Z",
-			"sourceFingerprint": "0ed9979696d21d397c273b1ececcf9e8e7985ccbd425da4d6465f871e16d33af",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:pixel-agents#383",
-				"pr:pixel-agents#388"
-			],
-			"rationale": "Copilot support expands provider reach but relies on the shared multi-provider runtime and lacks full end-to-end verification, so it fits the consolidated provider goal.",
-			"evidence": [
-				"Adds vscode-copilot OTel provider",
-				"Reuses existing multi-provider paths",
-				"Full Playwright suite was not run"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:55.886Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-781446196",
@@ -8283,38 +6080,6 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:paperclip#12669",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12669 Add end-to-end session goals to Paperclip Runner",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12669",
-			"sourceUpdatedAt": "2026-09-01T19:11:49Z",
-			"sourceFingerprint": "5a79379746ddab6532bd35e52f7be8d690639412b4d7da2ec17a0a0c50d82bad",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-specified cross-cutting feature with extensive layered test verification and a documented manual acceptance pass.",
-			"evidence": [
-				"Thinking path states roadmap alignment and rejected alternatives",
-				"Verification lists TypeScript, Rust, and vitest suites plus browser acceptance run"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T19:27:42.888Z"
-		},
-		{
 			"key": "proposal:2026-08-30-site-page-max-shared-token",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8414,14 +6179,14 @@
 			"scoredAt": "2026-08-31T07:38:21.867Z"
 		},
 		{
-			"key": "issue:paperclip#12687",
-			"kind": "issue",
+			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
+			"kind": "proposal",
 			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12687 issue write-denial code (denyIssueWrite) is never logged server-side",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12687",
-			"sourceUpdatedAt": "2026-09-01T19:57:59Z",
-			"sourceFingerprint": "f68d5b33dd1deb6e54b809b5e5448bb7398452489be72affec1aea5224818b53",
+			"repo": "minion-meta",
+			"title": "Infisical secret cache stored plaintext on disk (0600 only)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-17-pkg-infisical-cache-plaintext.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "a3e91af04253a3e0c05aedb9f102e14e27e0dbf330b09e0738d22ec6b623b92c",
 			"score": 43,
 			"band": "low",
 			"axes": {
@@ -8430,121 +6195,21 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 8
+				"specification": 6,
+				"implementation": 2
 			},
-			"confidence": 8,
+			"confidence": 5,
 			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:paperclip#12689"
-			],
-			"rationale": "The exact fix this issue requests (logging code/issueId/actorAgentId/runId in denyIssueWrite) is already implemented and tested in open PR #12689 within this same batch.",
-			"evidence": [
-				"\"Adds a logger.warn call with code, issueId, actorAgentId, runId\" (12689)",
-				"\"Fixes #12687\" (12689)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T20:28:19.924Z"
-		},
-		{
-			"key": "pr:paperclip#12689",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12689 Log issue write denial code, issueId, actorAgentId, runId",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12689",
-			"sourceUpdatedAt": "2026-09-01T23:30:05Z",
-			"sourceFingerprint": "99f777332bd817d9461ec478f2026792a06a2e94d39c7898c77826343d0b7b3d",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Small, well-verified, additive logging fix directly addresses a measured diagnosability gap that stranded ~10 issues over three days.",
+			"rationale": "The problem this proposal raised has already advanced into an approved spec and an active dev PR, making the proposal-stage item redundant.",
 			"evidence": [
-				"about ten issues stranded this way over three days",
-				"denyIssueWrite never wrote the denial code to logs before this change",
-				"targeted server route suite passes with new log-field test"
+				"status: in-spec",
+				"companion spec 2026-08-17-pkg-infisical-cache-plaintext-spec is approved",
+				"S1 already merged per handoff note, S3 in progress via pr:minion-meta#369"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T23:57:55.908Z"
-		},
-		{
-			"key": "pr:paperclip#12698",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12698 fix: add fail-closed branch freshness status",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12698",
-			"sourceUpdatedAt": "2026-09-02T00:18:34Z",
-			"sourceFingerprint": "a420d8f151c8424b3bafc27e23113ccab1de308810bf4991c0f1bb4c251850d0",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Adds a useful fail-closed branch-freshness CI status but requires manual admin ruleset changes to take effect and has unrelated pre-existing test failures noted.",
-			"evidence": [
-				"status producer does not enforce itself; admin must add to protected ruleset",
-				"2,799 passing tests with 21 pre-existing failures unrelated to change",
-				"139 focused tests passed for new workflow logic"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T00:27:24.253Z"
-		},
-		{
-			"key": "pr:pixel-agents#293",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#293 fix: furniture pick tool duplicates items instead of moving them",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/293",
-			"sourceUpdatedAt": "2026-06-03T12:15:20Z",
-			"sourceFingerprint": "ae6c99f3b00265422d4f6f7fd7807ed74959f250885237cf31b9c13bd32b54f9",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because this bounded editor bug violates expected move semantics and has strong automated and manual verification.",
-			"evidence": [
-				"Pick currently duplicates furniture instead of moving it.",
-				"New tests cover identity, overlap, walls, void, and bounds.",
-				"Lint, build, and tests pass."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:18.083Z"
+			"scoredAt": "2026-09-02T08:49:50.360Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-be019c6",
@@ -8611,39 +6276,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-02T07:38:39.357Z"
-		},
-		{
-			"key": "pr:pixel-agents#327",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#327 feat: add OpenCode provider via webhook adapter",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/327",
-			"sourceUpdatedAt": "2026-08-03T17:58:58Z",
-			"sourceFingerprint": "9d09c90b218f49af28545b61aa9efd104a2d3f42003d9d26442df94f5e9eb693",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because the bounded provider integration closes a stated issue, expands runtime coverage, and has focused automated plus manual evidence.",
-			"evidence": [
-				"The change adds OpenCode session visualization alongside Claude Code.",
-				"Twenty-three provider tests pass.",
-				"Manual webhook testing produced an agent in the standalone UI."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:18.083Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-brain-org-all-scope",
@@ -8858,78 +6490,6 @@
 			"scoredAt": "2026-08-31T07:38:58.989Z"
 		},
 		{
-			"key": "issue:pixel-agents#272",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#272 [Bug]: Agent Labels Overlap and Become Unreadable When Multiple Agents Are Close Together",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/272",
-			"sourceUpdatedAt": "2026-05-21T14:12:45Z",
-			"sourceFingerprint": "1ccc7d3600572d8ee80d596cba622e0a10fd4b7adba923d77790823c01ff3f35",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:pixel-agents#379",
-				"issue:pixel-agents#380"
-			],
-			"rationale": "Combine the overlapping crowding, seat-assignment, and unreadable-label reports into one goal covering sub-agent placement behavior.",
-			"evidence": [
-				"New subagents appear in the same location or chair area.",
-				"Labels overlap and become unreadable.",
-				"The report includes reproduction steps and expected repositioning."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:40:17.097Z"
-		},
-		{
-			"key": "issue:pixel-agents#379",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#379 [Bug]: Sub Agents create Crowd near Main Agents",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/379",
-			"sourceUpdatedAt": "2026-08-06T10:19:32Z",
-			"sourceFingerprint": "92c93eb710522d3f77e89b1c6cee678ff44b5606959cb0d3c53651ddeb07dc09",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:pixel-agents#272",
-				"issue:pixel-agents#380"
-			],
-			"rationale": "This crowding report describes the same placement failure as the more detailed seating and label-overlap candidates and should be resolved through one coherent goal.",
-			"evidence": [
-				"Subagents crowd near the main agent rather than using desks.",
-				"The reporter observed it 7 out of 10 times.",
-				"The report concerns standalone mode on macOS."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:40:17.097Z"
-		},
-		{
 			"key": "pr:minion (gateway)#256",
 			"kind": "pr",
 			"stage": "development",
@@ -9029,39 +6589,6 @@
 			"scoredAt": "2026-08-31T07:31:58.286Z"
 		},
 		{
-			"key": "pr:pixel-agents#356",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#356 feat: add --token/t CLI option for static auth token",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/356",
-			"sourceUpdatedAt": "2026-07-26T18:47:46Z",
-			"sourceFingerprint": "b130753069dc42cb0ebe5c85e48eab860328d374dba2d2777305a8c679a361bc",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because stable authentication directly enables persistent integrations and the change is small, backward-compatible, and unit-tested.",
-			"evidence": [
-				"Random UUID generation remains the default.",
-				"Custom tokens support clients that survive server restarts.",
-				"Tests cover usage, validation, missing values, and server wiring."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:18.083Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-1480236091",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9123,42 +6650,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-02T07:16:17.534Z"
-		},
-		{
-			"key": "pr:pixel-agents#390",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#390 feat(server): add Hermes HookProvider adapter",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/390",
-			"sourceUpdatedAt": "2026-08-29T01:10:58Z",
-			"sourceFingerprint": "d1aa51c09ef601911d5ddb0ee7c39c564ed418842ef6a292fe1db1ee26dd10ad",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 8,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"pr:pixel-agents#383",
-				"pr:pixel-agents#388"
-			],
-			"rationale": "The Hermes problem is real, but an adapter that explicitly omits provider-selection wiring cannot yet deliver the stated user outcome and overlaps the broader provider implementation.",
-			"evidence": [
-				"Adds Hermes normalization and hook installation",
-				"Provider selection wiring is a follow-up",
-				"No Hermes permissionRequest event exists"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:55.886Z"
 		},
 		{
 			"key": "issue:minion-meta#327",
@@ -9358,39 +6849,6 @@
 			"scoredAt": "2026-08-31T07:32:33.271Z"
 		},
 		{
-			"key": "pr:pixel-agents#298",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#298 feat: show user-set session names in agent labels",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/298",
-			"sourceUpdatedAt": "2026-06-04T08:07:37Z",
-			"sourceFingerprint": "f92eea8a39f8576adbd9b1cf23d389d548699edae7ea9168bd5bf31c92e5b66c",
-			"score": 37,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because session-name propagation addresses recurring ambiguity across same-folder sessions and is comprehensively specified and tested.",
-			"evidence": [
-				"Same-folder sessions are currently hard to distinguish.",
-				"Names propagate live, persist across restarts, and reach fresh clients.",
-				"Parser tests and manual end-to-end checks are reported."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:18.083Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-personal-agent-entrypoint-test",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9455,71 +6913,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
-		},
-		{
-			"key": "issue:paperclip#12701",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12701 Agent `capabilities` renders with platform authority but is unvalidated self-description",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12701",
-			"sourceUpdatedAt": "2026-09-01T22:13:12Z",
-			"sourceFingerprint": "fe67a01fae7df8e9e597ff623c07014d71eb8b742b28acf1f66ced9d54696846",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A cheap UI labeling fix addresses a documented incident where an unverified self-described field was mistaken for a platform-verified fact.",
-			"evidence": [
-				"sandbox claim was false for two weeks and believed due to lack of labeling",
-				"proposal is a minimal inline caption, near-zero cost"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T22:27:27.275Z"
-		},
-		{
-			"key": "pr:pixel-agents#374",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#374 chore(deps): bump actions/cache from 5 to 6",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/374",
-			"sourceUpdatedAt": "2026-08-03T15:25:17Z",
-			"sourceFingerprint": "a657c5f1619a3c22c52e591b0e09858196e1a43518028eb1007c6f7e4e9fc169",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A major-version cache action update has moderate CI-wide value, though the catalog provides no project-specific compatibility results.",
-			"evidence": [
-				"Bumps actions/cache from 5 to 6",
-				"Version 6 migrates to ESM",
-				"Release history includes security patches"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:55.886Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-3238987400",
@@ -9590,237 +6983,6 @@
 			"scoredAt": "2026-09-02T00:58:16.105Z"
 		},
 		{
-			"key": "issue:pixel-agents#278",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#278 Desktop fork (Tauri) — would you be open to a chat?",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/278",
-			"sourceUpdatedAt": "2026-05-22T06:30:24Z",
-			"sourceFingerprint": "cbd97525988360a0105a98ffa9d71005596057ad59cf7b8fa0da8a993ddbe4f6",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The desktop fork could broaden the product, but accepting, co-maintaining, or declining it requires an unresolved strategic ownership decision.",
-			"evidence": [
-				"A working Tauri v2 Windows fork and public release are linked.",
-				"The author proposes three mutually exclusive maintenance models.",
-				"The fork reportedly includes 34 Rust tests and a native installer."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:40:17.097Z"
-		},
-		{
-			"key": "pr:pixel-agents#310",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#310 feat: show all Claude projects as dormant characters in the office",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/310",
-			"sourceUpdatedAt": "2026-06-19T17:04:13Z",
-			"sourceFingerprint": "353e355154c65b612311b36c8920839a2b6fe72470b04ef50bb0da51f1576eec",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate after validating privacy, scale, and lifecycle behavior because the broad dormant-project feature is well described but its entire test plan is unchecked.",
-			"evidence": [
-				"It scans all projects under ~/.claude/projects/.",
-				"Dormant projects are capped at 20 and watched for live updates.",
-				"Every listed test-plan item is unchecked."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:18.083Z"
-		},
-		{
-			"key": "pr:pixel-agents#393",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#393 feat: walk agents to an office task board and bind the panel to selection",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/393",
-			"sourceUpdatedAt": "2026-08-16T15:19:39Z",
-			"sourceFingerprint": "021ded6049cb2aef6db37c9caa153053c52ab36ce25496e3069af9e0929990d1",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This is a well-specified, substantially tested user-facing enhancement with moderate product impact but little urgency or dependency centrality.",
-			"evidence": [
-				"Agents walk to a task whiteboard",
-				"Selection controls the displayed board",
-				"Full E2E reported 98 passed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:55.886Z"
-		},
-		{
-			"key": "issue:pixel-agents#253",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#253 Misleading \"Possible format issue\" UI for tail-only sessions and sessions with large user lines",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/253",
-			"sourceUpdatedAt": "2026-04-26T12:07:28Z",
-			"sourceFingerprint": "1467cbc6bc6bd7339bdd48d130b195d43e7fc691ca88d523f0ac8c6656b3900d",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute as a small, well-specified correctness fix because normal tailing and large-line buffering are mislabeled as corruption and the report provides concrete state-aware replacement behavior.",
-			"evidence": [
-				"The warning condition is linesProcessed equals zero while fileSize is positive.",
-				"Tail-only initialization starts at the existing file size, leaving valid inactive sessions at zero parsed lines.",
-				"Large JSONL lines can buffer for minutes before the first newline at the stated read rate."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:39:38.888Z"
-		},
-		{
-			"key": "issue:pixel-agents#286",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#286 [Feature]: More noticeable permission alert — jump animation + exclamation bubble + face camera",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/286",
-			"sourceUpdatedAt": "2026-05-31T16:42:55Z",
-			"sourceFingerprint": "5bcaaa92103e1be9bc58509f4ee45e4a28fab6cf0ca4a92f14b20dd60edb97ae",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This is a bounded usability improvement with a working prototype, named code touchpoints, and clear observable behavior.",
-			"evidence": [
-				"The current permission indicator is described as easy to miss.",
-				"A working prototype already exists.",
-				"The requested animation, direction behavior, assets, and constants are specified."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:40:17.097Z"
-		},
-		{
-			"key": "issue:pixel-agents#398",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#398 Feature request: custom display names for agents (override folder name)",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/398",
-			"sourceUpdatedAt": "2026-08-26T06:22:27Z",
-			"sourceFingerprint": "1d1f84645eb2b39e547fb23b7dffa071d4e05d29075be50d5fe8f1190babd241",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Custom naming addresses a real multi-session identification need, but the mapping scope, persistence model, precedence, and rename interface remain undecided.",
-			"evidence": [
-				"Sessions in the same repository currently share one folder label.",
-				"The request proposes either a mapping file or a rename affordance.",
-				"A local names.json patch reportedly demonstrates feasibility."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:40:17.097Z"
-		},
-		{
-			"key": "pr:pixel-agents#402",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#402 chore(deps): bump the minor-and-patch group across 1 directory with 22 updates",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/402",
-			"sourceUpdatedAt": "2026-08-31T15:28:57Z",
-			"sourceFingerprint": "deb0417f3b37431c9a530d84c3c2218ff49511084acda0de998ae8aaa17fbb51",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The grouped dependency refresh has moderate maintenance reach but needs compatibility and test evidence before paid execution is clearly justified.",
-			"evidence": [
-				"The update changes 21 listed packages.",
-				"It includes runtime, build, lint, test, and type packages.",
-				"No repository verification result is provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T15:55:06.484Z"
-		},
-		{
 			"key": "proposal:2026-08-22-crm-rank-query-prod-latency",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9852,72 +7014,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:42:55.201Z"
-		},
-		{
-			"key": "issue:paperclip#12702",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12702 Auto-retire pending agent-created approval cards when every linked issue is terminal",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12702",
-			"sourceUpdatedAt": "2026-09-01T22:42:03Z",
-			"sourceFingerprint": "dbc7091172cdb7f3acc3f1d9555eadc1c95a1d173eedaa0e9c87b915b8a8354e",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A clearly specified but unimplemented proposal to auto-retire dead approval cards, whose own data shows only single-digit queue counts so far.",
-			"evidence": [
-				"8 pending cards on 2026-08-17 growing to 15 a week later with 4 dead",
-				"proposed solution reuses existing status/ownership fields with no migration needed",
-				"no code changes yet, proposal stage only"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T22:57:52.252Z"
-		},
-		{
-			"key": "issue:paperclip#12703",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12703 OpenAPI actor annotations are inverted for the interaction withdraw and cancel routes",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12703",
-			"sourceUpdatedAt": "2026-09-01T22:48:19Z",
-			"sourceFingerprint": "e9be51e22d819fc6f24ecaeba7aaf863bb5a871dc4e896431a6d54e1341f14d7",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A precisely located, trivially fixable spec/guard mismatch that has already caused agents to write incorrect operating instructions.",
-			"evidence": [
-				"exact line and allowlist entries identified in BOARD_ONLY_OPERATIONS",
-				"agents concluded no agent-side withdraw path existed for weeks after it shipped",
-				"same drift class as prior issues #11946 and #12411"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T22:57:52.252Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-3389264281",
@@ -10046,39 +7142,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T20:58:04.154Z"
-		},
-		{
-			"key": "pr:pixel-agents#367",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#367 feat: use Claude session name for the agent label",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/367",
-			"sourceUpdatedAt": "2026-07-28T10:34:07Z",
-			"sourceFingerprint": "d61fae372427524a194671239bd4cd0300af077935927e19c0d1ebf4b0b6d665",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This is a bounded usability improvement with strong verification and low urgency, making it actionable but not strategically central.",
-			"evidence": [
-				"Session name falls back to folder name",
-				"Additive optional protocol change",
-				"321 unit tests reported passing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:55.886Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
@@ -10312,39 +7375,6 @@
 			"scoredAt": "2026-09-02T06:33:08.824Z"
 		},
 		{
-			"key": "pr:pixel-agents#373",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#373 chore(deps): bump schneegans/dynamic-badges-action from 1.8.0 to 1.9.0",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/373",
-			"sourceUpdatedAt": "2026-08-03T15:24:56Z",
-			"sourceFingerprint": "2bc7368375fe5491abc953e8a4f76f90404912db0cf2babc1b9792ce8328d11c",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The small dependency update addresses badge-workflow compatibility and timing reliability with a narrow, actionable scope.",
-			"evidence": [
-				"Bumps action from 1.8.0 to 1.9.0",
-				"Updates gist API conventions",
-				"Reduces timing-related failures"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:55.886Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-2222130690",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10374,6 +7404,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-02T00:58:57.715Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1d40d9a77164ea3461884f1a4e56296e94305a4c",
+			"sourceUpdatedAt": "2026-08-30T23:26:06Z",
+			"sourceFingerprint": "87059168be0433dabf795cb5c55e379712a0972b390a21d889eae2dd3423bfe4",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a snapshot of an already-merged CI/platform-validation commit with no open task to execute.",
+			"evidence": [
+				"summary describes merged commits: 'fix(ci): close remaining platform validation gaps'",
+				"status: unknown, updatedAt 2026-08-30"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T08:49:50.360Z"
 		},
 		{
 			"key": "pr:minion_hub#207",
@@ -10407,109 +7469,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:32:33.271Z"
-		},
-		{
-			"key": "pr:pixel-agents#232",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#232 feat: pixel art tool badges above agent characters",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/232",
-			"sourceUpdatedAt": "2026-05-12T12:21:34Z",
-			"sourceFingerprint": "568943b0e70b0064aa1ddb3a3a0a83fefd11e78252a59410726cde9a475e6dcc",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:pixel-agents#248"
-			],
-			"rationale": "Tool badges and skill-invocation visualization address the same agent-activity observability surface and should become one coherent status-visualization goal.",
-			"evidence": [
-				"Badges show the currently running tool above each character.",
-				"The change also fixes Glob, Grep, and WebSearch status mapping.",
-				"The manual test plan is not checked off."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:42.200Z"
-		},
-		{
-			"key": "pr:pixel-agents#248",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#248 feat: visualize Skill invocations on agent characters",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/248",
-			"sourceUpdatedAt": "2026-05-02T18:39:50Z",
-			"sourceFingerprint": "5d45830312fcc175d83a3cc12dc81068a9a2cab82804d97c01dd4abdabfb3329",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:pixel-agents#232"
-			],
-			"rationale": "Skill-state visualization overlaps directly with general tool badges and should be delivered through one consistent activity-state model and visual-priority contract.",
-			"evidence": [
-				"Synthetic skill events prevent agents from appearing idle during slash-command skills.",
-				"The skill indicator persists across internal tool calls.",
-				"All 143 tests passed, including six new parser tests."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:42.200Z"
-		},
-		{
-			"key": "pr:pixel-agents#250",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#250 feat: add token counter overlay",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/250",
-			"sourceUpdatedAt": "2026-04-24T20:26:51Z",
-			"sourceFingerprint": "1fd5a6c23c8e81dc71ea1bc5b93dfec902302f7a3ffcd7bfb65c06cf4f98b1c6",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The token overlay is well tested and useful for context awareness, but the catalog provides no evidence of a reliability problem, dependency, or deadline that raises it above optional product work.",
-			"evidence": [
-				"The overlay aggregates input and output tokens across active agents.",
-				"It uses context-fill thresholds and is toggleable through persisted settings.",
-				"The stated manual checks, build, and tests passed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:42.200Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-igv-rate-from-org-config",
@@ -10611,138 +7570,6 @@
 			"scoredAt": "2026-08-31T07:31:58.286Z"
 		},
 		{
-			"key": "pr:paperclip#12658",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12658 test(server): remove duplicated workspace-runtime pnpm provisioning test",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12658",
-			"sourceUpdatedAt": "2026-09-01T11:37:11Z",
-			"sourceFingerprint": "51e9b2d03f3096c93d988f2cf0f739c47ff20c06f0ceade272a6235eb54186f1",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 10
-			},
-			"confidence": 10,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute as a low-priority, low-risk cleanup because it removes a duplicated heavy CI fixture without reducing coverage.",
-			"evidence": [
-				"The same provisioning test appears twice with only timeout values differing.",
-				"The shorter-timeout copy runs a real pnpm install and is more flake-prone.",
-				"The change is a pure deletion and the retained copy passes."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T11:57:41.955Z"
-		},
-		{
-			"key": "pr:paperclip#12693",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12693 Add task workspace picker to properties pane",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12693",
-			"sourceUpdatedAt": "2026-09-01T20:32:40Z",
-			"sourceFingerprint": "af08ef8d7863eb95e7f26f2fa8779830a68aaf7f58dc9a6969676484f412ece5",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, gated, low-risk UI addition with passing focused tests and no API change.",
-			"evidence": [
-				"67 unit/component tests passed",
-				"picker shown only when isolated workspaces + project policy flags enabled",
-				"shared helper extracted to avoid duplicate selection logic"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T20:58:04.154Z"
-		},
-		{
-			"key": "pr:paperclip#12711",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12711 test(tool-access): cover archived pasted-link app recovery on re-connect",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12711",
-			"sourceUpdatedAt": "2026-09-02T07:03:41Z",
-			"sourceFingerprint": "b160951ce50b77ab5af5c0d947353bd8b6dbcbcd2d52c9899251c95e3c8423e1",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Low-risk, test-only PR that closes a verified regression-coverage gap and is confirmed to catch the original bug on revert.",
-			"evidence": [
-				"test-only PR, no source file changes",
-				"All 210 tests pass",
-				"fails with duplicate-key error when the fix is reverted"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T07:06:05.275Z"
-		},
-		{
-			"key": "pr:pixel-agents#294",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#294 feat: add delete button for selected furniture",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/294",
-			"sourceUpdatedAt": "2026-06-03T12:15:45Z",
-			"sourceFingerprint": "fa8f702e48833317757d46d873fc9a012a6bce4a7699f2b092c5d5894741bbec",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate because the discoverability improvement is actionable but has limited consequence and breadth compared with reliability work.",
-			"evidence": [
-				"Furniture can already be deleted by canvas control or keyboard.",
-				"The change adds a toolbar Delete button and enlarges canvas controls.",
-				"Lint, build, and tests pass."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:18.083Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-1883922325",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10773,72 +7600,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-02T00:58:57.715Z"
-		},
-		{
-			"key": "pr:pixel-agents#284",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#284 feat: org roles & departments with webview profile display",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/284",
-			"sourceUpdatedAt": "2026-05-23T08:33:06Z",
-			"sourceFingerprint": "f5001b4255116e4be660f5724a1389d78dfbf849e05c53679bfc53243dc01d5c",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Agent identity visibility could help users, but fixed boss identity and randomly assigned departments and duties do not reliably represent actual organizational state.",
-			"evidence": [
-				"The main session is assigned a fixed Sakura CEO identity and appearance.",
-				"Teammates are randomly assigned among six departments.",
-				"Name, role, department, palette, and hue are persisted and displayed."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:42.200Z"
-		},
-		{
-			"key": "pr:pixel-agents#395",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#395 Adrian's custom Pixel Agents setup: lounge and bigger-office fork cha…",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/395",
-			"sourceUpdatedAt": "2026-08-19T08:17:25Z",
-			"sourceFingerprint": "93409384c2b87a369dab9c56c9a9cbb15fbbe6db73c92bf335f4935cf556f763",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 9,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The custom office concept may be useful, but the contribution is explicitly an unfinished personal customization without evidence or a merge-verifiable outcome.",
-			"evidence": [
-				"Described as a personal customization",
-				"No screenshot is attached",
-				"Manual smoke test is unconfirmed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:55.886Z"
 		},
 		{
 			"key": "proposal:2026-08-29-proposal-index-check-mode-and-effort-projection",
@@ -10935,72 +7696,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-02T06:56:49.490Z"
-		},
-		{
-			"key": "issue:pixel-agents#263",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "pixel-agents",
-			"title": "#263 [Feature]: Custom character sprite packs via user-level override folder",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/issues/263",
-			"sourceUpdatedAt": "2026-05-12T14:11:30Z",
-			"sourceFingerprint": "b31ea8f3944d550b170531656bfad23d89bb0230e7f430317d011a62b3903f05",
-			"score": 21,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate against product priorities because the override design is actionable and non-breaking but addresses optional personalization rather than reliability or a blocked workflow.",
-			"evidence": [
-				"Customized bundled sprites are overwritten by releases.",
-				"The proposal defines a spritesPath setting with per-file fallback to bundled assets.",
-				"The reporter explicitly describes the feature as a nice to have."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:39:38.888Z"
-		},
-		{
-			"key": "pr:pixel-agents#258",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#258 feat: add RADAR governance visualisation with Vela NPC",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/258",
-			"sourceUpdatedAt": "2026-05-24T08:37:50Z",
-			"sourceFingerprint": "b49126d2b99961622c43c0f331deaecc84dc5004a2afddd5bd84a2b482d25704",
-			"score": 21,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 8,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The underlying governance-observability idea is real, but coupling it to one optional MCP tool, special furniture, an NPC animation, and placeholder assets makes the current outcome too narrow and incomplete.",
-			"evidence": [
-				"The feature activates specifically for mcp__radar__radar_assess.",
-				"Without a radar_desk or the RADAR MCP package, the feature is dormant.",
-				"The PR is draft, testing is in progress, and two visual assets are placeholders."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:35:42.200Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-workforce-client-json-error",
@@ -11108,6 +7803,38 @@
 			"scoredAt": "2026-08-31T07:37:34.863Z"
 		},
 		{
+			"key": "run:minion (gateway)#32376839599",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/32376839599",
+			"sourceUpdatedAt": "2026-08-20T20:02:42Z",
+			"sourceFingerprint": "2fb6436d9f9b10f20999c9acb2dc42abd7b6686ea9ac61e5279f40e0cc5f92ad",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A CI failure from 2026-08-20 appears stale and superseded by the later successful platform-validation work merged through 2026-08-30.",
+			"evidence": [
+				"status: failure, updatedAt 2026-08-20T20:02:42Z",
+				"later deploy record shows CI platform validation fixes merged through 2026-08-30"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T08:49:50.360Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-1447734948",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11139,72 +7866,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:45:56.597Z"
-		},
-		{
-			"key": "pr:pixel-agents#401",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#401 chore(deps): bump actions/setup-java from 5 to 6",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/401",
-			"sourceUpdatedAt": "2026-08-31T15:26:10Z",
-			"sourceFingerprint": "3f3eac4093d09d2fff9b47433a9f87af4208f77890edce848e3e4ab19a47cfb6",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The CI action upgrade is bounded but the catalog provides no evidence of a current failure, security exposure, deadline, or passed repository verification.",
-			"evidence": [
-				"It upgrades actions/setup-java from 5 to 6.",
-				"The tags identify a GitHub Actions dependency update.",
-				"No repository verification result is provided."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T15:55:06.484Z"
-		},
-		{
-			"key": "pr:pixel-agents#309",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "pixel-agents",
-			"title": "#309 feat: add random chat dialogues to agents",
-			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/pull/309",
-			"sourceUpdatedAt": "2026-07-21T00:53:39Z",
-			"sourceFingerprint": "4cc47ec57b4698e3f70f7b11c275425f1f0f53f35c8b2fca24d7e16e1377594c",
-			"score": 11,
-			"band": "low",
-			"axes": {
-				"criticality": 0,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 8,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reevaluate because this cosmetic idle behavior has no demonstrated dependency or reliability value and lacks complete validation.",
-			"evidence": [
-				"The feature adds random dialogue between nearby idle agents.",
-				"Testing is limited to local UI verification.",
-				"Rebase and remaining test-plan items are unchecked."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:36:18.083Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-2704064834",
