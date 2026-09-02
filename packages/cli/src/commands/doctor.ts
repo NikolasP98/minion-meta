@@ -101,7 +101,15 @@ export async function doctorCommand(json: boolean): Promise<number> {
 export function renderCacheWarning(status: CacheStatus): string {
 	const parts = [`cache:${status.mode}`];
 	if (status.legacyRemoved) parts.push('legacy plaintext cache removed this run');
-	if (status.dirModeLoose) parts.push('config dir permissions were looser than 0700 (now fixed)');
+	if (status.dirSecureFailed) {
+		parts.push(
+			status.dirModeLoose
+				? 'config dir permissions are looser than 0700 and could NOT be secured — fix manually'
+				: 'config dir could not be created/secured — disk caching may be unavailable',
+		);
+	} else if (status.dirModeLoose) {
+		parts.push('config dir permissions were looser than 0700 (now fixed)');
+	}
 	if (status.quarantineDirs.length > 0) {
 		const n = status.quarantineDirs.length;
 		parts.push(`${n} quarantined cache ${n === 1 ? 'object needs' : 'objects need'} review`);

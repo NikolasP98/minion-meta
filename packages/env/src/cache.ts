@@ -839,8 +839,16 @@ export interface CacheStatus {
 	mode: CacheMode;
 	/** Whether this process found and removed a legacy plaintext `infisical-cache.json`. */
 	legacyRemoved: boolean;
-	/** Whether the cache directory had group/other permission bits set before this call sealed it. */
+	/** Whether the cache directory had group/other permission bits set before this call attempted to
+	 *  seal it. This reflects what was OBSERVED, not that it was fixed — check `dirSecureFailed`
+	 *  before treating a `true` here as resolved. */
 	dirModeLoose: boolean;
+	/** True when the cache directory could not be created and/or permission-sealed at all this run
+	 *  (e.g. an invalid or unsecurable config root — a path component that isn't a directory, a
+	 *  read-only parent, a permission-denied chmod). When true, disk caching may be unusable and any
+	 *  `dirModeLoose` finding above was NOT corrected — render this as its own actionable warning,
+	 *  never as "(now fixed)". */
+	dirSecureFailed: boolean;
 	/** Absolute paths of `.infisical-cache-quarantine-*` directories still holding preserved
 	 *  rejected/unauthenticated objects, newest first is not guaranteed — sorted for stable output. */
 	quarantineDirs: string[];
@@ -867,7 +875,10 @@ function listQuarantineDirs(dir: string): string[] {
  * is active and whether something here needs an operator's attention. Performs the same
  * once-per-process initialization the resolve path does (legacy purge, directory sealing) without
  * fetching any secret, so `doctor` reports a truthful `legacyRemoved`/`dirModeLoose` for its own run
- * even when no subproject is cloned and no fetch ever happens.
+ * even when no subproject is cloned and no fetch ever happens. If sealing fails outright (invalid or
+ * unsecurable config root), that is surfaced via `dirSecureFailed` rather than silently folded into
+ * `dirModeLoose: false` — `readCache`/`writeCache` already warn on this path when it matters for a
+ * fetch, but a status probe must not imply "nothing to see" when securing actually failed.
  */
 export function cacheStatus(): CacheStatus {
 	const mode = resolveCacheMode();
@@ -880,17 +891,18 @@ export function cacheStatus(): CacheStatus {
 	} catch {
 		dirModeLoose = false;
 	}
+	let dirSecureFailed = false;
 	try {
 		ensureCacheDirSealed();
 	} catch {
-		/* the directory could not be secured; readCache/writeCache already warn on this path when it
-		 * actually matters for a fetch — a status probe degrades to reporting what it observed above */
+		dirSecureFailed = true;
 	}
 
 	return {
 		mode,
 		legacyRemoved: legacyRemovedThisProcess,
 		dirModeLoose,
+		dirSecureFailed,
 		quarantineDirs: listQuarantineDirs(dir),
 	};
 }

@@ -73,6 +73,7 @@ describe('renderCacheWarning — S3 doctor (meta) row cache probe', () => {
 			mode: 'disk',
 			legacyRemoved: false,
 			dirModeLoose: false,
+			dirSecureFailed: false,
 			quarantineDirs: [],
 			...overrides,
 		};
@@ -108,6 +109,17 @@ describe('renderCacheWarning — S3 doctor (meta) row cache probe', () => {
 				}),
 			),
 		).toBe('cache:disk; 2 quarantined cache objects need review');
+	});
+
+	it('reports an unsecurable config dir distinctly from a fixed one, and never claims it was fixed', () => {
+		expect(renderCacheWarning(status({ dirSecureFailed: true }))).toBe(
+			'cache:disk; config dir could not be created/secured — disk caching may be unavailable',
+		);
+		expect(
+			renderCacheWarning(status({ dirModeLoose: true, dirSecureFailed: true })),
+		).toBe(
+			'cache:disk; config dir permissions are looser than 0700 and could NOT be secured — fix manually',
+		);
 	});
 
 	it('joins every applicable clause when everything needs attention', () => {

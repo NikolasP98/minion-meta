@@ -925,9 +925,16 @@ describe('cache.ts', () => {
 		});
 
 		it('reports dirModeLoose when the config dir had group/other bits set, and seals it', () => {
+			// mkdirSync's requested mode is reduced by the process umask (e.g. 0755 becomes 0700 under
+			// umask 077), which would make this assertion pass or fail depending on the host's umask
+			// without ever exercising the permission-repair path. chmod explicitly afterward so the
+			// fixture's mode is deterministic regardless of umask.
 			fs.mkdirSync(cacheDir(), { recursive: true, mode: 0o755 });
+			fs.chmodSync(cacheDir(), 0o755);
 			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-			expect(cacheStatus().dirModeLoose).toBe(true);
+			const status = cacheStatus();
+			expect(status.dirModeLoose).toBe(true);
+			expect(status.dirSecureFailed).toBe(false);
 			warnSpy.mockRestore();
 			expect(fs.statSync(cacheDir()).mode & 0o777).toBe(0o700);
 		});
@@ -939,13 +946,15 @@ describe('cache.ts', () => {
 			expect(cacheStatus().quarantineDirs).toEqual([quarantine]);
 		});
 
-		it('never throws when the config dir cannot be secured', () => {
+		it('never throws when the config dir cannot be secured, and reports dirSecureFailed instead of a silent false', () => {
 			// A file occupying the would-be config dir path makes mkdirSync/statSync fail.
 			fs.mkdirSync(path.dirname(cacheDir()), { recursive: true });
 			fs.writeFileSync(cacheDir(), 'not a directory');
 			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-			expect(() => cacheStatus()).not.toThrow();
+			let status: ReturnType<typeof cacheStatus> | undefined;
+			expect(() => (status = cacheStatus())).not.toThrow();
 			warnSpy.mockRestore();
+			expect(status?.dirSecureFailed).toBe(true);
 		});
 	});
 });
