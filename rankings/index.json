@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T02:57:27.204Z",
+	"generatedAt": "2026-09-02T03:27:39.629Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -1518,41 +1518,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:31:21.054Z"
-		},
-		{
-			"key": "issue:paperclip#12686",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "paperclip",
-			"title": "#12686 Agent's own terminal-status PATCH returns 403, stranding issues as blocked",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12686",
-			"sourceUpdatedAt": "2026-09-01T19:57:48Z",
-			"sourceFingerprint": "b10b655256e6999c37bdcbafc0a387e4825251aecd47ee7f13e26d6d1a6f3cce",
-			"score": 82,
-			"band": "high",
-			"axes": {
-				"criticality": 9,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"issue:paperclip#12687",
-				"pr:paperclip#12689"
-			],
-			"rationale": "Actively recurring production incident (own-assignee PATCH 403 looping issues into blocked) with a code-level root cause narrowed to the authorization.decide policy path.",
-			"evidence": [
-				"\"~10 incident issues have been stranded this way since 8/31\"",
-				"\"re-stranded by 19:24Z — a repeating loop, not a one-off\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T20:28:19.924Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-orchestration-round7-spec",
@@ -3556,6 +3521,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
+		},
+		{
+			"key": "issue:paperclip#12686",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12686 Agent's own terminal-status PATCH returns 403, stranding issues as blocked",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12686",
+			"sourceUpdatedAt": "2026-09-02T03:16:06Z",
+			"sourceFingerprint": "50842141e25bd97cc0e0cb229f445a01bf0213eb4da41341f2f919b8a0bcbad0",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Confirmed authorization bug repeatedly strands agent-owned issues in a loop and has an actionable exemption fix even without the logging prerequisite.",
+			"evidence": [
+				"~10 incident issues stranded since 8/31",
+				"root cause traced to issues.ts:4098 running before assignee check at 4105",
+				"re-stranded within 14 minutes of manual recovery"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T03:27:39.538Z"
 		},
 		{
 			"key": "pr:paperclip#12634",
@@ -5918,41 +5916,6 @@
 			"scoredAt": "2026-08-31T07:31:23.880Z"
 		},
 		{
-			"key": "pr:paperclip#12699",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12699 feat(runner): add managed provider backends",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12699",
-			"sourceUpdatedAt": "2026-09-02T02:55:08Z",
-			"sourceFingerprint": "bfb7f00bf0d0a3e3835de363ceb76315586c98b45592b6cf0adf006277e9bd01",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:paperclip#12700"
-			],
-			"rationale": "Stacked, well-specified PR adding managed provider backends behind a default-off flag with substantial test verification reported.",
-			"evidence": [
-				"stacked on #12691, which is stacked on #12685",
-				"enableNativeRunner kept default-off",
-				"5,636 of 5,656 tests passed locally"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T02:57:27.114Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-distinct-visit-dates",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7083,6 +7046,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-02T00:58:57.715Z"
+		},
+		{
+			"key": "pr:paperclip#12699",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12699 feat(runner): add managed provider backends",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12699",
+			"sourceUpdatedAt": "2026-09-02T03:09:43Z",
+			"sourceFingerprint": "5bde50666d7ab0e8a453f46c93fdb54788688349c1bf07ff4daf65aac34c7e0f",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-specified, stacked, default-off Runner parity PR with extensive passing test verification is ready to merge.",
+			"evidence": [
+				"156 Rust tests + 5636/5656 full suite passed",
+				"enableNativeRunner kept default-off",
+				"stacked on #12691/#12685"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T03:27:39.538Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3518589653",
@@ -8625,8 +8621,8 @@
 			"repo": "paperclip",
 			"title": "#12709 feat(codex-local): give each Codex account its own home and path secret",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12709",
-			"sourceUpdatedAt": "2026-09-02T02:41:08Z",
-			"sourceFingerprint": "08d97b5bf1dd9b54a7a42d4fcc9724f04d0812e5b65b8a3b8fd386f5e4b425ba",
+			"sourceUpdatedAt": "2026-09-02T03:11:33Z",
+			"sourceFingerprint": "65382e829d515add58ec7e944a6572c5b82929deff98dcd15a6d0a8f11fa02d6",
 			"score": 43,
 			"band": "low",
 			"axes": {
@@ -8636,20 +8632,20 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 8
+				"implementation": 7
 			},
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Small, well-scoped security-reviewed fix enabling multi-account Codex credentials with clear tests and path-traversal safeguards.",
+			"rationale": "Focused, security-reviewed Codex multi-account isolation fix with passing tests is ready pending CI gates.",
 			"evidence": [
-				"security review returned approve with no blocking finding",
-				"strict allowlist and root containment check for account handle",
-				"adapter tests pass: 343 tests"
+				"security review approve, no blocking finding",
+				"343 adapter tests + 25 route tests pass",
+				"CI gates checklist still unchecked"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T02:57:27.114Z"
+			"scoredAt": "2026-09-02T03:27:39.538Z"
 		},
 		{
 			"key": "pr:pixel-agents#293",
