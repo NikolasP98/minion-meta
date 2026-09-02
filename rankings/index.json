@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T01:27:26.646Z",
+	"generatedAt": "2026-09-02T01:57:22.973Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -4871,38 +4871,6 @@
 			"scoredAt": "2026-09-01T19:57:47.791Z"
 		},
 		{
-			"key": "pr:paperclip#12707",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12707 fix(server): reject stale run checkouts",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12707",
-			"sourceUpdatedAt": "2026-09-02T01:23:17Z",
-			"sourceFingerprint": "e404eaf8f91dc6dfca06ac10705fdac223977412c302f3d5e895cfd1d56a3cc8",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Open PR fixes a checkout ownership race that lets stale runs falsely claim issues and then lose ownership mid-review, with reproduction steps and passing regression tests.",
-			"evidence": [
-				"stale-lock sweeper clears ownership before checkout run can attach review policy",
-				"13 and 19 regression tests passed, typecheck passed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T01:27:26.572Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5376,6 +5344,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
+		},
+		{
+			"key": "pr:paperclip#12707",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12707 fix(server): reject stale run checkouts",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12707",
+			"sourceUpdatedAt": "2026-09-02T01:29:08Z",
+			"sourceFingerprint": "c7b1cb1a8ad445e6d99a61d14b6c8f1372dd5fd412296124c277694dce2e2744",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Open PR fixes a checkout ownership race that breaks review handoff, with reproduction steps and passing regression tests.",
+			"evidence": [
+				"Terminal run received 200 checkout then stale-lock cleanup removed ownership causing conflicts",
+				"13+19 tests passed per verification log",
+				"No duplicate public issue or active PR found"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T01:57:22.879Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
