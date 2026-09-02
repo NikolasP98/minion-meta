@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T07:38:39.437Z",
+	"generatedAt": "2026-09-02T08:07:59.867Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -3392,6 +3392,39 @@
 			"scoredAt": "2026-09-02T03:27:39.538Z"
 		},
 		{
+			"key": "pr:minion-meta#247",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#247 feat(env): add machine-sealed cross-process caching",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/247",
+			"sourceUpdatedAt": "2026-09-02T08:02:14Z",
+			"sourceFingerprint": "df301bd0e7b994cf1cab2039eb7e94052bf71ff43417920bee4cbfb71de984fc",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "PR self-reports a concrete high-risk gap (non-Linux hosts and a concurrent key-publication crash window) in a security-relevant cache rewrite, so it should not merge as-is despite otherwise solid focused test evidence.",
+			"evidence": [
+				"Risk Assessment: 'durable cache contract remains violated on non-Linux hosts and during a concrete concurrent key-publication crash window'",
+				"Broad root CI, lint, typecheck, push, PR, and remote CI were intentionally left to the outer pipeline phases",
+				"Replaces legacy plaintext Infisical cache with machine-sealed, immutable cross-process generations"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T08:07:59.787Z"
+		},
+		{
 			"key": "pr:paperclip#12634",
 			"kind": "pr",
 			"stage": "development",
@@ -3593,39 +3626,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:21:50.290Z"
-		},
-		{
-			"key": "pr:minion-meta#247",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#247 feat(env): seal the cross-process secret cache",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/247",
-			"sourceUpdatedAt": "2026-09-02T07:17:34Z",
-			"sourceFingerprint": "a6bcbec341c751a6c25ae55a7158b1761dbb005c937baca46c8639647e9c9ecc",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Draft PR sealing the shared secrets cache self-reports high risk from unresolved crash, PID-reuse, and tamper-generation paths in foundational fleet-wide infra.",
-			"evidence": [
-				"Risk Assessment: 🚨 High: ... leaves concrete crash, PID-reuse, and tampered-generation paths",
-				"status: draft",
-				"6-layer env resolver used by all subprojects"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T07:38:39.357Z"
 		},
 		{
 			"key": "pr:minion-meta#286",
