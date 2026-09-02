@@ -3,7 +3,7 @@ id: 2026-08-29-proposal-index-check-mode-and-effort-projection
 title: proposal-index.mjs — add a read-only --check mode and reconcile projection with the auto-triage index writer
 status: review
 created: 2026-08-29
-updated: 2026-08-29
+updated: 2026-09-02
 repos: [minion-meta]
 tags: [infra, test]
 source: review-fix-6f292604
@@ -96,3 +96,11 @@ site was removed from `scripts/proposal-index.mjs` since it no longer applies.
 **Update (consolidated release, 2026-08-29):** read-only `--check`, its focused tests, effort
 projection, and effort validation are complete. Only the out-of-band auto-triage ordering
 contract remains open; its exact sort site retains the required `TODO(handoff)` marker.
+
+## Merged: handoff-sweep marker for the same open end
+
+`handoff-minion-meta-451096235` (handoff-ledger sweep, `NikolasP98/minion-meta@dev
+scripts/proposal-index.mjs:139`, checked 2026-09-02) flagged the exact sort-site marker this
+proposal already tracks as its one remaining open item: "this descending-id sort is not the
+order the out-of-band [auto-triage writer uses]". Merged into this proposal as its
+`status: merged` tombstone.

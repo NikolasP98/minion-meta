@@ -3,7 +3,7 @@ id: 2026-08-29-review-sidecar-producer-gaps
 title: Close the producer-side gaps the review-sidecar contract now exposes
 status: draft
 created: 2026-08-29
-updated: 2026-08-29
+updated: 2026-09-02
 repos: [minion-factory, minion-base, minion-meta]
 tags: [infra, docs]
 value: 6
@@ -99,3 +99,10 @@ that is a separate slice from the sidecar contract).
 - `node scripts/proposal-index.mjs` fails when a projected field is not declared, proven by a
   fixture in `scripts/`.
 - Promoting an unscored spec past G2 on the board either blocks or records an override reason.
+
+## Merged: handoff-sweep marker for the same open end
+
+`handoff-minion-meta-3748809828` (handoff-ledger sweep, `NikolasP98/minion-meta@dev
+scripts/review-sidecar.mjs:194`, checked 2026-09-02) flagged the same code-level marker this
+proposal already tracks: "producer-side halves of §4 are still absent". Merged into this
+proposal as its `status: merged` tombstone — no separate action needed beyond the DELTA above.

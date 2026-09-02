@@ -3,7 +3,7 @@ id: 2026-08-28-factory-release-probe-red-and-silent
 title: "Factory release probe can omit the required posture MCP call and force a full replay"
 status: draft
 created: 2026-08-28
-updated: 2026-08-28
+updated: 2026-09-02
 repos: [minion-factory]
 tags: [infra, test]
 ---
@@ -86,3 +86,10 @@ whole workflow replay:
 Remaining ask: record posture-call omission counts and per-attempt provider
 metadata without response-body leakage, then replace the incident-derived retry
 bound with a measured policy. Do not turn a missing call into a passing probe.
+
+## Merged: handoff-sweep marker for the same open end
+
+`handoff-minion-factory-1015683775` (handoff-ledger sweep, `NikolasP98/minion-factory@dev
+scripts/promotion/authenticated-boundary-probe.sh:51`, checked 2026-09-02) flagged the exact
+in-code marker this proposal's "Remaining ask" already tracks — "replace this incident-derived
+bound with measured omission". Merged into this proposal as its `status: merged` tombstone.

@@ -3,7 +3,7 @@ id: ci-minion-ai-auto-response
 title: CI red — Auto response on minion-ai main
 status: draft
 created: 2026-08-28
-updated: 2026-08-28
+updated: 2026-09-02
 repos: []
 ---
 
@@ -53,3 +53,12 @@ auto-response	UNKNOWN STEP	2026-08-28T09:10:15.4284362Z Token is not set
 auto-response	UNKNOWN STEP	2026-08-28T09:10:15.4390577Z Cleaning up orphan processes
 auto-response	UNKNOWN STEP	2026-08-28T09:10:15.4925098Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
+
+## Merged: same root cause across other minion-ai workflows
+
+Two other CI-watch tickets failed with the identical error — `actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547` throwing `Error: Input required and not supplied: private-key` for the same `app-id: 2729701` — confirming one shared root cause (the GitHub App's private key secret is missing/unset for this repo's Actions). Merged into this proposal as `status: merged` tombstones:
+
+- `ci-minion-ai-labeler` — Labeler workflow, job `label-issues`, run https://github.com/NikolasP98/minion-ai/actions/runs/33158249139 (checked 2026-08-28), same stack trace at the same `create-github-app-token` line.
+- `ci-minion-ai-stale` — Stale workflow, job `stale`, run https://github.com/NikolasP98/minion-ai/actions/runs/33587275096 (checked 2026-09-02), same stack trace at the same `create-github-app-token` line, reproduced 5 days later — confirms the secret has been missing continuously, not a one-off blip.
+
+**Definition of done (updated):** the fix is almost certainly a single change — provision/restore the GitHub App private-key secret consumed by `create-github-app-token` in this repo's Actions config — after which `auto-response`, `label-issues`, and `stale` should all go green together. Verify all three workflows' latest runs on `main` are green, or each is deliberately disabled with rationale.

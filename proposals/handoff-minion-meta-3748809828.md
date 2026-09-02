@@ -1,12 +1,13 @@
 ---
 id: handoff-minion-meta-3748809828
 title: Handoff marker — scripts/review-sidecar.mjs (minion-meta)
-status: review
+status: merged
 created: 2026-08-30
 updated: 2026-09-02
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-29-review-sidecar-producer-gaps
+merged_into: 2026-08-29-review-sidecar-producer-gaps
 ---
 
 # Handoff marker — scripts/review-sidecar.mjs

@@ -1,11 +1,12 @@
 ---
 id: ci-minion-ai-stale
 title: CI red — Stale on minion-ai main
-status: review
+status: merged
 created: 2026-08-28
 updated: 2026-09-02
 repos: []
 duplicate_candidate: ci-minion-ai-auto-response
+merged_into: ci-minion-ai-auto-response
 ---
 
 # CI red — Stale on NikolasP98/minion-ai@main
