@@ -12,7 +12,7 @@ verdict: approved
 repos: [minion-meta]
 tags: [security, infra, logic, test]
 type: fix
-approved_reason: "S2 is merged to dev and @minion-stack/env 1.2.0 is published; re-enter approved state for the remaining S3 doctor probe and behavioral anti-recurrence guard."
+approved_reason: "Machine-readable next_slice 3 is now merged; queue only the remaining S3 doctor probe and anti-recurrence guard."
 reconcile_ignore: true
 reconcile_ignore_reason: "Denied: S1 and S2 are implemented, and S3 documentation plus the env changeset are present; the doctor probe and anti-recurrence guard remain incomplete."
 ---
