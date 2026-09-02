@@ -1,12 +1,14 @@
 ---
 id: postmerge-minion-hub-007074feec3c
 title: "Post-merge finding — todo-handoff in src/lib/assistant/dispatch.ts (minion_hub)"
-status: draft
+status: merged
 created: 2026-09-02
 updated: 2026-09-02
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+duplicate_candidate: handoff-minion-hub-4221605246
+merged_into: handoff-minion-hub-4221605246
 ---
 
 # Post-merge finding — todo-handoff in `src/lib/assistant/dispatch.ts`

@@ -40,3 +40,14 @@ The `TODO(handoff)` marker at `src/routes/(app)/crm/customers/+page.svelte` is r
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/215
 - file: `src/routes/(app)/crm/customers/+page.svelte`
 - checked: 2026-09-02
+
+## Merged from handoff-minion-hub-4274754053
+
+Same marker, also caught by the handoff-ledger sweep against branch `master`:
+
+- `NikolasP98/minion_hub@master src/routes/(app)/crm/customers/+page.svelte:167` — https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/customers/+page.svelte#L167
+
+Note: that proposal previously carried `duplicate_candidate:
+2026-08-13-crm-customers-server-pagination` (a file-based match against an
+unrelated server-pagination performance proposal, not this `?new=1` POST
+marker). Superseded by this content-matched merge.

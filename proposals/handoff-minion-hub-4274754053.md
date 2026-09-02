@@ -1,12 +1,13 @@
 ---
 id: handoff-minion-hub-4274754053
 title: Handoff marker — src/routes/(app)/crm/customers/+page.svelte (minion_hub)
-status: draft
+status: merged
 created: 2026-08-22
 updated: 2026-09-02
 repos: [minion-hub]
 tags: [handoff-sweep]
-duplicate_candidate: 2026-08-13-crm-customers-server-pagination
+duplicate_candidate: postmerge-minion-hub-435bdc58c70c
+merged_into: postmerge-minion-hub-435bdc58c70c
 ---
 
 # Handoff marker — src/routes/(app)/crm/customers/+page.svelte

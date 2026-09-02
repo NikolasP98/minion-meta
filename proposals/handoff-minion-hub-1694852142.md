@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-1694852142
 title: Handoff marker — src/lib/assistant/ui-blocks.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-02
 updated: 2026-09-02
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-fcb3411ee30e
+merged_into: postmerge-minion-hub-fcb3411ee30e
 ---
 
 # Handoff marker — src/lib/assistant/ui-blocks.ts

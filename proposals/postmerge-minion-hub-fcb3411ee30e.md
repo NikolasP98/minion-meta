@@ -42,3 +42,9 @@ Looking at this handoff finding:
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/215
 - file: `src/lib/assistant/ui-blocks.ts`
 - checked: 2026-09-02
+
+## Merged from handoff-minion-hub-1694852142
+
+Same marker, also caught by the handoff-ledger sweep against branch `master`:
+
+- `NikolasP98/minion_hub@master src/lib/assistant/ui-blocks.ts:15` — https://github.com/NikolasP98/minion_hub/blob/master/src/lib/assistant/ui-blocks.ts#L15
