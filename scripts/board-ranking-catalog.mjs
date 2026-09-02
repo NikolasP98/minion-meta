@@ -92,7 +92,9 @@ export async function buildRankingCatalog({ root = '.', fetchFn = fetch, token =
 		const slug = repo.slug.split('/').map(encodeURIComponent).join('/');
 		const branch = encodeURIComponent(repo.branch);
 		const [issues, commits, workflowRuns] = await Promise.all([
-			githubPages(fetchFn, token, `/repos/${slug}/issues?state=open`, (payload) => payload),
+			repo.includeOpenItems === false
+				? Promise.resolve([])
+				: githubPages(fetchFn, token, `/repos/${slug}/issues?state=open`, (payload) => payload),
 			github(fetchFn, token, `/repos/${slug}/commits?sha=${branch}&per_page=1`),
 			githubPages(
 				fetchFn,

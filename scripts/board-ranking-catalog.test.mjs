@@ -69,6 +69,30 @@ test('catalog follows every issue and workflow-run page', async () => {
 	assert.ok(requested.some((request) => request.includes('/actions/runs?') && request.includes('page=2')));
 });
 
+test('catalog skips upstream open items when the repository disables their ingestion', async () => {
+	const requested = [];
+	const fetchFn = async (url) => {
+		const parsed = new URL(url);
+		requested.push(parsed.pathname);
+		if (parsed.pathname.endsWith('/actions/runs')) {
+			return { ok: true, json: async () => ({ workflow_runs: [] }) };
+		}
+		return { ok: true, json: async () => [] };
+	};
+	const root = fixtureRoot({
+		id: 'paperclip',
+		slug: 'paperclipai/paperclip',
+		branch: 'minion-integration',
+		allowMissingBranch: true,
+		includeOpenItems: false
+	});
+
+	const catalog = await buildRankingCatalog({ root, fetchFn, now: new Date('2026-09-01T00:00:00Z') });
+
+	assert.equal(catalog.candidates.some((candidate) => candidate.kind === 'issue' || candidate.kind === 'pr'), false);
+	assert.equal(requested.some((path) => path.endsWith('/issues')), false);
+});
+
 test('catalog refuses a failure after a full first page', async () => {
 	const fetchFn = async (url) => {
 		const parsed = new URL(url);
