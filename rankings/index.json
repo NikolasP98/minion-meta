@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T07:12:10.829Z",
+	"generatedAt": "2026-09-02T07:16:17.616Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -6146,39 +6146,6 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
-			"key": "pr:minion_hub#215",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#215 feat(assistant): navigate, guide and fill hub forms from chat (WebMCP-shaped)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/215",
-			"sourceUpdatedAt": "2026-09-02T07:11:23Z",
-			"sourceFingerprint": "ac6559c3985b0fdd3b34cc2939b7ca9a861ad0013c4889369d17770fed44fa47",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Open PR with clear staged scope, broad form coverage, and reported passing checks/unit/e2e/live-contract verification, with remaining gaps explicitly tracked as handoff items.",
-			"evidence": [
-				"bun run check 0 errors · build ok · lint:tokens 0",
-				"53-case EN/ES corpus + browser e2e + live model contract tests reported passing",
-				"known gaps documented as TODO(handoff) and a follow-up meta proposal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T07:12:10.737Z"
-		},
-		{
 			"key": "proposal:2026-08-17-pkg-gateway-client-onevent-errors",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8644,6 +8611,38 @@
 			"scoredAt": "2026-09-02T00:58:16.105Z"
 		},
 		{
+			"key": "deploy:minion_hub",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion_hub",
+			"title": "minion_hub deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/commit/be019c6283c7d1553bf0c67cceb07aae106ee425",
+			"sourceUpdatedAt": "2026-09-02T07:15:42Z",
+			"sourceFingerprint": "e99c7ce1fee53afae8a3f4bec6de99f0e0676ea2b624a78073ad70265398fb1b",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Deployment tracking entry for a merged hub feature commit shows no failure signal, so it is routine monitoring rather than an actionable goal.",
+			"evidence": [
+				"status: running",
+				"commit merges hub in-app assistant feature #215"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T07:16:17.534Z"
+		},
+		{
 			"key": "issue:minion-meta#340",
 			"kind": "issue",
 			"stage": "proposal",
@@ -9027,36 +9026,36 @@
 			"scoredAt": "2026-09-02T00:58:16.105Z"
 		},
 		{
-			"key": "deploy:minion_hub",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion_hub",
-			"title": "minion_hub deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/commit/7012cd5591f5550f6857a18cfe2082bff5edfe9a",
-			"sourceUpdatedAt": "2026-09-02T07:06:39Z",
-			"sourceFingerprint": "621fab35f4f4c5319d3e03b65b857e370ecafab8a4a113db145b7c92b657e545",
-			"score": 40,
+			"key": "proposal:merge-scan-minion-hub-7012cd5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 7012cd5",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-7012cd5.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "93491b790c06296bc5649904b571b4f290dc2b3ea91a4f9effad724115d6f925",
+			"score": 41,
 			"band": "low",
 			"axes": {
 				"criticality": 4,
-				"importance": 4,
-				"impact": 4
+				"importance": 5,
+				"impact": 3
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 2
+				"specification": 8,
+				"implementation": 8
 			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
+			"confidence": 7,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Deployment health status is listed as unknown with no diagnostic detail beyond the last merged PR's commit message.",
+			"rationale": "Automated merge-scan flags a concrete, bounded, medium-severity empty-catch bug with an exact file/line location.",
 			"evidence": [
-				"status: unknown",
-				"summary is just a merge commit message, no health detail"
+				"empty-catch at src/routes/(app)/scheduling/event-types/+page.server.ts:23",
+				"severity: medium"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T07:12:10.737Z"
+			"scoredAt": "2026-09-02T07:16:17.534Z"
 		},
 		{
 			"key": "pr:pixel-agents#390",
@@ -11332,6 +11331,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-02T00:58:16.105Z"
+		},
+		{
+			"key": "run:minion_hub#33602689578",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "Factory Notify",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/33602689578",
+			"sourceUpdatedAt": "2026-09-02T07:15:42Z",
+			"sourceFingerprint": "65f4633b677105aedb23616153446ba4a4226cefc3ce56afe911197126d29b04",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Queued CI notification run for a routine master push carries no independent actionable content.",
+			"evidence": [
+				"status: queued",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T07:16:17.534Z"
+		},
+		{
+			"key": "run:minion_hub#33602689683",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/33602689683",
+			"sourceUpdatedAt": "2026-09-02T07:15:42Z",
+			"sourceFingerprint": "a05a56cf0f70c476a3872c9dc657879bdc2752a89c1b990d26e59fc0f0471600",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Queued CI run tracking the same master push is routine pipeline status, not a goal.",
+			"evidence": [
+				"status: queued",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T07:16:17.534Z"
 		}
 	]
 }
