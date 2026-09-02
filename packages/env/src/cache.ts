@@ -11,12 +11,11 @@ import {
 	type CacheEnvelope,
 } from './cache-crypto.js';
 
-// TODO(handoff): S1+S2 of 2026-08-17-pkg-infisical-cache-plaintext-spec.md are implemented (nothing
-// lands on disk unsealed; the sealed disk cache below is machine-bound AES-256-GCM). S3 — README
-// `## Cache`/`## Security` rewrite (still describes the old plaintext file), the release changeset,
-// the `minion doctor` cache-mode probe, root `.env.example` entries for MINION_ENV_CACHE(_KEY), and
-// the behavioral anti-recurrence guard test — has not shipped yet. See the handoff note appended to
-// proposals/2026-08-17-pkg-infisical-cache-plaintext.md (2026-08-28).
+// TODO(handoff): S1+S2 of 2026-08-17-pkg-infisical-cache-plaintext-spec.md are implemented (no
+// fetched secret value lands on disk unsealed; the sealed disk cache below is machine-bound
+// AES-256-GCM). S3 still needs the `minion doctor` cache-mode probe and behavioral anti-recurrence
+// guard test. The package README, root `.env.example`, and release changeset now document the shipped
+// cache contract. See the latest handoff in proposals/2026-08-17-pkg-infisical-cache-plaintext.md.
 
 export interface CacheEntry {
 	env: Record<string, string>;

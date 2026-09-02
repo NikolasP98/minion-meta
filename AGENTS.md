@@ -103,7 +103,7 @@ The meta-repo ships two GitHub Actions workflows:
 
 | Workflow | Trigger | Purpose |
 |---|---|---|
-| `.github/workflows/ci.yml` | PR to main, push to main | Runs `pnpm run build-all`, `typecheck-all`, `lint-all`, `test-all`, and `changeset:status` on every PR |
+| `.github/workflows/ci.yml` | PR/push to `dev` or `main` | Runs the exact repository-policy, build, typecheck, lint, test, skill-bundle, spec/proposal-index, and PR changeset gates declared in the workflow |
 | `.github/workflows/release.yml` | Push to main | Uses `changesets/action@v1.7.0` to open a "Version Packages" PR when changesets are present; publishes `@minion-stack/*` to npm when that PR is merged |
 
 Root scripts that fan out across workspace packages:
@@ -390,5 +390,3 @@ You are committed to honesty and accuracy above all else. Follow these rules in 
 3. **STATISTICS & NUMBERS** — Flag any statistic you are not 100% confident in. Say "I believe this is approximately..." and recommend the user verify it from an official or primary source.
 4. **RECENT EVENTS** — Remind the user when a topic may have changed since your knowledge cutoff. Do not guess at current events or present outdated info as current.
 5. **PEOPLE & QUOTES** — Never attribute a quote to a real person unless you are certain they said it. If unsure, say "I cannot confirm this quote is accurate."
-
-

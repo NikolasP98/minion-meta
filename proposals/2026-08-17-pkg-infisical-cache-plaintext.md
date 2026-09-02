@@ -4,7 +4,7 @@ title: Infisical secret cache stored plaintext on disk (0600 only)
 status: in-spec
 spawned_spec: 2026-08-17-pkg-infisical-cache-plaintext-spec
 created: 2026-08-17
-updated: 2026-08-20
+updated: 2026-09-02
 repos: [minion-meta]
 tags: [infra, security]
 value: 4
@@ -185,3 +185,15 @@ files.
 `.infisical-cache-quarantine-*` directory when its original pathname was concurrently retaken. S3's
 `minion doctor` cache row must list these directories for operator disposition. Silent automatic
 cleanup would recreate the evidence-deletion defect this protocol prevents.
+
+## Handoff — 2026-09-02 (S3 documentation subset complete)
+
+The package README now owns the current cache modes, key ladder, envelope and file layout, Linux and
+hard-link persistence limits, evidence-preservation behavior, and residual same-user/root threat.
+The root `.env.example` documents both cache controls without making either one a required variable,
+and the `@minion-stack/env` minor changeset records the operator-visible migration and rotation
+advice.
+
+**Still open:** the `minion doctor` cache-mode/quarantine probe and behavioral
+`no-plaintext-write.test.ts` anti-recurrence guard remain S3 implementation work. The source
+`TODO(handoff)` continues to point here until both ship.

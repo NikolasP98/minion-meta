@@ -37,7 +37,7 @@ stale	UNKNOWN STEP	2026-09-02T03:30:18.0279149Z ##[endgroup]
 stale	UNKNOWN STEP	2026-09-02T03:30:18.1554807Z /home/runner/work/_actions/actions/create-github-app-token/d72941d797fd3113feb6b93fd0dec494b13a2547/dist/main.cjs:42559
 stale	UNKNOWN STEP	2026-09-02T03:30:18.1560255Z   throw new Error("Input required and not supplied: private-key");
 stale	UNKNOWN STEP	2026-09-02T03:30:18.1563535Z   ^
-stale	UNKNOWN STEP	2026-09-02T03:30:18.1565105Z 
+stale	UNKNOWN STEP	2026-09-02T03:30:18.1565105Z
 stale	UNKNOWN STEP	2026-09-02T03:30:18.1566573Z Error: Input required and not supplied: private-key
 stale	UNKNOWN STEP	2026-09-02T03:30:18.1571913Z     at Object.<anonymous> (/home/runner/work/_actions/actions/create-github-app-token/d72941d797fd3113feb6b93fd0dec494b13a2547/dist/main.cjs:42559:9)
 stale	UNKNOWN STEP	2026-09-02T03:30:18.1577567Z     at Module._compile (node:internal/modules/cjs/loader:1872:14)
@@ -47,7 +47,7 @@ stale	UNKNOWN STEP	2026-09-02T03:30:18.1587708Z     at Module._load (node:intern
 stale	UNKNOWN STEP	2026-09-02T03:30:18.1590822Z     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
 stale	UNKNOWN STEP	2026-09-02T03:30:18.1595291Z     at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
 stale	UNKNOWN STEP	2026-09-02T03:30:18.1598147Z     at node:internal/main/run_main_module:33:47
-stale	UNKNOWN STEP	2026-09-02T03:30:18.1599014Z 
+stale	UNKNOWN STEP	2026-09-02T03:30:18.1599014Z
 stale	UNKNOWN STEP	2026-09-02T03:30:18.1599453Z Node.js v24.19.0
 stale	UNKNOWN STEP	2026-09-02T03:30:18.2128204Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 stale	UNKNOWN STEP	2026-09-02T03:30:18.2133967Z Post job cleanup.
