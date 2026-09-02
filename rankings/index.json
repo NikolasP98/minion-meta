@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T04:27:26.171Z",
+	"generatedAt": "2026-09-02T04:57:42.754Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -6446,6 +6446,38 @@
 			"scoredAt": "2026-08-31T07:41:32.788Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-1d40d9a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 1d40d9a",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-1d40d9a.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "4dff2924dd3f9ac9f4d2c22cc7415f6bdd265adbfb28d24ca9521ef870870af0",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Bundles a dozen unrelated findings of varying severity across disjoint files, so it should be split into individually scoped fixes rather than treated as one goal.",
+			"evidence": [
+				"12 findings spanning llm-task, telegram, tts, ci-workflow tests, and config/types.ts",
+				"severities range from medium empty-catch to high weakened-test and unchecked-access with no unifying fix scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T04:57:42.677Z"
+		},
+		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -7761,8 +7793,8 @@
 			"repo": "paperclip",
 			"title": "#12709 feat(codex-local): give each Codex account its own home and path secret",
 			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12709",
-			"sourceUpdatedAt": "2026-09-02T04:13:39Z",
-			"sourceFingerprint": "9c725f7226183436adaeffdc3bc5e517f927d12edf85ac565ef4185bb304474a",
+			"sourceUpdatedAt": "2026-09-02T04:36:11Z",
+			"sourceFingerprint": "6375c63b1cc39bb5f1046272e4d6c58a6f8489a93a051d00bf7752a0bd2aa575",
 			"score": 49,
 			"band": "low",
 			"axes": {
@@ -7772,20 +7804,20 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 8
+				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Small, well-tested fix enabling multiple Codex accounts per company with security review already approved.",
+			"rationale": "Well-scoped, security-reviewed PR with passing tests is ready to land pending final CI/Greptile sign-off.",
 			"evidence": [
-				"Security review returned approve with no blocking finding",
-				"343 adapter tests and 25 route tests pass",
-				"Strict allowlist and root containment reduce path traversal risk"
+				"security review approved with no blocking finding",
+				"adapter-codex-local suite passes 343 tests",
+				"CI gates and Greptile checklist items still unchecked"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T04:27:26.094Z"
+			"scoredAt": "2026-09-02T04:57:42.677Z"
 		},
 		{
 			"key": "pr:pixel-agents#396",
@@ -8778,38 +8810,6 @@
 			"scoredAt": "2026-08-31T07:41:32.788Z"
 		},
 		{
-			"key": "proposal:ci-minion-ai-stale",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Stale on minion-ai main",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-stale.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "ec3951cbe6a1693e1094c98eeab9ea72d70f693d19d92fa585fdcfa1bdb8d55f",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Root cause is clearly identified (missing private-key input to the GitHub App token action) and the fix is bounded.",
-			"evidence": [
-				"Error: Input required and not supplied: private-key",
-				"create-github-app-token step fails before stale job runs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T00:58:16.105Z"
-		},
-		{
 			"key": "proposal:handoff-minion-factory-1093105314",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9423,6 +9423,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:44:37.861Z"
+		},
+		{
+			"key": "proposal:ci-minion-ai-stale",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Stale on minion-ai main",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-stale.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "84e806d78e399262831094505a56c7d669090614f33077eddb9088e538fad114",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Root cause is clearly diagnosed as a missing private-key input, making this a quick, low-risk fix or workflow removal.",
+			"evidence": [
+				"error: Input required and not supplied: private-key",
+				"clear definition of done: latest run green or workflow disabled with rationale"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T04:57:42.677Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-4278431509",
