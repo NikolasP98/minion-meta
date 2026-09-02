@@ -5,6 +5,8 @@ export { fetchInfisicalSecrets } from './infisical.js';
 export type { InfisicalFetchResult, InfisicalFetchOptions } from './infisical.js';
 export { resolveInfisicalAuth } from './infisical-auth.js';
 export type { InfisicalAuthResolution } from './infisical-auth.js';
+export { cacheStatus } from './cache.js';
+export type { CacheStatus, CacheMode } from './cache.js';
 export type {
 	Layer,
 	ResolvedVarSource,
