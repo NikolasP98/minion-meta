@@ -12,12 +12,6 @@ import {
 	type CacheEnvelope,
 } from './cache-crypto.js';
 
-// TODO(handoff): S1+S2 of 2026-08-17-pkg-infisical-cache-plaintext-spec.md are implemented (no
-// fetched secret value lands on disk unsealed; the sealed disk cache below is machine-bound
-// AES-256-GCM). S3 still needs the `minion doctor` cache-mode probe and behavioral anti-recurrence
-// guard test. The package README, root `.env.example`, and release changeset now document the shipped
-// cache contract. See the latest handoff in proposals/2026-08-17-pkg-infisical-cache-plaintext.md.
-
 export interface CacheEntry {
 	env: Record<string, string>;
 	/** Names of every key the underlying fetch returned, even if `env` was narrowed by an allowlist. */
@@ -31,6 +25,7 @@ export type CacheMode = 'off' | 'memory' | 'disk';
 /** Process-lifetime memo. Sits in front of the sealed disk cache — a memo hit never touches disk. */
 const memo = new Map<string, CacheEntry>();
 let legacyPurged = false;
+let legacyRemovedThisProcess = false;
 let diskReadWarned = false;
 let dirModeWarned = false;
 let diskWriteWarned = false;
@@ -145,6 +140,7 @@ export function purgeLegacyCacheOnce(): void {
 	}
 
 	removeQuarantinedPath(quarantined);
+	legacyRemovedThisProcess = true;
 
 	console.warn(
 		`[@minion-stack/env] Removed legacy plaintext secret cache at ${p} — it stored decrypted secret ` +
@@ -204,6 +200,10 @@ interface QuarantinedPath {
 	filePath: string;
 }
 
+/** Prefix shared by every quarantine directory `quarantinePath` creates, so `cacheStatus()` can list
+ *  the ones still awaiting operator disposition without guessing at the naming scheme. */
+const QUARANTINE_DIR_PREFIX = '.infisical-cache-quarantine-';
+
 /** Move the object currently occupying `source` into a fresh private directory before inspecting it.
  * The rename binds every later read/delete to that exact object: anything concurrently published at
  * `source` after the rename is a different pathname and is never touched. The quarantine directory
@@ -211,7 +211,7 @@ interface QuarantinedPath {
 function quarantinePath(source: string): QuarantinedPath | null {
 	let dir: string;
 	try {
-		dir = fs.mkdtempSync(path.join(path.dirname(source), '.infisical-cache-quarantine-'));
+		dir = fs.mkdtempSync(path.join(path.dirname(source), QUARANTINE_DIR_PREFIX));
 		fs.chmodSync(dir, 0o700);
 	} catch {
 		return null;
@@ -232,11 +232,10 @@ function quarantinePath(source: string): QuarantinedPath | null {
 }
 
 /** Restore a quarantined object without replacing anything that has since appeared at `destination`.
- * If the destination is occupied, the object stays at its named quarantine path as evidence.
- *
- * TODO(handoff): S3's `minion doctor` cache row must report `.infisical-cache-quarantine-*`
- * directories so an operator can disposition preserved rejected objects; automatic deletion cannot
- * distinguish them safely. See the 2026-08-30 review-fix handoff in the source proposal. */
+ * If the destination is occupied, the object stays at its named quarantine path as evidence —
+ * `cacheStatus()` lists these directories (via `listQuarantineDirs`) so `minion doctor` can surface
+ * them for operator disposition; automatic deletion cannot distinguish preserved evidence from
+ * ordinary retirement safely, so nothing here deletes one on its own. */
 function restoreQuarantinedPath(quarantined: QuarantinedPath, destination: string): void {
 	try {
 		if (!linkNoClobber(quarantined.filePath, destination)) return;
@@ -829,7 +828,69 @@ export function writeCache(
 export function resetCacheStateForTests(): void {
 	memo.clear();
 	legacyPurged = false;
+	legacyRemovedThisProcess = false;
 	diskReadWarned = false;
 	dirModeWarned = false;
 	diskWriteWarned = false;
+}
+
+export interface CacheStatus {
+	/** The active `MINION_ENV_CACHE` mode. */
+	mode: CacheMode;
+	/** Whether this process found and removed a legacy plaintext `infisical-cache.json`. */
+	legacyRemoved: boolean;
+	/** Whether the cache directory had group/other permission bits set before this call sealed it. */
+	dirModeLoose: boolean;
+	/** Absolute paths of `.infisical-cache-quarantine-*` directories still holding preserved
+	 *  rejected/unauthenticated objects, newest first is not guaranteed — sorted for stable output. */
+	quarantineDirs: string[];
+}
+
+/** List quarantine directories left behind under `dir` for operator disposition (§ TODO history in
+ *  `restoreQuarantinedPath`). Never inspects or reports their contents — presence of the directory is
+ *  itself the signal; a human decides whether the preserved object is evidence or reusable. */
+function listQuarantineDirs(dir: string): string[] {
+	let entries: fs.Dirent[];
+	try {
+		entries = fs.readdirSync(dir, { withFileTypes: true });
+	} catch {
+		return [];
+	}
+	return entries
+		.filter((entry) => entry.isDirectory() && entry.name.startsWith(QUARANTINE_DIR_PREFIX))
+		.map((entry) => path.join(dir, entry.name))
+		.sort();
+}
+
+/**
+ * Status-only snapshot for `minion doctor`'s `(meta)` row — never entries or values, only what mode
+ * is active and whether something here needs an operator's attention. Performs the same
+ * once-per-process initialization the resolve path does (legacy purge, directory sealing) without
+ * fetching any secret, so `doctor` reports a truthful `legacyRemoved`/`dirModeLoose` for its own run
+ * even when no subproject is cloned and no fetch ever happens.
+ */
+export function cacheStatus(): CacheStatus {
+	const mode = resolveCacheMode();
+	purgeLegacyCacheOnce();
+
+	const dir = cacheDir();
+	let dirModeLoose = false;
+	try {
+		dirModeLoose = (fs.statSync(dir).mode & 0o077) !== 0;
+	} catch {
+		dirModeLoose = false;
+	}
+	try {
+		ensureCacheDirSealed();
+	} catch {
+		/* the directory could not be secured; readCache/writeCache already warn on this path when it
+		 * actually matters for a fetch — a status probe degrades to reporting what it observed above */
+	}
+
+	return {
+		mode,
+		legacyRemoved: legacyRemovedThisProcess,
+		dirModeLoose,
+		quarantineDirs: listQuarantineDirs(dir),
+	};
 }

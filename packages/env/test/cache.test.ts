@@ -13,6 +13,7 @@ import {
 	readCache,
 	writeCache,
 	purgeLegacyCacheOnce,
+	cacheStatus,
 	resetCacheStateForTests,
 } from '../src/cache.js';
 import { InvalidCacheKeyError, seal as realSeal } from '../src/cache-crypto.js';
@@ -896,5 +897,55 @@ describe('cache.ts', () => {
 			},
 			10_000,
 		);
+	});
+
+	describe('cacheStatus (S3 doctor probe: mode/legacyRemoved/dirModeLoose/quarantineDirs only)', () => {
+		it('reports the active mode and no findings on a clean, unused config dir', () => {
+			const status = cacheStatus();
+			expect(status.mode).toBe('disk');
+			expect(status.legacyRemoved).toBe(false);
+			expect(status.dirModeLoose).toBe(false);
+			expect(status.quarantineDirs).toEqual([]);
+		});
+
+		it('reflects a non-default mode', () => {
+			process.env.MINION_ENV_CACHE = 'memory';
+			expect(cacheStatus().mode).toBe('memory');
+		});
+
+		it('reports legacyRemoved after purging a pre-existing legacy plaintext cache', () => {
+			fs.mkdirSync(cacheDir(), { recursive: true });
+			fs.writeFileSync(
+				cachePath(),
+				JSON.stringify({ 'minion-core|dev': { env: { X: 'leaked' }, fetchedAt: 1, ttlMs: 1 } }),
+			);
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			expect(cacheStatus().legacyRemoved).toBe(true);
+			warnSpy.mockRestore();
+		});
+
+		it('reports dirModeLoose when the config dir had group/other bits set, and seals it', () => {
+			fs.mkdirSync(cacheDir(), { recursive: true, mode: 0o755 });
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			expect(cacheStatus().dirModeLoose).toBe(true);
+			warnSpy.mockRestore();
+			expect(fs.statSync(cacheDir()).mode & 0o777).toBe(0o700);
+		});
+
+		it('lists quarantine directories left behind for operator disposition', () => {
+			fs.mkdirSync(cacheDir(), { recursive: true, mode: 0o700 });
+			const quarantine = path.join(cacheDir(), '.infisical-cache-quarantine-abc123');
+			fs.mkdirSync(quarantine);
+			expect(cacheStatus().quarantineDirs).toEqual([quarantine]);
+		});
+
+		it('never throws when the config dir cannot be secured', () => {
+			// A file occupying the would-be config dir path makes mkdirSync/statSync fail.
+			fs.mkdirSync(path.dirname(cacheDir()), { recursive: true });
+			fs.writeFileSync(cacheDir(), 'not a directory');
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			expect(() => cacheStatus()).not.toThrow();
+			warnSpy.mockRestore();
+		});
 	});
 });
