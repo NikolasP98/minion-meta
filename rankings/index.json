@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T01:57:22.973Z",
+	"generatedAt": "2026-09-02T02:27:48.125Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -4839,6 +4839,39 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
+			"key": "issue:paperclip#12633",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "paperclip",
+			"title": "#12633 Composio broker connections never leave draft status — every child toolkit's tools are invisible to the tool gateway",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/issues/12633",
+			"sourceUpdatedAt": "2026-09-01T04:16:37Z",
+			"sourceFingerprint": "5b6c726e7454fba57e71f910d794590ff3d998d328094d18dc684b0ce4033192",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A precisely located root cause leaves every Composio-brokered toolkit connection permanently invisible to tool execution despite passing health checks, and this is the third bug found in the same end-to-end chain.",
+			"evidence": [
+				"toolApplications rows for Composio connections never leave status draft, and connectedMcpToolsForCompany filters on status active",
+				"reproduction confirms 404 tool_not_found even after #12628 and #12631 fixes",
+				"fix location identified: promote applicationRow/connectionRow to active after checkConnectionHealth succeeds"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T02:27:48.038Z"
+		},
+		{
 			"key": "pr:paperclip#12679",
 			"kind": "pr",
 			"stage": "development",
@@ -6049,38 +6082,6 @@
 			"scoredAt": "2026-09-01T20:28:19.924Z"
 		},
 		{
-			"key": "pr:paperclip#12685",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12685 fix(runner): restore task runtime parity",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12685",
-			"sourceUpdatedAt": "2026-09-01T20:09:50Z",
-			"sourceFingerprint": "71c7e6d8307da3b0ed2bf771c103f9c47286cb0e6d2816d1645e0001c6d823d8",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-specified regression fix restoring steering, reasoning display, and instruction-bundle support lost in the merged runner stack, with 140+12 tests passing.",
-			"evidence": [
-				"\"queued message steering had no server route on master\"",
-				"\"Seven focused test files passed with 140 tests\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T20:28:19.924Z"
-		},
-		{
 			"key": "pr:paperclip#12690",
 			"kind": "pr",
 			"stage": "development",
@@ -6243,39 +6244,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:46:38.665Z"
-		},
-		{
-			"key": "pr:paperclip#12700",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12700 test(runner): add full-stack acceptance and eval gates",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12700",
-			"sourceUpdatedAt": "2026-09-01T23:00:21Z",
-			"sourceFingerprint": "fe46799a64c6c97734e3ffb9afb6dece2066c1918fda97680a976d5e460b47c7",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Large, broadly verified acceptance/eval/chaos gate suite for the restored runner stack, with strong local test evidence but real review-size and stacked-dependency risk.",
-			"evidence": [
-				"57-cell full-stack catalog, 56 unit tests, native runner kept off by default",
-				"full pnpm test:run shows 5,635 passing with failures attributed to pre-existing inherited issues",
-				"depends on lower stack PRs #12699, #12691, #12685 not in this batch"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T23:27:49.716Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-gateway-client-onevent-errors",
@@ -6779,39 +6747,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T11:27:38.486Z"
-		},
-		{
-			"key": "pr:paperclip#12691",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12691 feat(runner): activate qualified OpenCode and ACPX providers",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12691",
-			"sourceUpdatedAt": "2026-09-01T20:33:07Z",
-			"sourceFingerprint": "f87ff21d6a9c3f76f76ccd7ec5d65aede8cccd8187e5159e13909670afda74ae",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-specified provider-activation PR with extensive passing verification, gated behind the existing experimental flag.",
-			"evidence": [
-				"274 focused TS/server/UI tests passed plus 91+4 cargo tests",
-				"experimental flag still gates every fresh Paperclip Runner run",
-				"ACPX Pi explicitly kept unavailable and rejected before launch"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T20:58:04.154Z"
 		},
 		{
 			"key": "pr:pixel-agents#385",
@@ -8383,39 +8318,6 @@
 			"scoredAt": "2026-08-31T07:47:22.636Z"
 		},
 		{
-			"key": "pr:paperclip#12699",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "paperclip",
-			"title": "#12699 feat(runner): add managed provider backends",
-			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12699",
-			"sourceUpdatedAt": "2026-09-01T22:54:43Z",
-			"sourceFingerprint": "142b3e2e6dba895d577e6b039700158c2541d590a5fd866338d11187e0c35fe0",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Strategic managed-provider runner parity work is broad and heavily verified but kept behind a default-off flag and stacked on out-of-batch PRs.",
-			"evidence": [
-				"enableNativeRunner stays default-off",
-				"156 cargo tests pass plus focused server/CLI suites",
-				"stacked on #12691 and #12685, not in this batch"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T22:57:52.252Z"
-		},
-		{
 			"key": "pr:minion_hub#203",
 			"kind": "pr",
 			"stage": "development",
@@ -8479,6 +8381,112 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-01T19:27:42.888Z"
+		},
+		{
+			"key": "pr:paperclip#12691",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12691 feat(runner): activate qualified OpenCode and ACPX providers",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12691",
+			"sourceUpdatedAt": "2026-09-02T02:21:10Z",
+			"sourceFingerprint": "94110de38645fb651ddbc9f57701c7cba9fb2c473a3e41d732ece16bc807419d",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:paperclip#12699",
+				"pr:paperclip#12700"
+			],
+			"rationale": "Bottom of a stacked runner PR series with passing focused and full-suite tests, but gated behind the default-off enableNativeRunner flag so no immediate production exposure.",
+			"evidence": [
+				"274 focused tests plus 91 Rust unit tests passed",
+				"enableNativeRunner experimental flag kept unchanged/off"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T02:27:48.038Z"
+		},
+		{
+			"key": "pr:paperclip#12699",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12699 feat(runner): add managed provider backends",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12699",
+			"sourceUpdatedAt": "2026-09-02T02:21:22Z",
+			"sourceFingerprint": "4fc9cc1823b1d76d1497ea0162181222a3203a232d10006bdf32057578102669",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:paperclip#12691",
+				"pr:paperclip#12700"
+			],
+			"rationale": "Adds managed provider backends stacked on #12691 with extensive passing verification, still shielded by the same off-by-default flag.",
+			"evidence": [
+				"Stacked on #12691, which is stacked on #12685",
+				"5,636 of 5,656 tests passed; failures reproduce as unrelated environment issues",
+				"enableNativeRunner default-off preserved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T02:27:48.038Z"
+		},
+		{
+			"key": "pr:paperclip#12700",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "paperclip",
+			"title": "#12700 test(runner): add full-stack acceptance and eval gates",
+			"sourceUrl": "https://github.com/paperclipai/paperclip/pull/12700",
+			"sourceUpdatedAt": "2026-09-02T02:26:09Z",
+			"sourceFingerprint": "a12cb5b78f431a6005c82c18f9479bde7a14fafd3425769c21b35bbb1608545d",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:paperclip#12691",
+				"pr:paperclip#12699"
+			],
+			"rationale": "Adds acceptance/eval/chaos release gates for the same runner stack, improving safety of eventual rollout but not itself urgent since the feature stays flagged off.",
+			"evidence": [
+				"57-cell full-stack catalog with 60 unit tests added",
+				"enableNativeRunner kept off by default; harness only enables it in isolated test instance"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T02:27:48.038Z"
 		},
 		{
 			"key": "proposal:2026-08-30-site-page-max-shared-token",
