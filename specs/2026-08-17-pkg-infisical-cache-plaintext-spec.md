@@ -2,7 +2,7 @@
 id: 2026-08-17-pkg-infisical-cache-plaintext-spec
 title: "@minion-stack/env — stop leaving the gateway vault master key in a plaintext cache file"
 stage: spec
-status: implementing
+status: approved
 pass: 2
 created: 2026-08-17
 updated: 2026-09-02
@@ -11,7 +11,7 @@ verdict: approved
 repos: [minion-meta]
 tags: [security, infra, logic, test]
 type: fix
-approved_reason: "G2 verdict already approved in sidecar; security tag kept merge human-gated — dev run may proceed under overnight mandate."
+approved_reason: "S2 is merged to dev and @minion-stack/env 1.2.0 is published; re-enter approved state for the remaining S3 doctor probe and behavioral anti-recurrence guard."
 reconcile_ignore: true
 reconcile_ignore_reason: "Denied: S1 and S2 are implemented, and S3 documentation plus the env changeset are present; the doctor probe and anti-recurrence guard remain incomplete."
 ---
