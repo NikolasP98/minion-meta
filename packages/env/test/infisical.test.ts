@@ -11,7 +11,8 @@ vi.mock('node:child_process', () => ({
 
 // Import AFTER the mock is registered.
 const { fetchInfisicalSecrets } = await import('../src/infisical.js');
-const { resetCacheStateForTests } = await import('../src/cache.js');
+const { resetCacheStateForTests, buildCacheKey } = await import('../src/cache.js');
+const { seal } = await import('../src/cache-crypto.js');
 
 function mockExit(status: number, stdout: string, stderr = ''): void {
 	spawnSyncMock.mockReturnValue({
@@ -81,7 +82,20 @@ describe('fetchInfisicalSecrets', () => {
 		}
 	});
 
-	it('creates no cache file at all on a successful fetch', async () => {
+	it('creates a sealed cache file on a successful fetch (S2 default: disk mode)', async () => {
+		mockExit(0, 'X=1\n');
+		await fetchInfisicalSecrets('minion-core', { noCache: false });
+		const cacheFile = path.join(tmpHome, 'minion', 'infisical-cache.json');
+		expect(fs.existsSync(cacheFile)).toBe(true);
+		expect(fs.statSync(cacheFile).mode & 0o777).toBe(0o600);
+		const envelope = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+		expect(Object.keys(envelope).sort()).toEqual(
+			['alg', 'boundTo', 'ct', 'iv', 'kdf', 'tag', 'v'].sort(),
+		);
+	});
+
+	it('MINION_ENV_CACHE=memory creates no cache file, exactly as S1 defined it', async () => {
+		process.env.MINION_ENV_CACHE = 'memory';
 		mockExit(0, 'X=1\n');
 		await fetchInfisicalSecrets('minion-core', { noCache: false });
 		const cacheFile = path.join(tmpHome, 'minion', 'infisical-cache.json');
@@ -128,17 +142,126 @@ describe('fetchInfisicalSecrets', () => {
 		warnSpy.mockRestore();
 	});
 
-	it('MINION_ENV_CACHE=disk behaves as memory and warns in S1 (disk not implemented yet)', async () => {
+	it('MINION_ENV_CACHE=disk explicitly requested behaves like the default: sealed, no warning', async () => {
 		process.env.MINION_ENV_CACHE = 'disk';
 		const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 		mockExit(0, 'X=1\n');
 		await fetchInfisicalSecrets('minion-core');
 		await fetchInfisicalSecrets('minion-core');
-		expect(spawnSyncMock).toHaveBeenCalledTimes(1);
-		expect(fs.existsSync(path.join(tmpHome, 'minion', 'infisical-cache.json'))).toBe(false);
-		expect(warnSpy.mock.calls.some((c) => String(c[0]).includes("isn't implemented"))).toBe(true);
+		expect(spawnSyncMock).toHaveBeenCalledTimes(1); // second call served from the memo
+		expect(fs.existsSync(path.join(tmpHome, 'minion', 'infisical-cache.json'))).toBe(true);
+		expect(warnSpy).not.toHaveBeenCalled();
 		warnSpy.mockRestore();
 	});
+
+	it('a cross-process cache hit is served from the sealed disk file, not a re-spawn', async () => {
+		mockExit(0, 'MINION_SECRETS_KEY=b64==\n');
+		await fetchInfisicalSecrets('minion-core', { cacheKeys: ['MINION_SECRETS_KEY'] });
+		resetCacheStateForTests(); // simulate a fresh process: memo gone, sealed file stays on disk
+		spawnSyncMock.mockReset();
+		const r = await fetchInfisicalSecrets('minion-core', { cacheKeys: ['MINION_SECRETS_KEY'] });
+		expect(spawnSyncMock).not.toHaveBeenCalled();
+		expect(r.env).toEqual({ MINION_SECRETS_KEY: 'b64==' });
+	});
+
+	it('a foreign-machine sealed file is treated as a miss and refetched, never thrown', async () => {
+		mockExit(0, 'X=1\n');
+		await fetchInfisicalSecrets('minion-core');
+		resetCacheStateForTests();
+		const cacheFile = path.join(tmpHome, 'minion', 'infisical-cache.json');
+		const envelope = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+		envelope.boundTo = 'deadbeefdeadbeef';
+		fs.writeFileSync(cacheFile, JSON.stringify(envelope));
+
+		spawnSyncMock.mockReset();
+		mockExit(0, 'X=1\n');
+		const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+		const r = await fetchInfisicalSecrets('minion-core');
+		expect(r.ok).toBe(true);
+		expect(spawnSyncMock).toHaveBeenCalledTimes(1);
+		expect(warnSpy.mock.calls.some((c) => String(c[0]).includes('different machine'))).toBe(true);
+		warnSpy.mockRestore();
+	});
+
+	it('an unusable config root costs a cache hit, never the secrets themselves', async () => {
+		// A regular file where the config directory should be: `mkdirSync` fails with ENOTDIR on the
+		// read path, which runs BEFORE the authoritative `infisical` call.
+		const rootFile = path.join(tmpHome, 'config-root-is-a-file');
+		fs.writeFileSync(rootFile, 'not a directory');
+		process.env.XDG_CONFIG_HOME = rootFile;
+		const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+		mockExit(0, 'X=1\n');
+
+		const first = await fetchInfisicalSecrets('minion-core');
+		expect(first).toMatchObject({ ok: true, env: { X: '1' } });
+		expect(spawnSyncMock).toHaveBeenCalledTimes(1);
+
+		// The memo still works even though nothing can be persisted.
+		const second = await fetchInfisicalSecrets('minion-core');
+		expect(second).toMatchObject({ ok: true, env: { X: '1' } });
+		expect(spawnSyncMock).toHaveBeenCalledTimes(1);
+		warnSpy.mockRestore();
+		expect(fs.readFileSync(rootFile, 'utf8')).toBe('not a directory');
+	});
+
+	it.skipIf(process.getuid?.() === 0)(
+		'an unreadable sealed cache is refetched and left byte-for-byte intact',
+		async () => {
+			mockExit(0, 'X=1\n');
+			await fetchInfisicalSecrets('minion-core');
+			const cacheFile = path.join(tmpHome, 'minion', 'infisical-cache.json');
+			const before = fs.readFileSync(cacheFile);
+			fs.chmodSync(cacheFile, 0o000);
+			resetCacheStateForTests(); // fresh process: only the unreadable file remains
+
+			spawnSyncMock.mockReset();
+			mockExit(0, 'X=1\n');
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			const r = await fetchInfisicalSecrets('minion-core');
+			expect(r).toMatchObject({ ok: true, env: { X: '1' } });
+			expect(spawnSyncMock).toHaveBeenCalledTimes(1);
+			expect(warnSpy.mock.calls.some((c) => String(c[0]).includes('unreadable'))).toBe(true);
+			warnSpy.mockRestore();
+
+			expect(fs.statSync(cacheFile).mode & 0o777).toBe(0o000);
+			fs.chmodSync(cacheFile, 0o600);
+			expect(fs.readFileSync(cacheFile).equals(before)).toBe(true);
+		},
+	);
+
+	it(
+		'an authenticated but schema-malformed cache entry (M1) is treated as a miss — refetches ' +
+			'through the authoritative CLI instead of throwing, and leaves the file byte-for-byte intact',
+		async () => {
+			mockExit(0, 'X=1\n');
+			await fetchInfisicalSecrets('minion-core'); // establishes a real sealed cache dir + key file
+			resetCacheStateForTests();
+
+			const cacheDirPath = path.join(tmpHome, 'minion');
+			const cacheFile = path.join(cacheDirPath, 'infisical-cache.json');
+			const cacheKey = buildCacheKey('minion-core', 'dev', undefined, undefined);
+			// Schema-valid JSON, authenticatable with the real machine key — but the entry itself is `{}`.
+			// This is the review's own reproduction: `entry.keyNames` is `undefined`, and spreading it
+			// (`[...entry.keyNames]`) threw `TypeError: entry.keyNames is not iterable` out of `readCache`
+			// before entries were validated at the authentication boundary.
+			const malformed = { [cacheKey]: {} };
+			const envelope = seal(cacheDirPath, Buffer.from(JSON.stringify(malformed), 'utf8'));
+			fs.writeFileSync(cacheFile, JSON.stringify(envelope));
+			const before = fs.readFileSync(cacheFile);
+
+			spawnSyncMock.mockReset();
+			mockExit(0, 'X=1\n');
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			const r = await fetchInfisicalSecrets('minion-core');
+			expect(r).toMatchObject({ ok: true, env: { X: '1' } }); // never throws; refetches instead
+			expect(spawnSyncMock).toHaveBeenCalledTimes(1); // the authoritative fetch actually ran
+			warnSpy.mockRestore();
+
+			// Malformed authenticated payload is evidence, same as any other rejected file — never
+			// silently repaired or overwritten by the refetch that followed it.
+			expect(fs.readFileSync(cacheFile).equals(before)).toBe(true);
+		},
+	);
 
 	it('noCache bypasses cache read AND write', async () => {
 		mockExit(0, 'X=1\n');
