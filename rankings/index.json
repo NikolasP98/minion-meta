@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-02T06:33:08.914Z",
+	"generatedAt": "2026-09-02T06:43:01.166Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -4532,39 +4532,6 @@
 			"scoredAt": "2026-08-31T08:14:27.632Z"
 		},
 		{
-			"key": "deploy:minion_hub",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion_hub",
-			"title": "minion_hub deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/commit/f0ba8a3647695e279727304e467bd107f90b7710",
-			"sourceUpdatedAt": "2026-08-31T08:06:00Z",
-			"sourceFingerprint": "62e54ca2ddbe479450a6b079954dd8663b5758698fffd1e774c5250d78793277",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Gateway authentication and canonical writes are consequential, but unknown deployment status and absent health evidence prevent immediate execution.",
-			"evidence": [
-				"Deployment status is unknown.",
-				"The commit hardens gateway auth and canonical writes.",
-				"No failure or verification result is supplied."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T08:14:05.520Z"
-		},
-		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -5950,6 +5917,39 @@
 			"scoredAt": "2026-08-31T07:31:23.880Z"
 		},
 		{
+			"key": "pr:minion_hub#213",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#213 feat(scheduling): services view driven by the POS catalog + service picker in booking forms",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/213",
+			"sourceUpdatedAt": "2026-09-02T06:41:16Z",
+			"sourceFingerprint": "6edc1f4e02a49269b8e79159ac7c1258cb89be52a6a31e2050dc96da3aa99071",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Open PR with clear scope and passing checks/tests is ready to review and merge to extend booking scheduling.",
+			"evidence": [
+				"bun run check -> 0 errors, 0 warnings",
+				"vitest scheduling+bookings -> 17 passed",
+				"lint:design/lint:tokens clean"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:43:01.079Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-distinct-visit-dates",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6377,6 +6377,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:31:58.286Z"
+		},
+		{
+			"key": "pr:minion-base#53",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-base",
+			"title": "#53 fix(board): align spec evidence detail state",
+			"sourceUrl": "https://github.com/NikolasP98/minion-base/pull/53",
+			"sourceUpdatedAt": "2026-09-02T06:42:18Z",
+			"sourceFingerprint": "c8125114864e508fda3d191e646211659b0cb137bf48fd3a1f606f60496a425b",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fix to board spec-evidence semantics is thoroughly verified and ready to merge, improving internal tooling integrity.",
+			"evidence": [
+				"full suite 564 passed",
+				"svelte-check 0 errors/0 warnings",
+				"production build passes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:43:01.079Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
@@ -9126,6 +9159,41 @@
 			"scoredAt": "2026-09-02T00:58:16.105Z"
 		},
 		{
+			"key": "deploy:minion_hub",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion_hub",
+			"title": "minion_hub deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/commit/3310334d4ff8e5b68cc9e0d1b06aec9f59ddffbe",
+			"sourceUpdatedAt": "2026-09-02T06:42:24Z",
+			"sourceFingerprint": "ca64cc89ccb43e6518c1316476b885c6f933be07deb5c710f05d90b23dc6024a",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"run:minion_hub#33600052012",
+				"run:minion_hub#33600052035"
+			],
+			"rationale": "This is a running deployment status snapshot of an already-merged commit rather than an actionable goal.",
+			"evidence": [
+				"status: running",
+				"summary describes an already-completed Picker feature commit"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:43:01.079Z"
+		},
+		{
 			"key": "pr:pixel-agents#390",
 			"kind": "pr",
 			"stage": "development",
@@ -11075,6 +11143,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:37:34.863Z"
+		},
+		{
+			"key": "run:minion_hub#33600052012",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "Factory Notify",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/33600052012",
+			"sourceUpdatedAt": "2026-09-02T06:42:24Z",
+			"sourceFingerprint": "b5453c07974c21c8660a5897369fd7b43703b404d80f3519d5ec443bf425c256",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"run:minion_hub#33600052035",
+				"deploy:minion_hub"
+			],
+			"rationale": "Queued CI notification run is routine automation status tied to a push, not an actionable goal.",
+			"evidence": [
+				"status: queued",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:43:01.079Z"
+		},
+		{
+			"key": "run:minion_hub#33600052035",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/33600052035",
+			"sourceUpdatedAt": "2026-09-02T06:42:24Z",
+			"sourceFingerprint": "21a41d4231d456376f137960526879e6554ea5dc131599d92e7b165f76c05682",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"run:minion_hub#33600052012",
+				"deploy:minion_hub"
+			],
+			"rationale": "Queued CI run duplicates status tracking for the same push and carries no independent goal content.",
+			"evidence": [
+				"status: queued",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-02T06:43:01.079Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1447734948",
