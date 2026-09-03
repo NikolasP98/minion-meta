@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `src/lib/components/team/HolidaysTab.svelte` is re
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/227
 - file: `src/lib/components/team/HolidaysTab.svelte`
 - checked: 2026-09-03
+
+## Merged from handoff-minion-hub-3479589007
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/lib/components/team/HolidaysTab.svelte:74` — unchecking a weekday does not delete rows already materialised for it
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/team/HolidaysTab.svelte#L74
