@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-d7d6ea26b0c3
 title: "Post-merge finding — todo-handoff in src/lib/components/team/HolidaysTab.svelte (minion_hub)"
-status: approved
+status: closed
 created: 2026-09-03
 updated: 2026-09-03
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still approved — closing"
 ---
 
 # Post-merge finding — todo-handoff in `src/lib/components/team/HolidaysTab.svelte`
