@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-d7d6ea26b0c3
 title: "Post-merge finding — todo-handoff in src/lib/components/team/HolidaysTab.svelte (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-03
 updated: 2026-09-03
 repos: [minion-hub]
