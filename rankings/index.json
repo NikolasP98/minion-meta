@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-03T05:06:53.821Z",
+	"generatedAt": "2026-09-03T05:34:22.061Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -5782,6 +5782,39 @@
 			"scoredAt": "2026-09-03T02:05:01.995Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-f696097",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ f696097",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f696097.md",
+			"sourceUpdatedAt": "2026-09-03",
+			"sourceFingerprint": "1153c4fc8268f5d1d7562333eb708872ec82a33f448a8ae2c4ffaf944d0f5cd4",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Automated merge-scan lists concrete unchecked-access and unvalidated-input findings with exact file:line locations in minion_hub HR/scheduling code that are bounded to fix.",
+			"evidence": [
+				"hr.service.ts:230/315/370/564 return row without checking .returning()[0] for undefined",
+				"scheduling-slots.service.ts:189 dayOff.get() called without null check risking TypeError",
+				"multiple +server.ts routes pass unvalidated query params to service functions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-03T05:34:21.981Z"
+		},
+		{
 			"key": "pr:minion-meta#255",
 			"kind": "pr",
 			"stage": "development",
@@ -6980,38 +7013,6 @@
 			"scoredAt": "2026-08-31T07:42:55.201Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1d40d9a77164ea3461884f1a4e56296e94305a4c",
-			"sourceUpdatedAt": "2026-08-30T23:26:06Z",
-			"sourceFingerprint": "87059168be0433dabf795cb5c55e379712a0972b390a21d889eae2dd3423bfe4",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged CI platform-validation fix with no indication of ongoing incident or blocker.",
-			"evidence": [
-				"commit message: ci: scope platform validation and add DEV audits (#263)",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-03T05:06:53.752Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-2222130690",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7694,38 +7695,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-02T22:05:08.659Z"
-		},
-		{
-			"key": "run:minion_hub#33717448343",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/33717448343",
-			"sourceUpdatedAt": "2026-09-03T05:05:39Z",
-			"sourceFingerprint": "6bcda6b6187afe47f65031b0f0f805d166fe320079cfa9ce2de8c4a16702fbba",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A routine in-progress CI run on master with no evidence of failure or urgency.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-03T05:06:53.752Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-workforce-client-json-error",
