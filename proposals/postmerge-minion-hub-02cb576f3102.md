@@ -49,3 +49,10 @@ The raw `fetch()` at line 34-40 bypasses the hub's request abstraction layer, ma
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/233
 - file: `src/lib/components/users/MemberAccessControls.svelte`
 - checked: 2026-09-04
+
+## Merged from handoff-minion-hub-1153728387
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/lib/components/users/MemberAccessControls.svelte:5` — raw fetch moved verbatim from TeamTab — migrate to
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/users/MemberAccessControls.svelte#L5

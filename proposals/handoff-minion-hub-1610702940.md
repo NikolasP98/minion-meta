@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-1610702940
 title: Handoff marker — src/lib/components/users/JoinLinkForm.svelte (minion_hub)
-status: draft
+status: merged
 created: 2026-09-04
 updated: 2026-09-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-981acd88c1d3
+merged_into: postmerge-minion-hub-981acd88c1d3
 ---
 
 # Handoff marker — src/lib/components/users/JoinLinkForm.svelte

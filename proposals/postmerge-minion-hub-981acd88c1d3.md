@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `src/lib/components/users/JoinLinkForm.svelte` is 
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/233
 - file: `src/lib/components/users/JoinLinkForm.svelte`
 - checked: 2026-09-04
+
+## Merged from handoff-minion-hub-1610702940
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/lib/components/users/JoinLinkForm.svelte:5` — raw fetch + hardcoded EN strings moved verbatim from TeamTab —
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/users/JoinLinkForm.svelte#L5
