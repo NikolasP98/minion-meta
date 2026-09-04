@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-ba5345e2cb9d
 title: "Post-merge finding — todo-handoff in src/lib/components/team/TeamSettingsView.svelte (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-04
 updated: 2026-09-04
 repos: [minion-hub]
