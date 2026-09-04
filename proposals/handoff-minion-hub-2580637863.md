@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2580637863
 title: Handoff marker — src/server/services/hr.service.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-490d681c114f
 created: 2026-09-04
 updated: 2026-09-04
 repos: [minion-hub]

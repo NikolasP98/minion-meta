@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-3987281639
 title: Handoff marker — src/server/db/pg-hr-schema.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-249dc0b349bf
 created: 2026-09-04
 updated: 2026-09-04
 repos: [minion-hub]

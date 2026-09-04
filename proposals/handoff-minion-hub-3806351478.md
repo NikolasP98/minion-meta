@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-3806351478
 title: Handoff marker — src/lib/components/team/timeline.svelte.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-6e3297fea67e
 created: 2026-09-04
 updated: 2026-09-04
 repos: [minion-hub]

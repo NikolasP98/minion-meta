@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-186678670
 title: Handoff marker — src/lib/components/team/TeamSettingsView.svelte (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-ba5345e2cb9d
 created: 2026-09-04
 updated: 2026-09-04
 repos: [minion-hub]
