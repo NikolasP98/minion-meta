@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-04T06:35:31.093Z",
+	"generatedAt": "2026-09-04T06:52:40.631Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -5784,40 +5784,6 @@
 			"scoredAt": "2026-09-03T05:34:21.981Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-490d681c114f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/hr.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-490d681c114f.md",
-			"sourceUpdatedAt": "2026-09-04",
-			"sourceFingerprint": "39f294e6558786e17a8d0f8905834d7e873a14bd5a70abeb35da56c83d6867e0",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-2580637863"
-			],
-			"rationale": "Approved with a clear diagnosis of a silent data-consistency bug in HR holiday scheduling and two concrete fix options.",
-			"evidence": [
-				"status approved",
-				"fix direction: return 409 conflict or validate upfront and surface to UI"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-04T06:35:31.012Z"
-		},
-		{
 			"key": "pr:minion-meta#255",
 			"kind": "pr",
 			"stage": "development",
@@ -6079,6 +6045,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:47:22.636Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-490d681c114f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/hr.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-490d681c114f.md",
+			"sourceUpdatedAt": "2026-09-04",
+			"sourceFingerprint": "3e51316989fcea8286b2b171ac9149eecee3937ce147e53a310dd2da45a23e39",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Silent skip of already-held holiday dates causes HR data inconsistency and has a clear fix direction (409 conflict or upfront validation).",
+			"evidence": [
+				"TODO(handoff): a date already held by a manual holiday is skipped silently",
+				"Definition of done specifies removing or updating the marker with explicit conflict handling"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-04T06:52:40.536Z"
 		},
 		{
 			"key": "pr:minion_hub#203",
@@ -7251,74 +7249,6 @@
 			"scoredAt": "2026-08-31T07:42:55.201Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-186678670",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/team/TeamSettingsView.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-186678670.md",
-			"sourceUpdatedAt": "2026-09-04",
-			"sourceFingerprint": "50f3b25e8b469f9aa37c030b651ebd4f9c2d3831f6c1400acf69e10e2eefb5eb",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-ba5345e2cb9d"
-			],
-			"rationale": "This draft duplicates the same TeamSettingsView.svelte TODO marker already covered by an approved postmerge proposal with a concrete fix direction.",
-			"evidence": [
-				"identical marker 'add-only; rename / deactivate / max-days edits need a modal'",
-				"postmerge-minion-hub-ba5345e2cb9d covers the same file and is already approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-04T06:35:31.012Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-2580637863",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/server/services/hr.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2580637863.md",
-			"sourceUpdatedAt": "2026-09-04",
-			"sourceFingerprint": "78e6997136261c0bdff0f4ef11d43d3808e96ccbe7fa9c3f4456839b968c1124",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-490d681c114f"
-			],
-			"rationale": "This draft duplicates the hr.service.ts holiday-skip TODO already covered by an approved postmerge proposal with a fuller diagnosis.",
-			"evidence": [
-				"identical marker text about a date already held by a manual holiday",
-				"postmerge-minion-hub-490d681c114f is approved and more developed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-04T06:35:31.012Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-3389264281",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7914,37 +7844,6 @@
 			"scoredAt": "2026-08-31T07:31:58.286Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1d40d9a77164ea3461884f1a4e56296e94305a4c",
-			"sourceUpdatedAt": "2026-08-30T23:26:06Z",
-			"sourceFingerprint": "87059168be0433dabf795cb5c55e379712a0972b390a21d889eae2dd3423bfe4",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The summary describes CI platform-validation fixes already applied in past tense, leaving no forward-looking action.",
-			"evidence": [
-				"summary text: 'apply CI fixes', 'Fix CI platform audit reachability contracts'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-04T06:35:31.012Z"
-		},
-		{
 			"key": "proposal:2026-08-29-proposal-index-check-mode-and-effort-projection",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8007,74 +7906,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-04T02:35:18.636Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-3806351478",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/team/timeline.svelte.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3806351478.md",
-			"sourceUpdatedAt": "2026-09-04",
-			"sourceFingerprint": "3335f9a1ec421a1a971bc1f8f88e7f657014a34b3796ea4fc7f2198457e017d7",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-6e3297fea67e"
-			],
-			"rationale": "This draft duplicates the timeline.svelte.ts TODO already covered by an approved postmerge proposal.",
-			"evidence": [
-				"identical marker about leave bars/holiday shading tied to loader's current-year",
-				"postmerge-minion-hub-6e3297fea67e is approved and covers the same file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-04T06:35:31.012Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-3987281639",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/server/db/pg-hr-schema.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3987281639.md",
-			"sourceUpdatedAt": "2026-09-04",
-			"sourceFingerprint": "e68aa244da7e025f026670d10a85c7a6f40b2ba7c7b5f1c3d0514130791c45a9",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-249dc0b349bf"
-			],
-			"rationale": "This draft duplicates the pg-hr-schema.ts drop-column TODO already covered by a separate postmerge proposal citing the same proposal #16.",
-			"evidence": [
-				"identical marker 'drop column (proposal #16)'",
-				"postmerge-minion-hub-249dc0b349bf targets the same file and marker"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-04T06:35:31.012Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2757299434",
@@ -8343,6 +8174,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-02T22:34:24.629Z"
+		},
+		{
+			"key": "run:minion_hub#33846104256",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/33846104256",
+			"sourceUpdatedAt": "2026-09-04T06:51:16Z",
+			"sourceFingerprint": "6950643227353e799d9a7bca80feb1d71cf6832997673e418b6e53d85e80bacf",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run triggered by a push, not an actionable goal.",
+			"evidence": [
+				"stage: testing, status: in_progress",
+				"summary: push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-04T06:52:40.536Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-1962723814",
