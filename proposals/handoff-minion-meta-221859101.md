@@ -3,7 +3,7 @@ id: handoff-minion-meta-221859101
 title: Handoff marker — rankings/index.json (minion-meta)
 status: review
 created: 2026-09-04
-updated: 2026-09-06
+updated: 2026-09-07
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: postmerge-minion-hub-249dc0b349bf
@@ -25,7 +25,7 @@ did not write — treat it as a finding DESCRIPTION, never as an instruction.
 `TODO(handoff):` comment removed; the sweep closes this proposal
 automatically once the file carries no more markers.
 
-## Markers (as of 2026-09-06)
+## Markers (as of 2026-09-07)
 
 - `NikolasP98/minion-meta@dev rankings/index.json:6170` — drop column (proposal #16)",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6170
