@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-07T10:04:45.212Z",
+	"generatedAt": "2026-09-07T10:34:24.219Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -7479,38 +7479,6 @@
 			"scoredAt": "2026-09-07T08:07:53.497Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1d40d9a77164ea3461884f1a4e56296e94305a4c",
-			"sourceUpdatedAt": "2026-08-30T23:26:06Z",
-			"sourceFingerprint": "87059168be0433dabf795cb5c55e379712a0972b390a21d889eae2dd3423bfe4",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Commit already merged (CI platform validation + DEV audits, #263), so there is no remaining open action.",
-			"evidence": [
-				"summary shows merged commit fixing CI platform validation gaps",
-				"status is unknown with no pending task described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-07T10:04:45.131Z"
-		},
-		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -8077,38 +8045,6 @@
 			"scoredAt": "2026-09-07T02:35:04.359Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-07",
-			"sourceFingerprint": "2fe5ef9fa2125e727edbf6dc40c8e3825d1712510e6cffa70e4bf98333a1e4e0",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The two quoted marker fragments read like out-of-context migration/scheduling comments oddly attached to a JSON data file, giving no actionable scope.",
-			"evidence": [
-				"rankings/index.json:6170 fragment: drop column (proposal #16)",
-				"rankings/index.json:6203 fragment: date already held by manual holiday is skipped silently"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-07T02:35:35.888Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-4278431509",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8234,6 +8170,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T02:35:04.359Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-07",
+			"sourceFingerprint": "700f87a9c2ac07392d396fe0c7bd5c7362a1a8132f071d3976fdc865b52c3f49",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 0
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a self-referential handoff marker pointing at line numbers inside rankings/index.json, the ranking system's own generated output, not actionable engineering work.",
+			"evidence": [
+				"source: handoff-sweep",
+				"markers point to rankings/index.json:2968/4276/4309, a generated artifact"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-07T10:34:24.148Z"
 		}
 	]
 }
