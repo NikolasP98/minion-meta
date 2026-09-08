@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-08T08:04:53.546Z",
+	"generatedAt": "2026-09-08T08:34:23.192Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -2049,8 +2049,8 @@
 			"repo": "minion-meta",
 			"title": "#265 [monitor:unstick] Factory queue wedged",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/265",
-			"sourceUpdatedAt": "2026-09-02T09:17:02Z",
-			"sourceFingerprint": "66ac0cd5c4e617246ca423d4bb72c2bea6d9228d4ab0e0836e5e407d1dd80e49",
+			"sourceUpdatedAt": "2026-09-08T08:17:02Z",
+			"sourceFingerprint": "439bf2faf4f27c54b5568524d26a195d939fc31b2b10d5d7c946990307fd0469",
 			"score": 57,
 			"band": "medium",
 			"axes": {
@@ -2060,19 +2060,19 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 5
+				"implementation": 4
 			},
-			"confidence": 5,
+			"confidence": 4,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "An automated monitor reports the factory queue is wedged with queued runs and nothing executing for over 15 minutes, which blocks pipeline throughput until the runner is restarted.",
+			"rationale": "An automated monitor reports the factory queue has been wedged for over 15 minutes with nothing running, which blocks all downstream automated work until resolved.",
 			"evidence": [
 				"queued run(s) with nothing running for >15m; runner may need a restart",
-				"source: unstick, status open, updated 2026-09-02"
+				"source: unstick, fingerprint: unstick-queue-wedged"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T09:23:04.223Z"
+			"scoredAt": "2026-09-08T08:34:23.124Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
@@ -6682,38 +6682,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-04T06:35:31.012Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1d40d9a77164ea3461884f1a4e56296e94305a4c",
-			"sourceUpdatedAt": "2026-08-30T23:26:06Z",
-			"sourceFingerprint": "87059168be0433dabf795cb5c55e379712a0972b390a21d889eae2dd3423bfe4",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already closed the CI platform validation gaps, leaving no further deployment action evident.",
-			"evidence": [
-				"ci: scope platform validation and add DEV audits (#263)",
-				"no-mistakes: apply CI fixes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-08T08:04:53.479Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1447734948",
