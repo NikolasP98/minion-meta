@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-08T07:21:13.767Z",
+	"generatedAt": "2026-09-08T07:32:31.615Z",
 	"rankings": [
 		{
 			"key": "issue:minion-factory#107",
@@ -3065,41 +3065,6 @@
 			"scoredAt": "2026-09-07T08:09:49.304Z"
 		},
 		{
-			"key": "proposal:2026-08-29-proposal-index-projection-parity-untested",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "proposals/index.json silently drops frontmatter fields the projection forgets",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-proposal-index-projection-parity-untested.md",
-			"sourceUpdatedAt": "2026-09-01",
-			"sourceFingerprint": "7ba2d98327ac1b23054596e73c39295883154fa7d9a8ab708469adb84ea66e15",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:handoff-minion-meta-451096235"
-			],
-			"rationale": "Well-specified fix for a proven silent data-loss defect in the board's own proposal-index projection, with clear DoD.",
-			"evidence": [
-				"effort field was silently dropped and caught only by manual PR review",
-				"proposal-index.mjs has no parity test unlike spec-index.mjs's M1 test",
-				"DoD requires byte-identical regeneration on a clean checkout"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-01T20:58:04.154Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-2988591151",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5074,6 +5039,38 @@
 			"scoredAt": "2026-09-02T07:16:17.534Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/services/gateway.svelte.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fb0ae19f9ea1.md",
+			"sourceUpdatedAt": "2026-09-08",
+			"sourceFingerprint": "a1d969e0c389342d2487f035f955564e4906ad81142921fd09280783491393d1",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The workaround's removal is gated on an undefined root cause, so the finding as stated (\"remove once root-caused\") cannot be executed until reframed as a root-cause investigation task.",
+			"evidence": [
+				"marker: 'remove once the phone failure is root-caused' at gateway.svelte.ts:309",
+				"diagnosis fix direction requires searching repo/issue tracker and coordinating with gateway phone-control team before any removal is possible"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-08T07:32:31.539Z"
+		},
+		{
 			"key": "spec:2026-08-17-hub-brain-org-all-scope-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -6848,6 +6845,39 @@
 			"scoredAt": "2026-09-07T08:11:32.696Z"
 		},
 		{
+			"key": "proposal:2026-08-29-proposal-index-check-mode-and-effort-projection",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "proposal-index.mjs — add a read-only --check mode and reconcile projection with the auto-triage index writer",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-proposal-index-check-mode-and-effort-projection.md",
+			"sourceUpdatedAt": "2026-09-08",
+			"sourceFingerprint": "15de14498b82605796fd0293ac88215b2dac9cebf33e75f4cc81aa58602f1697",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Read-only mode and effort projection are both already implemented and tested, leaving only a minor unconfirmed ordering question with no declared canonical answer.",
+			"evidence": [
+				"'--check' fixed in consolidated release with tests for matching and drifted indexes",
+				"'effort' projection done in review-fix-6f292604, covered by proposal-index.test.mjs",
+				"row ordering divergence still open, marked TODO(handoff) with no owner decision"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-08T07:32:31.539Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-1883922325",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7476,38 +7506,6 @@
 			"scoredAt": "2026-09-07T22:34:40.008Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1d40d9a77164ea3461884f1a4e56296e94305a4c",
-			"sourceUpdatedAt": "2026-08-30T23:26:06Z",
-			"sourceFingerprint": "87059168be0433dabf795cb5c55e379712a0972b390a21d889eae2dd3423bfe4",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a past commit's CI/documentation fix already merged, not an open actionable goal.",
-			"evidence": [
-				"ci: scope platform validation and add DEV audits (#263)",
-				"status: unknown, but summary describes completed fixes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-08T07:21:13.696Z"
-		},
-		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -7605,39 +7603,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:08:45.360Z"
-		},
-		{
-			"key": "proposal:2026-08-29-proposal-index-check-mode-and-effort-projection",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "proposal-index.mjs — add a read-only --check mode and reconcile projection with the auto-triage index writer",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-proposal-index-check-mode-and-effort-projection.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "839dfa51667837dd4a0e21ac215338756ac0b4be3d7b38dc0c5ceea12c0e1518",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Every substantive delta item is already marked done, leaving only a minor unresolved ordering-confirmation detail not worth a standalone goal.",
-			"evidence": [
-				"--check mode: Done — matching and drifted index cases prove read-only",
-				"effort projection: Done — generator projects effort unconditionally",
-				"remaining ask is only to confirm auto-triage writer insertion order"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T06:25:18.017Z"
 		},
 		{
 			"key": "proposal:2026-08-29-roadmap-unhomed-program-detail",
@@ -8231,14 +8196,14 @@
 			"scoredAt": "2026-09-08T02:34:55.002Z"
 		},
 		{
-			"key": "run:minion_hub#34198776585",
+			"key": "run:minion_hub#34199694602",
 			"kind": "run",
 			"stage": "testing",
 			"repo": "minion_hub",
 			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/34198776585",
-			"sourceUpdatedAt": "2026-09-08T07:19:57Z",
-			"sourceFingerprint": "00ce19c90ba6ac89f3322feb41fb32247a11d9d6afbe903100383785bc10de92",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/34199694602",
+			"sourceUpdatedAt": "2026-09-08T07:30:57Z",
+			"sourceFingerprint": "b0dd8b291b730aabfa19779d707901509c246747f1762327e91c79f2c8f2b962",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -8253,14 +8218,14 @@
 			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run on master with no indication of failure or actionable problem.",
+			"rationale": "This is an in-progress CI run with no failure or actionable content, not a work item.",
 			"evidence": [
 				"status: in_progress",
-				"push on master"
+				"summary: push on master, no failure indicated"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-08T07:21:13.696Z"
+			"scoredAt": "2026-09-08T07:32:31.539Z"
 		}
 	]
 }
