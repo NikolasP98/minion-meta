@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `src/lib/services/gateway.svelte.ts` is removed, o
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/239
 - file: `src/lib/services/gateway.svelte.ts`
 - checked: 2026-09-08
+
+## Merged from handoff-minion-hub-2237864359
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/lib/services/gateway.svelte.ts:309` — remove once the phone failure is root-caused.
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/services/gateway.svelte.ts#L309

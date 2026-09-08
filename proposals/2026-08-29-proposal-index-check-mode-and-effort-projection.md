@@ -3,7 +3,7 @@ id: 2026-08-29-proposal-index-check-mode-and-effort-projection
 title: proposal-index.mjs — add a read-only --check mode and reconcile projection with the auto-triage index writer
 status: review
 created: 2026-08-29
-updated: 2026-09-02
+updated: 2026-09-08
 repos: [minion-meta]
 tags: [infra, test]
 source: review-fix-6f292604
@@ -96,6 +96,17 @@ site was removed from `scripts/proposal-index.mjs` since it no longer applies.
 **Update (consolidated release, 2026-08-29):** read-only `--check`, its focused tests, effort
 projection, and effort validation are complete. Only the out-of-band auto-triage ordering
 contract remains open; its exact sort site retains the required `TODO(handoff)` marker.
+
+## Merged from 2026-08-29-proposal-index-projection-parity-untested
+
+Same defect class, filed the same day from the general angle ("the projection can silently drop
+any frontmatter field, not just `effort`"), before this proposal's incident-specific fix landed.
+Its DELTA items are covered here (`scripts/proposal-index.test.mjs` parity coverage; the `--check`
+drift detection; "decide the second writer" ≡ the auto-triage ordering question still open above).
+Its `Definition of done` added one verification method worth keeping for whoever closes the
+remaining ordering item: **verify the parity test actually fails red** by temporarily deleting a
+projected key (e.g. `effort`) from the generator and confirming `node --test scripts/*.test.mjs`
+catches it — not just that the test file exists.
 
 ## Merged: handoff-sweep marker for the same open end
 

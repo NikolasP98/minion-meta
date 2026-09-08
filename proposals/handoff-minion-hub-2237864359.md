@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-2237864359
 title: Handoff marker — src/lib/services/gateway.svelte.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-08
 updated: 2026-09-08
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-fb0ae19f9ea1
+merged_into: postmerge-minion-hub-fb0ae19f9ea1
 ---
 
 # Handoff marker — src/lib/services/gateway.svelte.ts
