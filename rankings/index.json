@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-09T04:34:15.721Z",
+	"generatedAt": "2026-09-09T05:04:28.054Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2234,38 +2234,6 @@
 			"scoredAt": "2026-09-07T08:09:49.304Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-1d40d9a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 1d40d9a",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-1d40d9a.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "4dff2924dd3f9ac9f4d2c22cc7415f6bdd265adbfb28d24ca9521ef870870af0",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Bundles a dozen unrelated findings of varying severity across disjoint files, so it should be split into individually scoped fixes rather than treated as one goal.",
-			"evidence": [
-				"12 findings spanning llm-task, telegram, tts, ci-workflow tests, and config/types.ts",
-				"severities range from medium empty-catch to high weakened-test and unchecked-access with no unifying fix scope"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T04:57:42.677Z"
-		},
-		{
 			"key": "spec:2026-08-13-crm-customers-server-pagination-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -2467,6 +2435,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:11:32.696Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-1d40d9a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 1d40d9a",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-1d40d9a.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "4dff2924dd3f9ac9f4d2c22cc7415f6bdd265adbfb28d24ca9521ef870870af0",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Automated merge-scan surfaced multiple high-severity unchecked-access and weakened-test findings with precise file/line anchors that are directly actionable.",
+			"evidence": [
+				"ci-workflow.test.ts:137,209,251,261 unchecked-access on .find() results",
+				"llm-task-tool.test.ts:101 test has no assertions after removal",
+				"tts.test.ts:391 removed call-count assertion without replacement"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-09T05:04:27.982Z"
 		},
 		{
 			"key": "spec:2026-08-31-base-meta-status-revision-binding-required-spec",
@@ -7601,38 +7602,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T22:34:40.008Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1d40d9a77164ea3461884f1a4e56296e94305a4c",
-			"sourceUpdatedAt": "2026-08-30T23:26:06Z",
-			"sourceFingerprint": "87059168be0433dabf795cb5c55e379712a0972b390a21d889eae2dd3423bfe4",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged CI/platform-validation commit describing work already completed, not an open actionable goal.",
-			"evidence": [
-				"summary shows commit content for merged PR #263 closing CI platform validation gaps",
-				"status is unknown with no described outstanding problem"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T04:04:22.745Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
