@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-09T10:04:24.583Z",
+	"generatedAt": "2026-09-09T10:34:34.957Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7602,38 +7602,6 @@
 			"scoredAt": "2026-09-07T22:34:40.008Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1d40d9a77164ea3461884f1a4e56296e94305a4c",
-			"sourceUpdatedAt": "2026-08-30T23:26:06Z",
-			"sourceFingerprint": "87059168be0433dabf795cb5c55e379712a0972b390a21d889eae2dd3423bfe4",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged CI commit log entry, not an actionable goal, with no open scope remaining.",
-			"evidence": [
-				"commit message shows CI fixes already applied",
-				"no described outstanding problem or deadline"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T09:34:27.751Z"
-		},
-		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -8166,38 +8134,6 @@
 			"scoredAt": "2026-09-09T02:35:16.130Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-09",
-			"sourceFingerprint": "74dd53e87f7701a1abfaff6c79c109ffa55cc827e0c55fc7a7a746c39678a2b7",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The listed TODO(handoff) markers are scattered, unrelated fragments (scheduling, calendar, and a self-referential note) embedded in a generated data file rather than source code, so this cannot be resolved as one coherent action.",
-			"evidence": [
-				"markers span disparate topics: 'drop column', 'holiday is skipped silently', 'reschedule outside working hours', 'resourceId is only ever set'",
-				"one marker points at 'this proposal' itself, indicating self-referential/generated noise"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T06:35:03.763Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-4278431509",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8323,6 +8259,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-09T02:35:16.130Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-09",
+			"sourceFingerprint": "71aa11a2a1f48915775155ed940ba10e5d41dfe13b49345ae00fd8d06e531760",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed markers are quoted fragments from rankings/index.json, a generated data file, not real source-code TODOs, and one marker is self-referentially 'pointing at this proposal', indicating a malformed sweep artifact rather than actionable work.",
+			"evidence": [
+				"repo: NikolasP98/minion-meta, file rankings/index.json:2736 marker text is 'comment pointing at this proposal'",
+				"markers quote fragments like 'resourceId is only ever set from the calendar's' with no code context",
+				"target file is rankings/index.json (generated ranking data), not application source"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-09T10:34:34.890Z"
 		}
 	]
 }
