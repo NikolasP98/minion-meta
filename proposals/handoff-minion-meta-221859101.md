@@ -27,9 +27,9 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-09)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:2701` — comment pointing at this proposal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2701
-- `NikolasP98/minion-meta@dev rankings/index.json:4107` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4107
-- `NikolasP98/minion-meta@dev rankings/index.json:4140` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4140
+- `NikolasP98/minion-meta@dev rankings/index.json:2700` — comment pointing at this proposal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2700
+- `NikolasP98/minion-meta@dev rankings/index.json:4171` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4171
+- `NikolasP98/minion-meta@dev rankings/index.json:4204` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4204
