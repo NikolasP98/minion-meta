@@ -27,13 +27,15 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-09)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:2701` — comment pointing at this proposal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2701
-- `NikolasP98/minion-meta@dev rankings/index.json:4172` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4172
-- `NikolasP98/minion-meta@dev rankings/index.json:4205` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4205
-- `NikolasP98/minion-meta@dev rankings/index.json:5005` — spec §3.2b allows a reschedule outside working hours",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5005
-- `NikolasP98/minion-meta@dev rankings/index.json:5821` — resourceId is only ever set from the calendar's",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5821
+- `NikolasP98/minion-meta@dev rankings/index.json:2736` — comment pointing at this proposal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2736
+- `NikolasP98/minion-meta@dev rankings/index.json:4271` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4271
+- `NikolasP98/minion-meta@dev rankings/index.json:4304` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4304
+- `NikolasP98/minion-meta@dev rankings/index.json:4972` — spec §3.2b allows a reschedule outside working hours",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4972
+- `NikolasP98/minion-meta@dev rankings/index.json:5756` — resourceId is only ever set from the calendar's",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5756
+- `NikolasP98/minion-meta@dev rankings/index.json:6088` — prompt-driven protocol instead of native tool_use — replace'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6088
