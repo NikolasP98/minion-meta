@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-09T21:34:22.679Z",
+	"generatedAt": "2026-09-09T22:04:50.739Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1353,39 +1353,6 @@
 			"scoredAt": "2026-09-07T08:35:09.206Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-factory-0290030",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-located, concrete defects in the factory's own automation scripts include a potential infinite loop in rank.sh, directly threatening pipeline reliability.",
-			"evidence": [
-				"agent/rank.sh:74 unvalidated batch size could cause infinite loop",
-				"agent/rank.sh:71 unchecked jq access could silently skip the loop",
-				"15 findings across rank.sh, reconcile.sh, discovery.sh, cost.sh, and tests with exact file:line locations"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T21:34:47.734Z"
-		},
-		{
 			"key": "spec:2026-08-17-gw-shells-lifecycle-stubs-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -2232,6 +2199,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:09:49.304Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-factory-0290030",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Batch of findings in the factory's own core automation scripts includes a high-severity infinite-loop risk and test-masking issues, each independently bounded and file-anchored.",
+			"evidence": [
+				"agent/rank.sh:74 FACTORY_RANK_BATCH_SIZE unvalidated can cause infinite loop",
+				"agent/lib/unslop.test.sh:63 bare grep lacks error handling, can mask test failures"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-09T22:04:50.660Z"
 		},
 		{
 			"key": "spec:2026-08-13-crm-customers-server-pagination-spec",
@@ -6794,20 +6793,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 7
+				"specification": 7,
+				"implementation": 8
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Small, well-specified fix for silent localStorage failures degrading chat session persistence in one component.",
+			"rationale": "Three well-localized localStorage silent-failure findings in a single component are low-severity edge cases but cheap and clearly bounded to fix.",
 			"evidence": [
-				"FloatingAssistant.svelte:119 and 142 silently fail on getItem/setItem for session restore/persist",
-				"3 findings confined to a single component with exact line numbers"
+				"FloatingAssistant.svelte:119 localStorage.getItem silent failure blocks session restore",
+				"FloatingAssistant.svelte:142 localStorage.setItem silent failure blocks session persistence"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T21:34:47.734Z"
+			"scoredAt": "2026-09-09T22:04:50.660Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-e3c8ec8",
@@ -7071,38 +7070,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-09T20:34:29.102Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1d40d9a77164ea3461884f1a4e56296e94305a4c",
-			"sourceUpdatedAt": "2026-08-30T23:26:06Z",
-			"sourceFingerprint": "87059168be0433dabf795cb5c55e379712a0972b390a21d889eae2dd3423bfe4",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The summary shows a commit that already fixed CI platform validation gaps and was merged, so this deploy-health entry reflects satisfied work rather than an open goal.",
-			"evidence": [
-				"commit message shows fix(ci) and no-mistakes(review) already applied",
-				"sourceUrl points to an existing commit hash, not an open task"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T21:04:35.121Z"
 		},
 		{
 			"key": "pr:minion_hub#196",
