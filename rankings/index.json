@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-09T22:04:50.739Z",
+	"generatedAt": "2026-09-09T22:35:10.941Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2802,39 +2802,6 @@
 			"scoredAt": "2026-09-09T02:35:49.037Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-355769a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 355769a",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-355769a.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "66f71d445700c60f4067ffeaaf69579acadbd20324de9aa18469cffee3153ca7",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Four bounded defects in merged scheduling and UI code are actionable now, with the unescaped contact parameter and silently masked API failures providing the strongest justification.",
-			"evidence": [
-				"Four medium findings identify exact files and lines.",
-				"The booking route constructs a URL from an unsanitized contact value.",
-				"Two scheduling catches silently mask stock-preview and CRM-search failures."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T22:05:08.659Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-afd023b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4010,6 +3977,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:12:46.705Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-355769a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 355769a",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-355769a.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "66f71d445700c60f4067ffeaaf69579acadbd20324de9aa18469cffee3153ca7",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Merge-scan lists concrete file:line findings for silent empty-catch error handling and an unsanitized URL-parameter construction in minion_hub scheduling code, all small bounded fixes.",
+			"evidence": [
+				"BookingCreateForm.svelte:134 and :178 empty-catch swallows fetch/search errors",
+				"+page.server.ts:11 unvalidated-input: URL parameter not passed through URLSearchParams.set()"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-09T22:35:10.859Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-e863232",
@@ -6714,6 +6713,38 @@
 			"scoredAt": "2026-09-04T06:35:31.012Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1d40d9a77164ea3461884f1a4e56296e94305a4c",
+			"sourceUpdatedAt": "2026-08-30T23:26:06Z",
+			"sourceFingerprint": "87059168be0433dabf795cb5c55e379712a0972b390a21d889eae2dd3423bfe4",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Commit message shows CI platform-validation gaps already fixed and reviewed through multiple review passes, leaving no open action.",
+			"evidence": [
+				"commit message: 'fix(ci): close remaining platform validation gaps' followed by review/fix iterations",
+				"status field is 'unknown' with no described open task"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-09T22:35:10.859Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-1447734948",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6743,38 +6774,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:12:46.705Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-09",
-			"sourceFingerprint": "b78cd2e570bfc777d845ed9e7f74abf7c99bcbbc19b27b4a538f500c6033cc00",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This is a self-referential handoff marker pointing at ledger lines within the rankings file itself rather than a concrete, independently verifiable open end to resolve.",
-			"evidence": [
-				"Filed automatically by the factory handoff-ledger sweep",
-				"Markers point at rankings/index.json lines including this same proposal's own reference"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T18:34:47.150Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-29ee60e",
@@ -7070,6 +7069,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-09T20:34:29.102Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-38e0a3c5f572",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/appointments/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-38e0a3c5f572.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "f478634ed6c683c123152f3ff3fa4c30a2f888cc3d0c0da6ceafa3deb5fd6021",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single approved handoff marker about a moved booking form is low-impact and the filing's embedded fabricated tool-call transcript undermines confidence in its stated diagnosis.",
+			"evidence": [
+				"marker text: 'scheduling's booking form moved to the in-page route'",
+				"status already 'approved' but summary contains unverified fabricated tool-invocation content rather than real diagnosis output"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-09T22:35:10.859Z"
 		},
 		{
 			"key": "pr:minion_hub#196",
@@ -7827,41 +7858,6 @@
 			"scoredAt": "2026-09-09T07:34:26.326Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-38e0a3c5f572",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/appointments/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-38e0a3c5f572.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "f478634ed6c683c123152f3ff3fa4c30a2f888cc3d0c0da6ceafa3deb5fd6021",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-3035029616"
-			],
-			"rationale": "This post-merge finding duplicates the handoff-sweep proposal for the same source marker and should become a single tracked resolution goal.",
-			"evidence": [
-				"The finding targets src/routes/(app)/pos/appointments/+page.svelte.",
-				"Its marker text matches the handoff-sweep finding.",
-				"Definition of done is removal or an intentionally updated rationale."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-02T22:05:08.659Z"
-		},
-		{
 			"key": "spec:2026-08-17-hub-dead-mirrors-cleanup-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -8162,6 +8158,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-09T02:35:16.130Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-09",
+			"sourceFingerprint": "4ed75e7960100da700b4b4777d42d8b19650d3b7d00689d9e3b1ec3cfe5f57e8",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "All six cited markers point to lines inside rankings/index.json itself and read as unrelated rationale fragments rather than genuine code TODO(handoff) comments.",
+			"evidence": [
+				"markers cite 'rankings/index.json:2735/4302/4335/5003/5755/6087' — the ranking system's own data file",
+				"marker texts are disjoint fragments ('drop column (proposal #16)', 'resourceId is only ever set from the calendar's') not a coherent TODO"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-09T22:35:10.859Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-4278431509",
