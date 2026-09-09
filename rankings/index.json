@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-09T14:04:40.751Z",
+	"generatedAt": "2026-09-09T14:34:40.242Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6126,6 +6126,38 @@
 			"scoredAt": "2026-09-07T08:14:36.905Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1d40d9a77164ea3461884f1a4e56296e94305a4c",
+			"sourceUpdatedAt": "2026-08-30T23:26:06Z",
+			"sourceFingerprint": "87059168be0433dabf795cb5c55e379712a0972b390a21d889eae2dd3423bfe4",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "CI platform validation and audit fixes landed but there's no signal of an active production issue requiring urgent action.",
+			"evidence": [
+				"ci: scope platform validation and add DEV audits (#263)",
+				"tags: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-09T14:34:40.171Z"
+		},
+		{
 			"key": "pr:minion (gateway)#256",
 			"kind": "pr",
 			"stage": "development",
@@ -7701,6 +7733,38 @@
 			"scoredAt": "2026-09-07T08:11:32.696Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-09",
+			"sourceFingerprint": "6a48f36f9c8f36d6bbed94ded4158b9082561c11b3e25bcfc2085e76c44565bc",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This is a meta handoff-ledger marker referencing six disparate open items in a single rankings file rather than one coherent, actionable spec.",
+			"evidence": [
+				"carries a TODO(handoff): marker",
+				"six unrelated markers spanning scheduling, resourceId, and protocol topics bundled into one proposal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-09T14:34:40.171Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-0f5a066",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8260,39 +8324,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-09T02:35:16.130Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-09",
-			"sourceFingerprint": "71aa11a2a1f48915775155ed940ba10e5d41dfe13b49345ae00fd8d06e531760",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are quoted fragments from rankings/index.json, a generated data file, not real source-code TODOs, and one marker is self-referentially 'pointing at this proposal', indicating a malformed sweep artifact rather than actionable work.",
-			"evidence": [
-				"repo: NikolasP98/minion-meta, file rankings/index.json:2736 marker text is 'comment pointing at this proposal'",
-				"markers quote fragments like 'resourceId is only ever set from the calendar's' with no code context",
-				"target file is rankings/index.json (generated ranking data), not application source"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T10:34:34.890Z"
 		}
 	]
 }
