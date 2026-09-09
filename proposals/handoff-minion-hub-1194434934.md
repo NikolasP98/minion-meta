@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-1194434934
 title: Handoff marker — src/lib/components/scheduling/BookingCreateForm.svelte (minion_hub)
-status: draft
+status: merged
 created: 2026-09-09
 updated: 2026-09-09
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-b1533fc3bb8c
+merged_into: postmerge-minion-hub-b1533fc3bb8c
 ---
 
 # Handoff marker — src/lib/components/scheduling/BookingCreateForm.svelte

@@ -48,3 +48,10 @@ Looking at the booking form, if `resourceId` is critical for creating a booking 
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/244
 - file: `src/lib/components/scheduling/BookingCreateForm.svelte`
 - checked: 2026-09-09
+
+## Merged from handoff-minion-hub-1194434934
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCreateForm.svelte:238` — resourceId is only ever set from the calendar's
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCreateForm.svelte#L238

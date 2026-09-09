@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `src/server/services/scheduling-bookings.service.t
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/244
 - file: `src/server/services/scheduling-bookings.service.ts`
 - checked: 2026-09-09
+
+## Merged from handoff-minion-hub-2812393778
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/server/services/scheduling-bookings.service.ts:631` — spec §3.2b allows a reschedule outside working hours /
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/scheduling-bookings.service.ts#L631
