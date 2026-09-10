@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-10T22:04:17.172Z",
+	"generatedAt": "2026-09-10T22:34:29.844Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6493,38 +6493,6 @@
 			"scoredAt": "2026-09-07T08:14:36.905Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/8499d8fddc4afdd22f6160e3f3e6e448b6befe73",
-			"sourceUpdatedAt": "2026-09-10T13:10:39Z",
-			"sourceFingerprint": "749216b865d8919fbe7347a2d59c251ae9cd08decad46a781715916bf31f37e2",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a completed, verified CI portability fix already merged, not an open goal requiring further action.",
-			"evidence": [
-				"fix(ci): make ci-security-scope.sh portable to bash 3.2 (macOS runners) (#279)",
-				"Verified: pnpm exec vitest run test/ci/ -> 14 files / 101 tests passed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T19:04:24.327Z"
-		},
-		{
 			"key": "pr:minion (gateway)#256",
 			"kind": "pr",
 			"stage": "development",
@@ -8758,38 +8726,6 @@
 			"scoredAt": "2026-09-10T02:35:01.795Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "f861862b909a6ff5b9159371ea823aa29a198e7de857467cbee580c77ce08ec2",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers in a data file (rankings/index.json) are self-referential or reference unrelated scheduling/calendar logic, indicating a false-positive sweep rather than real actionable TODOs.",
-			"evidence": [
-				"one marker text reads 'comment pointing at this proposal' (self-referential)",
-				"other markers reference calendar/scheduling concepts unrelated to a rankings index file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T18:35:02.903Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8947,6 +8883,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-10T02:35:01.795Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "d29efd2c065921c28224477f6e24e0cf38aae54b4b7e33ef267a5f1887340957",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited markers are line numbers inside rankings/index.json itself, meaning the sweep is matching quoted TODO-like text embedded in prior ranking entries' summary strings rather than actual source-code TODOs.",
+			"evidence": [
+				"all markers point to rankings/index.json lines, a generated ranking artifact, not source files",
+				"marker text is copied fragments from other proposals' summaries (e.g. 'drop column (proposal #16)')"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T22:34:29.758Z"
 		}
 	]
 }
