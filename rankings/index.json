@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-10T07:05:34.087Z",
+	"generatedAt": "2026-09-10T07:34:39.250Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -802,40 +802,6 @@
 			"scoredAt": "2026-09-09T09:04:52.229Z"
 		},
 		{
-			"key": "pr:minion (gateway)#270",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#270 chore: sync main into DEV (CI scaffolding reconciled for the DEV→main train)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/270",
-			"sourceUpdatedAt": "2026-09-10T06:44:43Z",
-			"sourceFingerprint": "1fc0cd8c9c6abdff0e952a000a8e895e9dc5496536b7675ecd7e815b1929cb31",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#265"
-			],
-			"rationale": "Well-documented, per-conflict merge resolution with local test evidence that unblocks the stalled production promotion train.",
-			"evidence": [
-				"merge-tree reports a clean tree after this change, making #265 mergeable",
-				"97 tests passed across 14 CI-contract test files locally"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T07:05:34.007Z"
-		},
-		{
 			"key": "proposal:handoff-minion-factory-1378118597",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1290,6 +1256,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-09T15:35:06.298Z"
+		},
+		{
+			"key": "pr:minion (gateway)#270",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#270 chore: sync main into DEV (CI scaffolding reconciled for the DEV→main train)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/270",
+			"sourceUpdatedAt": "2026-09-10T07:27:53Z",
+			"sourceFingerprint": "41674ba785cc97e42ac0c511fe2a14549880987f3a06367f2635401e3be2a9c0",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#271",
+				"run:minion (gateway)#34447058968"
+			],
+			"rationale": "Detailed, gate-verified merge that unblocks the stuck DEV→main train PR #265.",
+			"evidence": [
+				"4 documented conflicts resolved with rationale per file",
+				"local vitest/oxfmt/check gates all passed",
+				"merge-tree confirms #265 becomes conflict-free after this lands"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T07:34:39.183Z"
 		},
 		{
 			"key": "pr:minion_site#29",
@@ -2539,6 +2541,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-09T05:04:27.982Z"
+		},
+		{
+			"key": "run:minion (gateway)#34447058968",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34447058968",
+			"sourceUpdatedAt": "2026-09-10T07:07:26Z",
+			"sourceFingerprint": "e7b442726262af762c9945595d0aa506e06f077132b1bf370c62f08844166b6d",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#270",
+				"pr:minion (gateway)#271"
+			],
+			"rationale": "A failing CI run on DEV with no diagnostic detail beyond status, likely tied to the same CI scaffolding divergence addressed by the two related PRs.",
+			"evidence": [
+				"status: failure",
+				"push on DEV",
+				"no failure detail or logs included in candidate"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T07:34:39.183Z"
 		},
 		{
 			"key": "spec:2026-08-31-base-meta-status-revision-binding-required-spec",
@@ -4313,6 +4351,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:13:41.404Z"
+		},
+		{
+			"key": "pr:minion (gateway)#271",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#271 ci: audit two PRIVATE_KEY-substring false positives in .secrets.baseline (76f0f367)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/271",
+			"sourceUpdatedAt": "2026-09-10T07:26:24Z",
+			"sourceFingerprint": "325d65405a1c4fc013884ee5f4fc84b61269194da521eb31975846bea88dc47f",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#270"
+			],
+			"rationale": "Small, fully audited baseline update required to unblock #270's secrets gate, with clear content-blind-gate rationale for admin merge.",
+			"evidence": [
+				"20-line .secrets.baseline change with documented sha1-of-'true' false positives",
+				"content-blind ci-security-scope.sh gate cannot pass without dedicated PR",
+				"directly unblocks pr:270's secrets job"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T07:34:39.183Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-msteams-large-upload",
@@ -8658,38 +8731,6 @@
 			"scoredAt": "2026-09-10T05:35:30.528Z"
 		},
 		{
-			"key": "run:minion (gateway)#34447058968",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34447058968",
-			"sourceUpdatedAt": "2026-09-10T06:54:45Z",
-			"sourceFingerprint": "6de13b6849ec187bc2de8a1346f475d847f755fb273ad562928fd8db73469c8e",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run status, not an independent actionable goal.",
-			"evidence": [
-				"status: in_progress",
-				"triggered by routine push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T07:05:34.007Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-4278431509",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8720,38 +8761,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:11:32.696Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5e5539650d2fed8a19f0a51e01382af176c6330b",
-			"sourceUpdatedAt": "2026-09-10T06:50:35Z",
-			"sourceFingerprint": "6fb8c2e112c5873b2998ad020f69c3caf1a7b99aba648a7852237a227218e67d",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Deployment record references an already-merged routine macOS test-path fix, not an open action item.",
-			"evidence": [
-				"commit already merged fixing macOS realpath test fixture",
-				"tags: deployment only"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T07:05:34.007Z"
 		},
 		{
 			"key": "issue:minion-meta#373",
