@@ -26,5 +26,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-10)
 
-- `NikolasP98/minion-ai@DEV extensions/flows/src/data-paths.ts:213` — SEC-08 deployment requires trusted same-UID writers, canonical root pointers,
-  https://github.com/NikolasP98/minion-ai/blob/DEV/extensions/flows/src/data-paths.ts#L213
+- `NikolasP98/minion-ai@DEV extensions/flows/src/data-paths.ts:31` — a supported Windows policy needs a real ACL owner/permission check
+  https://github.com/NikolasP98/minion-ai/blob/DEV/extensions/flows/src/data-paths.ts#L31
+- `NikolasP98/minion-ai@DEV extensions/flows/src/data-paths.ts:237` — SEC-08 deployment requires trusted same-UID writers, canonical root pointers,
+  https://github.com/NikolasP98/minion-ai/blob/DEV/extensions/flows/src/data-paths.ts#L237

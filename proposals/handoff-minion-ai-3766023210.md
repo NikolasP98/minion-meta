@@ -26,7 +26,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-10)
 
-- `NikolasP98/minion-ai@DEV extensions/flows/src/data-nodes.ts:176` — Raw-handle plugins and same-UID filesystem writers remain
-  https://github.com/NikolasP98/minion-ai/blob/DEV/extensions/flows/src/data-nodes.ts#L176
-- `NikolasP98/minion-ai@DEV extensions/flows/src/data-nodes.ts:395` — SEC-08 deployment must establish clean exact-image/runtime and
-  https://github.com/NikolasP98/minion-ai/blob/DEV/extensions/flows/src/data-nodes.ts#L395
+- `NikolasP98/minion-ai@DEV extensions/flows/src/data-nodes.ts:187` — Raw-handle plugins and same-UID filesystem writers remain
+  https://github.com/NikolasP98/minion-ai/blob/DEV/extensions/flows/src/data-nodes.ts#L187
+- `NikolasP98/minion-ai@DEV extensions/flows/src/data-nodes.ts:406` — SEC-08 deployment must establish clean exact-image/runtime and
+  https://github.com/NikolasP98/minion-ai/blob/DEV/extensions/flows/src/data-nodes.ts#L406
