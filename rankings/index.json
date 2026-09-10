@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-10T11:34:29.361Z",
+	"generatedAt": "2026-09-10T12:04:46.927Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3133,6 +3133,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:11:32.696Z"
+		},
+		{
+			"key": "run:minion (gateway)#34472281102",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34472281102",
+			"sourceUpdatedAt": "2026-09-10T11:56:50Z",
+			"sourceFingerprint": "7aa662de472d5b08b047d388747abd7104ffe7a29bd1aa21734214dd84ea9f34",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"deploy:minion (gateway)"
+			],
+			"rationale": "CI is currently failing on a DEV push shortly after a related Windows-timeout fix, but no failure details are provided to act on.",
+			"evidence": [
+				"status: failure",
+				"push on DEV",
+				"updatedAt 2026-09-10T11:56:50Z"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T12:04:46.857Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-orchestration-round7-spec",
@@ -7672,38 +7707,6 @@
 			"scoredAt": "2026-09-09T22:35:10.859Z"
 		},
 		{
-			"key": "run:minion (gateway)#34468030440",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34468030440",
-			"sourceUpdatedAt": "2026-09-10T11:31:13Z",
-			"sourceFingerprint": "64373316e2e9283c19fb464916a2b3883b73afd2672230374feb97999e9e5b0d",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI run on minion's DEV branch has no actionable outcome until it completes.",
-			"evidence": [
-				"status: in_progress",
-				"push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T11:34:29.291Z"
-		},
-		{
 			"key": "pr:minion_hub#196",
 			"kind": "pr",
 			"stage": "development",
@@ -8199,6 +8202,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T22:34:40.008Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/6f5dae21a06e0920b63d193a2bd77d4a00811559",
+			"sourceUpdatedAt": "2026-09-10T11:37:27Z",
+			"sourceFingerprint": "8168c3c69f27a4cdc857ec50d1fe88bf8665818d5f13901bec808aaee247124d",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Commit message describes a Windows CI timeout fix that has already been committed, leaving no further action needed.",
+			"evidence": [
+				"raising the describe-level ceiling to 120s keeps Windows coverage",
+				"the other seven cases already pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T12:04:46.857Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
