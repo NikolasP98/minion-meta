@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-3174605053
 title: Handoff marker — src/shells/manager.ts (minion-ai)
-status: draft
+status: review
 created: 2026-09-10
 updated: 2026-09-10
 repos: [minion-ai]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-08-17-gw-shells-lifecycle-stubs
 ---
 
 # Handoff marker — src/shells/manager.ts
