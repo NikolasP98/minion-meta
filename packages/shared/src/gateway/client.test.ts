@@ -77,8 +77,7 @@ function makeClient(
   return new GatewayClient({
     url: 'ws://mock-host/gateway',
     onChallenge: async (_nonce) => ({ token: 'test-token', minProtocol: 3, maxProtocol: 3 }),
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    WebSocketImpl: makeMockImpl(mockWs) as any,
+    WebSocketImpl: makeMockImpl(mockWs),
     connectTimeoutMs: 999_999,
     requestTimeoutMs: 999_999,
     ...opts,
@@ -238,17 +237,17 @@ describe('GatewayClient', () => {
     const ws2 = new MockWebSocket();
     instances.push(ws1, ws2);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const MultiImpl = function (_url: string, ..._args: unknown[]): any {
-      return instances[instanceIdx++];
+    const MultiImpl = function (_url: string, ..._args: unknown[]): MockWebSocket {
+      const next = instances[instanceIdx++];
+      if (!next) throw new Error('unexpected extra socket');
+      return next;
     };
 
     const reconnectDelays: number[] = [];
     const client = new GatewayClient({
       url: 'ws://mock-host/gateway',
       onChallenge: async (_nonce) => ({ token: 'x' }),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      WebSocketImpl: MultiImpl as any,
+      WebSocketImpl: MultiImpl,
       autoReconnect: true,
       connectTimeoutMs: 999_999,
       requestTimeoutMs: 999_999,
@@ -299,9 +298,10 @@ describe('GatewayClient', () => {
     const ws2 = new MockWebSocket();
     const instances = [ws1, ws2];
     let instanceIdx = 0;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const MultiImpl = function (_url: string, ..._args: unknown[]): any {
-      return instances[instanceIdx++];
+    const MultiImpl = function (_url: string, ..._args: unknown[]): MockWebSocket {
+      const next = instances[instanceIdx++];
+      if (!next) throw new Error('unexpected extra socket');
+      return next;
     };
 
     const reconnectDelays: number[] = [];
@@ -309,8 +309,7 @@ describe('GatewayClient', () => {
     const client = new GatewayClient({
       url: 'ws://mock-host/gateway',
       onChallenge: async (_nonce) => ({ token: 'x' }),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      WebSocketImpl: MultiImpl as any,
+      WebSocketImpl: MultiImpl,
       autoReconnect: true,
       connectTimeoutMs: 999_999,
       requestTimeoutMs: 999_999,
@@ -549,8 +548,7 @@ describe('GatewayClient', () => {
   describe('reconnect-attempt failures are reported, never discarded', () => {
     function makeThrowingReconnectImpl(ws1: MockWebSocket, err: Error) {
       let calls = 0;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const impl = function (_url: string, ..._args: unknown[]): any {
+      const impl = function (_url: string, ..._args: unknown[]): MockWebSocket {
         calls++;
         if (calls === 1) return ws1;
         throw err;
@@ -569,8 +567,7 @@ describe('GatewayClient', () => {
       const client = new GatewayClient({
         url: 'ws://mock-host/gateway',
         onChallenge: async (_nonce) => ({ token: 'x' }),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        WebSocketImpl: impl as any,
+        WebSocketImpl: impl,
         autoReconnect: true,
         connectTimeoutMs: 999_999,
         requestTimeoutMs: 999_999,
@@ -600,8 +597,7 @@ describe('GatewayClient', () => {
       const client = new GatewayClient({
         url: 'ws://mock-host/gateway',
         onChallenge: async (_nonce) => ({ token: 'x' }),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        WebSocketImpl: impl as any,
+        WebSocketImpl: impl,
         autoReconnect: true,
         connectTimeoutMs: 999_999,
         requestTimeoutMs: 999_999,
@@ -632,8 +628,7 @@ describe('GatewayClient', () => {
       const client = new GatewayClient({
         url: 'ws://mock-host/gateway',
         onChallenge: async (_nonce) => ({ token: 'x' }),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        WebSocketImpl: impl as any,
+        WebSocketImpl: impl,
         autoReconnect: true,
         connectTimeoutMs: 999_999,
         requestTimeoutMs: 999_999,
@@ -665,8 +660,7 @@ describe('GatewayClient', () => {
         const client = new GatewayClient({
           url: 'ws://mock-host/gateway',
           onChallenge: async (_nonce) => ({ token: 'x' }),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          WebSocketImpl: impl as any,
+          WebSocketImpl: impl,
           autoReconnect: true,
           connectTimeoutMs: 999_999,
           requestTimeoutMs: 999_999,
@@ -725,9 +719,10 @@ describe('GatewayClient', () => {
       const ws2 = new MockWebSocket();
       const instances = [ws1, ws2];
       let instanceIdx = 0;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const MultiImpl = function (_url: string, ..._args: unknown[]): any {
-        return instances[instanceIdx++];
+      const MultiImpl = function (_url: string, ..._args: unknown[]): MockWebSocket {
+        const next = instances[instanceIdx++];
+        if (!next) throw new Error('unexpected extra socket');
+        return next;
       };
 
       const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -735,8 +730,7 @@ describe('GatewayClient', () => {
       const client = new GatewayClient({
         url: 'ws://mock-host/gateway',
         onChallenge: async (_nonce) => ({ token: 'x' }),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        WebSocketImpl: MultiImpl as any,
+        WebSocketImpl: MultiImpl,
         connectTimeoutMs: 999_999,
         requestTimeoutMs: 999_999,
         onSocketError: (err) => { seen.push(err); },
@@ -774,16 +768,14 @@ describe('GatewayClient', () => {
 
     it('ws "error" does not close the socket, flush pending requests, or schedule a reconnect', async () => {
       let implCalls = 0;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const CountingImpl = function (_url: string, ..._args: unknown[]): any {
+      const CountingImpl = function (_url: string, ..._args: unknown[]): MockWebSocket {
         implCalls++;
         return mockWs;
       };
       const client = new GatewayClient({
         url: 'ws://mock-host/gateway',
         onChallenge: async (_nonce) => ({ token: 'x' }),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        WebSocketImpl: CountingImpl as any,
+        WebSocketImpl: CountingImpl,
         autoReconnect: true,
         connectTimeoutMs: 999_999,
         requestTimeoutMs: 999_999,
@@ -850,4 +842,275 @@ describe('GatewayClient', () => {
       }
     });
   });
+});
+
+// Real-client session tests: only socket delivery is synthetic. No network server.
+class BrowserSocket {
+  private socket = new MockWebSocket();
+  get readyState() { return this.socket.readyState; }
+  set readyState(value: number) { this.socket.readyState = value; }
+  get sentMessages() { return this.socket.sentMessages; }
+  send(data: string) { this.socket.send(data); }
+  close(code?: number, reason?: string) { this.socket.close(code, reason); }
+  addEventListener(event: string, listener: (value: unknown) => void) {
+    this.socket.on(event, (...args) => {
+      listener(event === 'message' ? { data: args[0] } : event === 'close'
+        ? { code: args[0], reason: args[1] } : args[0]);
+    });
+  }
+  __simulateOpen() { this.socket.__simulateOpen(); }
+  __simulateMessage(data: string) { this.socket.__simulateMessage(data); }
+  __simulateClose(code: number, reason: string) { this.socket.__simulateClose(code, reason); }
+}
+type SessionSocket = MockWebSocket | BrowserSocket;
+type AuthObserver = (hello: unknown, session: { readonly generation: number }) => void | Promise<void>;
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  let reject!: (error: Error) => void;
+  const promise = new Promise<T>((yes, no) => { resolve = yes; reject = no; });
+  return { promise, resolve, reject };
+}
+function startSession(client: GatewayClient) {
+  const promise = client.connect();
+  void promise.catch(() => {}); // Tests assert the outcome; cleanup must not create an unhandled rejection.
+  return promise;
+}
+function challenge(socket: SessionSocket) {
+  socket.__simulateMessage(JSON.stringify({ type: 'event', event: 'connect.challenge', payload: { nonce: 'offline' } }));
+}
+function requests(socket: SessionSocket, method = 'connect') {
+  return socket.sentMessages.map((text) => JSON.parse(text) as { id: string; method: string })
+    .filter((frame) => frame.method === method);
+}
+function helloReply(socket: SessionSocket, payload: unknown) {
+  const req = requests(socket).at(-1);
+  expect(req).toBeDefined();
+  const frame = JSON.stringify({ type: 'res', id: req!.id, ok: true, payload });
+  socket.__simulateMessage(frame);
+  return frame;
+}
+
+describe.each(['node', 'browser'] as const)('authenticated sessions (%s socket delivery)', (mode) => {
+  const clients: GatewayClient[] = [];
+  const makeSocket = (): SessionSocket => mode === 'node' ? new MockWebSocket() : new BrowserSocket();
+  function setup(extra: Partial<ConstructorParameters<typeof GatewayClient>[0]> & { onAuthenticated?: AuthObserver } = {}) {
+    const sockets: SessionSocket[] = [];
+    const options = {
+      url: 'ws://offline.invalid',
+      WebSocketImpl: function () { const socket = makeSocket(); sockets.push(socket); return socket; },
+      onChallenge: async () => ({ minProtocol: 3, maxProtocol: 3 }),
+      connectTimeoutMs: 100,
+      requestTimeoutMs: 100,
+      ...extra,
+    };
+    const client = new GatewayClient(options);
+    clients.push(client);
+    return { client, sockets };
+  }
+  beforeEach(() => { vi.useFakeTimers(); });
+  afterEach(async () => {
+    for (const client of clients.splice(0)) client.close();
+    await flushMicrotasks(12);
+    vi.clearAllTimers();
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+  });
+
+  it('publishes once after authentication, before caller then, and never for duplicate challenge/response', async () => {
+    const auth = deferred<Record<string, unknown>>();
+    const onChallenge = vi.fn(() => auth.promise);
+    const seen: string[] = [];
+    const observer = vi.fn<AuthObserver>(() => { seen.push('observer'); });
+    const { client, sockets } = setup({ onChallenge, onAuthenticated: observer });
+    const connected = startSession(client);
+    void connected.then(() => { seen.push('promise'); });
+    const socket = sockets[0]!;
+    socket.__simulateOpen();
+    challenge(socket); challenge(socket);
+    expect(observer).not.toHaveBeenCalled();
+    expect(onChallenge).toHaveBeenCalledOnce();
+    expect(requests(socket)).toHaveLength(0);
+    auth.resolve({ minProtocol: 3, maxProtocol: 3 });
+    await flushMicrotasks();
+    expect(requests(socket)).toHaveLength(1);
+    const hello = { type: 'hello-ok', server: { version: 'first' } };
+    const frame = helloReply(socket, hello);
+    await expect(connected).resolves.toEqual(hello);
+    socket.__simulateMessage(frame); challenge(socket);
+    await flushMicrotasks();
+    expect(observer).toHaveBeenCalledOnce(); expect(observer).toHaveBeenCalledWith(hello, { generation: 1 });
+    expect(onChallenge).toHaveBeenCalledOnce();
+    expect(requests(socket)).toHaveLength(1);
+    expect(seen).toEqual(['observer', 'promise']);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('publishes fresh hello after internal reconnect on the same client, with no request replay', async () => {
+    const observer = vi.fn<AuthObserver>();
+    const { client, sockets } = setup({ autoReconnect: true, onAuthenticated: observer });
+    const connected = startSession(client);
+    challenge(sockets[0]!); await flushMicrotasks(); helloReply(sockets[0]!, { version: 'first' });
+    await connected;
+    const request = client.request('mutation');
+    const rejected = expect(request).rejects.toThrow('closed');
+    sockets[0]!.__simulateClose(1006, 'offline'); await rejected;
+    await vi.advanceTimersByTimeAsync(800);
+    const next = sockets[1]!;
+    next.__simulateOpen();
+    expect(observer).toHaveBeenCalledTimes(1);
+    challenge(next); await flushMicrotasks(); helloReply(next, { version: 'second' });
+    await flushMicrotasks(12);
+    expect(observer.mock.calls).toEqual([[{ version: 'first' }, { generation: 1 }], [{ version: 'second' }, { generation: 2 }]]);
+    expect(requests(next, 'mutation')).toHaveLength(0);
+    client.close(); expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it.each(['resolve', 'reject'] as const)('fences delayed old challenge %s and settles superseded promise', async (outcome) => {
+    const auth = deferred<Record<string, unknown>>();
+    const onChallenge = vi.fn().mockImplementationOnce(() => auth.promise).mockResolvedValue({ fresh: true });
+    const observer = vi.fn<AuthObserver>();
+    const { client, sockets } = setup({ onChallenge, onAuthenticated: observer });
+    const old = startSession(client);
+    const oldSettled = vi.fn(); void old.then(oldSettled, oldSettled);
+    challenge(sockets[0]!);
+    const current = startSession(client);
+    await flushMicrotasks();
+    expect(oldSettled).toHaveBeenCalledOnce();
+    if (outcome === 'resolve') auth.resolve({ stale: true }); else auth.reject(new Error('old challenge failed'));
+    await flushMicrotasks(12);
+    expect(requests(sockets[1]!)).toHaveLength(0);
+    expect(sockets[1]!.readyState).toBe(1);
+    challenge(sockets[1]!); await flushMicrotasks(); helloReply(sockets[1]!, { fresh: true });
+    await expect(current).resolves.toEqual({ fresh: true });
+    expect(observer.mock.calls).toEqual([[{ fresh: true }, { generation: 2 }]]);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it.each([true, false])('fences old response continuation (ok=%s) before replacement', async (ok) => {
+    const observer = vi.fn<AuthObserver>();
+    const { client, sockets } = setup({ onAuthenticated: observer });
+    const old = startSession(client);
+    challenge(sockets[0]!); await flushMicrotasks();
+    sockets[0]!.__simulateMessage(JSON.stringify({ type: 'res', id: requests(sockets[0]!)[0]!.id, ok, payload: { stale: true }, error: { message: 'old failure' } }));
+    const current = startSession(client); // Replace before sendConnect's await resumes.
+    await flushMicrotasks(12);
+    expect(observer).not.toHaveBeenCalled();
+    expect(sockets[1]!.readyState).toBe(1);
+    challenge(sockets[1]!); await flushMicrotasks(); helloReply(sockets[1]!, { fresh: true });
+    await expect(current).resolves.toEqual({ fresh: true });
+    await expect(old).rejects.toThrow();
+    expect(observer.mock.calls).toEqual([[{ fresh: true }, { generation: 2 }]]);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('invalidates explicit close before native close delivery and preserves one close callback', async () => {
+    const auth = deferred<Record<string, unknown>>();
+    const observer = vi.fn<AuthObserver>(); const onClose = vi.fn();
+    const { client, sockets } = setup({ onChallenge: () => auth.promise, onAuthenticated: observer, onClose, autoReconnect: true });
+    const connected = startSession(client);
+    challenge(sockets[0]!);
+    vi.spyOn(sockets[0]!, 'close').mockImplementation(() => { sockets[0]!.readyState = 2; });
+    client.close();
+    await expect(connected).rejects.toThrow();
+    auth.resolve({ stale: true }); await flushMicrotasks(12);
+    expect(requests(sockets[0]!)).toHaveLength(0);
+    expect(observer).not.toHaveBeenCalled();
+    sockets[0]!.__simulateClose(1000, 'done');
+    expect(onClose).toHaveBeenCalledOnce(); expect(onClose).toHaveBeenCalledWith(1000, 'done');
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(sockets).toHaveLength(1);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it.each(['throw', 'reject', 'diagnostic-throws'] as const)('contains observer %s with fixed nonpayload reporting', async (kind) => {
+    const diagnostic = vi.spyOn(console, 'error').mockImplementation(() => { if (kind === 'diagnostic-throws') throw new Error('sink'); });
+    const onReconnectError = vi.fn(), onSocketError = vi.fn(), onEventError = vi.fn();
+    const observer: AuthObserver = () => { if (kind === 'reject') return Promise.reject(new Error('private detail')); throw new Error('private detail'); };
+    const { client, sockets } = setup({ onAuthenticated: observer, onReconnectError, onSocketError, onEventError });
+    const connected = startSession(client);
+    challenge(sockets[0]!); await flushMicrotasks(); helloReply(sockets[0]!, { auth: 'synthetic-private' });
+    await expect(connected).resolves.toEqual({ auth: 'synthetic-private' });
+    await flushMicrotasks(12);
+    expect(diagnostic).toHaveBeenCalledOnce(); expect(diagnostic).toHaveBeenCalledWith('[GatewayClient] onAuthenticated observer failed');
+    expect(onReconnectError).not.toHaveBeenCalled(); expect(onSocketError).not.toHaveBeenCalled(); expect(onEventError).not.toHaveBeenCalled();
+    expect(sockets[0]!.readyState).toBe(1);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it.each(['close', 'connect'] as const)('allows observer to %s without corrupting handshake bookkeeping', async (action) => {
+    let successor: Promise<unknown> | undefined;
+    const observer = vi.fn<AuthObserver>((_hello, session) => {
+      if (session.generation !== 1) return;
+      if (action === 'close') client.close(); else successor = startSession(client);
+    });
+    const { client, sockets } = setup({ onAuthenticated: observer });
+    const connected = startSession(client);
+    challenge(sockets[0]!); await flushMicrotasks(); helloReply(sockets[0]!, { first: true });
+    await expect(connected).resolves.toEqual({ first: true });
+    if (action === 'connect') {
+      expect(successor).toBeDefined();
+      challenge(sockets[1]!); await flushMicrotasks(); helloReply(sockets[1]!, { second: true });
+      await expect(successor).resolves.toEqual({ second: true });
+      expect(observer).toHaveBeenCalledTimes(2);
+    } else expect(sockets[0]!.readyState).toBe(3);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+  it.each(['rejection', 'timeout', 'send-throw'] as const)('never publishes failed handshake (%s) and clears timers', async (failure) => {
+    const observer = vi.fn<AuthObserver>();
+    const { client, sockets } = setup({ onAuthenticated: observer,
+      onChallenge: async () => { if (failure === 'rejection') throw new Error('auth rejected'); return {}; },
+    });
+    const connected = startSession(client);
+    const rejected = expect(connected).rejects.toThrow();
+    const close = vi.spyOn(sockets[0]!, 'close');
+    if (failure === 'send-throw') vi.spyOn(sockets[0]!, 'send').mockImplementation(() => { throw new Error('send failed'); });
+    if (failure === 'timeout') await vi.advanceTimersByTimeAsync(100);
+    else { challenge(sockets[0]!); await flushMicrotasks(12); }
+    await rejected;
+    expect(observer).not.toHaveBeenCalled();
+    expect(sockets[0]!.readyState).toBe(3);
+    if (failure === 'timeout') expect(close).toHaveBeenCalledWith();
+    else expect(close).toHaveBeenCalledWith(4008, 'connect failed');
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('clears the attempt timer if construction throws', async () => {
+    const observer = vi.fn<AuthObserver>();
+    const { client } = setup({ onAuthenticated: observer,
+      WebSocketImpl: function () { throw new Error('constructor failed'); },
+    });
+    await expect(startSession(client)).rejects.toThrow('constructor failed');
+    expect(observer).not.toHaveBeenCalled();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('does not schedule a second reconnect when onClose starts the successor', async () => {
+    let successor: Promise<unknown> | undefined;
+    const observer = vi.fn<AuthObserver>();
+    const { client, sockets } = setup({ autoReconnect: true, onAuthenticated: observer,
+      onClose: () => { if (sockets.length === 1) successor = startSession(client); },
+    });
+    const connected = startSession(client);
+    challenge(sockets[0]!); await flushMicrotasks(); helloReply(sockets[0]!, { first: true });
+    await connected;
+    sockets[0]!.__simulateClose(1006, 'offline');
+    challenge(sockets[1]!); await flushMicrotasks(); helloReply(sockets[1]!, { second: true });
+    await expect(successor).resolves.toEqual({ second: true });
+    await vi.advanceTimersByTimeAsync(1600);
+    expect(sockets).toHaveLength(2);
+    expect(observer).toHaveBeenCalledTimes(2);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it('honors close from reconnect scheduling without leaving a timer', async () => {
+    const { client, sockets } = setup({ autoReconnect: true, onReconnectScheduled: () => client.close() });
+    const connected = startSession(client);
+    challenge(sockets[0]!); await flushMicrotasks(); helloReply(sockets[0]!, {});
+    await connected;
+    sockets[0]!.__simulateClose(1006, 'offline');
+    await vi.advanceTimersByTimeAsync(1600);
+    expect(sockets).toHaveLength(1);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
 });
