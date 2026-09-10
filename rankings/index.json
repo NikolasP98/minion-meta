@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-10T12:04:46.927Z",
+	"generatedAt": "2026-09-10T12:35:15.051Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3135,14 +3135,14 @@
 			"scoredAt": "2026-09-07T08:11:32.696Z"
 		},
 		{
-			"key": "run:minion (gateway)#34472281102",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34472281102",
-			"sourceUpdatedAt": "2026-09-10T11:56:50Z",
-			"sourceFingerprint": "7aa662de472d5b08b047d388747abd7104ffe7a29bd1aa21734214dd84ea9f34",
+			"key": "proposal:ci-minion-ai-claude-code-review",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Claude Code Review on minion-ai DEV",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-claude-code-review.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "3b8a5114767f3d60b089735fdce456d628fd3fb44e142981d9fe15243199e295",
 			"score": 52,
 			"band": "medium",
 			"axes": {
@@ -3151,23 +3151,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 2
+				"specification": 7,
+				"implementation": 4
 			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"deploy:minion (gateway)"
-			],
-			"rationale": "CI is currently failing on a DEV push shortly after a related Windows-timeout fix, but no failure details are provided to act on.",
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The claude-review workflow on DEV has a failed latest run with a clear definition of done, though the attached log doesn't pinpoint the root cause.",
 			"evidence": [
-				"status: failure",
-				"push on DEV",
-				"updatedAt 2026-09-10T11:56:50Z"
+				"most recent completed run of this workflow on the deploy branch failed",
+				"run: actions/runs/29303163004"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T12:04:46.857Z"
+			"scoredAt": "2026-09-10T12:35:14.977Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-orchestration-round7-spec",
@@ -5670,6 +5667,37 @@
 			"scoredAt": "2026-09-07T08:35:39.550Z"
 		},
 		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 78734 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-09-10T12:21:09Z",
+			"sourceFingerprint": "789167028c5da7d95185a738f2f56254210714c3b512e3b86b22fa6c529ffb3f",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "A 78734-commit upstream diff dump has no bounded scope and cannot be executed as a single task as currently framed.",
+			"evidence": [
+				"Upstream sync: 78734 new commit(s) available"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T12:35:14.977Z"
+		},
+		{
 			"key": "issue:minion-meta#330",
 			"kind": "issue",
 			"stage": "proposal",
@@ -7051,6 +7079,38 @@
 			"scoredAt": "2026-09-07T08:12:46.705Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "9f312d1e615c34ac5b66e88e436fe71b70122b6fed3b61f738bc70c5618da532",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Six scattered TODO(handoff) markers in rankings/index.json each need individual scoping before this can be executed as one task.",
+			"evidence": [
+				"file carries a TODO(handoff): marker",
+				"6 markers as of 2026-09-10"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T12:35:14.977Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2230086850",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7287,38 +7347,6 @@
 			"scoredAt": "2026-09-10T11:04:59.722Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 78548 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-09-10T06:24:10Z",
-			"sourceFingerprint": "98d5088ade6e2b30ac173ac81819926c805c1e553d55c332eefcdca48b6210dd",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "A raw dump of 78548 unfiltered upstream commits gives no scoped or verifiable outcome and needs reframing into a bounded sync plan before it is actionable.",
-			"evidence": [
-				"78548 new commit(s) available",
-				"list is an unfiltered upstream commit log with no scoping"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T06:34:48.625Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-1447734948",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7479,6 +7507,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:13:41.404Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/8e628b972334151f1465564dc770f3e26b220013",
+			"sourceUpdatedAt": "2026-09-10T12:21:56Z",
+			"sourceFingerprint": "c4925175a09999c41526e9c6f8072af959609a79f13603ca0e4bc6091465eb9b",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The commit message shows the macOS CI mock-leak fix already applied and verified (254 passed, 0 failed), so no further work remains.",
+			"evidence": [
+				"after fix: 254 passed, 0 failed",
+				"pnpm check (0 errors)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T12:35:14.977Z"
 		},
 		{
 			"key": "proposal:2026-08-24-hub-crm-activity-rollup",
@@ -8204,38 +8264,6 @@
 			"scoredAt": "2026-09-07T22:34:40.008Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/6f5dae21a06e0920b63d193a2bd77d4a00811559",
-			"sourceUpdatedAt": "2026-09-10T11:37:27Z",
-			"sourceFingerprint": "8168c3c69f27a4cdc857ec50d1fe88bf8665818d5f13901bec808aaee247124d",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Commit message describes a Windows CI timeout fix that has already been committed, leaving no further action needed.",
-			"evidence": [
-				"raising the describe-level ceiling to 120s keeps Windows coverage",
-				"the other seven cases already pass"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T12:04:46.857Z"
-		},
-		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -8796,38 +8824,6 @@
 			"scoredAt": "2026-09-07T08:11:32.696Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "61fca0115ae5f8e76aab02539bc64ca13a96e020bdfc304bb97f972a3c98daae",
-			"score": 13,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The six markers quote disjoint, unrelated fragments (calendar scheduling, resourceId, protocol replacement) inside a JSON rankings data file, indicating a false-positive sweep match rather than a coherent actionable item.",
-			"evidence": [
-				"target is rankings/index.json, a data index not source code",
-				"markers reference unrelated topics across 6 separate lines"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T11:04:59.722Z"
-		},
-		{
 			"key": "issue:minion-meta#373",
 			"kind": "issue",
 			"stage": "proposal",
@@ -8921,6 +8917,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-10T02:35:01.795Z"
+		},
+		{
+			"key": "run:minion (gateway)#34476312509",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34476312509",
+			"sourceUpdatedAt": "2026-09-10T12:26:20Z",
+			"sourceFingerprint": "b176723db627c1ced7d8f75b8a45f2d918ae30d8e573f4ceae404fcbcf4df0c0",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run status, not an actionable goal.",
+			"evidence": [
+				"status: in_progress",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T12:35:14.977Z"
+		},
+		{
+			"key": "run:minion (gateway)#34476312863",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34476312863",
+			"sourceUpdatedAt": "2026-09-10T12:22:18Z",
+			"sourceFingerprint": "d3a5bc8d291635d487a07b6b584f07a7abd9556bbc6ddaa80ee4714087336210",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run status, not an actionable goal.",
+			"evidence": [
+				"status: in_progress",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T12:35:14.977Z"
 		}
 	]
 }
