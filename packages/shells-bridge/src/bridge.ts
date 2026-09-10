@@ -35,11 +35,15 @@ import { backup, restore } from './backup.js';
 import type { BridgeConfig } from './config.js';
 import { randomUUID } from 'node:crypto';
 import { statSync } from 'node:fs';
+import { isDeepStrictEqual } from 'node:util';
 
 interface ActiveRun {
   runId: string;
   sessionId: string;
   startedAt: number;
+  requestId: string;
+  requestSource: WebSocket;
+  requestParams: ShellsInvokeParams;
 }
 
 export class Bridge {
@@ -52,6 +56,7 @@ export class Bridge {
   private heartbeatMs: number;
   private reconnectDelay: number;
   private shuttingDown = false;
+  private harnessRunning = false;
   private nextFrameId = 1;
   private pendingBridgeRpc = new Map<string, { resolve: (v: unknown) => void; reject: (e: Error) => void }>();
 
@@ -74,15 +79,23 @@ export class Bridge {
       process.stderr.write(`[harness] ${chunk}`);
     });
     this.acp.on('exit', ({ code, signal }: { code: number | null; signal: NodeJS.Signals | null }) => {
+      this.harnessRunning = false;
       if (this.shuttingDown) return;
       this.reportFatal('unknown', `harness exited code=${code} signal=${signal ?? 'none'}`);
     });
-    this.acp.start();
+    this.harnessRunning = true;
+    try {
+      this.acp.start();
+    } catch (error) {
+      this.harnessRunning = false;
+      throw error;
+    }
     this.connect();
   }
 
   async shutdown(): Promise<void> {
     this.shuttingDown = true;
+    this.harnessRunning = false;
     if (this.heartbeatTimer) clearInterval(this.heartbeatTimer);
     if (this.ws) this.ws.close(1000, 'shutdown');
     await this.acp.stop();
@@ -100,14 +113,17 @@ export class Bridge {
     this.ws = ws;
 
     ws.on('open', () => {
+      if (this.ws !== ws || this.shuttingDown) return;
       this.reconnectDelay = this.config.reconnectMinMs;
       void this.register();
     });
     ws.on('message', (data) => {
+      if (this.ws !== ws || this.shuttingDown || ws.readyState !== WebSocket.OPEN) return;
       const text = typeof data === 'string' ? data : data.toString('utf8');
-      this.onFrame(text);
+      this.onFrame(text, ws);
     });
     ws.on('close', () => {
+      if (this.ws !== ws) return;
       this.ws = null;
       if (this.heartbeatTimer) {
         clearInterval(this.heartbeatTimer);
@@ -126,6 +142,7 @@ export class Bridge {
     setTimeout(() => this.connect(), delay);
   }
 
+  // TODO(handoff): Persist terminal frames and reconcile on reconnect instead of losing execution outcomes. See meta proposals/2026-09-08-platform-qc-remediation.md (A4).
   private send(frame: GatewayFrame): void {
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN) return;
     this.ws.send(JSON.stringify(frame));
@@ -166,14 +183,15 @@ export class Bridge {
   // Frame routing
   // ---------------------------------------------------------------------------
 
-  private onFrame(raw: string): void {
-    let frame: Record<string, unknown>;
+  private onFrame(raw: string, source: WebSocket): void {
+    let frame: unknown;
     try {
-      frame = JSON.parse(raw) as Record<string, unknown>;
+      frame = JSON.parse(raw) as unknown;
     } catch {
       return;
     }
-    if (frame.type === 'req') void this.handleRequest(frame as unknown as RequestFrame);
+    if (typeof frame !== 'object' || frame === null || Array.isArray(frame) || !('type' in frame)) return;
+    if (frame.type === 'req') void this.handleRequest(frame as unknown as RequestFrame, source);
     else if (frame.type === 'res') this.handleResponse(frame as unknown as ResponseFrame);
     // event frames from gateway are ignored — bridge is a leaf.
   }
@@ -186,11 +204,13 @@ export class Bridge {
     else p.reject(new Error(frame.error?.message ?? 'gateway rpc failed'));
   }
 
-  private async handleRequest(frame: RequestFrame): Promise<void> {
+  private async handleRequest(frame: RequestFrame, source: WebSocket): Promise<void> {
     try {
-      const result = await this.dispatch(frame.method, frame.params);
+      const result = await this.dispatch(frame.method, frame.params, frame.id, source);
+      if (this.ws !== source || this.shuttingDown) return;
       this.send({ type: 'res', id: frame.id, ok: true, payload: result });
     } catch (err) {
+      if (this.ws !== source || this.shuttingDown) return;
       const msg = err instanceof Error ? err.message : String(err);
       this.send({
         type: 'res',
@@ -201,10 +221,10 @@ export class Bridge {
     }
   }
 
-  private async dispatch(method: string, params: unknown): Promise<unknown> {
+  private async dispatch(method: string, params: unknown, requestId: string, source: WebSocket): Promise<unknown> {
     switch (method) {
       case SHELLS_METHODS.invoke:
-        return this.handleInvoke(params as ShellsInvokeParams);
+        return this.handleInvoke(params as ShellsInvokeParams, requestId, source);
       case SHELLS_METHODS.cancel:
         return this.handleCancel(params as ShellsCancelParams);
       case SHELLS_METHODS.backupNow:
@@ -226,6 +246,7 @@ export class Bridge {
   // ---------------------------------------------------------------------------
 
   private async register(): Promise<void> {
+    const source = this.ws;
     const params: ShellsRegisterParams = {
       shellId: this.config.shellId,
       deviceToken: this.config.deviceToken,
@@ -241,12 +262,13 @@ export class Bridge {
     };
     try {
       const res = await this.callGateway<ShellsRegisterResponse>(SHELLS_METHODS.register, params);
+      if (this.ws !== source || this.shuttingDown) return;
       this.heartbeatMs = res.heartbeatMs ?? this.heartbeatMs;
       this.startHeartbeat();
     } catch (err) {
       process.stderr.write(`[bridge] register failed: ${(err as Error).message}\n`);
       // Close ws; reconnect will retry.
-      this.ws?.close();
+      if (this.ws === source) source?.close();
     }
   }
 
@@ -281,27 +303,49 @@ export class Bridge {
   // Caller-facing RPC handlers
   // ---------------------------------------------------------------------------
 
-  private async handleInvoke(params: ShellsInvokeParams): Promise<ShellsInvokeResponse> {
+  // TODO(handoff): Add completed-request durable dedup and terminal/cancellation reconciliation in 11-03; this bounded replay covers active requests on their original connection only. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
+  private async handleInvoke(params: ShellsInvokeParams, requestId: string, source: WebSocket): Promise<ShellsInvokeResponse> {
+    if (this.shuttingDown || !this.harnessRunning) throw new Error('BRIDGE_UNAVAILABLE');
+    if (!params || params.shellId !== this.config.shellId || typeof params.sessionId !== 'string' || !params.sessionId || typeof requestId !== 'string' || !requestId) {
+      throw new Error('BRIDGE_INVALID_REQUEST');
+    }
+    const duplicate = [...this.activeRuns.values()].find((run) => run.requestId === requestId && run.requestSource === source);
+    if (duplicate) {
+      if (!isDeepStrictEqual(duplicate.requestParams, params)) throw new Error('BRIDGE_DUPLICATE_REQUEST');
+      return { runId: duplicate.runId, startedAt: duplicate.startedAt };
+    }
+    // Match the advertised instance-wide maxConcurrentRuns=1, including other sessions.
+    if (this.activeRuns.size > 0 || this.acpSessionToRun.has(params.sessionId)) throw new Error('BRIDGE_BUSY');
     const runId = `run_${randomUUID()}`;
     const startedAt = Date.now();
-    this.activeRuns.set(runId, { runId, sessionId: params.sessionId, startedAt });
+    const run: ActiveRun = { runId, sessionId: params.sessionId, startedAt, requestId, requestSource: source, requestParams: params };
+    this.activeRuns.set(runId, run);
     this.acpSessionToRun.set(params.sessionId, runId);
 
     // Fire ACP `session/prompt` — do NOT await; bridge replies to the caller
     // immediately with runId, then streams updates via shell.delta events.
-    this.acp
-      .call('session/prompt', { sessionId: params.sessionId, input: params.input })
-      .then((result: unknown) => {
-        this.emitFinal(runId, params.sessionId, 'final', startedAt, { result });
-      })
-      .catch((err: Error) => {
-        this.emitFinal(runId, params.sessionId, 'error', startedAt, { errorMessage: err.message });
-      });
+    try {
+      void this.acp
+        .call('session/prompt', { sessionId: params.sessionId, input: params.input })
+        .then(
+          (result: unknown) => { this.emitFinal(runId, params.sessionId, 'final', startedAt, { result }); },
+          (err: unknown) => { this.emitFinal(runId, params.sessionId, 'error', startedAt, { errorMessage: err instanceof Error ? err.message : String(err) }); },
+        )
+        .finally(() => { this.releaseRun(run); })
+        .catch((error: unknown) => {
+          // Local delivery failure must not leak an unhandled rejection or another owner's reservation.
+          process.stderr.write(`[bridge] final delivery failed: ${error instanceof Error ? error.message : String(error)}\n`);
+        });
+    } catch (error) {
+      this.releaseRun(run);
+      throw error;
+    }
 
     return { runId, startedAt };
   }
 
   private async handleCancel(params: ShellsCancelParams): Promise<ShellsCancelResponse> {
+    if (!params || params.shellId !== this.config.shellId) throw new Error('BRIDGE_INVALID_REQUEST');
     const run = this.activeRuns.get(params.runId);
     if (!run) return { cancelled: false };
     try {
@@ -329,6 +373,7 @@ export class Bridge {
   }
 
   private async handleRestore(params: { remotePath: string }): Promise<{ ok: true }> {
+    // TODO(handoff): Quiesce the harness and stage/verify restore before swapping the workdir; live overlay extraction races execution. See meta proposals/2026-09-08-platform-qc-remediation.md (A4).
     await restore({ workDir: this.config.harnessWorkDir, remotePath: params.remotePath });
     return { ok: true };
   }
@@ -344,12 +389,15 @@ export class Bridge {
     if (!sessionId) return;
     const runId = this.acpSessionToRun.get(sessionId);
     if (!runId) return;
+    const run = this.activeRuns.get(runId);
+    if (!run || run.sessionId !== sessionId) return;
+    // TODO(handoff): ACP session/update has no run identity; qualify late updates after timeout/cancel before reusing a session in 11-03/04. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
 
     const payload: ShellDeltaPayload = {
       shellId: this.config.shellId,
       runId,
       sessionId,
-      seq: nextSeq(this.activeRuns.get(runId)),
+      seq: nextSeq(run),
       acpUpdate: msg.params,
     };
     this.emitEvent(SHELLS_EVENTS.delta, payload);
@@ -362,6 +410,8 @@ export class Bridge {
     startedAt: number,
     extra: { result?: unknown; errorMessage?: string },
   ): void {
+    const run = this.activeRuns.get(runId);
+    if (!run || run.sessionId !== sessionId || run.startedAt !== startedAt || this.acpSessionToRun.get(sessionId) !== runId) return;
     const payload: ShellFinalPayload = {
       shellId: this.config.shellId,
       runId,
@@ -370,9 +420,17 @@ export class Bridge {
       errorMessage: extra.errorMessage,
       durationMs: Date.now() - startedAt,
     };
-    this.emitEvent(SHELLS_EVENTS.final, payload);
-    this.activeRuns.delete(runId);
-    this.acpSessionToRun.delete(sessionId);
+    try {
+      this.emitEvent(SHELLS_EVENTS.final, payload);
+    } finally {
+      this.releaseRun(run);
+    }
+  }
+
+  private releaseRun(run: ActiveRun): void {
+    if (this.activeRuns.get(run.runId) !== run) return;
+    this.activeRuns.delete(run.runId);
+    if (this.acpSessionToRun.get(run.sessionId) === run.runId) this.acpSessionToRun.delete(run.sessionId);
   }
 }
 
