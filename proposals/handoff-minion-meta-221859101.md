@@ -27,15 +27,15 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-10)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:2801` — comment pointing at this proposal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2801
-- `NikolasP98/minion-meta@dev rankings/index.json:4340` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4340
-- `NikolasP98/minion-meta@dev rankings/index.json:4373` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4373
-- `NikolasP98/minion-meta@dev rankings/index.json:5008` — spec §3.2b allows a reschedule outside working hours",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5008
-- `NikolasP98/minion-meta@dev rankings/index.json:5795` — resourceId is only ever set from the calendar's",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5795
-- `NikolasP98/minion-meta@dev rankings/index.json:6229` — prompt-driven protocol instead of native tool_use — replace'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6229
+- `NikolasP98/minion-meta@dev rankings/index.json:2804` — comment pointing at this proposal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2804
+- `NikolasP98/minion-meta@dev rankings/index.json:4343` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4343
+- `NikolasP98/minion-meta@dev rankings/index.json:4376` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4376
+- `NikolasP98/minion-meta@dev rankings/index.json:5045` — spec §3.2b allows a reschedule outside working hours",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5045
+- `NikolasP98/minion-meta@dev rankings/index.json:5864` — resourceId is only ever set from the calendar's",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5864
+- `NikolasP98/minion-meta@dev rankings/index.json:6298` — prompt-driven protocol instead of native tool_use — replace'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6298
