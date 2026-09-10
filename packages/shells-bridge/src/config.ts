@@ -36,16 +36,16 @@ export class ConfigError extends Error {
   }
 }
 
-function required(name: string): string {
-  const value = process.env[name];
+function required(env: NodeJS.ProcessEnv, name: string): string {
+  const value = env[name];
   if (!value || value.trim() === '') {
     throw new ConfigError(`Missing required env var: ${name}`);
   }
   return value;
 }
 
-function optionalInt(name: string, fallback: number): number {
-  const raw = process.env[name];
+function optionalInt(env: NodeJS.ProcessEnv, name: string, fallback: number): number {
+  const raw = env[name];
   if (!raw) return fallback;
   const n = Number.parseInt(raw, 10);
   if (Number.isNaN(n)) {
@@ -55,30 +55,31 @@ function optionalInt(name: string, fallback: number): number {
 }
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): BridgeConfig {
-  // Allow injection in tests by swapping process.env reference.
+  // Every field uses this environment; explicit injection never falls back to ambient state.
   const cmdRaw = env.SHELLS_HARNESS_CMD;
   if (!cmdRaw) {
     throw new ConfigError('Missing required env var: SHELLS_HARNESS_CMD');
   }
-  // Naive splitter — quoted args not supported. Image builder controls this value
-  // so naive is fine.
+  // TODO(handoff): Define structured argv and verify provisioned systemd environment;
+  // whitespace splitting cannot preserve quoted arguments. See the Shells lifecycle
+  // item in proposals/2026-09-08-platform-qc-remediation.md and 11-ACP-RESEARCH.md.
   const [harnessCommand, ...harnessArgs] = cmdRaw.split(/\s+/);
   if (!harnessCommand) {
     throw new ConfigError('SHELLS_HARNESS_CMD is empty');
   }
 
   return {
-    shellId: required('SHELLS_SHELL_ID'),
-    gatewayUrl: required('SHELLS_GATEWAY_URL'),
-    deviceToken: required('SHELLS_DEVICE_TOKEN'),
-    harness: required('SHELLS_HARNESS'),
-    harnessVersion: required('SHELLS_HARNESS_VERSION'),
+    shellId: required(env, 'SHELLS_SHELL_ID'),
+    gatewayUrl: required(env, 'SHELLS_GATEWAY_URL'),
+    deviceToken: required(env, 'SHELLS_DEVICE_TOKEN'),
+    harness: required(env, 'SHELLS_HARNESS'),
+    harnessVersion: required(env, 'SHELLS_HARNESS_VERSION'),
     harnessCommand,
     harnessArgs,
     harnessWorkDir: env.SHELLS_HARNESS_WORKDIR ?? '/home/agent/state',
     backupTarget: env.SHELLS_BACKUP_TARGET,
-    reconnectMinMs: optionalInt('SHELLS_RECONNECT_MIN_MS', 1000),
-    reconnectMaxMs: optionalInt('SHELLS_RECONNECT_MAX_MS', 60_000),
-    heartbeatMs: optionalInt('SHELLS_HEARTBEAT_MS', 15_000),
+    reconnectMinMs: optionalInt(env, 'SHELLS_RECONNECT_MIN_MS', 1000),
+    reconnectMaxMs: optionalInt(env, 'SHELLS_RECONNECT_MAX_MS', 60_000),
+    heartbeatMs: optionalInt(env, 'SHELLS_HEARTBEAT_MS', 15_000),
   };
 }
