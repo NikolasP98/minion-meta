@@ -1,5 +1,18 @@
 # @minion-stack/shells-bridge
 
+## 0.2.0
+
+### Minor Changes
+
+- 237be7f: Shells bridge foundations from the 360 program: per-session invoke admission and request correlation (11-02), a native SQLite run/outbox journal for terminal delivery (11-07, `run-journal.ts`), and explicit environment injection for configuration (11-08). Node engine floor is raised to 22.13 for unflagged `node:sqlite`. Durable sender integration with the gateway receiver is a separate follow-up.
+
+### Patch Changes
+
+- Updated dependencies [85ecd75]
+- Updated dependencies [1235b5e]
+- Updated dependencies [85ecd75]
+  - @minion-stack/shared@0.12.0
+
 ## 0.1.6
 
 ### Patch Changes

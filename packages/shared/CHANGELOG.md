@@ -1,5 +1,19 @@
 # @minion-stack/shared
 
+## 0.12.0
+
+### Minor Changes
+
+- 1235b5e: GatewayClient: add an optional `onAuthenticated(hello, { generation })` hook that fires exactly once per successful handshake on the current socket, including internal auto-reconnects. The connect promise settles before the observer runs, and observer throws/rejections are contained with a fixed non-payload diagnostic.
+
+  Handshake state is now owned per connection attempt: stale challenge, response and error continuations from a superseded socket can no longer send, settle, close or publish on its successor, and failed or explicitly closed handshakes clean up their pending promises and timers.
+
+- 85ecd75: Add the required-durable Shells invocation contract: `shells.invoke_durable` in `SHELLS_METHODS`, the frozen `SHELL_DURABLE_V1_INPUT_POLICY` / `SHELL_DURABLE_V1_OUTCOME_LIMITS` / `SHELL_DURABLE_V1_PROFILE`, `ShellsInvokeDurableParams` / `ShellsInvokeDurableResponse`, `normalizeShellsInvokeDurableResponse()`, and the canonical outcome/receipt validators. Additive; legacy `shells.invoke` is unchanged.
+
+### Patch Changes
+
+- 85ecd75: Clean release emission: `build`/`prepack` now run `scripts/build.mjs` (production-only `tsconfig.build.json`, no source/declaration maps, no test outputs, link-safe dist cleanup, real compiler exit propagation) and `prepublishOnly` only typechecks. Adds the package README. Archive drops from 125 to 44 members with no local build paths.
+
 ## 0.11.0
 
 ### Minor Changes
