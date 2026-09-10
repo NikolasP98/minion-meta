@@ -33,8 +33,10 @@ export interface GatewayClientOptions {
    * that fails either way is contained silently (a failed reporter has no second reporter to call)
    * and never escapes as an unhandled rejection.
    */
-  // TODO(handoff): hub, site and paperclip still run the console.error default and are
-  // unbumped; adoption tracked in proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md
+  // TODO(handoff): hub, site and paperclip still run the console.error default and are unbumped;
+  // adoption tracked in proposals/2026-08-17-gateway-client-error-hook-consumer-adoption.md.
+  // Qualifying all three consumer reporting hooks and the exact installed declarations/archives is
+  // tracked in proposals/2026-09-08-platform-qc-remediation.md and the 14-09/14-10/14-02 plans.
   onEventError?: (err: unknown, frame: EventFrame) => void | Promise<void>;
   /**
    * Called when an auto-reconnect attempt fails (the rejection from that attempt's `connect()`).
@@ -51,6 +53,15 @@ export interface GatewayClientOptions {
    * SHOULD NOT throw or reject: contained silently, same discipline as `onEventError`.
    */
   onSocketError?: (err: unknown) => void | Promise<void>;
+  /**
+   * Observes each successful current connect handshake, including automatic reconnects.
+   * Generation identifies the socket attempt within this client, not a server identity.
+   * The connect promise is settled first; observer failures are contained and reported
+   * with a fixed message, without exposing the hello or exception payload.
+   */
+  // TODO(handoff): Hub/Site must publish every accepted session before plugin capability gating;
+  // see proposals/2026-09-08-platform-qc-remediation.md and 14-09/14-10/14-06 plans.
+  onAuthenticated?: (hello: unknown, session: { readonly generation: number }) => void | Promise<void>;
   /** Called when the socket opens (before challenge handshake completes). */
   onOpen?: () => void;
   /** Called when the socket closes. */
@@ -75,19 +86,26 @@ export interface GatewayClientOptions {
   getParentTraceparent?: () => string | undefined | null;
 }
 
+/** Handshake ownership stays local to one socket even across asynchronous auth work. */
+interface ConnectionAttempt {
+  generation: number;
+  socket: unknown;
+  active: boolean;
+  connectSent: boolean;
+  resolve: ((value: unknown) => void) | null;
+  reject: ((error: Error) => void) | null;
+}
+
 export class GatewayClient {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private ws: any = null;
   /** Increments per connect() call to fence stale socket event handlers. */
   private generation = 0;
   private pending = new Map<string, PendingRequest>();
-  private connectNonce: string | null = null;
-  private connectSent = false;
+  private attempt: ConnectionAttempt | null = null;
   private reconnectTimer: ReturnType<typeof setTimeout> | null = null;
   private backoffMs = 800;
   private closed = false;
-  private helloResolve: ((value: unknown) => void) | null = null;
-  private helloReject: ((err: Error) => void) | null = null;
   /** Imperatively-set parent traceparent; takes precedence over opts.getParentTraceparent. */
   private parentTraceparent: string | undefined;
 
@@ -103,49 +121,54 @@ export class GatewayClient {
    * Resolves with the HelloOk payload from the server.
    */
   async connect(): Promise<unknown> {
-    this.closed = false;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const Impl = this.opts.WebSocketImpl ?? (globalThis as any).WebSocket;
     if (!Impl) throw new Error('No WebSocket implementation available. Pass WebSocketImpl or run in a browser.');
 
-    const args: unknown[] = this.opts.wsConstructorArgs ?? [];
     const gen = ++this.generation;
-    this.connectSent = false;
-    this.connectNonce = null;
+    this.closed = false;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = null;
+    }
+    const previousSocket = this.ws;
+    this.ws = null;
+    if (this.attempt) {
+      this.attempt.active = false;
+      this.attempt.reject?.(new Error('connection superseded'));
+    }
+    flushPending(this.pending, new Error('connection superseded'));
+    // Its event handlers are already fenced by the new generation.
+    previousSocket?.close();
 
+    const args: unknown[] = this.opts.wsConstructorArgs ?? [];
     return new Promise<unknown>((resolve, reject) => {
-      this.helloResolve = resolve;
-      this.helloReject = reject;
-
-      let connectTimer: ReturnType<typeof setTimeout> | null = null;
-      const connectTimeoutMs = this.opts.connectTimeoutMs ?? 10000;
-      connectTimer = setTimeout(() => {
-        connectTimer = null;
-        if (this.generation === gen) {
-          this.helloReject?.(new Error(`connect timed out after ${connectTimeoutMs}ms`));
-          this.helloResolve = this.helloReject = null;
-          this.ws?.close();
-        }
-      }, connectTimeoutMs);
-
-      const origReject = reject;
-      this.helloReject = (err: Error) => {
-        if (connectTimer) { clearTimeout(connectTimer); connectTimer = null; }
-        origReject(err);
+      const attempt: ConnectionAttempt = {
+        generation: gen, socket: null, active: true, connectSent: false,
+        resolve: null, reject: null,
       };
-      this.helloResolve = (value: unknown) => {
-        if (connectTimer) { clearTimeout(connectTimer); connectTimer = null; }
-        resolve(value);
+      this.attempt = attempt;
+      let timer: ReturnType<typeof setTimeout> | null = null;
+      const clearHandshake = () => {
+        if (timer !== null) { clearTimeout(timer); timer = null; }
+        attempt.resolve = attempt.reject = null;
       };
+      attempt.resolve = (value) => { clearHandshake(); resolve(value); };
+      attempt.reject = (error) => { clearHandshake(); reject(error); };
+      const timeoutMs = this.opts.connectTimeoutMs ?? 10000;
+      timer = setTimeout(() => {
+        if (!this.isLiveAttempt(attempt)) return;
+        this.failHandshake(attempt, new Error(`connect timed out after ${timeoutMs}ms`), true);
+      }, timeoutMs);
 
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         this.ws = new (Impl as any)(this.opts.url, ...args);
-        this.wireEvents(gen);
-      } catch (err) {
-        if (connectTimer) { clearTimeout(connectTimer); connectTimer = null; }
-        this.helloResolve = this.helloReject = null;
-        reject(err instanceof Error ? err : new Error(String(err)));
+        attempt.socket = this.ws;
+        this.wireEvents(attempt);
+      } catch (error) {
+        attempt.active = false;
+        attempt.reject?.(error instanceof Error ? error : new Error(String(error)));
       }
     });
   }
@@ -170,6 +193,8 @@ export class GatewayClient {
         reject: (e) => { clearTimeout(timer); reject(e); },
       });
       const parent = this.parentTraceparent ?? this.opts.getParentTraceparent?.() ?? undefined;
+      // TODO(handoff): Generic request send/serialization failures need pending-map cleanup in 14-01;
+      // handshake failure cleanup here does not qualify every request. See proposals/2026-09-08-platform-qc-remediation.md.
       ws.send(JSON.stringify({ type: 'req', id, method, params, traceparent: newTraceparent(parent) }));
     });
   }
@@ -184,19 +209,24 @@ export class GatewayClient {
       clearTimeout(this.reconnectTimer);
       this.reconnectTimer = null;
     }
-    if (this.ws) {
-      this.ws.close(code, reason);
-      this.ws = null;
+    const socket = this.ws;
+    this.ws = null;
+    if (this.attempt) {
+      this.attempt.active = false;
+      this.attempt.reject?.(new Error('disconnected'));
     }
     flushPending(this.pending, new Error('disconnected'));
     this.backoffMs = 800;
+    // Keep the attempt identity until the native close event delivers onClose.
+    // Any reentrant connect from onClose owns its own fields after this point.
+    socket?.close(code, reason);
   }
 
   // ---------------------------------------------------------------------------
   // Private helpers
   // ---------------------------------------------------------------------------
 
-  private wireEvents(gen: number): void {
+  private wireEvents(attempt: ConnectionAttempt): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ws: any = this.ws!;
 
@@ -213,12 +243,12 @@ export class GatewayClient {
     };
 
     on('open', () => {
-      if (this.generation !== gen) return;
+      if (!this.isLiveAttempt(attempt)) return;
       this.opts.onOpen?.();
     });
 
     on('message', (evOrData: unknown) => {
-      if (this.generation !== gen) return;
+      if (!this.isLiveAttempt(attempt)) return;
       // Node ws fires message(data, isBinary); browser fires MessageEvent.
       let raw: string;
       if (
@@ -230,11 +260,11 @@ export class GatewayClient {
       } else {
         raw = String(evOrData ?? '');
       }
-      this.handleMessage(raw);
+      this.handleMessage(raw, attempt);
     });
 
     on('close', (evOrCode: unknown, reasonBuf?: unknown) => {
-      if (this.generation !== gen) return;
+      if (!this.ownsAttempt(attempt)) return;
 
       // Node ws close(code, reason: Buffer); browser fires CloseEvent.
       let code: number;
@@ -249,28 +279,25 @@ export class GatewayClient {
       }
 
       this.ws = null;
+      attempt.active = false;
       flushPending(this.pending, new Error(`closed (${code}): ${reason}`));
+      attempt.reject?.(new Error(`closed before hello (${code})`));
       this.opts.onClose?.(code, reason);
 
-      // If connect() promise is still pending (closed before hello completed):
-      if (this.helloReject) {
-        this.helloReject(new Error(`closed before hello (${code})`));
-        this.helloResolve = this.helloReject = null;
-      }
-
-      if (this.opts.autoReconnect && !this.closed) {
+      // onClose can synchronously close or replace this client connection.
+      if (this.ownsAttempt(attempt) && this.opts.autoReconnect && !this.closed) {
         this.scheduleReconnect();
       }
     });
 
     on('error', (err: unknown) => {
-      if (this.generation !== gen) return;
+      if (!this.ownsAttempt(attempt)) return;
       // close handler fires next — no control-flow action here; reporting only.
       this.reportSocketError(err);
     });
   }
 
-  private handleMessage(raw: string): void {
+  private handleMessage(raw: string, attempt: ConnectionAttempt): void {
     let frame: Record<string, unknown>;
     try {
       frame = JSON.parse(raw) as Record<string, unknown>;
@@ -279,12 +306,14 @@ export class GatewayClient {
       return;
     }
 
+    // TODO(handoff): Validate parsed envelopes/hello payloads in 14-01 before claiming runtime authority;
+    // this session notification preserves current wire acceptance. See proposals/2026-09-08-platform-qc-remediation.md.
     if (frame['type'] === 'event') {
       if (frame['event'] === 'connect.challenge') {
         const payload = frame['payload'] as { nonce?: unknown } | undefined;
         const nonce = payload && typeof payload.nonce === 'string' ? payload.nonce : null;
         if (nonce) {
-          void this.sendConnect(nonce);
+          void this.sendConnect(nonce, attempt);
         }
         return;
       }
@@ -341,21 +370,51 @@ export class GatewayClient {
     }
   }
 
-  private async sendConnect(nonce: string): Promise<void> {
-    if (this.connectSent) return;
-    this.connectSent = true;
+  private ownsAttempt(attempt: ConnectionAttempt): boolean {
+    return this.attempt === attempt && this.generation === attempt.generation;
+  }
+
+  private isLiveAttempt(attempt: ConnectionAttempt): boolean {
+    return this.ownsAttempt(attempt) && attempt.active && !this.closed && this.ws === attempt.socket;
+  }
+
+  private failHandshake(attempt: ConnectionAttempt, error: Error, timedOut = false): void {
+    if (!this.isLiveAttempt(attempt)) return;
+    const socket = this.ws;
+    attempt.active = false;
+    attempt.reject?.(error);
+    flushPending(this.pending, error);
+    if (timedOut) socket?.close();
+    else socket?.close(4008, 'connect failed');
+  }
+
+  private async sendConnect(nonce: string, attempt: ConnectionAttempt): Promise<void> {
+    if (!this.isLiveAttempt(attempt) || attempt.connectSent) return;
+    attempt.connectSent = true;
     try {
       const params = await this.opts.onChallenge(nonce);
+      if (!this.isLiveAttempt(attempt)) return;
       const hello = await this.request<unknown>('connect', params);
-      // Successful connect — reset backoff.
+      if (!this.isLiveAttempt(attempt)) return;
       this.backoffMs = 800;
-      this.helloResolve?.(hello);
-      this.helloResolve = this.helloReject = null;
-    } catch (err) {
-      this.helloReject?.(err instanceof Error ? err : new Error(String(err)));
-      this.helloResolve = this.helloReject = null;
-      // Close the socket to trigger reconnect logic if autoReconnect is true.
-      this.ws?.close(4008, 'connect failed');
+      // Settlement clears attempt bookkeeping before an observer can close/reconnect.
+      attempt.resolve?.(hello);
+      this.notifyAuthenticated(hello, attempt.generation);
+    } catch (error) {
+      if (!this.isLiveAttempt(attempt)) return;
+      this.failHandshake(attempt, error instanceof Error ? error : new Error(String(error)));
+    }
+  }
+
+  private notifyAuthenticated(hello: unknown, generation: number): void {
+    const report = () => {
+      try { console.error('[GatewayClient] onAuthenticated observer failed'); }
+      catch { /* A broken diagnostic sink must not change transport control flow. */ }
+    };
+    try {
+      void Promise.resolve(this.opts.onAuthenticated?.(hello, { generation })).catch(report);
+    } catch {
+      report();
     }
   }
 
@@ -364,9 +423,12 @@ export class GatewayClient {
     const delay = this.backoffMs;
     // Exponential backoff capped at 15000ms (T-07-04 mitigation).
     this.backoffMs = Math.min(this.backoffMs * 1.7, 15000);
+    const generation = this.generation;
     this.opts.onReconnectScheduled?.(delay);
+    if (this.closed || this.generation !== generation) return;
     this.reconnectTimer = setTimeout(() => {
       this.reconnectTimer = null;
+      if (this.closed || this.generation !== generation) return;
       void this.connect().catch((err) => this.reportReconnectError(err, { delayMs: delay }));
     }, delay);
   }
