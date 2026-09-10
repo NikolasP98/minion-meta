@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-10T10:34:27.234Z",
+	"generatedAt": "2026-09-10T11:04:59.802Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7182,6 +7182,76 @@
 			"scoredAt": "2026-09-04T06:35:31.012Z"
 		},
 		{
+			"key": "proposal:handoff-minion-ai-692195553",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/infra/message-ledger-provenance.test.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-692195553.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "3668dd7d02c28cfa862aeede4a04450d2318c9b8450841e2d3b4563188a436ee",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:merge-scan-minion-ai-698ce81",
+				"deploy:minion (gateway)"
+			],
+			"rationale": "The marker captures a real but low-severity coverage gap, but the quoted marker text is truncated mid-sentence so the remediation scope isn't yet specified.",
+			"evidence": [
+				"marker at message-ledger-provenance.test.ts:138",
+				"marker text cuts off: 'would need a helper that'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T11:04:59.722Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-698ce81",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 698ce81",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-698ce81.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "7657571bd4101a5b0914a0f3d6cd2218b3388c294ba16153f8c86ca098198149",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-692195553",
+				"deploy:minion (gateway)"
+			],
+			"rationale": "This finding and the handoff proposal describe the same skipped Windows test in message-ledger-provenance.test.ts and should be consolidated into one remediation goal.",
+			"evidence": [
+				"finding cites message-ledger-provenance.test.ts:131 as weakened-test",
+				"references the same TODO(handoff) marker as the handoff proposal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T11:04:59.722Z"
+		},
+		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -7600,38 +7670,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-09T22:35:10.859Z"
-		},
-		{
-			"key": "run:minion (gateway)#34463439591",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34463439591",
-			"sourceUpdatedAt": "2026-09-10T10:17:16Z",
-			"sourceFingerprint": "059663dca976a40c72eb5b215023e80c157d348ccf5512482ba280ee4180a527",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI run on DEV has no outcome yet, so no action is warranted until it completes.",
-			"evidence": [
-				"status: in_progress",
-				"push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T10:34:27.166Z"
 		},
 		{
 			"key": "pr:minion_hub#196",
@@ -8129,6 +8167,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T22:34:40.008Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/698ce81b835b16509421a579e22dcbbb490494e4",
+			"sourceUpdatedAt": "2026-09-10T10:48:59Z",
+			"sourceFingerprint": "9f4db180dd6637c8bc1f7bc38cdca6c9457fffb2517cb3276c4842289c9078e2",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:merge-scan-minion-ai-698ce81",
+				"proposal:handoff-minion-ai-692195553"
+			],
+			"rationale": "The cited commit already merged the Windows test-skip fix, so this deployment entry reflects completed work rather than an open goal.",
+			"evidence": [
+				"commit 698ce81 skips the fixture with a TODO(handoff)",
+				"source guard left unchanged, only the fixture is skipped"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T11:04:59.722Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
@@ -8691,6 +8764,38 @@
 			"scoredAt": "2026-09-07T08:11:32.696Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "61fca0115ae5f8e76aab02539bc64ca13a96e020bdfc304bb97f972a3c98daae",
+			"score": 13,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The six markers quote disjoint, unrelated fragments (calendar scheduling, resourceId, protocol replacement) inside a JSON rankings data file, indicating a false-positive sweep match rather than a coherent actionable item.",
+			"evidence": [
+				"target is rankings/index.json, a data index not source code",
+				"markers reference unrelated topics across 6 separate lines"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T11:04:59.722Z"
+		},
+		{
 			"key": "issue:minion-meta#373",
 			"kind": "issue",
 			"stage": "proposal",
@@ -8786,14 +8891,14 @@
 			"scoredAt": "2026-09-10T02:35:01.795Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "3fb3f4354317e42cec9476df62d399bba683f6ba855618309563097236701e97",
+			"key": "run:minion (gateway)#34468030440",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34468030440",
+			"sourceUpdatedAt": "2026-09-10T10:52:46Z",
+			"sourceFingerprint": "967a136eecb4724f34dc0103bf9ec19c26d29ba9008f235d91b6be1df9b2e7b2",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -8805,17 +8910,17 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 2,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The listed markers are fragments of stored rationale/evidence text from the ranking system's own JSON output, not real code TODOs, indicating a self-scan false positive.",
+			"rationale": "This is a routine in-progress CI run with no indication of failure or actionable content.",
 			"evidence": [
-				"marker text 'a date already held by a manual holiday is skipped silently' is unrelated calendar-scheduling content",
-				"marker text 'resourceId is only ever set from the calendar's' is a fragment of prior evidence, not a TODO"
+				"status: in_progress",
+				"push on DEV triggered CI"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T10:05:17.928Z"
+			"scoredAt": "2026-09-10T11:04:59.722Z"
 		}
 	]
 }
