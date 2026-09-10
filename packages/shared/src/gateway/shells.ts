@@ -14,6 +14,211 @@
 //      shells.invoke from other callers is forwarded by the gateway over this same
 //      connection.
 
+// Durable v1 is additive. These helpers validate data, never caller authority.
+export interface ShellOutcomeLimits {
+  identifierBytes: number;
+  textBytes: number;
+  recordBytes: number;
+}
+/** Fixed v1 wire limits; input text and outcome metadata have distinct budgets. */
+export const SHELL_DURABLE_V1_INPUT_POLICY = Object.freeze({
+  contract: Object.freeze({ identifierBytes: 256, textBytes: 65536, recordBytes: 524288 } as const),
+  organizationBytes: 256,
+  invocationKeyBytes: 256,
+  envelopeBytes: 524288,
+} as const);
+export const SHELL_DURABLE_V1_OUTCOME_LIMITS = Object.freeze({
+  identifierBytes: 256,
+  textBytes: 4096,
+  recordBytes: 65536,
+} as const);
+/** Logical serialized reservation only; excludes SQLite/WAL/index and filesystem overhead. */
+// TODO(handoff): Receiver14-12 and sender11-03 must explicitly adopt this fixed profile and enforce its aggregate/metadata reservation; constants alone reserve nothing. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle) and D360-16.
+export const SHELL_DURABLE_V1_PROFILE = Object.freeze({
+  version: 1,
+  input: SHELL_DURABLE_V1_INPUT_POLICY,
+  outcome: SHELL_DURABLE_V1_OUTCOME_LIMITS,
+  maxOutcomeBytes: 57344,
+  maxReceiptBytes: 8192,
+  maxCombinedOutcomeBytes: 65536,
+  maxAdmissionMetadataBytes: 16384,
+  reservedRunBytes: 81920,
+} as const);
+export interface ShellRunIdentity {
+  shellId: string;
+  runId: string;
+  sessionId: string;
+  invocationId: string;
+  inputDigest: string;
+}
+export interface ShellRunAdmission extends ShellRunIdentity {
+  version: 1;
+  startedAt: number;
+}
+/** Gateway-internal forwarding only; never accept an admission from a caller. */
+// TODO(handoff): Receiver14-12 must validate the complete input envelope, scope the caller key and compute its semantic input digest before forwarding; admission normalization alone grants no authority. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
+export interface ShellAdmittedInvoke {
+  version: 1;
+  admission: ShellRunAdmission;
+  input: ShellsInvokeParams['input'];
+}
+export interface ShellRunOutcome extends ShellRunIdentity {
+  version: 1;
+  eventId: string;
+  state: 'final' | 'aborted' | 'error';
+  durationMs: number;
+  stopReason?: string;
+  /** Public-safe text supplied by the sender; byte validation is not secret redaction. */
+  errorMessage?: string;
+  outcomeDigest: string;
+}
+export interface ShellOutcomeReceipt {
+  version: 1;
+  shellId: string;
+  runId: string;
+  eventId: string;
+  outcomeDigest: string;
+  receiptId: string;
+  committedAt: number;
+}
+export interface ShellRunObservation {
+  version: 1;
+  kind: 'unresolved' | 'cancel_requested' | 'cancel_acknowledged' | 'cancel_unconfirmed';
+  at: number;
+  /** Bounded non-secret explanation, not raw ACP errors or output. */
+  reason?: string;
+}
+export type ShellsCommitOutcomeParams = ShellRunOutcome;
+export type ShellsCommitOutcomeResponse = ShellOutcomeReceipt;
+export interface ShellsGetOutcomeParams { version: 1; shellId: string; runId: string }
+export type ShellsGetOutcomeResponse =
+  | { version: 1; status: 'not_found' | 'unresolved'; shellId: string; runId: string }
+  | { version: 1; status: 'committed'; outcome: ShellRunOutcome; receipt: ShellOutcomeReceipt };
+
+export class ShellOutcomeValidationError extends Error {
+  constructor() { super('INVALID_SHELL_OUTCOME'); this.name = 'ShellOutcomeValidationError'; }
+}
+function invalidOutcome(): never { throw new ShellOutcomeValidationError(); }
+const utf8 = new TextEncoder();
+export function shellOutcomeByteLength(value: string): number { return utf8.encode(value).byteLength; }
+export function normalizeShellOutcomeLimits(value: unknown): ShellOutcomeLimits {
+  const item = outcomeObject(value, ['identifierBytes', 'textBytes', 'recordBytes']);
+  return { identifierBytes: positiveLimit(item.identifierBytes), textBytes: positiveLimit(item.textBytes), recordBytes: positiveLimit(item.recordBytes) };
+}
+function positiveLimit(value: unknown): number {
+  if (typeof value !== 'number' || !Number.isSafeInteger(value) || value <= 0) return invalidOutcome();
+  return value;
+}
+function outcomeObject(value: unknown, allowed: readonly string[]): Record<string, unknown> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return invalidOutcome();
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== null && prototype !== Object.prototype) return invalidOutcome();
+  const result: Record<string, unknown> = Object.create(null);
+  for (const key of Reflect.ownKeys(value)) {
+    if (typeof key !== 'string' || !allowed.includes(key)) return invalidOutcome();
+    const field = Object.getOwnPropertyDescriptor(value, key);
+    if (!field || !('value' in field) || !field.enumerable) return invalidOutcome();
+    result[key] = field.value;
+  }
+  return result;
+}
+function outcomeString(value: unknown, bytes: number, empty = false): string {
+  if (typeof value !== 'string' || (!empty && !value.length) || value.length > bytes) return invalidOutcome();
+  // Reject unpaired UTF-16 surrogates instead of silently replacing them in UTF-8.
+  for (let i = 0; i < value.length; i++) {
+    const code = value.charCodeAt(i);
+    if (code >= 0xd800 && code <= 0xdbff) {
+      const next = value.charCodeAt(++i);
+      if (!(next >= 0xdc00 && next <= 0xdfff)) return invalidOutcome();
+    } else if (code >= 0xdc00 && code <= 0xdfff) return invalidOutcome();
+  }
+  if (shellOutcomeByteLength(value) > bytes) return invalidOutcome();
+  return value;
+}
+function outcomeInteger(value: unknown): number {
+  if (typeof value !== 'number' || !Number.isSafeInteger(value) || value < 0) return invalidOutcome();
+  return value === 0 ? 0 : value;
+}
+function digest(value: unknown): string {
+  if (typeof value !== 'string' || !/^[a-f0-9]{64}$/.test(value)) return invalidOutcome();
+  return value;
+}
+function version(item: Record<string, unknown>): 1 { if (item.version !== 1) return invalidOutcome(); return 1; }
+function bounded<T extends object>(item: T, limits: ShellOutcomeLimits): T {
+  if (shellOutcomeByteLength(JSON.stringify(item)) > limits.recordBytes) return invalidOutcome();
+  return item;
+}
+const identityKeys = ['shellId', 'runId', 'sessionId', 'invocationId', 'inputDigest'];
+function identity(item: Record<string, unknown>, limits: ShellOutcomeLimits): ShellRunIdentity {
+  return {
+    shellId: outcomeString(item.shellId, limits.identifierBytes), runId: outcomeString(item.runId, limits.identifierBytes),
+    sessionId: outcomeString(item.sessionId, limits.identifierBytes), invocationId: outcomeString(item.invocationId, limits.identifierBytes), inputDigest: digest(item.inputDigest),
+  };
+}
+export function normalizeShellRunAdmission(value: unknown, policy: unknown): ShellRunAdmission {
+  const limits = normalizeShellOutcomeLimits(policy);
+  const item = outcomeObject(value, ['version', ...identityKeys, 'startedAt']);
+  return bounded({ version: version(item), ...identity(item, limits), startedAt: outcomeInteger(item.startedAt) }, limits);
+}
+export function normalizeShellRunOutcome(value: unknown, policy: unknown): ShellRunOutcome {
+  const limits = normalizeShellOutcomeLimits(policy);
+  const item = outcomeObject(value, ['version', ...identityKeys, 'eventId', 'state', 'durationMs', 'stopReason', 'errorMessage', 'outcomeDigest']);
+  if (item.state !== 'final' && item.state !== 'aborted' && item.state !== 'error') return invalidOutcome();
+  return bounded({
+    version: version(item), ...identity(item, limits), eventId: outcomeString(item.eventId, limits.identifierBytes), state: item.state,
+    durationMs: outcomeInteger(item.durationMs),
+    ...(item.stopReason === undefined ? {} : { stopReason: outcomeString(item.stopReason, limits.textBytes, true) }),
+    ...(item.errorMessage === undefined ? {} : { errorMessage: outcomeString(item.errorMessage, limits.textBytes, true) }),
+    outcomeDigest: digest(item.outcomeDigest),
+  }, limits);
+}
+export function shellRunOutcomeText(value: unknown, policy: unknown): string {
+  const o = normalizeShellRunOutcome(value, policy);
+  return JSON.stringify(['minion.shells.outcome', 1, o.shellId, o.runId, o.sessionId, o.invocationId, o.inputDigest, o.eventId, o.state, o.durationMs, o.stopReason ?? null, o.errorMessage ?? null]);
+}
+export function normalizeShellOutcomeReceipt(value: unknown, policy: unknown): ShellOutcomeReceipt {
+  const limits = normalizeShellOutcomeLimits(policy);
+  const item = outcomeObject(value, ['version', 'shellId', 'runId', 'eventId', 'outcomeDigest', 'receiptId', 'committedAt']);
+  return bounded({ version: version(item), shellId: outcomeString(item.shellId, limits.identifierBytes), runId: outcomeString(item.runId, limits.identifierBytes),
+    eventId: outcomeString(item.eventId, limits.identifierBytes), outcomeDigest: digest(item.outcomeDigest), receiptId: outcomeString(item.receiptId, limits.identifierBytes), committedAt: outcomeInteger(item.committedAt) }, limits);
+}
+export function normalizeShellRunObservation(value: unknown, policy: unknown): ShellRunObservation {
+  const limits = normalizeShellOutcomeLimits(policy);
+  const item = outcomeObject(value, ['version', 'kind', 'at', 'reason']);
+  if (item.kind !== 'unresolved' && item.kind !== 'cancel_requested' && item.kind !== 'cancel_acknowledged' && item.kind !== 'cancel_unconfirmed') return invalidOutcome();
+  return bounded({ version: version(item), kind: item.kind, at: outcomeInteger(item.at), ...(item.reason === undefined ? {} : { reason: outcomeString(item.reason, limits.textBytes, true) }) }, limits);
+}
+export function normalizeShellsGetOutcomeParams(value: unknown, policy: unknown): ShellsGetOutcomeParams {
+  const limits = normalizeShellOutcomeLimits(policy);
+  const item = outcomeObject(value, ['version', 'shellId', 'runId']);
+  return bounded({ version: version(item), shellId: outcomeString(item.shellId, limits.identifierBytes), runId: outcomeString(item.runId, limits.identifierBytes) }, limits);
+}
+export function normalizeShellsGetOutcomeResponse(value: unknown, policy: unknown): ShellsGetOutcomeResponse {
+  const limits = normalizeShellOutcomeLimits(policy);
+  const item = outcomeObject(value, ['version', 'status', 'shellId', 'runId', 'outcome', 'receipt']);
+  if (item.status === 'not_found' || item.status === 'unresolved') {
+    if ('outcome' in item || 'receipt' in item) return invalidOutcome();
+    const query = normalizeShellsGetOutcomeParams({ version: item.version, shellId: item.shellId, runId: item.runId }, limits);
+    return bounded({ ...query, status: item.status }, limits);
+  }
+  if (item.status !== 'committed' || 'shellId' in item || 'runId' in item) return invalidOutcome();
+  const outcome = normalizeShellRunOutcome(item.outcome, limits);
+  const receipt = normalizeShellOutcomeReceipt(item.receipt, limits);
+  if (outcome.shellId !== receipt.shellId || outcome.runId !== receipt.runId || outcome.eventId !== receipt.eventId || outcome.outcomeDigest !== receipt.outcomeDigest) return invalidOutcome();
+  return bounded({ version: version(item), status: 'committed', outcome, receipt }, limits);
+}
+
+/** Validates a required admission response, not live storage readiness or execution. */
+export function normalizeShellsInvokeDurableResponse(value: unknown): ShellsInvokeDurableResponse {
+  const limits = SHELL_DURABLE_V1_OUTCOME_LIMITS;
+  const item = outcomeObject(value, ['version', 'durability', 'runId', 'startedAt']);
+  if (item.durability !== 'required') return invalidOutcome();
+  return bounded({
+    version: version(item), durability: 'required' as const,
+    runId: outcomeString(item.runId, limits.identifierBytes), startedAt: outcomeInteger(item.startedAt),
+  }, limits);
+}
+
 // =============================================================================
 // RPC method names — use these constants on both client and server.
 // =============================================================================
@@ -25,6 +230,8 @@ export const SHELLS_METHODS = {
   provision: 'shells.provision',
   access: 'shells.access',
   invoke: 'shells.invoke',
+  // TODO(handoff): Caller routing must require this method/response and never fall back to legacy invocation; receiver must acknowledge only committed admission. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle) and D360-16.
+  invokeDurable: 'shells.invoke_durable',
   cancel: 'shells.cancel',
   archive: 'shells.archive',
   wake: 'shells.wake',
@@ -38,6 +245,8 @@ export const SHELLS_METHODS = {
   register: 'shells.register',
   heartbeat: 'shells.heartbeat',
   fatal: 'shells.fatal',
+  commitOutcome: 'shells.commit_outcome',
+  getOutcome: 'shells.get_outcome',
 } as const;
 
 // =============================================================================
@@ -236,6 +445,8 @@ export interface ShellsAccessResponse {
 
 /** shells.invoke — forwards to the bridge, which translates to ACP `session/prompt`. */
 export interface ShellsInvokeParams {
+  /** Optional caller key. The gateway must authenticate/scope it before admission. */
+  invocationKey?: string;
   shellId: string;
   sessionId: string;
   input:
@@ -243,6 +454,17 @@ export interface ShellsInvokeParams {
     | { kind: 'multimodal'; parts: Array<{ type: string; [k: string]: unknown }> };
   /** Force-wake if archived. Default true. */
   wakeIfArchived?: boolean;
+}
+/** Required durable invocation reuses the text-only member; parsing remains gateway-owned. */
+export interface ShellsInvokeDurableParams extends Omit<ShellsInvokeParams, 'input'> {
+  input: Extract<ShellsInvokeParams['input'], { kind: 'text' }>;
+}
+/** Persisted admission identity; does not establish that ACP started or succeeded. */
+export interface ShellsInvokeDurableResponse {
+  version: 1;
+  durability: 'required';
+  runId: string;
+  startedAt: number;
 }
 export interface ShellsInvokeResponse {
   runId: string;             // correlate with shell.delta / shell.final events
@@ -354,6 +576,8 @@ export interface ShellsRegisterParams {
   capabilities: ShellCapabilities;
 }
 export interface ShellCapabilities {
+  /** Advertise only when the durable receiver/sender integration is active. */
+  durableOutcomeVersion?: 1;
   /** ACP methods this harness supports. Gateway uses to reject unsupported invokes early. */
   acpMethods: string[];
   /** True if the harness can stream `session/update` events. */
@@ -364,9 +588,20 @@ export interface ShellCapabilities {
   maxConcurrentRuns: number;
 }
 export interface ShellsRegisterResponse {
+  /** Set only for a v1 peer after durable storage readiness and current-connection checks. */
+  durableOutcomeVersion?: 1;
   shellId: string;
   /** Server-issued heartbeat cadence (ms). Bridge calls shells.heartbeat every N ms. */
   heartbeatMs: number;
+}
+
+/** Contract selection only; it does not establish peer authority or storage readiness. */
+// TODO(handoff): Wire bilateral selection into the current registered receiver and durable sender; required durability must reject legacy absence. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
+export function negotiateShellDurableOutcomeVersion(sender: unknown, receiver: unknown): 1 | undefined {
+  if ((sender !== undefined && sender !== 1) || (receiver !== undefined && receiver !== 1)) {
+    return invalidOutcome();
+  }
+  return sender === 1 && receiver === 1 ? 1 : undefined;
 }
 
 /** shells.heartbeat — bridge liveness ping. */
