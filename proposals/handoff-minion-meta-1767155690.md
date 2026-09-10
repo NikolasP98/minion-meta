@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-1767155690
 title: Handoff marker — packages/shells-bridge/src/bridge.ts (minion-meta)
-status: draft
+status: review
 created: 2026-09-10
 updated: 2026-09-10
 repos: [minion-meta]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-08-17-gw-shells-lifecycle-stubs
 ---
 
 # Handoff marker — packages/shells-bridge/src/bridge.ts
