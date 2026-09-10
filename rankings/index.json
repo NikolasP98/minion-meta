@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-10T07:34:39.250Z",
+	"generatedAt": "2026-09-10T08:05:06.318Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -634,40 +634,6 @@
 			"scoredAt": "2026-09-07T08:15:17.104Z"
 		},
 		{
-			"key": "pr:minion (gateway)#265",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#265 train: promote DEV → main (2026-09-05)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/265",
-			"sourceUpdatedAt": "2026-09-10T06:50:50Z",
-			"sourceFingerprint": "46aec3808cae03fbdc784ce5b27cbb18de3d121156fd5365dfa1f3b8470a6a89",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#270"
-			],
-			"rationale": "The weekly production promotion train is currently blocked by merge conflicts that PR #270 was filed to resolve, so it isn't actionable until that merges.",
-			"evidence": [
-				"#270 states #265 was CONFLICTING/DIRTY due to CI-scaffolding divergence",
-				"checklist requires review PASS bound to final head SHA before merge"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T07:05:34.007Z"
-		},
-		{
 			"key": "spec:2026-08-28-shared-db-encryption-key-convergence-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1258,14 +1224,14 @@
 			"scoredAt": "2026-09-09T15:35:06.298Z"
 		},
 		{
-			"key": "pr:minion (gateway)#270",
+			"key": "pr:minion (gateway)#265",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion (gateway)",
-			"title": "#270 chore: sync main into DEV (CI scaffolding reconciled for the DEV→main train)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/270",
-			"sourceUpdatedAt": "2026-09-10T07:27:53Z",
-			"sourceFingerprint": "41674ba785cc97e42ac0c511fe2a14549880987f3a06367f2635401e3be2a9c0",
+			"title": "#265 train: promote DEV → main (2026-09-05)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/265",
+			"sourceUpdatedAt": "2026-09-10T07:56:43Z",
+			"sourceFingerprint": "9453b0d050063541a4a51a8a263f99f31976801d8b752c2ec713792768252fea",
 			"score": 63,
 			"band": "medium",
 			"axes": {
@@ -1274,24 +1240,24 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 9,
-				"implementation": 8
+				"specification": 7,
+				"implementation": 6
 			},
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion (gateway)#271",
-				"run:minion (gateway)#34447058968"
+				"run:minion (gateway)#34452510816",
+				"run:minion (gateway)#34452511053"
 			],
-			"rationale": "Detailed, gate-verified merge that unblocks the stuck DEV→main train PR #265.",
+			"rationale": "An open weekly DEV→main promotion train with a concrete merge checklist gates actual production deployment of 3 commits.",
 			"evidence": [
-				"4 documented conflicts resolved with rationale per file",
-				"local vitest/oxfmt/check gates all passed",
-				"merge-tree confirms #265 becomes conflict-free after this lands"
+				"Weekly promotion train (Saturday 21:00). 3 commits ready",
+				"Merging deploys to production",
+				"checklist requires review PASS and no unaddressed Critical/High finding"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T07:34:39.183Z"
+			"scoredAt": "2026-09-10T08:05:06.253Z"
 		},
 		{
 			"key": "pr:minion_site#29",
@@ -2543,42 +2509,6 @@
 			"scoredAt": "2026-09-09T05:04:27.982Z"
 		},
 		{
-			"key": "run:minion (gateway)#34447058968",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34447058968",
-			"sourceUpdatedAt": "2026-09-10T07:07:26Z",
-			"sourceFingerprint": "e7b442726262af762c9945595d0aa506e06f077132b1bf370c62f08844166b6d",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#270",
-				"pr:minion (gateway)#271"
-			],
-			"rationale": "A failing CI run on DEV with no diagnostic detail beyond status, likely tied to the same CI scaffolding divergence addressed by the two related PRs.",
-			"evidence": [
-				"status: failure",
-				"push on DEV",
-				"no failure detail or logs included in candidate"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T07:34:39.183Z"
-		},
-		{
 			"key": "spec:2026-08-31-base-meta-status-revision-binding-required-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -2980,6 +2910,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-10T05:35:30.528Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-db09a2f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ db09a2f",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-db09a2f.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "0884608e461e8ce6132b6049a562dd3cc57c4c5a103818a864d17a46ad2c2307",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Concrete high-severity unchecked-access findings across five test files plus a removed regression test reduce CI signal reliability and have precise file:line fixes.",
+			"evidence": [
+				"5 'high' unchecked-access findings in ci-workflow.test.ts and labeler-workflow.test.ts",
+				"'medium' finding: regression test for workflow file re-introduction was removed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T08:05:06.253Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-afd023b",
@@ -4351,41 +4313,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:13:41.404Z"
-		},
-		{
-			"key": "pr:minion (gateway)#271",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#271 ci: audit two PRIVATE_KEY-substring false positives in .secrets.baseline (76f0f367)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/271",
-			"sourceUpdatedAt": "2026-09-10T07:26:24Z",
-			"sourceFingerprint": "325d65405a1c4fc013884ee5f4fc84b61269194da521eb31975846bea88dc47f",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#270"
-			],
-			"rationale": "Small, fully audited baseline update required to unblock #270's secrets gate, with clear content-blind-gate rationale for admin merge.",
-			"evidence": [
-				"20-line .secrets.baseline change with documented sha1-of-'true' false positives",
-				"content-blind ci-security-scope.sh gate cannot pass without dedicated PR",
-				"directly unblocks pr:270's secrets job"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T07:34:39.183Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-msteams-large-upload",
@@ -6824,6 +6751,38 @@
 			"scoredAt": "2026-09-10T07:05:34.007Z"
 		},
 		{
+			"key": "proposal:handoff-minion-ai-2877399286",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — .github/workflows/ci.yml (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2877399286.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "5720a39b417cd6606ca923b80c4f753279d5018742572b24008f2f0434d09983",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single, narrowly-scoped CI workflow handoff marker about reaching Bun 1.4 parity before promoting from shadow evidence, with clear location but unclear parity criteria.",
+			"evidence": [
+				"marker at .github/workflows/ci.yml:428",
+				"'Reach Bun 1.4 parity before promoting it from shadow evidence'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T08:05:06.253Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-1323254565",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8171,6 +8130,38 @@
 			"scoredAt": "2026-09-07T22:34:40.008Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/db09a2f3162abea7dcf6f646fc31ca3b7c03bb5b",
+			"sourceUpdatedAt": "2026-09-10T07:56:26Z",
+			"sourceFingerprint": "4f079be43c9695843d670e642b0ca632859137755fed66f1b52e7ada66e7603d",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine already-merged DEV sync commit with no outstanding action.",
+			"evidence": [
+				"summary is a chore: sync main into DEV merge",
+				"commit already merged per sourceUrl"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T08:05:06.253Z"
+		},
+		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -8300,38 +8291,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:11:32.696Z"
-		},
-		{
-			"key": "proposal:handoff-minion-ai-2877399286",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — .github/workflows/ci.yml (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2877399286.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "abfc937359f0874f1478198f111bd1c725ad164247cb9b46fdf19e038065a3c1",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Bun 1.4 parity in CI is a low-urgency tooling upgrade with a single named blocker but no deadline evidence.",
-			"evidence": [
-				"marker: 'Reach Bun 1.4 parity before promoting it from shadow evidence'",
-				"status: review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T02:35:01.795Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1092774507",
@@ -8699,6 +8658,38 @@
 			"scoredAt": "2026-09-10T02:35:01.795Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "379188e89b6bd69793eabe9785f2c7e989a975cf7a6b050e228d6cf539e1c331",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The six listed markers are disjointed fragments (holidays, resourceId, prompt-driven protocol) that look like stored rationale text in rankings/index.json rather than coherent actionable code TODOs.",
+			"evidence": [
+				"markers reference unrelated topics like 'manual holiday' and 'resourceId'",
+				"all point at the same data file rankings/index.json with no unifying scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T08:05:06.253Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8729,6 +8720,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-10T05:35:30.528Z"
+		},
+		{
+			"key": "run:minion (gateway)#34452510816",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34452510816",
+			"sourceUpdatedAt": "2026-09-10T08:00:56Z",
+			"sourceFingerprint": "16af089292b46d60d286a73d161373ad2523c2002db587e8d4eca4d6c3943ab9",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:minion (gateway)#265"
+			],
+			"rationale": "An in-progress CI run status is not an independent work item and will self-resolve.",
+			"evidence": [
+				"status: in_progress",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T08:05:06.253Z"
+		},
+		{
+			"key": "run:minion (gateway)#34452511053",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34452511053",
+			"sourceUpdatedAt": "2026-09-10T07:59:08Z",
+			"sourceFingerprint": "e9c5d5976bfc15dda4194c62fe60f068f31d49b05826c8f8263ee62bf63f0961",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:minion (gateway)#265"
+			],
+			"rationale": "An in-progress Docker Release CI run is a status snapshot, not actionable work.",
+			"evidence": [
+				"status: in_progress",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T08:05:06.253Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-4278431509",
@@ -8856,38 +8915,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-10T02:35:01.795Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "1056be4a6a50c314cb6136bb733fb6511ccb06f0c03764a085939e847c0b3c49",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The quoted 'markers' are fragments of JSON string data inside the ranking index rather than real TODO(handoff) code comments, indicating a scanner false positive on the ranking pipeline's own artifact.",
-			"evidence": [
-				"target file is rankings/index.json, not source code",
-				"quoted fragments read as truncated JSON string values, e.g. 'comment pointing at this proposal\",'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T07:05:34.007Z"
 		}
 	]
 }
