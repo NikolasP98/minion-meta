@@ -35,7 +35,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4504
 - `NikolasP98/minion-meta@dev rankings/index.json:5207` — spec §3.2b allows a reschedule outside working hours",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5207
-- `NikolasP98/minion-meta@dev rankings/index.json:6088` — resourceId is only ever set from the calendar's",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6088
-- `NikolasP98/minion-meta@dev rankings/index.json:6486` — prompt-driven protocol instead of native tool_use — replace'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6486
+- `NikolasP98/minion-meta@dev rankings/index.json:6057` — resourceId is only ever set from the calendar's",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6057
+- `NikolasP98/minion-meta@dev rankings/index.json:6455` — prompt-driven protocol instead of native tool_use — replace'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6455
