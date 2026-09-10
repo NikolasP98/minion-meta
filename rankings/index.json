@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-10T09:34:44.961Z",
+	"generatedAt": "2026-09-10T10:05:18.013Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1514,39 +1514,6 @@
 			"scoredAt": "2026-09-10T02:35:01.795Z"
 		},
 		{
-			"key": "run:minion (gateway)#34456413881",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34456413881",
-			"sourceUpdatedAt": "2026-09-10T09:27:06Z",
-			"sourceFingerprint": "577bdaf90be0a39def3c139daee9914d7663aa9896ce1daf7efd90653ad3c8da",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "CI failed on a push to the minion gateway's DEV branch but no failure details are provided to act on yet.",
-			"evidence": [
-				"status: failure",
-				"push on DEV",
-				"repo: minion (gateway)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T09:34:44.891Z"
-		},
-		{
 			"key": "issue:minion (gateway)#249",
 			"kind": "issue",
 			"stage": "proposal",
@@ -2781,7 +2748,7 @@
 			"title": "Handoff marker — src/shells/manager.ts (minion-ai)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3174605053.md",
 			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "cf86c0cebab24d266f75980860cdb9191d1fc77c41f8581e8fd9c6d1074b675e",
+			"sourceFingerprint": "a848b2f232dcbbc2dcbebea44610de5d2e1a2dfb06bc302c818b648a0671a9d8",
 			"score": 53,
 			"band": "medium",
 			"axes": {
@@ -2791,19 +2758,19 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 3
+				"implementation": 5
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 6,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Three concrete shell-reliability gaps (receipt persistence, disconnect reconciliation, retry) are already tracked against an existing remediation spec but not yet scoped into bounded dev work.",
+			"rationale": "Three shells-manager reliability gaps are already scoped against an existing platform-qc-remediation spec and are further along the pipeline than the other draft handoffs.",
 			"evidence": [
-				"3 markers each cite meta proposals/2026-09-08-platform-qc-remediation.md",
-				"covers receipt persistence, online-status reconciliation, and failed-read retry"
+				"markers cite meta proposals/2026-09-08-platform-qc-remediation.md (Shells contract) three times",
+				"status: review"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T07:05:34.007Z"
+			"scoredAt": "2026-09-10T10:05:17.928Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1637616237",
@@ -4816,6 +4783,74 @@
 			"scoredAt": "2026-09-07T08:10:36.860Z"
 		},
 		{
+			"key": "proposal:handoff-minion-ai-315458649",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — extensions/flows/src/data-paths.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-315458649.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "4b1cef235bbda21a56b4d1551d69023aa8fc3d9b608a99f52140533100c78b22",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-3766023210"
+			],
+			"rationale": "Both markers describe unresolved SEC-08 deployment trust-model gaps in the flows data path and should be consolidated into one hardening spec.",
+			"evidence": [
+				"marker: 'SEC-08 deployment requires trusted same-UID writers, canonical root pointers'",
+				"marker: 'a supported Windows policy needs a real ACL owner/permission check'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T10:05:17.928Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-3766023210",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — extensions/flows/src/data-nodes.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3766023210.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "9573bce3466275a320a967e4700225ce118b4ba57e8b1aa1487c36102f8cd410",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-315458649"
+			],
+			"rationale": "Shares the same unresolved SEC-08 deployment trust-model concern as the data-paths.ts marker and should become one consolidated goal.",
+			"evidence": [
+				"marker: 'SEC-08 deployment must establish clean exact-image/runtime'",
+				"marker: 'Raw-handle plugins and same-UID filesystem writers remain'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T10:05:17.928Z"
+		},
+		{
 			"key": "proposal:handoff-minion-factory-1093105314",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5341,38 +5376,6 @@
 			"scoredAt": "2026-09-07T08:35:09.206Z"
 		},
 		{
-			"key": "proposal:handoff-minion-ai-3766023210",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — extensions/flows/src/data-nodes.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3766023210.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "cc99a3495c87e62788991c3cbafaab194d079f93a2bfa7bf2ae03a4a180b7cb1",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Repeats the same SEC-08/raw-handle-plugin trust boundary theme found elsewhere in this sweep, without added concrete scope.",
-			"evidence": [
-				"marker: 'SEC-08 deployment must establish clean exact-image/runtime'",
-				"marker: 'Raw-handle plugins and same-UID filesystem writers remain'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T07:05:34.007Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-3887937197",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5829,37 +5832,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-10T02:35:01.795Z"
-		},
-		{
-			"key": "proposal:handoff-minion-ai-315458649",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — extensions/flows/src/data-paths.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-315458649.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "58ecb494d9dd451bad8b3629d60f4d9aa1c3dfb7f05e4f47abedc859b00aab3d",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Security-adjacent SEC-08 deployment note lacks enough scope detail to size as actionable work yet.",
-			"evidence": [
-				"marker: 'SEC-08 deployment requires trusted same-UID writers, canonical root pointers'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T07:05:34.007Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-base-1d2151b",
@@ -7630,6 +7602,38 @@
 			"scoredAt": "2026-09-09T22:35:10.859Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/4c407d68dc8fb5a80f8016a89b70962a23169363",
+			"sourceUpdatedAt": "2026-09-10T09:56:57Z",
+			"sourceFingerprint": "12dadb0383780423ee3b6616618b59fad2b94f987616ab211dd1983b80f8450b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The fix described is already merged to DEV and shipping through CI/Docker Release, so this is a routine deployment-health record rather than a new goal.",
+			"evidence": [
+				"commit message describes a fix(flows) already merged to DEV",
+				"concurrent CI and Docker Release runs in_progress for the same push"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T10:05:17.928Z"
+		},
+		{
 			"key": "pr:minion_hub#196",
 			"kind": "pr",
 			"stage": "development",
@@ -8789,7 +8793,39 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "60d79f029d19dc43902299fb8f5bb23934849d0387e9a68d5952a16ab1ee1b35",
+			"sourceFingerprint": "3fb3f4354317e42cec9476df62d399bba683f6ba855618309563097236701e97",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed markers are fragments of stored rationale/evidence text from the ranking system's own JSON output, not real code TODOs, indicating a self-scan false positive.",
+			"evidence": [
+				"marker text 'a date already held by a manual holiday is skipped silently' is unrelated calendar-scheduling content",
+				"marker text 'resourceId is only ever set from the calendar's' is a fragment of prior evidence, not a TODO"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T10:05:17.928Z"
+		},
+		{
+			"key": "run:minion (gateway)#34463439591",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34463439591",
+			"sourceUpdatedAt": "2026-09-10T10:01:05Z",
+			"sourceFingerprint": "26fec3ed8ae278a72e50813215831f52604199ffe6b52bead900de8702551b32",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -8799,19 +8835,51 @@
 			},
 			"readiness": {
 				"specification": 2,
-				"implementation": 1
+				"implementation": 2
 			},
 			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Marked lines are inside rankings/index.json itself, a generated data file quoting evidence fragments, not genuine TODO(handoff) code markers needing resolution.",
+			"rationale": "Routine in-progress CI run on DEV with no failure signal, not an actionable goal.",
 			"evidence": [
-				"all cited locations are within rankings/index.json, the ranking output file",
-				"one 'marker' text reads 'comment pointing at this proposal', suggesting a self-referential sweep artifact"
+				"status: in_progress",
+				"push on DEV"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T09:34:44.891Z"
+			"scoredAt": "2026-09-10T10:05:17.928Z"
+		},
+		{
+			"key": "run:minion (gateway)#34463439903",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34463439903",
+			"sourceUpdatedAt": "2026-09-10T09:57:18Z",
+			"sourceFingerprint": "301d3fa5fe32ae0fb6556fa5435eee3a8969c4ea05e63af099ebbb6c0b155677",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress Docker Release run on DEV with no failure signal, not an actionable goal.",
+			"evidence": [
+				"status: in_progress",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-10T10:05:17.928Z"
 		}
 	]
 }
