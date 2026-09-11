@@ -29,13 +29,35 @@ import {
   type ShellDeltaPayload,
   type ShellFinalPayload,
   type ShellErrorReason,
+  type ShellsInvokeDurableResponse,
+  type ShellRunAdmission,
+  type ShellRunOutcome,
+  SHELL_DURABLE_V1_OUTCOME_LIMITS,
+  negotiateShellDurableOutcomeVersion,
+  normalizeShellRunAdmission,
+  normalizeShellsInvokeDurableResponse,
+  normalizeShellOutcomeReceipt,
+  shellRunOutcomeText,
 } from '@minion-stack/shared';
 import { AcpClient } from './acp-client.js';
 import { backup, restore } from './backup.js';
 import type { BridgeConfig } from './config.js';
-import { randomUUID } from 'node:crypto';
+import { RunJournal } from './run-journal.js';
+import { createHash, randomUUID } from 'node:crypto';
 import { statSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
+
+const DURABLE_LIMITS = SHELL_DURABLE_V1_OUTCOME_LIMITS;
+const PLACEHOLDER_DIGEST = '0'.repeat(64);
+/** ACP SDK 1.4.0 stable StopReason projection; an ended turn does not prove task success. */
+function durableStopReason(value: unknown): string | undefined {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
+  const reason = (value as { stopReason?: unknown }).stopReason;
+  switch (reason) {
+    case 'end_turn': case 'max_tokens': case 'max_turn_requests': case 'refusal': case 'cancelled': return reason;
+    default: return undefined;
+  }
+}
 
 interface ActiveRun {
   runId: string;
@@ -44,6 +66,23 @@ interface ActiveRun {
   requestId: string;
   requestSource: WebSocket;
   requestParams: ShellsInvokeParams;
+  /** Present only on the durable path; its identity is the gateway's, never minted here. */
+  admission?: ShellRunAdmission;
+}
+
+/** Local envelope check only. The canonical package validates the admission, not its wrapper. */
+function durableEnvelope(value: unknown): { admission: unknown; input: ShellsInvokeParams['input'] } {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('BRIDGE_INVALID_REQUEST');
+  const prototype = Object.getPrototypeOf(value);
+  if (prototype !== null && prototype !== Object.prototype) throw new Error('BRIDGE_INVALID_REQUEST');
+  const keys = Reflect.ownKeys(value);
+  if (keys.length !== 3 || !keys.every((key) => key === 'version' || key === 'admission' || key === 'input')) {
+    throw new Error('BRIDGE_INVALID_REQUEST');
+  }
+  const item = value as { version: unknown; admission: unknown; input: unknown };
+  if (item.version !== 1) throw new Error('BRIDGE_INVALID_REQUEST');
+  if (!item.input || typeof item.input !== 'object' || Array.isArray(item.input)) throw new Error('BRIDGE_INVALID_REQUEST');
+  return { admission: item.admission, input: item.input as ShellsInvokeParams['input'] };
 }
 
 export class Bridge {
@@ -59,6 +98,11 @@ export class Bridge {
   private harnessRunning = false;
   private nextFrameId = 1;
   private pendingBridgeRpc = new Map<string, { resolve: (v: unknown) => void; reject: (e: Error) => void }>();
+  /** Opened only for explicit `required` durable mode; absence keeps the bridge legacy. */
+  private journal: RunJournal | null = null;
+  /** The exact socket whose own registration response accepted v1. Never inherited across reconnects. */
+  private durableSocket: WebSocket | null = null;
+  private replaying = false;
 
   constructor(private readonly config: BridgeConfig) {
     this.acp = new AcpClient({
@@ -68,6 +112,15 @@ export class Bridge {
     });
     this.heartbeatMs = config.heartbeatMs;
     this.reconnectDelay = config.reconnectMinMs;
+    if (config.durable.mode === 'required') {
+      this.journal = new RunJournal({
+        path: config.durable.journalPath,
+        shellId: config.shellId,
+        maxRuns: config.durable.maxRuns,
+        maxOutcomeBytes: config.durable.maxOutcomeBytes,
+        limits: DURABLE_LIMITS,
+      });
+    }
   }
 
   start(): void {
@@ -97,8 +150,10 @@ export class Bridge {
     this.shuttingDown = true;
     this.harnessRunning = false;
     if (this.heartbeatTimer) clearInterval(this.heartbeatTimer);
+    this.durableSocket = null;
     if (this.ws) this.ws.close(1000, 'shutdown');
     await this.acp.stop();
+    this.journal?.close();
   }
 
   // ---------------------------------------------------------------------------
@@ -123,8 +178,14 @@ export class Bridge {
       this.onFrame(text, ws);
     });
     ws.on('close', () => {
+      if (this.durableSocket === ws) this.durableSocket = null;
       if (this.ws !== ws) return;
       this.ws = null;
+      // A commit_outcome awaiting a receipt must fail now, not in 30s: the terminal
+      // stays pending in the journal and is replayed on the next accepted registration.
+      const orphans = [...this.pendingBridgeRpc.values()];
+      this.pendingBridgeRpc.clear();
+      for (const rpc of orphans) rpc.reject(new Error('BRIDGE_DISCONNECTED'));
       if (this.heartbeatTimer) {
         clearInterval(this.heartbeatTimer);
         this.heartbeatTimer = null;
@@ -225,6 +286,8 @@ export class Bridge {
     switch (method) {
       case SHELLS_METHODS.invoke:
         return this.handleInvoke(params as ShellsInvokeParams, requestId, source);
+      case SHELLS_METHODS.invokeDurable:
+        return this.handleInvokeDurable(params, requestId, source);
       case SHELLS_METHODS.cancel:
         return this.handleCancel(params as ShellsCancelParams);
       case SHELLS_METHODS.backupNow:
@@ -254,6 +317,7 @@ export class Bridge {
       harnessVersion: this.config.harnessVersion,
       bridgeVersion: PACKAGE_VERSION,
       capabilities: {
+        ...(this.journal ? { durableOutcomeVersion: 1 as const } : {}),
         acpMethods: ['session/prompt', 'session/cancel', 'session/update'],
         streaming: true,
         backupKind: 'tar+rclone',
@@ -264,7 +328,13 @@ export class Bridge {
       const res = await this.callGateway<ShellsRegisterResponse>(SHELLS_METHODS.register, params);
       if (this.ws !== source || this.shuttingDown) return;
       this.heartbeatMs = res.heartbeatMs ?? this.heartbeatMs;
+      // Absence stays legacy; an explicitly malformed advertisement throws and fails registration.
+      const accepted = negotiateShellDurableOutcomeVersion(this.journal ? 1 : undefined, res.durableOutcomeVersion);
+      this.durableSocket = accepted === 1 ? source : null;
       this.startHeartbeat();
+      // A terminal that survived a disconnect or a bridge restart is delivered here,
+      // without a new invocation and without touching the harness.
+      if (accepted === 1) void this.replayPending();
     } catch (err) {
       process.stderr.write(`[bridge] register failed: ${(err as Error).message}\n`);
       // Close ws; reconnect will retry.
@@ -305,11 +375,13 @@ export class Bridge {
 
   // TODO(handoff): Add completed-request durable dedup and terminal/cancellation reconciliation in 11-03; this bounded replay covers active requests on their original connection only. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
   private async handleInvoke(params: ShellsInvokeParams, requestId: string, source: WebSocket): Promise<ShellsInvokeResponse> {
+    // Required mode never falls back to a transient run whose outcome cannot be replayed.
+    if (this.journal) throw new Error('BRIDGE_DURABLE_REQUIRED');
     if (this.shuttingDown || !this.harnessRunning) throw new Error('BRIDGE_UNAVAILABLE');
     if (!params || params.shellId !== this.config.shellId || typeof params.sessionId !== 'string' || !params.sessionId || typeof requestId !== 'string' || !requestId) {
       throw new Error('BRIDGE_INVALID_REQUEST');
     }
-    const duplicate = [...this.activeRuns.values()].find((run) => run.requestId === requestId && run.requestSource === source);
+    const duplicate = [...this.activeRuns.values()].find((run) => !run.admission && run.requestId === requestId && run.requestSource === source);
     if (duplicate) {
       if (!isDeepStrictEqual(duplicate.requestParams, params)) throw new Error('BRIDGE_DUPLICATE_REQUEST');
       return { runId: duplicate.runId, startedAt: duplicate.startedAt };
@@ -344,16 +416,157 @@ export class Bridge {
     return { runId, startedAt };
   }
 
+  // ---------------------------------------------------------------------------
+  // Durable path — the gateway owns identity, the journal owns delivery
+  // ---------------------------------------------------------------------------
+
+  /**
+   * `shells.invoke_durable` carries the gateway's own committed admission. The bridge
+   * mints no runId, startedAt, sessionId or invocationId here; it executes under the
+   * receiver's identity and replies with the strict four-field admission response.
+   */
+  private async handleInvokeDurable(params: unknown, requestId: string, source: WebSocket): Promise<ShellsInvokeDurableResponse> {
+    const journal = this.journal;
+    // Never fall back to legacy behaviour in this refusal.
+    if (!journal) throw new Error('BRIDGE_DURABLE_UNSUPPORTED');
+    if (this.shuttingDown || !this.harnessRunning) throw new Error('BRIDGE_UNAVAILABLE');
+    const envelope = durableEnvelope(params);
+    const admission = normalizeShellRunAdmission(envelope.admission, DURABLE_LIMITS);
+    if (admission.shellId !== this.config.shellId) throw new Error('BRIDGE_INVALID_REQUEST');
+
+    // The journal grants dispatch only after a fresh INSERT commits. Identical
+    // replay, including after restart, never grants another prompt opportunity.
+    const admitted = journal.admitForDispatch(admission);
+    const response = normalizeShellsInvokeDurableResponse({
+      version: 1, durability: 'required', runId: admission.runId, startedAt: admission.startedAt,
+    });
+    if (!admitted.fresh) return response;
+
+    const run: ActiveRun = {
+      runId: admission.runId, sessionId: admission.sessionId, startedAt: admission.startedAt,
+      requestId, requestSource: source, admission,
+      requestParams: { shellId: admission.shellId, sessionId: admission.sessionId, input: envelope.input },
+    };
+    this.activeRuns.set(run.runId, run);
+    this.acpSessionToRun.set(run.sessionId, run.runId);
+    try {
+      // TODO(handoff): Replace handwritten ACP initialization/session/prompt/cancel mapping
+      // with the qualified official SDK and verify actual process termination. This stable
+      // five-reason projection proves only a reported turn end, not process exit or task success.
+      // See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
+      void this.acp
+        .call('session/prompt', { sessionId: admission.sessionId, input: envelope.input })
+        .then(
+          (result: unknown) => {
+            if (!this.ownsDurableRun(run)) return;
+            const reason = durableStopReason(result);
+            if (reason === undefined) return this.observeDurable(run, 'unresolved');
+            return this.settleDurable(run, reason === 'cancelled' ? 'aborted' : 'final', reason);
+          },
+          () => this.observeDurable(run, 'unresolved'),
+        )
+        .catch(() => {
+          // Persistence may have failed before any terminal existed. Never expose
+          // provider/path details or release the owner because this local wait failed.
+          process.stderr.write('[bridge] durable outcome persistence or delivery failed\n');
+        });
+    } catch {
+      this.observeDurable(run, 'unresolved');
+    }
+    return response;
+  }
+
+  /** Journal first, then send, then acknowledge only against a validated receipt. */
+  private async settleDurable(run: ActiveRun, state: ShellRunOutcome['state'], stopReason?: string, errorMessage?: string): Promise<void> {
+    const journal = this.journal;
+    const admission = run.admission;
+    if (!journal || !admission || !this.ownsDurableRun(run)) return;
+    const body = {
+      version: 1 as const,
+      shellId: admission.shellId, runId: admission.runId, sessionId: admission.sessionId,
+      invocationId: admission.invocationId, inputDigest: admission.inputDigest,
+      eventId: `evt_${randomUUID()}`,
+      state,
+      durationMs: Math.max(0, Date.now() - admission.startedAt),
+      ...(stopReason === undefined ? {} : { stopReason }),
+      ...(errorMessage === undefined ? {} : { errorMessage }),
+    };
+    // The digest projection excludes outcomeDigest itself; the placeholder only satisfies
+    // the normalizer's shape check inside shellRunOutcomeText.
+    const outcome: ShellRunOutcome = {
+      ...body,
+      outcomeDigest: createHash('sha256')
+        .update(shellRunOutcomeText({ ...body, outcomeDigest: PLACEHOLDER_DIGEST }, DURABLE_LIMITS), 'utf8')
+        .digest('hex'),
+    };
+    // Release the local reservation as soon as the terminal is durable; delivery must
+    // never hold the harness slot hostage.
+    journal.commitOutcome(outcome);
+    this.releaseRun(run);
+    await this.deliverOutcome(outcome);
+  }
+
+  /** A failed, refused, closed or mismatched delivery leaves the entry pending. */
+  private async deliverOutcome(outcome: ShellRunOutcome): Promise<void> {
+    const socket = this.durableSocket;
+    if (!socket || socket !== this.ws || socket.readyState !== WebSocket.OPEN) throw new Error('BRIDGE_NO_DURABLE_SOCKET');
+    const receipt = await this.callGateway(SHELLS_METHODS.commitOutcome, outcome);
+    // acknowledge() re-binds the receipt to the stored event, run and digest.
+    this.journal?.acknowledge(normalizeShellOutcomeReceipt(receipt, DURABLE_LIMITS));
+  }
+
+  /** Re-sends stored terminals only: never re-admits, re-mints identity or re-prompts. */
+  private async replayPending(): Promise<void> {
+    const journal = this.journal;
+    if (!journal || this.replaying) return;
+    this.replaying = true;
+    try {
+      for (const outcome of journal.pending()) {
+        if (this.shuttingDown || this.durableSocket !== this.ws) break;
+        try {
+          await this.deliverOutcome(outcome);
+        } catch (error) {
+          process.stderr.write(`[bridge] durable replay deferred: ${error instanceof Error ? error.message : String(error)}\n`);
+          break;
+        }
+      }
+    } finally {
+      this.replaying = false;
+    }
+  }
+
   private async handleCancel(params: ShellsCancelParams): Promise<ShellsCancelResponse> {
     if (!params || params.shellId !== this.config.shellId) throw new Error('BRIDGE_INVALID_REQUEST');
     const run = this.activeRuns.get(params.runId);
     if (!run) return { cancelled: false };
+    // Three distinct facts: asked, unconfirmed, terminal. `cancel_acknowledged` needs
+    // protocol evidence the current adapter cannot supply, so it is never written.
+    // TODO(handoff): `session/cancel` returns a Boolean that conflates transmission with
+    // confirmation (acp-client.ts:96-99 also reports a timeout while the child may still
+    // run). 11-04 owns that seam. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
+    this.observeDurable(run, 'cancel_requested');
     try {
       await this.acp.call('session/cancel', { sessionId: run.sessionId });
       return { cancelled: true };
     } catch {
+      this.observeDurable(run, 'cancel_unconfirmed');
       return { cancelled: false };
     }
+  }
+
+  /** Observations never release the journal slot and never create a terminal. */
+  private observeDurable(run: ActiveRun, kind: 'unresolved' | 'cancel_requested' | 'cancel_unconfirmed'): void {
+    if (!this.journal || !this.ownsDurableRun(run)) return;
+    try {
+      this.journal.observe(run.runId, { version: 1, kind, at: Date.now() });
+    } catch {
+      process.stderr.write('[bridge] durable observation persistence failed; run remains unresolved\n');
+    }
+  }
+
+  private ownsDurableRun(run: ActiveRun): boolean {
+    return !this.shuttingDown && run.admission !== undefined &&
+      this.activeRuns.get(run.runId) === run && this.acpSessionToRun.get(run.sessionId) === run.runId;
   }
 
   private async handleBackup(params: ShellsBackupNowParams): Promise<ShellsBackupNowResponse> {
@@ -412,6 +625,9 @@ export class Bridge {
   ): void {
     const run = this.activeRuns.get(runId);
     if (!run || run.sessionId !== sessionId || run.startedAt !== startedAt || this.acpSessionToRun.get(sessionId) !== runId) return;
+    // A transient event creates no durable terminal at the receiver, so it is never a
+    // fallback for a failed commit_outcome. Legacy runs only.
+    if (run.admission) return;
     const payload: ShellFinalPayload = {
       shellId: this.config.shellId,
       runId,
