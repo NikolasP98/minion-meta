@@ -27,7 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-11)
 
-- `NikolasP98/minion-meta@dev packages/shells-bridge/src/run-journal.ts:58` — Wire private path, process generation and startup uncertainty only after receiver14-12 and sender11-03 acceptance; this adapter is deliberately unused by Bridge. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
+- `NikolasP98/minion-meta@dev packages/shells-bridge/src/run-journal.ts:58` — Qualify process generation and explicit unresolved-run reconciliation; Bridge replay has no dispatch authority and cannot recover unknown external effects. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
   https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/run-journal.ts#L58
-- `NikolasP98/minion-meta@dev packages/shells-bridge/src/run-journal.ts:198` — Only receiver14-12 authenticated COMMIT receipts delivered on the current sender11-03 socket may call this API; local identity matching proves no remote authority. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
-  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/run-journal.ts#L198
+- `NikolasP98/minion-meta@dev packages/shells-bridge/src/run-journal.ts:203` — Only receiver14-12 authenticated COMMIT receipts delivered on the current sender11-03 socket may call this API; local identity matching proves no remote authority. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
+  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/run-journal.ts#L203

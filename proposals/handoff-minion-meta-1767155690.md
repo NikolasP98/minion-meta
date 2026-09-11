@@ -27,15 +27,15 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-11)
 
-- `NikolasP98/minion-meta@dev packages/shells-bridge/src/bridge.ts:202` — Persist terminal frames and reconcile on reconnect instead of losing execution outcomes. See meta proposals/2026-09-08-platform-qc-remediation.md (A4).
-  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/bridge.ts#L202
-- `NikolasP98/minion-meta@dev packages/shells-bridge/src/bridge.ts:372` — Add completed-request durable dedup and terminal/cancellation reconciliation in 11-03; this bounded replay covers active requests on their original connection only. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
-  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/bridge.ts#L372
-- `NikolasP98/minion-meta@dev packages/shells-bridge/src/bridge.ts:449` — ACP cannot yet distinguish an aborted prompt from a completed one
-  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/bridge.ts#L449
-- `NikolasP98/minion-meta@dev packages/shells-bridge/src/bridge.ts:541` — session/cancel returns a Boolean that conflates transmission with
-  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/bridge.ts#L541
-- `NikolasP98/minion-meta@dev packages/shells-bridge/src/bridge.ts:581` — Quiesce the harness and stage/verify restore before swapping the workdir; live overlay extraction races execution. See meta proposals/2026-09-08-platform-qc-remediation.md (A4).
-  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/bridge.ts#L581
-- `NikolasP98/minion-meta@dev packages/shells-bridge/src/bridge.ts:599` — ACP session/update has no run identity; qualify late updates after timeout/cancel before reusing a session in 11-03/04. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
-  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/bridge.ts#L599
+- `NikolasP98/minion-meta@dev packages/shells-bridge/src/bridge.ts:206` — Persist terminal frames and reconcile on reconnect instead of losing execution outcomes. See meta proposals/2026-09-08-platform-qc-remediation.md (A4).
+  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/bridge.ts#L206
+- `NikolasP98/minion-meta@dev packages/shells-bridge/src/bridge.ts:376` — Add completed-request durable dedup and terminal/cancellation reconciliation in 11-03; this bounded replay covers active requests on their original connection only. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
+  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/bridge.ts#L376
+- `NikolasP98/minion-meta@dev packages/shells-bridge/src/bridge.ts:453` — Replace handwritten ACP initialization/session/prompt/cancel mapping
+  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/bridge.ts#L453
+- `NikolasP98/minion-meta@dev packages/shells-bridge/src/bridge.ts:544` — session/cancel returns a Boolean that conflates transmission with
+  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/bridge.ts#L544
+- `NikolasP98/minion-meta@dev packages/shells-bridge/src/bridge.ts:589` — Quiesce the harness and stage/verify restore before swapping the workdir; live overlay extraction races execution. See meta proposals/2026-09-08-platform-qc-remediation.md (A4).
+  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/bridge.ts#L589
+- `NikolasP98/minion-meta@dev packages/shells-bridge/src/bridge.ts:607` — ACP session/update has no run identity; qualify late updates after timeout/cancel before reusing a session in 11-03/04. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
+  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/bridge.ts#L607
