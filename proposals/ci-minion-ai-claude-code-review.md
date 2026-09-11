@@ -1,11 +1,22 @@
 ---
 id: ci-minion-ai-claude-code-review
 title: CI red — Claude Code Review on minion-ai DEV
-status: draft
+status: review
 created: 2026-09-10
-updated: 2026-09-10
+updated: 2026-09-11
 repos: []
+duplicate_candidate: ci-minion-ai-auto-response
 ---
+
+**Reconciliation note (2026-09-11):** flagged as a possible duplicate root
+cause, not merged — `ci-minion-ai-auto-response` documents a confirmed shared
+root cause (missing GitHub App private-key secret for
+`actions/create-github-app-token`, app-id 2729701) across three minion-ai
+workflows on `main`. This proposal's log tail shows the same action family
+(an installation-token revoke curl in post-job cleanup) failing/CI-red on
+`DEV`, but the tail cuts off before the actual failing step, so the shared
+root cause is plausible, not confirmed. A human should check whether the
+same missing secret explains this workflow too before merging the two.
 
 # CI red — Claude Code Review on NikolasP98/minion-ai@DEV
 
