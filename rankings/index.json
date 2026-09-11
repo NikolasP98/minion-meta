@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-11T17:05:15.671Z",
+	"generatedAt": "2026-09-11T17:35:25.685Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -504,6 +504,41 @@
 			"scoredAt": "2026-08-31T08:01:35.926Z"
 		},
 		{
+			"key": "pr:minion (gateway)#282",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#282 train: promote DEV → main (2026-09-11: durable shells receiver chain)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/282",
+			"sourceUpdatedAt": "2026-09-11T17:06:47Z",
+			"sourceFingerprint": "2f1e9e646a5efdfe2573112fda8fd093addfef3c4bfe636f017e719110772fbd",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"deploy:minion (gateway)",
+				"proposal:handoff-minion-ai-3701397223"
+			],
+			"rationale": "This is the DEV→main release train carrying the durable shells receiver chain with passing gates, ready to merge.",
+			"evidence": [
+				"root rerun 245/245 vitest, tsgo 0",
+				"carries #281 durable shells receiver chain"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T17:35:18.775Z"
+		},
+		{
 			"key": "spec:2026-08-31-dev-key-at-rest-audit-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -575,8 +610,8 @@
 			"repo": "minion_hub",
 			"title": "#247 fix(security): contain assistant SQL, bind actors, deny inferred tenant authority (09-01, 09-03)",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/247",
-			"sourceUpdatedAt": "2026-09-11T09:10:17Z",
-			"sourceFingerprint": "d5cfa5b7caf5844590835d71cf8415ae3fecf19ef3947a40dd741b2565797dfb",
+			"sourceUpdatedAt": "2026-09-11T17:10:14Z",
+			"sourceFingerprint": "1f9167102f0d245364e830d123abc554e028dc3b5177ca1eff3c4ceeb01bec5d",
 			"score": 82,
 			"band": "high",
 			"axes": {
@@ -586,19 +621,19 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 9
+				"implementation": 8
 			},
-			"confidence": 8,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Closes an active org-authority bypass (SV-01) and contains assistant SQL, a critical cross-tenant security fix ready to merge.",
+			"rationale": "Fixes an inferred-tenant-authority bypass and contains raw assistant SQL, both security-critical, with a control-mapping table and merge verification.",
 			"evidence": [
-				"independent source verification found SV-01 org-authority bypass, fixed by 09-03",
-				"unexempted no-tenant API requests now get 401/403 instead of inferred tenant"
+				"arbitrary assistant SQL fails closed before identity or DB access",
+				"no inferred tenant authority — unexempted requests get 401/403"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T09:19:01.019Z"
+			"scoredAt": "2026-09-11T17:35:18.775Z"
 		},
 		{
 			"key": "spec:2026-08-17-factory-token-budget-governance-spec",
@@ -698,36 +733,39 @@
 			"scoredAt": "2026-09-07T08:15:17.104Z"
 		},
 		{
-			"key": "pr:minion (gateway)#282",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#282 train: promote DEV → main (2026-09-11: durable shells receiver chain)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/282",
-			"sourceUpdatedAt": "2026-09-11T10:11:43Z",
-			"sourceFingerprint": "26cf376558b49d36dbc7ca30185e0c882d6e190cdbebd46d0ac53e275bca8268",
-			"score": 78,
+			"key": "proposal:2026-09-08-platform-qc-remediation",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Platform QC follow-ups — authorization, durable execution, compatibility and release evidence",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-08-platform-qc-remediation.md",
+			"sourceUpdatedAt": "2026-09-08",
+			"sourceFingerprint": "2c2e1402e2e10eba6ab41cfca5266c73ba5aaf4dc31748824fd52a331df0760e",
+			"score": 76,
 			"band": "high",
 			"axes": {
-				"criticality": 8,
+				"criticality": 7,
 				"importance": 8,
-				"impact": 7
+				"impact": 8
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 8
+				"specification": 5,
+				"implementation": 2
 			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Open DEV to main release-train PR with concrete gates and green verification is the actionable next step to ship the durable shells feature.",
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#247",
+				"proposal:handoff-minion-ai-3701397223"
+			],
+			"rationale": "Bundles several high-stakes security/durability slices from a private audit but explicitly authorizes no action yet, so each slice still needs its own spec.",
 			"evidence": [
-				"Gates: PR #281 required checks green, root rerun 245/245 vitest, tsgo 0",
-				"DEV push matrix for 5ff1c51d being watched before merge"
+				"This draft authorizes no production action",
+				"Audit completed; implementation remains open"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T14:05:57.000Z"
+			"scoredAt": "2026-09-11T17:35:18.775Z"
 		},
 		{
 			"key": "spec:2026-08-28-shared-db-encryption-key-convergence-spec",
@@ -829,74 +867,6 @@
 			"scoredAt": "2026-09-07T08:12:46.705Z"
 		},
 		{
-			"key": "run:minion (gateway)#34587949149",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949149",
-			"sourceUpdatedAt": "2026-09-11T10:46:59Z",
-			"sourceFingerprint": "82bcff565fd5b409b3f4fe7fab98082e953214bbd231af0206d034e22b97120c",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"run:minion (gateway)#34587949471"
-			],
-			"rationale": "CI failure on push to the DEV development branch blocks the release pipeline and pairs with a concurrent Docker Release failure on the same push, likely sharing a root cause.",
-			"evidence": [
-				"title: CI, status: failure",
-				"summary: push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T14:06:44.787Z"
-		},
-		{
-			"key": "run:minion (gateway)#34587949471",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "Docker Release",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949471",
-			"sourceUpdatedAt": "2026-09-11T10:13:03Z",
-			"sourceFingerprint": "bff3ad4ee3500a2aec6da97aca9215d1679d66023b6066cb22d3e02f7198b91a",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"run:minion (gateway)#34587949149"
-			],
-			"rationale": "Docker Release failure on the same DEV push as the concurrent CI failure blocks deployment and should be diagnosed together as one root-cause investigation.",
-			"evidence": [
-				"title: Docker Release, status: failure",
-				"summary: push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T14:06:44.787Z"
-		},
-		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -970,8 +940,8 @@
 			"repo": "minion_hub",
 			"title": "#248 feat(jobs): durable jobs/stock chain 10-01..10-10 — lease fencing, stock identity, effect receipts, revision binding, page atomicity",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/248",
-			"sourceUpdatedAt": "2026-09-11T17:01:08Z",
-			"sourceFingerprint": "81ee889c9993fe4ecdfb8dc31f1f2e75398159dcfb851813975a9445dbe311f7",
+			"sourceUpdatedAt": "2026-09-11T17:03:52Z",
+			"sourceFingerprint": "2b5064935e1a51527a8509448f6526a22fc1e5173c6d704c7a8e7f77c5394486",
 			"score": 69,
 			"band": "medium",
 			"axes": {
@@ -986,15 +956,14 @@
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Large, hash-verified durable jobs/stock chain landing core lease-fencing and invoice-identity correctness with preserved master-side work.",
+			"rationale": "Durable jobs/stock chain closes lease-fencing and replay-identity gaps with byte-verified provenance and additive migrations ready.",
 			"evidence": [
-				"39/39 files hash-matched, zero drift",
-				"5 additive migrations for lease fencing + invoice identity",
-				"master-side work preserved across 7 merge resolutions"
+				"39/39 files hash-checked against SUMMARY.md/VERIFICATION.md, zero drift",
+				"generation-fenced job leases hold terminal state against late success/failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T17:05:15.594Z"
+			"scoredAt": "2026-09-11T17:35:18.775Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -1094,39 +1063,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T10:04:28.070Z"
-		},
-		{
-			"key": "pr:minion-meta#380",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#380 qc: migration authority + drift gate (15-04), handoff ledger (18-03)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/380",
-			"sourceUpdatedAt": "2026-09-11T17:01:14Z",
-			"sourceFingerprint": "abbd80a0e8808b5148bc6796de3c866464b12792664074587c562f5729531e0c",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "New drift-detection tooling surfaced concrete schema-integrity risks across the fleet's migration trees.",
-			"evidence": [
-				"organizations/flows/organization_members have no CREATE",
-				"hub drizzle/ vs packages/db/drizzle/ diverge 0012-0015",
-				"26/26 tests passing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T17:05:15.594Z"
 		},
 		{
 			"key": "proposal:2026-08-20-dev-key-at-rest-audit",
@@ -1324,39 +1260,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-08T14:34:38.164Z"
-		},
-		{
-			"key": "pr:minion_hub#249",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#249 fix(scheduling): render and round-trip calendar events in the org timezone (offset was dropped)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/249",
-			"sourceUpdatedAt": "2026-09-11T17:03:00Z",
-			"sourceFingerprint": "e78525222661465c7b340d36b0ee3f2be1f0e03cc8060c147cd6024fe239c72a",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-documented timezone defect causing real multi-hour booking displacement, fixed with DST-aware tests on both read and write paths.",
-			"evidence": [
-				"08:00 Lima booking drawn on 13:00 row, 5hr displacement for FACES",
-				"fix covers load path and drag/resize write-back",
-				"DST-aware round-trip tests across 4 timezones"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T17:05:15.594Z"
 		},
 		{
 			"key": "proposal:2026-08-29-base-meta-status-revision-binding-required",
@@ -1946,6 +1849,38 @@
 			"scoredAt": "2026-09-07T08:14:36.905Z"
 		},
 		{
+			"key": "pr:minion_hub#249",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#249 fix(scheduling): render and round-trip calendar events in the org timezone (offset was dropped)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/249",
+			"sourceUpdatedAt": "2026-09-11T17:09:37Z",
+			"sourceFingerprint": "eb5266a939bc835ad576ebdd5eccf66d437693e2380036c16874e2392d45c845",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes a concrete scheduling bug where bookings render up to five hours off from their real time, root-caused with DST-aware tests.",
+			"evidence": [
+				"an 08:00 America/Lima booking was drawn on the 13:00 row",
+				"tests run under TZ=UTC, TZ=Asia/Tokyo, TZ=America/New_York"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T17:35:18.775Z"
+		},
+		{
 			"key": "pr:minion-meta#271",
 			"kind": "pr",
 			"stage": "development",
@@ -2311,38 +2246,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:09:49.304Z"
-		},
-		{
-			"key": "proposal:handoff-minion-ai-3701397223",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — src/shells/run-store.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3701397223.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "12e862243c75f577d4082c5bbeb4781550c122996d6c04f79542333f6fe4849f",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Markers flag unresolved production shutdown-path selection and unhandled power-loss/failed-commit recovery, which is a real reliability gap but needs design scoping before it is actionable.",
-			"evidence": [
-				"src/shells/run-store.ts:189 — failed-COMMIT, process loss and power-loss recovery are NOT [handled]",
-				"src/shells/run-store.ts:182 — production path selection, startup opening and shutdown close"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T14:06:44.787Z"
 		},
 		{
 			"key": "run:minion-meta#34440681982",
@@ -2853,39 +2756,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T14:35:13.467Z"
-		},
-		{
-			"key": "pr:minion_hub#250",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#250 feat(ui): mobile Home and Calendar composition (UI-04)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/250",
-			"sourceUpdatedAt": "2026-09-11T17:01:23Z",
-			"sourceFingerprint": "8ace5d9aece6e24cda2a2041d37ca2fe447d003d372aa2faf743669913c2c9af",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes concrete mobile usability blockers (invisible chat button, unreachable calendar slots) with strong before/after evidence.",
-			"evidence": [
-				"New chat button rendered 18x28 with icon hidden on mobile",
-				"calendar clipped past ~11:45 unreachable in any direction before fix",
-				"13/13 passed vs 12/13 failed on master baseline"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T17:05:15.594Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -3945,39 +3815,6 @@
 			"scoredAt": "2026-09-07T07:35:07.076Z"
 		},
 		{
-			"key": "pr:minion-meta#387",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#387 fix(shells-bridge): sender correction — replay denial, durable outcome, reopen, delivery ACK (11-10)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/387",
-			"sourceUpdatedAt": "2026-09-11T17:01:53Z",
-			"sourceFingerprint": "2e8b403681e95819172a72add4ab182a1ee6d967f4c93cf138fcaeec1a6f9ad2",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Reliability correction to the durable sender chain with frozen, hash-verified bytes and comprehensive test coverage.",
-			"evidence": [
-				"135/135 tests: 66 bridge + 36 journal + 33 config",
-				"frozen bytes hash-verified against RECEIPT.md",
-				"builds on 11-03 durable sender (#381)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T17:05:15.594Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4042,6 +3879,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:09:49.304Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-3701397223",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/shells/run-store.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3701397223.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "ddff302eba32e24c5c678da53b7be528e6c36d2f537456247eb2ee1a3fdc37e4",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#282",
+				"deploy:minion (gateway)"
+			],
+			"rationale": "Flags real open design questions in the run store (platform support, Node version floor, crash recovery) but each marker needs to become a concrete spec before it is actionable.",
+			"evidence": [
+				"exact Node 22.13.0 minimum, an actual distribution without the",
+				"failed-COMMIT, process loss and power-loss recovery are NOT"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T17:35:18.775Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ba5345e2cb9d",
@@ -5031,6 +4903,39 @@
 			"scoredAt": "2026-09-09T22:35:10.859Z"
 		},
 		{
+			"key": "run:minion (gateway)#34625829883",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34625829883",
+			"sourceUpdatedAt": "2026-09-11T17:09:03Z",
+			"sourceFingerprint": "8b0f99a6229cd93544ee223e7ea1e7d48fa69d5897cd06f628aa65c3b539a59c",
+			"score": 47,
+			"band": "low",
+			"axes": {
+				"criticality": 6,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A failed Docker Release run on DEV could block deploys and warrants a look, though no root-cause detail is given.",
+			"evidence": [
+				"status failure",
+				"title Docker Release",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T17:35:25.610Z"
+		},
+		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -5190,38 +5095,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:13:41.404Z"
-		},
-		{
-			"key": "pr:minion (gateway)#283",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#283 fix(shells): run store win32 refusal (UNSUPPORTED_PLATFORM) + realpath test tmpdir (macOS)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/283",
-			"sourceUpdatedAt": "2026-09-11T17:00:17Z",
-			"sourceFingerprint": "4b9fa16da6d9cdf6bc06b1777f776ea2287702f29bc30938c9fc2b50cd19c214",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, well-verified cross-platform test fix that unblocks a merge train.",
-			"evidence": [
-				"vitest 17/17 local, tsgo 0, oxlint clean",
-				"follow-up to #281 for train #282"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T17:05:15.594Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-msteams-large-upload",
@@ -5958,39 +5831,6 @@
 			"scoredAt": "2026-09-07T08:06:44.351Z"
 		},
 		{
-			"key": "pr:minion_hub#252",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#252 feat(plugins): 14-04 plugin bridge protocol and compat shim",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/252",
-			"sourceUpdatedAt": "2026-09-11T17:01:13Z",
-			"sourceFingerprint": "9ea2dbf1a3a23ce25d5f4ddc20ae9e5bfae584bd61b5fef2de90c0691bb527c5",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Self-contained, hash-verified plugin bridge adoption but its own verification record marks broader requirements as still pending.",
-			"evidence": [
-				"hash-verified against 14-04-VERIFICATION.md",
-				"status: scoped_pass_broader_requirements_pending",
-				"self-contained, no upstream touches"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T17:05:15.594Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-1637616237",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6574,14 +6414,14 @@
 			"scoredAt": "2026-09-07T07:35:47.669Z"
 		},
 		{
-			"key": "pr:minion_hub#251",
+			"key": "pr:minion_hub#252",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#251 feat(charts): reduced-motion and nonvisual access for the shared Chart (UI-06 slice)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/251",
-			"sourceUpdatedAt": "2026-09-11T17:01:18Z",
-			"sourceFingerprint": "b6a4090049917147adc9298fe62782ed7be962bf21f5076024a831239f369c7b",
+			"title": "#252 feat(plugins): 14-04 plugin bridge protocol and compat shim",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/252",
+			"sourceUpdatedAt": "2026-09-11T17:04:03Z",
+			"sourceFingerprint": "ff794d1c3dbf4809d45460b826fd7abe691fdf3539561c6ff314179bdaa25766",
 			"score": 39,
 			"band": "low",
 			"axes": {
@@ -6590,21 +6430,19 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 5,
+				"implementation": 5
 			},
-			"confidence": 6,
-			"recommendation": "execute",
+			"confidence": 4,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Accessibility improvement with solid evidence for the one fully-wired consumer, though most chart consumers only get a partial floor and some vitest gates are environment-blocked.",
+			"rationale": "Plugin bridge protocol is self-contained and hash-verified but its own verification record marks broader requirements as still pending.",
 			"evidence": [
-				"8/8 playwright canvas-accessibility passed with screenshot-diff proof",
-				"vitest blocked by pre-existing Vite/Rolldown bug, not introduced by this change",
-				"only 1 of 11 chart consumers fully wired with ariaLabel/table"
+				"status: scoped_pass_broader_requirements_pending"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T17:05:15.594Z"
+			"scoredAt": "2026-09-11T17:35:18.775Z"
 		},
 		{
 			"key": "proposal:2026-08-18-base-workdetail-summary-first",
@@ -6835,6 +6673,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T07:35:47.669Z"
+		},
+		{
+			"key": "pr:minion_hub#250",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#250 feat(ui): mobile Home and Calendar composition (UI-04)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/250",
+			"sourceUpdatedAt": "2026-09-11T17:03:58Z",
+			"sourceFingerprint": "da513608ba27c4bee3e49c0f2b8277c01ce18ccb19d63ca15a03bb3408ce1162",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes mobile layout overlap and unreachable calendar content, verified with a before/after Playwright fixture.",
+			"evidence": [
+				"New chat rendered 18x28 with icon hidden, invisible under the notes rail",
+				"13 passed after fix vs 12/13 failed on master baseline"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T17:35:18.775Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-workforce-error-body-leak",
@@ -7226,6 +7096,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:09:49.304Z"
+		},
+		{
+			"key": "pr:minion_hub#251",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#251 feat(charts): reduced-motion and nonvisual access for the shared Chart (UI-06 slice)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/251",
+			"sourceUpdatedAt": "2026-09-11T17:04:10Z",
+			"sourceFingerprint": "db86179b7fc13a5d90c7ed11cf52251b46abd57ecbdc543018240114aa514912",
+			"score": 34,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Accessibility work is solid but its unit-test gate is blocked by an unrelated environment bug and only one of eleven chart consumers is fully wired.",
+			"evidence": [
+				"vitest run blocked by pre-existing Vite/Rolldown dependency-optimizer bug",
+				"only CrmSentimentTrend is fully wired; 10 other consumers get floor behavior only"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T17:35:18.775Z"
 		},
 		{
 			"key": "proposal:2026-08-28-gateway-plugin-effect-disposers",
@@ -8536,6 +8438,38 @@
 			"scoredAt": "2026-09-07T08:06:44.351Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-0323908",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 0323908",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-0323908.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "aae0abcfad752a241811e1abdd9f27e80f3b1116525e1642b9a5a9f4e4c294c1",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single medium-severity unchecked-access finding in a test file is low urgency but concrete enough to triage.",
+			"evidence": [
+				"medium unchecked-access finding in run-store.forks.test.ts:138",
+				"status draft, single bullet finding"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T17:35:25.610Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-9d8d4a8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8638,8 +8572,8 @@
 			"repo": "minion_hub",
 			"title": "#256 chore(deps): remove proven-dead hub declarations; add locale-parity baseline (12-02)",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/256",
-			"sourceUpdatedAt": "2026-09-11T17:01:10Z",
-			"sourceFingerprint": "095dae3d6d0385e96b7404b97f16a07582d4d41c59879b036aa28c47ab9fb922",
+			"sourceUpdatedAt": "2026-09-11T17:04:01Z",
+			"sourceFingerprint": "db724915f33c7edd4adf1bbf6559922d5fbd35f9974784aae286d5f77616e2b9",
 			"score": 26,
 			"band": "low",
 			"axes": {
@@ -8648,21 +8582,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 7
+				"specification": 7,
+				"implementation": 8
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Routine dependency cleanup with clean gates; the locale-bleed race it surfaces is only characterized, not fixed, and deferred elsewhere.",
+			"rationale": "Low-risk removal of confirmed-dead dependencies plus a new characterization test, with clean check/build/lint.",
 			"evidence": [
-				"removes 6 proven-dead dependencies",
-				"locale-bleed race characterized but migration deferred to a proposal",
+				"import search + peer check confirmed dead deps",
 				"check/build/lint clean"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T17:05:15.594Z"
+			"scoredAt": "2026-09-11T17:35:18.775Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
@@ -9165,40 +9098,6 @@
 			"scoredAt": "2026-09-07T08:06:44.351Z"
 		},
 		{
-			"key": "pr:minion_hub#254",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#254 feat(jobs): 10-01 bg-jobs schema and lease generation",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/254",
-			"sourceUpdatedAt": "2026-09-11T09:10:39Z",
-			"sourceFingerprint": "34a074a30743629111b8575458cefb01d1915d5cee5cbb1056fd2bdfa1c49e80",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:minion_hub#248"
-			],
-			"rationale": "This narrow 10-01 slice appears superseded by #248, which already lands the same 10-01 lease-generation migration as part of the full 10-01..10-10 chain.",
-			"evidence": [
-				"#254 ships migration 20260909090100_bg_job_lease_generation.sql",
-				"#248 lands the identical 10-01 migration within its 10-01..10-10 chain"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T09:19:01.019Z"
-		},
-		{
 			"key": "pr:minion_hub#255",
 			"kind": "pr",
 			"stage": "development",
@@ -9453,6 +9352,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-09T07:34:26.326Z"
+		},
+		{
+			"key": "run:minion (gateway)#34625826206",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34625826206",
+			"sourceUpdatedAt": "2026-09-11T17:30:00Z",
+			"sourceFingerprint": "16320b23362185f175bfc61d9d66d6415a85630eeb231818d570009245bae26e",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run is transient pipeline state, not an actionable goal.",
+			"evidence": [
+				"status in_progress",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T17:35:25.610Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-dead-mirrors-cleanup-spec",
@@ -9765,7 +9696,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "c8d5545be69b19e723a343c9a90c79629702382ad5a1c2ec93220cee83a104fe",
+			"sourceFingerprint": "8e0230cd5959ffd82d953da2cc365d122123b20519d0dab53f9a8f7e6a709622",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -9775,19 +9706,20 @@
 			},
 			"readiness": {
 				"specification": 2,
-				"implementation": 2
+				"implementation": 1
 			},
 			"confidence": 3,
-			"recommendation": "prune",
+			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "The extracted 'markers' are disjointed text fragments pulled from a JSON data file (rankings/index.json) rather than coherent TODO(handoff) comments in source code, making this non-actionable sweep noise.",
+			"rationale": "The markers are real but span unrelated topics (holiday scheduling, tool-use protocol, a schema column drop) bundled under one file, so this framing cannot produce one effective goal.",
 			"evidence": [
-				"rankings/index.json:6704 — 'prompt-driven protocol instead of native tool_use — replace'",
-				"rankings/index.json:3006 — 'comment pointing at this proposal'"
+				"a date already held by a manual holiday is skipped silently",
+				"prompt-driven protocol instead of native tool_use — replace",
+				"drop column (proposal #16) in src/server/db/pg-hr-schema.ts"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T14:06:44.787Z"
+			"scoredAt": "2026-09-11T17:35:18.775Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
