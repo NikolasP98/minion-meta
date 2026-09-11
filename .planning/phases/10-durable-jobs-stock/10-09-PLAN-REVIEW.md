@@ -1,0 +1,9 @@
+# Shared manifest child admission
+
+Root independently reviewed the nine-file plan against the two actual failing native brain regressions, the current foundation and provider implementation. GSD structure passes three tasks, zero errors and zero warnings. Admitted PLAN SHA-256: `46e62a27197dd92585af572b40bdb3c41dc99b982089737929d8c3a79484f1ca`.
+
+The additive904 migration preserves frozen903 and prior receipts; incompatible partial catalogs fail. A head-only nullable manifest binds once under job/head locks, rejects unbound prior receipts, and resets only with explicit revision change. Manifest-bound embedding/commit callers cannot omit their assertion. The actual internally prepared provider descriptor is compared synchronously before admission and the same private body is sent. The readiness guard runs before a missing receipt is inserted; existing admitted outcomes remain indeterminate. All zero-batch publication paths share the binding. Existing readable ready documents require no backfill.
+
+Ownership: the foundation executor owns schema, new904 migration, job-effects service/unit/native tests and only the finance native migration list (six files). Root owns brain service/unit/native (three files). Neither changes embeddings, loaders, test configuration, RLS helpers or product dependencies. Test fixtures use ordinary SQL and synthetic providers; no driver fault injection. No production migration or release.
+
+APIs are frozen in the PLAN. Local BrainAlreadyPublished propagates through the DB-only guard to explicit successful canonical completion; it must not become a generic embedding failure. This is a trusted server callback, not an authorization sandbox. Historical whole-manifest retention and explicit ambiguous-request recovery remain documented gaps, not inferred guarantees.

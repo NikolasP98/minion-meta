@@ -2,11 +2,19 @@
 
 ## What This Is
 
-A root-level orchestration layer and shared-package ecosystem that transforms `/home/nikolas/Documents/CODE/AI/` from a loose collection of sibling subprojects into a coherent **meta-repo**. It owns the `minion` CLI, a hierarchical env/secrets system backed by Infisical, shared configs (tsconfig, lint), and shared npm packages (`@minion/*`) for cross-cutting concerns like DB schema, auth, and gateway WS protocol. Subprojects (`minion`, `minion_hub`, `minion_site`, `paperclip-minion`, `pixel-agents`, `minion_plugins`) remain independent git repos with their own remotes, branches, and deploy targets — the meta-repo never touches their `.git/`. Target consumers: the solo developer (Nikolas) working across all subprojects daily, and future collaborators onboarding to the platform.
+A root-level orchestration layer and shared-package ecosystem that transforms `/home/nikolas/Documents/CODE/MINION/` from a loose collection of sibling subprojects into a coherent **meta-repo**. It owns the `minion` CLI, a hierarchical env/secrets system backed by Infisical, shared configs (tsconfig, lint), and shared npm packages (`@minion/*`) for cross-cutting concerns like DB schema, auth, and gateway WS protocol. Subprojects (`minion`, `minion_hub`, `minion_site`, `paperclip-minion`, `pixel-agents`, `minion_plugins`) remain independent git repos with their own remotes, branches, and deploy targets — the meta-repo never touches their `.git/`. Target consumers: the solo developer (Nikolas) working across all subprojects daily, and future collaborators onboarding to the platform.
 
 ## Core Value
 
 **One command resolves the right env and runs the right build for any subproject, and every piece of cross-cutting code lives in exactly one place under uniform standardization — no exceptions.**
+
+## Current Milestone: v1.1 — 360 quality and reliability
+
+Goal: repair authorization and durable execution, qualify supported integration and operations, and repeat the full quality review on the implemented result.
+
+Scope: [PROGRAM.md](operations/360/PROGRAM.md), [REQUIREMENTS.md](REQUIREMENTS.md), [ROADMAP.md](ROADMAP.md).
+
+The validated v1.0 records below describe April delivery, not current deployed architecture. September2026 source/catalog evidence uses PostgreSQL and GoTrue in Hub; read current phase research and nearest verified code before applying historical storage/auth instructions.
 
 ## Requirements
 
@@ -98,7 +106,7 @@ Scope substitution: `@minion/shared` → `@minion-stack/shared`. Old package dep
 
 <!-- Current scope. Building toward these. -->
 
-_None — v1.0 shipped 2026-04-23. Run `/gsd-new-milestone` to scope v1.1._
+v1.1 active: 47 requirements across security, durable execution, agents, dependencies, UI, SDK, data, observability, runtime, docs, capacity and repeat review. See REQUIREMENTS.md and operations/360/PROGRAM.md.
 
 ### Out of Scope
 
@@ -115,7 +123,7 @@ _None — v1.0 shipped 2026-04-23. Run `/gsd-new-milestone` to scope v1.1._
 
 ## Context
 
-**Existing directory layout** (`/home/nikolas/Documents/CODE/AI/`):
+**Existing directory layout** (`/home/nikolas/Documents/CODE/MINION/`):
 - 7 active subproject directories each with their own `.git/`, remote, and branch: `minion/` (DEV), `minion_hub/` (dev), `minion_site/` (master), `minion-shared/` (to be folded in M3), `minion_plugins/` (main), `paperclip-minion/` (minion-integration), `pixel-agents/` (main)
 - 2 symlinks into `VAULT/MINION/`: `docs/` (project docs), `ai-studio/` (research/strategy)
 - Root-level one-time research artifacts (`A3_*.md`, `RETENTION_*.md`, etc.) — cleanup target for M0
@@ -182,4 +190,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-23 after v1.0 milestone (Minion Meta-Repo Foundation) completion*
+*Last updated: 2026-09-09 — v1.1 360 implementation started; v1.0 evidence preserved.*

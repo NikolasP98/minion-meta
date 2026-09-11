@@ -1,86 +1,53 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-status: verifying
-stopped_at: Completed 08-polish-automation-08-05-PLAN.md — Phase 08 DONE
-last_updated: "2026-04-23T23:51:00.941Z"
-last_activity: 2026-04-23
-progress:
-  total_phases: 8
-  completed_phases: 8
-  total_plans: 42
-  completed_plans: 42
-  percent: 100
+milestone: v1.1
+milestone_name: 360 quality and reliability
+status: wrapping-up
+stopped_at: User requested wrap-up, scoped progress commit and deployment assessment; no new implementation slices
+last_updated: "2026-09-11"
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-19)
-
-**Core value:** One command resolves the right env and runs the right build for any subproject, and every piece of cross-cutting code lives in exactly one place under uniform standardization — no exceptions.
-**Current focus:** Phase 08 — polish-automation
+See PROJECT.md and operations/360/PROGRAM.md. Historical v1.0 files copied to milestones/v1.0-pre360; existing phase history preserved.
 
 ## Current Position
 
-Phase: 08
-Plan: Not started
-Status: Phase complete — ready for verification
-Last activity: 2026-04-23
+Resumed by Codex on 2026-09-11 after Claude's continuation. Canonical current review: [RESUME-2026-09-11.md](operations/360/RESUME-2026-09-11.md). Historical implementation and delivery receipts remain in [CONTINUATION-LEDGER.md](operations/360/CONTINUATION-LEDGER.md).
 
-Progress: ████████░░ 97%
+**89 admitted plans / 51 requirements / 12 phases.** All allowlisted files exist. No entire phase or requirement is complete.
 
-## Performance Metrics
+Gateway production deployment for the second train succeeded (GitHub run34474818000). Claude's last host verification records main0aafeec7. Hub Dialog repair PR245 is merged and has a recorded Vercel production receipt. This status review did not re-probe production hosts or authenticated UI.
 
-**Velocity:**
+Shared contract, clean emission and client/session changes are merged upstream. npm shared0.12.0 and shells-bridge0.2.0 remain unpublished; current registry versions are0.11.0 and0.1.6. Release run34440681982 failed with PUT E404. Exact credential cause remains unverified here.
 
-- Total plans completed: 38
-- Average duration: —
-- Total execution time: —
+Claude completed private14-12 receiver and14-17 caller/config/lifecycle candidates and staged11-03 sender work. Root rehashed the six receiver and13 caller files against saved receipts with no drift; no end-to-end durable execution or production activation is inferred.
 
-**By Phase:**
+Fourteen staged delivery worktrees are preserved. The bulk flush script has confirmed path, remote-name and failure-handling defects; do not run it unchanged. The standalone10-01 branch is byte-identical to a subset of10x; deliver one path. The10x and12-02 test configurations need explicit reconciliation.
 
-| Phase | Plans | Total | Avg/Plan |
-|-------|-------|-------|----------|
-| — | — | — | — |
-| 1 | 5 | - | - |
-| 02 | 8 | - | - |
-| 3 | 6 | - | - |
-| 05 | 5 | - | - |
-| 06 | 5 | - | - |
-| 07 | 4 | - | - |
-| 08 | 5 | - | - |
+## Current Decisions
 
-**Recent Trend:**
+- User priority D360-17: mobile/desktop UI parity first, then all remaining360 implementation. Combined Hub UI passes full Svelte check and 30 mandatory journeys; Site actual-font chat/tab qualification passes, including full native checks. Actual HTTP/WebSocket integration passes under 14-18; portable CI runs under 13-14. See operations/360/UI-FIRST-2026-09-11.md.
 
-- Last 5 plans: —
-- Trend: — (not yet started)
+- Preserve all active, private and staged work; no blanket staging, branch changes or automatic bulk delivery.
+- Prioritize current Hub PR246 review findings before any review override or merge.
+- Keep exact source, package, candidate, merged and deployed identities distinct.
+- Continue independent local implementation/verification while publish/signing/live-access gates remain unresolved.
+- No new production or publication action was taken by this resumption review.
 
-| Phase 02 P07 | 90 min | 6 tasks | 11 files |
-| Phase 02 P08 | 8 | 3 tasks | 3 files |
-| Phase 03 P01 | 35 min | 3 tasks | 8 files |
-| Phase 03 P04 | 16 min | 3 tasks tasks | 6 files files |
-| Phase 03 P02 | 11 min | 3 tasks | 6 files |
-| Phase 03 P03 | 17 min | 3 tasks tasks | 8 files files |
-| Phase 03 P05 | 8min | 3 tasks tasks | 10 files files |
-| Phase 03 P06 | 2min | 2 tasks | 2 files |
-| Phase 04 P01 | 12 | 2 tasks | 13 files |
-| Phase 04-fold-minion-shared P03 | 15min | 2 tasks | 5 files |
-| Phase 04-fold-minion-shared P04 | 2min | 2 tasks | 2 files |
-| Phase 06-auth-extraction P06-01 | 30min | 3 tasks | 10 files |
-| Phase 06 P02 | 25min | 1 tasks | 3 files |
-| Phase 06-auth-extraction P03 | 3min | 1 tasks | 3 files |
-| Phase 07 P01 | 25 | 1 tasks | 1 files |
-| Phase 07 P02 | 30 | 2 tasks | 10 files |
-| Phase 07 P03 | 90 min | 3 tasks | 20 files |
-| Phase 07 P04 | 4min | 3 tasks | 2 files |
-| Phase 08-polish-automation P01 | 12 | 2 tasks | 8 files |
-| Phase 08 P02 | 8 | 2 tasks | 2 files |
-| Phase 08-polish-automation P08-03 | 3 | 2 tasks | 6 files |
-| Phase 08-polish-automation P04 | 3 | 2 tasks | 2 files |
-| Phase 08-polish-automation P08-05 | 5 | 2 tasks | 1 files |
+## Current Blockers / Evidence Gaps
+
+- npm shared0.12.0 / shells-bridge0.2.0 publication failure; license provenance and installed artifact acceptance remain separate gates.
+- Historical1Password signing blockage; current vault state untested. Staged queue requires repair and dependency reconciliation independently of signing.
+- Hub PR246: telemetry repair 16-04 passes independent source review and all 50 native tests. Header/capacity parser correction 15-06 passes independent review and 60 native tests; service-version binding remains open. Remote CI/deployment status has not been refreshed since the resume review.
+- Latest gateway DEV CI: Linux/Windows pass; three macOS assertions fail in scan-paths.symlink.test.ts and canvas-host/server.test.ts.
+- Durable caller lifecycle execution, effective read-scope authorization, actual receiver/sender integration, ACP truth and backup/restore remain open.
+- Factory containment, Sentry access, authenticated browser acceptance, container/runtime, load and recovery qualification remain open where recorded.
+- Earlier automatic approval rejection of further driver fault injection persists; do not repeat or reroute it.
+
+## Historical Accumulated Context (v1.0; not current runtime truth)
 
 ## Accumulated Context
 
@@ -164,8 +131,48 @@ yet. Phase 1 depends on nothing and can be planned immediately.
 
 - Pending: user must run 'cd packages/cli && npm publish --access public' to ship @minion-stack/cli@0.1.0 (2FA)
 
+
 ## Session Continuity
 
-Last session: 2026-04-22T01:57:39.635Z
-Stopped at: Completed 08-polish-automation-08-05-PLAN.md — Phase 08 DONE
-Resume file: None
+Resume: operations/360/PROGRAM.md, ROADMAP.md, REQUIREMENTS.md, DECISIONS.md, phase PLAN/SUMMARY/VERIFICATION files. Root owns progress updates. Do not mark pending release/runtime evidence complete.
+
+## Earlier execution checkpoints (superseded by Current Position)
+
+10-05/10-09 now independently pass brain30native/43unit and foundation25native/27unit; fresh Hub check0errors/0warnings. Four contained traces timed out under their60-second limits with successful isolation/input/cleanup checks, so12-07 profiling is admitted as a diagnostic. Corpus10-06 remains gated on explicit batching and canonical Qdrant outbox decisions. Differently named brain-business-persistence.service.test.ts loads application environment; narrow10-08 quarantine is being verified before any broad default suite. Production remains unchanged.
+
+14-11 independently passes isolated archive/export/runtime/declaration checks for its exact unpublished candidate; Hub/Site snapshots now contain the full matching package. Missing license/README and immutable release version remain open; local candidate preparation does not change active packages.
+
+11-07 native SQLite journal foundation is implemented and independently verified after timestamp/ACK ordering correction. Current/pinned-local runtimes passed native tests; minimum22.13 and receiver/sender/image adoption remain open. Prior linked Vitest cache writes are recorded as an isolation exception; corrected private-cache runs preserve active caches.
+
+
+Current continuation: Hub 14-09 independently passed 44 cases and its full native app check. Task 4 now supplies the remaining read-only accepted-session association for first-mount plugin consumers; 14-06 component code is still gated. Canonical 14-13 bilateral version negotiation passes 43 initial cases/types/lint; three additional invalid representatives await the independent 46-case run. Corpus 10-10 has measured synthetic capacity and selected logical limits but remains outside the admitted inventory pending contract revision/review. Receiver 14-12 is likewise a reviewed draft, with no source admission. ACP 11-04 research is active without depending on sender 11-03, whose superseded combined scope is explicitly held.
+
+
+Latest continuation: 67 admitted exact paths with per-task gates. Canonical14-13 independently passes46 cases/types. A new complete durable-contract archive is built; root review is pending, while prior Hub/Site package bytes remain unchanged. Hub14-09 routing correction passes58 author cases, with root focused verification underway; final fullcheck is serialized with14-06 fixture freeze. Corpus10-10 seven-file implementation is active; root selected a separate private three-file unit lane, native SQL is not admitted. Worker15-05 comments-only Task1 is complete; claim behavior and migration remain gated. ACP research is complete; SDK adoption and actual caller/process semantics remain open.
+
+
+2026-09-09 continuation:68 exact plans admitted.14-06 component repair active after independent5-control/8-red baseline;10-10 source foundation active with actor-SQL contract under review;14-14 pure gateway facade/input candidate admitted in isolated full-package snapshot.15-05 comment-only preparation independently verified. No phase or requirement closed.
+
+
+Current checkpoint:69 admitted plans.11-08 environment injection is implemented and independently verified10tests/types.14-14 private gateway facade/input is independently verified91tests/types.14-06 independently passes47focusedcases; fullcheck found two fixture typing errors and URL-equivalence review opened a bounded correction.10-10 initial native diagnostic passed19of20 before a wrapped-error assertion correction; broader qualification remains active. No requirement/phase/release closed.
+
+
+Current checkpoint: 70 admitted plans across 12 phases and 49 requirements. The final private 14-06 component independently passes 56 mounted cases and the full paired Hub check with zero errors/warnings; 14-09 session and 14-15 compatibility are included in that aggregate check. Native browser qualification is being prepared. 11-08 injected environment parsing and 14-14 gateway input/facade are independently verified. Corpus 10-10 passed 38 native cases before an additional exact PostgreSQL descriptor-boundary correction; final expanded qualification is still active. No phase, requirement or release is closed.
+
+
+## Preserved earlier Current Position
+
+The following checkpoint was replaced by the current summary above; its pending gates and counts are historical.
+
+### Prior position
+
+Phase: 09–20 — parallel implementation with exact-plan admission
+Plan: 67 admitted plans / 49 requirements. Source verification exists for 09-01/02/03/04/05/06, 10-01/02/03/04/05/07/08/09, 11-01/02/06, 13-01 and 18-01. These receipts have bounded scope; no phase is complete. 18-02 inventory tooling is verified; semantic disposition remains open.
+Status: Executing; no phase complete or released.
+Last activity: 2026-09-09 — 14-04 plugin foundation independently passes 75 tests and package typecheck. Fresh Hub snapshot (2,417 files plus six plugin sibling source/dist files) passes with zero errors and warnings. 14-05 Workforce package transport independently passes 105 tests, typecheck and local build. Task 3 helper integration independently passes 39 candidate and 36 installed-baseline cases; current 2,418-file Hub snapshot plus six plugin siblings passes full check with zero errors and warnings. The current Hub installed packages remain separate from these candidates.
+
+12-07 independently passes 20 diagnostic tests. Its one application profile and one decoder finished, but profile output stops at 3.570s of a 60.025s run and mostly describes initialization. No packaging cause or OOM attribution is established; no further experiment is admitted. The 12-01 dependency candidate stays unapplied. 12-04 remains incomplete after automatic safety review stopped fault injection; its guard candidate is untested and unaccepted.
+
+10-10 remains a draft: cross-document batch reservations must be distinct from remote admission; capacity ceilings and safe cross-job orphan reclamation are unresolved. Existing Qdrant mode stays. Worker durable results, claim generation and cancellation require separate repair.
+
+14-06 Task 1 is complete and component source remains gated. 14-07 generated package reuse passes106 tests/fullHubcheck and local native iframe/BFCache qualification. Reconnect review found that Hub and Site do not republish an authenticated session after shared-client internal reconnect, and deferred challenge work can cross socket generations. 14-08 shared-client source independently passes 65 tests and typecheck; 14-09 Hub snapshot independently passes 44 tests and the full app check; 15 existing regressions passed before the final event amendments.14-10 Site snapshot independently passes22 tests and fullSitecheck. Both use the full14-11 candidate; active app adoption/component mounting remain gated. The final plugin identity amendment independently passes 84 tests. Artifact generation uses that exact emitted package.
