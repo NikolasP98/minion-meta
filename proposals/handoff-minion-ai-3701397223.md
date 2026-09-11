@@ -27,9 +27,9 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-11)
 
-- `NikolasP98/minion-ai@DEV src/shells/run-store.ts:182` — production path selection, startup opening and shutdown close
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/run-store.ts#L182
-- `NikolasP98/minion-ai@DEV src/shells/run-store.ts:186` — exact Node 22.13.0 minimum, an actual distribution without the
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/run-store.ts#L186
-- `NikolasP98/minion-ai@DEV src/shells/run-store.ts:189` — failed-COMMIT, process loss and power-loss recovery are NOT
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/run-store.ts#L189
+- `NikolasP98/minion-ai@DEV src/shells/run-store.ts:183` — production path selection, startup opening and shutdown close
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/run-store.ts#L183
+- `NikolasP98/minion-ai@DEV src/shells/run-store.ts:187` — exact Node 22.13.0 minimum, an actual distribution without the
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/run-store.ts#L187
+- `NikolasP98/minion-ai@DEV src/shells/run-store.ts:190` — failed-COMMIT, process loss and power-loss recovery are NOT
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/run-store.ts#L190
