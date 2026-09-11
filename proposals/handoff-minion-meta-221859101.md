@@ -27,23 +27,29 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-11)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:3065` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3065
-- `NikolasP98/minion-meta@dev rankings/index.json:3333` — comment pointing at this proposal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3333
-- `NikolasP98/minion-meta@dev rankings/index.json:3989` — add-only; rename / deactivate / max-days edits need a modal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3989
-- `NikolasP98/minion-meta@dev rankings/index.json:5934` — spec §3.2b allows a reschedule outside working hours",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5934
-- `NikolasP98/minion-meta@dev rankings/index.json:6947` — resourceId is only ever set from the calendar's",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6947
-- `NikolasP98/minion-meta@dev rankings/index.json:7211` — Workshop/Pixi/physics operation parity needs real engine fixtures",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7211
-- `NikolasP98/minion-meta@dev rankings/index.json:7245` — effectScatter/lines effects need engine-specific reduced-motion",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7245
-- `NikolasP98/minion-meta@dev rankings/index.json:7374` — prompt-driven protocol instead of native tool_use — replace'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7374
-- `NikolasP98/minion-meta@dev rankings/index.json:8200` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8200
-- `NikolasP98/minion-meta@dev rankings/index.json:8233` — dataset/encode, tuple points, mixed category axes and non-Cartesian",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8233
+- `NikolasP98/minion-meta@dev rankings/index.json:865` — Gate constrained capabilities before component mounting, audit token/method authority",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L865
+- `NikolasP98/minion-meta@dev rankings/index.json:3178` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3178
+- `NikolasP98/minion-meta@dev rankings/index.json:3446` — comment pointing at this proposal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3446
+- `NikolasP98/minion-meta@dev rankings/index.json:4135` — add-only; rename / deactivate / max-days edits need a modal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4135
+- `NikolasP98/minion-meta@dev rankings/index.json:5193` — PluginIframe currently mounts before capabilities load",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5193
+- `NikolasP98/minion-meta@dev rankings/index.json:6032` — qualify error-storm flush fan-out and serverless delivery",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6032
+- `NikolasP98/minion-meta@dev rankings/index.json:6257` — spec §3.2b allows a reschedule outside working hours",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6257
+- `NikolasP98/minion-meta@dev rankings/index.json:7204` — resourceId is only ever set from the calendar's",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7204
+- `NikolasP98/minion-meta@dev rankings/index.json:7435` — effectScatter/lines effects need engine-specific reduced-motion",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7435
+- `NikolasP98/minion-meta@dev rankings/index.json:7564` — prompt-driven protocol instead of native tool_use — replace'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7564
+- `NikolasP98/minion-meta@dev rankings/index.json:8320` — finance-statements.service.ts keeps its own PARSER_VERSION",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8320
+- `NikolasP98/minion-meta@dev rankings/index.json:8455` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8455
+- `NikolasP98/minion-meta@dev rankings/index.json:8488` — dataset/encode, tuple points, mixed category axes and non-Cartesian",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8488
