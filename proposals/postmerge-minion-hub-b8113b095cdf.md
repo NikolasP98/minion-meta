@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-b8113b095cdf
 title: "Post-merge finding — todo-handoff in src/server/auth/assistant-principal.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
