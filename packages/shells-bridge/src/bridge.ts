@@ -49,11 +49,15 @@ import { isDeepStrictEqual } from 'node:util';
 
 const DURABLE_LIMITS = SHELL_DURABLE_V1_OUTCOME_LIMITS;
 const PLACEHOLDER_DIGEST = '0'.repeat(64);
-/**
- * Fixed public-safe text. A raw ACP rejection can carry provider payloads, paths or
- * credentials, so it is never forwarded — the canonical byte check is not redaction.
- */
-const DURABLE_ERROR_MESSAGE = 'harness prompt failed';
+/** ACP SDK 1.4.0 stable StopReason projection; an ended turn does not prove task success. */
+function durableStopReason(value: unknown): string | undefined {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
+  const reason = (value as { stopReason?: unknown }).stopReason;
+  switch (reason) {
+    case 'end_turn': case 'max_tokens': case 'max_turn_requests': case 'refusal': case 'cancelled': return reason;
+    default: return undefined;
+  }
+}
 
 interface ActiveRun {
   runId: string;
@@ -430,13 +434,13 @@ export class Bridge {
     const admission = normalizeShellRunAdmission(envelope.admission, DURABLE_LIMITS);
     if (admission.shellId !== this.config.shellId) throw new Error('BRIDGE_INVALID_REQUEST');
 
-    // admit() is the single gate: it replays an identical admission, refuses a
-    // conflicting one for a known identity, and enforces one unresolved run.
-    const admitted = journal.admit(admission);
+    // The journal grants dispatch only after a fresh INSERT commits. Identical
+    // replay, including after restart, never grants another prompt opportunity.
+    const admitted = journal.admitForDispatch(admission);
     const response = normalizeShellsInvokeDurableResponse({
       version: 1, durability: 'required', runId: admission.runId, startedAt: admission.startedAt,
     });
-    if (admitted.outcome || this.activeRuns.has(admission.runId)) return response;
+    if (!admitted.fresh) return response;
 
     const run: ActiveRun = {
       runId: admission.runId, sessionId: admission.sessionId, startedAt: admission.startedAt,
@@ -446,26 +450,28 @@ export class Bridge {
     this.activeRuns.set(run.runId, run);
     this.acpSessionToRun.set(run.sessionId, run.runId);
     try {
-      // TODO(handoff): ACP cannot yet distinguish an aborted prompt from a completed one
-      // beyond this stopReason string, nor prove the harness stopped. 11-04 owns that
-      // lifecycle truth. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
+      // TODO(handoff): Replace handwritten ACP initialization/session/prompt/cancel mapping
+      // with the qualified official SDK and verify actual process termination. This stable
+      // five-reason projection proves only a reported turn end, not process exit or task success.
+      // See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
       void this.acp
         .call('session/prompt', { sessionId: admission.sessionId, input: envelope.input })
         .then(
           (result: unknown) => {
-            const stopReason = (result as { stopReason?: unknown } | null)?.stopReason;
-            const reason = typeof stopReason === 'string' && stopReason ? stopReason : undefined;
+            if (!this.ownsDurableRun(run)) return;
+            const reason = durableStopReason(result);
+            if (reason === undefined) return this.observeDurable(run, 'unresolved');
             return this.settleDurable(run, reason === 'cancelled' ? 'aborted' : 'final', reason);
           },
-          () => this.settleDurable(run, 'error', undefined, DURABLE_ERROR_MESSAGE),
+          () => this.observeDurable(run, 'unresolved'),
         )
-        .catch((error: unknown) => {
-          // The terminal is already durable; a delivery failure only leaves it pending.
-          process.stderr.write(`[bridge] durable terminal delivery failed: ${error instanceof Error ? error.message : String(error)}\n`);
+        .catch(() => {
+          // Persistence may have failed before any terminal existed. Never expose
+          // provider/path details or release the owner because this local wait failed.
+          process.stderr.write('[bridge] durable outcome persistence or delivery failed\n');
         });
-    } catch (error) {
-      this.releaseRun(run);
-      throw error;
+    } catch {
+      this.observeDurable(run, 'unresolved');
     }
     return response;
   }
@@ -474,7 +480,7 @@ export class Bridge {
   private async settleDurable(run: ActiveRun, state: ShellRunOutcome['state'], stopReason?: string, errorMessage?: string): Promise<void> {
     const journal = this.journal;
     const admission = run.admission;
-    if (!journal || !admission) return;
+    if (!journal || !admission || !this.ownsDurableRun(run)) return;
     const body = {
       version: 1 as const,
       shellId: admission.shellId, runId: admission.runId, sessionId: admission.sessionId,
@@ -495,11 +501,8 @@ export class Bridge {
     };
     // Release the local reservation as soon as the terminal is durable; delivery must
     // never hold the harness slot hostage.
-    try {
-      journal.commitOutcome(outcome);
-    } finally {
-      this.releaseRun(run);
-    }
+    journal.commitOutcome(outcome);
+    this.releaseRun(run);
     await this.deliverOutcome(outcome);
   }
 
@@ -553,12 +556,17 @@ export class Bridge {
 
   /** Observations never release the journal slot and never create a terminal. */
   private observeDurable(run: ActiveRun, kind: 'unresolved' | 'cancel_requested' | 'cancel_unconfirmed'): void {
-    if (!this.journal || !run.admission) return;
+    if (!this.journal || !this.ownsDurableRun(run)) return;
     try {
       this.journal.observe(run.runId, { version: 1, kind, at: Date.now() });
-    } catch (error) {
-      process.stderr.write(`[bridge] observation dropped: ${error instanceof Error ? error.message : String(error)}\n`);
+    } catch {
+      process.stderr.write('[bridge] durable observation persistence failed; run remains unresolved\n');
     }
+  }
+
+  private ownsDurableRun(run: ActiveRun): boolean {
+    return !this.shuttingDown && run.admission !== undefined &&
+      this.activeRuns.get(run.runId) === run && this.acpSessionToRun.get(run.sessionId) === run.runId;
   }
 
   private async handleBackup(params: ShellsBackupNowParams): Promise<ShellsBackupNowResponse> {

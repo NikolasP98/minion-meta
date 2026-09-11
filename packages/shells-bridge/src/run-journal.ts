@@ -55,7 +55,7 @@ function parse(value: unknown): unknown { try { return JSON.parse(sqlText(value)
  * SQLite is the transaction engine; this adapter has no custom WAL/recovery format.
  * Trusted same-UID directory/process assumption: path inspection cannot prevent
  * arbitrary inode replacement by that principal between native opens.
- * TODO(handoff): Wire private path, process generation and startup uncertainty only after receiver14-12 and sender11-03 acceptance; this adapter is deliberately unused by Bridge. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
+ * TODO(handoff): Qualify process generation and explicit unresolved-run reconciliation; Bridge replay has no dispatch authority and cannot recover unknown external effects. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
  */
 export class RunJournal {
   private closed = false;
@@ -134,6 +134,11 @@ export class RunJournal {
   inspect(runId: string): JournalRun | null { return this.transaction(() => this.readRun(runId)); }
 
   admit(value: unknown): JournalRun {
+    return this.admitForDispatch(value).run;
+  }
+
+  /** Only the successful committed insertion grants this caller one dispatch opportunity. */
+  admitForDispatch(value: unknown): { fresh: boolean; run: JournalRun } {
     const admission = normalizeShellRunAdmission(value, this.limits);
     if (admission.shellId !== this.shellId) fail('CONFLICT');
     return this.transaction(() => {
@@ -141,12 +146,12 @@ export class RunJournal {
       if (existing.length) {
         const stored = this.readRun(sqlText(existing[0]?.run_id));
         if (existing.length !== 1 || !stored || JSON.stringify(stored.admission) !== JSON.stringify(admission)) fail('CONFLICT');
-        return stored;
+        return { fresh: false, run: stored };
       }
       if (Number(this.db.prepare('SELECT count(*) AS count FROM runs').get()?.count) >= this.maxRuns) fail('CAPACITY');
       if (this.db.prepare('SELECT run_id FROM runs WHERE outcome IS NULL LIMIT 1').get()) fail('BUSY');
       this.db.prepare('INSERT INTO runs(run_id, invocation_id, admission, reserved_bytes) VALUES(?, ?, ?, ?)').run(admission.runId, admission.invocationId, JSON.stringify(admission), this.maxOutcomeBytes);
-      return { admission, uncertainty: null, cancellation: null, outcome: null };
+      return { fresh: true, run: { admission, uncertainty: null, cancellation: null, outcome: null } };
     });
   }
 

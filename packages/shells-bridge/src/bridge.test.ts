@@ -631,13 +631,94 @@ describe('Bridge durable sender', () => {
     expect(accepted).toMatchObject({ ok: true });
   });
 
-  it('never puts raw error text in errorMessage', async () => {
+  it.each(['provider said SECRET_TOKEN=abc at /home/agent/state/key.pem', 'ACP call timed out'])('keeps rejected prompt unresolved: %s', async (message) => {
+    const stderr = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
     await receiver.invokeDurable({ version: 1, admission: admission(), input: { kind: 'text', text: 'hello' } });
-    receiver.expectCommit();
-    promptsOf()[0]!.reject(new Error('provider said SECRET_TOKEN=abc at /home/agent/state/key.pem'));
-    await receiver.whenCommitted();
-    expect(receiver.commits[0]).toMatchObject({ state: 'error', errorMessage: 'harness prompt failed' });
-    expect(JSON.stringify(receiver.commits[0])).not.toMatch(/SECRET_TOKEN|key\.pem/);
+    promptsOf()[0]!.reject(new Error(message));
+    await settle();
+    expect(receiver.commits).toHaveLength(0);
+    expect(readJournal((j) => j.inspect('run-durable-1'))).toMatchObject({ outcome: null, uncertainty: { kind: 'unresolved' } });
+    await assertRetainedOwner();
+    expect(JSON.stringify(stderr.mock.calls)).not.toMatch(/SECRET_TOKEN|key\.pem/);
+  });
+
+  async function assertRetainedOwner(expectedPrompts = 1) {
+    const owner = durable as unknown as { activeRuns: Map<string, unknown>; acpSessionToRun: Map<string, string> };
+    expect(owner.activeRuns.has('run-durable-1')).toBe(true);
+    expect(owner.acpSessionToRun.get('sess-1')).toBe('run-durable-1');
+    expect(await receiver.invokeDurable({ version: 1, admission: admission(), input: { kind: 'text', text: 'hello' } })).toMatchObject({ ok: true });
+    expect(promptsOf()).toHaveLength(expectedPrompts);
+    expect(await receiver.invokeDurable({ version: 1, admission: admission({ runId: 'other', invocationId: 'other' }), input: { kind: 'text', text: 'hello' } })).toMatchObject({ ok: false, error: { message: 'SHELL_JOURNAL_BUSY' } });
+  }
+
+  it('retains committed admission when the prompt call throws synchronously', async () => {
+    vi.spyOn(acpOf(), 'call').mockImplementationOnce(() => { throw new Error('SECRET_SYNC_FAILURE'); });
+    expect(await receiver.invokeDurable({ version: 1, admission: admission(), input: { kind: 'text', text: 'hello' } })).toMatchObject({ ok: true });
+    expect(receiver.commits).toHaveLength(0);
+    expect(readJournal((j) => j.inspect('run-durable-1'))).toMatchObject({ outcome: null, uncertainty: { kind: 'unresolved' } });
+    await assertRetainedOwner(0);
+  });
+
+  it.each([undefined, null, 42, 'end_turn', [], {}, { stopReason: 'unknown' }, { stopReason: 1 }])('keeps invalid prompt result %j unresolved', async (value) => {
+    await receiver.invokeDurable({ version: 1, admission: admission(), input: { kind: 'text', text: 'hello' } });
+    promptsOf()[0]!.resolve(value);
+    await settle();
+    expect(receiver.commits).toHaveLength(0);
+    expect(readJournal((j) => j.inspect('run-durable-1'))).toMatchObject({ outcome: null, uncertainty: { kind: 'unresolved' } });
+    await assertRetainedOwner();
+  });
+
+  it.each(['end_turn', 'max_tokens', 'max_turn_requests', 'refusal', 'cancelled'])('commits the stable terminal reason %s before releasing its local owner', async (stopReason) => {
+    await receiver.invokeDurable({ version: 1, admission: admission(), input: { kind: 'text', text: 'hello' } });
+    receiver.expectCommit(); promptsOf()[0]!.resolve({ stopReason });
+    await receiver.whenCommitted(); await settle();
+    expect(readJournal((j) => j.inspect('run-durable-1'))?.outcome).toMatchObject({ state: stopReason === 'cancelled' ? 'aborted' : 'final', stopReason });
+    const owner = durable as unknown as { activeRuns: Map<string, unknown> };
+    expect(owner.activeRuns.size).toBe(0);
+    await receiver.invokeDurable({ version: 1, admission: admission(), input: { kind: 'text', text: 'hello' } });
+    expect(promptsOf()).toHaveLength(1);
+  });
+
+  it('never dispatches an existing unresolved admission even when insertion preceded any prompt', async () => {
+    readJournal((j) => j.admit(admission()));
+    expect(await receiver.invokeDurable({ version: 1, admission: admission(), input: { kind: 'text', text: 'hello' } })).toMatchObject({ ok: true });
+    expect(promptsOf()).toHaveLength(0);
+    expect(readJournal((j) => j.inspect('run-durable-1'))?.outcome).toBeNull();
+  });
+
+  it('does not dispatch unresolved replay after restart or let the retired callback settle it', async () => {
+    await receiver.invokeDurable({ version: 1, admission: admission(), input: { kind: 'text', text: 'hello' } });
+    const retired = promptsOf()[0]!;
+    await durable!.shutdown(); durable = await startBridge();
+    expect(await receiver.invokeDurable({ version: 1, admission: admission(), input: { kind: 'text', text: 'hello' } })).toMatchObject({ ok: true });
+    expect(promptsOf()).toHaveLength(0);
+    retired.resolve({ stopReason: 'end_turn' }); await settle();
+    expect(receiver.commits).toHaveLength(0);
+    expect(readJournal((j) => j.inspect('run-durable-1'))?.outcome).toBeNull();
+  });
+
+  it('retains run and session ownership when durable outcome persistence fails', async () => {
+    const stderr = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
+    vi.spyOn(RunJournal.prototype, 'commitOutcome').mockImplementationOnce(() => { throw new Error('SECRET_COMMIT_PATH'); });
+    await receiver.invokeDurable({ version: 1, admission: admission(), input: { kind: 'text', text: 'hello' } });
+    promptsOf()[0]!.resolve({ stopReason: 'end_turn' }); await settle();
+    expect(receiver.commits).toHaveLength(0);
+    expect(readJournal((j) => j.inspect('run-durable-1'))?.outcome).toBeNull();
+    await assertRetainedOwner();
+    expect(JSON.stringify(stderr.mock.calls)).not.toContain('SECRET_COMMIT_PATH');
+    expect(stderr).toHaveBeenCalled();
+  });
+
+  it('retains ownership and reports safe failure if uncertainty cannot be stored', async () => {
+    const stderr = vi.spyOn(process.stderr, 'write').mockImplementation(() => true);
+    vi.spyOn(RunJournal.prototype, 'observe').mockImplementationOnce(() => { throw new Error('SECRET_OBSERVATION_PATH'); });
+    await receiver.invokeDurable({ version: 1, admission: admission(), input: { kind: 'text', text: 'hello' } });
+    promptsOf()[0]!.reject(new Error('SECRET_PROVIDER')); await settle();
+    expect(receiver.commits).toHaveLength(0);
+    expect(readJournal((j) => j.inspect('run-durable-1'))).toMatchObject({ outcome: null, uncertainty: null });
+    await assertRetainedOwner();
+    expect(JSON.stringify(stderr.mock.calls)).not.toMatch(/SECRET_/);
+    expect(stderr).toHaveBeenCalled();
   });
 
   it('records a cancellation request as its own observation without producing a terminal', async () => {
