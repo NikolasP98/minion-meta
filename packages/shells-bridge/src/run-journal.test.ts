@@ -30,6 +30,31 @@ function connection(path: string) { const db = new DatabaseSync(path); handles.p
 afterEach(() => { for (const journal of journals.splice(0)) journal.close(); for (const db of handles.splice(0)) db.close(); for (const dir of directories.splice(0)) rmSync(dir, { recursive: true, force: true }); });
 
 describe('native run journal', () => {
+  it('grants fresh dispatch only to the committed inserter across two native handles', () => {
+    const f = fixture(); const first = f.open(); const second = f.open();
+    const winner = first.admitForDispatch(admission);
+    expect(winner).toEqual({ fresh: true, run: { admission, uncertainty: null, cancellation: null, outcome: null } });
+    expect(second.admitForDispatch(admission)).toEqual({ fresh: false, run: winner.run });
+    expect(first.admitForDispatch(admission).fresh).toBe(false);
+    expect(second.admit(admission)).toEqual(winner.run);
+    first.close(); second.close();
+    expect(f.open().admitForDispatch(admission).fresh).toBe(false);
+  });
+  it('does not turn a compatibility admission into later dispatch permission', () => {
+    const journal = fixture().open();
+    expect(journal.admit(admission).admission).toEqual(admission);
+    expect(journal.admitForDispatch(admission).fresh).toBe(false);
+    expect(() => journal.admitForDispatch({ ...admission, inputDigest: 'b'.repeat(64) })).toThrow('CONFLICT');
+    expect(() => journal.admitForDispatch({ ...admission, runId: 'other', invocationId: 'other' })).toThrow('BUSY');
+  });
+  it('cannot return fresh permission while another native transaction owns the lock', () => {
+    const f = fixture(); const journal = f.open(); const lock = connection(f.options.path);
+    lock.exec('BEGIN IMMEDIATE');
+    expect(() => journal.admitForDispatch(admission)).toThrow(/locked/);
+    lock.exec('ROLLBACK');
+    expect(journal.inspect('run')).toBeNull();
+    expect(journal.admitForDispatch(admission).fresh).toBe(true);
+  });
   it('accepts a valid one-byte identifier policy without hidden sample identifiers', () => {
     const journal = fixture({ shellId: 's', limits: { ...limits, identifierBytes: 1 } }).open();
     expect(journal.admit({ ...admission, shellId: 's', runId: 'r', sessionId: 's', invocationId: 'i' }).admission.shellId).toBe('s');
@@ -228,8 +253,10 @@ const digest = createHash('sha256').update(JSON.stringify(['minion.shells.outcom
 const outcome = {version:1,shellId:'shell',runId:'run',sessionId:'session',invocationId:'invoke',inputDigest:'a'.repeat(64),eventId:'event',state:'final',durationMs:2,outcomeDigest:digest};
 let journal;
 try {
- journal=new RunJournal(options); journal.admit(admission); journal.commitOutcome(outcome); journal.close();
- journal=new RunJournal(options); if(journal.pending().length!==1) throw Error('missing outcome');
+ journal=new RunJournal(options); if(!journal.admitForDispatch(admission).fresh) throw Error('missing fresh insertion');
+ if(journal.admitForDispatch(admission).fresh) throw Error('replayed dispatch permission');
+ journal.commitOutcome(outcome); journal.close();
+ journal=new RunJournal(options); if(journal.pending().length!==1 || journal.admitForDispatch(admission).fresh) throw Error('missing outcome or replayed permission');
  journal.acknowledge({version:1,shellId:'shell',runId:'run',eventId:'event',outcomeDigest:digest,receiptId:'receipt',committedAt:3}); journal.close();
  journal=new RunJournal(options); if(journal.pending().length!==0 || !journal.inspect('run').outcome) throw Error('missing receipt/tombstone');
  console.log(JSON.stringify({runtime:process.version,sqlite:'actual',reopened:true,acknowledged:true}));
@@ -240,7 +267,7 @@ describe('emitted private module', () => {
   it('uses the actual emitted shared contract in a no-flag raw Node process', () => {
     const path = join(process.cwd(), 'dist/run-journal.js');
     expect(existsSync(path), 'build the isolated candidate before this test').toBe(true);
-    const output = execFileSync(process.execPath, ['--input-type=module', '-e', emittedJournalSmoke, path], { env: { LANG: 'C.UTF-8' }, encoding: 'utf8', timeout: 10000 });
+    const output = execFileSync(process.execPath, ['--input-type=module', '-e', emittedJournalSmoke, path], { env: { LANG: 'C.UTF-8', TMPDIR: tmpdir() }, encoding: 'utf8', timeout: 10000 });
     expect(JSON.parse(output)).toMatchObject({ runtime: process.version, reopened: true, acknowledged: true });
   });
 });
