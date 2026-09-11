@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-11T21:46:30.103Z",
+	"generatedAt": "2026-09-11T21:54:54.658Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -968,39 +968,6 @@
 			"scoredAt": "2026-09-07T08:35:09.206Z"
 		},
 		{
-			"key": "pr:minion_hub#246",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#246 feat(server): sanitized observability identity (OBS-01) + finance parser provenance and bounds (DATA-01)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/246",
-			"sourceUpdatedAt": "2026-09-11T09:45:31Z",
-			"sourceFingerprint": "b3fbc31c68562bdde1e308409be0b60a904847fcbaf166486ff8adb4edd3432f",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Server-only observability sanitization and finance parser bounds close real data-leak and unbounded-input risks with red-green test evidence and clean gates, though DATA-01 Task 2 remains explicitly blocked on a frozen dependency.",
-			"evidence": [
-				"OBS-01 replaces raw error.message/path with sha-256 digest + allowlisted identity, closing a data-leak in every server error event",
-				"DATA-01 bounds input (8M chars/100k rows) and rejects oversized records instead of silent coercion",
-				"85/85 focused tests pass, bun run check 0 errors; DATA-01 Task 2 blocked because job-effects.service.ts does not exist on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T10:04:28.070Z"
-		},
-		{
 			"key": "proposal:2026-08-20-dev-key-at-rest-audit",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1467,6 +1434,39 @@
 			"scoredAt": "2026-09-09T15:35:06.298Z"
 		},
 		{
+			"key": "pr:minion_hub#246",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#246 feat(server): sanitized observability identity (OBS-01) + finance parser provenance and bounds (DATA-01)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/246",
+			"sourceUpdatedAt": "2026-09-11T21:53:19Z",
+			"sourceFingerprint": "d4dcf20c194a87a10f39aec1970601d89554d7c228590650b25ecf250b18ea23",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Server-only sanitization and bounds work is fully gated with passing tests and documented red-green evidence, making it ready to land.",
+			"evidence": [
+				"85 passed / 0 failed on focused vitest files",
+				"bun run check 0 errors, 0 warnings",
+				"route contract 120 passed, no baseline re-pin"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T21:54:54.579Z"
+		},
+		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1759,6 +1759,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:35:09.206Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-b8113b095cdf",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/auth/assistant-principal.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b8113b095cdf.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "a36e1e1fa60aba423b944b354c12a7233ca2580a5187b241a855281a4bd9a5e6",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-ccb2014a7cbb"
+			],
+			"rationale": "Privilege-escalation gap in gateway-org-brain binding is a real security concern but is only diagnosed, not scoped into an executable slice, and shares its origin PR and restoration proposal with the sibling finding.",
+			"evidence": [
+				"TODO(handoff) notes brain_access alone does not bind a gateway",
+				"references SEC-06 / Phase 15 restoration proposal",
+				"merged PR #247 same repo"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T21:54:54.579Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-memory-governance-spec",
@@ -4313,6 +4348,41 @@
 			"scoredAt": "2026-09-11T14:05:57.000Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-ccb2014a7cbb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/assistant-query.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ccb2014a7cbb.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "e96bae6348d4b01d0f4e32baee85aab8b4068103b5bee890eaffd8c7a1695513",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b8113b095cdf"
+			],
+			"rationale": "Analytics coupling to rigid gateway crm_query blocks reporting but is undesigned, and is part of the same SEC-06/Phase 15 restoration effort as the sibling auth-binding finding from the same merged PR.",
+			"evidence": [
+				"TODO(handoff) calls for tenant/module/owner-bound typed datasets",
+				"references same SEC-06 / Phase 15 restoration proposal",
+				"merged PR #247 same repo"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T21:54:54.579Z"
+		},
+		{
 			"key": "spec:2026-08-17-maintenance-lane-monitors-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -6491,38 +6561,6 @@
 			"scoredAt": "2026-09-07T07:35:47.669Z"
 		},
 		{
-			"key": "pr:minion_hub#250",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#250 feat(ui): mobile Home and Calendar composition (UI-04)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/250",
-			"sourceUpdatedAt": "2026-09-11T17:03:58Z",
-			"sourceFingerprint": "da513608ba27c4bee3e49c0f2b8277c01ce18ccb19d63ca15a03bb3408ce1162",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes mobile layout overlap and unreachable calendar content, verified with a before/after Playwright fixture.",
-			"evidence": [
-				"New chat rendered 18x28 with icon hidden, invisible under the notes rail",
-				"13 passed after fix vs 12/13 failed on master baseline"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T17:35:18.775Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-workforce-error-body-leak",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8350,39 +8388,6 @@
 			"scoredAt": "2026-09-09T22:35:10.859Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/9c1a53f7e5c62ce846fef5e484b891ba0bce1775",
-			"sourceUpdatedAt": "2026-09-11T21:35:09Z",
-			"sourceFingerprint": "3ba7110f3197684f0773ff1ac399bdb2ef79bd7aa6c24e028ea52d0ff0885691",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The summary is a commit message showing the win32 test-skip fix (matching prior #288/#289) is already merged, so there is no pending work left to execute.",
-			"evidence": [
-				"test(gateway): skip the durable shells suites on win32 (#291)",
-				"matching #288/#289",
-				"DEV push b6485201"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T21:46:30.019Z"
-		},
-		{
 			"key": "pr:minion_hub#196",
 			"kind": "pr",
 			"stage": "development",
@@ -9665,72 +9670,6 @@
 			"scoredAt": "2026-09-11T18:35:08.700Z"
 		},
 		{
-			"key": "run:minion (gateway)#34650098320",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34650098320",
-			"sourceUpdatedAt": "2026-09-11T21:39:26Z",
-			"sourceFingerprint": "b080d3d31f5df6027ad6e565185f8dd447cd2d231999c4a0a2cee710239d621d",
-			"score": 13,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run with no reported failure or defect to act on.",
-			"evidence": [
-				"status: in_progress",
-				"push on DEV",
-				"title: CI"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T21:46:30.019Z"
-		},
-		{
-			"key": "run:minion_hub#34650834152",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/34650834152",
-			"sourceUpdatedAt": "2026-09-11T21:44:46Z",
-			"sourceFingerprint": "7db48879b53c988ed8add33993da5476457fc152194c49bc080943b150dc97e5",
-			"score": 13,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run with no reported failure or defect to act on.",
-			"evidence": [
-				"status: in_progress",
-				"push on master",
-				"title: CI"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T21:46:30.019Z"
-		},
-		{
 			"key": "issue:minion-meta#373",
 			"kind": "issue",
 			"stage": "proposal",
@@ -9761,6 +9700,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-09T23:04:27.681Z"
+		},
+		{
+			"key": "run:minion (gateway)#34650098320",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34650098320",
+			"sourceUpdatedAt": "2026-09-11T21:51:46Z",
+			"sourceFingerprint": "cd8a08e8882dd0bdf1262c3f742a367a38050d0700cffcac559ccf57879fe733",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a transient in-progress CI run status, not an actionable goal.",
+			"evidence": [
+				"status in_progress",
+				"title CI, push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T21:54:54.579Z"
+		},
+		{
+			"key": "run:minion_hub#34651498919",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/34651498919",
+			"sourceUpdatedAt": "2026-09-11T21:53:23Z",
+			"sourceFingerprint": "8f61a5d630694e0b4a07054ebf6a030dc25ac1976dd386fd43e57aa56c46fae2",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a transient in-progress CI run status, not an actionable goal.",
+			"evidence": [
+				"status in_progress",
+				"title CI, push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T21:54:54.579Z"
 		}
 	]
 }
