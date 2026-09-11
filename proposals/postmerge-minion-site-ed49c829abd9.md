@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-site-ed49c829abd9
 title: "Post-merge finding — todo-handoff in src/routes/auth/logout/+server.ts (minion-site)"
-status: draft
+status: approved
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-site]
