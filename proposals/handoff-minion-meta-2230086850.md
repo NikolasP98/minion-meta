@@ -1,12 +1,21 @@
 ---
 id: handoff-minion-meta-2230086850
 title: Handoff marker — packages/shared/README.md (minion-meta)
-status: draft
+status: merged
+merged_into: 2026-09-08-platform-qc-remediation
 created: 2026-09-10
 updated: 2026-09-11
 repos: [minion-meta]
 tags: [handoff-sweep]
 ---
+
+**Merged 2026-09-11:** the quoted marker text is a same-idea duplicate of the
+already-tracked license/attribution gap in
+[2026-09-08-platform-qc-remediation.md](2026-09-08-platform-qc-remediation.md)
+("Shared package release emission gate" section) — the marker itself cites
+that proposal by path. No unique content beyond the exact source line
+(`packages/shared/README.md:33`), which has been folded into the canonical
+document. Kept as a tombstone per reconciliation policy.
 
 # Handoff marker — packages/shared/README.md
 

@@ -3,7 +3,7 @@ id: 2026-09-08-platform-qc-remediation
 title: Platform QC follow-ups — authorization, durable execution, compatibility and release evidence
 status: draft
 created: 2026-09-08
-updated: 2026-09-08
+updated: 2026-09-11
 repos: [minion-meta, minion_hub, minion, minion_site, minion-factory, paperclip, pixel-agents]
 ---
 
@@ -303,6 +303,13 @@ Applicable license text and attribution remain unresolved; an MIT metadata value
 ## Shared package release emission gate
 
 12-08 proved, in a private lane only, a production-only clean emission for `@minion-stack/shared` (tsconfig.build.json + scripts/build.mjs + prepack routing + README): 44-member archive `d01a5285…`, no tests/maps/local paths, all five entry points and the optional `ws` peer behavior verified from the extracted tarball, root rerun byte-identical. Still open before any release: applicable license text/attribution (metadata says MIT, nothing shipped or verified), a distinct immutable version (0.9.0 is reused locally), qualification of the installed consumers (hub, site, paperclip `minion_gateway`), and adoption of the four candidate files into the active package. The README `TODO(handoff)` points here. Evidence: `.planning/phases/12-dependency-provenance/12-08-VERIFICATION.md`, `/tmp/minion-12-08-fa2dci45/RECEIPT.json`.
+
+Reconciliation note (2026-09-11): the 2026-09-10 handoff-ledger sweep filed a
+standalone marker proposal for this exact site
+(`packages/shared/README.md:33`, ex `handoff-minion-meta-2230086850`, now
+`status: merged` into this document) — the marker text itself already pointed
+back here. No new open end; this section remains the canonical tracker for the
+license/attribution gap.
 
 ## Shells durable receiver handoff (14-12)
 
