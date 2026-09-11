@@ -1,120 +1,54 @@
 ---
 phase: 18-docs-governance
 plan: "02"
-verified: 2026-09-09T06:16:12Z
+verified: 2026-09-11
 status: gaps_found
-slice_status: passed
-scope: Inventory tooling and review-needed packet only
-score: 6/6 scoped tooling truths verified
+score: 2/2 must-have truths reached at the explicit review boundary; 0/2 closed
 requirements_completed: []
+snapshot: /home/nikolas/.cache/claude-tmp/18-02-a4f19c2e/MINION
+base: origin/dev a018d6722904825d1c12fcb82d978448cde0265a
 re_verification:
   previous_status: gaps_found
-  previous_score: 3/6 scoped truths
+  previous_score: 6/6 scoped tooling truths (2026-09-09, inventory tooling only)
   gaps_closed:
-    - Nested Markdown inventory omissions
-    - Requirement-description freshness blindness
-    - Partial malformed requirement acceptance
-    - Duplicate lifecycle frontmatter acceptance
+    - Complete semantic document dispositions and requirement applicability (per-requirement, 51/51)
+    - Exact status/body/baseline child actions with validation commands (P1-P5)
   gaps_remaining:
-    - Complete semantic document dispositions and requirement applicability
-    - Task2 selected-source child-plan admission and status/body/index convergence
+    - Per-document semantic acceptance of 666 unreviewed documents
+    - Execution of P1-P5 under source ownership; landing of 21 planning-branch-only documents
   regressions: []
-gaps:
-  - truth: Existing proposals/specs have reviewed requirement applicability and semantic dispositions.
-    status: partial
-    reason: Tooling supplies explicit review-needed candidates; seven packet relationships are not exhaustive per-document semantic or historical review.
-    artifacts:
-      - path: .planning/phases/18-docs-governance/18-DISPOSITIONS.md
-        issue: 678 current Markdown records are inventoried, not semantically accepted.
-    missing:
-      - Complete body/source-backed dispositions and requirement applicability under reviewed source ownership.
-  - truth: Selected stale statuses and supersession references are resolved through admitted exact changes.
-    status: partial
-    reason: The NATS patch packet is concrete but the selected-source child plan, mutations and debt-ratchet verification remain pending.
-    artifacts:
-      - path: .planning/phases/18-docs-governance/18-STATUS-PATCH-PACKET.md
-        issue: Proposed patch is not an admitted or executed body/index correction.
-    missing:
-      - Selected integration-source ownership, bounded child plan, body/index updates and supersession/heading-debt validation.
 ---
 
-# 18-02 inventory-tool independent verification
+# 18-02 verification (executor self-check; independent verifier still required)
 
-**Phase goal:** Active instructions and proposal dispositions lead the operator to supported behavior and remaining work.
-
-**Result:** Corrected inventory tooling passes all six scoped truths. Full 18-02/DOC-02 acceptance remains open for semantic disposition and Task2 convergence. This review does not certify whole-history review, index mutations or Phase18 completion.
-
-Root and reference-checkout instructions were read before their source inspection. The separate `minion-meta/` checkout remains a reference snapshot, not authority to overwrite the working checkout. Only this report was written by the verifier. Root repaired source/tests and regenerated the disposition artifact; no source, index, proposal or generated-output mutation was performed by this reviewer.
-
-## Goal-backward truths
+## Must-have truths
 
 | Truth | Result | Evidence |
 |---|---|---|
-| Every current Markdown item is inventoried or explicitly excluded | Verified | Recursive physical-directory traversal records all 678 current Markdown files. Independent enumeration finds zero omissions. Nested artifacts have explicit review-needed states without invented top-level index membership. |
-| Source reads use the existing confinement boundary | Verified within the local-workspace contract | Every index/body/requirement/check read uses safeSource. Physical directory traversal rejects directory symlinks and unsafe environment directories. An actual existing outside-root nested Markdown alias was independently denied; its synthetic sentinel remained unchanged. |
-| Keyword matches and historical statuses never confer approval | Verified | Candidate disposition requires body/source review; declared complete is not reverified; retired remains no-new-authority; CLI reports semanticClosure:false. |
-| Requirement acceptance text participates in generated freshness | Verified | Render includes actual descriptions and SHA-256 of REQUIREMENTS.md. Description-only changes alter output; independent probe and durable regression pass. |
-| Reproduced malformed/duplicate metadata cannot silently narrow or alter inventory | Verified | Valid plus empty-description/missing-colon requirement declarations throw. Duplicate lifecycle frontmatter keys throw before the shared parser. Existing duplicate manifest/requirement-ID checks continue passing. |
-| Packet separates inventory, semantic review and future mutations | Verified | Summary and packet retain manual applicability, selected-source child-plan and Task2 mutation gates. Mapper has no index-write path. |
+| Every inventory item has a disposition/review-needed state and every requirement links to applicable prior work | Reached at review boundary | `18-DISPOSITIONS.md` "Every document" table: 966 rows, each with a disposition and a "Reviewed as" column; "Reviewed applicability" table: 51 rows, minimum 2 links, none "None applicable". Mapper throws on any requirement without an entry (test "rejects reviewed links that are incomplete, unknown or point at missing documents"). Not closed: 666 documents carry only mechanical states. |
+| Current indexes remain coherent with reviewed bodies; unresolved status changes have exact bounded child plans and no revived retired architecture | Reached at review boundary | `spec-index --check` and `proposal-index --check` exit 0 with both index hashes unchanged; packet P1–P5 name file, line, replacement text and validation command per patch; mapper test "never revives retired architecture or treats declared-complete work as active" plus the live `REVIEWED` table (NATS and two retired specs linked only as `superseded`). Not closed: patches are proposals until a child plan executes them. |
 
-**Score: 6/6 scoped tooling truths.** The roadmap also requires current instructions and full source/proposal handoff closure. DOC-01/03 are not recertified here; DOC-02 remains partially fulfilled rather than complete.
+## Artifacts
 
-## Re-verification history
-
-The original candidate at mapper SHA `5a4d9015f70304c9aba8819c61f9775ada3ccc1abaa39d34e7174ef222f42acb` passed six existing tests but failed independent probes:
-
-1. A direct-directory scan omitted 18 nested current Markdown files while claiming every Markdown artifact was accounted for.
-2. Requirement descriptions were absent from rendered evidence; changing acceptance text with the same ID produced identical output.
-3. A malformed second requirement disappeared when another valid row existed.
-4. Duplicate status keys selected the last value without an issue.
-
-Root added recursive source-confined inventory, requirement source hashes/descriptions, mapper-local input prevalidation and four durable regressions. The shared source/parser helpers were not silently rewritten. All four findings were independently rechecked and are closed at the corrected hashes below.
-
-The original generated-file check also failed after concurrent proposal-body updates. That was a freshness gate working correctly, not the same defect as missing requirement-description identity. Root regenerated after its ledger stabilized; the final check passes. Later source edits require another owner-run generation/check.
-
-## Artifacts, wiring and data flow
-
-| Artifact | Verification |
+| Artifact | Check |
 |---|---|
-| scripts/qc/proposal-requirement-map.mjs | Exists, substantive and callable. CLI invokes build/render; actual requirements, indexes and all current Markdown bodies flow through confinement and metadata checks into evidence rows. |
-| scripts/qc/proposal-requirement-map.test.mjs | Ten deterministic tests import the real builder/renderer and use disposable synthetic files; no tests skipped. |
-| 18-DISPOSITIONS.md | 678 actual path/status/hash records, 49 requirement rows, 56 divergent IDs and zero reported top-level index/body presence/title/status issues. Requirement descriptions and source hash are rendered. |
-| 18-STATUS-PATCH-PACKET.md | Seven reviewed relationships and one concrete NATS status-body correction; explicitly not an admitted child plan or applied source/index update. |
+| `scripts/qc/proposal-requirement-map.mjs` (`dd958b88…`) | `REVIEWED` 51 keys / 231 links; `ownersFrom`, `reviewLinks`; two new mechanical dispositions; CLI prints reviewedLinks/reviewedDocuments/unreviewedDocuments; no index-write path. |
+| `scripts/qc/proposal-requirement-map.test.mjs` (`f27569bf…`) | 14 deterministic tests, synthetic fixtures under `TMPDIR`, teardown per test. |
+| `18-DISPOSITIONS.md` (`0998cb38…`) | Regenerated at `a018d672`; `--check` byte-identical. |
+| `18-STATUS-PATCH-PACKET.md` (`1d0b797e7f0f496084d4ecca335ed6a1a2627dffa7dbaa6b13a2598cb11081c9`) | P1–P5 with validation commands; absent-document list; gate results. |
+| `specs/index.json`, `proposals/index.json` | Unchanged (`3866cde1…`, `9c574b81…`); coherence proven by the native checks, not by edits. |
 
-Nested supporting documents participate in inventory and candidate discovery but are not falsely claimed to belong to the top-level lifecycle indexes. Matching uses full document bodies by broad topic family; every requirement gets a review-needed candidate row. Only six candidate pointers per requirement are rendered, explicitly disclosed, while the exported build result retains all paths. Counts are not semantic coverage scores.
+## Key links
 
-The mapper reads indexes and never changes them. Its only normal CLI write is the generated dispositions artifact; --check is read-only. Source-derived strings never execute historical instructions. Local Git identity is collected without package script execution and does not prove deployment. Confinement remains a trusted local-workspace source boundary, not hostile-process/filesystem isolation.
+- Mapper → `specs/index.json`: `inventorySnapshot` reads both indexes read-only and reports presence/title/status drift as inventory issues (0 on `a018d672`).
+- `specs/index.json` → `18-DISPOSITIONS.md`: every indexed id appears as a record with hash; supersession orphans and reconcile denials surface as dispositions that the packet turns into child actions.
 
-## Independent executed evidence
+## Boundaries honoured
 
-| Check | Result |
-|---|---|
-| node --test scripts/qc/proposal-requirement-map.test.mjs | 10 passed, zero failed/skipped; 126ms. |
-| node scripts/qc/proposal-requirement-map.mjs --check | Passed: 678 documents, 49 requirements, 56 divergent IDs, zero inventory issues, semanticClosure:false. |
-| Independent recursive enumeration versus buildDispositionMap | 678 records; zero omitted Markdown paths across specs/, proposals/ and corresponding minion-meta/ roots. |
-| Disposable corrected regression probes using real exports | Nested coverage, changed-description rendering, partially malformed declaration and duplicate-key rejection all pass. |
-| Existing outside-root target via nested Markdown symlink | safeSource rejects with Source escapes root; synthetic sentinel unchanged. |
-| Scoped diff check | Passed. |
+No commit, stage, push, index rewrite, spec-body edit, network call beyond `git fetch origin dev`, credential read or production access. Main checkouts untouched except this SUMMARY/VERIFICATION pair. Receipts: `checks/before.txt`, `before-continuation.txt`, `after.txt`, `freeze.json`, `0*-pre.log`, `1*-post.log`, `review-[A-F]-*.md`, `absent-from-origin-dev.txt`.
 
-No server, provider, browser or production database was started or queried. Temporary fixture roots were removed by their own teardown. The verifier did not regenerate the inventory.
+## Independent verifier checklist
 
-## Standards and spec boundaries
-
-**Standards:** Source-confined reads, shared helper reuse, mapper-local validation, synthetic regressions, no dependencies and explicit nonapproval language pass this tooling review. The builder's TODO(handoff) links remaining semantic work to the platform QC proposal; root owns that ledger.
-
-**Spec:** Task1 reaches its explicit inventory/review-needed boundary. It does not establish every historical relationship's applicability or per-document disposition. Task2 remains incomplete. The NATS reference actually has status retired at line5 and stale visible approval at line16; its parser supports retired while the working parser does not. The packet correctly preserves retirement and requires a selected integration source before any body/index change.
-
-Remaining required work is concrete: reviewed semantic dispositions, requirement applicability, selected-source child admission, exact status/body/index patches, supersession-reference repair and heading-debt ratchet. Removed/archive-only Git revisions and whole-history review remain explicitly outside the current snapshot inventory. No human UI/runtime check is needed for these deterministic tooling tests; manual/source review remains required work, not a test result.
-
-## Corrected candidate hashes
-
-| Artifact | SHA-256 |
-|---|---|
-| scripts/qc/proposal-requirement-map.mjs | cb70ff507fc3ad185cfd306e45d5c5ef3bb2965936049c58f46aa8b051601a06 |
-| scripts/qc/proposal-requirement-map.test.mjs | f0369c62889e2a0843f76b2b9a57c26cf89eccb9187966a0f2cdb0c535f66fc3 |
-| 18-DISPOSITIONS.md | 862f0c3e8b60bf165ab78b6792a0277cf500df0dd722dd6f389f074b19ce576f |
-| 18-STATUS-PATCH-PACKET.md | 4a1527af6c246dfaa156ca64faad8851ba6d9f797fdce8575421066fbb9c3a08 |
-
-Root will refresh the worker-summary hash list against this candidate; the source hashes above are the independent review identity. A later summary-only update does not require re-running unchanged source behavior tests.
-
-Independent GSD verifier. No source/index mutation or commit.
+1. `cd` snapshot; run the five gate commands in the summary table; expect the same counts and exit 0.
+2. Re-read any 10 random `REVIEWED` evidence pointers against the cited lines.
+3. Confirm `git status --short --untracked-files=no` is empty in the snapshot (no tracked mutation).

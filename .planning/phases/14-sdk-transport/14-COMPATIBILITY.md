@@ -111,3 +111,52 @@ Only after that candidate passes should root define a separate active source/arc
 - Final Site UI receipt: `/tmp/minion-13-08-dn7zbntf/chat-freeze/manifest.json`, SHA `4c87eb7866118704d081ff96ece8e44dfc9f1ec9058619219be50e828050b1d5`; frozen UI/native/browser results are separate from the proposed real-service pairing.
 
 Standards review: exact hashes, preserved source/installed distinctions, no package mutation and no inferred license/release authority. Spec review: this matrix supplies the supported-combination inventory and next bounded integration seam; 14-01 runtime envelope implementation and phase-level compatibility remain incomplete.
+
+## 14-01 envelope contract — executed 2026-09-11 (private candidate)
+
+Source: `packages/shared/src/gateway/envelope-contract.ts` (+ `client.ts`, `protocol.ts`, `index.ts`) in the private meta snapshot `/home/nikolas/.cache/claude-tmp/14-01-a10d14a5/MINION` (base `origin/dev` `026afe8a`; `client.ts` there is byte-identical to merged `main` 0.12.0, SHA `5c3fcc3f…`). Server truth read at gateway `origin/DEV` `e499c3f5` (`protocol/schema/frames.ts`, `error-codes.ts`, `server-core/server-constants.ts`, `server/ws-connection/message-handler.ts`). Evidence: `checks/wire-fixture.log` (24/24 against the actual `pnpm build` output of that gateway on `ws://127.0.0.1:18901`, `env -i`, synthetic token), `checks/shared-test.log` (380/380). See `14-01-SUMMARY.md`.
+
+### Contract that is now enforced by the shared client
+
+| Boundary | Rule | Deterministic outcome |
+|---|---|---|
+| Inbound text frame | `parseFrame()`: byte size ≤ 25 MiB (`MAX_FRAME_BYTES`, mirror of server `MAX_PAYLOAD_BYTES`), valid JSON, non-null object, `type ∈ {req,res,event}`, `res.id` non-empty string, `res.ok` boolean, `res.error` = `{code,message,details?,retryable?,retryAfterMs?}`, `event.event` non-empty, `event.seq` ≥ 0 int, `event.stateVersion` `{presence,health}` numbers. | Discarded before any pending-map or handshake access. `req` frames never resolve calls. |
+| `connect.challenge` | `nonce` non-empty string; `protocol` (when present) positive integer. | Malformed → connect rejects `MALFORMED_FRAME`, socket closed 4008. Duplicates after the first are ignored. |
+| Version gate 1 (pre-credential) | Range = `[minProtocol,maxProtocol]` from the caller's connect params (default 3..3, as `buildConnectParams`). If the challenge announces a protocol outside it, **no connect request is sent**. | `UNSUPPORTED_PROTOCOL` with `details {gatewayProtocol,min,max}`. Legacy gateways that announce nothing fall through to gate 2. |
+| Version gate 2 (hello) | `validateHelloOk()`: `type:'hello-ok'`, `protocol` positive integer inside the range; `server.connId`, `auth.role`, `auth.scopes`, `policy.maxPayload` shape-checked when present. | `MALFORMED_FRAME` / `UNSUPPORTED_PROTOCOL`; connect rejects, socket closed 4008. |
+| Identity | `HelloOkView.identity` = `{connId, role, scopes}` from `hello.server`/`hello.auth` only. `userId`/`scopes`/`role` in connect params are caller assertions. | Real gateway without a paired device: asserted `['operator.admin','operator.read']` + `userId` → established scopes `[]`, `auth` absent; read RPC → `INVALID_REQUEST missing scope: operator.read`. |
+| Outbound request | Empty method / unserializable params → `INVALID_REQUEST` (local); byte length > session `hello.policy.maxPayload` → `PAYLOAD_TOO_LARGE`, **not sent, session intact**; `ws.send` throw → `SEND_FAILED` with the pending slot released. Parent traceparent inherited only when `isValidTraceparent()` (non-zero trace AND span id), else a fresh root. | All as `GatewayError{source:'client'}`. |
+| Responses / close | `res.error` → `GatewayError{source:'server', code, details, retryable, retryAfterMs}` (message falls back to `request failed`); timeout → `TIMEOUT`; socket close → every pending call `DISCONNECTED` with `details {code, reason}`; not connected → `NOT_CONNECTED`. Legacy message strings preserved. | — |
+| Retry | `canRetry(err,{idempotent})`: `NOT_CONNECTED`/`SEND_FAILED` (frame never left) → true; `DISCONNECTED`/`TIMEOUT`/server `retryable:true` → only when `idempotent`; everything else false. The client never replays. | — |
+| Error codes | `GATEWAY_ERROR_CODES` = exactly the gateway's `ErrorCodes` (8); `CLIENT_ERROR_CODES` = 8 local codes. | — |
+
+### Real-gateway rejection matrix (wire fixture, built gateway `2026.8.7-dev`)
+
+| Input | Server response | Close |
+|---|---|---|
+| `GET /health` | `{ok:true, protocol:3, version}` | — |
+| First frame not JSON | none | 1000 `""` |
+| First frame not a `req` | none | 1008 `invalid request frame` |
+| First `req` not `connect` | `INVALID_REQUEST invalid handshake: first request must be connect` | 1008 |
+| `connect` with `minProtocol=maxProtocol=99` | `INVALID_REQUEST protocol mismatch` `details.expectedProtocol=3` | 1002 |
+| `connect` without credentials but asserted scopes/userId | `NOT_PAIRED device identity required` | 1008 |
+| `connect` with wrong token | `INVALID_REQUEST unauthorized: gateway token mismatch …` | 1008 |
+| `connect` with Site's `client.id:'minion-member-ui'` | `INVALID_REQUEST invalid connect params: at /client/id: must be equal to constant …` | 1008 |
+| After handshake: `res`/`event`/empty-method `req` | `INVALID_REQUEST invalid request frame: …` (id echoed, or `invalid`) | none — session stays open |
+| After handshake: non-JSON | none (logged) | none |
+| Text frame of 25 MiB + 1 | none | 1009 |
+
+### Consumer compatibility findings
+
+1. **Site cannot connect to gateway DEV `e499c3f5` as written.** `minion_site/src/lib/services/member-gateway.svelte.ts:65` sends `client.id: 'minion-member-ui'`, which is not in `GATEWAY_CLIENT_IDS` (`webchat-ui, minion-control-ui, webchat, cli, gateway-client, minion-macos, minion-ios, minion-android, node-host, test, fingerprint, minion-probe`). The real gateway rejects it with `invalid connect params` (fixture case above). Hub sends `minion-control-ui` (valid; triggers the control-UI origin/secure-context path). This is a Site↔gateway contract break independent of 14-01 and needs its own bounded plan (Site source or gateway allow-list; the deployed gateway's actual list must be verified separately).
+2. **Test doubles must now answer `connect` with `{type:'hello-ok', protocol:<int>}`.** Hub 14-09 `gateway-transport.ts`, Site 14-10/14-18 fixtures already do; the shared package's own 14-08 session tests were updated (`HELLO` constant). Any consumer double replying `{}` or `{type:'hello-ok'}` alone will see `MALFORMED_FRAME` after adopting this client.
+3. Auto-reconnect keeps retrying after `UNSUPPORTED_PROTOCOL` (existing handshake-failure behaviour); consumers should surface the code and stop if desired.
+
+### Not covered by this slice (explicit gaps)
+
+- **ACP (JSON-RPC 2.0 over stdio)**: `packages/shells-bridge/src/acp-client.ts` matches responses by numeric id, emits `parse_error` for non-JSON lines, and has no structural validation of `result`/`error`/notification params and no negotiated-capability check; outside 14-01 ownership — needs an exact shells-bridge child plan.
+- **Durable Shells receiver/acknowledgment (11-03)**: 11-03 remains "candidate_frozen_for_independent_review" against a synthetic receiver; real acceptance against the 14-12 receiver + 14-17 caller and 11-04 cancellation acknowledgment are still pending. 14-01 changes no receiver frame.
+- **HTTP gateway identity** beyond `/health` (OpenResponses/ACP-HTTP error envelopes) not extracted here.
+- **Binary (Yjs) frames**: untouched; `parseFrame` only sees text (`String(data)` conversion in `client.ts` unchanged).
+- The oversized-frame case with a call still pending was not observed on the wire (the server answered the pending read before the 1009 close); the `DISCONNECTED{code:1009}` flush is proven only in the unit fixture.
+- Nothing here is installed into Hub/Site/Paperclip, published, or deployed; registry 0.12.0 is still absent.

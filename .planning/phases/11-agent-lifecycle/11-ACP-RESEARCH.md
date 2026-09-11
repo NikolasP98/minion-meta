@@ -1,8 +1,8 @@
 ---
 phase: 11-agent-lifecycle
 plan: 11-04
-status: research_complete_runtime_and_adapter_unqualified
-scope: Task_1_research_document_only
+status: synthetic_and_sdk_example_conformance_private_candidate_real_harness_unqualified
+scope: Tasks_1_and_2_private_candidate_2026-09-11_appended_to_research
 requirements: [AGT-05]
 execution_ready: false
 researched: 2026-09-09
@@ -121,3 +121,41 @@ Required fixtures include initialization mismatch; optional capability refusal; 
 | Installed Claude binary | `19842705e989393fce936804df6d2ab034860e24b8f8880357981d87ffd83fac` |
 
 The existing `TODO(handoff)` at `acp-client.ts:88` and bridge invoke/update/restore sites points to `proposals/2026-09-08-platform-qc-remediation.md`. Root owns that proposal and source comments. Add the concrete numeric-ID collision, malformed-null boundary, false startup readiness, input/session mismatch, cancelled-result loss and unsafe stop assumptions to the same tracked lifecycle item before implementation. No new source TODO was inserted by this document-only task. Primary pages were read through web search and direct read-only HTTPS metadata/source retrieval; no browser session or shared root browser was used.
+
+
+## Execution addendum 2026-09-11 (11-04 Tasks 1–2, private candidate)
+
+Private snapshot `/home/nikolas/.cache/claude-tmp/11-04-q7m3xk/minion-meta` at meta `origin/dev` `96e5ceeb25a7544e47fb9f3362c4d2b6849fcc5f`. Nothing committed, staged, published or deployed. Hashes and gate logs are in `11-04-SUMMARY.md`.
+
+### What now exists
+
+| Artifact | Role |
+| --- | --- |
+| `packages/shells-bridge/test/fixtures/acp-transcript.json` | Synthetic v1 transcript: 12 scenarios, every step labelled `dir` + `kind` (request / response / notification / malformed / exit). Shapes follow `schema/schema.json` of the pinned SDK 1.4.0. Not a recording of any real harness. |
+| `packages/shells-bridge/src/acp-conformance.test.ts` | Tier 1 replays the fixture through a scripted peer over real child-process stdio (allowlisted env: `PATH`, `HOME`, `TMPDIR` only). Tier 2 runs the pinned official example agent when `ACP_EXAMPLE_AGENT` names its `dist/examples/agent.js`; otherwise those three cases are *skipped*, which is pending evidence, never a pass. |
+| `packages/shells-bridge/src/acp-client.ts` | Corrected in-repo client. Inbound messages are classified by structure (`method`+`id` request, `method` only notification, `id`+`result|error` response), so an agent request with a colliding numeric id is answered under that id instead of resolving a pending prompt. Adds `initialize` (version 1 enforced), `newSession` (session id required), `prompt` (no local deadline; `stopReason` required), `cancel` (notification; pending permission requests are answered `cancelled` first, synchronously, so the answer precedes the notification on the wire), `onRequest`, `setPermissionHandler` (default: first reject-kind option, else cancelled — never auto-allow), a stdout line byte ceiling (default 4 MiB), spawn-failure surfaced on the `exit` channel, `close`-based exit (stdio drained), `stop(timeoutMs)` returning `{exited}`. Existing `call/notify/kill/start` and events remain, so `bridge.ts` compiles unchanged. |
+
+### Pinned credential-free harness receipt
+
+The official example agent from `@agentclientprotocol/sdk@1.4.0` was acquired in a scratch directory outside the repository (`/home/nikolas/.cache/claude-tmp/11-04-q7m3xk/sdk-scratch`), never installed into the workspace or lock:
+
+| Identity | Observed |
+| --- | --- |
+| Tarball | `npm pack @agentclientprotocol/sdk@1.4.0`; sha1 `01dd53874b97f50b325f9172a8f0714971e0d3ab` and sha512 `/eufudw+…PVThg==` both equal the registry `dist` values recorded above. |
+| `dist/examples/agent.js` | SHA-256 `65133ba9e228782be3b6e995a0ac35d554b762a6bb6033682503f116729f7d73` (compiled artifact; the source hash `f33af92a…` above is `src/examples/agent.ts`). |
+| Peer | `zod@3.25.76` installed in the scratch dir only (`npm install --no-save`). |
+| Runtime | Node v22.23.2, pnpm 10.15.0, vitest 2.1.9, typescript 5.9.3. |
+| Command | `ACP_EXAMPLE_AGENT=<scratch>/package/dist/examples/agent.js pnpm --filter @minion-stack/shells-bridge exec vitest run src/acp-conformance.test.ts -t 'example agent'` |
+| Result | 3/3: full `initialize → session/new → prompt` with permission allow → `end_turn` and the seven expected `session/update` kinds; cancel during model work → `cancelled`; **negative** cancel while permission pending → `end_turn`. |
+
+The negative case turns the static finding at `agent.ts:198–199` into a reproduced runtime observation: a conforming client must not read `end_turn` after a cancel request as cancellation acknowledgement. This tier proves SDK interoperability with a simulated agent. It is not a model harness, not Codex/Claude/Hermes, and closes nothing that requires one.
+
+### Unresolved real-run prerequisites (unchanged, now exact)
+
+1. **Adapter binary identity.** `codex-acp` and `claude-agent-acp` are not on PATH; the image Dockerfiles install `latest`. A real run needs one pinned adapter artifact with a recorded hash and a verified `--acp`/stdio entry.
+2. **Credential.** No provider key was available or used. A paid prompt needs an actual credential supplied by the owner.
+3. **Authority and budget.** D360-04: keys are not live-test authority. An explicit, recorded live-test approval with a consumption bound is required before any paid prompt.
+4. **Call-site adoption.** `bridge.ts` still prompts with the legacy `{ sessionId, input }` shape and sends `session/cancel` via `call()` (adds an id, awaits a response the notification contract does not give). The corrected client exposes the right surface; the sender slice must adopt it. `TODO(handoff)` sits at `acp-client.ts` `cancel()` pointing to the QC proposal.
+5. **SDK adoption decision.** The candidate does not depend on the SDK. A dependency transaction is prepared, unapplied, at `<snapshot>/checks/pending-root-lock-sdk-transaction.diff` pending root lock ownership. The research recommendation to use the SDK stands as an option; the hand-rolled client now passes the same contract without it.
+
+Only after 1–3 are met can Task 2's "real pinned harness" clause be evidenced. Until then AGT-05 remains open; synthetic and SDK-example passes are not phase closure.

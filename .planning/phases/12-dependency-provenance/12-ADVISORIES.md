@@ -1,6 +1,6 @@
 # 12-01 dependency advisory and compatibility record
 
-Status: isolated Hub candidate verified in focused server and native Chromium fixtures; clean typecheck passes; default-heap Vercel packaging failed and the explicit 8 GB retry was interrupted at the diagnostic cutoff. Real checkout admission is pending. DEP-01 remains open across the platform. Advisory inventory is a package/version match, not proof that every listed issue is reachable or exploitable.
+Status: 2026-09-11 — the bounded Hub candidate was re-resolved in a private snapshot of Hub `origin/master` 1df0a921 (the 2026-09-09 candidate lock could not be replayed because master moved: @event-calendar/core added, happy-dom 15→20.11.6, svelte/svelte-check bumped, vitest.config.ts gained `resolve.conditions`). Fixtures red on master / green on the candidate in Node and native Chromium; `bun run check` and full default-heap `bun run build` results are in the 2026-09-11 section below. Real checkout admission (commit/PR/merge) is still pending and DEP-01 remains open across the platform. Advisory inventory is a package/version match, not proof that every listed issue is reachable or exploitable.
 
 ## Platform inventory
 
@@ -92,3 +92,38 @@ Read-only trace review: installed adapter-vercel 6.3.4 calls `nodeFileTrace([ent
 Additional importer check: candidate Node resolution from finance/emission/zip.ts selects fflate 0.8.3, while PostHog request.js selects its nested 0.4.8. PostHog lib/src request and replay code uses gzipSync; no unzipSync call was found in that source tree. This narrows the observed sink exposure without treating the package as removed or comprehensively unreachable. Happy-dom is explicitly selected by theme-runtime-contract, sentiment-tooltip and layer test file directives; its remaining advisories concern the test runtime and require the planned compatibility slice.
 
 The heavy-work window was released after the baseline child fully exited. Root now owns manifest/lock coordination for 12-04 reproduction/selection only; no real dependency application was performed. Frozen candidate package-lock patch SHA-256: `8af0d3be77868e3023c2da8d2335ab06eb4f71508bb33288c2736df805b13583`. The independently reviewed fixture/config remain unchanged. Build diagnosis is drafted separately in 12-05-PLAN.md; no configuration or source repair is admitted by that draft.
+
+
+## 2026-09-11 re-resolution on Hub origin/master 1df0a921
+
+Snapshot: `/home/nikolas/.cache/claude-tmp/12-01-392e01c2/minion_hub` (detached worktree of Hub `origin/master` 1df0a921, private; nothing committed, staged or pushed). Receipts: `/home/nikolas/.cache/claude-tmp/12-01-392e01c2/checks/`.
+
+| Identity | SHA-256 |
+|---|---|
+| master `package.json` (before) | 12199632c49e0bc9960ec32203357b6bdfe90981f7b4d78ba771c1b9f5e547f6 |
+| master `bun.lock` (before) | ebc14272d106ebd486bedc7128fbaa5e775b15f1f675c026c33d5c9507c2963d |
+| candidate `package.json` | 9746f3d623c2976793c8f193e47b82f51385728c16ee1b7b103d8e0cb4c21724 |
+| candidate `bun.lock` | 363e2ee6b753e9c1d72c8c5417b39b02660c181bdaa5e0e0e668c2e16053a82f |
+| candidate `vitest.config.ts` | 113bc156de2ad4375efe006ce57f509a5081bf6447decfc080d63125a4a1f971 |
+| `tests/dependencies/security-compatibility.test.ts` (unchanged reviewed fixture) | de630b38a76aa25608e75d4bc5540a50b314cbdc2f973c105fd46cf9db0de6c3 |
+
+Manifest change is identical in intent to the 2026-09-09 candidate: exact `@tiptap/*` 3.30.5 (7 direct), `dompurify` 3.4.13, `@sveltejs/kit` 2.70.2, `vitest` 4.1.11, and `overrides` for `prosemirror-model` 1.25.11, `prosemirror-view` 1.41.9, `@xmldom/xmldom` 0.8.15, `@tiptap/extension-collaboration` 3.30.5, `@tiptap/y-tiptap` 3.0.7, `dompurify` 3.4.13. Sequence: `bun install` (47 packages; Bun kept the locked collaboration 3.27.3 / y-tiptap 3.0.6 despite the new overrides, exactly as on 2026-09-09) → `bun update @tiptap/extension-collaboration @tiptap/y-tiptap` (installs 3.30.5 / 3.0.7) → `bun install --frozen-lockfile` exit 0. The four local `deps/*.tgz` records are byte-unchanged in the lock diff (0 changed lines). Semantic lock diff: **44 package records changed**, all inside the admitted families (SvelteKit 1, Tiptap 32 incl. collaboration/y-tiptap, Vitest 8, DOMPurify 1, xmldom 1, ProseMirror 2); no unrelated version moved. 48 editor/XML peer contracts checked against installed versions, 0 violations (`checks/peer-contracts.txt`). Single installed copy each of dompurify 3.4.13, @xmldom/xmldom 0.8.15, prosemirror-model 1.25.11, prosemirror-view 1.41.9.
+
+Fixture evidence on this master base (unchanged fixture bytes from the 2026-09-09 review; the file was absent on master and is added by this plan; `tests/dependencies/**/*.test.ts` added to the Vitest include so it is discoverable):
+
+| Run | Result | Log |
+|---|---|---|
+| Baseline Node fixture (master lock) | 3 failed, 1 passed, 1 skipped — Accept and Markdown children ETIMEDOUT at 2.5 s, invalid entity serialization accepted; XML signing passes | `checks/baseline-fixture-node.log` (exit 1) |
+| Baseline native Chromium (`MINION_DEPENDENCY_BROWSER=1`, `BU_NAME=minion-12-01-392e01c2`, CDP 127.0.0.1:9223) | 1 failed — browser reports FAIL prototype attributes / FAIL detached sanitizer subtree; paste+Markdown and ordinary sanitizer pass | `checks/baseline-fixture-native.log` (exit 1), `checks/baseline-browser.png` (inspected) |
+| Candidate Node fixture | 4 passed, 1 skipped | `checks/candidate-fixture-node.log` (exit 0) |
+| Candidate native Chromium (same session) | 5 passed / 5, browser reports 4 PASS | `checks/candidate-fixture-native.log` (exit 0), `checks/candidate-browser.png` (inspected) |
+| Prettier on owned files | pass | `checks/prettier.log` (exit 0) |
+| `git diff --check` | pass | `checks/git-diff-check.log` (exit 0) |
+
+Native runs used the dedicated headless Chromium on 127.0.0.1:9223 through Browser Harness with a unique `BU_NAME`; exclusive ownership of that shared daemon could not be proven from this session (other agents may attach), so the native result is real but its exclusivity remains an unproven precondition of the plan's gate.
+
+Product gates: `bun run check` (svelte-check, `env -i` + synthetic empty `PUBLIC_POSTHOG_KEY`/`PUBLIC_POSTHOG_HOST`): **0 errors, 0 warnings**, exit 0 (`checks/candidate-check.log`). Full default-heap `bun run build` (same env, no `NODE_OPTIONS`, plain `vite build` + adapter-vercel 6.3.4): **exit 0 in 264 s**, client 8,438 / server 6,368 modules, `✔ done`, `.vercel/output` 99 MiB (config.json, functions, static), sampled peak process-tree RSS 2,807,664 KiB (`checks/candidate-build.log`). Without the two synthetic bindings both gates refuse on `src/hooks.client.ts` importing them from `$env/static/public` (`checks/candidate-check-noenv.log` exit 1 with 2 errors; `checks/candidate-build-noenv.log` exit 1, MISSING_EXPORT) — a harness precondition, not a library incompatibility; no real key or private env was used. The build log also shows `PostHogFetchNetworkError` noise from `@inlang/paraglide-js`'s bundled posthog-node (already silenced in vite.config.ts, not introduced here). This is the first default-heap full-build pass recorded for the candidate: the 2026-09-09 OOM did not reproduce on this master base (12-02 also built master 1df0a921 at default heap), so the earlier packaging-OOM finding remains an unexplained environmental/base difference rather than a candidate defect.
+
+Residual advisory notes relative to this base: the three `happy-dom 15.11.7` rows above came from the 2026-09-09 dirty worktree lock; master resolves happy-dom 20.11.6, so those rows do not describe this candidate. The remaining residual rows were not re-scanned on 2026-09-11 (registry advisory queries are external network calls outside the package-install allowance of this run); their disposition stands as recorded.
+
+Coordination: Hub PR #256 (12-02, open, `feat/dep-provenance-12-02`) edits the same `package.json`/`bun.lock`/`vitest.config.ts`. A merge simulation (`checks/pr256-merge-sim.log`) shows only adjacent-line conflicts: in `package.json` the `d3-scale`/`d3-shape` removals sit next to the `dompurify` bump (resolve: drop the d3 lines, keep `"dompurify": "3.4.13"`); in `vitest.config.ts` both add the identical include entry and #256 adds an `exclude` block (keep both). `bun.lock` must be re-resolved by whichever lands second (`bun install`, then `bun update @tiptap/extension-collaboration @tiptap/y-tiptap` if the override does not take, then `--frozen-lockfile`); root owns that lock sequencing.

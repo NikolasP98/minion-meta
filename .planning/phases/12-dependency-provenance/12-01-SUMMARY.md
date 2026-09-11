@@ -1,37 +1,80 @@
 ---
 phase: 12-dependency-provenance
-plan: 01
-status: in_progress
-requirements_completed: []
+plan: "01"
+status: complete-private-candidate
+requirements-completed: []
+snapshot: /home/nikolas/.cache/claude-tmp/12-01-392e01c2/minion_hub
+executed: 2026-09-11 (continuation of the 2026-09-09 partial; fixtures were already complete)
+executor: Claude (Fable 5.1) continuation, ponytail mode
+base: minion_hub origin/master 1df0a921 (fix(ui): native Dialog consumers … #245)
+owned_files:
+  - path: minion_hub/package.json
+    before: 12199632c49e0bc9960ec32203357b6bdfe90981f7b4d78ba771c1b9f5e547f6
+    after: 9746f3d623c2976793c8f193e47b82f51385728c16ee1b7b103d8e0cb4c21724
+  - path: minion_hub/bun.lock
+    before: ebc14272d106ebd486bedc7128fbaa5e775b15f1f675c026c33d5c9507c2963d
+    after: 363e2ee6b753e9c1d72c8c5417b39b02660c181bdaa5e0e0e668c2e16053a82f
+  - path: minion_hub/vitest.config.ts
+    before: 5a894f6d1623a3c84298b8efe23365698704ff8a0a159cb644de64c43ca9b182
+    after: 113bc156de2ad4375efe006ce57f509a5081bf6447decfc080d63125a4a1f971
+  - path: minion_hub/tests/dependencies/security-compatibility.test.ts
+    before: ABSENT
+    after: de630b38a76aa25608e75d4bc5540a50b314cbdc2f973c105fd46cf9db0de6c3
+  - path: .planning/phases/12-dependency-provenance/12-ADVISORIES.md
+    before: 318bb3d2dfa87ebb209420d2904dcd39a43b21e575212adae59d8dc03e82a68e
+    after: ca5e44fa53f341da40dba4f181d69c106093c0ca6d99fc68eb69e6824e097122
+decision_ids: [D360-01, D360-04, D360-06]
 ---
 
-# 12-01 bounded Hub dependency security patch
+# 12-01 Summary — bounded Hub dependency security patch (dependency transaction)
 
-The isolated candidate closes the selected SvelteKit, Tiptap, DOMPurify, xmldom and Vitest advisory version matches and passes focused behavioral compatibility. The shared checkout manifest and lock remain unchanged while full build admission is pending. DEP-01 remains open.
+Source edits live only in the private snapshot `/home/nikolas/.cache/claude-tmp/12-01-392e01c2/minion_hub` (detached worktree of Hub `origin/master` 1df0a921). Nothing committed, staged, pushed, tagged, merged or deployed; the main Hub checkout, other worktrees, stashes and branches were not touched. Receipts: `/home/nikolas/.cache/claude-tmp/12-01-392e01c2/checks/` (`before.txt`, `after.txt`, `freeze.json`, every gate log ends with `exit=<code>`).
 
-## Boundaries
+## What this continuation did
 
-Owned source: package.json, bun.lock, tests/dependencies/security-compatibility.test.ts and the independently admitted Vitest include glob only. The manifest/lock candidate is in `/tmp/minion-360-12-01/candidate/`; the clean frozen-install copy is `/tmp/minion-360-12-01/clean/`. This plan does not upgrade unrelated advisory families, modify production, migrate data, install a new browser runtime or claim container provenance. Existing staged work stays intact.
+The 2026-09-09 run left the fixture and Vitest include reviewed and frozen, with the dependency transaction held by the failing full default build. Its frozen candidate lock (`/tmp/minion-360-12-01/candidate-package-lock.patch`, SHA-256 `8af0d3be…`) was **not** replayable: Hub master moved (`@event-calendar/core` added, happy-dom 15.11.7→20.11.6, svelte 5.56.4→5.57.0, svelte-check pinned 4.7.6, `vitest.config.ts` gained `resolve.conditions`). So the transaction was re-resolved on the current base with the same reviewed family selection.
 
-Selected exact versions: Kit 2.70.2; all active Tiptap 3.30.5; collaboration 3.30.5 and y-tiptap 3.0.7 peers; ProseMirror model 1.25.11 and view 1.41.9; DOMPurify 3.4.13 across transitive copies; xmldom 0.8.15; Vitest 4.1.11. The 44 changed package records stay within these families. All 47 checked editor peer contracts match. Four local package archives and their verified integrity records are preserved. See 12-ADVISORIES.md for exact baseline/candidate hashes, primary sources and residual records.
+### Task 1 — fixture and inventory (already complete; re-validated)
 
-## Actual evidence
+- `tests/dependencies/security-compatibility.test.ts` copied byte-for-byte from the reviewed 2026-09-09 candidate (`de630b38…`, unchanged; still carries its TODO(handoff)). It was absent on master.
+- `vitest.config.ts`: one-line change — `'tests/dependencies/**/*.test.ts'` appended to `test.include` (the `resolve.conditions` block that master added since 09-09 is untouched).
+- Platform inventory in `12-ADVISORIES.md` stands as recorded on 2026-09-09 (13 locks; only Hub mutated). 12-ADVISORIES.md gained a dated 2026-09-11 section with the new candidate identities, evidence table and PR #256 coordination notes; the status line was updated.
+- Baseline on master (RED, real): Node fixture **3 failed / 1 passed / 1 skipped**, exit 1 (Accept + Markdown children `ETIMEDOUT` at 2.5 s; invalid entity serialization accepted; XML sign/verify/tamper passes). Native Chromium **1 failed**, exit 1 — page reports `FAIL: prototype attributes: inherited executable attributes` and `FAIL: detached sanitizer subtree: detached handler retained` (`checks/baseline-browser.png`, inspected).
 
-- Clean `bun install --frozen-lockfile --ignore-scripts`: passes with preserved candidate lock. Only empty synthetic public analytics bindings are used; private environment files and unrelated filesystem trees were excluded.
-- Baseline security fixture: 4/5 grouped tests fail. Malformed Accept and Markdown inputs exceed a 2.5-second child-process deadline; invalid XML entity serialization is accepted; Chromium reproduces prototype-inherited attributes and detached sanitizer descendant defects. XML signing already passes. These are bounded fixture findings, not proof every exploit is reachable in the app.
-- Candidate final fixture: 5/5 grouped tests pass in 2.98 seconds, including real Chromium editor paste/Markdown, plain sanitizer, prototype attributes and detached descendant safety. Screenshot candidate-browser-final.png was visually inspected. Native fixture requires explicit MINION_DEPENDENCY_BROWSER=1 and exclusive dedicated browser ownership; default unit skip does not qualify it.
-- Actual finance signXml synthetic RSA signature verifies, then rejects tampered invoice content. The existing SUNAT algorithm contract is preserved; no real certificate, SUNAT call or invoice mutation occurs.
-- Clean `bun run check`: passes, 0 errors and 0 warnings. Initial missing public static bindings were corrected with empty synthetic environment values; that initial harness failure is not classified as library incompatibility.
-- Full `bun run build`: client/server compilation passes, but Vercel packaging fails with Node heap OOM and exit -6. The explicit 8 GB retry was interrupted at the diagnostic cutoff. Default build compatibility has not passed.
+### Task 2 — dependency transaction and product checks
 
-## Open work and handoff
+Manifest (`package.json`): `@tiptap/{core,extension-drag-handle,extension-highlight,extension-image,extension-node-range,pm,starter-kit}` → exact `3.30.5`; `dompurify` → `3.4.13`; `@sveltejs/kit` → `2.70.2`; `vitest` → `4.1.11`; `overrides` += `prosemirror-model 1.25.11`, `prosemirror-view 1.41.9`, `@xmldom/xmldom 0.8.15`, `@tiptap/extension-collaboration 3.30.5`, `@tiptap/y-tiptap 3.0.7`, `dompurify 3.4.13` (existing `devalue`/`sha.js` overrides kept). No major bumps, no update-all.
 
-Real Hub package admission, installed-checkout verification and independent candidate review remain pending. Nineteen advisory records remain in other Hub families; every unreviewed platform/container/plugin surface and exact non-Hub family child plan remains open. TODO(handoff) is recorded in the dependency fixture with a pointer to the root-owned QC proposal UI-06; root owns the matching proposal and planning updates.
+Lock (`bun.lock`, Bun 1.3.4): `bun install` (47 pkgs; Bun kept locked collaboration 3.27.3 / y-tiptap 3.0.6 despite the new overrides — same quirk as 09-09) → `bun update @tiptap/extension-collaboration @tiptap/y-tiptap` (3.30.5 / 3.0.7) → `bun install --frozen-lockfile` **exit 0**. Semantic lock diff (`checks/lock-semantic-diff.txt`): **44 records changed**, all in the admitted families (SvelteKit 1, Tiptap 32, Vitest 8, DOMPurify 1, xmldom 1, ProseMirror 2) — same 44 as the 09-09 candidate. Four local `deps/*.tgz` records: 0 changed lines. Peer contracts: 48 checked, **0 violations** (`checks/peer-contracts.txt`). Single installed copy each of dompurify 3.4.13, @xmldom/xmldom 0.8.15, prosemirror-model 1.25.11, prosemirror-view 1.41.9.
 
-The default packaging OOM is a separate build-budget finding. Source CI has no Node heap override; the matched original-lock baseline also fails with a default-heap OOM. This proves a packaging problem predates the selected dependency changes on this source snapshot; it does not prove identical root causes or qualify the candidate. If the explicit 8 GB retry succeeds, that result must not be reported as a default CI build pass.
+| Gate | Result | Log |
+|---|---|---|
+| `node node_modules/vitest/vitest.mjs run tests/dependencies/security-compatibility.test.ts` | **4 passed, 1 skipped**, exit 0 | `checks/candidate-fixture-node.log` |
+| same with `MINION_DEPENDENCY_BROWSER=1 BU_NAME=minion-12-01-392e01c2 BU_CDP_URL=http://127.0.0.1:9223` | **5 passed / 5**, exit 0; page shows 4 PASS (`checks/candidate-browser.png`, inspected) | `checks/candidate-fixture-native.log` |
+| `bun run check` (`env -i` + `PUBLIC_POSTHOG_KEY= PUBLIC_POSTHOG_HOST=`) | **0 errors, 0 warnings**, exit 0 | `checks/candidate-check.log` |
+| `bun run build` (same env, default heap, no NODE_OPTIONS) | **exit 0**, 264 s, 8,438 client / 6,368 server modules, adapter-vercel `✔ done`, `.vercel/output` 99 MiB, sampled peak tree RSS 2,807,664 KiB | `checks/candidate-build.log` |
+| `bun run check` / `bun run build` without the two synthetic bindings | exit 1 / exit 1 — `src/hooks.client.ts` imports `PUBLIC_POSTHOG_KEY/HOST` from `$env/static/public` (harness precondition, recorded as the plan allows; not a library failure) | `checks/candidate-check-noenv.log`, `checks/candidate-build-noenv.log` |
+| Prettier `--check` on the 3 owned Hub files + fixture | pass, exit 0 | `checks/prettier.log` |
+| `git diff --check` | exit 0 | `checks/git-diff-check.log` |
 
-The final Node fixture adds post-import readiness assertions before hostile parsing. Candidate: 4 passed; baseline: 3 failed, 1 passed, with the native case intentionally skipped in this rerun. Both baseline readiness assertions passed before the 2.5-second parser timeouts, distinguishing them from import/tool failures. A fresh-baseline missing generated Svelte tsconfig caused a separate initial test startup error; explicit `svelte-kit sync` corrected the setup before these results. Native browser logic is unchanged from the inspected 5/5 run. Scoped Prettier check passes.
+The default-heap full build that blocked the 09-09 run **passed** here; the OOM did not reproduce on this base (12-02 also built 1df0a921 at default heap). The 09-09 packaging-OOM finding therefore stays an unexplained base/environment difference, not a candidate defect; the 12-05/06/07 diagnostics remain their own open items.
 
-Root independently reviewed the readiness markers, real signing/tamper fixture and native production-library fixture as coherent. Fixture/config are frozen; source family admission remains held by the build disposition. The default-heap baseline build with the original lock and matching 2,390 source input files completed with exit -6 after 394.4 seconds, with fatal OOM reported around 307.8 seconds and peak child RSS 5,672,356 KiB. No diagnostic cutoff was applied. Partial outputs remained 52 MiB SvelteKit and 29 MiB Vercel static. The next build investigation should first isolate the actual @vercel/nft reachable graph and trace culprit; route splitting or build heap configuration requires its own bounded admission.
+## Deviations
 
-The heavy-work window was released after the baseline child fully exited. Root now owns manifest/lock coordination for 12-04 reproduction/selection only; no real dependency application was performed. Frozen candidate package-lock patch SHA-256: `8af0d3be77868e3023c2da8d2335ab06eb4f71508bb33288c2736df805b13583`. The independently reviewed fixture/config remain unchanged. Build diagnosis is drafted separately in 12-05-PLAN.md; no configuration or source repair is admitted by that draft.
+- Frozen 09-09 lock patch not replayed (base moved); re-resolved with identical family targets. The resulting 44-record delta matches the reviewed candidate's delta.
+- Synthetic empty `PUBLIC_POSTHOG_KEY`/`PUBLIC_POSTHOG_HOST` used for check/build after both refused without them; no real key, no `.env`, no Infisical.
+- Native browser gate ran on the shared dedicated headless Chromium (127.0.0.1:9223) with a unique `BU_NAME`; the fixture hard-requires that CDP URL. Exclusive ownership of that daemon cannot be proven from this session.
+- Build log contains `PostHogFetchNetworkError` noise from `@inlang/paraglide-js`'s bundled posthog-node (pre-existing, silenced in vite.config.ts); not introduced by this change.
+- Fixture's screenshot default path is `/tmp/…`; overridden via `MINION_DEPENDENCY_SCREENSHOT` into the snapshot to honor the no-/tmp rule (fixture bytes unchanged).
+
+## Gaps / open (DEP-01 not closed)
+
+1. **Real checkout admission**: the candidate exists only in the snapshot. Needs root's lock ownership + commit/PR on Hub (`master`), sequenced with open Hub PR #256 (12-02) which edits the same three files. Merge simulation (`checks/pr256-merge-sim.log`): adjacent-line conflicts only — `package.json` (drop `d3-scale`/`d3-shape`, keep `"dompurify": "3.4.13"`), `vitest.config.ts` (identical include entry; keep #256's `exclude` block); `bun.lock` must be re-resolved by whichever lands second (`bun install` → `bun update @tiptap/extension-collaboration @tiptap/y-tiptap` → `--frozen-lockfile`).
+2. **Residual advisories not re-scanned** on 2026-09-11 (registry advisory queries are external network calls outside this run's package-install allowance). The 09-09 residual table stands, except the three `happy-dom 15.11.7` rows, which described the dirty worktree lock — master installs 20.11.6.
+3. **Non-Hub surfaces** (meta, gateway, site, paperclip, pixel-agents, drone, langgraph, base, factory ×4, container images, bundled plugin runtimes): inventoried only; each needs its own bounded child plan before DEP-01 can close. None created here (outside `files_modified`).
+4. **Native gate exclusivity** unproven (shared 9223 daemon).
+5. Hub PR #256 itself is still unmerged (12-02 `complete_uncommitted`); 14-03's crm-sdk archive adoption (`776d8c49`) also touches Hub `package.json`/`bun.lock` — root must serialize the three lock owners (12-01 → 12-02 → 14 adoption per the plan index).
+
+## Next gated plan
+
+Root-owned Hub lock transaction: apply this snapshot's `package.json`/`bun.lock`/`vitest.config.ts`/`tests/dependencies/security-compatibility.test.ts` to a Hub branch off `master`, reconcile with #256, run the same six gates on the merged lock, open the PR; then independent verification at the merged SHA and exact child plans for the non-Hub families.
