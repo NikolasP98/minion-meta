@@ -2,6 +2,7 @@
 // Unit tests for GatewayClient using a hand-rolled mock WebSocket.
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { GatewayClient, PROTOCOL_VERSION } from './client.js';
+import { canRetry, GatewayError } from './envelope-contract.js';
 
 // ---------------------------------------------------------------------------
 // Mock WebSocket
@@ -278,7 +279,7 @@ describe('GatewayClient', () => {
     });
     if (connectMsg2) {
       const req2 = JSON.parse(connectMsg2) as { id: string };
-      ws2.__simulateMessage(JSON.stringify({ type: 'res', id: req2.id, ok: true, payload: { type: 'hello-ok' } }));
+      ws2.__simulateMessage(JSON.stringify({ type: 'res', id: req2.id, ok: true, payload: { type: 'hello-ok', protocol: 3 } }));
       // The success path resolves through request<T>()'s inner Promise, then sendConnect()'s own
       // await, then the async connect()'s Promise-adoption tick — give it enough headroom before
       // asserting the backoffMs reset landed.
@@ -521,7 +522,7 @@ describe('GatewayClient', () => {
       if (connectMsg) {
         const req = JSON.parse(connectMsg) as { id: string };
         mockWs.__simulateMessage(
-          JSON.stringify({ type: 'res', id: req.id, ok: true, payload: { type: 'hello-ok' } }),
+          JSON.stringify({ type: 'res', id: req.id, ok: true, payload: { type: 'hello-ok', protocol: 3 } }),
         );
       }
       await connectPromise;
@@ -760,7 +761,7 @@ describe('GatewayClient', () => {
       if (connectMsg2) {
         const req2 = JSON.parse(connectMsg2) as { id: string };
         ws2.__simulateMessage(
-          JSON.stringify({ type: 'res', id: req2.id, ok: true, payload: { type: 'hello-ok' } }),
+          JSON.stringify({ type: 'res', id: req2.id, ok: true, payload: { type: 'hello-ok', protocol: 3 } }),
         );
       }
       await secondConnectPromise;
@@ -882,10 +883,12 @@ function requests(socket: SessionSocket, method = 'connect') {
   return socket.sentMessages.map((text) => JSON.parse(text) as { id: string; method: string })
     .filter((frame) => frame.method === method);
 }
-function helloReply(socket: SessionSocket, payload: unknown) {
+/** 14-01: connect() only resolves for a `hello-ok` with an integer protocol inside the advertised range. */
+const HELLO = { type: 'hello-ok', protocol: 3 } as const;
+function helloReply(socket: SessionSocket, payload: Record<string, unknown>) {
   const req = requests(socket).at(-1);
   expect(req).toBeDefined();
-  const frame = JSON.stringify({ type: 'res', id: req!.id, ok: true, payload });
+  const frame = JSON.stringify({ type: 'res', id: req!.id, ok: true, payload: { ...HELLO, ...payload } });
   socket.__simulateMessage(frame);
   return frame;
 }
@@ -933,7 +936,7 @@ describe.each(['node', 'browser'] as const)('authenticated sessions (%s socket d
     auth.resolve({ minProtocol: 3, maxProtocol: 3 });
     await flushMicrotasks();
     expect(requests(socket)).toHaveLength(1);
-    const hello = { type: 'hello-ok', server: { version: 'first' } };
+    const hello = { ...HELLO, server: { version: 'first' } };
     const frame = helloReply(socket, hello);
     await expect(connected).resolves.toEqual(hello);
     socket.__simulateMessage(frame); challenge(socket);
@@ -960,7 +963,7 @@ describe.each(['node', 'browser'] as const)('authenticated sessions (%s socket d
     expect(observer).toHaveBeenCalledTimes(1);
     challenge(next); await flushMicrotasks(); helloReply(next, { version: 'second' });
     await flushMicrotasks(12);
-    expect(observer.mock.calls).toEqual([[{ version: 'first' }, { generation: 1 }], [{ version: 'second' }, { generation: 2 }]]);
+    expect(observer.mock.calls).toEqual([[{ ...HELLO, version: 'first' }, { generation: 1 }], [{ ...HELLO, version: 'second' }, { generation: 2 }]]);
     expect(requests(next, 'mutation')).toHaveLength(0);
     client.close(); expect(vi.getTimerCount()).toBe(0);
   });
@@ -981,8 +984,8 @@ describe.each(['node', 'browser'] as const)('authenticated sessions (%s socket d
     expect(requests(sockets[1]!)).toHaveLength(0);
     expect(sockets[1]!.readyState).toBe(1);
     challenge(sockets[1]!); await flushMicrotasks(); helloReply(sockets[1]!, { fresh: true });
-    await expect(current).resolves.toEqual({ fresh: true });
-    expect(observer.mock.calls).toEqual([[{ fresh: true }, { generation: 2 }]]);
+    await expect(current).resolves.toEqual({ ...HELLO, fresh: true });
+    expect(observer.mock.calls).toEqual([[{ ...HELLO, fresh: true }, { generation: 2 }]]);
     expect(vi.getTimerCount()).toBe(0);
   });
 
@@ -997,9 +1000,9 @@ describe.each(['node', 'browser'] as const)('authenticated sessions (%s socket d
     expect(observer).not.toHaveBeenCalled();
     expect(sockets[1]!.readyState).toBe(1);
     challenge(sockets[1]!); await flushMicrotasks(); helloReply(sockets[1]!, { fresh: true });
-    await expect(current).resolves.toEqual({ fresh: true });
+    await expect(current).resolves.toEqual({ ...HELLO, fresh: true });
     await expect(old).rejects.toThrow();
-    expect(observer.mock.calls).toEqual([[{ fresh: true }, { generation: 2 }]]);
+    expect(observer.mock.calls).toEqual([[{ ...HELLO, fresh: true }, { generation: 2 }]]);
     expect(vi.getTimerCount()).toBe(0);
   });
 
@@ -1028,8 +1031,8 @@ describe.each(['node', 'browser'] as const)('authenticated sessions (%s socket d
     const observer: AuthObserver = () => { if (kind === 'reject') return Promise.reject(new Error('private detail')); throw new Error('private detail'); };
     const { client, sockets } = setup({ onAuthenticated: observer, onReconnectError, onSocketError, onEventError });
     const connected = startSession(client);
-    challenge(sockets[0]!); await flushMicrotasks(); helloReply(sockets[0]!, { auth: 'synthetic-private' });
-    await expect(connected).resolves.toEqual({ auth: 'synthetic-private' });
+    challenge(sockets[0]!); await flushMicrotasks(); helloReply(sockets[0]!, { secret: 'synthetic-private' });
+    await expect(connected).resolves.toEqual({ ...HELLO, secret: 'synthetic-private' });
     await flushMicrotasks(12);
     expect(diagnostic).toHaveBeenCalledOnce(); expect(diagnostic).toHaveBeenCalledWith('[GatewayClient] onAuthenticated observer failed');
     expect(onReconnectError).not.toHaveBeenCalled(); expect(onSocketError).not.toHaveBeenCalled(); expect(onEventError).not.toHaveBeenCalled();
@@ -1046,11 +1049,11 @@ describe.each(['node', 'browser'] as const)('authenticated sessions (%s socket d
     const { client, sockets } = setup({ onAuthenticated: observer });
     const connected = startSession(client);
     challenge(sockets[0]!); await flushMicrotasks(); helloReply(sockets[0]!, { first: true });
-    await expect(connected).resolves.toEqual({ first: true });
+    await expect(connected).resolves.toEqual({ ...HELLO, first: true });
     if (action === 'connect') {
       expect(successor).toBeDefined();
       challenge(sockets[1]!); await flushMicrotasks(); helloReply(sockets[1]!, { second: true });
-      await expect(successor).resolves.toEqual({ second: true });
+      await expect(successor).resolves.toEqual({ ...HELLO, second: true });
       expect(observer).toHaveBeenCalledTimes(2);
     } else expect(sockets[0]!.readyState).toBe(3);
     expect(vi.getTimerCount()).toBe(0);
@@ -1095,7 +1098,7 @@ describe.each(['node', 'browser'] as const)('authenticated sessions (%s socket d
     await connected;
     sockets[0]!.__simulateClose(1006, 'offline');
     challenge(sockets[1]!); await flushMicrotasks(); helloReply(sockets[1]!, { second: true });
-    await expect(successor).resolves.toEqual({ second: true });
+    await expect(successor).resolves.toEqual({ ...HELLO, second: true });
     await vi.advanceTimersByTimeAsync(1600);
     expect(sockets).toHaveLength(2);
     expect(observer).toHaveBeenCalledTimes(2);
@@ -1113,4 +1116,253 @@ describe.each(['node', 'browser'] as const)('authenticated sessions (%s socket d
     expect(vi.getTimerCount()).toBe(0);
   });
 
+});
+
+// ---------------------------------------------------------------------------
+// 14-01 boundary contract: malformed frames, handshake/version errors, pending cleanup, retry classes
+// ---------------------------------------------------------------------------
+
+function pendingSize(client: GatewayClient): number {
+  return (client as unknown as { pending: Map<string, unknown> }).pending.size;
+}
+function lastSent(ws: MockWebSocket): { id: string; method: string; params?: unknown; traceparent?: string } {
+  return JSON.parse(ws.sentMessages.at(-1)!) as { id: string; method: string; params?: unknown; traceparent?: string };
+}
+function connectRequests(ws: MockWebSocket) {
+  return ws.sentMessages.filter((m) => (JSON.parse(m) as { method?: string }).method === 'connect');
+}
+/** Drive open → challenge → connect request; returns the connect request id (or null when none was sent). */
+async function handshakeUntilConnect(
+  client: GatewayClient, ws: MockWebSocket, challengePayload: unknown = { nonce: 'n', protocol: 3 },
+): Promise<{ connectPromise: Promise<unknown>; id: string | null }> {
+  const connectPromise = client.connect();
+  void connectPromise.catch(() => {});
+  ws.__simulateOpen();
+  ws.__simulateMessage(JSON.stringify({ type: 'event', event: 'connect.challenge', payload: challengePayload }));
+  await flushMicrotasks();
+  const req = connectRequests(ws).at(-1);
+  return { connectPromise, id: req ? (JSON.parse(req) as { id: string }).id : null };
+}
+
+describe('14-01 wire boundary: inbound frames', () => {
+  let mockWs: MockWebSocket;
+  beforeEach(() => { mockWs = new MockWebSocket(); vi.useFakeTimers(); });
+  afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); });
+
+  it('malformed frames are discarded before the pending map is touched', async () => {
+    const client = makeClient(mockWs);
+    await performConnect(client, mockWs);
+    const req = client.request<{ v: number }>('agents.list');
+    const { id } = lastSent(mockWs);
+    expect(pendingSize(client)).toBe(1);
+    for (const raw of [
+      'not json', 'null', '[]', '"res"', '42',
+      JSON.stringify({ type: 'res', id }),                         // missing ok
+      JSON.stringify({ type: 'res', id, ok: 'true', payload: 1 }), // ok not boolean
+      JSON.stringify({ type: 'res', id: 7, ok: true }),            // id not string
+      JSON.stringify({ type: 'res', id, ok: false, error: 'boom' }), // error not object
+      JSON.stringify({ type: 'bogus', id, ok: true }),
+      JSON.stringify({ type: 'req', id, ok: true, method: 'x' }),  // req frames never resolve calls
+      JSON.stringify({ type: 'res', id: 'someone-else', ok: true, payload: 1 }),
+    ]) {
+      mockWs.__simulateMessage(raw);
+      expect(pendingSize(client), raw).toBe(1);
+    }
+    mockWs.__simulateMessage(JSON.stringify({ type: 'res', id, ok: true, payload: { v: 1 } }));
+    await expect(req).resolves.toEqual({ v: 1 });
+    expect(pendingSize(client)).toBe(0);
+  });
+
+  it('malformed event frames never reach onEvent', async () => {
+    const onEvent = vi.fn();
+    const client = makeClient(mockWs, { onEvent });
+    await performConnect(client, mockWs);
+    mockWs.__simulateMessage(JSON.stringify({ type: 'event' }));
+    mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: '' }));
+    mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'tick', seq: -1 }));
+    mockWs.__simulateMessage(JSON.stringify({ type: 'event', event: 'tick', seq: 4 }));
+    expect(onEvent).toHaveBeenCalledTimes(1);
+    expect(onEvent).toHaveBeenCalledWith({ type: 'event', event: 'tick', seq: 4 });
+  });
+
+  it('server error responses surface code/details/retryable as a GatewayError', async () => {
+    const client = makeClient(mockWs);
+    await performConnect(client, mockWs);
+    const req = client.request('chat.send');
+    const { id } = lastSent(mockWs);
+    mockWs.__simulateMessage(JSON.stringify({
+      type: 'res', id, ok: false,
+      error: { code: 'INVALID_REQUEST', message: 'missing scope: operator.write', details: { scope: 'operator.write' }, retryable: false },
+    }));
+    const err = await req.catch((e: unknown) => e);
+    expect(err).toBeInstanceOf(GatewayError);
+    expect(err).toMatchObject({ source: 'server', code: 'INVALID_REQUEST', message: 'missing scope: operator.write', details: { scope: 'operator.write' }, retryable: false });
+    expect(canRetry(err, { idempotent: true })).toBe(false);
+  });
+
+  it('ok:false without an error shape rejects with the legacy "request failed" message', async () => {
+    const client = makeClient(mockWs);
+    await performConnect(client, mockWs);
+    const req = client.request('x');
+    mockWs.__simulateMessage(JSON.stringify({ type: 'res', id: lastSent(mockWs).id, ok: false }));
+    await expect(req).rejects.toMatchObject({ code: 'UNKNOWN', message: 'request failed', source: 'server' });
+  });
+});
+
+describe('14-01 wire boundary: handshake and version negotiation', () => {
+  let mockWs: MockWebSocket;
+  beforeEach(() => { mockWs = new MockWebSocket(); vi.useFakeTimers(); });
+  afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); });
+
+  it('refuses to send connect when the challenge announces a protocol outside the advertised range', async () => {
+    const client = makeClient(mockWs); // advertises 3..3
+    const { connectPromise, id } = await handshakeUntilConnect(client, mockWs, { nonce: 'n', protocol: 99 });
+    expect(id).toBeNull();
+    expect(mockWs.sentMessages).toHaveLength(0); // no credentials left the client
+    await expect(connectPromise).rejects.toMatchObject({
+      code: 'UNSUPPORTED_PROTOCOL', source: 'client', details: { gatewayProtocol: 99, min: 3, max: 3 },
+    });
+    expect(mockWs.readyState).toBe(MockWebSocket.CLOSED);
+  });
+
+  it('tolerates an older gateway inside a wider advertised range (additive negotiation)', async () => {
+    const client = makeClient(mockWs, { onChallenge: async () => ({ minProtocol: 1, maxProtocol: 3 }) });
+    const { connectPromise, id } = await handshakeUntilConnect(client, mockWs, { nonce: 'n', protocol: 2 });
+    expect(id).not.toBeNull();
+    mockWs.__simulateMessage(JSON.stringify({ type: 'res', id, ok: true, payload: { type: 'hello-ok', protocol: 2 } }));
+    await expect(connectPromise).resolves.toEqual({ type: 'hello-ok', protocol: 2 });
+  });
+
+  it('connects when the challenge carries no protocol (legacy gateway) and validates hello instead', async () => {
+    const client = makeClient(mockWs);
+    const { connectPromise, id } = await handshakeUntilConnect(client, mockWs, { nonce: 'n' });
+    expect(id).not.toBeNull();
+    mockWs.__simulateMessage(JSON.stringify({ type: 'res', id, ok: true, payload: { type: 'hello-ok', protocol: 3 } }));
+    await expect(connectPromise).resolves.toEqual({ type: 'hello-ok', protocol: 3 });
+  });
+
+  it.each<[string, unknown, string]>([
+    ['hello without protocol', { type: 'hello-ok', server: { connId: 'c' } }, 'MALFORMED_FRAME'],
+    ['hello with wrong type', { type: 'hello', protocol: 3 }, 'MALFORMED_FRAME'],
+    ['hello that is not an object', 'ok', 'MALFORMED_FRAME'],
+    ['hello.protocol newer than advertised max', { type: 'hello-ok', protocol: 4 }, 'UNSUPPORTED_PROTOCOL'],
+    ['hello.protocol older than advertised min', { type: 'hello-ok', protocol: 2 }, 'UNSUPPORTED_PROTOCOL'],
+    ['hello.auth with forged scope type', { type: 'hello-ok', protocol: 3, auth: { scopes: 'operator.admin' } }, 'MALFORMED_FRAME'],
+  ])('rejects connect deterministically for %s', async (_what, payload, code) => {
+    const client = makeClient(mockWs);
+    const { connectPromise, id } = await handshakeUntilConnect(client, mockWs);
+    mockWs.__simulateMessage(JSON.stringify({ type: 'res', id, ok: true, payload }));
+    await expect(connectPromise).rejects.toMatchObject({ code, source: 'client' });
+    expect(mockWs.readyState).toBe(MockWebSocket.CLOSED);
+    expect(pendingSize(client)).toBe(0);
+  });
+
+  it('rejects connect params that advertise an invalid protocol range without sending them', async () => {
+    const client = makeClient(mockWs, { onChallenge: async () => ({ minProtocol: 4, maxProtocol: 3 }) });
+    const { connectPromise, id } = await handshakeUntilConnect(client, mockWs);
+    expect(id).toBeNull();
+    await expect(connectPromise).rejects.toMatchObject({ code: 'UNSUPPORTED_PROTOCOL' });
+  });
+
+  it('fails the handshake on a malformed connect.challenge payload', async () => {
+    const client = makeClient(mockWs);
+    const { connectPromise, id } = await handshakeUntilConnect(client, mockWs, { ts: 1 });
+    expect(id).toBeNull();
+    await expect(connectPromise).rejects.toMatchObject({ code: 'MALFORMED_FRAME', message: 'invalid connect.challenge payload' });
+  });
+
+  it('server-side protocol mismatch (INVALID_REQUEST + close 1002) rejects connect with the server error', async () => {
+    const client = makeClient(mockWs);
+    const { connectPromise, id } = await handshakeUntilConnect(client, mockWs);
+    mockWs.__simulateMessage(JSON.stringify({
+      type: 'res', id, ok: false, error: { code: 'INVALID_REQUEST', message: 'protocol mismatch', details: { expectedProtocol: 3 } },
+    }));
+    await expect(connectPromise).rejects.toMatchObject({ source: 'server', code: 'INVALID_REQUEST', details: { expectedProtocol: 3 } });
+  });
+});
+
+describe('14-01 wire boundary: outbound requests and pending cleanup', () => {
+  let mockWs: MockWebSocket;
+  beforeEach(() => { mockWs = new MockWebSocket(); vi.useFakeTimers(); });
+  afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); });
+
+  it('send failure releases the pending slot immediately and later requests still work', async () => {
+    const client = makeClient(mockWs);
+    await performConnect(client, mockWs);
+    const sendSpy = vi.spyOn(mockWs, 'send').mockImplementationOnce(() => { throw new Error('EPIPE'); });
+    const err = await client.request('x').catch((e: unknown) => e);
+    expect(err).toMatchObject({ code: 'SEND_FAILED', source: 'client', details: 'EPIPE' });
+    expect(pendingSize(client)).toBe(0);
+    expect(canRetry(err, { idempotent: false })).toBe(true); // never left the client
+    sendSpy.mockRestore();
+    const ok = client.request('y');
+    mockWs.__simulateMessage(JSON.stringify({ type: 'res', id: lastSent(mockWs).id, ok: true, payload: 'fine' }));
+    await expect(ok).resolves.toBe('fine');
+  });
+
+  it('unserializable params and empty methods are rejected locally without a pending entry', async () => {
+    const client = makeClient(mockWs);
+    await performConnect(client, mockWs);
+    const before = mockWs.sentMessages.length;
+    await expect(client.request('x', { big: 1n })).rejects.toMatchObject({ code: 'INVALID_REQUEST', source: 'client' });
+    await expect(client.request('')).rejects.toMatchObject({ code: 'INVALID_REQUEST' });
+    expect(pendingSize(client)).toBe(0);
+    expect(mockWs.sentMessages).toHaveLength(before);
+  });
+
+  it('honours hello.policy.maxPayload: oversized requests are refused before send', async () => {
+    const client = makeClient(mockWs);
+    const { connectPromise, id } = await handshakeUntilConnect(client, mockWs);
+    mockWs.__simulateMessage(JSON.stringify({ type: 'res', id, ok: true, payload: { type: 'hello-ok', protocol: 3, policy: { maxPayload: 256, maxBufferedBytes: 512, tickIntervalMs: 1 } } }));
+    await connectPromise;
+    const before = mockWs.sentMessages.length;
+    const err = await client.request('x', { blob: 'é'.repeat(200) }).catch((e: unknown) => e);
+    expect(err).toMatchObject({ code: 'PAYLOAD_TOO_LARGE', details: { maxPayload: 256 } });
+    expect(mockWs.sentMessages).toHaveLength(before);
+    expect(pendingSize(client)).toBe(0);
+    expect(canRetry(err, { idempotent: true })).toBe(false);
+    void client.request('small'); // fits
+    expect(mockWs.sentMessages).toHaveLength(before + 1);
+  });
+
+  it('socket close (e.g. 1009 from the server maxPayload) flushes pending calls as DISCONNECTED with the close code', async () => {
+    const client = makeClient(mockWs);
+    await performConnect(client, mockWs);
+    const a = client.request('a'); const b = client.request('b');
+    expect(pendingSize(client)).toBe(2);
+    mockWs.__simulateClose(1009, 'Max payload size exceeded');
+    for (const p of [a, b]) {
+      const err = await p.catch((e: unknown) => e);
+      expect(err).toMatchObject({ code: 'DISCONNECTED', source: 'client', message: 'closed (1009): Max payload size exceeded', details: { code: 1009 } });
+      expect(canRetry(err, { idempotent: false })).toBe(false); // effect state unknown → never auto-replay
+      expect(canRetry(err, { idempotent: true })).toBe(true);
+    }
+    expect(pendingSize(client)).toBe(0);
+    await expect(client.request('after')).rejects.toMatchObject({ code: 'NOT_CONNECTED' });
+  });
+
+  it('timeouts are TIMEOUT errors: retryable only for idempotent calls', async () => {
+    const client = makeClient(mockWs, { requestTimeoutMs: 50 });
+    await performConnect(client, mockWs);
+    const p = client.request('slow');
+    vi.advanceTimersByTime(60);
+    const err = await p.catch((e: unknown) => e);
+    expect(err).toMatchObject({ code: 'TIMEOUT', message: "request 'slow' timed out after 50ms" });
+    expect(canRetry(err, { idempotent: false })).toBe(false);
+    expect(canRetry(err, { idempotent: true })).toBe(true);
+    expect(pendingSize(client)).toBe(0);
+  });
+
+  it('descends only from a valid parent traceparent; an invalid one yields a fresh root', async () => {
+    let parent: string | undefined = '00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01';
+    const client = makeClient(mockWs, { getParentTraceparent: () => parent });
+    await performConnect(client, mockWs);
+    void client.request('a');
+    expect(lastSent(mockWs).traceparent).toMatch(/^00-0af7651916cd43dd8448eb211c80319c-[0-9a-f]{16}-01$/);
+    expect(lastSent(mockWs).traceparent).not.toContain('b7ad6b7169203331');
+    parent = '00-0af7651916cd43dd8448eb211c80319c-0000000000000000-01'; // zero span id: invalid parent
+    void client.request('b');
+    expect(lastSent(mockWs).traceparent).toMatch(/^00-[0-9a-f]{32}-[0-9a-f]{16}-01$/);
+    expect(lastSent(mockWs).traceparent).not.toContain('0af7651916cd43dd8448eb211c80319c');
+  });
 });

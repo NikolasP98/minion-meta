@@ -4,8 +4,20 @@ import { flushPending, handleResponseFrame, type PendingRequest } from './protoc
 import type { EventFrame } from './types.js';
 import { uuid } from '../utils/uuid.js';
 import { newTraceparent } from './traceparent.js';
+import {
+  CLIENT_ERROR_CODES,
+  frameByteLength,
+  GatewayError,
+  isValidTraceparent,
+  parseFrame,
+  PROTOCOL_VERSION,
+  protocolInRange,
+  protocolRange,
+  validateConnectChallenge,
+  validateHelloOk,
+} from './envelope-contract.js';
 
-export const PROTOCOL_VERSION = 3;
+export { PROTOCOL_VERSION };
 
 export interface GatewayClientOptions {
   /** WebSocket URL to connect to. */
@@ -92,6 +104,8 @@ interface ConnectionAttempt {
   socket: unknown;
   active: boolean;
   connectSent: boolean;
+  /** Protocol announced on connect.challenge, when the gateway sent one. */
+  challengeProtocol?: number;
   resolve: ((value: unknown) => void) | null;
   reject: ((error: Error) => void) | null;
 }
@@ -108,6 +122,8 @@ export class GatewayClient {
   private closed = false;
   /** Imperatively-set parent traceparent; takes precedence over opts.getParentTraceparent. */
   private parentTraceparent: string | undefined;
+  /** `hello.policy.maxPayload` of the current session; outbound requests above it are not sent. */
+  private maxPayload: number | undefined;
 
   constructor(private readonly opts: GatewayClientOptions) {}
 
@@ -135,9 +151,9 @@ export class GatewayClient {
     this.ws = null;
     if (this.attempt) {
       this.attempt.active = false;
-      this.attempt.reject?.(new Error('connection superseded'));
+      this.attempt.reject?.(GatewayError.client(CLIENT_ERROR_CODES.DISCONNECTED, 'connection superseded'));
     }
-    flushPending(this.pending, new Error('connection superseded'));
+    flushPending(this.pending, GatewayError.client(CLIENT_ERROR_CODES.DISCONNECTED, 'connection superseded'));
     // Its event handlers are already fenced by the new generation.
     previousSocket?.close();
 
@@ -158,7 +174,11 @@ export class GatewayClient {
       const timeoutMs = this.opts.connectTimeoutMs ?? 10000;
       timer = setTimeout(() => {
         if (!this.isLiveAttempt(attempt)) return;
-        this.failHandshake(attempt, new Error(`connect timed out after ${timeoutMs}ms`), true);
+        this.failHandshake(
+          attempt,
+          GatewayError.client(CLIENT_ERROR_CODES.TIMEOUT, `connect timed out after ${timeoutMs}ms`),
+          true,
+        );
       }, timeoutMs);
 
       try {
@@ -175,27 +195,63 @@ export class GatewayClient {
 
   /**
    * Send a gateway request and resolve with the response payload.
-   * Rejects if not connected or if the request times out.
+   * Rejects with a `GatewayError`: NOT_CONNECTED, INVALID_REQUEST (empty method / unserializable
+   * params), PAYLOAD_TOO_LARGE (above the session's announced maxPayload; nothing is sent),
+   * SEND_FAILED, TIMEOUT, DISCONNECTED, or the server's own `res.error` (source 'server').
+   * Nothing is ever retried automatically — see `canRetry()`.
    */
   async request<T>(method: string, params?: unknown, opts?: { timeoutMs?: number }): Promise<T> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ws: any = this.ws;
-    if (!ws || ws.readyState !== 1 /* OPEN */) throw new Error('not connected');
+    if (!ws || ws.readyState !== 1 /* OPEN */) {
+      throw GatewayError.client(CLIENT_ERROR_CODES.NOT_CONNECTED, 'not connected');
+    }
+    if (typeof method !== 'string' || method.length === 0) {
+      throw GatewayError.client(CLIENT_ERROR_CODES.INVALID_REQUEST, 'request method must be a non-empty string');
+    }
     const id = uuid();
+    const parentRaw = this.parentTraceparent ?? this.opts.getParentTraceparent?.() ?? undefined;
+    // An invalid parent (all-zero span, wrong version, …) must not be inherited: mint a fresh root.
+    const parent = isValidTraceparent(parentRaw) ? parentRaw : undefined;
+    let wire: string;
+    try {
+      wire = JSON.stringify({ type: 'req', id, method, params, traceparent: newTraceparent(parent) });
+    } catch (error) {
+      throw GatewayError.client(
+        CLIENT_ERROR_CODES.INVALID_REQUEST,
+        `request '${method}' params are not serializable`,
+        error instanceof Error ? error.message : String(error),
+      );
+    }
+    if (this.maxPayload !== undefined && frameByteLength(wire) > this.maxPayload) {
+      throw GatewayError.client(
+        CLIENT_ERROR_CODES.PAYLOAD_TOO_LARGE,
+        `request '${method}' exceeds the gateway maxPayload of ${this.maxPayload} bytes`,
+        { maxPayload: this.maxPayload },
+      );
+    }
     const timeoutMs = opts?.timeoutMs ?? this.opts.requestTimeoutMs ?? 15000;
     return new Promise<T>((resolve, reject) => {
       const timer = setTimeout(() => {
         this.pending.delete(id);
-        reject(new Error(`request '${method}' timed out after ${timeoutMs}ms`));
+        reject(GatewayError.client(CLIENT_ERROR_CODES.TIMEOUT, `request '${method}' timed out after ${timeoutMs}ms`));
       }, timeoutMs);
       this.pending.set(id, {
         resolve: (v) => { clearTimeout(timer); resolve(v as T); },
         reject: (e) => { clearTimeout(timer); reject(e); },
       });
-      const parent = this.parentTraceparent ?? this.opts.getParentTraceparent?.() ?? undefined;
-      // TODO(handoff): Generic request send/serialization failures need pending-map cleanup in 14-01;
-      // handshake failure cleanup here does not qualify every request. See proposals/2026-09-08-platform-qc-remediation.md.
-      ws.send(JSON.stringify({ type: 'req', id, method, params, traceparent: newTraceparent(parent) }));
+      try {
+        ws.send(wire);
+      } catch (error) {
+        // The frame never left: release the slot now instead of leaking it until timeout/close.
+        clearTimeout(timer);
+        this.pending.delete(id);
+        reject(GatewayError.client(
+          CLIENT_ERROR_CODES.SEND_FAILED,
+          `request '${method}' send failed`,
+          error instanceof Error ? error.message : String(error),
+        ));
+      }
     });
   }
 
@@ -213,9 +269,9 @@ export class GatewayClient {
     this.ws = null;
     if (this.attempt) {
       this.attempt.active = false;
-      this.attempt.reject?.(new Error('disconnected'));
+      this.attempt.reject?.(GatewayError.client(CLIENT_ERROR_CODES.DISCONNECTED, 'disconnected'));
     }
-    flushPending(this.pending, new Error('disconnected'));
+    flushPending(this.pending, GatewayError.client(CLIENT_ERROR_CODES.DISCONNECTED, 'disconnected'));
     this.backoffMs = 800;
     // Keep the attempt identity until the native close event delivers onClose.
     // Any reentrant connect from onClose owns its own fields after this point.
@@ -280,8 +336,14 @@ export class GatewayClient {
 
       this.ws = null;
       attempt.active = false;
-      flushPending(this.pending, new Error(`closed (${code}): ${reason}`));
-      attempt.reject?.(new Error(`closed before hello (${code})`));
+      this.maxPayload = undefined;
+      flushPending(
+        this.pending,
+        GatewayError.client(CLIENT_ERROR_CODES.DISCONNECTED, `closed (${code}): ${reason}`, { code, reason }),
+      );
+      attempt.reject?.(
+        GatewayError.client(CLIENT_ERROR_CODES.DISCONNECTED, `closed before hello (${code})`, { code, reason }),
+      );
       this.opts.onClose?.(code, reason);
 
       // onClose can synchronously close or replace this client connection.
@@ -298,36 +360,40 @@ export class GatewayClient {
   }
 
   private handleMessage(raw: string, attempt: ConnectionAttempt): void {
-    let frame: Record<string, unknown>;
-    try {
-      frame = JSON.parse(raw) as Record<string, unknown>;
-    } catch {
-      // Malformed JSON — silently discard (T-07-02 mitigation).
-      return;
-    }
+    // Malformed or oversized frames are discarded before any handshake or pending-map access
+    // (T-07-02 / T-14-01-01). Only structurally valid req/res/event frames pass this point.
+    const parsed = parseFrame(raw);
+    if (!parsed.ok) return;
+    const frame = parsed.frame;
 
-    // TODO(handoff): Validate parsed envelopes/hello payloads in 14-01 before claiming runtime authority;
-    // this session notification preserves current wire acceptance. See proposals/2026-09-08-platform-qc-remediation.md.
-    if (frame['type'] === 'event') {
-      if (frame['event'] === 'connect.challenge') {
-        const payload = frame['payload'] as { nonce?: unknown } | undefined;
-        const nonce = payload && typeof payload.nonce === 'string' ? payload.nonce : null;
-        if (nonce) {
-          void this.sendConnect(nonce, attempt);
+    if (frame.type === 'event') {
+      if (frame.event === 'connect.challenge') {
+        // Only the first challenge of an attempt drives the handshake; later ones are ignored.
+        if (attempt.connectSent) return;
+        const challenge = validateConnectChallenge(frame.payload);
+        if (!challenge) {
+          this.failHandshake(
+            attempt,
+            GatewayError.client(CLIENT_ERROR_CODES.MALFORMED_FRAME, 'invalid connect.challenge payload'),
+          );
+          return;
         }
+        attempt.challengeProtocol = challenge.protocol;
+        void this.sendConnect(challenge.nonce, attempt);
         return;
       }
       // The handler may throw synchronously OR return a rejecting promise; both are reported once.
       try {
-        void Promise.resolve(this.opts.onEvent?.(frame as unknown as EventFrame))
-          .catch((err) => this.reportEventError(err, frame as unknown as EventFrame));
+        void Promise.resolve(this.opts.onEvent?.(frame))
+          .catch((err) => this.reportEventError(err, frame));
       } catch (err) {
-        this.reportEventError(err, frame as unknown as EventFrame);
+        this.reportEventError(err, frame);
       }
       return;
     }
 
-    handleResponseFrame(frame, this.pending);
+    // A client never receives 'req' frames; only 'res' can touch the pending map.
+    if (frame.type === 'res') handleResponseFrame(frame as unknown as Record<string, unknown>, this.pending);
   }
 
   private reportEventError(err: unknown, frame: EventFrame): void {
@@ -394,8 +460,38 @@ export class GatewayClient {
     try {
       const params = await this.opts.onChallenge(nonce);
       if (!this.isLiveAttempt(attempt)) return;
+      const range = protocolRange(params);
+      if (!range) {
+        throw GatewayError.client(
+          CLIENT_ERROR_CODES.UNSUPPORTED_PROTOCOL,
+          'connect params advertise an invalid minProtocol/maxProtocol range',
+        );
+      }
+      // Version gate 1: the gateway announced its protocol on the challenge — refuse before sending
+      // credentials when it is outside what these params support (older gateways announce nothing).
+      const announced = attempt.challengeProtocol;
+      if (announced !== undefined && !protocolInRange(announced, range)) {
+        throw GatewayError.client(
+          CLIENT_ERROR_CODES.UNSUPPORTED_PROTOCOL,
+          `gateway protocol ${announced} is outside the supported range ${range.min}..${range.max}`,
+          { gatewayProtocol: announced, ...range },
+        );
+      }
       const hello = await this.request<unknown>('connect', params);
       if (!this.isLiveAttempt(attempt)) return;
+      // Version gate 2: the negotiated hello must be a hello-ok inside the advertised range.
+      const verdict = validateHelloOk(hello);
+      if (!verdict.ok) {
+        throw GatewayError.client(CLIENT_ERROR_CODES.MALFORMED_FRAME, `invalid hello-ok: ${verdict.reason}`);
+      }
+      if (!protocolInRange(verdict.hello.protocol, range)) {
+        throw GatewayError.client(
+          CLIENT_ERROR_CODES.UNSUPPORTED_PROTOCOL,
+          `gateway protocol ${verdict.hello.protocol} is outside the supported range ${range.min}..${range.max}`,
+          { gatewayProtocol: verdict.hello.protocol, ...range },
+        );
+      }
+      this.maxPayload = verdict.hello.maxPayload;
       this.backoffMs = 800;
       // Settlement clears attempt bookkeeping before an observer can close/reconnect.
       attempt.resolve?.(hello);
