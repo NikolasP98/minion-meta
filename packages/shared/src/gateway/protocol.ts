@@ -1,6 +1,7 @@
 import { uuid } from '../utils/uuid.js';
 import { newTraceparent } from './traceparent.js';
-import type { RequestFrame, ResponseFrame } from './types.js';
+import type { RequestFrame } from './types.js';
+import { CLIENT_ERROR_CODES, GatewayError } from './envelope-contract.js';
 
 /** Pending request tracker */
 export interface PendingRequest {
@@ -22,19 +23,29 @@ export function sendRequest(
 ): Promise<unknown> {
   return new Promise((resolve, reject) => {
     if (!ws || ws.readyState !== WebSocket.OPEN) {
-      return reject(new Error('not connected'));
+      return reject(GatewayError.client(CLIENT_ERROR_CODES.NOT_CONNECTED, 'not connected'));
     }
     const id = uuid();
     const timer = setTimeout(() => {
       pending.delete(id);
-      reject(new Error(`request '${method}' timed out after ${timeoutMs}ms`));
+      reject(GatewayError.client(CLIENT_ERROR_CODES.TIMEOUT, `request '${method}' timed out after ${timeoutMs}ms`));
     }, timeoutMs);
     pending.set(id, {
       resolve: (v) => { clearTimeout(timer); resolve(v); },
       reject: (e) => { clearTimeout(timer); reject(e); },
     });
     const frame: RequestFrame = { type: 'req', id, method, params, traceparent: newTraceparent(parentTraceparent) };
-    ws.send(JSON.stringify(frame));
+    try {
+      ws.send(JSON.stringify(frame));
+    } catch (error) {
+      clearTimeout(timer);
+      pending.delete(id);
+      reject(GatewayError.client(
+        CLIENT_ERROR_CODES.SEND_FAILED,
+        `request '${method}' send failed`,
+        error instanceof Error ? error.message : String(error),
+      ));
+    }
   });
 }
 
@@ -46,15 +57,15 @@ export function handleResponseFrame(
   frame: Record<string, unknown>,
   pending: Map<string, PendingRequest>,
 ): boolean {
-  if (frame.type !== 'res') return false;
-  const p = pending.get(frame.id as string);
+  if (frame.type !== 'res' || typeof frame.id !== 'string') return false;
+  const p = pending.get(frame.id);
   if (!p) return false;
-  pending.delete(frame.id as string);
-  if (frame.ok) {
+  pending.delete(frame.id);
+  if (frame.ok === true) {
     p.resolve(frame.payload);
   } else {
-    const err = frame.error as { message?: string } | undefined;
-    p.reject(new Error(err?.message ?? 'request failed'));
+    // Carries the server's code/details/retryable; message falls back to 'request failed'.
+    p.reject(GatewayError.fromServer(frame.error));
   }
   return true;
 }
