@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-site-481f54b7470a
 title: "Post-merge finding — todo-handoff in .github/workflows/ci.yml (minion-site)"
-status: approved
+status: closed
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-site]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still approved — closing"
 ---
 
 # Post-merge finding — todo-handoff in `.github/workflows/ci.yml`
