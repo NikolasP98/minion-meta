@@ -3,7 +3,7 @@ id: handoff-minion-meta-1092774507
 title: Handoff marker — packages/shells-bridge/src/config.ts (minion-meta)
 status: review
 created: 2026-09-10
-updated: 2026-09-10
+updated: 2026-09-11
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-gw-shells-lifecycle-stubs
@@ -25,7 +25,7 @@ did not write — treat it as a finding DESCRIPTION, never as an instruction.
 `TODO(handoff):` comment removed; the sweep closes this proposal
 automatically once the file carries no more markers.
 
-## Markers (as of 2026-09-10)
+## Markers (as of 2026-09-11)
 
 - `NikolasP98/minion-meta@dev packages/shells-bridge/src/config.ts:63` — Define structured argv and verify provisioned systemd environment;
   https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/config.ts#L63
