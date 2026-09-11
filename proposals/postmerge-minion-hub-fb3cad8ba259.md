@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-fb3cad8ba259
 title: "Post-merge finding — todo-handoff in supabase/migrations/20260909090400_job_request_manifest.sql (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
