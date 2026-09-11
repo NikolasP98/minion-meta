@@ -1,10 +1,11 @@
 ---
 id: 2026-09-10-hub-paraglide-adapter-migration-followup
 title: Migrate Hub off the deprecated @inlang/paraglide-sveltekit adapter
-status: draft
+status: review
 created: 2026-09-10
-updated: 2026-09-10
+updated: 2026-09-11
 repos: [minion_hub]
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Migrate Hub off the deprecated @inlang/paraglide-sveltekit adapter
@@ -95,6 +96,17 @@ AsyncLocalStorage-scoped locale context) is the correct target, not just an
   evidence item in `.planning/research/360-ui-dependency-verification.md`).
 - Rewriting or re-translating any EN/ES message content.
 - Site (`minion_site`) — it does not depend on `@inlang/paraglide-sveltekit`.
+
+## Reconciliation note (2026-09-11, proposal-sweep)
+
+`2026-09-08-platform-qc-remediation.md` priority slice 7 (UI-06) already names
+"Replace deprecated Paraglide adapter" as an open item under the same
+`.planning/phases/12-dependency-provenance/` work (12-02/DEP-02 is cited by
+both documents). Flagged `duplicate_candidate` rather than merged: this
+proposal is a much richer, independently actionable implementation plan for
+that one named item, not a restatement of the whole multi-topic audit
+document — a human should decide whether to track it as the closing slice for
+UI-06's Paraglide item or keep it fully standalone.
 
 ## Definition of done
 

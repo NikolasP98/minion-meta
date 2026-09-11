@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-3766023210
 title: Handoff marker — extensions/flows/src/data-nodes.ts (minion-ai)
-status: draft
+status: merged
 created: 2026-09-10
 updated: 2026-09-11
 repos: [minion-ai]
 tags: [handoff-sweep]
+merged_into: 2026-09-08-platform-qc-remediation
 ---
 
 # Handoff marker — extensions/flows/src/data-nodes.ts

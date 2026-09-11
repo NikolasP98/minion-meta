@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-3652542388
 title: Handoff marker — scripts/qc/handoff-ledger.test.mjs (minion-meta)
-status: draft
+status: review
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-meta]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Handoff marker — scripts/qc/handoff-ledger.test.mjs

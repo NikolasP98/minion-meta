@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-3887937197
 title: Handoff marker — packages/plugin-ui-bridge/src/index.ts (minion-ai)
-status: draft
+status: merged
 created: 2026-09-10
 updated: 2026-09-11
 repos: [minion-ai]
 tags: [handoff-sweep]
+merged_into: 2026-09-08-platform-qc-remediation
 ---
 
 # Handoff marker — packages/plugin-ui-bridge/src/index.ts

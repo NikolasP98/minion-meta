@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-692195553
 title: Handoff marker — src/infra/message-ledger-provenance.test.ts (minion-ai)
-status: draft
+status: merged
 created: 2026-09-10
 updated: 2026-09-11
 repos: [minion-ai]
 tags: [handoff-sweep]
+merged_into: 2026-09-08-platform-qc-remediation
 ---
 
 # Handoff marker — src/infra/message-ledger-provenance.test.ts

@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-site-a357d1f6520e
 title: "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.0-qc-d01a528579e7.tgz (minion-site)"
-status: draft
+status: review
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-site]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `deps/minion-stack-shared-0.9.0-qc-d01a528579e7.tgz`
@@ -37,3 +38,16 @@ This is a committed tarball of a shared package (`@minion-stack/shared`), which 
 - merged PR: https://github.com/NikolasP98/minion-site/pull/31
 - file: `deps/minion-stack-shared-0.9.0-qc-d01a528579e7.tgz`
 - checked: 2026-09-11
+
+## Reconciliation note (2026-09-11, proposal-sweep)
+
+The tarball hash `d01a528579e7` matches the `@minion-stack/shared` archive
+already tracked in `2026-09-08-platform-qc-remediation.md`'s "Shared package
+release emission gate" section (`d01a5285…`, 44-member archive, adoption by
+hub/site/paperclip still open pending license text and an immutable version).
+Flagged `duplicate_candidate` rather than merged: that section is about
+producing a clean publishable release; this finding is about site vendoring
+a build of that same unpublished artifact as a committed `deps/*.tgz` — the
+auto-diagnosis's suggested `bun install` fix may not apply while the package
+remains unpublished, which a human should confirm before disposing of this
+either way.

@@ -64,7 +64,7 @@ Native overlay qualification additionally reproduced a stale queued close event 
 
 SV-01/SEC-07: a verified browser identity without resolved membership can pass through the global-organization fallback into server creation. A synthetic actual-hook/actual-handler probe returned200 and persisted the unrelated fixture tenant. Remove the global fallback in hooks and tenant-ctx; preserve the explicit join/invite/onboarding path. Plan09-03 owns durable negative/positive regressions and URL update parity. PUT currently accepts a URL denied by creation policy; no outgoing SSRF chain is claimed.
 
-SV-02/SEC-08: actual flow handlers followed a database symlink and a directory symlink outside configured roots in disposable fixtures. Separately, db.exec VACUUM INTO created an outside file without any symlink. Plan09-04 must constrain the SQL writer surface and filesystem objects together. A realpath precheck is not proof against a hostile same-UID writer; supported filesystem ownership/trust and stronger isolation requirements must be explicit. Source sites: minion/extensions/flows/src/data-nodes.ts resolveDbForNode, resolveFileWithinBase and handleDbExec.
+SV-02/SEC-08: actual flow handlers followed a database symlink and a directory symlink outside configured roots in disposable fixtures. Separately, db.exec VACUUM INTO created an outside file without any symlink. Plan09-04 must constrain the SQL writer surface and filesystem objects together. A realpath precheck is not proof against a hostile same-UID writer; supported filesystem ownership/trust and stronger isolation requirements must be explicit. Source sites: minion/extensions/flows/src/data-nodes.ts resolveDbForNode, resolveFileWithinBase and handleDbExec. A companion gap in `data-paths.ts` (handoff-sweep, 2026-09-11): no supported Windows ACL owner/permission check exists yet for these same-UID/ownership requirements — Windows environments are unverified rather than covered.
 
 The server service's legacy ID migration and per-user link model also need review before universal isolation claims. Its upsert conflict target is tenantId+url, not id: caller-supplied id alone has not been shown to overwrite another row. Do not relabel a source suspicion as a confirmed IDOR. Track the actual mutation/persistence/consumer authority in phase14/15 and retain the existing migration handoff.
 
@@ -344,3 +344,53 @@ Owner: each site's own repository (Hub `CLAUDE.md`, gateway `CLAUDE.md`, minion_
 **Full detail**: `.planning/phases/18-docs-governance/18-HANDOFF-RESULTS.md` (regenerate with `node scripts/qc/handoff-ledger.mjs`; `--check` currently exits1 on the 20 items above, by design — the gate fails closed until each owning repo supplies its side).
 
 DOC-03 stays open: this reconciliation verifies and records every known open end with an owner and next step: it closes none of them by itself.
+
+## 2026-09-11 handoff-marker reconciliation (proposal-sweep)
+
+The proposal-reconciliation sweep found six more per-file handoff-sweep marker
+proposals (filed 2026-09-10, all `repos: [minion-ai]`) whose `TODO(handoff):`
+text is the same open end already narrated above, and merged them here as
+tombstones (`status: merged`, `merged_into: 2026-09-08-platform-qc-remediation`):
+
+- `handoff-minion-ai-2382793954` — `src/infra/message-ledger.ts:134`,
+  "Raw-handle plugins remain trusted process code. Receipt history..." — the
+  same gap as the Filesystem containment restoration gate section above ("Raw
+  getDb/SDK consumers remain trusted process code; receipt history/anomaly
+  checks cannot attest callbacks or enforce hostile-plugin isolation").
+- `handoff-minion-ai-3235580445` — `src/infra/message-ledger-profile.ts:49`,
+  "Additional persisted schemas/DDL spellings need reviewed profiles;" — the
+  same gate's "Inventory/admit additional legacy profiles before restoration,
+  without caller bypass."
+- `handoff-minion-ai-692195553` — `src/infra/message-ledger-provenance.test.ts:138`,
+  a companion test gap: "a Windows fixture for open-file replacement would need
+  a helper" — no committed Windows open-file-replacement fixture exists yet;
+  tracked under the same Filesystem containment restoration gate.
+- `handoff-minion-ai-3766023210` — `extensions/flows/src/data-nodes.ts:187,406`,
+  "Raw-handle plugins and same-UID filesystem writers remain" and "SEC-08
+  deployment must establish clean exact-image/runtime" — the same SV-02/SEC-08
+  finding above.
+- `handoff-minion-ai-315458649` — `extensions/flows/src/data-paths.ts:31,237`,
+  a Windows ACL-owner check gap plus "SEC-08 deployment requires trusted
+  same-UID writers, canonical root pointers," — same SV-02/SEC-08 finding; the
+  Windows ACL detail was new and is now folded into that section above.
+- `handoff-minion-ai-3887937197` — `packages/plugin-ui-bridge/src/index.ts:223,367`,
+  "Qualify wildcard-fallback extension callers and handwritten artifact peers
+  before rollout" and "Add per-operation cancellation/timeouts without
+  truncating 180s generation calls" — the same Plugin consumer gates section
+  above (three handwritten builtin artifact peers; no blanket 30-second
+  timeout because generation/edit calls need 180 seconds).
+
+No new open end beyond the Windows ACL note folded in above: each marker's
+underlying `TODO(handoff)` resolves to a gap this document already tracks.
+
+Separately, two 2026-09-11-filed markers on this repo's own new
+`scripts/qc/` tooling — `handoff-minion-meta-1708310858`
+(`handoff-ledger.mjs:73`) and `handoff-minion-meta-3652542388`
+(`handoff-ledger.test.mjs`, all matches inside its own test-fixture strings) —
+look like the same false-positive detector class DOC-03 already named above
+(literal marker text in test fixtures, or the scanner's own code) but this
+time in the tool's own source rather than a client repo. Not merged: flagged
+`duplicate_candidate` for human confirmation instead, since no prior pass
+audited the tool's own files this way. `handoff-minion-meta-277751425`
+(`package-provenance.mjs:18`) named no comparable existing coverage here and
+is left untouched.
