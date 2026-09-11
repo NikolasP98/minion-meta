@@ -1,0 +1,115 @@
+{
+  "reviews": [
+    {
+      "id": 5176596339,
+      "node_id": "PRR_kwDORh4BJs8AAAABNIyXcw",
+      "user": {
+        "login": "copilot-pull-request-reviewer[bot]",
+        "id": 175728472,
+        "node_id": "BOT_kgDOCnlnWA",
+        "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D",
+        "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+        "followers_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/followers",
+        "following_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/following{/other_user}",
+        "gists_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/subscriptions",
+        "organizations_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/orgs",
+        "repos_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/repos",
+        "events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/copilot-pull-request-reviewer%5Bbot%5D/received_events",
+        "type": "Bot",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "body": "### \ud83d\udfe1 Changes recommended\n\nUnresolved stale gateway-run handling and fixture archive verification findings block approval.\n\n*Once you've addressed the issues Copilot identified, you can request another Copilot review.*\n\n<details>\n<summary>Pull request overview</summary>\n\nThis pull request improves the members dashboard\u2019s responsive behavior and gateway session lifecycle, with added native and browser qualification coverage.\n\n**Changes:**\n- Enhances responsive navigation, chat, files, graph, accessibility, and localization.\n- Hardens gateway reconnect, streaming cleanup, and stale-operation handling.\n- Adds deterministic fixtures, test matrices, dependency pins, fonts, and CI qualification.\n</details>\n\n<details>\n<summary>File summaries</summary>\n\n| File | Reviewed change |\r\n|---|---|\r\n| `vitest.workspace.ts` | Defines server and member test projects |\r\n| `vitest.gateway-contract.config.ts` | Configures native gateway contract tests |\r\n| `vitest.config.ts` | Integrates the test workspace |\r\n| `tests/fixtures/member-gateway-parity/README.md` | Documents gateway fixture qualification |\r\n| `tests/fixtures/member-gateway-parity/Fixture.svelte` | Gateway parity fixture UI |\r\n| `tests/fixtures/member-gateway-parity/build.mjs` | Builds the gateway fixture |\r\n| `tests/fixtures/member-data-parity/README.md` | Documents data fixture qualification |\r\n| `tests/fixtures/member-data-parity/Fixture.svelte` | Data parity fixture UI |\r\n| `tests/fixtures/member-data-parity/build.mjs` | Builds the data fixture |\r\n| `tests/fixtures/member-chat-parity/README.md` | Documents chat fixture qualification |\r\n| `tests/fixtures/member-chat-parity/Fixture.svelte` | Chat parity fixture UI |\r\n| `tests/fixtures/member-chat-parity/build.mjs` | Builds the chat fixture |\r\n| `tests/e2e/member-gateway-parity.spec.ts` | Gateway reconnect and streaming coverage |\r\n| `tests/e2e/member-data-parity.spec.ts` | Graph, files, fonts, and logout coverage |\r\n| `tests/e2e/member-chat-parity.spec.ts` | Responsive chat and keyboard coverage |\r\n| `static/fonts/barlow-LICENSE.txt` | Font license distribution |\r\n| `src/routes/auth/logout/logout.test.ts` | Logout endpoint tests |\r\n| `src/routes/auth/logout/+server.ts` | Provider-aware logout handling |\r\n| `src/routes/(app)/members/+page.svelte` | Responsive dashboard shell and panels |\r\n| `src/lib/services/member-gateway.test.ts` | Gateway lifecycle tests |\r\n| `src/lib/services/member-gateway.svelte.ts` | Gateway lifecycle and operation fencing |\r\n| `src/lib/components/members/TabBar.test.ts` | Tab navigation tests |\r\n| `src/lib/components/members/TabBar.svelte` | Accessible tab navigation |\r\n| `src/lib/components/members/GraphTab.test.ts` | Graph loading and sizing tests |\r\n| `src/lib/components/members/GraphTab.svelte` | Safe graph loading and resize handling |\r\n| `src/lib/components/members/FilesTab.test.ts` | File browser and fencing tests |\r\n| `src/lib/components/members/FilesTab.svelte` | Responsive file browser |\r\n| `src/lib/components/members/ChatTab.test.ts` | Chat composition and streaming tests |\r\n| `src/lib/components/members/ChatTab.svelte` | Chat composer and accessible rendering |\r\n| `src/lib/components/members/AppBar.test.ts` | Account control tests |\r\n| `src/lib/components/members/AppBar.svelte` | Responsive localized account controls |\r\n| `src/app.html` | Removes the remote font dependency |\r\n| `src/app.css` | Adds self-hosted fonts and responsive styling |\r\n| `scripts/qc/ui-fixtures.test.mjs` | Tests qualification controls |\r\n| `scripts/qc/compile-ui-messages.test.mjs` | Tests message compiler safety |\r\n| `scripts/qc/compile-ui-messages.mjs` | Provides credential-free message compilation |\r\n| `playwright.ui-fixtures.config.ts` | Configures the browser matrix |\r\n| `package.json` | Defines test, font, and fixture dependencies |\r\n| `messages/es.json` | Spanish dashboard messages |\r\n| `messages/en.json` | English dashboard messages |\r\n| `.github/workflows/ci.yml` | Adds hosted UI qualification |\n</details>\n\n<details>\n<summary>Review details</summary>\n\n### Suppressed comments (1)\n\n**src/lib/services/member-gateway.svelte.ts:301**\n* Medium: A `final` event for an older run can enter this branch while `chat.runId` belongs to a newer send, and `loadHistory(current)` then starts a shared history operation that can replace the newer message/stream when it resolves. Treat a mismatched run ID as stale and return without reloading history; the current run will refresh history on its own completion.\n```\n  if (payload.runId && chat.runId && payload.runId !== chat.runId) {\n    if (payload.state === 'final') loadHistory(current);\n    return;\n```\n\n- **Files reviewed:** 43/45 changed files\n- **Comments generated:** 1\n- **Review effort level:** Lite\n</details>\n\n---\n\n\ud83d\udca1 <a href=\"/NikolasP98/minion-site/new/master?filename=.github/skills/code-review/SKILL.md\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Add a `code-review` agent skill</a> or configure MCP servers for context-aware, tailored reviews. <a href=\"https://docs.github.com/copilot/how-tos/use-copilot-agents/request-a-code-review/use-code-review?tool=webui#mcp-servers-and-agent-skills\" class=\"Link--inTextBlock\" target=\"_blank\" rel=\"noopener noreferrer\">Learn more in the docs.</a>",
+      "state": "COMMENTED",
+      "html_url": "https://github.com/NikolasP98/minion-site/pull/31#pullrequestreview-5176596339",
+      "pull_request_url": "https://api.github.com/repos/NikolasP98/minion-site/pulls/31",
+      "author_association": "NONE",
+      "_links": {
+        "html": {
+          "href": "https://github.com/NikolasP98/minion-site/pull/31#pullrequestreview-5176596339"
+        },
+        "pull_request": {
+          "href": "https://api.github.com/repos/NikolasP98/minion-site/pulls/31"
+        }
+      },
+      "submitted_at": "2026-09-11T08:40:55Z",
+      "commit_id": "b3ad0102a2e9d153bd784f670a8ed0dc24444282"
+    }
+  ],
+  "comments": [
+    {
+      "url": "https://api.github.com/repos/NikolasP98/minion-site/pulls/comments/3987389063",
+      "pull_request_review_id": 5176596339,
+      "id": 3987389063,
+      "node_id": "PRRC_kwDORh4BJs7tqrqH",
+      "diff_hunk": "@@ -0,0 +1,33 @@\n+# Site gateway integration fixture\n+\n+This fixture mounts the actual members page, service, member state and installed shared client. Only the page's server/user identity data and the remote server responses are synthetic. The native browser WebSocket, local HTTP signing request, connection handshake, service session ownership and Svelte UI updates run together.\n+\n+The private manifest and Bun lock select `deps/minion-stack-shared-0.9.0-qc-d01a528579e7.tgz`, SHA256 `d01a528579e7b0877d05565b9d3ad2747ab45610d634948f51b6a25b4bf4f756`. All 44 installed members must match this archive. Version `0.9.0` alone does not identify these bytes. The archive is a private qualification input; license provenance, registry publication, active adoption and deployment remain separate gates.",
+      "path": "tests/fixtures/member-gateway-parity/README.md",
+      "commit_id": "b3ad0102a2e9d153bd784f670a8ed0dc24444282",
+      "original_commit_id": "b3ad0102a2e9d153bd784f670a8ed0dc24444282",
+      "user": {
+        "login": "Copilot",
+        "id": 175728472,
+        "node_id": "BOT_kgDOCnlnWA",
+        "avatar_url": "https://avatars.githubusercontent.com/in/946600?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/Copilot",
+        "html_url": "https://github.com/apps/copilot-pull-request-reviewer",
+        "followers_url": "https://api.github.com/users/Copilot/followers",
+        "following_url": "https://api.github.com/users/Copilot/following{/other_user}",
+        "gists_url": "https://api.github.com/users/Copilot/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/Copilot/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/Copilot/subscriptions",
+        "organizations_url": "https://api.github.com/users/Copilot/orgs",
+        "repos_url": "https://api.github.com/users/Copilot/repos",
+        "events_url": "https://api.github.com/users/Copilot/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/Copilot/received_events",
+        "type": "Bot",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "body": "High: `tests/fixtures/member-gateway-parity/README.md:5` records an exact tarball digest, but the qualification only compares the installed package before/after (`scripts/qc/ui-fixtures.mjs:425-533`) and the contract hashes three installed files (`src/lib/services/member-gateway.contract.fixture.ts:177-196`). A different local archive can therefore pass these checks while changing other package members or dependencies. Verify the tarball (or complete installed-package inventory) against the documented SHA-256 before accepting the fixture.",
+      "created_at": "2026-09-11T08:40:55Z",
+      "updated_at": "2026-09-11T08:40:55Z",
+      "html_url": "https://github.com/NikolasP98/minion-site/pull/31#discussion_r3987389063",
+      "pull_request_url": "https://api.github.com/repos/NikolasP98/minion-site/pulls/31",
+      "_links": {
+        "self": {
+          "href": "https://api.github.com/repos/NikolasP98/minion-site/pulls/comments/3987389063"
+        },
+        "html": {
+          "href": "https://github.com/NikolasP98/minion-site/pull/31#discussion_r3987389063"
+        },
+        "pull_request": {
+          "href": "https://api.github.com/repos/NikolasP98/minion-site/pulls/31"
+        }
+      },
+      "reactions": {
+        "url": "https://api.github.com/repos/NikolasP98/minion-site/pulls/comments/3987389063/reactions",
+        "total_count": 0,
+        "+1": 0,
+        "-1": 0,
+        "laugh": 0,
+        "hooray": 0,
+        "confused": 0,
+        "heart": 0,
+        "rocket": 0,
+        "eyes": 0
+      },
+      "start_line": null,
+      "original_start_line": null,
+      "start_side": null,
+      "line": 5,
+      "original_line": 5,
+      "side": "RIGHT",
+      "author_association": "NONE",
+      "original_position": 5,
+      "position": 5,
+      "subject_type": "line"
+    }
+  ]
+}

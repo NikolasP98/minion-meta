@@ -1,0 +1,103 @@
+
+ RUN  v3.2.6 /home/nikolas/.cache/minion-qc/site-production-i01etdap/minion_site
+
+{"runeModule":"/home/nikolas/.cache/minion-qc/site-production-i01etdap/minion_site/src/lib/state/member.svelte.ts","ssr":false,"client":true,"transformedSha256":"c278d82385dee0a125c2d1959f8b4f08dbac183100e3675cf39ce56aef1784d8"}
+stdout | src/lib/services/member-gateway.contract.fixture.ts > actual Site member service with emitted shared candidate > publishes actual client rune changes to a native store subscriber
+[member-gateway] connection recovered after 1 failures
+
+stdout | src/lib/services/member-gateway.contract.fixture.ts > actual Site member service with emitted shared candidate > fences queued send resolve and never replays it on same-client reconnect
+[member-gateway] connection recovered after 1 failures
+
+stdout | src/lib/services/member-gateway.contract.fixture.ts > actual Site member service with emitted shared candidate > fences queued send reject and never replays it on same-client reconnect
+[member-gateway] connection recovered after 1 failures
+
+stdout | src/lib/services/member-gateway.contract.fixture.ts > actual Site member service with emitted shared candidate > retires acknowledged streaming work before accepting a successor session
+[member-gateway] connection recovered after 1 failures
+
+ ❯ |gateway-contract| src/lib/services/member-gateway.contract.fixture.ts (25 tests | 2 failed) 3453ms
+   ✓ actual Site member service with emitted shared candidate > resolves the complete candidate runtime and declarations from this private snapshot  965ms
+   ✓ actual Site member service with emitted shared candidate > publishes actual client rune changes to a native store subscriber 145ms
+   ✓ actual Site member service with emitted shared candidate > initial authentication preserves role/scopes, initialization and exactly one polling timer 116ms
+   ✓ actual Site member service with emitted shared candidate > publishes a fresh authenticated session after same-client automatic reconnect 117ms
+   ✓ actual Site member service with emitted shared candidate > ignores a retired client close delivered after successor authentication 106ms
+   ✓ actual Site member service with emitted shared candidate > does not dispatch successor history from a retired send rejection 114ms
+   ✓ actual Site member service with emitted shared candidate > keeps the newer history operation loading when an older same-session request settles 111ms
+   ✓ actual Site member service with emitted shared candidate > does not let an old activity timeout clear the successor activity 100ms
+   ✓ actual Site member service with emitted shared candidate > clears its activity and poll timers on explicit disconnect 100ms
+   ✓ actual Site member service with emitted shared candidate > reports current socket failure only through the selected fixed warning 96ms
+   ✓ actual Site member service with emitted shared candidate > does not initialize twice after duplicate challenge or hello responses 97ms
+   ✓ actual Site member service with emitted shared candidate > cannot publish or send after disconnect during asynchronous challenge signing 92ms
+   ✓ actual Site member service with emitted shared candidate > ignores queued old initialization, events and errors when replacing the client 95ms
+   ✓ actual Site member service with emitted shared candidate > ignores queued old history and clears only the retired loading flag 93ms
+   ✓ actual Site member service with emitted shared candidate > fences queued send resolve and never replays it on same-client reconnect 113ms
+   ✓ actual Site member service with emitted shared candidate > fences queued send reject and never replays it on same-client reconnect 99ms
+   × actual Site member service with emitted shared candidate > retires history already pending when a new send is admitted 123ms
+     → expected [ { role: 'assistant', …(1) } ] to be [ { role: 'user', …(2) } ] // Object.is equality
+   × actual Site member service with emitted shared candidate > ignores an older run final on the current socket while a newer run is active 104ms
+     → expected [ { type: 'req', …(4) }, …(1) ] to have a length of 1 but got 2
+   ✓ actual Site member service with emitted shared candidate > retires acknowledged streaming work before accepting a successor session 110ms
+   ✓ actual Site member service with emitted shared candidate > retires queued poll completion and owns exactly one successor polling interval 94ms
+   ✓ actual Site member service with emitted shared candidate > contains current event and socket reporter failures (throwing sink=false) 94ms
+   ✓ actual Site member service with emitted shared candidate > contains current event and socket reporter failures (throwing sink=true) 85ms
+   ✓ actual Site member service with emitted shared candidate > reports failed reconnect safely and stays disconnected (throwing sink=false) 98ms
+   ✓ actual Site member service with emitted shared candidate > reports failed reconnect safely and stays disconnected (throwing sink=true) 93ms
+   ✓ actual Site member service with emitted shared candidate > ignores a queued old authenticated success after explicit replacement 92ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |gateway-contract| src/lib/services/member-gateway.contract.fixture.ts > actual Site member service with emitted shared candidate > retires history already pending when a new send is admitted
+AssertionError: expected [ { role: 'assistant', …(1) } ] to be [ { role: 'user', …(2) } ] // Object.is equality
+
+- Expected
++ Received
+
+  [
+    {
+-     "content": [
+-       {
+-         "text": "newer message",
+-         "type": "text",
+-       },
+-     ],
+-     "role": "user",
+-     "timestamp": 1789116206990,
++     "content": "obsolete history",
++     "role": "assistant",
+    },
+  ]
+
+ ❯ src/lib/services/member-gateway.contract.fixture.ts:472:46
+    470|     socket.reply(older, { messages: [{ role: 'assistant', content: 'ob…
+    471|     await drain();
+    472|     expect(member.memberState.chat.messages).toBe(messages);
+       |                                              ^
+    473|     expect(loadingAtSend).toBe(false);
+    474|     expect(member.memberState.chat.runId).toBe(newerRun);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |gateway-contract| src/lib/services/member-gateway.contract.fixture.ts > actual Site member service with emitted shared candidate > ignores an older run final on the current socket while a newer run is active
+AssertionError: expected [ { type: 'req', …(4) }, …(1) ] to have a length of 1 but got 2
+
+- Expected
++ Received
+
+- 1
++ 2
+
+ ❯ src/lib/services/member-gateway.contract.fixture.ts:507:78
+    505|     event(firstRun, 'final');
+    506|     await drain();
+    507|     expect(socket.frames.filter((frame) => frame.method === 'chat.hist…
+       |                                                                              ^
+    508|     expect(member.memberState.chat.messages).toBe(messages);
+    509|     expect(member.memberState.chat.runId).toBe(newerRun);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 23 passed (25)
+   Start at  03:43:24
+   Duration  3.85s (transform 671ms, setup 0ms, collect 107ms, tests 3.45s, environment 0ms, prepare 67ms)
+

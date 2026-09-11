@@ -2,8 +2,8 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: 360 quality and reliability
-status: wrapping-up
-stopped_at: User requested wrap-up, scoped progress commit and deployment assessment; no new implementation slices
+status: paused
+stopped_at: User requested pause; Site PR31 deployed and live smoke verified; remaining work paused; see operations/360/RELEASE-2026-09-11.md
 last_updated: "2026-09-11"
 ---
 
@@ -35,13 +35,13 @@ Fourteen staged delivery worktrees are preserved. The bulk flush script has conf
 - Prioritize current Hub PR246 review findings before any review override or merge.
 - Keep exact source, package, candidate, merged and deployed identities distinct.
 - Continue independent local implementation/verification while publish/signing/live-access gates remain unresolved.
-- No new production or publication action was taken by this resumption review.
+- Wrap-up release status is tracked in operations/360/RELEASE-2026-09-11.md. Site PR31 is the bounded master-based production candidate; PR29 remains outside this release. No npm publication is implied.
 
 ## Current Blockers / Evidence Gaps
 
 - npm shared0.12.0 / shells-bridge0.2.0 publication failure; license provenance and installed artifact acceptance remain separate gates.
-- Historical1Password signing blockage; current vault state untested. Staged queue requires repair and dependency reconciliation independently of signing.
-- Hub PR246: telemetry repair 16-04 passes independent source review and all 50 native tests. Header/capacity parser correction 15-06 passes independent review and 60 native tests; service-version binding remains open. Remote CI/deployment status has not been refreshed since the resume review.
+- Configured 1Password SSH signing now works with the private TMPDIR. The staged queue still requires repair and dependency reconciliation; do not bulk flush it.
+- Hub PR246: telemetry repair 16-04 passes independent source review and all 50 native tests. Header/capacity parser correction 15-06 passes independent review and 60 native tests; service-version binding is independently verified in private15-07 (102 unit/parser and41 PostgreSQL cases). Hub adoption remains pending; its remote CI/deployment status has not been refreshed since the resume review.
 - Latest gateway DEV CI: Linux/Windows pass; three macOS assertions fail in scan-paths.symlink.test.ts and canvas-host/server.test.ts.
 - Durable caller lifecycle execution, effective read-scope authorization, actual receiver/sender integration, ACP truth and backup/restore remain open.
 - Factory containment, Sentry access, authenticated browser acceptance, container/runtime, load and recovery qualification remain open where recorded.

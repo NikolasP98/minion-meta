@@ -1,0 +1,97 @@
+{
+  "verdict": "PASS: bounded PR31 history-race and shared delivery integrity amendment",
+  "baseHead": "b3ad0102a2e9d153bd784f670a8ed0dc24444282",
+  "candidate": "/home/nikolas/.cache/minion-qc/site-production-i01etdap/minion_site",
+  "freeze": {
+    "path": "/home/nikolas/.cache/minion-qc/site-production-i01etdap/freeze-v2/manifest.json",
+    "sha256": "61e6d6ff8f27b3ea7e421338d4fe0a1b7d1d7c915765f249df7a001ca466176a",
+    "all46SourcesMatch": true
+  },
+  "changedFiles": [
+    {
+      "path": "scripts/qc/ui-fixtures.mjs",
+      "sha256": "d04f8fb75a7f10835103d5c719e7999fb5887c8acce6130b934587539428b974",
+      "bytes": 24221
+    },
+    {
+      "path": "scripts/qc/ui-fixtures.test.mjs",
+      "sha256": "372603c152fb33f99c3bfd4be2d30b1078513a456c6151a4d2b59abe196ae6b4",
+      "bytes": 15203
+    },
+    {
+      "path": "src/lib/services/member-gateway.contract.fixture.ts",
+      "sha256": "173465e0e7f56308d101bcad487afef6e548fb23efbfa4beef6a27c0f0d7b189",
+      "bytes": 27292
+    },
+    {
+      "path": "src/lib/services/member-gateway.svelte.ts",
+      "sha256": "afb7f8316ed560fd339b2c28d5d0e9298c4af02541a6e7f2820fb5ab7234da9a",
+      "bytes": 17198
+    },
+    {
+      "path": "tests/fixtures/member-data-parity/README.md",
+      "sha256": "3e45f50c08a5a626f2781f8dfad7e3e0cfba742e871490aa943135c7944cf2e6",
+      "bytes": 7307
+    },
+    {
+      "path": "tests/fixtures/member-gateway-parity/README.md",
+      "sha256": "0493940f79af6aa44089bd72bfb754c3e3076960965969f30798933ced9b86ff",
+      "bytes": 5503
+    }
+  ],
+  "findings": [
+    {
+      "area": "Mismatched final",
+      "result": "PASS",
+      "evidence": "Same-session mismatched-run events return before history request dispatch. Matching final still clears the run/stream and performs normal history refresh; no-active-run remote continuation remains supported."
+    },
+    {
+      "area": "Earlier pending history",
+      "result": "PASS",
+      "evidence": "A valid new send retires historyOperation and its loading flag before appending the optimistic message. Old completion/catch/finally remain denied by operation identity; newer run/messages survive. Both changes use existing lifecycle state without a new protocol model."
+    },
+    {
+      "area": "Meaningful native regressions",
+      "result": "PASS",
+      "evidence": "Actual emitted GatewayClient fixture covers pending history\u2192new send\u2192old response and current-socket runA final during runB, with positive matching-run final/history controls. Saved baseline2fail/23pass became25pass."
+    },
+    {
+      "area": "Shared archive identity",
+      "result": "PASS",
+      "evidence": "Fixed expected SHA256 and1MiB bound precede parsing. Native GNU tar receives authenticated selected bytes over stdin, clean env and bounded timeout/output, no shell or filesystem extraction.44unique regular members are required; installed membership, lengths and per-member hashes must exactly match, no extra dirs/files or symlinks. Same check repeats before acceptance."
+    },
+    {
+      "area": "Archive negatives",
+      "result": "PASS",
+      "evidence": "Actual selected archive and installed package copies exercise corruption, same-length client byte mutation, missing declaration, extra file/emptydir, linked member/package root and positive44-member case. Final tooling31pass. Same-length mutation proves hash comparison beyond size precheck."
+    },
+    {
+      "area": "Scope",
+      "result": "PASS",
+      "evidence": "Only service/contract, runner/test and two fixture README files differ fromb3ad; no package/dependency/source expansion. Runner now requires87ordinary/25gateway/81browser. Prior negative artifacts retained."
+    }
+  ],
+  "savedEvidence": [
+    {
+      "path": "/home/nikolas/.cache/minion-qc/site-production-i01etdap/stale-run-red-final.log",
+      "sha256": "49855840ca6c5d403f1fb358e1e7dde9235f798d8c9e53421926f76850306545"
+    },
+    {
+      "path": "/home/nikolas/.cache/minion-qc/site-production-i01etdap/stale-run-green.log",
+      "sha256": "cc5c07ad69fd5393f434e685a454b75eaadfa12ef599018dc9eeff803084d241"
+    },
+    {
+      "path": "/home/nikolas/.cache/minion-qc/site-production-i01etdap/archive-red.log",
+      "sha256": "9c0fc5d0d8cdbe0bf0f3a38426340c8f522c099f4a2f4b2eeedf6c83cfda6b2e"
+    },
+    {
+      "path": "/home/nikolas/.cache/minion-qc/site-production-i01etdap/archive-tooling-v2.log",
+      "sha256": "21f2d60b14675478c8cdab534d23991ad48817496fa2983589b78ac81b63eca1"
+    }
+  ],
+  "limits": [
+    "Independent read-only source and saved-evidence review; no source edits or test execution by reviewer.",
+    "Final full replay87/25/81 is running under integrator; hosted CI/new commit qualification remains parent-owned.",
+    "Native tar command intentionally targets existing Linux/GNU toolchain; root-selected artifact identity is not registry publication provenance."
+  ]
+}

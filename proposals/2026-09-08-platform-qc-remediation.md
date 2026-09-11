@@ -383,3 +383,10 @@ Static review verified complete SDK1.4.0 and Zod4.3.6 archives, including integr
 ## 2026-09-11 sender correction qualification
 
 11-10 now independently passes102 cases on final source. Fresh committed admission alone permits dispatch; restarted unresolved records cannot re-prompt, and failed terminal persistence cannot release ownership. The frozen four-file correction requires staged11-03. Official ACP adoption, actual process lifecycle and explicit unresolved recovery remain open at the existing source TODO sites.
+
+
+## 2026-09-11 wrap-up: Site release and remaining delivery boundary
+
+Site PR31 is merged as `0ed4e1b16cef4ca9287314df5af58a8af17f537c`, with the exact tree of reviewed `2359978`. Hosted run34580815730 passes build and the full portable UI lane. The Site-only hosted CI gate referenced by earlier fixture TODOs is satisfied by this run; Hub portability, real authentication/revocation and physical-device acceptance remain open. Canonical deployment receipt: `.planning/operations/360/RELEASE-2026-09-11.md`.
+
+PR30 is superseded and closed; its branch remains preserved. Resume development synchronization from final production, preserving the separate PR29 train and its unresolved conflicts/findings. Hub UI and sender/finance candidates remain saved source deliveries, not deployed applications. The user paused further implementation. No remaining category is implicitly approved as complete.

@@ -1,0 +1,57 @@
+
+ RUN  v3.2.6 /home/nikolas/.cache/minion-qc/site-production-i01etdap/minion_site
+
+{"runeModule":"/home/nikolas/.cache/minion-qc/site-production-i01etdap/minion_site/src/lib/state/member.svelte.ts","ssr":false,"client":true,"transformedSha256":"c278d82385dee0a125c2d1959f8b4f08dbac183100e3675cf39ce56aef1784d8"}
+ ❯ |gateway-contract| src/lib/services/member-gateway.contract.fixture.ts (23 tests | 1 failed | 22 skipped) 1227ms
+   ↓ actual Site member service with emitted shared candidate > resolves the complete candidate runtime and declarations from this private snapshot
+   ↓ actual Site member service with emitted shared candidate > publishes actual client rune changes to a native store subscriber
+   ↓ actual Site member service with emitted shared candidate > initial authentication preserves role/scopes, initialization and exactly one polling timer
+   ↓ actual Site member service with emitted shared candidate > publishes a fresh authenticated session after same-client automatic reconnect
+   ↓ actual Site member service with emitted shared candidate > ignores a retired client close delivered after successor authentication
+   ↓ actual Site member service with emitted shared candidate > does not dispatch successor history from a retired send rejection
+   ↓ actual Site member service with emitted shared candidate > keeps the newer history operation loading when an older same-session request settles
+   ↓ actual Site member service with emitted shared candidate > does not let an old activity timeout clear the successor activity
+   ↓ actual Site member service with emitted shared candidate > clears its activity and poll timers on explicit disconnect
+   ↓ actual Site member service with emitted shared candidate > reports current socket failure only through the selected fixed warning
+   ↓ actual Site member service with emitted shared candidate > does not initialize twice after duplicate challenge or hello responses
+   ↓ actual Site member service with emitted shared candidate > cannot publish or send after disconnect during asynchronous challenge signing
+   ↓ actual Site member service with emitted shared candidate > ignores queued old initialization, events and errors when replacing the client
+   ↓ actual Site member service with emitted shared candidate > ignores queued old history and clears only the retired loading flag
+   ↓ actual Site member service with emitted shared candidate > fences queued send resolve and never replays it on same-client reconnect
+   ↓ actual Site member service with emitted shared candidate > fences queued send reject and never replays it on same-client reconnect
+   × actual Site member service with emitted shared candidate > retires acknowledged streaming work before accepting a successor session 1224ms
+     → expected 'f3247a32-7d81-46c2-ae56-66235da009e3' to be null
+   ↓ actual Site member service with emitted shared candidate > retires queued poll completion and owns exactly one successor polling interval
+   ↓ actual Site member service with emitted shared candidate > contains current event and socket reporter failures (throwing sink=false)
+   ↓ actual Site member service with emitted shared candidate > contains current event and socket reporter failures (throwing sink=true)
+   ↓ actual Site member service with emitted shared candidate > reports failed reconnect safely and stays disconnected (throwing sink=false)
+   ↓ actual Site member service with emitted shared candidate > reports failed reconnect safely and stays disconnected (throwing sink=true)
+   ↓ actual Site member service with emitted shared candidate > ignores a queued old authenticated success after explicit replacement
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |gateway-contract| src/lib/services/member-gateway.contract.fixture.ts > actual Site member service with emitted shared candidate > retires acknowledged streaming work before accepting a successor session
+AssertionError: expected 'f3247a32-7d81-46c2-ae56-66235da009e3' to be null
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+"f3247a32-7d81-46c2-ae56-66235da009e3"
+
+ ❯ src/lib/services/member-gateway.contract.fixture.ts:481:43
+    479|     expect(member.memberState.chat.stream).toBe('Retired stream');
+    480|     old.finishClose(1006);
+    481|     expect(member.memberState.chat.runId).toBeNull();
+       |                                           ^
+    482|     expect(member.memberState.chat.stream).toBeNull();
+    483|     await vi.advanceTimersByTimeAsync(800);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 22 skipped (23)
+   Start at  03:19:36
+   Duration  1.88s (transform 926ms, setup 0ms, collect 199ms, tests 1.23s, environment 0ms, prepare 155ms)
+
