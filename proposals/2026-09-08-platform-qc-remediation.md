@@ -394,3 +394,38 @@ time in the tool's own source rather than a client repo. Not merged: flagged
 audited the tool's own files this way. `handoff-minion-meta-277751425`
 (`package-provenance.mjs:18`) named no comparable existing coverage here and
 is left untouched.
+
+## 2026-09-11 postmerge-discovery reconciliation (proposal-sweep)
+
+The same sweep also found four `postmerge-discovery`-sourced findings against
+`minion_hub` (distinct from the `handoff-sweep` markers above) whose content
+is already tracked here, merged as tombstones:
+
+- `postmerge-minion-hub-aed0037b3792` — `scripts/qc/trace-build-graph.mjs`,
+  marker text literally reads "route evidence to 12-05 results and meta
+  proposals/2026-09-08-platform-qc-remediation.md before admitting a build
+  change" — an explicit self-citation of this document, not a suspicion.
+- `postmerge-minion-hub-e022fc029fcb` —
+  `src/lib/server/workforce-http-boundary.contract.test.ts`, "the helper
+  rejects cancellation, but this real loader intentionally [allows it]" — this
+  is the "actual boundary test" the Workforce helper sections above already
+  name alongside `workforce-fetch.ts`.
+- `postmerge-minion-hub-442b47988ef5` — `src/lib/server/workforce-fetch.ts`,
+  "Safe helper errors do not change loaders that swallow cancellation" — the
+  same gap as "the real inbox loader swallows cancellation into degraded
+  success" in the Workforce helper verification checkpoint section above.
+- `postmerge-minion-hub-b81c6df7d2e4` — `src/lib/server/workforce-fetch.ts`,
+  "Candidate transport honors these structural options; installed0.3.0" —
+  the same "installed 0.3.0 still ignores deadline/byte options" gap named in
+  the Workforce candidate JSON transport section above (the unusual
+  "installed0.3.0" phrasing matches verbatim).
+
+Three other 2026-09-11 `postmerge-discovery` findings on `minion_hub`
+(`postmerge-minion-hub-043c795d03eb` test-fixture README, `-2fae7c00c46f`
+canvas-accessibility Pixi/physics parity, `-6fdada5c6f49` calendar UTC
+timezone display) describe open ends not named anywhere above and were left
+untouched — not merged, not flagged. The three `Chart.svelte` postmerge
+findings (`-514d2ca3f3e5`, `-94ad6c223964`, `-cff27fef4e3c`) were checked and
+are three distinct TODO markers at three different lines of the same file
+(confirmed against `handoff-minion-hub-1431194768`'s marker list), not
+duplicates of each other or of this document.

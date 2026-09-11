@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-6fdada5c6f49
 title: "Post-merge finding — todo-handoff in src/routes/(app)/scheduling/calendar/+page.svelte (minion_hub)"
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+merged_into: handoff-minion-hub-3264105139
 ---
 
 # Post-merge finding — todo-handoff in `src/routes/(app)/scheduling/calendar/+page.svelte`

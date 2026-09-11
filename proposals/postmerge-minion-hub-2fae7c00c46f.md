@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-2fae7c00c46f
 title: "Post-merge finding — todo-handoff in tests/e2e/ui-audit/canvas-accessibility.spec.ts (minion_hub)"
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+merged_into: handoff-minion-hub-2729736154
 ---
 
 # Post-merge finding — todo-handoff in `tests/e2e/ui-audit/canvas-accessibility.spec.ts`

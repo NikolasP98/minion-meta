@@ -28,3 +28,20 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/routes/(app)/scheduling/calendar/+page.svelte:26` — appointments render at their UTC wall-clock, not the org's
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/scheduling/calendar/+page.svelte#L26
+
+## Merged content (from postmerge-minion-hub-6fdada5c6f49, 2026-09-11)
+
+The post-merge discovery loop independently found the same marker (repo
+`NikolasP98/minion_hub@1d491db`, PR #250) and filed a diagnosis, folded in
+here as the richer record now that both point at the same open end:
+
+**Why it matters**: Users see appointment times in UTC, not their
+organization's local timezone. A 2 PM EST meeting displays as 6 PM, causing
+missed bookings and confusion, especially across distributed teams. Trust in
+the scheduling system fails immediately.
+
+**Fix direction**: Query the organization's timezone setting (store it in
+the org config if not already), then convert appointment datetimes from
+storage (assumed UTC) to that zone before rendering. Apply the conversion in
+the calendar component's display layer, and ensure the API/DB layer
+continues storing UTC internally for consistency.

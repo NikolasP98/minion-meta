@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-aed0037b3792
 title: "Post-merge finding — todo-handoff in scripts/qc/trace-build-graph.mjs (minion_hub)"
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+merged_into: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — todo-handoff in `scripts/qc/trace-build-graph.mjs`

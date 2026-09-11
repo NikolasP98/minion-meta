@@ -28,3 +28,20 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master tests/e2e/ui-audit/canvas-accessibility.spec.ts:217` — Workshop/Pixi/physics operation parity needs real engine fixtures;
   https://github.com/NikolasP98/minion_hub/blob/master/tests/e2e/ui-audit/canvas-accessibility.spec.ts#L217
+
+## Merged content (from postmerge-minion-hub-2fae7c00c46f, 2026-09-11)
+
+The post-merge discovery loop independently found the same marker (repo
+`NikolasP98/minion_hub@bb286f8`, PR #251) and filed a diagnosis, folded in
+here as the richer record now that both point at the same open end:
+
+**Why it matters**: The workshop canvas relies on Rapier2D physics for agent
+sprite behavior (spring joints, collision). E2E accessibility tests using
+mock physics won't catch real engine bugs or regressions that affect actual
+user interactions — test/prod parity gap.
+
+**Fix direction**: Replace mock physics with real Rapier2D fixtures in the
+test harness. Alternatively, if performance is a concern, ensure the test
+engine operates identically to production (swap rendering/timing, not
+physics simulation). Accessibility audits must exercise the actual physics
+behavior users experience.

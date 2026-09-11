@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-e022fc029fcb
 title: "Post-merge finding — todo-handoff in src/lib/server/workforce-http-boundary.contract.test.ts (minion_hub)"
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+merged_into: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — todo-handoff in `src/lib/server/workforce-http-boundary.contract.test.ts`

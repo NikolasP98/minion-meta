@@ -28,3 +28,23 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master tests/fixtures/critical-journeys/README.md:45` — Qualify actual login/session and authenticated CRM routing using a
   https://github.com/NikolasP98/minion_hub/blob/master/tests/fixtures/critical-journeys/README.md#L45
+
+## Merged content (from postmerge-minion-hub-043c795d03eb, 2026-09-11)
+
+The post-merge discovery loop independently found the same marker (repo
+`NikolasP98/minion_hub@1d491db`, PR #250) and filed a diagnosis, folded in
+here as the richer record now that both point at the same open end:
+
+**Why this matters**: Critical authentication journeys (login, session
+management, CRM routing) are high-risk for supply-chain and data-leakage
+bugs. An incomplete TODO in the test fixtures means this path is either
+untested, partially tested, or the acceptance criteria were never written
+down — any of which can mask auth regressions.
+
+**Fix direction**:
+1. Complete the TODO statement (it cuts off at "using a.") to clarify what
+   login/session/CRM behavior needs testing and which test tools/assertions
+   to use.
+2. Either implement the missing test steps or, if it's a larger piece of
+   work, document the test gap and its acceptance criteria here.
+3. Link back to this proposal so future work knows where to pick it up.

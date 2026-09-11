@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-043c795d03eb
 title: "Post-merge finding — todo-handoff in tests/fixtures/critical-journeys/README.md (minion_hub)"
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+merged_into: handoff-minion-hub-3215540846
 ---
 
 # Post-merge finding — todo-handoff in `tests/fixtures/critical-journeys/README.md`
