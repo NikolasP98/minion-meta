@@ -40,3 +40,9 @@ This matters because the test is a **regression guard** (checks *if* locale pari
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/256
 - file: `tests/dependencies/locale-parity.test.ts`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-582703223
+
+Same marker, also caught by the handoff-ledger sweep against branch `master`:
+
+- `NikolasP98/minion_hub@master tests/dependencies/locale-parity.test.ts:3` — https://github.com/NikolasP98/minion_hub/blob/master/tests/dependencies/locale-parity.test.ts#L3

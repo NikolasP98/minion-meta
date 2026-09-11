@@ -40,3 +40,9 @@ The `TODO(handoff)` marker at `src/lib/plugins/compat.ts` is removed, or intenti
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/252
 - file: `src/lib/plugins/compat.ts`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-3087604309
+
+Same marker, also caught by the handoff-ledger sweep against branch `master`:
+
+- `NikolasP98/minion_hub@master src/lib/plugins/compat.ts:71` — https://github.com/NikolasP98/minion_hub/blob/master/src/lib/plugins/compat.ts#L71

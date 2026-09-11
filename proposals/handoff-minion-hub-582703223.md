@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-582703223
 title: Handoff marker — tests/dependencies/locale-parity.test.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-9732f7ab41ad
+merged_into: postmerge-minion-hub-9732f7ab41ad
 ---
 
 # Handoff marker — tests/dependencies/locale-parity.test.ts

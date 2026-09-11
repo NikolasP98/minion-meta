@@ -429,3 +429,35 @@ findings (`-514d2ca3f3e5`, `-94ad6c223964`, `-cff27fef4e3c`) were checked and
 are three distinct TODO markers at three different lines of the same file
 (confirmed against `handoff-minion-hub-1431194768`'s marker list), not
 duplicates of each other or of this document.
+
+## 2026-09-11 handoff-marker reconciliation, round 2 (proposal-sweep)
+
+A later pass of the same sweep found three `minion_hub` handoff-sweep marker
+proposals (also filed 2026-09-11) whose single (or, for one, doubled) marker
+text is the exact text already merged here via their sibling
+`postmerge-discovery` findings above. Merged as tombstones (`status: merged`,
+`merged_into: 2026-09-08-platform-qc-remediation`):
+
+- `handoff-minion-hub-2781372415` — `src/lib/server/workforce-http-boundary.contract.test.ts:218`,
+  "The helper rejects cancellation, but this real loader intentionally" —
+  identical marker text already merged here via `postmerge-minion-hub-e022fc029fcb`.
+- `handoff-minion-hub-3253046558` — `scripts/qc/trace-build-graph.mjs:1`,
+  the self-citing "route evidence to 12-05 results and meta
+  proposals/2026-09-08-platform-qc-remediation.md" marker — identical text
+  already merged here via `postmerge-minion-hub-aed0037b3792`.
+- `handoff-minion-hub-883626349` — `src/lib/server/workforce-fetch.ts`, carries
+  both of that file's markers (`:74` "Candidate transport honors these
+  structural options; installed0.3.0" and `:220` "Safe helper errors do not
+  change loaders that swallow cancellation") — both already merged here via
+  `postmerge-minion-hub-b81c6df7d2e4` and `postmerge-minion-hub-442b47988ef5`
+  respectively.
+
+No new open end: each marker's underlying `TODO(handoff)` resolves to a gap
+already tracked above. By contrast, `handoff-minion-hub-1431194768`
+(`Chart.svelte`, 3 markers) and `handoff-minion-hub-821383456`
+(`bridge-protocol.ts`, 2 markers) were left untouched again — their
+constituent markers still resolve to separate still-open per-marker
+proposals (the three `Chart.svelte` postmerge findings above, and
+`postmerge-minion-hub-a4e7e5bce6b1` / `-d3e0b507af92` for `bridge-protocol.ts`
+respectively), not to one shared canonical document, so there is no single
+target to merge the container into.

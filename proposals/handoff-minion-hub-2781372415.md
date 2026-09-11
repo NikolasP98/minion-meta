@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-2781372415
 title: Handoff marker — src/lib/server/workforce-http-boundary.contract.test.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-09-08-platform-qc-remediation
+merged_into: 2026-09-08-platform-qc-remediation
 ---
 
 # Handoff marker — src/lib/server/workforce-http-boundary.contract.test.ts
