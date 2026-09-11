@@ -1,0 +1,90 @@
+name: CI
+on:
+  pull_request:
+    branches: [dev, master, main]
+  push:
+    branches: [dev, master, main]
+
+jobs:
+  check-and-build:
+    runs-on: ubuntu-latest
+    env:
+      # $env/static/public imports need these DEFINED at check/build time.
+      # CI never talks to Supabase — the anon key is a placeholder; the real
+      # values live in Vercel project env.
+      PUBLIC_SUPABASE_URL: https://gxvsaskbohavnurfvshr.supabase.co
+      PUBLIC_SUPABASE_ANON_KEY: ci-placeholder-anon-key
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Compile paraglide i18n messages
+        run: bunx paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide
+
+      - name: Svelte check + typecheck
+        run: bun run check
+
+      - name: Prettier check
+        run: bun run format:check
+
+      - name: Build
+        run: bun run build
+
+  # TODO(handoff): Qualify this exact job on stock Ubuntu24.04 after reviewed
+  # source adoption; local Linux wrapper evidence is not hosted CI evidence.
+  # See proposals/2026-09-08-platform-qc-remediation.md (portable Site UI CI gate).
+  ui-fixtures:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: ui-lane/site
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          path: ui-lane/site
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22.23.2
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: 1.3.4
+      - name: Install exact locked packages without lifecycle hooks
+        timeout-minutes: 10
+        run: bun install --frozen-lockfile --ignore-scripts
+      - name: Install native browser revisions and Ubuntu libraries
+        timeout-minutes: 10
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/ui-browsers
+        run: node node_modules/@playwright/test/cli.js install --with-deps chromium firefox webkit
+      - name: Run complete credential-free native and browser matrices
+        timeout-minutes: 20
+        run: |
+          env -i PATH="$PATH" HOME="$RUNNER_TEMP/ui-home" LANG=C.UTF-8 \
+            PLAYWRIGHT_BROWSERS_PATH="$RUNNER_TEMP/ui-browsers" \
+            node scripts/qc/ui-fixtures.mjs
+      - name: Preserve bounded fixture evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: site-ui-fixtures
+          path: |
+            ui-lane/ui-fixtures-*/
+            ui-lane/chat-output/ui-fixtures-*/
+            ui-lane/gateway-output/ui-fixtures-*/
+            !ui-lane/ui-fixtures-*/cache/**
+            !ui-lane/ui-fixtures-*/tmp/**
+            !ui-lane/ui-fixtures-*/home/**
+            !ui-lane/ui-fixtures-*/playwright-cache/**
+          if-no-files-found: error
+          retention-days: 7

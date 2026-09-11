@@ -317,3 +317,7 @@ Current exact inventory:80 plans,51 requirements. [13-09](../../phases/13-ui-qua
 - [15-07](../../phases/15-data-pipelines/15-07-PLAN.md): five-file parser v3/durable service binding, with D360-20 historical-version refusal and independent raw/normalized source digests; source implementation active, private native fixture requires root admission.
 
 The earlier 86-plan UI packet remains pinned to its own exact catalogue. Current admission is 88; newer plans are not retroactively included in that source packet.
+
+## Wrap-up checkpoint (2026-09-11)
+
+All89 exact allowlisted plans pass installed GSD structural verification.11-10 sender correction and15-07 finance binding independently pass their native tests;13-14 portable Site acceptance is locally qualified. Their canonical summaries distinguish local implementation from release. The auditable task tally is172/229 (75.1%), including37/40 UI tasks (92.5%); no51-requirement closure is implied. Release integration is tracked separately in RELEASE-2026-09-11.md.
