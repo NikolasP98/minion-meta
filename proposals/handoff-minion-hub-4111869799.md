@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-4111869799
 title: Handoff marker — src/lib/components/scheduling/calendar/SchedulingCalendar.svelte (minion_hub)
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-94a4fd2563f2
+merged_into: postmerge-minion-hub-94a4fd2563f2
 ---
 
 # Handoff marker — src/lib/components/scheduling/calendar/SchedulingCalendar.svelte

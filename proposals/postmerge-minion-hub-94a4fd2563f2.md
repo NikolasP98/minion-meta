@@ -45,3 +45,10 @@ Check `minion_hub/src/lib/components/scheduling/calendar/SchedulingCalendar.svel
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/249
 - file: `src/lib/components/scheduling/calendar/SchedulingCalendar.svelte`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-4111869799
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/calendar/SchedulingCalendar.svelte:98` — define fold-spanning event rendering when local end <= start;
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/calendar/SchedulingCalendar.svelte#L98

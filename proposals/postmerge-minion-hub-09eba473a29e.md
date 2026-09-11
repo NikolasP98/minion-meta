@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `src/server/scheduling/load-calendar-events.ts` is
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/249
 - file: `src/server/scheduling/load-calendar-events.ts`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-2333523323
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/server/scheduling/load-calendar-events.ts:76` — decide overlap-window inclusion for bookings starting before from;
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/scheduling/load-calendar-events.ts#L76
