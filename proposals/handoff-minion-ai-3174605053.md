@@ -27,9 +27,17 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-11)
 
-- `NikolasP98/minion-ai@DEV src/shells/manager.ts:616` — Persist terminal receipts and correlate logical runs before acknowledgement in 11-03/14; this relay remains transient. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells contract).
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/manager.ts#L616
-- `NikolasP98/minion-ai@DEV src/shells/manager.ts:653` — Reconcile persisted online status after disconnect; no grace-period sweeper is wired. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells contract).
+- `NikolasP98/minion-ai@DEV src/shells/manager.ts:69` — strict gateway config, production store opening and shutdown
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/manager.ts#L69
+- `NikolasP98/minion-ai@DEV src/shells/manager.ts:558` — caller routing/authorization (shells.invoke_durable,
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/manager.ts#L558
+- `NikolasP98/minion-ai@DEV src/shells/manager.ts:635` — the caller child must classify shells.get_outcome for
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/manager.ts#L635
+- `NikolasP98/minion-ai@DEV src/shells/manager.ts:653` — sender 11-03 must adopt this envelope/receipt; current bridge
   https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/manager.ts#L653
-- `NikolasP98/minion-ai@DEV src/shells/manager.ts:949` — Retry/report failed auxiliary timestamp and timer reads through durable lifecycle recovery; rejected reads are contained, not recovered. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells contract).
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/manager.ts#L949
+- `NikolasP98/minion-ai@DEV src/shells/manager.ts:997` — Persist terminal receipts and correlate logical runs before acknowledgement in 11-03/14; this relay remains transient. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells contract).
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/manager.ts#L997
+- `NikolasP98/minion-ai@DEV src/shells/manager.ts:1034` — Reconcile persisted online status after disconnect; no grace-period sweeper is wired. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells contract).
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/manager.ts#L1034
+- `NikolasP98/minion-ai@DEV src/shells/manager.ts:1331` — Retry/report failed auxiliary timestamp and timer reads through durable lifecycle recovery; rejected reads are contained, not recovered. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells contract).
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/shells/manager.ts#L1331
