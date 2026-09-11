@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-3219321730
 title: Handoff marker — src/gateway/server.impl.ts (minion-ai)
-status: draft
+status: review
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-ai]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-08-17-gw-shells-lifecycle-stubs
 ---
 
 # Handoff marker — src/gateway/server.impl.ts
