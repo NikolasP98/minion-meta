@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-11T22:24:13.655Z",
+	"generatedAt": "2026-09-11T22:29:28.472Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2230,39 +2230,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T07:35:07.076Z"
-		},
-		{
-			"key": "pr:minion_hub#257",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#257 build(deps): security compatibility transaction — Tiptap 3.30.5, dompurify 3.4.13, kit 2.70.2, vitest 4.1.11 (12-01)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/257",
-			"sourceUpdatedAt": "2026-09-11T22:21:50Z",
-			"sourceFingerprint": "f55ec591f1a8f393699687fde7bf69162e5e7e0bcebcf4ae800556f42eec894d",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A dependency-security update PR with verification evidence (test results, build success) and explicit merge-ordering guidance is ready for review/merge now.",
-			"evidence": [
-				"Node fixture: 4 passed / 1 skipped (baseline master: 3 failed)",
-				"tags: test, deps",
-				"serialize with #256 due to overlapping lock files"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T22:24:13.582Z"
 		},
 		{
 			"key": "pr:minion_site#29",
@@ -4988,6 +4955,41 @@
 			"scoredAt": "2026-09-11T21:34:57.253Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-f67a7acec33b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/servers/[id]/provision/run/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f67a7acec33b.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "b1c96d6f086eafe6c7e5e0014b507ae7e97c974eae7af116834abf947cb4643f",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-274eede277fe",
+				"proposal:postmerge-minion-hub-86bab04e505b"
+			],
+			"rationale": "Fragmented host error-log scrubbing separate from the main sanitization pipeline is a plausible sensitive-data-leak risk in provisioning logs, warranting inclusion in a combined PR #246 handoff cleanup.",
+			"evidence": [
+				"TODO(handoff): host error-log scrubbing is separate from the sanitized ... pipeline",
+				"merged PR #246 touching /provision/run/+server.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:29:28.398Z"
+		},
+		{
 			"key": "pr:minion-base#43",
 			"kind": "pr",
 			"stage": "development",
@@ -5755,6 +5757,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T14:06:44.787Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-274eede277fe",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/server/posthog.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-274eede277fe.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "48d8119e25d2e80c5320b9d211edf21c9dc351244f18a83c4602a29b69dd0904",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-86bab04e505b",
+				"proposal:postmerge-minion-hub-f67a7acec33b"
+			],
+			"rationale": "Auto-filed handoff TODO about unawaited PostHog flush risking lost error events in serverless is a real but narrow observability gap best merged with sibling findings from the same PR into one cleanup goal.",
+			"evidence": [
+				"TODO(handoff): qualify error-storm flush fan-out and serverless delivery",
+				"merged PR https://github.com/NikolasP98/minion_hub/pull/246"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:29:28.398Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
@@ -8010,6 +8047,41 @@
 			"scoredAt": "2026-09-09T08:04:55.503Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-86bab04e505b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/finance-statement-parser.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-86bab04e505b.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "90447ac427c7d210a063f03470b5103fc89fbb874d6c5d31431bf10706a51228",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-274eede277fe",
+				"proposal:postmerge-minion-hub-f67a7acec33b"
+			],
+			"rationale": "Duplicate PARSER_VERSION constants risk silent drift between parser and service, a bounded fix that fits naturally alongside the other two same-PR handoff findings.",
+			"evidence": [
+				"TODO(handoff): finance-statements.service.ts keeps its own PARSER_VERSION",
+				"merged PR #246 in NikolasP98/minion_hub@4baea86"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:29:28.398Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9732f7ab41ad",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9189,37 +9261,36 @@
 			"scoredAt": "2026-09-07T22:34:40.008Z"
 		},
 		{
-			"key": "run:minion_hub#34653727534",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/34653727534",
-			"sourceUpdatedAt": "2026-09-11T22:22:58Z",
-			"sourceFingerprint": "3c943934f5918a880689c25ea74980b0048a705a97fcdcf6d20483b5dc533220",
-			"score": 25,
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/9c1a53f7e5c62ce846fef5e484b891ba0bce1775",
+			"sourceUpdatedAt": "2026-09-11T21:35:09Z",
+			"sourceFingerprint": "3ba7110f3197684f0773ff1ac399bdb2ef79bd7aa6c24e028ea52d0ff0885691",
+			"score": 23,
 			"band": "low",
 			"axes": {
-				"criticality": 3,
-				"importance": 2,
+				"criticality": 2,
+				"importance": 3,
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 2
+				"specification": 6,
+				"implementation": 8
 			},
-			"confidence": 3,
+			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run on master with no actionable content of its own beyond monitoring.",
+			"rationale": "Summary describes a test-skip fix already committed (commit 9c1a53f), so this deployment-health entry reflects resolved work rather than an open goal.",
 			"evidence": [
-				"status: in_progress",
-				"summary: push on master",
-				"kind: run, stage: testing"
+				"commit b6485201 skipIf(win32) matching #288/#289",
+				"sourceUrl points to an existing commit"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T22:24:13.582Z"
+			"scoredAt": "2026-09-11T22:29:28.398Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
@@ -10005,6 +10076,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T22:14:33.543Z"
+		},
+		{
+			"key": "run:minion_hub#34654093997",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/34654093997",
+			"sourceUpdatedAt": "2026-09-11T22:27:41Z",
+			"sourceFingerprint": "997a68af0a4a261b65b79bf51cc1b68916bc22d0e116fe02accc9e671959ee3a",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is just an in-progress CI run status on a push to master, not an actionable goal.",
+			"evidence": [
+				"status: in_progress",
+				"summary: push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:29:28.398Z"
 		}
 	]
 }
