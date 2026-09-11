@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-11T09:34:45.908Z",
+	"generatedAt": "2026-09-11T10:04:28.154Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -898,6 +898,39 @@
 			"scoredAt": "2026-09-07T08:35:09.206Z"
 		},
 		{
+			"key": "pr:minion_hub#246",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#246 feat(server): sanitized observability identity (OBS-01) + finance parser provenance and bounds (DATA-01)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/246",
+			"sourceUpdatedAt": "2026-09-11T09:45:31Z",
+			"sourceFingerprint": "b3fbc31c68562bdde1e308409be0b60a904847fcbaf166486ff8adb4edd3432f",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Server-only observability sanitization and finance parser bounds close real data-leak and unbounded-input risks with red-green test evidence and clean gates, though DATA-01 Task 2 remains explicitly blocked on a frozen dependency.",
+			"evidence": [
+				"OBS-01 replaces raw error.message/path with sha-256 digest + allowlisted identity, closing a data-leak in every server error event",
+				"DATA-01 bounds input (8M chars/100k rows) and rejects oversized records instead of silent coercion",
+				"85/85 focused tests pass, bun run check 0 errors; DATA-01 Task 2 blocked because job-effects.service.ts does not exist on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T10:04:28.070Z"
+		},
+		{
 			"key": "proposal:2026-08-20-dev-key-at-rest-audit",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -993,6 +1026,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:35:39.550Z"
+		},
+		{
+			"key": "pr:minion (gateway)#280",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#280 feat(shells): durable receiver chain (14-14/14-12/14-17) + vendored shared 0.12.0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/280",
+			"sourceUpdatedAt": "2026-09-11T09:55:34Z",
+			"sourceFingerprint": "a913a35ea0d1bb64a6016147033f59b7521bd249a74321891cd535335c2b014a",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Durable shells receiver chain with full test/tsgo/check evidence and a documented workaround, but published dependency is blocked pending NPM_TOKEN so it carries a temporary vendored-archive risk.",
+			"evidence": [
+				"245/245 tests pass, pnpm tsgo 0 diagnostics",
+				"vendored @minion-stack/shared 0.12.0 archive because npm publish blocked on expired NPM_TOKEN",
+				"fix: create run store parent dir 0700 before construction to avoid SHELL_RUN_STORE_INVALID_PATH"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T10:04:28.070Z"
 		},
 		{
 			"key": "proposal:2026-08-23-minion-ai-ci-baseline-debt",
@@ -1356,38 +1422,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-09T15:35:06.298Z"
-		},
-		{
-			"key": "pr:minion_hub#246",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#246 feat(server): sanitized observability identity (OBS-01) + finance parser provenance and bounds (DATA-01)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/246",
-			"sourceUpdatedAt": "2026-09-11T09:09:44Z",
-			"sourceFingerprint": "e34558fd63bc3d991e0419a668ca75d3cc2f68d1463891940dbe18dc06d8249e",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Server-only security/observability hardening (sanitized error identity, bounded finance parsing) is fully gated and ready to merge.",
-			"evidence": [
-				"replaces leaky distinctId/raw error.message/path with sanitized envelope",
-				"85 passed / 0 failed on focused tests, bun run check 0 errors"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T09:19:01.019Z"
 		},
 		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
@@ -7981,38 +8015,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-09T22:35:10.859Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/8499d8fddc4afdd22f6160e3f3e6e448b6befe73",
-			"sourceUpdatedAt": "2026-09-10T13:10:39Z",
-			"sourceFingerprint": "749216b865d8919fbe7347a2d59c251ae9cd08decad46a781715916bf31f37e2",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Commit message documents a bash-3.2 CI portability bug already fixed and verified with tests and lint passing.",
-			"evidence": [
-				"mapfile calls replaced with portable while-read loops",
-				"pnpm exec vitest run test/ci/ -> 14 files / 101 tests passed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T09:34:45.836Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
