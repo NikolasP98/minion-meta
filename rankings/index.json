@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-11T18:05:22.176Z",
+	"generatedAt": "2026-09-11T18:35:08.778Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -999,6 +999,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:07:53.497Z"
+		},
+		{
+			"key": "pr:minion (gateway)#286",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#286 fix(gateway): accept the Site members UI client id (minion-member-ui)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/286",
+			"sourceUpdatedAt": "2026-09-11T18:28:48Z",
+			"sourceFingerprint": "52432c7cc117563a9da1702273afd713f3d228126988d1d2da5103bc9ad87cdc",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Open PR fixes a concrete gateway schema rejection blocking the Site members UI from connecting, with passing protocol tests.",
+			"evidence": [
+				"gateway connect schema rejects client.id 'minion-member-ui'",
+				"protocol:check clean, protocol tests 12/12, tsgo 0"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T18:35:08.700Z"
 		},
 		{
 			"key": "pr:minion_hub#200",
@@ -3305,73 +3337,6 @@
 			"scoredAt": "2026-09-07T08:07:53.497Z"
 		},
 		{
-			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Migrate Hub off the deprecated @inlang/paraglide-sveltekit adapter",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-paraglide-adapter-migration-followup.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "47b93c52bb4326dc19369cb6aeef6082f2861d72465f6b14c70db51d264ee1aa",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Well-evidenced deprecated-dependency migration with a demonstrated latent concurrency defect, but still needs paraglide-js v2 API re-verification before dev work is actionable.",
-			"evidence": [
-				"@inlang/paraglide-sveltekit is npm-deprecated",
-				"locale-parity.test.ts shows ambient setLanguageTag bleeds locale under concurrent requests",
-				"sketch requires re-reading v2 docs before picking an approach"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T09:34:45.836Z"
-		},
-		{
-			"key": "proposal:handoff-minion-ai-315458649",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — extensions/flows/src/data-paths.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-315458649.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "79473fa9aab13f053f238d30c2dfa27718a94d73479d4e6917873890f8106611",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-ai-3766023210"
-			],
-			"rationale": "SEC-08 same-UID/ACL deployment marker in data-paths.ts overlaps directly with the matching SEC-08 marker in data-nodes.ts.",
-			"evidence": [
-				"marker: SEC-08 deployment requires trusted same-UID writers, canonical root pointers",
-				"marker: a supported Windows policy needs a real ACL owner/permission check"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T02:35:06.477Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-3159127524",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3439,40 +3404,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T14:05:57.000Z"
-		},
-		{
-			"key": "proposal:handoff-minion-ai-3766023210",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — extensions/flows/src/data-nodes.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3766023210.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "c02f88bedec12fe7c97ba1742800c7aa2bf92c59c8513e0e090472dfbd32420b",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-ai-315458649"
-			],
-			"rationale": "SEC-08 raw-handle plugin and runtime-image markers in data-nodes.ts mirror the same SEC-08 deployment marker in data-paths.ts.",
-			"evidence": [
-				"marker: SEC-08 deployment must establish clean exact-image/runtime",
-				"marker: Raw-handle plugins and same-UID filesystem writers remain"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T02:35:06.477Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-1093105314",
@@ -4479,6 +4410,38 @@
 			"scoredAt": "2026-09-09T06:35:03.763Z"
 		},
 		{
+			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Migrate Hub off the deprecated @inlang/paraglide-sveltekit adapter",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-paraglide-adapter-migration-followup.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "e6401cb36d95f9c85e2c2b8d23a3183c9790d69d757891cd5811b002ffbc5f70",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-evidenced deprecated-dependency migration with a deterministic locale-bleed test proving a real latent correctness bug and a concrete file-by-file sketch.",
+			"evidence": [
+				"@inlang/paraglide-sveltekit is npm-deprecated",
+				"locale-parity.test.ts shows deterministic cross-request locale bleed under concurrency for the ambient API"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T18:35:08.700Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-111011530",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4979,38 +4942,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T17:35:25.610Z"
-		},
-		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 79245 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-09-11T12:21:11Z",
-			"sourceFingerprint": "a48b4ae8ee61f906debcfedbf148f53fdd8e011db42ea8ff6cb7e4a261e00944",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "A raw dump of 79245 upstream commits has no defined scope and needs reframing into a bounded sync plan before it is actionable.",
-			"evidence": [
-				"Title: Upstream sync: 79245 new commit(s) available",
-				"Body is only a raw commit log with no merge plan or scope"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T14:05:57.000Z"
 		},
 		{
 			"key": "pr:minion-base#43",
@@ -5648,38 +5579,6 @@
 			"scoredAt": "2026-09-11T14:05:57.000Z"
 		},
 		{
-			"key": "proposal:handoff-minion-ai-2382793954",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — src/infra/message-ledger.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2382793954.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "35e223d43beac2f9c7e2edb3502380ffbba629044767a244ebe431e62f36709b",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Trust-boundary note on plugin receipt history in the message ledger is important but underspecified.",
-			"evidence": [
-				"marker: Raw-handle plugins remain trusted process code. Receipt history",
-				"status draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T02:35:06.477Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-3238987400",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6266,38 +6165,6 @@
 			"scoredAt": "2026-09-07T08:35:09.206Z"
 		},
 		{
-			"key": "proposal:handoff-minion-ai-3887937197",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — packages/plugin-ui-bridge/src/index.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3887937197.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "c23aa1f1b06f3b596c0fbeb05a1d3144d98e9806475846b527466a11d8afcc51",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Plugin UI bridge needs caller qualification and cancellation/timeout handling but scope is only sketched in marker text.",
-			"evidence": [
-				"marker: Qualify wildcard-fallback extension callers and handwritten artifact peers before rollout",
-				"marker: Add per-operation cancellation/timeouts without truncating 180s generation calls"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T02:35:06.477Z"
-		},
-		{
 			"key": "proposal:handoff-minion-site-2829334481",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6520,6 +6387,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:10:36.860Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-site-a357d1f6520e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.0-qc-d01a528579e7.tgz (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-a357d1f6520e.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "9abeac3886f680e8a31999037164fb185b99b6eef4b1b019b50cfbc66c8aa2b9",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Repo-hygiene fix is clear but the reconciliation note flags this as a duplicate_candidate whose disposal is pending a human decision on the unpublished shared package's license/version.",
+			"evidence": [
+				"reconciliation note: flagged duplicate_candidate, adoption pending license text and immutable version",
+				"committed deps/*.tgz blocks diff scanning and obscures dependency version"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T18:35:08.700Z"
 		},
 		{
 			"key": "spec:2026-08-19-gateway-client-error-hook-consumer-adoption-spec",
@@ -8064,40 +7963,6 @@
 			"scoredAt": "2026-09-11T07:34:34.821Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/e499c3f50b72c4f12b6f874e0e9ad97d823b1317",
-			"sourceUpdatedAt": "2026-09-11T17:50:23Z",
-			"sourceFingerprint": "d4a9baa93554eed81e8bc443f6a4cc397adc8feda04c8ddc71347e9afddab73e",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:minion (gateway)#282"
-			],
-			"rationale": "This deployment-health entry only restates an already-merged commit fixing macOS tmpdir resolution in test fixtures with no source change.",
-			"evidence": [
-				"commit says 'No source change'",
-				"fixes only test fixtures for macOS CI"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T18:05:22.094Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-2187559393",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8319,38 +8184,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-08T21:04:28.601Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-site-a357d1f6520e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.0-qc-d01a528579e7.tgz (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-a357d1f6520e.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "756d6e8e69ea24dad2f4f225b80f12a43700303a7c34bd6e06f249a3f5e21156",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Committed dependency tarball is a low-risk repo-hygiene fix with an explicit remediation path.",
-			"evidence": [
-				"committed tarball deps/minion-stack-shared-0.9.0-qc-d01a528579e7.tgz",
-				"fix: git rm tarball, gitignore deps/, resolve via bun install and lockfile"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T09:06:03.071Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
@@ -9110,40 +8943,6 @@
 			"scoredAt": "2026-09-07T22:34:40.008Z"
 		},
 		{
-			"key": "run:minion (gateway)#34629938303",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34629938303",
-			"sourceUpdatedAt": "2026-09-11T17:54:46Z",
-			"sourceFingerprint": "8ce988bcaf91601d2eed86433caf913a47fcb9656810f3cd3185574a77c0687e",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:minion (gateway)#282"
-			],
-			"rationale": "This is only a transient in-progress CI status for a DEV push already tracked by the merge-train PR, not a standalone actionable goal.",
-			"evidence": [
-				"status: in_progress",
-				"'push on DEV', duplicating work already covered by pr:minion (gateway)#282"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T18:05:22.094Z"
-		},
-		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -9307,14 +9106,14 @@
 			"scoredAt": "2026-09-07T08:11:32.696Z"
 		},
 		{
-			"key": "proposal:handoff-minion-ai-3235580445",
+			"key": "proposal:handoff-minion-meta-1708310858",
 			"kind": "proposal",
 			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — src/infra/message-ledger-profile.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3235580445.md",
+			"repo": "minion-meta",
+			"title": "Handoff marker — scripts/qc/handoff-ledger.mjs (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-1708310858.md",
 			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "22381c96507e3e025de2a67a8a81a25c98345f9c09ae7306ef5220db3c04b678",
+			"sourceFingerprint": "5ad79c8d599ee1ec2c41a4c3519482a6d1331bf5357f0826c16f95b283c2f6a5",
 			"score": 23,
 			"band": "low",
 			"axes": {
@@ -9323,20 +9122,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 2
+				"specification": 3,
+				"implementation": 3
 			},
 			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A narrow schema-profile review item with vague scope and no urgency signal.",
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"proposal:handoff-minion-meta-3652542388"
+			],
+			"rationale": "The quoted marker is a bare code fragment rather than a real TODO description, suggesting the handoff-ledger scanner mis-extracted context rather than flagging genuine unresolved work.",
 			"evidence": [
-				"marker: Additional persisted schemas/DDL spellings need reviewed profiles",
-				"status draft"
+				"marker text is `') || !COMMENT_OPENER.test(line)) return;` with no surrounding TODO description"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T02:35:06.477Z"
+			"scoredAt": "2026-09-11T18:35:08.700Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1883922325",
@@ -9465,6 +9265,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:13:41.404Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 79328 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-09-11T18:17:57Z",
+			"sourceFingerprint": "d64d4efa1c067f1eb170c2e3105f7d979b2bc807b6a63a9700fbc6f086c2f386",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated upstream-sync tracker listing thousands of commits with no scoped, actionable work defined.",
+			"evidence": [
+				"79328 new commit(s) available, auto-generated commit list, no specific change requested"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T18:35:08.700Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
@@ -9706,70 +9537,6 @@
 			"scoredAt": "2026-09-07T08:06:44.351Z"
 		},
 		{
-			"key": "proposal:handoff-minion-ai-692195553",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — src/infra/message-ledger-provenance.test.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-692195553.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "a9daa1e5604c877fe96c74b52793021bfb80271b64be6696dffa548f46482d82",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A minor Windows-only test-fixture gap with narrow scope and no urgency.",
-			"evidence": [
-				"marker: a Windows fixture for open-file replacement would need a helper that",
-				"status draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T02:35:06.477Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-1708310858",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — scripts/qc/handoff-ledger.mjs (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-1708310858.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "629ce710dfad8230c82cdbc5ee1f7de3005c3e3f7e1d6f83b82bf9a4dd9cd1f1",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The captured marker is a bare code fragment rather than a TODO description, suggesting the ledger sweep grabbed the wrong line and needs its extraction logic corrected before this can be actioned.",
-			"evidence": [
-				"marker text is just \"') || !COMMENT_OPENER.test(line)) return;\"",
-				"no explanatory TODO(handoff) rationale quoted"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T18:05:22.094Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-221859101",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9928,6 +9695,39 @@
 			"scoredAt": "2026-09-07T08:11:32.696Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-3652542388",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — scripts/qc/handoff-ledger.test.mjs (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-3652542388.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "a72a2f6c249953d9ef9f28d3a3e840b477b0c032fb3d89169b90e94bbed41f95",
+			"score": 13,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"proposal:handoff-minion-meta-1708310858"
+			],
+			"rationale": "Markers quote test-fixture string literals from handoff-ledger.test.mjs itself (e.g. 'should never be scanned', 'no link here at all'), indicating the scanner is flagging its own test data rather than real open ends.",
+			"evidence": [
+				"marker text 'prose mention only, not a source site' and 'should never be scanned' are self-describing test fixtures inside handoff-ledger.test.mjs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T18:35:08.700Z"
+		},
+		{
 			"key": "issue:minion-meta#373",
 			"kind": "issue",
 			"stage": "proposal",
@@ -9960,14 +9760,14 @@
 			"scoredAt": "2026-09-09T23:04:27.681Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-3652542388",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — scripts/qc/handoff-ledger.test.mjs (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-3652542388.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "abf59218ba186be0b820485a5bb1119fbf98f477c78754904a286efd33aec836",
+			"key": "run:minion (gateway)#34629938303",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34629938303",
+			"sourceUpdatedAt": "2026-09-11T18:28:38Z",
+			"sourceFingerprint": "95f68abd70a1404e5f251b5a5611b040d97406f2234dfc1061ef5ddc9d811386",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -9979,17 +9779,16 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 8,
+			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Every quoted marker is a deliberate test-fixture string inside the handoff-ledger scanner's own test file, not a real open end in shipped code.",
+			"rationale": "This is an in-progress CI run status, not a discrete work item to rank.",
 			"evidence": [
-				"quoted lines include 'no link here at all' and 'should never be scanned'",
-				"file is scripts/qc/handoff-ledger.test.mjs, the scanner's own test suite"
+				"CI run, push on DEV, status in_progress"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T18:05:22.094Z"
+			"scoredAt": "2026-09-11T18:35:08.700Z"
 		}
 	]
 }
