@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-11T22:19:13.421Z",
+	"generatedAt": "2026-09-11T22:24:13.655Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -835,6 +835,42 @@
 			"scoredAt": "2026-09-07T08:12:46.705Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-a4e7e5bce6b1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/plugins/bridge-protocol.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a4e7e5bce6b1.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "b5c9c5f0743c4aa2c7fefeb4937141f00e3de648ec29577ff0e1b34a09243701",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-d3e0b507af92",
+				"proposal:postmerge-minion-hub-0050a8290ce5"
+			],
+			"rationale": "A security gap allowing unauthorized component mounting with unvalidated capability tokens in the bridge protocol is high-consequence and shares the same file/PR as a related sanitization finding, warranting a combined bridge-protocol hardening goal.",
+			"evidence": [
+				"TODO(handoff): Gate constrained capabilities before component mounting, audit token/method authority",
+				"could allow unauthorized components to execute with unvalidated capabilities",
+				"merged PR #252, file src/lib/plugins/bridge-protocol.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:24:13.582Z"
+		},
+		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1501,39 +1537,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-09T15:35:06.298Z"
-		},
-		{
-			"key": "pr:minion_hub#246",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#246 feat(server): sanitized observability identity (OBS-01) + finance parser provenance and bounds (DATA-01)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/246",
-			"sourceUpdatedAt": "2026-09-11T21:53:19Z",
-			"sourceFingerprint": "d4dcf20c194a87a10f39aec1970601d89554d7c228590650b25ecf250b18ea23",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Server-only sanitization and bounds work is fully gated with passing tests and documented red-green evidence, making it ready to land.",
-			"evidence": [
-				"85 passed / 0 failed on focused vitest files",
-				"bun run check 0 errors, 0 warnings",
-				"route contract 120 passed, no baseline re-pin"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T21:54:54.579Z"
 		},
 		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
@@ -2235,8 +2238,8 @@
 			"repo": "minion_hub",
 			"title": "#257 build(deps): security compatibility transaction — Tiptap 3.30.5, dompurify 3.4.13, kit 2.70.2, vitest 4.1.11 (12-01)",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/257",
-			"sourceUpdatedAt": "2026-09-11T18:00:30Z",
-			"sourceFingerprint": "768866ef10d3d925a5a37df600618db2b5b1cc9ef01cd7ba9b27c31aa7bacb8a",
+			"sourceUpdatedAt": "2026-09-11T22:21:50Z",
+			"sourceFingerprint": "f55ec591f1a8f393699687fde7bf69162e5e7e0bcebcf4ae800556f42eec894d",
 			"score": 58,
 			"band": "medium",
 			"axes": {
@@ -2245,21 +2248,21 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 7
+				"specification": 8,
+				"implementation": 8
 			},
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Security-relevant dependency compatibility transaction with a new regression test and verified build/check passing, though it must serialize with a sibling PR not in this batch.",
+			"rationale": "A dependency-security update PR with verification evidence (test results, build success) and explicit merge-ordering guidance is ready for review/merge now.",
 			"evidence": [
-				"Node fixture 4 passed/1 skipped vs baseline 3 failed",
-				"bun run check 0/0; build ok",
-				"must serialize with #256 on package.json/bun.lock"
+				"Node fixture: 4 passed / 1 skipped (baseline master: 3 failed)",
+				"tags: test, deps",
+				"serialize with #256 due to overlapping lock files"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T18:05:22.094Z"
+			"scoredAt": "2026-09-11T22:24:13.582Z"
 		},
 		{
 			"key": "pr:minion_site#29",
@@ -4915,6 +4918,42 @@
 			"scoredAt": "2026-09-09T22:35:10.859Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-0050a8290ce5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/plugins/compat.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0050a8290ce5.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "0488c801f47c667b2f975e30e54b5d4972f6087f5876813776f981ba51fa042c",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-a4e7e5bce6b1",
+				"proposal:postmerge-minion-hub-d3e0b507af92"
+			],
+			"rationale": "A race-condition bug in PluginIframe mounting is clearly described with a fix direction but lacks bounded execution evidence, and it shares the same merged PR/file family as two related bridge-protocol findings.",
+			"evidence": [
+				"TODO(handoff): PluginIframe currently mounts before capabilities load",
+				"merged PR #252, file src/lib/plugins/compat.ts",
+				"fix direction proposes a loading gate + test"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:24:13.582Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-09eba473a29e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5173,6 +5212,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-10T06:04:56.918Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d3e0b507af92",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/plugins/bridge-protocol.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d3e0b507af92.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "68480ab2ac3d5f1cd890cf8f6837c99edbe1ab1baffbbd43a3cc7a85103c3507",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-a4e7e5bce6b1",
+				"proposal:postmerge-minion-hub-0050a8290ce5"
+			],
+			"rationale": "Raw upstream error leakage in the same bridge-protocol file is a lower-severity information-disclosure issue best folded into the related bridge-protocol hardening work rather than tracked separately.",
+			"evidence": [
+				"Raw upstream error messages leak internal system details",
+				"same file src/lib/plugins/bridge-protocol.ts, same merged PR #252",
+				"fix direction proposes a safe error projection layer"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:24:13.582Z"
 		},
 		{
 			"key": "spec:2026-08-03-crm-icp-score-spec",
@@ -9114,6 +9189,39 @@
 			"scoredAt": "2026-09-07T22:34:40.008Z"
 		},
 		{
+			"key": "run:minion_hub#34653727534",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/34653727534",
+			"sourceUpdatedAt": "2026-09-11T22:22:58Z",
+			"sourceFingerprint": "3c943934f5918a880689c25ea74980b0048a705a97fcdcf6d20483b5dc533220",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run on master with no actionable content of its own beyond monitoring.",
+			"evidence": [
+				"status: in_progress",
+				"summary: push on master",
+				"kind: run, stage: testing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:24:13.582Z"
+		},
+		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -9404,38 +9512,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:13:41.404Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/9c1a53f7e5c62ce846fef5e484b891ba0bce1775",
-			"sourceUpdatedAt": "2026-09-11T21:35:09Z",
-			"sourceFingerprint": "3ba7110f3197684f0773ff1ac399bdb2ef79bd7aa6c24e028ea52d0ff0885691",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Already-merged routine Windows CI test-skip fix, nothing further to act on.",
-			"evidence": [
-				"test(gateway): skip the durable shells suites on win32 (#291)",
-				"matching #288/#289"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T22:19:13.345Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
@@ -9929,39 +10005,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T22:14:33.543Z"
-		},
-		{
-			"key": "run:minion_hub#34653329839",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/34653329839",
-			"sourceUpdatedAt": "2026-09-11T22:17:26Z",
-			"sourceFingerprint": "da7d35123a12550ef485a774330d0c665ea1ecedc554dd83ea7e30ba6aeea575",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is only an in-progress CI run status on master, not an actionable goal.",
-			"evidence": [
-				"CI",
-				"push on master",
-				"in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T22:19:13.345Z"
 		}
 	]
 }
