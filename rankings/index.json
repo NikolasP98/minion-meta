@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-11T08:04:25.236Z",
+	"generatedAt": "2026-09-11T08:34:41.488Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1678,6 +1678,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-10T06:04:56.918Z"
+		},
+		{
+			"key": "pr:minion_site#30",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_site",
+			"title": "#30 fix(members): responsive UI and authenticated reconnect lifecycle",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/30",
+			"sourceUpdatedAt": "2026-09-11T08:14:56Z",
+			"sourceFingerprint": "b683e3cecdda20948c494cdd03321ad85c84f7d9d4768680cb42749f36c7a44c",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_site#31"
+			],
+			"rationale": "Responsive UI and gateway-lifecycle fix targeting dev overlaps almost entirely with PR #31's version of the same fix, so the two should be reconciled into one goal before either merges.",
+			"evidence": [
+				"targets dev branch per repo's PR base",
+				"final portable acceptance run (22+75 cases) still required before merge",
+				"near-identical scope to pr:minion_site#31"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T08:34:41.415Z"
+		},
+		{
+			"key": "pr:minion_site#31",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_site",
+			"title": "#31 fix(members): responsive UI and gateway lifecycle production repair",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/31",
+			"sourceUpdatedAt": "2026-09-11T08:32:11Z",
+			"sourceFingerprint": "bf35a32b8b0403f8a11bb5559a3be32c565aad0ea6ce0f0f2afe71c7832da982",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_site#30"
+			],
+			"rationale": "This is a more validated version of the same responsive-UI/gateway-lifecycle fix as PR #30 but targets master directly, deviating from the repo's declared dev PR base, so it should be reconciled with #30 rather than merged separately.",
+			"evidence": [
+				"explicitly starts from master though minion_site's registered PR base is dev",
+				"broader validation passing (87+23+23+81 cases, hosted checks) with only final review pending",
+				"overlaps substantially with pr:minion_site#30's scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T08:34:41.415Z"
 		},
 		{
 			"key": "pr:minion-meta#271",
@@ -4010,40 +4080,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:14:36.905Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/8499d8fddc4afdd22f6160e3f3e6e448b6befe73",
-			"sourceUpdatedAt": "2026-09-10T13:10:39Z",
-			"sourceFingerprint": "749216b865d8919fbe7347a2d59c251ae9cd08decad46a781715916bf31f37e2",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"run:minion (gateway)#34574805109"
-			],
-			"rationale": "This commit already fixed a portable-bash CI bug with verified tests, so it is satisfied work, not an open goal.",
-			"evidence": [
-				"fix(ci): make ci-security-scope.sh portable to bash 3.2",
-				"Verified: pnpm exec vitest run test/ci/ -> 14 files / 101 tests passed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T08:04:25.156Z"
 		},
 		{
 			"key": "issue:minion-meta#344",
