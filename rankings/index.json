@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-11T20:04:44.400Z",
+	"generatedAt": "2026-09-11T20:34:23.973Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2358,39 +2358,6 @@
 			"scoredAt": "2026-09-11T18:05:22.094Z"
 		},
 		{
-			"key": "run:minion-meta#34440681982",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion-meta",
-			"title": "Release",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/actions/runs/34440681982",
-			"sourceUpdatedAt": "2026-09-10T05:21:07Z",
-			"sourceFingerprint": "f67730aec58827695c8de17c7b17ec3ee5d6fd127bdaf053e75e68e82b9f0c05",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failed Release workflow on main risks blocking npm publishing of shared packages consumed by hub, site, and paperclip, but the log gives no failure detail to act on yet.",
-			"evidence": [
-				"status: failure",
-				"summary: 'push on main' with no further diagnostic detail",
-				"workflow named 'Release'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T05:35:30.528Z"
-		},
-		{
 			"key": "spec:2026-08-17-gw-defaces-crm-tools-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -2454,6 +2421,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:08:45.360Z"
+		},
+		{
+			"key": "run:minion (gateway)#34641318894",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34641318894",
+			"sourceUpdatedAt": "2026-09-11T20:31:19Z",
+			"sourceFingerprint": "136344760fd209a4b23b20ebb6fa186e30ad84e8eac19ebf1aa84f06b32a70d2",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A failing CI run on the gateway's development branch blocks merges and warrants prompt investigation.",
+			"evidence": [
+				"status: failure",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T20:34:23.876Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -8413,38 +8412,6 @@
 			"scoredAt": "2026-09-09T22:35:10.859Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/c12eb0f29be2f5b99069952e5208a386be740f1f",
-			"sourceUpdatedAt": "2026-09-11T19:54:05Z",
-			"sourceFingerprint": "111e55c90a553f68961bcdb90c81fc26d0ce4ef2dcc9dee898d65b06511282f6",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 8
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The commit already resolves the Windows test-skip and fixture-path portability issue as intended behavior, leaving no outstanding action.",
-			"evidence": [
-				"fail-closed refusal from #283 is the intended behaviour",
-				"resolve the fixture path so it is absolute and canonical on every platform"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T20:04:44.322Z"
-		},
-		{
 			"key": "pr:minion_hub#196",
 			"kind": "pr",
 			"stage": "development",
@@ -9266,6 +9233,38 @@
 			"scoredAt": "2026-09-09T07:34:26.326Z"
 		},
 		{
+			"key": "run:minion-meta#34440681982",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion-meta",
+			"title": "Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/actions/runs/34440681982",
+			"sourceUpdatedAt": "2026-09-11T20:33:01Z",
+			"sourceFingerprint": "e2fa26225aaeb7de55c8bf3e4fa390205159c757a38d9f2a72f358c82e0f4f12",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A release workflow still in progress on main is not yet actionable and may resolve on its own.",
+			"evidence": [
+				"status: in_progress",
+				"push on main"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T20:34:23.876Z"
+		},
+		{
 			"key": "spec:2026-08-17-hub-dead-mirrors-cleanup-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -9598,38 +9597,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-10T05:35:30.528Z"
-		},
-		{
-			"key": "run:minion (gateway)#34641318894",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34641318894",
-			"sourceUpdatedAt": "2026-09-11T19:58:32Z",
-			"sourceFingerprint": "3ac979db42f2d35eba2ee2e61163746fe3036be92af53a641015b0696acaaf65",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run status rather than an actionable goal.",
-			"evidence": [
-				"push on DEV",
-				"status: in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T20:04:44.322Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-1962723814",
