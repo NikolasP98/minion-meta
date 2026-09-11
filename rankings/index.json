@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-11T07:34:34.897Z",
+	"generatedAt": "2026-09-11T08:04:25.236Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3330,6 +3330,40 @@
 			"scoredAt": "2026-09-11T07:05:12.919Z"
 		},
 		{
+			"key": "run:minion (gateway)#34574805109",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34574805109",
+			"sourceUpdatedAt": "2026-09-11T07:48:39Z",
+			"sourceFingerprint": "89f7f154f6827d6f64188cd2ecc9cbb04c0f70ba7c4b87a96935ba01461d7a0c",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"deploy:minion (gateway)"
+			],
+			"rationale": "A failing CI run on DEV needs investigation but no root cause or scope is given here.",
+			"evidence": [
+				"status: failure",
+				"workflow_dispatch on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T08:04:25.156Z"
+		},
+		{
 			"key": "spec:2026-08-18-factory-orchestration-round7-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -3976,6 +4010,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:14:36.905Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/8499d8fddc4afdd22f6160e3f3e6e448b6befe73",
+			"sourceUpdatedAt": "2026-09-10T13:10:39Z",
+			"sourceFingerprint": "749216b865d8919fbe7347a2d59c251ae9cd08decad46a781715916bf31f37e2",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"run:minion (gateway)#34574805109"
+			],
+			"rationale": "This commit already fixed a portable-bash CI bug with verified tests, so it is satisfied work, not an open goal.",
+			"evidence": [
+				"fix(ci): make ci-security-scope.sh portable to bash 3.2",
+				"Verified: pnpm exec vitest run test/ci/ -> 14 files / 101 tests passed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T08:04:25.156Z"
 		},
 		{
 			"key": "issue:minion-meta#344",
@@ -8806,39 +8874,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T02:35:26.011Z"
-		},
-		{
-			"key": "run:minion (gateway)#34574805109",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34574805109",
-			"sourceUpdatedAt": "2026-09-11T07:32:51Z",
-			"sourceFingerprint": "5938b797e05ce2d314c2a4b1073fbcd2696e271f5fbd66d7f296e05ff4e51015",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a transient in-progress CI workflow run with no scoped problem statement, not an actionable goal.",
-			"evidence": [
-				"kind: run, stage: testing, status: in_progress",
-				"summary: workflow_dispatch on DEV",
-				"title: CI"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T07:34:34.821Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-4278431509",
