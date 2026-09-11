@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-ccb2014a7cbb
 title: "Post-merge finding — todo-handoff in src/server/services/assistant-query.service.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
