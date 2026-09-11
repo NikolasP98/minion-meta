@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-11T21:54:54.658Z",
+	"generatedAt": "2026-09-11T21:59:49.450Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -703,6 +703,41 @@
 			"scoredAt": "2026-09-11T18:05:22.094Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-b8113b095cdf",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/auth/assistant-principal.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b8113b095cdf.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "10b969c643bf2d93436b1a761a9336ffa2c505fca2567f4ee976ae2288b87b84",
+			"score": 75,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-ccb2014a7cbb",
+				"proposal:merge-scan-minion-hub-309dbe0"
+			],
+			"rationale": "An unverified gateway-org-brain assignment is a privilege-escalation gap that is part of the same SEC-06/Phase15 restoration effort as two related findings.",
+			"evidence": [
+				"TODO: brain_access alone does not bind a gateway; persist and verify assignment before restoring gateway brain calls",
+				"flagged independently by both merge-scan and handoff-ledger sweeps"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T21:59:49.370Z"
+		},
+		{
 			"key": "spec:2026-08-28-shared-db-encryption-key-convergence-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1305,6 +1340,40 @@
 			"scoredAt": "2026-09-11T02:35:26.011Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-309dbe0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 309dbe0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-309dbe0.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "40596bddf80826aa8d02c92192036144d853bcd5f03904fb0b7126f10018c4bc",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b8113b095cdf",
+				"proposal:postmerge-minion-hub-ccb2014a7cbb"
+			],
+			"rationale": "A weakened auth-mock test masking authorization regressions sits on the same assistant-principal auth surface as two related SEC-06 handoff findings.",
+			"evidence": [
+				"assistant-principal.test.ts:316 mock returns true for all calls but test expects false, failing to catch authorization regressions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T21:59:49.370Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-d1c5d80",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1759,41 +1828,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:35:09.206Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-b8113b095cdf",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/auth/assistant-principal.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b8113b095cdf.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "a36e1e1fa60aba423b944b354c12a7233ca2580a5187b241a855281a4bd9a5e6",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-ccb2014a7cbb"
-			],
-			"rationale": "Privilege-escalation gap in gateway-org-brain binding is a real security concern but is only diagnosed, not scoped into an executable slice, and shares its origin PR and restoration proposal with the sibling finding.",
-			"evidence": [
-				"TODO(handoff) notes brain_access alone does not bind a gateway",
-				"references SEC-06 / Phase 15 restoration proposal",
-				"merged PR #247 same repo"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T21:54:54.579Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-memory-governance-spec",
@@ -2297,6 +2331,41 @@
 			"scoredAt": "2026-09-11T18:05:22.094Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-ccb2014a7cbb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/assistant-query.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ccb2014a7cbb.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "58869449c3b5f0e1d2fcc59efbe5f975adaa59506ef4b82557c83177f90dc455",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b8113b095cdf",
+				"proposal:merge-scan-minion-hub-309dbe0"
+			],
+			"rationale": "Retiring the gateway crm_query advertisement for typed tenant-scoped datasets is the analytics half of the same SEC-06/Phase15 assistant-query delegation restoration.",
+			"evidence": [
+				"TODO: restore flexible analytics via tenant/module/owner/field-bound typed datasets and retire gateway crm_query advertisement",
+				"references proposals/2026-09-09-assistant-query-delegation-restoration.md (SEC-06/Phase15), same as related finding"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T21:59:49.370Z"
+		},
+		{
 			"key": "spec:2026-08-17-gw-defaces-crm-tools-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -2360,6 +2429,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:08:45.360Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-6fdada5c6f49",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/scheduling/calendar/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6fdada5c6f49.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "e6c700d6f2f196287f8b8bf9c3f6164c54036bbb32db6a050d66e98b29fc0f58",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Appointments rendering in UTC instead of the org's local timezone is a concrete, well-scoped user-facing scheduling bug affecting all calendar users.",
+			"evidence": [
+				"TODO: appointments render at their UTC wall-clock, not the org's [timezone]",
+				"fix direction specifies org timezone lookup and display-layer conversion, keeping UTC storage"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T21:59:49.370Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -4346,41 +4447,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T14:05:57.000Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-ccb2014a7cbb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/assistant-query.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ccb2014a7cbb.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "e96bae6348d4b01d0f4e32baee85aab8b4068103b5bee890eaffd8c7a1695513",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-b8113b095cdf"
-			],
-			"rationale": "Analytics coupling to rigid gateway crm_query blocks reporting but is undesigned, and is part of the same SEC-06/Phase 15 restoration effort as the sibling auth-binding finding from the same merged PR.",
-			"evidence": [
-				"TODO(handoff) calls for tenant/module/owner-bound typed datasets",
-				"references same SEC-06 / Phase 15 restoration proposal",
-				"merged PR #247 same repo"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T21:54:54.579Z"
 		},
 		{
 			"key": "spec:2026-08-17-maintenance-lane-monitors-spec",
@@ -6985,38 +7051,6 @@
 			"scoredAt": "2026-09-07T08:09:49.304Z"
 		},
 		{
-			"key": "pr:minion_hub#251",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#251 feat(charts): reduced-motion and nonvisual access for the shared Chart (UI-06 slice)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/251",
-			"sourceUpdatedAt": "2026-09-11T17:04:10Z",
-			"sourceFingerprint": "db86179b7fc13a5d90c7ed11cf52251b46abd57ecbdc543018240114aa514912",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Accessibility work is solid but its unit-test gate is blocked by an unrelated environment bug and only one of eleven chart consumers is fully wired.",
-			"evidence": [
-				"vitest run blocked by pre-existing Vite/Rolldown dependency-optimizer bug",
-				"only CrmSentimentTrend is fully wired; 10 other consumers get floor behavior only"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T17:35:18.775Z"
-		},
-		{
 			"key": "proposal:2026-08-28-gateway-plugin-effect-disposers",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8356,6 +8390,38 @@
 			"scoredAt": "2026-09-09T20:34:29.102Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-043c795d03eb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in tests/fixtures/critical-journeys/README.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-043c795d03eb.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "bd49d80b863308562f5694a55955810c67d3f9fc2127ce1747a1c8fcdc7b572a",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The cut-off TODO marker in a test fixture README leaves the actual scope of missing auth/CRM test coverage unclear.",
+			"evidence": [
+				"marker text cuts off at 'using a.'",
+				"finding is in tests/fixtures/critical-journeys/README.md, not production code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T21:59:49.370Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-38e0a3c5f572",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9241,6 +9307,37 @@
 			"scoredAt": "2026-09-07T08:13:41.404Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/9c1a53f7e5c62ce846fef5e484b891ba0bce1775",
+			"sourceUpdatedAt": "2026-09-11T21:35:09Z",
+			"sourceFingerprint": "3ba7110f3197684f0773ff1ac399bdb2ef79bd7aa6c24e028ea52d0ff0885691",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy-health entry reflects a test-skip fix already merged, leaving no outstanding action.",
+			"evidence": [
+				"commit skips durable shells suites on win32, matching prior #288/#289 pattern"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T21:59:49.370Z"
+		},
+		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -9543,6 +9640,37 @@
 			"scoredAt": "2026-09-10T05:35:30.528Z"
 		},
 		{
+			"key": "run:minion_hub#34651834344",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/34651834344",
+			"sourceUpdatedAt": "2026-09-11T21:57:55Z",
+			"sourceFingerprint": "b3f249eadb4df5419d978fad6e67524b2147e4b0c3073e27e881c23f0bc932a4",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run status rather than an actionable goal.",
+			"evidence": [
+				"push on master, CI status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T21:59:49.370Z"
+		},
+		{
 			"key": "proposal:handoff-minion-factory-1962723814",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9728,38 +9856,6 @@
 			"evidence": [
 				"status in_progress",
 				"title CI, push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T21:54:54.579Z"
-		},
-		{
-			"key": "run:minion_hub#34651498919",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/34651498919",
-			"sourceUpdatedAt": "2026-09-11T21:53:23Z",
-			"sourceFingerprint": "8f61a5d630694e0b4a07054ebf6a030dc25ac1976dd386fd43e57aa56c46fae2",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a transient in-progress CI run status, not an actionable goal.",
-			"evidence": [
-				"status in_progress",
-				"title CI, push on master"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
