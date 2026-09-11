@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `src/server/services/assistant-query.service.ts` i
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/247
 - file: `src/server/services/assistant-query.service.ts`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-1848199558
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/server/services/assistant-query.service.ts:36` — Restore flexible analytics through tenant/module/owner/field-bound typed datasets and retire gateway crm_query advertisement. See meta proposals/2026-09-09-assistant-query-delegation-restoration.md (SEC-06 / Phase 15).
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/assistant-query.service.ts#L36

@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `src/server/auth/assistant-principal.ts` is remove
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/247
 - file: `src/server/auth/assistant-principal.ts`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-507180069
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/server/auth/assistant-principal.ts:105` — Persist and verify a brain-agent/gateway/org assignment before restoring gateway brain calls; brain_access alone does not bind a gateway. See meta proposals/2026-09-09-assistant-query-delegation-restoration.md (SEC-06 / Phase 15).
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/auth/assistant-principal.ts#L105

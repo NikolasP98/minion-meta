@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-507180069
 title: Handoff marker — src/server/auth/assistant-principal.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-b8113b095cdf
+merged_into: postmerge-minion-hub-b8113b095cdf
 ---
 
 # Handoff marker — src/server/auth/assistant-principal.ts

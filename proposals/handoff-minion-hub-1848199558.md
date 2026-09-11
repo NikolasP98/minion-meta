@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-1848199558
 title: Handoff marker — src/server/services/assistant-query.service.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-ccb2014a7cbb
+merged_into: postmerge-minion-hub-ccb2014a7cbb
 ---
 
 # Handoff marker — src/server/services/assistant-query.service.ts
