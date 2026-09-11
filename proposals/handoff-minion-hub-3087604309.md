@@ -1,6 +1,6 @@
 ---
-id: handoff-minion-hub-2729736154
-title: Handoff marker — tests/e2e/ui-audit/canvas-accessibility.spec.ts (minion_hub)
+id: handoff-minion-hub-3087604309
+title: Handoff marker — src/lib/plugins/compat.ts (minion_hub)
 status: draft
 created: 2026-09-11
 updated: 2026-09-11
@@ -8,7 +8,7 @@ repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — tests/e2e/ui-audit/canvas-accessibility.spec.ts
+# Handoff marker — src/lib/plugins/compat.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-11)
 
-- `NikolasP98/minion_hub@master tests/e2e/ui-audit/canvas-accessibility.spec.ts:217` — Workshop/Pixi/physics operation parity needs real engine fixtures;
-  https://github.com/NikolasP98/minion_hub/blob/master/tests/e2e/ui-audit/canvas-accessibility.spec.ts#L217
+- `NikolasP98/minion_hub@master src/lib/plugins/compat.ts:71` — PluginIframe currently mounts before capabilities load; admit that component,
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/plugins/compat.ts#L71

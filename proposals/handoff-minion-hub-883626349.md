@@ -1,6 +1,6 @@
 ---
-id: handoff-minion-hub-2729736154
-title: Handoff marker — tests/e2e/ui-audit/canvas-accessibility.spec.ts (minion_hub)
+id: handoff-minion-hub-883626349
+title: Handoff marker — src/lib/server/workforce-fetch.ts (minion_hub)
 status: draft
 created: 2026-09-11
 updated: 2026-09-11
@@ -8,7 +8,7 @@ repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — tests/e2e/ui-audit/canvas-accessibility.spec.ts
+# Handoff marker — src/lib/server/workforce-fetch.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-11)
 
-- `NikolasP98/minion_hub@master tests/e2e/ui-audit/canvas-accessibility.spec.ts:217` — Workshop/Pixi/physics operation parity needs real engine fixtures;
-  https://github.com/NikolasP98/minion_hub/blob/master/tests/e2e/ui-audit/canvas-accessibility.spec.ts#L217
+- `NikolasP98/minion_hub@master src/lib/server/workforce-fetch.ts:74` — Candidate transport honors these structural options; installed0.3.0
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/server/workforce-fetch.ts#L74
+- `NikolasP98/minion_hub@master src/lib/server/workforce-fetch.ts:220` — Safe helper errors do not change loaders that swallow cancellation,
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/server/workforce-fetch.ts#L220

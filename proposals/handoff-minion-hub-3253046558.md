@@ -1,6 +1,6 @@
 ---
-id: handoff-minion-hub-2729736154
-title: Handoff marker — tests/e2e/ui-audit/canvas-accessibility.spec.ts (minion_hub)
+id: handoff-minion-hub-3253046558
+title: Handoff marker — scripts/qc/trace-build-graph.mjs (minion_hub)
 status: draft
 created: 2026-09-11
 updated: 2026-09-11
@@ -8,7 +8,7 @@ repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — tests/e2e/ui-audit/canvas-accessibility.spec.ts
+# Handoff marker — scripts/qc/trace-build-graph.mjs
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-11)
 
-- `NikolasP98/minion_hub@master tests/e2e/ui-audit/canvas-accessibility.spec.ts:217` — Workshop/Pixi/physics operation parity needs real engine fixtures;
-  https://github.com/NikolasP98/minion_hub/blob/master/tests/e2e/ui-audit/canvas-accessibility.spec.ts#L217
+- `NikolasP98/minion_hub@master scripts/qc/trace-build-graph.mjs:1` — This diagnostic does not repair packaging or qualify deployment; route evidence to 12-05 results and meta proposals/2026-09-08-platform-qc-remediation.md before admitting a build change.
+  https://github.com/NikolasP98/minion_hub/blob/master/scripts/qc/trace-build-graph.mjs#L1
