@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `src/lib/server/posthog.ts` is removed, or intenti
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/246
 - file: `src/lib/server/posthog.ts`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-2567266504
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/lib/server/posthog.ts:57` — qualify error-storm flush fan-out and serverless delivery;
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/server/posthog.ts#L57

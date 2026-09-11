@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `src/server/services/finance-statement-parser.ts` 
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/246
 - file: `src/server/services/finance-statement-parser.ts`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-4059547384
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/server/services/finance-statement-parser.ts:28` — finance-statements.service.ts keeps its own PARSER_VERSION
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/finance-statement-parser.ts#L28

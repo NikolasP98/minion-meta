@@ -49,3 +49,10 @@ The `TODO(handoff)` marker at `src/server/services/brain-corpus.service.ts` is r
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/248
 - file: `src/server/services/brain-corpus.service.ts`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-2856171723
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/server/services/brain-corpus.service.ts:158` — a single month segment/business record above the foundation
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/brain-corpus.service.ts#L158

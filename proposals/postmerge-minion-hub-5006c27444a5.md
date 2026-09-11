@@ -44,3 +44,10 @@ The `TODO(handoff)` marker at `src/server/services/brains.effect-ownership.sql.i
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/248
 - file: `src/server/services/brains.effect-ownership.sql.integration.test.ts`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-1625446079
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/server/services/brains.effect-ownership.sql.integration.test.ts:123` — Qualify actual Qdrant generation/outbox triggers under 10-06 and
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/brains.effect-ownership.sql.integration.test.ts#L123

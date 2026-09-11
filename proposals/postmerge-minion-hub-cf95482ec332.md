@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `supabase/migrations/20260909090500_job_effect_pag
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/248
 - file: `supabase/migrations/20260909090500_job_effect_page_batches.sql`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-1548178017
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master supabase/migrations/20260909090500_job_effect_page_batches.sql:3` — Historical receipt/tombstone retention and missing-owner recovery need
+  https://github.com/NikolasP98/minion_hub/blob/master/supabase/migrations/20260909090500_job_effect_page_batches.sql#L3

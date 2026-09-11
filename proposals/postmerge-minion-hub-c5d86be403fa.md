@@ -40,3 +40,10 @@ This matters because these four ingest/corpus services handle business-critical 
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/248
 - file: `src/server/services/bg-runtime.ts`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-1757377296
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/server/services/bg-runtime.ts:54` — Adopt JobExecution in statement_ingest, brain_ingest, brain_corpus_conversations/whatsapp and brain_corpus_business; their domain effects still need ownership gates. See meta proposals/2026-09-08-platform-qc-remediation.md (HDS-05).
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/bg-runtime.ts#L54

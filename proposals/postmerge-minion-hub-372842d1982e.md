@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `vitest.disposable.config.ts` is removed, or inten
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/248
 - file: `vitest.disposable.config.ts`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-3702204827
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master vitest.disposable.config.ts:10` — Add each new native job/driver fixture after its source and marker checks are reviewed; see meta proposals/2026-09-08-platform-qc-remediation.md (test-lane isolation).
+  https://github.com/NikolasP98/minion_hub/blob/master/vitest.disposable.config.ts#L10

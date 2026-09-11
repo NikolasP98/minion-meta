@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `tests/dependencies/security-compatibility.test.ts
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/257
 - file: `tests/dependencies/security-compatibility.test.ts`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-845466429
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master tests/dependencies/security-compatibility.test.ts:1` — Qualify residual advisory families and container/plugin inventories before DEP-01 closure; this fixture covers only the bounded Hub patch. See meta proposals/2026-09-08-platform-qc-remediation.md (UI-06) and .planning/phases/12-dependency-provenance/12-ADVISORIES.md.
+  https://github.com/NikolasP98/minion_hub/blob/master/tests/dependencies/security-compatibility.test.ts#L1

@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-3532679618
 title: Handoff marker — src/server/services/job-stock-concurrency.sql.integration.test.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-c399783e15f5
+merged_into: postmerge-minion-hub-c399783e15f5
 ---
 
 # Handoff marker — src/server/services/job-stock-concurrency.sql.integration.test.ts

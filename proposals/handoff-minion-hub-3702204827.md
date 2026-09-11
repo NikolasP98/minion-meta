@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-3702204827
 title: Handoff marker — vitest.disposable.config.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-372842d1982e
+merged_into: postmerge-minion-hub-372842d1982e
 ---
 
 # Handoff marker — vitest.disposable.config.ts

@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-1548178017
 title: Handoff marker — supabase/migrations/20260909090500_job_effect_page_batches.sql (minion_hub)
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-cf95482ec332
+merged_into: postmerge-minion-hub-cf95482ec332
 ---
 
 # Handoff marker — supabase/migrations/20260909090500_job_effect_page_batches.sql

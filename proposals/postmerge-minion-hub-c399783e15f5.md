@@ -46,3 +46,10 @@ See `proposals/2026-09-08-platform-qc-remediation.md` (HDS-05) for full context 
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/248
 - file: `src/server/services/job-stock-concurrency.sql.integration.test.ts`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-3532679618
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/server/services/job-stock-concurrency.sql.integration.test.ts:513` — Qualify/fix postgres-js nextWrite null-socket crash on backend loss before rollout. See meta proposals/2026-09-08-platform-qc-remediation.md (HDS-05).
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/job-stock-concurrency.sql.integration.test.ts#L513

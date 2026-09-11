@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-2856171723
 title: Handoff marker — src/server/services/brain-corpus.service.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-9288d166a192
+merged_into: postmerge-minion-hub-9288d166a192
 ---
 
 # Handoff marker — src/server/services/brain-corpus.service.ts

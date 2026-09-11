@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `supabase/migrations/20260909090400_job_request_ma
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/248
 - file: `supabase/migrations/20260909090400_job_request_manifest.sql`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-2883926730
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master supabase/migrations/20260909090400_job_request_manifest.sql:11` — Current-head reset does not archive whole-manifest history.
+  https://github.com/NikolasP98/minion_hub/blob/master/supabase/migrations/20260909090400_job_request_manifest.sql#L11

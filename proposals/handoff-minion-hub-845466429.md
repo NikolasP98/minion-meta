@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-845466429
 title: Handoff marker — tests/dependencies/security-compatibility.test.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-9654a64b55fa
+merged_into: postmerge-minion-hub-9654a64b55fa
 ---
 
 # Handoff marker — tests/dependencies/security-compatibility.test.ts

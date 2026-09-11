@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-1757377296
 title: Handoff marker — src/server/services/bg-runtime.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-c5d86be403fa
+merged_into: postmerge-minion-hub-c5d86be403fa
 ---
 
 # Handoff marker — src/server/services/bg-runtime.ts

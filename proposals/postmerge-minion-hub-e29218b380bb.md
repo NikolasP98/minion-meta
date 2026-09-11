@@ -44,3 +44,10 @@ Define retention window (e.g., 90 days post-completion) and cleanup triggers. Fo
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/248
 - file: `supabase/migrations/20260909090300_job_effect_receipts.sql`
 - checked: 2026-09-11
+
+## Merged from handoff-minion-hub-2363080814
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master supabase/migrations/20260909090300_job_effect_receipts.sql:3` — Choose receipt retention and indeterminate-provider recovery policy before
+  https://github.com/NikolasP98/minion_hub/blob/master/supabase/migrations/20260909090300_job_effect_receipts.sql#L3

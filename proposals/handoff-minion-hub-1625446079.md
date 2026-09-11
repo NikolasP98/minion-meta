@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-1625446079
 title: Handoff marker — src/server/services/brains.effect-ownership.sql.integration.test.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-5006c27444a5
+merged_into: postmerge-minion-hub-5006c27444a5
 ---
 
 # Handoff marker — src/server/services/brains.effect-ownership.sql.integration.test.ts

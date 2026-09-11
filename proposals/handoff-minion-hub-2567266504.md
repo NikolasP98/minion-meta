@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-2567266504
 title: Handoff marker — src/lib/server/posthog.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-11
 updated: 2026-09-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-274eede277fe
+merged_into: postmerge-minion-hub-274eede277fe
 ---
 
 # Handoff marker — src/lib/server/posthog.ts
