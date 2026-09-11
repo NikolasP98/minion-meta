@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-11T03:04:19.813Z",
+	"generatedAt": "2026-09-11T03:34:18.475Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1550,38 +1550,6 @@
 			"scoredAt": "2026-09-07T08:11:32.696Z"
 		},
 		{
-			"key": "issue:minion (gateway)#249",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#249 test(memory): eliminate nondeterministic atomic-reindex rollback failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/249",
-			"sourceUpdatedAt": "2026-08-28T03:11:51Z",
-			"sourceFingerprint": "b07d3a09759f3ecb6e477dc264094ce2734ab3cfc8698d89972a4a2f71956f9b",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Flaky atomic-reindex rollback test has a detailed reproduction, required outcome, and verification bar making it actionable now.",
-			"evidence": [
-				"same SHA failed once then passed on rerun of exact workflow",
-				"isolated test passed 20/20 locally, pointing to isolation/order issue not logic bug"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-07T08:05:35.025Z"
-		},
-		{
 			"key": "proposal:2026-08-29-roadmap-milestone-order-deviation",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1979,6 +1947,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:14:36.905Z"
+		},
+		{
+			"key": "issue:minion (gateway)#249",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#249 test(memory): eliminate nondeterministic atomic-reindex rollback failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/249",
+			"sourceUpdatedAt": "2026-09-11T03:29:08Z",
+			"sourceFingerprint": "81fefae6d8fc7e8284d44444d91981ed0c5f786b12b1f4a8144ae47c0504cc1e",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Nondeterministic CI failure in atomic-reindex rollback risks masking real data-loss bugs and blocks trust in the test suite, with clear reproduction evidence and required outcomes specified.",
+			"evidence": [
+				"exact SHA failed then passed on rerun (run 33136804153)",
+				"isolated test passed 20/20 locally",
+				"requires 100+ repetitions and multi-shard verification before merge"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T03:34:18.400Z"
 		},
 		{
 			"key": "pr:minion_hub#191",
@@ -6550,38 +6551,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:14:36.905Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/8499d8fddc4afdd22f6160e3f3e6e448b6befe73",
-			"sourceUpdatedAt": "2026-09-10T13:10:39Z",
-			"sourceFingerprint": "749216b865d8919fbe7347a2d59c251ae9cd08decad46a781715916bf31f37e2",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged, verified CI portability fix with no remaining action needed.",
-			"evidence": [
-				"fix already merged (#279)",
-				"verified via vitest 101 tests passed and pnpm check 0 errors"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T03:04:19.741Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
