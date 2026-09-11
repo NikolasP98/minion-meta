@@ -27,5 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-11)
 
-- `NikolasP98/minion-meta@dev packages/shells-bridge/src/config.ts:63` — Define structured argv and verify provisioned systemd environment;
-  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/config.ts#L63
+- `NikolasP98/minion-meta@dev packages/shells-bridge/src/config.ts:44` — Size retained runs and outcome bytes from observed VM disk and run
+  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/config.ts#L44
+- `NikolasP98/minion-meta@dev packages/shells-bridge/src/config.ts:124` — Define structured argv and verify provisioned systemd environment;
+  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/config.ts#L124
