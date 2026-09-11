@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-11T22:09:33.755Z",
+	"generatedAt": "2026-09-11T22:14:33.622Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1798,6 +1798,38 @@
 			"scoredAt": "2026-09-07T08:11:32.696Z"
 		},
 		{
+			"key": "run:minion (gateway)#34650098320",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34650098320",
+			"sourceUpdatedAt": "2026-09-11T22:08:40Z",
+			"sourceFingerprint": "9eb07d353ed79b22b8d48996a903a16c95f9070f1877ee83eaa8c172cdb91dee",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Failing CI on the gateway's DEV branch blocks integration but the run gives no failure detail to scope a fix yet.",
+			"evidence": [
+				"push on DEV",
+				"status: failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:14:33.543Z"
+		},
+		{
 			"key": "proposal:2026-08-29-roadmap-milestone-order-deviation",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2394,6 +2426,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:08:45.360Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-3264105139",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/scheduling/calendar/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3264105139.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "a1e0c3777195eec824c40d2d5a68b7f2f7f2ce43b93d91184a822af912cb4bf6",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Single-file scheduling bug where appointments render in UTC instead of the org's timezone is a clear, bounded, user-facing correctness fix.",
+			"evidence": [
+				"appointments render at their UTC wall-clock, not the org's",
+				"src/routes/(app)/scheduling/calendar/+page.svelte:26"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:14:33.543Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-6fdada5c6f49",
@@ -4447,6 +4511,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T14:05:57.000Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-aed0037b3792",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in scripts/qc/trace-build-graph.mjs (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-aed0037b3792.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "3af8bd876d378b18e20ceee99245740d822682b287d0516bc29a230351ff711b",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "QC diagnostic lacking an enforced deployment gate is a real reliability gap but needs a scoped gate design before it is actionable work.",
+			"evidence": [
+				"diagnostic identifies build graph issues but doesn't repair them or confirm deployment safety",
+				"Wire the diagnostic into CI/CD as a required check, not an optional report"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:14:33.543Z"
 		},
 		{
 			"key": "spec:2026-08-17-maintenance-lane-monitors-spec",
@@ -7056,14 +7152,14 @@
 			"scoredAt": "2026-09-07T08:09:49.304Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
+			"key": "proposal:handoff-minion-hub-1431194768",
 			"kind": "proposal",
 			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/charts/Chart.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1431194768.md",
 			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "1ca86e1b0ac52565135df8344046b0e050b3c589ed083c75028546d9bfb8df4c",
+			"sourceFingerprint": "f0159bf346a41c701544c2892d340166f78586dec3fb2cb4c229737413b4b998",
 			"score": 36,
 			"band": "low",
 			"axes": {
@@ -7072,21 +7168,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 4,
+				"implementation": 3
 			},
 			"confidence": 5,
-			"recommendation": "reframe",
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "This ledger-sweep proposal bundles seven unrelated TODO markers (scheduling holidays, resourceId source, protocol replacement, db column drop) into one review item, so it lacks a single verifiable scope and should be split into per-marker specs rather than executed as-is.",
+			"rationale": "Three unrelated Chart.svelte gaps (dataset edge cases, reduced-motion, keyboard access) are bundled without a single scoped outcome.",
 			"evidence": [
-				"Markers (as of 2026-09-11) lists 7 distinct file:line entries across unrelated concerns",
-				"status: review",
-				"the sweep closes this proposal automatically once the file carries no more markers"
+				"dataset/encode, tuple points, mixed category axes and non-Cartesian",
+				"clickable filter and legend consumers still need keyboard action"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T21:46:30.019Z"
+			"scoredAt": "2026-09-11T22:14:33.543Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2fae7c00c46f",
@@ -7747,6 +7842,40 @@
 			"scoredAt": "2026-09-07T08:12:46.705Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-3215540846",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — tests/fixtures/critical-journeys/README.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3215540846.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "c416380094bdb11fbfdd0a7f3b20cdda0daa033463d514926fd61b5baa12856b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-2729736154"
+			],
+			"rationale": "Fixture-qualification gap for login/session/CRM routing in critical-journeys tests shares scope with the canvas-accessibility fixture marker.",
+			"evidence": [
+				"Qualify actual login/session and authenticated CRM routing using a",
+				"tests/fixtures/critical-journeys/README.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:14:33.543Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-3389264281",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8266,6 +8395,38 @@
 			"scoredAt": "2026-09-09T22:04:50.660Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-bb286f8",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ bb286f8",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-bb286f8.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "81772c18b3b4c7356178c03173cec3afd0273ff41a1e197609f91376ba7d7b17",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Two concrete, file/line-pinpointed test-file defects (unchecked array access, unvalidated env var) are small and immediately fixable.",
+			"evidence": [
+				"intents.at(-1) accessed with non-null assertion without verifying array is non-empty",
+				"process.env.MINION_CRITICAL_OUT is used without runtime validation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:14:33.543Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-e3c8ec8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8690,38 +8851,6 @@
 			"scoredAt": "2026-09-07T07:35:07.076Z"
 		},
 		{
-			"key": "pr:minion_hub#256",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#256 chore(deps): remove proven-dead hub declarations; add locale-parity baseline (12-02)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/256",
-			"sourceUpdatedAt": "2026-09-11T17:04:01Z",
-			"sourceFingerprint": "db724915f33c7edd4adf1bbf6559922d5fbd35f9974784aae286d5f77616e2b9",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Low-risk removal of confirmed-dead dependencies plus a new characterization test, with clean check/build/lint.",
-			"evidence": [
-				"import search + peer check confirmed dead deps",
-				"check/build/lint clean"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T17:35:18.775Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8882,6 +9011,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:10:36.860Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2729736154",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — tests/e2e/ui-audit/canvas-accessibility.spec.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2729736154.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "a0ada36dc8de743cb1a8e3fea2884f956a53481196afed9d521248c21bbf2e4a",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-3215540846"
+			],
+			"rationale": "Vague single-line marker about needing real engine fixtures for canvas a11y tests overlaps with the other critical-journeys fixture gap.",
+			"evidence": [
+				"Workshop/Pixi/physics operation parity needs real engine fixtures"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:14:33.543Z"
 		},
 		{
 			"key": "spec:2026-08-26-spec-heading-lint-baseline-backfill-spec",
@@ -9479,38 +9641,6 @@
 			"scoredAt": "2026-09-07T08:13:41.404Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/9c1a53f7e5c62ce846fef5e484b891ba0bce1775",
-			"sourceUpdatedAt": "2026-09-11T21:35:09Z",
-			"sourceFingerprint": "3ba7110f3197684f0773ff1ac399bdb2ef79bd7aa6c24e028ea52d0ff0885691",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Summary describes a test-skip commit already pushed to DEV, so the described work is already done.",
-			"evidence": [
-				"push b6485201, Windows shard 1",
-				"skipIf(win32), matching #288/#289"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T22:09:33.681Z"
-		},
-		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -9813,6 +9943,37 @@
 			"scoredAt": "2026-09-10T05:35:30.528Z"
 		},
 		{
+			"key": "run:minion_hub#34652957141",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/34652957141",
+			"sourceUpdatedAt": "2026-09-11T22:12:38Z",
+			"sourceFingerprint": "665bce022990136239f18c42d8f7829cb984eff1696a752ed1ccb8d0d048b60c",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "CI run is still in progress with no outcome to act on.",
+			"evidence": [
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-11T22:14:33.543Z"
+		},
+		{
 			"key": "proposal:handoff-minion-factory-1962723814",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9972,14 +10133,14 @@
 			"scoredAt": "2026-09-09T23:04:27.681Z"
 		},
 		{
-			"key": "run:minion (gateway)#34650098320",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34650098320",
-			"sourceUpdatedAt": "2026-09-11T21:51:46Z",
-			"sourceFingerprint": "cd8a08e8882dd0bdf1262c3f742a367a38050d0700cffcac559ccf57879fe733",
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "eae385e7fed4ddfa472c1e58c233534fd4e76002037ade84770b200f8622d576",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -9988,52 +10149,20 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 0,
-				"implementation": 0
+				"specification": 2,
+				"implementation": 1
 			},
 			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a transient in-progress CI run status, not an actionable goal.",
+			"rationale": "Markers point into rankings/index.json, the ranking system's own generated data file, indicating scan noise rather than real code TODOs.",
 			"evidence": [
-				"status in_progress",
-				"title CI, push on DEV"
+				"rankings/index.json:2935",
+				"rankings/index.json:7900"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T21:54:54.579Z"
-		},
-		{
-			"key": "run:minion_hub#34652582502",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/34652582502",
-			"sourceUpdatedAt": "2026-09-11T22:07:35Z",
-			"sourceFingerprint": "3deadc8fecbd5f7b45aebcab39f26788e917954b05e3325e074c0e6dda70f55b",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI run status with no failure or defect evidence is not an actionable goal.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T22:09:33.681Z"
+			"scoredAt": "2026-09-11T22:14:33.543Z"
 		}
 	]
 }
