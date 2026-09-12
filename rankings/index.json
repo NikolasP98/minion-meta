@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-12T23:04:14.257Z",
+	"generatedAt": "2026-09-12T23:34:25.184Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1036,6 +1036,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T03:08:40.374Z"
+		},
+		{
+			"key": "pr:minion_hub#272",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#272 fix(security): enforce attachment authority and durable deletion",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/272",
+			"sourceUpdatedAt": "2026-09-12T23:31:32Z",
+			"sourceFingerprint": "e9d15439286afbbff5bf467a44849c12d8abc895313dfce99c930694bfff924f",
+			"score": 70,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#271"
+			],
+			"rationale": "Security-relevant attachment authority fix has broad test coverage but is still draft and gated behind a migration sequencing step and unscheduled follow-up work.",
+			"evidence": [
+				"status: draft",
+				"Deployment requires the reviewed additive attachment lifecycle migration before code",
+				"General abandoned-file cleanup remains unscheduled"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-12T23:34:25.098Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -2706,6 +2741,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T07:35:07.076Z"
+		},
+		{
+			"key": "pr:minion_hub#271",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#271 fix(worker): drain Node jobs and route handlers before resource shutdown",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/271",
+			"sourceUpdatedAt": "2026-09-12T23:31:02Z",
+			"sourceFingerprint": "fa059db26e4feec3fe338af7a014850cb25c89cee3df27e6e2f4b50276088c63",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#272"
+			],
+			"rationale": "Open PR fixes a real production shutdown gap (worker outliving 90s stop window) with passing tests and green CI, making it actionable now.",
+			"evidence": [
+				"exceeding the deployed service's 90 second stop window",
+				"29 focused tests pass; full Svelte check 0 errors/0 warnings",
+				"All required hosted CI jobs and Vercel preview are green"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-12T23:34:25.098Z"
 		},
 		{
 			"key": "pr:minion_site#29",
@@ -12158,38 +12228,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T03:09:59.397Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This entry only records an already-merged commit fixing nitter shutdown handling, with no open problem or pending work described.",
-			"evidence": [
-				"Summary is a commit message for a merged fix (#295)",
-				"Status is 'unknown' with no described outstanding issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T22:34:38.988Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-4278431509",
