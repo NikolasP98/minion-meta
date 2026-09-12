@@ -15,71 +15,64 @@
   },
   "NikolasP98/minion_hub:master": {
     "cursor": "e98422b899a30ff9668869a0dae6d4cc0bcb371f",
-    "head": "b5d40c7bfdbae094c751b922f18f9f943dcf27fd",
-    "done": 13,
+    "head": "25e2bb758678d7618b23b4f20b0f00ecc57a51cc",
+    "done": 14,
     "kept": [
       {
         "file": "src/lib/attachments/upload.ts",
-        "desc": ".catch(() => {}) silently swallows DELETE errors during fallback cleanup; should at least log or warn before proceeding",
-        "severity": "medium",
+        "desc": "Catch block silently swallows DELETE error without logging or propagating; cleanup failure is unobserved.",
+        "severity": "high",
         "category": "empty-catch",
         "line": 125
       },
       {
-        "file": "src/lib/components/attachments/AttachmentList.svelte",
-        "desc": "Catch block swallows load error silently; component shows empty state without notifying user that the fetch failed, unlike other error handlers in the same component that toast errors.",
+        "file": "src/lib/automations/system-automations.ts",
+        "desc": "Automation marked 'unscheduled' lacks required TODO(handoff) marker; open end documented in comment but not properly flagged per SDLC contract.",
         "severity": "high",
-        "category": "empty-catch",
-        "line": 64
+        "category": "missing-handoff",
+        "line": 90
       },
       {
-        "file": "src/lib/components/finances/InvoicePickerField.svelte",
-        "desc": "API response is cast to InvoiceOption[] without validation; malformed JSON from /api/finances/invoices could bypass type safety and cause runtime errors downstream.",
-        "severity": "medium",
-        "category": "unvalidated-input",
-        "line": 70
-      },
-      {
-        "file": "src/lib/components/scheduling/BookingEditForm.svelte",
-        "desc": "Type assertion assumes response has booking property; if missing, saved becomes undefined and is passed to onsaved without validation.",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 156
-      },
-      {
-        "file": "src/lib/server/posthog.ts",
-        "desc": "Promise rejection from client initialization and event capture silently swallowed with no handler or logged context",
-        "severity": "medium",
+        "file": "src/lib/components/attachments/AttachmentList.svelte",
+        "desc": "catch block silently swallows listAttachments() errors without user feedback, masking failures in a data-loading function",
+        "severity": "high",
         "category": "empty-catch",
         "line": 62
       },
       {
-        "file": "src/lib/server/posthog.ts",
-        "desc": "Catch block swallows all exceptions from descriptor access and validation without propagating or logging",
+        "file": "src/lib/components/scheduling/BookingEditForm.svelte",
+        "desc": "Tags update fetch response not checked; silent failure if server returns error status",
         "severity": "medium",
-        "category": "empty-catch",
-        "line": 63
+        "category": "missing-handoff",
+        "line": 151
+      },
+      {
+        "file": "src/lib/components/scheduling/BookingEditForm.svelte",
+        "desc": "Status update fetch in cancelInstead not checked; unhandled error on critical delete operation",
+        "severity": "high",
+        "category": "missing-handoff",
+        "line": 206
+      },
+      {
+        "file": "src/lib/components/tags/index.ts",
+        "desc": "TagDot is exported but not imported or used anywhere in the diff.",
+        "severity": "medium",
+        "category": "unwired-export",
+        "line": 2
       },
       {
         "file": "src/routes/(app)/crm/customers/+page.svelte",
-        "desc": "c.tag_ids is spread without checking if it exists; c.auto_tag_ids is safely guarded with ??[], but tag_ids is not, risking a TypeError if tag_ids is undefined or null",
-        "severity": "medium",
+        "desc": "c.tag_ids is spread without null check; if undefined, throws at runtime. Should use ...(c.tag_ids ?? []).",
+        "severity": "high",
         "category": "unchecked-access",
-        "line": 54
+        "line": 61
       },
       {
-        "file": "src/routes/(app)/scheduling/calendar/+page.server.ts",
-        "desc": "The preferences.preferences.calendar property chain is accessed without optional chaining or null checks before the type assertion; if parent layout data lacks this nested structure, the code will throw a runtime error.",
-        "severity": "medium",
+        "file": "src/routes/(app)/crm/[contactId]/+page.svelte",
+        "desc": "b.startTime passed to fmtBooking() without null check; if undefined, fmtBooking().toLocaleString() fails at runtime.",
+        "severity": "high",
         "category": "unchecked-access",
-        "line": 29
-      },
-      {
-        "file": "src/routes/(app)/scheduling/calendar/+page.svelte",
-        "desc": "TODO(handoff) comment documenting a known UTC wall-clock rendering bug was removed without transferring the issue to a proposal file, violating the handoff contract in AGENTS.md.",
-        "severity": "medium",
-        "category": "missing-handoff",
-        "line": 27
+        "line": 891
       }
     ]
   }
