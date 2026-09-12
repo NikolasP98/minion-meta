@@ -1,0 +1,987 @@
+{
+  "$comment": "Synthetic ACP v1 transcript. Shapes follow schema/schema.json of @agentclientprotocol/sdk@1.4.0 (gitHead e6463f444093ed7c5f1cc937c3f32afb5853e906). Every step is labelled by direction and JSON-RPC kind so a test can prove requests, responses and notifications are told apart. This is NOT a recording of a real harness; it proves adapter behaviour against a scripted peer only. Placeholders: id \"$last\" = the client's most recent request id (used to force id collisions); raw \"$oversize\" = one line longer than the client's byte ceiling; `match` = subset the client's actual line must contain.",
+  "protocolVersion": 1,
+  "scenarios": [
+    {
+      "name": "initialize",
+      "steps": [
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "initialize",
+            "params": {
+              "protocolVersion": 1,
+              "clientCapabilities": {
+                "fs": {
+                  "readTextFile": false,
+                  "writeTextFile": false
+                },
+                "terminal": false
+              }
+            }
+          },
+          "match": {
+            "method": "initialize",
+            "params": {
+              "protocolVersion": 1
+            }
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "protocolVersion": 1,
+              "agentCapabilities": {
+                "loadSession": false,
+                "promptCapabilities": {
+                  "image": false,
+                  "audio": false,
+                  "embeddedContext": false
+                }
+              },
+              "authMethods": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "initialize-version-mismatch",
+      "steps": [
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "initialize",
+            "params": {
+              "protocolVersion": 1
+            }
+          },
+          "match": {
+            "method": "initialize"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "protocolVersion": 0,
+              "agentCapabilities": {},
+              "authMethods": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "initialize-error",
+      "steps": [
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "initialize",
+            "params": {
+              "protocolVersion": 1
+            }
+          },
+          "match": {
+            "method": "initialize"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "error": {
+              "code": -32000,
+              "message": "agent refused"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "session-new",
+      "steps": [
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "initialize",
+            "params": {
+              "protocolVersion": 1
+            }
+          },
+          "match": {
+            "method": "initialize"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "protocolVersion": 1,
+              "agentCapabilities": {
+                "loadSession": false
+              },
+              "authMethods": []
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 2,
+            "method": "session/new",
+            "params": {
+              "cwd": "/private/work",
+              "mcpServers": []
+            }
+          },
+          "match": {
+            "method": "session/new",
+            "params": {
+              "mcpServers": []
+            }
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "sessionId": "sess-a1"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "session-new-missing-id",
+      "steps": [
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "initialize",
+            "params": {
+              "protocolVersion": 1
+            }
+          },
+          "match": {
+            "method": "initialize"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "protocolVersion": 1
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 2,
+            "method": "session/new",
+            "params": {
+              "cwd": "/private/work",
+              "mcpServers": []
+            }
+          },
+          "match": {
+            "method": "session/new"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "modes": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "prompt-permission-numeric-id-collision",
+      "$comment": "The agent's permission request reuses the numeric id of the client's in-flight prompt. A correct client must treat it as a request (it has `method`), answer it under that id, and keep the prompt pending until the prompt response arrives.",
+      "steps": [
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "initialize",
+            "params": {
+              "protocolVersion": 1
+            }
+          },
+          "match": {
+            "method": "initialize"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "protocolVersion": 1,
+              "agentCapabilities": {
+                "loadSession": false
+              },
+              "authMethods": []
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 2,
+            "method": "session/new",
+            "params": {
+              "cwd": "/private/work",
+              "mcpServers": []
+            }
+          },
+          "match": {
+            "method": "session/new"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "sessionId": "sess-a1"
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 3,
+            "method": "session/prompt",
+            "params": {
+              "sessionId": "sess-a1",
+              "prompt": [
+                {
+                  "type": "text",
+                  "text": "update the config"
+                }
+              ]
+            }
+          },
+          "match": {
+            "method": "session/prompt",
+            "params": {
+              "sessionId": "sess-a1",
+              "prompt": [
+                {
+                  "type": "text",
+                  "text": "update the config"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "notification",
+          "message": {
+            "jsonrpc": "2.0",
+            "method": "session/update",
+            "params": {
+              "sessionId": "sess-a1",
+              "update": {
+                "sessionUpdate": "agent_message_chunk",
+                "content": {
+                  "type": "text",
+                  "text": "Reading config."
+                }
+              }
+            }
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "notification",
+          "message": {
+            "jsonrpc": "2.0",
+            "method": "session/update",
+            "params": {
+              "sessionId": "sess-a1",
+              "update": {
+                "sessionUpdate": "tool_call",
+                "toolCallId": "call_2",
+                "title": "Modify config.json",
+                "kind": "edit",
+                "status": "pending"
+              }
+            }
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "method": "session/request_permission",
+            "params": {
+              "sessionId": "sess-a1",
+              "toolCall": {
+                "toolCallId": "call_2",
+                "title": "Modify config.json",
+                "kind": "edit",
+                "status": "pending"
+              },
+              "options": [
+                {
+                  "optionId": "allow",
+                  "name": "Allow once",
+                  "kind": "allow_once"
+                },
+                {
+                  "optionId": "reject",
+                  "name": "Reject once",
+                  "kind": "reject_once"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 3,
+            "result": {
+              "outcome": {
+                "outcome": "selected",
+                "optionId": "allow"
+              }
+            }
+          },
+          "match": {
+            "result": {
+              "outcome": {
+                "outcome": "selected",
+                "optionId": "allow"
+              }
+            }
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "notification",
+          "message": {
+            "jsonrpc": "2.0",
+            "method": "session/update",
+            "params": {
+              "sessionId": "sess-a1",
+              "update": {
+                "sessionUpdate": "tool_call_update",
+                "toolCallId": "call_2",
+                "status": "completed"
+              }
+            }
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "stopReason": "end_turn"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "prompt-permission-string-id-default-reject",
+      "$comment": "String request id from the agent; the client has no permission policy installed, so the safe default selects the reject option. Never auto-allow.",
+      "steps": [
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "initialize",
+            "params": {
+              "protocolVersion": 1
+            }
+          },
+          "match": {
+            "method": "initialize"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "protocolVersion": 1,
+              "authMethods": []
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 2,
+            "method": "session/new",
+            "params": {
+              "cwd": "/private/work",
+              "mcpServers": []
+            }
+          },
+          "match": {
+            "method": "session/new"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "sessionId": "sess-b2"
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 3,
+            "method": "session/prompt",
+            "params": {
+              "sessionId": "sess-b2",
+              "prompt": [
+                {
+                  "type": "text",
+                  "text": "delete everything"
+                }
+              ]
+            }
+          },
+          "match": {
+            "method": "session/prompt"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "perm-7",
+            "method": "session/request_permission",
+            "params": {
+              "sessionId": "sess-b2",
+              "toolCall": {
+                "toolCallId": "call_9",
+                "title": "rm -rf",
+                "kind": "delete",
+                "status": "pending"
+              },
+              "options": [
+                {
+                  "optionId": "yes",
+                  "name": "Allow always",
+                  "kind": "allow_always"
+                },
+                {
+                  "optionId": "no",
+                  "name": "Reject always",
+                  "kind": "reject_always"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "perm-7",
+            "result": {
+              "outcome": {
+                "outcome": "selected",
+                "optionId": "no"
+              }
+            }
+          },
+          "match": {
+            "id": "perm-7",
+            "result": {
+              "outcome": {
+                "outcome": "selected",
+                "optionId": "no"
+              }
+            }
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "stopReason": "end_turn"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "cancel-mid-turn",
+      "$comment": "session/cancel is a notification (no id). Cancellation is confirmed only by the original prompt's response carrying stopReason cancelled.",
+      "steps": [
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "initialize",
+            "params": {
+              "protocolVersion": 1
+            }
+          },
+          "match": {
+            "method": "initialize"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "protocolVersion": 1,
+              "authMethods": []
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 2,
+            "method": "session/new",
+            "params": {
+              "cwd": "/private/work",
+              "mcpServers": []
+            }
+          },
+          "match": {
+            "method": "session/new"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "sessionId": "sess-c3"
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 3,
+            "method": "session/prompt",
+            "params": {
+              "sessionId": "sess-c3",
+              "prompt": [
+                {
+                  "type": "text",
+                  "text": "long task"
+                }
+              ]
+            }
+          },
+          "match": {
+            "method": "session/prompt"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "notification",
+          "message": {
+            "jsonrpc": "2.0",
+            "method": "session/update",
+            "params": {
+              "sessionId": "sess-c3",
+              "update": {
+                "sessionUpdate": "agent_message_chunk",
+                "content": {
+                  "type": "text",
+                  "text": "working"
+                }
+              }
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "notification",
+          "message": {
+            "jsonrpc": "2.0",
+            "method": "session/cancel",
+            "params": {
+              "sessionId": "sess-c3"
+            }
+          },
+          "match": {
+            "method": "session/cancel",
+            "params": {
+              "sessionId": "sess-c3"
+            }
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "notification",
+          "message": {
+            "jsonrpc": "2.0",
+            "method": "session/update",
+            "params": {
+              "sessionId": "sess-c3",
+              "update": {
+                "sessionUpdate": "agent_message_chunk",
+                "content": {
+                  "type": "text",
+                  "text": "late chunk after cancel"
+                }
+              }
+            }
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "stopReason": "cancelled"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "cancel-during-permission",
+      "$comment": "A pending permission request must be answered with outcome cancelled before the cancel notification leaves; the turn is still only confirmed by the prompt response.",
+      "steps": [
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "initialize",
+            "params": {
+              "protocolVersion": 1
+            }
+          },
+          "match": {
+            "method": "initialize"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "protocolVersion": 1,
+              "authMethods": []
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 2,
+            "method": "session/new",
+            "params": {
+              "cwd": "/private/work",
+              "mcpServers": []
+            }
+          },
+          "match": {
+            "method": "session/new"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "sessionId": "sess-d4"
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 3,
+            "method": "session/prompt",
+            "params": {
+              "sessionId": "sess-d4",
+              "prompt": [
+                {
+                  "type": "text",
+                  "text": "risky task"
+                }
+              ]
+            }
+          },
+          "match": {
+            "method": "session/prompt"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "method": "session/request_permission",
+            "params": {
+              "sessionId": "sess-d4",
+              "toolCall": {
+                "toolCallId": "call_5",
+                "title": "Write file",
+                "kind": "edit",
+                "status": "pending"
+              },
+              "options": [
+                {
+                  "optionId": "allow",
+                  "name": "Allow",
+                  "kind": "allow_once"
+                },
+                {
+                  "optionId": "reject",
+                  "name": "Reject",
+                  "kind": "reject_once"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 3,
+            "result": {
+              "outcome": {
+                "outcome": "cancelled"
+              }
+            }
+          },
+          "match": {
+            "result": {
+              "outcome": {
+                "outcome": "cancelled"
+              }
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "notification",
+          "message": {
+            "jsonrpc": "2.0",
+            "method": "session/cancel",
+            "params": {
+              "sessionId": "sess-d4"
+            }
+          },
+          "match": {
+            "method": "session/cancel",
+            "params": {
+              "sessionId": "sess-d4"
+            }
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "stopReason": "cancelled"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "harness-exit-mid-call",
+      "steps": [
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "initialize",
+            "params": {
+              "protocolVersion": 1
+            }
+          },
+          "match": {
+            "method": "initialize"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "protocolVersion": 1,
+              "authMethods": []
+            }
+          }
+        },
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 2,
+            "method": "session/new",
+            "params": {
+              "cwd": "/private/work",
+              "mcpServers": []
+            }
+          },
+          "match": {
+            "method": "session/new"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "exit",
+          "code": 3
+        }
+      ]
+    },
+    {
+      "name": "hold-on-eof",
+      "holdOnEof": true,
+      "steps": [
+        {
+          "dir": "client->agent",
+          "kind": "request",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "initialize",
+            "params": {
+              "protocolVersion": 1
+            }
+          },
+          "match": {
+            "method": "initialize"
+          }
+        },
+        {
+          "dir": "agent->client",
+          "kind": "response",
+          "message": {
+            "jsonrpc": "2.0",
+            "id": "$last",
+            "result": {
+              "protocolVersion": 1,
+              "authMethods": []
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
