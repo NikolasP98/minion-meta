@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-97024660f7ac
 title: "Post-merge finding — todo-handoff in src/server/services/finance-statement-parser.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-12
 updated: 2026-09-12
 repos: [minion-hub]
