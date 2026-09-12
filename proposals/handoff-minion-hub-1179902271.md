@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-1179902271
 title: Handoff marker — src/server/services/crm-insights-dashboard.service.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-12
 updated: 2026-09-12
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-eea107ee93eb
+merged_into: postmerge-minion-hub-eea107ee93eb
 ---
 
 # Handoff marker — src/server/services/crm-insights-dashboard.service.ts

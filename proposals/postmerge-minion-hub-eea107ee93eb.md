@@ -42,3 +42,10 @@ Add `owner_id` grouping to word-frequency, sentiment, and win-index aggregation 
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/268
 - file: `src/server/services/crm-insights-dashboard.service.ts`
 - checked: 2026-09-12
+
+## Merged from handoff-minion-hub-1179902271
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/server/services/crm-insights-dashboard.service.ts:40` — scope word-frequency/sentiment/win-index rollups by owner
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/crm-insights-dashboard.service.ts#L40
