@@ -1,9 +1,9 @@
 ---
 id: postmerge-minion-hub-5006c27444a5
 title: "Post-merge finding — todo-handoff in src/server/services/brains.effect-ownership.sql.integration.test.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-09-12
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
