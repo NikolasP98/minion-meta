@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-86bab04e505b
 title: "Post-merge finding — todo-handoff in src/server/services/finance-statement-parser.ts (minion_hub)"
-status: approved
+status: closed
 created: 2026-09-11
 updated: 2026-09-12
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still approved — closing"
 ---
 
 # Post-merge finding — todo-handoff in `src/server/services/finance-statement-parser.ts`
