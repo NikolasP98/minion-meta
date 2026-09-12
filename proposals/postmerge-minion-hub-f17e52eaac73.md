@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-f17e52eaac73
 title: "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-12
 updated: 2026-09-12
 repos: [minion-hub]
