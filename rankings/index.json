@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-12T00:04:47.865Z",
+	"generatedAt": "2026-09-12T00:34:39.468Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -666,6 +666,41 @@
 			"scoredAt": "2026-09-07T08:15:17.104Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-c399783e15f5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/job-stock-concurrency.sql.integration.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c399783e15f5.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "52d46cf14dfacef521e9b6c01f27d9102825913c2eaf9d9be1fb87e598a2f99b",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-c5d86be403fa"
+			],
+			"rationale": "A postgres-js null-socket crash on backend loss is explicitly flagged as a pre-rollout blocker for job concurrency and was independently caught by two sweeps.",
+			"evidence": [
+				"marker text: 'Qualify/fix postgres-js nextWrite null-socket crash on backend loss before rollout'",
+				"duplicate detection via postmerge-discovery and handoff-ledger sweeps",
+				"tied to proposals/2026-09-08-platform-qc-remediation.md (HDS-05)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-12T00:34:39.390Z"
+		},
+		{
 			"key": "proposal:2026-09-08-platform-qc-remediation",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1077,14 +1112,14 @@
 			"scoredAt": "2026-09-11T18:05:22.094Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-c399783e15f5",
+			"key": "proposal:postmerge-minion-hub-c5d86be403fa",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/job-stock-concurrency.sql.integration.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c399783e15f5.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "fb730ae22b59bb87de5926912d0b4a14dd94c3bbec7b849984bb150ea54fcd66",
+			"title": "Post-merge finding — todo-handoff in src/server/services/bg-runtime.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c5d86be403fa.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "feb2cc6d65c1b7d204c247e06620d434984208007b49b17319cbc2521c903190",
 			"score": 68,
 			"band": "medium",
 			"axes": {
@@ -1094,21 +1129,22 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 3
+				"implementation": 4
 			},
-			"confidence": 5,
-			"recommendation": "group",
+			"confidence": 6,
+			"recommendation": "reevaluate",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-dba9eee424f4"
+				"proposal:postmerge-minion-hub-c399783e15f5"
 			],
-			"rationale": "A pre-rollout postgres-js socket-loss crash in job concurrency shares root cause with the invoice/stock race finding and should become one real-Postgres concurrency test goal.",
+			"rationale": "Missing JobExecution ownership gates on four ingest/corpus services is a real authorization and reliability gap, but the exact gate rule depends on an external HDS-05 proposal not yet confirmed.",
 			"evidence": [
-				"marker: 'nextWrite null-socket crash on backend loss before rollout'",
-				"merged PR #248 to master, file job-stock-concurrency.sql.integration.test.ts"
+				"marker: 'Adopt JobExecution ... their domain effects still need ownership gates'",
+				"diagnosis notes 'the proposal likely defines the exact gate rule' (unconfirmed)",
+				"also caught by independent handoff-ledger sweep"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T23:38:32.249Z"
+			"scoredAt": "2026-09-12T00:34:39.390Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-dba9eee424f4",
@@ -1240,40 +1276,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:11:32.696Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-c5d86be403fa",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/bg-runtime.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c5d86be403fa.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "b79b7a33756efc0044198536ed75d96b8f52289a91755dd0282cb6227a5b0f92",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-c399783e15f5"
-			],
-			"rationale": "Missing ownership gates across four ingest/corpus services is a real authorization gap but still only diagnosed, not scoped into an executable spec.",
-			"evidence": [
-				"marker names 4 services: statement_ingest, brain_ingest, brain_corpus_conversations/whatsapp, brain_corpus_business",
-				"status: draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T23:38:32.249Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-capability-separation-spec",
@@ -4817,6 +4819,38 @@
 			"scoredAt": "2026-09-09T19:04:37.327Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-c1b3044762bb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/finance-statements.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c1b3044762bb.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "7682aec710bf82b606bd084bd2ce4bab0b3e99ebfd167951dfbe380ac4729da2",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Blob/DB desync on failed or concurrent finance-statement imports risks orphaned storage and billing drift but has no stated deadline or rollout blocker.",
+			"evidence": [
+				"TODO(handoff) marker in finance-statements.service.ts",
+				"fix direction covers transaction wrapping, GC job, and DB locking but is auto-generated diagnosis, not a scoped plan"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-12T00:34:39.390Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-d3e0b507af92",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6481,40 +6515,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T22:39:03.778Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-c1b3044762bb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/finance-statements.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c1b3044762bb.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "84cd1b22a536ee8fd2a36cc34ec3c2d4e4bfa1537b89e0fd198ee5972313e91a",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-6a19625ce1c0"
-			],
-			"rationale": "Orphaned blobs from failed/concurrent imports is a real data-consistency and storage-cost issue that pairs naturally with the sibling job-status finding in the same file into one import-reliability goal.",
-			"evidence": [
-				"failed/concurrent import creation can orphan uploaded blobs",
-				"same file src/server/services/finance-statements.service.ts and PR #248 as the sibling finding"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T23:36:42.500Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
@@ -10277,38 +10277,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T22:34:40.008Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/9c1a53f7e5c62ce846fef5e484b891ba0bce1775",
-			"sourceUpdatedAt": "2026-09-11T21:35:09Z",
-			"sourceFingerprint": "3ba7110f3197684f0773ff1ac399bdb2ef79bd7aa6c24e028ea52d0ff0885691",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The described win32 test-skip fix is already committed and matches a prior established pattern, leaving no outstanding actionable work.",
-			"evidence": [
-				"commit already applies skipIf(win32) matching #288/#289",
-				"summary describes a completed, merged change"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T00:04:47.784Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
