@@ -3,7 +3,7 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: 360 quality and reliability
 status: executing
-stopped_at: User resumed implementation; jobs and stock first, then UI accessibility, then agents governance
+stopped_at: Executing security and jobs-stock gap closure before SDK-transport
 last_updated: "2026-09-12"
 ---
 
@@ -23,15 +23,16 @@ Hub jobs repairs PR269 deployed f97efb2d; UI PR270 deployed77445c01 with3800 ord
 
 ## Current Decisions
 
-- User priority: jobs/stock, UI/accessibility, agents/governance. Bounded subagents implement, review and monitor; root owns canonical planning and cross-project admission.
+- Current user priority: close remaining security and jobs/stock gaps, then SDK/transport. See operations/360/GAP-CLOSURE-2026-09-12.md. Bounded subagents implement and independently verify; root owns canonical planning and cross-project admission.
 - Preserve active dirty checkouts; separate private, merged, published and deployed identities.
 - Exact SDK1.4.0/Zod4.3.6 qualify outside production build/exports. Do not silently replace caller conversation history with one-shot sessions.
 - Original task metric stays comparable; an audit deliverable and its proposed repairs are counted separately.
 
 ## Current Blockers / Evidence Gaps
 
+- Netcup jobs-only cron is paused after verifying an August10 unfenced runtime.10-15 owns safe Node worker adoption and exact restoration; other scheduled work remains unchanged.
 - Attachment linked-record authorization and link/sweeper deletion races remain high findings; cron scheduling stays pending.
-- Booking transaction rollback is fixed; postcommit stock realization/release still needs durable admission and recovery. The bounded design is recorded in phase10; draft preservation, default timing and business-block retry policy await user answers.
+- Booking transaction rollback is fixed; postcommit stock realization/release still needs durable admission and recovery. The bounded design is recorded in phase10; source-backed compatibility policy now preserves existing drafts, operation-time resolution and explicit business retry; durable producer/worker implementation is active.
 - Authenticated ERP/UI, remaining Workshop/chart keyboard tasks, native AT/devices, B2 acceptance and actual provider revocation remain unqualified.
 - SDK/provider session continuation, complete governance corpus, installed sender/image adoption, containers, application load and cross-store restore remain open.
 - Prior automatic approval rejection of PostgreSQL backend fault injection remains recorded. It was not rerun; owned disposable Factory child restart tests are a distinct qualified scope.

@@ -1,6 +1,6 @@
 # Booking stock recovery: bounded implementation proposal
 
-Status: root-reviewed design; implementation awaits the three inventory-policy answers requested2026-09-12. This additional gap is outside the original229-task completion denominator. No customer database, provider, browser, migration or network mutation was used.
+Status: root-reviewed design; source-backed compatibility policy admitted2026-09-12 as recorded below. This additional gap is outside the original229-task completion denominator. No customer database, provider, browser, migration or network mutation was used.
 
 ## Verified baseline
 
@@ -14,7 +14,7 @@ Source findings:
 - `bg-runtime.ts:59` enqueue opens its own DB operation: calling it after commit does not solve atomic admission. `job-effects.service.ts:505–552` already atomically commits a domain mutation, revision head and queued job; `withJobRequest:408` checks lease/revision and performs domain SQL in the same transaction. Its effect-result rows are embedding-specific: do not put stock receipts into vector descriptor/result fields.
 - Public stock functions open separate `withOrgCore` transactions. A lease check followed by calling them outside the ownership transaction still permits stale effects. Existing bookkeeping-role restoration must be retained.
 
-## Required policy admission
+## Original policy questions (resolved by source-backed compatibility below)
 
 These are real business decisions, not reasons to defer fixture construction:
 1. **Edit/cancel after stock work has started:** preserve the existing draft as-is and require explicit Stock adjustment, or permit superseding/replacing an unsubmitted draft. Submitted ledger must remain append-only; cancellation must not silently reverse posted inventory. Reopening a cancelled/released booking currently does not resurrect accruals. Do not choose a new reopen policy implicitly.
@@ -58,3 +58,13 @@ New `scheduling-booking-stock.sql.integration.test.ts` uses actual disposable Po
 Required cases: booking+intent+job atomic rollback on invalid combined PATCH/audit/intent insert; idempotent UID/HTTP retry; committed intent reopened by a fresh process before first dispatch; two claimants/expired owner; duplicate completion and stock draft race produce one active issue and one ledger effect; restart after draft, after submission and before accrual stamping; completion-before-accrual; cancel/edit/delete before dispatch and between stages under the selected revision policy; blocked negative stock retains draft and requires selected retry authority; stale worker cannot publish after supersession; mismatched existing draft is not silently rewritten; tenant/RLS/owner/retry denial; no resurrection of settled accruals; malformed/oversized payload refusal. Observe committed DB state, not only mocked call counts. Actual child restart is fixture-only, not a claim of power-loss durability.
 
 Run existing booking atomic/update/accrual suites, stock/stock-accrual suites, jobs ownership suites, new native lane, typecheck, design/token checks and a credential-free UI fixture. Actual authenticated operator flow, migration preflight/application and production cron/handler adoption are separate release gates. No retrospective stock backfill, provider calls, new scheduler/library or broad stock rewrite belongs to this slice.
+
+## Admitted compatibility policy,2026-09-12
+
+This admission derives from actual source behavior at Hub77445c01 and the user's instruction to implement gap closure, not elapsed silence on the optional question. Preserve existing non-cancelled drafts and posted entries; never silently rewrite or reverse them, and do not resurrect released/realized accruals. Business-stock failures remain visible and require authorized explicit retry; interrupted infrastructure work may resume automatically.
+
+Creation captures its resolved accrual basis at creation admission. Existing completion re-resolves UOM from qtyConsumption: therefore an explicit completion request resolves issue lines with the then-current UOM exactly once and stores that execution snapshot when no draft/submitted entry already exists. Existing entries are reused unchanged. Submission valuation continues to use current bin moving-average rates. Ordinary product/event-type edits do not automatically re-accrue; explicit accrual adjustment owns that change. Timing/text-only edits do not mint a stock revision.
+
+Atomic intent SQL failure rolls back the booking mutation as the intended durability correction. Domain stock warnings do not prevent booking completion: record safe blocked state without continuing an aborted SQL transaction. A completion-before-accrual intent must carry the prior captured accrual basis; no lost predecessor or false no-op.
+
+Additional producer discovered: src/routes/api/gateway/actions/booking-complete/+server.ts. Preserve confirm:false preview, assistant scheduling edit capability and actor identity; confirm:true joins the same atomic admission and explicit retry contract. All producer claims include this route.
