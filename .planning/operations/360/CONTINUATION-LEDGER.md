@@ -194,3 +194,9 @@ User authorized corrections and ordered jobs/stock, UI/accessibility, then agent
 - Native regression owner: recount_takeover; independent current-master clone; genuine pgvector corpus fixture and hosted jobs/stock/finance lane.
 - Next-wave discovery: review_gateway_takeover; remaining UI/governance acceptance and current adoption, read-only until implementation assignment.
 - Root owns integration, scope admission, review and source/CI/deployment receipts. No dirty checkout, worktree, customer data or rejected fault-injection operation is part of this admission.
+
+## 2026-09-12 independently reviewed delivery
+
+Hub jobs PR269 and UI PR270 are deployed through77445c01, with148 strict native cases/zero skips,3800 ordinary pass/25 existing skips, build/design gates and public desktop/mobile smoke. Exact receipts and current promotion outcomes are maintained in [priority delivery](PRIORITY-DELIVERY-2026-09-12.md). Meta support-floor PR400 and dev-only ACP qualification PR401 merged to dev. Factory governance/planner source is dev467906db; trusted promotion failed before rollout twice with an unclassified broker502, leaving live/main02900306 unchanged. No provider or release-policy override was made.
+
+The refreshed original task inventory is193/229 complete,29 partial,7 without complete receipts; no whole requirement closed. Booking-to-stock postcommit recovery is a newly identified operational gap outside that denominator. Its bounded design preserves existing job infrastructure and append-only posted stock; three inventory policy answers remain pending. UI consumer/real-device and complete governance qualification remain separate from the delivered fixes.

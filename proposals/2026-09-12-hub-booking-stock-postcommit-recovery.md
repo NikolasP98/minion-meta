@@ -1,3 +1,12 @@
+---
+id: 2026-09-12-hub-booking-stock-postcommit-recovery
+title: 'Durable booking stock effects after commit'
+status: draft
+created: 2026-09-12
+updated: 2026-09-12
+repos: [minion-hub]
+---
+
 # Booking stock effects after commit
 
 Status: open; separate from the combined PATCH rollback repair.
@@ -11,3 +20,6 @@ Next bounded implementation: admit a durable stock intent in the same transactio
 Acceptance: a disposable real PostgreSQL test must prove process restart between booking commit and dispatch recovers the intent once; concurrent completion/retry creates at most one submitted stock issue; cancellation/reassignment follows the admitted revision policy; failed combined PATCH creates neither a booking mutation nor an effect intent. Operator UI must expose pending/failed stock work and an authorized retry.
 
 Existing phase10 invoice issue/submission acceptance remains distinct from this booking-triggered effect expansion. No current production recovery claim is made.
+
+
+Root-reviewed design and exact producer/helper/index/test ownership: [.planning/phases/10-durable-jobs-stock/10-BOOKING-STOCK-RECOVERY-DESIGN.md](../.planning/phases/10-durable-jobs-stock/10-BOOKING-STOCK-RECOVERY-DESIGN.md). This also covers explicit complete/accrual routes and deletion, completion before initial accrual, and the missing database-enforced booking-issue identity. The three inventory-policy questions are pending user input; no retrospective stock repair, migration or automatic posting behavior is inferred.

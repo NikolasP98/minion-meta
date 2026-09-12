@@ -1,0 +1,51 @@
+{
+  "status": "qualified-linux-awaiting-release-owner-hosted-integration",
+  "checkout": "/home/nikolas/.cache/minion-qc/gateway-boundary-repair-fAmq99JI/minion",
+  "base": "2f6ac3f96153d4c9e0476b8239d3ef749520d60a",
+  "files": {
+    "src/security/scan-paths.ts": "c38a4b7d36d9bed31a23797a08ffe172a62053da0a4d1268af4fbda0a25ea8bf",
+    "src/security/scan-paths.symlink.test.ts": "4d487c5047c261d15c03ef7e3dfb82470bdd7d1e11784fd10d3b4c5dbe0721d2",
+    "src/agents/bash/bash-tools.shared.ts": "c7241fb0195ccec6a90f17f894b8677417335f7a51d11f11873387cdcff87bba",
+    "src/agents/bash/bash-tools.shared.workdir.test.ts": "33f2a07528e27bec2f8c85a389ef1ac3969695c9e5acdea9e81bd19b1588702f"
+  },
+  "cause": "realpathSafe lexical fallback for nonexistent candidates both mismatched canonical workspace aliases and accepted missing descendants of escaping directory symlinks",
+  "fix": "Resolve nearest existing ancestor plus missing suffix; existing entries whose realpath fails, non-ENOENT, cycles and ENOTDIR fail closed",
+  "red": {
+    "passed": 12,
+    "failed": 7,
+    "log": "scan-paths-red-expanded.log"
+  },
+  "green": {
+    "passed": 25,
+    "failed": 0,
+    "skipped": 0,
+    "files": 2,
+    "log": "path-caller-final-green.log"
+  },
+  "checks": {
+    "oxlint": "0 warnings/errors",
+    "oxfmt": "pass",
+    "diffCheck": "pass"
+  },
+  "diff": "path-caller-review.diff",
+  "limits": [
+    "Actual macOS hosted confirmation pending release-owner integration",
+    "Existing Windows symlink privilege skips retained",
+    "Normalized snapshot check is not atomic against hostile filesystem swaps; source TODO and root proposal retain boundary"
+  ],
+  "commit": null,
+  "push": false,
+  "callerFix": "resolveWorkdir normalizes once before stat and returns same path to guard and exec cwd; fallback warnings and sandbox branch unchanged",
+  "callerRed": {
+    "failed": 2,
+    "passed": 3,
+    "log": "workdir-caller-red.log"
+  },
+  "probe": "path-dotdot-caller-probe.json",
+  "cwdFallbackCorrection": {
+    "redFailed": 1,
+    "redPassed": 5,
+    "redLog": "workdir-cwd-fallback-red.log",
+    "scope": "path.resolve inside try, mocked process.cwd error restored before assertions; homedir warning preserved"
+  }
+}

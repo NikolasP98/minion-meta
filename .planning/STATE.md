@@ -19,7 +19,7 @@ Independent takeover review and resumed repairs are recorded in [PRIORITY-DELIVE
 
 **89 plans / 229 tasks / 51 requirements / 12 phases.** 193 scoped deliverables complete (84.3%),29 partial, seven without complete receipts. This includes private/preparatory work; no whole requirement is independently closed. New review findings remain outside the historical denominator.
 
-Hub jobs repairs PR269 deployed f97efb2d; UI PR270 deployed77445c01 with3800 ordinary passing tests (25 existing skips),148 native cases without skips, required build/design gates and public mobile/desktop smoke. Meta Node-floor PR400 mergeddev6103e982. Gateway security PR292 mergedDEV2a2fdace; production PR293 is monitored separately. Factory boundary PR187 mergeddev905b4b10; its trusted promoter owns production. Current exact final release status belongs to the priority-delivery report rather than inferred branch state.
+Hub jobs repairs PR269 deployed f97efb2d; UI PR270 deployed77445c01 with3800 ordinary passing tests (25 existing skips),148 native cases without skips, required build/design gates and public mobile/desktop smoke. Meta Node-floor PR400 mergeddev6103e982. Gateway security PR292 mergedDEV2a2fdace; production PR293 is monitored separately. Factory boundary/planner repairs are merged to dev467906db; trusted promotion failed before rollout twice with an unclassified broker502, leaving live/main02900306 unchanged. ACP qualification PR401 is merged to dev48e67faf as a dev-only candidate. Current exact final release status belongs to the priority-delivery report rather than inferred branch state.
 
 ## Current Decisions
 
@@ -31,7 +31,7 @@ Hub jobs repairs PR269 deployed f97efb2d; UI PR270 deployed77445c01 with3800 ord
 ## Current Blockers / Evidence Gaps
 
 - Attachment linked-record authorization and link/sweeper deletion races remain high findings; cron scheduling stays pending.
-- Booking transaction rollback is fixed; postcommit stock realization/release still needs durable admission and recovery.
+- Booking transaction rollback is fixed; postcommit stock realization/release still needs durable admission and recovery. The bounded design is recorded in phase10; draft preservation, default timing and business-block retry policy await user answers.
 - Authenticated ERP/UI, remaining Workshop/chart keyboard tasks, native AT/devices, B2 acceptance and actual provider revocation remain unqualified.
 - SDK/provider session continuation, complete governance corpus, installed sender/image adoption, containers, application load and cross-store restore remain open.
 - Prior automatic approval rejection of PostgreSQL backend fault injection remains recorded. It was not rerun; owned disposable Factory child restart tests are a distinct qualified scope.
