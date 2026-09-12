@@ -15,36 +15,57 @@
   },
   "NikolasP98/minion_hub:master": {
     "cursor": "e98422b899a30ff9668869a0dae6d4cc0bcb371f",
-    "head": "abba212f4d7aac3e595fd958c83956a821e0010d",
-    "done": 13,
+    "head": "e17a8cb6871ed27bf383ece06725671d34107904",
+    "done": 14,
     "kept": [
       {
-        "file": "src/routes/(app)/scheduling/calendar/+page.server.ts",
-        "desc": "Accessing nested property preferences.preferences without null check; throws if parent() returns object lacking preferences property",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 27
-      },
-      {
-        "file": "src/routes/api/servers/[id]/provision/run/+server.ts",
-        "desc": "Telemetry capture errors are silently swallowed with no logging, masking bugs in observability code even though the catch comment explains non-blocking intent.",
+        "file": "src/lib/attachments/upload.ts",
+        "desc": "DELETE cleanup error is swallowed silently with .catch(() => {}), risking orphaned server-side files if the delete fails during CORS fallback",
         "severity": "medium",
         "category": "empty-catch",
-        "line": 43
+        "line": 125
       },
       {
-        "file": "src/server/services/attachments.service.ts",
-        "desc": "Presigned URL TTL (900 seconds) is hardcoded; should be a constant or environment-configurable",
-        "severity": "medium",
-        "category": "hardcoded-config",
-        "line": 130
-      },
-      {
-        "file": "src/server/services/bg-runtime.test.ts",
-        "desc": "Function returns result.rows[0] without checking if array has elements; all callers access properties on potentially undefined value",
+        "file": "src/lib/components/attachments/AttachmentList.svelte",
+        "desc": "load() catches listAttachments errors silently, showing empty list without reporting the failure to user",
         "severity": "high",
+        "category": "empty-catch",
+        "line": 64
+      },
+      {
+        "file": "src/lib/server/observability-context.ts",
+        "desc": "header() function swallows errors from header getter silently without logging or documentation",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 123
+      },
+      {
+        "file": "src/lib/server/observability-context.ts",
+        "desc": "sanitizeEventProperties() swallows errors from property descriptor access silently",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 302
+      },
+      {
+        "file": "src/lib/server/posthog.ts",
+        "desc": "Empty catch block swallows errors silently without logging or instrumentation.",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 61
+      },
+      {
+        "file": "src/routes/(app)/crm/[contactId]/+page.svelte",
+        "desc": "ms.id.slice(3) assumes id exists and is a string with at least 3 characters without validation",
+        "severity": "medium",
         "category": "unchecked-access",
-        "line": 46
+        "line": 1014
+      },
+      {
+        "file": "src/routes/api/marketplace/install/+server.ts",
+        "desc": "Empty catch block silently swallows telemetry errors without logging or observability",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 82
       }
     ]
   }
