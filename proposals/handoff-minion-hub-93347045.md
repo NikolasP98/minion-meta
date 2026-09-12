@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-93347045
 title: Handoff marker — src/server/services/attachments.service.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-12
 updated: 2026-09-12
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-8a282b90cd22
+merged_into: postmerge-minion-hub-8a282b90cd22
 ---
 
 # Handoff marker — src/server/services/attachments.service.ts

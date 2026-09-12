@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `src/server/services/attachments.service.ts` is re
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/260
 - file: `src/server/services/attachments.service.ts`
 - checked: 2026-09-12
+
+## Merged from handoff-minion-hub-93347045
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/server/services/attachments.service.ts:108` — no sweeper for files rows whose finalize never runs
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/attachments.service.ts#L108
