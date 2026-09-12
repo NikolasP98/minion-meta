@@ -2,7 +2,7 @@
 phase: 11-agent-lifecycle
 plan: "07"
 date: 2026-09-09
-status: candidate_frozen_runtime_gate_partial
+status: scoped_runtime_floor_qualified_adoption_open
 plan_sha256: 8055b67ae3dac4e739a8d1d57893a6683f44ca236ab1c9e56ab6021aa88aec73
 requirements_completed: []
 key-files:
@@ -141,3 +141,12 @@ Exact source TODOs point to `proposals/2026-09-08-platform-qc-remediation.md`:
 - Test `run-journal.test.ts:215`: exact minimum/unsupported runtime qualification, package/image and release acceptance remain pending.
 
 Send these entries to root for its paired proposal ledger. No global proposal, roadmap, requirement, state or other plan was edited. Independent verification is separate from this implementer's evidence. **Standards:** source ownership and native engine reuse were preserved, with no new dependency or active dist mutation; initial test cache isolation failed and requires the documented correction. **Spec:** Tasks1/2 candidate behavior is tested; Task3 has current/pinned-local evidence only. No sender/receiver or phase closure.
+
+
+## 2026-09-12 resumed qualification
+
+Task3 is now qualified at the exact supported floor. Meta PR400 merged to dev6103e982508ec3cdc18488eb4f855474ef52c907 after hosted run34714453995 executed216 shared/bridge cases without skips on official Node22.13.0 / SQLite3.47.2. The emitted journal was imported, committed, reopened and ACKed without experimental flags. The same emitted smoke passed on Node22.23.1 / SQLite3.51.3. Official Node20.18.0 separately rejected node:sqlite with ERR_UNKNOWN_BUILTIN_MODULE and created no journal or fallback files. A deliberate skipped-test trial was rejected by the qualification guard.
+
+Hosted source81067d5a1a8a11d6d0b46d6d5e7ea273b20851a8 differs from final dev only in unrelated rankings/index.json; qualification sources and lockfile match. Official image digest: sha256:87608ec5109795be954baa2f5b0b6da1911423d8b44b58fecda31f81d28bfc0f.
+
+The source floor task is complete. This does not publish the current sender generation, qualify the workstation image, prove power-loss durability, or activate the gateway durable mode. Earlier TODOs about minimum runtime are satisfied by this evidence; their package/image and deployment limits remain open.

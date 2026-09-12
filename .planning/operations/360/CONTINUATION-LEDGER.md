@@ -1,6 +1,6 @@
 # Continuation ledger — Claude resume of the 360 program (from 2026-09-09 17:17)
 
-> Current Codex reconciliation: [2026-09-11 resumption review](RESUME-2026-09-11.md). Entries below preserve Claude's historical observations; publication, CI, staged-script and PR246 status were refreshed there.
+> Current Codex reconciliation: [2026-09-12 independent review](REVIEW-2026-09-12.md). Entries below are historical claims; the current review identifies unadopted repairs, red CI and production defects that limit blanket completion statements.
 
 Purpose: every adoption, merge, publish and deploy performed after the Codex usage limit, with the receipt Codex can verify independently. Same discipline as the program: private snapshots, hash receipts, root rerun before adoption, PRs to the real integration branches, production verification by observed behaviour. Status vocabulary: `verified-private` (candidate passed root rerun in /tmp), `adopted` (in a real branch/PR), `merged`, `published`, `deployed-verified`.
 
@@ -185,3 +185,12 @@ Master `a99c0af7` (program PRs #246, #247, #249, #250, #251, #252, #253, #255, #
 
 ## Program delivery state at close (2026-09-11 ~23:00 UTC)
 Gateway prod main `064b4d34` · Hub prod master `c4878dbb` · Site prod `0ed4e1b` · npm shared 0.12.0 / shells-bridge 0.2.0 · meta dev carries 12-03, 11-03, 11-10, 15-04/18-03, 14-01 (dev→main release = next owner step). Open (owner/decision/credential/docker): `20-RESIDUAL-DECISIONS.md` A-01…A-12 + R-01…R-08; authenticated `artifacts.catalog` probe; 17-03/17-04 (docker); 13-03 (credentials); local dump delete+rotate (R-01).
+
+## 2026-09-12 resumed priority execution
+
+User authorized corrections and ordered jobs/stock, UI/accessibility, then agents/governance. Prior review-only pause is lifted for this work. Existing 190/229 task credits remain unchanged until verification. GSD summary presence is not closure: phase10 init reports no incomplete plans, but 10-06 native pgvector qualification remains partial.
+
+- Hub repair owner: review_hub_takeover; isolated current-master clone; finance15-07 adoption, stock fixture, server error redaction, booking request correctness.
+- Native regression owner: recount_takeover; independent current-master clone; genuine pgvector corpus fixture and hosted jobs/stock/finance lane.
+- Next-wave discovery: review_gateway_takeover; remaining UI/governance acceptance and current adoption, read-only until implementation assignment.
+- Root owns integration, scope admission, review and source/CI/deployment receipts. No dirty checkout, worktree, customer data or rejected fault-injection operation is part of this admission.

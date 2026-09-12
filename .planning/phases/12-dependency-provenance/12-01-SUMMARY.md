@@ -6,7 +6,7 @@ requirements-completed: []
 snapshot: /home/nikolas/.cache/claude-tmp/12-01-392e01c2/minion_hub
 executed: 2026-09-11 (continuation of the 2026-09-09 partial; fixtures were already complete)
 executor: Claude (Fable 5.1) continuation, ponytail mode
-base: minion_hub origin/master 1df0a921 (fix(ui): native Dialog consumers … #245)
+base: "minion_hub origin/master 1df0a921 (fix(ui): native Dialog consumers … #245)"
 owned_files:
   - path: minion_hub/package.json
     before: 12199632c49e0bc9960ec32203357b6bdfe90981f7b4d78ba771c1b9f5e547f6

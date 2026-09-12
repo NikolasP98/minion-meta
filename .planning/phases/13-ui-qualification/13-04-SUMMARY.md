@@ -4,7 +4,7 @@ plan: "04"
 type: execute
 requirements: ["UI-06", "UI-03"]
 requirements-completed: []
-status: partial
+status: scoped_audit_complete_consumer_gaps_open
 ---
 
 # Phase 13 plan 04 — shared chart reduced-motion + nonvisual access slice
@@ -355,3 +355,12 @@ Current behavior handles supported vertical/horizontal category charts and forma
 Native mounted/ECharts SSR-model tests:23 passing, with only canvas text measurement shimmed. Root native browser run:18 existing cases passed across three engines; the three new wide-table cases initially failed because the test expected the wrong accessible name. After correcting the assertion, all three wide-table cases passed. This represents21 passing cases across two runs, not a single wholly green21-case run. Logs: `chart-browser-v1.log` and `chart-wide-v2.log` under the root combined candidate parent. Actual keyboard ArrowRight scrolling was observed without page overflow at360px. Chromium149, Firefox151 and Linux WebKit26.5 were used; WebKit requires the recorded private runtime wrapper.
 
 Full combined Hub Svelte check returned zero errors/warnings; scoped design/token checks pass. Final fixture/spec formatting was applied with the native Svelte Prettier plugin. Unqualified dataset/encode/mixed/non-Cartesian alternatives, consumer keyboard actions, custom effects and workshop/Pixi behavior retain source TODOs and matching proposal entries. UI-06 remains open.
+
+
+## 2026-09-12 resumed qualification
+
+Task2 now has actual native-engine observations and bounded consumer follow-ups, adopted in13-CANVAS-COVERAGE.md and13-REMAINING-CONSUMER-PLANS.md. Hub packet bf8bbf532abbdc3e3d6edf3a227b667cd4d7206e includes keyboard agent selection/task entry, native Dialog behavior, pixel lifecycle-safe reduced motion, and actual classic/Habbo Pixi pulse/reaction/hover control. Physics continues advancing. Review caught and corrected the first implementation's frozen spawn/despawn lifecycle; the first commit must never be adopted alone.
+
+Evidence:18 component/OfficeState browser cases and9 WebGL/Pixi/Rapier cases across Chromium, Firefox and WebKit;11 native unit cases;30 critical fixture cases;13 Chromium navigation cases. Initial and live motion preferences, cleanup, focus and task callbacks are asserted against real local components. Full Svelte check has zero errors/warnings; tokens zero violations; design debt does not increase. The integrated release candidate also passed3800 ordinary tests (25 pre-existing skips),148 native jobs tests without skips, both CRM lanes and production build. PR270 merged77445c01ec38657c767d6f011e77148be3cc4ccf; deployment is recorded separately in the priority-delivery report.
+
+The audit deliverable is complete, not UI-06 or whole UI parity. Relationship/element/camera keyboard actions, selected chart drilldowns/legend/Sankey alternatives, full Workshop composition, authenticated Supabase journeys, native assistive technology and real devices remain explicit gates. The browser fixtures do not prove a real provider task or authenticated save. Historical missing-build/native-test limitations above are superseded only for these exact recorded candidates.

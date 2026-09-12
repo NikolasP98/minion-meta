@@ -1,0 +1,102 @@
+{
+  "scope": "Read-only gateway/meta/registry review; no production mutation or source edits",
+  "gateway_main": "064b4d34444274275be61e8e707982b772ca3543",
+  "gateway_remote_dev": "9c1a53f7e5c62ce846fef5e484b891ba0bce1775",
+  "meta_main": "f4343b79de3d4c1cee128866041f74f3cd90a198",
+  "findings": [
+    {
+      "priority": "high",
+      "title": "Registered bridge can commit a different shell outcome within its organization",
+      "locations": [
+        "minion/src/shells/manager.ts:658-682",
+        "minion/src/shells/run-store.ts:369-384"
+      ],
+      "trigger": "An accepted shell-a socket submits a valid outcome for a known shell-c admission belonging to the same org.",
+      "cause": "Manager authenticates socket and org, then passes org and raw outcome to store without comparing outcome.shellId against registered shellId.",
+      "impact": "Wrong shell can permanently finalize another shell run.",
+      "proof": {
+        "method": "Actual ShellsManager plus native ShellRunStore imported through tsx from private gw-d, synthetic registry and socket fixtures, private disposable database. Both shells registered normally; target admission inserted into actual store. No production requests.",
+        "source_sha256": "5543ffdc6af8b369372c20a588f74d0db5b28f844371625f26cc52a23e4cf1ad",
+        "source_matches_deployed_manager": true,
+        "exit_code": 0,
+        "stdout": {
+          "registeredShell": "shell-a",
+          "payloadShell": "shell-c",
+          "acceptedReceiptShell": "shell-c",
+          "storedStatus": "committed"
+        },
+        "cleanup": "Private database directory deleted in finally; no script persisted (inline heredoc)."
+      },
+      "fix": "Validate and bind normalized outcome.shellId to the registered shell before committing; add same-org cross-shell regression."
+    },
+    {
+      "priority": "medium",
+      "title": "Legacy invoke drops invocationKey before manager refusal guard",
+      "locations": [
+        "minion/src/gateway/server-methods/shells.ts:377-384",
+        "minion/src/shells/manager.ts:383-384"
+      ],
+      "trigger": "Legacy shells.invoke supplied with invocationKey and retried while durability disabled.",
+      "cause": "Handler reconstructs params without invocationKey, making manager hasOwn guard unreachable for wire callers.",
+      "impact": "Caller key silently ignored; retry may execute again.",
+      "qualification": "Source-confirmed existing boundary gap left unclosed by train; no runtime reproduction performed."
+    }
+  ],
+  "deployment": {
+    "run_id": 34649530514,
+    "repo": "NikolasP98/minion-ai",
+    "status": "completed",
+    "conclusion": "success",
+    "branch": "main",
+    "jobs": [
+      {
+        "id": 103428184192,
+        "name": "Load server registry",
+        "conclusion": "success"
+      },
+      {
+        "id": 103428235412,
+        "name": "Version-compat gate (prd)",
+        "conclusion": "success"
+      },
+      {
+        "id": 103428299791,
+        "name": "Deploy to prd-netcup",
+        "conclusion": "success"
+      },
+      {
+        "id": 103430178708,
+        "name": "Deployment Summary",
+        "conclusion": "success"
+      }
+    ],
+    "host_reprobe": false
+  },
+  "registry": {
+    "release_run": 34440681982,
+    "release_conclusion": "success",
+    "shared": {
+      "version": "0.12.0",
+      "members": 44,
+      "integrity": "sha512-Y+bag0yT9hRpERB/eiFT1H5akd5Wy/yjG+2qms0wcFkw1JBgZiphOOlgrZLEY2CBD+k/fufmIcMw8jiJ4gZhbQ==",
+      "envelope_contract_file_present": false,
+      "client_parseFrame_present": false
+    },
+    "shells_bridge": {
+      "version": "0.2.0",
+      "members": 37,
+      "integrity": "sha512-+PXi8bkkhXhHWRO+xGDQPxnm4qRzgEcCbBeXRS/UaI2GUBlfjbi9Si4Mq9PMxSxkQVS1GybLrSdcpXwZ4VIF2g==",
+      "durable_advertisement_invoke_commit_present": false,
+      "acp_initialize_present": false
+    },
+    "method": "Registry metadata and actual tarballs downloaded in memory; no installation or artifact rebuild."
+  },
+  "delivery_limits": [
+    "Meta PR387 sender correction and PR388 envelope contract are on dev, not main/npm. PR389 not found.",
+    "ACP conformance remains private candidate; meta dev still retains handwritten initialization/prompt/cancel mapping.",
+    "Durable receiver defaults disabled; deployed code does not prove enabled durable execution.",
+    "Windows store explicitly UNSUPPORTED_PLATFORM; skipped receiver suites are not parity.",
+    "Train PR282 reported 34 passed, 2 failed, 25 skipped; Linux deployment success is not fully green cross-platform qualification.",
+    "No host re-probe or authenticated artifact catalog probe performed."
+  ]
+}

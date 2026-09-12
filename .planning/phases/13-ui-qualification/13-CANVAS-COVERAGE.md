@@ -102,3 +102,21 @@ not and cannot certify these files; the canaries exist so a future change that t
 forced to update this document too. `bunx vitest run` was not usable to verify `Chart.svelte`
 itself in this environment; see 13-04-SUMMARY.md for the exact blocked-gate evidence and the
 Playwright/production-fixture substitute used instead.
+
+
+## 2026-09-12 resumed qualification
+
+Current Hub integrated source:77445c01ec38657c767d6f011e77148be3cc4ccf. This addendum supersedes old missing-engine rows only where explicitly listed. Historical inventory remains a discovery map, not a claim that every caller was requalified.
+
+| Actual surface | Verified evidence | Remaining task |
+|---|---|---|
+| Shared Chart and sentiment | Prior23 mounted/native and21 browser cases; real table mapping and ECharts reduced motion | Concrete consumer drilldowns/legend and unsupported graph alternatives: UI-C1 |
+| Workshop agent controls and task dialog |18 browser cases over real controls/OfficeState at mobile/desktop widths; native focus/Escape and callback identity | Full Workshop composition, authenticated save/provider completion |
+| Pixel game loop and OfficeState | Lifecycle regression reproduced before fix; spawn/despawn and bubble expiry continue with decorative movement paused | Actual simulation scheduler/full route acceptance |
+| Classic and Habbo agent sprites | Native WebGL state assertions for pulse/reaction initially and after preference changes | Full composed scene integration |
+| Habbo element hover | Native position/scale/alpha and cleanup assertions | Element keyboard actions: UI-K1 |
+| Rapier physics | Actual WASM advances; manual movement remains accepted with reduced motion | Physics/scheduler policy is unchanged, not broadly certified |
+| Relationships, elements, camera | Exact pointer handlers inventoried in UI-K1 | Keyboard equivalence and shared action state, undo/save, view-mode coverage |
+| Reliability chart consumers | Exact handlers inventoried in UI-C1 | Keyboard filter/detail/legend/Sankey equivalence |
+
+Native motion fixture:9 cases across all three browser engines, zero skipped. Root adopts the bounded action, ownership, negative-case and acceptance scopes in13-REMAINING-CONSUMER-PLANS.md. All older unqualified consumer rows remain open; the original audit task is fulfilled by evidence plus explicit gap plans, not by claiming these gaps implemented.

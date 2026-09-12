@@ -78,3 +78,14 @@ Runtime freeze (`checks/freeze.json`): Node v22.23.2, pnpm 10.15.0, vitest 2.1.9
 
 - **SDK dependency transaction — pending root lock.** `checks/pending-root-lock-sdk-transaction.diff`.
 - Not changed: gateway/image Dockerfiles, `config.ts` command parsing, `index.ts` exit-on-stop.
+
+
+## 2026-09-12 SDK candidate qualification
+
+Meta PR401 candidate d7809157fca6c9ef83215767dd28215d6b09502e adds an official SDK1.4.0 qualification adapter outside production src, with exact development-only Zod4.3.6. Twenty-two real-stdio cases cover official examples and protocol/result/resource boundaries; source and emitted production runtime remain unchanged. Root review reproduced and corrected an error-event path that falsely certified process exit; only actual child close now certifies it. An earlier156-case full package run passed before that added negative case; final counts and hosted checks are recorded in the copied ACP receipt and priority-delivery report.
+
+The package archive contains37 files and excludes qualification source/build metadata and runtime SDK/Zod dependencies. Normal typecheck includes the separate qualification tsconfig. The SDK owns dispatch and inbound schemas, but generic response fields require explicit validation. Official example-agent cancellation during a pending permission returns end_turn, so this is recorded as a limitation, not a cancellation-acknowledgement pass.
+
+Task2 remains partial. SessionId currently carries no proven one-shot semantics; existing runtime must not be changed to fresh conversations. Exact scope, decisions and acceptance for caller→ACP mapping, load/restart and late-frame fences are in the canonical platform proposal section11-04 ACP SDK continuation. No credentialed provider, VM image, installed bridge or production adoption is certified.
+
+Final SDK qualification delivery: PR401 mergeddev48e67faff5aa9f320f371f985dd599efdf82bde0; all four CI checks pass. Hosted verify34715455498 reports157/157 package cases, including22 candidate cases, plus the normal hooked qualification typecheck. Production source unchanged; no publication/deployment.

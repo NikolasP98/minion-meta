@@ -76,3 +76,12 @@ Freeze (`checks/freeze.json`): Node v22.23.2, npm 12.0.2, tsx 4.23.12, typescrip
 - **GG-04 (decision):** Factory has no approval TTL; only a policy owner can introduce one.
 - **Independent review (D360-07)** of this candidate has not happened; requirement closure is root's call.
 - No commit, stage, push, PR, publish, deploy, branch, stash or main-checkout source change was made.
+
+
+## 2026-09-12 actual tool-host effect boundary
+
+Factory PR187 (feature21463a7e8b893bff43e025a5769a068b181bea4c; dev merge905b4b10a2553f56625331eefcade4794589a188) adds actual MCP client→tool-host HTTP→runner Express→native SQLite tests. Unknown token/tool/capability requests create no admission effects; accepted phase admission persists; an owned child killed after admission can reopen and replay without duplicate effects; changed payload and revoked capability are rejected. Hosted boundary execution passed184 tests without skips. This is phase admission, not external executor side-effect qualification.
+
+The normal trusted promoter initially stopped before deployment because its feature-test planner installed only tool-host dependencies for a tool-host-only change, while these tests import runner/tsx. This release integration gap is being corrected through a separate bounded PR; consult the priority-delivery report for final status. No flag or production data change was used to pass tests.
+
+Task1 remains partial: budget exhaustion, mutable tool/schema/model/image identity, actual expiry policy and external execution remain outstanding. The exact new test TODO and canonical platform proposal record those limits. No full governance closure is claimed from an admission test corpus.

@@ -1,7 +1,7 @@
 ---
 phase: 10-durable-jobs-stock
 plan: "06"
-status: complete-private-candidate
+status: scoped_deliverables_qualified_runtime_gates_open
 requirements-completed: []
 plan_sha256: 104eac725ef93f7b6f6e4dfab381638af9586e9853ccd95f0880f0c026cd485a
 snapshot: /home/nikolas/.cache/claude-tmp/10-06-k4v9tq/minion_hub
@@ -96,3 +96,12 @@ Runtime: Node v22.23.2, Bun 1.3.4, Vitest 4.1.10, svelte-check 4.7.6, TypeScript
 4. **Page capacity ceiling** — `TODO(handoff)` in `packCorpusPages` (`brain-corpus.service.ts`): a single month segment or business record above 256 chunks / 2 MiB cannot be embedded through the job path and surfaces as an ordinary bounded failure; the pre-adoption path had no ceiling. Proposal text for root's ledger: *"Corpus sources larger than one job-effect page (256 chunks or 2 MiB of chunk text) fail the job path with `capacity`; decide a multi-page-per-source manifest (raise `job-effect-pages.service` LIMIT or split one entity across pages under one revision) before such sources can publish again; pointer `minion_hub/src/server/services/brain-corpus.service.ts` packCorpusPages."*
 5. **Registration TODO outside ownership** — `src/server/services/bg-runtime.ts:54` still names `brain_corpus_conversations/whatsapp` and `brain_corpus_business` in its `TODO(handoff)`. That file is not in this plan's `files_modified`; root should trim those entries once this candidate is accepted.
 6. Full Hub build, aggregate regression, migration/drain ordering and deployment remain root-owned release gates; nothing here is a release certificate, and JOB-01/JOB-02 are not globally closed.
+
+
+## 2026-09-12 resumed qualification
+
+The current evidence below supersedes the historical native-fixture limitation, while preserving the original implementation receipt above. Scoped Task3 now passes with real PostgreSQL18.6, pgvector0.8.6, vector(1536), both HNSW indexes and the actual hash-pinned serving-index migration trigger. Thirteen corpus cases cover overlap, cancellation, received-result recovery, indeterminate admission, stale publication, deletions, generation and RLS. The full hosted jobs lane passes148 cases across five exact suites with zero skips; its guard rejects missing or skipped suites. Backend-loss injection is separately gated and was not executed.
+
+Hub PR269 reviewed a8efe289b4d1377edcf3b58ab8ae2d6f22888b52 and deployed merge f97efb2d43742772d5bc44b93260920bb20bb0a4. It also adopts15-07 parser binding, booking transaction rollback, generic server errors and repaired stock fixtures. CI run34714521965 supplies the native artifact. See the dated priority-delivery report for exact release identities and copied receipts.
+
+All three planned deliverables have evidence; JOB/STK requirements remain open for production worker/migration adoption, backend-loss qualification, all producer effects and recovery. Booking status commits followed by best-effort stock realization remain a separate crash window, documented in proposals/2026-09-12-hub-booking-stock-postcommit-recovery.md. No production data or migration was changed for these tests.

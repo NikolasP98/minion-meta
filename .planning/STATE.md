@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: 360 quality and reliability
-status: paused
-stopped_at: User requested pause; Site PR31 deployed and live smoke verified; remaining work paused; see operations/360/RELEASE-2026-09-11.md
-last_updated: "2026-09-11"
+status: executing
+stopped_at: User resumed implementation; jobs and stock first, then UI accessibility, then agents governance
+last_updated: "2026-09-12"
 ---
 
 # Project State
@@ -15,37 +15,26 @@ See PROJECT.md and operations/360/PROGRAM.md. Historical v1.0 files copied to mi
 
 ## Current Position
 
-Resumed by Codex on 2026-09-11 after Claude's continuation. Canonical current review: [RESUME-2026-09-11.md](operations/360/RESUME-2026-09-11.md). Historical implementation and delivery receipts remain in [CONTINUATION-LEDGER.md](operations/360/CONTINUATION-LEDGER.md).
+Independent takeover review and resumed repairs are recorded in [PRIORITY-DELIVERY-2026-09-12.md](operations/360/PRIORITY-DELIVERY-2026-09-12.md), with the original findings in [REVIEW-2026-09-12.md](operations/360/REVIEW-2026-09-12.md) and the refreshed [task table](operations/360/PROGRESS-2026-09-12.md).
 
-**89 admitted plans / 51 requirements / 12 phases.** All allowlisted files exist. No entire phase or requirement is complete.
+**89 plans / 229 tasks / 51 requirements / 12 phases.** 193 scoped deliverables complete (84.3%),29 partial, seven without complete receipts. This includes private/preparatory work; no whole requirement is independently closed. New review findings remain outside the historical denominator.
 
-Gateway production deployment for the second train succeeded (GitHub run34474818000). Claude's last host verification records main0aafeec7. Hub Dialog repair PR245 is merged and has a recorded Vercel production receipt. This status review did not re-probe production hosts or authenticated UI.
-
-Shared contract, clean emission and client/session changes are merged upstream. npm shared0.12.0 and shells-bridge0.2.0 remain unpublished; current registry versions are0.11.0 and0.1.6. Release run34440681982 failed with PUT E404. Exact credential cause remains unverified here.
-
-Claude completed private14-12 receiver and14-17 caller/config/lifecycle candidates and staged11-03 sender work. Root rehashed the six receiver and13 caller files against saved receipts with no drift; no end-to-end durable execution or production activation is inferred.
-
-Fourteen staged delivery worktrees are preserved. The bulk flush script has confirmed path, remote-name and failure-handling defects; do not run it unchanged. The standalone10-01 branch is byte-identical to a subset of10x; deliver one path. The10x and12-02 test configurations need explicit reconciliation.
+Hub jobs repairs PR269 deployed f97efb2d; UI PR270 deployed77445c01 with3800 ordinary passing tests (25 existing skips),148 native cases without skips, required build/design gates and public mobile/desktop smoke. Meta Node-floor PR400 mergeddev6103e982. Gateway security PR292 mergedDEV2a2fdace; production PR293 is monitored separately. Factory boundary PR187 mergeddev905b4b10; its trusted promoter owns production. Current exact final release status belongs to the priority-delivery report rather than inferred branch state.
 
 ## Current Decisions
 
-- User priority D360-17: mobile/desktop UI parity first, then all remaining360 implementation. Combined Hub UI passes full Svelte check and 30 mandatory journeys; Site actual-font chat/tab qualification passes, including full native checks. Actual HTTP/WebSocket integration passes under 14-18; portable CI runs under 13-14. See operations/360/UI-FIRST-2026-09-11.md.
-
-- Preserve all active, private and staged work; no blanket staging, branch changes or automatic bulk delivery.
-- Prioritize current Hub PR246 review findings before any review override or merge.
-- Keep exact source, package, candidate, merged and deployed identities distinct.
-- Continue independent local implementation/verification while publish/signing/live-access gates remain unresolved.
-- Wrap-up release status is tracked in operations/360/RELEASE-2026-09-11.md. Site PR31 is the bounded master-based production candidate; PR29 remains outside this release. No npm publication is implied.
+- User priority: jobs/stock, UI/accessibility, agents/governance. Bounded subagents implement, review and monitor; root owns canonical planning and cross-project admission.
+- Preserve active dirty checkouts; separate private, merged, published and deployed identities.
+- Exact SDK1.4.0/Zod4.3.6 qualify outside production build/exports. Do not silently replace caller conversation history with one-shot sessions.
+- Original task metric stays comparable; an audit deliverable and its proposed repairs are counted separately.
 
 ## Current Blockers / Evidence Gaps
 
-- npm shared0.12.0 / shells-bridge0.2.0 publication failure; license provenance and installed artifact acceptance remain separate gates.
-- Configured 1Password SSH signing now works with the private TMPDIR. The staged queue still requires repair and dependency reconciliation; do not bulk flush it.
-- Hub PR246: telemetry repair 16-04 passes independent source review and all 50 native tests. Header/capacity parser correction 15-06 passes independent review and 60 native tests; service-version binding is independently verified in private15-07 (102 unit/parser and41 PostgreSQL cases). Hub adoption remains pending; its remote CI/deployment status has not been refreshed since the resume review.
-- Latest gateway DEV CI: Linux/Windows pass; three macOS assertions fail in scan-paths.symlink.test.ts and canvas-host/server.test.ts.
-- Durable caller lifecycle execution, effective read-scope authorization, actual receiver/sender integration, ACP truth and backup/restore remain open.
-- Factory containment, Sentry access, authenticated browser acceptance, container/runtime, load and recovery qualification remain open where recorded.
-- Earlier automatic approval rejection of further driver fault injection persists; do not repeat or reroute it.
+- Attachment linked-record authorization and link/sweeper deletion races remain high findings; cron scheduling stays pending.
+- Booking transaction rollback is fixed; postcommit stock realization/release still needs durable admission and recovery.
+- Authenticated ERP/UI, remaining Workshop/chart keyboard tasks, native AT/devices, B2 acceptance and actual provider revocation remain unqualified.
+- SDK/provider session continuation, complete governance corpus, installed sender/image adoption, containers, application load and cross-store restore remain open.
+- Prior automatic approval rejection of PostgreSQL backend fault injection remains recorded. It was not rerun; owned disposable Factory child restart tests are a distinct qualified scope.
 
 ## Historical Accumulated Context (v1.0; not current runtime truth)
 
