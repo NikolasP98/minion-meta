@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-12T19:04:22.725Z",
+	"generatedAt": "2026-09-12T19:34:23.046Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -869,6 +869,39 @@
 			"scoredAt": "2026-09-07T08:05:35.025Z"
 		},
 		{
+			"key": "pr:minion (gateway)#292",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#292 fix(shells): bind outcome identity and reject keyed legacy calls",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/292",
+			"sourceUpdatedAt": "2026-09-12T19:31:03Z",
+			"sourceFingerprint": "59f2dd0412839d780f9983a9a6b382130504b404f9079d2105aa2a6b3a8eedd9",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes a cross-tenant identity-binding bug and a legacy keyed-retry validation gap with full test evidence, making it a security-relevant fix ready to merge.",
+			"evidence": [
+				"shell could commit another shell's outcome within the same organization",
+				"99 tests passed... zero skips on Node22.23.2/Linux",
+				"Windows durable storage remains unsupported and is not certified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-12T19:34:22.971Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-722867358",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1103,6 +1136,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:35:09.206Z"
+		},
+		{
+			"key": "pr:minion_hub#269",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#269 fix(jobs): bind parser recovery and qualify stock transactions",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/269",
+			"sourceUpdatedAt": "2026-09-12T19:32:12Z",
+			"sourceFingerprint": "59344f9f9b1b5afdf523b38d82b619bddd0ca17184a2673c4eabaafc3d938711",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Fixes parser version drift and transactional booking correctness with substantial test evidence, but hosted CI and several tracked follow-ups are still outstanding.",
+			"evidence": [
+				"Statement imports used parser v3 while recording/checking version1",
+				"Integrated type checks and full ordinary tests are running; hosted CI must pass",
+				"Postcommit booking stock recovery... remain explicitly tracked"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-12T19:34:22.971Z"
 		},
 		{
 			"key": "proposal:2026-08-20-dev-key-at-rest-audit",
@@ -8382,6 +8448,39 @@
 			"scoredAt": "2026-09-07T07:35:47.669Z"
 		},
 		{
+			"key": "pr:minion-meta#400",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#400 test(bridge): qualify emitted journal on the minimum Node container",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/400",
+			"sourceUpdatedAt": "2026-09-12T19:32:11Z",
+			"sourceFingerprint": "9b567fa1a0b4d4ab20ff5313b8253e033b0ff6c5707c1b2147ad9175356a0807",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Adds CI qualification for the bridge's Node floor with local test evidence, but it is test-infrastructure only and still awaits hosted container execution.",
+			"evidence": [
+				"Locally, exact Node22.13.0/SQLite3.47.2 passes216 tests with zero skips",
+				"Hosted container execution is required before accepting that boundary",
+				"No dependency/version/export or production behavior changes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-12T19:34:22.971Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-brain-org-all-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11214,38 +11313,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T03:08:40.374Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/9c1a53f7e5c62ce846fef5e484b891ba0bce1775",
-			"sourceUpdatedAt": "2026-09-11T21:35:09Z",
-			"sourceFingerprint": "3ba7110f3197684f0773ff1ac399bdb2ef79bd7aa6c24e028ea52d0ff0885691",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This entry describes an already-merged commit skipping unsupported win32 test suites, leaving no open action.",
-			"evidence": [
-				"skipIf(win32), matching #288/#289",
-				"DEV push b6485201, Windows shard 1"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T19:04:22.647Z"
 		},
 		{
 			"key": "issue:minion-meta#373",
