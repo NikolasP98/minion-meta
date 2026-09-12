@@ -1,9 +1,9 @@
 ---
 id: postmerge-minion-hub-274eede277fe
 title: "Post-merge finding — todo-handoff in src/lib/server/posthog.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-09-12
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
