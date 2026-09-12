@@ -1,0 +1,54 @@
+{
+  "status": "reviewed-local-source-candidate",
+  "commit": "f8508a7b4ef5123248d591ddbe42eb7b20f67893",
+  "base": "dd9dde24a601501a3d3eb63bd7d0b291ec9e764d",
+  "branch": "fix/nitter-persistence-drain-20260912",
+  "clone": "/home/nikolas/.cache/minion-qc/gateway-nitter-2j82f9uk/minion",
+  "files": {
+    "extensions/nitter/src/feed-state.test.ts": "751e76e88f8e9af4e6a2ce5f0b9f58c2458d59a7f16f43409b6bef08ee2c0b7f",
+    "extensions/nitter/src/feed-state.ts": "30035c0006826255b3c3d8a425bd2cbab729bfe130f00ef12b381133b2bc12ce",
+    "extensions/nitter/src/poller-service.test.ts": "f448f22b3daa8003d903607531e4eecec8725b98508cf2d715120773ff3f10d8",
+    "extensions/nitter/src/poller-service.ts": "2e633d76c5c49c876ad91e5cb92534d4b556a229a7bcae1a61c49022c9b63c3d"
+  },
+  "tests": {
+    "passed": 75,
+    "skipped": 0,
+    "files": 4,
+    "retry": 0,
+    "command": "TMPDIR=/home/nikolas/.cache/minion-qc pnpm exec vitest run --config vitest.extensions.config.ts extensions/nitter/src",
+    "log": "nitter-final.log"
+  },
+  "redRegression": {
+    "maxConcurrentWrites": 24,
+    "expected": 1,
+    "log": "nitter-red.log",
+    "note": "Old source also lacked flush; teardown reported that separately."
+  },
+  "focusedTypecheck": {
+    "result": "pass",
+    "config": "tsconfig.nitter.json",
+    "log": "nitter-typecheck.log",
+    "scope": "Four changed files with actual transitive imports and existing src/types ambient declarations"
+  },
+  "lint": {
+    "result": "0 warnings, 0 errors on 4 files",
+    "config": "oxlint.nitter.json",
+    "log": "nitter-explicit-lint.log",
+    "note": "Private copy retains repository rules and explicitly includes normally ignored extensions; no repository config edited."
+  },
+  "format": "pass",
+  "diffCheck": "pass",
+  "signaturePresent": true,
+  "workingTree": "clean",
+  "lifecycleCallers": [
+    "src/plugins/services.ts:69 awaits entry.stop()",
+    "src/gateway/server-core/server-close.ts:103 awaits pluginServices.stop()"
+  ],
+  "remaining": [
+    "Hosted full Windows acceptance",
+    "Crash-safe file replacement and delivery/state atomicity unqualified",
+    "Synchronous mutation API acknowledges memory; source TODO and root proposal R10 preserve limitation"
+  ],
+  "pushed": false,
+  "testDependencies": "Existing gateway-boundary-repair-fAmq99JI/minion/node_modules reused via temporary symlink; symlink removed after checks, dependency files unchanged"
+}
