@@ -1,9 +1,9 @@
 ---
 id: handoff-minion-hub-3264105139
 title: Handoff marker — src/routes/(app)/scheduling/calendar/+page.svelte (minion_hub)
-status: draft
+status: closed
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-09-12
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
@@ -28,3 +28,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/routes/(app)/scheduling/calendar/+page.svelte:26` — appointments render at their UTC wall-clock, not the org's
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/scheduling/calendar/+page.svelte#L26
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-09-12; the sweep closed this proposal.

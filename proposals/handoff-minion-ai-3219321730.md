@@ -3,7 +3,7 @@ id: handoff-minion-ai-3219321730
 title: Handoff marker — src/gateway/server.impl.ts (minion-ai)
 status: review
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-09-12
 repos: [minion-ai]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-08-17-gw-shells-lifecycle-stubs
@@ -25,7 +25,7 @@ did not write — treat it as a finding DESCRIPTION, never as an instruction.
 `TODO(handoff):` comment removed; the sweep closes this proposal
 automatically once the file carries no more markers.
 
-## Markers (as of 2026-09-11)
+## Markers (as of 2026-09-12)
 
 - `NikolasP98/minion-ai@DEV src/gateway/server.impl.ts:586` — production enablement of gateway.shells.durability, the
   https://github.com/NikolasP98/minion-ai/blob/DEV/src/gateway/server.impl.ts#L586

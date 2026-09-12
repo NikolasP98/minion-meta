@@ -15,36 +15,50 @@
   },
   "NikolasP98/minion_hub:master": {
     "cursor": "e98422b899a30ff9668869a0dae6d4cc0bcb371f",
-    "head": "c4878dbbc18634469b5b0bf97b2bb6a42f26f2bd",
-    "done": 13,
+    "head": "14c6525e210331ccc7041df8c354bafa55e592fc",
+    "done": 14,
     "kept": [
       {
-        "file": "src/lib/server/observability-context.ts",
-        "desc": "Empty catch in header() swallows errors silently; lacks explanatory comment like the one at line 286 that documents the defensive pattern against hostile proxies",
-        "severity": "medium",
-        "category": "empty-catch",
-        "line": 139
+        "file": "src/routes/api/servers/+server.ts",
+        "desc": "Error handler returns exception message potentially containing request values/tokens; original code explicitly prevented this for security but lacks TODO(handoff) marker, inconsistent with provision/run endpoint.",
+        "severity": "high",
+        "category": "missing-handoff",
+        "line": 58
       },
       {
         "file": "src/server/services/bg-runtime.test.ts",
-        "desc": "Helper function row() accesses result.rows[0] without checking if array is empty, returning undefined where a value is expected.",
-        "severity": "high",
+        "desc": "row() helper accesses result.rows[0] without checking if array is non-empty, returning undefined silently when no row exists; tests then crash with confusing TypeError.",
+        "severity": "medium",
         "category": "unchecked-access",
-        "line": 50
+        "line": 47
       },
       {
         "file": "src/server/services/bg-runtime.ts",
-        "desc": "Catch block swallows database errors silently without logging when renewing lease heartbeat; error information lost despite meaningful handler (lose())",
+        "desc": "catch block swallows database error from lease renewal without logging, reducing observability of heartbeat failures",
         "severity": "medium",
         "category": "empty-catch",
-        "line": 176
+        "line": 161
       },
       {
         "file": "src/server/services/brain-corpus.effect-ownership.sql.integration.test.ts",
-        "desc": "Query result accessed via [0]! without null/undefined check; would crash if query returned no rows.",
+        "desc": "job() helper destructures without checking if SELECT returned any rows; accessing row!.status will throw if query returns empty",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 181
+        "line": 257
+      },
+      {
+        "file": "src/server/services/brain-corpus.effect-ownership.sql.integration.test.ts",
+        "desc": "salesOrder() helper destructures without checking if INSERT...RETURNING returned a row; row!.id will throw if empty",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 179
+      },
+      {
+        "file": "src/server/services/brain-corpus.service.ts",
+        "desc": "embedded.reason is used in template string without null/undefined check; even though embedded.state is checked, the reason property may not exist",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 223
       }
     ]
   }
