@@ -6,6 +6,7 @@ created: 2026-09-11
 updated: 2026-09-12
 repos: [minion-hub]
 tags: [handoff-sweep]
+merged_from: [postmerge-minion-hub-344344b7b063]
 ---
 
 # Handoff marker — src/server/services/brains.service.ts
@@ -30,3 +31,13 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/brains.service.ts#L1032
 - `NikolasP98/minion_hub@master src/server/services/brains.service.ts:1055` — JOB-02 still requires driver-recovery and deployed migration/drain
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/brains.service.ts#L1055
+
+## Additional context (merged from postmerge-minion-hub-344344b7b063)
+
+Post-merge discovery independently flagged the line:1055 marker in
+`NikolasP98/minion_hub@c4878db` (PR #248). Its diagnosis: JOB-02 deployed
+without driver-recovery and migration/drain logic risks agents losing state
+or failing to recover after restarts. Suggested fix direction: implement
+migration logic that safely drains old agent state to the new driver format,
+add integration tests proving recovery after simulated crashes, and gate
+deployment on both completing and passing in staging.

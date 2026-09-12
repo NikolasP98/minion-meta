@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-821383456
 title: Handoff marker — src/lib/plugins/bridge-protocol.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-11
 updated: 2026-09-12
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-a4e7e5bce6b1
 ---
 
 # Handoff marker — src/lib/plugins/bridge-protocol.ts

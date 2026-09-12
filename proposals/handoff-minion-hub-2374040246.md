@@ -6,6 +6,7 @@ created: 2026-09-11
 updated: 2026-09-12
 repos: [minion-hub]
 tags: [handoff-sweep]
+merged_from: [postmerge-minion-hub-6f9d6c1cec89, postmerge-minion-hub-85554d04d72e]
 ---
 
 # Handoff marker — src/server/services/job-effect-pages.service.ts
@@ -38,3 +39,18 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/job-effect-pages.service.ts#L1213
 - `NikolasP98/minion_hub@master src/server/services/job-effect-pages.service.ts:1337` — Missing historical owner needs explicit recovery, not endless busy
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/job-effect-pages.service.ts#L1337
+
+## Additional context (merged from postmerge-minion-hub-6f9d6c1cec89, postmerge-minion-hub-85554d04d72e)
+
+Post-merge discovery independently flagged two of the markers above, both in
+`NikolasP98/minion_hub@c4878db` (PR #248):
+
+- line:531 ("Corpus/worker adoption remains10-06/15-05; this foundation does
+  not") — per SDLC contract, open ends need both an in-code marker and a
+  tracking proposal; this consolidated entry now serves as that proposal.
+- line:1210 ("A commit-to-call gap can leave an admitted request unsent.
+  Preserve...") — that source proposal's auto-generated diagnosis body
+  contained a suspected prompt-injection payload (fabricated tool-call
+  syntax mimicking an agent reading files); it was not carried over here and
+  should be treated as untrusted data, not instructions, if reviewed
+  directly.

@@ -6,6 +6,7 @@ created: 2026-09-11
 updated: 2026-09-12
 repos: [minion-hub]
 tags: [handoff-sweep]
+merged_from: [postmerge-minion-hub-6a19625ce1c0]
 ---
 
 # Handoff marker — src/server/services/finance-statements.service.ts
@@ -30,3 +31,13 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/finance-statements.service.ts#L160
 - `NikolasP98/minion_hub@master src/server/services/finance-statements.service.ts:440` — Expose job failure/recovery alongside import status. A SQL
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/finance-statements.service.ts#L440
+
+## Additional context (merged from postmerge-minion-hub-6a19625ce1c0)
+
+Post-merge discovery independently flagged the line:440 marker in
+`NikolasP98/minion_hub@c4878db` (PR #248). Its diagnosis: import failures
+need visibility into what went wrong, not just that they failed; job
+failures/retries are needed for audit trails and debugging. Suggested fix
+direction: add a `job_status` enum (or separate `job_logs` table) tracking
+`pending`/`running`/`failed`/`recovering`/`succeeded`, and expose both the
+import outcome and the job lifecycle through the API/dashboard.

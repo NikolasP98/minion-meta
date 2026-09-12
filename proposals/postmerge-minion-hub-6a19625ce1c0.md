@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-6a19625ce1c0
 title: "Post-merge finding — todo-handoff in src/server/services/finance-statements.service.ts (minion_hub)"
-status: draft
+status: merged
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-09-12
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+merged_into: handoff-minion-hub-2780509395
 ---
 
 # Post-merge finding — todo-handoff in `src/server/services/finance-statements.service.ts`
