@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-eea107ee93eb
 title: "Post-merge finding — todo-handoff in src/server/services/crm-insights-dashboard.service.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-12
 updated: 2026-09-12
 repos: [minion-hub]
