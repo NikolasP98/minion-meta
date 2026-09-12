@@ -1,0 +1,49 @@
+name: Bridge runtime floor
+
+on:
+  pull_request:
+    branches: [main, dev]
+    paths:
+      - 'packages/shared/**'
+      - 'packages/shells-bridge/**'
+      - 'packages/tsconfig/**'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'package.json'
+      - 'scripts/qc/bridge-runtime*'
+      - '.github/workflows/bridge-runtime-floor.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-floor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Official node:22.13.0-bookworm-slim linux/amd64 manifest, resolved from
+    # Docker Hub with SHA-256 verified; provenance is in bridge-runtime-image.json.
+    container:
+      image: node:22.13.0-bookworm-slim@sha256:87608ec5109795be954baa2f5b0b6da1911423d8b44b58fecda31f81d28bfc0f
+    env:
+      QC_SOURCE_REVISION: ${{ github.sha }}
+      QC_IMAGE: docker.io/library/node:22.13.0-bookworm-slim@sha256:87608ec5109795be954baa2f5b0b6da1911423d8b44b58fecda31f81d28bfc0f
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4.4.0
+      - name: Verify engine and install frozen dependencies
+        run: |
+          node -e 'if (process.version !== "v22.13.0" || process.env.NODE_OPTIONS) process.exit(1)'
+          pnpm install --frozen-lockfile
+      - name: Build emitted shared contract, then bridge
+        run: |
+          pnpm --filter @minion-stack/shared build
+          pnpm --filter @minion-stack/shells-bridge build
+      - name: Qualify native journal and sender without flags or skips
+        run: node scripts/qc/bridge-runtime.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bridge-runtime-floor-${{ github.sha }}
+          path: artifacts/bridge-runtime/
+          if-no-files-found: error
