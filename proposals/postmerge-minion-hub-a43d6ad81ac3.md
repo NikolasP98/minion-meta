@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-a43d6ad81ac3
 title: "Post-merge finding — todo-handoff in tests/fixtures/workshop-motion/README.md (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-12
 updated: 2026-09-12
 repos: [minion-hub]
