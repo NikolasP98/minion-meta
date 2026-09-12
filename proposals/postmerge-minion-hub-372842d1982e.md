@@ -1,9 +1,9 @@
 ---
 id: postmerge-minion-hub-372842d1982e
 title: "Post-merge finding — todo-handoff in vitest.disposable.config.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-09-12
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
