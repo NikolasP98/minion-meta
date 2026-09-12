@@ -1,6 +1,6 @@
 ---
 id: 2026-09-12-360-continuation-review-followups
-title: Follow-ups from independent review of Claude continuation
+title: 'Follow-ups from independent review of Claude continuation'
 status: draft
 created: 2026-09-12
 updated: 2026-09-12
@@ -35,3 +35,17 @@ Acceptance: independently reviewed fixes at exact candidate identities, targeted
 - UI follow-ups: root-adopted13-REMAINING-CONSUMER-PLANS.md specifies exact keyboard and chart actions/negative cases. Real authentication remains a separate explicit target gate.
 
 The original review below performed no deployments; the later authorized implementation did. Original83.0% is superseded by193/229=84.3% scoped deliverables, not production readiness.
+
+
+## Additional findings from production promotion gates
+
+R9: Gateway realpathSafe used lexical fallback whenever realpath failed. Actual Linux reproduction of macOS-style aliases found legitimate missing files denied and missing descendants beneath escaping symlinks accepted. Repair resolves the nearest existing ancestor; dangling/cyclic links and permission/I/O errors fail closed. Nineteen targeted cases include the seven observed failures before correction. Source and actual production identity remain separate in the priority-delivery receipt.
+
+The path predicate is a normalized-path snapshot, not atomic filesystem authorization. Existing check-then-use consumers can race a symlink replacement; operation-specific descriptor/handle-bound access or equivalent filesystem isolation needs a separate bounded owner/callsite plan. Preserve fail-closed resolution and actual consumer normalization. The exact predicate TODO points here; no atomic containment claim is made by the new tests.
+
+Gateway release also found a canvas fixture/global-name mismatch, a fixed-sleep filesystem-watch test and actual JavaScript assets served with a non-JavaScript MIME type. Scoped fixes are tested and recorded with the new release candidate, not dismissed as generic CI flakiness. The earlier independent web-fetch endless-stream timeout is retained separately; focused no-retry execution passed and one failed-job rerun was authorized.
+
+Factory promotion stopped safely before deployment when tool-host-only test selection omitted its runner dependency. PR188 adds an explicit runner install root and meaningful revoked-principal native test. An unchanged trusted controller executed the cumulative candidate from a clean dependency state before promotion; no gate, runtime flag or main-branch protection was bypassed.
+
+
+R9 caller follow-through: actual exec helper statted and returned raw working directories while the guard checked a normalized path. A disposable child demonstrated link/../target could reach the outside fixture directory. The same repair packet now normalizes before stat and returns exactly that path, retaining unavailable-cwd fallback. The25 guard/caller cases prove this static semantic agreement; check-then-use replacement races remain the explicitly separate limitation above.
