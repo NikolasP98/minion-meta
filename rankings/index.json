@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-12T19:34:23.046Z",
+	"generatedAt": "2026-09-12T19:42:35.907Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -698,41 +698,6 @@
 			"scoredAt": "2026-09-07T08:15:17.104Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-c399783e15f5",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/job-stock-concurrency.sql.integration.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c399783e15f5.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "52d46cf14dfacef521e9b6c01f27d9102825913c2eaf9d9be1fb87e598a2f99b",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-c5d86be403fa"
-			],
-			"rationale": "A postgres-js null-socket crash on backend loss is explicitly flagged as a pre-rollout blocker for job concurrency and was independently caught by two sweeps.",
-			"evidence": [
-				"marker text: 'Qualify/fix postgres-js nextWrite null-socket crash on backend loss before rollout'",
-				"duplicate detection via postmerge-discovery and handoff-ledger sweeps",
-				"tied to proposals/2026-09-08-platform-qc-remediation.md (HDS-05)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T00:34:39.390Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-eea107ee93eb",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1136,39 +1101,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:35:09.206Z"
-		},
-		{
-			"key": "pr:minion_hub#269",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#269 fix(jobs): bind parser recovery and qualify stock transactions",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/269",
-			"sourceUpdatedAt": "2026-09-12T19:32:12Z",
-			"sourceFingerprint": "59344f9f9b1b5afdf523b38d82b619bddd0ca17184a2673c4eabaafc3d938711",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Fixes parser version drift and transactional booking correctness with substantial test evidence, but hosted CI and several tracked follow-ups are still outstanding.",
-			"evidence": [
-				"Statement imports used parser v3 while recording/checking version1",
-				"Integrated type checks and full ordinary tests are running; hosted CI must pass",
-				"Postcommit booking stock recovery... remain explicitly tracked"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T19:34:22.971Z"
 		},
 		{
 			"key": "proposal:2026-08-20-dev-key-at-rest-audit",
@@ -2832,38 +2764,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T23:38:32.249Z"
-		},
-		{
-			"key": "run:minion_hub#34682740127",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/34682740127",
-			"sourceUpdatedAt": "2026-09-12T08:17:33Z",
-			"sourceFingerprint": "9e01ecc35fda8bba50611680e225a22de317e160dd8af73d5073924ad1237de1",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "CI is failing on minion_hub's master branch but no failure detail is provided, so investigation is needed before action.",
-			"evidence": [
-				"CI run status: failure",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T08:34:52.564Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-defaces-crm-tools-spec",
@@ -6744,6 +6644,39 @@
 			"scoredAt": "2026-09-07T08:06:44.351Z"
 		},
 		{
+			"key": "pr:minion-factory#187",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-factory",
+			"title": "#187 test(governance): verify MCP denial and native runner replay effects",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/187",
+			"sourceUpdatedAt": "2026-09-12T19:39:50Z",
+			"sourceFingerprint": "f04f98ef3f5685faf54399f7cb3f66cd51f72c487ed53719a3d74c90fa5a808a",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Open PR with concrete validation evidence (31/31 and 27/27 tests passing) delivers scoped governance-test coverage that is ready to merge now.",
+			"evidence": [
+				"Tool-host suite: 31/31 passed, zero skips",
+				"changes two test/fixture files only",
+				"explicitly scoped to durable runner admission, not broader governance gates"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-12T19:42:35.816Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-5886b6d51578",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8448,39 +8381,6 @@
 			"scoredAt": "2026-09-07T07:35:47.669Z"
 		},
 		{
-			"key": "pr:minion-meta#400",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#400 test(bridge): qualify emitted journal on the minimum Node container",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/400",
-			"sourceUpdatedAt": "2026-09-12T19:32:11Z",
-			"sourceFingerprint": "9b567fa1a0b4d4ab20ff5313b8253e033b0ff6c5707c1b2147ad9175356a0807",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Adds CI qualification for the bridge's Node floor with local test evidence, but it is test-infrastructure only and still awaits hosted container execution.",
-			"evidence": [
-				"Locally, exact Node22.13.0/SQLite3.47.2 passes216 tests with zero skips",
-				"Hosted container execution is required before accepting that boundary",
-				"No dependency/version/export or production behavior changes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T19:34:22.971Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-brain-org-all-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8943,38 +8843,6 @@
 			"scoredAt": "2026-09-12T03:09:59.397Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-86bab04e505b",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/finance-statement-parser.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-86bab04e505b.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "8b2dd752098513b9c6cce7a4034a626aa2550380702b5a2d45232aefe0656be0",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Duplicated PARSER_VERSION constant across two files is a clear, low-risk drift bug with a straightforward single-source-of-truth fix.",
-			"evidence": [
-				"finance-statements.service.ts duplicates PARSER_VERSION per marker",
-				"fix direction: export/import single constant"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T03:09:59.397Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-981acd88c1d3",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9365,6 +9233,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-08T21:04:28.601Z"
+		},
+		{
+			"key": "run:minion_hub#34714875126",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/34714875126",
+			"sourceUpdatedAt": "2026-09-12T19:40:55Z",
+			"sourceFingerprint": "93b64faa3c72dd5f0da80a6dae2d90b59718b0d67d16873805ce89df0085cfcc",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run on master offers no outcome yet to act on beyond waiting for its result.",
+			"evidence": [
+				"status: in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-12T19:42:35.816Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
@@ -10850,6 +10750,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:13:41.404Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/9c1a53f7e5c62ce846fef5e484b891ba0bce1775",
+			"sourceUpdatedAt": "2026-09-11T21:35:09Z",
+			"sourceFingerprint": "3ba7110f3197684f0773ff1ac399bdb2ef79bd7aa6c24e028ea52d0ff0885691",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The linked commit already merged a narrow win32 test-skip matching prior precedent, leaving no pending deployment action.",
+			"evidence": [
+				"skipIf(win32), matching #288/#289",
+				"commit already pushed to DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-12T19:42:35.816Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
