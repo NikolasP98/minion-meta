@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-12T18:04:13.605Z",
+	"generatedAt": "2026-09-12T18:34:40.082Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2666,6 +2666,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T03:06:14.157Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-25e2bb7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 25e2bb7",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-25e2bb7.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "fca373cc727b9a3be6d4afb72144e1eed12348ef3bd65547aed495576b39a11f",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Merge-scan surfaced multiple specific high-severity defects (unchecked-access crashes, empty-catch error swallowing) in minion_hub with exact file:line locations, making this bounded and actionable.",
+			"evidence": [
+				"high: crm/customers/+page.svelte:61 spreads c.tag_ids without null check, throws at runtime",
+				"high: crm/[contactId]/+page.svelte:891 passes possibly-undefined b.startTime to fmtBooking()",
+				"high: upload.ts:125 catch block silently swallows DELETE error"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-12T18:34:39.988Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b6caed3b36fd",
@@ -8185,6 +8218,39 @@
 			"scoredAt": "2026-09-07T08:14:36.905Z"
 		},
 		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 80033 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-09-12T18:16:17Z",
+			"sourceFingerprint": "a2d37f7d4cdc2c61dffbf75b521ca9d518ec633a529ff45c3b5434ebb976cb45",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated upstream-sync notification listing 80033 raw commits with no defined task, scope, or owner, so it is not actionable as filed.",
+			"evidence": [
+				"title: '80033 new commit(s) available'",
+				"summary is a raw git log dump, no stated action or scope",
+				"tags: upstream-sync (routine bot issue)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-12T18:34:39.988Z"
+		},
+		{
 			"key": "pr:minion (gateway)#256",
 			"kind": "pr",
 			"stage": "development",
@@ -9769,39 +9835,6 @@
 			"scoredAt": "2026-09-09T22:35:10.859Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 79844 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-09-12T12:19:11Z",
-			"sourceFingerprint": "2971432465c191b7924e7c45f6637a7e9e66a710ad8f8fa5cdec88cc2f9b7463",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An automated upstream-sync notice listing thousands of unreviewed commits is not a scoped, actionable goal.",
-			"evidence": [
-				"title: 'Upstream sync: 79844 new commit(s) available'",
-				"tags: upstream-sync",
-				"summary is a raw commit log dump, not a spec"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T12:34:20.252Z"
-		},
-		{
 			"key": "pr:minion_hub#196",
 			"kind": "pr",
 			"stage": "development",
@@ -10429,38 +10462,6 @@
 			"scoredAt": "2026-09-07T22:34:40.008Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/9c1a53f7e5c62ce846fef5e484b891ba0bce1775",
-			"sourceUpdatedAt": "2026-09-11T21:35:09Z",
-			"sourceFingerprint": "3ba7110f3197684f0773ff1ac399bdb2ef79bd7aa6c24e028ea52d0ff0885691",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine CI test-skip fix already committed, not an open goal requiring further action.",
-			"evidence": [
-				"skipIf(win32), matching #288/#289",
-				"commit already pushed to DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T15:04:19.607Z"
-		},
-		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11030,7 +11031,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "d99a2045720fd5816aa43454e9a0a95b6407d3ae8d6eb8c37c3e3d4855907a14",
+			"sourceFingerprint": "2d7bf3d89a9ded053abd11017420c8ef4edf4f87f8965f116f66ebc8c7270a69",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -11045,14 +11046,15 @@
 			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Automated handoff-sweep marker list conflates unrelated feature markers (calendar scheduling, resourceId, db schema) all attributed to a single JSON data file, indicating a malformed or misattributed sweep rather than an actionable spec.",
+			"rationale": "The cited markers are unrelated text fragments (calendar, HR schema, protocol notes) quoted from within rankings/index.json, a generated data file, not real code TODOs needing resolution.",
 			"evidence": [
-				"all markers cite line numbers in rankings/index.json but describe unrelated domains like pg-hr-schema.ts and calendar rescheduling",
-				"one marker points back at this same proposal file, suggesting sweep tooling error"
+				"target file is rankings/index.json, this ranking system's own generated output",
+				"markers reference disparate unrelated topics (holidays, pg-hr-schema, tool_use protocol)",
+				"stage: proposal, status: review with no concrete code fix scope"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T14:34:25.615Z"
+			"scoredAt": "2026-09-12T18:34:39.988Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
