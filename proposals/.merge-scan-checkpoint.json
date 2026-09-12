@@ -16,7 +16,7 @@
   "NikolasP98/minion_hub:master": {
     "cursor": "e98422b899a30ff9668869a0dae6d4cc0bcb371f",
     "head": "25e2bb758678d7618b23b4f20b0f00ecc57a51cc",
-    "done": 25,
+    "done": 35,
     "kept": [
       {
         "file": "src/lib/attachments/upload.ts",
@@ -122,6 +122,55 @@
         "severity": "medium",
         "category": "unchecked-access",
         "line": 201
+      },
+      {
+        "file": "src/server/services/brains.effect-ownership.sql.integration.test.ts",
+        "desc": "extension from query destructuring used directly in expect() without null check; if pg_vector extension query returns no rows, undefined will be passed to expect()",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 71
+      },
+      {
+        "file": "src/server/services/brains.effect-ownership.sql.integration.test.ts",
+        "desc": "job() helper function returns row! without checking if the query result is empty; used throughout tests and will crash if called with non-existent id",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 130
+      },
+      {
+        "file": "src/server/services/brains.effect-ownership.sql.integration.test.ts",
+        "desc": "createdJob from query destructuring used with ! to access .id property without validation that query returned a row",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 94
+      },
+      {
+        "file": "src/server/services/brains.service.ts",
+        "desc": "row accessed without null check (destructured from createJobRequest return value without validating value property)",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 397
+      },
+      {
+        "file": "src/server/services/finance-statements.effect-ownership.sql.integration.test.ts",
+        "desc": "Magic 4000ms timeout in until() utility should be configurable to prevent flaky tests under system slowness.",
+        "severity": "medium",
+        "category": "hardcoded-config",
+        "line": 87
+      },
+      {
+        "file": "src/server/services/finance-statements.effect-ownership.sql.integration.test.ts",
+        "desc": "SQL query result [0] accessed without checking if array has elements; could be undefined if query returns zero rows.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 120
+      },
+      {
+        "file": "src/server/services/finance-statements.effect-ownership.sql.integration.test.ts",
+        "desc": "Destructured SQL result [row] lacks defensive check; non-null assertion masks potential undefined at runtime.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 138
       }
     ]
   }
