@@ -1,9 +1,9 @@
 ---
 id: postmerge-minion-hub-c399783e15f5
 title: "Post-merge finding — todo-handoff in src/server/services/job-stock-concurrency.sql.integration.test.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-09-12
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
