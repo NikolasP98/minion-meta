@@ -235,39 +235,13 @@ describe('native run journal', () => {
   });
 });
 
-// Reused verbatim for explicit no-flag runtime qualification against an emitted
-// private module. It never imports the active CLI entrypoint or normal config.
-// TODO(handoff): Qualify exact Node22.13.0 and an actually unsupported distribution before minimum-runtime/release acceptance; current22.23.2 and pinned-local22.23.1 do not prove those lanes or an image. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
-export const emittedJournalSmoke = String.raw`
-import { mkdtempSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { createHash } from 'node:crypto';
-import { pathToFileURL } from 'node:url';
-const { RunJournal } = await import(pathToFileURL(process.argv[1]).href);
-const dir = mkdtempSync(join(tmpdir(), 'shell-journal-emitted-'));
-const limits = { identifierBytes:128, textBytes:256, recordBytes:2048 };
-const options = {path:join(dir,'journal.sqlite'),shellId:'shell',maxRuns:1,maxOutcomeBytes:1024,limits};
-const admission = {version:1,shellId:'shell',runId:'run',sessionId:'session',invocationId:'invoke',inputDigest:'a'.repeat(64),startedAt:1};
-const digest = createHash('sha256').update(JSON.stringify(['minion.shells.outcome',1,'shell','run','session','invoke','a'.repeat(64),'event','final',2,null,null])).digest('hex');
-const outcome = {version:1,shellId:'shell',runId:'run',sessionId:'session',invocationId:'invoke',inputDigest:'a'.repeat(64),eventId:'event',state:'final',durationMs:2,outcomeDigest:digest};
-let journal;
-try {
- journal=new RunJournal(options); if(!journal.admitForDispatch(admission).fresh) throw Error('missing fresh insertion');
- if(journal.admitForDispatch(admission).fresh) throw Error('replayed dispatch permission');
- journal.commitOutcome(outcome); journal.close();
- journal=new RunJournal(options); if(journal.pending().length!==1 || journal.admitForDispatch(admission).fresh) throw Error('missing outcome or replayed permission');
- journal.acknowledge({version:1,shellId:'shell',runId:'run',eventId:'event',outcomeDigest:digest,receiptId:'receipt',committedAt:3}); journal.close();
- journal=new RunJournal(options); if(journal.pending().length!==0 || !journal.inspect('run').outcome) throw Error('missing receipt/tombstone');
- console.log(JSON.stringify({runtime:process.version,sqlite:'actual',reopened:true,acknowledged:true}));
-} finally { journal?.close(); rmSync(dir,{recursive:true,force:true}); }
-`;
+// TODO(handoff): Qualify an actually unsupported distribution and the workstation image before fleet-runtime acceptance. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
 
 describe('emitted private module', () => {
   it('uses the actual emitted shared contract in a no-flag raw Node process', () => {
     const path = join(process.cwd(), 'dist/run-journal.js');
     expect(existsSync(path), 'build the isolated candidate before this test').toBe(true);
-    const output = execFileSync(process.execPath, ['--input-type=module', '-e', emittedJournalSmoke, path], { env: { LANG: 'C.UTF-8', TMPDIR: tmpdir() }, encoding: 'utf8', timeout: 10000 });
-    expect(JSON.parse(output)).toMatchObject({ runtime: process.version, reopened: true, acknowledged: true });
+    const output = execFileSync(process.execPath, [join(process.cwd(), 'scripts/journal-smoke.mjs'), path], { env: { LANG: 'C.UTF-8', TMPDIR: tmpdir() }, encoding: 'utf8', timeout: 10000 });
+    expect(JSON.parse(output)).toMatchObject({ runtime: process.version, execArgv: [], reopened: true, acknowledged: true });
   });
 });
