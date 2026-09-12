@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-7440051c7752
 title: "Post-merge finding — todo-handoff in src/server/services/job-stock-backend-fault.fixture.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-12
 updated: 2026-09-12
 repos: [minion-hub]
