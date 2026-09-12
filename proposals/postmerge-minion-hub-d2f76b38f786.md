@@ -42,3 +42,10 @@ Looking at this finding: the `/crm/insights` page is missing the `ownerFilter` t
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/261
 - file: `src/routes/(app)/crm/insights/+page.server.ts`
 - checked: 2026-09-12
+
+## Merged from handoff-minion-hub-1861206407
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/routes/(app)/crm/insights/+page.server.ts:33` — no ownerFilter here, unlike the sibling /crm dashboard
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/insights/+page.server.ts#L33

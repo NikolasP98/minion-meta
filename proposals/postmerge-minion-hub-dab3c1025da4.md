@@ -44,3 +44,10 @@ The issue: This `standardize` endpoint lacks an `ownerFilter` on its scan/apply 
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/261
 - file: `src/routes/api/crm/cleanup/standardize/+server.ts`
 - checked: 2026-09-12
+
+## Merged from handoff-minion-hub-2928471522
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/routes/api/crm/cleanup/standardize/+server.ts:8` — no ownerFilter on this scan/apply pair, unlike the sibling
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/crm/cleanup/standardize/+server.ts#L8

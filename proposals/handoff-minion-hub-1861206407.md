@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-1861206407
 title: Handoff marker — src/routes/(app)/crm/insights/+page.server.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-d2f76b38f786
 created: 2026-09-12
 updated: 2026-09-12
 repos: [minion-hub]

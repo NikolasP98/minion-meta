@@ -40,3 +40,10 @@ Looking at the AttachmentList finding: the "Link to…" feature currently accept
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/263
 - file: `src/lib/components/attachments/AttachmentList.svelte`
 - checked: 2026-09-12
+
+## Merged from handoff-minion-hub-2371407342
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/lib/components/attachments/AttachmentList.svelte:31` — "Link to…" takes a raw object id — a Picker per object
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/attachments/AttachmentList.svelte#L31
