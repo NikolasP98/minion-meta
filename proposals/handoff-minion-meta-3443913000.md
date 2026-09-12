@@ -29,5 +29,5 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-meta@dev packages/shells-bridge/src/run-journal.test.ts:145` — This proves statement-failure rollback, not failed-COMMIT or process/power-loss recovery; those require separately admitted deterministic qualification. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
   https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/run-journal.test.ts#L145
-- `NikolasP98/minion-meta@dev packages/shells-bridge/src/run-journal.test.ts:240` — Qualify exact Node22.13.0 and an actually unsupported distribution before minimum-runtime/release acceptance; current22.23.2 and pinned-local22.23.1 do not prove those lanes or an image. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
-  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/run-journal.test.ts#L240
+- `NikolasP98/minion-meta@dev packages/shells-bridge/src/run-journal.test.ts:238` — Qualify an actually unsupported distribution and the workstation image before fleet-runtime acceptance. See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle).
+  https://github.com/NikolasP98/minion-meta/blob/dev/packages/shells-bridge/src/run-journal.test.ts#L238

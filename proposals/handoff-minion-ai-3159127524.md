@@ -27,7 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-12)
 
-- `NikolasP98/minion-ai@DEV src/gateway/server-methods/shells.ts:399` — the sender does not call this yet — packages/shells-bridge
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/gateway/server-methods/shells.ts#L399
-- `NikolasP98/minion-ai@DEV src/gateway/server-methods/shells.ts:426` — appearing in the static capability floor asserts only that
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/gateway/server-methods/shells.ts#L426
+- `NikolasP98/minion-ai@DEV src/gateway/server-methods/shells.ts:404` — the sender does not call this yet — packages/shells-bridge
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/gateway/server-methods/shells.ts#L404
+- `NikolasP98/minion-ai@DEV src/gateway/server-methods/shells.ts:431` — appearing in the static capability floor asserts only that
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/gateway/server-methods/shells.ts#L431
