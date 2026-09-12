@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-e0651859d6e7
 title: "Post-merge finding — todo-handoff in src/lib/components/attachments/AttachmentList.svelte (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-12
 updated: 2026-09-12
 repos: [minion-hub]
