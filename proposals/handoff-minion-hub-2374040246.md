@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2374040246
 title: Handoff marker — src/server/services/job-effect-pages.service.ts (minion_hub)
-status: draft
+status: merged
+merged_into: 2026-09-08-platform-qc-remediation
 created: 2026-09-11
 updated: 2026-09-12
 repos: [minion-hub]

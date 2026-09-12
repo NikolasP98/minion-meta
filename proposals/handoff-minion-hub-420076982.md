@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-420076982
 title: Handoff marker — src/server/services/brains.service.ts (minion_hub)
-status: draft
+status: review
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 created: 2026-09-11
 updated: 2026-09-12
 repos: [minion-hub]

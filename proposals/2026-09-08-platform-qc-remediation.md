@@ -3,7 +3,7 @@ id: 2026-09-08-platform-qc-remediation
 title: Platform QC follow-ups — authorization, durable execution, compatibility and release evidence
 status: draft
 created: 2026-09-08
-updated: 2026-09-11
+updated: 2026-09-12
 repos: [minion-meta, minion_hub, minion, minion_site, minion-factory, paperclip, pixel-agents]
 ---
 
@@ -461,3 +461,58 @@ proposals (the three `Chart.svelte` postmerge findings above, and
 `postmerge-minion-hub-a4e7e5bce6b1` / `-d3e0b507af92` for `bridge-protocol.ts`
 respectively), not to one shared canonical document, so there is no single
 target to merge the container into.
+
+## 2026-09-12 handoff-marker reconciliation, round 3 (proposal-sweep)
+
+A later async proposal-reconciliation pass found three more `minion_hub`
+handoff-sweep marker proposals (markers refreshed 2026-09-12) whose text
+matches gaps already tracked above, not previously examined by round 2.
+Merged as tombstones (`status: merged`, `merged_into:
+2026-09-08-platform-qc-remediation`):
+
+- `handoff-minion-hub-3867632534` — `src/server/services/groupchat.service.ts:389,538`
+  — both markers explicitly self-cite "See meta
+  proposals/2026-09-08-platform-qc-remediation.md (HDS-05)" in the source
+  comment itself. Line 389 ("reconcile admitted remote outcomes using
+  provider receipts before offering retry") is the same gap as "Provider
+  outcome without a receipt remains indeterminate" (Additional domain-effect
+  admission decision) and the committed-message finalization work (Native
+  effect verification and receiver follow-up). Line 538 ("reconcile
+  unreadable checkpoints and storage-unavailable terminal writes") is
+  verbatim the same open end named in that same section: "Unreadable
+  checkpoint ownership and storage-unavailable terminal persistence still
+  require an explicit recovery path."
+- `handoff-minion-hub-2374040246` — `src/server/services/job-effect-pages.service.ts`
+  (6 markers) — near-verbatim match to the "Corpus foundation limits retained
+  through 10-10" section's four named boundaries (bound source database
+  reads; explicit recovery for committed admission before call/unknown
+  remote outcome; byte-bounded provider response before `res.json()`;
+  missing historical owner reconciliation, "not endless busy" loop) plus the
+  "JOB-02 shared document manifest and history" section's "neither batch
+  zero nor job cursor proves the whole prior intent" / "forensic whole-manifest
+  archive... remain separate decisions" (marker at :618, "Legacy receipts
+  cannot reconstruct a complete source manifest") and the "later corpus/worker
+  adoption must remain separate" line (marker at :531).
+- `handoff-minion-hub-2780509395` — `src/server/services/finance-statements.service.ts:160,440`
+  — line 160 ("reconcile uploaded blobs after failed/concurrent import
+  creation") is the same gap as "Finance statement blob reconciliation"
+  above ("Reconcile those orphan candidates without deleting the winning
+  import's source"). Line 440 ("expose job failure/recovery alongside import
+  status") is the same gap as "JOB-02 finance terminal state and recovery
+  UI" above ("no statement recovery UI was implemented or verified... expose
+  the authorized recovery action").
+
+No new open end in any of the three: each marker's underlying `TODO(handoff)`
+resolves to a gap this document already tracks under an existing section.
+
+Merely suspicious, not merged: `handoff-minion-hub-420076982`
+(`src/server/services/brains.service.ts:1032,1055`) echoes the same JOB-02
+program in general terms ("indeterminate admissions need an explicit
+recovery/UI"; "driver-recovery and deployed migration/drain") and
+`brains.service.ts`'s `brain_ingest` job is named as one of the five
+still-ignoring-the-envelope job types in the "Remaining job handlers"
+section above — but unlike the three merged markers, its wording is not a
+verbatim or near-verbatim match to any specific sentence already recorded
+here, so I cannot be certain it's the identical open end rather than a
+distinct one. Flagged `duplicate_candidate` and `status: review` on that
+proposal for a human to confirm scope instead of merging it.
