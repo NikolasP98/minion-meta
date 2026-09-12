@@ -31,13 +31,3 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/groupchat.service.ts#L389
 - `NikolasP98/minion_hub@master src/server/services/groupchat.service.ts:538` — Reconcile unreadable checkpoints and storage-unavailable terminal writes through an explicit recovery path; no owner inference or automatic RPC replay. See meta proposals/2026-09-08-platform-qc-remediation.md (HDS-05).
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/groupchat.service.ts#L538
-
-## Additional context (merged from postmerge-minion-hub-88b7d55e6a6e)
-
-Post-merge discovery independently flagged the line:389 marker in
-`NikolasP98/minion_hub@c4878db` (PR #248). Its diagnosis: retrying a failed
-group-chat send without confirming the original attempt's outcome risks
-delivering duplicate messages to remote platforms, corrupting conversation
-history across channels. Suggested fix direction: before retrying, query the
-remote provider's delivery status via its receipt/webhook API; reconcile
-local state if already delivered, and only retry on confirmed non-delivery.

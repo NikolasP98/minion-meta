@@ -33,15 +33,3 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/charts/Chart.svelte#L184
 - `NikolasP98/minion_hub@master src/lib/components/charts/Chart.svelte:281` — clickable filter and legend consumers still need keyboard action
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/charts/Chart.svelte#L281
-
-## Additional context (merged from postmerge-minion-hub-514d2ca3f3e5)
-
-Post-merge discovery independently flagged the line:104 marker in
-`NikolasP98/minion_hub@bb286f8` (PR #251). Its diagnosis: Chart.svelte is the
-hub's shared data-visualization abstraction (reliability metrics, knowledge
-graphs, workshop telemetry); the marker flags missing tuple-point/dataset
-encode support, mixed category/numeric axes, and non-Cartesian coordinates.
-Suggested fix direction: extend ECharts `dataset`/`encode` config for tuple
-unpacking, add an axis-type auto-detection layer, and wire up non-Cartesian
-transforms (polar, geographic) as opt-in modes, with type-safe encode
-builders and a test matrix per pattern.
