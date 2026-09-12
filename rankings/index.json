@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-12T03:34:47.947Z",
+	"generatedAt": "2026-09-12T04:04:18.228Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6504,6 +6504,38 @@
 			"scoredAt": "2026-09-12T03:09:59.397Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-8a282b90cd22",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/attachments.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8a282b90cd22.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "4c8ec658fb78c138724fd73a1600e590adf46aa42b1f8ece841691ceff1aaa87",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Orphaned unfinalized file rows/storage will leak resources indefinitely without a sweeper, and the fix direction is concretely scoped.",
+			"evidence": [
+				"TODO(handoff): no sweeper for `files` rows whose finalize never runs",
+				"Fix direction specifies periodic sweeper deleting orphaned storage+DB rows"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-12T04:04:18.152Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7088,38 +7120,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T07:05:12.919Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-8a282b90cd22",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/attachments.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8a282b90cd22.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "93f3588e413d49eeb5c80b148f2208173665ed8d0f4916e2e5c8b880e42b9089",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Missing sweeper for un-finalized file rows causes unbounded storage/DB leak, with a concrete scheduled-job fix direction.",
-			"evidence": [
-				"no sweeper for files rows whose finalize never runs",
-				"fix direction: background sweeper + manual endpoint"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T03:09:59.397Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-94a4fd2563f2",
@@ -10770,38 +10770,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:13:41.404Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/9c1a53f7e5c62ce846fef5e484b891ba0bce1775",
-			"sourceUpdatedAt": "2026-09-11T21:35:09Z",
-			"sourceFingerprint": "3ba7110f3197684f0773ff1ac399bdb2ef79bd7aa6c24e028ea52d0ff0885691",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Already-merged test-skip commit reported as deployment health status, not an outstanding actionable goal.",
-			"evidence": [
-				"commit skips durable shells suites on win32, matching prior #288/#289",
-				"pushed to DEV as b6485201"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T03:34:47.865Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
