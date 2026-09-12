@@ -1,9 +1,9 @@
 ---
 id: postmerge-minion-hub-9654a64b55fa
 title: "Post-merge finding — todo-handoff in tests/dependencies/security-compatibility.test.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-09-12
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
