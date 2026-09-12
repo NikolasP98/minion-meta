@@ -1,9 +1,9 @@
 ---
 id: postmerge-minion-hub-b6caed3b36fd
 title: "Post-merge finding — todo-handoff in src/server/services/job-effect-pages.service.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-09-12
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
