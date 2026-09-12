@@ -27,19 +27,21 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-12)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:3573` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3573
-- `NikolasP98/minion-meta@dev rankings/index.json:3841` — comment pointing at this proposal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3841
-- `NikolasP98/minion-meta@dev rankings/index.json:4630` — add-only; rename / deactivate / max-days edits need a modal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4630
-- `NikolasP98/minion-meta@dev rankings/index.json:5213` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5213
-- `NikolasP98/minion-meta@dev rankings/index.json:6771` — spec §3.2b allows a reschedule outside working hours",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6771
-- `NikolasP98/minion-meta@dev rankings/index.json:7850` — resourceId is only ever set from the calendar's",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7850
-- `NikolasP98/minion-meta@dev rankings/index.json:8246` — prompt-driven protocol instead of native tool_use — replace'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8246
-- `NikolasP98/minion-meta@dev rankings/index.json:9073` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9073
+- `NikolasP98/minion-meta@dev rankings/index.json:3645` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3645
+- `NikolasP98/minion-meta@dev rankings/index.json:3947` — comment pointing at this proposal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3947
+- `NikolasP98/minion-meta@dev rankings/index.json:4737` — add-only; rename / deactivate / max-days edits need a modal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4737
+- `NikolasP98/minion-meta@dev rankings/index.json:5354` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5354
+- `NikolasP98/minion-meta@dev rankings/index.json:5983` — Qualify Pixi/Habbo/Rapier motion, camera and relationship/element"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5983
+- `NikolasP98/minion-meta@dev rankings/index.json:7012` — spec §3.2b allows a reschedule outside working hours",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7012
+- `NikolasP98/minion-meta@dev rankings/index.json:8126` — resourceId is only ever set from the calendar's",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8126
+- `NikolasP98/minion-meta@dev rankings/index.json:8522` — prompt-driven protocol instead of native tool_use — replace'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8522
+- `NikolasP98/minion-meta@dev rankings/index.json:9316` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9316

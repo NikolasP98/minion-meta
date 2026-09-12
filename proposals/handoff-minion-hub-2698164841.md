@@ -1,14 +1,14 @@
 ---
-id: handoff-minion-hub-3215540846
-title: Handoff marker — tests/fixtures/critical-journeys/README.md (minion_hub)
+id: handoff-minion-hub-2698164841
+title: Handoff marker — tests/fixtures/workshop-motion/README.md (minion_hub)
 status: draft
-created: 2026-09-11
+created: 2026-09-12
 updated: 2026-09-12
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — tests/fixtures/critical-journeys/README.md
+# Handoff marker — tests/fixtures/workshop-motion/README.md
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-12)
 
-- `NikolasP98/minion_hub@master tests/fixtures/critical-journeys/README.md:47` — Qualify actual login/session and authenticated CRM routing using a
-  https://github.com/NikolasP98/minion_hub/blob/master/tests/fixtures/critical-journeys/README.md#L47
+- `NikolasP98/minion_hub@master tests/fixtures/workshop-motion/README.md:36` — Qualify full Workshop composition and remaining keyboard camera,
+  https://github.com/NikolasP98/minion_hub/blob/master/tests/fixtures/workshop-motion/README.md#L36

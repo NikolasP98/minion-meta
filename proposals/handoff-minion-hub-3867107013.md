@@ -1,14 +1,14 @@
 ---
-id: handoff-minion-hub-3215540846
-title: Handoff marker — tests/fixtures/critical-journeys/README.md (minion_hub)
+id: handoff-minion-hub-3867107013
+title: Handoff marker — src/lib/components/workshop/WorkshopCanvas.svelte (minion_hub)
 status: draft
-created: 2026-09-11
+created: 2026-09-12
 updated: 2026-09-12
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — tests/fixtures/critical-journeys/README.md
+# Handoff marker — src/lib/components/workshop/WorkshopCanvas.svelte
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-12)
 
-- `NikolasP98/minion_hub@master tests/fixtures/critical-journeys/README.md:47` — Qualify actual login/session and authenticated CRM routing using a
-  https://github.com/NikolasP98/minion_hub/blob/master/tests/fixtures/critical-journeys/README.md#L47
+- `NikolasP98/minion_hub@master src/lib/components/workshop/WorkshopCanvas.svelte:1724` — Full Workshop composition/camera and keyboard relationship/element
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/workshop/WorkshopCanvas.svelte#L1724
