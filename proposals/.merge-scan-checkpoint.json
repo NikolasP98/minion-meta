@@ -16,7 +16,7 @@
   "NikolasP98/minion_hub:master": {
     "cursor": "e98422b899a30ff9668869a0dae6d4cc0bcb371f",
     "head": "25e2bb758678d7618b23b4f20b0f00ecc57a51cc",
-    "done": 14,
+    "done": 25,
     "kept": [
       {
         "file": "src/lib/attachments/upload.ts",
@@ -73,6 +73,55 @@
         "severity": "high",
         "category": "unchecked-access",
         "line": 891
+      },
+      {
+        "file": "src/routes/api/marketplace/install/+server.ts",
+        "desc": "Empty catch block silently drops errors from requestIdentity/captureServerEvent calls",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 82
+      },
+      {
+        "file": "src/routes/api/servers/+server.ts",
+        "desc": "Telemetry errors silently swallowed; catch block has no logging or error handling and could mask bugs.",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 51
+      },
+      {
+        "file": "src/routes/api/servers/[id]/provision/run/+server.ts",
+        "desc": "Telemetry errors silently swallowed; catch block has no logging or error handling and could mask bugs.",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 36
+      },
+      {
+        "file": "src/server/services/bg-runtime.ts",
+        "desc": "Catch block handles storage errors silently without logging, hampering production debugging of heartbeat renewal failures",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 177
+      },
+      {
+        "file": "src/server/services/brain-corpus.effect-ownership.sql.integration.test.ts",
+        "desc": "Destructured row from insert query used without null check; crashes if insert returns no rows",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 227
+      },
+      {
+        "file": "src/server/services/brain-corpus.effect-ownership.sql.integration.test.ts",
+        "desc": "Destructured row from select query used without null check; crashes if no matching job exists",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 233
+      },
+      {
+        "file": "src/server/services/brain-corpus.effect-ownership.sql.integration.test.ts",
+        "desc": "Destructured restricted from select query used in expect without null check; fails with unclear error if role query returns no rows",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 201
       }
     ]
   }
