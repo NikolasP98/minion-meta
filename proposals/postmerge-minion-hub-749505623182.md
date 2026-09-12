@@ -34,9 +34,14 @@ The `TODO(handoff)` marker at `src/server/worker-lifecycle.ts` is removed, or in
 
 **Fix direction**: Ensure the response body is fully drained (or explicitly closed) before the handler returns, and await all deferred operations with proper error boundaries. Use `finally` blocks to guarantee cleanup, and consider adding explicit flush/drain calls on stream-end rather than relying on implicit resolution.
 
+
 ## Latest occurrence
 
-- repo: `NikolasP98/minion_hub@10e9567`
-- merged PR: https://github.com/NikolasP98/minion_hub/pull/271
+- repo: `NikolasP98/minion_hub@096756e`
+- merged PR: https://github.com/NikolasP98/minion_hub/pull/272
 - file: `src/server/worker-lifecycle.ts`
 - checked: 2026-09-12
+
+Marker text:
+
+    TODO(handoff): A resolved streaming Response can retain body/deferred work beyond

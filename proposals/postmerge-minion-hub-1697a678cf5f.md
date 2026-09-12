@@ -42,9 +42,14 @@ I'll check the current state of that file to understand the context.
 </invoke>
 </function_calls>
 
+
 ## Latest occurrence
 
-- repo: `NikolasP98/minion_hub@10e9567`
-- merged PR: https://github.com/NikolasP98/minion_hub/pull/271
+- repo: `NikolasP98/minion_hub@096756e`
+- merged PR: https://github.com/NikolasP98/minion_hub/pull/272
 - file: `scripts/ops/hub-worker-release.md`
 - checked: 2026-09-12
+
+Marker text:
+
+    TODO(handoff): Full provider and authenticated tenant acceptance remain separate
