@@ -1,0 +1,126 @@
+{
+  "recorded_at": "2026-09-12T20:10:41.565176+00:00",
+  "repository": "NikolasP98/minion-factory",
+  "pr187": {
+    "number": 187,
+    "head": "21463a7e8b893bff43e025a5769a068b181bea4c",
+    "dev_merge": "905b4b10a2553f56625331eefcade4794589a188"
+  },
+  "pr188": {
+    "number": 188,
+    "head": "32d84d874f8c20791651fba4f03b7b21e9fd6a5e",
+    "dev_merge": "467906db88f51476e2ca5fb561c2c4a79459e268"
+  },
+  "remote_refs_verified": {
+    "dev": "467906db88f51476e2ca5fb561c2c4a79459e268",
+    "main": "02900306a1fcc7b182bae726a24260d08467f81e"
+  },
+  "required_candidate_checks": {
+    "CI": 34715756085,
+    "Promotion safety CI": 34715756090,
+    "Codex Boundary": 34715756087,
+    "conclusions": "success"
+  },
+  "promotion": {
+    "run": 34715953488,
+    "attempts": 2,
+    "candidate_tests": "success",
+    "authenticated_boundary": "failure",
+    "deployment": "skipped",
+    "error": "broker turn failed (502, UPSTREAM_FAILURE)",
+    "attempt1_at": "2026-09-12T20:05:27Z",
+    "attempt2_at": "2026-09-12T20:07:44.759603Z"
+  },
+  "posture": {
+    "at": "2026-09-12T20:09:43.589571+00:00",
+    "marker": "02900306a1fcc7b182bae726a24260d08467f81e",
+    "health": {
+      "runningSha": "02900306a1fcc7b182bae726a24260d08467f81e",
+      "bootedAt": "2026-09-02T10:02:50.725Z",
+      "pausedForOperator": false,
+      "now": "2026-09-12T20:09:43.532Z"
+    },
+    "flags": {
+      "FACTORY_LINEAGE_ORCHESTRATOR_V1": "0",
+      "FACTORY_CONTAINMENT_V2": "0",
+      "FACTORY_DISPATCH_PAUSED": "0"
+    },
+    "runs": [
+      {
+        "id": "0d4aaf7d",
+        "kind": "reconcile",
+        "status": "error",
+        "finished_at": "2026-09-12T19:52:55.056Z"
+      },
+      {
+        "id": "a4166bdd",
+        "kind": "discovery",
+        "status": "passed",
+        "finished_at": "2026-09-12T19:46:19.085Z"
+      },
+      {
+        "id": "db35ab30",
+        "kind": "rank",
+        "status": "error",
+        "finished_at": "2026-09-12T19:48:52.310Z"
+      }
+    ],
+    "containers": [
+      {
+        "ID": "f7249df5a9d4",
+        "Names": "factory-runner",
+        "Image": "minion-factory-runner",
+        "Status": "Up 10 days"
+      }
+    ]
+  },
+  "diagnosis": {
+    "observed_boundary": "Initial POST /turn to healthy candidate broker, before exact resume and release supervision",
+    "provider": "openrouter",
+    "base_url": "https://openrouter.ai/api/v1",
+    "wire_api": "responses",
+    "routed_model": "openai/gpt-5.6-sol",
+    "sdk": "@openai/codex-sdk@0.147.0",
+    "secret_metadata": {
+      "name": "FACTORY_RELEASE_OPENROUTER_API_KEY",
+      "present": true,
+      "updated_at": "2026-08-23T11:01:24Z"
+    },
+    "configuration_evidence": "Broker readiness succeeded after runtime configuration validation; workflow secret was nonempty and provider-format valid. Upstream authorization/model existence are not established.",
+    "error_mapping": "Both SDK turn.failed/error events and arbitrary SDK exceptions collapse to UPSTREAM_FAILURE HTTP502. It is a broker-assigned HTTP status, not proof that OpenRouter returned502.",
+    "secondary_error": "broker response is not JSON follows the failed run_turn emitting no stdout; it is not evidence of a provider JSON parsing failure.",
+    "retained_diagnostics": "No workflow artifacts; cleanup deletes probe containers/volumes, full hosted logs contain no upstream status or sanitized reason.",
+    "cause": "Indeterminate: provider outage, upstream authorization/quota/model routing, SDK/network/adapter exception cannot be distinguished from retained evidence.",
+    "next_action": "Add reviewed allowlisted upstream error classification and failure artifact at broker/probe boundary without recording raw errors, prompts, credentials or authorization headers; use deterministic redaction/error-mapping tests before any separately authorized real retry. Trusted controller remains main02900306, so diagnostics must respect controller promotion trust, not patch/bypass main."
+  },
+  "worker_outcomes": "All three initially observed workers became terminal before deployment. Discovery passed, rank and reconcile errored; no rollout/adoption occurred, no interruption attributed to this release.",
+  "mutations": "Only normal dev PR merges and one failed-jobs retry. No production deployment, runtime/provider flag changes or directmain mutation.",
+  "source_references": [
+    "broker/src/broker.ts:386",
+    "broker/src/broker.ts:451",
+    "broker/src/errors.ts:32",
+    "broker/src/policy.ts:311",
+    "broker/src/policy.ts:343",
+    "scripts/promotion/authenticated-boundary-probe.sh:58",
+    "scripts/promotion/authenticated-boundary-probe.sh:210",
+    "scripts/promotion/authenticated-boundary-probe.sh:251",
+    ".github/workflows/promote-dev-daily.yml:314"
+  ],
+  "artifacts": {
+    "PROMOTION-FIX-RECEIPT.json": "6fdedd21700515f2014f18b20b4a324c941cd96cbb3e13a32dc2c7522be4169a",
+    "promoter-retry-failure.log": "ca8a22a6b3e7e1d76e1368b1569d04aa64fbff1b727da5d3fdbfa5925ccf1cfc",
+    "final-promotion-status.json": "5e4136c9ccb02101d246f844937f0674b53b2726c86310738d0aab2f6723de7a",
+    "HOSTED-RECEIPT.json": "2f329ec9d5ad221133350f1f11565ca4fe90277931b9b4363b7641fee45db7fc",
+    "PRODUCTION-POSTURE.json": "8bb65aa0b5944604ba3ea769b2fe7840019b86d90ff371acc2825a136eea5103"
+  },
+  "public_registry_check": {
+    "checked_at": "2026-09-12T20:11:33.767722+00:00",
+    "url": "https://openrouter.ai/api/v1/models",
+    "method": "Unauthenticated read-only public registry, no inference call",
+    "exact_id": "openai/gpt-5.6-sol",
+    "present": true,
+    "canonical_slug": "openai/gpt-5.6-sol-20260709",
+    "evidence": "Public JSON contains exact id field; not merely an alias target or substring",
+    "limits": "Catalog presence does not establish key authorization, credit availability, Responses API compatibility or cause of the observed broker502."
+  }
+}

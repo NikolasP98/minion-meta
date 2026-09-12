@@ -1,0 +1,27 @@
+From 1ed362a32db68aa1e58f36e8b9121b45108c380b Mon Sep 17 00:00:00 2001
+From: Nikolas Pinon <19605027+NikolasP98@users.noreply.github.com>
+Date: Sat, 12 Sep 2026 15:39:03 -0500
+Subject: [PATCH] docs(ci): record native Swift qualification handoff
+
+---
+ .github/workflows/ci.yml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index dfc58ab4e..4aacf9fb6 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -859,6 +859,10 @@ jobs:
+           sudo xcode-select -s /Applications/Xcode_26.1.app
+           xcodebuild -version
+ 
++      # TODO(handoff): Qualify the native Swift lane: the 2026-09-12 floating
++      # Homebrew SwiftFormat 0.63 run failed 116/208 files before Swift build/tests.
++      # Record tool/source compatibility before choosing a pin or scoped correction.
++      # See meta proposals/2026-09-12-gateway-native-swift-qualification.md.
+       - name: Install XcodeGen / SwiftLint / SwiftFormat
+         run: brew install xcodegen swiftlint swiftformat
+ 
+-- 
+2.55.0
+
