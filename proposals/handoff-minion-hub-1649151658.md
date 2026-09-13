@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-13)
 
-- `NikolasP98/minion_hub@master src/server/services/attachment-lifecycle.ts:287` — Retain tombstones until provider write-quiescence and a
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/attachment-lifecycle.ts#L287
+- `NikolasP98/minion_hub@master src/server/services/attachment-lifecycle.ts:347` — Retain tombstones until provider write-quiescence and a
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/attachment-lifecycle.ts#L347
