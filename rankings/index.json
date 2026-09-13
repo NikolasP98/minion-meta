@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-13T21:58:22.407Z",
+	"generatedAt": "2026-09-13T22:28:35.284Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4708,6 +4708,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-13T19:28:54.366Z"
+		},
+		{
+			"key": "issue:minion-meta#426",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#426 [monitor:unstick] reconcile proposals run e399b19c: claude agent exit-126 after successful merge-scan",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/426",
+			"sourceUpdatedAt": "2026-09-13T22:17:45Z",
+			"sourceFingerprint": "18aebdf66cf4aa28cafd04c25a313d1aa7ae3f5ece4bbf59dce7225a6c726bce",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Recurring exit-126 host-level infra fault is blocking the reconcile agent across three runs in ~1.5h with a clear, bounded diagnosis and fix path.",
+			"evidence": [
+				"exit 126 turns=0 seen in runs e399b19c, 0efde7a0, 510720bc within ~1.5h",
+				"diagnosis isolates cause to claude binary/wrapper permissions on the worker box, not a spec defect"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-13T22:28:35.204Z"
 		},
 		{
 			"key": "pr:minion (gateway)#262",
@@ -9551,38 +9583,6 @@
 			"scoredAt": "2026-09-07T08:14:36.905Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A recent commit fixed a persistence/shutdown race in the nitter extension but there's no evidence of ongoing deployment failure requiring urgent action.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-13T21:58:22.310Z"
-		},
-		{
 			"key": "pr:minion (gateway)#256",
 			"kind": "pr",
 			"stage": "development",
@@ -10108,6 +10108,38 @@
 			"scoredAt": "2026-09-07T08:12:46.705Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-13",
+			"sourceFingerprint": "57ed569cd9626ffd70440f394b5ad7d784d66065d876dee6865aa5117c46e623",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This handoff marker bundles nine unrelated TODOs scattered across rankings/index.json into a single proposal with no coherent, verifiable outcome.",
+			"evidence": [
+				"9 markers span disparate topics: holiday scheduling, rename modal, recovery policy, resourceId, protocol replacement, schema column drop",
+				"proposal defines done as removing all TODO(handoff) comments rather than a single scoped deliverable"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-13T22:28:35.204Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3518589653",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10536,38 +10568,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:12:46.705Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-13",
-			"sourceFingerprint": "385f30de6127af3e5190bd486df1e997d0c7090432eee74c28953ba94a9513d3",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This is an auto-filed handoff marker bundling nine unrelated TODO pointers scattered across a data file, so it lacks a single verifiable scope and should be split into individually specced items rather than executed as one goal.",
-			"evidence": [
-				"Markers (as of 2026-09-13) lists 9 distinct rankings/index.json line pointers",
-				"status: review, filed by handoff-sweep automation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-13T20:58:24.494Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-29ee60e",
