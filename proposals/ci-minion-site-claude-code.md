@@ -3,7 +3,7 @@ id: ci-minion-site-claude-code
 title: CI red — Claude Code on minion-site dev
 status: draft
 created: 2026-09-12
-updated: 2026-09-12
+updated: 2026-09-13
 repos: []
 ---
 
@@ -19,7 +19,7 @@ green, or the workflow is deliberately removed/disabled with rationale.
 ## Latest failure
 
 - run: https://github.com/NikolasP98/minion-site/actions/runs/31686953430
-- checked: 2026-09-12
+- checked: 2026-09-13
 
 ```
 
