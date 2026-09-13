@@ -41,7 +41,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7598
 - `NikolasP98/minion-meta@dev rankings/index.json:8844` — resourceId is only ever set from the calendar's",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8844
-- `NikolasP98/minion-meta@dev rankings/index.json:9443` — prompt-driven protocol instead of native tool_use — replace'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9443
-- `NikolasP98/minion-meta@dev rankings/index.json:10237` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10237
+- `NikolasP98/minion-meta@dev rankings/index.json:9475` — prompt-driven protocol instead of native tool_use — replace'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9475
+- `NikolasP98/minion-meta@dev rankings/index.json:10269` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10269
