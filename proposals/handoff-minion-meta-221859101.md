@@ -33,15 +33,15 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4206
 - `NikolasP98/minion-meta@dev rankings/index.json:4993` — add-only; rename / deactivate / max-days edits need a modal",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4993
-- `NikolasP98/minion-meta@dev rankings/index.json:5746` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5746
-- `NikolasP98/minion-meta@dev rankings/index.json:7435` — The service now binds this version and verifies normalized",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7435
-- `NikolasP98/minion-meta@dev rankings/index.json:7598` — spec §3.2b allows a reschedule outside working hours",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7598
-- `NikolasP98/minion-meta@dev rankings/index.json:8844` — resourceId is only ever set from the calendar's",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8844
-- `NikolasP98/minion-meta@dev rankings/index.json:9476` — prompt-driven protocol instead of native tool_use — replace'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9476
-- `NikolasP98/minion-meta@dev rankings/index.json:10270` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10270
+- `NikolasP98/minion-meta@dev rankings/index.json:5712` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5712
+- `NikolasP98/minion-meta@dev rankings/index.json:7401` — The service now binds this version and verifies normalized",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7401
+- `NikolasP98/minion-meta@dev rankings/index.json:7564` — spec §3.2b allows a reschedule outside working hours",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7564
+- `NikolasP98/minion-meta@dev rankings/index.json:8810` — resourceId is only ever set from the calendar's",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8810
+- `NikolasP98/minion-meta@dev rankings/index.json:9442` — prompt-driven protocol instead of native tool_use — replace'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9442
+- `NikolasP98/minion-meta@dev rankings/index.json:10268` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10268
