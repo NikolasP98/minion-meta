@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-13T19:58:24.077Z",
+	"generatedAt": "2026-09-13T20:28:22.125Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -664,6 +664,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-09T06:35:03.763Z"
+		},
+		{
+			"key": "pr:minion_hub#276",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#276 fix(db): security hardening from the 2026-09-13 advisor pass",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/276",
+			"sourceUpdatedAt": "2026-09-13T20:25:05Z",
+			"sourceFingerprint": "0d62abfad2c59a5c2d02c4d1dbb5c756608281324f89e9645df7d427bfd1d694",
+			"score": 79,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Migration closes a publicly-exploitable SECURITY DEFINER cross-tenant data exposure plus several other advisor-flagged RLS/permission gaps, with idempotent guards and a passing PGlite test.",
+			"evidence": [
+				"crm_contact_timeline was SECURITY DEFINER and granted to anon/authenticated, allowing cross-org message reads via PostgREST",
+				"64 RLS policies rewritten for auth.uid() init-plan perf, migration applied twice in test with 4/4 assertions passing",
+				"gated by existing vercel-build = db:migrate && build pipeline"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-13T20:28:22.036Z"
 		},
 		{
 			"key": "spec:2026-08-22-factory-dev-staging-daily-production-promotion-spec",
@@ -9514,38 +9547,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-07T08:14:36.905Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Commit message shows the nitter persistence/shutdown fix is already implemented and merged, leaving no open actionable work.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"commit b841c36 already present in gateway history"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-13T19:58:23.996Z"
 		},
 		{
 			"key": "pr:minion (gateway)#256",
