@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-15T07:28:34.695Z",
+	"generatedAt": "2026-09-15T07:59:01.720Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -840,8 +840,8 @@
 			"repo": "minion_hub",
 			"title": "#278 feat(pos,scheduling): session packages, payment plans, client ledger, module nav",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/278",
-			"sourceUpdatedAt": "2026-09-15T07:14:18Z",
-			"sourceFingerprint": "f0e42b5d6cc555378192735bfad2d6e6035a048a4cd0d0e85d2cfbcdd0b3f2b2",
+			"sourceUpdatedAt": "2026-09-15T07:41:35Z",
+			"sourceFingerprint": "e963d57d4eb6d7e8b696f93fe4a6d71285c0aee650890a35dcc7abe225cd7d0f",
 			"score": 73,
 			"band": "high",
 			"axes": {
@@ -853,18 +853,18 @@
 				"specification": 8,
 				"implementation": 8
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Large feature PR ports already-live-dependent migrations' consuming code (packages, payment plans, ledger, hardened booking path) onto current master with resolved conflicts and RBAC gap closure, ready to merge.",
+			"rationale": "Large, well-documented PR whose DB migrations are already live in production and which closes RBAC view-gate holes, making merge the safe and needed next step.",
 			"evidence": [
-				"migrations 20260914000000_pos_packages_plans etc. already applied to production",
-				"26 conflicted files resolved against base, other two commits cherry-picked clean",
-				"closes /pulse and /work RBAC view-gate holes with asserting test"
+				"'Migrations — already applied to production ... merging this is the safe direction'",
+				"'closes the /pulse and /work view-gate holes; modules-rbac.test.ts asserts no module page reaches the authenticated fallback'",
+				"updatedAt 2026-09-15T07:41:35Z, status open"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-15T07:28:34.608Z"
+			"scoredAt": "2026-09-15T07:59:01.638Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-722867358",
@@ -1871,39 +1871,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-13T00:04:59.606Z"
-		},
-		{
-			"key": "run:minion (gateway)#34819118490",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34819118490",
-			"sourceUpdatedAt": "2026-09-14T08:01:29Z",
-			"sourceFingerprint": "046ed524a1b11cee3ca1959e90306d29c7fb6379251b97fd4ffa6e9a37bacb88",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failing CI run blocks development on DEV but the catalog entry provides no diagnostic detail about the failure's actual cause.",
-			"evidence": [
-				"status: failure",
-				"workflow_dispatch on DEV",
-				"updatedAt 2026-09-14 (most recent)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-14T09:40:01.696Z"
 		},
 		{
 			"key": "issue:minion-meta#395",
@@ -5197,6 +5164,38 @@
 			"scoredAt": "2026-09-12T09:34:19.356Z"
 		},
 		{
+			"key": "run:minion (gateway)#34942358577",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34942358577",
+			"sourceUpdatedAt": "2026-09-15T07:54:22Z",
+			"sourceFingerprint": "d89098ccd1d8164294dfa31659abe97fba7e27bcaba47db2c3941478cde09183",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A recent CI failure on the DEV branch needs its logs examined before any fix can be scoped, since no failure detail is provided.",
+			"evidence": [
+				"status: failure",
+				"workflow_dispatch on DEV, updatedAt 2026-09-15T07:54:22Z"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-15T07:59:01.638Z"
+		},
+		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -6470,6 +6469,38 @@
 			"scoredAt": "2026-09-12T03:10:32.723Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/services/gateway.svelte.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fb0ae19f9ea1.md",
+			"sourceUpdatedAt": "2026-09-08",
+			"sourceFingerprint": "691152b0ae9ea98ad198ea372dd5d31c0c5980484ce4ea1879ce1b5908ee4806",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An approved but still root-cause-unknown production workaround needs cross-team investigation before it can be scoped as executable work.",
+			"evidence": [
+				"marker: 'TODO(handoff): remove once the phone failure is root-caused'",
+				"fix direction calls for coordination with the gateway/voice team before removal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-15T07:59:01.638Z"
+		},
+		{
 			"key": "proposal:2026-08-18-base-ui-primitives-and-shell",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7560,38 +7591,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T21:05:36.332Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/services/gateway.svelte.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fb0ae19f9ea1.md",
-			"sourceUpdatedAt": "2026-09-08",
-			"sourceFingerprint": "691152b0ae9ea98ad198ea372dd5d31c0c5980484ce4ea1879ce1b5908ee4806",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Approved proposal has a clear definition of done and fix-direction steps but the underlying phone-failure root cause is still undefined, so execution isn't yet bounded.",
-			"evidence": [
-				"TODO(handoff) marker at gateway.svelte.ts:309 pending root-cause investigation",
-				"fix direction requires coordination with phone-control/voice subsystem teams before removal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-08T07:34:38.514Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-distinct-visit-dates-spec",
@@ -10845,39 +10844,6 @@
 			"scoredAt": "2026-09-08T21:04:28.601Z"
 		},
 		{
-			"key": "proposal:2026-08-29-proposal-index-check-mode-and-effort-projection",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "proposal-index.mjs — add a read-only --check mode and reconcile projection with the auto-triage index writer",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-proposal-index-check-mode-and-effort-projection.md",
-			"sourceUpdatedAt": "2026-09-08",
-			"sourceFingerprint": "15de14498b82605796fd0293ac88215b2dac9cebf33e75f4cc81aa58602f1697",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Read-only mode and effort projection are both already implemented and tested, leaving only a minor unconfirmed ordering question with no declared canonical answer.",
-			"evidence": [
-				"'--check' fixed in consolidated release with tests for matching and drifted indexes",
-				"'effort' projection done in review-fix-6f292604, covered by proposal-index.test.mjs",
-				"row ordering divergence still open, marked TODO(handoff) with no owner decision"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-08T07:32:31.539Z"
-		},
-		{
 			"key": "proposal:2026-08-30-site-page-max-shared-token",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12263,6 +12229,38 @@
 			"scoredAt": "2026-09-14T22:28:27.306Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy-health entry is just a commit message for an already-merged nitter persistence/shutdown fix, with no reported deployment problem.",
+			"evidence": [
+				"summary is a commit message: 'serialize persistence and drain poller shutdown'",
+				"status: unknown, no health signal given"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-15T07:59:01.638Z"
+		},
+		{
 			"key": "issue:minion-meta#417",
 			"kind": "issue",
 			"stage": "proposal",
@@ -12357,6 +12355,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:33:05.928Z"
+		},
+		{
+			"key": "proposal:2026-08-29-proposal-index-check-mode-and-effort-projection",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "proposal-index.mjs — add a read-only --check mode and reconcile projection with the auto-triage index writer",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-proposal-index-check-mode-and-effort-projection.md",
+			"sourceUpdatedAt": "2026-09-08",
+			"sourceFingerprint": "15de14498b82605796fd0293ac88215b2dac9cebf33e75f4cc81aa58602f1697",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Both original defects are marked done, leaving only a narrow ordering-confirmation task in a low-stakes tooling script.",
+			"evidence": [
+				"'--check verification and effort projection are complete'",
+				"'Row ordering still diverges ... TODO(handoff) sits at the sort site'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-15T07:59:01.638Z"
 		},
 		{
 			"key": "proposal:2026-08-29-roadmap-unhomed-program-detail",
