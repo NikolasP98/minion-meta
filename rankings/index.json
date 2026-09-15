@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-15T14:28:58.790Z",
+	"generatedAt": "2026-09-15T14:58:39.564Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -632,6 +632,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:46:38.665Z"
+		},
+		{
+			"key": "issue:minion-factory#107",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "#107 security(factory): remove credentials from worker process arguments",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/issues/107",
+			"sourceUpdatedAt": "2026-08-28T02:42:58Z",
+			"sourceFingerprint": "f6e7a91c00b34f74043ea5ba388445cafe8118b1d315d000f6c8f9eae5753ba6",
+			"score": 80,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Credentials exposed in process argv is a live security/data-exposure risk with a clear, actionable, human-gated remediation spec.",
+			"evidence": [
+				"GitHub and model-provider credentials disclosed via process listing",
+				"required outcome includes rotation and regression tests",
+				"explicitly human-gated, do not auto-merge"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-15T14:58:39.472Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-release-probe-red-and-silent",
@@ -1302,39 +1335,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:35:55.019Z"
-		},
-		{
-			"key": "issue:minion-factory#107",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "#107 security(factory): remove credentials from worker process arguments",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/issues/107",
-			"sourceUpdatedAt": "2026-08-28T02:42:58Z",
-			"sourceFingerprint": "f6e7a91c00b34f74043ea5ba388445cafe8118b1d315d000f6c8f9eae5753ba6",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-specified fix for credential exposure via host process arguments in a live security-tagged issue with clear scope and test requirements.",
-			"evidence": [
-				"credential values directly in host-side Docker argument vector in runner/src/queue.ts",
-				"local process listing can disclose GitHub and model-provider credentials while a run is active",
-				"human-gated, do not auto-merge"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-08T14:34:38.164Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1767155690",
@@ -5192,6 +5192,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
+		},
+		{
+			"key": "issue:minion (gateway)#249",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#249 test(memory): eliminate nondeterministic atomic-reindex rollback failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/249",
+			"sourceUpdatedAt": "2026-09-11T03:29:08Z",
+			"sourceFingerprint": "81fefae6d8fc7e8284d44444d91981ed0c5f786b12b1f4a8144ae47c0504cc1e",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A well-specified flaky-test/atomicity investigation with clear reproduction steps and regression criteria blocking reliable CI trust.",
+			"evidence": [
+				"exact CI run failed then passed on rerun of same SHA",
+				"required outcome specifies 100 repetitions and multi-shard verification"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-15T14:58:39.472Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-1093105314",
@@ -10126,6 +10158,38 @@
 			"scoredAt": "2026-09-14T22:58:23.991Z"
 		},
 		{
+			"key": "run:minion_site#31686953033",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_site",
+			"title": "Claude Code",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/actions/runs/31686953033",
+			"sourceUpdatedAt": "2026-09-12T09:31:54Z",
+			"sourceFingerprint": "fd33d67a9bcb040c710991818cff95818ec5463761e5c0012f15091f3395c7b6",
+			"score": 32,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A failed CI run tied to a PR review comment on dev with no detail on root cause or scope.",
+			"evidence": [
+				"status failure",
+				"pull_request_review_comment on dev"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-15T14:58:39.472Z"
+		},
+		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11275,6 +11339,38 @@
 			"scoredAt": "2026-09-12T20:36:08.826Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a merged commit record about nitter persistence/shutdown fixes, not an open actionable goal.",
+			"evidence": [
+				"title is a commit message",
+				"co-authored-by tag indicates already merged"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-15T14:58:39.472Z"
+		},
+		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -12158,6 +12254,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T22:28:27.306Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 81758 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-09-15T12:19:56Z",
+			"sourceFingerprint": "87078e8e75b53a8bb370185f597d538be33e407a567877bfcfa059cfd4915c1b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated upstream-sync notification listing thousands of upstream commits with no scoped actionable task defined.",
+			"evidence": [
+				"81758 new commits available",
+				"tag upstream-sync, auto-generated diff listing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-15T14:58:39.472Z"
 		},
 		{
 			"key": "issue:minion-meta#417",
