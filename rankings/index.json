@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-15T21:58:28.126Z",
+	"generatedAt": "2026-09-15T22:28:33.249Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9465,38 +9465,6 @@
 			"scoredAt": "2026-09-14T09:38:46.333Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged fix for nitter persistence/shutdown draining is routine maintenance with no indication of ongoing production impact.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-15T21:58:28.030Z"
-		},
-		{
 			"key": "issue:minion-meta#436",
 			"kind": "issue",
 			"stage": "proposal",
@@ -13231,6 +13199,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-15T18:28:59.404Z"
+		},
+		{
+			"key": "issue:minion-meta#440",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#440 [monitor:unstick] reconcile run 9ad9ad8b (minion-meta) failed to launch agent: exit-126, zero turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/440",
+			"sourceUpdatedAt": "2026-09-15T22:17:26Z",
+			"sourceFingerprint": "f1e5d739a195de5513f96b5ec531b74618d5ee73436e622a8582423916c0723b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Single transient agent-launch failure (exit 126, zero turns) that the diagnosis itself attributes to a host/environment fluke and recommends simply retrying, not a scoped fix.",
+			"evidence": [
+				"exit code 126 turns=0, permission_denials=0",
+				"Recommendation: retry the run - this looks transient/environmental rather than a repo or spec problem"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-15T22:28:33.170Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-4278431509",
