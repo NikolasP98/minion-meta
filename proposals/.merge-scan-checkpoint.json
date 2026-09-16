@@ -15,155 +15,92 @@
   },
   "NikolasP98/minion_hub:master": {
     "cursor": "10e9567ad61bc9b3dfcfa5b62bcff1a188dfa05c",
-    "head": "a480592365645c74976afd5b22d78a5e7890da85",
-    "done": 27,
+    "head": "9ceecf6ac8ca3fa09d604d9367b17850bd218875",
+    "done": 17,
     "kept": [
       {
         "file": "package.json",
-        "desc": "qa:seed:verify script embeds default database credentials and port in the environment variable fallback; move to configuration.",
+        "desc": "Hardcoded database credentials (postgres:postgres) and port (54422) in qa:seed:verify script should use environment variables instead.",
         "severity": "medium",
         "category": "hardcoded-config",
-        "line": 168
-      },
-      {
-        "file": "scripts/qa/check-baseline.ts",
-        "desc": "JSON.parse() result cast without validation; malformed baseline.json would crash at runtime without a clear error message (line 84 accesses .migrationFilesAtSnapshot without defensive checks).",
-        "severity": "medium",
-        "category": "unvalidated-input",
-        "line": 122
-      },
-      {
-        "file": "scripts/qa/check-migration-seed-pairing.ts",
-        "desc": "JSON.parse() result from GitHub event file cast without validation; subsequent code uses optional chaining but a malformed file could crash during JSON.parse.",
-        "severity": "medium",
-        "category": "unvalidated-input",
-        "line": 82
+        "line": 167
       },
       {
         "file": "scripts/qa/db-bootstrap.ts",
-        "desc": "migrate.stdout could be null per TypeScript types but is accessed with .matchAll() without a null check; will crash at runtime if stdio is misconfigured.",
+        "desc": "migrate.stdout could be null (spawnSync defaults stdio[1] to 'inherit'), but is accessed without a null check",
         "severity": "high",
         "category": "unchecked-access",
-        "line": 234
+        "line": 138
+      },
+      {
+        "file": "scripts/qa/db-bootstrap.ts",
+        "desc": "status.stdout could be null (spawnSync defaults stdio[1] to 'inherit'), but is accessed without a null check",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 169
       },
       {
         "file": "scripts/qa/extend.ts",
-        "desc": "argv[ttlArgIdx + 1] is accessed without bounds checking; if --ttl is the final argument with no value, undefined is passed to parseTtl unchecked",
-        "severity": "medium",
+        "desc": "Accessing argv[ttlArgIdx + 1] without bounds check; if --ttl is the final argument, this passes undefined to parseTtl unexpectedly",
+        "severity": "high",
         "category": "unchecked-access",
         "line": 11
       },
       {
         "file": "scripts/qa/seed/catalog.ts",
-        "desc": "products.find() result accessed with non-null assertion (!) without runtime validation; crashes if matrixId not in array",
+        "desc": "products.find() result is used with non-null assertion (!) without runtime check; will crash at runtime if find() returns undefined due to data inconsistency.",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 164
+        "line": 167
+      },
+      {
+        "file": "scripts/qa/seed/index.ts",
+        "desc": "Missing validation for '--only' argument; if specified without a value, args[onlyIndex + 1] returns undefined and the flag is silently ignored, seeding all domains instead of erroring.",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 123
       },
       {
         "file": "scripts/qa/seed/seed.contract.test.ts",
-        "desc": "Destructuring const [row] = await sql<...> then accessing row.live on line 110 without checking if the array is empty.",
+        "desc": "Destructured [row] from query result without checking if rows exist; accessing row.live will crash if query returns zero rows.",
         "severity": "high",
         "category": "unchecked-access",
-        "line": 105
+        "line": 110
       },
       {
         "file": "scripts/qa/seed/seed.contract.test.ts",
-        "desc": "Destructuring const [row] = await sql<...> then accessing row.live on line 120 without checking if the array is empty.",
+        "desc": "Destructured [row] from query result without checking if rows exist; accessing row.live will crash if query returns zero rows.",
         "severity": "high",
         "category": "unchecked-access",
-        "line": 115
-      },
-      {
-        "file": "scripts/qa/seed/seed.contract.test.ts",
-        "desc": "Destructuring const [membership] = await sql<...> then accessing membership.n on line 131 without checking if the array is empty.",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 125
-      },
-      {
-        "file": "scripts/qa/seed/seed.contract.test.ts",
-        "desc": "Destructuring const [roles] = await sql<...> then accessing roles.n on line 132 without checking if the array is empty.",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 128
-      },
-      {
-        "file": "scripts/qa/seed/seed.contract.test.ts",
-        "desc": "Destructuring const [row] = await sql<...> then accessing row.size_bytes on line 142 without checking if the array is empty.",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 139
-      },
-      {
-        "file": "scripts/qa/snapshot-prod-schema.ts",
-        "desc": "result.stdout used with .split() without null check",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 168
-      },
-      {
-        "file": "scripts/qa/status.ts",
-        "desc": "dbStatus.stdout used with .trim() without null check",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 33
-      },
-      {
-        "file": "scripts/qa/up.ts",
-        "desc": "argv[ttlArgIdx + 1] accessed without bounds check; if --ttl is the last argument, undefined is silently treated as default TTL instead of erroring",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 31
-      },
-      {
-        "file": "src/lib/attachments/upload.test.ts",
-        "desc": ".find()! result used without null check before accessing [1]",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 128
-      },
-      {
-        "file": "src/lib/attachments/upload.test.ts",
-        "desc": ".find()! result used without null check before accessing [1]",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 131
-      },
-      {
-        "file": "src/lib/attachments/upload.test.ts",
-        "desc": ".find()! result used without null check before accessing [1]",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 134
-      },
-      {
-        "file": "src/lib/components/finance/FinanceNav.svelte",
-        "desc": "i.matcher is called without checking if it exists; will throw if items from getAreaItems lack matcher property",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 18
-      },
-      {
-        "file": "src/lib/components/pos/ClientAccountDrawer.svelte",
-        "desc": "partyId and crmContactId props passed to PlanOpenForm without null-coalescing undefined values; elsewhere (line 221–222) these same fields are explicitly coalesced with ?? null, suggesting the child component expects null, not undefined.",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 258
-      },
-      {
-        "file": "src/lib/components/pos/CustomerPicker.svelte",
-        "desc": "Exception during customer creation is caught but silently swallowed without user feedback; consistent error handling like savePhone shows better pattern",
-        "severity": "medium",
-        "category": "empty-catch",
         "line": 119
       },
       {
-        "file": "src/lib/components/pos/PackageEditor.svelte",
-        "desc": "The components property from API response is not validated before calling .map() on it—if the server returns a missing field, this will throw.",
-        "severity": "medium",
+        "file": "scripts/qa/seed/seed.contract.test.ts",
+        "desc": "Destructured [membership] from query result without checking if rows exist; accessing membership.n will crash if query returns zero rows.",
+        "severity": "high",
         "category": "unchecked-access",
-        "line": 85
+        "line": 129
+      },
+      {
+        "file": "scripts/qa/seed/seed.contract.test.ts",
+        "desc": "Destructured [roles] from query result without checking if rows exist; accessing roles.n will crash if query returns zero rows.",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 135
+      },
+      {
+        "file": "scripts/qa/seed/seed.contract.test.ts",
+        "desc": "Non-null assertion on registered.get('att.file.near-quota') without prior existence check; fails silently if matrix id was not registered by seed.",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 144
+      },
+      {
+        "file": "scripts/qa/seed/seed.contract.test.ts",
+        "desc": "Destructured [row] from query result without checking if rows exist; accessing row.size_bytes will crash if query returns zero rows.",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 147
       }
     ]
   }
