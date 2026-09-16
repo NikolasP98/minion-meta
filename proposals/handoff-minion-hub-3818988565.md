@@ -30,7 +30,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L178
 - `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:217` — a client with SEVERAL pending tickets only gets a link to
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L217
-- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:277` — this counts EVERY historical service line without a
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L277
-- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:623` — cancelling a plan leaves its already-paid instalment lines
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L623
+- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:294` — this counts EVERY historical service line without a
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L294
+- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:642` — cancelling a plan leaves its already-paid instalment lines
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L642

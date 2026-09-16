@@ -15,169 +15,57 @@
   },
   "NikolasP98/minion_hub:master": {
     "cursor": "10e9567ad61bc9b3dfcfa5b62bcff1a188dfa05c",
-    "head": "4be159a3504ba40dacefc3380753b1e9350d9ee1",
-    "done": 29,
+    "head": "e97e79d7c31de234b82a8868a1c8c6685b7f71e3",
+    "done": 15,
     "kept": [
       {
-        "file": ".github/workflows/ci.yml",
-        "desc": "MAX_LEDGER_VERSION assigned from unchecked command substitution; if baseline.json is missing, require() fails silently and variable becomes empty, causing test to proceed with incorrect baseline version comparisons",
-        "severity": "high",
+        "file": "package.json",
+        "desc": "Database connection string with credentials hardcoded as shell default; move to .env.example or similar",
+        "severity": "medium",
+        "category": "hardcoded-config",
+        "line": 169
+      },
+      {
+        "file": "scripts/qa/db-bootstrap.ts",
+        "desc": "Destructuring result[0] from SQL query without checking if array is empty; throws TypeError if query returns no rows instead of clear error message",
+        "severity": "medium",
         "category": "unchecked-access",
-        "line": 415
+        "line": 105
+      },
+      {
+        "file": "scripts/qa/db-bootstrap.ts",
+        "desc": "Destructuring result[0] from SQL query without checking if array is empty; throws TypeError if query returns no rows instead of clear error message",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 138
       },
       {
         "file": "scripts/qa/extend.ts",
-        "desc": "argv[ttlArgIdx + 1] accessed without bounds check; if --ttl is the last argument, undefined is passed to parseTtl unchecked",
+        "desc": "argv[ttlArgIdx + 1] accessed without bounds check; if --ttl is the final argument, undefined is silently passed to parseTtl instead of erroring",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 11
+        "line": 12
       },
       {
         "file": "scripts/qa/reset.ts",
-        "desc": "seed/index.ts deferred as incomplete without TODO(handoff) marker required by AGENTS.md open-items ledger",
-        "severity": "high",
-        "category": "missing-handoff",
-        "line": 43
-      },
-      {
-        "file": "scripts/qa/seed/crm.ts",
-        "desc": "matrixById() return value used without null/undefined check before calling .has()",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 224
-      },
-      {
-        "file": "scripts/qa/seed/crm.ts",
-        "desc": "matrixById() return value used without null/undefined check before calling .has()",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 247
-      },
-      {
-        "file": "scripts/qa/seed/index.ts",
-        "desc": "args[onlyIndex + 1] can be undefined if --only is the last argument; bounds check missing before array access",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 150
-      },
-      {
-        "file": "scripts/qa/seed/seed.contract.test.ts",
-        "desc": "Array destructuring const [row] assumes query returns ≥1 rows; accessing row.live without length check",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 111
-      },
-      {
-        "file": "scripts/qa/seed/seed.contract.test.ts",
-        "desc": "Array destructuring const [row] assumes query returns ≥1 rows; accessing row.live without length check",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 119
-      },
-      {
-        "file": "scripts/qa/seed/seed.contract.test.ts",
-        "desc": "Array destructuring const [membership] assumes query returns ≥1 rows; accessing membership.n without length check",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 127
-      },
-      {
-        "file": "scripts/qa/seed/seed.contract.test.ts",
-        "desc": "Array destructuring const [roles] assumes query returns ≥1 rows; accessing roles.n without length check",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 130
-      },
-      {
-        "file": "scripts/qa/seed/seed.contract.test.ts",
-        "desc": "Array destructuring const [row] on file lookup; query may legitimately return 0 rows but row.size_bytes accessed without check",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 141
-      },
-      {
-        "file": "scripts/qa/status.ts",
-        "desc": "dbStatus.stdout could be null; calling .trim() without null check may crash",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 36
-      },
-      {
-        "file": "scripts/qa/snapshot-prod-schema.ts",
-        "desc": "Destructured versionRow could be undefined if query returns empty array",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 95
-      },
-      {
-        "file": "scripts/qa/snapshot-prod-schema.ts",
-        "desc": "Destructured ledgerRow could be undefined if query returns empty array",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 99
-      },
-      {
-        "file": "src/lib/attachments/upload.test.ts",
-        "desc": "Calling .find()! then immediately accessing result without runtime null/undefined check; test crashes with confusing error if assertion fails",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 129
-      },
-      {
-        "file": "src/lib/attachments/upload.test.ts",
-        "desc": "Calling .find()! then immediately accessing result without runtime null/undefined check; test crashes with confusing error if assertion fails",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 132
-      },
-      {
-        "file": "src/lib/attachments/upload.test.ts",
-        "desc": "Calling .find()! then immediately accessing result without runtime null/undefined check; test crashes with confusing error if assertion fails",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 135
-      },
-      {
-        "file": "src/lib/components/attachments/AttachmentList.svelte",
-        "desc": "Error from listTrashedAttachments is silently swallowed with .catch(() => []), masking failures and preventing error logging",
-        "severity": "medium",
-        "category": "empty-catch",
-        "line": 67
-      },
-      {
-        "file": "src/lib/components/pos/CustomerPicker.svelte",
-        "desc": "Catch block silently swallows network/parsing errors without user notification, allowing customer name to be set in the finally block (line 126) even though party creation failed, giving false confidence a CRM record exists.",
-        "severity": "high",
-        "category": "empty-catch",
-        "line": 119
-      },
-      {
-        "file": "src/lib/components/pos/PackageEditor.svelte",
-        "desc": "j.components is used with .map() but j is only type-cast; if API response omits components, this crashes with TypeError",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 79
-      },
-      {
-        "file": "src/lib/components/pos/PackageEditor.svelte",
-        "desc": "Catch block swallows load errors silently with no user feedback, leaving component empty if API fails or returns malformed data",
-        "severity": "medium",
-        "category": "empty-catch",
-        "line": 81
-      },
-      {
-        "file": "src/lib/components/pos/PaymentStep.svelte",
-        "desc": "Hardcoded 'credit' method ID is acknowledged as incomplete (\"magic method id\") but lacks TODO(handoff): marker; comment references a TODO elsewhere rather than documenting the open end here",
+        "desc": "Seed functionality explicitly deferred (scripts/qa/seed/index.ts not yet implemented) but lacks TODO(handoff) marker required by SDLC handoff documentation contract",
         "severity": "medium",
         "category": "missing-handoff",
-        "line": 51
+        "line": 42
       },
       {
-        "file": "src/lib/components/pos/PlanOpenForm.svelte",
-        "desc": "partyId and crmContactId sent to API without validating at least one is present per component documentation",
-        "severity": "medium",
-        "category": "unvalidated-input",
-        "line": 61
+        "file": "scripts/qa/seed/catalog.ts",
+        "desc": "The .find() result uses non-null assertion (!) without runtime validation; if matrixId lists desync, accessing .id on undefined crashes at runtime",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 163
+      },
+      {
+        "file": "scripts/qa/seed/matrix.ts",
+        "desc": "MatrixEntry interface missing expect?: 'absent' field required by docstring; ABSENT entries (e.g., crm.settings.defaults-personal, crm.activity.stats-missing) cannot express row-absence contract with db.ts.",
+        "severity": "high",
+        "category": "missing-handoff",
+        "line": 18
       }
     ]
   }
