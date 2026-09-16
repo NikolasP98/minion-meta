@@ -12,5 +12,89 @@
         "line": 136
       }
     ]
+  },
+  "NikolasP98/minion_hub:master": {
+    "cursor": "10e9567ad61bc9b3dfcfa5b62bcff1a188dfa05c",
+    "head": "2ffbf0b615a0cde5d7405ba9036764b9fb675d95",
+    "done": 13,
+    "kept": [
+      {
+        "file": ".github/workflows/ci.yml",
+        "desc": "Database credential hardcoded in workflow: use GitHub secrets instead of embedding postgres://minion_qc:disposable-ci-only@... directly in the step",
+        "severity": "medium",
+        "category": "hardcoded-config",
+        "line": 300
+      },
+      {
+        "file": ".github/workflows/ci.yml",
+        "desc": "Database credential hardcoded in workflow: use GitHub secrets instead of embedding postgres://minion_qc:disposable-ci-only@... directly in the step",
+        "severity": "medium",
+        "category": "hardcoded-config",
+        "line": 313
+      },
+      {
+        "file": "src/lib/attachments/upload.test.ts",
+        "desc": "find() result on fetchSpy.mock.calls used with non-null assertion without runtime null check; test will fail with cryptic error if intent endpoint is not called",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 130
+      },
+      {
+        "file": "src/lib/components/attachments/AttachmentList.svelte",
+        "desc": "listTrashedAttachments errors silently ignored with .catch(() => []), no logging or user feedback if trash is unavailable",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 62
+      },
+      {
+        "file": "src/lib/components/attachments/AttachmentList.svelte",
+        "desc": "Error catch resets rows but not new trashed state; inconsistency if listAttachments fails on retry after prior success",
+        "severity": "medium",
+        "category": "missing-handoff",
+        "line": 74
+      },
+      {
+        "file": "src/lib/components/pos/PackageEditor.svelte",
+        "desc": "j.components accessed without validating response structure; calling .map() crashes if not an array",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 91
+      },
+      {
+        "file": "src/lib/components/pos/PackageEditor.svelte",
+        "desc": "catch block swallows errors silently with no user feedback; network or server errors fail quietly",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 93
+      },
+      {
+        "file": "src/lib/components/pos/PaymentStep.svelte",
+        "desc": "Hardcoded magic method id 'credit' lacks TODO(handoff) marker at site; comment references external TODO instead of marking locally.",
+        "severity": "medium",
+        "category": "missing-handoff",
+        "line": 51
+      },
+      {
+        "file": "src/lib/components/pos/PlanOpenForm.svelte",
+        "desc": "JSON parsing error is silently swallowed by .catch(() => ({})), causing 200 responses with invalid JSON to be treated as successful submissions.",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 73
+      },
+      {
+        "file": "src/lib/components/scheduling/AppointmentForm.svelte",
+        "desc": "Catch block in loadConsumption swallows all errors silently; obscures network, JSON parsing, and API failures with no logging.",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 128
+      },
+      {
+        "file": "src/lib/components/scheduling/AppointmentForm.svelte",
+        "desc": "Catch block in book swallows actual error details; user sees generic message but root cause (network, parse, server) is lost to debugging.",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 211
+      }
+    ]
   }
 }

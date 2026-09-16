@@ -1,15 +1,14 @@
 ---
-id: handoff-minion-hub-3035029616
-title: Handoff marker — src/routes/(app)/pos/appointments/+page.svelte (minion_hub)
-status: closed
-created: 2026-09-02
+id: handoff-minion-hub-1536014697
+title: Handoff marker — src/routes/api/pos/packages/grants/[id]/redeem/+server.ts (minion_hub)
+status: draft
+created: 2026-09-16
 updated: 2026-09-16
 repos: [minion-hub]
 tags: [handoff-sweep]
-duplicate_candidate: postmerge-minion-hub-38e0a3c5f572
 ---
 
-# Handoff marker — src/routes/(app)/pos/appointments/+page.svelte
+# Handoff marker — src/routes/api/pos/packages/grants/[id]/redeem/+server.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -27,9 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-16)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/appointments/+page.svelte:168` — scheduling's booking form moved to the in-page route
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/appointments/+page.svelte#L168
-
-## Closed (auto)
-
-No `TODO(handoff):` marker found in this file as of 2026-09-16; the sweep closed this proposal.
+- `NikolasP98/minion_hub@master src/routes/api/pos/packages/grants/[id]/redeem/+server.ts:23` — the session is drawn when the cashier clicks, not when the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/pos/packages/grants/[id]/redeem/+server.ts#L23

@@ -26,5 +26,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-16)
 
-- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/[id]/+server.ts:79` — Persist realization admission with the status change; this
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/[id]/+server.ts#L79
+- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/[id]/+server.ts:21` — this read now returns package-grant money, plan money and an
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/[id]/+server.ts#L21
+- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/[id]/+server.ts:129` — Persist realization admission with the status change; this
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/[id]/+server.ts#L129
