@@ -45,6 +45,10 @@ repositories; they carry no registry row.
 
 The `minion` CLI (`@minion-stack/cli` npm package, binary `minion`) orchestrates every subproject with resolved env vars. Install once: `npm install -g @minion-stack/cli` (or `pnpm add -g @minion-stack/cli`).
 
+### Verify the CLI identity
+
+Both the gateway and the meta orchestrator use the binary name `minion`. Before using the registry commands, check `minion --help`: the orchestrator describes itself as "Minion meta-repo CLI" and exposes `list`, `doctor` and `sync-env`. If PATH resolves the gateway CLI, use `node packages/cli/dist/index.js <command>` from the built meta checkout. `node packages/cli/dist/index.js --help` and `list --json` are read-only identity checks. Rebuild the package with its declared build command if the dist output is absent or stale; do not overwrite another CLI installation as an implicit repair.
+
 ## Codex Memory Parity
 
 This repo carries Codex parity artifacts under `codex/` so Codex can use the same durable-memory patterns as Claude without changing Claude's workflow:
@@ -54,6 +58,10 @@ This repo carries Codex parity artifacts under `codex/` so Codex can use the sam
 - `codex/skills/lessons-learned/` ports the post-task observation workflow.
 
 Use these when the user asks about prior-session context, durable memory, project wake-up context, or lessons learned. Do not save secrets, raw credentials, or unrelated transcript bulk into memory.
+
+## Curated Engineering Skills
+
+The canonical interactive bundle lives in `minion_plugins/plugins/minion-engineering/`. Run `scripts/sync-minion-engineering-skills.sh` after updating it to install the project-local skills for Claude, Cursor, and Codex and to copy the advisory prose auditor into `minion_factory/agent/skills/`. Local project instructions always win; the prose auditor is advisory and has no rewrite, verdict, or merge authority.
 
 ### Core commands
 
