@@ -16,7 +16,7 @@
   "NikolasP98/minion_hub:master": {
     "cursor": "10e9567ad61bc9b3dfcfa5b62bcff1a188dfa05c",
     "head": "a480592365645c74976afd5b22d78a5e7890da85",
-    "done": 17,
+    "done": 27,
     "kept": [
       {
         "file": "package.json",
@@ -94,6 +94,76 @@
         "severity": "high",
         "category": "unchecked-access",
         "line": 139
+      },
+      {
+        "file": "scripts/qa/snapshot-prod-schema.ts",
+        "desc": "result.stdout used with .split() without null check",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 168
+      },
+      {
+        "file": "scripts/qa/status.ts",
+        "desc": "dbStatus.stdout used with .trim() without null check",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 33
+      },
+      {
+        "file": "scripts/qa/up.ts",
+        "desc": "argv[ttlArgIdx + 1] accessed without bounds check; if --ttl is the last argument, undefined is silently treated as default TTL instead of erroring",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 31
+      },
+      {
+        "file": "src/lib/attachments/upload.test.ts",
+        "desc": ".find()! result used without null check before accessing [1]",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 128
+      },
+      {
+        "file": "src/lib/attachments/upload.test.ts",
+        "desc": ".find()! result used without null check before accessing [1]",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 131
+      },
+      {
+        "file": "src/lib/attachments/upload.test.ts",
+        "desc": ".find()! result used without null check before accessing [1]",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 134
+      },
+      {
+        "file": "src/lib/components/finance/FinanceNav.svelte",
+        "desc": "i.matcher is called without checking if it exists; will throw if items from getAreaItems lack matcher property",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 18
+      },
+      {
+        "file": "src/lib/components/pos/ClientAccountDrawer.svelte",
+        "desc": "partyId and crmContactId props passed to PlanOpenForm without null-coalescing undefined values; elsewhere (line 221–222) these same fields are explicitly coalesced with ?? null, suggesting the child component expects null, not undefined.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 258
+      },
+      {
+        "file": "src/lib/components/pos/CustomerPicker.svelte",
+        "desc": "Exception during customer creation is caught but silently swallowed without user feedback; consistent error handling like savePhone shows better pattern",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 119
+      },
+      {
+        "file": "src/lib/components/pos/PackageEditor.svelte",
+        "desc": "The components property from API response is not validated before calling .map() on it—if the server returns a missing field, this will throw.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 85
       }
     ]
   }
