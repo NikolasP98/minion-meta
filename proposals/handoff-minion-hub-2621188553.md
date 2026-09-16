@@ -1,6 +1,6 @@
 ---
-id: handoff-minion-hub-902041533
-title: Handoff marker — src/lib/components/pos/SellCart.svelte (minion_hub)
+id: handoff-minion-hub-2621188553
+title: Handoff marker — src/server/auth/authorize.ts (minion_hub)
 status: draft
 created: 2026-09-16
 updated: 2026-09-16
@@ -8,7 +8,7 @@ repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — src/lib/components/pos/SellCart.svelte
+# Handoff marker — src/server/auth/authorize.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-16)
 
-- `NikolasP98/minion_hub@master src/lib/components/pos/SellCart.svelte:74` — the affordance is one-way — once opened, a line's discount
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/pos/SellCart.svelte#L74
+- `NikolasP98/minion_hub@master src/server/auth/authorize.ts:27` — a full per-handler audit of the remaining requireAdmin
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/auth/authorize.ts#L27

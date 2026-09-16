@@ -26,11 +26,11 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-16)
 
-- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:176` — accounts are GROUPED by this key, so a client whose older rows
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L176
-- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:214` — a client with SEVERAL pending tickets only gets a link to
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L214
-- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:256` — this counts EVERY historical service line without a
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L256
-- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:602` — cancelling a plan leaves its already-paid instalment lines
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L602
+- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:178` — accounts are GROUPED by this key, so a client whose older rows
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L178
+- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:217` — a client with SEVERAL pending tickets only gets a link to
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L217
+- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:277` — this counts EVERY historical service line without a
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L277
+- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:623` — cancelling a plan leaves its already-paid instalment lines
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L623
