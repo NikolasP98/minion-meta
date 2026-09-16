@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T21:29:38.632Z",
+	"generatedAt": "2026-09-16T21:58:30.469Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -634,39 +634,6 @@
 			"scoredAt": "2026-09-14T09:40:01.696Z"
 		},
 		{
-			"key": "pr:minion_hub#290",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#290 fix(pos): refuse sales on stock shortfall instead of dropping the stock entry; one account row per person; schedule step clears pending",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/290",
-			"sourceUpdatedAt": "2026-09-16T21:06:51Z",
-			"sourceFingerprint": "6de47372596c04963e51fe53d4ee7d20c0a89d316c91c24895b8824a2efe9b50",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Open PR with tests closes a critical stock-shortfall data-loss bug plus an account-merge and scheduling bug in POS.",
-			"evidence": [
-				"refuses sale on stock shortfall instead of silently dropping the stock entry",
-				"tests: pos.tickets.test.ts, pos-accounts-list.test.ts, scheduling-bookings-ticket-link.test.ts",
-				"PR #290 open, status open"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T21:29:38.544Z"
-		},
-		{
 			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -796,6 +763,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
+		},
+		{
+			"key": "pr:minion_hub#290",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#290 fix(pos): refuse sales on stock shortfall instead of dropping the stock entry; one account row per person; schedule step clears pending",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/290",
+			"sourceUpdatedAt": "2026-09-16T21:51:54Z",
+			"sourceFingerprint": "3952c7ea8472a3f2dc53f6c8e9fa324fb807721c656fa8a0d3649b0eb282e867",
+			"score": 75,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Open PR with cause-fix-test writeup already resolves three POS bugs (stock entry loss, duplicate account rows, void-ticket booking) with passing tests and documented residual TODOs.",
+			"evidence": [
+				"StockError previously aborted the whole stock entry on any short line, dropping stock tracking",
+				"listClientAccounts CTEs lacked a party/contact bridge causing duplicate rows",
+				"void guard checked 'voided' but voidTicket persists 'void', letting voided tickets be booked"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T21:58:30.369Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
@@ -12233,38 +12233,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Commit already merged and fixes nitter persistence/shutdown drain, leaving no forward action.",
-			"evidence": [
-				"commit fixes nitter persistence and drain poller shutdown",
-				"already merged into repo"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T21:29:38.544Z"
 		},
 		{
 			"key": "issue:minion-meta#389",
