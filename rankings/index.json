@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T17:58:35.220Z",
+	"generatedAt": "2026-09-16T18:29:06.670Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -769,6 +769,39 @@
 			"scoredAt": "2026-09-11T22:39:03.778Z"
 		},
 		{
+			"key": "pr:minion_hub#283",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#283 fix(pos): viewer cannot open write pages; settings save returns 400 not 500",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/283",
+			"sourceUpdatedAt": "2026-09-16T18:15:51Z",
+			"sourceFingerprint": "70ccca946ffb954bbd3ca4a33b3f9d5a74799aa1c539b9d49056e67916b612ab",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Closes a broken-access-control gap letting viewers open POS write pages and charge sales, plus root-causes a long-open 500 on settings save with a concrete fix.",
+			"evidence": [
+				"viewer could open /pos/sell and click Charge with no capability gate at all",
+				"POST /api/pos/tickets had no requireOrgCapability call, unlike its siblings",
+				"untargeted ON CONFLICT fixes the PostgresError 23505 causing the settings-save 500"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T18:29:06.570Z"
+		},
+		{
 			"key": "proposal:2026-08-28-factory-containment-base-reconciliation",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1038,39 +1071,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-15T14:28:58.709Z"
-		},
-		{
-			"key": "pr:minion_hub#283",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#283 fix(pos): viewer cannot open write pages; settings save returns 400 not 500",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/283",
-			"sourceUpdatedAt": "2026-09-16T17:56:57Z",
-			"sourceFingerprint": "e498020da156c6d184cf9cd6a63ed38ad544ad5777008c01ffacd23e8d5cd584",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes a real RBAC gap letting viewers open POS write pages and charge/create tickets with no capability gate, backed by new passing tests, though a 500-vs-400 repro remains unverified against a live DB.",
-			"evidence": [
-				"POST /api/pos/tickets had no requireOrgCapability call at all",
-				"viewer can open /pos/sell and enable Charge",
-				"126 tests pass"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T17:58:35.115Z"
 		},
 		{
 			"key": "proposal:2026-09-12-hub-booking-stock-postcommit-recovery",
@@ -6893,38 +6893,6 @@
 			"scoredAt": "2026-09-13T02:34:43.271Z"
 		},
 		{
-			"key": "pr:minion_hub#281",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#281 fix(qa): TTL teardown no longer kills itself; stress-test scenario docs",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/281",
-			"sourceUpdatedAt": "2026-09-16T17:02:37Z",
-			"sourceFingerprint": "db006c4fe308cdf590811f7f106818516e9f3300f2f7b2c1177c792b6cd6109d",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The PR fixes a concrete QA teardown bug that left the stack up 9 hours, with a unit test covering both paths and is already open for merge.",
-			"evidence": [
-				"qa:down disarmed the TTL first, stopping the systemd unit it was running inside; the stack stayed up 9 hours",
-				"Unit test covers both paths (disarmUnits)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T17:29:43.471Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8409,6 +8377,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T17:01:45.719Z"
+		},
+		{
+			"key": "pr:minion_hub#281",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#281 fix(qa): TTL teardown no longer kills itself; stress-test scenario docs",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/281",
+			"sourceUpdatedAt": "2026-09-16T18:18:15Z",
+			"sourceFingerprint": "e56b1a15264fc11f44c9d973fbd512765b844e76808f226e6334c9c57e7d5a36",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes a QA teardown ordering bug that left a stack running 9 hours, with a unit test covering both paths and docs added.",
+			"evidence": [
+				"TTL disarmed before stopping the unit it ran inside, stack stayed up 9 hours",
+				"unit test covers disarmUnits for both paths"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T18:29:06.570Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
@@ -11080,70 +11080,6 @@
 			"scoredAt": "2026-09-14T09:38:46.333Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged commit fixing nitter persistence/shutdown draining offers no open action item beyond monitoring deployment health.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"status unknown, updatedAt 2026-09-12"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T17:58:35.115Z"
-		},
-		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 82351 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-09-16T12:22:30Z",
-			"sourceFingerprint": "ebb4cec2be98c82b0e20c829bccfd0c732389cddf070071940bacb669e39388a",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "A bulk upstream-sync notice listing 82k+ commits is not a scoped, actionable goal as written and needs to be broken into a real sync/merge task with defined scope.",
-			"evidence": [
-				"title states '82351 new commit(s) available'",
-				"summary is a raw commit log dump, not a defined outcome"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T12:28:31.228Z"
-		},
-		{
 			"key": "issue:minion-meta#436",
 			"kind": "issue",
 			"stage": "proposal",
@@ -13181,6 +13117,38 @@
 			"scoredAt": "2026-09-12T20:36:08.826Z"
 		},
 		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 82459 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-09-16T18:17:47Z",
+			"sourceFingerprint": "f652ee898c061689c3ac2c735860270f11d1547ef2071e1751728c534c04dc49",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Automated upstream-sync notification listing tens of thousands of commits with no scoped task or verifiable outcome defined.",
+			"evidence": [
+				"82459 new commit(s) available",
+				"body is a raw commit list, not a defined scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T18:29:06.570Z"
+		},
+		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14236,6 +14204,38 @@
 			"scoredAt": "2026-09-15T10:28:53.675Z"
 		},
 		{
+			"key": "issue:minion-meta#452",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#452 [monitor:unstick] reconcile run 1a3422fa: provider exec failure (exit-126, turns=0)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/452",
+			"sourceUpdatedAt": "2026-09-16T18:17:54Z",
+			"sourceFingerprint": "d29edc93ab0bcdae9435c96b298c334462b7ff48aa4891ff9c9d17ed73b9ad0a",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Self-diagnosed transient infra exec fault where the actual reconcile work already succeeded, warranting only a retry and a check against a matching sibling failure.",
+			"evidence": [
+				"actual reconcile work succeeded; exit-126 turns=0 classified as infra fault, safe to retry",
+				"sibling failure e6e89e89 ~1h apart with identical signature"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T18:29:06.570Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-personal-agent-entrypoint-test",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14392,6 +14392,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T17:29:43.471Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "ae8ff8c9655fe1018777904713a672ed9670aea55ae070a28096bc4867929dcb",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The listed markers are unrelated quoted text fragments spanning many disconnected topics all located inside one generated index file, so treating them as one resolvable unit isn't an effective framing.",
+			"evidence": [
+				"markers span POS UI, DB migrations, holiday scheduling, and protocol design in one file",
+				"all ten markers point at the same generated rankings/index.json"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T18:29:06.570Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-277751425",
@@ -15660,37 +15692,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T02:30:09.344Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "2096e929fa821dbcbfdea39ce9b8721395625e472177c6f9817aaf8a909d6b34",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Markers are quoted text fragments embedded inside the rankings/index.json data snapshot itself, not real TODOs in source code, so there is no actionable defect.",
-			"evidence": [
-				"Marker text 'drawer still shows no LINKED POS TICKETS' is unrelated snippet text quoted inside rankings/index.json, a generated data file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T17:31:00.934Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
