@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T22:29:03.839Z",
+	"generatedAt": "2026-09-16T22:58:30.727Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7551,38 +7551,6 @@
 			"scoredAt": "2026-09-12T23:59:40.697Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-355769a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 355769a",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-355769a.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "66f71d445700c60f4067ffeaaf69579acadbd20324de9aa18469cffee3153ca7",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Merge-scan lists concrete file:line findings for silent empty-catch error handling and an unsanitized URL-parameter construction in minion_hub scheduling code, all small bounded fixes.",
-			"evidence": [
-				"BookingCreateForm.svelte:134 and :178 empty-catch swallows fetch/search errors",
-				"+page.server.ts:11 unvalidated-input: URL parameter not passed through URLSearchParams.set()"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T22:35:10.859Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-9e33ef1698dc",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12723,6 +12691,38 @@
 			"scoredAt": "2026-09-16T22:29:03.742Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-355769a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 355769a",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-355769a.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "66f71d445700c60f4067ffeaaf69579acadbd20324de9aa18469cffee3153ca7",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Four bounded, file:line-specific medium-severity fixes (three empty-catch swallows and one unescaped URL param) in minion_hub scheduling components are clear and actionable but not urgent or high-impact.",
+			"evidence": [
+				"BookingCreateForm.svelte:134/178 empty-catch swallows stock accrual and CRM search errors",
+				"+page.server.ts:11 unsanitized URL parameter construction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T22:58:30.641Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-bb286f8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12949,38 +12949,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T17:01:45.719Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine deployment-health snapshot citing an already-merged fix commit with no open failure or ask.",
-			"evidence": [
-				"commit message shows a completed fix (nitter persistence/shutdown)",
-				"status: unknown, tags: deployment only"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T22:29:03.742Z"
 		},
 		{
 			"key": "issue:minion-meta#390",
