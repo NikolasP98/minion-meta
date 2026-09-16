@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T03:59:01.846Z",
+	"generatedAt": "2026-09-16T04:28:50.794Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2080,6 +2080,38 @@
 			"scoredAt": "2026-09-12T20:05:54.883Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-80b7daf173aa",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-80b7daf173aa.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "b5a03283d6d90789a1186c2cc3e457a9fdaa976f83a311cb6c769ce6eeba1839",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Timezone mismatch between browser-local and server data window can cause missed or double-booked appointments and has a concrete three-step fix.",
+			"evidence": [
+				"marker: browser's timezone vs data window mismatch",
+				"diagnosis gives explicit UTC-storage and render-time-conversion fix steps"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T04:28:50.710Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-ee6ab5707843",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2676,7 +2708,7 @@
 			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-77b26984c8ea.md",
 			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "8c1db6d7e3e2f2ace5550c7b24fc8948337e7cedb7bb49bf3b85ac5677176b17",
+			"sourceFingerprint": "a60fb30d2077426782ace348ec78a357e5744e80ddd708205816c875f1808605",
 			"score": 58,
 			"band": "medium",
 			"axes": {
@@ -2685,20 +2717,23 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 8,
+				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Rescheduling drops the package_id link, breaking billing/quota tracking tied to package-based bookings.",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-7ec5d7436363",
+				"proposal:postmerge-minion-hub-86b35d6fff89"
+			],
+			"rationale": "Reschedule dropping package_id breaks billing/quota tracking and has a clear fix direction with a concrete test criterion.",
 			"evidence": [
-				"TODO(handoff): RESCHEDULE currently loses the package link. The only",
-				"diagnosis: breaks business model, makes packages untrackable after reschedule"
+				"marker: reschedule loses the package link",
+				"diagnosis specifies exact fix: carry forward package_id and assert equality in a test"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T02:59:31.885Z"
+			"scoredAt": "2026-09-16T04:28:50.710Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9d6b626ef615",
@@ -2905,38 +2940,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:38:46.333Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-80b7daf173aa",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-80b7daf173aa.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "5ef0a1096e17fd4e8a48556c96ccc4d33d1de3cac4c1ac2c657b22a08b009555",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A browser-vs-server timezone mismatch in the booking calendar risks double-bookings and missed appointments, but the fix spans client display logic and server API timezone data so it needs scoping before execution.",
-			"evidence": [
-				"Marker: 'local' is the BROWSER's timezone while the data window differs",
-				"Diagnosis: causes wrong times, missed appointments, double-booking, scales with usage"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T03:00:46.609Z"
 		},
 		{
 			"key": "pr:minion-base#43",
@@ -5832,7 +5835,7 @@
 			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/sell/+page.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-86b35d6fff89.md",
 			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "9adc51c8f2820adf251ce429dd6983c88ae7cc2926b49eaf2edd28e041286477",
+			"sourceFingerprint": "463d84cf3442fbfd0777c16ed7de595f6e130e23dd34b1786efa78d11b321290",
 			"score": 50,
 			"band": "medium",
 			"axes": {
@@ -5841,20 +5844,23 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
+				"specification": 6,
 				"implementation": 6
 			},
 			"confidence": 6,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Posting a hardcoded null finProductId orphans revenue records and breaks revenue-by-product reporting, and the fix is narrowly scoped to sourcing the id from cart/sale state.",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-77b26984c8ea",
+				"proposal:postmerge-minion-hub-7ec5d7436363"
+			],
+			"rationale": "Posting a null finProductId orphans revenue records and breaks revenue-by-product analytics, with two plausible fix options identified though the preferred one needs more context confirmation.",
 			"evidence": [
-				"Marker: line posts 'finProductId: null'",
-				"Diagnosis: orphans revenue-by-product analytics"
+				"marker: line posts finProductId: null",
+				"diagnosis: breaks revenue-by-product reporting/analytics attribution"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T03:00:46.609Z"
+			"scoredAt": "2026-09-16T04:28:50.710Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c1b3044762bb",
@@ -8297,6 +8303,41 @@
 			"scoredAt": "2026-09-11T07:05:12.919Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-7ec5d7436363",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos-packages.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7ec5d7436363.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "cf7ab4653cc7396bcb7f7eb2a43349a1184cee102cc0136825edb5b0aaf20d3a",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-77b26984c8ea",
+				"proposal:postmerge-minion-hub-86b35d6fff89"
+			],
+			"rationale": "The auto-diagnosis section is a leaked, incomplete tool-call transcript rather than an actual analysis, so severity and fix direction are not established.",
+			"evidence": [
+				"diagnosis body shows unfinished Glob/read tool-call narration instead of a conclusion",
+				"marker text truncated: 'cancel a grant' action will hit this"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T04:28:50.710Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-94a4fd2563f2",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10596,38 +10637,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a deployment-health record for a fix already merged and shipped, not an open actionable goal.",
-			"evidence": [
-				"summary is a merged commit message (nitter persistence/shutdown fix)",
-				"status unknown with no described open issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T03:59:01.751Z"
 		},
 		{
 			"key": "issue:minion-meta#389",
@@ -13675,38 +13684,6 @@
 			"evidence": [
 				"diagnosis text reads as an assistant transcript asking for the full TODO rather than analysis",
 				"marker truncated at \"whose older rows.\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T02:59:31.885Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-7ec5d7436363",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos-packages.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7ec5d7436363.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "1639893d48f90ff14a9b4204d9f86cc12e74b9a2ad35b9034e48246e84d3a1a8",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The auto-diagnosis section is a broken transcript containing a simulated tool invocation rather than real analysis, leaving the actual scope unclear.",
-			"evidence": [
-				"diagnosis text contains a fake <function_calls><invoke name=\"Glob\"> block instead of findings",
-				"marker truncated at \"will hit this\""
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
