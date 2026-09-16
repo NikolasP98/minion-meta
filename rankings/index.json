@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T13:58:30.394Z",
+	"generatedAt": "2026-09-16T14:29:06.169Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1552,21 +1552,20 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 2
+				"specification": 8,
+				"implementation": 5
 			},
 			"confidence": 6,
-			"recommendation": "reevaluate",
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Large stalled PR with unresolved High findings needs a reconciliation pass before any implementation can proceed, but the scope is broad enough to warrant re-scoping rather than execution as-is.",
+			"rationale": "Well-structured salvage plan with a clear, actionable first output (reconciliation) and completion criteria, though most implementation is gated behind unresolved High findings.",
 			"evidence": [
-				"96 changed files, 7,759 additions",
-				"3 unaddressed High review findings",
-				"No product implementation is authorized until reconciliation is reviewed"
+				"96 changed files, 7,759 additions, three unaddressed High review findings",
+				"Required first output is a current-master reconciliation before any implementation is authorized"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T14:04:40.681Z"
+			"scoredAt": "2026-09-16T14:29:06.082Z"
 		},
 		{
 			"key": "pr:minion (gateway)#255",
@@ -8973,6 +8972,38 @@
 			"scoredAt": "2026-09-14T10:29:00.906Z"
 		},
 		{
+			"key": "issue:minion-meta#448",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#448 [monitor:unstick] run c5e2d026 (minion-meta reconcile): agent exit-126/turns=0 despite completed git work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/448",
+			"sourceUpdatedAt": "2026-09-16T14:17:55Z",
+			"sourceFingerprint": "c4f068e0660af22c48a58ea0e3a2d2bf587c36368725f182f61ad44c88c151e8",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single self-healed automation run leaves one small residual action item (check runner CLI permissions) with no evidence yet of recurring impact.",
+			"evidence": [
+				"merge-scan and push self-healed via rebase; state already checkpointed",
+				"isolated failure is exit-126/turns=0, described as a runner launch fault, not a task-logic or spec issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T14:29:06.082Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-msteams-large-upload",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12677,38 +12708,6 @@
 			"scoredAt": "2026-09-16T03:30:25.155Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged commit fixing shutdown/persistence serialization in the nitter extension, not an open actionable goal.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown (#295)",
-				"status: unknown, already committed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T12:58:31.573Z"
-		},
-		{
 			"key": "issue:minion-meta#417",
 			"kind": "issue",
 			"stage": "proposal",
@@ -13787,39 +13786,6 @@
 			"scoredAt": "2026-09-14T09:35:55.019Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "e02fccd44044b825756b054ba222b26fefd3c5a5fdad9aa166a1e12bbca79600",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a malformed handoff marker whose \"markers\" are actually JSON array fragments from rankings/index.json rather than real TODO(handoff) comments, so it has no verifiable open end to resolve.",
-			"evidence": [
-				"marker lines are quoted JSON string fragments like '... \\\",' ending mid-sentence",
-				"targets rankings/index.json itself (a generated data file), not source code with a TODO(handoff) comment",
-				"9 disparate unrelated line references bundled into one proposal with no coherent scope"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T10:58:35.697Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14073,6 +14039,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T02:30:09.344Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "6713cab4673de2661ca7684a1c9572f35b8ce82f1adcdc504fba5ec328bcbc92",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed markers are quoted rationale/evidence text from unrelated prior ranking entries stored inside rankings/index.json, not actual in-code TODO(handoff) comments to resolve.",
+			"evidence": [
+				"Markers cite rankings/index.json lines quoting unrelated product text (POS tickets, HR schema, phone failure)",
+				"No source-file TODO(handoff) comment is shown, only quoted JSON data from this ranking system's own output"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T14:29:06.082Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
