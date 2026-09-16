@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-198db99358ad
 title: "Post-merge finding — todo-handoff in src/lib/components/pos/SellCart.svelte (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-16
 updated: 2026-09-16
 repos: [minion-hub]
