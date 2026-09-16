@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T19:05:16.999Z",
+	"generatedAt": "2026-09-16T19:08:57.612Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -634,6 +634,38 @@
 			"scoredAt": "2026-09-14T09:40:01.696Z"
 		},
 		{
+			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub backup scheduler is never started — backups and retention pruning never run",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-backup-scheduler-never-started.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "d65caaafbb438afdfee41a8826af665fcc74c526e37081dfdca07cd2a72c6df3",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The backup/retention scheduler is fully implemented but has zero call sites, so backups and retention pruning silently never run.",
+			"evidence": [
+				"startBackupScheduler() has zero call sites anywhere in the repo",
+				"no backup is ever taken and retention pruning never runs, silently"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T19:08:57.525Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-7440051c7752",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -731,6 +763,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
+		},
+		{
+			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub stress-test defects — scheduling, stock, POS (3-agent QA stack pass)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-stress-test-defects-scheduling-stock-pos.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "8338aeb27dc121d062b6d0cf45528e6474a700c6457919f101062af86723a1fe",
+			"score": 75,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-7e2a23e32c73"
+			],
+			"rationale": "A concurrent 3-agent QA pass found 12 scheduling defects including silent reschedule failures and a role-check bug blocking org owners, each backed by evidence and code pointers.",
+			"evidence": [
+				"D2: drag-reschedule onto a conflict returns 409 with no toast/inline error, UI just snaps back",
+				"D3: requireAdmin checks platform role not org role, so tenant owners get 403 creating scheduling links"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T19:08:57.525Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-a4e7e5bce6b1",
@@ -8281,38 +8347,6 @@
 			"scoredAt": "2026-09-16T17:01:45.719Z"
 		},
 		{
-			"key": "pr:minion_hub#285",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#285 fix(qa-seed): payment methods + surcharge, Madrid schedule, room/equipment event types, redemption on the fully-linked booking, duplicate registration guard",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/285",
-			"sourceUpdatedAt": "2026-09-16T19:02:13Z",
-			"sourceFingerprint": "df93d1aa8ae9ddfdfeb591b06f183f6b9761456fa3314c8f21deec8aff2d63d4",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Verified fix for QA seed-fixture gaps enabling scheduling/stock/POS stress testing, ready to merge.",
-			"evidence": [
-				"171/171 matrix ids verified on running stack",
-				"qa:seed:verify 177/177, bun run check 0/0"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T19:05:16.909Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8800,6 +8834,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T02:30:09.344Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-7e2a23e32c73",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/pos/settings/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7e2a23e32c73.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "769216e06bbbe81231577b44003fcd13908f0a1687af458ebe97a137b58d0996",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos"
+			],
+			"rationale": "An incomplete handoff TODO citing 'QA-stack app logs' for a POS settings bug likely stems from the same QA stress-test investigation and should be resolved together with it.",
+			"evidence": [
+				"TODO(handoff): the confirmed root cause (QA-stack app logs) was [incomplete sentence]",
+				"found in same PR #283 tied to the QA-stack testing window"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T19:08:57.525Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -14008,6 +14076,38 @@
 			"scoredAt": "2026-09-16T03:30:25.155Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This entry is only a merged commit message about a nitter fix with no indication of a current deployment problem to act on.",
+			"evidence": [
+				"summary is a git commit message, not a deployment incident",
+				"status: unknown, no failure signal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T19:08:57.525Z"
+		},
+		{
 			"key": "issue:minion-meta#417",
 			"kind": "issue",
 			"stage": "proposal",
@@ -15405,6 +15505,38 @@
 			"scoredAt": "2026-09-16T17:01:45.719Z"
 		},
 		{
+			"key": "run:minion_hub#35138553245",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35138553245",
+			"sourceUpdatedAt": "2026-09-16T19:06:39Z",
+			"sourceFingerprint": "6738ac85b5ad7ff31a248086e530e833cb676c0812b99b6d7ab0ec2b4e269491",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine pending CI run on master with no failure or defect content to act on.",
+			"evidence": [
+				"status: pending",
+				"summary: push on master, no failure indicated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T19:08:57.525Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-94ad6c223964",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15626,38 +15758,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T02:30:09.344Z"
-		},
-		{
-			"key": "run:minion_hub#35138240722",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35138240722",
-			"sourceUpdatedAt": "2026-09-16T19:03:36Z",
-			"sourceFingerprint": "571392f29920af0f01e5e237436f78a9b5d8ce13dba6b2fd3ce1a8adc991a3a3",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A pending CI run status entry is not an actionable goal with defined scope or outcome.",
-			"evidence": [
-				"status: pending",
-				"kind: run, stage: testing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T19:05:16.909Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
