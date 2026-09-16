@@ -27,27 +27,21 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-16)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:3823` — the session is drawn when the cashier clicks, not when the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3823
-- `NikolasP98/minion-meta@dev rankings/index.json:3855` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3855
-- `NikolasP98/minion-meta@dev rankings/index.json:5451` — add-only; rename / deactivate / max-days edits need a modal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5451
-- `NikolasP98/minion-meta@dev rankings/index.json:6152` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6152
-- `NikolasP98/minion-meta@dev rankings/index.json:6770` — remove once the phone failure is root-caused'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6770
-- `NikolasP98/minion-meta@dev rankings/index.json:7829` — the affordance is one-way — once opened, a line's discount",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7829
-- `NikolasP98/minion-meta@dev rankings/index.json:7863` — spec §4.1 also lists reschedule, \"charge in POS\" and \"book the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7863
-- `NikolasP98/minion-meta@dev rankings/index.json:7895` — The service now binds this version and verifies normalized",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7895
-- `NikolasP98/minion-meta@dev rankings/index.json:8297` — the drawer still shows no LINKED POS TICKETS — spec §4.1",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8297
-- `NikolasP98/minion-meta@dev rankings/index.json:9741` — prompt-driven protocol instead of native tool_use — replace'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9741
-- `NikolasP98/minion-meta@dev rankings/index.json:10664` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10664
-- `NikolasP98/minion-meta@dev rankings/index.json:11150` — 'optional' is STORED and surfaced in /pos/settings but is",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11150
+- `NikolasP98/minion-meta@dev rankings/index.json:1799` — session is drawn when the cashier clicks, not at a validation checkpoint",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L1799
+- `NikolasP98/minion-meta@dev rankings/index.json:3885` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3885
+- `NikolasP98/minion-meta@dev rankings/index.json:5483` — add-only; rename / deactivate / max-days edits need a modal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5483
+- `NikolasP98/minion-meta@dev rankings/index.json:6186` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6186
+- `NikolasP98/minion-meta@dev rankings/index.json:6804` — remove once the phone failure is root-caused'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6804
+- `NikolasP98/minion-meta@dev rankings/index.json:7897` — drawer still shows no LINKED POS TICKETS — spec §4.1",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7897
+- `NikolasP98/minion-meta@dev rankings/index.json:7929` — The service now binds this version and verifies normalized",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7929
+- `NikolasP98/minion-meta@dev rankings/index.json:9808` — prompt-driven protocol instead of native tool_use — replace",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9808
+- `NikolasP98/minion-meta@dev rankings/index.json:10765` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10765

@@ -16,7 +16,7 @@
   "NikolasP98/minion_hub:master": {
     "cursor": "10e9567ad61bc9b3dfcfa5b62bcff1a188dfa05c",
     "head": "2ffbf0b615a0cde5d7405ba9036764b9fb675d95",
-    "done": 27,
+    "done": 35,
     "kept": [
       {
         "file": ".github/workflows/ci.yml",
@@ -129,6 +129,97 @@
         "severity": "medium",
         "category": "unchecked-access",
         "line": 24
+      },
+      {
+        "file": "src/routes/api/pos/accounts/[clientKey]/+server.ts",
+        "desc": "N+1 performance issue (getPlan called in loop after listPlans) documented in comment but lacks TODO(handoff) marker and handoff proposal",
+        "severity": "medium",
+        "category": "missing-handoff",
+        "line": 41
+      },
+      {
+        "file": "src/routes/api/pos/plans/+server.ts",
+        "desc": "PLAN_STATUSES.find() result may be undefined when status param doesn't match any valid status; passed unchecked to listPlans.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 49
+      },
+      {
+        "file": "src/routes/api/servers/[id]/server.test.ts",
+        "desc": "Accessing .mock.calls on console methods without confirming they are mocked via vi.spyOn() or vi.mock() — vi.mocked() is a type assertion, not a mock factory, so this will throw if console.warn/error/log are not already mocked.",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 408
+      },
+      {
+        "file": "src/server/db/pg-scheduling-schema.ts",
+        "desc": "schedBookingStatusLog table schema defined with comment 'nothing populates this table yet' but lacks TODO(handoff) marker required by SDLC contract (AGENTS.md)",
+        "severity": "medium",
+        "category": "missing-handoff",
+        "line": 283
+      },
+      {
+        "file": "src/server/db/security-hardening-migration.test.ts",
+        "desc": "policy() helper returns .rows[0] without checking if query returned results; crashes on empty result",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 52
+      },
+      {
+        "file": "src/server/db/security-hardening-migration.test.ts",
+        "desc": ".rows[0].roles accessed without verifying query returned results",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 67
+      },
+      {
+        "file": "src/server/db/security-hardening-migration.test.ts",
+        "desc": ".rows[0].reloptions accessed without verifying query returned results",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 72
+      },
+      {
+        "file": "src/server/db/security-hardening-migration.test.ts",
+        "desc": ".rows[0] accessed in expect() without verifying query returned results",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 79
+      },
+      {
+        "file": "src/server/db/security-hardening-migration.test.ts",
+        "desc": "for loop over .rows without checking if array exists or is undefined",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 96
+      },
+      {
+        "file": "src/server/db/security-hardening-migration.test.ts",
+        "desc": ".rows[0].proconfig accessed without verifying query returned results",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 109
+      },
+      {
+        "file": "src/server/db/security-hardening-migration.test.ts",
+        "desc": ".rows[0].src accessed without verifying query returned results",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 115
+      },
+      {
+        "file": "src/server/db/security-hardening-migration.test.ts",
+        "desc": ".rows[0].n accessed without verifying query returned results",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 121
+      },
+      {
+        "file": "src/server/services/attachment-lifecycle.ts",
+        "desc": "Magic timeout 900_000ms (15-min upload expiry) hardcoded at lines 152, 161, 228; should be extracted to a named constant.",
+        "severity": "medium",
+        "category": "hardcoded-config",
+        "line": 152
       }
     ]
   }
