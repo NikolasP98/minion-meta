@@ -45,3 +45,26 @@ Two-step checkout with change calculation; credit tender including the over-limi
 3. D8 (instalment prefill) — money path, one-line fix plus a characterization test.
 4. D5, D7 (UI entry points for grants and plans in the sell/booking flows) — one slice.
 5. D6, D9 — after a trackpad confirmation of D9.
+
+## Status 2026-09-16 (later)
+
+- **D1 and D2 are fixed** by hub PR #283 (viewer can no longer open
+  `/pos/sell`; `PUT /api/pos/settings` no longer 500s on
+  `requirements.identityDocument = required`). D2's root cause: the
+  QA-stack shadow-series seeding (`seedShadowSeries`) used an
+  `ON CONFLICT` that ignored the partial index
+  `pos_series_one_active_per_env`, so the settings write raced a seed
+  path that could leave more than one "active" series per environment
+  and the update failed downstream of that constraint.
+- **D4 is confirmed and wider than originally filed.** A follow-up
+  three-agent stress pass (`proposals/2026-09-16-hub-stress-test-defects-scheduling-stock-pos.md`,
+  POS §2.3) found the same split-account behaviour with **no quick-add
+  involved at all**: selecting an existing CRM contact from the POS
+  client picker already writes `partyId` and leaves `crmContactId`
+  null. This is the general POS client-selection path, not an edge
+  case in the DNI quick-add flow.
+- **D5, D7, D8 are unchanged.** D8 (instalment prefill = whole
+  remaining balance, not the next instalment) is independently
+  reconfirmed by the same follow-up pass. D5 (no grant-draw on the
+  new-appointment page) and D7 (no instalment option at the payment
+  step) were re-checked and still reproduce as filed.
