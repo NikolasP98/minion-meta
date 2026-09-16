@@ -27,27 +27,39 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-16)
 
-- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:28` — fix the thing, see',
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L28
-- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:32` — no link here at all\nexport const b = 2;');
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L32
-- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:33` — should never be scanned\n');
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L33
-- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:34` — prose mention only, not a source site\n');
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L34
-- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:44` — pick a retention policy before shipping\ncreate table x (id int);\n');
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L44
-- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:45` — rework this layout on mobile -->\n<div>ok</div>\n');
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L45
-- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:54` — wire the retry budget\\n';",
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L54
-- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:64` — nested repo marker\n');
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L64
-- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:97` — x\n// proposals/2026-01-01-p.md\n');
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L97
-- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:108` — linked\n// proposals/2026-01-01-p.md\n');
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L108
-- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:109` — unlinked open end\n');
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L109
-- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:125` — RESOLVED claim with no evidence\n// proposals/2026-01-01-p.md\n');
-  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L125
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:29` — DOC-03 verify the native boundary.\n// See proposals/example.md.';
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L29
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:71` — quoted";',
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L71
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:72` — quoted';",
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L72
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:74` — template',
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L74
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:76` — \\/\\/regex/;',
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L76
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:77` — JSX text</div>;',
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L77
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:78` — real expression comment */ 1 } tail;',
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L78
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:79` — real block */',
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L79
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:98` — unterminated', 'scripts/a.ts').issues.length,
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L98
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:101` — review', 'scripts/a.py').issues[0].code,
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L101
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:105` — css */</style>', 'packages/ui/src/A.svelte').issues[0]
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L105
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:126` — DOC-03 native boundary remains open.';
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L126
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:139` — DOC-99 See proposals/example.md.');
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L139
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:213` — DO_NOT_READ');
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L213
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:281` — proposals/example.md;';
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L281
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:293` — one\r\n// proposals/one.md';
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L293
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:294` — two\r\n// proposals/two.md';
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L294
+- `NikolasP98/minion-meta@dev scripts/qc/handoff-ledger.test.mjs:301` — one TODO(handoff): two */', 'scripts/a.ts').issues[0].code,
+  https://github.com/NikolasP98/minion-meta/blob/dev/scripts/qc/handoff-ledger.test.mjs#L301

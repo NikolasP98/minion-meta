@@ -15,288 +15,155 @@
   },
   "NikolasP98/minion_hub:master": {
     "cursor": "10e9567ad61bc9b3dfcfa5b62bcff1a188dfa05c",
-    "head": "2ffbf0b615a0cde5d7405ba9036764b9fb675d95",
-    "done": 42,
+    "head": "a480592365645c74976afd5b22d78a5e7890da85",
+    "done": 27,
     "kept": [
       {
-        "file": ".github/workflows/ci.yml",
-        "desc": "Database credential hardcoded in workflow: use GitHub secrets instead of embedding postgres://minion_qc:disposable-ci-only@... directly in the step",
+        "file": "package.json",
+        "desc": "qa:seed:verify script embeds default database credentials and port in the environment variable fallback; move to configuration.",
         "severity": "medium",
         "category": "hardcoded-config",
-        "line": 300
+        "line": 168
       },
       {
-        "file": ".github/workflows/ci.yml",
-        "desc": "Database credential hardcoded in workflow: use GitHub secrets instead of embedding postgres://minion_qc:disposable-ci-only@... directly in the step",
+        "file": "scripts/qa/check-baseline.ts",
+        "desc": "JSON.parse() result cast without validation; malformed baseline.json would crash at runtime without a clear error message (line 84 accesses .migrationFilesAtSnapshot without defensive checks).",
         "severity": "medium",
-        "category": "hardcoded-config",
-        "line": 313
+        "category": "unvalidated-input",
+        "line": 122
       },
       {
-        "file": "src/lib/attachments/upload.test.ts",
-        "desc": "find() result on fetchSpy.mock.calls used with non-null assertion without runtime null check; test will fail with cryptic error if intent endpoint is not called",
+        "file": "scripts/qa/check-migration-seed-pairing.ts",
+        "desc": "JSON.parse() result from GitHub event file cast without validation; subsequent code uses optional chaining but a malformed file could crash during JSON.parse.",
         "severity": "medium",
-        "category": "unchecked-access",
-        "line": 130
+        "category": "unvalidated-input",
+        "line": 82
       },
       {
-        "file": "src/lib/components/attachments/AttachmentList.svelte",
-        "desc": "listTrashedAttachments errors silently ignored with .catch(() => []), no logging or user feedback if trash is unavailable",
-        "severity": "medium",
-        "category": "empty-catch",
-        "line": 62
-      },
-      {
-        "file": "src/lib/components/attachments/AttachmentList.svelte",
-        "desc": "Error catch resets rows but not new trashed state; inconsistency if listAttachments fails on retry after prior success",
-        "severity": "medium",
-        "category": "missing-handoff",
-        "line": 74
-      },
-      {
-        "file": "src/lib/components/pos/PackageEditor.svelte",
-        "desc": "j.components accessed without validating response structure; calling .map() crashes if not an array",
+        "file": "scripts/qa/db-bootstrap.ts",
+        "desc": "migrate.stdout could be null per TypeScript types but is accessed with .matchAll() without a null check; will crash at runtime if stdio is misconfigured.",
         "severity": "high",
         "category": "unchecked-access",
-        "line": 91
+        "line": 234
       },
       {
-        "file": "src/lib/components/pos/PackageEditor.svelte",
-        "desc": "catch block swallows errors silently with no user feedback; network or server errors fail quietly",
-        "severity": "medium",
-        "category": "empty-catch",
-        "line": 93
-      },
-      {
-        "file": "src/lib/components/pos/PaymentStep.svelte",
-        "desc": "Hardcoded magic method id 'credit' lacks TODO(handoff) marker at site; comment references external TODO instead of marking locally.",
-        "severity": "medium",
-        "category": "missing-handoff",
-        "line": 51
-      },
-      {
-        "file": "src/lib/components/pos/PlanOpenForm.svelte",
-        "desc": "JSON parsing error is silently swallowed by .catch(() => ({})), causing 200 responses with invalid JSON to be treated as successful submissions.",
-        "severity": "medium",
-        "category": "empty-catch",
-        "line": 73
-      },
-      {
-        "file": "src/lib/components/scheduling/AppointmentForm.svelte",
-        "desc": "Catch block in loadConsumption swallows all errors silently; obscures network, JSON parsing, and API failures with no logging.",
-        "severity": "medium",
-        "category": "empty-catch",
-        "line": 128
-      },
-      {
-        "file": "src/lib/components/scheduling/AppointmentForm.svelte",
-        "desc": "Catch block in book swallows actual error details; user sees generic message but root cause (network, parse, server) is lost to debugging.",
-        "severity": "medium",
-        "category": "empty-catch",
-        "line": 211
-      },
-      {
-        "file": "src/lib/components/scheduling/BookingDetailDrawer.svelte",
-        "desc": "j.stockWarning.message accessed without checking if message property exists; the if guard only validates stockWarning is truthy, not that message exists",
+        "file": "scripts/qa/extend.ts",
+        "desc": "argv[ttlArgIdx + 1] is accessed without bounds checking; if --ttl is the final argument with no value, undefined is passed to parseTtl unchecked",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 252
+        "line": 11
       },
       {
-        "file": "src/routes/(app)/agents/autonomous/+page.svelte",
-        "desc": "wiringLabel[a.wiring]() may throw if a.wiring is not a key in the map",
+        "file": "scripts/qa/seed/catalog.ts",
+        "desc": "products.find() result accessed with non-null assertion (!) without runtime validation; crashes if matrixId not in array",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 164
+      },
+      {
+        "file": "scripts/qa/seed/seed.contract.test.ts",
+        "desc": "Destructuring const [row] = await sql<...> then accessing row.live on line 110 without checking if the array is empty.",
         "severity": "high",
         "category": "unchecked-access",
-        "line": 198
+        "line": 105
       },
       {
-        "file": "src/routes/(app)/pos/appointments/+page.server.ts",
-        "desc": "Timezone 'America/Lima' hardcoded as org timezone fallback; should be in env/config",
-        "severity": "medium",
-        "category": "hardcoded-config",
-        "line": 26
-      },
-      {
-        "file": "src/routes/(app)/pos/sell/+page.svelte",
-        "desc": "catch block silently swallows fetch error without logging; network failures should be reported for debugging",
-        "severity": "medium",
-        "category": "empty-catch",
-        "line": 289
-      },
-      {
-        "file": "src/routes/api/attachments/+server.ts",
-        "desc": "access from getAttachmentAccess() is used without null/undefined check before passing to list functions",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 24
-      },
-      {
-        "file": "src/routes/api/pos/accounts/[clientKey]/+server.ts",
-        "desc": "N+1 performance issue (getPlan called in loop after listPlans) documented in comment but lacks TODO(handoff) marker and handoff proposal",
-        "severity": "medium",
-        "category": "missing-handoff",
-        "line": 41
-      },
-      {
-        "file": "src/routes/api/pos/plans/+server.ts",
-        "desc": "PLAN_STATUSES.find() result may be undefined when status param doesn't match any valid status; passed unchecked to listPlans.",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 49
-      },
-      {
-        "file": "src/routes/api/servers/[id]/server.test.ts",
-        "desc": "Accessing .mock.calls on console methods without confirming they are mocked via vi.spyOn() or vi.mock() — vi.mocked() is a type assertion, not a mock factory, so this will throw if console.warn/error/log are not already mocked.",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 408
-      },
-      {
-        "file": "src/server/db/pg-scheduling-schema.ts",
-        "desc": "schedBookingStatusLog table schema defined with comment 'nothing populates this table yet' but lacks TODO(handoff) marker required by SDLC contract (AGENTS.md)",
-        "severity": "medium",
-        "category": "missing-handoff",
-        "line": 283
-      },
-      {
-        "file": "src/server/db/security-hardening-migration.test.ts",
-        "desc": "policy() helper returns .rows[0] without checking if query returned results; crashes on empty result",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 52
-      },
-      {
-        "file": "src/server/db/security-hardening-migration.test.ts",
-        "desc": ".rows[0].roles accessed without verifying query returned results",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 67
-      },
-      {
-        "file": "src/server/db/security-hardening-migration.test.ts",
-        "desc": ".rows[0].reloptions accessed without verifying query returned results",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 72
-      },
-      {
-        "file": "src/server/db/security-hardening-migration.test.ts",
-        "desc": ".rows[0] accessed in expect() without verifying query returned results",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 79
-      },
-      {
-        "file": "src/server/db/security-hardening-migration.test.ts",
-        "desc": "for loop over .rows without checking if array exists or is undefined",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 96
-      },
-      {
-        "file": "src/server/db/security-hardening-migration.test.ts",
-        "desc": ".rows[0].proconfig accessed without verifying query returned results",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 109
-      },
-      {
-        "file": "src/server/db/security-hardening-migration.test.ts",
-        "desc": ".rows[0].src accessed without verifying query returned results",
+        "file": "scripts/qa/seed/seed.contract.test.ts",
+        "desc": "Destructuring const [row] = await sql<...> then accessing row.live on line 120 without checking if the array is empty.",
         "severity": "high",
         "category": "unchecked-access",
         "line": 115
       },
       {
-        "file": "src/server/db/security-hardening-migration.test.ts",
-        "desc": ".rows[0].n accessed without verifying query returned results",
+        "file": "scripts/qa/seed/seed.contract.test.ts",
+        "desc": "Destructuring const [membership] = await sql<...> then accessing membership.n on line 131 without checking if the array is empty.",
         "severity": "high",
         "category": "unchecked-access",
-        "line": 121
+        "line": 125
       },
       {
-        "file": "src/server/services/attachment-lifecycle.ts",
-        "desc": "Magic timeout 900_000ms (15-min upload expiry) hardcoded at lines 152, 161, 228; should be extracted to a named constant.",
-        "severity": "medium",
-        "category": "hardcoded-config",
-        "line": 152
+        "file": "scripts/qa/seed/seed.contract.test.ts",
+        "desc": "Destructuring const [roles] = await sql<...> then accessing roles.n on line 132 without checking if the array is empty.",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 128
       },
       {
-        "file": "src/server/services/attachments.lifecycle.sql.integration.test.ts",
-        "desc": "Destructuring [{ pid }] without checking if query returned rows; undefined pid cast to number.",
+        "file": "scripts/qa/seed/seed.contract.test.ts",
+        "desc": "Destructuring const [row] = await sql<...> then accessing row.size_bytes on line 142 without checking if the array is empty.",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 139
+      },
+      {
+        "file": "scripts/qa/snapshot-prod-schema.ts",
+        "desc": "result.stdout used with .split() without null check",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 168
+      },
+      {
+        "file": "scripts/qa/status.ts",
+        "desc": "dbStatus.stdout used with .trim() without null check",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 33
+      },
+      {
+        "file": "scripts/qa/up.ts",
+        "desc": "argv[ttlArgIdx + 1] accessed without bounds check; if --ttl is the last argument, undefined is silently treated as default TTL instead of erroring",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 31
+      },
+      {
+        "file": "src/lib/attachments/upload.test.ts",
+        "desc": ".find()! result used without null check before accessing [1]",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 109
+        "line": 128
       },
       {
-        "file": "src/server/services/attachments.lifecycle.sql.integration.test.ts",
-        "desc": "Destructuring [r] without checking if query returned rows; undefined return breaks test assertions.",
+        "file": "src/lib/attachments/upload.test.ts",
+        "desc": ".find()! result used without null check before accessing [1]",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 114
+        "line": 131
       },
       {
-        "file": "src/server/services/attachments.lifecycle.sql.integration.test.ts",
-        "desc": "Destructuring [state] without checking; accessing state.access_modules on undefined would throw.",
+        "file": "src/lib/attachments/upload.test.ts",
+        "desc": ".find()! result used without null check before accessing [1]",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 235
+        "line": 134
       },
       {
-        "file": "src/server/services/attachments.lifecycle.sql.integration.test.ts",
-        "desc": "Destructuring [before] without checking if query returned rows; undefined used in assertion.",
+        "file": "src/lib/components/finance/FinanceNav.svelte",
+        "desc": "i.matcher is called without checking if it exists; will throw if items from getAreaItems lack matcher property",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 18
+      },
+      {
+        "file": "src/lib/components/pos/ClientAccountDrawer.svelte",
+        "desc": "partyId and crmContactId props passed to PlanOpenForm without null-coalescing undefined values; elsewhere (line 221–222) these same fields are explicitly coalesced with ?? null, suggesting the child component expects null, not undefined.",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 269
+        "line": 258
       },
       {
-        "file": "src/server/services/attachments.lifecycle.sql.integration.test.ts",
-        "desc": "Destructuring [after] without checking if query returned rows; undefined used in assertion.",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 282
-      },
-      {
-        "file": "src/server/services/attachments.service.test.ts",
-        "desc": "Hardcoded value 900 (signed URL expiry seconds) should be defined as a named constant",
-        "severity": "medium",
-        "category": "hardcoded-config",
-        "line": 130
-      },
-      {
-        "file": "src/server/services/attachments.service.ts",
-        "desc": "Non-'not_found' errors in batch deletion loop are silently swallowed after counting, losing error context",
+        "file": "src/lib/components/pos/CustomerPicker.svelte",
+        "desc": "Exception during customer creation is caught but silently swallowed without user feedback; consistent error handling like savePhone shows better pattern",
         "severity": "medium",
         "category": "empty-catch",
-        "line": 600
+        "line": 119
       },
       {
-        "file": "src/server/services/pos-accounts.logic.ts",
-        "desc": "The today parameter is used without format validation; invalid dates like \"2026-13-45\" would silently produce incorrect results instead of erroring, despite documented assumption that it comes from grantToday().",
-        "severity": "medium",
-        "category": "unvalidated-input",
-        "line": 226
-      },
-      {
-        "file": "src/server/services/pos-accounts.service.ts",
-        "desc": "Destructuring const [row] = await tx.insert(...).returning() without checking if array is empty — if empty, row is undefined but return type expects PosClientLedgerRow",
+        "file": "src/lib/components/pos/PackageEditor.svelte",
+        "desc": "The components property from API response is not validated before calling .map() on it—if the server returns a missing field, this will throw.",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 430
-      },
-      {
-        "file": "src/server/services/pos-accounts.service.ts",
-        "desc": "Destructuring const [plan] = await tx.insert(...).returning() inside createPlan without checking if array is empty — if empty, plan is undefined but used unsafely",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 459
-      },
-      {
-        "file": "src/server/services/pos-packages.service.ts",
-        "desc": "Destructured row from .update().returning() may be undefined if WHERE clause doesn't match; returned directly without null check despite return type PosPackageGrant.",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 340
+        "line": 85
       }
     ]
   }

@@ -15,7 +15,10 @@ name: Thermonuclear Code Review
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+    # Not on every push (`synchronize`): claude-code-review already runs per push, and
+    # this adversarial pass is the expensive one. It runs when a PR opens or leaves
+    # draft, and again on demand via the `thermonuclear` label.
+    types: [opened, ready_for_review, labeled]
 
 # One review per PR; a newer push cancels an in-flight run so we never stack
 # duplicate review comments (per the workflow's own first review).
@@ -26,7 +29,9 @@ concurrency:
 jobs:
   thermonuclear-review:
     # Skip drafts to avoid burning tokens on work-in-progress.
-    if: github.event.pull_request.draft == false
+    if: >-
+      github.event.pull_request.draft == false &&
+      (github.event.action != 'labeled' || github.event.label.name == 'thermonuclear')
     runs-on: ubuntu-latest
     permissions:
       contents: read

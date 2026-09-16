@@ -1,9 +1,9 @@
 ---
 id: 2026-09-02-hub-pos-appointments-modal-to-route
 title: POS appointments "+New" is still a modal — reuse the in-page BookingCreateForm route
-status: draft
+status: approved
 created: 2026-09-02
-updated: 2026-09-02
+updated: 2026-09-16
 repos: [minion_hub]
 tags: [ux, ui]
 value: 4
