@@ -16,7 +16,7 @@
   "NikolasP98/minion_hub:master": {
     "cursor": "10e9567ad61bc9b3dfcfa5b62bcff1a188dfa05c",
     "head": "4be159a3504ba40dacefc3380753b1e9350d9ee1",
-    "done": 16,
+    "done": 29,
     "kept": [
       {
         "file": ".github/workflows/ci.yml",
@@ -94,6 +94,90 @@
         "severity": "medium",
         "category": "unchecked-access",
         "line": 141
+      },
+      {
+        "file": "scripts/qa/status.ts",
+        "desc": "dbStatus.stdout could be null; calling .trim() without null check may crash",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 36
+      },
+      {
+        "file": "scripts/qa/snapshot-prod-schema.ts",
+        "desc": "Destructured versionRow could be undefined if query returns empty array",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 95
+      },
+      {
+        "file": "scripts/qa/snapshot-prod-schema.ts",
+        "desc": "Destructured ledgerRow could be undefined if query returns empty array",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 99
+      },
+      {
+        "file": "src/lib/attachments/upload.test.ts",
+        "desc": "Calling .find()! then immediately accessing result without runtime null/undefined check; test crashes with confusing error if assertion fails",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 129
+      },
+      {
+        "file": "src/lib/attachments/upload.test.ts",
+        "desc": "Calling .find()! then immediately accessing result without runtime null/undefined check; test crashes with confusing error if assertion fails",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 132
+      },
+      {
+        "file": "src/lib/attachments/upload.test.ts",
+        "desc": "Calling .find()! then immediately accessing result without runtime null/undefined check; test crashes with confusing error if assertion fails",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 135
+      },
+      {
+        "file": "src/lib/components/attachments/AttachmentList.svelte",
+        "desc": "Error from listTrashedAttachments is silently swallowed with .catch(() => []), masking failures and preventing error logging",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 67
+      },
+      {
+        "file": "src/lib/components/pos/CustomerPicker.svelte",
+        "desc": "Catch block silently swallows network/parsing errors without user notification, allowing customer name to be set in the finally block (line 126) even though party creation failed, giving false confidence a CRM record exists.",
+        "severity": "high",
+        "category": "empty-catch",
+        "line": 119
+      },
+      {
+        "file": "src/lib/components/pos/PackageEditor.svelte",
+        "desc": "j.components is used with .map() but j is only type-cast; if API response omits components, this crashes with TypeError",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 79
+      },
+      {
+        "file": "src/lib/components/pos/PackageEditor.svelte",
+        "desc": "Catch block swallows load errors silently with no user feedback, leaving component empty if API fails or returns malformed data",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 81
+      },
+      {
+        "file": "src/lib/components/pos/PaymentStep.svelte",
+        "desc": "Hardcoded 'credit' method ID is acknowledged as incomplete (\"magic method id\") but lacks TODO(handoff): marker; comment references a TODO elsewhere rather than documenting the open end here",
+        "severity": "medium",
+        "category": "missing-handoff",
+        "line": 51
+      },
+      {
+        "file": "src/lib/components/pos/PlanOpenForm.svelte",
+        "desc": "partyId and crmContactId sent to API without validating at least one is present per component documentation",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 61
       }
     ]
   }
