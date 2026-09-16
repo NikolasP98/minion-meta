@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T18:29:06.670Z",
+	"generatedAt": "2026-09-16T18:58:43.785Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1071,6 +1071,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-15T14:28:58.709Z"
+		},
+		{
+			"key": "pr:minion-meta#453",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#453 docs(proposals): hub stress-test defects (scheduling/stock/POS) + backup scheduler never started",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/453",
+			"sourceUpdatedAt": "2026-09-16T18:33:09Z",
+			"sourceFingerprint": "91789602e53e6f47bb8a4d42ea2bb96ce440060c78ad6bfa15698f80dec37604",
+			"score": 70,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Consolidates 39 QA defects including a high-severity auth bug blocking org owners/admins and a backup scheduler that never runs, but this PR is only documentation pending human review before spec work starts.",
+			"evidence": [
+				"requireAdmin checks platform role not org role, blocking scheduling link/event creation",
+				"backup-scheduler.ts startBackupScheduler() has zero call sites",
+				"39 defects: 9 high, 19 medium, 11 low across scheduling/stock/POS"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T18:58:43.685Z"
 		},
 		{
 			"key": "proposal:2026-09-12-hub-booking-stock-postcommit-recovery",
@@ -2806,6 +2839,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:29:14.447Z"
+		},
+		{
+			"key": "pr:minion_hub#284",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#284 fix(ci): make the unit-test lane durable — PGlite hookTimeout under load",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/284",
+			"sourceUpdatedAt": "2026-09-16T18:37:32Z",
+			"sourceFingerprint": "09147640fd0c773a490d96325a9ff161b6cf25eaf91664178058258de29b964e",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A well-documented, root-caused CI flake fix (PGlite hookTimeout) with evidence of reproduction and two clean post-fix runs is ready to merge.",
+			"evidence": [
+				"hookTimeout: 30_000 fix root-caused to PGlite startup cost under load",
+				"two consecutive clean full-suite runs post-fix (4072 tests passed)",
+				"14 failing CI runs traced and confirmed resolved upstream"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T18:58:43.685Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -11078,6 +11144,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:38:46.333Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown drain is a routine deployment health signal without evidence of ongoing incident.",
+			"evidence": [
+				"commit b841c36 fix(nitter): serialize persistence and drain poller shutdown",
+				"status unknown, updatedAt 2026-09-12"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T18:58:43.685Z"
 		},
 		{
 			"key": "issue:minion-meta#436",
