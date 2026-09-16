@@ -3,7 +3,7 @@ id: 2026-09-08-platform-qc-remediation
 title: Platform QC follow-ups — authorization, durable execution, compatibility and release evidence
 status: draft
 created: 2026-09-08
-updated: 2026-09-12
+updated: 2026-09-08
 repos: [minion-meta, minion_hub, minion, minion_site, minion-factory, paperclip, pixel-agents]
 ---
 
@@ -64,7 +64,7 @@ Native overlay qualification additionally reproduced a stale queued close event 
 
 SV-01/SEC-07: a verified browser identity without resolved membership can pass through the global-organization fallback into server creation. A synthetic actual-hook/actual-handler probe returned200 and persisted the unrelated fixture tenant. Remove the global fallback in hooks and tenant-ctx; preserve the explicit join/invite/onboarding path. Plan09-03 owns durable negative/positive regressions and URL update parity. PUT currently accepts a URL denied by creation policy; no outgoing SSRF chain is claimed.
 
-SV-02/SEC-08: actual flow handlers followed a database symlink and a directory symlink outside configured roots in disposable fixtures. Separately, db.exec VACUUM INTO created an outside file without any symlink. Plan09-04 must constrain the SQL writer surface and filesystem objects together. A realpath precheck is not proof against a hostile same-UID writer; supported filesystem ownership/trust and stronger isolation requirements must be explicit. Source sites: minion/extensions/flows/src/data-nodes.ts resolveDbForNode, resolveFileWithinBase and handleDbExec. A companion gap in `data-paths.ts` (handoff-sweep, 2026-09-11): no supported Windows ACL owner/permission check exists yet for these same-UID/ownership requirements — Windows environments are unverified rather than covered.
+SV-02/SEC-08: actual flow handlers followed a database symlink and a directory symlink outside configured roots in disposable fixtures. Separately, db.exec VACUUM INTO created an outside file without any symlink. Plan09-04 must constrain the SQL writer surface and filesystem objects together. A realpath precheck is not proof against a hostile same-UID writer; supported filesystem ownership/trust and stronger isolation requirements must be explicit. Source sites: minion/extensions/flows/src/data-nodes.ts resolveDbForNode, resolveFileWithinBase and handleDbExec.
 
 The server service's legacy ID migration and per-user link model also need review before universal isolation claims. Its upsert conflict target is tenantId+url, not id: caller-supplied id alone has not been shown to overwrite another row. Do not relabel a source suspicion as a confirmed IDOR. Track the actual mutation/persistence/consumer authority in phase14/15 and retain the existing migration handoff.
 
@@ -304,218 +304,92 @@ Applicable license text and attribution remain unresolved; an MIT metadata value
 
 12-08 proved, in a private lane only, a production-only clean emission for `@minion-stack/shared` (tsconfig.build.json + scripts/build.mjs + prepack routing + README): 44-member archive `d01a5285…`, no tests/maps/local paths, all five entry points and the optional `ws` peer behavior verified from the extracted tarball, root rerun byte-identical. Still open before any release: applicable license text/attribution (metadata says MIT, nothing shipped or verified), a distinct immutable version (0.9.0 is reused locally), qualification of the installed consumers (hub, site, paperclip `minion_gateway`), and adoption of the four candidate files into the active package. The README `TODO(handoff)` points here. Evidence: `.planning/phases/12-dependency-provenance/12-08-VERIFICATION.md`, `/tmp/minion-12-08-fa2dci45/RECEIPT.json`.
 
-Reconciliation note (2026-09-11): the 2026-09-10 handoff-ledger sweep filed a
-standalone marker proposal for this exact site
-(`packages/shared/README.md:33`, ex `handoff-minion-meta-2230086850`, now
-`status: merged` into this document) — the marker text itself already pointed
-back here. No new open end; this section remains the canonical tracker for the
-license/attribution gap.
-
 ## Shells durable receiver handoff (14-12)
 
 The private 14-12 candidate implements the injected native receiver (MSR1 three-table node:sqlite store, manager durable invoke/query/current-socket commit/quiesce, registered `shells.commit_outcome`) with 69 native/loopback cases and root rerun. Exact-site `TODO(handoff)` comments in the candidate point here for: production store path and open/close lifecycle wiring, caller method/JWT organization authorization (dispatcher child), sender 11-03 adoption of the `shells.invoke_durable` envelope/response, exact minimum Node/image runtime for node:sqlite, untested failed-COMMIT/process/power-loss recovery, transient `shell.final` limits, and the same-UID pathname/inode replacement gap inherited from 11-07. Nothing is adopted into the active gateway. Evidence: `.planning/phases/14-sdk-transport/14-12-VERIFICATION.md`, `/tmp/minion-14-12-receiver-foox9ehr/checks/freeze.json`.
 
-## 2026-09-10 handoff-ledger reconciliation (18-03/DOC-03)
+## UI-first continuation —2026-09-11
 
-`scripts/qc/handoff-ledger.mjs` (read-only; never edits source) inventoried every `TODO(handoff):` comment in the meta repo and every locally checked-out subproject with its own `.git` (minion, minion_hub, minion_factory; minion_site, paperclip-minion, pixel-agents, minion_base, drone, minion_plugins carried none). 109 genuine markers found after excluding two detector false-positive classes: literal `TODO(handoff)` text embedded in test-fixture strings or a scanner's own label-formatting code (`minion_factory/runner/src/discovery.test.ts`, `discovery.ts:118`, `queue.test.ts:792`), and prose *about* the convention lacking the required colon (`discovery.ts:30`, `db.ts:877`). Neither class is a real open-item site; excluding them is this tool's own detection precision, not remediation of that code.
+13-05 and13-06 implement call-control parity and mandatory component journeys. Shared Chart source now has a paired TODO for dataset/encode, tuple data, mixed category axes and non-Cartesian alternatives; exact consumer inventory is `.planning/phases/13-ui-qualification/13-CANVAS-COVERAGE.md`. A correct table for scalar Cartesian data cannot close workshop/canvas keyboard interaction, sparklines or all chart callers. Preserve those source TODOs and issue consumer-specific completion scopes during the UI re-audit.
 
-Of 109 genuine markers, 89 already resolve cleanly to an existing `proposals/*.md` file (most to this document). 20 do not, and this reconciliation does not fix them — per boundary, source changes outside this doc lane require handoff to their implementation owner and no concurrent mass comment editing:
+The second chart review also found callback props captured at engine initialization and motion flags retained by merge updates. Both have local native regressions and repaired source. Consumer keyboard filters/legend equivalents and effectScatter/lines effects still require engine-specific work, paired with TODOs in Chart.svelte.
 
-**Missing-target (3)** — the referenced proposal file does not exist under `proposals/`:
-- `minion_factory/broker/src/policy.ts:69` → `proposals/2026-08-23-factory-runner-owned-role-executor.md`
-- `minion_factory/runner/src/queue.ts:1894` → `proposals/2026-08-23-factory-containment-effect-ledger-integration.md`
-- `minion_factory/runner/src/queue.ts:4761` → `proposals/2026-08-17-factory-chat-session-resume-after-failed-turn.md`
+New UI-first children13-07/13-08 cover mobile navigation utility/focus parity and Site graph/file asynchronous correctness. Site provider-aware logout and chat IME/scroll/mobile viewport behavior are still queued exact follow-up scopes; navigation to login cannot be treated as proof of session revocation.
 
-Owner: minion_factory (its own AGENTS.md/CLAUDE.md). Next gated step: minion_factory's owner either creates the named proposal in this repo's `proposals/` (if the underlying open item is real and still open) or corrects the source comment if the item already closed under a different filename. This document does not create those three files on minion_factory's behalf — the sites live in a repo this lane does not own.
 
-**Orphan — no proposal reference at all (17)**, grouped by owning repo:
-- `packages/workforce-client/src/client.ts:287` (meta) — companion marker at line276 links here; this second block should carry its own pointer.
-- `minion/extensions/nostr/src/inbound-dispatch.ts:7,42` and `inbound-dispatch.test.ts:27` — each points only to `specs/2026-08-17-gw-nostr-dispatch-pipeline-spec.md` (a spec, not a `proposals/` entry). Under the strict two-sided rule this is an orphan; the underlying work may already be tracked in the spec.
-- `minion/src/agents/minion-tools.ts:355` — no pointer at all.
-- `minion_hub/src/lib/plugins/bridge-protocol.ts:168` and `minion_hub/src/lib/plugins/compat.ts:71` — point only to `.planning/phases/14-sdk-transport/14-PLUGIN-BRIDGE-MATRIX.md`, not `proposals/`.
-- `minion_hub/src/lib/server/workforce-fetch.ts:220` — refers back to "the Workforce proposal above" in prose without repeating the path at this exact site.
-- `minion_hub/src/server/services/crm-contacts.service.ts:215`, `crm-journey.service.ts:44`, `crm-similarity.service.ts:55`, `pos.service.ts:1393,1407` — no pointer.
-- `minion_factory/runner/src/deployment-recovery-runtime.ts:69`, `lifecycle.ts:30`, `memory/read.ts:22`, `queue.ts:4857` — no pointer (the last cites a spec: `2026-08-17-factory-chat-restart-drops-pending-spec`, not `proposals/`).
+### September11 Site logout and dependency qualification
 
-Owner: each site's own repository (Hub `CLAUDE.md`, gateway `CLAUDE.md`, minion_factory's own instructions) per the meta AGENTS.md cross-project convention — this lane does not add or edit their comments. Next gated step: each owning repo either adds the missing `proposals/` pointer at the exact site or, where a `specs/*.md` already tracks the item, root decides whether a spec citation satisfies the two-sided rule (open policy question, not decided by this document).
+The13-09 endpoint's source TODO records a real library limitation: installed Better Auth1.4.19 catches durable session-deletion failure and can return success with cookie deletion. Qualify both supported providers with disposable sessions and storage-failure injection before authenticated logout closure. A synthetic endpoint result, cleared cookie or navigation is insufficient. Keep native provider behavior; no replacement session engine is authorized by this UI slice.
 
-**Advisory only, not gated (3)** — `proposals/2026-09-08-platform-qc-remediation.md` itself names `drone/src/define.ts`, `drone/src/run.ts` and `drone/vitest.config.ts` as sites (Priority slice5) with no matching `TODO(handoff)` at those exact files. This may be legitimate (the open item may be tracked structurally rather than per-line); this tool does not invent a marker to close the gap.
+13-08 adds native mounted/browser test tooling and aligns Vitest3.2.6 with the existing Vite6/Svelte plugin. An explicit development ws8.20.0 pin preserves existing gateway/LibSQL optional-peer resolution while HappyDOM owns its newer nested ws. Track removal only after native resolver evidence proves the same production identities. Better Auth's existing optional Vitest peer can materialize test dependencies in Bun's production-only install; investigate packaging separately and do not describe these files as an observed shipped browser bundle.
 
-**Full detail**: `.planning/phases/18-docs-governance/18-HANDOFF-RESULTS.md` (regenerate with `node scripts/qc/handoff-ledger.mjs`; `--check` currently exits1 on the 20 items above, by design — the gate fails closed until each owning repo supplies its side).
+## Site formatter debt — September 11
 
-DOC-03 stays open: this reconciliation verifies and records every known open end with an owner and next step: it closes none of them by itself.
+The 13-08 supplement pins the native Svelte formatter plugin and extends the installed shared preset. Focused changed files pass. Global `bun run format:check` now parses all Svelte files, but reports 289 style warnings in files byte-identical to the active baseline. The exact paired TODO is in the private candidate's `prettier.config.cjs`. Preserve that baseline distinction; do not mass-format concurrent work or call the global gate green. A later scoped formatting slice should establish reviewable file ownership, apply the canonical preset, and verify no semantic change. Evidence: `/tmp/minion-13-08-dn7zbntf/checks/formatter/final.json`; root's comment-only addition is recorded separately in `root-config-sha256.txt`.
 
-## 2026-09-11 handoff-marker reconciliation (proposal-sweep)
 
-The proposal-reconciliation sweep found six more per-file handoff-sweep marker
-proposals (filed 2026-09-10, all `repos: [minion-ai]`) whose `TODO(handoff):`
-text is the same open end already narrated above, and merged them here as
-tombstones (`status: merged`, `merged_into: 2026-09-08-platform-qc-remediation`):
+## Current-source handoff reconciliation — September 11
 
-- `handoff-minion-ai-2382793954` — `src/infra/message-ledger.ts:134`,
-  "Raw-handle plugins remain trusted process code. Receipt history..." — the
-  same gap as the Filesystem containment restoration gate section above ("Raw
-  getDb/SDK consumers remain trusted process code; receipt history/anomaly
-  checks cannot attest callbacks or enforce hostile-plugin isolation").
-- `handoff-minion-ai-3235580445` — `src/infra/message-ledger-profile.ts:49`,
-  "Additional persisted schemas/DDL spellings need reviewed profiles;" — the
-  same gate's "Inventory/admit additional legacy profiles before restoration,
-  without caller bypass."
-- `handoff-minion-ai-692195553` — `src/infra/message-ledger-provenance.test.ts:138`,
-  a companion test gap: "a Windows fixture for open-file replacement would need
-  a helper" — no committed Windows open-file-replacement fixture exists yet;
-  tracked under the same Filesystem containment restoration gate.
-- `handoff-minion-ai-3766023210` — `extensions/flows/src/data-nodes.ts:187,406`,
-  "Raw-handle plugins and same-UID filesystem writers remain" and "SEC-08
-  deployment must establish clean exact-image/runtime" — the same SV-02/SEC-08
-  finding above.
-- `handoff-minion-ai-315458649` — `extensions/flows/src/data-paths.ts:31,237`,
-  a Windows ACL-owner check gap plus "SEC-08 deployment requires trusted
-  same-UID writers, canonical root pointers," — same SV-02/SEC-08 finding; the
-  Windows ACL detail was new and is now folded into that section above.
-- `handoff-minion-ai-3887937197` — `packages/plugin-ui-bridge/src/index.ts:223,367`,
-  "Qualify wildcard-fallback extension callers and handwritten artifact peers
-  before rollout" and "Add per-operation cancellation/timeouts without
-  truncating 180s generation calls" — the same Plugin consumer gates section
-  above (three handwritten builtin artifact peers; no blanket 30-second
-  timeout because generation/edit calls need 180 seconds).
+The native-parser checker passes 25 independently repeated tests. Its full current-source inventory remains incomplete: 82 parsed markers initially lacked structured reverse records, and five scan limitations remain explicit. Root has reviewed the two checker sites below. These records pair their known open work; they do not complete DOC-02/DOC-03, certify proposal history or close implementation. Review each remaining source comment and its actual owner/next gate before adding a record. Do not automatically classify unstructured prose as research or remove source comments to make the count fall.
 
-No new open end beyond the Windows ACL note folded in above: each marker's
-underlying `TODO(handoff)` resolves to a gap this document already tracks.
+```handoff-ledger
+[
+  {
+    "id": "qc-handoff-reconciliation",
+    "kind": "implementation",
+    "state": "unresolved",
+    "sources": [
+      {
+        "path": "scripts/qc/handoff-ledger.mjs",
+        "markerSha256": "fab388657f78f900bed725b514a62c7ef5a425f1d7cccb175afcba776a610d92"
+      }
+    ],
+    "owner": "Minion meta-repo orchestrator",
+    "nextPlan": ".planning/phases/18-docs-governance/18-03-PLAN.md"
+  },
+  {
+    "id": "qc-history-body-review",
+    "kind": "implementation",
+    "state": "unresolved",
+    "sources": [
+      {
+        "path": "scripts/qc/proposal-requirement-map.mjs",
+        "markerSha256": "a345f6222e34d8cbf2bf755ceac89371e127b47f45b092aa6af11224bd8b8860"
+      }
+    ],
+    "owner": "Minion meta-repo orchestrator",
+    "nextPlan": ".planning/phases/18-docs-governance/18-02-PLAN.md"
+  }
+]
+```
 
-Separately, two 2026-09-11-filed markers on this repo's own new
-`scripts/qc/` tooling — `handoff-minion-meta-1708310858`
-(`handoff-ledger.mjs:73`) and `handoff-minion-meta-3652542388`
-(`handoff-ledger.test.mjs`, all matches inside its own test-fixture strings) —
-look like the same false-positive detector class DOC-03 already named above
-(literal marker text in test fixtures, or the scanner's own code) but this
-time in the tool's own source rather than a client repo. Not merged: flagged
-`duplicate_candidate` for human confirmation instead, since no prior pass
-audited the tool's own files this way. `handoff-minion-meta-277751425`
-(`package-provenance.mjs:18`) named no comparable existing coverage here and
-is left untouched.
 
-## 2026-09-11 postmerge-discovery reconciliation (proposal-sweep)
+## Portable UI regression automation — September 11
 
-The same sweep also found four `postmerge-discovery`-sourced findings against
-`minion_hub` (distinct from the `handoff-sweep` markers above) whose content
-is already tracked here, merged as tombstones:
+13-14 now owns an eight-file Site CI implementation derived from the qualified 14-18 candidate. It reuses native Paraglide, Vitest and Playwright for 56 ordinary plus 22 service cases and 75 browser cases across three engines. The workflow must preserve the existing global format/build gates, including the 289 current baseline style warnings. Its exact source TODO must retain actual stock Ubuntu CI execution as pending until that job runs; local Arch/Linux evidence and prepared YAML are not hosted CI success. Real authorization, physical-device behavior and deployment remain separate. Hub critical and remaining component matrices need their own explicit portable runner scopes; no new replacement browser/test framework is proposed.
 
-- `postmerge-minion-hub-aed0037b3792` — `scripts/qc/trace-build-graph.mjs`,
-  marker text literally reads "route evidence to 12-05 results and meta
-  proposals/2026-09-08-platform-qc-remediation.md before admitting a build
-  change" — an explicit self-citation of this document, not a suspicion.
-- `postmerge-minion-hub-e022fc029fcb` —
-  `src/lib/server/workforce-http-boundary.contract.test.ts`, "the helper
-  rejects cancellation, but this real loader intentionally [allows it]" — this
-  is the "actual boundary test" the Workforce helper sections above already
-  name alongside `workforce-fetch.ts`.
-- `postmerge-minion-hub-442b47988ef5` — `src/lib/server/workforce-fetch.ts`,
-  "Safe helper errors do not change loaders that swallow cancellation" — the
-  same gap as "the real inbox loader swallows cancellation into degraded
-  success" in the Workforce helper verification checkpoint section above.
-- `postmerge-minion-hub-b81c6df7d2e4` — `src/lib/server/workforce-fetch.ts`,
-  "Candidate transport honors these structural options; installed0.3.0" —
-  the same "installed 0.3.0 still ignores deadline/byte options" gap named in
-  the Workforce candidate JSON transport section above (the unusual
-  "installed0.3.0" phrasing matches verbatim).
 
-Three other 2026-09-11 `postmerge-discovery` findings on `minion_hub`
-(`postmerge-minion-hub-043c795d03eb` test-fixture README, `-2fae7c00c46f`
-canvas-accessibility Pixi/physics parity, `-6fdada5c6f49` calendar UTC
-timezone display) describe open ends not named anywhere above and were left
-untouched — not merged, not flagged. The three `Chart.svelte` postmerge
-findings (`-514d2ca3f3e5`, `-94ad6c223964`, `-cff27fef4e3c`) were checked and
-are three distinct TODO markers at three different lines of the same file
-(confirmed against `handoff-minion-hub-1431194768`'s marker list), not
-duplicates of each other or of this document.
+## Sender restart and uncertain-terminal correction — September 11
 
-## 2026-09-11 handoff-marker reconciliation, round 2 (proposal-sweep)
+Read-only review of the preserved `meta-11-03` candidate found a dispatch-authority gap at `packages/shells-bridge/src/bridge.ts`, `handleInvokeDurable`: `journal.admit()` returns both newly committed and existing identical admissions, while `activeRuns` is process-local. After restart, the existing unresolved admission can therefore reach another prompt call. Native regression execution is pending; the source path is confirmed. The existing durable-dedup TODO at handleInvoke's boundary remains applicable. A bounded correction must distinguish fresh committed admission from replay atomically; a separate pre-read is insufficient. No automatic re-prompt is authorized by an unresolved journal record.
 
-A later pass of the same sweep found three `minion_hub` handoff-sweep marker
-proposals (also filed 2026-09-11) whose single (or, for one, doubled) marker
-text is the exact text already merged here via their sibling
-`postmerge-discovery` findings above. Merged as tombstones (`status: merged`,
-`merged_into: 2026-09-08-platform-qc-remediation`):
+The same candidate maps any prompt rejection to a durable error outcome, even though a timeout or lost response does not prove remote termination. `settleDurable` also releases the local run in a finally block if journal outcome commit fails. Preserve unresolved obligations and admission occupancy until supported terminal evidence and successful durable commit. Actual ACP prompt schema/stop reasons and process lifecycle need their distinct library/adapter scope; synthetic passing sender tests do not close that contract. The source lifecycle TODO near the prompt call and run-journal startup TODO retain these gates. Preserve the original staged sender tree while preparing native regressions and a scoped candidate repair. No sender adoption or real prompt execution occurred during this review.
 
-- `handoff-minion-hub-2781372415` — `src/lib/server/workforce-http-boundary.contract.test.ts:218`,
-  "The helper rejects cancellation, but this real loader intentionally" —
-  identical marker text already merged here via `postmerge-minion-hub-e022fc029fcb`.
-- `handoff-minion-hub-3253046558` — `scripts/qc/trace-build-graph.mjs:1`,
-  the self-citing "route evidence to 12-05 results and meta
-  proposals/2026-09-08-platform-qc-remediation.md" marker — identical text
-  already merged here via `postmerge-minion-hub-aed0037b3792`.
-- `handoff-minion-hub-883626349` — `src/lib/server/workforce-fetch.ts`, carries
-  both of that file's markers (`:74` "Candidate transport honors these
-  structural options; installed0.3.0" and `:220` "Safe helper errors do not
-  change loaders that swallow cancellation") — both already merged here via
-  `postmerge-minion-hub-b81c6df7d2e4` and `postmerge-minion-hub-442b47988ef5`
-  respectively.
 
-No new open end: each marker's underlying `TODO(handoff)` resolves to a gap
-already tracked above. By contrast, `handoff-minion-hub-1431194768`
-(`Chart.svelte`, 3 markers) and `handoff-minion-hub-821383456`
-(`bridge-protocol.ts`, 2 markers) were left untouched again — their
-constituent markers still resolve to separate still-open per-marker
-proposals (the three `Chart.svelte` postmerge findings above, and
-`postmerge-minion-hub-a4e7e5bce6b1` / `-d3e0b507af92` for `bridge-protocol.ts`
-respectively), not to one shared canonical document, so there is no single
-target to merge the container into.
+### Official ACP SDK diagnostic boundary
 
-## 2026-09-12 handoff-marker reconciliation, round 3 (proposal-sweep)
+Static review verified complete SDK1.4.0 and Zod4.3.6 archives, including integrity, emitted modules and actual license files; receipt `/home/nikolas/.cache/minion-qc/acp-artifact-review/RECEIPT.json`. The official SDK remains the preferred replacement for handwritten JSON-RPC, but stock jsonrpc notification error handling logs the raw notification through global console.error and has no injected logger option in AppOptions. A malformed notification could expose content on stderr. Before release acceptance, execute a canary regression and select an official fix or separately tracked minimal upstream patch with exact provenance. Do not hide the issue with process-global console replacement or copied protocol schemas. The packaged example client also uses an unqualified interactive launch and unconditional success exit; it is not the conformance runner. Official compiled agent positives and its cancellation-during-permission negative remain distinct from a real production harness.
 
-A later async proposal-reconciliation pass found three more `minion_hub`
-handoff-sweep marker proposals (markers refreshed 2026-09-12) whose text
-matches gaps already tracked above, not previously examined by round 2.
-Merged as tombstones (`status: merged`, `merged_into:
-2026-09-08-platform-qc-remediation`):
+## 2026-09-11 sender correction qualification
 
-- `handoff-minion-hub-3867632534` — `src/server/services/groupchat.service.ts:389,538`
-  — both markers explicitly self-cite "See meta
-  proposals/2026-09-08-platform-qc-remediation.md (HDS-05)" in the source
-  comment itself. Line 389 ("reconcile admitted remote outcomes using
-  provider receipts before offering retry") is the same gap as "Provider
-  outcome without a receipt remains indeterminate" (Additional domain-effect
-  admission decision) and the committed-message finalization work (Native
-  effect verification and receiver follow-up). Line 538 ("reconcile
-  unreadable checkpoints and storage-unavailable terminal writes") is
-  verbatim the same open end named in that same section: "Unreadable
-  checkpoint ownership and storage-unavailable terminal persistence still
-  require an explicit recovery path."
-- `handoff-minion-hub-2374040246` — `src/server/services/job-effect-pages.service.ts`
-  (6 markers) — near-verbatim match to the "Corpus foundation limits retained
-  through 10-10" section's four named boundaries (bound source database
-  reads; explicit recovery for committed admission before call/unknown
-  remote outcome; byte-bounded provider response before `res.json()`;
-  missing historical owner reconciliation, "not endless busy" loop) plus the
-  "JOB-02 shared document manifest and history" section's "neither batch
-  zero nor job cursor proves the whole prior intent" / "forensic whole-manifest
-  archive... remain separate decisions" (marker at :618, "Legacy receipts
-  cannot reconstruct a complete source manifest") and the "later corpus/worker
-  adoption must remain separate" line (marker at :531).
-- `handoff-minion-hub-2780509395` — `src/server/services/finance-statements.service.ts:160,440`
-  — line 160 ("reconcile uploaded blobs after failed/concurrent import
-  creation") is the same gap as "Finance statement blob reconciliation"
-  above ("Reconcile those orphan candidates without deleting the winning
-  import's source"). Line 440 ("expose job failure/recovery alongside import
-  status") is the same gap as "JOB-02 finance terminal state and recovery
-  UI" above ("no statement recovery UI was implemented or verified... expose
-  the authorized recovery action").
+11-10 now independently passes102 cases on final source. Fresh committed admission alone permits dispatch; restarted unresolved records cannot re-prompt, and failed terminal persistence cannot release ownership. The frozen four-file correction requires staged11-03. Official ACP adoption, actual process lifecycle and explicit unresolved recovery remain open at the existing source TODO sites.
 
-No new open end in any of the three: each marker's underlying `TODO(handoff)`
-resolves to a gap this document already tracks under an existing section.
 
-Merely suspicious, not merged: `handoff-minion-hub-420076982`
-(`src/server/services/brains.service.ts:1032,1055`) echoes the same JOB-02
-program in general terms ("indeterminate admissions need an explicit
-recovery/UI"; "driver-recovery and deployed migration/drain") and
-`brains.service.ts`'s `brain_ingest` job is named as one of the five
-still-ignoring-the-envelope job types in the "Remaining job handlers"
-section above — but unlike the three merged markers, its wording is not a
-verbatim or near-verbatim match to any specific sentence already recorded
-here, so I cannot be certain it's the identical open end rather than a
-distinct one. Flagged `duplicate_candidate` and `status: review` on that
-proposal for a human to confirm scope instead of merging it.
+## 2026-09-11 wrap-up: Site release and remaining delivery boundary
+
+Site PR31 is merged as `0ed4e1b16cef4ca9287314df5af58a8af17f537c`, with the exact tree of reviewed `2359978`. Hosted run34580815730 passes build and the full portable UI lane. The Site-only hosted CI gate referenced by earlier fixture TODOs is satisfied by this run; Hub portability, real authentication/revocation and physical-device acceptance remain open. Canonical deployment receipt: `.planning/operations/360/RELEASE-2026-09-11.md`.
+
+PR30 is superseded and closed; its branch remains preserved. Resume development synchronization from final production, preserving the separate PR29 train and its unresolved conflicts/findings. Hub UI and sender/finance candidates remain saved source deliveries, not deployed applications. The user paused further implementation. No remaining category is implicitly approved as complete.
 
 ### 2026-09-12 Workshop accessibility follow-up
 

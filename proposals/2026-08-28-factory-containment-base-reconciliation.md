@@ -1,12 +1,10 @@
 ---
 id: 2026-08-28-factory-containment-base-reconciliation
 title: Containment base reconciliation — controller-owned merges for behind-base resumes
-status: in-spec
+status: draft
 created: 2026-08-28
 updated: 2026-08-28
-spawned_spec: 2026-08-28-factory-containment-base-reconciliation-spec
 repos: [minion-factory]
-tags: [infra]
 ---
 
 # Containment base reconciliation — controller-owned merges for behind-base resumes

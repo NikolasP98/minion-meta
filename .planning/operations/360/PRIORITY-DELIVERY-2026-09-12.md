@@ -1,7 +1,5 @@
 # Priority delivery and independent review — 2026-09-12
 
-Planning scope: the 89-plan task denominator describes the [archived local orchestration snapshot](https://github.com/NikolasP98/minion-meta/tree/0b29d6e631179d54ee11a00162cf7351037e1bb4/.planning/phases), with its [state and qualifications](https://github.com/NikolasP98/minion-meta/blob/0b29d6e631179d54ee11a00162cf7351037e1bb4/.planning/STATE.md). The archive is evidence, not adoption of that historical GSD tree or runtime source into `dev`. This documentation delivery preserves the current `dev` planning baseline.
-
 **193/229 original scoped tasks are complete (84.3%); 29 remain partial and seven lack complete receipts.** This measures planned deliverables, including audits and preparation, not production readiness. No whole requirement is independently closed (0/51). Hub jobs/stock, UI and the scoped Linux Gateway repairs are deployed; Factory source remains blocked before rollout. There is no whole-platform security or production certification.
 
 ## Findings and corrections

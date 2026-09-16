@@ -1,0 +1,1502 @@
+--- a/src/server/services/finance-statements.service.ts
++++ b/src/server/services/finance-statements.service.ts
+@@ -38,6 +38,9 @@
+ } from './job-effects.service';
+ import {
+   parseStatementCsv,
++  STATEMENT_PARSER_VERSION,
++  StatementParseHeaderError,
++  StatementParseLimitError,
+   normalizeStatementText,
+   type StatementParseResult,
+   type StatementEntryOk,
+@@ -56,14 +59,13 @@
+ }
+ 
+ export const STATEMENT_JOB_TYPE = 'statement_ingest';
+-const PARSER_VERSION = 1;
++const PARSER_VERSION_CONFLICT =
++  'Statement parser version mismatch; historical import recovery requires explicit review';
+ // ponytail: bounded rows-per-advance() step, not a hard system limit — raise
+ // if real statements regularly need more than a couple of ticks to ingest.
+ const CHUNK_SIZE = 500;
+-// ponytail: rejections are recomputed by re-parsing on every status read
+-// (deterministic + cheap for statement-sized files) rather than persisted in
+-// a new table/column — cap what we return so a huge rejected set can't bloat
+-// the response.
++// Rejections are recomputed from the full stored input on eligible status reads.
++// This cap bounds the response sample, not the cost of fetching or parsing it.
+ const MAX_REJECTIONS_IN_STATUS = 200;
+ 
+ function sha256Hex(bytes: Uint8Array | string): string {
+@@ -175,7 +177,7 @@
+     const created = await createJobRequest(
+       ctx,
+       importEntity(id),
+-      sourceIdentity({ contentSha256: sha, parserVersion: PARSER_VERSION }),
++      sourceIdentity({ contentSha256: sha, parserVersion: STATEMENT_PARSER_VERSION }),
+       { type: STATEMENT_JOB_TYPE, userId: ctx.profileId, refId: id },
+       async (tx) => {
+         const [inserted] = await tx
+@@ -186,7 +188,7 @@
+             fileId,
+             sourceKind: input.sourceKind,
+             contentSha256: sha,
+-            parserVersion: PARSER_VERSION,
++            parserVersion: STATEMENT_PARSER_VERSION,
+             status: 'queued',
+             nextChunk: 0,
+             createdBy: input.createdBy ?? null,
+@@ -221,6 +223,40 @@
+   return { import: row, created: true };
+ }
+ 
++class StatementSourceIntegrityError extends Error {
++  constructor() {
++    super('stored statement content hash mismatch');
++  }
++}
++
++function parseFailure(error: unknown): { errorCode: string; message: string } {
++  if (
++    error instanceof StatementParseHeaderError &&
++    ['record-too-large', 'malformed-quoting', 'invalid-encoding'].includes(error.reason)
++  ) {
++    return {
++      errorCode: 'statement_header_invalid',
++      message: `Invalid statement header: ${error.reason}`,
++    };
++  }
++  if (
++    error instanceof StatementParseLimitError &&
++    ['input-too-large', 'too-many-rows'].includes(error.reason)
++  ) {
++    return {
++      errorCode: 'statement_limit_exceeded',
++      message: `Statement input limit exceeded: ${error.reason}`,
++    };
++  }
++  return {
++    errorCode: 'parse_failed',
++    message:
++      error instanceof StatementSourceIntegrityError
++        ? 'stored statement content hash mismatch'
++        : 'Statement parsing failed',
++  };
++}
++
+ async function loadImportText(
+   ctx: CoreCtx,
+   row: FinStatementImport,
+@@ -233,15 +269,19 @@
+   signal?.throwIfAborted();
+   const res = await fetch(file.url, { signal });
+   if (!res.ok) throw new Error(`failed to fetch statement content (${res.status})`);
++  // TODO(handoff): Bound streamed response bytes before allocation; arrayBuffer()
++  // currently buffers the full response before the parser character limit applies.
++  // Also measure repeated full fetch/parse per 500-row chunk and eligible status
++  // read; follow-up: proposals/2026-09-10-hub-finance-parser-version-binding.md.
+   const bytes = new Uint8Array(await res.arrayBuffer());
+   signal?.throwIfAborted();
+-  if (signal && sha256Hex(bytes) !== row.contentSha256)
+-    throw new Error('stored statement content hash mismatch');
++  if (sha256Hex(bytes) !== row.contentSha256) throw new StatementSourceIntegrityError();
+   return new TextDecoder().decode(bytes);
+ }
+ 
+-/** One bounded step: parse (deterministic, re-run every call — cheap for
+- *  statement-sized files) and persist the next CHUNK_SIZE rows starting at
++/** One step bounds persisted rows, while fetching and parsing the full input
++ *  again on each call; its read/parse cost has not been measured. Persist the
++ *  next CHUNK_SIZE rows starting at
+  *  `next_chunk`. Insert uses onConflictDoNothing on (import_id, source_row),
+  *  so re-running the same chunk (retry, or a resumed lease) never duplicates. */
+ export async function persistImportChunk(
+@@ -278,8 +318,10 @@
+     const row = await lockedImport(tx, ctx, importId);
+     if (!row || row.status === 'undone')
+       throw new JobEffectError('superseded', 'Statement import is missing or undone');
+-    if (row.parserVersion !== PARSER_VERSION || sourceIdentity(row) !== request.sourceHash)
++    if (sourceIdentity(row) !== request.sourceHash)
+       throw new JobEffectError('conflict', 'Statement content or parser identity changed');
++    if (!['done', 'failed'].includes(row.status) && row.parserVersion !== STATEMENT_PARSER_VERSION)
++      throw new JobEffectError('conflict', PARSER_VERSION_CONFLICT);
+     return row;
+   };
+   const initial = await withJobRequest(execution, ctx, request, readCurrent);
+@@ -291,14 +333,15 @@
+   }
+ 
+   let parsed: StatementParseResult;
++  let text: string;
+   try {
+-    const text = await loadImportText(ctx, initial, execution.signal);
++    text = await loadImportText(ctx, initial, execution.signal);
+     checkCancelled();
+     parsed = parseStatementCsv(text);
+     checkCancelled();
+   } catch (e) {
+     checkCancelled();
+-    const message = e instanceof Error ? e.message : String(e);
++    const { message, errorCode } = parseFailure(e);
+     await withJobRequest(
+       execution,
+       ctx,
+@@ -314,7 +357,7 @@
+           .update(finStatementImports)
+           .set({
+             status: 'failed',
+-            errorCode: 'parse_failed',
++            errorCode,
+             errorMessage: message,
+             finishedAt: new Date(),
+           })
+@@ -324,6 +367,14 @@
+     );
+     return { ...(await jobRequestAdvanceResult(execution, ctx, request, true)), error: message };
+   }
++
++  // Uploaded bytes and normalized decoded parser text have distinct identities
++  // (e.g. BOM/CRLF). An invalid parser result must not enter failure persistence.
++  if (
++    parsed.provenance.parserVersion !== STATEMENT_PARSER_VERSION ||
++    parsed.provenance.sourceSha256 !== sha256Hex(normalizeStatementText(text))
++  )
++    throw new JobEffectError('conflict', 'Statement parse provenance mismatch');
+ 
+   const outcome = await withJobRequest(
+     execution,
+@@ -421,8 +472,8 @@
+   rejections: Array<{ sourceRow: number; reason: string; raw: Record<string, string> }>;
+ }
+ 
+-/** Status incl. counts + a bounded sample of rejections (recomputed by
+- *  re-parsing the stored content — cheap, deterministic, no extra table). */
++/** Status incl. counts + a bounded sample of rejections. Eligible reads fetch
++ *  and re-parse the full content; the sample cap does not bound that work. */
+ export async function getImportStatus(
+   ctx: CoreCtx,
+   importId: string,
+@@ -442,7 +493,10 @@
+   // explicit retry is available through the authenticated API, but status/UI
+   // reconciliation is separate. See meta proposals/2026-09-08-platform-qc-remediation.md (finance job recovery).
+   let rejections: ImportStatus['rejections'] = [];
+-  if (row.status === 'done' || row.status === 'parsing') {
++  if (
++    row.parserVersion === STATEMENT_PARSER_VERSION &&
++    (row.status === 'done' || row.status === 'parsing')
++  ) {
+     try {
+       const text = await loadImportText(ctx, row);
+       rejections = parseStatementCsv(text)
+@@ -472,6 +526,10 @@
+   });
+   if (!row) return null;
+   if (!['queued', 'parsing', 'failed', 'undone'].includes(row.status)) return row;
++  // TODO(handoff): Historical version replacement needs an explicit data contract;
++  // preserve rows/cursors instead of silently relabeling or claiming retry recovery.
++  // See meta proposals/2026-09-10-hub-finance-parser-version-binding.md (D360-20).
++  if (row.parserVersion !== STATEMENT_PARSER_VERSION) throw error(409, PARSER_VERSION_CONFLICT);
+ 
+   try {
+     const created = await createJobRequest(
+@@ -483,6 +541,8 @@
+         const current = await lockedImport(tx, ctx, importId);
+         if (!current || !['queued', 'parsing', 'failed', 'undone'].includes(current.status))
+           throw new UnchangedImport(current);
++        if (current.parserVersion !== STATEMENT_PARSER_VERSION)
++          throw error(409, PARSER_VERSION_CONFLICT);
+         if (sourceIdentity(current) !== sourceIdentity(row))
+           throw new JobEffectError('conflict', 'Statement identity changed during retry');
+         const [r] = await tx
+--- a/src/server/services/finance-statements.service.test.ts
++++ b/src/server/services/finance-statements.service.test.ts
+@@ -32,10 +32,16 @@
+   retryImport,
+   undoImport,
+   persistImportChunk,
++  getImportStatus,
+   STATEMENT_JOB_TYPE,
+ } from './finance-statements.service';
+ import { uploadFile, getFileUrl } from './file.service';
+ import { advanceJob } from './bg-runtime';
++import { parseStatementCsv, STATEMENT_PARSER_VERSION } from './finance-statement-parser';
++vi.mock('./finance-statement-parser', async (original) => {
++  const actual = await original<typeof import('./finance-statement-parser')>();
++  return { ...actual, parseStatementCsv: vi.fn(actual.parseStatementCsv) };
++});
+ 
+ const CSV =
+   'Date,Description,Amount\n2026-01-05,Grocery,-45.90\n2026-01-06,Bad,oops\n2026-01-07,Salary,2500.00';
+@@ -49,14 +55,14 @@
+   nextChunk: 0,
+   insertedCount: 0,
+   rejectedCount: 0,
+-  parserVersion: 1,
++  parserVersion: STATEMENT_PARSER_VERSION,
+   contentSha256: hash(CSV),
+ } as FinStatementImport;
+ const request = {
+   family: 'finance.statement',
+   entityId: row.id,
+   revision: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+-  sourceHash: hash(JSON.stringify([row.contentSha256, 1])),
++  sourceHash: hash(JSON.stringify([row.contentSha256, STATEMENT_PARSER_VERSION])),
+ };
+ const job = {
+   id: 'job-1',
+@@ -101,7 +107,10 @@
+     vi.fn(async () => new Response(CSV)),
+   );
+ });
+-afterEach(() => vi.unstubAllGlobals());
++afterEach(() => {
++  vi.unstubAllGlobals();
++  vi.mocked(parseStatementCsv).mockReset();
++});
+ 
+ describe('statement boundaries (native tests prove transactions)', () => {
+   it('rejects cancelled ownership before any domain or file read', async () => {
+@@ -212,3 +221,191 @@
+     expect(mock.db.update).not.toHaveBeenCalled();
+   });
+ });
++
++const VERSION_CONFLICT =
++  'Statement parser version mismatch; historical import recovery requires explicit review';
++function boundImport(overrides: Partial<FinStatementImport>) {
++  const current = { ...row, ...overrides };
++  return {
++    current,
++    boundJob: {
++      ...job,
++      cursor: JSON.stringify({
++        __jobRequest: {
++          ...request,
++          sourceHash: hash(JSON.stringify([current.contentSha256, current.parserVersion])),
++        },
++      }),
++    },
++  };
++}
++describe('parser version and provenance binding', () => {
++  it.each(
++    [1, 2].flatMap((version) =>
++      ['queued', 'parsing'].flatMap((status) =>
++        [0, 500].map((nextChunk) => ({ version, status, nextChunk })),
++      ),
++    ),
++  )(
++    'rejects stale $version/$status cursor $nextChunk before file access or writes',
++    async ({ version, status, nextChunk }) => {
++      const { current, boundJob } = boundImport({ parserVersion: version, status, nextChunk });
++      mock.resolveSequence([[current]]);
++      await expect(persistImportChunk(ctx, boundJob, execution)).rejects.toMatchObject({
++        code: 'conflict',
++        message: VERSION_CONFLICT,
++      });
++      expect(getFileUrl).not.toHaveBeenCalled();
++      expect(parseStatementCsv).not.toHaveBeenCalled();
++      expect(mock.db.insert).not.toHaveBeenCalled();
++      expect(mock.db.update).not.toHaveBeenCalled();
++    },
++  );
++  it.each(['queued', 'parsing', 'failed', 'undone'])(
++    'refuses historical %s retry before admission',
++    async (status) => {
++      mock.resolveSequence([[{ ...row, parserVersion: 1, status }]]);
++      await expect(retryImport(ctx, row.id)).rejects.toMatchObject({
++        status: 409,
++        body: { message: VERSION_CONFLICT },
++      });
++      expect(effects.create).not.toHaveBeenCalled();
++      expect(mock.db.update).not.toHaveBeenCalled();
++    },
++  );
++  it('rechecks parser version in the locked retry callback', async () => {
++    mock.resolveSequence([[row], [{ ...row, parserVersion: 2 }]]);
++    await expect(retryImport(ctx, row.id)).rejects.toMatchObject({
++      status: 409,
++      body: { message: VERSION_CONFLICT },
++    });
++    expect(mock.db.update).not.toHaveBeenCalled();
++    expect(advanceJob).not.toHaveBeenCalled();
++  });
++  it.each(['done', 'failed'])(
++    'returns exact historical %s without parsing or relabeling',
++    async (status) => {
++      const { current, boundJob } = boundImport({
++        parserVersion: 1,
++        status,
++        nextChunk: 500,
++        errorMessage: status === 'failed' ? 'Historical fixed failure' : null,
++      });
++      mock.resolveSequence([[current]]);
++      expect(await persistImportChunk(ctx, boundJob, execution)).toMatchObject({ done: true });
++      expect(getFileUrl).not.toHaveBeenCalled();
++      expect(parseStatementCsv).not.toHaveBeenCalled();
++      expect(mock.db.update).not.toHaveBeenCalled();
++    },
++  );
++  it.each(['done', 'parsing'])(
++    'does not attach v3 rejection samples to historical %s',
++    async (status) => {
++      const historical = { ...row, parserVersion: 1, status, nextChunk: 500 };
++      mock.resolveSequence([[historical]]);
++      expect(await getImportStatus(ctx, row.id)).toEqual({ import: historical, rejections: [] });
++      expect(getFileUrl).not.toHaveBeenCalled();
++      expect(parseStatementCsv).not.toHaveBeenCalled();
++    },
++  );
++  it('current status still returns its bounded actual parser rejection', async () => {
++    mock.resolveSequence([[{ ...row, status: 'done' }]]);
++    expect((await getImportStatus(ctx, row.id))?.rejections).toMatchObject([{ sourceRow: 2 }]);
++    expect(parseStatementCsv).toHaveBeenCalledTimes(1);
++  });
++  it('checks stored bytes on status reads before parser access', async () => {
++    mock.resolveSequence([[{ ...row, status: 'done' }]]);
++    vi.mocked(fetch).mockResolvedValueOnce(new Response('corrupted'));
++    expect((await getImportStatus(ctx, row.id))?.rejections).toEqual([]);
++    expect(parseStatementCsv).not.toHaveBeenCalled();
++  });
++  it.each(['version', 'digest'])(
++    'rejects wrong returned provenance %s outside failure persistence',
++    async (field) => {
++      const actual = await vi.importActual<typeof import('./finance-statement-parser')>(
++        './finance-statement-parser',
++      );
++      vi.mocked(parseStatementCsv).mockImplementationOnce((text) => {
++        const result = actual.parseStatementCsv(text);
++        return {
++          ...result,
++          provenance: {
++            ...result.provenance,
++            ...(field === 'version' ? { parserVersion: 1 } : { sourceSha256: '0'.repeat(64) }),
++          },
++        };
++      });
++      mock.resolveSequence([[row]]);
++      await expect(persistImportChunk(ctx, job, execution)).rejects.toMatchObject({
++        code: 'conflict',
++        message: 'Statement parse provenance mismatch',
++      });
++      expect(mock.db.update).not.toHaveBeenCalled();
++      expect(mock.db.insert).not.toHaveBeenCalled();
++    },
++  );
++  it.each([
++    'Date,Description,Amount\n2026-01-01,Sample,1'.replaceAll('\n', '\r\n'),
++    '\uFEFFDate,Description,Amount\n2026-01-01,Sample,1',
++  ])('accepts distinct raw and normalized hashes', async (text) => {
++    const { current, boundJob } = boundImport({ contentSha256: hash(text) });
++    mock.resolveSequence([[current], [current], [{ id: 'inserted' }], [{ id: row.id }]]);
++    vi.mocked(fetch).mockResolvedValueOnce(new Response(text));
++    expect(await persistImportChunk(ctx, boundJob, execution)).toMatchObject({ done: true });
++    expect(mock.db.insert).toHaveBeenCalledTimes(1);
++  });
++  it.each([
++    ['record-too-large', 'Date,Description,' + 'S'.repeat(4097) + 'SECRET_HEADER'],
++    ['malformed-quoting', 'Date,"SECRET_HEADER'],
++    ['invalid-encoding', 'Date,Description,Amount\uFFFDSECRET_HEADER'],
++  ])('keeps actual %s header diagnostics content-free', async (reason, header) => {
++    const text = header + '\n2026-01-01,Sample,1';
++    const { current, boundJob } = boundImport({ contentSha256: hash(text) });
++    mock.resolveSequence([[current], [current], []]);
++    vi.mocked(fetch).mockResolvedValueOnce(new Response(text));
++    const result = await persistImportChunk(ctx, boundJob, execution);
++    expect(result).toMatchObject({ done: true, error: `Invalid statement header: ${reason}` });
++    expect(JSON.stringify(result)).not.toContain('SECRET_HEADER');
++    expect(mock.db.insert).not.toHaveBeenCalled();
++  });
++  it('does not persist an arbitrary external error message', async () => {
++    mock.resolveSequence([[row], [row], []]);
++    vi.mocked(fetch).mockRejectedValueOnce(new Error('SECRET_TRANSPORT_PAYLOAD'));
++    const result = await persistImportChunk(ctx, job, execution);
++    expect(result).toMatchObject({ done: true, error: 'Statement parsing failed' });
++    expect(JSON.stringify(result)).not.toContain('SECRET_TRANSPORT_PAYLOAD');
++  });
++});
++
++describe('fixed typed parser diagnostics', () => {
++  it('reconstructs header diagnostics instead of forwarding a mutated Error.message', async () => {
++    const actual = await vi.importActual<typeof import('./finance-statement-parser')>(
++      './finance-statement-parser',
++    );
++    const failure = new actual.StatementParseHeaderError('malformed-quoting');
++    failure.message = 'SECRET_MUTATED_HEADER';
++    vi.mocked(parseStatementCsv).mockImplementationOnce(() => {
++      throw failure;
++    });
++    mock.resolveSequence([[row], [row], []]);
++    expect(await persistImportChunk(ctx, job, execution)).toMatchObject({
++      done: true,
++      error: 'Invalid statement header: malformed-quoting',
++    });
++  });
++  it('retains a fixed whole-input limit classification without arbitrary message text', async () => {
++    const actual = await vi.importActual<typeof import('./finance-statement-parser')>(
++      './finance-statement-parser',
++    );
++    const failure = new actual.StatementParseLimitError('too-many-rows', 100000, 100001);
++    failure.message = 'SECRET_MUTATED_LIMIT';
++    vi.mocked(parseStatementCsv).mockImplementationOnce(() => {
++      throw failure;
++    });
++    mock.resolveSequence([[row], [row], []]);
++    expect(await persistImportChunk(ctx, job, execution)).toMatchObject({
++      done: true,
++      error: 'Statement input limit exceeded: too-many-rows',
++    });
++  });
++});
+--- a/src/server/services/finance-statements.effect-ownership.sql.integration.test.ts
++++ b/src/server/services/finance-statements.effect-ownership.sql.integration.test.ts
+@@ -40,8 +40,16 @@
+   getImportStatus,
+   STATEMENT_JOB_TYPE,
+ } from './finance-statements.service';
+-import { parseStatementCsv } from './finance-statement-parser';
++import {
++  parseStatementCsv,
++  STATEMENT_PARSER_VERSION,
++  STATEMENT_LIMITS,
++} from './finance-statement-parser';
+ import { finStatementImports } from '$server/db/pg-finance-schema';
++vi.mock('$server/auth/core-ctx', () => ({ getCoreCtx: async () => scope() }));
++vi.mock('./modules.service', () => ({ isModuleEnabled: async () => true }));
++vi.mock('./tenant.service', () => ({ getTenant: async () => ({ kind: 'personal' }) }));
++import { GET as statusRoute } from '../../routes/api/finances/statement-imports/[id]/+server';
+ 
+ type Client = ReturnType<typeof postgres>;
+ const context = new AsyncLocalStorage<Client>();
+@@ -50,6 +58,7 @@
+ let owner: Client, a: Client, b: Client;
+ let backendIds: number[];
+ let originalHandler: JobHandler;
++let setupFailure: unknown;
+ const ORG = 'qc-finance-a',
+   OTHER = 'qc-finance-b';
+ const CSV =
+@@ -59,7 +68,7 @@
+ const outstanding = new Set<Promise<unknown>>();
+ const releases = new Set<() => void>();
+ const scope = (tenantId = ORG) => ({ db: getCoreDb(), tenantId });
+-const on = <T>(client: Client, work: () => Promise<T>) => {
++const on = <T,>(client: Client, work: () => Promise<T>) => {
+   const promise = context.run(client, work);
+   outstanding.add(promise);
+   void promise.then(
+@@ -91,7 +100,12 @@
+   const [head] = await owner`select * from job_effects where entity_id=${id} and kind='head'`;
+   return { row: row!, transactions, jobs, head };
+ }
+-async function seed(text = CSV, status = 'queued', next = 0) {
++async function seed(
++  text = CSV,
++  status = 'queued',
++  next = 0,
++  parserVersion = STATEMENT_PARSER_VERSION,
++) {
+   const id = randomUUID(),
+     file = randomUUID();
+   files.set(file, text);
+@@ -100,12 +114,12 @@
+     createJobRequest(
+       scope(),
+       { family: 'finance.statement', entityId: id },
+-      hash(JSON.stringify([contentHash, 1])),
++      hash(JSON.stringify([contentHash, parserVersion])),
+       { type: STATEMENT_JOB_TYPE, refId: id },
+       async (tx) => {
+         await tx.execute(sql`insert into fin_statement_imports
+         (id,org_id,file_id,source_kind,content_sha256,parser_version,status,next_chunk,inserted_count,rejected_count)
+-        values (${id},${ORG},${file},'csv',${contentHash},1,${status},${next},0,0)`);
++        values (${id},${ORG},${file},'csv',${contentHash},${parserVersion},${status},${next},0,0)`);
+       },
+     ),
+   );
+@@ -127,51 +141,56 @@
+   );
+ }
+ beforeAll(async () => {
+-  harness = await openDisposablePostgres();
+-  owner = harness.owner;
+-  await owner.unsafe(`CREATE SCHEMA "${schema}"; SET search_path TO "${schema}";
++  try {
++    harness = await openDisposablePostgres();
++    owner = harness.owner;
++    await owner.unsafe(`CREATE SCHEMA "${schema}"; SET search_path TO "${schema}";
+     CREATE TABLE bg_jobs (id text primary key, tenant_id text not null, user_id text, type text not null,
+       ref_id text, status text not null default 'queued', cursor text, error text, attempts integer not null default 0,
+       lease_until bigint, created_at bigint not null, updated_at bigint not null, started_at bigint, finished_at bigint);`);
+-  for (const file of [
+-    '20260909090100_bg_job_lease_generation.sql',
+-    '20260909090300_job_effect_receipts.sql',
+-    '20260909090400_job_request_manifest.sql',
+-    '20260722234500_fin_statement_imports.sql',
+-  ]) {
+-    const ddl = readFileSync(
+-      new URL(`../../../supabase/migrations/${file}`, import.meta.url),
+-      'utf8',
+-    );
+-    await owner.unsafe(ddl.replaceAll('public.', `"${schema}".`));
+-  }
+-  await owner.unsafe(`GRANT USAGE ON SCHEMA "${schema}" TO app_ledger`);
+-  a = harness.createConnection(schema);
+-  b = harness.createConnection(schema);
+-  const ids = await Promise.all(
+-    [a, b].map(
+-      async (client) =>
+-        (
+-          await client`select pg_backend_pid() pid,
++    for (const file of [
++      '20260909090100_bg_job_lease_generation.sql',
++      '20260909090300_job_effect_receipts.sql',
++      '20260909090400_job_request_manifest.sql',
++      '20260722234500_fin_statement_imports.sql',
++    ]) {
++      const ddl = readFileSync(
++        new URL(`../../../supabase/migrations/${file}`, import.meta.url),
++        'utf8',
++      );
++      await owner.unsafe(ddl.replaceAll('public.', `"${schema}".`));
++    }
++    await owner.unsafe(`GRANT USAGE ON SCHEMA "${schema}" TO app_ledger`);
++    a = harness.createConnection(schema);
++    b = harness.createConnection(schema);
++    const ids = await Promise.all(
++      [a, b].map(
++        async (client) =>
++          (
++            await client`select pg_backend_pid() pid,
+     current_database() as database, shobj_description(oid,'pg_database') as marker
+     from pg_database where datname=current_database()`
+-        )[0],
+-    ),
+-  );
+-  ids.forEach((id) =>
+-    expect(id).toMatchObject({
+-      database: harness.identity.database,
+-      marker: harness.identity.marker,
+-    }),
+-  );
+-  expect(ids[0]?.pid).not.toBe(ids[1]?.pid);
+-  backendIds = ids.map((id) => Number(id!.pid));
+-  owner = harness.createConnection(schema);
+-  boundary.pool.mockImplementation(() => context.getStore() ?? a);
+-  originalHandler = boundary.registered.mock.calls
+-    .map(([handler]) => handler as JobHandler)
+-    .find((handler) => handler.type === STATEMENT_JOB_TYPE)!;
+-  expect(originalHandler).toBeDefined();
++          )[0],
++      ),
++    );
++    ids.forEach((id) =>
++      expect(id).toMatchObject({
++        database: harness.identity.database,
++        marker: harness.identity.marker,
++      }),
++    );
++    expect(ids[0]?.pid).not.toBe(ids[1]?.pid);
++    backendIds = ids.map((id) => Number(id!.pid));
++    owner = harness.createConnection(schema);
++    boundary.pool.mockImplementation(() => context.getStore() ?? a);
++    originalHandler = boundary.registered.mock.calls
++      .map(([handler]) => handler as JobHandler)
++      .find((handler) => handler.type === STATEMENT_JOB_TYPE)!;
++    expect(originalHandler).toBeDefined();
++  } catch (error) {
++    setupFailure = error;
++    throw error;
++  }
+ }, 20000);
+ beforeEach(async () => {
+   await owner.unsafe('TRUNCATE fin_transactions,fin_statement_imports,bg_jobs,job_effects');
+@@ -206,8 +225,32 @@
+   vi.unstubAllGlobals();
+ });
+ afterAll(async () => {
+-  if (owner) await owner.unsafe(`DROP SCHEMA IF EXISTS "${schema}" CASCADE`);
+-  await harness?.close();
++  if (!harness) return;
++  const failures: unknown[] = [];
++  try {
++    for (const release of releases) release();
++    releases.clear();
++    await Promise.allSettled([...outstanding]);
++    // Setup may fail inside an authored BEGIN. A fresh marked connection owns
++    // cleanup after rollback, even when the setup owner's transaction aborted.
++    await harness.owner.unsafe('ROLLBACK');
++    const cleanup = harness.createConnection();
++    await cleanup.unsafe(`DROP SCHEMA IF EXISTS "${schema}" CASCADE`);
++    expect(await cleanup`select nspname from pg_namespace where nspname=${schema}`).toEqual([]);
++  } catch (error) {
++    failures.push(error);
++  } finally {
++    try {
++      await harness.close();
++    } catch (error) {
++      failures.push(error);
++    }
++  }
++  if (failures.length)
++    throw new AggregateError(
++      setupFailure === undefined ? failures : [setupFailure, ...failures],
++      'Finance fixture cleanup failed',
++    );
+ });
+ 
+ describe('native statement ownership', () => {
+@@ -250,6 +293,10 @@
+       inserted_count: 2,
+       rejected_count: 1,
+     });
++    expect(current.row.parser_version).toBe(STATEMENT_PARSER_VERSION);
++    expect(current.head?.source_hash).toBe(
++      hash(JSON.stringify([hash(CSV), STATEMENT_PARSER_VERSION])),
++    );
+     expect(current.transactions.map((row) => row.signed_amount)).toEqual(['-45.90', '2500.00']);
+     expect(JSON.parse(current.jobs[0]!.cursor).nextChunk).toBe(3);
+     expect(current.head?.revision).toBe(
+@@ -581,3 +628,182 @@
+     expect(current.transactions).toHaveLength(2);
+   });
+ });
++
++const VERSION_CONFLICT =
++  'Statement parser version mismatch; historical import recovery requires explicit review';
++describe('native parser version/provenance integration', () => {
++  it.each(
++    [1, 2].flatMap((version) =>
++      ['queued', 'parsing'].flatMap((status) =>
++        [0, 500].map((next) => ({ version, status, next })),
++      ),
++    ),
++  )(
++    'stale v$version $status cursor $next preserves all domain effects',
++    async ({ version, status, next }) => {
++      const created = await seed(CSV, status, next, version);
++      if (next) {
++        await owner`insert into fin_transactions(org_id,import_id,source_row,posted_on,description,signed_amount)
++          values(${ORG},${created.id},1,'2026-01-05','Historical',-45.90)`;
++        await owner`update fin_statement_imports set inserted_count=1,rejected_count=2,row_count=503 where id=${created.id}`;
++      }
++      const before = await state(created.id);
++      await on(a, () => advanceJob(created.jobId));
++      const after = await state(created.id);
++      expect(after.row).toEqual(before.row);
++      expect(after.transactions).toEqual(before.transactions);
++      expect(after.head).toEqual(before.head);
++      expect(after.jobs[0]?.cursor).toBe(before.jobs[0]?.cursor);
++      expect(after.jobs[0]?.error).toContain(VERSION_CONFLICT);
++      expect(fetch).not.toHaveBeenCalled();
++      expect(boundary.file).not.toHaveBeenCalled();
++    },
++  );
++  it.each(['queued', 'parsing', 'failed', 'undone'])(
++    'historical %s retry refuses before admission',
++    async (status) => {
++      const created = await seed(CSV, status, 0, 1);
++      const before = await state(created.id);
++      await expect(on(a, () => retryImport(scope(), created.id))).rejects.toMatchObject({
++        status: 409,
++        body: { message: VERSION_CONFLICT },
++      });
++      expect(await state(created.id)).toEqual(before);
++      expect(fetch).not.toHaveBeenCalled();
++    },
++  );
++  it('a version change while retry waits rolls back head replacement and enqueue', async () => {
++    const created = await seed(),
++      locked = deferred<void>(),
++      release = deferred<void>();
++    const transaction = owner.begin(async (tx) => {
++      await tx`select id from job_effects where entity_id=${created.id} for update`;
++      locked.resolve();
++      await release.promise;
++      await tx`update fin_statement_imports set parser_version=2 where id=${created.id}`;
++    });
++    await locked.promise;
++    const retry = on(b, () => retryImport(scope(), created.id));
++    const observed = retry.then(
++      () => ({ resolved: true }),
++      (error) => ({ error }),
++    );
++    await until(
++      async () =>
++        (
++          await a`select pid from pg_stat_activity where pid=${backendIds[1]!} and wait_event_type='Lock'`
++        ).length === 1,
++    );
++    release.resolve();
++    await transaction;
++    expect(await observed).toMatchObject({
++      error: { status: 409, body: { message: VERSION_CONFLICT } },
++    });
++    const current = await state(created.id);
++    expect(current.jobs).toHaveLength(1);
++    expect(current.head?.revision).toBe(created.request.revision);
++    expect(current.row.parser_version).toBe(2);
++    expect(current.row.status).toBe('queued');
++    expect(current.transactions).toEqual([]);
++  });
++  it.each(['done', 'failed'])(
++    'historical %s returns persisted terminal outcome without parsing',
++    async (status) => {
++      const created = await seed(CSV, status, 500, 1);
++      await owner`update fin_statement_imports set error_message=${status === 'failed' ? 'Historical fixed failure' : null} where id=${created.id}`;
++      const before = await state(created.id);
++      await on(a, () => advanceJob(created.jobId));
++      const after = await state(created.id);
++      expect(after.row).toEqual(before.row);
++      expect(after.head).toEqual(before.head);
++      expect(fetch).not.toHaveBeenCalled();
++      const result = await on(a, () => getImportStatus(scope(), created.id));
++      expect(result?.rejections).toEqual([]);
++      expect(result?.import.parserVersion).toBe(1);
++      expect(fetch).not.toHaveBeenCalled();
++    },
++  );
++  it.each([
++    'Date,Description,Amount\r\n2026-01-01,Sample,1',
++    '\uFEFFDate,Description,Amount\n2026-01-01,Sample,1',
++  ])(
++    'raw source and decoded normalized provenance may differ without corrupting accounting',
++    async (text) => {
++      const created = await seed(text);
++      await on(a, () => advanceJob(created.jobId));
++      const current = await state(created.id);
++      expect(current.row).toMatchObject({
++        parser_version: STATEMENT_PARSER_VERSION,
++        content_sha256: hash(text),
++        status: 'done',
++        next_chunk: 1,
++        inserted_count: 1,
++      });
++      expect(current.transactions[0]).toMatchObject({ source_row: 1, signed_amount: '1.00' });
++      expect(created.request.sourceHash).toBe(
++        hash(JSON.stringify([hash(text), STATEMENT_PARSER_VERSION])),
++      );
++    },
++  );
++  it.each([
++    ['record-too-large', 'Date,Description,' + 'S'.repeat(4097) + 'SECRET_HEADER'],
++    ['malformed-quoting', 'Date,"SECRET_HEADER'],
++    ['invalid-encoding', 'Date,Description,Amount\uFFFDSECRET_HEADER'],
++  ])(
++    'actual %s header keeps fixed classification through persisted status route',
++    async (reason, header) => {
++      const text = header + '\n2026-01-01,Sample,1';
++      const created = await seed(text);
++      await on(a, () => advanceJob(created.jobId));
++      const current = await state(created.id);
++      expect(current.row).toMatchObject({
++        status: 'failed',
++        error_code: 'statement_header_invalid',
++        error_message: `Invalid statement header: ${reason}`,
++        next_chunk: 0,
++        inserted_count: 0,
++        rejected_count: 0,
++      });
++      expect(current.transactions).toEqual([]);
++      const response = await on(a, async () =>
++        statusRoute({ locals: {}, params: { id: created.id } } as Parameters<
++          typeof statusRoute
++        >[0]),
++      );
++      const body = await response.json();
++      expect(body.import.errorCode).toBe('statement_header_invalid');
++      expect(body.import.errorMessage).toBe(`Invalid statement header: ${reason}`);
++      expect(JSON.stringify(body)).not.toContain('SECRET_HEADER');
++    },
++  );
++  it('actual whole-input limit persists only fixed bounded classification', async () => {
++    const created = await seed('S'.repeat(STATEMENT_LIMITS.maxInputChars + 1));
++    await on(a, () => advanceJob(created.jobId));
++    const current = await state(created.id);
++    expect(current.row).toMatchObject({
++      status: 'failed',
++      error_code: 'statement_limit_exceeded',
++      error_message: 'Statement input limit exceeded: input-too-large',
++      next_chunk: 0,
++      inserted_count: 0,
++    });
++    expect(current.transactions).toEqual([]);
++  });
++
++  it('late invalid-header result cannot fail a replaced request', async () => {
++    const text = 'Date,"SECRET_HEADER';
++    const created = await seed(text),
++      file = deferred<Response>();
++    vi.mocked(fetch).mockImplementationOnce(() => file.promise);
++    const run = on(a, () => advanceJob(created.jobId));
++    await until(() => vi.mocked(fetch).mock.calls.length === 1);
++    await on(b, () => undoImport(scope(), created.id));
++    const before = await state(created.id);
++    file.resolve(new Response(text));
++    await run;
++    const after = await state(created.id);
++    expect(after.row).toEqual(before.row);
++    expect(after.head).toEqual(before.head);
++    expect(after.transactions).toEqual([]);
++  });
++});
+--- a/src/server/services/finance-statement-parser.ts
++++ b/src/server/services/finance-statement-parser.ts
+@@ -7,7 +7,78 @@
+  * `rejected` (with a reason). Ambiguous column mapping (can't confidently find
+  * date+description+amount) rejects EVERY data row with reason 'needs-llm' —
+  * the gateway drone fallback is a later cross-repo wave (R5/WP5).
++ *
++ * DATA-01: every result carries its own provenance (parser version + sha-256
++ * of the exact normalized text that was parsed), and the work is bounded.
++ * Whole-input limits (characters, data rows) throw `StatementParseLimitError` —
++ * there is no row to attach them to and continuing would be unbounded memory.
++ * Invalid headers throw a content-free `StatementParseHeaderError` before mapping.
++ * Per-data-record limits reject that record and keep its raw values, so a single
++ * oversized or badly-encoded line never discards the rest of the statement.
++ * Nothing ambiguous is coerced to a default: it is rejected with a reason.
+  */
++import { createHash } from 'node:crypto';
++
++/**
++ * Bump whenever accepted/rejected semantics change — a stored parse is only
++ * reproducible against the version that produced it.
++ * v2: bounded input/record work, invalid-encoding and duplicate detection.
++ * v3: reject unusable headers and count data records after excluding genuine blanks.
++ *
++ * TODO(handoff): The service now binds this version and verifies normalized
++ * parse provenance separately from uploaded-byte integrity. Historical version
++ * replacement and durable normalized-provenance storage remain separately gated;
++ * see proposals/2026-09-10-hub-finance-parser-version-binding.md (D360-20).
++ */
++export const STATEMENT_PARSER_VERSION = 3;
++
++/**
++ * Enforced limits. Deliberately generous relative to a real bank statement
++ * (a year of daily transactions is ~400 rows) — these bound a hostile or
++ * corrupt upload, they are not a business policy on statement size.
++ */
++export const STATEMENT_LIMITS = {
++  /** Whole input, in UTF-16 code units. ~8 MB of ASCII. Throws. */
++  maxInputChars: 8_000_000,
++  /** Data rows excluding the header. Throws. */
++  maxDataRows: 100_000,
++  /** One field's characters. Rejects the record. */
++  maxFieldChars: 4_096,
++  /** Columns per record. Rejects the record. */
++  maxColumns: 256,
++} as const;
++
++/** Whole-input limit breach — no single record owns it, so it is thrown. */
++export class StatementParseLimitError extends Error {
++  readonly code = 'statement_limit_exceeded';
++  constructor(
++    readonly reason: 'input-too-large' | 'too-many-rows',
++    readonly limit: number,
++    readonly actual: number,
++  ) {
++    super(`${reason}: ${actual} exceeds the enforced limit of ${limit}`);
++    this.name = 'StatementParseLimitError';
++  }
++}
++
++/** An unusable header cannot assign trustworthy meaning to any data row.
++ * Only a fixed reason is exposed: never echo a header containing customer data. */
++export class StatementParseHeaderError extends Error {
++  readonly code = 'statement_header_invalid';
++  constructor(readonly reason: 'record-too-large' | 'malformed-quoting' | 'invalid-encoding') {
++    super(`Invalid statement header: ${reason}`);
++    this.name = 'StatementParseHeaderError';
++  }
++}
++
++/** Deterministic identity of the exact text this result was produced from. */
++export interface StatementParseProvenance {
++  parserVersion: number;
++  /** sha-256 of the NORMALIZED text actually parsed (CRLF/CR already folded). */
++  sourceSha256: string;
++  sourceChars: number;
++  dataRows: number;
++}
+ 
+ export interface StatementEntryOk {
+   sourceRow: number;
+@@ -40,6 +111,8 @@
+   rejected: StatementEntryRejected[];
+   /** Recognized field keys detected in the header, for diagnostics. */
+   headerFields: string[];
++  /** DATA-01: which parser, and which exact bytes, produced this result. */
++  provenance: StatementParseProvenance;
+ }
+ 
+ /** Normalize pasted-text line endings so identical content hashes identically
+@@ -55,6 +128,9 @@
+    *  or a quote was never closed before EOF. The row's cells are best-effort
+    *  only — callers should reject the row rather than trust them. */
+   malformed: boolean;
++  /** A field or the column count exceeded its enforced limit. Cells are
++   *  truncated to keep memory bounded — reject the record, don't trust them. */
++  oversized: boolean;
+ }
+ 
+ // ── CSV tokenizer (minimal RFC4180: quoted fields, "" escape, embedded commas/newlines) ──
+@@ -65,19 +141,54 @@
+   let inQuotes = false;
+   let fieldStarted = false; // has any char landed in the current field yet?
+   let rowMalformed = false;
++  let rowOversized = false;
+   let sawAny = false;
+ 
+   const endField = () => {
+-    row.push(field);
++    // Column overflow drops the surplus cell rather than growing the row: the
++    // record is already rejected, and an unbounded column count is the whole
++    // point of the limit.
++    if (row.length >= STATEMENT_LIMITS.maxColumns) rowOversized = true;
++    else row.push(field);
+     field = '';
+     fieldStarted = false;
+   };
+   const endRow = () => {
+     endField();
+-    rows.push({ cells: row, malformed: rowMalformed });
++    // Match the existing logical-row convention, but discard genuine blanks
++    // before allocating/counting them. Malformed or truncated empty-looking
++    // records remain evidence and consume capacity like any other data record.
++    const blank = row.length === 1 && row[0].trim() === '' && !rowMalformed && !rowOversized;
++    if (!blank) {
++      if (rows.length === 0) {
++        // The first nonblank row owns the column mapping. Truncated characters
++        // or columns are never trusted, even if a dropped suffix hid U+FFFD.
++        if (rowOversized) throw new StatementParseHeaderError('record-too-large');
++        if (rowMalformed) throw new StatementParseHeaderError('malformed-quoting');
++        if (row.some((cell) => cell.includes(REPLACEMENT_CHAR))) {
++          throw new StatementParseHeaderError('invalid-encoding');
++        }
++      }
++      rows.push({ cells: row, malformed: rowMalformed, oversized: rowOversized });
++      // +1 for the validated header; rejected data records count too.
++      if (rows.length > STATEMENT_LIMITS.maxDataRows + 1) {
++        throw new StatementParseLimitError(
++          'too-many-rows',
++          STATEMENT_LIMITS.maxDataRows,
++          rows.length - 1,
++        );
++      }
++    }
+     row = [];
+     rowMalformed = false;
++    rowOversized = false;
+     sawAny = false;
++  };
++
++  /** Bounded field append — past the limit characters are dropped, not stored. */
++  const push = (c: string) => {
++    if (field.length >= STATEMENT_LIMITS.maxFieldChars) rowOversized = true;
++    else field += c;
+   };
+ 
+   for (let i = 0; i < text.length; i++) {
+@@ -85,7 +196,7 @@
+     if (inQuotes) {
+       if (c === '"') {
+         if (text[i + 1] === '"') {
+-          field += '"';
++          push('"');
+           i++;
+         } else {
+           inQuotes = false;
+@@ -96,7 +207,7 @@
+           }
+         }
+       } else {
+-        field += c;
++        push(c);
+       }
+       continue;
+     }
+@@ -111,7 +222,7 @@
+     }
+     if (c === '"') {
+       rowMalformed = true;
+-      field += c;
++      push(c);
+       fieldStarted = true;
+       sawAny = true;
+       continue;
+@@ -126,7 +237,7 @@
+       continue;
+     }
+     if (c === '\r') continue; // normalize CRLF/bare-CR
+-    field += c;
++    push(c);
+     fieldStarted = true;
+     sawAny = true;
+   }
+@@ -134,7 +245,7 @@
+   if (sawAny || field.length > 0 || row.length > 0) {
+     endRow();
+   }
+-  return rows.filter((r) => !(r.cells.length === 1 && r.cells[0].trim() === '' && !r.malformed));
++  return rows;
+ }
+ 
+ function stripAccents(s: string): string {
+@@ -280,9 +391,7 @@
+ 
+   if (lastComma !== -1 && lastDot !== -1) {
+     const commaIsDecimal = lastDot < lastComma;
+-    const canonical = commaIsDecimal
+-      ? s.replace(/\./g, '').replace(',', '.')
+-      : s.replace(/,/g, '');
++    const canonical = commaIsDecimal ? s.replace(/\./g, '').replace(',', '.') : s.replace(/,/g, '');
+     return { negative, canonical, ambiguous: false, decimalChar: commaIsDecimal ? ',' : '.' };
+   }
+ 
+@@ -350,13 +459,10 @@
+  *  group amount (e.g. "1.234") in the same file can be resolved instead of
+  *  guessed. Returns undefined when no convention could be established (no
+  *  unambiguous signal, or conflicting signals across rows). */
+-function detectAmountConvention(
+-  table: CsvRow[],
+-  colIdx: number[],
+-): ',' | '.' | undefined {
++function detectAmountConvention(table: CsvRow[], colIdx: number[]): ',' | '.' | undefined {
+   let found: ',' | '.' | undefined;
+   for (let r = 1; r < table.length; r++) {
+-    if (table[r].malformed) continue;
++    if (table[r].malformed || table[r].oversized) continue;
+     for (const idx of colIdx) {
+       const raw = table[r].cells[idx];
+       if (raw === undefined) continue;
+@@ -378,14 +484,36 @@
+   if (a.canonical !== null) return { value: toNumber(a), ambiguous: false };
+   if (a.ambiguous) {
+     const resolved = resolveAmbiguous(a, convention);
+-    return resolved === null ? { value: null, ambiguous: true } : { value: resolved, ambiguous: false };
++    return resolved === null
++      ? { value: null, ambiguous: true }
++      : { value: resolved, ambiguous: false };
+   }
+   return { value: null, ambiguous: false };
+ }
+ 
++/** U+FFFD only appears when a decode already failed — the original bytes are
++ *  gone, so the cell's financial meaning cannot be recovered. Reject, keep raw. */
++const REPLACEMENT_CHAR = '\uFFFD';
++
+ export function parseStatementCsv(text: string): StatementParseResult {
+-  const table = splitCsvRows(normalizeStatementText(text));
+-  if (table.length === 0) return { entries: [], rows: [], rejected: [], headerFields: [] };
++  const normalized = normalizeStatementText(text);
++  if (normalized.length > STATEMENT_LIMITS.maxInputChars) {
++    throw new StatementParseLimitError(
++      'input-too-large',
++      STATEMENT_LIMITS.maxInputChars,
++      normalized.length,
++    );
++  }
++  const provenanceOf = (dataRows: number): StatementParseProvenance => ({
++    parserVersion: STATEMENT_PARSER_VERSION,
++    sourceSha256: createHash('sha256').update(normalized, 'utf8').digest('hex'),
++    sourceChars: normalized.length,
++    dataRows,
++  });
++
++  const table = splitCsvRows(normalized);
++  if (table.length === 0)
++    return { entries: [], rows: [], rejected: [], headerFields: [], provenance: provenanceOf(0) };
+ 
+   const header = table[0].cells;
+   const cols = detectColumns(header);
+@@ -403,6 +531,7 @@
+     : undefined;
+ 
+   const entries: StatementEntry[] = [];
++  const seen = new Map<string, number>();
+   for (let r = 1; r < table.length; r++) {
+     const sourceRow = r; // 1-based data row index, header excluded
+     const cells = table[r].cells;
+@@ -411,8 +540,16 @@
+       raw[h.trim() || `col${idx}`] = cells[idx] ?? '';
+     });
+ 
++    if (table[r].oversized) {
++      entries.push({ sourceRow, ok: false, reason: 'record-too-large', raw });
++      continue;
++    }
+     if (table[r].malformed) {
+       entries.push({ sourceRow, ok: false, reason: 'malformed-quoting', raw });
++      continue;
++    }
++    if (cells.some((c) => c.includes(REPLACEMENT_CHAR))) {
++      entries.push({ sourceRow, ok: false, reason: 'invalid-encoding', raw });
+       continue;
+     }
+     if (!canParseDeterministically) {
+@@ -448,10 +585,17 @@
+       if (debitRaw === '' && creditRaw === '') {
+         signedAmount = null;
+       } else {
+-        const debitR = debitRaw === '' ? { value: 0, ambiguous: false } : resolveAmountCell(debitRaw, amountConvention);
+-        const creditR = creditRaw === '' ? { value: 0, ambiguous: false } : resolveAmountCell(creditRaw, amountConvention);
++        const debitR =
++          debitRaw === ''
++            ? { value: 0, ambiguous: false }
++            : resolveAmountCell(debitRaw, amountConvention);
++        const creditR =
++          creditRaw === ''
++            ? { value: 0, ambiguous: false }
++            : resolveAmountCell(creditRaw, amountConvention);
+         amountAmbiguous = debitR.ambiguous || creditR.ambiguous;
+-        signedAmount = debitR.value === null || creditR.value === null ? null : creditR.value - debitR.value;
++        signedAmount =
++          debitR.value === null || creditR.value === null ? null : creditR.value - debitR.value;
+       }
+     }
+     if (signedAmount === null || Number.isNaN(signedAmount)) {
+@@ -464,24 +608,41 @@
+       continue;
+     }
+ 
++    // Identical transactions are legitimate on a real statement (two coffees on
++    // one day), so they stay ACCEPTED — the warning makes the repeat traceable
++    // without a policy decision the parser has no authority to make.
++    const fixedAmount = signedAmount.toFixed(2);
++    const dupeKey = `${parsedDate.iso}|${description}|${fixedAmount}`;
++    const firstSeen = seen.get(dupeKey);
++    if (firstSeen === undefined) seen.set(dupeKey, sourceRow);
++
+     entries.push({
+       sourceRow,
+       ok: true,
+       postedOn: parsedDate.iso,
+       description,
+-      signedAmount: signedAmount.toFixed(2),
++      signedAmount: fixedAmount,
+       currency: cols.currency !== undefined ? (cells[cols.currency] ?? '').trim() || null : null,
+       counterparty:
+         cols.counterparty !== undefined ? (cells[cols.counterparty] ?? '').trim() || null : null,
+       category: cols.category !== undefined ? (cells[cols.category] ?? '').trim() || null : null,
+       reference: cols.reference !== undefined ? (cells[cols.reference] ?? '').trim() || null : null,
+       confidence: null, // deterministic path — confidence is an LLM-fallback concept (R5/WP5)
+-      warnings: parsedDate.ambiguous ? ['date-format-ambiguous-assumed-dmy'] : [],
++      warnings: [
++        ...(parsedDate.ambiguous ? ['date-format-ambiguous-assumed-dmy'] : []),
++        ...(firstSeen === undefined ? [] : [`duplicate-of-row-${firstSeen}`]),
++      ],
+       raw,
+     });
+   }
+ 
+   const rows = entries.filter((e): e is StatementEntryOk => e.ok);
+   const rejected = entries.filter((e): e is StatementEntryRejected => !e.ok);
+-  return { entries, rows, rejected, headerFields: Object.keys(cols) };
+-}
++  return {
++    entries,
++    rows,
++    rejected,
++    headerFields: Object.keys(cols),
++    provenance: provenanceOf(entries.length),
++  };
++}
+--- a/src/server/services/finance-statement-parser.test.ts
++++ b/src/server/services/finance-statement-parser.test.ts
+@@ -4,6 +4,9 @@
+   parseStatementDate,
+   parseStatementAmount,
+   normalizeStatementText,
++  StatementParseLimitError,
++  STATEMENT_LIMITS,
++  STATEMENT_PARSER_VERSION,
+ } from './finance-statement-parser';
+ 
+ describe('normalizeStatementText', () => {
+@@ -166,11 +169,13 @@
+   });
+ 
+   it('returns empty result for empty input', () => {
+-    expect(parseStatementCsv('')).toEqual({
+-      entries: [],
+-      rows: [],
+-      rejected: [],
+-      headerFields: [],
++    const result = parseStatementCsv('');
++    expect(result).toMatchObject({ entries: [], rows: [], rejected: [], headerFields: [] });
++    // Provenance is still emitted — an empty parse is a parse.
++    expect(result.provenance).toMatchObject({
++      parserVersion: STATEMENT_PARSER_VERSION,
++      sourceChars: 0,
++      dataRows: 0,
+     });
+   });
+ 
+@@ -224,3 +229,266 @@
+     expect(result.rows[0].description).toBe('Grocer"s store');
+   });
+ });
++
++// ── DATA-01: provenance and enforced bounds ────────────────────────────────
++
++const HEADER = 'Date,Description,Amount';
++const csv = (...rows: string[]) => [HEADER, ...rows].join('\n');
++
++describe('parse provenance (DATA-01)', () => {
++  it('identifies the parser and the exact normalized text it parsed', () => {
++    const result = parseStatementCsv(csv('2026-03-04,Coffee,-4.50'));
++    expect(result.provenance.parserVersion).toBe(STATEMENT_PARSER_VERSION);
++    expect(result.provenance.sourceSha256).toMatch(/^[0-9a-f]{64}$/);
++    expect(result.provenance.dataRows).toBe(1);
++    expect(result.provenance.sourceChars).toBe(csv('2026-03-04,Coffee,-4.50').length);
++  });
++
++  it('is deterministic for identical content and differs for different content', () => {
++    const a = parseStatementCsv(csv('2026-03-04,Coffee,-4.50')).provenance.sourceSha256;
++    const b = parseStatementCsv(csv('2026-03-04,Coffee,-4.50')).provenance.sourceSha256;
++    const c = parseStatementCsv(csv('2026-03-04,Coffee,-4.51')).provenance.sourceSha256;
++    expect(a).toBe(b);
++    expect(a).not.toBe(c);
++  });
++
++  it('hashes the NORMALIZED text, so CRLF and LF of the same statement agree', () => {
++    const lf = parseStatementCsv(csv('2026-03-04,Coffee,-4.50'));
++    const crlf = parseStatementCsv(csv('2026-03-04,Coffee,-4.50').replace(/\n/g, '\r\n'));
++    expect(crlf.provenance.sourceSha256).toBe(lf.provenance.sourceSha256);
++    expect(crlf.rows).toEqual(lf.rows);
++  });
++
++  it('counts every data row as accepted or rejected, never dropped', () => {
++    const result = parseStatementCsv(
++      csv('2026-03-04,Coffee,-4.50', '2026-13-40,Bad date,-1.00', 'not,a,row'),
++    );
++    expect(result.entries.length).toBe(3);
++    expect(result.rows.length + result.rejected.length).toBe(result.entries.length);
++    expect(result.provenance.dataRows).toBe(3);
++  });
++});
++
++describe('bounded ingestion (DATA-01)', () => {
++  it('throws a traceable limit error for oversized input instead of parsing it', () => {
++    const huge = 'x'.repeat(STATEMENT_LIMITS.maxInputChars + 1);
++    expect(() => parseStatementCsv(huge)).toThrow(StatementParseLimitError);
++    try {
++      parseStatementCsv(huge);
++      expect.unreachable();
++    } catch (e) {
++      const err = e as StatementParseLimitError;
++      expect(err.reason).toBe('input-too-large');
++      expect(err.limit).toBe(STATEMENT_LIMITS.maxInputChars);
++      expect(err.actual).toBe(huge.length);
++      // The message must stay bounded and content-free — it is persisted on
++      // the import row and surfaced to the operator.
++      expect(err.message.length).toBeLessThan(120);
++      expect(err.message).not.toContain('x'.repeat(20));
++    }
++  });
++
++  it('throws once the data-row limit is passed, without materializing the rest', () => {
++    const rows = Array.from(
++      { length: STATEMENT_LIMITS.maxDataRows + 5 },
++      () => '2026-03-04,Coffee,-4.50',
++    );
++    try {
++      parseStatementCsv(csv(...rows));
++      expect.unreachable();
++    } catch (e) {
++      const err = e as StatementParseLimitError;
++      expect(err).toBeInstanceOf(StatementParseLimitError);
++      expect(err.reason).toBe('too-many-rows');
++      expect(err.limit).toBe(STATEMENT_LIMITS.maxDataRows);
++    }
++  });
++
++  it('accepts a statement exactly at the row limit', () => {
++    const rows = Array.from(
++      { length: STATEMENT_LIMITS.maxDataRows },
++      (_, i) => `2026-03-04,Row ${i},-1.00`,
++    );
++    const result = parseStatementCsv(csv(...rows));
++    expect(result.entries.length).toBe(STATEMENT_LIMITS.maxDataRows);
++    expect(result.rows.length).toBe(STATEMENT_LIMITS.maxDataRows);
++  });
++
++  it('rejects one oversized record and keeps the rest of the statement', () => {
++    const big = 'y'.repeat(STATEMENT_LIMITS.maxFieldChars + 10);
++    const result = parseStatementCsv(
++      csv('2026-03-04,Coffee,-4.50', `2026-03-05,${big},-9.99`, '2026-03-06,Bus,-2.00'),
++    );
++    expect(result.rejected.map((r) => [r.sourceRow, r.reason])).toEqual([[2, 'record-too-large']]);
++    expect(result.rows.map((r) => r.description)).toEqual(['Coffee', 'Bus']);
++    // The rejected record's raw values are retained but bounded.
++    const raw = JSON.stringify(result.rejected[0].raw);
++    expect(raw.length).toBeLessThan(STATEMENT_LIMITS.maxFieldChars + 200);
++  });
++
++  it('rejects a record with more columns than the limit', () => {
++    const wide = Array.from({ length: STATEMENT_LIMITS.maxColumns + 5 }, () => 'v').join(',');
++    const result = parseStatementCsv(csv('2026-03-04,Coffee,-4.50', wide));
++    expect(result.rejected.map((r) => r.reason)).toEqual(['record-too-large']);
++    expect(result.rows.length).toBe(1);
++  });
++
++  it('rejects a record whose bytes failed to decode, with its raw preserved', () => {
++    const result = parseStatementCsv(csv('2026-03-04,Caf\uFFFD,-4.50', '2026-03-05,Clean,-1.00'));
++    expect(result.rejected.map((r) => [r.sourceRow, r.reason])).toEqual([[1, 'invalid-encoding']]);
++    expect(result.rejected[0].raw.Description).toBe('Caf\uFFFD');
++    expect(result.rows.map((r) => r.description)).toEqual(['Clean']);
++  });
++
++  it('does not coerce an ambiguous amount or date into a fabricated default', () => {
++    // No unambiguous amount anywhere in the file, so "1.234" has no column
++    // convention to resolve against — it must stay rejected, not become 1234.
++    const result = parseStatementCsv(csv('2026-03-04,Coffee,1.234', 'nope,Bus,5.678'));
++    expect(result.rejected.map((r) => r.reason)).toEqual(['ambiguous-amount', 'invalid-date']);
++    expect(result.rows).toEqual([]);
++  });
++
++  it('keeps duplicate transactions accepted but traceable to the first row', () => {
++    const result = parseStatementCsv(
++      csv('2026-03-04,Coffee,-4.50', '2026-03-04,Coffee,-4.50', '2026-03-04,Coffee,-4.51'),
++    );
++    expect(result.rows.length).toBe(3);
++    expect(result.rows[0].warnings).toEqual([]);
++    expect(result.rows[1].warnings).toEqual(['duplicate-of-row-1']);
++    expect(result.rows[2].warnings).toEqual([]);
++    // Financial meaning is preserved — a duplicate is still money.
++    expect(result.rows.map((r) => r.signedAmount)).toEqual(['-4.50', '-4.50', '-4.51']);
++  });
++
++  it('keeps quoted multiline fields and the ambiguous-date warning intact', () => {
++    const result = parseStatementCsv(csv('03/04/2026,"Grocer\nSt 5",-4.50'));
++    expect(result.rows[0].description).toBe('Grocer\nSt 5');
++    expect(result.rows[0].postedOn).toBe('2026-04-03');
++    expect(result.rows[0].warnings).toEqual(['date-format-ambiguous-assumed-dmy']);
++  });
++});
++
++describe('header admission and logical capacity (15-06)', () => {
++  it('accepts a header field exactly at its decoded-character limit', () => {
++    const result = parseStatementCsv(
++      `${HEADER},${'h'.repeat(STATEMENT_LIMITS.maxFieldChars)}\n2026-03-04,Coffee,-4.50,x`,
++    );
++    expect(result.rows.map((row) => row.signedAmount)).toEqual(['-4.50']);
++  });
++
++  it('refuses a truncated header field before returning any parsed rows', () => {
++    expect(() =>
++      parseStatementCsv(
++        `${HEADER},${'h'.repeat(STATEMENT_LIMITS.maxFieldChars + 1)}\n2026-03-04,Coffee,-4.50,x`,
++      ),
++    ).toThrowError(
++      expect.objectContaining({ code: 'statement_header_invalid', reason: 'record-too-large' }),
++    );
++  });
++
++  it('accepts exactly 256 header columns but rejects a 257th even if data fits the truncated header', () => {
++    const extras = Array.from({ length: STATEMENT_LIMITS.maxColumns - 3 }, (_, i) => `extra${i}`);
++    const header = [HEADER, ...extras].join(',');
++    const row = ['2026-03-04,Coffee,-4.50', ...extras.map(() => 'x')].join(',');
++    expect(parseStatementCsv(`${header}\n${row}`).rows).toHaveLength(1);
++    expect(() => parseStatementCsv(`${header},surplus\n${row}`)).toThrowError(
++      expect.objectContaining({ code: 'statement_header_invalid', reason: 'record-too-large' }),
++    );
++  });
++
++  it.each([
++    'Date,Description,Amount,Ex"tra',
++    'Date,Description,Amount,"Extra"oops',
++    'Date,Description,Amount,"Extra',
++  ])('refuses malformed header %s', (header) => {
++    expect(() => parseStatementCsv(`${header}\n2026-03-04,Coffee,-4.50,x`)).toThrowError(
++      expect.objectContaining({ code: 'statement_header_invalid', reason: 'malformed-quoting' }),
++    );
++  });
++
++  it('refuses a header whose decoding was already damaged with a bounded content-free diagnostic', () => {
++    try {
++      parseStatementCsv(`${HEADER},private-header-\uFFFD\n2026-03-04,Coffee,-4.50,x`);
++      expect.unreachable('damaged header must not establish a mapping');
++    } catch (error) {
++      expect(error).toMatchObject({ code: 'statement_header_invalid', reason: 'invalid-encoding' });
++      expect(error).toBeInstanceOf(Error);
++      expect((error as Error).message.length).toBeLessThan(120);
++      expect((error as Error).message).not.toContain('private-header');
++    }
++  });
++
++  it('counts 100000 actual records, excluding leading/interspersed/trailing genuine blanks', () => {
++    const rows = Array.from(
++      { length: STATEMENT_LIMITS.maxDataRows },
++      (_, i) => `2026-03-04,Row ${i},-1.00\n${i % 10 === 0 ? ' \t\n""\n' : ''}`,
++    ).join('');
++    const text = `\n \t\n${HEADER}\n\n${rows}\n \t\n`;
++    const result = parseStatementCsv(text);
++    expect(result.provenance.dataRows).toBe(STATEMENT_LIMITS.maxDataRows);
++    expect(result.rows).toHaveLength(STATEMENT_LIMITS.maxDataRows);
++    expect(result.rejected).toHaveLength(0);
++    expect(result.entries[0].sourceRow).toBe(1);
++    expect(result.entries.at(-1)?.sourceRow).toBe(STATEMENT_LIMITS.maxDataRows);
++    expect(result.provenance.sourceChars).toBe(text.length);
++  });
++
++  it('rejects 100001 actual records even when interspersed blank rows are present', () => {
++    const text =
++      `\n${HEADER}\n` + '2026-03-04,Coffee,-1.00\n\n'.repeat(STATEMENT_LIMITS.maxDataRows + 1);
++    expect(() => parseStatementCsv(text)).toThrowError(
++      expect.objectContaining({
++        code: 'statement_limit_exceeded',
++        reason: 'too-many-rows',
++        limit: STATEMENT_LIMITS.maxDataRows,
++        actual: STATEMENT_LIMITS.maxDataRows + 1,
++      }),
++    );
++  });
++
++  it('preserves logical source rows, duplicate warnings, money and normalized-text identity across blanks', () => {
++    const text = `\n${HEADER}\n2026-03-04,Coffee,-4.50\n \t\n""\n2026-03-04,Coffee,-4.50\n,,\n${' '.repeat(STATEMENT_LIMITS.maxFieldChars + 1)}\n""oops\n2026-03-05,Bus,-2.00\n`;
++    const result = parseStatementCsv(text);
++    expect(result.entries.map((row) => row.sourceRow)).toEqual([1, 2, 3, 4, 5, 6]);
++    expect(result.rows.map((row) => [row.sourceRow, row.signedAmount])).toEqual([
++      [1, '-4.50'],
++      [2, '-4.50'],
++      [6, '-2.00'],
++    ]);
++    expect(result.rows[1].warnings).toEqual(['duplicate-of-row-1']);
++    expect(result.rejected.map((row) => [row.sourceRow, row.reason])).toEqual([
++      [3, 'invalid-date'],
++      [4, 'record-too-large'],
++      [5, 'malformed-quoting'],
++    ]);
++    expect(result.rows.length + result.rejected.length).toBe(result.provenance.dataRows);
++    expect(parseStatementCsv(text.replace(/\n/g, '\r\n')).provenance.sourceSha256).toBe(
++      result.provenance.sourceSha256,
++    );
++    expect(parseStatementCsv(text.replace('\n \t\n""\n', '\n')).provenance.sourceSha256).not.toBe(
++      result.provenance.sourceSha256,
++    );
++  });
++});
++
++it.each(['field', 'column'])(
++  'does not hide invalid encoding in a truncated header suffix: %s',
++  (kind) => {
++    const header =
++      kind === 'field'
++        ? `${HEADER},${'h'.repeat(STATEMENT_LIMITS.maxFieldChars)}\uFFFD`
++        : [
++            HEADER,
++            ...Array.from({ length: STATEMENT_LIMITS.maxColumns - 3 }, (_, i) => `extra${i}`),
++            '\uFFFD',
++          ].join(',');
++    expect(() => parseStatementCsv(`${header}\n2026-03-04,Coffee,-4.50,x`)).toThrowError(
++      expect.objectContaining({ code: 'statement_header_invalid', reason: 'record-too-large' }),
++    );
++  },
++);
++
++it('bounds decoded header characters rather than CSV quote-escaping bytes', () => {
++  const quoted = `"${'""'.repeat(STATEMENT_LIMITS.maxFieldChars)}"`;
++  expect(parseStatementCsv(`${HEADER},${quoted}\n2026-03-04,Coffee,-4.50,x`).rows).toHaveLength(1);
++});
