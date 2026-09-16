@@ -16,7 +16,7 @@
   "NikolasP98/minion_hub:master": {
     "cursor": "10e9567ad61bc9b3dfcfa5b62bcff1a188dfa05c",
     "head": "2ffbf0b615a0cde5d7405ba9036764b9fb675d95",
-    "done": 35,
+    "done": 42,
     "kept": [
       {
         "file": ".github/workflows/ci.yml",
@@ -220,6 +220,83 @@
         "severity": "medium",
         "category": "hardcoded-config",
         "line": 152
+      },
+      {
+        "file": "src/server/services/attachments.lifecycle.sql.integration.test.ts",
+        "desc": "Destructuring [{ pid }] without checking if query returned rows; undefined pid cast to number.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 109
+      },
+      {
+        "file": "src/server/services/attachments.lifecycle.sql.integration.test.ts",
+        "desc": "Destructuring [r] without checking if query returned rows; undefined return breaks test assertions.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 114
+      },
+      {
+        "file": "src/server/services/attachments.lifecycle.sql.integration.test.ts",
+        "desc": "Destructuring [state] without checking; accessing state.access_modules on undefined would throw.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 235
+      },
+      {
+        "file": "src/server/services/attachments.lifecycle.sql.integration.test.ts",
+        "desc": "Destructuring [before] without checking if query returned rows; undefined used in assertion.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 269
+      },
+      {
+        "file": "src/server/services/attachments.lifecycle.sql.integration.test.ts",
+        "desc": "Destructuring [after] without checking if query returned rows; undefined used in assertion.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 282
+      },
+      {
+        "file": "src/server/services/attachments.service.test.ts",
+        "desc": "Hardcoded value 900 (signed URL expiry seconds) should be defined as a named constant",
+        "severity": "medium",
+        "category": "hardcoded-config",
+        "line": 130
+      },
+      {
+        "file": "src/server/services/attachments.service.ts",
+        "desc": "Non-'not_found' errors in batch deletion loop are silently swallowed after counting, losing error context",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 600
+      },
+      {
+        "file": "src/server/services/pos-accounts.logic.ts",
+        "desc": "The today parameter is used without format validation; invalid dates like \"2026-13-45\" would silently produce incorrect results instead of erroring, despite documented assumption that it comes from grantToday().",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 226
+      },
+      {
+        "file": "src/server/services/pos-accounts.service.ts",
+        "desc": "Destructuring const [row] = await tx.insert(...).returning() without checking if array is empty — if empty, row is undefined but return type expects PosClientLedgerRow",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 430
+      },
+      {
+        "file": "src/server/services/pos-accounts.service.ts",
+        "desc": "Destructuring const [plan] = await tx.insert(...).returning() inside createPlan without checking if array is empty — if empty, plan is undefined but used unsafely",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 459
+      },
+      {
+        "file": "src/server/services/pos-packages.service.ts",
+        "desc": "Destructured row from .update().returning() may be undefined if WHERE clause doesn't match; returned directly without null check despite return type PosPackageGrant.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 340
       }
     ]
   }
