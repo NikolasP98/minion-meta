@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T06:28:57.726Z",
+	"generatedAt": "2026-09-16T06:58:50.436Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1389,20 +1389,20 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 7
+				"specification": 7,
+				"implementation": 6
 			},
-			"confidence": 8,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Merge-scan surfaced a high-severity cross-tenant data access risk alongside several unchecked-access crash sites, each pinpointed to an exact file and line.",
+			"rationale": "Merge-scan surfaced a high-severity cross-tenant data access gap alongside several high/medium unchecked-access bugs with exact file:line locations, making this both consequential and actionable now.",
 			"evidence": [
-				"'Missing org isolation in getContactTagsBulk query...risking cross-tenant data access' (high)",
-				"multiple 'high' unchecked-access findings that would throw TypeError on empty DB returns"
+				"'Missing org isolation in getContactTagsBulk query...risking cross-tenant data access'",
+				"'const [r] from .returning() is destructured and returned without verifying r exists'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T06:35:03.763Z"
+			"scoredAt": "2026-09-16T06:58:50.347Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-6b39120c48a2",
@@ -3068,6 +3068,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:38:46.333Z"
+		},
+		{
+			"key": "proposal:ci-minion-ai-auto-response",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Auto response on minion-ai main",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-auto-response.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "488a8f89387aba404437491c63fbd64b79e5b6c7f82fc020938085743abfaf4f",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "CI workflow failure has an exact root cause (missing private-key input) and a clear, narrowly-scoped definition of done.",
+			"evidence": [
+				"'Error: Input required and not supplied: private-key'",
+				"DoD: 'the workflow's latest completed run on main is green, or the workflow is deliberately removed/disabled'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T06:58:50.347Z"
 		},
 		{
 			"key": "pr:minion-base#43",
@@ -5693,38 +5725,6 @@
 			"scoredAt": "2026-09-14T09:34:00.936Z"
 		},
 		{
-			"key": "proposal:ci-minion-ai-auto-response",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Auto response on minion-ai main",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-auto-response.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "488a8f89387aba404437491c63fbd64b79e5b6c7f82fc020938085743abfaf4f",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A single failing CI workflow on main with an exact, unambiguous root cause (missing private-key input) is bounded and immediately fixable.",
-			"evidence": [
-				"'Error: Input required and not supplied: private-key'",
-				"definition of done is explicit: green run or workflow removed with rationale"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T06:35:03.763Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-1975235460",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6109,20 +6109,21 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
+				"specification": 8,
 				"implementation": 4
 			},
 			"confidence": 6,
-			"recommendation": "execute",
+			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "Well-documented producer-side gaps (missing reviewed_commit writer, incomplete G2 rubric, no G1 producer) that currently cause published review chips to be untraceable or silently absent.",
+			"rationale": "The proposal bundles four distinct producer-side gaps (missing reviewed_commit, incomplete G2 rubric, missing G1 producer, no coverage contract) that each need their own bounded slice rather than one combined goal.",
 			"evidence": [
-				"'the 9 previously scored specs in specs/index.json lost their chip in the 2026-08-29 fix precisely because their rubric was incomplete'",
-				"'No G1 producer exists'"
+				"'The G2 reviewer only scores 4 of the 6 required axes'",
+				"'No G1 producer exists'",
+				"'proposals/index.json has no projection-coverage contract'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T06:35:03.763Z"
+			"scoredAt": "2026-09-16T06:58:50.347Z"
 		},
 		{
 			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
@@ -12638,6 +12639,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T03:30:25.155Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The entry is a deploy-health record whose summary is just a merged commit message with no stated failure or open problem.",
+			"evidence": [
+				"summary is a fix commit message, not a problem statement",
+				"status: unknown with no failure evidence"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T06:58:50.347Z"
 		},
 		{
 			"key": "issue:minion-meta#417",
