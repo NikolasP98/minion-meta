@@ -5,7 +5,7 @@ status: closed
 created: 2026-08-22
 updated: 2026-08-24
 repos: [minion-factory]
-tags: [ci, test, npm]
+tags: [infra, test]
 ---
 
 # Factory runner native-binding test gap

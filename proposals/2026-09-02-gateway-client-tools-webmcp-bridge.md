@@ -5,7 +5,7 @@ status: draft
 created: 2026-09-02
 updated: 2026-09-02
 repos: [minion, minion_hub, minion-meta]
-tags: [assistant, webmcp, protocol]
+tags: [infra, logic]
 ---
 
 # Gateway-native client tools (WebMCP step 2)

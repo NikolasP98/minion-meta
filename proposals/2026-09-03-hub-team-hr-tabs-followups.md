@@ -1,3 +1,12 @@
+---
+id: 2026-09-03-hub-team-hr-tabs-followups
+title: /team HR tabs follow-ups
+status: draft
+created: 2026-09-03
+updated: 2026-09-04
+repos: [minion_hub]
+---
+
 # /team HR tabs (S2–S4) — deferred follow-ups
 
 - **Status**: resolved (branch `feat/hr-followups`, hub commit `6876bcd0`, PR pending)

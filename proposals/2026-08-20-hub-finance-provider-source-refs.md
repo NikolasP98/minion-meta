@@ -5,7 +5,7 @@ status: draft
 created: 2026-08-20
 updated: 2026-08-20
 repos: [minion_hub]
-tags: [finance, data-model, sunat]
+tags: [billing, data]
 value: 8
 effort: M
 source: sunat-sire-faces-live-rollout

@@ -5,7 +5,7 @@ stage: spec
 status: draft
 pass: 1
 created: 2026-09-12
-updated: 2026-09-12
+updated: 2026-09-15
 repos: [minion_hub]
 type: research
 parent: 2026-09-12-erp-core-modules-attachments-spec
@@ -20,6 +20,10 @@ Reference material read: brief `specs/2026-09-12-erp-core-modules-attachments-sp
 What master carries since the calendar spec shipped (ledger 2026-09-11): #249 `ef6d4638` org-timezone round-trip fix; #250 `1d491db8` mobile Home/Calendar composition + calendar toolbar + Playwright mobile fixtures; #247 security containment (assistant SQL fail-closed, bound actors); #248 durable jobs + stock invoice-issue identity (five migrations `20260909090100–090500` applied to prod by the owner).
 
 ---
+
+## 0. Product
+
+Research input for the parent spec: what Hub master already has for CRM, Stock, Scheduling and file storage, how those objects link today, and where the owner brief (interconnected events, tag-driven visuals, attachments as a core primitive) is not yet covered. The output is the slice order the delivery followed.
 
 ## 1. Scheduling
 
@@ -222,3 +226,11 @@ Dependencies: S3 ← S1+S2; S4 ← S3; S6 ← S5; S7 independent of S1–S6; S8 
 - Never `db:push`; hub schema is not reproducible from the repo — verify the prod catalog (`hub_migrations`, 79 applied as of 2026-09-11) before adding a migration.
 - Vercel body cap makes S2's presigned PUT the only path for PDFs/images >4 MB; the per-file limit should default below that for the proxied path.
 - Owner brief says links are "not mandatory": every FK/soft column above stays nullable; `attachment_links` uses the polymorphic no-FK shape so one file can attach to a contact, an event and an invoice at once (three rows).
+
+## 7. Out of scope
+
+This document proposes no code changes and was not run against any database; it records the state of master at `c4878dbb` and the gaps. Delivery decisions, acceptance and the ledger live in the parent spec.
+
+## 8. Verification
+
+Survey performed read-only on a detached worktree at `c4878dbb`; every `file:line` pointer was taken from that commit. The gap list in §6 was checked against the delivered slices in the parent spec's ledger (S1–S12 merged 2026-09-11/12), which closes every gap listed except the owner items named there.

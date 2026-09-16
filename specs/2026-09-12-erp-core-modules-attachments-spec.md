@@ -1,3 +1,14 @@
+---
+id: 2026-09-12-erp-core-modules-attachments-spec
+title: "ERP core modules production-readiness: CRM, Stock, Scheduling + Attachments as a core component"
+stage: done
+status: shipped
+pass: 1
+created: 2026-09-12
+updated: 2026-09-15
+repos: [minion_hub]
+---
+
 # ERP core modules production-readiness: CRM, Stock, Scheduling + Attachments as a core component
 
 **Status:** delivered (11 slices merged to hub master and verified in production at `b5d40c7b`, 2026-09-12 02:50 UTC)
@@ -9,6 +20,10 @@
 > - Verify module interconnections;
 >
 > I also want attachments to be more of a core component of the minion ERP. attach documents to CRM entries, for example. Include an attachment button (with size limits) on crm users, on events, on services, items, invoices. Create a system that properly maps items to objects. For example, a document can connect to single or multiple types of objects like a CRM contact, an event and an invoice at the same time.
+
+## 0. Product
+
+Three Hub modules a clinic uses every day (CRM, Stock, Scheduling) reach production quality in one pass, and documents become a first-class object of the ERP: any file can attach to a contact, an event, a service, a stock item and an invoice at the same time, with size limits, org-scoped access and a shared button everywhere. Events carry their own tag colours and inherit visual markers from linked objects, so a VIP client is visible on the calendar without opening the booking.
 
 ## Scope
 
@@ -64,3 +79,17 @@ Base: hub `origin/master` `c4878dbb`. Slice numbers from the recon §6.2. Each r
 - PRs in merge order: #258 S7 `14c6525e` · #259 S10 `8a32e6c6` · #260 S1+S2 `abba212f` · #261 S11 `11e2e17f` · #262 S5 `7a12ad67` · #263 S3 `e17a8cb6` · #264 S6 `eae723ed` · #265 S9 `357490ec` · #266 S4 `b2916eee` · #267 S8 `b5d40c7b`. Every PR: root re-ran targeted vitest, `bun run check` 0/0, `lint:design`/`lint:tokens` 0, prettier, ui-audit re-pin; CI green; `--admin` squash under the owner's standing authorization.
 - Not browser-verified in production (no credentials in this session): the upload flow end-to-end (needs the B2 CORS owner item for >4 MB files; ≤4 MB uses the proxied fallback), the calendar visuals on real data (covered by the fixture e2e at 390/768/1280).
 - Receipts: `~/.cache/claude-tmp/erp-<slice>/checks/root-*.log` (root gate reruns) and executor logs alongside; train logs `~/.cache/claude-tmp/erp-train-*.log`.
+
+## Out of scope
+
+- Browser-direct uploads larger than 4 MB until the owner applies the B2 bucket CORS rule (client falls back to the proxied `POST /api/files` below that size).
+- Owner-dimension refresh pipelines for CRM insights (word frequency, sentiment, win index) — left as `TODO(handoff)` in `crm-insights-dashboard.service.ts`.
+- Attachment previews/thumbnails and virus scanning; only upload, link/unlink, list and presigned download shipped.
+- Recurring events and multi-resource bookings (tracked by the scheduling calendar spec, not this pass).
+
+## Verification
+
+- Every slice PR (#258–#268) re-ran targeted vitest, `bun run check` 0/0, `lint:design`/`lint:tokens` 0, prettier and the ui-audit re-pin before its `--admin` squash; CI green on each.
+- Production verified at hub master `b5d40c7b` (2026-09-12 02:50 UTC) and again at `25e2bb75` after #268: GitHub Production deployment `success`; `/en/login` 200, `/api/health` 401, `/api/attachments/intent` 401, `/api/finances/invoices?q=` 401, `/en/crm/customers` 302→login.
+- Migrations `20260912090100` (attachment_links) and `20260912090200` (sched_bookings.invoice_id) present in prod `hub_migrations`, applied by the build's `db:migrate` gate.
+- Calendar interaction fixtures pass at 390/768/1280 (ERP S9, #265). Not browser-verified with production credentials: the >4 MB upload path (blocked on the CORS owner item).

@@ -8,7 +8,7 @@ created: 2026-09-02
 updated: 2026-09-03
 pr: 229
 repos: [minion_hub, minion-meta]
-tags: [ui, logic, schema, scheduling, hr]
+tags: [ui, logic, data]
 type: feature
 ---
 

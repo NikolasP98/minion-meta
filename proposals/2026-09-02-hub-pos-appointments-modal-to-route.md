@@ -5,7 +5,7 @@ status: draft
 created: 2026-09-02
 updated: 2026-09-02
 repos: [minion_hub]
-tags: [ux, scheduling, pos, assistant]
+tags: [ux, ui]
 value: 4
 effort: S
 source: hub PR feat/booking-route-picker (assistant navigation round 3)

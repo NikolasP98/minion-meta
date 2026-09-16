@@ -1,3 +1,12 @@
+---
+id: 2026-08-28-hub-faces-insumos-reconciliation-followups
+title: FACES insumos reconciliation — deferred follow-ups
+status: draft
+created: 2026-08-28
+updated: 2026-08-28
+repos: [minion_hub]
+---
+
 # FACES insumos reconciliation — deferred follow-ups
 
 - **Status**: open
