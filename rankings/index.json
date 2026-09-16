@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T20:28:47.745Z",
+	"generatedAt": "2026-09-16T20:58:53.023Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -468,39 +468,6 @@
 			"scoredAt": "2026-08-31T08:01:35.926Z"
 		},
 		{
-			"key": "pr:minion_hub#286",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#286 fix(pos,stock,scheduling): org-role gating, public booking API, discount and rate validation, stock RBAC consistency",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/286",
-			"sourceUpdatedAt": "2026-09-16T20:25:37Z",
-			"sourceFingerprint": "f2b1ffc214a0aa764af3bbf3f6e8d9af7399730e80a3d5e4e11ebafdcfb77843",
-			"score": 85,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Ready PR with tests fixes multiple RBAC/security/logic defects (org-role gating, stock data exposure, negative totals) ahead of a stated training deadline.",
-			"evidence": [
-				"fixes org-role gating on scheduling admin routes",
-				"stock GET endpoints had no capability check, any authenticated org member could read data",
-				"ahead of tomorrow's user training"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T20:28:47.659Z"
-		},
-		{
 			"key": "proposal:2026-08-28-factory-reviewer-instruction-isolation",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -798,6 +765,42 @@
 			"scoredAt": "2026-09-14T09:40:01.696Z"
 		},
 		{
+			"key": "pr:minion_hub#286",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#286 fix(pos,stock,scheduling): org-role gating, public booking API, discount and rate validation, stock RBAC consistency",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/286",
+			"sourceUpdatedAt": "2026-09-16T20:44:56Z",
+			"sourceFingerprint": "3fbc37761e18d568336de3888ecb9e214b390f93be7f0d8e320b7ccc3ae3de5a",
+			"score": 75,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#287",
+				"pr:minion_hub#289"
+			],
+			"rationale": "Fixes an org-role auth bypass and financial validation bugs ahead of a stated training deadline, with tests already in an open PR.",
+			"evidence": [
+				"requireAdmin checked platform role not org membership, causing 403 for org admins",
+				"negative cart totals possible from oversized discounts",
+				"tests added per fix, PR open and updated 2026-09-16"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T20:58:52.932Z"
+		},
+		{
 			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -968,6 +971,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T02:32:22.410Z"
+		},
+		{
+			"key": "pr:minion_hub#287",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#287 fix(ui): walk-in scheduling, booking accept/reject, conflict toasts, adjustment rate, stock on-hand/low-stock, plan actions",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/287",
+			"sourceUpdatedAt": "2026-09-16T20:31:14Z",
+			"sourceFingerprint": "b9f5c6cad24b6afb6af2c9a1b1daf9e9e44d13006c42500c2ae7123c3d9a84e2",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#286",
+				"pr:minion_hub#289"
+			],
+			"rationale": "Fixes six UI defects explicitly called training-blocking, with most changes type-checked but limited UI test coverage noted by the author.",
+			"evidence": [
+				"found by 2026-09-16 stress test ahead of training",
+				"walk-in scheduling and confirmation accept/reject were broken",
+				"author notes no UI harness invoked for this pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T20:58:52.932Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-qa-stack-first-pass-defects",
@@ -2840,6 +2879,77 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:29:14.447Z"
+		},
+		{
+			"key": "pr:minion_hub#288",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#288 fix(finances,pos): revenue KPI excludes voided invoices; active packages counts drawable grants only",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/288",
+			"sourceUpdatedAt": "2026-09-16T20:49:43Z",
+			"sourceFingerprint": "a20de64edbc7027dd45c9a44fbf4cca49b63a406a87dedac8c9dde21a0d33050",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#286"
+			],
+			"rationale": "Corrects revenue KPI and active-package-count accuracy with SQL-level tests and a clean check run, ready to merge.",
+			"evidence": [
+				"net aggregate lacked void-status filter used elsewhere",
+				"39/39 tests passed, bun run check clean",
+				"PR open, updated 2026-09-16"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T20:58:52.932Z"
+		},
+		{
+			"key": "pr:minion_hub#289",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#289 feat(pos): draw package sessions from the accounts drawer and the new-appointment page",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/289",
+			"sourceUpdatedAt": "2026-09-16T20:54:06Z",
+			"sourceFingerprint": "fc27a7fa787ddc7dceae02e3a6a0bb9d916df42c6190a8a7e967882bdd7f4962",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#286",
+				"pr:minion_hub#287"
+			],
+			"rationale": "Adds a missing package-session draw flow needed for training coverage, with a unit test but no component-test harness available.",
+			"evidence": [
+				"no screen could draw a session from a sold package, blocking training",
+				"new pure filter has a unit test",
+				"54 targeted vitest tests passed, check clean"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T20:58:52.932Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -13204,20 +13314,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 7,
+				"implementation": 2
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 6,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A single medium-severity unchecked-access finding in one file is low-consequence but has a clear fix location.",
+			"rationale": "A specific, narrow null-check defect (medium severity) is clearly located but no fix has been started yet.",
 			"evidence": [
-				"medium unchecked-access at MarkdownMessage.svelte:41",
-				"c.input accessed without null check could throw TypeError"
+				"MarkdownMessage.svelte:41 accesses c.input without null check",
+				"status: draft, single finding",
+				"auto-filed by merge-scan, not yet actioned"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T20:34:29.102Z"
+			"scoredAt": "2026-09-16T20:58:52.932Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-a5a65f6d6dac",
@@ -14753,6 +14864,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:34:00.936Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a deployment log entry for an already-merged nitter persistence/shutdown fix, not an open actionable goal.",
+			"evidence": [
+				"summary is a merged commit message (#295)",
+				"tags: [deployment]",
+				"no open problem statement or pending scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T20:58:52.932Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
