@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T19:58:49.117Z",
+	"generatedAt": "2026-09-16T20:28:47.745Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -466,6 +466,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:01:35.926Z"
+		},
+		{
+			"key": "pr:minion_hub#286",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#286 fix(pos,stock,scheduling): org-role gating, public booking API, discount and rate validation, stock RBAC consistency",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/286",
+			"sourceUpdatedAt": "2026-09-16T20:25:37Z",
+			"sourceFingerprint": "f2b1ffc214a0aa764af3bbf3f6e8d9af7399730e80a3d5e4e11ebafdcfb77843",
+			"score": 85,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Ready PR with tests fixes multiple RBAC/security/logic defects (org-role gating, stock data exposure, negative totals) ahead of a stated training deadline.",
+			"evidence": [
+				"fixes org-role gating on scheduling admin routes",
+				"stock GET endpoints had no capability check, any authenticated org member could read data",
+				"ahead of tomorrow's user training"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T20:28:47.659Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-reviewer-instruction-isolation",
@@ -6894,6 +6927,39 @@
 			"scoredAt": "2026-09-13T02:34:43.271Z"
 		},
 		{
+			"key": "issue:minion-meta#454",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#454 [monitor:unstick] reconcile run 944f4125 (minion-meta) - exit-126 turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/454",
+			"sourceUpdatedAt": "2026-09-16T20:17:37Z",
+			"sourceFingerprint": "d67cd5fa2464aee78d8a8a2142226071adf8f057e72e5a83436b4a272554ccf6",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Automated monitor intake diagnoses a recurring exit-126/turns=0 provider-invocation infra fault on the runner but only recommends human inspection, not a bounded fix yet.",
+			"evidence": [
+				"exit 126 with 0 turns, agent invocation never started",
+				"sibling run 1a3422fa shows identical signature about an hour earlier",
+				"recommendation: a human should inspect the runner box claude CLI install/permissions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T20:28:47.659Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11113,38 +11179,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:38:46.333Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Commit fixes a nitter persistence/shutdown race but there is no evidence of current deployment health issues to act on.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"tags: deployment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T19:58:49.018Z"
 		},
 		{
 			"key": "issue:minion-meta#436",
