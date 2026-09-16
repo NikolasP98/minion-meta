@@ -2,7 +2,7 @@
 
 Orchestration tooling, shared packages, and specs for the Minion personal AI assistant platform.
 
-This is a **meta-repo** — a root git repo that owns the `minion` CLI, shared `@minion-stack/*` npm packages, and cross-cutting specs. It wraps 7 independent subprojects (each with its own remote, branch, package manager, and deploy pipeline) via a registry at `minion.json`.
+This is a **meta-repo** — a root git repo that owns the `minion` CLI, shared `@minion-stack/*` npm packages, and cross-cutting specs. The CLI registry at `minion.json` has six entries. Additional runtime and documentation checkouts participate in the platform; the registry is not a complete repository count. Each independent repository keeps its own branch, package manager and release pipeline. Inspect `AGENTS.md` and generate local identity evidence with `node scripts/qc/repo-truth.mjs` before cross-project work.
 
 Design spec: [`specs/2026-04-19-minion-meta-repo-design.md`](specs/2026-04-19-minion-meta-repo-design.md).
 
@@ -19,8 +19,8 @@ Design spec: [`specs/2026-04-19-minion-meta-repo-design.md`](specs/2026-04-19-mi
 
 ```bash
 # 1. Clone the meta-repo
-git clone git@github.com:NikolasP98/minion-meta.git AI
-cd AI
+git clone git@github.com:NikolasP98/minion-meta.git MINION
+cd MINION
 
 # 2. Install meta-repo tooling
 pnpm install
@@ -48,6 +48,10 @@ minion doctor
 # 8. Run a subproject's dev command with resolved env
 minion dev hub
 ```
+
+### Verify the CLI identity
+
+Both the gateway and the meta orchestrator use the binary name `minion`. Before using the registry commands, check `minion --help`: the orchestrator describes itself as "Minion meta-repo CLI" and exposes `list`, `doctor` and `sync-env`. If PATH resolves the gateway CLI, use `node packages/cli/dist/index.js <command>` from the built meta checkout. `node packages/cli/dist/index.js --help` and `list --json` are read-only identity checks. Rebuild the package with its declared build command if the dist output is absent or stale; do not overwrite another CLI installation as an implicit repair.
 
 ## CI & Releases
 
@@ -96,7 +100,7 @@ Exit codes: 0 success, 1 generic, 2 config, 3 infisical auth, 4 subproject not f
 
 Six layers, lowest → highest precedence:
 
-1. `AI/.env.defaults` — shared non-secret defaults (committed)
+1. `<meta-root>/.env.defaults` — shared non-secret defaults (committed)
 2. Infisical project `minion-core` — shared secrets
 3. `<subproject>/.env.defaults` — per-subproject non-secret defaults (committed in each subproject)
 4. Infisical project `minion-<name>` — per-subproject secrets
@@ -122,7 +126,7 @@ Published to npm under `@minion-stack/*` with Changesets for independent version
 | [`@minion-stack/tsconfig`](packages/tsconfig/) | TS configs (base/node/svelte/library) |
 | [`@minion-stack/lint-config`](packages/lint-config/) | oxlint + ESLint + Prettier presets |
 | [`@minion-stack/shared`](packages/shared/) | Gateway protocol types, WS clients, utilities, and the versioned brain-vector contract |
-| [`@minion-stack/db`](packages/db/) | Canonical Drizzle schema (38 tables) + migration runner |
+| [`@minion-stack/db`](packages/db/) | Legacy `/schema` and PostgreSQL `/pg` Drizzle exports; physical migration ownership must be verified |
 | [`@minion-stack/auth`](packages/auth/) | Better Auth `createAuth()` factory |
 
 ## Subprojects
@@ -152,3 +156,9 @@ Each has its own repository + README. See their own CLAUDE.md / AGENTS.md for pr
 - Roadmap: [`.planning/ROADMAP.md`](.planning/ROADMAP.md)
 - Requirements: [`.planning/REQUIREMENTS.md`](.planning/REQUIREMENTS.md)
 - Root orchestrator doc: [`CLAUDE.md`](CLAUDE.md)
+
+## Current storage and identity boundaries
+
+Hub combines PostgreSQL/Supabase domain and browser identity paths with surviving LibSQL access. Site retains provider-selected Supabase/Better Auth and legacy LibSQL consumers. The shared DB package exports both schema families; installing it does not establish one migration authority or a shared live session configuration. See each project's active instructions and `src/hooks.server.ts`/DB clients.
+
+The source inventory command reads registry/package/Git metadata and named source files; it never runs database setup, migrations, seed commands or reads local environment files. `node scripts/qc/repo-truth.mjs --check-docs` checks selected stale claims and executable script declarations. It complements source review and does not certify every sentence or a deployed environment.

@@ -27,21 +27,21 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-16)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:3684` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3684
-- `NikolasP98/minion-meta@dev rankings/index.json:5311` — add-only; rename / deactivate / max-days edits need a modal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5311
-- `NikolasP98/minion-meta@dev rankings/index.json:5903` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5903
-- `NikolasP98/minion-meta@dev rankings/index.json:6480` — remove once the phone failure is root-caused'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6480
-- `NikolasP98/minion-meta@dev rankings/index.json:7535` — The service now binds this version and verifies normalized",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7535
-- `NikolasP98/minion-meta@dev rankings/index.json:7669` — spec §3.2b allows a reschedule outside working hours",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7669
-- `NikolasP98/minion-meta@dev rankings/index.json:8755` — resourceId is only ever set from the calendar's",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8755
-- `NikolasP98/minion-meta@dev rankings/index.json:9307` — prompt-driven protocol instead of native tool_use — replace'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9307
-- `NikolasP98/minion-meta@dev rankings/index.json:10262` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10262
+- `NikolasP98/minion-meta@dev rankings/index.json:1799` — session is drawn when the cashier clicks, not at a validation checkpoint",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L1799
+- `NikolasP98/minion-meta@dev rankings/index.json:3885` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3885
+- `NikolasP98/minion-meta@dev rankings/index.json:5483` — add-only; rename / deactivate / max-days edits need a modal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5483
+- `NikolasP98/minion-meta@dev rankings/index.json:6186` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6186
+- `NikolasP98/minion-meta@dev rankings/index.json:6804` — remove once the phone failure is root-caused'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6804
+- `NikolasP98/minion-meta@dev rankings/index.json:7897` — drawer still shows no LINKED POS TICKETS — spec §4.1",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7897
+- `NikolasP98/minion-meta@dev rankings/index.json:7929` — The service now binds this version and verifies normalized",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7929
+- `NikolasP98/minion-meta@dev rankings/index.json:9776` — prompt-driven protocol instead of native tool_use — replace",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9776
+- `NikolasP98/minion-meta@dev rankings/index.json:10765` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10765
