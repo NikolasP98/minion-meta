@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T15:28:38.297Z",
+	"generatedAt": "2026-09-16T15:59:00.910Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1584,20 +1584,20 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 7,
+				"specification": 8,
 				"implementation": 6
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "High-risk-tagged reliability work (backup verification, rollback, observability) building on a merged persistence slice, tightly scoped.",
+			"rationale": "Bounded slice building a shell restore/wake coordinator with explicit security/rollback scope makes it a higher-stakes, well-specified piece of infra work.",
 			"evidence": [
-				"risk:high",
-				"Build the one wake coordinator with the specified backup verification, quota ... failure rollback/observability"
+				"risk:high and topic:security tags",
+				"spec-referenced backup verification, quota, restore, rollback/observability scope"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T15:35:06.298Z"
+			"scoredAt": "2026-09-16T15:59:00.827Z"
 		},
 		{
 			"key": "proposal:2026-08-23-minion-ai-ci-baseline-debt",
@@ -2037,6 +2037,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:35:55.019Z"
+		},
+		{
+			"key": "pr:minion (gateway)#262",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#262 factory: board issue minion-ai#249: test(memory): eliminate nondeterministic atomic-reindex rollback failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/262",
+			"sourceUpdatedAt": "2026-08-31T04:08:10Z",
+			"sourceFingerprint": "a52aa68a9f8025441e08fd557bc097a509459ed3efac9c2d616eb6ce68410e4c",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A nondeterministic test failure spanning multiple channels undermines CI confidence and has a small, bounded fix directive.",
+			"evidence": [
+				"size: S, spans discord/telegram/voice-call/whatsapp-web tags",
+				"instructed to implement smallest bounded fix and avoid repeating failed approaches"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T15:59:00.827Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
@@ -4433,38 +4465,6 @@
 			"scoredAt": "2026-09-13T21:28:27.949Z"
 		},
 		{
-			"key": "pr:minion (gateway)#254",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#254 factory: Nostr dispatch S2: buffered encrypted DM reply pipeline",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/254",
-			"sourceUpdatedAt": "2026-08-31T01:26:10Z",
-			"sourceFingerprint": "721731983240d89aa7de5581a174568e2141ff1fd542d67436112b37647f2956",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Bounded, precisely-scoped slice 2 of an already-approved spec building on merged Slice 1 seam work.",
-			"evidence": [
-				"Implement ONLY Slice 2 ... at exact spec commit",
-				"Gateway PR #229 delivered the typed fail-loud Slice 1 seam"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T15:35:06.298Z"
-		},
-		{
 			"key": "pr:minion_hub#279",
 			"kind": "pr",
 			"stage": "development",
@@ -5028,38 +5028,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-13T22:28:35.204Z"
-		},
-		{
-			"key": "pr:minion (gateway)#262",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#262 factory: board issue minion-ai#249: test(memory): eliminate nondeterministic atomic-reindex rollback failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/262",
-			"sourceUpdatedAt": "2026-08-31T04:08:10Z",
-			"sourceFingerprint": "a52aa68a9f8025441e08fd557bc097a509459ed3efac9c2d616eb6ce68410e4c",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small bounded fix for a nondeterministic test failure that undermines CI reliability across multiple channels.",
-			"evidence": [
-				"eliminate nondeterministic atomic-reindex rollback failure",
-				"size: S"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T15:35:06.298Z"
 		},
 		{
 			"key": "proposal:ci-minion-ai-ci",
@@ -5977,21 +5945,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 8,
+				"implementation": 6
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 6,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Large, high-risk-tagged instruction-parity slice with explicit fail-closed conditions suggesting scope/ambiguity risk worth a check before continued spend.",
+			"rationale": "Cross-repo instruction-parity repair is foundational for consistent agent behavior and has a precise fail-closed scope guard.",
 			"evidence": [
-				"risk:high",
-				"size: XL",
-				"If the exact source spec cannot be read or its Slice 3 conflicts ... fail closed"
+				"repairs 4 approved contradictions only, S4-S8 excluded",
+				"fail closed and report discrepancy if source spec unreadable"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T15:35:06.298Z"
+			"scoredAt": "2026-09-16T15:59:00.827Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-lifecycle-swallows-handoff",
@@ -9849,38 +9816,6 @@
 			"scoredAt": "2026-09-14T09:38:46.333Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Deployment status entry reflects a merged fix commit with no indication of an active incident or pending action.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T15:28:38.213Z"
-		},
-		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -9945,6 +9880,38 @@
 			"scoredAt": "2026-09-15T06:28:46.934Z"
 		},
 		{
+			"key": "pr:minion (gateway)#254",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#254 factory: Nostr dispatch S2: buffered encrypted DM reply pipeline",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/254",
+			"sourceUpdatedAt": "2026-08-31T01:26:10Z",
+			"sourceFingerprint": "721731983240d89aa7de5581a174568e2141ff1fd542d67436112b37647f2956",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-scoped continuation of a spec'd 3-slice Nostr DM pipeline with narrow channel-level impact.",
+			"evidence": [
+				"Slice 2 of a specific spec commit, S1 already merged in #229",
+				"exactly-once dispatch and encrypted DM scope, S3 explicitly excluded"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T15:59:00.827Z"
+		},
+		{
 			"key": "pr:minion (gateway)#256",
 			"kind": "pr",
 			"stage": "development",
@@ -9961,21 +9928,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 9,
 				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Small, low-risk opt-in config slice already past draft (status open) with a narrow explicit scope.",
+			"rationale": "Small, precisely-scoped opt-in config change with default-off behavior limits blast radius while being highly actionable.",
 			"evidence": [
-				"status: open",
-				"size: M",
-				"explicit opt-in, default OFF"
+				"status: open, size: M",
+				"explicit opt-in, default OFF, no secret handling expansion"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T15:35:06.298Z"
+			"scoredAt": "2026-09-16T15:59:00.827Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-brain-org-all-scope",
