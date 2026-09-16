@@ -16,7 +16,7 @@
   "NikolasP98/minion_hub:master": {
     "cursor": "10e9567ad61bc9b3dfcfa5b62bcff1a188dfa05c",
     "head": "2ffbf0b615a0cde5d7405ba9036764b9fb675d95",
-    "done": 13,
+    "done": 27,
     "kept": [
       {
         "file": ".github/workflows/ci.yml",
@@ -94,6 +94,41 @@
         "severity": "medium",
         "category": "empty-catch",
         "line": 211
+      },
+      {
+        "file": "src/lib/components/scheduling/BookingDetailDrawer.svelte",
+        "desc": "j.stockWarning.message accessed without checking if message property exists; the if guard only validates stockWarning is truthy, not that message exists",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 252
+      },
+      {
+        "file": "src/routes/(app)/agents/autonomous/+page.svelte",
+        "desc": "wiringLabel[a.wiring]() may throw if a.wiring is not a key in the map",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 198
+      },
+      {
+        "file": "src/routes/(app)/pos/appointments/+page.server.ts",
+        "desc": "Timezone 'America/Lima' hardcoded as org timezone fallback; should be in env/config",
+        "severity": "medium",
+        "category": "hardcoded-config",
+        "line": 26
+      },
+      {
+        "file": "src/routes/(app)/pos/sell/+page.svelte",
+        "desc": "catch block silently swallows fetch error without logging; network failures should be reported for debugging",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 289
+      },
+      {
+        "file": "src/routes/api/attachments/+server.ts",
+        "desc": "access from getAttachmentAccess() is used without null/undefined check before passing to list functions",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 24
       }
     ]
   }

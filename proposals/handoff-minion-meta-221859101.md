@@ -27,21 +27,27 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-16)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:3684` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3684
-- `NikolasP98/minion-meta@dev rankings/index.json:5311` — add-only; rename / deactivate / max-days edits need a modal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5311
-- `NikolasP98/minion-meta@dev rankings/index.json:5903` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5903
-- `NikolasP98/minion-meta@dev rankings/index.json:6480` — remove once the phone failure is root-caused'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6480
-- `NikolasP98/minion-meta@dev rankings/index.json:7535` — The service now binds this version and verifies normalized",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7535
-- `NikolasP98/minion-meta@dev rankings/index.json:7669` — spec §3.2b allows a reschedule outside working hours",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7669
-- `NikolasP98/minion-meta@dev rankings/index.json:8755` — resourceId is only ever set from the calendar's",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8755
-- `NikolasP98/minion-meta@dev rankings/index.json:9307` — prompt-driven protocol instead of native tool_use — replace'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9307
-- `NikolasP98/minion-meta@dev rankings/index.json:10262` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10262
+- `NikolasP98/minion-meta@dev rankings/index.json:3823` — the session is drawn when the cashier clicks, not when the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3823
+- `NikolasP98/minion-meta@dev rankings/index.json:3855` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3855
+- `NikolasP98/minion-meta@dev rankings/index.json:5451` — add-only; rename / deactivate / max-days edits need a modal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5451
+- `NikolasP98/minion-meta@dev rankings/index.json:6152` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6152
+- `NikolasP98/minion-meta@dev rankings/index.json:6770` — remove once the phone failure is root-caused'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6770
+- `NikolasP98/minion-meta@dev rankings/index.json:7829` — the affordance is one-way — once opened, a line's discount",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7829
+- `NikolasP98/minion-meta@dev rankings/index.json:7863` — spec §4.1 also lists reschedule, \"charge in POS\" and \"book the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7863
+- `NikolasP98/minion-meta@dev rankings/index.json:7895` — The service now binds this version and verifies normalized",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7895
+- `NikolasP98/minion-meta@dev rankings/index.json:8297` — the drawer still shows no LINKED POS TICKETS — spec §4.1",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8297
+- `NikolasP98/minion-meta@dev rankings/index.json:9741` — prompt-driven protocol instead of native tool_use — replace'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9741
+- `NikolasP98/minion-meta@dev rankings/index.json:10664` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10664
+- `NikolasP98/minion-meta@dev rankings/index.json:11150` — 'optional' is STORED and surfaced in /pos/settings but is",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11150
