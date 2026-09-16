@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T22:58:30.727Z",
+	"generatedAt": "2026-09-16T23:14:40.488Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -763,38 +763,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
-		},
-		{
-			"key": "pr:minion_hub#290",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#290 fix(pos): refuse sales on stock shortfall instead of dropping the stock entry; one account row per person; schedule step clears pending",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/290",
-			"sourceUpdatedAt": "2026-09-16T22:02:57Z",
-			"sourceFingerprint": "8135f569cc0fa65b76ddc826ce6dcf9b09f230f5083da330a9cf76d2b4cb9d68",
-			"score": 75,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Open PR with tested fixes for a critical POS stock-shortfall data-integrity bug plus two other confirmed defects, ready to merge.",
-			"evidence": [
-				"'Stock shortfall discarded the whole stock entry (Critical, D2)'",
-				"tests: pos.tickets.test.ts, pos-accounts-list.test.ts, scheduling-bookings-ticket-link.test.ts"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T22:29:03.742Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
@@ -1898,6 +1866,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T16:59:42.409Z"
+		},
+		{
+			"key": "proposal:2026-09-16-hub-requireadmin-audit-followup",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Full requireAdmin call-site audit (org-vs-platform misclassification)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-requireadmin-audit-followup.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "a61efaac33a980afb0d5499a9186826466423a911ef0e8b7a16a574a89958ea3",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A confirmed live authorization defect pattern (platform-role check misused for org-scoped actions) spans ~55 unaudited call sites with a clear classification and test plan.",
+			"evidence": [
+				"confirmed as a live defect on the scheduling links ... handlers",
+				"~55 other call sites ... spot-audited by path name only"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T23:14:40.398Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-capability-separation-spec",
@@ -10534,6 +10534,38 @@
 			"scoredAt": "2026-09-11T23:38:32.249Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown draining is a routine deployment health item with no indication of ongoing incident.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"status unknown, no failure indicated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T23:14:40.398Z"
+		},
+		{
 			"key": "issue:minion-meta#409",
 			"kind": "issue",
 			"stage": "proposal",
@@ -10695,6 +10727,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T17:01:45.719Z"
+		},
+		{
+			"key": "proposal:2026-09-16-hub-pos-accounts-drawer-pending-scheduling",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub POS accounts drawer — no pending-scheduling link",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-pos-accounts-drawer-pending-scheduling.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "c70060bb5440954eca9e388085dae23deb7bff3be162169053695ac91e687df1",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-specified UI gap leaves users unable to schedule pending services from the client drawer, with the underlying endpoint already made safe for this link.",
+			"evidence": [
+				"drawer... has no equivalent: ... no link back to the schedule step",
+				"made /pos/appointments/new accept ?ticketId=&lineId= ... safe by construction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T23:14:40.398Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1431194768",
@@ -13979,70 +14043,6 @@
 			"scoredAt": "2026-09-14T09:29:51.901Z"
 		},
 		{
-			"key": "pr:minion_hub#291",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#291 docs(qa): cross-module data-lifecycle stress scenarios (L1–L8)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/291",
-			"sourceUpdatedAt": "2026-09-16T22:02:58Z",
-			"sourceFingerprint": "5abce412e1d9d37aa9e0508741a6ffa344ebaca51bc17dbfb46d70c564546c59",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Docs-only QA scenario PR is low risk, clearly scoped, and ready to merge as-is.",
-			"evidence": [
-				"'Docs only; no code.'",
-				"adds docs/qa-scenarios/cross-module-lifecycles.md"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T22:29:03.742Z"
-		},
-		{
-			"key": "pr:minion-meta#455",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#455 docs(proposals): hub requireAdmin audit + POS accounts drawer follow-ups (2026-09-16)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/455",
-			"sourceUpdatedAt": "2026-09-16T22:03:39Z",
-			"sourceFingerprint": "0f83386db7fb1d4037313fe93460406581c464485853ba6fd412f69045595b6d",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, self-contained docs/ledger PR that regenerates the proposal index and passes its own check.",
-			"evidence": [
-				"'regenerates proposals/index.json (455 proposals, --check passes)'",
-				"'Docs only.'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T22:29:03.742Z"
-		},
-		{
 			"key": "proposal:2026-08-22-crm-rank-query-prod-latency",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14378,6 +14378,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-13T00:04:59.606Z"
+		},
+		{
+			"key": "issue:minion-meta#373",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#373 [monitor:unstick] Requeued transient failure of run 99a3bcf3",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/373",
+			"sourceUpdatedAt": "2026-09-02T22:17:02Z",
+			"sourceFingerprint": "71b558d0c71ae098a761ca35a0c20d72a2a090d6d2937b15f317b120176c172d",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An automated monitor requeue of a transient push failure lacks evidence of recurrence or lasting impact.",
+			"evidence": [
+				"class=C note=push failed; requeue -> 201",
+				"fingerprint: unstick-transient-99a3bcf3"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T23:14:40.398Z"
 		},
 		{
 			"key": "issue:minion-meta#433",
@@ -15810,6 +15842,38 @@
 			"scoredAt": "2026-09-16T17:01:45.719Z"
 		},
 		{
+			"key": "run:minion_hub#35161285083",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35161285083",
+			"sourceUpdatedAt": "2026-09-16T23:12:58Z",
+			"sourceFingerprint": "a65aeb732d24e9f6aaf84abd9198ae3fe779120bbdc850f0a864fdf47297f767",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 4
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run on master is routine pipeline activity with no indication of failure requiring action.",
+			"evidence": [
+				"status in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T23:14:40.398Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-94ad6c223964",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15840,6 +15904,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T03:09:59.397Z"
+		},
+		{
+			"key": "pr:minion_hub#291",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#291 docs(qa): cross-module data-lifecycle stress scenarios (L1–L8)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/291",
+			"sourceUpdatedAt": "2026-09-16T23:13:22Z",
+			"sourceFingerprint": "16d8f2fe6f4981acb4498a19e8a5c42bae855ef059984f5d1324b350e05b021c",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Docs-only QA scenario stories add no code and carry minimal urgency or impact.",
+			"evidence": [
+				"Docs only; no code",
+				"Adds cross-module-lifecycles.md stress-test stories"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T23:14:40.398Z"
 		},
 		{
 			"key": "proposal:2026-09-03-hub-team-hr-tabs-followups",
@@ -15903,38 +15999,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T17:29:43.471Z"
-		},
-		{
-			"key": "issue:minion-meta#373",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#373 [monitor:unstick] Requeued transient failure of run 99a3bcf3",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/373",
-			"sourceUpdatedAt": "2026-09-02T22:17:02Z",
-			"sourceFingerprint": "71b558d0c71ae098a761ca35a0c20d72a2a090d6d2937b15f317b120176c172d",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Automated monitor ticket for a transient class-C push failure that was requeued and returned a 201 success, indicating no outstanding action.",
-			"evidence": [
-				"class=C note=push failed; requeue -> 201",
-				"fingerprint: unstick-transient-99a3bcf3"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T23:04:27.681Z"
 		},
 		{
 			"key": "issue:minion-meta#438",
