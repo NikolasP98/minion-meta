@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T17:31:01.026Z",
+	"generatedAt": "2026-09-16T17:58:35.220Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1038,6 +1038,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-15T14:28:58.709Z"
+		},
+		{
+			"key": "pr:minion_hub#283",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#283 fix(pos): viewer cannot open write pages; settings save returns 400 not 500",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/283",
+			"sourceUpdatedAt": "2026-09-16T17:56:57Z",
+			"sourceFingerprint": "e498020da156c6d184cf9cd6a63ed38ad544ad5777008c01ffacd23e8d5cd584",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes a real RBAC gap letting viewers open POS write pages and charge/create tickets with no capability gate, backed by new passing tests, though a 500-vs-400 repro remains unverified against a live DB.",
+			"evidence": [
+				"POST /api/pos/tickets had no requireOrgCapability call at all",
+				"viewer can open /pos/sell and enable Charge",
+				"126 tests pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:58:35.115Z"
 		},
 		{
 			"key": "proposal:2026-09-12-hub-booking-stock-postcommit-recovery",
@@ -7681,6 +7714,39 @@
 			"scoredAt": "2026-09-14T09:31:14.559Z"
 		},
 		{
+			"key": "pr:minion_hub#282",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#282 chore(crons): hourly word-frequency rollup, weekly 90-day full rebuild, manifest matches the box",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/282",
+			"sourceUpdatedAt": "2026-09-16T17:35:53Z",
+			"sourceFingerprint": "d3ced97e0506fc667689a23436eb38404914ddd0193a028a1a82ccc9c4f83535",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Concrete cron cost/correctness fixes (96→24 runs/day, 4000→90 day window) are scoped and gated by green tests, but leaves an unresolved backup-scheduler wiring decision.",
+			"evidence": [
+				"96 → 24 runs/day",
+				"refresh/full: 4000 days → 90, nightly → weekly",
+				"TODO(handoff): startBackupScheduler() has no call site"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:58:35.115Z"
+		},
+		{
 			"key": "pr:minion_site#28",
 			"kind": "pr",
 			"stage": "development",
@@ -11012,6 +11078,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:38:46.333Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged commit fixing nitter persistence/shutdown draining offers no open action item beyond monitoring deployment health.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"status unknown, updatedAt 2026-09-12"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:58:35.115Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
