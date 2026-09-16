@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-38e0a3c5f572
 title: "Post-merge finding — todo-handoff in src/routes/(app)/pos/appointments/+page.svelte (minion_hub)"
-status: approved
+status: closed
 created: 2026-09-02
-updated: 2026-09-02
+updated: 2026-09-16
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still approved — closing"
 ---
 
 # Post-merge finding — todo-handoff in `src/routes/(app)/pos/appointments/+page.svelte`
