@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T21:58:30.469Z",
+	"generatedAt": "2026-09-16T22:29:03.839Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -771,31 +771,30 @@
 			"repo": "minion_hub",
 			"title": "#290 fix(pos): refuse sales on stock shortfall instead of dropping the stock entry; one account row per person; schedule step clears pending",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/290",
-			"sourceUpdatedAt": "2026-09-16T21:51:54Z",
-			"sourceFingerprint": "3952c7ea8472a3f2dc53f6c8e9fa324fb807721c656fa8a0d3649b0eb282e867",
+			"sourceUpdatedAt": "2026-09-16T22:02:57Z",
+			"sourceFingerprint": "8135f569cc0fa65b76ddc826ce6dcf9b09f230f5083da330a9cf76d2b4cb9d68",
 			"score": 75,
 			"band": "high",
 			"axes": {
 				"criticality": 8,
-				"importance": 7,
-				"impact": 7
+				"importance": 8,
+				"impact": 6
 			},
 			"readiness": {
 				"specification": 9,
 				"implementation": 8
 			},
-			"confidence": 7,
+			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Open PR with cause-fix-test writeup already resolves three POS bugs (stock entry loss, duplicate account rows, void-ticket booking) with passing tests and documented residual TODOs.",
+			"rationale": "Open PR with tested fixes for a critical POS stock-shortfall data-integrity bug plus two other confirmed defects, ready to merge.",
 			"evidence": [
-				"StockError previously aborted the whole stock entry on any short line, dropping stock tracking",
-				"listClientAccounts CTEs lacked a party/contact bridge causing duplicate rows",
-				"void guard checked 'voided' but voidTicket persists 'void', letting voided tickets be booked"
+				"'Stock shortfall discarded the whole stock entry (Critical, D2)'",
+				"tests: pos.tickets.test.ts, pos-accounts-list.test.ts, scheduling-bookings-ticket-link.test.ts"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T21:58:30.369Z"
+			"scoredAt": "2026-09-16T22:29:03.742Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
@@ -3880,38 +3879,6 @@
 			"scoredAt": "2026-09-16T02:29:17.604Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-factory-0290030",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Batch of findings in the factory's own core automation scripts includes a high-severity infinite-loop risk and test-masking issues, each independently bounded and file-anchored.",
-			"evidence": [
-				"agent/rank.sh:74 FACTORY_RANK_BATCH_SIZE unvalidated can cause infinite loop",
-				"agent/lib/unslop.test.sh:63 bare grep lacks error handling, can mask test failures"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T22:04:50.660Z"
-		},
-		{
 			"key": "spec:2026-08-13-crm-customers-server-pagination-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -5269,6 +5236,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-10T08:05:06.253Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-factory-0290030",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Concrete file:line findings in factory automation scripts, including a high-severity unvalidated-input infinite-loop risk, give a clear bounded fix list.",
+			"evidence": [
+				"'high agent/rank.sh:74 ... non-numeric or zero value causes infinite loop'",
+				"'high agent/lib/unslop.test.sh:63 ... silently masking missing or incorrect run.sh/spec.sh content'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T22:29:03.742Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-7854cfd",
@@ -7028,6 +7027,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T20:28:47.659Z"
+		},
+		{
+			"key": "issue:minion-meta#456",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#456 [monitor:unstick] reconcile run 956f82ec: claude agent exit-126/turns=0 despite pipeline completing",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/456",
+			"sourceUpdatedAt": "2026-09-16T22:17:24Z",
+			"sourceFingerprint": "787e4cd1cdbafb910df9a486e0419d184177ed11042d3e72dd1aa43f7982379c",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#457"
+			],
+			"rationale": "Recurring infra-level exec failure (exit 126) with a healthy underlying pipeline is best consolidated with its identical sibling report into one host-classifier goal.",
+			"evidence": [
+				"'exited 126 with turns=0 (process could not be executed, not a task-logic failure)'",
+				"'recurred 3x today on minion-meta reconcile runs'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T22:29:03.742Z"
+		},
+		{
+			"key": "issue:minion-meta#457",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#457 [monitor:unstick] reconcile run 83034d70: claude agent exit-126/turns=0 despite pipeline completing",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/457",
+			"sourceUpdatedAt": "2026-09-16T22:17:40Z",
+			"sourceFingerprint": "f8f9d791a8cd77fda51bd16f6bb8dffa4011f4a11b5430bf9513b16bf831560d",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#456"
+			],
+			"rationale": "Identical exit-126/turns=0 signature to the sibling report; should be merged into a single host-classifier investigation goal rather than tracked twice.",
+			"evidence": [
+				"'same pattern as sibling runs today'",
+				"'Recurring 3x today with identical signature'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T22:29:03.742Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
@@ -12592,6 +12659,38 @@
 			"scoredAt": "2026-09-16T21:29:38.544Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "467b50b33b912a9b8f08d0b6721ecc12efe9572061b4ef9932c9eaceca502f76",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The listed 'markers' are fragments quoted out of a generated rankings JSON file rather than real code TODOs, so the artifact needs to be reframed around actual actionable open items before it can be worked.",
+			"evidence": [
+				"'Every marker quoted below is text copied out of repository source this sweep did not write'",
+				"targets are line offsets inside rankings/index.json, not source code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T22:29:03.742Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-29ee60e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12609,19 +12708,19 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 8
+				"implementation": 6
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Three well-localized localStorage silent-failure findings in a single component are low-severity edge cases but cheap and clearly bounded to fix.",
+			"rationale": "Small, well-localized empty-catch findings in one component file make for a quick, low-risk fix.",
 			"evidence": [
-				"FloatingAssistant.svelte:119 localStorage.getItem silent failure blocks session restore",
-				"FloatingAssistant.svelte:142 localStorage.setItem silent failure blocks session persistence"
+				"'localStorage.getItem() silently fails during session restoration'",
+				"all three findings in FloatingAssistant.svelte"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T22:04:50.660Z"
+			"scoredAt": "2026-09-16T22:29:03.742Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-bb286f8",
@@ -12850,6 +12949,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T17:01:45.719Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine deployment-health snapshot citing an already-merged fix commit with no open failure or ask.",
+			"evidence": [
+				"commit message shows a completed fix (nitter persistence/shutdown)",
+				"status: unknown, tags: deployment only"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T22:29:03.742Z"
 		},
 		{
 			"key": "issue:minion-meta#390",
@@ -13878,6 +14009,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:29:51.901Z"
+		},
+		{
+			"key": "pr:minion_hub#291",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#291 docs(qa): cross-module data-lifecycle stress scenarios (L1–L8)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/291",
+			"sourceUpdatedAt": "2026-09-16T22:02:58Z",
+			"sourceFingerprint": "5abce412e1d9d37aa9e0508741a6ffa344ebaca51bc17dbfb46d70c564546c59",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Docs-only QA scenario PR is low risk, clearly scoped, and ready to merge as-is.",
+			"evidence": [
+				"'Docs only; no code.'",
+				"adds docs/qa-scenarios/cross-module-lifecycles.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T22:29:03.742Z"
+		},
+		{
+			"key": "pr:minion-meta#455",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#455 docs(proposals): hub requireAdmin audit + POS accounts drawer follow-ups (2026-09-16)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/455",
+			"sourceUpdatedAt": "2026-09-16T22:03:39Z",
+			"sourceFingerprint": "0f83386db7fb1d4037313fe93460406581c464485853ba6fd412f69045595b6d",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, self-contained docs/ledger PR that regenerates the proposal index and passes its own check.",
+			"evidence": [
+				"'regenerates proposals/index.json (455 proposals, --check passes)'",
+				"'Docs only.'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T22:29:03.742Z"
 		},
 		{
 			"key": "proposal:2026-08-22-crm-rank-query-prod-latency",
@@ -15868,38 +16063,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T02:30:09.344Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "99e9a31d320a658db7409e165cd460386db9a27281fd9ded2bb2dc9d7f004e42",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Findings are quoted string fragments inside the ranking tool's own generated index.json, not actionable source-code markers.",
-			"evidence": [
-				"target file is rankings/index.json, the ranking system's own data output",
-				"quoted fragments reference multiple unrelated other findings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T21:29:38.544Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
