@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T17:01:45.813Z",
+	"generatedAt": "2026-09-16T17:31:01.026Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1540,6 +1540,39 @@
 			"scoredAt": "2026-09-16T04:59:04.923Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-928e5d399f1a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/run-migrations.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-928e5d399f1a.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "95075896492dc53a23e4abe35a13a26d3db33b73dd5eba01c47f8e6c80aa676e",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An incomplete ALTER TABLE migration in a merged production PR can block schema pushes and cause runtime errors, and the finding already includes a concrete fix direction and verification step.",
+			"evidence": [
+				"marker: 'TODO(handoff): drizzle/0008_workshop_thumbnail.sql (ALTER TABLE' in src/server/run-migrations.ts",
+				"diagnosis notes 'incomplete ALTER TABLE statement will block schema pushes'",
+				"merged PR #280 on minion_hub master branch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:31:00.934Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-b8113b095cdf",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2240,6 +2273,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T17:00:42.813Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-915328540",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — .planning/operations/360/checkpoint-2026-09-11/sender/source/packages/shells-bridge/src/bridge.ts (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-915328540.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "4ad638ad98709d41270c13f7300fdd0006a8940c3780e95152d684bafed42cd5",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-meta-2187562221",
+				"proposal:handoff-minion-meta-2934878458"
+			],
+			"rationale": "bridge.ts carries the most substantive Shells-lifecycle reliability gaps and should anchor a consolidated remediation goal with the related run-journal markers.",
+			"evidence": [
+				"marker: 'Persist terminal frames and reconcile on reconnect instead of losing execution outcomes' (A4)",
+				"marker: 'Quiesce the harness and stage/verify restore before swapping the workdir; live overlay extraction races execution' (A4)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:31:00.934Z"
 		},
 		{
 			"key": "pr:minion (gateway)#262",
@@ -4964,6 +5032,41 @@
 			"scoredAt": "2026-09-16T02:32:22.410Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-3082127154",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — .planning/operations/360/checkpoint-2026-09-11/finance/source/src/server/services/finance-statements.service.ts (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-3082127154.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "7304cf1eeb305830834bf7584e05b60060fe1cc1f25bdcc60b1b6cd6ad88cbda",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:handoff-minion-meta-403744372"
+			],
+			"rationale": "Finance statement import has concrete unresolved data-integrity risks worth spec'ing into a fix.",
+			"evidence": [
+				"marker: 'Bound streamed response bytes before allocation; arrayBuffer()'",
+				"marker: 'Reconcile uploaded blobs after failed/concurrent import creation'",
+				"marker: 'Expose job failure/recovery alongside import status'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:31:00.934Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-db09a2f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5752,6 +5855,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:35:55.019Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-2028489184",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — .planning/operations/360/checkpoint-2026-09-11/sender/before/packages/shells-bridge/src/bridge.ts (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-2028489184.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "bb31f3dc13ce88f7cf38125dcbb3632e08c49f5e3a6a5dd5a56ad6bf1ab6c48d",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-meta-1910089182",
+				"proposal:handoff-minion-meta-1967076684",
+				"proposal:handoff-minion-meta-2120635823"
+			],
+			"rationale": "Six markers on bridge.ts covering frame persistence, dedup, and session-cancel semantics are the most substantive part of the same tracked Shells-lifecycle remediation and anchor the group.",
+			"evidence": [
+				"Persist terminal frames and reconcile on reconnect instead of losing execution outcomes",
+				"session/cancel returns a Boolean that conflates transmission with..."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:29:43.471Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3287487637",
@@ -6719,6 +6858,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-13T02:34:43.271Z"
+		},
+		{
+			"key": "pr:minion_hub#281",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#281 fix(qa): TTL teardown no longer kills itself; stress-test scenario docs",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/281",
+			"sourceUpdatedAt": "2026-09-16T17:02:37Z",
+			"sourceFingerprint": "db006c4fe308cdf590811f7f106818516e9f3300f2f7b2c1177c792b6cd6109d",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The PR fixes a concrete QA teardown bug that left the stack up 9 hours, with a unit test covering both paths and is already open for merge.",
+			"evidence": [
+				"qa:down disarmed the TTL first, stopping the systemd unit it was running inside; the stack stayed up 9 hours",
+				"Unit test covers both paths (disarmUnits)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:29:43.471Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
@@ -8364,6 +8535,38 @@
 			"scoredAt": "2026-09-14T09:36:50.832Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-608985431",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — .planning/operations/360/checkpoint-2026-09-11/ui/site-ui.patch (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-608985431.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "eb16c24de6badbb75e7bc0771aa1e99db5e8feec3df148521cf350e4050d8312",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Bundles a security-relevant auth-revocation gap with unrelated CI/formatter notes, so it needs scope-splitting before it is spec-ready.",
+			"evidence": [
+				"marker: 'Qualify durable revocation with disposable provider sessions'",
+				"marker: 'Wire this native fixture into Site CI'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:31:00.934Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-0050a8290ce5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8631,41 +8834,6 @@
 			"scoredAt": "2026-09-16T02:30:09.344Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-928e5d399f1a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/run-migrations.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-928e5d399f1a.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "106030ebeddc3c4f14c5152c9fd8cabff443609432a5f1c783f8ce25e848b539",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-9e9d069dc1bc",
-				"proposal:postmerge-minion-hub-cb4eec61bb4f"
-			],
-			"rationale": "An incomplete ALTER TABLE marker risks blocking future schema pushes and has a small, bounded fix location.",
-			"evidence": [
-				"TODO(handoff) marks an incomplete ALTER TABLE for workshop_thumbnail migration",
-				"fix verifiable via bun run db:push"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T17:01:45.719Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8825,6 +8993,147 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T02:32:22.410Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-1910089182",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — .planning/operations/360/checkpoint-2026-09-11/sender/before/packages/shells-bridge/src/run-journal.test.ts (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-1910089182.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "16f4e80d50fce83ba9cac17d7f957c4eb1f3683dd573da3b38d55841fd85bac2",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-meta-1967076684",
+				"proposal:handoff-minion-meta-2028489184",
+				"proposal:handoff-minion-meta-2120635823"
+			],
+			"rationale": "These markers reference the same tracked Shells-lifecycle remediation effort as the sibling shells-bridge proposals in this batch and should be consolidated into one goal.",
+			"evidence": [
+				"See meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle)",
+				"This proves statement-failure rollback, not failed-COMMIT or process/power-loss recovery"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:29:43.471Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-1967076684",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — .planning/operations/360/checkpoint-2026-09-11/sender/source/packages/shells-bridge/src/run-journal.ts (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-1967076684.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "c7eef9f29de17dfbbe8e6a2366ec0efa0528c2e55afb582c77f1e015ef97453c",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-meta-1910089182",
+				"proposal:handoff-minion-meta-2028489184",
+				"proposal:handoff-minion-meta-2120635823"
+			],
+			"rationale": "These markers cite the same Shells-lifecycle remediation doc as sibling shells-bridge proposals and cover reconciliation-authority gaps belonging in the same consolidated goal.",
+			"evidence": [
+				"Bridge replay has no dispatch authority and cannot recover unknown external effects",
+				"Only receiver14-12 authenticated COMMIT receipts...may call this API"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:29:43.471Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-2120635823",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — .planning/operations/360/checkpoint-2026-09-11/sender.patch (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-2120635823.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "b0b1dd3e9763e0fd82892756cbad34b3e7bccafd3f8d4b839fdcd9126c6bf459",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-meta-1910089182",
+				"proposal:handoff-minion-meta-1967076684",
+				"proposal:handoff-minion-meta-2028489184"
+			],
+			"rationale": "ACP mapping and private-path markers reference the same platform-qc-remediation Shells-lifecycle effort as the sibling shells-bridge proposals and should not be tracked separately.",
+			"evidence": [
+				"Wire private path, process generation and startup uncertainty only after receiver14-12 and sender11-03 acceptance",
+				"Replace handwritten ACP initialization/session/prompt/cancel mapping"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:29:43.471Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-403744372",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — .planning/operations/360/checkpoint-2026-09-11/finance/before/src/server/services/finance-statements.service.ts (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-403744372.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "8f4d6779be2c702464e178a0b70b20e57bacab3830fea3ba19312c060b00c9c6",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:handoff-minion-meta-3082127154"
+			],
+			"rationale": "This is the 'before' checkpoint variant of the same finance-statements.service.ts file with a subset of the markers already captured more completely in the 'source' variant proposal.",
+			"evidence": [
+				"same file finance-statements.service.ts with markers 'Reconcile uploaded blobs' and 'Expose job failure/recovery' duplicated in proposal 3082127154's source variant"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:31:00.934Z"
 		},
 		{
 			"key": "issue:minion-meta#430",
@@ -9633,6 +9942,38 @@
 			"scoredAt": "2026-09-16T14:29:06.082Z"
 		},
 		{
+			"key": "issue:minion-meta#451",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#451 [monitor:unstick] reconcile run e6e89e89 (minion-meta): agent launch failed exit-126 after scripted reconcile succeeded",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/451",
+			"sourceUpdatedAt": "2026-09-16T17:17:37Z",
+			"sourceFingerprint": "2bdaed26f68d888c62f6bc4c6053a61878aa95b08d8be4ddafd8f020c9385c7b",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "All reconcile state was already persisted before the launch-level exit-126 failure, so it is safe to retry but the worker CLI install fault still needs isolated diagnosis.",
+			"evidence": [
+				"all reconciliation state was already persisted...a retry only needs to re-run the agent step",
+				"exit-126 with turns=0 and 0 permission_denials indicates a launch-level fault on the worker box"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:29:43.471Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-msteams-large-upload",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10241,6 +10582,105 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:36:50.832Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-1708310858",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — scripts/qc/handoff-ledger.mjs (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-1708310858.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "eb4a6ad1896fee0f943240abaa2a85edb9bab5ace054065afcd8e6571af58a5e",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This handoff-ledger tooling gap is already at review status, further along the pipeline than its draft peers.",
+			"evidence": [
+				"status: review",
+				"DOC-03 needs root-reviewed reverse records and independent source/test"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:29:43.471Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-1816477971",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — .planning/operations/360/checkpoint-2026-09-11/ui/hub-ui.patch (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-1816477971.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "0cddc2eb0759783d80d9bf23a584396a4b1065039e0ad10cf99635cbd4f267f8",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Multiple distinct UI a11y/timezone/engine-fidelity gaps are bundled loosely in one checkpoint patch and need rescoping before execution.",
+			"evidence": [
+				"appointments render at their UTC wall-clock, not the org's",
+				"clickable filter and legend consumers still need keyboard action"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:29:43.471Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-2187562221",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — .planning/operations/360/checkpoint-2026-09-11/sender/source/packages/shells-bridge/src/run-journal.test.ts (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-2187562221.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "f1946b729e1ced9fa1083073b8211df3f1836d47191d5751af5ae18654204c10",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-meta-2934878458",
+				"proposal:handoff-minion-meta-915328540"
+			],
+			"rationale": "A test-coverage gap in a Shells-lifecycle checkpoint fixture should be consolidated with the related bridge.ts/run-journal.ts markers into one remediation goal.",
+			"evidence": [
+				"run-journal.test.ts:145 notes rollback proof excludes COMMIT/power-loss recovery",
+				"references meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:31:00.934Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3518589653",
@@ -11059,6 +11499,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T02:32:22.410Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-1254928260",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — .planning/operations/360/checkpoint-2026-09-11/finance.patch (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-1254928260.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "3a5c392d6f0ff25730a554a2e86b85af7e878cfd5898cdcd85194c872f2d5574",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The markers flag unresolved bounds and data-contract gaps in a historical checkpoint finance patch, but current applicability is unclear from the excerpt alone.",
+			"evidence": [
+				"Bound streamed response bytes before allocation; arrayBuffer()",
+				"Historical version replacement needs an explicit data contract"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:29:43.471Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2757299434",
@@ -13270,6 +13742,41 @@
 			"scoredAt": "2026-09-16T02:32:22.410Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-2934878458",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — .planning/operations/360/checkpoint-2026-09-11/sender/before/packages/shells-bridge/src/run-journal.ts (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-2934878458.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "862726f5911905d5d3ece4cb2a44ec10aabd8541f6901fc5a5cac5d8756a3dd1",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-meta-2187562221",
+				"proposal:handoff-minion-meta-915328540"
+			],
+			"rationale": "Deferred, deliberately-unused adapter wiring for Shells lifecycle should be consolidated with the other Shells-lifecycle markers rather than tracked separately.",
+			"evidence": [
+				"marker states 'this adapter is deliberately unused by Bridge'",
+				"references meta proposals/2026-09-08-platform-qc-remediation.md (Shells lifecycle)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:31:00.934Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-372842d1982e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13758,6 +14265,37 @@
 			"scoredAt": "2026-09-16T02:30:09.344Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-368607906",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/run-migrations.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-368607906.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "9f14765cda052b5e43e2d6d17b6bc714f64dacf2a316f438dc10ceec6bb37c79",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single auto-extracted migration marker lacks enough scope detail to act on directly without further investigation.",
+			"evidence": [
+				"single marker at run-migrations.ts:40 referencing drizzle/0008_workshop_thumbnail.sql ALTER TABLE"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:29:43.471Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-277751425",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13788,6 +14326,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T02:32:59.548Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-4036985971",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — scripts/qc/proposal-requirement-map.mjs (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-4036985971.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "2258ea4186b26bb58aba19479f81fe9179107864f6bd8fe5bacdb5d008bb16f8",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single, narrow QC-tooling documentation requirement marker that is low urgency but plausibly actionable.",
+			"evidence": [
+				"marker: 'DOC-02 requires per-document body/source acceptance and exact status patches'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:31:00.934Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-f0ba8a3",
@@ -14611,6 +15180,68 @@
 			"scoredAt": "2026-09-14T09:35:55.019Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-3045707328",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — .planning/operations/360/checkpoint-2026-09-11/finance/source/src/server/services/finance-statement-parser.ts (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-3045707328.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "117b34f87f09871990fafaa0d4d260942acb837f6bff4cb0303428bab18e4875",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The single marker fragment is too truncated to state a verifiable problem or scope, so it needs a reframed, fuller description before it can enter the spec pipeline.",
+			"evidence": [
+				"Only marker text is 'The service now binds this version and verifies normalized' with no completion or context"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:31:00.934Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-3663138542",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — .planning/operations/360/checkpoint-2026-09-11/site-ci/source/.github/workflows/ci.yml (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-3663138542.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "e72a600a16fe14b6e2422458333274a1ca362faba099d1ca9e7a8808b8ce94fb",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single low-stakes CI qualification marker for one workflow job.",
+			"evidence": [
+				"marker: 'Qualify this exact job on stock Ubuntu24.04 after reviewed'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:31:00.934Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14774,14 +15405,14 @@
 			"scoredAt": "2026-09-16T17:00:42.813Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-1708310858",
+			"key": "proposal:handoff-minion-hub-815818272",
 			"kind": "proposal",
 			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — scripts/qc/handoff-ledger.mjs (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-1708310858.md",
+			"repo": "minion-hub",
+			"title": "Handoff marker — scripts/qa/seed/seed.contract.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-815818272.md",
 			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "d92a91f40a99d14cab1126efc010f8468da17fa1d11078ec3345193fcc974ad7",
+			"sourceFingerprint": "7bb1c68b873cb17c820cbfafa6293a844289fc88a9afdda84e777c1f78efa33a",
 			"score": 13,
 			"band": "low",
 			"axes": {
@@ -14790,19 +15421,19 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 1,
-				"implementation": 1
+				"specification": 2,
+				"implementation": 2
 			},
-			"confidence": 7,
+			"confidence": 4,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The captured marker text is a raw code fragment rather than a description of an open end, indicating a non-actionable sweep false positive.",
+			"rationale": "The marker only states that SUPABASE_SERVICE_ROLE_KEY is generated by supabase start, which is expected test-fixture behavior rather than an actionable defect.",
 			"evidence": [
-				"handoff-ledger.mjs:73 \\u0027) || !COMMENT_OPENER.test(line)) return;"
+				"marker text: SUPABASE_SERVICE_ROLE_KEY is generated by supabase start"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T02:32:22.410Z"
+			"scoredAt": "2026-09-16T17:29:43.471Z"
 		},
 		{
 			"key": "issue:minion-meta#373",
@@ -14940,39 +15571,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "6713cab4673de2661ca7684a1c9572f35b8ce82f1adcdc504fba5ec328bcbc92",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are quoted rationale/evidence text from unrelated prior ranking entries stored inside rankings/index.json, not actual in-code TODO(handoff) comments to resolve.",
-			"evidence": [
-				"Markers cite rankings/index.json lines quoting unrelated product text (POS tickets, HR schema, phone failure)",
-				"No source-file TODO(handoff) comment is shown, only quoted JSON data from this ranking system's own output"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T14:29:06.082Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-3652542388",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — scripts/qc/handoff-ledger.test.mjs (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-3652542388.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "84db217cd7fe9f39ae78c7b781227e5e97544aa2fa91dbc36aa60f0d53fce274",
+			"sourceFingerprint": "2096e929fa821dbcbfdea39ce9b8721395625e472177c6f9817aaf8a909d6b34",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -14984,17 +15583,16 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 8,
+			"confidence": 7,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "All eleven markers are test-fixture strings inside the handoff-ledger scanner's own test file, not real open items.",
+			"rationale": "Markers are quoted text fragments embedded inside the rankings/index.json data snapshot itself, not real TODOs in source code, so there is no actionable defect.",
 			"evidence": [
-				"file is scripts/qc/handoff-ledger.test.mjs",
-				"fixture text includes 'should never be scanned' and 'RESOLVED claim with no evidence'"
+				"Marker text 'drawer still shows no LINKED POS TICKETS' is unrelated snippet text quoted inside rankings/index.json, a generated data file"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T02:32:59.548Z"
+			"scoredAt": "2026-09-16T17:31:00.934Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
@@ -15059,6 +15657,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T07:28:29.730Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-3652542388",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — scripts/qc/handoff-ledger.test.mjs (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-3652542388.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "1420e15d83701251dd5d8f443f53f5cf7243d43f25c8fae03f49f0fa4a96f318",
+			"score": 0,
+			"band": "low",
+			"axes": {
+				"criticality": 0,
+				"importance": 0,
+				"impact": 0
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The markers are test fixture strings inside the handoff-ledger scanner's own test file, designed to exercise comment/string parsing edge cases, not real open items.",
+			"evidence": [
+				"file is scripts/qc/handoff-ledger.test.mjs, the scanner's own test suite",
+				"marker text includes fixture strings like 'quoted\";'' and 'JSX text</div>;'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T17:31:00.934Z"
 		}
 	]
 }
