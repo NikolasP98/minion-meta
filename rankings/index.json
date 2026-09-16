@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T18:58:43.785Z",
+	"generatedAt": "2026-09-16T19:05:16.999Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -769,39 +769,6 @@
 			"scoredAt": "2026-09-11T22:39:03.778Z"
 		},
 		{
-			"key": "pr:minion_hub#283",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#283 fix(pos): viewer cannot open write pages; settings save returns 400 not 500",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/283",
-			"sourceUpdatedAt": "2026-09-16T18:15:51Z",
-			"sourceFingerprint": "70ccca946ffb954bbd3ca4a33b3f9d5a74799aa1c539b9d49056e67916b612ab",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Closes a broken-access-control gap letting viewers open POS write pages and charge sales, plus root-causes a long-open 500 on settings save with a concrete fix.",
-			"evidence": [
-				"viewer could open /pos/sell and click Charge with no capability gate at all",
-				"POST /api/pos/tickets had no requireOrgCapability call, unlike its siblings",
-				"untargeted ON CONFLICT fixes the PostgresError 23505 causing the settings-save 500"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T18:29:06.570Z"
-		},
-		{
 			"key": "proposal:2026-08-28-factory-containment-base-reconciliation",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1071,39 +1038,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-15T14:28:58.709Z"
-		},
-		{
-			"key": "pr:minion-meta#453",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#453 docs(proposals): hub stress-test defects (scheduling/stock/POS) + backup scheduler never started",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/453",
-			"sourceUpdatedAt": "2026-09-16T18:33:09Z",
-			"sourceFingerprint": "91789602e53e6f47bb8a4d42ea2bb96ce440060c78ad6bfa15698f80dec37604",
-			"score": 70,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Consolidates 39 QA defects including a high-severity auth bug blocking org owners/admins and a backup scheduler that never runs, but this PR is only documentation pending human review before spec work starts.",
-			"evidence": [
-				"requireAdmin checks platform role not org role, blocking scheduling link/event creation",
-				"backup-scheduler.ts startBackupScheduler() has zero call sites",
-				"39 defects: 9 high, 19 medium, 11 low across scheduling/stock/POS"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T18:58:43.685Z"
 		},
 		{
 			"key": "proposal:2026-09-12-hub-booking-stock-postcommit-recovery",
@@ -2106,38 +2040,6 @@
 			"scoredAt": "2026-09-16T03:30:25.155Z"
 		},
 		{
-			"key": "run:minion_hub#35124617207",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35124617207",
-			"sourceUpdatedAt": "2026-09-16T16:55:56Z",
-			"sourceFingerprint": "da329ff8e691765ec3e28d23feddf468af35036d9239b6389cac701fd7b1b93c",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failing CI run on the master branch is high consequence but the entry carries no diagnostic detail to act on yet.",
-			"evidence": [
-				"status: failure",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T17:01:45.719Z"
-		},
-		{
 			"key": "issue:minion-meta#395",
 			"kind": "issue",
 			"stage": "proposal",
@@ -2839,39 +2741,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:29:14.447Z"
-		},
-		{
-			"key": "pr:minion_hub#284",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#284 fix(ci): make the unit-test lane durable — PGlite hookTimeout under load",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/284",
-			"sourceUpdatedAt": "2026-09-16T18:37:32Z",
-			"sourceFingerprint": "09147640fd0c773a490d96325a9ff161b6cf25eaf91664178058258de29b964e",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A well-documented, root-caused CI flake fix (PGlite hookTimeout) with evidence of reproduction and two clean post-fix runs is ready to merge.",
-			"evidence": [
-				"hookTimeout: 30_000 fix root-caused to PGlite startup cost under load",
-				"two consecutive clean full-suite runs post-fix (4072 tests passed)",
-				"14 failing CI runs traced and confirmed resolved upstream"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T18:58:43.685Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -5198,6 +5067,39 @@
 			"scoredAt": "2026-09-10T08:05:06.253Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-7854cfd",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 7854cfd",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-7854cfd.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "624c3f0acc54463de45da3d16b8f7a9c7485d1ecf5b462ec907b34fbdd6038b6",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Multiple high/medium unchecked-access findings across POS and scheduling components risk runtime errors from undefined fields.",
+			"evidence": [
+				"SellableWizard.svelte:274 match.name.toLowerCase() unchecked",
+				"BookingsView.svelte:357 match.name unchecked",
+				"6 findings spanning POS/scheduling/stock files"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T19:05:16.909Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-2164a4547ea3",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6396,39 +6298,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T02:32:59.548Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-hub-7854cfd",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 7854cfd",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-7854cfd.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "624c3f0acc54463de45da3d16b8f7a9c7485d1ecf5b462ec907b34fbdd6038b6",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Multiple concrete unchecked-access findings with exact file/line locations across POS and scheduling components pose real runtime error risk and are directly actionable.",
-			"evidence": [
-				"high: SellableWizard.svelte:274 unchecked-access on match.name",
-				"high: BookingsView.svelte:357 unchecked-access, inconsistent with display_name comment",
-				"5 additional medium-severity unchecked-access findings across POS/stock/scheduling files"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-09T19:04:37.327Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-198db99358ad",
@@ -7748,39 +7617,6 @@
 			"scoredAt": "2026-09-14T09:31:14.559Z"
 		},
 		{
-			"key": "pr:minion_hub#282",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#282 chore(crons): hourly word-frequency rollup, weekly 90-day full rebuild, manifest matches the box",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/282",
-			"sourceUpdatedAt": "2026-09-16T17:35:53Z",
-			"sourceFingerprint": "d3ced97e0506fc667689a23436eb38404914ddd0193a028a1a82ccc9c4f83535",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Concrete cron cost/correctness fixes (96→24 runs/day, 4000→90 day window) are scoped and gated by green tests, but leaves an unresolved backup-scheduler wiring decision.",
-			"evidence": [
-				"96 → 24 runs/day",
-				"refresh/full: 4000 days → 90, nightly → weekly",
-				"TODO(handoff): startBackupScheduler() has no call site"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T17:58:35.115Z"
-		},
-		{
 			"key": "pr:minion_site#28",
 			"kind": "pr",
 			"stage": "development",
@@ -8445,14 +8281,14 @@
 			"scoredAt": "2026-09-16T17:01:45.719Z"
 		},
 		{
-			"key": "pr:minion_hub#281",
+			"key": "pr:minion_hub#285",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#281 fix(qa): TTL teardown no longer kills itself; stress-test scenario docs",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/281",
-			"sourceUpdatedAt": "2026-09-16T18:18:15Z",
-			"sourceFingerprint": "e56b1a15264fc11f44c9d973fbd512765b844e76808f226e6334c9c57e7d5a36",
+			"title": "#285 fix(qa-seed): payment methods + surcharge, Madrid schedule, room/equipment event types, redemption on the fully-linked booking, duplicate registration guard",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/285",
+			"sourceUpdatedAt": "2026-09-16T19:02:13Z",
+			"sourceFingerprint": "df93d1aa8ae9ddfdfeb591b06f183f6b9761456fa3314c8f21deec8aff2d63d4",
 			"score": 43,
 			"band": "low",
 			"axes": {
@@ -8461,20 +8297,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 8
+				"specification": 9,
+				"implementation": 9
 			},
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Fixes a QA teardown ordering bug that left a stack running 9 hours, with a unit test covering both paths and docs added.",
+			"rationale": "Verified fix for QA seed-fixture gaps enabling scheduling/stock/POS stress testing, ready to merge.",
 			"evidence": [
-				"TTL disarmed before stopping the unit it ran inside, stack stayed up 9 hours",
-				"unit test covers disarmUnits for both paths"
+				"171/171 matrix ids verified on running stack",
+				"qa:seed:verify 177/177, bun run check 0/0"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T18:29:06.570Z"
+			"scoredAt": "2026-09-16T19:05:16.909Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
@@ -11144,38 +10980,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:38:46.333Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged fix for nitter persistence/shutdown drain is a routine deployment health signal without evidence of ongoing incident.",
-			"evidence": [
-				"commit b841c36 fix(nitter): serialize persistence and drain poller shutdown",
-				"status unknown, updatedAt 2026-09-12"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T18:58:43.685Z"
 		},
 		{
 			"key": "issue:minion-meta#436",
@@ -14684,6 +14488,38 @@
 			"scoredAt": "2026-09-12T21:05:36.332Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-c371d6639113",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/backup-scheduler.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c371d6639113.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "26732e5087b8c94049152e09ac20cb5aa4c0495ad52aa5cc2b768eb5f6a4b658",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Unresolved TODO(handoff) marks dead/unwired backup scheduler code needing cleanup or wiring, but urgency is low.",
+			"evidence": [
+				"TODO(handoff): startBackupScheduler() has no call site anywhere in src/",
+				"single file src/server/services/backup-scheduler.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T19:05:16.909Z"
+		},
+		{
 			"key": "spec:2026-08-17-hub-dead-mirrors-cleanup-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -15790,6 +15626,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T02:30:09.344Z"
+		},
+		{
+			"key": "run:minion_hub#35138240722",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35138240722",
+			"sourceUpdatedAt": "2026-09-16T19:03:36Z",
+			"sourceFingerprint": "571392f29920af0f01e5e237436f78a9b5d8ce13dba6b2fd3ce1a8adc991a3a3",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A pending CI run status entry is not an actionable goal with defined scope or outcome.",
+			"evidence": [
+				"status: pending",
+				"kind: run, stage: testing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-16T19:05:16.909Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
