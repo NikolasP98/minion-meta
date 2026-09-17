@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-17T14:24:36.818Z",
+	"generatedAt": "2026-09-17T14:28:38.959Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11552,6 +11552,38 @@
 			"scoredAt": "2026-09-14T09:38:46.333Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown draining with no reported deployment failure or ongoing incident evidence.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"status unknown, tagged deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T14:28:38.846Z"
+		},
+		{
 			"key": "issue:minion-meta#436",
 			"kind": "issue",
 			"stage": "proposal",
@@ -13019,8 +13051,8 @@
 			"repo": "minion_hub",
 			"title": "#316 fix(roles): role list rows no longer overflow the rail",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/316",
-			"sourceUpdatedAt": "2026-09-17T14:22:07Z",
-			"sourceFingerprint": "7e107cc37c5ae43fc72d8cc2708e0f5c78bb472a3a1fc177667d94e9b2556934",
+			"sourceUpdatedAt": "2026-09-17T14:25:03Z",
+			"sourceFingerprint": "bc59e69ef3e93aebed30bdffc4a3763f0358074b0184feac5df53e2595c22881",
 			"score": 30,
 			"band": "low",
 			"axes": {
@@ -13030,20 +13062,20 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 8
+				"implementation": 7
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Root cause and exact CSS fix are already specified for a scoped UI overflow bug, making this ready to merge.",
+			"rationale": "Well-specified, low-risk UI overflow fix with a clear root cause, scoped CSS override, and open PR ready for review.",
 			"evidence": [
-				"root cause identified as shared Button slot trap",
-				"exact selector overrides given for role-list rows",
-				"PR already open in development stage"
+				"role list rows overlap due to Button slot trap",
+				"scoped fix proposed: .role-btn height:auto, inner span flex",
+				"PR open, updated 2026-09-17"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T14:24:36.716Z"
+			"scoredAt": "2026-09-17T14:28:38.846Z"
 		},
 		{
 			"key": "proposal:2026-08-17-site-vendored-tgz-untracked",
@@ -16994,39 +17026,6 @@
 				"all markers point to line numbers inside rankings/index.json itself",
 				"quoted fragments are partial sentences resembling evidence text, not TODO(handoff) syntax",
 				"source is an automated handoff-sweep with no code-level marker shown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T14:24:36.716Z"
-		},
-		{
-			"key": "run:minion_hub#35233091098",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35233091098",
-			"sourceUpdatedAt": "2026-09-17T14:22:23Z",
-			"sourceFingerprint": "1dfd29e4003263e951e8742b1eca7ce12948f8615143ebed92efb5c92688311b",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run status entry, not a discrete work item to rank or execute.",
-			"evidence": [
-				"kind is run, stage testing, status in_progress",
-				"summary is just 'push on master'",
-				"no defect or task described beyond CI execution"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
