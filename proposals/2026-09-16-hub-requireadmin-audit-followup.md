@@ -9,6 +9,21 @@ tags: [logic]
 effort: M
 ---
 
+## Progress (2026-09-16, second increment)
+
+`join-links/*` and `join-requests/*` (admin side: GET, `[id]/+server.ts`,
+`[id]/approve`, `[id]/deny`, `pending`, `count`) confirmed as the same
+misclassification via the acceptance walkthrough (D4: an org owner got
+"Admin access required" minting a join link) and switched to
+`requireOrgCapability(locals, 'users', 'manage')`, org-scoped (POST/GET
+validate `organizationId` against `locals.tenantCtx.tenantId`, 403/404 on
+mismatch; platform admins keep the cross-org path explicitly). `POST
+/api/join-requests` (top-level) is intentionally untouched — applicant
+self-service, gated by `requireAuth` only. hub PR: `fix(rbac): org owners
+manage join links/requests (org-scoped); any multi-org member can switch
+org`. Remaining count: ~50 (was ~55; gateways/servers/users/workflow-defs/
+backup-config/memberships/etc. still spot-audited-only, not line-by-line).
+
 # Full requireAdmin call-site audit (org-vs-platform misclassification)
 
 ## Problem
@@ -68,3 +83,12 @@ shipped and is covered by tests.
 `/home/nikolas/.cache/claude-tmp/hub-fix-f1` on 2026-09-16, cross-referenced
 against `defaultCaps`/`requireOrgCapability` in
 `src/server/services/rbac.service.ts`.
+
+## Related, found by the same walkthrough (2026-09-16, not a `requireAdmin` site)
+
+- **Legacy-member role rendered inconsistently.** `tenancy.user.legacy-member` (only an
+  `organization_members.role`, no `member_roles` row) shows as "viewer" on the Team page but
+  as `roleKey: "manager"` in `/api/dev/users` and in RBAC resolution (`legacyRoleKey`
+  fallback). One of the two surfaces reads the legacy column differently; align the Team
+  page's role display with `rbac.service.ts`'s fallback. Severity: low (display only, the
+  effective permissions follow RBAC).
