@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-e263984cb0f6
 title: "Post-merge finding — todo-handoff in src/server/services/ruc-registry.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-17
 updated: 2026-09-17
 repos: [minion-hub]
