@@ -47,11 +47,11 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9347
 - `NikolasP98/minion-meta@dev rankings/index.json:9672` — the confirmed root cause (QA-stack app logs) was",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9672
-- `NikolasP98/minion-meta@dev rankings/index.json:10893` — reopened mid-exit — cancel the pending close",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10893
-- `NikolasP98/minion-meta@dev rankings/index.json:11740` — prompt-driven protocol instead of native tool_use — replace",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11740
-- `NikolasP98/minion-meta@dev rankings/index.json:12935` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12935
-- `NikolasP98/minion-meta@dev rankings/index.json:15823` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15823
+- `NikolasP98/minion-meta@dev rankings/index.json:10926` — reopened mid-exit — cancel the pending close",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10926
+- `NikolasP98/minion-meta@dev rankings/index.json:11773` — prompt-driven protocol instead of native tool_use — replace",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11773
+- `NikolasP98/minion-meta@dev rankings/index.json:12968` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12968
+- `NikolasP98/minion-meta@dev rankings/index.json:15824` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15824
