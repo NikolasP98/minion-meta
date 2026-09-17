@@ -41,17 +41,17 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7629
 - `NikolasP98/minion-meta@dev rankings/index.json:7762` — remove once the phone failure is root-caused'",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7762
-- `NikolasP98/minion-meta@dev rankings/index.json:8932` — drawer still shows no LINKED POS TICKETS — spec §4.1",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8932
-- `NikolasP98/minion-meta@dev rankings/index.json:8964` — The service now binds this version and verifies normalized",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8964
-- `NikolasP98/minion-meta@dev rankings/index.json:9289` — the confirmed root cause (QA-stack app logs) was",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9289
-- `NikolasP98/minion-meta@dev rankings/index.json:10542` — reopened mid-exit — cancel the pending close",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10542
-- `NikolasP98/minion-meta@dev rankings/index.json:11325` — prompt-driven protocol instead of native tool_use — replace",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11325
-- `NikolasP98/minion-meta@dev rankings/index.json:12587` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12587
-- `NikolasP98/minion-meta@dev rankings/index.json:15346` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15346
+- `NikolasP98/minion-meta@dev rankings/index.json:9043` — drawer still shows no LINKED POS TICKETS — spec §4.1",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9043
+- `NikolasP98/minion-meta@dev rankings/index.json:9075` — The service now binds this version and verifies normalized",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9075
+- `NikolasP98/minion-meta@dev rankings/index.json:9400` — the confirmed root cause (QA-stack app logs) was",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9400
+- `NikolasP98/minion-meta@dev rankings/index.json:10653` — reopened mid-exit — cancel the pending close",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10653
+- `NikolasP98/minion-meta@dev rankings/index.json:11468` — prompt-driven protocol instead of native tool_use — replace",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11468
+- `NikolasP98/minion-meta@dev rankings/index.json:12698` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12698
+- `NikolasP98/minion-meta@dev rankings/index.json:15488` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15488
