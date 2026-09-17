@@ -51,7 +51,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10829
 - `NikolasP98/minion-meta@dev rankings/index.json:11676` — prompt-driven protocol instead of native tool_use — replace",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11676
-- `NikolasP98/minion-meta@dev rankings/index.json:12871` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12871
-- `NikolasP98/minion-meta@dev rankings/index.json:15760` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15760
+- `NikolasP98/minion-meta@dev rankings/index.json:12903` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12903
+- `NikolasP98/minion-meta@dev rankings/index.json:15792` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15792
