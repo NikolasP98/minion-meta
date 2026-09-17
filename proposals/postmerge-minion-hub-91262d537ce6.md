@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-91262d537ce6
 title: "Post-merge finding — todo-handoff in scripts/qa/smoke-dev-switcher.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-17
 updated: 2026-09-17
 repos: [minion-hub]
