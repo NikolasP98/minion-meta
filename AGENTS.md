@@ -102,7 +102,7 @@ Published to npm under the `@minion-stack` scope. Independent semver via Changes
 | `@minion-stack/lint-config` | oxlint + flat-ESLint + Prettier presets |
 | `@minion-stack/shared` | See the README package inventory; gateway surfaces are consumed by hub, site, and paperclip |
 | `@minion-stack/db` | Canonical Drizzle schema (38 tables) + migration runner — consumed by hub + site |
-| `@minion-stack/auth` | Better Auth `createAuth()` factory — consumed by hub + site with shared session continuity |
+| `@minion-stack/auth` | Better Auth `createAuth()` factory — consumed by `minion_site`; `minion_hub` authenticates with Supabase Auth (GoTrue) since `6227f3b1` (`src/server/auth/`) |
 
 Releases are automated: merges to `main` with `.changeset/*.md` trigger a "Version Packages" PR via `changesets/action`; merging that PR publishes to npm.
 
@@ -162,7 +162,7 @@ Connection flow: WS connect → `connect.challenge` event → `connect` request 
 
 ### Multi-Tenant Database
 
-`minion_hub` and `minion_site` share a database (Drizzle ORM + LibSQL/Turso). Local dev: SQLite file (`file:./data/minion_hub.db`). Production: Turso. Auth: Better Auth 1.4.19.
+`minion_hub` and `minion_site` share a database (Drizzle ORM + LibSQL/Turso). Local dev: SQLite file (`file:./data/minion_hub.db`). Production: Turso. Auth: `minion_hub` uses Supabase Auth (GoTrue); `minion_site` uses Better Auth 1.4.19.
 
 Hub DB has 35+ schema tables covering: agents, sessions, chat-messages, servers, channels, skills, reliability-events, missions, tasks, marketplace, workshop-saves, users, settings, and more. Schema files: `minion_hub/src/server/db/schema/`.
 
@@ -350,7 +350,7 @@ When sending work to a subproject, always include:
 | Channel extension (new/modify) | `minion/extensions/<channel>/` + `minion/src/channels/` |
 | DB schema change | `minion_hub/src/server/db/schema/` → `minion_site/src/server/db/` (shared DB) |
 | Agent definition format | `Minion Docs/agents/` → `minion_hub/` (marketplace) → `minion/` (runtime) |
-| Auth changes | `minion_hub/src/lib/auth/` ↔ `minion_site/src/lib/auth/` (shared Better Auth) |
+| Auth changes | `minion_hub/src/server/auth/` (Supabase GoTrue) ↔ `minion_site/src/lib/auth/` (Better Auth) — no longer a shared session |
 | Workshop/canvas | `minion_hub/src/lib/workshop/` + `minion_hub/src/lib/components/workshop/` |
 | Pixel office | `pixel-agents/src/` (extension) + `pixel-agents/webview-ui/src/` (React) |
 | Paperclip adapters | `paperclip-minion/packages/adapters/` + `paperclip-minion/server/` |
