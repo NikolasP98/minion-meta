@@ -844,3 +844,30 @@ Test: `src/lib/components/pos/customer-quick-add.test.ts`.
 | 32.4 | open — orphan keys await a wholesale sweep |
 | 32.5 | open — no browser QA (production-bound dev server) |
 
+
+## §34 — RUC parties are SUNAT-verified at create (2026-09-17)
+
+Owner (2026-09-17): "All RUC/business account SHOULD be verified via API."
+Live probe of the documented endpoint (`GET api.perudevs.com/api/v1/ruc`)
+with `20511417253` returned LABORATORIOS BIOPAS S.A.C.; an unknown RUC answers
+HTTP 200 `{estado:false}`, which the parser now treats as not-found.
+
+### CLOSED
+
+- `POST /api/crm/parties` verifies every 11-digit document against SUNAT
+  server-side (`src/server/services/ruc-registry.ts`, 10-min per-instance
+  cache); unknown → `422 {code:'ruc_not_found'}`, outage → 502, no key → 503.
+  The registry's razón social overrides the typed name; the party is flagged
+  `dni_verified=true` with `metadata.ruc_registry` as the audit trail.
+- POS quick-add no longer offers a manual name for an unknown RUC (DNI keeps
+  its manual rung); the CRM create form surfaces the 422.
+
+### Still open
+
+- **34.1 Pre-existing RUC parties are unverified.** Rows created before this
+  change (finance/SUSII reconcile, earlier quick-adds) carry no
+  `ruc_registry` and `dni_verified=false`. The DNI backfill mechanism
+  (`/api/crm/dni-validation/tick`) is still `wiring: 'unscheduled'` in
+  `system-automations.ts`, so extending it to 11-digit company docs would be
+  inert until the crontab line exists. Pointer:
+  `TODO(handoff)` in `src/server/services/ruc-registry.ts`.
