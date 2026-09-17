@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-17T06:03:34.726Z",
+	"generatedAt": "2026-09-17T06:11:58.599Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6057,6 +6057,39 @@
 			"scoredAt": "2026-09-11T07:05:12.919Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-f696097",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ f696097",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f696097.md",
+			"sourceUpdatedAt": "2026-09-03",
+			"sourceFingerprint": "1153c4fc8268f5d1d7562333eb708872ec82a33f448a8ae2c4ffaf944d0f5cd4",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Concrete high-severity unchecked-access findings in hr.service.ts risk runtime crashes and are precisely located with clear fixes.",
+			"evidence": [
+				"four high-severity unchecked .returning()[0] destructuring sites in hr.service.ts",
+				"medium unvalidated query params across multiple HR API routes",
+				"scheduling-slots.service.ts null-check gap could crash with TypeError"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T06:11:58.499Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-f67a7acec33b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8437,39 +8470,6 @@
 			"scoredAt": "2026-09-17T02:07:01.827Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-f696097",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ f696097",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f696097.md",
-			"sourceUpdatedAt": "2026-09-03",
-			"sourceFingerprint": "1153c4fc8268f5d1d7562333eb708872ec82a33f448a8ae2c4ffaf944d0f5cd4",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Automated rubric scan lists several unvalidated-input and unchecked-access findings in HR scheduling code but has no scoped fix plan or implementation yet.",
-			"evidence": [
-				"multiple high-severity unchecked-access findings in hr.service.ts",
-				"medium unvalidated-input findings across HR endpoints",
-				"status: draft, no implementation evidence"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T06:04:56.918Z"
-		},
-		{
 			"key": "spec:2026-08-31-handoff-minion-hub-722867358-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -8501,6 +8501,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
+		},
+		{
+			"key": "pr:minion_hub#313",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#313 feat(rbac): module dashboards are their own permission row",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/313",
+			"sourceUpdatedAt": "2026-09-17T06:09:19Z",
+			"sourceFingerprint": "0c2382f77e627110231936cd87578297a989129e6d8f1b55503aada283468c41",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-scoped RBAC dashboard-permission feature with tests and no behavior change for existing roles.",
+			"evidence": [
+				"exact flag registers dashboard as own permission row",
+				"route-access-authority.test.ts covers exact-vs-prefix resolution",
+				"bun run check green"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T06:11:58.499Z"
 		},
 		{
 			"key": "proposal:2026-08-18-base-attention-queue-responsive-runs",
@@ -9994,38 +10027,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:38:46.333Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged fix for nitter persistence/shutdown draining has landed but deployment health status is unknown so it needs verification rather than immediate action.",
-			"evidence": [
-				"commit fixes serialize persistence and drain poller shutdown",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T06:03:34.608Z"
 		},
 		{
 			"key": "issue:minion-meta#327",
@@ -14435,6 +14436,39 @@
 			"scoredAt": "2026-09-17T02:01:05.989Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "6060060ae772f4e97664de25d6128c7dabb0b4ada1d423ae64db92f88190df44",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "An aggregated ledger of 14 unrelated TODO markers across disparate features lacks a single verifiable outcome and should be split into individually scoped items.",
+			"evidence": [
+				"14 distinct markers spanning migrations, HR schema, POS drawer, auth recovery policy",
+				"no single scope or dependency described beyond file:line pointers",
+				"status review but definition of done requires clearing all markers"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T06:11:58.499Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-372842d1982e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14694,38 +14728,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T05:58:42.726Z"
-		},
-		{
-			"key": "run:minion_hub#35188077963",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35188077963",
-			"sourceUpdatedAt": "2026-09-17T06:01:57Z",
-			"sourceFingerprint": "36934685cd97cc5c8e06e3215dd86109a3faa16c52c97616257139d82e31abd1",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 5
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A CI run on master is in progress with no indication of failure yet, so it merely needs monitoring until completion.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T06:03:34.608Z"
 		},
 		{
 			"key": "issue:minion-meta#417",
@@ -16325,38 +16327,6 @@
 			"scoredAt": "2026-09-17T02:03:35.240Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "529755b9bf1d8c7a2c248ed6561453596d85743f428921f971dabc46c7c4fd69",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a self-referential handoff marker pointing to disparate unrelated TODO lines scattered across a rankings index file, not a coherent actionable goal.",
-			"evidence": [
-				"filed automatically by the factory handoff-ledger sweep",
-				"markers span 14 unrelated line references across rankings/index.json"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T06:03:34.608Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-9288d166a192",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16714,6 +16684,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T02:03:35.240Z"
+		},
+		{
+			"key": "run:minion_hub#35188663195",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35188663195",
+			"sourceUpdatedAt": "2026-09-17T06:10:20Z",
+			"sourceFingerprint": "366de9894947468de96f1fa7fe1b5e62f9f18d00f5d337cf9da9beb59a4a0bd2",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run with no actionable content of its own.",
+			"evidence": [
+				"status in_progress",
+				"push on master",
+				"kind run, not a work item"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T06:11:58.499Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
