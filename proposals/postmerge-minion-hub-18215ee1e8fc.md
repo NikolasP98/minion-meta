@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-18215ee1e8fc
 title: "Post-merge finding — todo-handoff in src/lib/components/ui/foundations/Dialog.svelte (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-17
 updated: 2026-09-17
 repos: [minion-hub]
