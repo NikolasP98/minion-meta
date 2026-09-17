@@ -53,5 +53,5 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11510
 - `NikolasP98/minion-meta@dev rankings/index.json:12705` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12705
-- `NikolasP98/minion-meta@dev rankings/index.json:15627` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15627
+- `NikolasP98/minion-meta@dev rankings/index.json:15594` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15594
