@@ -33,21 +33,23 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2099
 - `NikolasP98/minion-meta@dev rankings/index.json:4421` — a date already held by a manual holiday is skipped silently",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4421
-- `NikolasP98/minion-meta@dev rankings/index.json:6189` — add-only; rename / deactivate / max-days edits need a modal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6189
-- `NikolasP98/minion-meta@dev rankings/index.json:6922` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6922
-- `NikolasP98/minion-meta@dev rankings/index.json:7708` — remove once the phone failure is root-caused'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7708
-- `NikolasP98/minion-meta@dev rankings/index.json:8972` — drawer still shows no LINKED POS TICKETS — spec §4.1",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8972
-- `NikolasP98/minion-meta@dev rankings/index.json:9004` — The service now binds this version and verifies normalized",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9004
-- `NikolasP98/minion-meta@dev rankings/index.json:9474` — the confirmed root cause (QA-stack app logs) was",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9474
-- `NikolasP98/minion-meta@dev rankings/index.json:11485` — prompt-driven protocol instead of native tool_use — replace",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11485
-- `NikolasP98/minion-meta@dev rankings/index.json:12473` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12473
-- `NikolasP98/minion-meta@dev rankings/index.json:15161` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15161
+- `NikolasP98/minion-meta@dev rankings/index.json:6221` — add-only; rename / deactivate / max-days edits need a modal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6221
+- `NikolasP98/minion-meta@dev rankings/index.json:6954` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6954
+- `NikolasP98/minion-meta@dev rankings/index.json:7639` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7639
+- `NikolasP98/minion-meta@dev rankings/index.json:7772` — remove once the phone failure is root-caused'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7772
+- `NikolasP98/minion-meta@dev rankings/index.json:8962` — drawer still shows no LINKED POS TICKETS — spec §4.1",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8962
+- `NikolasP98/minion-meta@dev rankings/index.json:8994` — The service now binds this version and verifies normalized",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8994
+- `NikolasP98/minion-meta@dev rankings/index.json:9464` — the confirmed root cause (QA-stack app logs) was",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9464
+- `NikolasP98/minion-meta@dev rankings/index.json:11436` — prompt-driven protocol instead of native tool_use — replace",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11436
+- `NikolasP98/minion-meta@dev rankings/index.json:12456` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12456
+- `NikolasP98/minion-meta@dev rankings/index.json:15112` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15112

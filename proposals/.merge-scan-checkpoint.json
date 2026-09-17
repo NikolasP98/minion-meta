@@ -16,7 +16,7 @@
   "NikolasP98/minion_hub:master": {
     "cursor": "10e9567ad61bc9b3dfcfa5b62bcff1a188dfa05c",
     "head": "fb083ec58167b2c6b061f5ca2918d869300b4ea3",
-    "done": 15,
+    "done": 31,
     "kept": [
       {
         "file": "package.json",
@@ -66,6 +66,97 @@
         "severity": "medium",
         "category": "unchecked-access",
         "line": 109
+      },
+      {
+        "file": "scripts/qa/seed/seed.contract.test.ts",
+        "desc": "Destructuring from SQL query result without checking array has elements; accessing row.live on undefined throws TypeError. Pattern repeats at lines 120, 131, 144.",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 110
+      },
+      {
+        "file": "scripts/qa/seed/ui-audit-compat.ts",
+        "desc": "Hardcoded fallback password 'MinionAudit!2026' in source; require environment variable without fallback.",
+        "severity": "medium",
+        "category": "hardcoded-config",
+        "line": 19
+      },
+      {
+        "file": "scripts/qa/smoke-dev-switcher.ts",
+        "desc": "Response body cast to {email: string} without checking that .json() actually contains an email property; returns undefined if missing",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 107
+      },
+      {
+        "file": "scripts/qa/smoke-dev-switcher.ts",
+        "desc": "Response body cast to {users: DevUser[]} without validation; undefined users property will crash on .map() call at line 117",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 115
+      },
+      {
+        "file": "scripts/qa/snapshot-prod-schema.ts",
+        "desc": "toSessionPoolerUrl(rawUrl) throws if rawUrl is not a valid URL; no try-catch wraps the call despite rawUrl being only existence-checked, not format-validated",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 70
+      },
+      {
+        "file": "scripts/qa/status.ts",
+        "desc": "dbStatus.stdout (type string | null) is accessed with .trim() inside if (status === 0) without null check",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 35
+      },
+      {
+        "file": "scripts/qc/attachments-postgres-contract.ts",
+        "desc": "Optional chaining on row.name returns undefined if name is missing, but .endsWith() is called on the result without checking, causing a crash",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 40
+      },
+      {
+        "file": "scripts/qc/principal-postgres-contract.ts",
+        "desc": "Optional chaining on row.name returns undefined if name is missing, but .endsWith() is called on the result without checking, causing a crash",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 39
+      },
+      {
+        "file": "src/lib/components/attachments/AttachmentList.svelte",
+        "desc": "Catch block resets rows but not trashed, leaving component in inconsistent state if listAttachments fails on retry after initial success.",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 67
+      },
+      {
+        "file": "src/lib/components/layout/DevUserSwitcher.svelte",
+        "desc": "catch block in loadUsers() discards error object; user sees only generic message, losing debug details",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 64
+      },
+      {
+        "file": "src/lib/components/layout/DevUserSwitcher.svelte",
+        "desc": "catch block in selectUser() discards error object; user sees only generic message, losing debug details",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 90
+      },
+      {
+        "file": "src/lib/components/layout/DevUserSwitcher.svelte",
+        "desc": "API response structure not validated; type-asserted without checking—if /api/dev/users returns malformed data, users becomes undefined, breaking rendering",
+        "severity": "high",
+        "category": "unvalidated-input",
+        "line": 61
+      },
+      {
+        "file": "src/lib/components/pos/ClientAccountDrawer.svelte",
+        "desc": "Note input field lacks validation (no maxLength, type, or pattern) before sending to server",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 243
       }
     ]
   }
