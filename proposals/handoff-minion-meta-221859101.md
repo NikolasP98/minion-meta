@@ -27,20 +27,20 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-17)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:1597` — drizzle/0008_workshop_thumbnail.sql (ALTER TABLE' in src/server/run-migrations.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L1597
-- `NikolasP98/minion-meta@dev rankings/index.json:2102` — session is drawn when the cashier clicks, not at a validation checkpoint",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2102
-- `NikolasP98/minion-meta@dev rankings/index.json:4657` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4657
-- `NikolasP98/minion-meta@dev rankings/index.json:6485` — add-only; rename / deactivate / max-days edits need a modal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6485
-- `NikolasP98/minion-meta@dev rankings/index.json:7216` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7216
-- `NikolasP98/minion-meta@dev rankings/index.json:7869` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7869
-- `NikolasP98/minion-meta@dev rankings/index.json:8002` — remove once the phone failure is root-caused'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8002
+- `NikolasP98/minion-meta@dev rankings/index.json:1629` — drizzle/0008_workshop_thumbnail.sql (ALTER TABLE' in src/server/run-migrations.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L1629
+- `NikolasP98/minion-meta@dev rankings/index.json:2134` — session is drawn when the cashier clicks, not at a validation checkpoint",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2134
+- `NikolasP98/minion-meta@dev rankings/index.json:4689` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4689
+- `NikolasP98/minion-meta@dev rankings/index.json:6517` — add-only; rename / deactivate / max-days edits need a modal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6517
+- `NikolasP98/minion-meta@dev rankings/index.json:7248` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7248
+- `NikolasP98/minion-meta@dev rankings/index.json:7901` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7901
+- `NikolasP98/minion-meta@dev rankings/index.json:8034` — remove once the phone failure is root-caused'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8034
 - `NikolasP98/minion-meta@dev rankings/index.json:9251` — drawer still shows no LINKED POS TICKETS — spec §4.1",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9251
 - `NikolasP98/minion-meta@dev rankings/index.json:9283` — The service now binds this version and verifies normalized",
@@ -51,7 +51,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10829
 - `NikolasP98/minion-meta@dev rankings/index.json:11676` — prompt-driven protocol instead of native tool_use — replace",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11676
-- `NikolasP98/minion-meta@dev rankings/index.json:12903` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12903
-- `NikolasP98/minion-meta@dev rankings/index.json:15792` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15792
+- `NikolasP98/minion-meta@dev rankings/index.json:12871` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12871
+- `NikolasP98/minion-meta@dev rankings/index.json:15760` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15760
