@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-17T05:33:27.651Z",
+	"generatedAt": "2026-09-17T05:58:42.823Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1067,6 +1067,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-15T14:28:58.709Z"
+		},
+		{
+			"key": "pr:minion_hub#311",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#311 fix(gateway): every org member sees and can use the org's gateways",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/311",
+			"sourceUpdatedAt": "2026-09-17T05:53:33Z",
+			"sourceFingerprint": "74c00c287b06070deba70cc14d26998e824472d38b88ad34fc2fb4d1cb992549",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Clear, tested fix for a real access-control gap where non-admin org members never got a user_gateway row.",
+			"evidence": [
+				"members who came through a join link, an approval or an admin-created account never got one",
+				"hosts.service.test.ts (new)... bun run check green",
+				"QA-stack verification: logged in as tenancy.user.staff, page data lists the org gateway"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
 			"key": "proposal:2026-09-12-hub-booking-stock-postcommit-recovery",
@@ -14632,36 +14665,36 @@
 			"scoredAt": "2026-09-14T22:28:27.306Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
+			"key": "proposal:merge-scan-minion-hub-1df0a92",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 1df0a92",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-1df0a92.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "2c28ad57267a55cd14a1b01b207e1d2553fc27f8355bbbde309a9e87ae2d86ee",
+			"score": 25,
 			"band": "low",
 			"axes": {
-				"criticality": 2,
-				"importance": 3,
+				"criticality": 3,
+				"importance": 2,
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 8
+				"specification": 6,
+				"implementation": 6
 			},
-			"confidence": 4,
-			"recommendation": "prune",
+			"confidence": 5,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "This deploy entry reflects an already-merged commit fixing nitter persistence and shutdown, not an open goal.",
+			"rationale": "Small, well-scoped null-check fix in a single test-fixture file with a clearly stated finding.",
 			"evidence": [
-				"summary shows merged fix commit #295",
-				"status field is 'unknown' with no indication of ongoing issue"
+				"medium unchecked-access in tests/fixtures/overlay-native/verify.py:20",
+				"will throw if selector matches no elements"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T05:33:27.549Z"
+			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
 			"key": "issue:minion-meta#417",
@@ -16261,14 +16294,14 @@
 			"scoredAt": "2026-09-17T02:03:35.240Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-1df0a92",
+			"key": "proposal:handoff-minion-meta-221859101",
 			"kind": "proposal",
 			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 1df0a92",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-1df0a92.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "2c28ad57267a55cd14a1b01b207e1d2553fc27f8355bbbde309a9e87ae2d86ee",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "5807156462fd644c2e808bfbdec648ba9dafeb88bf8e6591ed53f3661eb85c31",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -16277,20 +16310,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 2,
+				"implementation": 1
 			},
-			"confidence": 6,
-			"recommendation": "execute",
+			"confidence": 3,
+			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "A single, precisely located null-check bug in a test fixture is a small, bounded, low-risk fix ready to apply now.",
+			"rationale": "The markers point to line numbers inside rankings/index.json, a generated ranking-output data file, not real source-code TODOs, making the finding non-actionable.",
 			"evidence": [
-				"finding: click_selector calls getBoundingClientRect() on possibly-null querySelector result at verify.py:20",
-				"severity labeled medium, scoped to one file/line"
+				"rankings/index.json:1630",
+				"rankings/index.json:15313 — nothing links here with these params yet",
+				"source: handoff-sweep"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-10T05:35:30.528Z"
+			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9288d166a192",
@@ -16423,38 +16457,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T03:09:59.397Z"
-		},
-		{
-			"key": "run:minion_hub#35186083703",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35186083703",
-			"sourceUpdatedAt": "2026-09-17T05:31:51Z",
-			"sourceFingerprint": "334c3decebfc79a372b30b7332411567e556ca79a907918f797cd1bc94441038",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an automated in-progress CI run status, not an actionable work item.",
-			"evidence": [
-				"kind: run, stage: testing",
-				"summary: 'push on master', status: in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T05:33:27.549Z"
 		},
 		{
 			"key": "proposal:2026-09-03-hub-team-hr-tabs-followups",
@@ -16682,38 +16684,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T02:03:35.240Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "9be367ab04388e36761eec9dcfbea3a2c951407ccc626322670d801ab146c6b8",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are quoted rationale fragments embedded inside a generated ranking-data file, not actual unresolved code TODOs, so this finding is non-actionable.",
-			"evidence": [
-				"target file is rankings/index.json, a generated data artifact, not source code",
-				"markers are fragments of prior ranking rationale text, not code comments"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T05:29:19.197Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
