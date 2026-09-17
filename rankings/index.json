@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-17T21:47:02.183Z",
+	"generatedAt": "2026-09-17T21:58:49.625Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10456,6 +10456,40 @@
 			"scoredAt": "2026-09-17T01:28:52.562Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-2650013771",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/ruc-registry.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2650013771.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "26e59003c0694bf6055e258c55abc8bf64fd5e9f7cbbe23ee4e5c60f90c90a1b",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-e263984cb0f6"
+			],
+			"rationale": "Same underlying DNI-duplicate-logic marker as the postmerge finding for the same file, but less developed.",
+			"evidence": [
+				"marker at src/server/services/ruc-registry.ts:9 about DNI twin duplication",
+				"draft status with no diagnosis"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T21:58:49.528Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-3389264281",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10520,6 +10554,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T02:03:35.240Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-e263984cb0f6",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/ruc-registry.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e263984cb0f6.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "b3bf2225a538026dd8dc69ec5dd6ed35fc91ef185f2fb62fd99aa6f246a2a678",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-2650013771"
+			],
+			"rationale": "Approved, well-specified finding with a clear fix direction to consolidate duplicate DNI lookup logic into the CRM SDK.",
+			"evidence": [
+				"duplicate DNI lookup logic in ruc-registry.ts vs @minion-stack/crm-sdk::lookupDni",
+				"status: approved with explicit fix direction and DoD"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T21:58:49.528Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e2abba73de07",
@@ -11727,40 +11795,6 @@
 			"scoredAt": "2026-09-12T00:04:47.784Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-e263984cb0f6",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/ruc-registry.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e263984cb0f6.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "d7bdd5a9834210991c67c5de22d581176ef06a9b9e0c5459938278089d44ac0d",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-b27d16c7cc07"
-			],
-			"rationale": "Duplicate DNI lookup logic has a clear, bounded fix: replace the local implementation with the existing crm-sdk lookupDni import.",
-			"evidence": [
-				"marker: DNI twin lives in @minion-stack/crm-sdk (lookupDni)",
-				"fix direction: remove local implementation, import lookupDni, verify signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T21:47:02.078Z"
-		},
-		{
 			"key": "spec:2026-08-17-hub-brain-org-all-scope-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -12120,6 +12154,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T15:59:00.827Z"
+		},
+		{
+			"key": "pr:minion_hub#327",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#327 chore(qa): dev-only credentials via .qa/keys.env",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/327",
+			"sourceUpdatedAt": "2026-09-17T21:52:59Z",
+			"sourceFingerprint": "552b6d5fafafd19ba5ba79c8babe4133d3a2dc32acf94ceeeab935b2dfb5d657",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, already-verified dev-only QA credential persistence fix ready to land.",
+			"evidence": [
+				"`.qa/keys.env` survives regeneration and wins under dev:local",
+				"Verified end to end on the local QA stack"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T21:58:49.528Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-brain-org-all-scope",
@@ -13215,38 +13281,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already fixes the nitter persistence/shutdown issue, leaving no further actionable work in this deploy snapshot.",
-			"evidence": [
-				"commit message: 'fix(nitter): serialize persistence and drain poller shutdown'",
-				"status: unknown, tags: deployment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T21:47:02.078Z"
 		},
 		{
 			"key": "issue:minion-meta#389",
@@ -17048,38 +17082,6 @@
 			"scoredAt": "2026-09-17T02:03:35.240Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "c3690e957498889494a161cdb4c36de3c364f14b0592a99bbfba2b73e4da5f30",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The 14 flagged lines sit inside rankings/index.json, a generated data store of past rationale/evidence text, so the sweep is likely matching quoted strings rather than real code TODOs and needs a corrected detection angle.",
-			"evidence": [
-				"markers span rankings/index.json lines 1629-15892, a JSON data file not application source",
-				"quoted snippets read as fragments of prior evidence/rationale text, not actionable TODO descriptions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T21:28:52.957Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-9288d166a192",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17145,38 +17147,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T17:01:45.719Z"
-		},
-		{
-			"key": "run:minion_hub#35278364107",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35278364107",
-			"sourceUpdatedAt": "2026-09-17T21:44:50Z",
-			"sourceFingerprint": "448919cfa90c83176e56175a50ac81b96fbb08bc959b4ca9302d9a3d27335ea7",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run on master with no indication of failure or blockage, not an actionable goal.",
-			"evidence": [
-				"status: in_progress",
-				"summary: push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T21:47:02.078Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2071590033",
@@ -17342,6 +17312,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T03:29:07.866Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "e5f839c02dfe5fdef0f761c82a53dfe6d8e274524e26841b84925baf3cd809ee",
+			"score": 13,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Markers are disjointed fragments scraped from rankings/index.json, a generated data file quoting other findings' text rather than actionable source code.",
+			"evidence": [
+				"target file is rankings/index.json, not application source",
+				"fragments are truncated quotes with no coherent single issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T21:58:49.528Z"
 		},
 		{
 			"key": "issue:minion-meta#438",
