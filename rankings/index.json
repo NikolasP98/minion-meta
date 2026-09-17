@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-17T09:58:24.054Z",
+	"generatedAt": "2026-09-17T10:28:29.600Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11584,39 +11584,6 @@
 			"scoredAt": "2026-09-14T09:38:46.333Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"run:minion (gateway)#35195198189"
-			],
-			"rationale": "A merged fix touching nitter persistence/shutdown, but no clear deployment problem statement or verifiable outcome is given.",
-			"evidence": [
-				"commit b841c36 fix(nitter): serialize persistence and drain poller shutdown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T08:28:34.266Z"
-		},
-		{
 			"key": "issue:minion-meta#436",
 			"kind": "issue",
 			"stage": "proposal",
@@ -13843,6 +13810,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T10:58:35.697Z"
+		},
+		{
+			"key": "issue:minion-meta#479",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#479 [monitor:unstick] reconcile run a34572dd: claude provider exec failure (exit-126, 0 turns) despite completed pipeline work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/479",
+			"sourceUpdatedAt": "2026-09-17T10:17:41Z",
+			"sourceFingerprint": "6838c253f2b82b2e19d3981ce2d514d49509f1c11a204863052fef7a614fd44e",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Automated monitor reports a transient exit-126/turns=0 agent-launch failure while the deterministic reconcile pipeline itself completed and pushed successfully.",
+			"evidence": [
+				"exit_code=1 note exit-126/turns=0/permission_denials=0",
+				"successful git push 798f0fc..38ac608 dev->dev",
+				"recommendation: safe to retry, low-risk"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T10:28:29.468Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-167668368",
@@ -16544,6 +16544,39 @@
 			"scoredAt": "2026-09-17T02:03:35.240Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "878b5b11f24d29e81eaae67bc29704cb9d10deedd29b3e45b2aa728b64bd8606",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a self-referential handoff marker pointing at TODO comments inside the generated rankings/index.json data file itself, which is not actionable source code to fix.",
+			"evidence": [
+				"markers all point to rankings/index.json lines, a generated ranking data file",
+				"14 disparate quoted fragments with no coherent single open end",
+				"stage: review, filed automatically by handoff-sweep"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T10:28:29.468Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9288d166a192",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16933,38 +16966,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T02:07:01.827Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "cc31c79c87a965471a73e910f8c007f5eb54af3abde20b0c78507a198918b715",
-			"score": 3,
-			"band": "low",
-			"axes": {
-				"criticality": 0,
-				"importance": 0,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are quotes from the ranking data file itself (rankings/index.json), not real TODO(handoff) comments in source code, making this a self-referential artifact with no actionable target.",
-			"evidence": [
-				"all 14 marker lines point to rankings/index.json, the ranking catalog itself, not application source",
-				"summary text is generated from quoted fragments rather than a coherent single open end"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T06:58:49.320Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
