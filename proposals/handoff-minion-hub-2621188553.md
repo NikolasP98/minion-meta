@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-17)
 
-- `NikolasP98/minion_hub@master src/server/auth/authorize.ts:27` — a full per-handler audit of the remaining requireAdmin
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/auth/authorize.ts#L27
+- `NikolasP98/minion_hub@master src/server/auth/authorize.ts:30` — a full per-handler audit of the remaining requireAdmin
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/auth/authorize.ts#L30
