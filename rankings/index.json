@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-16T23:58:42.215Z",
+	"generatedAt": "2026-09-17T00:28:55.920Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7918,6 +7918,80 @@
 			"scoredAt": "2026-09-14T09:31:14.559Z"
 		},
 		{
+			"key": "pr:minion_hub#292",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#292 feat(qa): host dev server on the containerized seeded backend (dev:local, S3)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/292",
+			"sourceUpdatedAt": "2026-09-17T00:26:12Z",
+			"sourceFingerprint": "0a46c86632b9d88b2ca1e8938f94d74506e3da151756de892f330df947bbb4f8",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#293",
+				"pr:minion-meta#458",
+				"pr:minion-meta#459"
+			],
+			"rationale": "Ready QA dev-server slice with passing checks and tests as part of a coordinated multi-slice spec.",
+			"evidence": [
+				"bun run check 0 errors",
+				"66 vitest tests passed",
+				"implements S3 of dated spec"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T00:28:55.814Z"
+		},
+		{
+			"key": "pr:minion_hub#293",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#293 feat(dev): DEV backend mode + /api/dev user switcher endpoints (S1)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/293",
+			"sourceUpdatedAt": "2026-09-17T00:25:59Z",
+			"sourceFingerprint": "8078032b6bbae24cad5ac925b01d0f76812549a307fac1c86380716a98ea420a",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#292",
+				"pr:minion-meta#458",
+				"pr:minion-meta#459"
+			],
+			"rationale": "Server-side DEV switcher slice has full test coverage and passing gates despite still being in draft.",
+			"evidence": [
+				"bun run check exit 0",
+				"4 new test files with route guard coverage",
+				"status is draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T00:28:55.814Z"
+		},
+		{
 			"key": "pr:minion_site#28",
 			"kind": "pr",
 			"stage": "development",
@@ -9813,6 +9887,79 @@
 			"scoredAt": "2026-09-15T14:28:58.709Z"
 		},
 		{
+			"key": "pr:minion-meta#458",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#458 spec: `minion run hub [--prd]` + DEV-only user switcher (2026-09-16)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/458",
+			"sourceUpdatedAt": "2026-09-17T00:03:39Z",
+			"sourceFingerprint": "b0dea395d7a23a6c9ea4bf858f4580d11675af9df120dd8d75a2475e57333f11",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#292",
+				"pr:minion_hub#293",
+				"pr:minion-meta#459"
+			],
+			"rationale": "Docs-only spec/proposal PR that unblocks and coordinates the related implementation slices.",
+			"evidence": [
+				"both --check gates pass",
+				"docs only change",
+				"spec dated 2026-09-16"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T00:28:55.814Z"
+		},
+		{
+			"key": "pr:minion-meta#459",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#459 feat(cli): `minion run <id>` registered default + --prd (S4)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/459",
+			"sourceUpdatedAt": "2026-09-17T00:13:46Z",
+			"sourceFingerprint": "fa028930a9ea67d1046f30b93855734b67c9b0ef0fe0488dc7f0e693fbaf166b",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#458",
+				"pr:minion_hub#292",
+				"pr:minion_hub#293"
+			],
+			"rationale": "CLI slice S4 has full test/typecheck/lint gates passing, completing the run-hub spec's tooling piece.",
+			"evidence": [
+				"46 tests passing incl 10 new",
+				"typecheck/lint/changeset gates pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T00:28:55.814Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11214,6 +11361,39 @@
 			"scoredAt": "2026-09-14T09:29:51.901Z"
 		},
 		{
+			"key": "issue:minion-meta#460",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#460 [monitor:unstick] reconcile 44336b57 (minion-meta): claude agent exec failure (exit-126, turns=0) despite successful script work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/460",
+			"sourceUpdatedAt": "2026-09-17T00:17:48Z",
+			"sourceFingerprint": "b5344a3b4470a18d68d6aa6a62c54a1a850c4dc6e6969eda6b81842fb4e4e140",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Recurring exit-126/turns=0 runner failures need host-level investigation before a classifier fix can be actionable.",
+			"evidence": [
+				"recurred 3x within ~2.5h",
+				"recommends checking runner CLI binary permissions",
+				"underlying reconcile work already succeeded"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T00:28:55.814Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-1097951829",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12329,6 +12509,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy-health entry is just a merged commit log for an already-shipped fix, not a forward-looking goal.",
+			"evidence": [
+				"commit fixes nitter persistence/drain shutdown",
+				"already committed to history"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T00:28:55.814Z"
 		},
 		{
 			"key": "issue:minion-meta#389",
