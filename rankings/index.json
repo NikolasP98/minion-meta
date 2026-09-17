@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-17T21:28:53.073Z",
+	"generatedAt": "2026-09-17T21:47:02.183Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8180,6 +8180,40 @@
 			"scoredAt": "2026-09-12T03:10:32.723Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-b27d16c7cc07",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/ruc-registry.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b27d16c7cc07.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "03a6994a8af331f78595aa93d795917a4f42d46e1f76ebf6d5736d0944b80f0a",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-e263984cb0f6"
+			],
+			"rationale": "The unverified-RUC-parties gap is a real data-integrity concern but the fix direction offers two undecided approaches, so it isn't yet a bounded actionable task.",
+			"evidence": [
+				"marker: parties created before 2026-09-17 are unverified",
+				"fix direction lists two alternative remediation paths (backfill vs pending-status workflow)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T21:47:02.078Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-c371d6639113",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11693,6 +11727,40 @@
 			"scoredAt": "2026-09-12T00:04:47.784Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-e263984cb0f6",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/ruc-registry.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e263984cb0f6.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "d7bdd5a9834210991c67c5de22d581176ef06a9b9e0c5459938278089d44ac0d",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b27d16c7cc07"
+			],
+			"rationale": "Duplicate DNI lookup logic has a clear, bounded fix: replace the local implementation with the existing crm-sdk lookupDni import.",
+			"evidence": [
+				"marker: DNI twin lives in @minion-stack/crm-sdk (lookupDni)",
+				"fix direction: remove local implementation, import lookupDni, verify signature"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T21:47:02.078Z"
+		},
+		{
 			"key": "spec:2026-08-17-hub-brain-org-all-scope-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -13147,6 +13215,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit already fixes the nitter persistence/shutdown issue, leaving no further actionable work in this deploy snapshot.",
+			"evidence": [
+				"commit message: 'fix(nitter): serialize persistence and drain poller shutdown'",
+				"status: unknown, tags: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T21:47:02.078Z"
 		},
 		{
 			"key": "issue:minion-meta#389",
@@ -17045,6 +17145,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T17:01:45.719Z"
+		},
+		{
+			"key": "run:minion_hub#35278364107",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35278364107",
+			"sourceUpdatedAt": "2026-09-17T21:44:50Z",
+			"sourceFingerprint": "448919cfa90c83176e56175a50ac81b96fbb08bc959b4ca9302d9a3d27335ea7",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run on master with no indication of failure or blockage, not an actionable goal.",
+			"evidence": [
+				"status: in_progress",
+				"summary: push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T21:47:02.078Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2071590033",
