@@ -1,14 +1,14 @@
 ---
-id: handoff-minion-hub-1689544730
-title: Handoff marker — src/server/worker-lifecycle.ts (minion_hub)
+id: handoff-minion-hub-3609176085
+title: Handoff marker — scripts/qa/smoke-dev-switcher.ts (minion_hub)
 status: draft
-created: 2026-09-12
+created: 2026-09-17
 updated: 2026-09-17
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — src/server/worker-lifecycle.ts
+# Handoff marker — scripts/qa/smoke-dev-switcher.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-17)
 
-- `NikolasP98/minion_hub@master src/server/worker-lifecycle.ts:9` — A resolved streaming Response can retain body/deferred work beyond
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/worker-lifecycle.ts#L9
+- `NikolasP98/minion_hub@master scripts/qa/smoke-dev-switcher.ts:134` — this hasn't been exercised against a live local Supabase
+  https://github.com/NikolasP98/minion_hub/blob/master/scripts/qa/smoke-dev-switcher.ts#L134

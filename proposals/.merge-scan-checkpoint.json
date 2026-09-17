@@ -15,57 +15,57 @@
   },
   "NikolasP98/minion_hub:master": {
     "cursor": "10e9567ad61bc9b3dfcfa5b62bcff1a188dfa05c",
-    "head": "e97e79d7c31de234b82a8868a1c8c6685b7f71e3",
+    "head": "fb083ec58167b2c6b061f5ca2918d869300b4ea3",
     "done": 15,
     "kept": [
       {
         "file": "package.json",
-        "desc": "Database connection string with credentials hardcoded as shell default; move to .env.example or similar",
+        "desc": "Test database connection string with credentials hardcoded in script; should be sourced from .env.example or documentation instead",
         "severity": "medium",
         "category": "hardcoded-config",
         "line": 169
       },
       {
         "file": "scripts/qa/db-bootstrap.ts",
-        "desc": "Destructuring result[0] from SQL query without checking if array is empty; throws TypeError if query returns no rows instead of clear error message",
-        "severity": "medium",
+        "desc": "migrate.stdout can be null even with encoding:utf8; calling .matchAll() without null check will throw TypeError",
+        "severity": "high",
         "category": "unchecked-access",
-        "line": 105
+        "line": 155
       },
       {
         "file": "scripts/qa/db-bootstrap.ts",
-        "desc": "Destructuring result[0] from SQL query without checking if array is empty; throws TypeError if query returns no rows instead of clear error message",
-        "severity": "medium",
+        "desc": "newestMigrationVersion from .at(-1) can be undefined when no .sql files exist; used in log message at line 175 without null check",
+        "severity": "high",
         "category": "unchecked-access",
-        "line": 138
-      },
-      {
-        "file": "scripts/qa/extend.ts",
-        "desc": "argv[ttlArgIdx + 1] accessed without bounds check; if --ttl is the final argument, undefined is silently passed to parseTtl instead of erroring",
-        "severity": "medium",
-        "category": "unchecked-access",
-        "line": 12
+        "line": 157
       },
       {
         "file": "scripts/qa/reset.ts",
-        "desc": "Seed functionality explicitly deferred (scripts/qa/seed/index.ts not yet implemented) but lacks TODO(handoff) marker required by SDLC handoff documentation contract",
+        "desc": "Database URL with hardcoded credentials should read from environment variable instead",
         "severity": "medium",
-        "category": "missing-handoff",
-        "line": 42
+        "category": "hardcoded-config",
+        "line": 21
       },
       {
-        "file": "scripts/qa/seed/catalog.ts",
-        "desc": "The .find() result uses non-null assertion (!) without runtime validation; if matrixId lists desync, accessing .id on undefined crashes at runtime",
+        "file": "scripts/qa/seed/crm.ts",
+        "desc": "matrixById() result used without null/undefined check before calling .has()",
         "severity": "high",
         "category": "unchecked-access",
-        "line": 163
+        "line": 240
       },
       {
-        "file": "scripts/qa/seed/matrix.ts",
-        "desc": "MatrixEntry interface missing expect?: 'absent' field required by docstring; ABSENT entries (e.g., crm.settings.defaults-personal, crm.activity.stats-missing) cannot express row-absence contract with db.ts.",
-        "severity": "high",
-        "category": "missing-handoff",
-        "line": 18
+        "file": "scripts/qa/seed/env.ts",
+        "desc": "filePath parameter used in writeFile without validation, allowing potential directory traversal to write credentials outside the project",
+        "severity": "medium",
+        "category": "unvalidated-input",
+        "line": 37
+      },
+      {
+        "file": "scripts/qa/seed/index.ts",
+        "desc": "Array access args[onlyIndex + 1] without bounds check; if --only is last argument without a value, silently seeds all modules instead of erroring",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 109
       }
     ]
   }
