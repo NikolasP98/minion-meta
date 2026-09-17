@@ -15,148 +15,50 @@
   },
   "NikolasP98/minion_hub:master": {
     "cursor": "10e9567ad61bc9b3dfcfa5b62bcff1a188dfa05c",
-    "head": "fb083ec58167b2c6b061f5ca2918d869300b4ea3",
-    "done": 31,
+    "head": "d75e623edecf49e1864f19bc6b60c7decc427694",
+    "done": 15,
     "kept": [
       {
         "file": "package.json",
-        "desc": "Test database connection string with credentials hardcoded in script; should be sourced from .env.example or documentation instead",
+        "desc": "Database URL and credentials hardcoded as fallback in qa:seed:verify script; credentials should be environment-only even for QA.",
         "severity": "medium",
         "category": "hardcoded-config",
-        "line": 169
+        "line": 170
       },
       {
         "file": "scripts/qa/db-bootstrap.ts",
-        "desc": "migrate.stdout can be null even with encoding:utf8; calling .matchAll() without null check will throw TypeError",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 155
-      },
-      {
-        "file": "scripts/qa/db-bootstrap.ts",
-        "desc": "newestMigrationVersion from .at(-1) can be undefined when no .sql files exist; used in log message at line 175 without null check",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 157
-      },
-      {
-        "file": "scripts/qa/reset.ts",
-        "desc": "Database URL with hardcoded credentials should read from environment variable instead",
-        "severity": "medium",
-        "category": "hardcoded-config",
-        "line": 21
-      },
-      {
-        "file": "scripts/qa/seed/crm.ts",
-        "desc": "matrixById() result used without null/undefined check before calling .has()",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 240
-      },
-      {
-        "file": "scripts/qa/seed/env.ts",
-        "desc": "filePath parameter used in writeFile without validation, allowing potential directory traversal to write credentials outside the project",
-        "severity": "medium",
-        "category": "unvalidated-input",
-        "line": 37
-      },
-      {
-        "file": "scripts/qa/seed/index.ts",
-        "desc": "Array access args[onlyIndex + 1] without bounds check; if --only is last argument without a value, silently seeds all modules instead of erroring",
+        "desc": ".at(-1) could return undefined if no .sql files exist; used later in comparison without null check",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 109
+        "line": 186
       },
       {
-        "file": "scripts/qa/seed/seed.contract.test.ts",
-        "desc": "Destructuring from SQL query result without checking array has elements; accessing row.live on undefined throws TypeError. Pattern repeats at lines 120, 131, 144.",
+        "file": "scripts/qa/dev.ts",
+        "desc": "argv[ttlArgIdx + 1] accessed without bounds check; if --ttl is the last argument or omitted, returns undefined",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 110
+        "line": 137
       },
       {
-        "file": "scripts/qa/seed/ui-audit-compat.ts",
-        "desc": "Hardcoded fallback password 'MinionAudit!2026' in source; require environment variable without fallback.",
+        "file": "scripts/qa/extend.ts",
+        "desc": "argv[ttlArgIdx + 1] accessed without bounds check; if --ttl is the last argument or omitted, returns undefined",
         "severity": "medium",
-        "category": "hardcoded-config",
-        "line": 19
-      },
-      {
-        "file": "scripts/qa/smoke-dev-switcher.ts",
-        "desc": "Response body cast to {email: string} without checking that .json() actually contains an email property; returns undefined if missing",
-        "severity": "medium",
-        "category": "unvalidated-input",
-        "line": 107
-      },
-      {
-        "file": "scripts/qa/smoke-dev-switcher.ts",
-        "desc": "Response body cast to {users: DevUser[]} without validation; undefined users property will crash on .map() call at line 117",
-        "severity": "medium",
-        "category": "unvalidated-input",
-        "line": 115
-      },
-      {
-        "file": "scripts/qa/snapshot-prod-schema.ts",
-        "desc": "toSessionPoolerUrl(rawUrl) throws if rawUrl is not a valid URL; no try-catch wraps the call despite rawUrl being only existence-checked, not format-validated",
-        "severity": "medium",
-        "category": "unvalidated-input",
-        "line": 70
-      },
-      {
-        "file": "scripts/qa/status.ts",
-        "desc": "dbStatus.stdout (type string | null) is accessed with .trim() inside if (status === 0) without null check",
-        "severity": "high",
         "category": "unchecked-access",
-        "line": 35
+        "line": 12
       },
       {
-        "file": "scripts/qc/attachments-postgres-contract.ts",
-        "desc": "Optional chaining on row.name returns undefined if name is missing, but .endsWith() is called on the result without checking, causing a crash",
-        "severity": "high",
+        "file": "scripts/qa/env.ts",
+        "desc": "result.stdout used without null/undefined check; spawnSupabaseCli return type guarantees not verified",
+        "severity": "medium",
         "category": "unchecked-access",
-        "line": 40
+        "line": 106
       },
       {
-        "file": "scripts/qc/principal-postgres-contract.ts",
-        "desc": "Optional chaining on row.name returns undefined if name is missing, but .endsWith() is called on the result without checking, causing a crash",
-        "severity": "high",
+        "file": "scripts/qa/seed/catalog.ts",
+        "desc": "find() result used with ! assertion instead of runtime check; if matrixId list and products array drift, will crash at runtime instead of failing at development time.",
+        "severity": "medium",
         "category": "unchecked-access",
-        "line": 39
-      },
-      {
-        "file": "src/lib/components/attachments/AttachmentList.svelte",
-        "desc": "Catch block resets rows but not trashed, leaving component in inconsistent state if listAttachments fails on retry after initial success.",
-        "severity": "medium",
-        "category": "empty-catch",
-        "line": 67
-      },
-      {
-        "file": "src/lib/components/layout/DevUserSwitcher.svelte",
-        "desc": "catch block in loadUsers() discards error object; user sees only generic message, losing debug details",
-        "severity": "medium",
-        "category": "empty-catch",
-        "line": 64
-      },
-      {
-        "file": "src/lib/components/layout/DevUserSwitcher.svelte",
-        "desc": "catch block in selectUser() discards error object; user sees only generic message, losing debug details",
-        "severity": "medium",
-        "category": "empty-catch",
-        "line": 90
-      },
-      {
-        "file": "src/lib/components/layout/DevUserSwitcher.svelte",
-        "desc": "API response structure not validated; type-asserted without checking—if /api/dev/users returns malformed data, users becomes undefined, breaking rendering",
-        "severity": "high",
-        "category": "unvalidated-input",
-        "line": 61
-      },
-      {
-        "file": "src/lib/components/pos/ClientAccountDrawer.svelte",
-        "desc": "Note input field lacks validation (no maxLength, type, or pattern) before sending to server",
-        "severity": "medium",
-        "category": "unvalidated-input",
-        "line": 243
+        "line": 163
       }
     ]
   }
