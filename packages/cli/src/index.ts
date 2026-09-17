@@ -15,6 +15,7 @@ import { linkCommand } from './commands/link.js';
 import { listCommand } from './commands/list.js';
 import { branchCommand } from './commands/branch.js';
 import { pluginNewCommand } from './commands/plugin.js';
+import { parseAliasArgs } from './lib/alias.js';
 
 /**
  * Build and parse the Commander program. Exits via `process.exit` inside each action
@@ -55,9 +56,10 @@ export async function main(argv: string[] = process.argv): Promise<number> {
 	program
 		.command('run')
 		.argument('<id>')
-		.argument('<cmd...>')
-		.action(async (id: string, cmd: string[]) => {
-			process.exit(await runPassthroughCommand(id, cmd));
+		.argument('[cmd...]', 'command to run; omit to run the registered default', [])
+		.option('--prd', 'run the registered `run:prd` default instead of `run`')
+		.action(async (id: string, cmd: string[], opts: { prd?: boolean }) => {
+			process.exit(await runPassthroughCommand(id, cmd, opts));
 		});
 	program
 		.command('status')
@@ -127,15 +129,14 @@ export async function main(argv: string[] = process.argv): Promise<number> {
 			},
 		);
 
-	// Shorthand alias: `minion <id> <cmd...>` → run
+	// Shorthand alias: `minion <id> [cmd...]` → run. No cmd resolves the registered default;
+	// a bare `--prd` among the trailing args selects `run:prd` before forwarding.
 	const knownCommands = new Set(program.commands.map((c) => c.name()));
 	const rawArgs = argv.slice(2);
 	const first = rawArgs[0];
 	if (first && !knownCommands.has(first) && !first.startsWith('-')) {
-		const cmd = rawArgs.slice(1);
-		if (cmd.length > 0) {
-			process.exit(await runPassthroughCommand(first, cmd));
-		}
+		const { cmd, prd } = parseAliasArgs(rawArgs.slice(1));
+		process.exit(await runPassthroughCommand(first, cmd, { prd }));
 	}
 
 	await program.parseAsync(argv);

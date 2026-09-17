@@ -19,6 +19,7 @@ pnpm add -g @minion-stack/cli
 | `minion test <id>`          | Run subproject's `test` command                                                           |
 | `minion check <id>`         | Run subproject's `check` command                                                          |
 | `minion run <id> <cmd...>`  | Arbitrary passthrough with env resolved                                                   |
+| `minion run <id> [cmd...] [--prd]` | No `cmd`: run the registered default (`commands.run`, or `commands["run:prd"]` with `--prd`) |
 | `minion <id> <cmd...>`      | Shorthand alias for `run`                                                                 |
 | `minion dev --all`          | Parallel fanout via `concurrently` across every subproject that declares `dev`            |
 | `minion build/test/check --all` | Same fanout for other commands                                                        |
