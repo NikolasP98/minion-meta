@@ -49,9 +49,9 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9474
 - `NikolasP98/minion-meta@dev rankings/index.json:10695` — reopened mid-exit — cancel the pending close",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10695
-- `NikolasP98/minion-meta@dev rankings/index.json:11542` — prompt-driven protocol instead of native tool_use — replace",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11542
-- `NikolasP98/minion-meta@dev rankings/index.json:12805` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12805
-- `NikolasP98/minion-meta@dev rankings/index.json:15563` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15563
+- `NikolasP98/minion-meta@dev rankings/index.json:11510` — prompt-driven protocol instead of native tool_use — replace",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11510
+- `NikolasP98/minion-meta@dev rankings/index.json:12705` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12705
+- `NikolasP98/minion-meta@dev rankings/index.json:15593` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15593
