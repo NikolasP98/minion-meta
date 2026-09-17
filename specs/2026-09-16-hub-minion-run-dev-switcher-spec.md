@@ -1,11 +1,11 @@
 ---
 id: 2026-09-16-hub-minion-run-dev-switcher-spec
 title: "`minion run hub [--prd]`: host dev server on the containerized seeded backend, DEV-only user switcher in the avatar menu, explicit PRD mode"
-stage: dev
-status: implementing
+stage: done
+status: done
 pass: 1
 created: 2026-09-16
-updated: 2026-09-16
+updated: 2026-09-17
 repos: [minion_hub, minion-meta]
 tags: [infra, auth, ui, test]
 type: infra
@@ -140,3 +140,7 @@ Reuses `up.ts`'s helpers (`assertLoopbackIfSet`, supabase start/status, bootstra
 - Production after merge: `/api/dev/users` and `/api/dev/switch-user` return 404 on `hub.minion-ai.org` (smoke in the post-merge check).
 
 **Verification:** the CI smoke plus the S5 walkthrough are the acceptance evidence; the spec moves to `status: done` when both are recorded in the linked proposal's follow-up section.
+
+## 7. Outcome (2026-09-17)
+
+Shipped: hub #293 (S1), #294 (S2), #292 (S3), meta #459 (S4). Acceptance (S5) on the local stack: DEV hint, badge and "Switch user…" present; nine personas switched with RBAC matching each role; no-org persona lands on `/join`; a sale as staff and a stock receipt as owner while switched; `--prd` shows no DEV affordance and `/api/dev/users` → 404; production `hub.minion-ai.org` answers 404 for both `/api/dev/*` routes. Follow-ups found by S5 and merged the same night: hub #295 (`dev:local` ignores inherited backend env, seeds a fresh checkout, stops the Vite child on Ctrl-C), #300 (join links/requests for org owners, org-scoped; any multi-org member can switch org). Open in the ledger: `proposals/2026-09-16-hub-requireadmin-audit-followup.md` (legacy-member role display). The CLI change reaches the published `minion` binary with the next `@minion-stack/cli` release.
