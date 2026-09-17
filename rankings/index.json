@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-17T02:07:09.495Z",
+	"generatedAt": "2026-09-17T02:28:58.358Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1734,6 +1734,75 @@
 			"scoredAt": "2026-09-16T14:29:06.082Z"
 		},
 		{
+			"key": "issue:minion-meta#462",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#462 [monitor:unstick] reconcile run 6a8b8c7e: reconcile-agent exec fails (exit-126, 0 turns) after full pipeline success",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/462",
+			"sourceUpdatedAt": "2026-09-17T02:17:54Z",
+			"sourceFingerprint": "9a2365b7ae303a645264916f02a340c4277f19a83282b02a59a8e3cbe6e9952d",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#463"
+			],
+			"rationale": "Recurring exit-126/turns=0 reconcile-agent failure blocking the automation pipeline's final step, matching the signature in issue #463 and warranting one consolidated fix/classifier goal.",
+			"evidence": [
+				"exit_code=1, provider=claude exit-126 turns=0 after full pipeline success",
+				"recommendation: human check runner box claude CLI binary/permissions before requeuing",
+				"same signature also seen on runs 971d2fed and 44336b57 (3 of 4 unrecognized runs)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T02:28:58.251Z"
+		},
+		{
+			"key": "issue:minion-meta#463",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#463 [monitor:unstick] reconcile run 971d2fed: reconcile-agent exec fails (exit-126, 0 turns) after full pipeline success",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/463",
+			"sourceUpdatedAt": "2026-09-17T02:18:11Z",
+			"sourceFingerprint": "610f6110a0763ec493ab78c49040d490a28a741c1838a0b0f899d79477b60885",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#462"
+			],
+			"rationale": "Duplicate exit-126/turns=0 reconcile-agent failure signature; should be consolidated with #462 into one runner-box/classifier fix rather than tracked separately.",
+			"evidence": [
+				"identical note: provider=claude exit-126 turns=0 permission_denials=0 after visible pipeline success",
+				"explicitly flagged as same recurring class as 6a8b8c7e and 44336b57"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T02:28:58.251Z"
+		},
+		{
 			"key": "pr:minion (gateway)#255",
 			"kind": "pr",
 			"stage": "development",
@@ -1764,6 +1833,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T15:59:00.827Z"
+		},
+		{
+			"key": "pr:minion_hub#295",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#295 fix(qa): dev:local/qa:up ignore inherited backend env instead of refusing; redact URLs in guards",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/295",
+			"sourceUpdatedAt": "2026-09-17T02:22:48Z",
+			"sourceFingerprint": "9ed3ecae5525b9c58d41857d57154ba3d0c02e4a5429d352a453ca87736c0e48",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Open PR with tests and reproduced proof fixes a dev-workflow safety bug that both blocks local dev and leaks credentials in guard logs.",
+			"evidence": [
+				"dev:local refused to start on machines whose env pointed at production",
+				"redactUrl added to guard messages; scripts/qa/dev.test.ts covers drop+redact",
+				"proof: fake production .env.local present, dev:local started clean, log free of credentials"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T02:28:58.251Z"
 		},
 		{
 			"key": "proposal:2026-08-23-minion-ai-ci-baseline-debt",
@@ -7016,39 +7118,6 @@
 			"scoredAt": "2026-09-16T22:29:03.742Z"
 		},
 		{
-			"key": "pr:minion_hub#295",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#295 fix(qa): dev:local/qa:up ignore inherited backend env instead of refusing; redact URLs in guards",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/295",
-			"sourceUpdatedAt": "2026-09-17T01:30:53Z",
-			"sourceFingerprint": "c28507d093bedd3aa8760887aa2ab06074bce7e85b28a07bbf26a0a92cc49957",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A tested, already-implemented fix for a dev/QA startup guard that both blocked local dev and leaked credentials in logs.",
-			"evidence": [
-				"guard refused to start on machines with prod-pointing env vars",
-				"echoed full URL with credentials",
-				"proof: started, served /en/login 200, log free of credentials"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T01:59:04.744Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9002,6 +9071,39 @@
 			"scoredAt": "2026-09-17T02:03:35.240Z"
 		},
 		{
+			"key": "pr:minion_hub#296",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#296 feat(calendar): sticky time/date axes, date picker on the range label, day-view aggregate column",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/296",
+			"sourceUpdatedAt": "2026-09-17T02:26:09Z",
+			"sourceFingerprint": "dbb9068590032f09c11d14c487420bfabf070759cfb01fe033c790ee09e85ffb",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-tested UI feature PR for the appointments calendar with explicitly documented scope boundary and open ends via TODO(handoff).",
+			"evidence": [
+				"bun run check 0 errors, 24/24 vitest passing",
+				"known-gap section explains /scheduling/calendar is unaffected by design",
+				"TODO(handoff) filed for stale doc comment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T02:28:58.251Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10774,6 +10876,38 @@
 			"scoredAt": "2026-09-14T09:36:50.832Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "f5e1a471e31223cded952a7d77372c50bf6a56e5a3de5405446e60763852dc53",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The proposal bundles a dozen unrelated TODO markers scraped from a single JSON file line range into one artifact, which cannot produce one coherent, verifiable outcome as scoped.",
+			"evidence": [
+				"13 markers spanning unrelated topics (migrations, holiday scheduling, POS drawer, phone failure, protocol replacement) bundled under one file's definition-of-done",
+				"definition of done requires resolving all markers in the same file before the proposal closes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T02:28:58.251Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-277751425",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12494,6 +12628,38 @@
 			"scoredAt": "2026-09-14T09:40:01.696Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Summary is a commit message for an already-merged nitter persistence/shutdown fix, not an open deployment task.",
+			"evidence": [
+				"summary is a merged commit co-authored by NikolasP98",
+				"tags: deployment; status: unknown but content shows completed work"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T02:28:58.251Z"
+		},
+		{
 			"key": "issue:minion-meta#389",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14135,6 +14301,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:29:51.901Z"
+		},
+		{
+			"key": "pr:minion_hub#297",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#297 feat(shell): floating assistant pill collapses to an icon-only circle when docked",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/297",
+			"sourceUpdatedAt": "2026-09-17T02:26:29Z",
+			"sourceFingerprint": "49ccf91d0fbc5cc7a33d0a3b786e7be16c82e5472250508832d137d4da2addd6",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, fully tested cosmetic UI PR ready to merge with low overall stakes.",
+			"evidence": [
+				"bun run check 0 errors, design-lint and token-integrity clean",
+				"manually verified docked/dragged states and persistence across reload"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T02:28:58.251Z"
 		},
 		{
 			"key": "proposal:2026-08-22-crm-rank-query-prod-latency",
@@ -16280,39 +16478,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T02:03:35.240Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "dab646be533fe94eb006383885133925ac8481ca505f9027db54c54f4ad34210",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Flagged markers are quoted evidence text embedded inside the rankings JSON data file, not actual code TODOs.",
-			"evidence": [
-				"path is rankings/index.json, a generated ranking data artifact",
-				"quoted lines are evidence/rationale fragments (e.g. 'session is drawn when the cashier clicks'), not source comments",
-				"status: review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T02:05:33.813Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
