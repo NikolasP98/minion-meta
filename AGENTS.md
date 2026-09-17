@@ -71,6 +71,7 @@ The canonical interactive bundle lives in `minion_plugins/plugins/minion-enginee
 | `minion dev <id>` | Launch subproject's dev command with the 6-layer env merge applied |
 | `minion dev --all` | Parallel fanout (concurrently) across subprojects that declare a dev command |
 | `minion build <id>`, `minion test <id>`, `minion check <id>` | Same pattern for build/test/check |
+| `minion run <id> [cmd...] [--prd]` | Passthrough with env resolved; no `cmd` runs the registered default (`commands.run`, or `commands["run:prd"]` with `--prd`) |
 | `minion status` | Tabular git status across all subprojects |
 | `minion doctor` | Env validation + Infisical auth + bin availability health report |
 | `minion sync-env <id>` | Write merged env to `<sub>/.env.local` (useful when running subproject's native command) |

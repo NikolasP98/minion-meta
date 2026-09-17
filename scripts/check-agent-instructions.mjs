@@ -39,6 +39,11 @@ const commandsHeader = ['Repo id', 'Install', 'Dev', 'Build', 'Test', 'Check', '
 // The CLI's minion.json registry projects the same six command keys as the AGENTS.md commands
 // block — `install` included, so a subproject can be bootstrapped from registry metadata alone.
 const cliCommandKeys = commandKeys;
+// Registered `minion run <id> [cmd...] [--prd]` defaults (spec: 2026-09-16-hub-minion-run-dev-
+// switcher-spec.md §2.5). Per-subproject dev-workflow scripts, not fleet-wide facts — intentionally
+// absent from repo-policy.yaml and the generated AGENTS.md commands block, so they're allowed in
+// minion.json without a repo-policy row to cross-check against.
+const cliOnlyCommandKeys = ['run', 'run:prd'];
 const memoryBlockPattern = /^<claude-mem-context\b/i;
 const includePattern = /^@[^\s@]\S*$/;
 const separatorPattern = /^:?-+:?$/;
@@ -388,7 +393,7 @@ export function checkCliRegistry(rootDir, policy) {
     const commands = entry.commands;
     if (!commands || typeof commands !== 'object' || Array.isArray(commands)) { errors.push(`${path2}.commands: must be an object`); continue; }
     for (const key of Object.keys(commands)) {
-      if (!cliCommandKeys.includes(key)) errors.push(`${path2}.commands.${key}: unknown command — the CLI projects ${cliCommandKeys.join(', ')}`);
+      if (!cliCommandKeys.includes(key) && !cliOnlyCommandKeys.includes(key)) errors.push(`${path2}.commands.${key}: unknown command — the CLI projects ${cliCommandKeys.join(', ')}, plus CLI-only keys ${cliOnlyCommandKeys.join(', ')}`);
     }
     for (const key of cliCommandKeys) {
       const declared = row.commands[key];
