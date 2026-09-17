@@ -1,11 +1,12 @@
 ---
 id: ci-minion-ai-claude-code-review
 title: CI red — Claude Code Review on minion-ai DEV
-status: review
+status: closed
 created: 2026-09-10
-updated: 2026-09-11
+updated: 2026-09-17
 repos: []
 duplicate_candidate: ci-minion-ai-auto-response
+closed_reason: "workflow green again as of 2026-09-17, run https://github.com/NikolasP98/minion-ai/actions/runs/30177634406"
 ---
 
 **Reconciliation note (2026-09-11):** flagged as a possible duplicate root
