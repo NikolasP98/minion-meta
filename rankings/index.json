@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-17T21:58:49.625Z",
+	"generatedAt": "2026-09-17T22:28:49.321Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4742,6 +4742,74 @@
 			"scoredAt": "2026-09-17T16:28:53.952Z"
 		},
 		{
+			"key": "issue:minion-meta#494",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#494 [monitor:unstick] reconcile run 44bbfe05: claude provider exit-126 despite clean merge-scan/push",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/494",
+			"sourceUpdatedAt": "2026-09-17T22:17:52Z",
+			"sourceFingerprint": "6b88edc47b4adbc856153fd1d11598a1130ff906d5fbc5bf80651d9c6c7c1836",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#495"
+			],
+			"rationale": "Recurring host-level claude-provider exit-126 failure on reconcile runs is duplicated verbatim in #495 and should become one host-infra goal.",
+			"evidence": [
+				"same exit-126/turns=0 signature recurred 7x between 19:18Z and 21:57Z",
+				"reconcile git/merge-scan work itself succeeded"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T22:28:49.218Z"
+		},
+		{
+			"key": "issue:minion-meta#495",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#495 [monitor:unstick] reconcile run ae3b86da: claude provider exit-126 despite clean merge-scan/push",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/495",
+			"sourceUpdatedAt": "2026-09-17T22:17:53Z",
+			"sourceFingerprint": "cf65a09fc1d489794464d46d8330219d466b31aea219d1fa0239be7f1feee671",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#494"
+			],
+			"rationale": "Duplicate report of the same claude-provider exit-126 host issue already filed as #494.",
+			"evidence": [
+				"identical exit-126/turns=0 claude-provider signature",
+				"same 7-occurrence recurrence window cited"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T22:28:49.218Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5978,6 +6046,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T03:09:59.397Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-b27d16c7cc07",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/ruc-registry.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b27d16c7cc07.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "e36cc96ae2ba13495ff2df21088e837ba9f760fc5db52433d177e3048d44549a",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-specified data-integrity finding with a clear file, marker, and concrete fix direction, already approved for work.",
+			"evidence": [
+				"TODO(handoff) flags RUC parties before 2026-09-17 as unverified",
+				"diagnosis proposes backfill migration or pending-verification workflow"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T22:28:49.218Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ccb2014a7cbb",
@@ -8178,40 +8278,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T03:10:32.723Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-b27d16c7cc07",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/ruc-registry.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b27d16c7cc07.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "03a6994a8af331f78595aa93d795917a4f42d46e1f76ebf6d5736d0944b80f0a",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-e263984cb0f6"
-			],
-			"rationale": "The unverified-RUC-parties gap is a real data-integrity concern but the fix direction offers two undecided approaches, so it isn't yet a bounded actionable task.",
-			"evidence": [
-				"marker: parties created before 2026-09-17 are unverified",
-				"fix direction lists two alternative remediation paths (backfill vs pending-status workflow)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T21:47:02.078Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c371d6639113",
@@ -12156,38 +12222,6 @@
 			"scoredAt": "2026-09-16T15:59:00.827Z"
 		},
 		{
-			"key": "pr:minion_hub#327",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#327 chore(qa): dev-only credentials via .qa/keys.env",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/327",
-			"sourceUpdatedAt": "2026-09-17T21:52:59Z",
-			"sourceFingerprint": "552b6d5fafafd19ba5ba79c8babe4133d3a2dc32acf94ceeeab935b2dfb5d657",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, already-verified dev-only QA credential persistence fix ready to land.",
-			"evidence": [
-				"`.qa/keys.env` survives regeneration and wins under dev:local",
-				"Verified end to end on the local QA stack"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T21:58:49.528Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-brain-org-all-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15420,6 +15454,38 @@
 			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This entry is just a changelog commit message for an already-merged fix, not a description of an active deployment problem.",
+			"evidence": [
+				"summary is commit text for merged PR #295",
+				"no problem statement or outstanding issue described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T22:28:49.218Z"
+		},
+		{
 			"key": "issue:minion-meta#417",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17082,6 +17148,38 @@
 			"scoredAt": "2026-09-17T02:03:35.240Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "a6fcb728ddc848f91090279e6b4998fb6fd88f3d2ae28ec88c28ac4ca2d566d2",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The listed markers point at lines in rankings/index.json that appear to be quoted proposal text from unrelated repos rather than genuine code TODOs, so the sweep's matching needs correction before any single marker can be resolved.",
+			"evidence": [
+				"14 unrelated snippets bundled from one data file, rankings/index.json",
+				"marker text matches quoted proposal content, not source-code comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T22:28:49.218Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9288d166a192",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17312,38 +17410,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T03:29:07.866Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "e5f839c02dfe5fdef0f761c82a53dfe6d8e274524e26841b84925baf3cd809ee",
-			"score": 13,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Markers are disjointed fragments scraped from rankings/index.json, a generated data file quoting other findings' text rather than actionable source code.",
-			"evidence": [
-				"target file is rankings/index.json, not application source",
-				"fragments are truncated quotes with no coherent single issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T21:58:49.528Z"
 		},
 		{
 			"key": "issue:minion-meta#438",
