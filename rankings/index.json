@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-17T15:58:35.527Z",
+	"generatedAt": "2026-09-17T16:28:54.066Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4464,6 +4464,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T07:28:51.138Z"
+		},
+		{
+			"key": "issue:minion-meta#483",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#483 [monitor:unstick] reconcile proposals run 1c3d2c19 (minion-meta) stalled on claude exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/483",
+			"sourceUpdatedAt": "2026-09-17T16:17:53Z",
+			"sourceFingerprint": "e403f9a6500c390d0453f8bf6b5aed30afe9af9c7fc882d09f78c040b6f071f4",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#484"
+			],
+			"rationale": "Recurring infra exit-126 signature blocking automated reconcile runs on the same host warrants a single consolidated fix rather than per-incident handling.",
+			"evidence": [
+				"claude provider invocation failed immediately with exit-126, turns=0",
+				"4th-5th occurrence of the identical signature within ~2 hours"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T16:28:53.952Z"
+		},
+		{
+			"key": "issue:minion-meta#484",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#484 [monitor:unstick] reconcile proposals run a9b4829d (minion-meta) stalled on claude exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/484",
+			"sourceUpdatedAt": "2026-09-17T16:17:54Z",
+			"sourceFingerprint": "689d18dc7af8b85f2cb1cda61e243688e930d4a6e6a94a7ea4de5851f2f1d475",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#483"
+			],
+			"rationale": "Duplicate of the sibling exit-126 runner-launch failure signature and should be consolidated into one host-fix goal.",
+			"evidence": [
+				"same signature as sibling runs today",
+				"recurring signature across multiple runs today, not an isolated blip"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T16:28:53.952Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -9352,38 +9420,6 @@
 			"scoredAt": "2026-09-17T02:03:35.240Z"
 		},
 		{
-			"key": "pr:minion_hub#319",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#319 feat(stock): valuation + consumption charts on the dashboard; low-stock count on the list card",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/319",
-			"sourceUpdatedAt": "2026-09-17T15:55:53Z",
-			"sourceFingerprint": "4d6a9990002c0217cc937f5c2cee2e2996d45610ccf44c5c72e01fb4b46c4776",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Open PR with green gates and unit tests delivers a scoped dashboard improvement ready to merge.",
-			"evidence": [
-				"bun run check green · lint:design no added debt · stock.logic.test.ts 79/79",
-				"Grid id bumped to stock-dashboard-v2 for new default layout"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T15:58:35.413Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10895,6 +10931,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T23:38:32.249Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown draining with no reported failure or incident evidence in the catalog entry.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"tags: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T16:28:53.952Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
@@ -12563,6 +12631,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-15T14:58:39.472Z"
+		},
+		{
+			"key": "pr:minion_hub#319",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#319 feat(stock): valuation + consumption charts on the dashboard; low-stock count on the list card",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/319",
+			"sourceUpdatedAt": "2026-09-17T16:25:40Z",
+			"sourceFingerprint": "385729b900a8e96ba25b530aa576d50021917e9de85c526fd15fcb4b9c4f3034",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-specified, already-implemented dashboard feature with green gates and passing tests, ready to merge.",
+			"evidence": [
+				"bun run check green · lint:design no added debt · stock.logic.test.ts 79/79",
+				"Grid id → stock-dashboard-v2 so everyone gets the new default layout"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T16:28:53.952Z"
 		},
 		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
