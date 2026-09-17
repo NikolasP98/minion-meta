@@ -34,9 +34,14 @@ The `TODO(handoff)` marker at `scripts/qa/smoke-dev-switcher.ts` is removed, or 
 
 **Fix direction:** Run the smoke test against a real local SQLite instance (minion_hub's dev DB at `file:./data/minion_hub.db`), not mocks. Add a setup step to seed minimal test data, then verify the smoke test passes. Document completion by removing the TODO and noting when it was validated against live DB.
 
+
 ## Latest occurrence
 
-- repo: `NikolasP98/minion_hub@5bc69c8`
-- merged PR: https://github.com/NikolasP98/minion_hub/pull/293
+- repo: `NikolasP98/minion_hub@96261e2`
+- merged PR: https://github.com/NikolasP98/minion_hub/pull/294
 - file: `scripts/qa/smoke-dev-switcher.ts`
 - checked: 2026-09-17
+
+Marker text:
+
+    TODO(handoff): this hasn't been exercised against a live local Supabase
