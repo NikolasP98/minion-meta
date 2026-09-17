@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-17T02:58:38.265Z",
+	"generatedAt": "2026-09-17T03:09:50.362Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -535,38 +535,6 @@
 			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
-			"key": "pr:minion_hub#300",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#300 fix(rbac): org owners manage join links/requests (org-scoped); any multi-org member can switch org",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/300",
-			"sourceUpdatedAt": "2026-09-17T02:57:16Z",
-			"sourceFingerprint": "31f660e3b42821b1a891ebce5287aa2204f9cebc0fa54bf21f3d5da6b675d3ca",
-			"score": 82,
-			"band": "high",
-			"axes": {
-				"criticality": 9,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes a cross-org data leak in join-link listing plus broken org-owner permissions, i.e. a real multi-tenant security defect with 134 passing tests.",
-			"evidence": [
-				"GET /api/join-links was unscoped, leaking every org's links to any capability holder",
-				"134 tests pass incl. cross-org 403 coverage"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T02:58:38.155Z"
-		},
-		{
 			"key": "spec:2026-08-17-factory-token-budget-governance-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1068,6 +1036,40 @@
 			"scoredAt": "2026-09-14T09:40:01.696Z"
 		},
 		{
+			"key": "pr:minion_hub#300",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#300 fix(rbac): org owners manage join links/requests (org-scoped); any multi-org member can switch org",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/300",
+			"sourceUpdatedAt": "2026-09-17T03:04:45Z",
+			"sourceFingerprint": "428ae45b4d0f79e9aefbb96753e07ead87e6d36b745a9525c9f2d8cc7cb2d319",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#464"
+			],
+			"rationale": "Security-relevant RBAC fix closes a cross-org data leak and is fully tested and ready to merge.",
+			"evidence": [
+				"GET /api/join-links was unscoped, leaking every org's links to any capability holder",
+				"134 tests pass including new org-scoping tests"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T03:09:50.260Z"
+		},
+		{
 			"key": "pr:minion_site#29",
 			"kind": "pr",
 			"stage": "development",
@@ -1099,38 +1101,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-15T14:28:58.709Z"
-		},
-		{
-			"key": "pr:minion_hub#299",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#299 fix(ui): Dialog asserts its accessible name only while open (settings client-side nav crash)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/299",
-			"sourceUpdatedAt": "2026-09-17T02:40:52Z",
-			"sourceFingerprint": "a1945d459d846bc2bfe76769907d75131e6f8452f0bc2ea3255f371c9fa9b7b5",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 8,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes a production crash that breaks client-side navigation to settings until a manual refresh, with a clear root cause and passing tests.",
-			"evidence": [
-				"Uncaught Error: Dialog requires a title or labelledBy reference in production",
-				"QA stack does not reproduce it; production does"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T02:58:38.155Z"
 		},
 		{
 			"key": "proposal:2026-09-12-hub-booking-stock-postcommit-recovery",
@@ -1897,39 +1867,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T15:59:00.827Z"
-		},
-		{
-			"key": "pr:minion_hub#295",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#295 fix(qa): dev:local/qa:up ignore inherited backend env instead of refusing; redact URLs in guards",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/295",
-			"sourceUpdatedAt": "2026-09-17T02:22:48Z",
-			"sourceFingerprint": "9ed3ecae5525b9c58d41857d57154ba3d0c02e4a5429d352a453ca87736c0e48",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Open PR with tests and reproduced proof fixes a dev-workflow safety bug that both blocks local dev and leaks credentials in guard logs.",
-			"evidence": [
-				"dev:local refused to start on machines whose env pointed at production",
-				"redactUrl added to guard messages; scripts/qa/dev.test.ts covers drop+redact",
-				"proof: fake production .env.local present, dev:local started clean, log free of credentials"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T02:28:58.251Z"
 		},
 		{
 			"key": "proposal:2026-08-23-minion-ai-ci-baseline-debt",
@@ -10294,6 +10231,38 @@
 			"scoredAt": "2026-09-17T02:58:38.155Z"
 		},
 		{
+			"key": "pr:minion_hub#301",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#301 feat(data-table): sticky row-actions column with end padding",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/301",
+			"sourceUpdatedAt": "2026-09-17T03:01:52Z",
+			"sourceFingerprint": "79798ab9926cfb0d1428ec826847a9004ec70cea6210312a042a82c40a492776",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Ready UI fix adds sticky row actions and resolves a scroll-reset bug, verified via tests and browser checks.",
+			"evidence": [
+				"regression test asserts createVirtualizer called once across expand/collapse",
+				"browser-verified at /en/stock/items and /en/pos/catalog"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T03:09:50.260Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-msteams-large-upload",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12412,38 +12381,6 @@
 			"scoredAt": "2026-09-15T14:58:39.472Z"
 		},
 		{
-			"key": "pr:minion_hub#296",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#296 feat(calendar): sticky time/date axes, date picker on the range label, day-view aggregate column",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/296",
-			"sourceUpdatedAt": "2026-09-17T02:28:40Z",
-			"sourceFingerprint": "93752590028ebe30212efad19c6c7379bfe818c28478e3d663d2ccb4d04a9e8b",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Ready calendar UX PR with tests and browser QA, but scoped to a single non-critical route and an explicitly documented follow-up gap for the other calendar view.",
-			"evidence": [
-				"only /pos/appointments renders BookingCalendar.svelte today",
-				"24/24 vitest passing, bun run check 0 errors"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T02:58:38.155Z"
-		},
-		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12753,6 +12690,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a deployment health record reflecting an already-merged commit, not an actionable goal.",
+			"evidence": [
+				"commit fix(nitter): serialize persistence and drain shutdown (#295)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T03:09:50.260Z"
 		},
 		{
 			"key": "issue:minion-meta#389",
@@ -14820,6 +14788,40 @@
 			"scoredAt": "2026-09-16T18:29:06.570Z"
 		},
 		{
+			"key": "pr:minion-meta#464",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#464 docs(proposals): requireAdmin audit progress (hub #300) + legacy-member role display mismatch",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/464",
+			"sourceUpdatedAt": "2026-09-17T02:58:14Z",
+			"sourceFingerprint": "b35ec2835904ac89db98c4792ea03346b97032f4c0f6404be6bb94c3525feb21",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#300"
+			],
+			"rationale": "Low-risk docs-only ledger update tracking the completed hub #300 fixes.",
+			"evidence": [
+				"Docs only",
+				"Index regenerated, --check passes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T03:09:50.260Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-personal-agent-entrypoint-test",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16317,6 +16319,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T17:01:45.719Z"
+		},
+		{
+			"key": "run:minion_hub#35177037338",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35177037338",
+			"sourceUpdatedAt": "2026-09-17T03:08:26Z",
+			"sourceFingerprint": "2abb79b1b43f46a8c4806dd13b0129fa08731fc4b98b9a4b6c038e10bf7b2d65",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run is a status signal rather than an actionable board goal.",
+			"evidence": [
+				"status in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T03:09:50.260Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2071590033",
