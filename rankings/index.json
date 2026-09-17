@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-17T05:58:42.823Z",
+	"generatedAt": "2026-09-17T06:03:34.726Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1067,39 +1067,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-15T14:28:58.709Z"
-		},
-		{
-			"key": "pr:minion_hub#311",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#311 fix(gateway): every org member sees and can use the org's gateways",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/311",
-			"sourceUpdatedAt": "2026-09-17T05:53:33Z",
-			"sourceFingerprint": "74c00c287b06070deba70cc14d26998e824472d38b88ad34fc2fb4d1cb992549",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Clear, tested fix for a real access-control gap where non-admin org members never got a user_gateway row.",
-			"evidence": [
-				"members who came through a join link, an approval or an admin-created account never got one",
-				"hosts.service.test.ts (new)... bun run check green",
-				"QA-stack verification: logged in as tenancy.user.staff, page data lists the org gateway"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
 			"key": "proposal:2026-09-12-hub-booking-stock-postcommit-recovery",
@@ -10029,6 +9996,38 @@
 			"scoredAt": "2026-09-14T09:38:46.333Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown draining has landed but deployment health status is unknown so it needs verification rather than immediate action.",
+			"evidence": [
+				"commit fixes serialize persistence and drain poller shutdown",
+				"status: unknown"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T06:03:34.608Z"
+		},
+		{
 			"key": "issue:minion-meta#327",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14697,6 +14696,38 @@
 			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
+			"key": "run:minion_hub#35188077963",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35188077963",
+			"sourceUpdatedAt": "2026-09-17T06:01:57Z",
+			"sourceFingerprint": "36934685cd97cc5c8e06e3215dd86109a3faa16c52c97616257139d82e31abd1",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 5
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A CI run on master is in progress with no indication of failure yet, so it merely needs monitoring until completion.",
+			"evidence": [
+				"status: in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-17T06:03:34.608Z"
+		},
+		{
 			"key": "issue:minion-meta#417",
 			"kind": "issue",
 			"stage": "proposal",
@@ -16301,7 +16332,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "5807156462fd644c2e808bfbdec648ba9dafeb88bf8e6591ed53f3661eb85c31",
+			"sourceFingerprint": "529755b9bf1d8c7a2c248ed6561453596d85743f428921f971dabc46c7c4fd69",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -16310,21 +16341,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 2,
+				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 3,
+			"confidence": 2,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The markers point to line numbers inside rankings/index.json, a generated ranking-output data file, not real source-code TODOs, making the finding non-actionable.",
+			"rationale": "This is a self-referential handoff marker pointing to disparate unrelated TODO lines scattered across a rankings index file, not a coherent actionable goal.",
 			"evidence": [
-				"rankings/index.json:1630",
-				"rankings/index.json:15313 — nothing links here with these params yet",
-				"source: handoff-sweep"
+				"filed automatically by the factory handoff-ledger sweep",
+				"markers span 14 unrelated line references across rankings/index.json"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T05:58:42.726Z"
+			"scoredAt": "2026-09-17T06:03:34.608Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9288d166a192",
