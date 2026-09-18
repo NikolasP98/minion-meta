@@ -31,10 +31,10 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L1728
 - `NikolasP98/minion-meta@dev rankings/index.json:2292` — session is drawn when the cashier clicks, not at a validation checkpoint",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2292
-- `NikolasP98/minion-meta@dev rankings/index.json:5127` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5127
-- `NikolasP98/minion-meta@dev rankings/index.json:7588` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7588
+- `NikolasP98/minion-meta@dev rankings/index.json:4947` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4947
+- `NikolasP98/minion-meta@dev rankings/index.json:7441` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7441
 - `NikolasP98/minion-meta@dev rankings/index.json:8501` — this hasn't been exercised against a live local Supabase",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8501
 - `NikolasP98/minion-meta@dev rankings/index.json:8634` — remove once the phone failure is root-caused'",
@@ -57,7 +57,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12965
 - `NikolasP98/minion-meta@dev rankings/index.json:13065` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13065
-- `NikolasP98/minion-meta@dev rankings/index.json:13883` — leave bars + holiday shading come from the loader's current-year",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13883
-- `NikolasP98/minion-meta@dev rankings/index.json:16207` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16207
+- `NikolasP98/minion-meta@dev rankings/index.json:13916` — leave bars + holiday shading come from the loader's current-year",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13916
+- `NikolasP98/minion-meta@dev rankings/index.json:16240` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16240
