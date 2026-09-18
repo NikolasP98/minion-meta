@@ -51,7 +51,11 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11511
 - `NikolasP98/minion-meta@dev rankings/index.json:12260` — prompt-driven protocol instead of native tool_use — replace",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12260
-- `NikolasP98/minion-meta@dev rankings/index.json:13248` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13248
-- `NikolasP98/minion-meta@dev rankings/index.json:16097` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16097
+- `NikolasP98/minion-meta@dev rankings/index.json:12920` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12920
+- `NikolasP98/minion-meta@dev rankings/index.json:13020` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13020
+- `NikolasP98/minion-meta@dev rankings/index.json:13214` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13214
+- `NikolasP98/minion-meta@dev rankings/index.json:16063` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16063
