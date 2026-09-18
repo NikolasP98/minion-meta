@@ -31,31 +31,33 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L1728
 - `NikolasP98/minion-meta@dev rankings/index.json:2292` — session is drawn when the cashier clicks, not at a validation checkpoint",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2292
-- `NikolasP98/minion-meta@dev rankings/index.json:5161` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5161
-- `NikolasP98/minion-meta@dev rankings/index.json:6915` — add-only; rename / deactivate / max-days edits need a modal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6915
-- `NikolasP98/minion-meta@dev rankings/index.json:7617` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7617
-- `NikolasP98/minion-meta@dev rankings/index.json:8459` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8459
-- `NikolasP98/minion-meta@dev rankings/index.json:8592` — remove once the phone failure is root-caused'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8592
-- `NikolasP98/minion-meta@dev rankings/index.json:9832` — drawer still shows no LINKED POS TICKETS — spec §4.1",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9832
-- `NikolasP98/minion-meta@dev rankings/index.json:9864` — The service now binds this version and verifies normalized",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9864
-- `NikolasP98/minion-meta@dev rankings/index.json:10191` — the confirmed root cause (QA-stack app logs) was",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10191
-- `NikolasP98/minion-meta@dev rankings/index.json:11511` — reopened mid-exit — cancel the pending close",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11511
-- `NikolasP98/minion-meta@dev rankings/index.json:12260` — prompt-driven protocol instead of native tool_use — replace",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12260
-- `NikolasP98/minion-meta@dev rankings/index.json:12920` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12920
-- `NikolasP98/minion-meta@dev rankings/index.json:13020` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13020
-- `NikolasP98/minion-meta@dev rankings/index.json:13214` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13214
-- `NikolasP98/minion-meta@dev rankings/index.json:16063` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16063
+- `NikolasP98/minion-meta@dev rankings/index.json:5127` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5127
+- `NikolasP98/minion-meta@dev rankings/index.json:7588` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7588
+- `NikolasP98/minion-meta@dev rankings/index.json:8501` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8501
+- `NikolasP98/minion-meta@dev rankings/index.json:8634` — remove once the phone failure is root-caused'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8634
+- `NikolasP98/minion-meta@dev rankings/index.json:9874` — drawer still shows no LINKED POS TICKETS — spec §4.1",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9874
+- `NikolasP98/minion-meta@dev rankings/index.json:9906` — The service now binds this version and verifies normalized",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9906
+- `NikolasP98/minion-meta@dev rankings/index.json:10233` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10233
+- `NikolasP98/minion-meta@dev rankings/index.json:10265` — the confirmed root cause (QA-stack app logs) was",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10265
+- `NikolasP98/minion-meta@dev rankings/index.json:10636` — add-only; rename / deactivate / max-days edits need a modal over",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10636
+- `NikolasP98/minion-meta@dev rankings/index.json:11588` — reopened mid-exit — cancel the pending close",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11588
+- `NikolasP98/minion-meta@dev rankings/index.json:12337` — prompt-driven protocol instead of native tool_use — replace",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12337
+- `NikolasP98/minion-meta@dev rankings/index.json:12999` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12999
+- `NikolasP98/minion-meta@dev rankings/index.json:13099` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13099
+- `NikolasP98/minion-meta@dev rankings/index.json:13949` — leave bars + holiday shading come from the loader's current-year",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13949
+- `NikolasP98/minion-meta@dev rankings/index.json:16208` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16208
