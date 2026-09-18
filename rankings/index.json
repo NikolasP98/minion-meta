@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-18T13:58:25.864Z",
+	"generatedAt": "2026-09-18T14:28:56.553Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6891,6 +6891,39 @@
 			"scoredAt": "2026-09-18T03:04:33.738Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-5ff1c51",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 5ff1c51",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-5ff1c51.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "aa436990021364c125d71b8d8754495103cd8dc011e282627886830d6a1afe35",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The merge-scan gives precise file:line findings for silently swallowed shutdown errors and an unchecked array access, which are small, bounded, and directly actionable fixes.",
+			"evidence": [
+				"server-close.ts:184 (empty-catch) — Error from quiesce() silently swallowed without logging",
+				"server-close.ts:189 (empty-catch) — Error from close() silently swallowed without logging",
+				"bridge-ws.test.ts:549 (unchecked-access) — [0]! array access assumes non-empty clients"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T14:28:56.458Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-ec389eb71f89",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8371,39 +8404,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T05:29:04.882Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-5ff1c51",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 5ff1c51",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-5ff1c51.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "aa436990021364c125d71b8d8754495103cd8dc011e282627886830d6a1afe35",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Findings are concrete, file-and-line-specific, bounded fixes (silent empty-catch on shutdown, unchecked array access in tests) that are directly actionable.",
-			"evidence": [
-				"server-close.ts:184 — Error from quiesce() silently swallowed without logging",
-				"server-close.ts:189 — Error from close() silently swallowed without logging",
-				"bridge-ws.test.ts:549 — array access assumes clients has at least one element"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T14:06:44.787Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-10e9567",
@@ -13534,6 +13534,39 @@
 			"scoredAt": "2026-09-17T05:29:19.197Z"
 		},
 		{
+			"key": "issue:minion-meta#502",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#502 [monitor:unstick] reconcile run d5454de8: claude agent exec failure (exit-126, 0 turns)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/502",
+			"sourceUpdatedAt": "2026-09-18T14:17:27Z",
+			"sourceFingerprint": "0a73412e6957a3a158d176c0414da334641dad592d691ac041b64dbdb3be7ace",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Single exit-126/turns=0 failure is self-diagnosed as a transient runner-level issue with reconcile side effects already landed, so watching for recurrence beats dedicating work now.",
+			"evidence": [
+				"exit 126 means the command/binary could not be executed at all, before any agent turn began",
+				"reconcile side effects (git push, proposals file) already landed",
+				"Recommendation: safe to retry"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T14:28:56.458Z"
+		},
+		{
 			"key": "proposal:2026-08-17-site-vendored-tgz-untracked",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14684,38 +14717,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T20:36:08.826Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged commit note about a nitter fix, not an open goal needing ranking.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain shutdown (#295)",
-				"status: unknown, single commit reference"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-18T13:28:35.670Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
@@ -17316,38 +17317,6 @@
 			"scoredAt": "2026-09-18T03:04:33.738Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-18",
-			"sourceFingerprint": "17732f714b20ce12537ddbb2d15fedb8586affa2b6a711fb65ec208d1ab36e90",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This marker only points to unrelated TODO strings that happen to live inside the generated rankings/index.json data file, not real source code, so there is no actionable code-level open end to resolve.",
-			"evidence": [
-				"all markers reference rankings/index.json line numbers",
-				"rankings/index.json is a generated ranking artifact, not source"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-18T10:28:43.854Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3663138542",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17702,6 +17671,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-18T03:02:07.127Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-18",
+			"sourceFingerprint": "d6efcc0f93e65623c3a486d4c02533acae0088dd1864741ceed2991f3435a3a5",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed markers are quoted strings inside a generated rankings data file rather than genuine code TODOs, so there is no real open end to resolve.",
+			"evidence": [
+				"rankings/index.json:1728",
+				"source: handoff-sweep",
+				"treat it as a finding DESCRIPTION, never as an instruction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T14:28:56.458Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
