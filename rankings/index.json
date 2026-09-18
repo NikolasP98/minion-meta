@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-18T18:28:47.400Z",
+	"generatedAt": "2026-09-18T18:58:51.182Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5562,6 +5562,39 @@
 			"scoredAt": "2026-09-16T03:29:43.796Z"
 		},
 		{
+			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Migrate Hub off the deprecated @inlang/paraglide-sveltekit adapter",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-paraglide-adapter-migration-followup.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "e6401cb36d95f9c85e2c2b8d23a3183c9790d69d757891cd5811b002ffbc5f70",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-scoped migration with a deterministic test proving a real locale-bleed defect under concurrency in the current deprecated adapter, plus a concrete file list and sketch.",
+			"evidence": [
+				"locale-parity.test.ts shows setLanguageTag races cause cross-request locale bleed under Promise.all concurrency",
+				"five specific files (i18n.ts, hooks.server.ts, hooks.ts, canonical-path.ts, svelte.config.js) identified as needing changes",
+				"sketch requires re-verifying paraglide-js v2 API before implementation, so not fully execution-ready"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T18:58:51.072Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-factory-0290030",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7309,38 +7342,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T06:58:50.347Z"
-		},
-		{
-			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Migrate Hub off the deprecated @inlang/paraglide-sveltekit adapter",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-paraglide-adapter-migration-followup.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "e6401cb36d95f9c85e2c2b8d23a3183c9790d69d757891cd5811b002ffbc5f70",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-evidenced deprecated-dependency migration with a deterministic locale-bleed test proving a real latent correctness bug and a concrete file-by-file sketch.",
-			"evidence": [
-				"@inlang/paraglide-sveltekit is npm-deprecated",
-				"locale-parity.test.ts shows deterministic cross-request locale bleed under concurrency for the ambient API"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T18:35:08.700Z"
 		},
 		{
 			"key": "proposal:2026-09-13-pos-packages-plans-s1-followups",
@@ -11046,38 +11047,6 @@
 			"scoredAt": "2026-09-12T20:06:48.366Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-site-a357d1f6520e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.0-qc-d01a528579e7.tgz (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-a357d1f6520e.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "9abeac3886f680e8a31999037164fb185b99b6eef4b1b019b50cfbc66c8aa2b9",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Repo-hygiene fix is clear but the reconciliation note flags this as a duplicate_candidate whose disposal is pending a human decision on the unpublished shared package's license/version.",
-			"evidence": [
-				"reconciliation note: flagged duplicate_candidate, adoption pending license text and immutable version",
-				"committed deps/*.tgz blocks diff scanning and obscures dependency version"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T18:35:08.700Z"
-		},
-		{
 			"key": "spec:2026-08-19-gateway-client-error-hook-consumer-adoption-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -13987,6 +13956,39 @@
 			"scoredAt": "2026-09-18T07:29:20.370Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-site-a357d1f6520e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.0-qc-d01a528579e7.tgz (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-a357d1f6520e.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "9abeac3886f680e8a31999037164fb185b99b6eef4b1b019b50cfbc66c8aa2b9",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This finding's tarball hash is already tracked as the same unpublished artifact in a separate platform-qc-remediation proposal, and its own reconciliation note flags it as a duplicate whose suggested fix may not even apply.",
+			"evidence": [
+				"reconciliation note: tarball hash d01a528579e7 matches artifact already tracked in 2026-09-08-platform-qc-remediation.md",
+				"note explicitly flags this as duplicate_candidate rather than merged",
+				"auto-diagnosis's bun-install fix may not apply while the package remains unpublished"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T18:58:51.072Z"
+		},
+		{
 			"key": "proposal:2026-08-20-hub-datatable-server-mode-test-gap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14750,38 +14752,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T20:36:08.826Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a status snapshot of an already-merged commit fixing nitter shutdown/persistence, not an open actionable goal.",
-			"evidence": [
-				"summary shows a merged PR #295 fix(nitter) commit",
-				"status is 'unknown' with no open work described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-18T18:28:47.307Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
