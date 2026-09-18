@@ -53,11 +53,11 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11588
 - `NikolasP98/minion-meta@dev rankings/index.json:12337` — prompt-driven protocol instead of native tool_use — replace",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12337
-- `NikolasP98/minion-meta@dev rankings/index.json:12999` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12999
-- `NikolasP98/minion-meta@dev rankings/index.json:13099` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13099
-- `NikolasP98/minion-meta@dev rankings/index.json:13949` — leave bars + holiday shading come from the loader's current-year",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13949
-- `NikolasP98/minion-meta@dev rankings/index.json:16208` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16208
+- `NikolasP98/minion-meta@dev rankings/index.json:12965` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12965
+- `NikolasP98/minion-meta@dev rankings/index.json:13065` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13065
+- `NikolasP98/minion-meta@dev rankings/index.json:13883` — leave bars + holiday shading come from the loader's current-year",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13883
+- `NikolasP98/minion-meta@dev rankings/index.json:16207` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16207
