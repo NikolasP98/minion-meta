@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-18T22:29:06.740Z",
+	"generatedAt": "2026-09-18T23:28:50.232Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -831,42 +831,6 @@
 			"scoredAt": "2026-09-18T03:03:08.683Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-a4e7e5bce6b1",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/plugins/bridge-protocol.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a4e7e5bce6b1.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "f007c06ebbe2877969f83ede98d75cc1807ea83d894d3a2dce8bd49abbb6a9c2",
-			"score": 75,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-0050a8290ce5",
-				"proposal:postmerge-minion-hub-d3e0b507af92"
-			],
-			"rationale": "Unvalidated capability/token gating at plugin mount is a cross-boundary security gap that should be resolved together with the related mount-race and error-leak findings from the same merged PR.",
-			"evidence": [
-				"status approved",
-				"diagnosis: component could forge/escalate token claims to call privileged methods",
-				"same file/PR #252 as both other bridge-protocol findings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T22:39:03.778Z"
-		},
-		{
 			"key": "proposal:2026-08-28-factory-containment-base-reconciliation",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1272,6 +1236,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T21:35:19.360Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-a4e7e5bce6b1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/plugins/bridge-protocol.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a4e7e5bce6b1.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "f007c06ebbe2877969f83ede98d75cc1807ea83d894d3a2dce8bd49abbb6a9c2",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-d3e0b507af92"
+			],
+			"rationale": "Approved security finding about unauthenticated component mounting in bridge-protocol.ts should be combined with the sibling TODO in the same file/PR into one hardening goal.",
+			"evidence": [
+				"marker in src/lib/plugins/bridge-protocol.ts merged via PR #252",
+				"diagnosis flags unauthorized component execution with unvalidated capabilities",
+				"status: approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T23:28:50.129Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c5d86be403fa",
@@ -2692,42 +2691,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-18T03:06:31.837Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-hub-e98422b",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ e98422b",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-e98422b.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "1c94b5cda7e606109e540876a314f0961fabe4d669b5da137c6d2049771070e4",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-821383456",
-				"proposal:handoff-minion-hub-3087604309"
-			],
-			"rationale": "Automated scan surfaces multiple high-severity unchecked-access crash risks concentrated in the plugin bridge-protocol/compat files already flagged by handoff markers, best resolved as one hardening goal.",
-			"evidence": [
-				"high: unchecked-access compat.ts:89 caps.methods optional not checked, TypeError risk",
-				"high: unchecked-access trace-build-graph.test.mjs .find()/.at(-1) undefined access",
-				"high: weakened test workforce-fetch.test.ts:180 asserts wrong mint call count"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T22:35:25.138Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-f97efb2",
@@ -6479,39 +6442,6 @@
 			"scoredAt": "2026-09-17T06:11:58.499Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-f67a7acec33b",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/servers/[id]/provision/run/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f67a7acec33b.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "9e2c47b3404618b96fe793dabe7cb0defd389e26be6b25a4c08b599022bb9f48",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Already-approved, narrowly-scoped fix to consolidate host error-log scrubbing into the existing sanitization pipeline to prevent sensitive-data leakage.",
-			"evidence": [
-				"status: approved",
-				"single named file with concrete fix direction (consolidate into reusable sanitizer)",
-				"concerns credentials/internal IPs/user data in logs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T22:35:40.935Z"
-		},
-		{
 			"key": "run:minion (gateway)#31686911500",
 			"kind": "run",
 			"stage": "testing",
@@ -7144,41 +7074,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T00:34:39.390Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-d3e0b507af92",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/plugins/bridge-protocol.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d3e0b507af92.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "42389ae26aae015b787fc0a48b98f7da264255917284dde4f7fb2d0f1c5b2f06",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-a4e7e5bce6b1"
-			],
-			"rationale": "Raw upstream error leakage in the same bridge-protocol.ts file is a related hardening task from the same PR that pairs naturally with the capability-gating fix.",
-			"evidence": [
-				"status approved",
-				"raw error messages expose internal DB/API details",
-				"same file/PR #252 as the capability-gating finding"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T22:39:03.778Z"
 		},
 		{
 			"key": "pr:minion (gateway)#257",
@@ -9138,6 +9033,41 @@
 			"scoredAt": "2026-09-12T00:04:47.784Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-d3e0b507af92",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/plugins/bridge-protocol.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d3e0b507af92.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "42389ae26aae015b787fc0a48b98f7da264255917284dde4f7fb2d0f1c5b2f06",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-a4e7e5bce6b1"
+			],
+			"rationale": "Same file and PR (#252) as the bridge-protocol capability-gating finding, so sanitizing error messages should land as part of one bridge-protocol hardening effort.",
+			"evidence": [
+				"marker in src/lib/plugins/bridge-protocol.ts merged via PR #252, same PR as sibling finding",
+				"diagnosis: raw upstream errors leak internal system details",
+				"status: approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T23:28:50.129Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-e29218b380bb",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9339,6 +9269,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-18T03:05:45.022Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-e98422b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ e98422b",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-e98422b.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "1c94b5cda7e606109e540876a314f0961fabe4d669b5da137c6d2049771070e4",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Concrete crash-risk findings with specific file:line locations, including an unchecked optional-field access in production code, make this actionable now.",
+			"evidence": [
+				"compat.ts:89 unchecked caps.methods access flagged as could throw TypeError",
+				"two high-severity unchecked-access (.find()/.at(-1)) crash risks cited with file:line"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T23:28:50.129Z"
 		},
 		{
 			"key": "spec:2026-08-31-handoff-minion-hub-722867358-spec",
@@ -10704,6 +10666,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-11T23:38:32.249Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f67a7acec33b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/servers/[id]/provision/run/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f67a7acec33b.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "9e2c47b3404618b96fe793dabe7cb0defd389e26be6b25a4c08b599022bb9f48",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved finding with a clear fix direction to consolidate host-provisioning error-log scrubbing into the existing sanitizer pipeline.",
+			"evidence": [
+				"marker in src/routes/api/servers/[id]/provision/run/+server.ts merged via PR #246",
+				"diagnosis warns fragmented scrubbing risks inconsistent leaking of sensitive data in logs",
+				"status: approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T23:28:50.129Z"
 		},
 		{
 			"key": "spec:2026-08-18-sdlc-transformation-roadmap",
@@ -14750,6 +14745,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T20:36:08.826Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deployment-health entry only quotes a merged commit message with no stated open issue or actionable scope.",
+			"evidence": [
+				"summary is the text of merged PR #295's commit message",
+				"status field is 'unknown' with no failure or pending action indicated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T23:28:50.129Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
