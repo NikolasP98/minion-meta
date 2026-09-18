@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-18T23:28:50.232Z",
+	"generatedAt": "2026-09-18T23:58:59.495Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3859,40 +3859,6 @@
 			"scoredAt": "2026-09-16T03:30:25.155Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-ec4f70d3709c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/groupchat.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ec4f70d3709c.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "67b1b70d24f2ab06b7e5a423dfaf8b8af73451fe352148fb99c45896fd1cdafa",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-c399783e15f5"
-			],
-			"rationale": "Unreadable-checkpoint and storage-unavailable recovery in groupchat is a genuine silent-failure reliability gap with a concrete 3-step fix direction, but is still only at diagnosis stage.",
-			"evidence": [
-				"marker: 'Reconcile unreadable checkpoints and storage-unavailable terminal writes through an explicit recovery path'",
-				"status: approved, diagnosis gives 3 concrete fix steps"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T23:38:32.249Z"
-		},
-		{
 			"key": "spec:2026-08-18-factory-memory-governance-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -5011,6 +4977,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T20:36:08.826Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ec4f70d3709c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/groupchat.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ec4f70d3709c.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "67b1b70d24f2ab06b7e5a423dfaf8b8af73451fe352148fb99c45896fd1cdafa",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Silent-failure risk around checkpoint/storage recovery is reliability-relevant and already has a concrete fix direction tied to an existing remediation proposal.",
+			"evidence": [
+				"marker references proposals/2026-09-08-platform-qc-remediation.md (HDS-05)",
+				"fix direction: check storage availability, fail fast with logged errors, surface recovery decisions instead of auto RPC replay"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T23:58:59.402Z"
 		},
 		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
@@ -8566,6 +8564,38 @@
 			"scoredAt": "2026-09-15T07:59:01.638Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-fb3cad8ba259",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in supabase/migrations/20260909090400_job_request_manifest.sql (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fb3cad8ba259.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "fe5784443e64aeada13cce10c990d10b869dab34ce01c53f1fa4ab13c5913007",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Loss of audit trail on manifest current-head reset is a compliance/debuggability gap with a clear two-phase fix and independent confirmation from a separate sweep.",
+			"evidence": [
+				"marker: 'Current-head reset does not archive whole-manifest history'",
+				"fix direction: archive-then-reset or status column; also caught by handoff-ledger sweep handoff-minion-hub-2883926730"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T23:58:59.402Z"
+		},
+		{
 			"key": "proposal:2026-08-18-base-ui-primitives-and-shell",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9101,41 +9131,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T00:04:47.784Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-fb3cad8ba259",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in supabase/migrations/20260909090400_job_request_manifest.sql (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fb3cad8ba259.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "fe5784443e64aeada13cce10c990d10b869dab34ce01c53f1fa4ab13c5913007",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-cf95482ec332",
-				"proposal:postmerge-minion-hub-de95b8a03fe5"
-			],
-			"rationale": "Loss of manifest history on current-head reset is a compliance/audit concern with two clear fix options, but is not time-critical.",
-			"evidence": [
-				"marker: 'Current-head reset does not archive whole-manifest history'",
-				"status: approved, diagnosis gives two concrete archive-vs-soft-delete options"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T23:38:32.249Z"
 		},
 		{
 			"key": "spec:2026-08-31-roadmap-milestone-order-deviation-spec",
@@ -10264,6 +10259,38 @@
 			"scoredAt": "2026-09-16T19:58:49.018Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-e41a33a864a1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/brains.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e41a33a864a1.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "c239ad4478e5071d99561dbd2a240510c4f147e32c8e55d63746888e08f41140",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The handoff marker text is truncated and the auto-diagnosis contains only stub tool-call placeholders with no real analysis, leaving the scope undefined.",
+			"evidence": [
+				"marker: 'Indeterminate admissions need an explicit recovery/UI and' (cut off)",
+				"diagnosis section shows only unexecuted read/grep tool-call stubs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T23:58:59.402Z"
+		},
+		{
 			"key": "issue:minion-meta#430",
 			"kind": "issue",
 			"stage": "proposal",
@@ -10631,41 +10658,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-18T07:29:20.370Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-e9b22dc941f6",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/job-effect-pages.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e9b22dc941f6.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "4d2add799dcc28902cf89efb063d8c92aa443fc8e3de82bdbdfcdea2dd41e3bf",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-e41a33a864a1",
-				"proposal:postmerge-minion-hub-de95b8a03fe5"
-			],
-			"rationale": "Marker text is incomplete ('Phase15 must bound source') and the diagnosis section again only shows unexecuted tool-call stubs, so scope must be re-established before this is actionable.",
-			"evidence": [
-				"marker cuts off: 'These bounds start after host source loading. Phase15 must bound source'",
-				"diagnosis body shows only Read-tool call stubs, no findings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T23:38:32.249Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-f67a7acec33b",
@@ -11650,14 +11642,14 @@
 			"scoredAt": "2026-09-16T03:30:25.155Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-e41a33a864a1",
+			"key": "proposal:postmerge-minion-hub-e9b22dc941f6",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/brains.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e41a33a864a1.md",
+			"title": "Post-merge finding — todo-handoff in src/server/services/job-effect-pages.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e9b22dc941f6.md",
 			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "c239ad4478e5071d99561dbd2a240510c4f147e32c8e55d63746888e08f41140",
+			"sourceFingerprint": "4d2add799dcc28902cf89efb063d8c92aa443fc8e3de82bdbdfcdea2dd41e3bf",
 			"score": 38,
 			"band": "low",
 			"axes": {
@@ -11667,21 +11659,19 @@
 			},
 			"readiness": {
 				"specification": 2,
-				"implementation": 1
+				"implementation": 2
 			},
-			"confidence": 2,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-e9b22dc941f6"
-			],
-			"rationale": "The marker text is truncated and the auto-diagnosis contains only unexecuted tool-call stubs with no actual analysis, so the finding needs to be re-derived before it can be executed.",
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Marker text is cut off mid-sentence and the auto-diagnosis never produced substantive analysis, so scope and desired outcome are unverifiable.",
 			"evidence": [
-				"marker cuts off: 'Indeterminate admissions need an explicit recovery/UI and'",
-				"diagnosis body shows only 'I need to check the file...' followed by empty function_calls blocks"
+				"marker: 'bounds start after host source loading. Phase15 must bound source' (truncated)",
+				"diagnosis section shows only unexecuted read tool-call stubs"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T23:38:32.249Z"
+			"scoredAt": "2026-09-18T23:58:59.402Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
@@ -12267,6 +12257,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:29:51.901Z"
+		},
+		{
+			"key": "issue:minion-meta#389",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#389 [monitor:unstick] Run 1298682b (minion-meta rank) failed: provider returned invalid JSON, fallback did not recover",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/389",
+			"sourceUpdatedAt": "2026-09-11T23:17:17Z",
+			"sourceFingerprint": "939de4f1b58be55f0b1343876c6c796f63924eb46940a3c7513f6ccaad97e038",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A transient provider JSON-parse fault stalled one ranking batch despite fallback, but this is a narrow self-referential pipeline hiccup rather than a scoped product goal.",
+			"evidence": [
+				"batch 3 got invalid-JSON parse error triggering fallback to codex, run still exited 1",
+				"index progress 12 changed/317-327 total with 34/337 candidates pending"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T23:58:59.402Z"
 		},
 		{
 			"key": "issue:minion-meta#460",
@@ -13319,38 +13341,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
-		},
-		{
-			"key": "issue:minion-meta#389",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#389 [monitor:unstick] Run 1298682b (minion-meta rank) failed: provider returned invalid JSON, fallback did not recover",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/389",
-			"sourceUpdatedAt": "2026-09-11T23:17:17Z",
-			"sourceFingerprint": "939de4f1b58be55f0b1343876c6c796f63924eb46940a3c7513f6ccaad97e038",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Auto-filed monitor issue describing a single transient provider JSON-parse failure in the ranking pipeline, best handled by retry rather than dedicated engineering work.",
-			"evidence": [
-				"parse error in batch 3, fallback to codex also failed",
-				"12 changed/317-327 total, 34/337 candidates pending before failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T23:35:22.586Z"
 		},
 		{
 			"key": "issue:minion-meta#405",
@@ -14745,38 +14735,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T20:36:08.826Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This deployment-health entry only quotes a merged commit message with no stated open issue or actionable scope.",
-			"evidence": [
-				"summary is the text of merged PR #295's commit message",
-				"status field is 'unknown' with no failure or pending action indicated"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-18T23:28:50.129Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
