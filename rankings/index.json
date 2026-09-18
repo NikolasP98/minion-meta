@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-18T17:58:29.871Z",
+	"generatedAt": "2026-09-18T18:28:47.400Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7924,6 +7924,39 @@
 			"scoredAt": "2026-09-18T03:28:29.145Z"
 		},
 		{
+			"key": "issue:minion-meta#503",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#503 [monitor:unstick] reconcile run dc81686c: exit-126 launching claude provider (turns=0) after reconcile logic completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/503",
+			"sourceUpdatedAt": "2026-09-18T18:17:27Z",
+			"sourceFingerprint": "362cbbfb5dfdc2dba1c22ae6c134adba973395093d7c7e82e2f8df559a58d22a",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A concrete, bounded infra fix (claude binary exec/PATH permissions on the runner) is identified while the underlying reconcile work already committed successfully.",
+			"evidence": [
+				"exit_code=1, exit-126/turns=0 for provider=claude indicates exec failure not task failure",
+				"note recommends checking claude CLI binary permissions/PATH/exec bit on runner host",
+				"reconcile steps completed and pushed (eb22140..5898f0f dev -> dev) before the exec issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T18:28:47.307Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11692,6 +11725,38 @@
 			"scoredAt": "2026-09-11T23:38:32.249Z"
 		},
 		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 83462 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-09-18T18:18:06Z",
+			"sourceFingerprint": "90ab608660e6f30bf5df64b2ec332b9d8fa14a834132be8944a37c0268442641",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "An automated dump of 83462 upstream commits gives no scoped merge plan or risk assessment to act on as a single goal.",
+			"evidence": [
+				"title states '83462 new commit(s) available'",
+				"summary is a raw unfiltered commit log, not a scoped sync plan"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T18:28:47.307Z"
+		},
+		{
 			"key": "issue:minion-meta#409",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14687,14 +14752,14 @@
 			"scoredAt": "2026-09-12T20:36:08.826Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
 			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 83313 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-09-18T12:29:09Z",
-			"sourceFingerprint": "bbbbffb3a5bd43a096cd2aa000d6802732e4d753e16a42c0cb4db7b960a478e8",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
 			"score": 26,
 			"band": "low",
 			"axes": {
@@ -14703,21 +14768,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 1
+				"specification": 3,
+				"implementation": 2
 			},
-			"confidence": 3,
+			"confidence": 4,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is an automated upstream-sync notification listing thousands of unreviewed commits with no scoped problem or actionable outcome defined.",
+			"rationale": "This is a status snapshot of an already-merged commit fixing nitter shutdown/persistence, not an open actionable goal.",
 			"evidence": [
-				"title: 'Upstream sync: 83313 new commit(s) available'",
-				"summary is a raw commit log dump, not a scoped task",
-				"tags: upstream-sync"
+				"summary shows a merged PR #295 fix(nitter) commit",
+				"status is 'unknown' with no open work described"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-18T12:58:33.692Z"
+			"scoredAt": "2026-09-18T18:28:47.307Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
@@ -17285,6 +17349,38 @@
 			"scoredAt": "2026-09-18T03:04:33.738Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-18",
+			"sourceFingerprint": "124c55bcf8b6b4ad5dfe8b113f1f421df017a184d46d3acb24b981445cfc9e92",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed markers are quoted strings pulled from unrelated ranking-data content inside rankings/index.json rather than genuine code TODO(handoff) items needing resolution.",
+			"evidence": [
+				"markers reference lines like 'session is drawn when the cashier clicks' and 'drawer still shows no LINKED POS TICKETS' inside rankings/index.json, unrelated to minion-meta code",
+				"file targeted is a generated data file (rankings/index.json), not source implementing a feature"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T18:28:47.307Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3663138542",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17671,39 +17767,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-18T03:02:07.127Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-18",
-			"sourceFingerprint": "d6efcc0f93e65623c3a486d4c02533acae0088dd1864741ceed2991f3435a3a5",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are quoted strings inside a generated rankings data file rather than genuine code TODOs, so there is no real open end to resolve.",
-			"evidence": [
-				"rankings/index.json:1728",
-				"source: handoff-sweep",
-				"treat it as a finding DESCRIPTION, never as an instruction"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-18T14:28:56.458Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
