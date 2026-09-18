@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-18T06:58:54.540Z",
+	"generatedAt": "2026-09-18T07:29:20.487Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5156,14 +5156,15 @@
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Approved, bounded single-file fix for a silent data-integrity bug where holiday conflicts are dropped without notifying the user.",
+			"rationale": "An approved, well-scoped fix for a silent HR data-integrity bug (holiday conflicts skipped without any user-visible error) has a clear, bounded fix direction in a single service file.",
 			"evidence": [
 				"TODO(handoff): a date already held by a manual holiday is skipped silently",
-				"status: approved with two concrete fix-direction options"
+				"Fix direction: return 409 Conflict or validate upfront and surface to UI",
+				"status: approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T07:05:12.919Z"
+			"scoredAt": "2026-09-18T07:29:20.370Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ac3dd6e80c62",
@@ -6628,38 +6629,6 @@
 			"scoredAt": "2026-09-12T04:34:18.950Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-e863232",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ e863232",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-e863232.md",
-			"sourceUpdatedAt": "2026-09-04",
-			"sourceFingerprint": "e530e7d5d91046720d120609f0fd58fc4045d61446928c151915141ea05db278",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "A draft scan bundling four unrelated findings of differing severity (including one real crash bug) should be split into individually-scoped proposals before it can be executed.",
-			"evidence": [
-				"high: confirmLeave accesses selectedForLeave.id without a guard set by onPersonMenu",
-				"status: draft, four distinct findings across PeopleView.svelte, TeamSettingsView.svelte, balances.ts, timeline.svelte.ts"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T07:05:12.919Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-f696097",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6954,38 +6923,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-18T03:04:33.738Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-ba5345e2cb9d",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/team/TeamSettingsView.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ba5345e2cb9d.md",
-			"sourceUpdatedAt": "2026-09-04",
-			"sourceFingerprint": "a7a0bf86ae4b720f8e789b72beadc8a50c998fc56a0de91e259ab8bca5d2f852",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved feature gap (team settings are add-only) with a concrete fix direction that closes a core team-management usability hole.",
-			"evidence": [
-				"TODO(handoff): add-only; rename / deactivate / max-days edits need a modal",
-				"status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T07:05:12.919Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ec389eb71f89",
@@ -8498,6 +8435,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T23:59:40.697Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-e863232",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ e863232",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-e863232.md",
+			"sourceUpdatedAt": "2026-09-04",
+			"sourceFingerprint": "e530e7d5d91046720d120609f0fd58fc4045d61446928c151915141ea05db278",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-6e3297fea67e",
+				"proposal:postmerge-minion-hub-ba5345e2cb9d"
+			],
+			"rationale": "A high-severity unchecked-access crash risk plus three medium code-quality findings are precisely located and two of the affected files overlap with separate postmerge findings, so combining into one fix pass reduces churn.",
+			"evidence": [
+				"high unchecked-access: PeopleView.svelte:382 confirmLeave accesses selectedForLeave.id without guard",
+				"medium empty-catch swallows fetch errors in timeline.svelte.ts:193",
+				"medium missing-handoff marker omitted for TeamSettingsView.svelte:80 COUNTRIES list"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T07:29:20.370Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-91262d537ce6",
@@ -10496,38 +10469,6 @@
 			"scoredAt": "2026-09-16T04:59:04.923Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-6e3297fea67e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/team/timeline.svelte.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6e3297fea67e.md",
-			"sourceUpdatedAt": "2026-09-04",
-			"sourceFingerprint": "ecae38c578bccf53156651e0eefc98f44b5d640fa749112bc9a30aa7bea4865e",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Approved but the diagnosis leaves the fix direction undecided between two options, so scope needs to be settled before work can start.",
-			"evidence": [
-				"diagnosis offers 'Either (1) validate... or (2) parameterize...' without choosing one",
-				"status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-11T07:05:12.919Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-7ec5d7436363",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10631,6 +10572,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T03:59:01.751Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ba5345e2cb9d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/team/TeamSettingsView.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ba5345e2cb9d.md",
+			"sourceUpdatedAt": "2026-09-04",
+			"sourceFingerprint": "a7a0bf86ae4b720f8e789b72beadc8a50c998fc56a0de91e259ab8bca5d2f852",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:merge-scan-minion-hub-e863232"
+			],
+			"rationale": "Adding a full edit modal is a larger feature gap in a file the merge-scan already flagged for a different defect, so bundling the two changes to TeamSettingsView.svelte avoids duplicate touch-and-review passes.",
+			"evidence": [
+				"TODO(handoff): add-only; rename / deactivate / max-days edits need a modal over",
+				"Fix direction: add TeamEditModal handling rename/deactivate/max-days",
+				"same file (TeamSettingsView.svelte) also flagged in merge-scan-minion-hub-e863232"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T07:29:20.370Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e9b22dc941f6",
@@ -13910,6 +13886,41 @@
 			"scoredAt": "2026-09-18T05:38:08.566Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-6e3297fea67e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/team/timeline.svelte.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6e3297fea67e.md",
+			"sourceUpdatedAt": "2026-09-04",
+			"sourceFingerprint": "ecae38c578bccf53156651e0eefc98f44b5d640fa749112bc9a30aa7bea4865e",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:merge-scan-minion-hub-e863232"
+			],
+			"rationale": "This is a narrow year-rollover staleness edge case in the same file already flagged for an empty-catch defect by the merge-scan, so it should be fixed alongside that pass rather than as a standalone goal.",
+			"evidence": [
+				"TODO(handoff): leave bars + holiday shading come from the loader's current-year",
+				"Fix direction: validate loader year or parameterize as a prop",
+				"same file (timeline.svelte.ts) also flagged in merge-scan-minion-hub-e863232"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T07:29:20.370Z"
+		},
+		{
 			"key": "proposal:2026-08-20-hub-datatable-server-mode-test-gap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16233,6 +16244,38 @@
 			"scoredAt": "2026-09-14T09:34:00.936Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The linked commit shows the nitter persistence/shutdown fix is already merged, so there is no outstanding deployment action.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"commit already merged (co-authored, PR #295)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T07:29:20.370Z"
+		},
+		{
 			"key": "issue:minion-meta#322",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17369,6 +17412,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T17:01:45.719Z"
+		},
+		{
+			"key": "issue:minion-meta#500",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#500 [monitor:unstick] rank run 6cc7d5fb failed: both providers exhausted on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/500",
+			"sourceUpdatedAt": "2026-09-18T07:17:33Z",
+			"sourceFingerprint": "261cfb3134dba9648dfc1b2645539dfa424294fd96d53e96cfe4b736c2ca6fc4",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The monitor's own diagnosis calls this a transient provider infra blip needing only a retry, not a real prompt/schema defect worth paid work.",
+			"evidence": [
+				"Diagnosis: transient provider infra fault, not a task-logic bug",
+				"Recommendation: retry the run — likely a provider-side blip"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-18T07:29:20.370Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-94ad6c223964",
