@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-19T21:29:02.160Z",
+	"generatedAt": "2026-09-19T21:58:37.613Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -666,40 +666,6 @@
 			"scoredAt": "2026-09-16T19:08:57.525Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-7440051c7752",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/job-stock-backend-fault.fixture.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7440051c7752.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "333a288c11b0e27ec8ae6aca8e50c31aae5f96ed6f6908a15635452c3e5ec2e9",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-570b9d39c7eb"
-			],
-			"rationale": "A postgres-js crash on backend loss breaks all minion_hub dashboards during DB outages and originates from the same PR #269 job-stock work as the sibling booking-transaction finding, warranting one combined durability goal.",
-			"evidence": [
-				"approved status, references meta remediation doc HDS-05",
-				"diagnosis: leaves hub in unrecoverable state during database outages, breaking reliability for all dashboards"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T21:35:19.360Z"
-		},
-		{
 			"key": "spec:2026-08-22-hub-load-nav-performance-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -966,6 +932,38 @@
 			"scoredAt": "2026-09-16T23:58:42.118Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-7440051c7752",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/job-stock-backend-fault.fixture.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7440051c7752.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "333a288c11b0e27ec8ae6aca8e50c31aae5f96ed6f6908a15635452c3e5ec2e9",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A postgres-js null-socket crash on backend loss leaves minion_hub unrecoverable during DB outages, affecting all dashboards, and a fixture already exists to reproduce it.",
+			"evidence": [
+				"'Qualify/fix postgres-js nextWrite null-socket crash on backend loss before rollout'",
+				"leaves minion_hub in an unrecoverable state during database outages, breaking reliability for all dashboards"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T21:58:37.512Z"
+		},
+		{
 			"key": "spec:2026-08-28-shared-db-encryption-key-convergence-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1162,40 +1160,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T02:32:02.624Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-570b9d39c7eb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-570b9d39c7eb.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "70cc634a565204503028ec25aa468164fd1ae205b763227c7a41c65a20d5ee48",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-7440051c7752"
-			],
-			"rationale": "This booking/stock transactional-consistency bug from PR #269 shares root cause territory with the sibling job-stock-backend-fault finding from the same PR and should be resolved as one durability goal.",
-			"evidence": [
-				"approved status, same merged PR #269 as the sibling fixture finding",
-				"diagnosis: stock release not in same transaction as booking commit, risking overbooking"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T21:35:19.360Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-a4e7e5bce6b1",
@@ -2194,6 +2158,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T05:58:55.533Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-570b9d39c7eb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-570b9d39c7eb.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "70cc634a565204503028ec25aa468164fd1ae205b763227c7a41c65a20d5ee48",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A clear inventory-consistency bug where stock release isn't committed atomically with the booking, risking overbooking or stranded reservations, with a concrete transactional fix direction.",
+			"evidence": [
+				"TODO: 'Admit stock release durably with the booking commit'",
+				"fix direction: release stock in the same database transaction as the booking state change"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T21:58:37.512Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-774c6bbb4186",
@@ -9109,38 +9105,6 @@
 			"scoredAt": "2026-09-19T02:34:16.963Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-2e7588be9b25",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in tests/fixtures/workshop-accessibility/README.md (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2e7588be9b25.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "56034dbd7f5c9023306e1bfd980f62713b1224103a3a393e9289b7eb5428d534",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved post-merge finding on the workshop canvas gives a concrete WCAG motion-accessibility gap with a clear fix direction affecting all workshop users.",
-			"evidence": [
-				"approved status, merged PR #270 in minion_hub",
-				"fix direction: motion/camera test matrix with Playwright E2E and ARIA assertions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T21:35:19.360Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-d3e0b507af92",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10488,6 +10452,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-18T23:58:59.402Z"
+		},
+		{
+			"key": "issue:minion-meta#405",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#405 [monitor:unstick] reconcile proposals - run 7768f84a stuck on exit-126 claude-agent step",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/405",
+			"sourceUpdatedAt": "2026-09-12T21:18:06Z",
+			"sourceFingerprint": "1a1cb051d243dca96a6a9ed62fe540ef790812121983b8990bcf90f17ff488bf",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#406"
+			],
+			"rationale": "Recurring exit-126/zero-turns infra fault on the reconcile-agent sub-step, but the deterministic pipeline output itself is unaffected and no fix has been executed yet.",
+			"evidence": [
+				"exit 126 with 0 turns, 0 permission_denials",
+				"identical signature recurs 3 times in this batch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T21:58:37.512Z"
+		},
+		{
+			"key": "issue:minion-meta#406",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#406 [monitor:unstick] reconcile proposals - run 237c07d5 stuck on exit-126 claude-agent step",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/406",
+			"sourceUpdatedAt": "2026-09-12T21:18:07Z",
+			"sourceFingerprint": "5d4d8ed4ce9867ebfff2a5b1dd52728f018c326ed5cb4823c9cce25a6d1ce1e4",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#405"
+			],
+			"rationale": "Same exit-126/zero-turns recurring infra signature as #405, should be consolidated into one host-classifier/infra-fix goal.",
+			"evidence": [
+				"Same pattern as run 7768f84a and 0d4aaf7d",
+				"proposals/index.json written and pushed despite the sub-step error"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T21:58:37.512Z"
 		},
 		{
 			"key": "issue:minion-meta#430",
@@ -12490,38 +12522,6 @@
 			"scoredAt": "2026-09-14T09:38:46.333Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The referenced nitter persistence/drain-shutdown fix is already merged, leaving no pending deployment action.",
-			"evidence": [
-				"commit message: fix(nitter): serialize persistence and drain poller shutdown",
-				"co-authored, already committed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-19T21:29:02.048Z"
-		},
-		{
 			"key": "issue:minion-meta#436",
 			"kind": "issue",
 			"stage": "proposal",
@@ -13530,74 +13530,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
-		},
-		{
-			"key": "issue:minion-meta#405",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#405 [monitor:unstick] reconcile proposals - run 7768f84a stuck on exit-126 claude-agent step",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/405",
-			"sourceUpdatedAt": "2026-09-12T21:18:06Z",
-			"sourceFingerprint": "1a1cb051d243dca96a6a9ed62fe540ef790812121983b8990bcf90f17ff488bf",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#406"
-			],
-			"rationale": "This is one instance of a recurring runner-box exit-126 infra fault that duplicates #406 and should be consolidated into a single infra-fix goal.",
-			"evidence": [
-				"diagnosis states identical exit-126/turns=0 signature also appears on runs 237c07d5 and 0d4aaf7d",
-				"reconcile pipeline itself completed successfully, only the embedded claude sub-step failed to start"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T21:35:19.360Z"
-		},
-		{
-			"key": "issue:minion-meta#406",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#406 [monitor:unstick] reconcile proposals - run 237c07d5 stuck on exit-126 claude-agent step",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/406",
-			"sourceUpdatedAt": "2026-09-12T21:18:07Z",
-			"sourceFingerprint": "5d4d8ed4ce9867ebfff2a5b1dd52728f018c326ed5cb4823c9cce25a6d1ce1e4",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#405"
-			],
-			"rationale": "Same recurring exit-126 zero-turn signature as #405, warranting one combined infra-fix goal instead of duplicate tickets.",
-			"evidence": [
-				"same pattern as run 7768f84a and 0d4aaf7d",
-				"recommends a dedicated host-classifier signature given repeat count"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T21:35:19.360Z"
 		},
 		{
 			"key": "issue:minion-meta#419",
@@ -15498,6 +15430,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T02:32:02.624Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-2e7588be9b25",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in tests/fixtures/workshop-accessibility/README.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2e7588be9b25.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "56034dbd7f5c9023306e1bfd980f62713b1224103a3a393e9289b7eb5428d534",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The TODO only flags a qualification gap in an accessibility test fixture with no bounded scope, so it needs a narrower target before it is actionable paid work.",
+			"evidence": [
+				"marker text: 'Qualify Pixi/Habbo/Rapier motion, camera and relationship/element'",
+				"fix direction proposes an open-ended test matrix across animation, camera, and physics"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T21:58:37.512Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-94ad6c223964",
