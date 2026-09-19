@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-19T08:28:58.815Z",
+	"generatedAt": "2026-09-19T08:58:23.472Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -698,38 +698,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T21:35:19.360Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-eea107ee93eb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/crm-insights-dashboard.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-eea107ee93eb.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "8f5e413b38e3e20b58ede9bee2645a2cc157639c8b3a4440bc414ae83a3c1e09",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved, clearly-specified fix addresses a multi-tenant data isolation break in the merged CRM insights dashboard.",
-			"evidence": [
-				"diagnosis: unscoped rollups mix CRM metrics across all owners, breaking multi-tenant isolation",
-				"status: approved with explicit fix direction (owner_id grouping)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T08:34:52.564Z"
 		},
 		{
 			"key": "spec:2026-08-22-hub-load-nav-performance-spec",
@@ -4264,6 +4232,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-18T22:29:06.640Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-eea107ee93eb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/crm-insights-dashboard.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-eea107ee93eb.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "8f5e413b38e3e20b58ede9bee2645a2cc157639c8b3a4440bc414ae83a3c1e09",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A merged PR left an unscoped CRM rollup query that mixes data across owners, breaking multi-tenant isolation, with a clear fix direction and location.",
+			"evidence": [
+				"Unscoped rollups mix CRM metrics across all owners/users, breaking multi-tenant isolation",
+				"TODO(handoff): scope word-frequency/sentiment/win-index rollups by owner",
+				"file: src/server/services/crm-insights-dashboard.service.ts:40"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T08:58:23.378Z"
 		},
 		{
 			"key": "spec:2026-08-13-crm-customers-server-pagination-spec",
@@ -14791,38 +14792,6 @@
 			"scoredAt": "2026-09-19T03:58:43.645Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This deployment entry only points to an already-merged commit fixing nitter persistence/shutdown handling, with no outstanding action described.",
-			"evidence": [
-				"commit message: fix(nitter): serialize persistence and drain poller shutdown",
-				"status: unknown, no pending deployment task named"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-19T08:28:58.699Z"
-		},
-		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -16805,17 +16774,17 @@
 				"specification": 3,
 				"implementation": 2
 			},
-			"confidence": 6,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Automated monitor intake shows the transient push failure already requeued successfully with a 201 response.",
+			"rationale": "A single transient push failure that was automatically requeued and returned success with no recurring pattern shown.",
 			"evidence": [
-				"fingerprint unstick-transient-68142f89",
-				"note: push failed; requeue -> 201 success"
+				"note=push failed; requeue -> 201",
+				"class=C"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T08:34:52.564Z"
+			"scoredAt": "2026-09-19T08:58:23.378Z"
 		},
 		{
 			"key": "issue:minion-meta#402",
