@@ -65,15 +65,15 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10858
 - `NikolasP98/minion-meta@dev rankings/index.json:11677` — reopened mid-exit — cancel the pending close",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11677
-- `NikolasP98/minion-meta@dev rankings/index.json:12553` — prompt-driven protocol instead of native tool_use — replace",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12553
-- `NikolasP98/minion-meta@dev rankings/index.json:13210` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13210
-- `NikolasP98/minion-meta@dev rankings/index.json:13307` — define fold-spanning event rendering when local end <= start",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13307
-- `NikolasP98/minion-meta@dev rankings/index.json:13375` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13375
-- `NikolasP98/minion-meta@dev rankings/index.json:14194` — leave bars + holiday shading come from the loader's current-year",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14194
+- `NikolasP98/minion-meta@dev rankings/index.json:12521` — prompt-driven protocol instead of native tool_use — replace",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12521
+- `NikolasP98/minion-meta@dev rankings/index.json:13146` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13146
+- `NikolasP98/minion-meta@dev rankings/index.json:13243` — define fold-spanning event rendering when local end <= start",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13243
+- `NikolasP98/minion-meta@dev rankings/index.json:13311` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13311
+- `NikolasP98/minion-meta@dev rankings/index.json:14130` — leave bars + holiday shading come from the loader's current-year",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14130
 - `NikolasP98/minion-meta@dev rankings/index.json:16336` — nothing links here with these params yet",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16336
