@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-19T18:28:21.866Z",
+	"generatedAt": "2026-09-19T18:58:23.688Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3455,39 +3455,6 @@
 			"scoredAt": "2026-09-19T02:35:31.767Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-25e2bb7",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 25e2bb7",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-25e2bb7.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "fca373cc727b9a3be6d4afb72144e1eed12348ef3bd65547aed495576b39a11f",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Merge-scan surfaced multiple specific high-severity defects (unchecked-access crashes, empty-catch error swallowing) in minion_hub with exact file:line locations, making this bounded and actionable.",
-			"evidence": [
-				"high: crm/customers/+page.svelte:61 spreads c.tag_ids without null check, throws at runtime",
-				"high: crm/[contactId]/+page.svelte:891 passes possibly-undefined b.startTime to fmtBooking()",
-				"high: upload.ts:125 catch block silently swallows DELETE error"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T18:34:39.988Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-afd023b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4028,6 +3995,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T06:58:50.347Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-25e2bb7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 25e2bb7",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-25e2bb7.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "fca373cc727b9a3be6d4afb72144e1eed12348ef3bd65547aed495576b39a11f",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Multiple high-severity findings (empty-catch swallowing errors, unchecked-access causing runtime crashes) across critical CRM/attachment/booking paths warrant triage and fixes.",
+			"evidence": [
+				"high: c.tag_ids spread without null check throws at runtime",
+				"high: b.startTime unchecked causes fmtBooking() to fail",
+				"high: status update fetch in cancelInstead not checked on critical delete operation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T18:58:23.592Z"
 		},
 		{
 			"key": "pr:minion-base#43",
@@ -13508,6 +13508,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged nitter persistence/shutdown fix with no indication of ongoing failure or urgency beyond routine deployment health tracking.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown (#295)",
+				"status: unknown, tags: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T18:58:23.592Z"
 		},
 		{
 			"key": "issue:minion-meta#405",
