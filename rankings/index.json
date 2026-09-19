@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-19T00:28:47.352Z",
+	"generatedAt": "2026-09-19T00:58:50.019Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1273,41 +1273,6 @@
 			"scoredAt": "2026-09-18T23:28:50.129Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-c5d86be403fa",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/bg-runtime.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c5d86be403fa.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "feb2cc6d65c1b7d204c247e06620d434984208007b49b17319cbc2521c903190",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-c399783e15f5"
-			],
-			"rationale": "Missing JobExecution ownership gates on four ingest/corpus services is a real authorization and reliability gap, but the exact gate rule depends on an external HDS-05 proposal not yet confirmed.",
-			"evidence": [
-				"marker: 'Adopt JobExecution ... their domain effects still need ownership gates'",
-				"diagnosis notes 'the proposal likely defines the exact gate rule' (unconfirmed)",
-				"also caught by independent handoff-ledger sweep"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T00:34:39.390Z"
-		},
-		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1996,6 +1961,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T03:29:07.866Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-c5d86be403fa",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/bg-runtime.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c5d86be403fa.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "feb2cc6d65c1b7d204c247e06620d434984208007b49b17319cbc2521c903190",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved finding, corroborated by a separate handoff-ledger sweep, flags missing ownership gates and JobExecution tracking on four business-critical data-mutation services.",
+			"evidence": [
+				"without ownership gates, unauthorized agents could trigger domain effects",
+				"spans statement_ingest, brain_ingest, brain_corpus_conversations/whatsapp, brain_corpus_business",
+				"also caught by the factory handoff-ledger sweep (duplicate signal)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T00:58:49.905Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-capability-separation-spec",
@@ -7043,38 +7041,6 @@
 			"scoredAt": "2026-09-16T04:28:50.710Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-c1b3044762bb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/finance-statements.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c1b3044762bb.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "7682aec710bf82b606bd084bd2ce4bab0b3e99ebfd167951dfbe380ac4729da2",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Blob/DB desync on failed or concurrent finance-statement imports risks orphaned storage and billing drift but has no stated deadline or rollout blocker.",
-			"evidence": [
-				"TODO(handoff) marker in finance-statements.service.ts",
-				"fix direction covers transaction wrapping, GC job, and DB locking but is auto-generated diagnosis, not a scoped plan"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T00:34:39.390Z"
-		},
-		{
 			"key": "pr:minion (gateway)#257",
 			"kind": "pr",
 			"stage": "development",
@@ -8496,6 +8462,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-12T03:10:32.723Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-c1b3044762bb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/finance-statements.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c1b3044762bb.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "7682aec710bf82b606bd084bd2ce4bab0b3e99ebfd167951dfbe380ac4729da2",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved post-merge finding with a clear definition of done and a bounded fix direction (transaction wrap plus GC job) for an orphaned-blob/DB desync risk.",
+			"evidence": [
+				"TODO(handoff): Reconcile uploaded blobs after failed/concurrent import creation",
+				"status: approved",
+				"fix direction: wrap blob uploads in a transaction, add GC job keyed on import ID"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T00:58:49.905Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c371d6639113",
@@ -11675,38 +11674,6 @@
 			"scoredAt": "2026-09-18T23:58:59.402Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 83462 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-09-18T18:18:06Z",
-			"sourceFingerprint": "90ab608660e6f30bf5df64b2ec332b9d8fa14a834132be8944a37c0268442641",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "An automated dump of 83462 upstream commits gives no scoped merge plan or risk assessment to act on as a single goal.",
-			"evidence": [
-				"title states '83462 new commit(s) available'",
-				"summary is a raw unfiltered commit log, not a scoped sync plan"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-18T18:28:47.307Z"
-		},
-		{
 			"key": "issue:minion-meta#409",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14738,38 +14705,6 @@
 			"scoredAt": "2026-09-12T20:36:08.826Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Deployment health entry only restates an already-merged commit message with no distinct actionable scope.",
-			"evidence": [
-				"status: unknown",
-				"summary is the merged nitter fix commit body, not a task description"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-19T00:28:47.257Z"
-		},
-		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -15551,6 +15486,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T05:58:42.726Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 83664 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-09-19T00:33:42Z",
+			"sourceFingerprint": "b97ca403c3bb44fc6bfd4e488d568d573a6d6f365ef6a56d09d90fd66566fc4b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated upstream-sync notification listing thousands of raw commits with no scoped task or verifiable outcome, so it is not actionable work.",
+			"evidence": [
+				"title: '83664 new commit(s) available'",
+				"summary is a raw commit log with no defined scope or acceptance criteria"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T00:58:49.905Z"
 		},
 		{
 			"key": "issue:minion-meta#417",
