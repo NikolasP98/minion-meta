@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-19T22:28:38.201Z",
+	"generatedAt": "2026-09-19T22:58:22.829Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6803,41 +6803,6 @@
 			"scoredAt": "2026-09-18T14:28:56.458Z"
 		},
 		{
-			"key": "issue:minion-meta#408",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#408 [monitor:unstick] reconcile a0747071: claude provider exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/408",
-			"sourceUpdatedAt": "2026-09-12T22:18:05Z",
-			"sourceFingerprint": "415830db44788b6ee6a22bf2fc58a850f1e895a5023dc2cff8012f976cdaf736",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#409"
-			],
-			"rationale": "This is one of five identical claude-CLI exit-126 infra faults today and should become a single host-classifier/infra-check goal together with #409 rather than two separate items.",
-			"evidence": [
-				"Identical signature seen on 4 other reconcile runs today (4ccfc914, 7768f84a, 237c07d5, 0d4aaf7d)",
-				"run did not reach the proposals-write/push step",
-				"Recommendation: add a host classifier signature for provider=claude exit-126 turns=0"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T22:34:38.988Z"
-		},
-		{
 			"key": "issue:minion-meta#443",
 			"kind": "issue",
 			"stage": "proposal",
@@ -9204,6 +9169,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:31:14.559Z"
+		},
+		{
+			"key": "issue:minion-meta#408",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#408 [monitor:unstick] reconcile a0747071: claude provider exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/408",
+			"sourceUpdatedAt": "2026-09-12T22:18:05Z",
+			"sourceFingerprint": "415830db44788b6ee6a22bf2fc58a850f1e895a5023dc2cff8012f976cdaf736",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#409"
+			],
+			"rationale": "Recurring claude CLI exit-126 across 5 reconcile runs indicates a box-level infra fault needing a host check, and this run did not complete its push so may need retry.",
+			"evidence": [
+				"exit-126 turns=0 seen on 5 reconcile runs in a 2.5h window",
+				"this run did not reach proposals-write/push step"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T22:58:22.730Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-8b65d2a",
@@ -11722,7 +11721,7 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 7,
+				"specification": 6,
 				"implementation": 3
 			},
 			"confidence": 6,
@@ -11730,15 +11729,14 @@
 			"relatedKeys": [
 				"issue:minion-meta#408"
 			],
-			"rationale": "Same recurring claude-CLI exit-126 infra signature as #408 but with no data loss and no retry needed, so it should merge into the same host-classifier goal rather than stand alone.",
+			"rationale": "Same recurring exit-126 signature but this run's core work (push, proposals write) already succeeded so it's lower urgency and should be merged into one host-fault investigation goal.",
 			"evidence": [
-				"same as 4 other reconcile runs today (a0747071, 7768f84a, 237c07d5, 0d4aaf7d)",
-				"no data appears lost (push succeeded), so no retry needed for this run specifically",
-				"Worth adding a host classifier signature for provider=claude exit-126 turns=0"
+				"push succeeded and proposals/index.json written before error",
+				"recommendation states no retry needed for this specific run"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-12T22:34:38.988Z"
+			"scoredAt": "2026-09-19T22:58:22.730Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-merge-time-change-ledger",
@@ -14845,38 +14843,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T03:58:43.645Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged commit fixing nitter persistence/shutdown with no open problem statement or pending action.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain shutdown (#295)",
-				"summary is a completed, merged commit message"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-19T22:28:38.069Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
