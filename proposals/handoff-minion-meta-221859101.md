@@ -65,13 +65,13 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11462
 - `NikolasP98/minion-meta@dev rankings/index.json:12242` — prompt-driven protocol instead of native tool_use — replace",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12242
-- `NikolasP98/minion-meta@dev rankings/index.json:12899` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12899
-- `NikolasP98/minion-meta@dev rankings/index.json:12996` — define fold-spanning event rendering when local end <= start",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12996
-- `NikolasP98/minion-meta@dev rankings/index.json:13064` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13064
-- `NikolasP98/minion-meta@dev rankings/index.json:13947` — leave bars + holiday shading come from the loader's current-year",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13947
-- `NikolasP98/minion-meta@dev rankings/index.json:16057` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16057
+- `NikolasP98/minion-meta@dev rankings/index.json:12867` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12867
+- `NikolasP98/minion-meta@dev rankings/index.json:12964` — define fold-spanning event rendering when local end <= start",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12964
+- `NikolasP98/minion-meta@dev rankings/index.json:13032` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13032
+- `NikolasP98/minion-meta@dev rankings/index.json:13882` — leave bars + holiday shading come from the loader's current-year",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13882
+- `NikolasP98/minion-meta@dev rankings/index.json:16024` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16024
