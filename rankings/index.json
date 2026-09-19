@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-19T05:16:12.219Z",
+	"generatedAt": "2026-09-19T05:22:07.447Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4780,6 +4780,114 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T22:28:49.218Z"
+		},
+		{
+			"key": "issue:minion-meta#507",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#507 [monitor:unstick] reconcile proposals failed to launch agent (run 1f964451, minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/507",
+			"sourceUpdatedAt": "2026-09-19T05:17:56Z",
+			"sourceFingerprint": "a7790ced40856a5d6bfaf692d3757522a8d00f0b6dd6b3a8e5ace4d2800f85c6",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#508",
+				"issue:minion-meta#509"
+			],
+			"rationale": "Same exit-126/turns=0 agent-launch signature reported three times within 40 minutes should become one host-infra fix goal rather than three tickets.",
+			"evidence": [
+				"exit-126 with turns=0 for claude provider, agent never started a turn",
+				"reconcile script logic itself completed fully (proposals/index.json written, git push succeeded)",
+				"identical signature also seen on runs c2ceab64 and e2c61ecc same hour"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T05:22:07.345Z"
+		},
+		{
+			"key": "issue:minion-meta#508",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#508 [monitor:unstick] reconcile proposals failed to launch agent (run c2ceab64, minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/508",
+			"sourceUpdatedAt": "2026-09-19T05:17:57Z",
+			"sourceFingerprint": "3d652851423c4c48dd1082d0ce6c4886ccd8c30a81823169ec307f6bd30f2f5a",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#507",
+				"issue:minion-meta#509"
+			],
+			"rationale": "Duplicate exit-126/turns=0 runner-launch failure signature already tracked in #507/#509 and should be consolidated into a single host-classifier fix goal.",
+			"evidence": [
+				"third occurrence of identical exit-126/turns=0 signature this hour",
+				"reconcile script's own work (handoff refreshes, proposals/index.json) completed successfully",
+				"recommended fix is checking runner box claude CLI install/permissions/PATH"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T05:22:07.345Z"
+		},
+		{
+			"key": "issue:minion-meta#509",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#509 [monitor:unstick] reconcile proposals failed to launch agent (run e2c61ecc, minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/509",
+			"sourceUpdatedAt": "2026-09-19T05:17:58Z",
+			"sourceFingerprint": "6519d77f24f5e55ca1d6467a26fef9ba0053c983bb2c75491d598805325d9b4e",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#507",
+				"issue:minion-meta#508"
+			],
+			"rationale": "Earliest instance of the same recurring exit-126/turns=0 launch failure as #507/#508, warranting one grouped infra remediation goal.",
+			"evidence": [
+				"earliest of three identical-signature failures within the hour",
+				"exit-126 conventionally indicates a not-executable binary on the runner",
+				"recommendation is to add a dedicated host-classifier signature and fix runner CLI install"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T05:22:07.345Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -12284,38 +12392,6 @@
 			"scoredAt": "2026-09-14T09:38:46.333Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The linked commit is an already-merged nitter persistence/shutdown fix, and deployment status is listed as unknown so no current action is evidenced.",
-			"evidence": [
-				"status: unknown",
-				"commit message shows a completed fix for nitter persistence and shutdown draining"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-19T05:16:12.100Z"
-		},
-		{
 			"key": "issue:minion-meta#436",
 			"kind": "issue",
 			"stage": "proposal",
@@ -16062,38 +16138,6 @@
 			"scoredAt": "2026-09-19T03:59:20.386Z"
 		},
 		{
-			"key": "run:minion_hub#35423406138",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35423406138",
-			"sourceUpdatedAt": "2026-09-19T05:14:22Z",
-			"sourceFingerprint": "2c946979c1f5e532055c80d8d25a9ee42d850e12f68c31c65086ce9993141b6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a live in-progress CI run on master with no reported failure or defined task to execute.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-19T05:16:12.100Z"
-		},
-		{
 			"key": "spec:2026-08-17-hub-dead-mirrors-cleanup-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -17963,6 +18007,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T07:28:29.730Z"
+		},
+		{
+			"key": "run:minion_hub#35423677669",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35423677669",
+			"sourceUpdatedAt": "2026-09-19T05:20:21Z",
+			"sourceFingerprint": "d3ba4bbbbae6d358ed0850fa6de65400c027e7c107f770aaa44f4c64781d7c0c",
+			"score": 0,
+			"band": "low",
+			"axes": {
+				"criticality": 0,
+				"importance": 0,
+				"impact": 0
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run on master with no reported failure or actionable problem stated.",
+			"evidence": [
+				"status: in_progress",
+				"summary: push on master, no failure or error detail given"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-19T05:22:07.345Z"
 		}
 	]
 }
