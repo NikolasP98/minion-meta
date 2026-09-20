@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-20T07:51:36.399Z",
+	"generatedAt": "2026-09-20T07:58:40.117Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9899,7 +9899,7 @@
 			"title": "Handoff marker — src/routes/(app)/pos/sell/+page.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1975235460.md",
 			"sourceUpdatedAt": "2026-09-20",
-			"sourceFingerprint": "f7de4d38b0e8402a55822cfde2ff7e0991fe923077d64a76ca013d32c3c794af",
+			"sourceFingerprint": "3279ccce6751b4e12e19ef1c198796ab98bec981396f6d118b09d5422463b792",
 			"score": 43,
 			"band": "low",
 			"axes": {
@@ -9908,22 +9908,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 3,
+				"implementation": 3
 			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-902041533"
-			],
-			"rationale": "Concrete, line-referenced POS bugs affecting revenue-by-product reporting and till-draw timing are scoped and actionable now.",
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Three POS sell-page markers point to real gaps in till-draw timing, revenue-by-product data, and tender visibility, but the fragments lack enough context to spec a fix directly.",
 			"evidence": [
-				"Marker at +page.svelte:427 notes finProductId: null breaks revenue-by-product",
-				"Marker at +page.svelte:371 flags till-side draw firing on click, not submit"
+				"+page.svelte:427 posts finProductId: null affecting revenue-by-product",
+				"+page.svelte:371 till-side draw happens on click, not submit"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T07:28:52.825Z"
+			"scoredAt": "2026-09-20T07:58:39.993Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2222130690",
@@ -15236,6 +15234,37 @@
 			"scoredAt": "2026-09-19T03:58:43.645Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The referenced commit is a nitter persistence/shutdown fix already merged (#295), leaving no outstanding deployment action.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown (#295)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T07:58:39.993Z"
+		},
+		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18395,38 +18424,6 @@
 			"scoredAt": "2026-09-20T00:46:43.335Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-20",
-			"sourceFingerprint": "f52ca6a6a3f9b7e669c19a62caf4d3966348c7398d72a5242926aee718145e2d",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The flagged markers are text fragments harvested from the rankings cache file itself rather than genuine code TODOs, making this non-actionable.",
-			"evidence": [
-				"Target file is rankings/index.json, a generated data artifact, not application source",
-				"Quoted fragments read as rationale text from unrelated proposals rather than distinct issues"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T07:28:52.825Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-87d40ff94ec0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18459,38 +18456,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T03:29:07.866Z"
-		},
-		{
-			"key": "run:minion_hub#35497913755",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35497913755",
-			"sourceUpdatedAt": "2026-09-20T07:49:55Z",
-			"sourceFingerprint": "d2a8b7a3d54335477034f8297a4df252a7f2f1b1715c3a05080a52c4a44db1b9",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Run is still in progress with no failure or other actionable signal yet.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T07:51:36.279Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-815818272",
@@ -18683,6 +18648,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T00:45:40.415Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-20",
+			"sourceFingerprint": "b6c4d4d67d0ecbf1622abf2c8db25c75a8d9b65b4045942a9dff2c8441c9843c",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The flagged file is this ranking system's own data store (rankings/index.json) containing quoted fragments of unrelated past markers, not an application source-code TODO.",
+			"evidence": [
+				"target path is rankings/index.json, not application source",
+				"quoted marker text spans unrelated topics (migrations, holidays, phone failures, POS) indicating recursive noise"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T07:58:39.993Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
