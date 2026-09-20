@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-20T19:28:23.170Z",
+	"generatedAt": "2026-09-20T19:58:41.001Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6083,74 +6083,6 @@
 			"scoredAt": "2026-09-20T05:58:22.414Z"
 		},
 		{
-			"key": "issue:minion-meta#422",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#422 [monitor:unstick] reconcile proposals run 9c3275fd: claude agent exit-126 (never started)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/422",
-			"sourceUpdatedAt": "2026-09-13T19:18:27Z",
-			"sourceFingerprint": "d285271fb211d40b2527a0ab38324dee7afd73421c1b6ecf6860ade15c4e9398",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#423"
-			],
-			"rationale": "Recurring exit-126/turns=0 claude-CLI launch failure across 3 runs points to a broken runner exec environment needing a human check of binary/PATH/permissions.",
-			"evidence": [
-				"'This exact signature ... recurred identically across 3 runs today'",
-				"'a human should check the claude CLI invocation on the runner'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-13T19:28:54.366Z"
-		},
-		{
-			"key": "issue:minion-meta#423",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#423 [monitor:unstick] reconcile proposals run 1943e666: claude agent exit-126 (never started)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/423",
-			"sourceUpdatedAt": "2026-09-13T19:18:27Z",
-			"sourceFingerprint": "13682e0a3f3b302970a6e07c1c74c2d68bc19567b9fbbcc958a3c8b199b81a85",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#422"
-			],
-			"rationale": "Identical exit-126/turns=0 reconcile-agent failure signature as #422, same runner-box diagnosis and remediation.",
-			"evidence": [
-				"run note: 'reconcile agent failed (provider=claude; exit-126; turns=0)'",
-				"deterministic sweep completed and pushed, only the LLM step failed to launch"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-13T19:28:54.366Z"
-		},
-		{
 			"key": "issue:minion-meta#426",
 			"kind": "issue",
 			"stage": "proposal",
@@ -6838,6 +6770,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-18T14:28:56.458Z"
+		},
+		{
+			"key": "issue:minion-meta#422",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#422 [monitor:unstick] reconcile proposals run 9c3275fd: claude agent exit-126 (never started)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/422",
+			"sourceUpdatedAt": "2026-09-13T19:18:27Z",
+			"sourceFingerprint": "d285271fb211d40b2527a0ab38324dee7afd73421c1b6ecf6860ade15c4e9398",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#423"
+			],
+			"rationale": "This is one of two identical exit-126/turns=0 claude-CLI launch failures recurring across the reconcile pipeline and should be merged with its duplicate into a single runner-infra fix goal.",
+			"evidence": [
+				"'exact signature (exit-126, turns=0, provider=claude) recurred identically across 3 runs today'",
+				"recommendation: 'a human should check the claude CLI invocation on the runner'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T19:58:40.906Z"
+		},
+		{
+			"key": "issue:minion-meta#423",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#423 [monitor:unstick] reconcile proposals run 1943e666: claude agent exit-126 (never started)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/423",
+			"sourceUpdatedAt": "2026-09-13T19:18:27Z",
+			"sourceFingerprint": "13682e0a3f3b302970a6e07c1c74c2d68bc19567b9fbbcc958a3c8b199b81a85",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#422"
+			],
+			"rationale": "This report duplicates the same exit-126/turns=0 claude-CLI runner failure as #422 and should be grouped into one infra-fix goal rather than tracked separately.",
+			"evidence": [
+				"identical text and signature to #422: 'reconcile agent failed (provider=claude; exit-126; turns=0)'",
+				"deterministic sweep steps completed normally; only the LLM reconciliation step failed to launch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T19:58:40.906Z"
 		},
 		{
 			"key": "issue:minion-meta#443",
@@ -13140,38 +13140,6 @@
 			"scoredAt": "2026-09-14T09:38:46.333Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Routine merged fix for nitter persistence/shutdown with no indication of ongoing production impact.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"status unknown, updatedAt 2026-09-12"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T19:28:23.070Z"
-		},
-		{
 			"key": "issue:minion-meta#436",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17616,20 +17584,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 4,
+				"implementation": 1
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Single billed provider call failed transiently and the note itself recommends only retrying unless the same batch signature recurs.",
+			"rationale": "The embedded diagnosis identifies a single transient upstream provider flake resolved by simply retrying the run, so it is not an actionable development goal.",
 			"evidence": [
-				"'consistent with genuine upstream provider flakiness rather than a stall or spec bug'",
-				"'Recommendation: retry the rank run as-is'"
+				"diagnosis: 'transient/infra fault on batch 1... not a task-logic failure'",
+				"recommendation: 'retry the rank run as-is'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-13T19:28:54.366Z"
+			"scoredAt": "2026-09-20T19:58:40.906Z"
 		},
 		{
 			"key": "issue:minion-meta#427",
@@ -19037,14 +19005,14 @@
 			"confidence": 9,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Test-fingerprint monitor intake with placeholder content, not real work.",
+			"rationale": "This is an automated monitor-intake test entry with no real content beyond a placeholder 'test detail'.",
 			"evidence": [
-				"fingerprint: `unstick-unknown-test`",
-				"summary body is literally 'test detail'"
+				"title is '[monitor:unstick] test'",
+				"summary body is just 'test detail'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-13T19:28:54.366Z"
+			"scoredAt": "2026-09-20T19:58:40.906Z"
 		},
 		{
 			"key": "issue:minion-meta#445",
