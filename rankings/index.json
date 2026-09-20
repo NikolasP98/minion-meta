@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-20T18:28:15.592Z",
+	"generatedAt": "2026-09-20T18:58:22.500Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -12846,6 +12846,38 @@
 			"scoredAt": "2026-09-18T23:58:59.402Z"
 		},
 		{
+			"key": "issue:minion-meta#419",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#419 [monitor:unstick] reconcile run 94587ecb: provider launch exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/419",
+			"sourceUpdatedAt": "2026-09-13T18:17:29Z",
+			"sourceFingerprint": "64c8505d9e6ca28a75adf6ee30e668f6c68cdc3d7bc4a8244cda24ce05a98c1e",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single provider-launch exit-126 with the underlying merge-scan work already succeeded suggests a transient infra fault worth a retry rather than immediate deep investigation.",
+			"evidence": [
+				"exit_code=1, provider=claude, exit-126, turns=0",
+				"git push to minion-meta:dev succeeded (5c0f519..2473f22)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T18:58:22.384Z"
+		},
+		{
 			"key": "issue:minion-meta#460",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14146,39 +14178,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:40:01.696Z"
-		},
-		{
-			"key": "issue:minion-meta#419",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#419 [monitor:unstick] reconcile run 94587ecb: provider launch exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/419",
-			"sourceUpdatedAt": "2026-09-13T18:17:29Z",
-			"sourceFingerprint": "64c8505d9e6ca28a75adf6ee30e668f6c68cdc3d7bc4a8244cda24ce05a98c1e",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The underlying reconcile work already succeeded and only a single provider-launch exit-126 occurred, so this needs recurrence evidence before becoming a systemic fix goal.",
-			"evidence": [
-				"'merge-scan/reconcile script itself completed fully and successfully'",
-				"'exit code 126 ... before any agent turns ran'",
-				"'Recommendation: retry the run'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-13T18:28:45.114Z"
 		},
 		{
 			"key": "issue:minion-meta#435",
@@ -15502,38 +15501,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T03:58:43.645Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This deployment-health entry only references an already-merged nitter fix commit with no open follow-up scope.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"Co-authored-by merge commit, no unresolved deployment issue stated"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T18:22:48.987Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
