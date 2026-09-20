@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-20T06:06:31.265Z",
+	"generatedAt": "2026-09-20T06:29:03.046Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -699,6 +699,74 @@
 			"scoredAt": "2026-09-14T09:40:01.696Z"
 		},
 		{
+			"key": "issue:minion-meta#528",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#528 [monitor:unstick] reconcile run 72308098: claude provider exit-126, turns=0 after successful scan phase",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/528",
+			"sourceUpdatedAt": "2026-09-20T06:18:12Z",
+			"sourceFingerprint": "615168110457ba73f613cb392aa088d4eb47b01a42af1aaa08cd53ab4bc34876",
+			"score": 75,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#529"
+			],
+			"rationale": "Detailed diagnosis identifies a recurring systemic host-level exec failure killing the reconcile agent immediately after scripted work finishes, matching sibling run #529.",
+			"evidence": [
+				"worker_started_at is only ~0.6s before finished_at, exit-126, turns=0",
+				"same exact signature recurs across the last 5 reconcile runs over ~2 hours"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T06:29:02.941Z"
+		},
+		{
+			"key": "issue:minion-meta#529",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#529 [monitor:unstick] reconcile run 4cf015d9: claude provider exit-126, turns=0 after successful scan phase",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/529",
+			"sourceUpdatedAt": "2026-09-20T06:18:12Z",
+			"sourceFingerprint": "6be7a9175ebbb55a0888032498564f79aa3cf21351db7411ea75828db5a8f1dd",
+			"score": 75,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#528"
+			],
+			"rationale": "Explicitly documented as sibling to run 72308098 (#528) with the identical exit-126/turns=0 launch-to-death timing, pointing to one shared host fault.",
+			"evidence": [
+				"same signature as sibling runs 72308098/2093bda7/5b0520fb/adcc48d8",
+				"recommend checking runner host for claude binary/wrapper exec permissions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T06:29:02.941Z"
+		},
+		{
 			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -831,6 +899,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T00:50:29.342Z"
+		},
+		{
+			"key": "issue:minion-meta#265",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#265 [monitor:unstick] Factory queue wedged",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/265",
+			"sourceUpdatedAt": "2026-09-20T06:17:02Z",
+			"sourceFingerprint": "d9f9fe605f2d0e8ca80a8cf97194338a71c187c29d5f666c8556a0ab214190e3",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The factory automation queue is stalled with nothing running for over 15 minutes, blocking all downstream automated work until the runner is restarted.",
+			"evidence": [
+				"queued run(s) with nothing running for >15m; runner may need a restart",
+				"source: unstick monitor intake"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T06:29:02.941Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-qa-stack-first-pass-defects",
@@ -1476,40 +1576,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T17:01:45.719Z"
-		},
-		{
-			"key": "issue:minion-meta#265",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#265 [monitor:unstick] Factory queue wedged",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/265",
-			"sourceUpdatedAt": "2026-09-16T03:17:02Z",
-			"sourceFingerprint": "a1e55fb3f5281de3e615cfd9c690e1ee9e4e433f14afccbe49b0a687b25486fd",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#443"
-			],
-			"rationale": "A generic queue-stall alert with no diagnosis likely shares the same runner-level root cause as the concurrently reported exit-126 fault.",
-			"evidence": [
-				"queued run(s) with nothing running for >15m; runner may need a restart",
-				"no fingerprint detail beyond the generic symptom"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T03:29:43.796Z"
 		},
 		{
 			"key": "issue:minion-meta#485",
@@ -11378,38 +11444,6 @@
 			"scoredAt": "2026-09-14T09:38:46.333Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 84164 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-09-20T00:40:03Z",
-			"sourceFingerprint": "653882b3f0278a3fa6f4f667ca3989b3bbed3a476139c4e2ff8eb2ae0d6366df",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Upstream sync dump lists tens of thousands of commits with no scoped task, so it can't be actioned as filed.",
-			"evidence": [
-				"84164 new commits listed with no scoped subset",
-				"auto-generated 'upstream-sync' issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T00:44:53.307Z"
-		},
-		{
 			"key": "issue:minion-meta#327",
 			"kind": "issue",
 			"stage": "proposal",
@@ -12740,38 +12774,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:38:46.333Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an already-merged fix commit for nitter shutdown/persistence with no indication of an ongoing deployment problem.",
-			"evidence": [
-				"summary: fix(nitter): serialize persistence and drain shutdown (#295)",
-				"status: unknown, updatedAt 2026-09-12"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T06:06:31.147Z"
 		},
 		{
 			"key": "issue:minion-meta#436",
@@ -16143,6 +16145,38 @@
 			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 84323 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-09-20T06:23:02Z",
+			"sourceFingerprint": "66ecc83dfe409d961a4b631854c5c5009744ddc1e35639e72029d10cfa28394e",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated upstream-sync notification dumping 84k+ raw commit lines with no defined scope or verifiable outcome beyond the sync itself.",
+			"evidence": [
+				"title says 84323 new commit(s) available",
+				"summary is just a raw git log listing, not a scoped task"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T06:29:02.941Z"
+		},
+		{
 			"key": "issue:minion-meta#417",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17854,7 +17888,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-20",
-			"sourceFingerprint": "42eb9973c1bf99ddd9435b81b3e55fb50dd576e74492ba0eeb7ff83be4b1a2da",
+			"sourceFingerprint": "edf210a6472e2e03aab17d00c2cd6581efd628200760b428554f6893a966a2da",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -17863,20 +17897,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 1
+				"specification": 3,
+				"implementation": 2
 			},
-			"confidence": 3,
-			"recommendation": "prune",
+			"confidence": 4,
+			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "The listed markers are quoted text fragments at lines inside a JSON data file rather than coherent actionable code TODOs.",
+			"rationale": "The bundled markers are quoted TODO-like strings copied verbatim from unrelated repos' source into the stored rankings/index.json data file, not live actionable defects in that file itself.",
 			"evidence": [
-				"all markers cite rankings/index.json line numbers, a generated data file",
-				"filed by automated handoff-sweep, status review"
+				"markers span unrelated topics like drizzle migrations, cashier session UI, and Supabase testing",
+				"file targeted is rankings/index.json, a generated data/history artifact"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T06:06:31.147Z"
+			"scoredAt": "2026-09-20T06:29:02.941Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-608985431",
@@ -18649,38 +18683,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T00:51:29.312Z"
-		},
-		{
-			"key": "run:minion_hub#35493283538",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35493283538",
-			"sourceUpdatedAt": "2026-09-20T06:04:32Z",
-			"sourceFingerprint": "4a59324fb2106ec9e6e810b4c1783c1080a065ac08c57fa9987d53a1df5ab369",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine queued CI run with no failure or blocking signal to act on.",
-			"evidence": [
-				"status: queued",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T06:06:31.147Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
