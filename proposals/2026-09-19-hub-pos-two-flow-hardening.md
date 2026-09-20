@@ -264,9 +264,11 @@ staff/viewer logins. The original qualification limits above are historical.
   `Reflect.deleteProperty`, preserving removal rather than assigning undefined.
 - The first full suite exposed a missing expected `workflow` schema column;
   its corrected four-test schema contract passes. A higher-parallelism full run
-  then reported 4,327 passes and one unrelated ACI 5-second timeout. A clean-clone
-  qualification with CI-style retries and lower concurrency is running; no clean
-  full-suite result is claimed until it finishes.
+  then reported 4,327 passes and one unrelated ACI 5-second timeout. Clean-clone
+  qualification at `79a0175a` passed 505 files and 4,305 tests, with 213 skipped,
+  using `--maxWorkers=2 --retry=2`. The production build and Vercel adapter
+  completed using explicit local QA environment settings. Changed-file Prettier,
+  token integrity, and changed-file design debt checks also passed.
 
 Release preparation is isolated at
 `/home/nikolas/.cache/minion-release/pos-hardening-Mvn33h/hub`, branch
@@ -276,3 +278,9 @@ Hub CLAUDE branch prose. Live branch protection requires one approving review.
 The release must not bypass that gate. Production Vercel builds run the migration
 runner before app build; deployment is not complete until its revision, migration
 ledger receipt, and smoke result are verified. No production data writes yet.
+
+Publication: [Hub PR #340](https://github.com/NikolasP98/minion_hub/pull/340)
+at `79a0175a`; [evidence PR #524](https://github.com/NikolasP98/minion-meta/pull/524).
+Hub is ready for review, with a review requested from `minion-agent-bot`.
+Hosted CI and the protected-branch approval remain release gates. The preview
+deployment is not production evidence.

@@ -36,4 +36,10 @@ server policy enforcement. No blocking introduced integrity regression remained.
 
 The reviewer used source inspection and the parent's reported runtime evidence;
 it did not independently rerun the parent's browser or 307-test qualification.
-The spec records remaining qualification and the unrelated full-typecheck error.
+The proposal's follow-up qualification section records the completed browser
+matrix and concurrency probes. The unrelated full-typecheck error was corrected
+without changing cleanup semantics.
+
+Follow-up independent scheduling review found no blockers in the loopback-only
+concurrency harness, deterministic identity-org seed, ten-case registry pairing,
+or test cleanup fix. This review does not replace the protected branch approval.
