@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-20T21:58:50.811Z",
+	"generatedAt": "2026-09-20T22:29:07.265Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6015,38 +6015,6 @@
 			"scoredAt": "2026-09-20T05:58:22.414Z"
 		},
 		{
-			"key": "issue:minion-meta#426",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#426 [monitor:unstick] reconcile proposals run e399b19c: claude agent exit-126 after successful merge-scan",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/426",
-			"sourceUpdatedAt": "2026-09-13T22:17:45Z",
-			"sourceFingerprint": "18aebdf66cf4aa28cafd04c25a313d1aa7ae3f5ece4bbf59dce7225a6c726bce",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Recurring exit-126 host-level infra fault is blocking the reconcile agent across three runs in ~1.5h with a clear, bounded diagnosis and fix path.",
-			"evidence": [
-				"exit 126 turns=0 seen in runs e399b19c, 0efde7a0, 510720bc within ~1.5h",
-				"diagnosis isolates cause to claude binary/wrapper permissions on the worker box, not a spec defect"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-13T22:28:35.204Z"
-		},
-		{
 			"key": "issue:minion-meta#467",
 			"kind": "issue",
 			"stage": "proposal",
@@ -6905,6 +6873,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T19:28:23.070Z"
+		},
+		{
+			"key": "issue:minion-meta#540",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#540 [monitor:unstick] reconcile proposals run 1c493d71 (minion-meta) - claude provider exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/540",
+			"sourceUpdatedAt": "2026-09-20T22:17:47Z",
+			"sourceFingerprint": "ac549e060e5763f868b6770d14401e74ae66f09aa3feab5a1f8c7e750727721e",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#426"
+			],
+			"rationale": "Identical exit-126/turns=0 claude-provider launch failure recurring within hours of a sibling run, pointing to the same unresolved runner-box infra fault as #426.",
+			"evidence": [
+				"reconcile agent step (provider=claude) exited 126 with turns=0",
+				"worker_started_at to finished_at only ~0.6s, consistent with immediate launch failure",
+				"same exact signature recurs in sibling run d56b5e67 ~1h44m earlier"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T22:29:07.159Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
@@ -8810,6 +8813,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T20:58:43.992Z"
+		},
+		{
+			"key": "issue:minion-meta#426",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#426 [monitor:unstick] reconcile proposals run e399b19c: claude agent exit-126 after successful merge-scan",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/426",
+			"sourceUpdatedAt": "2026-09-13T22:17:45Z",
+			"sourceFingerprint": "18aebdf66cf4aa28cafd04c25a313d1aa7ae3f5ece4bbf59dce7225a6c726bce",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#540"
+			],
+			"rationale": "Merge-scan data already committed and pushed successfully; only the downstream claude-provider step failed with exit-126/turns=0, a host-side permission fault, not a spec defect.",
+			"evidence": [
+				"375 proposals written, pushed df1cf4d..e1966b9 to dev, state persisted",
+				"exit 126 with turns=0 permission_denials=0",
+				"same signature seen in two other runs (0efde7a0, 510720bc)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T22:29:07.159Z"
 		},
 		{
 			"key": "issue:minion-meta#429",
@@ -16444,38 +16482,6 @@
 			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged commit (nitter persistence/shutdown fix) with no indication of an open deployment issue or unresolved health concern.",
-			"evidence": [
-				"commit title: fix(nitter): serialize persistence and drain shutdown (#295)",
-				"status: unknown, no failure or incident described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T21:58:50.685Z"
-		},
-		{
 			"key": "issue:minion-meta#437",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18218,7 +18224,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-20",
-			"sourceFingerprint": "52b532733a149adca0c570b506199314133713e846c201692c057f97ed11a78d",
+			"sourceFingerprint": "ceb6508e00c4006aea16ceb37c252752f98925693407e58953032d90a770da21",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -18233,14 +18239,15 @@
 			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a self-referential handoff marker pointing at lines within the rankings/index.json ranking artifact itself rather than a concrete, scoped engineering task.",
+			"rationale": "The listed markers are quoted fragments scraped from rankings/index.json, a generated ranking-data artifact, not actual TODO(handoff) comments in source code, so there is no coherent open end to resolve.",
 			"evidence": [
-				"Filed automatically by the factory handoff-ledger sweep",
-				"marker's open end is resolved and the TODO(handoff) comment removed"
+				"markers point at rankings/index.json lines containing unrelated snippet text (e.g. 'ALTER TABLE', 'cashier clicks', 'LINKED POS TICKETS')",
+				"file targeted is a generated rankings index, not source code",
+				"sweep description says markers are text copied out of repository source but content is clearly ranking-summary text"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T20:28:46.918Z"
+			"scoredAt": "2026-09-20T22:29:07.159Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-608985431",
