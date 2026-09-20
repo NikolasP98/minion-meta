@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-20T14:28:34.401Z",
+	"generatedAt": "2026-09-20T14:58:21.159Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -15404,6 +15404,38 @@
 			"scoredAt": "2026-09-19T03:58:43.645Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a merged commit fixing nitter persistence/shutdown draining, not an open actionable goal.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"commit already authored/merged"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T14:58:21.059Z"
+		},
+		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -16344,38 +16376,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T05:58:42.726Z"
-		},
-		{
-			"key": "issue:minion-meta#418",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#418 [monitor:unstick] run 574d1e71 (minion-meta reconcile) - provider exec failure exit-126",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/418",
-			"sourceUpdatedAt": "2026-09-13T14:17:28Z",
-			"sourceFingerprint": "4a9336574fb2b3c5e466b5525dc2835a23a12477e29d6f67964ab19c3447da16",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A single transient provider exec failure with no confirmed recurrence and an explicit retry-only recommendation is not actionable work.",
-			"evidence": [
-				"exit-126, turns=0, cost_usd=0, isolated to provider agent invocation",
-				"Recommendation: retry the run (likely transient); only escalate if it recurs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-13T14:28:40.121Z"
 		},
 		{
 			"key": "issue:minion-meta#437",
@@ -17468,6 +17468,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T10:58:26.125Z"
+		},
+		{
+			"key": "issue:minion-meta#418",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#418 [monitor:unstick] run 574d1e71 (minion-meta reconcile) - provider exec failure exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/418",
+			"sourceUpdatedAt": "2026-09-13T14:17:28Z",
+			"sourceFingerprint": "4a9336574fb2b3c5e466b5525dc2835a23a12477e29d6f67964ab19c3447da16",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single exit-126 provider-exec failure appears transient/infra-related and the report itself recommends only retrying and watching for recurrence.",
+			"evidence": [
+				"Exit 126 ... consistent with an exec/permissions/environment fault on the worker box",
+				"Recommendation: retry the run (likely transient)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T14:58:21.059Z"
 		},
 		{
 			"key": "issue:minion-meta#421",
