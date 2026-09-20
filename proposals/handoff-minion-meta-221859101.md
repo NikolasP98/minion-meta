@@ -35,8 +35,8 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4266
 - `NikolasP98/minion-meta@dev rankings/index.json:4986` — a date already held by a manual holiday is skipped silently",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4986
-- `NikolasP98/minion-meta@dev rankings/index.json:6504` — provider JSON reader is not byte bounded before res.json()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6504
+- `NikolasP98/minion-meta@dev rankings/index.json:6436` — provider JSON reader is not byte bounded before res.json()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6436
 - `NikolasP98/minion-meta@dev rankings/index.json:8473` — this hasn't been exercised against a live local Supabase",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8473
 - `NikolasP98/minion-meta@dev rankings/index.json:8537` — Reconcile uploaded blobs after failed/concurrent import creation",
