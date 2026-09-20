@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-20T10:28:26.165Z",
+	"generatedAt": "2026-09-20T10:58:26.230Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -16313,6 +16313,38 @@
 			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine merged fix commit (nitter persistence/shutdown) surfaced as deployment health with no indication of ongoing failure.",
+			"evidence": [
+				"title: minion (gateway) deployment health",
+				"summary references a merged PR #295 fix, not an active incident"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T10:58:26.125Z"
+		},
+		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -16343,39 +16375,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T06:29:02.941Z"
-		},
-		{
-			"key": "issue:minion-meta#417",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#417 [monitor:unstick] reconcile proposals run b694e8db: infra launch failure (exit-126, 0 turns)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/417",
-			"sourceUpdatedAt": "2026-09-13T10:17:33Z",
-			"sourceFingerprint": "f75d8adf5fbb34cc94a96acfc3624b9ba974a87d274a9909c369bf4a933c0e8f",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Diagnosis indicates a transient infra/runner issue (exit-126, zero turns) rather than a code defect, so a simple retry is likely sufficient but should be watched for recurrence before investing in a new classifier signature.",
-			"evidence": [
-				"exit code 126, turns=0, permission_denials=0, cost_usd=0",
-				"Recommendation: retry the run -- underlying reconcile work already succeeded",
-				"candidate for new host-classifier signature if it recurs across multiple runs/boxes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-13T10:28:20.884Z"
 		},
 		{
 			"key": "issue:minion-meta#418",
@@ -17468,6 +17467,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T07:51:36.279Z"
+		},
+		{
+			"key": "issue:minion-meta#417",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#417 [monitor:unstick] reconcile proposals run b694e8db: infra launch failure (exit-126, 0 turns)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/417",
+			"sourceUpdatedAt": "2026-09-13T10:17:33Z",
+			"sourceFingerprint": "f75d8adf5fbb34cc94a96acfc3624b9ba974a87d274a9909c369bf4a933c0e8f",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The diagnosis in the issue itself concludes the actual reconcile work succeeded and the exit-126/zero-turn failure is a transient runner/infra glitch warranting only a retry, not scoped remediation work.",
+			"evidence": [
+				"exit code 126, turns=0, permission_denials=0, cost_usd=0",
+				"diagnosis states reconcile sweep completed successfully and recommends retry only"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T10:58:26.125Z"
 		},
 		{
 			"key": "issue:minion-meta#421",
