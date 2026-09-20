@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-20T13:58:16.199Z",
+	"generatedAt": "2026-09-20T14:28:34.401Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -16346,38 +16346,6 @@
 			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged commit fixing nitter persistence/shutdown, not an open actionable goal.",
-			"evidence": [
-				"commit already merged (fix(nitter): serialize persistence and drain shutdown #295)",
-				"status: unknown, no described outstanding problem"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T12:58:25.580Z"
-		},
-		{
 			"key": "issue:minion-meta#418",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17858,6 +17826,38 @@
 			"scoredAt": "2026-09-19T02:29:13.976Z"
 		},
 		{
+			"key": "issue:minion-meta#535",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#535 [monitor:unstick] run 62ff2f55 (minion-meta reconcile) failed to launch agent process: exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/535",
+			"sourceUpdatedAt": "2026-09-20T14:17:27Z",
+			"sourceFingerprint": "e14a587c3a88f099f0fb894478c198ee05b772b971e68404c55840f15ece6f16",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The embedded diagnosis attributes the failure to a transient infra/spawn fault with the substantive reconcile work already completed, and states no spec or repo fix is needed.",
+			"evidence": [
+				"exit-126 turns=0 permission_denials=0 identified as process-launch/infra fault, not task failure",
+				"recommendation: safe to retry the run as-is (no spec or repo fix needed)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T14:28:34.300Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-4278431509",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18056,7 +18056,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-20",
-			"sourceFingerprint": "2291fd93ea10b248d38ec69564746b97222d5545a9a6af2be9a1814148eed6f5",
+			"sourceFingerprint": "50ec79be81f75a4b3e4c08d77f2ca79739302b257bf76dbd07dde5be9527c702",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -18065,20 +18065,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 1,
+				"specification": 2,
 				"implementation": 1
 			},
-			"confidence": 2,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a malformed handoff marker whose 'markers' are just arbitrary line fragments scraped from a JSON data file (rankings/index.json), not real TODO(handoff) comments describing an open engineering task.",
+			"rationale": "The listed markers are quoted line-fragments inside the generated rankings/index.json data file itself, not real source TODOs, so there is no meaningful code location to fix.",
 			"evidence": [
-				"markers point at rankings/index.json, a generated ranking output file, not source code",
-				"listed fragments are unrelated quoted substrings (SQL, UI copy, unrelated proposals) with no coherent single open end"
+				"all markers point to NikolasP98/minion-meta@dev rankings/index.json, a generated output file",
+				"marker text is fragments of unrelated quoted strings rather than actual TODO(handoff) comments in source"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T10:28:26.050Z"
+			"scoredAt": "2026-09-20T14:28:34.300Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-608985431",
