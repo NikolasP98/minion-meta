@@ -27,45 +27,45 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-20)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:1668` — drizzle/0008_workshop_thumbnail.sql (ALTER TABLE' in src/server/run-migrations.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L1668
-- `NikolasP98/minion-meta@dev rankings/index.json:2230` — session is drawn when the cashier clicks, not at a validation checkpoint",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2230
-- `NikolasP98/minion-meta@dev rankings/index.json:4097` — scope word-frequency/sentiment/win-index rollups by owner",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4097
-- `NikolasP98/minion-meta@dev rankings/index.json:4817` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4817
-- `NikolasP98/minion-meta@dev rankings/index.json:6437` — provider JSON reader is not byte bounded before res.json()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6437
-- `NikolasP98/minion-meta@dev rankings/index.json:8242` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8242
-- `NikolasP98/minion-meta@dev rankings/index.json:8306` — Reconcile uploaded blobs after failed/concurrent import creation",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8306
-- `NikolasP98/minion-meta@dev rankings/index.json:8374` — remove once the phone failure is root-caused'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8374
-- `NikolasP98/minion-meta@dev rankings/index.json:10048` — drawer still shows no LINKED POS TICKETS — spec §4.1",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10048
-- `NikolasP98/minion-meta@dev rankings/index.json:10181` — Historical receipt/tombstone retention and missing-owner recovery need",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10181
-- `NikolasP98/minion-meta@dev rankings/index.json:10509` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10509
-- `NikolasP98/minion-meta@dev rankings/index.json:10541` — the confirmed root cause (QA-stack app logs) was",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10541
-- `NikolasP98/minion-meta@dev rankings/index.json:10575` — Add an explicitly reviewed indeterminate recovery policy",
+- `NikolasP98/minion-meta@dev rankings/index.json:1734` — drizzle/0008_workshop_thumbnail.sql (ALTER TABLE' in src/server/run-migrations.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L1734
+- `NikolasP98/minion-meta@dev rankings/index.json:2296` — session is drawn when the cashier clicks, not at a validation checkpoint",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2296
+- `NikolasP98/minion-meta@dev rankings/index.json:4163` — scope word-frequency/sentiment/win-index rollups by owner",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4163
+- `NikolasP98/minion-meta@dev rankings/index.json:4883` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4883
+- `NikolasP98/minion-meta@dev rankings/index.json:6503` — provider JSON reader is not byte bounded before res.json()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6503
+- `NikolasP98/minion-meta@dev rankings/index.json:8308` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8308
+- `NikolasP98/minion-meta@dev rankings/index.json:8372` — Reconcile uploaded blobs after failed/concurrent import creation",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8372
+- `NikolasP98/minion-meta@dev rankings/index.json:8440` — remove once the phone failure is root-caused'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8440
+- `NikolasP98/minion-meta@dev rankings/index.json:10114` — drawer still shows no LINKED POS TICKETS — spec §4.1",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10114
+- `NikolasP98/minion-meta@dev rankings/index.json:10247` — Historical receipt/tombstone retention and missing-owner recovery need",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10247
+- `NikolasP98/minion-meta@dev rankings/index.json:10575` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10575
-- `NikolasP98/minion-meta@dev rankings/index.json:11043` — add-only; rename / deactivate / max-days edits need a modal over",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11043
-- `NikolasP98/minion-meta@dev rankings/index.json:11795` — reopened mid-exit — cancel the pending close",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11795
-- `NikolasP98/minion-meta@dev rankings/index.json:12700` — prompt-driven protocol instead of native tool_use — replace",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12700
-- `NikolasP98/minion-meta@dev rankings/index.json:13353` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13353
-- `NikolasP98/minion-meta@dev rankings/index.json:13450` — define fold-spanning event rendering when local end <= start",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13450
-- `NikolasP98/minion-meta@dev rankings/index.json:13550` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13550
-- `NikolasP98/minion-meta@dev rankings/index.json:14432` — leave bars + holiday shading come from the loader's current-year",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14432
-- `NikolasP98/minion-meta@dev rankings/index.json:16621` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16621
+- `NikolasP98/minion-meta@dev rankings/index.json:10607` — the confirmed root cause (QA-stack app logs) was",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10607
+- `NikolasP98/minion-meta@dev rankings/index.json:10641` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10641
+- `NikolasP98/minion-meta@dev rankings/index.json:11109` — add-only; rename / deactivate / max-days edits need a modal over",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11109
+- `NikolasP98/minion-meta@dev rankings/index.json:11829` — reopened mid-exit — cancel the pending close",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11829
+- `NikolasP98/minion-meta@dev rankings/index.json:12734` — prompt-driven protocol instead of native tool_use — replace",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12734
+- `NikolasP98/minion-meta@dev rankings/index.json:13387` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13387
+- `NikolasP98/minion-meta@dev rankings/index.json:13484` — define fold-spanning event rendering when local end <= start",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13484
+- `NikolasP98/minion-meta@dev rankings/index.json:13584` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13584
+- `NikolasP98/minion-meta@dev rankings/index.json:14466` — leave bars + holiday shading come from the loader's current-year",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14466
+- `NikolasP98/minion-meta@dev rankings/index.json:16719` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16719
