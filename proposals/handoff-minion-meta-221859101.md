@@ -67,5 +67,5 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13784
 - `NikolasP98/minion-meta@dev rankings/index.json:14634` — leave bars + holiday shading come from the loader's current-year",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14634
-- `NikolasP98/minion-meta@dev rankings/index.json:16888` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16888
+- `NikolasP98/minion-meta@dev rankings/index.json:16856` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16856
