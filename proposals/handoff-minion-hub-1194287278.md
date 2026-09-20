@@ -26,7 +26,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-20)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:27` — despite the name, only /pos/appointments renders this now
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L27
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:118` — "local" here is the BROWSER's timezone, while the data window
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L118
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:29` — despite the name, only /pos/appointments renders this now
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L29
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:129` — "local" here is the BROWSER's timezone, while the data window
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L129
