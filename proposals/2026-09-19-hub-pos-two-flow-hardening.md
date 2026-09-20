@@ -284,3 +284,13 @@ at `79a0175a`; [evidence PR #524](https://github.com/NikolasP98/minion-meta/pull
 Hub is ready for review, with a review requested from `minion-agent-bot`.
 Hosted CI and the protected-branch approval remain release gates. The preview
 deployment is not production evidence.
+
+CI follow-up `29eea501`: the fresh QA bootstrap restored baseline tables as
+`supabase_admin` but invoked new migrations as non-owner `postgres`. A separate
+local database (`pos_release_bootstrap_0919`, auth schema only plus the committed
+baseline) reproduced `must be owner of table pos_settings`. QA bootstrap now
+uses its restore user for the migration subprocess after the existing loopback
+and port checks. Production runner behavior is unchanged. The migration applied
+once, zero migrations remained pending, and repeated JSON bootstrap succeeded.
+Nine database-guard tests and independent safety review passed. Hosted CI is
+rerunning. Clean-clone svelte-check also completed with zero errors and warnings.
