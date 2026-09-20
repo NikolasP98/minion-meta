@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-20T08:58:25.712Z",
+	"generatedAt": "2026-09-20T09:28:30.820Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3088,6 +3088,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T20:24:00.658Z"
+		},
+		{
+			"key": "issue:minion-meta#532",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#532 [monitor:unstick] reconcile run fa3019c2 (minion-meta): claude agent exec failure exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/532",
+			"sourceUpdatedAt": "2026-09-20T09:17:41Z",
+			"sourceFingerprint": "5ae74c2348d828e256f30db5abdb16f18275dbffb599404f2238de0398e83e35",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#533"
+			],
+			"rationale": "Duplicate monitor-intake report of a recurring runner-box exec failure (claude provider exit-126, turns=0) that blocks only the final step of otherwise-successful reconcile runs and needs infra triage, not a code fix.",
+			"evidence": [
+				"exit-126, turns=0, permission_denials=0",
+				"reconcile script clone/refresh/push steps completed successfully",
+				"same signature recurs across 4 consecutive runs in ~70 minutes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T09:28:30.713Z"
+		},
+		{
+			"key": "issue:minion-meta#533",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#533 [monitor:unstick] reconcile run bf633da4 (minion-meta): claude agent exec failure exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/533",
+			"sourceUpdatedAt": "2026-09-20T09:18:04Z",
+			"sourceFingerprint": "8eeadd56862454a9f7a52a464902351f5175473c40c54fe249ac44510ff29c09",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#532"
+			],
+			"rationale": "Same recurring runner-box exec-permission failure signature as #532 (both reference fa3019c2/bf633da4/e3ca01f2/94c9e865), so these should be consolidated into a single host-classifier/triage goal rather than tracked separately.",
+			"evidence": [
+				"exit-126, turns=0, permission_denials=0",
+				"identical signature across fa3019c2, bf633da4, e3ca01f2, 94c9e865",
+				"diagnosis states infra fault, not repo-content or spec issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T09:28:30.713Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -12904,38 +12974,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-14T09:38:46.333Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged fix for nitter persistence/shutdown draining with no reported ongoing incident signal, so it reads as routine deployment health rather than urgent.",
-			"evidence": [
-				"commit fix(nitter): serialize persistence and drain poller shutdown",
-				"tags: deployment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T08:58:25.593Z"
 		},
 		{
 			"key": "issue:minion-meta#436",
