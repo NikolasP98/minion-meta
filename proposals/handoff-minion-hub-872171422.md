@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-20)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/accounts/+page.svelte:115` — the link targets /pos/sell, so a role holding
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/accounts/+page.svelte#L115
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/accounts/+page.svelte:117` — the link targets /pos/sell, so a role holding
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/accounts/+page.svelte#L117
