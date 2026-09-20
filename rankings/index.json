@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-20T01:05:49.582Z",
+	"generatedAt": "2026-09-20T01:29:04.096Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7645,6 +7645,150 @@
 			"scoredAt": "2026-09-18T18:28:47.307Z"
 		},
 		{
+			"key": "issue:minion-meta#519",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#519 [monitor:unstick] reconcile run 971cac45 (minion-meta) - agent exec failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/519",
+			"sourceUpdatedAt": "2026-09-20T01:17:54Z",
+			"sourceFingerprint": "18f0cbd1b47673965ca5cc07c52612b355624f02faceabedc317290cffaf4372",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#520",
+				"issue:minion-meta#521",
+				"issue:minion-meta#522"
+			],
+			"rationale": "This is one of four sibling reports of the same exit-126/turns=0 worker-box exec fault and should be consolidated into a single host-classifier goal rather than tracked separately.",
+			"evidence": [
+				"fingerprint unstick-unknown-971cac45, 4th of 4 identical occurrences",
+				"diagnosis: reconcile-agent (provider=claude) exited 126 with turns=0, worker-box/env fault"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T01:29:03.974Z"
+		},
+		{
+			"key": "issue:minion-meta#520",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#520 [monitor:unstick] reconcile run 38291e0e (minion-meta) - agent exec failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/520",
+			"sourceUpdatedAt": "2026-09-20T01:18:14Z",
+			"sourceFingerprint": "627d6bf8b48780190a0a55b8783b6bf99533309c048d3479b188c7a2b5724f7c",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#519",
+				"issue:minion-meta#521",
+				"issue:minion-meta#522"
+			],
+			"rationale": "Duplicate of the identical exit-126/turns=0 signature reported across four issues in the same ~30 minute window and should be merged into one goal.",
+			"evidence": [
+				"3rd of 4 identical failures for minion-meta reconcile",
+				"script log stopped before proposals/index.json write, then agent invocation exited 126"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T01:29:03.974Z"
+		},
+		{
+			"key": "issue:minion-meta#521",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#521 [monitor:unstick] reconcile run 3f877d82 (minion-meta) - agent exec failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/521",
+			"sourceUpdatedAt": "2026-09-20T01:18:15Z",
+			"sourceFingerprint": "2262d3cd0c3966ea31f68f2a37fece4bd48899f7619000e76b257172e0d1aa88",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#519",
+				"issue:minion-meta#520",
+				"issue:minion-meta#522"
+			],
+			"rationale": "Another instance of the same worker-box exec fault signature; grouping avoids four separate tickets for one root cause.",
+			"evidence": [
+				"2nd of 4 identical failures within ~30 minutes",
+				"deterministic reconcile script completed; only the claude-provider agent invocation exited 126 with turns=0"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T01:29:03.974Z"
+		},
+		{
+			"key": "issue:minion-meta#522",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#522 [monitor:unstick] reconcile run 12ecb435 (minion-meta) - agent exec failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/522",
+			"sourceUpdatedAt": "2026-09-20T01:18:15Z",
+			"sourceFingerprint": "c0f96a3715a90a5652eb1684f6febca525f39a96389574607a5303a05d65bc56",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#519",
+				"issue:minion-meta#520",
+				"issue:minion-meta#521"
+			],
+			"rationale": "This is the earliest of four identical exec-fault reports and is the natural anchor for a single consolidated host-classifier goal.",
+			"evidence": [
+				"earliest of 4 identical failures, establishing the recurring pattern",
+				"recommends adding a host-classifier signature for (reconcile, provider=claude, exit-126, turns=0)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T01:29:03.974Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10963,6 +11107,38 @@
 			"scoredAt": "2026-09-17T01:28:52.562Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1194287278",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
+			"sourceUpdatedAt": "2026-09-20",
+			"sourceFingerprint": "3278685ea37c2b68a6e8776b32cac89863e4c479ddf9eb702233c45de7f5cb9d",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Two concrete, line-anchored TODO(handoff) markers in a booking-calendar component (a stale-name comment and a browser/data-window timezone mismatch) form a bounded, actionable cleanup.",
+			"evidence": [
+				"BookingCalendar.svelte:29 note that only /pos/appointments renders this now",
+				"BookingCalendar.svelte:139 flags browser-local vs data-window timezone mismatch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T01:29:03.974Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-1708310858",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12774,38 +12950,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T00:45:40.415Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-1194287278",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
-			"sourceUpdatedAt": "2026-09-20",
-			"sourceFingerprint": "283c61cabe6d7537eb770274e4050b49f76f8fcf292a4bbd5c7c5c5608df8d82",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The two handoff markers are inline clarifying notes about naming/timezone nuance rather than a clearly scoped defect ready to spec.",
-			"evidence": [
-				"marker: despite the name, only /pos/appointments renders this now",
-				"marker: 'local' here is the BROWSER's timezone, while the data window..."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T00:58:37.589Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1323254565",
@@ -14748,39 +14892,6 @@
 			"scoredAt": "2026-09-19T03:59:20.386Z"
 		},
 		{
-			"key": "run:minion_hub#35480425112",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35480425112",
-			"sourceUpdatedAt": "2026-09-20T01:04:20Z",
-			"sourceFingerprint": "3d03240350f9fcbb1032724c10a3e292dbc1cbf1f88b232b4189c3be26747797",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI run on master has limited standalone context to score as a strategic goal.",
-			"evidence": [
-				"status: in_progress",
-				"push on master",
-				"tags: ci"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T01:05:49.461Z"
-		},
-		{
 			"key": "issue:minion-meta#395",
 			"kind": "issue",
 			"stage": "proposal",
@@ -16085,14 +16196,14 @@
 			"scoredAt": "2026-09-14T09:35:55.019Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
+			"key": "proposal:handoff-minion-hub-2843825962",
 			"kind": "proposal",
 			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/pos/appointments/new/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2843825962.md",
 			"sourceUpdatedAt": "2026-09-20",
-			"sourceFingerprint": "90c30856608e7364c6a28a8339131ff1222b39861db0d955035a90f6e85ed5a3",
+			"sourceFingerprint": "b1af106016ac37cb5cc8ade5f12769b75ae73197cd2d5e1321b39f3bc7f19505",
 			"score": 23,
 			"band": "low",
 			"axes": {
@@ -16101,20 +16212,19 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 1,
-				"implementation": 1
+				"specification": 3,
+				"implementation": 2
 			},
 			"confidence": 3,
-			"recommendation": "reframe",
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The 16+ quoted markers span unrelated topics inside a generated rankings JSON file, indicating the sweep is scraping unrelated fragment text rather than surfacing one coherent actionable issue.",
+			"rationale": "The single marker's quoted text is truncated ('nothing links here with these params yet'), leaving the actual open end too underspecified to size or execute confidently.",
 			"evidence": [
-				"markers reference unrelated topics like cashier session UI, migration SQL, and Supabase testing all within rankings/index.json",
-				"file is a generated rankings data artifact, not application source"
+				"only one marker at new/+page.svelte:24 with a cut-off description"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T00:58:37.589Z"
+			"scoredAt": "2026-09-20T01:29:03.974Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-4036985971",
@@ -16407,6 +16517,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T00:50:29.342Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit fixing nitter persistence/shutdown is already merged, so this deployment-health record has no remaining open work.",
+			"evidence": [
+				"summary is a merged commit message '(#295)'",
+				"tags:[\"deployment\"] with no failure indicated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T01:29:03.974Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
@@ -17340,37 +17482,6 @@
 			"scoredAt": "2026-09-20T00:45:40.415Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2843825962",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/pos/appointments/new/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2843825962.md",
-			"sourceUpdatedAt": "2026-09-20",
-			"sourceFingerprint": "559f33cc762bff0227853f5c7b9786e8f477346184c68775a783bf21124ce4ca",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 2,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Marker text ('nothing links here with these params yet') is truncated and ambiguous about whether this route is dead code or pending work.",
-			"evidence": [
-				"marker: 'nothing links here with these params yet' at +page.svelte:23"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T00:47:42.784Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-348234352",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18009,6 +18120,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T00:46:43.335Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-20",
+			"sourceFingerprint": "3828c1be5f0a1eb659c3f6bd35fb979a111c4d4450c91c70ce50f3bf4f073247",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The flagged 'markers' are strings embedded in the rankings/index.json data artifact (past evidence text quoting TODO(handoff) patterns), not real source-code TODOs, so there is no genuine code change to make.",
+			"evidence": [
+				"target file is rankings/index.json, a generated ranking index, not application source",
+				"quoted marker text (e.g. 'drizzle/0008_workshop_thumbnail.sql ... in run-migrations.ts') reads as prior evidence strings, not live TODOs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T01:29:03.974Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-87d40ff94ec0",
