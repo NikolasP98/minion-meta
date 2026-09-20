@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-20T07:58:40.117Z",
+	"generatedAt": "2026-09-20T08:20:56.935Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9730,6 +9730,74 @@
 			"scoredAt": "2026-09-20T04:23:44.896Z"
 		},
 		{
+			"key": "issue:minion-meta#530",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#530 [monitor:unstick] reconcile run e3ca01f2 (minion-meta): claude agent launch exit-126, reconcile data step succeeded",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/530",
+			"sourceUpdatedAt": "2026-09-20T08:17:48Z",
+			"sourceFingerprint": "340cde9faa09012e03dcf70f981e81b226bfc96aba6ce5b8300983ae24a64d22",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#531"
+			],
+			"rationale": "Recurring worker exec-permission fault (exit-126) on agent launch is diagnosed as infra-only since the reconcile task itself already succeeded, and duplicates #531's identical signature.",
+			"evidence": [
+				"exit-126 turns=0 permission_denials=0 recurs identically across runs",
+				"reconcile data step already succeeded and pushed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T08:20:56.818Z"
+		},
+		{
+			"key": "issue:minion-meta#531",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#531 [monitor:unstick] reconcile run 94c9e865 (minion-meta): claude agent launch exit-126, reconcile data step succeeded",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/531",
+			"sourceUpdatedAt": "2026-09-20T08:17:48Z",
+			"sourceFingerprint": "fc94b67dd8a5fc46bd7147b401abea898c98fd28efc304caca397731dd52b8e9",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#530"
+			],
+			"rationale": "Same recurring exit-126 worker exec-permission fault as #530 with identical diagnosis and recommended host-classifier fix, so both should become one goal.",
+			"evidence": [
+				"worker_started_at only ~0.6s before finished_at, exit 126",
+				"same exact signature recurs identically across multiple runs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T08:20:56.818Z"
+		},
+		{
 			"key": "pr:minion-meta#524",
 			"kind": "pr",
 			"stage": "development",
@@ -15234,37 +15302,6 @@
 			"scoredAt": "2026-09-19T03:58:43.645Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The referenced commit is a nitter persistence/shutdown fix already merged (#295), leaving no outstanding deployment action.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown (#295)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T07:58:39.993Z"
-		},
-		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18712,6 +18749,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T00:51:29.312Z"
+		},
+		{
+			"key": "run:minion_hub#35499225175",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35499225175",
+			"sourceUpdatedAt": "2026-09-20T08:19:07Z",
+			"sourceFingerprint": "ff66e6e3ae4fc2eb12e0cf387de91c40fecd1df354d41a18bbca2f2fbb683db4",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Bare queued CI run entry with no problem statement or actionable content is not a goal candidate.",
+			"evidence": [
+				"status: queued",
+				"summary: push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T08:20:56.818Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
