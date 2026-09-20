@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-20T05:58:22.512Z",
+	"generatedAt": "2026-09-20T06:06:31.265Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -12742,6 +12742,38 @@
 			"scoredAt": "2026-09-14T09:38:46.333Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an already-merged fix commit for nitter shutdown/persistence with no indication of an ongoing deployment problem.",
+			"evidence": [
+				"summary: fix(nitter): serialize persistence and drain shutdown (#295)",
+				"status: unknown, updatedAt 2026-09-12"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T06:06:31.147Z"
+		},
+		{
 			"key": "issue:minion-meta#436",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17822,7 +17854,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-20",
-			"sourceFingerprint": "ae8dfe5df11d7093559344aade7c913ac0bc3910d7ff6af59a57676a06cabf12",
+			"sourceFingerprint": "42eb9973c1bf99ddd9435b81b3e55fb50dd576e74492ba0eeb7ff83be4b1a2da",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -17834,17 +17866,17 @@
 				"specification": 2,
 				"implementation": 1
 			},
-			"confidence": 6,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Markers were found inside the generated rankings/index.json data file rather than in source code, indicating the sweep is flagging quoted historical text, not real outstanding work.",
+			"rationale": "The listed markers are quoted text fragments at lines inside a JSON data file rather than coherent actionable code TODOs.",
 			"evidence": [
-				"target file is rankings/index.json, a generated ranking index, not application source",
-				"16+ markers span unrelated topics (SQL migration, sentiment rollups, phone failure) consistent with quoted past-rationale text"
+				"all markers cite rankings/index.json line numbers, a generated data file",
+				"filed by automated handoff-sweep, status review"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T05:29:11.787Z"
+			"scoredAt": "2026-09-20T06:06:31.147Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-608985431",
@@ -18617,6 +18649,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T00:51:29.312Z"
+		},
+		{
+			"key": "run:minion_hub#35493283538",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35493283538",
+			"sourceUpdatedAt": "2026-09-20T06:04:32Z",
+			"sourceFingerprint": "4a59324fb2106ec9e6e810b4c1783c1080a065ac08c57fa9987d53a1df5ab369",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine queued CI run with no failure or blocking signal to act on.",
+			"evidence": [
+				"status: queued",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-20T06:06:31.147Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
