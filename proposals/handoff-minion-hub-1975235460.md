@@ -30,5 +30,5 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L371
 - `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:427` — the line posts finProductId: null (revenue-by-product does
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L427
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:546` — the tender only appears when the org registered a method
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L546
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:547` — the tender only appears when the org registered a method
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L547

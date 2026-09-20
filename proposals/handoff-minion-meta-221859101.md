@@ -35,14 +35,14 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4163
 - `NikolasP98/minion-meta@dev rankings/index.json:4883` — a date already held by a manual holiday is skipped silently",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4883
-- `NikolasP98/minion-meta@dev rankings/index.json:6503` — provider JSON reader is not byte bounded before res.json()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6503
-- `NikolasP98/minion-meta@dev rankings/index.json:8308` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8308
-- `NikolasP98/minion-meta@dev rankings/index.json:8372` — Reconcile uploaded blobs after failed/concurrent import creation",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8372
-- `NikolasP98/minion-meta@dev rankings/index.json:8440` — remove once the phone failure is root-caused'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8440
+- `NikolasP98/minion-meta@dev rankings/index.json:6470` — provider JSON reader is not byte bounded before res.json()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6470
+- `NikolasP98/minion-meta@dev rankings/index.json:8307` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8307
+- `NikolasP98/minion-meta@dev rankings/index.json:8371` — Reconcile uploaded blobs after failed/concurrent import creation",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8371
+- `NikolasP98/minion-meta@dev rankings/index.json:8439` — remove once the phone failure is root-caused'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8439
 - `NikolasP98/minion-meta@dev rankings/index.json:10114` — drawer still shows no LINKED POS TICKETS — spec §4.1",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10114
 - `NikolasP98/minion-meta@dev rankings/index.json:10247` — Historical receipt/tombstone retention and missing-owner recovery need",
@@ -67,5 +67,5 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13584
 - `NikolasP98/minion-meta@dev rankings/index.json:14466` — leave bars + holiday shading come from the loader's current-year",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14466
-- `NikolasP98/minion-meta@dev rankings/index.json:16719` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16719
+- `NikolasP98/minion-meta@dev rankings/index.json:16784` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16784
