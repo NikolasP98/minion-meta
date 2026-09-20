@@ -1,14 +1,14 @@
 ---
-id: handoff-minion-hub-3579215965
-title: Handoff marker — src/routes/api/scheduling/bookings/[id]/+server.ts (minion_hub)
+id: handoff-minion-hub-2557316487
+title: Handoff marker — src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)
 status: draft
-created: 2026-09-12
+created: 2026-09-20
 updated: 2026-09-20
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — src/routes/api/scheduling/bookings/[id]/+server.ts
+# Handoff marker — src/routes/api/scheduling/bookings/_handlers.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-20)
 
-- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/[id]/+server.ts:13` — this read now returns package-grant money, plan money and an
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/[id]/+server.ts#L13
+- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:207` — Persist realization admission with the status change; this
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L207
