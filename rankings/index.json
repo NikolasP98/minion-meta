@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-21T10:40:01.705Z",
+	"generatedAt": "2026-09-21T10:59:16.753Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4322,6 +4322,38 @@
 			"scoredAt": "2026-09-21T10:37:11.960Z"
 		},
 		{
+			"key": "issue:minion-meta#431",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#431 [monitor:unstick] reconcile proposals run cd5da78d: exit-126/turns=0 on claude agent step despite otherwise-successful pipeline",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/431",
+			"sourceUpdatedAt": "2026-09-14T10:17:37Z",
+			"sourceFingerprint": "87336a5becc13feb49103e5c98129744f20bf53a65a4b7a61ad7c35afc227027",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An exit-126/turns=0 fault on the claude-agent step despite an otherwise fully durable pipeline run points to a runner PATH/permission problem worth checking before scheduling a fix.",
+			"evidence": [
+				"exit-126, turns=0, permission_denials=0 on claude-agent invocation",
+				"rest of pipeline (375 proposals written, git push) completed normally"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-21T10:59:16.651Z"
+		},
+		{
 			"key": "pr:minion-base#43",
 			"kind": "pr",
 			"stage": "development",
@@ -4553,111 +4585,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:39:09.996Z"
-		},
-		{
-			"key": "issue:minion-meta#358",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#358 [monitor:unstick] Run d36336e5: invalid spec review verdict",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/358",
-			"sourceUpdatedAt": "2026-08-31T09:17:57Z",
-			"sourceFingerprint": "8981853f3358d5d2f6efa12d4c9b27771a1558f189d719adcf7a3dff99b2387e",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#359",
-				"issue:minion-meta#360"
-			],
-			"rationale": "Duplicate monitor alert for the same recurring pass2 'degraded' verdict contract failure as #359/#360 and should be consolidated into one fix.",
-			"evidence": [
-				"pass2 produced review verdict \"degraded\", which violates the allowed verdict enum",
-				"Classification: recurring new stall class / genuine generated-output contract failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-14T10:29:00.906Z"
-		},
-		{
-			"key": "issue:minion-meta#359",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#359 [monitor:unstick] Run 879cc5bb: invalid spec review verdict",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/359",
-			"sourceUpdatedAt": "2026-08-31T09:17:57Z",
-			"sourceFingerprint": "efd142a0f62c09ed4d707ab150cd008b816056ee2c9f3200cc383cacd53a0532",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#358",
-				"issue:minion-meta#360"
-			],
-			"rationale": "Identical root-cause alert to #358/#360 for the same pass2 schema/verdict bug, best resolved as one grouped fix.",
-			"evidence": [
-				"pass2 produced review verdict \"degraded\", which violates the allowed verdict enum",
-				"fix the pass2 reviewer prompt/schema or normalize/reject \"degraded\" before index validation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-14T10:29:00.906Z"
-		},
-		{
-			"key": "issue:minion-meta#360",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#360 [monitor:unstick] Run 9de9a37d: invalid spec review verdict",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/360",
-			"sourceUpdatedAt": "2026-08-31T09:17:58Z",
-			"sourceFingerprint": "33a1e9353dfad9c69ac2bfb777a33e9685416b0a7aef1a678de96fb076f5936c",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#358",
-				"issue:minion-meta#359"
-			],
-			"rationale": "Third duplicate of the same recurring pass2 verdict-enum violation as #358/#359, warranting a single grouped remediation.",
-			"evidence": [
-				"pass2 produced review verdict \"degraded\"",
-				"Add a host-classifier signature for invalid review verdicts"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-14T10:29:00.906Z"
 		},
 		{
 			"key": "issue:minion-meta#476",
@@ -5393,6 +5320,111 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:30:12.209Z"
+		},
+		{
+			"key": "issue:minion-meta#358",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#358 [monitor:unstick] Run d36336e5: invalid spec review verdict",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/358",
+			"sourceUpdatedAt": "2026-08-31T09:17:57Z",
+			"sourceFingerprint": "8981853f3358d5d2f6efa12d4c9b27771a1558f189d719adcf7a3dff99b2387e",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#359",
+				"issue:minion-meta#360"
+			],
+			"rationale": "This is one of three near-identical automated intakes reporting the same pass2 'degraded' verdict enum violation and should become a single fix goal.",
+			"evidence": [
+				"pass2 produced review verdict \"degraded\", which violates the allowed verdict enum",
+				"classified as recurring new stall class across multiple run IDs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-21T10:59:16.651Z"
+		},
+		{
+			"key": "issue:minion-meta#359",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#359 [monitor:unstick] Run 879cc5bb: invalid spec review verdict",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/359",
+			"sourceUpdatedAt": "2026-08-31T09:17:57Z",
+			"sourceFingerprint": "efd142a0f62c09ed4d707ab150cd008b816056ee2c9f3200cc383cacd53a0532",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#358",
+				"issue:minion-meta#360"
+			],
+			"rationale": "Duplicate of the same 'degraded' verdict enum failure reported in #358 and #360, same-second timestamp confirms redundancy.",
+			"evidence": [
+				"pass2 produced review verdict \"degraded\", which violates the allowed verdict enum",
+				"updatedAt identical to #358 (2026-08-31T09:17:57Z)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-21T10:59:16.651Z"
+		},
+		{
+			"key": "issue:minion-meta#360",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#360 [monitor:unstick] Run 9de9a37d: invalid spec review verdict",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/360",
+			"sourceUpdatedAt": "2026-08-31T09:17:58Z",
+			"sourceFingerprint": "33a1e9353dfad9c69ac2bfb777a33e9685416b0a7aef1a678de96fb076f5936c",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#358",
+				"issue:minion-meta#359"
+			],
+			"rationale": "Third duplicate of the same pass2 'degraded' verdict enum failure already captured in #358 and #359.",
+			"evidence": [
+				"pass2 produced review verdict \"degraded\", which violates the allowed verdict enum",
+				"fingerprint pattern unstick-unknown-<runid> matches sibling issues"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-21T10:59:16.651Z"
 		},
 		{
 			"key": "pr:minion_hub#279",
@@ -12185,39 +12217,6 @@
 			"scoredAt": "2026-09-21T10:31:35.291Z"
 		},
 		{
-			"key": "issue:minion-meta#431",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#431 [monitor:unstick] reconcile proposals run cd5da78d: exit-126/turns=0 on claude agent step despite otherwise-successful pipeline",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/431",
-			"sourceUpdatedAt": "2026-09-14T10:17:37Z",
-			"sourceFingerprint": "87336a5becc13feb49103e5c98129744f20bf53a65a4b7a61ad7c35afc227027",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Single reported instance of an exit-126/turns=0 infra-exec fault on the claude-agent step with a clear retry recommendation but no confirmed recurrence yet.",
-			"evidence": [
-				"reconcile agent (provider=claude) failed with exit-126, turns=0",
-				"the rest of the reconcile pipeline ... completed normally",
-				"Recommendation: retry the run -- the non-agent work already appears durable/committed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-14T10:29:00.906Z"
-		},
-		{
 			"key": "issue:minion-meta#448",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17595,6 +17594,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T03:59:20.386Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit already fixes nitter persistence and shutdown, leaving no open action behind this deployment-health record.",
+			"evidence": [
+				"commit b841c36 title: fix(nitter): serialize persistence and drain shutdown",
+				"status: unknown with no stated follow-up work"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-21T10:59:16.651Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
