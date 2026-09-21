@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-21T21:58:32.340Z",
+	"generatedAt": "2026-09-21T22:28:32.964Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -16297,6 +16297,39 @@
 			"scoredAt": "2026-09-21T18:29:21.238Z"
 		},
 		{
+			"key": "issue:minion-meta#550",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#550 [monitor:unstick] reconcile run 7517eadc (minion-meta) — reconcile agent exec fault, deterministic sweep succeeded",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/550",
+			"sourceUpdatedAt": "2026-09-21T22:17:27Z",
+			"sourceFingerprint": "278885be7ad7d5f466dd0b09d00274cd5cff0801a614bb70aca24053e9ecee48",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single transient exit-126/turns=0 exec fault on the reconcile-agent sub-step, already classified as infra not task failure, with deterministic state already persisted.",
+			"evidence": [
+				"exit-126 with turns=0 and permission_denials=0",
+				"Classified as transient/infra, not a task failure",
+				"dev branch was pushed (8116aec..c780928) before the run ended in error"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-21T22:28:32.871Z"
+		},
+		{
 			"key": "proposal:2026-08-17-meta-spec-index-project-possibly-shipped",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17055,38 +17088,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T05:58:42.726Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 4
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged commit fixing a nitter persistence/shutdown bug, not an open goal requiring ranking.",
-			"evidence": [
-				"commit fix(nitter): serialize persistence and drain shutdown (#295)",
-				"status unknown, single commit reference"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-21T21:58:32.240Z"
 		},
 		{
 			"key": "issue:minion-meta#427",
@@ -18720,7 +18721,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-21",
-			"sourceFingerprint": "15700729786ca669846a947c5d09c2cfbd0dbd494cb02892d18fecca61d11791",
+			"sourceFingerprint": "b5b2347263508ae74e0ea03dc2b4f2deb6ecd80783a9cf5d8e6d728520a1b338",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -18729,21 +18730,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 1,
+				"specification": 2,
 				"implementation": 1
 			},
 			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The sweep bundles roughly 17 unrelated text fragments found inside rankings/index.json, a generated ranking data artifact rather than source code, into a single non-actionable proposal with no coherent definition of done.",
+			"rationale": "This is a self-referential handoff marker pointing at TODO comments embedded inside the generated rankings/index.json data file itself, not actionable source-code work.",
 			"evidence": [
-				"target file is rankings/index.json, a data artifact not source code",
-				"markers span unrelated domains: DB migration, POS UI, sentiment rollups, phone failure, recovery policy",
-				"17 disparate line-item quotes with no single coherent scope despite stated DoD"
+				"marker's open end is resolved and the TODO(handoff): comment removed",
+				"NikolasP98/minion-meta@dev rankings/index.json:2109",
+				"filed automatically by the factory handoff-ledger sweep"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-21T18:29:21.238Z"
+			"scoredAt": "2026-09-21T22:28:32.871Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3045707328",
