@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-21T22:28:32.964Z",
+	"generatedAt": "2026-09-21T22:59:02.109Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -13871,6 +13871,74 @@
 			"scoredAt": "2026-09-16T08:28:51.848Z"
 		},
 		{
+			"key": "issue:minion-meta#362",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#362 [monitor:unstick] Run 05da2dd1: fallback agent stalled until 90m wall-clock kill",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/362",
+			"sourceUpdatedAt": "2026-08-31T22:17:42Z",
+			"sourceFingerprint": "f0ae3cbf9fa5a2121c5dd71d584212c570d21bec2fbee48af4d0315a206c23ff",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"issue:minion-meta#434"
+			],
+			"rationale": "Diagnosed as a transient infra stall with a simple retry recommendation, not yet a bounded engineering task worth funding.",
+			"evidence": [
+				"Diagnosis: transient/infra stall, not an evidenced task failure",
+				"recommendation: retry after Claude quota resets or with known-available fallback"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-21T22:59:02.001Z"
+		},
+		{
+			"key": "issue:minion-meta#434",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#434 [monitor:unstick] reconcile run dc183386: agent exec failed post-work (exit-126, turns=0)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/434",
+			"sourceUpdatedAt": "2026-09-14T22:17:24Z",
+			"sourceFingerprint": "e44b411cf4707e2edf66470294347241bbfaa618b6fdc0b5152994d3a3d1060a",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"issue:minion-meta#362"
+			],
+			"rationale": "Exit-126 infra fault is flagged as safe to retry with scripted work already persisted, so no immediate paid task is actionable unless the pattern recurs.",
+			"evidence": [
+				"exit-126 with turns=0, permission_denials=0",
+				"recommendation: safe to retry; check runner claude binary permissions if recurs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-21T22:59:02.001Z"
+		},
+		{
 			"key": "issue:minion-meta#436",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14645,38 +14713,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:40:01.592Z"
-		},
-		{
-			"key": "issue:minion-meta#362",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#362 [monitor:unstick] Run 05da2dd1: fallback agent stalled until 90m wall-clock kill",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/362",
-			"sourceUpdatedAt": "2026-08-31T22:17:42Z",
-			"sourceFingerprint": "f0ae3cbf9fa5a2121c5dd71d584212c570d21bec2fbee48af4d0315a206c23ff",
-			"score": 32,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Automated monitor intake flags a single transient fallback-agent stall killed by wall-clock budget, diagnosed as infra rather than a confirmed recurring task failure.",
-			"evidence": [
-				"exit 137 after almost exactly 90 minutes",
-				"Diagnosis: transient/infra stall, not an evidenced task failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-14T22:58:23.991Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
@@ -17026,38 +17062,6 @@
 			"scoredAt": "2026-09-16T23:14:40.398Z"
 		},
 		{
-			"key": "issue:minion-meta#434",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#434 [monitor:unstick] reconcile run dc183386: agent exec failed post-work (exit-126, turns=0)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/434",
-			"sourceUpdatedAt": "2026-09-14T22:17:24Z",
-			"sourceFingerprint": "e44b411cf4707e2edf66470294347241bbfaa618b6fdc0b5152994d3a3d1060a",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single exit-126/turns=0 infra-runner failure was already diagnosed as safely retryable with state persisted, so it is low urgency unless recurrence is confirmed.",
-			"evidence": [
-				"exit-126 with turns=0 and permission_denials=0",
-				"merge-scan state was already persisted so a retry should pick up cleanly"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-14T22:28:27.306Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17088,6 +17092,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T05:58:42.726Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a deployment-health snapshot of an already-merged commit fixing nitter persistence/shutdown, leaving no further actionable work.",
+			"evidence": [
+				"commit fixes 'serialize persistence and drain poller shutdown' for nitter",
+				"tagged as deployment health entry, already committed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-21T22:59:02.001Z"
 		},
 		{
 			"key": "issue:minion-meta#427",
