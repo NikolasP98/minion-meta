@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-21T18:29:21.341Z",
+	"generatedAt": "2026-09-21T18:58:53.582Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -16994,38 +16994,6 @@
 			"scoredAt": "2026-09-16T23:14:40.398Z"
 		},
 		{
-			"key": "issue:minion-meta#433",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#433 [monitor:unstick] run 46644dbd (minion-meta reconcile) - claude provider exit-126, zero turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/433",
-			"sourceUpdatedAt": "2026-09-14T18:17:34Z",
-			"sourceFingerprint": "a36b64db5d4f6d01afd691f52c7f26a3a37ab63877af113511437e95d4eca443",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The alert itself characterizes this as a single transient infra blip that only becomes actionable if the exit-126/turns=0 signature recurs.",
-			"evidence": [
-				"exit-126, turns=0... surrounding pipeline completed normally with no errors visible in-band",
-				"Recommendation: retry the run -- it looks transient or infra rather than a real content problem"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-14T18:28:54.801Z"
-		},
-		{
 			"key": "issue:minion-meta#434",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17088,6 +17056,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T05:58:42.726Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine merged commit about serializing nitter persistence and shutdown, not an actionable open goal.",
+			"evidence": [
+				"commit message: fix(nitter): serialize persistence and drain shutdown (#295)",
+				"status: unknown, deployment stage"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-21T18:58:53.488Z"
 		},
 		{
 			"key": "issue:minion-meta#427",
@@ -19068,6 +19068,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T07:25:37.763Z"
+		},
+		{
+			"key": "issue:minion-meta#433",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#433 [monitor:unstick] run 46644dbd (minion-meta reconcile) - claude provider exit-126, zero turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/433",
+			"sourceUpdatedAt": "2026-09-14T18:17:34Z",
+			"sourceFingerprint": "a36b64db5d4f6d01afd691f52c7f26a3a37ab63877af113511437e95d4eca443",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Log evidence shows the reconcile pipeline itself completed normally and the report explicitly frames the single exit-126/turns=0 event as likely transient infra noise warranting only a retry, not a standing goal.",
+			"evidence": [
+				"'log tail... all completed normally with no errors visible in-band'",
+				"'Recommendation: retry the run -- it looks transient or infra rather than a real content problem'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-21T18:58:53.488Z"
 		},
 		{
 			"key": "issue:minion-meta#500",
