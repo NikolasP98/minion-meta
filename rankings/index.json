@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-21T02:37:02.840Z",
+	"generatedAt": "2026-09-21T02:58:28.342Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -13447,6 +13447,38 @@
 			"scoredAt": "2026-09-14T09:38:46.333Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown handling with no indication of ongoing failure or urgency.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"tags: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-21T02:58:28.221Z"
+		},
+		{
 			"key": "issue:minion-meta#436",
 			"kind": "issue",
 			"stage": "proposal",
@@ -16699,6 +16731,39 @@
 			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
+			"key": "issue:minion-meta#427",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#427 [monitor:unstick] reconcile run c512376f: provider launch failure (exit-126) after successful reconcile work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/427",
+			"sourceUpdatedAt": "2026-09-14T02:17:22Z",
+			"sourceFingerprint": "97226c88f5c4815f21c4e31439f2a83a8483491b4ae751be9ae46b3e1c08d4f6",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The reconcile work already completed successfully and only a trailing provider launch step failed with a known transient infra signature, so no substantive action is needed beyond optional monitoring.",
+			"evidence": [
+				"core reconcile logic completing fully... successful git push",
+				"exit-126 and turns=0... box-level infra fault, not a spec or task problem",
+				"safe to retry the run as-is since the underlying reconcile work already succeeded"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-21T02:58:28.221Z"
+		},
+		{
 			"key": "issue:minion-meta#437",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17914,39 +17979,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T19:58:40.906Z"
-		},
-		{
-			"key": "issue:minion-meta#427",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#427 [monitor:unstick] reconcile run c512376f: provider launch failure (exit-126) after successful reconcile work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/427",
-			"sourceUpdatedAt": "2026-09-14T02:17:22Z",
-			"sourceFingerprint": "97226c88f5c4815f21c4e31439f2a83a8483491b4ae751be9ae46b3e1c08d4f6",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The core reconcile work already succeeded and pushed cleanly; only a trailing provider process failed to exec (exit-126, zero turns), which reads as a transient infra blip rather than actionable dev work.",
-			"evidence": [
-				"reconcile logic completing fully: 55 handoffs refreshed... successful git push",
-				"exit-126 and turns=0... provider process never executed any agent turns",
-				"permission_denials=0 rules out an auth/ACL denial"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-14T02:29:20.466Z"
 		},
 		{
 			"key": "issue:minion-meta#428",
