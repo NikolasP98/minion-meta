@@ -65,7 +65,9 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15204
 - `NikolasP98/minion-meta@dev rankings/index.json:15304` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15304
-- `NikolasP98/minion-meta@dev rankings/index.json:16123` — leave bars + holiday shading come from the loader's current-year",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16123
-- `NikolasP98/minion-meta@dev rankings/index.json:18347` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18347
+- `NikolasP98/minion-meta@dev rankings/index.json:16058` — leave bars + holiday shading come from the loader's current-year",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16058
+- `NikolasP98/minion-meta@dev rankings/index.json:17508` — marker",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17508
+- `NikolasP98/minion-meta@dev rankings/index.json:18379` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18379
