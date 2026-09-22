@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-22T03:59:02.806Z",
+	"generatedAt": "2026-09-22T04:29:14.823Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3517,6 +3517,111 @@
 			"scoredAt": "2026-09-20T09:28:30.713Z"
 		},
 		{
+			"key": "issue:minion-meta#556",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#556 [monitor:unstick] reconcile proposals a907657f - claude agent exec failure (exit-126, turns=0)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/556",
+			"sourceUpdatedAt": "2026-09-22T04:17:47Z",
+			"sourceFingerprint": "99aa4f8b84bf93d27d8f6aab059e634be45d2d85eefa12a38bf60c839728f949",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#557",
+				"issue:minion-meta#558"
+			],
+			"rationale": "This is one of three near-identical automated alerts for the same recurring exit-126/turns=0 executor failure and should be consolidated into a single infra-fix goal.",
+			"evidence": [
+				"same diagnosis text and signature as #557 and #558",
+				"recurred 4 times within ~2 hours on 2026-09-22 per the quoted alert"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T04:29:14.699Z"
+		},
+		{
+			"key": "issue:minion-meta#557",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#557 [monitor:unstick] reconcile proposals 3985ae74 - claude agent exec failure (exit-126, turns=0)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/557",
+			"sourceUpdatedAt": "2026-09-22T04:17:51Z",
+			"sourceFingerprint": "4ecab2eeecb92c9b002a6381fe3fe33b562ceb8c3d2a3820132c6a7000ca49bf",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#556",
+				"issue:minion-meta#558"
+			],
+			"rationale": "Duplicate of #556/#558 reporting the same executor-host exit-126/turns=0 signature and should be merged into one goal rather than tracked separately.",
+			"evidence": [
+				"identical diagnosis text to #556 and #558",
+				"reconcile pipeline succeeded before the downstream exec failure, per the quoted alert"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T04:29:14.699Z"
+		},
+		{
+			"key": "issue:minion-meta#558",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#558 [monitor:unstick] reconcile proposals ebc3bd69 - claude agent exec failure (exit-126, turns=0)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/558",
+			"sourceUpdatedAt": "2026-09-22T04:17:55Z",
+			"sourceFingerprint": "5cd92331f6ac6eafecedbf17d417ed08ab1cc7f773a4d20c8110ff0e9eea9162",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#556",
+				"issue:minion-meta#557"
+			],
+			"rationale": "Third duplicate alert for the same recurring exit-126/turns=0 executor failure; grouping avoids tracking three tickets for one root cause.",
+			"evidence": [
+				"same fingerprint pattern and diagnosis as #556 and #557",
+				"alert recommends inspecting the executor host, not the reconcile logic"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T04:29:14.699Z"
+		},
+		{
 			"key": "pr:minion_site#25",
 			"kind": "pr",
 			"stage": "development",
@@ -5521,6 +5626,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T03:29:43.796Z"
+		},
+		{
+			"key": "pr:minion_hub#360",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#360 fix(ui): stop in-page chrome outranking app chrome; portal the tooltip",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/360",
+			"sourceUpdatedAt": "2026-09-22T04:26:11Z",
+			"sourceFingerprint": "7415f97f35eab4fc5457cedf7dd74d35d0260dece30fcba34ac0bcbb4015454d",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Owner-reported z-index stacking bug across sidebar/tooltip/calendar/table is fully diagnosed, fixed, and verified with new regression tests, ready to land.",
+			"evidence": [
+				"owner report: 'appointments calendar painted over the collapsed sidebar'",
+				"z-layers.test.ts added to lock the three fixed rules",
+				"72/72 suites passing, 0 lint/token debt increase"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T04:29:14.699Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -15431,6 +15569,38 @@
 			"scoredAt": "2026-09-21T14:59:23.458Z"
 		},
 		{
+			"key": "pr:minion_hub#359",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#359 fix(nav): centre module-mode icons in the collapsed rail",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/359",
+			"sourceUpdatedAt": "2026-09-22T04:02:38Z",
+			"sourceFingerprint": "56a7ff1f940fe8d9ad0572aafcfe54241fc501b17356aa9fc29416038127913a",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, well-proven, already-implemented UI fix with root cause and before/after measurements ready to merge.",
+			"evidence": [
+				"root cause identified: scoped .nav-text flex overriding Tailwind hidden",
+				"proof shows x=22→x=28 fix across all POS rows, 49/49 specs passing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T04:29:14.699Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-brain-org-all-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18038,6 +18208,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T03:59:20.386Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 8
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine deployment-health entry pointing at an already-merged commit fixing nitter persistence/shutdown, so there is no open work left to schedule.",
+			"evidence": [
+				"summary is a merged commit message (co-authored)",
+				"tags: deployment, no open status field beyond 'unknown'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T04:29:14.699Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
