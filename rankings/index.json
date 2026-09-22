@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-21T23:58:22.288Z",
+	"generatedAt": "2026-09-22T00:24:20.192Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2979,6 +2979,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:38:08.134Z"
+		},
+		{
+			"key": "spec:2026-09-21-hub-optimistic-interactions-motion-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion-meta",
+			"title": "Hub optimistic interactions, autosave and async motion",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-09-21-hub-optimistic-interactions-motion-spec.md",
+			"sourceUpdatedAt": "2026-09-21",
+			"sourceFingerprint": "bd4ee6943e6ec9ef0fc56b7ef7ccd82837840e05dd1e60495f3fe5d564496e87",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-09-20-hub-component-service-centralization"
+			],
+			"rationale": "User-authorized implementation is already underway with a merged Hub PR extending shared mutation/optimistic infrastructure while a documented stale-write risk in booking persistence remains unresolved.",
+			"evidence": [
+				"Hub PR #352 (698aaa71) merged per IMPLEMENTATION.md, user authorized merge/deployment",
+				"Booking PATCH lacks expected version; current row locking alone does not reject stale client intent",
+				"scanner covered 1,055 client source files across booking, CRM, stock, POS"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T00:24:20.096Z"
 		},
 		{
 			"key": "pr:minion (gateway)#262",
@@ -9045,6 +9080,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:40:01.592Z"
+		},
+		{
+			"key": "proposal:2026-09-20-hub-component-service-centralization",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Centralize Hub components, domain contracts and live entity updates",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-20-hub-component-service-centralization.md",
+			"sourceUpdatedAt": "2026-09-21",
+			"sourceFingerprint": "9594598e0b2955fefcb74e4a938a3129ccee63b8e0740633a407db6842a2a2f8",
+			"score": 47,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-09-21-hub-optimistic-interactions-motion-spec"
+			],
+			"rationale": "Detailed audit-backed proposal to centralize Hub domain services and live updates remains at proposal stage with no dev started, and overlaps a spec already implementing part of its scope.",
+			"evidence": [
+				"status: draft, stage: proposal",
+				"cites specific anchors e.g. stock/items/+page.svelte:19, flow-editor.svelte.ts:588",
+				"DELTA slice 1 (fetchJson/jsonMutation, expected-version writes) overlaps spec's authorized work"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T00:24:20.096Z"
 		},
 		{
 			"key": "run:minion (gateway)#35574314591",
@@ -17094,38 +17164,6 @@
 			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a deployment-health snapshot of an already-merged commit fixing nitter persistence/shutdown, leaving no further actionable work.",
-			"evidence": [
-				"commit fixes 'serialize persistence and drain poller shutdown' for nitter",
-				"tagged as deployment health entry, already committed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-21T22:59:02.001Z"
-		},
-		{
 			"key": "issue:minion-meta#427",
 			"kind": "issue",
 			"stage": "proposal",
@@ -19168,6 +19206,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-18T07:29:20.370Z"
+		},
+		{
+			"key": "run:minion_hub#35671656119",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35671656119",
+			"sourceUpdatedAt": "2026-09-22T00:22:11Z",
+			"sourceFingerprint": "07f79144052e46eb7706196368a2796814f5beb5b4da4a62f82d6fc4be171d07",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run on a master push with no reported failure or actionable follow-up, not a board goal.",
+			"evidence": [
+				"status: in_progress",
+				"summary: push on master",
+				"workflow name: CI"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T00:24:20.096Z"
 		},
 		{
 			"key": "issue:minion-meta#428",
