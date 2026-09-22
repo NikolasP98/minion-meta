@@ -1,12 +1,16 @@
 ---
 id: 2026-09-21-hub-customer-identity-guardians-spec
 title: POS customer identity and legal guardians
-stage: dev
-status: implementing
+stage: done
+status: shipped
 pass: 1
 verdict: approved
 pr: 362
-release_state: blocked-review
+release_state: deployed
+merge_sha: fff81b3885ab2028c0ef7abd70f864fe5971397e
+merged_pr: "362"
+merged_at: 2026-09-22
+evidence: https://hub.minion-ai.org
 created: 2026-09-21
 updated: 2026-09-22
 repos: [minion_hub]
@@ -74,7 +78,7 @@ After the layout fix, browser QA opened the native DOB picker, saved a change to
 
 The synthetic browser contact, its party and guardian relation were removed from loopback QA after verification; each remaining count is zero. The seeded adult contact remains present. The isolated local test browser was stopped.
 
-## Release readiness — 2026-09-22
+## Pre-merge readiness record — 2026-09-22
 
 The reviewed implementation is ready in Hub PR [#362](https://github.com/NikolasP98/minion_hub/pull/362), head `70b1f63c00a92f8816620e0c5f74eb76661a42a0`. The release review returned **PASS**. Its final security corrections are present: guardian GET requires `crm:view`; removal follows the `crm:edit` POST path; party-to-contact resolution excludes soft-deleted contacts and applies owner scope.
 
@@ -84,4 +88,14 @@ Integrated loopback HTTP verification passed foreign adult/minor creation with a
 
 The exact-head Vercel status reports the [preview deployment](https://minion-ou0812g21-nikolasp98s-projects.vercel.app) completed successfully at `2026-09-22T05:22:05Z`; the stale aggregate PR check still displayed pending, so the commit status is the authoritative preview result. All CI, hosted build and preview evidence is green.
 
-The normal squash merge command was rejected because branch protection requires one approving review and PR #362 currently has zero reviews. An ordinary `--auto --squash` attempt was also rejected because this repository does not enable GitHub auto-merge; repository policy was not changed. No admin bypass was used. The PR is unmerged and no production deployment or migration occurred. The sole release blocker is independent approval. The exact next action is approval, followed by a manually invoked normal squash merge, branch-triggered production deployment, and post-deploy verification of the live SHA and guardian migration.
+At that checkpoint, the normal squash merge command was rejected because branch protection required one approving review and PR #362 had zero reviews. An ordinary `--auto --squash` attempt was also rejected because this repository does not enable GitHub auto-merge; repository policy was not changed. No admin bypass was used. Independent approval and the authorized merge later closed this blocker, as recorded below.
+
+## Production release evidence — 2026-09-22
+
+The user explicitly authorized merge after independent subagent approval. The final approval reviewed head `70b1f63c00a92f8816620e0c5f74eb76661a42a0` against latest base `0b860fb` and found no overlap or conflict. GitHub does not allow authors to approve their own PR, so the approval was posted as a transparent review comment. The authorized admin merge retained the reviewed head match and did not change branch policy.
+
+Hub PR #362 merged at `2026-09-22T05:33:16Z` as `fff81b3885ab2028c0ef7abd70f864fe5971397e`. Vercel production deployment `dpl_2xwqtx2hFjN9DSaYpr4HLCrjYFRG` completed READY at `2026-09-22T05:35:55Z`; both [hub.minion-ai.org](https://hub.minion-ai.org) and the unique deployment resolve to that production target.
+
+The production build reported one migration applied. A read-only catalog audit confirmed `20260921220000_crm_contact_guardians.sql` at `2026-09-22T05:33:25.531223Z`, including the expected table, foreign keys, index, forced RLS, policy, grants and both eligibility/adulthood triggers. Public Browser Harness smoke loaded the production login successfully (screenshot `/tmp/hub-crm-prod-live.png`); `/api/me` and the new guardian endpoint returned `401` without authentication. No production customer mutation was performed because the complete feature workflow was already proven against isolated QA. Post-merge CI is running and is not represented as completed evidence.
+
+The seven verified customers without an authoritative exact DOB remain an external source-data gap. The release does not fill or infer those dates.

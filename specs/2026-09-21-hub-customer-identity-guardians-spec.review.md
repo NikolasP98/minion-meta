@@ -59,4 +59,12 @@ Hub PR #362 is ready at `70b1f63c00a92f8816620e0c5f74eb76661a42a0`. GitHub Actio
 
 The exact-head [Vercel preview](https://minion-ou0812g21-nikolasp98s-projects.vercel.app) completed successfully at `2026-09-22T05:22:05Z`. All CI, hosted build and preview evidence is green.
 
-Release is blocked only on branch protection. The normal squash merge was rejected because one approving review is required and PR #362 has zero reviews. An ordinary auto-squash request was rejected because repository auto-merge is disabled, and policy was not changed; approval will therefore require a subsequent manual normal merge command. No admin bypass was attempted and no production deployment or migration occurred. The next action is an independent GitHub approval, followed by normal merge, production deployment and verification of the live SHA and migration.
+At the pre-merge checkpoint, release was blocked only on branch protection. The normal squash merge was rejected because one approving review was required and PR #362 had zero reviews. An ordinary auto-squash request was rejected because repository auto-merge is disabled, and policy was not changed. The later independent approval and authorized merge closed this blocker, as recorded below.
+
+## Release disposition — DEPLOYED
+
+The user explicitly authorized merge after independent approval. A subagent reviewed exact head `70b1f63c00a92f8816620e0c5f74eb76661a42a0` against latest base `0b860fb` and returned **APPROVED**, with no overlapping changes or conflicts. Because GitHub blocks self-approval, that result was recorded transparently as a comment. The authorized admin merge used head matching and did not alter branch policy.
+
+PR #362 merged at `2026-09-22T05:33:16Z` as `fff81b3885ab2028c0ef7abd70f864fe5971397e`. Production deployment `dpl_2xwqtx2hFjN9DSaYpr4HLCrjYFRG` completed READY at `2026-09-22T05:35:55Z` and serves [hub.minion-ai.org](https://hub.minion-ai.org). Migration `20260921220000` was applied and independently verified read-only, including forced RLS, policy, grants, referential constraints, triggers and index. Public smoke rendered the login and confirmed protected APIs return `401` unauthenticated. No live customer data was changed. Post-merge CI remains in progress and is not claimed green.
+
+The seven unavailable authoritative DOBs remain a documented data-source limitation rather than a release defect.
