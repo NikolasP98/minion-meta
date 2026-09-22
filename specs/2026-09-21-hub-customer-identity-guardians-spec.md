@@ -5,6 +5,8 @@ stage: dev
 status: implementing
 pass: 1
 verdict: approved
+pr: 362
+release_state: blocked-review
 created: 2026-09-21
 updated: 2026-09-22
 repos: [minion_hub]
@@ -74,6 +76,12 @@ The synthetic browser contact, its party and guardian relation were removed from
 
 ## Release readiness — 2026-09-22
 
-The reviewed implementation is staged in Hub PR [#362](https://github.com/NikolasP98/minion_hub/pull/362), head `70b1f63c`. The release review in `/tmp/hub-crm-release-review.md` returned **PASS**. Its final security corrections are present: guardian GET requires `crm:view`; removal follows the `crm:edit` POST path; party-to-contact resolution excludes soft-deleted contacts and applies owner scope.
+The reviewed implementation is ready in Hub PR [#362](https://github.com/NikolasP98/minion_hub/pull/362), head `70b1f63c00a92f8816620e0c5f74eb76661a42a0`. The release review returned **PASS**. Its final security corrections are present: guardian GET requires `crm:view`; removal follows the `crm:edit` POST path; party-to-contact resolution excludes soft-deleted contacts and applies owner scope.
 
-The PR's CI and production build are pending. PR #362 has not merged and the feature is **not deployed**. A green local suite or review verdict is preparation rather than release evidence; deployment and post-merge verification remain outstanding lifecycle states.
+GitHub Actions run `35690259849` passed all seven jobs. The test job reports 513 files and 4,375 tests passed, with 4 files and 208 tests skipped; the guardian PostgreSQL suite separately passed 1/1. Svelte check reports zero errors and warnings. Both hosted builds passed. The default-heap local build exhausted memory; a duplicate local retry was stopped after hosted build evidence was green, so it is not represented as an additional pass.
+
+Integrated loopback HTTP verification passed foreign adult/minor creation with a shared phone but distinct parties, foreign-document and demographic persistence, DOB patch/readback, guardian linking/removal, and deleted-contact resolver behavior. Synthetic fixture cleanup left zero contacts, parties or links. The seeded QA roles all carry CRM view, so no runtime `403` persona existed; the five-test guardian API regression proves denied GET access before contact reads.
+
+The exact-head Vercel status reports the [preview deployment](https://minion-ou0812g21-nikolasp98s-projects.vercel.app) completed successfully at `2026-09-22T05:22:05Z`; the stale aggregate PR check still displayed pending, so the commit status is the authoritative preview result. All CI, hosted build and preview evidence is green.
+
+The normal squash merge command was rejected because branch protection requires one approving review and PR #362 currently has zero reviews. An ordinary `--auto --squash` attempt was also rejected because this repository does not enable GitHub auto-merge; repository policy was not changed. No admin bypass was used. The PR is unmerged and no production deployment or migration occurred. The sole release blocker is independent approval. The exact next action is approval, followed by a manually invoked normal squash merge, branch-triggered production deployment, and post-deploy verification of the live SHA and guardian migration.

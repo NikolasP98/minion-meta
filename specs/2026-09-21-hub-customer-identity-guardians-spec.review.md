@@ -53,4 +53,10 @@ The isolated release review at Hub PR [#362](https://github.com/NikolasP98/minio
 
 The final access review confirmed that guardian GET requires `crm:view`, guardian removal uses the edit-gated POST action, and party-to-contact resolution excludes soft-deleted contacts while retaining owner scope. Focused guardian API coverage proves link `201`, removal `200`, invalid route/body rejection and denied reads before contact access.
 
-This release review does not change the requirements verdict from `partial`: seven verified customers still lack an authoritative exact DOB. It also does not claim release completion. CI and the production build are pending; PR #362 is unmerged and **not deployed**.
+This release review does not change the requirements result from partial: seven verified customers still lack an authoritative exact DOB.
+
+Hub PR #362 is ready at `70b1f63c00a92f8816620e0c5f74eb76661a42a0`. GitHub Actions run `35690259849` passed all seven jobs: 513 files and 4,375 tests passed, while 4 files and 208 tests were skipped; the guardian PostgreSQL suite separately passed 1/1. Svelte check is clean and both hosted builds are green. Integrated HTTP verification and synthetic cleanup passed. The absent runtime `403` persona is covered by the five-test guardian API regression, which proves denied reads before contact access.
+
+The exact-head [Vercel preview](https://minion-ou0812g21-nikolasp98s-projects.vercel.app) completed successfully at `2026-09-22T05:22:05Z`. All CI, hosted build and preview evidence is green.
+
+Release is blocked only on branch protection. The normal squash merge was rejected because one approving review is required and PR #362 has zero reviews. An ordinary auto-squash request was rejected because repository auto-merge is disabled, and policy was not changed; approval will therefore require a subsequent manual normal merge command. No admin bypass was attempted and no production deployment or migration occurred. The next action is an independent GitHub approval, followed by normal merge, production deployment and verification of the live SHA and migration.
