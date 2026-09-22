@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-22T10:28:33.309Z",
+	"generatedAt": "2026-09-22T10:58:31.638Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -17773,6 +17773,38 @@
 			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine merged commit fixing nitter persistence/shutdown with no indication of ongoing deployment health issue.",
+			"evidence": [
+				"commit already merged: fix(nitter): serialize persistence and drain shutdown (#295)",
+				"tag is generic 'deployment' with no failure signal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T10:58:31.532Z"
+		},
+		{
 			"key": "issue:minion-meta#427",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17854,21 +17886,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 6,
+				"implementation": 3
 			},
 			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The reconcile sweep's actual work (commit and push) already succeeded and only a transient agent-launch step failed, with the diagnosis itself recommending action only if the pattern recurs.",
+			"rationale": "The diagnosis itself states the reconcile data was already committed and pushed and the failure was a transient infra exit-126 with zero turns consumed, safe to retry as-is with no repo-side fix needed.",
 			"evidence": [
-				"exit-126, turns=0, worker_started_at ~0.5s before finished_at",
-				"reconciliation data already committed and pushed (2a874e7..859e9f3)",
-				"recommendation: safe to retry as-is; check runner only if signature recurs"
+				"reconciliation data itself is already committed and pushed",
+				"exit-126, turns=0 ... looks like a runner/box-level infra fault ... not a task-logic or spec failure",
+				"Recommendation: safe to retry as-is"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-15T10:28:53.675Z"
+			"scoredAt": "2026-09-22T10:58:31.532Z"
 		},
 		{
 			"key": "issue:minion-meta#452",
