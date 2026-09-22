@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-22T18:29:10.760Z",
+	"generatedAt": "2026-09-22T18:58:37.804Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -13186,6 +13186,38 @@
 			"scoredAt": "2026-09-21T10:38:08.134Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown handling appears deployed but has no explicit verification signal attached.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"status: unknown"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T18:58:37.685Z"
+		},
+		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18973,21 +19005,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 5,
+				"implementation": 3
 			},
-			"confidence": 3,
+			"confidence": 4,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Automated monitor-intake reports a single transient agent-launch exit-126 on an otherwise-completed reconcile run, with no distinct actionable engineering task defined.",
+			"rationale": "Diagnosis indicates the substantive reconcile work already completed and pushed, with only a cheap idempotent agent-launch retry remaining, so this is low-value as a standalone goal.",
 			"evidence": [
-				"tags: monitor-intake",
-				"title notes 'exit-126, turns=0'",
-				"fingerprint: unstick-unknown-1971ab3c"
+				"all substantive work upstream of that call completed and was already persisted/pushed",
+				"Recommendation: safe to retry"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-15T18:28:59.404Z"
+			"scoredAt": "2026-09-22T18:58:37.685Z"
 		},
 		{
 			"key": "issue:minion-meta#440",
