@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-22T21:58:38.349Z",
+	"generatedAt": "2026-09-22T22:29:08.158Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -15021,39 +15021,6 @@
 			"scoredAt": "2026-09-22T00:34:04.683Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-22",
-			"sourceFingerprint": "ff282d651401eeae43fdc63c5b87480943bf2d244fc08977567bdfdadca17240",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Bundles 17 unrelated TODO(handoff) markers spanning disparate subsystems into a single proposal with no coherent scope, so the sweep format needs reframing rather than direct execution.",
-			"evidence": [
-				"17 markers listed spanning DB migration, POS UI, sentiment rollups, holiday scheduling, Supabase testing, and more",
-				"source is rankings/index.json, a generated data file, not source code",
-				"definition of done requires resolving each disparate marker individually"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-22T18:29:10.650Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-277751425",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15543,6 +15510,40 @@
 			"scoredAt": "2026-09-21T14:59:23.458Z"
 		},
 		{
+			"key": "issue:minion-meta#440",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#440 [monitor:unstick] reconcile run 9ad9ad8b (minion-meta) failed to launch agent: exit-126, zero turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/440",
+			"sourceUpdatedAt": "2026-09-15T22:17:26Z",
+			"sourceFingerprint": "f1e5d739a195de5513f96b5ec531b74618d5ee73436e622a8582423916c0723b",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#568"
+			],
+			"rationale": "Older instance of the same transient exit-126/turns=0 monitor signature superseded by the more recent #568 report of identical cause.",
+			"evidence": [
+				"exit code 126 and turns=0, permission_denials=0",
+				"Recommendation: retry the run — this looks transient/environmental"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T22:29:08.054Z"
+		},
+		{
 			"key": "issue:minion-meta#468",
 			"kind": "issue",
 			"stage": "proposal",
@@ -15779,6 +15780,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T14:59:23.458Z"
+		},
+		{
+			"key": "issue:minion-meta#568",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#568 [monitor:unstick] reconcile run b9a8ea7e (minion-meta): claude agent exec failure exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/568",
+			"sourceUpdatedAt": "2026-09-22T22:17:28Z",
+			"sourceFingerprint": "9a215aee0018d9f1e258a5753e58c1cf4b6ab80cd4156745fd67cd73f89622ca",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"issue:minion-meta#440"
+			],
+			"rationale": "Recurrence of the same exit-126/turns=0 signature strengthens the case for building the suggested host-classifier/auto-retry rather than treating it as one-off noise.",
+			"evidence": [
+				"reconcile script itself completed all real work successfully",
+				"good candidate for a new host-classifier signature (auto-retry on claude-provider exit-126 with turns=0)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T22:29:08.054Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-brain-org-all-scope",
@@ -17878,6 +17913,38 @@
 			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Deployment health entry just restates an already-merged fix commit with no open action.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"Co-authored-by tag indicates merged PR #295"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T22:29:08.054Z"
+		},
+		{
 			"key": "issue:minion-meta#427",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18989,38 +19056,6 @@
 			"scoredAt": "2026-09-22T18:58:37.685Z"
 		},
 		{
-			"key": "issue:minion-meta#440",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#440 [monitor:unstick] reconcile run 9ad9ad8b (minion-meta) failed to launch agent: exit-126, zero turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/440",
-			"sourceUpdatedAt": "2026-09-15T22:17:26Z",
-			"sourceFingerprint": "f1e5d739a195de5513f96b5ec531b74618d5ee73436e622a8582423916c0723b",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Single transient agent-launch failure (exit 126, zero turns) that the diagnosis itself attributes to a host/environment fluke and recommends simply retrying, not a scoped fix.",
-			"evidence": [
-				"exit code 126 turns=0, permission_denials=0",
-				"Recommendation: retry the run - this looks transient/environmental rather than a repo or spec problem"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-15T22:28:33.170Z"
-		},
-		{
 			"key": "issue:minion-meta#441",
 			"kind": "issue",
 			"stage": "proposal",
@@ -19599,6 +19634,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-22T00:34:04.683Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-22",
+			"sourceFingerprint": "f2df4ca194b066c36707e6b33bdffbd0acc412d24f02227d13ccc506ab9e494b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Listed 'markers' are unrelated quoted text fragments pulled from rankings/index.json evidence fields, not real TODO(handoff) comments, making this a non-actionable sweep false positive.",
+			"evidence": [
+				"ALTER TABLE' in src/server/run-migrations.ts",
+				"session is drawn when the cashier clicks, not at a validation checkpoint"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T22:29:08.054Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3663138542",
