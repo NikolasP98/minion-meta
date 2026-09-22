@@ -3,7 +3,7 @@ id: handoff-minion-meta-221859101
 title: Handoff marker — rankings/index.json (minion-meta)
 status: review
 created: 2026-09-04
-updated: 2026-09-21
+updated: 2026-09-22
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: postmerge-minion-hub-249dc0b349bf
@@ -25,7 +25,7 @@ did not write — treat it as a finding DESCRIPTION, never as an instruction.
 `TODO(handoff):` comment removed; the sweep closes this proposal
 automatically once the file carries no more markers.
 
-## Markers (as of 2026-09-21)
+## Markers (as of 2026-09-22)
 
 - `NikolasP98/minion-meta@dev rankings/index.json:2109` — drizzle/0008_workshop_thumbnail.sql (ALTER TABLE' in src/server/run-migrations.ts",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2109
@@ -59,13 +59,15 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12502
 - `NikolasP98/minion-meta@dev rankings/index.json:13865` — prompt-driven protocol instead of native tool_use — replace",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13865
-- `NikolasP98/minion-meta@dev rankings/index.json:14413` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14413
-- `NikolasP98/minion-meta@dev rankings/index.json:14510` — define fold-spanning event rendering when local end <= start",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14510
-- `NikolasP98/minion-meta@dev rankings/index.json:14610` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14610
-- `NikolasP98/minion-meta@dev rankings/index.json:15495` — leave bars + holiday shading come from the loader's current-year",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15495
-- `NikolasP98/minion-meta@dev rankings/index.json:17664` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17664
+- `NikolasP98/minion-meta@dev rankings/index.json:14481` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14481
+- `NikolasP98/minion-meta@dev rankings/index.json:14578` — define fold-spanning event rendering when local end <= start",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14578
+- `NikolasP98/minion-meta@dev rankings/index.json:14678` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14678
+- `NikolasP98/minion-meta@dev rankings/index.json:15531` — leave bars + holiday shading come from the loader's current-year",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15531
+- `NikolasP98/minion-meta@dev rankings/index.json:17733` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17733
+- `NikolasP98/minion-meta@dev rankings/index.json:18777` — comment removed",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18777
