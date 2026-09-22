@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-22T05:35:16.477Z",
+	"generatedAt": "2026-09-22T05:56:15.354Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3652,40 +3652,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-15T14:28:58.709Z"
-		},
-		{
-			"key": "pr:minion-meta#561",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#561 docs: record CRM identity and guardian release readiness",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/561",
-			"sourceUpdatedAt": "2026-09-22T05:28:42Z",
-			"sourceFingerprint": "f69a6e30bd191d8a4d8259a4c19ffd3e1696b05e07da1bdeae0d264bace66118",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-ab7a33dc7fa6"
-			],
-			"rationale": "Hub PR #362 is fully green and only blocked on the required independent approval, so merging it is a small, high-readiness action that unblocks deployment.",
-			"evidence": [
-				"all seven CI jobs, both hosted builds, and exact-head Vercel preview are green",
-				"blocked only by branch-protection's one required approving review; auto-merge disabled"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-22T05:35:16.373Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-lifecycle-swallows-handoff",
@@ -9586,6 +9552,40 @@
 			"scoredAt": "2026-09-15T14:28:58.709Z"
 		},
 		{
+			"key": "pr:minion-meta#561",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#561 docs: record CRM identity and guardian release readiness",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/561",
+			"sourceUpdatedAt": "2026-09-22T05:39:16Z",
+			"sourceFingerprint": "b98f876cd7969e4ab0bfe6e746f47cacf60ff09c65def6c6f62c95d581fdb8cb",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-4251576030"
+			],
+			"rationale": "This documentation PR has clear validation steps and reports passing post-merge CI, so it is ready to merge and close the SDLC loop.",
+			"evidence": [
+				"Post-merge CI run 35691161338 completed successfully with all six applicable jobs passing",
+				"Vercel production deployment dpl_2xwqtx2hFjN9DSaYpr4HLCrjYFRG is READY"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T05:56:15.231Z"
+		},
+		{
 			"key": "proposal:2026-08-18-base-attention-queue-responsive-runs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14816,6 +14816,40 @@
 			"scoredAt": "2026-09-22T00:32:55.816Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-4251576030",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — scripts/repair-verified-customer-metadata.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-4251576030.md",
+			"sourceUpdatedAt": "2026-09-22",
+			"sourceFingerprint": "1631b28b0a6573efc7812e001939dbdde5afc688232f1c523a36a2386cd8d19a",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"pr:minion-meta#561"
+			],
+			"rationale": "The DOB gap is already documented as an accepted limitation caused by an external provider, so the goal needs reframing toward an alternate resolution path rather than expecting the current approach to close it.",
+			"evidence": [
+				"Seven production-verified customers still have no DOB",
+				"the configured authoritative provider returned no exact dates"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T05:56:15.231Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-902723699",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17077,6 +17111,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-22T00:34:04.683Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine, already-merged nitter fix with unknown deployment status and no defined goal beyond tracking health.",
+			"evidence": [
+				"status: unknown",
+				"fix(nitter): serialize persistence and drain poller shutdown (already merged)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T05:56:15.231Z"
 		},
 		{
 			"key": "issue:minion-meta#345",
@@ -19553,14 +19619,14 @@
 			"scoredAt": "2026-09-20T00:28:23.917Z"
 		},
 		{
-			"key": "run:minion_hub#35691161338",
+			"key": "run:minion_hub#35692529849",
 			"kind": "run",
 			"stage": "testing",
 			"repo": "minion_hub",
 			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35691161338",
-			"sourceUpdatedAt": "2026-09-22T05:33:23Z",
-			"sourceFingerprint": "99320f5a4ed2d6d137068c1f3acf8780366c199b5316aec8ecdcb7b0cf0e1e12",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/35692529849",
+			"sourceUpdatedAt": "2026-09-22T05:54:12Z",
+			"sourceFingerprint": "4d2da3030fe97fa05f074079c800ddcdd777caaa5307543739b11fb8876b0f43",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -19569,20 +19635,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 2,
+				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 5,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run triggered by a push to master, not a discrete actionable goal to rank.",
+			"rationale": "This is a transient, still-running CI status entry with no defined goal or actionable scope.",
 			"evidence": [
-				"stage: testing, status: in_progress",
-				"summary: push on master"
+				"status: in_progress",
+				"push on master"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-22T05:35:16.373Z"
+			"scoredAt": "2026-09-22T05:56:15.231Z"
 		},
 		{
 			"key": "issue:minion-meta#415",
@@ -19978,7 +20044,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-22",
-			"sourceFingerprint": "c9cb3f0df6579cc812da09957a0278c6c410f70a8435d403a799855970b96e3e",
+			"sourceFingerprint": "b75697e0c1928d5ed01b7f1298104c79efe87498caeb0e1a55f4d1af98250341",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -19990,17 +20056,17 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 2,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The listed markers are line references into the rankings/index.json data file itself rather than real source-code TODO(handoff) comments needing resolution.",
+			"rationale": "The listed markers are text fragments extracted from a JSON data file (rankings/index.json) rather than real code TODOs, making this sweep output non-actionable noise.",
 			"evidence": [
-				"all markers point into rankings/index.json, a generated ranking data file",
-				"marker text fragments look like quoted excerpts from prior candidate summaries, not code TODOs"
+				"markers quoted below is text copied out of repository source this sweep did not write",
+				"all citations point into rankings/index.json data lines, not source code"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-22T05:29:22.315Z"
+			"scoredAt": "2026-09-22T05:56:15.231Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
