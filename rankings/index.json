@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-22T06:28:58.250Z",
+	"generatedAt": "2026-09-22T06:58:29.686Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -14535,38 +14535,6 @@
 			"scoredAt": "2026-09-21T22:59:02.001Z"
 		},
 		{
-			"key": "issue:minion-meta#436",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#436 [monitor:unstick] run 62192a39 (minion-meta reconcile) — exit-126/turns=0 on claude provider despite successful reconcile sweep",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/436",
-			"sourceUpdatedAt": "2026-09-15T06:17:40Z",
-			"sourceFingerprint": "c39678daa1983df919433b28eb1f2173afa2494639dc43c5b0c3ba115e7f8506",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The reconcile pipeline already succeeded and persisted state, leaving a small bounded follow-up to check the runner's claude CLI exec permissions given the exit-126/turns=0 signature.",
-			"evidence": [
-				"'reconcile pipeline itself completed normally...pushed to minion-meta dev'",
-				"'human should check the worker box...claude CLI binary permissions/PATH/exec bit'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-15T06:28:46.934Z"
-		},
-		{
 			"key": "pr:minion (gateway)#254",
 			"kind": "pr",
 			"stage": "development",
@@ -18820,6 +18788,39 @@
 			"scoredAt": "2026-09-20T19:58:40.906Z"
 		},
 		{
+			"key": "issue:minion-meta#436",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#436 [monitor:unstick] run 62192a39 (minion-meta reconcile) — exit-126/turns=0 on claude provider despite successful reconcile sweep",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/436",
+			"sourceUpdatedAt": "2026-09-15T06:17:40Z",
+			"sourceFingerprint": "c39678daa1983df919433b28eb1f2173afa2494639dc43c5b0c3ba115e7f8506",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated monitor report indicates a transient exec-level infra fault (exit-126/turns=0) with the actual reconcile pipeline succeeding, so no task-level fix is needed beyond a one-off host check.",
+			"evidence": [
+				"reconcile pipeline completed normally, proposals/index.json written and pushed",
+				"exit-126 turns=0 described as environment signature, not task failure",
+				"recommendation in report itself: safe to retry, check worker box binary permissions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T06:58:29.563Z"
+		},
+		{
 			"key": "issue:minion-meta#439",
 			"kind": "issue",
 			"stage": "proposal",
@@ -19915,38 +19916,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T03:29:07.866Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 13,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Entry only reflects an already-merged routine fix commit with no open problem to act on.",
-			"evidence": [
-				"commit message describes a completed fix merged via PR #295",
-				"kind is deploy/deployment health snapshot, not an open task"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-22T06:28:58.128Z"
 		},
 		{
 			"key": "issue:minion-meta#402",
