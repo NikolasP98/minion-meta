@@ -1,10 +1,10 @@
 ---
 id: 2026-09-20-hub-component-service-centralization
 title: Centralize Hub components, domain contracts and live entity updates
-status: draft
+status: approved
 implementation_status: partial
 created: 2026-09-20
-updated: 2026-09-21
+updated: 2026-09-22
 repos: [minion-meta, minion_hub]
 tags: [logic, test]
 effort: L
