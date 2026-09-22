@@ -68,7 +68,16 @@ Those 26 tests pass with process-local `commit.gpgsign=false`; the complete suit
 passed with 4,332 tests and 206 skipped across 505 passing/3 skipped files. No global Git setting changed.
 Production build passed, including Vercel adapter output. Final type check again
 reported 0 errors/0 warnings; formatting passed for all 28 release files. Signed commit `aaf61ac9` is published in [Hub PR #354](https://github.com/NikolasP98/minion_hub/pull/354).
-Hosted PR checks, merge and deployment remain pending.
+All PR checks passed, including hosted QA and Vercel. The user explicitly
+approved the admin override for #354; it merged as
+`2365d2042b7d73473c25a7782d42598b95e23234` at `2026-09-22T00:22:04Z`.
+
+Production deployment `dpl_EJDZv5LGKCcyt2M1erLNjXXBaZ5V` reached Ready, with GitHub
+deployment `6580832713` confirming that exact SHA and success at
+`2026-09-22T00:24:41Z`. Vercel aliases include `https://hub.minion-ai.org`.
+Headless Chromium loaded `/en/login`, title `Sign in — Minion Hub`, with the
+expected email/password form and Google sign-in control. No production sign-in
+or mutation was performed. [Production screenshot](browser/production-login.png).
 
 ## Scope limits
 
