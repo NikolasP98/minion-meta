@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-22T02:29:03.851Z",
+	"generatedAt": "2026-09-22T02:58:28.120Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -12766,6 +12766,38 @@
 			"scoredAt": "2026-09-21T10:38:08.134Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown serialization looks like routine maintenance rather than an active deployment blocker.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"status: unknown"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T02:58:28.005Z"
+		},
+		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -15152,38 +15184,6 @@
 			"scoredAt": "2026-09-21T14:59:23.458Z"
 		},
 		{
-			"key": "issue:minion-meta#435",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#435 [monitor:unstick] reconcile proposals run ece42838 (minion-meta) — exit-126 agent launch failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/435",
-			"sourceUpdatedAt": "2026-09-15T02:17:30Z",
-			"sourceFingerprint": "0b3947824fc7ddb7dd637e1a59ab44709c3cfc6f898f5ca552d48f2af74e2d84",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An automated monitor report of a single exit-126 agent-launch failure whose scripted work already succeeded and is idempotent, leaving only a vague human infra check as next step.",
-			"evidence": [
-				"exit-126 with turns=0 and permission_denials=0 points to a worker exec-environment fault, not task logic",
-				"scripted reconcile work completed fully, pushed, and merge-scan state persisted"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-15T02:29:33.521Z"
-		},
-		{
 			"key": "issue:minion-meta#468",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17416,6 +17416,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T02:58:28.221Z"
+		},
+		{
+			"key": "issue:minion-meta#435",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#435 [monitor:unstick] reconcile proposals run ece42838 (minion-meta) — exit-126 agent launch failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/435",
+			"sourceUpdatedAt": "2026-09-15T02:17:30Z",
+			"sourceFingerprint": "0b3947824fc7ddb7dd637e1a59ab44709c3cfc6f898f5ca552d48f2af74e2d84",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The scripted reconcile work already completed and pushed successfully, and the reported exit-126 failure is a transient worker-exec fault with a cheap idempotent retry, not a real open task.",
+			"evidence": [
+				"all ~55 handoffs refreshed... pushed to NikolasP98/minion-meta dev",
+				"exit-126, turns=0, permission_denials=0 — worker-box/exec-environment fault, not task-logic"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-22T02:58:28.005Z"
 		},
 		{
 			"key": "issue:minion-meta#437",
