@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-23T15:58:30.790Z",
+	"generatedAt": "2026-09-23T16:28:45.197Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2302,14 +2302,14 @@
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Bounded slice building a shell restore/wake coordinator with explicit security/rollback scope makes it a higher-stakes, well-specified piece of infra work.",
+			"rationale": "Well-bounded Slice 2 wake coordinator building on merged Slice 1 with explicit failure/rollback and concurrency test requirements, tagged high risk/security.",
 			"evidence": [
-				"risk:high and topic:security tags",
-				"spec-referenced backup verification, quota, restore, rollback/observability scope"
+				"Gateway PR #216 delivered Slice 1 persistence",
+				"risk:high, topic:security tags"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T15:59:00.827Z"
+			"scoredAt": "2026-09-23T16:28:45.092Z"
 		},
 		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
@@ -2782,6 +2782,38 @@
 			"scoredAt": "2026-09-21T10:39:09.996Z"
 		},
 		{
+			"key": "pr:minion (gateway)#254",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#254 factory: Nostr dispatch S2: buffered encrypted DM reply pipeline",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/254",
+			"sourceUpdatedAt": "2026-08-31T01:26:10Z",
+			"sourceFingerprint": "721731983240d89aa7de5581a174568e2141ff1fd542d67436112b37647f2956",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Scoped Slice 2 continuation of an already-landed Slice 1 seam with clear exclusions and test coverage requirements.",
+			"evidence": [
+				"Gateway PR #229 delivered Slice 1 seam",
+				"draft, gates pending"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T16:28:45.092Z"
+		},
+		{
 			"key": "pr:minion_site#25",
 			"kind": "pr",
 			"stage": "development",
@@ -2979,38 +3011,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-22T00:24:20.096Z"
-		},
-		{
-			"key": "pr:minion (gateway)#262",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#262 factory: board issue minion-ai#249: test(memory): eliminate nondeterministic atomic-reindex rollback failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/262",
-			"sourceUpdatedAt": "2026-08-31T04:08:10Z",
-			"sourceFingerprint": "a52aa68a9f8025441e08fd557bc097a509459ed3efac9c2d616eb6ce68410e4c",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A nondeterministic test failure spanning multiple channels undermines CI confidence and has a small, bounded fix directive.",
-			"evidence": [
-				"size: S, spans discord/telegram/voice-call/whatsapp-web tags",
-				"instructed to implement smallest bounded fix and avoid repeating failed approaches"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T15:59:00.827Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
@@ -4228,6 +4228,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T21:28:52.957Z"
+		},
+		{
+			"key": "pr:minion (gateway)#262",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#262 factory: board issue minion-ai#249: test(memory): eliminate nondeterministic atomic-reindex rollback failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/262",
+			"sourceUpdatedAt": "2026-08-31T04:08:10Z",
+			"sourceFingerprint": "a52aa68a9f8025441e08fd557bc097a509459ed3efac9c2d616eb6ce68410e4c",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Targets a concrete nondeterministic test-flake issue affecting multiple channels with a bounded fix-or-close instruction.",
+			"evidence": [
+				"issue #249 nondeterministic rollback failure",
+				"channels: discord, telegram, voice-call, whatsapp-web"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T16:28:45.092Z"
 		},
 		{
 			"key": "proposal:2026-09-10-hub-calendar-utc-offset-dropped",
@@ -5643,6 +5675,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T14:59:07.146Z"
+		},
+		{
+			"key": "pr:minion (gateway)#257",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#257 factory: Repository policy S3: gateway instruction parity and contradiction repair",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/257",
+			"sourceUpdatedAt": "2026-08-31T03:24:19Z",
+			"sourceFingerprint": "006d17de3aa33c2230615e0d6f1ec324696de4b02cd30249c9c3e3871426a253",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Instruction-parity repair slice with fail-closed guardrails and explicit scope limits, though it depends on exact spec/commit fetch succeeding.",
+			"evidence": [
+				"S1-S2 already merged",
+				"fail closed if spec unreadable",
+				"risk:high tag"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T16:28:45.092Z"
 		},
 		{
 			"key": "pr:minion-base#43",
@@ -7348,38 +7413,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:38:08.134Z"
-		},
-		{
-			"key": "pr:minion (gateway)#257",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#257 factory: Repository policy S3: gateway instruction parity and contradiction repair",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/257",
-			"sourceUpdatedAt": "2026-08-31T03:24:19Z",
-			"sourceFingerprint": "006d17de3aa33c2230615e0d6f1ec324696de4b02cd30249c9c3e3871426a253",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Cross-repo instruction-parity repair is foundational for consistent agent behavior and has a precise fail-closed scope guard.",
-			"evidence": [
-				"repairs 4 approved contradictions only, S4-S8 excluded",
-				"fail closed and report discrepancy if source spec unreadable"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T15:59:00.827Z"
 		},
 		{
 			"key": "pr:minion_hub#279",
@@ -10558,6 +10591,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T18:22:48.987Z"
+		},
+		{
+			"key": "pr:minion (gateway)#256",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#256 factory: WhatsApp fallback S2: opt-in per-account template config",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/256",
+			"sourceUpdatedAt": "2026-08-31T01:40:39Z",
+			"sourceFingerprint": "5ef650bded3013374cac7c6e2d4e54358105e07f5d8ce654462e752ed2d39776",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, opt-in default-off config addition building on merged Slice 1, low risk and already open (not just draft).",
+			"evidence": [
+				"status: open",
+				"default OFF, no secret handling expansion",
+				"size: M"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T16:28:45.092Z"
 		},
 		{
 			"key": "pr:minion_site#28",
@@ -14402,70 +14468,6 @@
 			"scoredAt": "2026-09-21T22:59:02.001Z"
 		},
 		{
-			"key": "pr:minion (gateway)#254",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#254 factory: Nostr dispatch S2: buffered encrypted DM reply pipeline",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/254",
-			"sourceUpdatedAt": "2026-08-31T01:26:10Z",
-			"sourceFingerprint": "721731983240d89aa7de5581a174568e2141ff1fd542d67436112b37647f2956",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-scoped continuation of a spec'd 3-slice Nostr DM pipeline with narrow channel-level impact.",
-			"evidence": [
-				"Slice 2 of a specific spec commit, S1 already merged in #229",
-				"exactly-once dispatch and encrypted DM scope, S3 explicitly excluded"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T15:59:00.827Z"
-		},
-		{
-			"key": "pr:minion (gateway)#256",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#256 factory: WhatsApp fallback S2: opt-in per-account template config",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/256",
-			"sourceUpdatedAt": "2026-08-31T01:40:39Z",
-			"sourceFingerprint": "5ef650bded3013374cac7c6e2d4e54358105e07f5d8ce654462e752ed2d39776",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, precisely-scoped opt-in config change with default-off behavior limits blast radius while being highly actionable.",
-			"evidence": [
-				"status: open, size: M",
-				"explicit opt-in, default OFF, no secret handling expansion"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T15:59:00.827Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18010,38 +18012,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T05:58:42.726Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Entry is a commit message for an already-merged nitter persistence/shutdown fix, not an open deployment problem.",
-			"evidence": [
-				"commit describes fix merged as #295",
-				"no indication of ongoing deployment issue in summary"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T14:59:07.146Z"
 		},
 		{
 			"key": "issue:minion-meta#427",
