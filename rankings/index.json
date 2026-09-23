@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-23T17:32:03.968Z",
+	"generatedAt": "2026-09-23T17:58:50.835Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2006,39 +2006,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T17:28:32.856Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-928e5d399f1a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/run-migrations.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-928e5d399f1a.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "95075896492dc53a23e4abe35a13a26d3db33b73dd5eba01c47f8e6c80aa676e",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An incomplete ALTER TABLE migration in a merged production PR can block schema pushes and cause runtime errors, and the finding already includes a concrete fix direction and verification step.",
-			"evidence": [
-				"marker: 'TODO(handoff): drizzle/0008_workshop_thumbnail.sql (ALTER TABLE' in src/server/run-migrations.ts",
-				"diagnosis notes 'incomplete ALTER TABLE statement will block schema pushes'",
-				"merged PR #280 on minion_hub master branch"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T17:31:00.934Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-dd764fd1df5e",
@@ -4081,6 +4048,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T05:28:46.320Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-928e5d399f1a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/run-migrations.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-928e5d399f1a.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "95075896492dc53a23e4abe35a13a26d3db33b73dd5eba01c47f8e6c80aa676e",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved proposal identifies a likely-incomplete ALTER TABLE migration that could block schema pushes or cause runtime errors, with a clear verify-and-test fix path.",
+			"evidence": [
+				"TODO(handoff) marker cites incomplete ALTER TABLE in drizzle/0008_workshop_thumbnail.sql",
+				"status is approved with explicit fix direction to test via bun run db:push"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T17:58:50.726Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9654a64b55fa",
@@ -10180,6 +10179,38 @@
 			"scoredAt": "2026-09-21T10:31:35.291Z"
 		},
 		{
+			"key": "issue:minion-meta#451",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#451 [monitor:unstick] reconcile run e6e89e89 (minion-meta): agent launch failed exit-126 after scripted reconcile succeeded",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/451",
+			"sourceUpdatedAt": "2026-09-16T17:17:37Z",
+			"sourceFingerprint": "2bdaed26f68d888c62f6bc4c6053a61878aa95b08d8be4ddafd8f020c9385c7b",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The diagnosis clearly isolates a launch-level exit-126 fault on one worker box with all reconcile state already persisted, giving a bounded, low-risk fix (check/repair claude CLI install) plus a retry.",
+			"evidence": [
+				"exit-126 turns=0 permission_denials=0 indicates launch-level fault not task failure",
+				"diagnosis states reconciliation state already persisted so retry only needs the agent step"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T17:58:50.726Z"
+		},
+		{
 			"key": "issue:minion-meta#472",
 			"kind": "issue",
 			"stage": "proposal",
@@ -12611,38 +12642,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:31:35.291Z"
-		},
-		{
-			"key": "issue:minion-meta#451",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#451 [monitor:unstick] reconcile run e6e89e89 (minion-meta): agent launch failed exit-126 after scripted reconcile succeeded",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/451",
-			"sourceUpdatedAt": "2026-09-16T17:17:37Z",
-			"sourceFingerprint": "2bdaed26f68d888c62f6bc4c6053a61878aa95b08d8be4ddafd8f020c9385c7b",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "All reconcile state was already persisted before the launch-level exit-126 failure, so it is safe to retry but the worker CLI install fault still needs isolated diagnosis.",
-			"evidence": [
-				"all reconciliation state was already persisted...a retry only needs to re-run the agent step",
-				"exit-126 with turns=0 and 0 permission_denials indicates a launch-level fault on the worker box"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T17:29:43.471Z"
 		},
 		{
 			"key": "issue:minion-meta#543",
@@ -18653,6 +18652,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T03:59:20.386Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The summary is a commit message for a nitter persistence/shutdown fix that is already merged, leaving no actionable deployment-health work.",
+			"evidence": [
+				"commit message describes fix already merged via co-authored commit",
+				"status is unknown with no open action described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T17:58:50.726Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
