@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-23T02:58:26.903Z",
+	"generatedAt": "2026-09-23T03:28:30.885Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3234,39 +3234,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T04:28:50.710Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-ee6ab5707843",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos-accounts.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ee6ab5707843.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "a5cd33027e86e770f0b354456dd805137c9d8bbcefc44b002e7257448f5c7e5f",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An unfiltered historical service-line count inflates POS billing/analytics metrics and this finding is already past proposal triage (status approved), so it is ready to proceed independently.",
-			"evidence": [
-				"status: approved",
-				"Marker: counts EVERY historical service line without a...",
-				"Diagnosis: inflates metrics, breaks billing/analytics accuracy"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T03:00:46.609Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-reserva-keyword-config-spec",
@@ -6839,6 +6806,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T01:28:21.880Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ee6ab5707843",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos-accounts.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ee6ab5707843.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "a5cd33027e86e770f0b354456dd805137c9d8bbcefc44b002e7257448f5c7e5f",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A TODO(handoff) marker flags a likely billing/analytics accuracy bug in POS service line counting but lacks confirmed diagnosis of the missing filter.",
+			"evidence": [
+				"marker: counts EVERY historical service line without a filter",
+				"file src/server/services/pos-accounts.service.ts, merged PR #278"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T03:28:30.775Z"
 		},
 		{
 			"key": "run:minion (gateway)#35700237308",
@@ -14292,38 +14291,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T08:28:51.848Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a merged commit fixing nitter persistence/shutdown races, not an open action item requiring further work.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T02:58:26.764Z"
 		},
 		{
 			"key": "issue:minion-meta#362",
