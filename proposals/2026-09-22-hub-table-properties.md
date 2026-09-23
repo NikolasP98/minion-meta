@@ -1,7 +1,7 @@
 ---
 id: 2026-09-22-hub-table-properties
 title: Inline catalog tags, managed category selects and custom-column boundaries
-status: in-spec
+status: done
 created: 2026-09-22
 updated: 2026-09-22
 repos: [minion_hub]
@@ -25,3 +25,7 @@ See [implementation specification](../specs/2026-09-22-hub-table-properties-spec
 ## Authorization
 
 The user requested this implementation on 2026-09-22, following the CRM release, and requested Sol implementation agents in this session. Work occurs in an isolated clone based on Hub `master`; existing shared-checkout changes remain untouched. Record review and verification before release.
+
+## Delivery
+
+Hub [PR 364](https://github.com/NikolasP98/minion_hub/pull/364) merged and deployed after Sol approval and passing CI. The linked specification records the exact production commit, migration verification, and completed module assessment.

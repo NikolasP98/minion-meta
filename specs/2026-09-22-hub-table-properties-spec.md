@@ -1,8 +1,8 @@
 ---
 id: 2026-09-22-hub-table-properties-spec
 title: Catalog table properties and custom-column foundation
-stage: dev
-status: implementing
+stage: done
+status: shipped
 pass: 2
 verdict: approved
 created: 2026-09-22
@@ -66,7 +66,7 @@ Record two passes: standards (architecture, permissions, design, concurrent-writ
 
 The Sol reviewer approved both specification axes on pass 2 after clarifying read-only link preservation, transaction serialization, category deletion, permission mapping and acknowledged/uncertain save outcomes. Implementation verification is recorded below as it completes.
 
-## Verification evidence in progress
+## Verification evidence
 
 - Baseline DataTable and table registry: 23 tests passed. Existing tag service: 9 tests passed.
 - New tag-link PostgreSQL integration: 1 test passed using independent database connections; covers concurrent whole-set writes, manual-only replacement, read-only legacy links and organization isolation.
@@ -76,3 +76,18 @@ The Sol reviewer approved both specification axes on pass 2 after clarifying rea
 
 - Fresh local schema restore applied the migration; all 177 seed registrations succeeded, and the seed contract passed 183 tests including idempotency. Drizzle schema drift check passed.
 - Browser: tag creation and rename persisted; category creation, assignment, rename and recolor persisted with the row chip updating. Design debt did not increase and token integrity reported zero violations.
+
+- Full unit run: 4,394 passed, 212 skipped and two failures in the unrelated ACI Git fixture. Both failures traced to the local 1Password signing agent; the complete ACI file passed 26/26 with process-local commit signing disabled. Architecture reconstruction tests passed 3/3. PostgreSQL suites were separately qualified against loopback QA.
+- Browser failure injection found that Retry discarded a rejected tag-removal intent. The Sol reviewer rejected that revision; commit `11bad9dd` separates displayed confirmed IDs from retry IDs. The new regression passed, and the repeated browser sequence sent `PUT []` twice, first rejected and then successful, with authoritative tags empty and the error cleared.
+- Inline tag tests now pass 3/3. Category route mocks were narrowed for type checking; DataTable tests use per-test cleanup. Final typecheck passed with 0 errors and 0 warnings; hosted CI passed all test, build, migration-pairing and QA-stack checks.
+- Browser organization field overrides disabled every visible category/tag mutation control; configuration was restored afterward. Tag recolor persisted, category deletion cleared the assignment, and the original QA product category was restored.
+
+- Independent Sol final review approved exact head `8c87d302d99491dba4b98bd1fe007c54d8147d72`. Hub [PR 364](https://github.com/NikolasP98/minion_hub/pull/364) merged after checks passed; merge commit `245135773e5c7d84d0ad05382a55c7bdf599fe63`. Production verification passed as recorded below.
+
+## Production verification
+
+The standard Git-triggered release deployed merge commit `245135773e5c7d84d0ad05382a55c7bdf599fe63`. GitHub Production deployment `6604308676` succeeded at `2026-09-23T01:24:01Z`; Vercel deployment `dpl_5KceVfj8foTyjCYaTvu5vNYz4K5J` reports `target=production` and `readyState=READY`.
+
+A separate read-only database transaction verified migration receipt `20260922120000`, expected schema/defaults, forced organization RLS, app_ledger grants, primary/unique/color constraints, and the composite product-category foreign key with update cascade and category-only delete clearing. Six managed options cover all 61 existing categorized products; there are zero unmatched assignments. The production browser route reached the expected sign-in boundary without an authenticated session; interactive product verification was performed on seeded loopback QA. No production feature-test writes or provider calls were made.
+
+Tag and category management are shipped. The module minimum-column assessment is complete; arbitrary custom-column creation/removal remains the explicitly separate future phase.
