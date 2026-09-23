@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-23T03:28:30.885Z",
+	"generatedAt": "2026-09-23T03:59:17.084Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2076,6 +2076,41 @@
 			"scoredAt": "2026-09-16T17:31:00.934Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-dd764fd1df5e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dd764fd1df5e.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "dc133844c054182ce72c917ac47150b5d2200b7e43ae60a8689d844b136c499b",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-dca03692bd9a",
+				"proposal:postmerge-minion-hub-d4a019b21d9a"
+			],
+			"rationale": "Voiding an installment ticket without reversing paid-to-date breaks financial reconciliation and should be grouped with the related PR #278 transactional-integrity fix.",
+			"evidence": [
+				"voiding an instalment ticket un-pays its plan (paid-to-date)",
+				"should be transactional with the void itself"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T03:59:16.962Z"
+		},
+		{
 			"key": "proposal:2026-09-20-hub-component-service-centralization",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2774,39 +2809,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T00:28:47.257Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-dd764fd1df5e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dd764fd1df5e.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "dc133844c054182ce72c917ac47150b5d2200b7e43ae60a8689d844b136c499b",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Voiding installment tickets without reversing paid-to-date corrupts financial/payment-plan state, a customer-facing billing integrity bug.",
-			"evidence": [
-				"marker: 'voiding an instalment ticket un-pays its plan (paid-to-date'",
-				"diagnosis: 'customers appear over-paid, and reconciliation breaks'",
-				"status: approved, merged PR #278"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T03:30:25.155Z"
 		},
 		{
 			"key": "spec:2026-08-18-agent-instruction-parity-and-repo-policy-spec",
@@ -4165,21 +4167,23 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
+				"specification": 8,
 				"implementation": 7
 			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Non-atomic cascading cancels risk orphaned/inconsistent bookings, a real reliability defect with a clear db.transaction fix.",
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-dd764fd1df5e",
+				"proposal:postmerge-minion-hub-d4a019b21d9a"
+			],
+			"rationale": "Non-atomic multi-transaction booking cancellation risks orphaned bookings and pairs naturally with the sibling PR #278 financial-integrity finding.",
 			"evidence": [
-				"marker: 'a following cancel is N independent transactions, not one'",
-				"status: approved, merged PR #278",
+				"a following cancel is N independent transactions, not one",
 				"fix direction: wrap in db.transaction()"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T03:30:25.155Z"
+			"scoredAt": "2026-09-23T03:59:16.962Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fc192ff88fe3",
@@ -5702,39 +5706,6 @@
 			"scoredAt": "2026-09-21T10:59:16.651Z"
 		},
 		{
-			"key": "pr:minion_hub#279",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#279 feat(artifacts): generated inline plugin-bridge region for built-in artifacts + qc build-trace tooling (14-07, 12-QC)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/279",
-			"sourceUpdatedAt": "2026-09-16T03:15:45Z",
-			"sourceFingerprint": "6a3e9dbab3ad440e240ce4c4dbec9192251d708c65c97816c9d293a142dda80b",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The PR is fully scoped and verified with passing checks and tests, ready to land the missing artifact-bridge slice on master.",
-			"evidence": [
-				"bun run check → 0 errors, 0 warnings",
-				"vitest: 7 files, 157 tests passing",
-				"build-inline-bridge.mjs --check passed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T03:29:43.796Z"
-		},
-		{
 			"key": "pr:minion-base#43",
 			"kind": "pr",
 			"stage": "development",
@@ -7073,41 +7044,6 @@
 			"scoredAt": "2026-09-20T19:58:40.906Z"
 		},
 		{
-			"key": "issue:minion-meta#443",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#443 [monitor:unstick] reconcile run 14b8ca85 (minion-meta): exit-126 after successful push",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/443",
-			"sourceUpdatedAt": "2026-09-16T03:17:36Z",
-			"sourceFingerprint": "056cb8d4ae5fe53e558dc848141e5565264ec95ebd558fdfd2bbe139ca761490",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#265"
-			],
-			"rationale": "The diagnosis points to a recurring runner/provider-binary fault that plausibly explains the concurrent queue-wedged alert, so both should become one runner-health investigation.",
-			"evidence": [
-				"exit-126 after successful git push, turns=0, permission_denials=0",
-				"same signature occurred on run 4d72eee9 ~45 minutes earlier",
-				"recommends checking runner box/container image for claude binary permissions/PATH"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T03:29:43.796Z"
-		},
-		{
 			"key": "issue:minion-meta#481",
 			"kind": "issue",
 			"stage": "proposal",
@@ -7505,6 +7441,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-16T15:59:00.827Z"
+		},
+		{
+			"key": "pr:minion_hub#279",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#279 feat(artifacts): generated inline plugin-bridge region for built-in artifacts + qc build-trace tooling (14-07, 12-QC)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/279",
+			"sourceUpdatedAt": "2026-09-16T03:15:45Z",
+			"sourceFingerprint": "6a3e9dbab3ad440e240ce4c4dbec9192251d708c65c97816c9d293a142dda80b",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An open, well-documented PR with local verification already passing that closes the last gap between master and the shared artifact-bridge tooling.",
+			"evidence": [
+				"bun run check → 0 errors, 0 warnings",
+				"7 files, 157 tests passing",
+				"node scripts/artifacts/build-inline-bridge.mjs --check → passed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T03:59:16.962Z"
 		},
 		{
 			"key": "proposal:2026-08-18-base-ui-primitives-and-shell",
@@ -9360,6 +9329,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T22:29:07.159Z"
+		},
+		{
+			"key": "issue:minion-meta#443",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#443 [monitor:unstick] reconcile run 14b8ca85 (minion-meta): exit-126 after successful push",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/443",
+			"sourceUpdatedAt": "2026-09-16T03:17:36Z",
+			"sourceFingerprint": "056cb8d4ae5fe53e558dc848141e5565264ec95ebd558fdfd2bbe139ca761490",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The diagnosis is clear but the fix requires a human checking runner-box binary permissions/PATH, not agent-executable code work.",
+			"evidence": [
+				"exit-126 after successful push, turns=0",
+				"same signature occurred on run 4d72eee9 ~45 minutes earlier",
+				"recommendation: human should check runner box/container image"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T03:59:16.962Z"
 		},
 		{
 			"key": "issue:minion-meta#510",
@@ -12929,39 +12931,6 @@
 			"scoredAt": "2026-09-21T14:59:23.458Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-d4a019b21d9a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d4a019b21d9a.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "126a0dbd641e4078fe0512c08f46e715f03dac2c7bdc7e303d378da599811128",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Missing client-side permission check is a UX/confusion issue with server-side security already intact, and has a concrete scoped fix.",
-			"evidence": [
-				"diagnosis: 'server-side verify as a security gate' already exists",
-				"status: approved, merged PR #278",
-				"fix direction: conditional render on pos:create capability"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T03:30:25.155Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-e9b22dc941f6",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16258,6 +16227,38 @@
 			"scoredAt": "2026-09-21T10:38:08.134Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy-health entry only reports a commit that already shipped the nitter shutdown/persistence fix, leaving no further actionable work.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"status: unknown, commit already merged"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T03:59:16.962Z"
+		},
+		{
 			"key": "proposal:2026-08-20-hub-datatable-server-mode-test-gap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17832,6 +17833,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T21:29:02.048Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d4a019b21d9a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d4a019b21d9a.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "126a0dbd641e4078fe0512c08f46e715f03dac2c7bdc7e303d378da599811128",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-dca03692bd9a",
+				"proposal:postmerge-minion-hub-dd764fd1df5e"
+			],
+			"rationale": "A minor UX-only permission-gating gap from the same merged PR as two more severe scheduling/POS findings, better handled as one hardening goal.",
+			"evidence": [
+				"server-side verify remains the security gate",
+				"same merged PR #278, same repo"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T03:59:16.962Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e0651859d6e7",
