@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-23T11:28:41.912Z",
+	"generatedAt": "2026-09-23T11:58:56.806Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -17980,6 +17980,37 @@
 			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a merged commit fixing nitter persistence/shutdown, not an open actionable goal.",
+			"evidence": [
+				"Commit message shows fix already merged: 'serialize persistence and drain poller shutdown'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T11:58:56.695Z"
+		},
+		{
 			"key": "issue:minion-meta#427",
 			"kind": "issue",
 			"stage": "proposal",
@@ -19207,20 +19238,19 @@
 			},
 			"readiness": {
 				"specification": 5,
-				"implementation": 2
+				"implementation": 3
 			},
 			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Automated monitor intake diagnoses a transient provider-side batch failure with catalog writes otherwise succeeding, and itself recommends simply retrying rather than dedicated action.",
+			"rationale": "Automated monitor intake diagnoses a transient provider-side flakiness with explicit recommendation to just retry, not a real task requiring work.",
 			"evidence": [
-				"Catalog itself wrote fine (426 goals, only 2/426 candidates still pending)",
-				"Recommendation: safe to retry the run as-is",
-				"looks like transient provider-side flakiness/outage, not a genuine task/spec failure"
+				"Diagnosis states 'transient provider-side flakiness/outage, not a genuine task/spec failure'",
+				"Recommendation: safe to retry the run as-is"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T11:28:33.068Z"
+			"scoredAt": "2026-09-23T11:58:56.695Z"
 		},
 		{
 			"key": "issue:minion-meta#461",
