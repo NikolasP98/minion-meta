@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-23T12:28:50.666Z",
+	"generatedAt": "2026-09-23T12:58:59.041Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4296,6 +4296,41 @@
 			"scoredAt": "2026-09-21T10:37:11.960Z"
 		},
 		{
+			"key": "run:minion (gateway)#35832453674",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/35832453674",
+			"sourceUpdatedAt": "2026-09-23T08:15:03Z",
+			"sourceFingerprint": "19f6cb7f3ec14870c1e80a88fca8bf3962518c7a1deb63edb936c1c5306a12e5",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"deploy:minion (gateway)"
+			],
+			"rationale": "A failing CI run on the DEV branch blocks confidence in recent changes and should be triaged promptly.",
+			"evidence": [
+				"status: failure",
+				"workflow_dispatch on DEV",
+				"updatedAt 2026-09-23T08:15:03Z"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T12:58:58.923Z"
+		},
+		{
 			"key": "issue:minion-meta#431",
 			"kind": "issue",
 			"stage": "proposal",
@@ -5346,39 +5381,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-18T23:58:59.402Z"
-		},
-		{
-			"key": "run:minion (gateway)#35574314591",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/35574314591",
-			"sourceUpdatedAt": "2026-09-21T08:02:32Z",
-			"sourceFingerprint": "ab0a445745e07fe8d3ac3904c89e0557e450dfaf0c5bc94900fd7a2833a6f238",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failing CI run on the DEV branch is a concrete signal worth investigating but lacks failure detail to act on directly.",
-			"evidence": [
-				"status: failure",
-				"workflow_dispatch on DEV",
-				"updatedAt 2026-09-21T08:02:32Z"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T12:28:50.541Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-whatsapp-cloud-template-fallback-spec",
@@ -13164,6 +13166,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T01:30:12.761Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"run:minion (gateway)#35832453674"
+			],
+			"rationale": "A merged fix for nitter persistence/shutdown is deployed but there is no explicit verification evidence tied to this record.",
+			"evidence": [
+				"commit message fix(nitter): serialize persistence and drain poller shutdown",
+				"tag: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T12:58:58.923Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
