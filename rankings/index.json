@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-23T01:58:30.446Z",
+	"generatedAt": "2026-09-23T02:28:51.170Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8530,6 +8530,76 @@
 			"scoredAt": "2026-09-21T14:59:23.458Z"
 		},
 		{
+			"key": "issue:minion-meta#570",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#570 [monitor:unstick] reconcile proposals run 08fb27d8 (minion-meta) - agent exec exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/570",
+			"sourceUpdatedAt": "2026-09-23T02:17:38Z",
+			"sourceFingerprint": "55d7d916a1aa23c05d4b07e599726fb557c4e9eee3ce96cc75b6b5f0642889ae",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#571"
+			],
+			"rationale": "Recurring exec-126/zero-turns infra fault on the reconcile-agent runner, duplicated in issue #571 with the same diagnosis and fix.",
+			"evidence": [
+				"agent exec exit-126, turns=0, permission_denials=0",
+				"identical signature also seen in run 24c4239a ~36min earlier same repo",
+				"deterministic sweep portion completed and succeeded normally"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T02:28:51.055Z"
+		},
+		{
+			"key": "issue:minion-meta#571",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#571 [monitor:unstick] reconcile proposals run 24c4239a (minion-meta) - agent exec exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/571",
+			"sourceUpdatedAt": "2026-09-23T02:17:41Z",
+			"sourceFingerprint": "e0d3f5542a141e034bc89db6114f5b8ea65af4e835925e7906f984037a6cad05",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#570"
+			],
+			"rationale": "Same runner-level exec-126/zero-turns infra fault as #570, filed separately for the paired run 24c4239a.",
+			"evidence": [
+				"agent exec exit-126, turns=0, permission_denials=0",
+				"identical signature also seen in run 08fb27d8 ~36min later same repo",
+				"only the agent step needs retrying once the box is fixed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T02:28:51.055Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-msteams-large-upload",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14801,6 +14871,39 @@
 			"scoredAt": "2026-09-23T01:33:46.091Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-23",
+			"sourceFingerprint": "7c5785ce1d458937bad2e3ee691420ba6d4b0752badd9616304c86e00668d76d",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The listed markers are quoted evidence/rationale fragments embedded in the generated rankings/index.json data file rather than genuine in-code TODO(handoff) items, so the sweep is likely misclassifying data-file text as actionable markers.",
+			"evidence": [
+				"file: rankings/index.json (a generated ranking output, not source code)",
+				"markers quoted below is text copied out of repository source this sweep did not write",
+				"17+ disparate marker fragments spanning unrelated subsystems, suggesting a false-positive scan"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T02:28:51.055Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17860,38 +17963,6 @@
 			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged commit fixing a nitter extension shutdown/persistence bug, not an open actionable goal.",
-			"evidence": [
-				"commit already merged: 'fix(nitter): serialize persistence and drain poller shutdown'",
-				"status unknown with no described follow-up work"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T01:58:30.332Z"
-		},
-		{
 			"key": "issue:minion-meta#427",
 			"kind": "issue",
 			"stage": "proposal",
@@ -19549,38 +19620,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T01:33:46.091Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-23",
-			"sourceFingerprint": "ac1552b3c4ac71782a741d9c635ad0ec4ab1ffedd747b592af6b9f9618125f76",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Quoted markers read as JSON string fragments embedded inside stored ranking-candidate summaries, not real code TODOs, so the sweep's scan scope needs correcting rather than the data file's content.",
-			"evidence": [
-				"marker reads 'drizzle/0008_workshop_thumbnail.sql (ALTER TABLE' in src/server/run-migrations.ts' — a quoted fragment, not a comment",
-				"target file is rankings/index.json, the ranking data store itself"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T01:35:33.772Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3663138542",
