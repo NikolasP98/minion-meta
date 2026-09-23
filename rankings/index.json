@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-23T02:28:51.170Z",
+	"generatedAt": "2026-09-23T02:58:26.903Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -14294,6 +14294,38 @@
 			"scoredAt": "2026-09-16T08:28:51.848Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "This is a merged commit fixing nitter persistence/shutdown races, not an open action item requiring further work.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"status: unknown"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T02:58:26.764Z"
+		},
+		{
 			"key": "issue:minion-meta#362",
 			"kind": "issue",
 			"stage": "proposal",
@@ -19125,20 +19157,20 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 3
+				"implementation": 6
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Diagnosis already confirms the reconcile work committed successfully and the failure is a transient exit-126 launcher fault needing only a retry, not a real goal.",
+			"rationale": "The diagnosis itself concludes this is a transient infra exit-126 with the underlying reconcile work already committed successfully, so no real remediation is needed beyond a routine retry.",
 			"evidence": [
 				"reconcile sweep body itself succeeded end-to-end",
-				"claude provider process ... exited 126 with turns=0",
+				"exit 126...transient/infra fault...not a genuine task failure",
 				"Recommendation: retry the run as-is"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T02:29:17.604Z"
+			"scoredAt": "2026-09-23T02:58:26.764Z"
 		},
 		{
 			"key": "issue:minion-meta#444",
