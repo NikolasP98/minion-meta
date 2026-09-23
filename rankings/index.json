@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-23T18:28:35.197Z",
+	"generatedAt": "2026-09-23T18:58:37.291Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -18041,6 +18041,38 @@
 			"scoredAt": "2026-09-17T05:58:42.726Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine merged commit fixing nitter shutdown/persistence with no evidence of ongoing deployment issue.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain shutdown (#295)",
+				"tags: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T18:58:37.198Z"
+		},
+		{
 			"key": "issue:minion-meta#427",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18137,38 +18169,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-22T10:58:31.532Z"
-		},
-		{
-			"key": "issue:minion-meta#452",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#452 [monitor:unstick] reconcile run 1a3422fa: provider exec failure (exit-126, turns=0)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/452",
-			"sourceUpdatedAt": "2026-09-16T18:17:54Z",
-			"sourceFingerprint": "d29edc93ab0bcdae9435c96b298c334462b7ff48aa4891ff9c9d17ed73b9ad0a",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Self-diagnosed transient infra exec fault where the actual reconcile work already succeeded, warranting only a retry and a check against a matching sibling failure.",
-			"evidence": [
-				"actual reconcile work succeeded; exit-126 turns=0 classified as infra fault, safe to retry",
-				"sibling failure e6e89e89 ~1h apart with identical signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T18:29:06.570Z"
 		},
 		{
 			"key": "issue:minion-meta#480",
@@ -19346,6 +19346,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T11:58:56.695Z"
+		},
+		{
+			"key": "issue:minion-meta#452",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#452 [monitor:unstick] reconcile run 1a3422fa: provider exec failure (exit-126, turns=0)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/452",
+			"sourceUpdatedAt": "2026-09-16T18:17:54Z",
+			"sourceFingerprint": "d29edc93ab0bcdae9435c96b298c334462b7ff48aa4891ff9c9d17ed73b9ad0a",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated monitor intake diagnoses a transient worker-infra exit-126 fault with the actual reconcile work having succeeded, and explicitly recommends retry rather than dedicated engineering work.",
+			"evidence": [
+				"actual reconcile work succeeded",
+				"Recommendation: safe to retry as-is once the box/exec environment is confirmed healthy"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T18:58:37.198Z"
 		},
 		{
 			"key": "issue:minion-meta#461",
