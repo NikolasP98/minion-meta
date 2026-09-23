@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-23T22:58:53.887Z",
+	"generatedAt": "2026-09-23T23:28:56.702Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10911,6 +10911,38 @@
 			"scoredAt": "2026-09-23T22:28:55.993Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-355769a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 355769a",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-355769a.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "66f71d445700c60f4067ffeaaf69579acadbd20324de9aa18469cffee3153ca7",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Four precisely located medium-severity findings, including unsanitized URL parameter construction and silent error swallowing, are bounded and fixable now.",
+			"evidence": [
+				"Unsanitized URL parameter construction: contact value should be passed through URLSearchParams.set()",
+				"Empty catch block silently swallows errors from CRM party search"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T23:28:56.595Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-2164a4547ea3",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12104,6 +12136,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T01:28:52.562Z"
+		},
+		{
+			"key": "proposal:2026-09-16-hub-pos-accounts-drawer-pending-scheduling",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub POS accounts drawer — no pending-scheduling link",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-pos-accounts-drawer-pending-scheduling.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "c70060bb5440954eca9e388085dae23deb7bff3be162169053695ac91e687df1",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-d43d362714c8"
+			],
+			"rationale": "The missing drawer link to the pending-scheduling flow is the exact link that would make the sibling post-merge finding's dead-code route reachable.",
+			"evidence": [
+				"drawer has no pending-scheduling section and no link back to the schedule step",
+				"PR made /pos/appointments/new accept ?ticketId=&lineId= so a future link is safe by construction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T23:28:56.595Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-2877399286",
@@ -13681,38 +13747,6 @@
 			"scoredAt": "2026-09-23T17:31:19.046Z"
 		},
 		{
-			"key": "proposal:2026-09-16-hub-pos-accounts-drawer-pending-scheduling",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub POS accounts drawer — no pending-scheduling link",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-pos-accounts-drawer-pending-scheduling.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "c70060bb5440954eca9e388085dae23deb7bff3be162169053695ac91e687df1",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-specified UI gap leaves users unable to schedule pending services from the client drawer, with the underlying endpoint already made safe for this link.",
-			"evidence": [
-				"drawer... has no equivalent: ... no link back to the schedule step",
-				"made /pos/appointments/new accept ?ticketId=&lineId= ... safe by construction"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T23:14:40.398Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-1431194768",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15111,6 +15145,40 @@
 			"scoredAt": "2026-09-18T05:38:08.566Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-d43d362714c8",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/appointments/new/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d43d362714c8.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "e2c7c6f03b0067b51bc796646b6f8553b08187715c450234e876e37169a450cf",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-09-16-hub-pos-accounts-drawer-pending-scheduling"
+			],
+			"rationale": "This unreachable route with an unfinished handoff note is the same link target the sibling drawer proposal needs to wire up, so they belong in one goal.",
+			"evidence": [
+				"TODO(handoff): nothing links here with these params yet — the",
+				"route is unreachable — no navigation path passes the required parameters to it"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T23:28:56.595Z"
+		},
+		{
 			"key": "spec:2026-08-31-handoff-minion-hub-722867358-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -15938,38 +16006,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T22:58:53.789Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-hub-355769a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 355769a",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-355769a.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "66f71d445700c60f4067ffeaaf69579acadbd20324de9aa18469cffee3153ca7",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Four bounded, file:line-specific medium-severity fixes (three empty-catch swallows and one unescaped URL param) in minion_hub scheduling components are clear and actionable but not urgent or high-impact.",
-			"evidence": [
-				"BookingCreateForm.svelte:134/178 empty-catch swallows stock accrual and CRM search errors",
-				"+page.server.ts:11 unsanitized URL parameter construction"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T22:58:30.641Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-77445c0",
@@ -17940,38 +17976,6 @@
 			"scoredAt": "2026-09-23T17:32:03.848Z"
 		},
 		{
-			"key": "issue:minion-meta#373",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#373 [monitor:unstick] Requeued transient failure of run 99a3bcf3",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/373",
-			"sourceUpdatedAt": "2026-09-02T22:17:02Z",
-			"sourceFingerprint": "71b558d0c71ae098a761ca35a0c20d72a2a090d6d2937b15f317b120176c172d",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An automated monitor requeue of a transient push failure lacks evidence of recurrence or lasting impact.",
-			"evidence": [
-				"class=C note=push failed; requeue -> 201",
-				"fingerprint: unstick-transient-99a3bcf3"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T23:14:40.398Z"
-		},
-		{
 			"key": "issue:minion-meta#576",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18619,38 +18623,6 @@
 			"scoredAt": "2026-09-23T17:32:03.848Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-d43d362714c8",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/appointments/new/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d43d362714c8.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "e2c7c6f03b0067b51bc796646b6f8553b08187715c450234e876e37169a450cf",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An unreachable POS appointments route with an incomplete handoff note needs a scoping decision (complete the flow or remove the route) before it can be executed.",
-			"evidence": [
-				"TODO(handoff): nothing links here with these params yet",
-				"no navigation path passes the required parameters to it"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T23:28:22.397Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-f17e52eaac73",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18681,38 +18653,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T03:59:20.386Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This deployment-health entry only surfaces a commit message for an already-merged nitter shutdown/persistence fix with no pending goal.",
-			"evidence": [
-				"summary is a merged commit fixing nitter persistence and shutdown",
-				"status unknown, no forward-looking scope stated"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T22:58:53.789Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
@@ -20371,6 +20311,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-17T03:29:07.866Z"
+		},
+		{
+			"key": "issue:minion-meta#373",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#373 [monitor:unstick] Requeued transient failure of run 99a3bcf3",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/373",
+			"sourceUpdatedAt": "2026-09-02T22:17:02Z",
+			"sourceFingerprint": "71b558d0c71ae098a761ca35a0c20d72a2a090d6d2937b15f317b120176c172d",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated transient-failure alert shows the push already succeeded on requeue, leaving no actionable defect.",
+			"evidence": [
+				"class=C note=push failed; requeue -> 201",
+				"fingerprint: unstick-transient-99a3bcf3"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-23T23:28:56.595Z"
 		},
 		{
 			"key": "issue:minion-meta#402",
