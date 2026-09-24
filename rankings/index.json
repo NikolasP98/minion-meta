@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-24T21:58:41.896Z",
+	"generatedAt": "2026-09-24T22:28:53.446Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10059,6 +10059,39 @@
 			"scoredAt": "2026-09-18T23:28:50.129Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-e263984cb0f6",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/ruc-registry.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e263984cb0f6.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "b3bf2225a538026dd8dc69ec5dd6ed35fc91ef185f2fb62fd99aa6f246a2a678",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved, clearly-specified fix removes duplicated DNI lookup logic in favor of the shared crm-sdk implementation to prevent behavior divergence.",
+			"evidence": [
+				"'duplicate DNI lookup logic — one in ruc-registry.ts and one in @minion-stack/crm-sdk::lookupDni'",
+				"status: approved",
+				"'Fix direction: Remove the local implementation ... import lookupDni from @minion-stack/crm-sdk instead'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T22:28:53.341Z"
+		},
+		{
 			"key": "issue:minion-meta#408",
 			"kind": "issue",
 			"stage": "proposal",
@@ -12537,40 +12570,6 @@
 			"scoredAt": "2026-09-22T03:59:02.691Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-e263984cb0f6",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/ruc-registry.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e263984cb0f6.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "b3bf2225a538026dd8dc69ec5dd6ed35fc91ef185f2fb62fd99aa6f246a2a678",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-2650013771"
-			],
-			"rationale": "Approved, well-specified finding with a clear fix direction to consolidate duplicate DNI lookup logic into the CRM SDK.",
-			"evidence": [
-				"duplicate DNI lookup logic in ruc-registry.ts vs @minion-stack/crm-sdk::lookupDni",
-				"status: approved with explicit fix direction and DoD"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T21:58:49.528Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-fcb3411ee30e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12941,6 +12940,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T14:29:00.859Z"
+		},
+		{
+			"key": "issue:minion-meta#585",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#585 [monitor:unstick] reconcile proposals run 852842fd (minion-meta) errored: exit-126 on claude provider launch",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/585",
+			"sourceUpdatedAt": "2026-09-24T22:17:29Z",
+			"sourceFingerprint": "84f13805367e08cdd9c6ad1b55d488bb2b59471db85a59d6f54fe2fc74910a21",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An automated diagnosis already isolated a runner-box exit-126 provider-launch fault with no lost work and a concrete next step.",
+			"evidence": [
+				"'exited 126... classic shell signature for a missing/non-executable binary or bad interpreter/PATH'",
+				"'No work was lost: the merge-scan/proposal state was already committed and pushed'",
+				"'Recommendation: retry the run... have a human check the runner box's claude CLI invocation'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T22:28:53.341Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-workforce-error-body-leak",
@@ -13881,38 +13913,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T17:31:19.046Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-24",
-			"sourceFingerprint": "f84a5a80267501332dcafe02191ce2c97b8916bd3e320dd0bccd5ed4d0739ebd",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This proposal bundles 15+ unrelated TODO markers spanning security, race conditions, and schema changes under one generic definition of done, so it can't produce one effective outcome as framed.",
-			"evidence": [
-				"markers span security audit, race window narrowing, byte-bounded JSON reading, and DB schema drop across unrelated files",
-				"definition of done is only 'resolve marker, remove TODO'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T18:29:17.246Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-5e55396",
@@ -18769,6 +18769,38 @@
 			"scoredAt": "2026-09-19T03:59:20.386Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine merged-commit deployment health snapshot with no open problem to act on.",
+			"evidence": [
+				"commit message describes a completed fix: 'serialize persistence and drain poller shutdown'",
+				"status: unknown, tags: deployment (no failure indicated)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T22:28:53.341Z"
+		},
+		{
 			"key": "issue:minion-meta#322",
 			"kind": "issue",
 			"stage": "proposal",
@@ -20723,6 +20755,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T02:35:48.101Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-24",
+			"sourceFingerprint": "94a88de03c935e75d3f83bfb90bf8d3c175ff8ea5fbd2bd2bd8d1e0590ea8269",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed markers are quoted evidence snippets embedded inside the generated rankings/index.json output itself, not genuine unresolved code TODOs, so this is a sweep false positive.",
+			"evidence": [
+				"all 'markers' point at rankings/index.json lines spanning unrelated topics (auth, payments, Supabase) consistent with quoted evidence text",
+				"file is the ranking pipeline's own output artifact, not application source"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T22:28:53.341Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
