@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-24T09:58:29.306Z",
+	"generatedAt": "2026-09-24T10:29:02.302Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11603,6 +11603,39 @@
 			"scoredAt": "2026-09-24T02:30:12.291Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-24",
+			"sourceFingerprint": "8b385cbf8e16239bb0135a9353390286a40623e11888b8da2da96dc555ac2b42",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This handoff marker bundles roughly seventeen unrelated one-line TODO(handoff) fragments (auth audit, credit-card id logic, Supabase test coverage, DB schema drop, retention policy, etc.) into a single goal that only closes once every marker is resolved, so it should be split into individually scoped proposals rather than executed as one.",
+			"evidence": [
+				"17+ distinct marker lines spanning different files and concerns",
+				"definition of done requires all markers removed before the proposal closes",
+				"each marker is a terse quoted fragment lacking independent scope/acceptance criteria"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T10:29:02.188Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-be019c6",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12968,38 +13001,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T02:31:02.577Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-24",
-			"sourceFingerprint": "ad986ecb0df8b02de914880c426e3aaaeea38d0d17ae87bdca2f039addaefd98",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Bundling 17+ unrelated TODO markers spanning auth, HR schema, retention policy, and dead code into one proposal prevents a single verifiable outcome.",
-			"evidence": [
-				"lists markers spanning admin-audit, credit-card id logic, HR schema column drop, recovery policy, and an unused startBackupScheduler()",
-				"closes only once every one of the 17+ markers is resolved, with no per-item scoping"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T06:29:26.069Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-608985431",
@@ -14471,6 +14472,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T05:58:59.413Z"
+		},
+		{
+			"key": "issue:minion-meta#479",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#479 [monitor:unstick] reconcile run a34572dd: claude provider exec failure (exit-126, 0 turns) despite completed pipeline work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/479",
+			"sourceUpdatedAt": "2026-09-17T10:17:41Z",
+			"sourceFingerprint": "6838c253f2b82b2e19d3981ce2d514d49509f1c11a204863052fef7a614fd44e",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#582"
+			],
+			"rationale": "Monitor diagnosis shows a transient runner-level exit-126/turns=0 claude-launch failure with the deterministic reconcile work already completed and pushed, matching a second same-signature run a week later.",
+			"evidence": [
+				"exit-126/turns=0 with permission_denials=0",
+				"proposals/index.json written and git push succeeded before the failure",
+				"same signature recurs in #582"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T10:29:02.188Z"
+		},
+		{
+			"key": "issue:minion-meta#582",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#582 [monitor:unstick] run 72122f00 (minion-meta reconcile) - claude provider exec failure, exit 126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/582",
+			"sourceUpdatedAt": "2026-09-24T10:17:33Z",
+			"sourceFingerprint": "f908db70d4c217d3ac05dcc2e2bddfd97a9e9b997d4cc68fa1e3a0cedff7ba07",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#479"
+			],
+			"rationale": "Second occurrence of the identical exit-126/turns=0 claude-agent launch failure with the deterministic sweep succeeding, indicating a recurring runner-box defect worth tracking as one host-classifier goal with #479.",
+			"evidence": [
+				"exit-126 turns=0 signature identical to #479",
+				"sweep pushed 17270e0..5c26bf2 before the agent-launch step failed",
+				"diagnosis explicitly flags recurrence as classifier-worthy"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T10:29:02.188Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
@@ -16866,39 +16937,6 @@
 			"scoredAt": "2026-09-23T11:28:41.805Z"
 		},
 		{
-			"key": "issue:minion-meta#479",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#479 [monitor:unstick] reconcile run a34572dd: claude provider exec failure (exit-126, 0 turns) despite completed pipeline work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/479",
-			"sourceUpdatedAt": "2026-09-17T10:17:41Z",
-			"sourceFingerprint": "6838c253f2b82b2e19d3981ce2d514d49509f1c11a204863052fef7a614fd44e",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Automated monitor reports a transient exit-126/turns=0 agent-launch failure while the deterministic reconcile pipeline itself completed and pushed successfully.",
-			"evidence": [
-				"exit_code=1 note exit-126/turns=0/permission_denials=0",
-				"successful git push 798f0fc..38ac608 dev->dev",
-				"recommendation: safe to retry, low-risk"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T10:28:29.468Z"
-		},
-		{
 			"key": "issue:minion-meta#501",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17552,38 +17590,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T03:58:43.645Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The referenced commit already merges the nitter persistence/shutdown fix, leaving no open deployment issue evident in the entry.",
-			"evidence": [
-				"commit fixes nitter persistence and drain poller shutdown (#295)",
-				"status: unknown with no incident detail"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T08:58:49.051Z"
 		},
 		{
 			"key": "issue:minion-meta#345",
