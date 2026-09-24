@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-24T08:28:36.437Z",
+	"generatedAt": "2026-09-24T08:58:49.169Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6509,38 +6509,6 @@
 			"scoredAt": "2026-09-21T10:33:23.669Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-db09a2f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ db09a2f",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-db09a2f.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "0884608e461e8ce6132b6049a562dd3cc57c4c5a103818a864d17a46ad2c2307",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Multiple high-severity unchecked-access findings in CI/labeler test files plus a removed regression test are concrete, actionable defects with clear file/line pointers.",
-			"evidence": [
-				"5 'high' unchecked-access findings across ci-workflow.test.ts and labeler-workflow.test.ts",
-				"medium: entire review-workflow.test.ts removed, dropping a regression check"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T08:28:34.266Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-2e738f3f945a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8886,6 +8854,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T02:36:54.565Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-db09a2f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ db09a2f",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-db09a2f.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "0884608e461e8ce6132b6049a562dd3cc57c4c5a103818a864d17a46ad2c2307",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The proposal lists specific high-severity unchecked-access findings at exact file:line locations in CI test files, giving a clear bounded fix.",
+			"evidence": [
+				"high unchecked-access at test/ci/ci-workflow.test.ts:206",
+				"4 similar high findings in labeler-workflow.test.ts",
+				"medium: regression test for workflow file re-introduction was removed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T08:58:49.051Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-e863232",
@@ -11471,6 +11472,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:37:11.960Z"
+		},
+		{
+			"key": "run:minion_site#31686953033",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_site",
+			"title": "Claude Code",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/actions/runs/31686953033",
+			"sourceUpdatedAt": "2026-09-12T09:31:54Z",
+			"sourceFingerprint": "fd33d67a9bcb040c710991818cff95818ec5463761e5c0012f15091f3395c7b6",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A CI run failed on the dev branch for a review-comment trigger, but the catalog gives no failure detail to act on yet.",
+			"evidence": [
+				"status: failure",
+				"event: pull_request_review_comment on dev",
+				"workflow: Claude Code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T08:58:49.051Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-3238987400",
@@ -17518,6 +17552,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T03:58:43.645Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The referenced commit already merges the nitter persistence/shutdown fix, leaving no open deployment issue evident in the entry.",
+			"evidence": [
+				"commit fixes nitter persistence and drain poller shutdown (#295)",
+				"status: unknown with no incident detail"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T08:58:49.051Z"
 		},
 		{
 			"key": "issue:minion-meta#345",
