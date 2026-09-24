@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-24T17:58:39.066Z",
+	"generatedAt": "2026-09-24T18:29:17.381Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1875,38 +1875,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-18T23:28:50.129Z"
-		},
-		{
-			"key": "run:minion (gateway)#35970376558",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/35970376558",
-			"sourceUpdatedAt": "2026-09-24T08:08:15Z",
-			"sourceFingerprint": "d1461a0661db463f17f79a6cc0f932456645cb0a848441ec35055739df66e165",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A same-day CI failure on the gateway's DEV development branch can block ongoing work but lacks failure detail needed to act.",
-			"evidence": [
-				"CI workflow failed on DEV branch via workflow_dispatch",
-				"updatedAt 2026-09-24T08:08:15Z is the most recent of the batch"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T14:58:59.221Z"
 		},
 		{
 			"key": "spec:2026-08-28-factory-containment-base-reconciliation-spec",
@@ -5758,6 +5726,74 @@
 			"scoredAt": "2026-09-23T14:59:07.146Z"
 		},
 		{
+			"key": "issue:minion-meta#486",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#486 [monitor:unstick] reconcile run 7f695b37 (minion-meta) — agent exec-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/486",
+			"sourceUpdatedAt": "2026-09-17T18:17:48Z",
+			"sourceFingerprint": "78408f8d3eda1abb901827f6a3f79da789164028d943d9bcad991971d057ec14",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#584"
+			],
+			"rationale": "A recurring exit-126/turns=0 provider exec fault on the reconcile runner has a clear diagnosis and should be combined with its later recurrence into one host-fix goal.",
+			"evidence": [
+				"exit 126, turns=0, permission_denials=0 recurring 4x in ~2.5h",
+				"reconcile work itself succeeded (push fd003f1..1902b06)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T18:29:17.246Z"
+		},
+		{
+			"key": "issue:minion-meta#584",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#584 [monitor:unstick] reconcile proposals run 0f247401 (minion-meta) - exit-126 agent exec failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/584",
+			"sourceUpdatedAt": "2026-09-24T18:17:26Z",
+			"sourceFingerprint": "f23c69f0e896ac1f7bba2929b81294895da2b8fa55db130b54a164815c4d4b7f",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#486"
+			],
+			"rationale": "Same exit-126/turns=0 provider exec signature recurring again a week later confirms this is a persistent host-level issue that should be one goal with #486.",
+			"evidence": [
+				"same exit-126/turns=0 signature on 2026-09-24, one week after #486",
+				"reconcile-proper work succeeded (push 26175cb..047b516)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T18:29:17.246Z"
+		},
+		{
 			"key": "pr:minion (gateway)#257",
 			"kind": "pr",
 			"stage": "development",
@@ -8092,38 +8128,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T16:58:47.308Z"
-		},
-		{
-			"key": "issue:minion-meta#486",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#486 [monitor:unstick] reconcile run 7f695b37 (minion-meta) — agent exec-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/486",
-			"sourceUpdatedAt": "2026-09-17T18:17:48Z",
-			"sourceFingerprint": "78408f8d3eda1abb901827f6a3f79da789164028d943d9bcad991971d057ec14",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Recurring exit-126/turns=0 reconcile-agent launch fault across 4 consecutive runs points to a host-level binary/permission problem needing human remediation, though the reconcile pipeline itself still completes.",
-			"evidence": [
-				"note=reconcile agent failed exit-126, turns=0, permission_denials=0",
-				"identical signature recorded in 4 consecutive reconcile runs over ~2.5h"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T18:22:37.920Z"
 		},
 		{
 			"key": "issue:minion-meta#497",
@@ -11473,6 +11477,38 @@
 			"scoredAt": "2026-09-21T10:37:11.960Z"
 		},
 		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 86796 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-09-24T18:20:51Z",
+			"sourceFingerprint": "adae1b9865eddafe10d8c92ed57ddec7485fc7735c7d4a7391c9b8e5afd8f741",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "An 86796-commit upstream sync dump has no scoped task and needs to be broken into concrete sync slices before it is actionable.",
+			"evidence": [
+				"Upstream sync: 86796 new commit(s) available",
+				"raw commit log listing with no defined scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T18:29:17.246Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-3238987400",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11567,39 +11603,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T02:30:12.291Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-24",
-			"sourceFingerprint": "a951c122f81fc46b6849f779a5f35bc9b311ed3fd67198ef3edcac0ff2751a8b",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Bundles ~17 unrelated TODO(handoff) markers spanning auth, race conditions, dead code, and JSON-parsing safety into one proposal with no unifying scope, so it needs to be split into separate specs before it is actionable.",
-			"evidence": [
-				"17 distinct file:line markers listed under one proposal",
-				"topics span requireAdmin audit, race window, unbounded JSON reader, dead startBackupScheduler()",
-				"status: review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T14:29:15.707Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-be019c6",
@@ -13846,6 +13849,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T17:31:19.046Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-24",
+			"sourceFingerprint": "f84a5a80267501332dcafe02191ce2c97b8916bd3e320dd0bccd5ed4d0739ebd",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This proposal bundles 15+ unrelated TODO markers spanning security, race conditions, and schema changes under one generic definition of done, so it can't produce one effective outcome as framed.",
+			"evidence": [
+				"markers span security audit, race window narrowing, byte-bounded JSON reading, and DB schema drop across unrelated files",
+				"definition of done is only 'resolve marker, remove TODO'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T18:29:17.246Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-5e55396",
@@ -16415,6 +16450,38 @@
 			"scoredAt": "2026-09-18T18:58:51.072Z"
 		},
 		{
+			"key": "run:minion (gateway)#34476312509",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34476312509",
+			"sourceUpdatedAt": "2026-09-10T13:02:10Z",
+			"sourceFingerprint": "d9eeb27125dfb5d832f355c81e51e1397b3ffb8c8022abd4d1ea418dc27aeb98",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A two-week-old CI failure with no logs or failure detail can't be scoped as actionable work without more evidence.",
+			"evidence": [
+				"CI run failure on push to DEV, 2026-09-10",
+				"no failure detail beyond status=failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T18:29:17.246Z"
+		},
+		{
 			"key": "spec:2026-08-17-hub-dead-mirrors-cleanup-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -18156,6 +18223,37 @@
 			"scoredAt": "2026-09-24T04:28:31.385Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy record only shows an already-merged fix commit, not an open deployment problem.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain shutdown (#295)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T18:29:17.246Z"
+		},
+		{
 			"key": "issue:minion-meta#427",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18700,39 +18798,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T03:59:20.386Z"
-		},
-		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 86669 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-09-24T12:23:22Z",
-			"sourceFingerprint": "bfb90b9975ac18b15bbc9d8643f1e4550bdea2388363e6ca971f313349aa6b31",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An automated upstream-sync notification listing thousands of commits with no defined scope or actionable outcome for this repo.",
-			"evidence": [
-				"New upstream commits detected",
-				"86669 new commit(s) available",
-				"tags: upstream-sync"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T12:28:57.319Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
