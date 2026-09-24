@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-24T13:58:38.800Z",
+	"generatedAt": "2026-09-24T14:29:15.811Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4444,39 +4444,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T05:29:11.787Z"
-		},
-		{
-			"key": "run:minion (gateway)#35970376558",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/35970376558",
-			"sourceUpdatedAt": "2026-09-24T08:08:15Z",
-			"sourceFingerprint": "d1461a0661db463f17f79a6cc0f932456645cb0a848441ec35055739df66e165",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failing CI run on the DEV branch from today blocks confidence in that branch but lacks failure details needed to scope work.",
-			"evidence": [
-				"status: failure",
-				"workflow_dispatch on DEV",
-				"updatedAt 2026-09-24T08:08:15Z"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T13:29:06.815Z"
 		},
 		{
 			"key": "spec:2026-08-20-handoff-minion-hub-3530856808-spec",
@@ -11474,39 +11441,6 @@
 			"scoredAt": "2026-09-21T10:37:11.960Z"
 		},
 		{
-			"key": "run:minion_site#31686953033",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_site",
-			"title": "Claude Code",
-			"sourceUrl": "https://github.com/NikolasP98/minion-site/actions/runs/31686953033",
-			"sourceUpdatedAt": "2026-09-12T09:31:54Z",
-			"sourceFingerprint": "fd33d67a9bcb040c710991818cff95818ec5463761e5c0012f15091f3395c7b6",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A CI run failed on the dev branch for a review-comment trigger, but the catalog gives no failure detail to act on yet.",
-			"evidence": [
-				"status: failure",
-				"event: pull_request_review_comment on dev",
-				"workflow: Claude Code"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T08:58:49.051Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-3238987400",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11610,7 +11544,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-24",
-			"sourceFingerprint": "8b385cbf8e16239bb0135a9353390286a40623e11888b8da2da96dc555ac2b42",
+			"sourceFingerprint": "a951c122f81fc46b6849f779a5f35bc9b311ed3fd67198ef3edcac0ff2751a8b",
 			"score": 41,
 			"band": "low",
 			"axes": {
@@ -11620,20 +11554,20 @@
 			},
 			"readiness": {
 				"specification": 2,
-				"implementation": 1
+				"implementation": 2
 			},
-			"confidence": 3,
+			"confidence": 4,
 			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "This handoff marker bundles roughly seventeen unrelated one-line TODO(handoff) fragments (auth audit, credit-card id logic, Supabase test coverage, DB schema drop, retention policy, etc.) into a single goal that only closes once every marker is resolved, so it should be split into individually scoped proposals rather than executed as one.",
+			"rationale": "Bundles ~17 unrelated TODO(handoff) markers spanning auth, race conditions, dead code, and JSON-parsing safety into one proposal with no unifying scope, so it needs to be split into separate specs before it is actionable.",
 			"evidence": [
-				"17+ distinct marker lines spanning different files and concerns",
-				"definition of done requires all markers removed before the proposal closes",
-				"each marker is a terse quoted fragment lacking independent scope/acceptance criteria"
+				"17 distinct file:line markers listed under one proposal",
+				"topics span requireAdmin audit, race window, unbounded JSON reader, dead startBackupScheduler()",
+				"status: review"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T10:29:02.188Z"
+			"scoredAt": "2026-09-24T14:29:15.707Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-be019c6",
@@ -11931,6 +11865,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-22T05:29:22.315Z"
+		},
+		{
+			"key": "issue:minion-meta#583",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#583 [monitor:unstick] run dcfafaec (minion-meta reconcile) failed: claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/583",
+			"sourceUpdatedAt": "2026-09-24T14:17:23Z",
+			"sourceFingerprint": "0f9d3b2828d9112ce1796c6c82c216f6cb463283f9070d54f15259319d607cb9",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#480"
+			],
+			"rationale": "Recurrence of the identical exit-126/turns=0 provider-launch fault on 2026-09-24 confirms a persistent runner/box issue worth one consolidated investigation with #480.",
+			"evidence": [
+				"claude-provider agent exited 126 with turns=0 and cost_usd=0",
+				"updatedAt 2026-09-24T14:17:23Z",
+				"recommendation: retry the run; fix box if pattern recurs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T14:29:15.707Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-3215540846",
@@ -14012,6 +13981,39 @@
 			"scoredAt": "2026-09-19T20:59:00.809Z"
 		},
 		{
+			"key": "run:minion (gateway)#34476312509",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34476312509",
+			"sourceUpdatedAt": "2026-09-10T13:02:10Z",
+			"sourceFingerprint": "d9eeb27125dfb5d832f355c81e51e1397b3ffb8c8022abd4d1ea418dc27aeb98",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A bare CI failure record on DEV with no logs or failing-step detail, now two weeks stale, so current relevance needs to be confirmed against the branch's latest CI run before acting.",
+			"evidence": [
+				"status: failure",
+				"updatedAt 2026-09-10T13:02:10Z",
+				"summary: push on DEV, no further detail"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T14:29:15.707Z"
+		},
+		{
 			"key": "issue:minion-meta#352",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14475,6 +14477,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T10:29:02.188Z"
+		},
+		{
+			"key": "issue:minion-meta#480",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#480 [monitor:unstick] reconcile run 0db97b3d (minion-meta): claude provider exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/480",
+			"sourceUpdatedAt": "2026-09-17T14:17:30Z",
+			"sourceFingerprint": "a042e8eb1e7e74f4a1611d2b0d21e93822815fd41931874e042976b608758bda",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#583"
+			],
+			"rationale": "Same claude-provider exit-126/turns=0 signature as the newer #583 and should be merged into one runner-diagnosis goal rather than tracked twice.",
+			"evidence": [
+				"fingerprint: unstick-unknown-0db97b3d",
+				"claude provider exited 126 with turns=0",
+				"updatedAt 2026-09-17"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T14:29:15.707Z"
 		},
 		{
 			"key": "issue:minion-meta#582",
@@ -17560,38 +17597,6 @@
 			"scoredAt": "2026-09-19T03:58:43.645Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The summary is a commit message for an already-merged nitter persistence/shutdown fix, leaving no pending action.",
-			"evidence": [
-				"Summary: 'fix(nitter): serialize persistence and drain shutdown (#295)'",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T13:29:06.815Z"
-		},
-		{
 			"key": "issue:minion-meta#345",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18215,39 +18220,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-22T10:58:31.532Z"
-		},
-		{
-			"key": "issue:minion-meta#480",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#480 [monitor:unstick] reconcile run 0db97b3d (minion-meta): claude provider exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/480",
-			"sourceUpdatedAt": "2026-09-17T14:17:30Z",
-			"sourceFingerprint": "a042e8eb1e7e74f4a1611d2b0d21e93822815fd41931874e042976b608758bda",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The reconcile work itself succeeded and pushed, leaving only a single transient provider exit-126 that the diagnosis says is safe to retry.",
-			"evidence": [
-				"reconcile pipeline completed substantive work and pushed to dev despite the error",
-				"provider sub-step exited 126 with turns=0, suggesting a runner binary/permissions issue",
-				"recommendation in the alert itself is to retry, a low-risk action"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T14:24:36.716Z"
 		},
 		{
 			"key": "issue:minion-meta#518",
