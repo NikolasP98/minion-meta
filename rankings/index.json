@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-24T03:28:23.874Z",
+	"generatedAt": "2026-09-24T04:28:31.503Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2460,21 +2460,21 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 4
+				"specification": 8,
+				"implementation": 6
 			},
 			"confidence": 6,
-			"recommendation": "reframe",
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Real authorization-misclassification risk across ~50 unaudited call sites, but a single monolithic 50-site audit isn't a boundable unit of paid work.",
+			"rationale": "A confirmed authorization misclassification bug (platform-admin check used where org-scoped check is needed) with a clear scoped definition of done and precedent pattern already shipped for scheduling handlers.",
 			"evidence": [
-				"~50 requireAdmin call sites spot-audited by path name only, not read line-by-line",
-				"confirmed live defect pattern already fixed for scheduling via requireOrgCapability",
-				"DoD requires per-handler classification plus targeted tests"
+				"confirmed as a live defect on the scheduling links...event-types handlers",
+				"~55 other call sites...spot-audited by path name only (not read line-by-line)",
+				"Definition of done: classification comment or switch to requireOrgCapability, targeted vitest per switched handler"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T03:29:07.866Z"
+			"scoredAt": "2026-09-24T04:28:31.385Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1637616237",
@@ -17978,6 +17978,38 @@
 			"scoredAt": "2026-09-23T18:28:35.077Z"
 		},
 		{
+			"key": "issue:minion-meta#580",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#580 [monitor:unstick] rank board goals (e6c76fc5) - both providers failed batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/580",
+			"sourceUpdatedAt": "2026-09-24T04:17:28Z",
+			"sourceFingerprint": "a5f4df555ad4188318a3db0629323d4e6499d49037ccd772d7d1404f44cb19e9",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A transient provider-availability hiccup in the ranking pipeline itself, already diagnosed as low-risk and self-resolving on retry.",
+			"evidence": [
+				"Diagnosis: transient provider-availability/flakiness issue, not a spec or code defect",
+				"Recommendation: retry the run; a single-batch provider hiccup is unlikely to repeat"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T04:28:31.385Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18554,37 +18586,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T03:59:20.386Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a changelog entry for an already-merged nitter persistence/shutdown fix with no open deployment problem described.",
-			"evidence": [
-				"commit b841c36 merged fix(nitter): serialize persistence and drain poller shutdown (#295)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T02:58:43.971Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
@@ -20269,22 +20270,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 7
+				"specification": 6,
+				"implementation": 6
 			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-1194287278"
-			],
-			"rationale": "Already approved with a clear rename/relocate fix direction for a low-risk naming-clarity issue.",
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A minor naming/discoverability TODO on a merged component with no functional bug, low urgency but well-scoped if picked up.",
 			"evidence": [
-				"status approved, merged PR #296 referenced",
-				"clear fix direction: rename to PosAppointmentCalendar or relocate"
+				"only `/pos/appointments` renders this now",
+				"Fix direction: Rename to PosAppointmentCalendar...or move to routes/(app)/pos/components/"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T03:29:07.866Z"
+			"scoredAt": "2026-09-24T04:28:31.385Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2187562221",
