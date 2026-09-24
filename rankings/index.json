@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-24T16:28:36.892Z",
+	"generatedAt": "2026-09-24T16:58:47.412Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4949,74 +4949,6 @@
 			"scoredAt": "2026-09-21T10:39:09.996Z"
 		},
 		{
-			"key": "issue:minion-meta#483",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#483 [monitor:unstick] reconcile proposals run 1c3d2c19 (minion-meta) stalled on claude exit-126",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/483",
-			"sourceUpdatedAt": "2026-09-17T16:17:53Z",
-			"sourceFingerprint": "e403f9a6500c390d0453f8bf6b5aed30afe9af9c7fc882d09f78c040b6f071f4",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#484"
-			],
-			"rationale": "Recurring infra exit-126 signature blocking automated reconcile runs on the same host warrants a single consolidated fix rather than per-incident handling.",
-			"evidence": [
-				"claude provider invocation failed immediately with exit-126, turns=0",
-				"4th-5th occurrence of the identical signature within ~2 hours"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T16:28:53.952Z"
-		},
-		{
-			"key": "issue:minion-meta#484",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#484 [monitor:unstick] reconcile proposals run a9b4829d (minion-meta) stalled on claude exit-126",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/484",
-			"sourceUpdatedAt": "2026-09-17T16:17:54Z",
-			"sourceFingerprint": "689d18dc7af8b85f2cb1cda61e243688e930d4a6e6a94a7ea4de5851f2f1d475",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#483"
-			],
-			"rationale": "Duplicate of the sibling exit-126 runner-launch failure signature and should be consolidated into one host-fix goal.",
-			"evidence": [
-				"same signature as sibling runs today",
-				"recurring signature across multiple runs today, not an isolated blip"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T16:28:53.952Z"
-		},
-		{
 			"key": "issue:minion-meta#494",
 			"kind": "issue",
 			"stage": "proposal",
@@ -8092,6 +8024,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-20T21:28:45.429Z"
+		},
+		{
+			"key": "issue:minion-meta#483",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#483 [monitor:unstick] reconcile proposals run 1c3d2c19 (minion-meta) stalled on claude exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/483",
+			"sourceUpdatedAt": "2026-09-17T16:17:53Z",
+			"sourceFingerprint": "e403f9a6500c390d0453f8bf6b5aed30afe9af9c7fc882d09f78c040b6f071f4",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#484"
+			],
+			"rationale": "Recurring claude exit-126 launch failure on the reconcile runner is an infra fault best tracked as one goal with its sibling occurrence rather than duplicated per-run.",
+			"evidence": [
+				"exit-126, turns=0, $0 cost — agent process never launched",
+				"4th-5th occurrence of identical signature within ~2 hours per the alert text"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T16:58:47.308Z"
+		},
+		{
+			"key": "issue:minion-meta#484",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#484 [monitor:unstick] reconcile proposals run a9b4829d (minion-meta) stalled on claude exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/484",
+			"sourceUpdatedAt": "2026-09-17T16:17:54Z",
+			"sourceFingerprint": "689d18dc7af8b85f2cb1cda61e243688e930d4a6e6a94a7ea4de5851f2f1d475",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#483"
+			],
+			"rationale": "Same exit-126/turns=0 runner-launch signature as #483 on the same reconcile pipeline, so it should be consolidated into a single infra-fix goal rather than tracked separately.",
+			"evidence": [
+				"reconcile state (handoff, merge-scan, git push) completed normally; only the claude provider call failed with exit-126",
+				"described as a recurring signature across multiple runs today, not isolated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T16:58:47.308Z"
 		},
 		{
 			"key": "issue:minion-meta#486",
@@ -18153,38 +18153,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T04:28:31.385Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged commit fixing a shutdown/persistence race in the nitter extension, not an open actionable goal.",
-			"evidence": [
-				"commit already merged: 'fix(nitter): serialize persistence and drain shutdown (#295)'",
-				"status is unknown with no indication of ongoing deployment issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T15:58:37.104Z"
 		},
 		{
 			"key": "issue:minion-meta#427",
