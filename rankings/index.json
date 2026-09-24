@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-24T14:58:59.345Z",
+	"generatedAt": "2026-09-24T15:28:59.317Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7050,74 +7050,6 @@
 			"scoredAt": "2026-09-24T07:59:05.912Z"
 		},
 		{
-			"key": "issue:minion-meta#481",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#481 [monitor:unstick] reconcile proposals run 8362ab1d: claude provider exit-126 after successful git work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/481",
-			"sourceUpdatedAt": "2026-09-17T15:17:46Z",
-			"sourceFingerprint": "dc9ac4938383283fd768d164a715ad670b3f9f85b999ad41a2f6241464ff9cdc",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#482"
-			],
-			"rationale": "Recurring exit-126/turns=0 claude-provider failure in the reconcile worker should be combined with the sibling report into one infra investigation goal.",
-			"evidence": [
-				"exit-126, turns=0, permission_denials=0 for provider=claude",
-				"same signature recurred 3x in 30 minutes across 8362ab1d, 47ecd4c6, 0db97b3d"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T15:19:05.322Z"
-		},
-		{
-			"key": "issue:minion-meta#482",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#482 [monitor:unstick] reconcile proposals run 47ecd4c6: claude provider exit-126 after partial git work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/482",
-			"sourceUpdatedAt": "2026-09-17T15:17:52Z",
-			"sourceFingerprint": "3e3331a2751963f9d8089e9dd497c9791d31f353f2060348817c680036c499bd",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#481"
-			],
-			"rationale": "Same exit-126 claude-provider signature as #481, so both should merge into a single worker-image permissions/PATH investigation goal.",
-			"evidence": [
-				"exit-126, turns=0, permission_denials=0, provider=claude, worker_started_at ~1s from finished_at",
-				"1 of 3 identical-signature occurrences within a 30-minute window"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-17T15:19:05.322Z"
-		},
-		{
 			"key": "issue:minion-meta#538",
 			"kind": "issue",
 			"stage": "proposal",
@@ -7479,6 +7411,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:38:08.134Z"
+		},
+		{
+			"key": "issue:minion-meta#481",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#481 [monitor:unstick] reconcile proposals run 8362ab1d: claude provider exit-126 after successful git work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/481",
+			"sourceUpdatedAt": "2026-09-17T15:17:46Z",
+			"sourceFingerprint": "dc9ac4938383283fd768d164a715ad670b3f9f85b999ad41a2f6241464ff9cdc",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#482"
+			],
+			"rationale": "Automated monitor intake describing a recurring reconcile-worker exit-126/claude-provider signature that duplicates issue #482 and a third unlisted run.",
+			"evidence": [
+				"exit-126, turns=0, provider=claude signature recurred 3x in 30 minutes across 8362ab1d, 47ecd4c6, 0db97b3d",
+				"git-side work already landed via push retry, so only the agent-launch step needs a fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T15:28:59.186Z"
+		},
+		{
+			"key": "issue:minion-meta#482",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#482 [monitor:unstick] reconcile proposals run 47ecd4c6: claude provider exit-126 after partial git work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/482",
+			"sourceUpdatedAt": "2026-09-17T15:17:52Z",
+			"sourceFingerprint": "3e3331a2751963f9d8089e9dd497c9791d31f353f2060348817c680036c499bd",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#481"
+			],
+			"rationale": "Same infra-level claude-provider exit-126 signature as #481, one of three near-identical monitor-intake reports in a 30-minute window that should be consolidated.",
+			"evidence": [
+				"exit-126, turns=0, permission_denials=0 for provider=claude with worker_started_at ~1s from finished_at",
+				"recommendation to check claude CLI binary permissions/PATH/install integrity in the reconcile worker image"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-24T15:28:59.186Z"
 		},
 		{
 			"key": "pr:minion_hub#279",
@@ -18153,38 +18153,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T04:28:31.385Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The referenced commit already merged a fix for nitter persistence and shutdown draining, so no further action is needed.",
-			"evidence": [
-				"commit fixes nitter persistence serialization and shutdown drain",
-				"co-authored merge commit indicates the fix is already merged"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T14:58:59.221Z"
 		},
 		{
 			"key": "issue:minion-meta#427",
