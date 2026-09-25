@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-25T14:29:06.624Z",
+	"generatedAt": "2026-09-25T14:58:43.763Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7018,39 +7018,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T03:00:35.573Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-5ff1c51",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 5ff1c51",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-5ff1c51.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "aa436990021364c125d71b8d8754495103cd8dc011e282627886830d6a1afe35",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The merge-scan gives precise file:line findings for silently swallowed shutdown errors and an unchecked array access, which are small, bounded, and directly actionable fixes.",
-			"evidence": [
-				"server-close.ts:184 (empty-catch) — Error from quiesce() silently swallowed without logging",
-				"server-close.ts:189 (empty-catch) — Error from close() silently swallowed without logging",
-				"bridge-ws.test.ts:549 (unchecked-access) — [0]! array access assumes non-empty clients"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-18T14:28:56.458Z"
 		},
 		{
 			"key": "issue:minion-meta#422",
@@ -14789,6 +14756,38 @@
 			"scoredAt": "2026-09-25T14:29:06.515Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown draining with no indication of unresolved deployment health issues.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"tags: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-25T14:58:43.651Z"
+		},
+		{
 			"key": "issue:minion-meta#362",
 			"kind": "issue",
 			"stage": "proposal",
@@ -15571,6 +15570,38 @@
 			"scoredAt": "2026-09-21T10:37:11.960Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-5ff1c51",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 5ff1c51",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-5ff1c51.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "aa436990021364c125d71b8d8754495103cd8dc011e282627886830d6a1afe35",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Automated merge-scan lists concrete medium-severity findings (silent error swallowing, unchecked array access) that are actionable but not urgent.",
+			"evidence": [
+				"medium empty-catch: Error from quiesce() silently swallowed without logging",
+				"medium unchecked-access: [0]! array access assumes wss.clients has at least one element"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-25T14:58:43.651Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-2d728adb7c22",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16028,39 +16059,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-22T22:29:08.054Z"
-		},
-		{
-			"key": "issue:minion-meta#502",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#502 [monitor:unstick] reconcile run d5454de8: claude agent exec failure (exit-126, 0 turns)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/502",
-			"sourceUpdatedAt": "2026-09-18T14:17:27Z",
-			"sourceFingerprint": "0a73412e6957a3a158d176c0414da334641dad592d691ac041b64dbdb3be7ace",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Single exit-126/turns=0 failure is self-diagnosed as a transient runner-level issue with reconcile side effects already landed, so watching for recurrence beats dedicating work now.",
-			"evidence": [
-				"exit 126 means the command/binary could not be executed at all, before any agent turn began",
-				"reconcile side effects (git push, proposals file) already landed",
-				"Recommendation: safe to retry"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-18T14:28:56.458Z"
 		},
 		{
 			"key": "issue:minion-meta#504",
@@ -17202,6 +17200,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T10:58:45.561Z"
+		},
+		{
+			"key": "issue:minion-meta#502",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#502 [monitor:unstick] reconcile run d5454de8: claude agent exec failure (exit-126, 0 turns)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/502",
+			"sourceUpdatedAt": "2026-09-18T14:17:27Z",
+			"sourceFingerprint": "0a73412e6957a3a158d176c0414da334641dad592d691ac041b64dbdb3be7ace",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Diagnosis indicates reconcile side effects already succeeded and only a transient runner-level exec failure needs a retry, which is not substantial standalone work.",
+			"evidence": [
+				"reconcile core work completed successfully ... git push to minion-meta:dev succeeded",
+				"exit 126 means the command/binary could not be executed at all ... looks like a transient or box-level exec/permission issue",
+				"Recommendation: safe to retry"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-25T14:58:43.651Z"
 		},
 		{
 			"key": "issue:minion-meta#506",
