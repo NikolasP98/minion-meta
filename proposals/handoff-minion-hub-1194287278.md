@@ -26,7 +26,9 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-25)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:29` — despite the name, only /pos/appointments renders this now
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L29
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:144` — "local" here is the BROWSER's timezone, while the data window
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L144
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:39` — despite the name, only /pos/appointments renders this now
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L39
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:45` — the interchangeable block/sliver colour picker (2026-09-25,
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L45
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:194` — "local" here is the BROWSER's timezone, while the data window
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L194

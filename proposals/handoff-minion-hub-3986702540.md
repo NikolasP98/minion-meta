@@ -1,14 +1,14 @@
 ---
-id: handoff-minion-hub-2843825962
-title: Handoff marker — src/routes/(app)/pos/appointments/new/+page.svelte (minion_hub)
+id: handoff-minion-hub-3986702540
+title: Handoff marker — scripts/sunat-baja-hub-emissions.ts (minion_hub)
 status: draft
-created: 2026-09-16
+created: 2026-09-25
 updated: 2026-09-25
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — src/routes/(app)/pos/appointments/new/+page.svelte
+# Handoff marker — scripts/sunat-baja-hub-emissions.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-25)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/appointments/new/+page.svelte:27` — nothing links here with these params yet — the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/appointments/new/+page.svelte#L27
+- `NikolasP98/minion_hub@master scripts/sunat-baja-hub-emissions.ts:141` — --apply is intentionally unimplemented. Building it
+  https://github.com/NikolasP98/minion_hub/blob/master/scripts/sunat-baja-hub-emissions.ts#L141

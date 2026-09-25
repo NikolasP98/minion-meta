@@ -59,17 +59,17 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13139
 - `NikolasP98/minion-meta@dev rankings/index.json:13852` — startBackupScheduler() has no call site anywhere in src/",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13852
-- `NikolasP98/minion-meta@dev rankings/index.json:15130` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15130
-- `NikolasP98/minion-meta@dev rankings/index.json:15230` — define fold-spanning event rendering when local end <= start",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15230
-- `NikolasP98/minion-meta@dev rankings/index.json:15330` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15330
-- `NikolasP98/minion-meta@dev rankings/index.json:15364` — nothing links here with these params yet — the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15364
-- `NikolasP98/minion-meta@dev rankings/index.json:16174` — the affordance is one-way — once opened, a line's discount",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16174
-- `NikolasP98/minion-meta@dev rankings/index.json:16244` — leave bars + holiday shading come from the loader's current-year",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16244
-- `NikolasP98/minion-meta@dev rankings/index.json:17320` — the confirmed root cause (QA-stack app logs) was'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17320
+- `NikolasP98/minion-meta@dev rankings/index.json:15164` — define fold-spanning event rendering when local end <= start",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15164
+- `NikolasP98/minion-meta@dev rankings/index.json:15263` — nothing links here with these params yet — the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15263
+- `NikolasP98/minion-meta@dev rankings/index.json:16039` — the affordance is one-way — once opened, a line's discount",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16039
+- `NikolasP98/minion-meta@dev rankings/index.json:16109` — leave bars + holiday shading come from the loader's current-year",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16109
+- `NikolasP98/minion-meta@dev rankings/index.json:17185` — the confirmed root cause (QA-stack app logs) was'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17185
+- `NikolasP98/minion-meta@dev rankings/index.json:17788` — raw fetch moved verbatim from TeamTab — migrate to",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17788
+- `NikolasP98/minion-meta@dev rankings/index.json:17887` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17887
