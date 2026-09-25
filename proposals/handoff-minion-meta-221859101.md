@@ -53,19 +53,19 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12848
 - `NikolasP98/minion-meta@dev rankings/index.json:13545` — remove once the phone failure is root-caused",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13545
-- `NikolasP98/minion-meta@dev rankings/index.json:14322` — startBackupScheduler() has no call site anywhere in src/",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14322
-- `NikolasP98/minion-meta@dev rankings/index.json:15634` — tagOptions is the FILTER's list — the event-scope registry"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15634
-- `NikolasP98/minion-meta@dev rankings/index.json:15697` — define fold-spanning event rendering when local end <= start",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15697
-- `NikolasP98/minion-meta@dev rankings/index.json:15796` — nothing links here with these params yet — the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15796
+- `NikolasP98/minion-meta@dev rankings/index.json:14290` — startBackupScheduler() has no call site anywhere in src/",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14290
+- `NikolasP98/minion-meta@dev rankings/index.json:15602` — tagOptions is the FILTER's list — the event-scope registry"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15602
+- `NikolasP98/minion-meta@dev rankings/index.json:15665` — define fold-spanning event rendering when local end <= start",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15665
+- `NikolasP98/minion-meta@dev rankings/index.json:15764` — nothing links here with these params yet — the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15764
 - `NikolasP98/minion-meta@dev rankings/index.json:16539` — the affordance is one-way — once opened, a line's discount",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16539
 - `NikolasP98/minion-meta@dev rankings/index.json:17684` — the confirmed root cause (QA-stack app logs) was'",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17684
-- `NikolasP98/minion-meta@dev rankings/index.json:18287` — raw fetch moved verbatim from TeamTab — migrate to",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18287
-- `NikolasP98/minion-meta@dev rankings/index.json:18386` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18386
+- `NikolasP98/minion-meta@dev rankings/index.json:18319` — raw fetch moved verbatim from TeamTab — migrate to",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18319
+- `NikolasP98/minion-meta@dev rankings/index.json:18418` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18418
