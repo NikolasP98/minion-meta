@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-e5bc9fd11deb
 title: "Post-merge finding — todo-handoff in src/lib/components/scheduling/hover-fields.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-25
 updated: 2026-09-25
 repos: [minion-hub]
