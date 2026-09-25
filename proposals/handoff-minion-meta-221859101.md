@@ -27,22 +27,22 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-25)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:3299` — a full per-handler audit of the remaining requireAdmin",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3299
-- `NikolasP98/minion-meta@dev rankings/index.json:4563` — the id is the ONLY signal. An org that names a credit-CARD",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4563
-- `NikolasP98/minion-meta@dev rankings/index.json:5098` — scope word-frequency/sentiment/win-index rollups by owner",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5098
-- `NikolasP98/minion-meta@dev rankings/index.json:6849` — this narrows the race window, it does not close it —",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6849
-- `NikolasP98/minion-meta@dev rankings/index.json:6918` — provider JSON reader is not byte bounded before res.json()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6918
-- `NikolasP98/minion-meta@dev rankings/index.json:9062` — the tender only appears when the org registered a method",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9062
-- `NikolasP98/minion-meta@dev rankings/index.json:9160` — Reconcile uploaded blobs after failed/concurrent import creation",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9160
-- `NikolasP98/minion-meta@dev rankings/index.json:10520` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10520
+- `NikolasP98/minion-meta@dev rankings/index.json:3331` — a full per-handler audit of the remaining requireAdmin",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3331
+- `NikolasP98/minion-meta@dev rankings/index.json:4661` — the id is the ONLY signal. An org that names a credit-CARD",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4661
+- `NikolasP98/minion-meta@dev rankings/index.json:5196` — scope word-frequency/sentiment/win-index rollups by owner",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5196
+- `NikolasP98/minion-meta@dev rankings/index.json:6914` — this narrows the race window, it does not close it —",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6914
+- `NikolasP98/minion-meta@dev rankings/index.json:6983` — provider JSON reader is not byte bounded before res.json()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6983
+- `NikolasP98/minion-meta@dev rankings/index.json:9094` — the tender only appears when the org registered a method",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9094
+- `NikolasP98/minion-meta@dev rankings/index.json:9192` — Reconcile uploaded blobs after failed/concurrent import creation",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9192
+- `NikolasP98/minion-meta@dev rankings/index.json:10552` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10552
 - `NikolasP98/minion-meta@dev rankings/index.json:11450` — Historical receipt/tombstone retention and missing-owner recovery need",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11450
 - `NikolasP98/minion-meta@dev rankings/index.json:11841` — drop column (proposal #16)"
@@ -51,21 +51,21 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11906
 - `NikolasP98/minion-meta@dev rankings/index.json:12668` — prompt-driven protocol instead of native tool_use",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12668
-- `NikolasP98/minion-meta@dev rankings/index.json:13365` — remove once the phone failure is root-caused",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13365
-- `NikolasP98/minion-meta@dev rankings/index.json:14110` — startBackupScheduler() has no call site anywhere in src/",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14110
-- `NikolasP98/minion-meta@dev rankings/index.json:15454` — tagOptions is the FILTER's list — the event-scope registry"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15454
-- `NikolasP98/minion-meta@dev rankings/index.json:15517` — define fold-spanning event rendering when local end <= start",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15517
-- `NikolasP98/minion-meta@dev rankings/index.json:15616` — nothing links here with these params yet — the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15616
-- `NikolasP98/minion-meta@dev rankings/index.json:16358` — the affordance is one-way — once opened, a line's discount",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16358
-- `NikolasP98/minion-meta@dev rankings/index.json:17568` — the confirmed root cause (QA-stack app logs) was'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17568
-- `NikolasP98/minion-meta@dev rankings/index.json:18203` — raw fetch moved verbatim from TeamTab — migrate to",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18203
-- `NikolasP98/minion-meta@dev rankings/index.json:18302` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18302
+- `NikolasP98/minion-meta@dev rankings/index.json:13400` — remove once the phone failure is root-caused",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13400
+- `NikolasP98/minion-meta@dev rankings/index.json:14181` — startBackupScheduler() has no call site anywhere in src/",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14181
+- `NikolasP98/minion-meta@dev rankings/index.json:15559` — tagOptions is the FILTER's list — the event-scope registry"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15559
+- `NikolasP98/minion-meta@dev rankings/index.json:15622` — define fold-spanning event rendering when local end <= start",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15622
+- `NikolasP98/minion-meta@dev rankings/index.json:15721` — nothing links here with these params yet — the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15721
+- `NikolasP98/minion-meta@dev rankings/index.json:16527` — the affordance is one-way — once opened, a line's discount",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16527
+- `NikolasP98/minion-meta@dev rankings/index.json:17736` — the confirmed root cause (QA-stack app logs) was'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17736
+- `NikolasP98/minion-meta@dev rankings/index.json:18339` — raw fetch moved verbatim from TeamTab — migrate to",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18339
+- `NikolasP98/minion-meta@dev rankings/index.json:18438` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18438
