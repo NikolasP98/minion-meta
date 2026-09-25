@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-25T03:05:34.507Z",
+	"generatedAt": "2026-09-25T03:58:51.487Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8135,38 +8135,6 @@
 			"scoredAt": "2026-09-24T16:58:47.308Z"
 		},
 		{
-			"key": "issue:minion-meta#497",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#497 [monitor:unstick] run 90699164 (minion-meta rank) - batch candidate mismatch, exit 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/497",
-			"sourceUpdatedAt": "2026-09-18T03:17:35Z",
-			"sourceFingerprint": "f76e487746e2bc25673f52741e2bff36ccc3d1bf634e653a12c12a84979d520d",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An automated monitor flagged a recurring batch candidate-count validation failure in the ranking pipeline itself, which merits a retry and possible classifier addition but isn't independently verified beyond the alert text.",
-			"evidence": [
-				"exit_code=1 with note 'batch candidate-count validation failure'",
-				"89/532 candidates pending when it stopped, cost incurred $1.02"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-18T03:28:29.145Z"
-		},
-		{
 			"key": "issue:minion-meta#503",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14087,6 +14055,40 @@
 			"scoredAt": "2026-09-20T18:58:22.384Z"
 		},
 		{
+			"key": "issue:minion-meta#497",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#497 [monitor:unstick] run 90699164 (minion-meta rank) - batch candidate mismatch, exit 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/497",
+			"sourceUpdatedAt": "2026-09-18T03:17:35Z",
+			"sourceFingerprint": "f76e487746e2bc25673f52741e2bff36ccc3d1bf634e653a12c12a84979d520d",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#587"
+			],
+			"rationale": "A genuine batch-validation failure left 89/532 candidates unprocessed and cost was incurred, and it shares a host-classifier hardening goal with the similar rank-job failure in #587.",
+			"evidence": [
+				"batch candidate-count mismatch on batch 4, cost $1.02 incurred",
+				"89/532 candidates still pending when it stopped"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-25T03:58:51.361Z"
+		},
+		{
 			"key": "issue:minion-meta#514",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14216,6 +14218,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T09:28:57.500Z"
+		},
+		{
+			"key": "issue:minion-meta#587",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#587 [monitor:unstick] rank run dfc092d5 - batch 2 provider failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/587",
+			"sourceUpdatedAt": "2026-09-25T03:17:34Z",
+			"sourceFingerprint": "7877ce6ac4f0517f009fcec0c2e9dbe73cfa70567cca00cfc741a124e9c63ff4",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#497"
+			],
+			"rationale": "Another rank-job batch failure (provider exhaustion) leaving 93/631 candidates pending, best combined with #497 into one host-classifier hardening goal for recurring rank-job batch failure signatures.",
+			"evidence": [
+				"batch 2 failed after both bounded providers rejected it, 93/631 candidates pending",
+				"recommendation suggests adding a host-classifier signature if pattern recurs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-25T03:58:51.361Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-workforce-client-json-error",
@@ -19538,14 +19574,14 @@
 			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The monitor diagnosis states the reconcile sweep itself completed successfully and pushed its output, with no spec or code fix indicated.",
+			"rationale": "The underlying reconcile work completed and pushed successfully; only a wrapper exec-126 fault occurred with no spec or code fix indicated.",
 			"evidence": [
-				"\"No spec fix or code fix indicated\"",
-				"\"reconcile sweep itself ran to completion... pushed 2b1dca5..b5231d8\""
+				"reconcile sweep ran to completion, proposals/index.json written and pushed",
+				"diagnosis states 'no spec fix or code fix indicated'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-18T02:59:40.392Z"
+			"scoredAt": "2026-09-25T03:58:51.361Z"
 		},
 		{
 			"key": "issue:minion-meta#505",
@@ -20507,6 +20543,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T02:59:44.134Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Entry is just a merged commit message about nitter shutdown handling with no open deployment issue stated.",
+			"evidence": [
+				"summary is a merged PR commit message",
+				"no failure or pending action described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-25T03:58:51.361Z"
 		},
 		{
 			"key": "issue:minion-meta#373",
