@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-25T17:58:29.855Z",
+	"generatedAt": "2026-09-25T18:17:01.236Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3754,6 +3754,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T03:05:34.377Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-420bc99ef6af",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-420bc99ef6af.md",
+			"sourceUpdatedAt": "2026-09-25",
+			"sourceFingerprint": "ec0ca67d10a57f4ec31bea8e016fee216ed661d2d6d6e3cd6696793fd2836bf3",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-c5107e319c39"
+			],
+			"rationale": "A real timezone-identity bug in BookingCalendar affects booking correctness for users across timezones and shares the same file/PR as another open BookingCalendar finding.",
+			"evidence": [
+				"Diagnosis: browser's local 'now' compared against provider-timezone slots causes off-by-timezone availability errors",
+				"Same file/PR (#368) as proposal:postmerge-minion-hub-c5107e319c39"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-25T18:17:01.104Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-80b7daf173aa",
@@ -11155,38 +11189,6 @@
 			"scoredAt": "2026-09-25T03:01:39.775Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-25",
-			"sourceFingerprint": "132803bdf07a339d0098fdad905337a54fbe34bdf7aa81b1de0b8867d3fb0c79",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This single proposal bundles roughly 18 unrelated TODO(handoff) markers spanning security review, backup-scheduler dead code, JSON-reader bounding, and tag-filter logic, so it cannot be resolved as one coherent deliverable and should be split per marker.",
-			"evidence": [
-				"18 distinct file:line markers listed under one proposal",
-				"markers span unrelated concerns: 'requireAdmin' audit, 'provider JSON reader is not byte bounded', 'startBackupScheduler() has no call site'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-25T14:29:06.515Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-355769a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17445,6 +17447,38 @@
 			"scoredAt": "2026-09-25T03:03:10.836Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-0323908",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 0323908",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-0323908.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "aae0abcfad752a241811e1abdd9f27e80f3b1116525e1642b9a5a9f4e4c294c1",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A specific, bounded medium-severity null-check gap in a single test file is clear enough to fix directly.",
+			"evidence": [
+				"src/shells/run-store.forks.test.ts:138 unchecked-access finding",
+				"medium severity per merge-scan, scoped to one file/line"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-25T18:17:01.104Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-9d8d4a8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17773,38 +17807,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T03:58:43.645Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Entry shows an already-merged commit fixing nitter persistence/shutdown, so no outstanding action remains.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"Co-authored-by commit already landed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-25T15:59:10.514Z"
 		},
 		{
 			"key": "issue:minion-meta#345",
@@ -20546,38 +20548,6 @@
 			"scoredAt": "2026-09-25T03:05:34.377Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-0323908",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 0323908",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-0323908.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "aae0abcfad752a241811e1abdd9f27e80f3b1116525e1642b9a5a9f4e4c294c1",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single medium-severity unchecked-access finding in a test file's finally block is low-stakes and narrow in scope.",
-			"evidence": [
-				"medium unchecked-access finding in run-store.forks.test.ts:138",
-				"finding is test-code only, not production path"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-18T17:58:29.767Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-d222079",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20741,6 +20711,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T03:59:20.386Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-c5107e319c39",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c5107e319c39.md",
+			"sourceUpdatedAt": "2026-09-25",
+			"sourceFingerprint": "1f3720a52dd6106308362c0bb86623dfccb3d1afb648b6f98f26797b9d84fd20",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-420bc99ef6af"
+			],
+			"rationale": "A cosmetic styling-configurability gap in the same BookingCalendar component and PR is best resolved alongside the related timezone fix rather than as a standalone goal.",
+			"evidence": [
+				"TODO: event-block styling exists but the now-line indicator lacks matching configurability",
+				"Same file/PR (#368) as proposal:postmerge-minion-hub-420bc99ef6af"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-25T18:17:01.104Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-df5cae93bfc8",
@@ -21636,6 +21640,38 @@
 			"scoredAt": "2026-09-25T03:04:34.436Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-25",
+			"sourceFingerprint": "e8eca8724a80c6e2ac9d20fb61c81c5529692111f7f3af511837b45196ab7db6",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The quoted markers are historical finding text embedded inside the rankings index data file itself, not genuine unresolved code TODOs needing a fix.",
+			"evidence": [
+				"Title: 'Handoff marker — rankings/index.json (minion-meta)'",
+				"Markers quote unrelated fragments (e.g. 'requireAdmin', 'drop column (proposal #16)') sourced from prior findings stored in the same JSON file"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-25T18:17:01.104Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3652542388",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21666,6 +21702,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T03:05:34.377Z"
+		},
+		{
+			"key": "run:minion_hub#36172157636",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/36172157636",
+			"sourceUpdatedAt": "2026-09-25T18:14:42Z",
+			"sourceFingerprint": "105aea403884e9d0f4a8aaea59155eb8ad50146b09beaf78198b18cbc5118c63",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress CI run status snapshot, not a scoped goal with a verifiable outcome to rank.",
+			"evidence": [
+				"status: in_progress, push on master",
+				"no findings, scope, or defined outcome beyond CI run state"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-25T18:17:01.104Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
