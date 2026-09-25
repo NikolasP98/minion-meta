@@ -34,11 +34,15 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L50
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:53` — so do the configurable event-BLOCK lines and the now-line
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L53
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:121` — tagOptions is the FILTER's list — the event-scope registry
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L121
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:241` — "local" here is the BROWSER's timezone, while the data window
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L241
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:265` — "now" is the BROWSER's wall clock and todayIn(TZ) the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L265
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:501` — this is a per-VIEWER preference, not an RBAC restriction —
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L501
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:128` — tagOptions is the FILTER's list — the event-scope registry
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L128
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:258` — "local" here is the BROWSER's timezone, while the data window
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L258
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:282` — "now" is the BROWSER's wall clock and todayIn(TZ) the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L282
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:521` — this is a per-VIEWER preference, not an RBAC restriction —
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L521
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:855` — a merged visit is N sequential PATCHes, so a 409 (or a
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L855
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1289` — ship drag-a-member-out onto the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1289

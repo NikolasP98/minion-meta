@@ -1,14 +1,14 @@
 ---
-id: handoff-minion-hub-2843825962
-title: Handoff marker — src/routes/(app)/pos/appointments/new/+page.svelte (minion_hub)
+id: handoff-minion-hub-3542676477
+title: Handoff marker — src/lib/components/scheduling/hover-fields.ts (minion_hub)
 status: draft
-created: 2026-09-16
+created: 2026-09-25
 updated: 2026-09-25
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — src/routes/(app)/pos/appointments/new/+page.svelte
+# Handoff marker — src/lib/components/scheduling/hover-fields.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-25)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/appointments/new/+page.svelte:28` — nothing links here with these params yet — the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/appointments/new/+page.svelte#L28
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/hover-fields.ts:29` — client has exactly ONE sub-item today because the POS
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/hover-fields.ts#L29
