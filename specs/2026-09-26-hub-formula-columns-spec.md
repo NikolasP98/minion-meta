@@ -14,6 +14,10 @@ tags: [ui, data, security]
 
 # Formula properties
 
+## 0. Product
+
+Deliver a guarded formula property and a separate POS margin simulation without changing native accounting or recipe calculations.
+
 ## AS-IS
 
 At Hub master 55f525c, custom-properties.ts admits six input types. Definition rules are organization-scoped JSONB; values use explicit null versus absent/default projection, versions and forced RLS. custom-property-bundle.service.ts authorizes records before loading values. POS catalog +page.server.ts derives native margin from listSellables unitPrice and costForProducts canonical recipe cost. Margin is money, not the payload-only margin percentage. Finance-sensitive viewers receive null cost/margin. DataTable supports shared custom cells and client query/export, with custom server operations disabled for CRM.
@@ -41,7 +45,11 @@ At Hub master 55f525c, custom-properties.ts admits six input types. Definition r
 | Generic properties to protected formulas | Tenant/record/module checks, finance-sensitive denial across catalog/preview/cells/export, transitive restricted/partial propagation |
 | Local qualification to release | Focused and full CI/check/build/design/token checks, local seeded browser QA, independent exact-head Sol review, verified merge/deploy; targeted template install/readback and read-only comparison |
 
-## Follow-ups
+## Verification
+
+Run the focused parser/compiler/service/API/component tests, real PostgreSQL concurrency and arithmetic tests, local seeded HTTP/browser comparisons, full CI checks and exact-head independent review. Verify deployment readiness and migration identity, then install and read back the targeted comparison property.
+
+## Out of scope and follow-ups
 
 Relations/rollups, additional native source adapters, optional-native migration/minimum provisioning, required-on-create and complete-set CRM/server query/export remain in proposal 2026-09-26-hub-custom-columns-next-phases. Keep TODO(handoff) at actual unsupported boundaries; do not offer inactive relation/function choices.
 
