@@ -1,8 +1,8 @@
 ---
 id: 2026-09-26-hub-custom-columns-spec
 title: Typed custom-column creation and management
-stage: dev
-status: implementing
+stage: done
+status: shipped
 pass: 2
 verdict: approved
 created: 2026-09-26
@@ -51,7 +51,7 @@ Schema changes require the owning module's manage capability plus view; value mu
 
 Adapters validate canonical record identity, current organization and the native list/detail ownership rules before value read/write. Cross-org, deleted, nonexistent and out-of-scope records must not become value-store hosts. Do not expose existence via differing forbidden/not-found results. CRM ownerFilter is mandatory. For every owning module supported by shouldMaskSensitive, a caller for whom it returns true receives no custom definitions or values, and canManage/canEdit are false; mutations reject. Apply the same gate to reads, writes, export and management, including guessed property IDs. Team uses the explicit HR/user matrix above. This conservative policy avoids classifying arbitrary custom values as automatically nonsensitive. Socials supports c:<campaignId> campaign rows only in this slice; expanded s:<adsetId>/a:<adId> rows show unavailable custom cells without editors. Validate campaigns by current-org Meta connection/account insight existence, using canonical org+campaign identity consistent with the current native grouping. Test same IDs in another org/account and reject records with no authorized backing insights. Validate employee/member IDs through current org HR/membership sources. Finance edit permission allows custom annotations even on closed/imported documents; those writes never update official fields. Raw ids alone prove nothing.
 
-All reads/writes, including direct API calls, enforce these rules. UI gating mirrors server capabilities but is not the security boundary. Batch reads are bounded; no per-cell request loop. A full DataTable custom-properties bundle carries definitions, per-row effective values/versions, canManage/canEdit and mutation callbacks. Definitions remain org/entity-scoped across native view variants.
+All reads/writes, including direct API calls, enforce these rules. UI gating mirrors server capabilities but is not the security boundary. Batch reads are bounded; no per-cell request loop. Each organization/table allows at most 100 active properties; archived definitions do not consume that capacity, and restore enforces the same limit as creation. A full DataTable custom-properties bundle carries definitions, per-row effective values/versions, canManage/canEdit and mutation callbacks. Definitions remain org/entity-scoped across native view variants.
 
 ## UI and save behavior
 
@@ -78,3 +78,13 @@ Focused shared-contract/API/service/component tests; real PostgreSQL RLS/concurr
 ## Out of scope and follow-up
 
 Formula execution/IntelliSense, relations/rollups, global server-query/export planning for new property types, required-field enforcement across all creation/import paths, migration of optional built-ins into custom properties, minimal-core provisioning changes, and admission of the remaining table surfaces are subsequent phases. Record these at extension boundaries with TODO(handoff) and a matching open proposal. No inactive controls or fake implementations for those types ship in this slice.
+
+## Implementation and release evidence
+
+- Hub PR: https://github.com/NikolasP98/minion_hub/pull/386. Reviewed source caee27476b36e16c762bac8efd0de6066c6eccdb; squash merge fc4ebb1b70eed8f2fa141b69dd89f9cd50d21f91 on 2026-09-26.
+- Independent Sol exact-commit review approved; separate backend/adapters and documentation reviews approved. The user authorized merge after subagent review. GitHub requires another account approval; the authorized admin merge was used after all checks passed.
+- CI run https://github.com/NikolasP98/minion_hub/actions/runs/36274006276 passed unit, check/build, PostgreSQL and seeded QA jobs. Vercel preview was Ready before merge.
+- Local type checking: zero errors/warnings. Design-debt and token gates passed; architecture tests 3/3. PostgreSQL RLS, compare-and-swap and configuration/value race tests passed. Eleven HTTP lifecycle/permission groups passed; seed repeat was idempotent; schema drift passed.
+- Local full unit run had 4,566 passing tests and one unrelated scheduling timeout under load. The scheduling and custom UI focused rerun passed 28/28; the full CI suite passed.
+- Browser qualification: created and edited all six types at POS; verified localized date display, header configuration, rename/default projection, archive/restore and persistence after reload. Custom edits sent no native row updates. Stock displayed all six seeded types and management controls. Owner/editor/viewer permissions and tenant/record boundaries were exercised by HTTP and adapter tests.
+- Production deployment dpl_7mj35Skj7wfodVLwvWabUw1yCeX9 is READY and serves hub.minion-ai.org. Its build cloned master at fc4ebb1 and applied 20260926180000_custom_table_properties.sql successfully (one migration applied). Deployment: https://minion-yw0on4byg-nikolasp98s-projects.vercel.app. The public POS catalog route responds with the expected unauthenticated login redirect; authenticated mutation qualification used the seeded local environment, not production customer records.

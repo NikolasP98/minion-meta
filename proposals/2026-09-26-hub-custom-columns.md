@@ -1,7 +1,7 @@
 ---
 id: 2026-09-26-hub-custom-columns
 title: Organization-owned custom columns at source tables
-status: in-spec
+status: done
 created: 2026-09-26
 updated: 2026-09-26
 repos: [minion_hub]
