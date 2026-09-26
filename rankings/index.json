@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-26T13:58:21.802Z",
+	"generatedAt": "2026-09-26T14:29:03.813Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -15863,38 +15863,6 @@
 			"scoredAt": "2026-09-20T00:28:23.917Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged fix for nitter persistence/shutdown draining exists but there is no evidence of a current deployment issue requiring action.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T12:58:24.170Z"
-		},
-		{
 			"key": "issue:minion-meta#362",
 			"kind": "issue",
 			"stage": "proposal",
@@ -21650,6 +21618,38 @@
 			"scoredAt": "2026-09-25T04:28:36.058Z"
 		},
 		{
+			"key": "issue:minion-meta#617",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#617 [monitor:unstick] reconcile run caf335b7 (minion-meta): claude agent exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/617",
+			"sourceUpdatedAt": "2026-09-26T14:17:22Z",
+			"sourceFingerprint": "537c59ed94a45888fa33e41e34e4aac25c5b5d94e59b743d4bf4c82ba19d9b06",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A single transient infra exit-126 already diagnosed as a low-risk retry with the rest of the pipeline healthy is not a durable engineering task worth tracking as a goal.",
+			"evidence": [
+				"claude provider agent exited 126 with 0 turns and 0 cost_usd",
+				"reconcile pipeline otherwise completed and pushed dev->dev successfully"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T14:29:03.694Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-4278431509",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22039,7 +22039,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "db703d5d3c7a8d7f99d5a1e51176891cf76708af6d6784762e103aebea04bff6",
+			"sourceFingerprint": "f07cddde83192ba4a61495610a4f885551976e81f4582dc9b7f80e53cbc7fb2a",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -22054,14 +22054,14 @@
 			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Every cited marker points into rankings/index.json, this ranking system's own generated output file, so the sweep appears to have flagged quoted TODO-like text embedded in prior candidate summaries rather than real source-code work.",
+			"rationale": "The listed markers point at quoted evidence-style fragments inside a generated rankings/index.json output file rather than genuine unresolved TODO(handoff) comments in source, making this non-actionable.",
 			"evidence": [
-				"all markers target rankings/index.json line numbers",
-				"markers quote fragments like 'the tender only appears when the org registered a method' which read as candidate summary prose, not code comments"
+				"target is rankings/index.json, a generated ranking/output data file",
+				"18 scattered quoted fragments across unrelated topics, none reading as an actual code TODO"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T10:28:43.990Z"
+			"scoredAt": "2026-09-26T14:29:03.694Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-d222079",
