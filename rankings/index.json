@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-26T08:58:25.546Z",
+	"generatedAt": "2026-09-26T09:28:31.908Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2737,6 +2737,39 @@
 			"scoredAt": "2026-09-26T01:28:49.049Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-eea107ee93eb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/crm-insights-dashboard.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-eea107ee93eb.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "8f5e413b38e3e20b58ede9bee2645a2cc157639c8b3a4440bc414ae83a3c1e09",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved proposal with clear scope identifies a multi-tenant data isolation bug in CRM dashboard aggregation that leaks cross-owner data.",
+			"evidence": [
+				"Unscoped rollups mix CRM metrics across all owners/users, breaking multi-tenant isolation",
+				"status: approved",
+				"Add owner_id grouping to word-frequency, sentiment, and win-index aggregation queries"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T09:28:31.801Z"
+		},
+		{
 			"key": "spec:2026-08-18-factory-memory-governance-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -5309,39 +5342,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T06:29:26.069Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-eea107ee93eb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/crm-insights-dashboard.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-eea107ee93eb.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "8f5e413b38e3e20b58ede9bee2645a2cc157639c8b3a4440bc414ae83a3c1e09",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A merged PR left an unscoped CRM rollup query that mixes data across owners, breaking multi-tenant isolation, with a clear fix direction and location.",
-			"evidence": [
-				"Unscoped rollups mix CRM metrics across all owners/users, breaking multi-tenant isolation",
-				"TODO(handoff): scope word-frequency/sentiment/win-index rollups by owner",
-				"file: src/server/services/crm-insights-dashboard.service.ts:40"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-19T08:58:23.378Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-defaces-crm-tools-spec",
@@ -15860,6 +15860,38 @@
 			"scoredAt": "2026-09-20T00:28:23.917Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Commit fixes nitter persistence/shutdown but deployment health status is unknown so no clear action is implied.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"status: unknown"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T09:28:31.801Z"
+		},
+		{
 			"key": "issue:minion-meta#362",
 			"kind": "issue",
 			"stage": "proposal",
@@ -19830,6 +19862,38 @@
 			"scoredAt": "2026-09-23T17:32:03.848Z"
 		},
 		{
+			"key": "issue:minion-meta#398",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#398 [monitor:unstick] Requeued transient failure of run 68142f89",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/398",
+			"sourceUpdatedAt": "2026-09-12T08:17:02Z",
+			"sourceFingerprint": "90cea18b6911f353323b63f94653de8efa648402be99e6c9248afb23b445d082",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated monitor intake reports a transient failure already requeued successfully, indicating self-resolution.",
+			"evidence": [
+				"push failed; requeue -> 201",
+				"fingerprint: unstick-transient-68142f89"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T09:28:31.801Z"
+		},
+		{
 			"key": "issue:minion-meta#576",
 			"kind": "issue",
 			"stage": "proposal",
@@ -20832,38 +20896,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T04:59:11.196Z"
-		},
-		{
-			"key": "issue:minion-meta#398",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#398 [monitor:unstick] Requeued transient failure of run 68142f89",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/398",
-			"sourceUpdatedAt": "2026-09-12T08:17:02Z",
-			"sourceFingerprint": "90cea18b6911f353323b63f94653de8efa648402be99e6c9248afb23b445d082",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A single transient push failure that was automatically requeued and returned success with no recurring pattern shown.",
-			"evidence": [
-				"note=push failed; requeue -> 201",
-				"class=C"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-19T08:58:23.378Z"
 		},
 		{
 			"key": "issue:minion-meta#416",
