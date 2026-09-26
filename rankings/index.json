@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-26T18:58:16.738Z",
+	"generatedAt": "2026-09-26T19:10:37.355Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5160,20 +5160,19 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 3
+				"implementation": 5
 			},
-			"confidence": 5,
-			"recommendation": "execute",
+			"confidence": 6,
+			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "Multiple high-severity findings (empty-catch swallowing errors, unchecked-access causing runtime crashes) across critical CRM/attachment/booking paths warrant triage and fixes.",
+			"rationale": "Bundles roughly fifteen concrete high/medium-severity defects across unrelated files that need independent scoping before any can be executed.",
 			"evidence": [
 				"high: c.tag_ids spread without null check throws at runtime",
-				"high: b.startTime unchecked causes fmtBooking() to fail",
-				"high: status update fetch in cancelInstead not checked on critical delete operation"
+				"high: status update fetch in cancelInstead not checked, unhandled error on critical delete operation"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-19T18:58:23.592Z"
+			"scoredAt": "2026-09-26T19:10:37.228Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-afd023b",
@@ -12270,6 +12269,41 @@
 			"scoredAt": "2026-09-23T09:28:57.500Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-54fcd641f081",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-54fcd641f081.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "b0005a52be007afda36e827b2dba0d788793e6062c9f30d6b2f8bc2d9236ff21",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-2841d2ba75ad",
+				"proposal:postmerge-minion-hub-d56bb9cb0b58"
+			],
+			"rationale": "Has a clear diagnosis of an incomplete drag-detach feature in BookingCalendar.svelte from PR #377 and should be merged with two related fan-out/detach markers from the same PR into one goal.",
+			"evidence": [
+				"diagnosis proposes completing member-detach drag lifecycle or removing the stub",
+				"same merged PR #377 and file family as two other scheduling markers"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T19:10:37.228Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9e33ef1698dc",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15508,14 +15542,14 @@
 			"scoredAt": "2026-09-24T07:59:05.912Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-54fcd641f081",
+			"key": "proposal:postmerge-minion-hub-2841d2ba75ad",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-54fcd641f081.md",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/fan-out.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2841d2ba75ad.md",
 			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "3c2e08ced54f078207a971ef2949f99d6fde7a16310f2da946a348571db43256",
+			"sourceFingerprint": "b91f9ca113426598166fc52737751a8e476efc5756f22b65516d55e2f6d7838d",
 			"score": 36,
 			"band": "low",
 			"axes": {
@@ -15524,22 +15558,23 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 3
+				"specification": 3,
+				"implementation": 2
 			},
 			"confidence": 4,
 			"recommendation": "group",
 			"relatedKeys": [
-				"proposal:handoff-minion-hub-1194287278"
+				"proposal:postmerge-minion-hub-54fcd641f081",
+				"proposal:postmerge-minion-hub-d56bb9cb0b58"
 			],
-			"rationale": "This drag-a-member-out marker (line 1753) is already one of the 11 markers aggregated in the BookingCalendar handoff proposal.",
+			"rationale": "Same merged PR #377 scheduling drag/fan-out feature as two other TODO markers, so it should be consolidated into one goal instead of tracked separately.",
 			"evidence": [
-				"marker text 'ship drag-a-member-out onto the grid (detach +' matches line 1753 entry in handoff-minion-hub-1194287278",
-				"diagnosis gives a concrete fix direction (complete or remove drag-detach stub)"
+				"merged PR #377 on branch master",
+				"marker references fan-out/procedure logic tied to the same scheduling feature as the BookingCalendar markers"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T18:47:49.966Z"
+			"scoredAt": "2026-09-26T19:10:37.228Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c371d6639113",
@@ -15616,7 +15651,7 @@
 			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d56bb9cb0b58.md",
 			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "c1b1ee352f9f3b435ca3ba7233b1f762c9d559c35cd0603f4d015c22f48f9bec",
+			"sourceFingerprint": "701d021ae0c5b18b5cf7faf5544c216637f689696fcb571259a10b08e412aa2f",
 			"score": 36,
 			"band": "low",
 			"axes": {
@@ -15625,22 +15660,23 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 1
+				"specification": 3,
+				"implementation": 2
 			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
+			"confidence": 4,
+			"recommendation": "group",
 			"relatedKeys": [
-				"proposal:handoff-minion-hub-1194287278"
+				"proposal:postmerge-minion-hub-2841d2ba75ad",
+				"proposal:postmerge-minion-hub-54fcd641f081"
 			],
-			"rationale": "Another fragment-level TODO in the same overloaded BookingCalendar.svelte file, but with no real diagnosis performed yet.",
+			"rationale": "Targets the same BookingCalendar.svelte drag/fan-out feature and merged PR #377 as two other markers, so it should be consolidated rather than tracked as a separate goal.",
 			"evidence": [
-				"diagnosis section contains only unexecuted Read/Grep tool-call placeholders",
-				"same file already has an aggregate handoff proposal covering other markers"
+				"file src/lib/components/scheduling/BookingCalendar.svelte matches proposal 54fcd641f081",
+				"same merged PR #377 on branch master"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T18:47:49.966Z"
+			"scoredAt": "2026-09-26T19:10:37.228Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e0651859d6e7",
@@ -16725,38 +16761,6 @@
 			"scoredAt": "2026-09-26T02:24:03.793Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "1736aa14815a9063073433d8ccbee2f23b8ca9b784cd33744331dd7d1ea89f34",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This is a self-referential ledger dump of markers found inside the rankings index file itself rather than a scoped, actionable engineering task.",
-			"evidence": [
-				"file is rankings/index.json, the ranking output file itself",
-				"19 disparate marker snippets bundled into one proposal with no single scope"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T18:58:16.599Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3518589653",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17311,6 +17315,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:40:01.592Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Deployment-health entry reflects an already-merged fix with no remaining open action.",
+			"evidence": [
+				"commit message describes completed fix for nitter persistence/shutdown drain",
+				"status unknown with no outstanding issue text"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T19:10:37.228Z"
 		},
 		{
 			"key": "issue:minion-meta#432",
@@ -18029,40 +18065,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T06:58:31.640Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-2841d2ba75ad",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/fan-out.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2841d2ba75ad.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "8ee4aecb5da96a3856d6e87bb7d7973a6d11b1e121dc2efe30db5ba3576090d7",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-2361254700"
-			],
-			"rationale": "Duplicates the handoff-sweep proposal for the same fan-out.ts marker and its diagnosis is only unexecuted tool-call stubs.",
-			"evidence": [
-				"same marker text as proposal:handoff-minion-hub-2361254700",
-				"diagnosis section shows only unexecuted read tool-call placeholders"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T18:47:49.966Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-3602cf6ee4f0",
@@ -22536,14 +22538,14 @@
 			"scoredAt": "2026-09-25T08:01:10.741Z"
 		},
 		{
-			"key": "run:minion_hub#36264301570",
+			"key": "run:minion_hub#36264942845",
 			"kind": "run",
 			"stage": "testing",
 			"repo": "minion_hub",
 			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/36264301570",
-			"sourceUpdatedAt": "2026-09-26T18:56:33Z",
-			"sourceFingerprint": "ada88972840202efab70c0942fb5665a6bbf7cd59d3e02fe51f6d98d1eba3da5",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/36264942845",
+			"sourceUpdatedAt": "2026-09-26T19:07:32Z",
+			"sourceFingerprint": "48b53047e8e34f294c20c2f66156ddc9b169c2494ad175ad81cd8e6ce9351516",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -22552,20 +22554,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 2
+				"specification": 1,
+				"implementation": 1
 			},
-			"confidence": 3,
+			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run, not an actionable goal to rank.",
+			"rationale": "Routine in-progress CI run on master with no failure signal to act on.",
 			"evidence": [
-				"stage testing, status in_progress",
-				"push on master triggering CI"
+				"status in_progress",
+				"push on master, no failure reported"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T18:58:16.599Z"
+			"scoredAt": "2026-09-26T19:10:37.228Z"
 		},
 		{
 			"key": "issue:minion-meta#415",
@@ -23425,6 +23427,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T02:19:20.490Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "50675a0373bb026860cad02a9834b774278a4ebc7bd116133e8072bd8814ff89",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Markers are quoted evidence snippets embedded in the ranking system's own index output, not actionable code TODOs.",
+			"evidence": [
+				"target file is rankings/index.json itself, the ranking system's own output",
+				"quoted marker snippets are truncated fragments of prior ranking rationale text"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T19:10:37.228Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
