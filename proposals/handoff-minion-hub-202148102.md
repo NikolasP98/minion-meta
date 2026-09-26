@@ -26,5 +26,9 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-26)
 
-- `NikolasP98/minion_hub@master src/routes/api/pos/appointments/[id]/group/+server.ts:28` — no /api/scheduling/bookings/[id]/group twin. Merged visits are
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/pos/appointments/[id]/group/+server.ts#L28
+- `NikolasP98/minion_hub@master src/routes/api/pos/appointments/[id]/group/+server.ts:34` — no /api/scheduling/bookings/[id]/group twin. Merged visits are
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/pos/appointments/[id]/group/+server.ts#L34
+- `NikolasP98/minion_hub@master src/routes/api/pos/appointments/[id]/group/+server.ts:65` — this read and moveGroup are two transactions, so a visit
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/pos/appointments/[id]/group/+server.ts#L65
+- `NikolasP98/minion_hub@master src/routes/api/pos/appointments/[id]/group/+server.ts:70` — no route-level test for this body union — the /group route
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/pos/appointments/[id]/group/+server.ts#L70

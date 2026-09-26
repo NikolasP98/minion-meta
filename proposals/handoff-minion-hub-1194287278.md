@@ -26,23 +26,27 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-26)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:39` — despite the name, only /pos/appointments renders this now
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L39
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:45` — the interchangeable block/sliver colour picker (2026-09-25,
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L45
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:50` — the configurable hover-card fields (2026-09-25,
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L50
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:53` — so do the configurable event-BLOCK lines and the now-line
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L53
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:128` — tagOptions is the FILTER's list — the event-scope registry
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L128
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:258` — "local" here is the BROWSER's timezone, while the data window
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L258
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:282` — "now" is the BROWSER's wall clock and todayIn(TZ) the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L282
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:521` — this is a per-VIEWER preference, not an RBAC restriction —
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L521
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:855` — a merged visit is N sequential PATCHes, so a 409 (or a
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L855
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1289` — ship drag-a-member-out onto the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1289
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:57` — despite the name, only /pos/appointments renders this now
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L57
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:63` — the interchangeable block/sliver colour picker (2026-09-25,
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L63
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:68` — the configurable hover-card fields (2026-09-25,
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L68
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:71` — the day RUNWAY (infinite week scrolling, 2026-09-25,
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L71
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:76` — so do the configurable event-BLOCK lines and the now-line
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L76
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:154` — tagOptions is the FILTER's list — the event-scope registry
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L154
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:300` — "local" here is the BROWSER's timezone, while the data window
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L300
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:492` — "now" is the BROWSER's wall clock and todayIn(TZ) the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L492
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:620` — the clear is WHOLESALE and keyed on prop identity, so an
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L620
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:790` — this is a per-VIEWER preference, not an RBAC restriction —
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L790
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1003` — a drag cannot cross the runway's visible edge — there is no
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1003
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1632` — ship drag-a-member-out onto the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1632

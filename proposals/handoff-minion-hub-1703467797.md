@@ -1,15 +1,14 @@
 ---
-id: handoff-minion-hub-3035029616
-title: Handoff marker — src/routes/(app)/pos/appointments/+page.svelte (minion_hub)
+id: handoff-minion-hub-1703467797
+title: Handoff marker — src/lib/components/scheduling/merge-target.ts (minion_hub)
 status: draft
-created: 2026-09-02
+created: 2026-09-26
 updated: 2026-09-26
 repos: [minion-hub]
 tags: [handoff-sweep]
-duplicate_candidate: postmerge-minion-hub-38e0a3c5f572
 ---
 
-# Handoff marker — src/routes/(app)/pos/appointments/+page.svelte
+# Handoff marker — src/lib/components/scheduling/merge-target.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -27,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-26)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/appointments/+page.svelte:152` — "retries on the next settle" means a week that failed
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/appointments/+page.svelte#L152
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/merge-target.ts:19` — only the ghost's START is tested, so dragging a booking so that
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/merge-target.ts#L19
