@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-1703467797
 title: Handoff marker — src/lib/components/scheduling/merge-target.ts (minion_hub)
-status: draft
+status: closed
 created: 2026-09-26
 updated: 2026-09-26
 repos: [minion-hub]
@@ -28,3 +28,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/merge-target.ts:19` — only the ghost's START is tested, so dragging a booking so that
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/merge-target.ts#L19
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-09-26; the sweep closed this proposal.

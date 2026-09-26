@@ -48,9 +48,9 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1099
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1325` — a drag cannot cross the runway's visible edge — there is no
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1325
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1768` — ship drag-a-member-out onto the grid (detach +
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1768
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2094` — the month grid carries no tickets
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2094
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2104` — nor does it fan a CONTAINER out (2026-09-26):
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1778` — ship drag-a-member-out onto the grid (detach +
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1778
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2104` — the month grid carries no tickets
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2104
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2114` — nor does it fan a CONTAINER out (2026-09-26):
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2114
