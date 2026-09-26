@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-26)
 
-- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:217` — Persist realization admission with the status change; this
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L217
+- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:232` — Persist realization admission with the status change; this
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L232
