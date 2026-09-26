@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-26T20:15:31.529Z",
+	"generatedAt": "2026-09-26T20:29:01.412Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -972,6 +972,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:39:09.996Z"
+		},
+		{
+			"key": "issue:minion-meta#627",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#627 [monitor:unstick] reconcile proposals run 36266e78: claude agent exec failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/627",
+			"sourceUpdatedAt": "2026-09-26T20:18:09Z",
+			"sourceFingerprint": "279be2c7db49b2516e7ec8ae3d1d1586afff16e5f0cada57f5242f1bf5ab006a",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#629",
+				"issue:minion-meta#628"
+			],
+			"rationale": "A box-wide claude CLI exec fault (exit-126, turns=0) recurred 9 times in ~2.5 hours and is blocking the reconcile pipeline, with a clear actionable fix (verify CLI binary install/PATH/perms on the runner).",
+			"evidence": [
+				"identical exit-126/turns=0 signature recurred across 9 reconcile runs 17:51-20:14 UTC",
+				"recommendation given: verify claude CLI binary is installed/executable on the runner image"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T20:29:01.278Z"
+		},
+		{
+			"key": "issue:minion-meta#629",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#629 [monitor:unstick] reconcile proposals run 65808957: claude agent exec failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/629",
+			"sourceUpdatedAt": "2026-09-26T20:18:15Z",
+			"sourceFingerprint": "cd977cdd25f84f386998b5e9f559e73691ddf626b9da7c0f462503444e071fef",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#627",
+				"issue:minion-meta#628"
+			],
+			"rationale": "Duplicate occurrence of the same box-wide claude CLI exec fault (exit-126, turns=0) blocking the reconcile pipeline, reinforcing the need for a single infra fix.",
+			"evidence": [
+				"exit 126 with 0 turns and 0 permission denials, same signature as 9 other runs today",
+				"push succeeded (rebase/re-push) but the reconcile agent step itself never executed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T20:29:01.278Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-722867358",
@@ -2070,6 +2140,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T06:59:15.405Z"
+		},
+		{
+			"key": "issue:minion-meta#628",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#628 [monitor:unstick] rank board goals run 986e1af0: both bounded providers failed batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/628",
+			"sourceUpdatedAt": "2026-09-26T20:18:09Z",
+			"sourceFingerprint": "f8dc15218840a9de2b39184f78df396edf0701a53b2a7181116ff08c8278b7ae",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#627",
+				"issue:minion-meta#629"
+			],
+			"rationale": "Ranking pipeline batch 1 failed because claude was unavailable (same box-wide CLI fault as #627/#629) and codex separately returned invalid JSON, both blocking automated rankings.",
+			"evidence": [
+				"batch 1 failed: claude unavailable, codex fallback also produced invalid JSON",
+				"likely same underlying claude CLI exec fault seen in reconcile runs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T20:29:01.278Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-dd764fd1df5e",
@@ -19485,38 +19590,6 @@
 			"scoredAt": "2026-09-26T00:28:54.749Z"
 		},
 		{
-			"key": "run:minion_hub#36268772757",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/36268772757",
-			"sourceUpdatedAt": "2026-09-26T20:13:41Z",
-			"sourceFingerprint": "d7caa01d5be21a3dc20f22bd1e0740ae9216e235453ef46c34e0d989c591104b",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI run on master has no confirmed outcome yet, so no action is actionable until it completes.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T20:15:31.366Z"
-		},
-		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -20837,6 +20910,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T17:32:03.848Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This entry just logs an already-merged nitter persistence/shutdown fix with no open problem to act on.",
+			"evidence": [
+				"commit message describes a completed fix (#295)",
+				"status: unknown, no failure signal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T20:29:01.278Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
@@ -22387,6 +22492,38 @@
 			"scoredAt": "2026-09-26T02:22:19.766Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "3fae83d2298ab0ba36e8c20db92e88fa5d93fdb82aeaba0d2f2b1644af215043",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed markers are unrelated text fragments quoted inside the ranking system's own data file rather than real code TODOs, making this non-actionable.",
+			"evidence": [
+				"markers point at rankings/index.json lines containing disjoint quoted snippets (payments, backups, Supabase, etc.)",
+				"file targeted is the ranking pipeline's own output artifact, not application source"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T20:29:01.278Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-d222079",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23474,38 +23611,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T02:19:20.490Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "a391c1598b8a4517e1fc4a8d63eb225a0a8cae5ddb163b3d2ba25440fe467a04",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Markers are quoted from rankings/index.json itself, i.e. the sweep scraped historical rationale/evidence strings out of a generated data artifact rather than real source-code TODOs.",
-			"evidence": [
-				"target file is rankings/index.json, a generated ranking-history data file, not source code",
-				"quoted snippets read as prior rationale/evidence text (e.g. 'the confirmed root cause (QA-stack app logs) was') rather than TODO comments"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T19:58:51.521Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
