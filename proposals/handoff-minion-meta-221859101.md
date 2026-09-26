@@ -39,27 +39,25 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9603
 - `NikolasP98/minion-meta@dev rankings/index.json:11100` — this hasn't been exercised against a live local Supabase",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11100
-- `NikolasP98/minion-meta@dev rankings/index.json:12196` — the clear is WHOLESALE and keyed on prop identity",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12196
-- `NikolasP98/minion-meta@dev rankings/index.json:12264` — Historical receipt/tombstone retention and missing-owner recovery need",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12264
-- `NikolasP98/minion-meta@dev rankings/index.json:12751` — drop column (proposal #16)"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12751
-- `NikolasP98/minion-meta@dev rankings/index.json:13621` — prompt-driven protocol instead of native tool_use",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13621
-- `NikolasP98/minion-meta@dev rankings/index.json:14647` — remove once the phone failure is root-caused",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14647
-- `NikolasP98/minion-meta@dev rankings/index.json:15397` — startBackupScheduler() has no call site anywhere in src/",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15397
-- `NikolasP98/minion-meta@dev rankings/index.json:16713` — tagOptions is the FILTER's list — the event-scope registry"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16713
-- `NikolasP98/minion-meta@dev rankings/index.json:16874` — nothing links here with these params yet — the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16874
-- `NikolasP98/minion-meta@dev rankings/index.json:17754` — the affordance is one-way — once opened, a line's discount",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17754
-- `NikolasP98/minion-meta@dev rankings/index.json:19061` — the confirmed root cause (QA-stack app logs) was'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19061
-- `NikolasP98/minion-meta@dev rankings/index.json:19596` — raw fetch moved verbatim from TeamTab — migrate to",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19596
-- `NikolasP98/minion-meta@dev rankings/index.json:19695` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19695
+- `NikolasP98/minion-meta@dev rankings/index.json:12231` — Historical receipt/tombstone retention and missing-owner recovery need",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12231
+- `NikolasP98/minion-meta@dev rankings/index.json:12718` — drop column (proposal #16)"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12718
+- `NikolasP98/minion-meta@dev rankings/index.json:13553` — prompt-driven protocol instead of native tool_use",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13553
+- `NikolasP98/minion-meta@dev rankings/index.json:14579` — remove once the phone failure is root-caused",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14579
+- `NikolasP98/minion-meta@dev rankings/index.json:15361` — startBackupScheduler() has no call site anywhere in src/",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15361
+- `NikolasP98/minion-meta@dev rankings/index.json:16645` — tagOptions is the FILTER's list — the event-scope registry"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16645
+- `NikolasP98/minion-meta@dev rankings/index.json:16806` — nothing links here with these params yet — the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16806
+- `NikolasP98/minion-meta@dev rankings/index.json:17686` — the affordance is one-way — once opened, a line's discount",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17686
+- `NikolasP98/minion-meta@dev rankings/index.json:18993` — the confirmed root cause (QA-stack app logs) was'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18993
+- `NikolasP98/minion-meta@dev rankings/index.json:19560` — raw fetch moved verbatim from TeamTab — migrate to",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19560
+- `NikolasP98/minion-meta@dev rankings/index.json:19659` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19659
