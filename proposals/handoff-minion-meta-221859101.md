@@ -57,9 +57,9 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16874
 - `NikolasP98/minion-meta@dev rankings/index.json:17754` — the affordance is one-way — once opened, a line's discount",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17754
-- `NikolasP98/minion-meta@dev rankings/index.json:19093` — the confirmed root cause (QA-stack app logs) was'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19093
-- `NikolasP98/minion-meta@dev rankings/index.json:19628` — raw fetch moved verbatim from TeamTab — migrate to",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19628
-- `NikolasP98/minion-meta@dev rankings/index.json:19727` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19727
+- `NikolasP98/minion-meta@dev rankings/index.json:19061` — the confirmed root cause (QA-stack app logs) was'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19061
+- `NikolasP98/minion-meta@dev rankings/index.json:19596` — raw fetch moved verbatim from TeamTab — migrate to",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19596
+- `NikolasP98/minion-meta@dev rankings/index.json:19695` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19695

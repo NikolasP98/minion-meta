@@ -44,13 +44,11 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L654
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:762` — "now" is the BROWSER's wall clock and todayIn(TZ) the
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L762
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:890` — the clear is WHOLESALE and keyed on prop identity, so an
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L890
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1101` — this is a per-VIEWER preference, not an RBAC restriction —
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1101
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1327` — a drag cannot cross the runway's visible edge — there is no
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1327
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1837` — the month grid carries no tickets
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1837
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2105` — ship drag-a-member-out onto the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2105
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1092` — this is a per-VIEWER preference, not an RBAC restriction —
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1092
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1318` — a drag cannot cross the runway's visible edge — there is no
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1318
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1846` — the month grid carries no tickets
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1846
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2114` — ship drag-a-member-out onto the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2114
