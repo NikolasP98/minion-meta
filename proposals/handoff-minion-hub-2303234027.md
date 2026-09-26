@@ -26,9 +26,9 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-26)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:258` — the drawer still shows no LINKED POS TICKETS — spec §4.1
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L258
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:262` — spec §4.1 also lists reschedule, "charge in POS" and "book the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L262
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:266` — the plan button is gated on pos:create, but server-side
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L266
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:276` — the drawer still shows no LINKED POS TICKETS — spec §4.1
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L276
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:280` — spec §4.1 also lists reschedule, "charge in POS" and "book the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L280
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:284` — the plan button is gated on pos:create, but server-side
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L284
