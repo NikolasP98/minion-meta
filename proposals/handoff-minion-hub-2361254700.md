@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-26)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/fan-out.ts:54` — that trade means a deck of QUARTER-hour procedures (FACES runs
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/fan-out.ts#L54
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/fan-out.ts:42` — that trade means a deck of QUARTER-hour procedures (FACES runs
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/fan-out.ts#L42

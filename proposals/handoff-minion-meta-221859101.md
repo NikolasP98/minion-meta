@@ -49,14 +49,14 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14680
 - `NikolasP98/minion-meta@dev rankings/index.json:15569` — startBackupScheduler() has no call site anywhere in src/",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15569
-- `NikolasP98/minion-meta@dev rankings/index.json:16887` — tagOptions is the FILTER's list — the event-scope registry"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16887
-- `NikolasP98/minion-meta@dev rankings/index.json:17048` — nothing links here with these params yet — the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17048
-- `NikolasP98/minion-meta@dev rankings/index.json:17994` — the affordance is one-way — once opened, a line's discount",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17994
-- `NikolasP98/minion-meta@dev rankings/index.json:19303` — the confirmed root cause (QA-stack app logs) was'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19303
+- `NikolasP98/minion-meta@dev rankings/index.json:16919` — tagOptions is the FILTER's list — the event-scope registry"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16919
+- `NikolasP98/minion-meta@dev rankings/index.json:17080` — nothing links here with these params yet — the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17080
+- `NikolasP98/minion-meta@dev rankings/index.json:18026` — the affordance is one-way — once opened, a line's discount",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18026
+- `NikolasP98/minion-meta@dev rankings/index.json:19335` — the confirmed root cause (QA-stack app logs) was'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19335
 - `NikolasP98/minion-meta@dev rankings/index.json:19870` — raw fetch moved verbatim from TeamTab — migrate to",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19870
 - `NikolasP98/minion-meta@dev rankings/index.json:19969` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
