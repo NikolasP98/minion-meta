@@ -53,8 +53,8 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16817
 - `NikolasP98/minion-meta@dev rankings/index.json:16978` — nothing links here with these params yet — the",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16978
-- `NikolasP98/minion-meta@dev rankings/index.json:17858` — the affordance is one-way — once opened, a line's discount",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17858
+- `NikolasP98/minion-meta@dev rankings/index.json:17890` — the affordance is one-way — once opened, a line's discount",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17890
 - `NikolasP98/minion-meta@dev rankings/index.json:19165` — the confirmed root cause (QA-stack app logs) was'",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19165
 - `NikolasP98/minion-meta@dev rankings/index.json:19700` — raw fetch moved verbatim from TeamTab — migrate to",
