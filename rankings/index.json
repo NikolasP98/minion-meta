@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-26T14:29:03.813Z",
+	"generatedAt": "2026-09-26T14:58:29.388Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -15863,6 +15863,38 @@
 			"scoredAt": "2026-09-20T00:28:23.917Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown draining with test coverage but no indication of ongoing deployment issues.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"test(flows): close owned SQLite fixture connections on every exit"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T14:58:29.248Z"
+		},
+		{
 			"key": "issue:minion-meta#362",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18448,38 +18480,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T02:59:05.362Z"
-		},
-		{
-			"key": "issue:minion-meta#515",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#515 [monitor:unstick] reconcile run 1e9663f5 (minion-meta): agent exit-126, turns=0, despite reconcile script completing",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/515",
-			"sourceUpdatedAt": "2026-09-19T14:17:25Z",
-			"sourceFingerprint": "1f553748a3289f9a8477bcbd0796a876a6a8aaed4e188d0143bcece2f26b5af0",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single isolated worker-box exit-126/turns=0 fault with reconcile state already persisted is low urgency but worth a retry/monitor.",
-			"evidence": [
-				"exit 126 turns=0 for provider=claude",
-				"reconcile state already persisted successfully"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-19T14:28:24.983Z"
 		},
 		{
 			"key": "issue:minion-meta#516",
@@ -21389,6 +21389,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T04:59:11.196Z"
+		},
+		{
+			"key": "issue:minion-meta#515",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#515 [monitor:unstick] reconcile run 1e9663f5 (minion-meta): agent exit-126, turns=0, despite reconcile script completing",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/515",
+			"sourceUpdatedAt": "2026-09-19T14:17:25Z",
+			"sourceFingerprint": "1f553748a3289f9a8477bcbd0796a876a6a8aaed4e188d0143bcece2f26b5af0",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated monitor intake diagnosing a single isolated worker-box exit-126 fault where the underlying reconcile state already persisted successfully, making a retry low-value busywork rather than a real goal.",
+			"evidence": [
+				"reconcile shell logic ran to completion in this run",
+				"failure looks isolated to that worker box rather than to this repo or spec"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T14:58:29.248Z"
 		},
 		{
 			"key": "issue:minion-meta#535",
