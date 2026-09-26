@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-3ba60040d060
 title: "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/+page.svelte (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-26
 updated: 2026-09-26
 repos: [minion-hub]
