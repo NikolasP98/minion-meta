@@ -46,11 +46,11 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L769
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1099` — this is a per-VIEWER preference, not an RBAC restriction —
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1099
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1325` — a drag cannot cross the runway's visible edge — there is no
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1325
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1778` — ship drag-a-member-out onto the grid (detach +
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1778
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2104` — the month grid carries no tickets
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2104
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2114` — nor does it fan a CONTAINER out (2026-09-26):
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2114
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1339` — a drag cannot cross the runway's visible edge — there is no
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1339
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1792` — ship drag-a-member-out onto the grid (detach +
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1792
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2118` — the month grid carries no tickets
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2118
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2128` — nor does it fan a CONTAINER out (2026-09-26):
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2128

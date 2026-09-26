@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-26)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/appointments/new/+page.svelte:28` — nothing links here with these params yet — the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/appointments/new/+page.svelte#L28
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/appointments/new/+page.svelte:26` — nothing links here with these params yet — the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/appointments/new/+page.svelte#L26
