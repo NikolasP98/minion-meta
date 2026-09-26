@@ -1,6 +1,6 @@
 ---
 id: 2026-09-26-hub-custom-columns-next-phases
-title: Guarded formulas, complete custom-property queries and minimal provisioning
+title: Relations, complete custom-property queries and minimal provisioning
 status: draft
 created: 2026-09-26
 updated: 2026-09-26
@@ -12,11 +12,11 @@ tags: [ui, data, security]
 
 ## AS-IS
 
-The first implementation slice is specified in 2026-09-26-hub-custom-columns-spec: six typed scalar/list properties on the eight registered primary tables. This proposal records deliberately deferred capabilities, not delivered behavior. The source audit found 41 production DataTable uses and several grids. CRM delegates pagination and CSV export to server-side domain queries; adding display accessors alone cannot extend their full-result semantics.
+The first implementation slice is specified in 2026-09-26-hub-custom-columns-spec: six typed scalar/list properties on the eight registered primary tables. Typed scalar formulas and the POS margin comparison have moved into the separate implementation spec 2026-09-26-hub-formula-columns-spec and Hub PR389; their release evidence belongs there. This proposal records the remaining capabilities. The source audit found 41 production DataTable uses and several grids. CRM delegates pagination and CSV export to server-side domain queries; adding display accessors alone cannot extend their full-result semantics.
 
 ## TO-BE
 
-1. Calculated properties use the typed property catalog and stable-ID expression tree. SQL-style property references, arithmetic, functions and later registered relation rollups have inline syntax/type diagnostics and context-aware IntelliSense. Incompatible number/text/date/money/UOM operations, cycles, missing or restricted dependencies fail before save and are rechecked server-side. Formula preview/table/filter/sort/export share the authoritative evaluator.
+1. Extend the guarded scalar formula engine with registered linked properties and relation rollups, additional native source adapters, and explicit UOM/time semantics. Preserve stable dependency IDs, inline type diagnostics, permission redaction and server validation. Full-result formula filtering, sorting and export must use the authoritative evaluator.
 2. CRM and other server-mode tables support custom filtering, ordering and full-result export through a scoped query planner, without page-only fallback. New required properties enforce domain create/import/API constraints before the option is offered.
 3. Minimal-core provisioning defines and tests core fields per module, migrates eligible optional built-ins into org-owned properties while preserving existing data, and leaves canonical domain calculations intact as reusable sources.
 4. Further durable source tables, report adapters and Socials hierarchy levels are admitted with canonical identities, typed metadata and correct owner/sensitive policies. Row renderers are not automatically treated as writable entities. Legacy CRM custom_fields gains a controlled binding/migration to property IDs.
