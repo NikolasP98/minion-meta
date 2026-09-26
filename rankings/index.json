@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-26T03:28:51.144Z",
+	"generatedAt": "2026-09-26T03:58:54.661Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6936,6 +6936,41 @@
 			"scoredAt": "2026-09-26T02:25:34.726Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-0a366fa7d8f4",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/pos/appointments/[id]/group/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0a366fa7d8f4.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "29afcf1c6a096a0349bca15b75e37bb5c6467c393787522878d4849211178b6a",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-551c45cff1cc",
+				"proposal:postmerge-minion-hub-8dc5df280f16"
+			],
+			"rationale": "A clear transaction-safety bug from PR #370 that shares scope with the other two merge-target findings from the same PR.",
+			"evidence": [
+				"diagnosis: read and moveGroup are separate transactions causing a race window",
+				"same PR #370 as merge-target test findings"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T03:58:54.544Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-ccb2014a7cbb",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12408,36 +12443,39 @@
 			"scoredAt": "2026-09-25T08:59:04.748Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-3ba60040d060",
+			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3ba60040d060.md",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/merge-target.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-551c45cff1cc.md",
 			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "c4fd4a82addf3be2452ea3bca55c88ed8539aac9ebf43c122aaa8768db4dcb04",
+			"sourceFingerprint": "c567a75b7ac37a07e20b842f045b416da80854e44b23d6868d2b6042125548e4",
 			"score": 41,
 			"band": "low",
 			"axes": {
-				"criticality": 3,
+				"criticality": 4,
 				"importance": 5,
-				"impact": 5
+				"impact": 3
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 5
+				"implementation": 6
 			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A clear UX inconsistency (CRM tags read-only vs editable catalog tags) has a concrete comparison-and-unify fix direction ready to scope.",
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-0a366fa7d8f4",
+				"proposal:postmerge-minion-hub-8dc5df280f16"
+			],
+			"rationale": "Test-coverage gap in merge-target wiring from PR #370, best combined with the related race-condition and drag-test findings from the same PR into one goal.",
 			"evidence": [
-				"CRM customer tags are read-only while /pos/catalog supports inline editing",
-				"diagnosis proposes comparing tag components and unifying to the editable variant"
+				"marker: wiring not covered by tests",
+				"same PR #370, same component as related findings"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T02:59:05.362Z"
+			"scoredAt": "2026-09-26T03:58:54.544Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-88c1258817d5",
@@ -12470,6 +12508,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T05:58:59.413Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-8dc5df280f16",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/merge-target.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8dc5df280f16.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "a5b859e12c0c2f9a611af1cdda33eee98ec16df6e54515e88a21f2da3d1f083b",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-0a366fa7d8f4",
+				"proposal:postmerge-minion-hub-551c45cff1cc"
+			],
+			"rationale": "Untested drag-end behavior in merge-target from PR #370, part of the same component and PR as the other two findings and should be resolved together.",
+			"evidence": [
+				"marker: only ghost's START is tested, not drop/END",
+				"same PR #370 and file area as related merge-target findings"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T03:58:54.544Z"
 		},
 		{
 			"key": "issue:minion-meta#405",
@@ -19245,6 +19318,38 @@
 			"scoredAt": "2026-09-19T21:58:37.512Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-3ba60040d060",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3ba60040d060.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "4b8bdbc862d9e6fc01c1c77ba4b3b63686b60b9c06cf62a3b44dc35212ac68e8",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A minor UX inconsistency between CRM and catalog tag editing whose resolution path is undecided pending feasibility investigation.",
+			"evidence": [
+				"tags read-only in CRM but inline-editable in /pos/catalog",
+				"fix direction is conditional on further investigation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T03:58:54.544Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-94ad6c223964",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19607,6 +19712,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T02:25:34.726Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed commit already implements the nitter persistence/shutdown fix, leaving no outstanding actionable work.",
+			"evidence": [
+				"commit message shows fix already merged",
+				"no unresolved problem statement given"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T03:58:54.544Z"
 		},
 		{
 			"key": "issue:minion-meta#427",
@@ -21593,39 +21730,6 @@
 			"scoredAt": "2026-09-25T05:59:01.886Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-0a366fa7d8f4",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/pos/appointments/[id]/group/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0a366fa7d8f4.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "dd697388ee083c94fbeeef169058c9edb0a74025992bc58c40b79a36c8b49979",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-202148102"
-			],
-			"rationale": "This post-merge finding quotes the exact same TODO(handoff) marker at the same file/line already tracked in the broader handoff-sweep proposal for this file.",
-			"evidence": [
-				"marker text identical to handoff-minion-hub-202148102 line 65: this read and moveGroup are two transactions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T02:29:49.567Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-1697a678cf5f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21916,72 +22020,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T06:23:13.006Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/merge-target.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-551c45cff1cc.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "a1fab3244a153dc0b125e25682babd69f5dc51b37b98351ca7ee0f163bb6a182",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-732128239"
-			],
-			"rationale": "Duplicates the single marker already filed under the handoff-sweep proposal for merge-target.test.ts.",
-			"evidence": [
-				"marker text identical to handoff-minion-hub-732128239 line 40: the PREDICATE is covered here, the WIRING is not"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T02:29:49.567Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-8dc5df280f16",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/merge-target.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8dc5df280f16.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "28196dceb66f80f06b0f4ca23501abe7f781eb34c4e5874bbd0b867f75b10e25",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-1703467797"
-			],
-			"rationale": "Duplicates the single marker already filed under the handoff-sweep proposal for merge-target.ts.",
-			"evidence": [
-				"marker text identical to handoff-minion-hub-1703467797 line 19: only the ghost's START is tested"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T02:29:49.567Z"
 		},
 		{
 			"key": "issue:minion-meta#382",
