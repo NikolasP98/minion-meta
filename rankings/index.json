@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-26T02:59:05.484Z",
+	"generatedAt": "2026-09-26T03:28:51.144Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3648,39 +3648,6 @@
 			"scoredAt": "2026-09-23T04:59:02.949Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-ba6133139e27",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/appointments/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ba6133139e27.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "31ba2a380ffbb66b56939599e05ce85e0381ea93dc7aceecb5dd5ef9ce43c97d",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Settlement-retry semantics for POS appointments are undefined, so the fix needs a business-rule decision before any bounded implementation is possible.",
-			"evidence": [
-				"marker: \"'retries on the next settle' means a week that failed\"",
-				"fix direction starts with '(1) Clarify what settle means'",
-				"status: draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T02:30:28.805Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-bf747956e314",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4612,6 +4579,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T22:58:44.421Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ba6133139e27",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/appointments/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ba6133139e27.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "ec311f610767571cad69005d74768dbf9dd2364c5cba5e330e5b5216af803833",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The underlying risk (ambiguous settlement retry semantics in POS appointments risking double-charges or billing disputes) is real but not yet scoped enough to execute — the settle cadence and retry limits must first be clarified before a boundable fix or tests can be written.",
+			"evidence": [
+				"TODO(handoff): \\\"retries on the next settle\\\" means a week that failed",
+				"diagnosis asks to first clarify what \\\"settle\\\" means (daily batch? weekly?)",
+				"merged PR #370 touches payment/financial POS appointments flow"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T03:28:51.003Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d3e0b507af92",
@@ -11260,6 +11260,39 @@
 			"scoredAt": "2026-09-26T02:29:49.567Z"
 		},
 		{
+			"key": "issue:minion-meta#608",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#608 [monitor:unstick] reconcile run 4d7752c5 (minion-meta): agent launch exit-126, task work completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/608",
+			"sourceUpdatedAt": "2026-09-26T03:17:59Z",
+			"sourceFingerprint": "0b11c19e4e065e76411582b3f7380f7b78fc21d2446dd79f4add237a445d3812",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Diagnosis shows the reconcile task itself succeeded and only the wrapping agent launcher failed (exit 126, turns=0), a recurring host/image issue needing human infra triage rather than a code fix.",
+			"evidence": [
+				"push landed at 414df2d despite error status",
+				"identical exit_code=126/turns=0 signature across 3 runs in ~90 minutes",
+				"recommendation is to check claude CLI/agent launcher exec permissions on the worker image"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T03:28:51.003Z"
+		},
+		{
 			"key": "pr:minion (gateway)#256",
 			"kind": "pr",
 			"stage": "development",
@@ -11819,6 +11852,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T21:29:02.048Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-a0837e19f43a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a0837e19f43a.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "2d35f1ab48dee6a36423746ecfe54bcd938a90b2809e3769e9532d0bcf47066f",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Post-merge finding gives a concrete, bounded fix direction (replace identity-keyed wholesale clear with structural/$derived.by equality check) for a real state-loss/performance bug in a merged scheduling component.",
+			"evidence": [
+				"TODO(handoff): the clear is WHOLESALE and keyed on prop identity",
+				"merged PR #370 in NikolasP98/minion_hub@6fdbb71",
+				"fix direction specifies Svelte 5 $derived.by with explicit equality checks"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T03:28:51.003Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ba5345e2cb9d",
@@ -20094,38 +20160,6 @@
 			"scoredAt": "2026-09-19T03:59:20.386Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This entry is just a merged commit message about a nitter fix, not a defined goal with an open problem.",
-			"evidence": [
-				"title/summary is a commit log entry (fix(nitter): serialize persistence...)",
-				"status is unknown with no stated open problem"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T02:59:05.362Z"
-		},
-		{
 			"key": "issue:minion-meta#322",
 			"kind": "issue",
 			"stage": "proposal",
@@ -21689,39 +21723,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-19T03:59:20.386Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-a0837e19f43a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a0837e19f43a.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "b8da7d9634fd5e5764d683f468c0d14313b56c8e3aca7be0b88f602881d65a1c",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-1194287278"
-			],
-			"rationale": "Duplicates one of the twelve markers already listed in the broader handoff-sweep proposal for BookingCalendar.svelte (line 620).",
-			"evidence": [
-				"marker text identical to handoff-minion-hub-1194287278 line 620: the clear is WHOLESALE and keyed on prop identity"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T02:29:49.567Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-df5cae93bfc8",
