@@ -49,25 +49,25 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12785
 - `NikolasP98/minion-meta@dev rankings/index.json:13238` — drop column (proposal #16)"
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13238
-- `NikolasP98/minion-meta@dev rankings/index.json:14252` — prompt-driven protocol instead of native tool_use",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14252
-- `NikolasP98/minion-meta@dev rankings/index.json:15246` — remove once the phone failure is root-caused",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15246
-- `NikolasP98/minion-meta@dev rankings/index.json:16170` — startBackupScheduler() has no call site anywhere in src/",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16170
-- `NikolasP98/minion-meta@dev rankings/index.json:16304` — Full Workshop composition/camera and keyboard relationship/element",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16304
-- `NikolasP98/minion-meta@dev rankings/index.json:17522` — tagOptions is the FILTER's list — the event-scope registry"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17522
-- `NikolasP98/minion-meta@dev rankings/index.json:17555` — Admit guarded formula/relation types and required-on-create only",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17555
-- `NikolasP98/minion-meta@dev rankings/index.json:17685` — nothing links here with these params yet — the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17685
-- `NikolasP98/minion-meta@dev rankings/index.json:18565` — the affordance is one-way — once opened, a line's discount",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18565
-- `NikolasP98/minion-meta@dev rankings/index.json:19769` — the confirmed root cause (QA-stack app logs) was'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19769
-- `NikolasP98/minion-meta@dev rankings/index.json:20304` — raw fetch moved verbatim from TeamTab — migrate to",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20304
-- `NikolasP98/minion-meta@dev rankings/index.json:20403` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20403
+- `NikolasP98/minion-meta@dev rankings/index.json:14255` — prompt-driven protocol instead of native tool_use",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14255
+- `NikolasP98/minion-meta@dev rankings/index.json:15249` — remove once the phone failure is root-caused",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15249
+- `NikolasP98/minion-meta@dev rankings/index.json:16173` — startBackupScheduler() has no call site anywhere in src/",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16173
+- `NikolasP98/minion-meta@dev rankings/index.json:16307` — Full Workshop composition/camera and keyboard relationship/element",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16307
+- `NikolasP98/minion-meta@dev rankings/index.json:17559` — tagOptions is the FILTER's list — the event-scope registry"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17559
+- `NikolasP98/minion-meta@dev rankings/index.json:17592` — Admit guarded formula/relation types and required-on-create only",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17592
+- `NikolasP98/minion-meta@dev rankings/index.json:17722` — nothing links here with these params yet — the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17722
+- `NikolasP98/minion-meta@dev rankings/index.json:18602` — the affordance is one-way — once opened, a line's discount",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18602
+- `NikolasP98/minion-meta@dev rankings/index.json:19842` — the confirmed root cause (QA-stack app logs) was'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19842
+- `NikolasP98/minion-meta@dev rankings/index.json:20409` — raw fetch moved verbatim from TeamTab — migrate to",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20409
+- `NikolasP98/minion-meta@dev rankings/index.json:20508` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20508
