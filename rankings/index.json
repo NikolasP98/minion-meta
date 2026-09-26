@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-26T20:55:12.388Z",
+	"generatedAt": "2026-09-26T20:58:56.513Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4750,37 +4750,6 @@
 			"scoredAt": "2026-09-26T02:18:08.817Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2557316487",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2557316487.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "5315972bf5769917c1a5d2505eb852bb7b77d16928980352c15f8c343124a62d",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A single clear correctness gap — status change not persisted with realization admission — is well scoped for immediate fix.",
-			"evidence": [
-				"Persist realization admission with the status change"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T02:20:34.403Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-2650013771",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4945,6 +4914,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T02:25:44.241Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-2769d3127d2e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2769d3127d2e.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "a771ff5e10545641be750137f230423cc47ac8796dbeee04ce257ef72d84f17c",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-2557316487"
+			],
+			"rationale": "Already approved post-merge finding about ambiguous packageGrantId/paymentPlanId sourcing in the bookings service, with diagnosis already underway.",
+			"evidence": [
+				"status: approved",
+				"marker ties packageGrantId/paymentPlanId to LEAD in scheduling-bookings.service.ts",
+				"diagnosis steps already invoked against the merged PR #384"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T20:58:56.379Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-6b39120c48a2",
@@ -9444,6 +9448,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T02:29:49.567Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2557316487",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2557316487.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "4a9201aba125c97f5e529d294cec588642b43cf1e693084539c8a2af1c0d62a4",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-2769d3127d2e"
+			],
+			"rationale": "A terse single-line TODO about persisting booking status-change admission overlaps with the related bookings-service payment/status finding and lacks its own scope detail.",
+			"evidence": [
+				"marker: 'Persist realization admission with the status change'",
+				"file src/routes/api/scheduling/bookings/_handlers.ts:232",
+				"status draft, single marker only"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T20:58:56.379Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2582471367",
@@ -15000,38 +15039,6 @@
 			"scoredAt": "2026-09-21T10:38:08.134Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 4
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged fix for nitter persistence/shutdown draining with no reported ongoing incident signal.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"status unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T20:55:12.270Z"
-		},
-		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17142,39 +17149,6 @@
 			"scoredAt": "2026-09-25T22:58:57.724Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-2769d3127d2e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2769d3127d2e.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "79b49b2eda72211ec59032386c08001c360c84532e0979f8266219529cd76c75",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single well-located TODO(handoff) finding tied to a specific merged PR and file needing resolution or rationale.",
-			"evidence": [
-				"TODO(handoff) at scheduling-bookings.service.ts",
-				"merged PR #384 referenced",
-				"status draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T20:55:12.270Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-2d728adb7c22",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18415,39 +18389,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:38:08.134Z"
-		},
-		{
-			"key": "pr:minion_hub#385",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#385 feat(stock): UOM inline-editable select + resizable plain tables",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/385",
-			"sourceUpdatedAt": "2026-09-26T20:53:58Z",
-			"sourceFingerprint": "733fbd20a58d9658fc85e5a36022ee31719c2df094cf46bde2c962d605a0b5c3",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-specified, tested, open PR with passing checks ready to merge as a UI/UX improvement.",
-			"evidence": [
-				"44 passed tests, 0 errors 0 warnings",
-				"bun run check and lint:design/tokens clean",
-				"status open"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T20:55:12.270Z"
 		},
 		{
 			"key": "proposal:2026-08-20-hub-datatable-server-mode-test-gap",
@@ -19825,6 +19766,39 @@
 			"scoredAt": "2026-09-24T01:29:00.202Z"
 		},
 		{
+			"key": "pr:minion_hub#385",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#385 feat(stock): UOM inline-editable select + resizable plain tables",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/385",
+			"sourceUpdatedAt": "2026-09-26T20:57:23Z",
+			"sourceFingerprint": "7abdd0d4636a94dad72a4a715eebde753f584a04d4d4f4e9389ec8a46d9894e3",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fully implemented, tested (44 passing, design/token lint clean), and manually QA'd UI enhancement ready to merge.",
+			"evidence": [
+				"44 tests passed including 2 new",
+				"bun run check 0 errors, 0 warnings",
+				"manual QA confirmed persistence via independent session"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T20:58:56.379Z"
+		},
+		{
 			"key": "pr:minion-meta#555",
 			"kind": "pr",
 			"stage": "development",
@@ -20091,38 +20065,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T02:20:34.403Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "a86b4bfb82680af0207d06c7fadb6de6d176d6929cd5bf5795e6d58f55f530bf",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 2,
-			"recommendation": "group",
-			"relatedKeys": [],
-			"rationale": "An aggregated ledger of many unrelated TODO markers across the codebase with no single actionable scope.",
-			"evidence": [
-				"16 separate marker lines across unrelated files",
-				"status review, auto-filed by handoff-ledger sweep"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T20:55:12.270Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-02cb576f3102",
@@ -23709,6 +23651,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T02:19:20.490Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "dff7139fa7035af28366b5eed7cdeea43d6ffd298370c5ca214f55f66c77e0ff",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The flagged file is the meta-repo's own generated rankings data index, and the quoted 'markers' are stored text fragments from prior findings rather than actionable code TODOs.",
+			"evidence": [
+				"target file is rankings/index.json, a generated data artifact",
+				"17 quoted fragments are excerpts of other proposals' prose, not source-code comments",
+				"no actual code file or logic is identified as needing a fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T20:58:56.379Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
