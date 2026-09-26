@@ -1,7 +1,7 @@
 ---
 id: 2026-09-26-hub-formula-columns
 title: Guarded formula properties and POS margin comparison
-status: in-spec
+status: done
 created: 2026-09-26
 updated: 2026-09-26
 repos: [minion_hub]
@@ -24,3 +24,7 @@ Add a working read-only Formula type with typed expressions, completions, inline
 Implement a bounded scalar expression language, stable AST/dependency storage, canonical source catalog and server evaluation, dependency lifecycle checks, reusable editor, and idempotent targeted template creation. Formula type is available on all eight registered tables for supported scalar custom inputs; native inputs begin with POS price/cost and canonical margin for comparison. Relations/rollups and full server-query planning remain separate phases.
 
 The user authorized implementation, Sol agents, review before merge, verification and deployment. First-column creation is explicitly requested; provision only the identified target organization, preserving its existing data and native calculation.
+
+## Delivered
+
+Hub PR 389 is merged and deployed. FACES SCULPTORS now has the requested duplicate margin formula; the production comparison found 35 complete matches, no differences, 43 blanks, 6 partial rows and no errors across 84 authorized rows. See the shipped specification and its qualification artifact for exact commit, deployment and validation evidence.

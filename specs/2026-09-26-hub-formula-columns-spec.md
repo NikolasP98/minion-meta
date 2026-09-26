@@ -1,8 +1,8 @@
 ---
 id: 2026-09-26-hub-formula-columns-spec
 title: Typed scalar formula properties and margin comparison
-stage: dev
-status: implementing
+stage: done
+status: shipped
 pass: 2
 verdict: approved
 created: 2026-09-26
@@ -69,3 +69,9 @@ The following details resolve the two review passes and take precedence over abb
 - Every definition create/update/archive/restore and custom scalar value write takes the same org/table advisory lock before locking definition rows, in deterministic ID order when multiple rows are locked. Add a real concurrent PostgreSQL graph/value test. Definition graph is validated in that transaction; reads use a consistent definition/value snapshot or detect/retry concurrent version changes so a bundle cannot combine incompatible revisions.
 - Template identity: nullable immutable `templateKey` on definitions, unique `(org_id,table_id,template_key)` including archived rows. Installer requires explicit `--org-id`, `--expected-org-slug` and `--actor-profile-id`; the actor must be an owner of that organization, defaults to dry-run, and executes only with `--apply`. Existing key returns unchanged regardless of edited label/expression/archive state. An unrelated label collision stops. Construct the template through trusted stable source IDs and canonical validation, independent of locale. Target creation is authorized by the user; it is not an all-org migration.
 - Formula catalog responses include a deterministic `revision` covering definition identities, versions, labels/types and native source semantics. Formula create/update/preview requests carry `catalogRevision`; the server compares it with the current catalog under the graph lock and rejects missing/stale revisions with 409 catalog_changed. This prevents a stale editor from silently rebinding a renamed/reused label to another source. Value-only changes do not invalidate that revision. Runtime dependency errors are passed through the compiler's reference error channel so CASE/COALESCE retain lazy evaluation across formula dependencies; sensitivity and partial quality remain static.
+
+## Release evidence
+
+Hub PR [389](https://github.com/NikolasP98/minion_hub/pull/389) merged as `c0e9fbba887ab28eb1e0e2a14ea7f9efcd729bfe` after independent Sol approval of head `58d7f9b1248126b8e1a960f093197c542964afb0`, passing full CI and browser qualification. Production deployment `dpl_DzanCjk7MmgtdJaGhF58hXiT8nuE` is READY at `hub.minion-ai.org` on that merge SHA; migration `20260926230000` applied successfully. Post-merge CI run `36280596634` passed.
+
+The targeted installer created `Margen (fórmula)` in FACES SCULPTORS, definition `dfb97dd0-90ba-46b1-8aa9-7513058c00e1`; replay returned unchanged. The read-only production comparison covered 84 authorized catalog rows: 35 complete matches, 0 differences, 43 blank, 6 partial and 0 errors. Partial rows are not counted as complete matches. Authenticated browser qualification used synthetic QA data; production browser verification confirmed the unauthenticated login boundary. Full evidence and screenshots are in `audits/2026-09-26-hub-formula-columns/qualification.json` and its sibling `browser/` directory.
