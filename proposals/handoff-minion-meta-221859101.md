@@ -27,37 +27,37 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-26)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:3582` — a full per-handler audit of the remaining requireAdmin",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3582
-- `NikolasP98/minion-meta@dev rankings/index.json:4872` — the id is the ONLY signal. An org that names a credit-CARD",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4872
-- `NikolasP98/minion-meta@dev rankings/index.json:4969` — \\\"retries on the next settle\\\" means a week that failed",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4969
-- `NikolasP98/minion-meta@dev rankings/index.json:7012` — this narrows the race window, it does not close it —",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7012
-- `NikolasP98/minion-meta@dev rankings/index.json:9701` — the tender only appears when the org registered a method",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9701
-- `NikolasP98/minion-meta@dev rankings/index.json:11198` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11198
-- `NikolasP98/minion-meta@dev rankings/index.json:12398` — Historical receipt/tombstone retention and missing-owner recovery need",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12398
-- `NikolasP98/minion-meta@dev rankings/index.json:12851` — drop column (proposal #16)"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12851
-- `NikolasP98/minion-meta@dev rankings/index.json:13799` — prompt-driven protocol instead of native tool_use",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13799
-- `NikolasP98/minion-meta@dev rankings/index.json:14793` — remove once the phone failure is root-caused",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14793
-- `NikolasP98/minion-meta@dev rankings/index.json:15717` — startBackupScheduler() has no call site anywhere in src/",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15717
-- `NikolasP98/minion-meta@dev rankings/index.json:17069` — tagOptions is the FILTER's list — the event-scope registry"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17069
-- `NikolasP98/minion-meta@dev rankings/index.json:17230` — nothing links here with these params yet — the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17230
-- `NikolasP98/minion-meta@dev rankings/index.json:18142` — the affordance is one-way — once opened, a line's discount",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18142
-- `NikolasP98/minion-meta@dev rankings/index.json:19384` — the confirmed root cause (QA-stack app logs) was'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19384
-- `NikolasP98/minion-meta@dev rankings/index.json:19919` — raw fetch moved verbatim from TeamTab — migrate to",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19919
-- `NikolasP98/minion-meta@dev rankings/index.json:20018` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20018
+- `NikolasP98/minion-meta@dev rankings/index.json:3687` — a full per-handler audit of the remaining requireAdmin",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3687
+- `NikolasP98/minion-meta@dev rankings/index.json:4977` — the id is the ONLY signal. An org that names a credit-CARD",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4977
+- `NikolasP98/minion-meta@dev rankings/index.json:5074` — \\\"retries on the next settle\\\" means a week that failed",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5074
+- `NikolasP98/minion-meta@dev rankings/index.json:7117` — this narrows the race window, it does not close it —",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7117
+- `NikolasP98/minion-meta@dev rankings/index.json:9806` — the tender only appears when the org registered a method",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9806
+- `NikolasP98/minion-meta@dev rankings/index.json:11303` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11303
+- `NikolasP98/minion-meta@dev rankings/index.json:12503` — Historical receipt/tombstone retention and missing-owner recovery need",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12503
+- `NikolasP98/minion-meta@dev rankings/index.json:12956` — drop column (proposal #16)"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12956
+- `NikolasP98/minion-meta@dev rankings/index.json:13904` — prompt-driven protocol instead of native tool_use",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13904
+- `NikolasP98/minion-meta@dev rankings/index.json:14898` — remove once the phone failure is root-caused",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14898
+- `NikolasP98/minion-meta@dev rankings/index.json:15822` — startBackupScheduler() has no call site anywhere in src/",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15822
+- `NikolasP98/minion-meta@dev rankings/index.json:17174` — tagOptions is the FILTER's list — the event-scope registry"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17174
+- `NikolasP98/minion-meta@dev rankings/index.json:17335` — nothing links here with these params yet — the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17335
+- `NikolasP98/minion-meta@dev rankings/index.json:18247` — the affordance is one-way — once opened, a line's discount",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18247
+- `NikolasP98/minion-meta@dev rankings/index.json:19489` — the confirmed root cause (QA-stack app logs) was'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19489
+- `NikolasP98/minion-meta@dev rankings/index.json:20024` — raw fetch moved verbatim from TeamTab — migrate to",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20024
+- `NikolasP98/minion-meta@dev rankings/index.json:20123` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20123
