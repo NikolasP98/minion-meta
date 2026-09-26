@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-26T22:36:55.737Z",
+	"generatedAt": "2026-09-26T22:59:02.801Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7370,6 +7370,42 @@
 			"scoredAt": "2026-09-21T10:39:09.996Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1194287278",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "0541c4e45c3470636a5f8a1d98cbb75080d0526bb9ff8f21aba813d89c2def32",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-2843825962",
+				"proposal:handoff-minion-hub-3035029616"
+			],
+			"rationale": "A core scheduling component carries 12 distinct unresolved handoff markers (timezone ambiguity, RBAC-vs-preference confusion, unbuilt drag-out feature, missing month-grid tickets) that should become one scoped scheduling-cleanup goal rather than 12 ad-hoc fixes.",
+			"evidence": [
+				"12 separate TODO(handoff) markers in one file",
+				"marker notes 'despite the name, only /pos/appointments renders this now'",
+				"marker flags unbuilt 'ship drag-a-member-out onto the grid' feature"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T22:59:02.651Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3287487637",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9660,6 +9696,41 @@
 			"scoredAt": "2026-09-26T02:20:34.403Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-3035029616",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/pos/appointments/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3035029616.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "edfc73cb0578889da44aa41a712e9a47df8f47980cc1edae903ebb74261dad36",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-1194287278",
+				"proposal:handoff-minion-hub-2843825962"
+			],
+			"rationale": "A single marker about payment/settlement retry semantics touches financial correctness in the same appointments feature area and should be grouped into one scheduling-feature goal rather than fixed in isolation.",
+			"evidence": [
+				"marker: '\"retries on the next settle\" means a week that failed'",
+				"same pos/appointments feature directory as the other two hub proposals"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T22:59:02.651Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-3818988565",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11731,40 +11802,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:33:43.591Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-1194287278",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "fcfad3778194e25ae32ef81fa2ae79e71bc84e17c7f4df891d7c947574e2ddab",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-732128239"
-			],
-			"rationale": "Thirteen unrelated TODO markers (color picker, hover-card fields, infinite scroll, drag constraints, timezone handling, month grid) are bundled under one file-level proposal with no single verifiable outcome.",
-			"evidence": [
-				"13 distinct markers spanning L85-L2104 covering different features",
-				"definition of done requires clearing all markers in one file before the proposal auto-closes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T19:58:51.521Z"
 		},
 		{
 			"key": "spec:2026-08-18-minion-base-mobile-hitl-ux-plan",
@@ -16818,38 +16855,6 @@
 			"scoredAt": "2026-09-20T00:28:23.917Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged fix commit (nitter persistence/shutdown) already deployed, not an open actionable goal.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown (#295)",
-				"status: unknown, commit already merged"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T22:36:55.617Z"
-		},
-		{
 			"key": "issue:minion-meta#362",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18554,39 +18559,6 @@
 			"scoredAt": "2026-09-26T02:24:03.793Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "8d0318bc912e425c11fd3d3fe1d1c351a1755d90be2cef042abf92958aa49dad",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Eighteen markers spanning unrelated topics were scraped from a generated rankings/index.json artifact, so the sweep's extraction approach needs reframing rather than treating this as one actionable goal.",
-			"evidence": [
-				"markers span admin audit, credit-card ids, backend-loss, workshop composition, tagOptions",
-				"source path is rankings/index.json, a generated data artifact not source code",
-				"no coherent single scope ties the 18 quoted lines together"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T22:28:57.584Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3045707328",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18848,38 +18820,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T23:58:59.849Z"
-		},
-		{
-			"key": "run:minion_hub#36276748651",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/36276748651",
-			"sourceUpdatedAt": "2026-09-26T22:35:16Z",
-			"sourceFingerprint": "411270918c5bc4e159caa677f321c45dad89fc8c3eb1186f83d275d63b8afb6a",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI run on master has no outcome yet to score as a goal.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T22:36:55.617Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-dead-mirrors-cleanup-spec",
@@ -19758,38 +19698,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:33:23.669Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-3035029616",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/pos/appointments/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3035029616.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "9d225c174bac35e3457969728a0e9530e9e5dbd1e89c0c5e7b13a83ba812a2b1",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single, precisely located TODO marker but the actual resolution requirement beyond removing the comment isn't specified.",
-			"evidence": [
-				"single marker at +page.svelte:155 about retry-on-next-settle",
-				"sweep auto-closes once the marker is resolved and removed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T22:28:57.584Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-368607906",
@@ -21141,6 +21049,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:35:53.852Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2843825962",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/pos/appointments/new/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2843825962.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "a9b04726cac464b1c9dec438abd8066f8f8dcafd249c70f5995eea3cf9a7301f",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-1194287278",
+				"proposal:handoff-minion-hub-3035029616"
+			],
+			"rationale": "A single low-stakes marker noting an apparently orphaned route is best folded into the broader pos/appointments scheduling cleanup rather than treated as its own goal.",
+			"evidence": [
+				"single marker: 'nothing links here with these params yet'",
+				"file is a narrow new-appointment route page"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T22:59:02.651Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-4221605246",
@@ -22859,37 +22802,6 @@
 			"scoredAt": "2026-09-26T02:19:40.348Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2843825962",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/pos/appointments/new/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2843825962.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "94502f77f9fdfcd2760310e6907b5ae77bb66f31dadc89132a7bbd5ae3ab29d9",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The marker only notes an orphaned route with no incoming links, too thin and low-value to justify a standalone goal.",
-			"evidence": [
-				"nothing links here with these params yet"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T02:20:34.403Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-348234352",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24071,6 +23983,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T02:19:20.490Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "73499ecbecfa3cf48197d630e831bba3947696f5461abf4e46e67910bb4fec14",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This flags TODO(handoff) text found inside rankings/index.json, which is a generated data file storing historical marker excerpts (already tracked as their own separate proposals), so the finding is a self-referential sweep artifact rather than real actionable work.",
+			"evidence": [
+				"target file is rankings/index.json, a data/output artifact",
+				"quoted markers duplicate text already appearing verbatim in other standalone proposals (e.g. 'tagOptions is the FILTER's list', 'nothing links here with these params yet')"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-26T22:59:02.651Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
