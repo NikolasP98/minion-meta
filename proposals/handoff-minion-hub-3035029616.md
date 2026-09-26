@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-26)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/appointments/+page.svelte:152` — "retries on the next settle" means a week that failed
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/appointments/+page.svelte#L152
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/appointments/+page.svelte:154` — "retries on the next settle" means a week that failed
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/appointments/+page.svelte#L154
