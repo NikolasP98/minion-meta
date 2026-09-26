@@ -21,3 +21,7 @@ Sol reviewer guardians_dob approved pass 2 after resolving typed scalar wire sem
 ## Requirements pass — approved
 
 Sol reviewer verified_backfill approved pass 2 after requiring shared table graph locks for definition/value writes, snapshot consistency, durable template identity and explicit targeted idempotent installation, frozen preview/cell contracts and canonical organization currency resolution. Both reviews precede implementation. Native margin remains unchanged and rounding differences remain visible.
+
+## Implementation review — approved
+
+Independent Sol reviewer guardians_dob approved exact Hub head `58d7f9b1248126b8e1a960f093197c542964afb0` after corrections for snapshot consistency, lazy dependency errors, typed preview inputs and disabled invalid saves. The final delta is a browser-mode component-test fixture. Hosted CI and production deployment remain separate release gates; their evidence is recorded in `audits/2026-09-26-hub-formula-columns/qualification.json`.
