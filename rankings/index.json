@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-27T05:28:20.057Z",
+	"generatedAt": "2026-09-27T05:58:27.548Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5349,22 +5349,19 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 5
+				"implementation": 6
 			},
 			"confidence": 6,
 			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-2557316487"
-			],
-			"rationale": "Approved postmerge finding with a clear diagnosis and fix direction for a booking status-persistence bug that breaks audit trails.",
+			"relatedKeys": [],
+			"rationale": "An approved, well-scoped fix for a real data-consistency gap where booking status changes can lose associated admission state.",
 			"evidence": [
-				"status: approved",
-				"diagnosis: admission state lost on reload, breaking audit trails",
-				"fix direction: persist admission in same transaction as status update"
+				"TODO(handoff) marker: persist realization admission with status change",
+				"diagnosis notes admission state lost on reload, breaking audit trails/data consistency"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T05:29:11.787Z"
+			"scoredAt": "2026-09-27T05:58:27.412Z"
 		},
 		{
 			"key": "spec:2026-08-20-handoff-minion-hub-3530856808-spec",
@@ -11325,74 +11322,6 @@
 			"scoredAt": "2026-09-26T10:58:37.905Z"
 		},
 		{
-			"key": "issue:minion-meta#526",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#526 [monitor:unstick] reconcile run 2093bda7 (minion-meta): agent exit-126, turns=0, but reconcile shell logic completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/526",
-			"sourceUpdatedAt": "2026-09-20T05:17:43Z",
-			"sourceFingerprint": "cd9088147709f8a500643c86a1cb97826e8270dc30edf03b925f658d26cff242",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#527"
-			],
-			"rationale": "Third recurrence of an identical exit-126/turns=0 exec-failure signature in ~70 minutes should be merged with #527 into one host-classifier fix.",
-			"evidence": [
-				"exit-126 turns=0, third occurrence today (03:54, 04:22, 05:04)",
-				"shell pipeline still completed: 90 handoffs refreshed, index written, push succeeded"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T05:29:11.787Z"
-		},
-		{
-			"key": "issue:minion-meta#527",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#527 [monitor:unstick] reconcile run 5b0520fb (minion-meta): agent exit-126, turns=0, but reconcile shell logic completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/527",
-			"sourceUpdatedAt": "2026-09-20T05:17:43Z",
-			"sourceFingerprint": "ae7c55ea64a40c62912e4531624b3000322619e8c9a111438e4adb7576cc95fb",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#526"
-			],
-			"rationale": "Second occurrence of the same exit-126/turns=0 exec-failure signature; should be grouped with #526 rather than filed separately.",
-			"evidence": [
-				"exit-126, turns=0, second occurrence within 30 min of prior run",
-				"push succeeded d4c20ee with no conflicts"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T05:29:11.787Z"
-		},
-		{
 			"key": "issue:minion-meta#554",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14027,6 +13956,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:38:08.134Z"
+		},
+		{
+			"key": "issue:minion-meta#526",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#526 [monitor:unstick] reconcile run 2093bda7 (minion-meta): agent exit-126, turns=0, but reconcile shell logic completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/526",
+			"sourceUpdatedAt": "2026-09-20T05:17:43Z",
+			"sourceFingerprint": "cd9088147709f8a500643c86a1cb97826e8270dc30edf03b925f658d26cff242",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#527"
+			],
+			"rationale": "Recurring exit-126/turns=0 exec failure on a runner box is a low-severity infra flake since the reconcile pipeline itself completes successfully each time.",
+			"evidence": [
+				"exit-126 and turns=0 with reconcile shell logic completing regardless",
+				"third occurrence of exact signature today (03:54, 04:22, 05:04)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T05:58:27.412Z"
+		},
+		{
+			"key": "issue:minion-meta#527",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#527 [monitor:unstick] reconcile run 5b0520fb (minion-meta): agent exit-126, turns=0, but reconcile shell logic completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/527",
+			"sourceUpdatedAt": "2026-09-20T05:17:43Z",
+			"sourceFingerprint": "ae7c55ea64a40c62912e4531624b3000322619e8c9a111438e4adb7576cc95fb",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#526"
+			],
+			"rationale": "Same recurring exit-126 signature as the sibling run and should be consolidated into one host-classifier fix rather than tracked separately.",
+			"evidence": [
+				"second occurrence of exact signature today within ~30 minutes of prior",
+				"claude-agent subprocess exec failure while shell steps succeeded independently"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T05:58:27.412Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
@@ -16923,38 +16920,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T01:06:02.900Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged fix for nitter persistence/shutdown handling with no indication of ongoing incident.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"commit already merged"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T04:28:23.355Z"
 		},
 		{
 			"key": "issue:minion-meta#362",
