@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-27T21:58:26.860Z",
+	"generatedAt": "2026-09-27T22:28:47.594Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -13837,6 +13837,38 @@
 			"scoredAt": "2026-09-26T19:29:19.184Z"
 		},
 		{
+			"key": "issue:minion-meta#649",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#649 [monitor:unstick] run 07f8dae7 (minion-meta reconcile) failed to launch claude provider",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/649",
+			"sourceUpdatedAt": "2026-09-27T22:17:30Z",
+			"sourceFingerprint": "0a17b9c20dfcbf62443de5862dffd90a3f3ba9b1f4e34a53d479b4e63fd767c1",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The diagnosis pins a specific transient infra signature (exit-126, turns=0) with a clear retry path and a bounded follow-up (host classifier addition), but it is not yet urgent or scoped as a goal.",
+			"evidence": [
+				"exit-126 with turns=0 indicates the claude CLI process never started, a PATH/permissions issue rather than task failure",
+				"upstream state (handoffs, proposals, push) already persisted so retry should be clean"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T22:28:47.469Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-3542676477",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20575,6 +20607,37 @@
 			"scoredAt": "2026-09-25T09:28:32.378Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deployment-health entry only references an already-merged fix commit, leaving nothing outstanding to execute.",
+			"evidence": [
+				"Commit message shows the nitter persistence/shutdown fix is already merged (#295)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T22:28:47.469Z"
+		},
+		{
 			"key": "issue:minion-meta#345",
 			"kind": "issue",
 			"stage": "proposal",
@@ -20842,38 +20905,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T01:05:10.940Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-27",
-			"sourceFingerprint": "1a67deb5044e22d6cd5964af28af2906c3cbcf3d5c274eb65236d5145c6595f6",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This sweep bundles 15+ unrelated TODO markers (auth audit, billing signal, race window, HDS-05 gating, backup scheduler dead code, etc.) into one proposal with no unifying scope, so it needs reframing into separately scoped specs per marker.",
-			"evidence": [
-				"Markers span rankings/index.json lines 3691 through 16522 on unrelated topics",
-				"Definition of done requires resolving every listed marker before the sweep closes the proposal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T18:28:53.557Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2934878458",
@@ -23439,6 +23470,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T01:07:41.322Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-27",
+			"sourceFingerprint": "561cd57f14ee1acb12c62329e2fdfe62a9a900366c0c7d15b7c66ba9e847e7fb",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The flagged 'markers' are quoted summary text embedded inside the rankings data file itself, not real TODO(handoff) code markers, making this a sweep false positive with no actionable code-level open end.",
+			"evidence": [
+				"All 16 cited lines point into rankings/index.json, a generated catalog file, not source code",
+				"Quoted marker text matches other candidates' summary/evidence strings rather than actual in-code TODO comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T22:28:47.469Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3663138542",
