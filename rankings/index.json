@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-27T14:28:28.379Z",
+	"generatedAt": "2026-09-27T14:58:44.625Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11687,6 +11687,40 @@
 			"scoredAt": "2026-09-21T10:31:35.291Z"
 		},
 		{
+			"key": "issue:minion-meta#418",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#418 [monitor:unstick] run 574d1e71 (minion-meta reconcile) - provider exec failure exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/418",
+			"sourceUpdatedAt": "2026-09-13T14:17:28Z",
+			"sourceFingerprint": "4a9336574fb2b3c5e466b5525dc2835a23a12477e29d6f67964ab19c3447da16",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#535"
+			],
+			"rationale": "An exit-126 provider-exec failure with the reconcile pipeline otherwise succeeding recurred again in #535, so both should become one host-classifier goal.",
+			"evidence": [
+				"exit-126, turns=0, permission_denials=0 while reconcile's own work completed successfully",
+				"recommendation notes recurrence should trigger a new host-classifier signature"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T14:58:44.492Z"
+		},
+		{
 			"key": "issue:minion-meta#451",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11785,6 +11819,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T09:58:33.330Z"
+		},
+		{
+			"key": "issue:minion-meta#535",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#535 [monitor:unstick] run 62ff2f55 (minion-meta reconcile) failed to launch agent process: exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/535",
+			"sourceUpdatedAt": "2026-09-20T14:17:27Z",
+			"sourceFingerprint": "e14a587c3a88f099f0fb894478c198ee05b772b971e68404c55840f15ece6f16",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#418"
+			],
+			"rationale": "Same exit-126 exec-failure diagnosis as #418 a week later confirms a recurring infra pattern warranting one combined classifier goal.",
+			"evidence": [
+				"diagnosis: exit-126 with turns=0 means the provider process never executed, an exec-class failure",
+				"explicit suggestion to add an 'agent-exec-126' host classifier signature if recurring"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T14:58:44.492Z"
 		},
 		{
 			"key": "issue:minion-meta#536",
@@ -21201,6 +21269,38 @@
 			"scoredAt": "2026-09-24T04:28:31.385Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit already merged the nitter persistence/shutdown fix, leaving no outstanding deployment action.",
+			"evidence": [
+				"summary shows a merged fix(nitter) commit for serialize persistence and drain shutdown",
+				"status is unknown with no indication of unresolved deployment risk"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T14:58:44.492Z"
+		},
+		{
 			"key": "issue:minion-meta#427",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22363,38 +22463,6 @@
 			"scoredAt": "2026-09-27T11:28:28.049Z"
 		},
 		{
-			"key": "issue:minion-meta#418",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#418 [monitor:unstick] run 574d1e71 (minion-meta reconcile) - provider exec failure exit-126",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/418",
-			"sourceUpdatedAt": "2026-09-13T14:17:28Z",
-			"sourceFingerprint": "4a9336574fb2b3c5e466b5525dc2835a23a12477e29d6f67964ab19c3447da16",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single exit-126 provider-exec failure appears transient/infra-related and the report itself recommends only retrying and watching for recurrence.",
-			"evidence": [
-				"Exit 126 ... consistent with an exec/permissions/environment fault on the worker box",
-				"Recommendation: retry the run (likely transient)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T14:58:21.059Z"
-		},
-		{
 			"key": "issue:minion-meta#421",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22849,38 +22917,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T22:36:55.617Z"
-		},
-		{
-			"key": "issue:minion-meta#535",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#535 [monitor:unstick] run 62ff2f55 (minion-meta reconcile) failed to launch agent process: exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/535",
-			"sourceUpdatedAt": "2026-09-20T14:17:27Z",
-			"sourceFingerprint": "e14a587c3a88f099f0fb894478c198ee05b772b971e68404c55840f15ece6f16",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The embedded diagnosis attributes the failure to a transient infra/spawn fault with the substantive reconcile work already completed, and states no spec or repo fix is needed.",
-			"evidence": [
-				"exit-126 turns=0 permission_denials=0 identified as process-launch/infra fault, not task failure",
-				"recommendation: safe to retry the run as-is (no spec or repo fix needed)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T14:28:34.300Z"
 		},
 		{
 			"key": "issue:minion-meta#539",
