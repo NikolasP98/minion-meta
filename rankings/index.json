@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-27T07:28:26.373Z",
+	"generatedAt": "2026-09-27T07:58:36.045Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10287,38 +10287,6 @@
 			"scoredAt": "2026-09-23T07:28:54.990Z"
 		},
 		{
-			"key": "run:minion (gateway)#36226955717",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/36226955717",
-			"sourceUpdatedAt": "2026-09-26T07:46:37Z",
-			"sourceFingerprint": "2f0adedeb8cf77fad5cd541329d5eca0f6f792525b959d3e454f96d4ad5e5737",
-			"score": 47,
-			"band": "low",
-			"axes": {
-				"criticality": 6,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A CI failure on the gateway's DEV branch needs triage but the catalog gives no failure details or scope.",
-			"evidence": [
-				"status: failure",
-				"workflow_dispatch on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T07:58:25.893Z"
-		},
-		{
 			"key": "issue:minion-meta#329",
 			"kind": "issue",
 			"stage": "proposal",
@@ -16954,38 +16922,6 @@
 			"scoredAt": "2026-09-27T01:06:02.900Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged commit fixing nitter persistence/shutdown, not an open actionable goal.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"commit already merged"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T07:28:26.254Z"
-		},
-		{
 			"key": "issue:minion-meta#362",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22353,14 +22289,14 @@
 			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Transient dual-provider rank failure was already diagnosed as a provider fault with a simple retry, not an actionable engineering defect.",
+			"rationale": "Transient dual-provider failure during a rank run that the note itself says to resolve by retrying, not a code or spec defect warranting tracked work.",
 			"evidence": [
-				"fell back to codex, still failed",
+				"batch 1 ranking failed on both bounded LLM providers",
 				"Recommendation: retry the run"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T07:51:36.279Z"
+			"scoredAt": "2026-09-27T07:58:35.914Z"
 		},
 		{
 			"key": "issue:minion-meta#417",
@@ -24350,6 +24286,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T01:08:40.541Z"
+		},
+		{
+			"key": "run:minion (gateway)#36303400457",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/36303400457",
+			"sourceUpdatedAt": "2026-09-27T07:49:48Z",
+			"sourceFingerprint": "cdeaee95580da92ca4e640b0db03efc764a631d2657a09a3ca63f1a4944091a4",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This entry is only a status snapshot of an in-progress CI run with no stated problem or scope to act on.",
+			"evidence": [
+				"workflow_dispatch on DEV",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T07:58:35.914Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
