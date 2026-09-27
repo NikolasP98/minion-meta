@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-27T06:58:26.385Z",
+	"generatedAt": "2026-09-27T07:28:26.373Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -16954,6 +16954,38 @@
 			"scoredAt": "2026-09-27T01:06:02.900Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a merged commit fixing nitter persistence/shutdown, not an open actionable goal.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"commit already merged"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T07:28:26.254Z"
+		},
+		{
 			"key": "issue:minion-meta#362",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22266,6 +22298,39 @@
 			"scoredAt": "2026-09-26T21:05:44.911Z"
 		},
 		{
+			"key": "issue:minion-meta#415",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#415 [monitor:unstick] run e2f69c69 (minion-meta reconcile) - claude agent exit-126, turns=0, sweep otherwise completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/415",
+			"sourceUpdatedAt": "2026-09-13T06:17:32Z",
+			"sourceFingerprint": "f5649b9396294d7714d6e89aee41e89374ded8151eb0ba6234407be9b34a7f4e",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated monitor intake diagnosed as a transient infra flake (exit-126, turns=0) with the rest of the sweep completing normally and no human action required beyond a retry.",
+			"evidence": [
+				"classify as infra flake",
+				"retry authority rests with a human",
+				"rest of the reconcile sweep... ran to completion normally"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T07:28:26.254Z"
+		},
+		{
 			"key": "issue:minion-meta#416",
 			"kind": "issue",
 			"stage": "proposal",
@@ -23525,38 +23590,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T08:01:10.741Z"
-		},
-		{
-			"key": "issue:minion-meta#415",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#415 [monitor:unstick] run e2f69c69 (minion-meta reconcile) - claude agent exit-126, turns=0, sweep otherwise completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/415",
-			"sourceUpdatedAt": "2026-09-13T06:17:32Z",
-			"sourceFingerprint": "f5649b9396294d7714d6e89aee41e89374ded8151eb0ba6234407be9b34a7f4e",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A single transient exit-126 infra flake where the rest of the sweep completed normally, already diagnosed as safe-to-retry with no genuine task failure.",
-			"evidence": [
-				"exit 126 with turns=0, classify as infra flake",
-				"rest of reconcile sweep completed normally and pushed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T07:25:37.763Z"
 		},
 		{
 			"key": "issue:minion-meta#433",
