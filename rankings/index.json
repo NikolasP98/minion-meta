@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-27T18:58:23.820Z",
+	"generatedAt": "2026-09-27T19:28:42.850Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8080,38 +8080,6 @@
 			"scoredAt": "2026-09-24T22:58:44.421Z"
 		},
 		{
-			"key": "issue:minion-meta#538",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#538 [monitor:unstick] reconcile run 9729955c (minion-meta) - claude agent exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/538",
-			"sourceUpdatedAt": "2026-09-20T19:17:37Z",
-			"sourceFingerprint": "ebaf92376e9cce0d6570c9633d76a4374be40cb243e8cf8d5d92f800a1707ddf",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Diagnosis identifies a recurring infra exec-failure (exit-126/turns=0) pattern on the runner box rather than a task bug, so the fix belongs in host/runner infrastructure and classifier work, not this task.",
-			"evidence": [
-				"exit-126, 0 turns indicates claude binary not executable/resolvable on runner box",
-				"recurring signature also seen on runs 82695d34 and a8a056ea within ~25 min"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T19:28:23.070Z"
-		},
-		{
 			"key": "issue:minion-meta#540",
 			"kind": "issue",
 			"stage": "proposal",
@@ -10922,6 +10890,41 @@
 			"scoredAt": "2026-09-27T18:28:53.557Z"
 		},
 		{
+			"key": "issue:minion-meta#538",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#538 [monitor:unstick] reconcile run 9729955c (minion-meta) - claude agent exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/538",
+			"sourceUpdatedAt": "2026-09-20T19:17:37Z",
+			"sourceFingerprint": "ebaf92376e9cce0d6570c9633d76a4374be40cb243e8cf8d5d92f800a1707ddf",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#419"
+			],
+			"rationale": "Same recurring exit-126/turns=0 provider-launch infra fault explicitly noted as seen on three separate runs, indicating a systemic worker-image issue that should be consolidated with #419 rather than tracked as isolated alerts.",
+			"evidence": [
+				"Recurring class: identical exit-126/turns=0/permission_denials=0 signature also seen on runs 82695d34 and a8a056ea",
+				"exit 126 is the standard OS signal for \"command found but not executable\"",
+				"a human should check that the claude binary/wrapper is executable and resolvable on this runner box"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T19:28:42.731Z"
+		},
+		{
 			"key": "issue:minion-meta#581",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11824,6 +11827,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T14:58:44.492Z"
+		},
+		{
+			"key": "issue:minion-meta#419",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#419 [monitor:unstick] reconcile run 94587ecb: provider launch exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/419",
+			"sourceUpdatedAt": "2026-09-13T18:17:29Z",
+			"sourceFingerprint": "64c8505d9e6ca28a75adf6ee30e668f6c68cdc3d7bc4a8244cda24ce05a98c1e",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#538"
+			],
+			"rationale": "Automated monitor alert describing an infra-level exit-126/0-turns provider launch fault during reconcile, not a task failure, and duplicates the same recurring signature reported in #538.",
+			"evidence": [
+				"exit_code=1, note: provider=claude, exit-126, turns=0, permission_denials=0",
+				"This looks like a worker-box/infra launch fault, not a task or spec failure",
+				"If exit-126 on provider=claude recurs across multiple runs/boxes... worth fixing at the host level"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T19:28:42.731Z"
 		},
 		{
 			"key": "issue:minion-meta#451",
@@ -16763,38 +16801,6 @@
 			"scoredAt": "2026-09-21T10:31:35.291Z"
 		},
 		{
-			"key": "issue:minion-meta#419",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#419 [monitor:unstick] reconcile run 94587ecb: provider launch exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/419",
-			"sourceUpdatedAt": "2026-09-13T18:17:29Z",
-			"sourceFingerprint": "64c8505d9e6ca28a75adf6ee30e668f6c68cdc3d7bc4a8244cda24ce05a98c1e",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single provider-launch exit-126 with the underlying merge-scan work already succeeded suggests a transient infra fault worth a retry rather than immediate deep investigation.",
-			"evidence": [
-				"exit_code=1, provider=claude, exit-126, turns=0",
-				"git push to minion-meta:dev succeeded (5c0f519..2473f22)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T18:58:22.384Z"
-		},
-		{
 			"key": "issue:minion-meta#497",
 			"kind": "issue",
 			"stage": "proposal",
@@ -21303,38 +21309,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T04:28:31.385Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 4
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged commit fixing nitter persistence/shutdown behavior with no indication of ongoing incident or blocked deploy.",
-			"evidence": [
-				"title mentions serialize persistence and drain shutdown (#295)",
-				"status is unknown with no error details"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T18:58:23.684Z"
 		},
 		{
 			"key": "issue:minion-meta#427",
