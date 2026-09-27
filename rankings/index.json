@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-27T17:58:22.883Z",
+	"generatedAt": "2026-09-27T18:28:53.677Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10852,6 +10852,76 @@
 			"scoredAt": "2026-09-27T01:58:36.168Z"
 		},
 		{
+			"key": "issue:minion-meta#536",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#536 [monitor:unstick] reconcile run 82695d34 (minion-meta): agent launch exit-126, infra fault",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/536",
+			"sourceUpdatedAt": "2026-09-20T18:17:53Z",
+			"sourceFingerprint": "988485c2741ff995023bdf6d53cf395f668fecccc85b7c4e3d292eff5827bf8a",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#537",
+				"issue:minion-meta#648"
+			],
+			"rationale": "This is one of three occurrences of the identical claude-provider exit-126/turns=0 infra signature and should be merged with #537 and #648 into a single host-classifier fix goal.",
+			"evidence": [
+				"exit_code=1 / note exit-126, turns=0, cost_usd=0 for the claude provider invocation",
+				"recurred twice within 6 minutes (see also run a8a056ea)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T18:28:53.557Z"
+		},
+		{
+			"key": "issue:minion-meta#537",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#537 [monitor:unstick] reconcile run a8a056ea (minion-meta): agent launch exit-126, infra fault",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/537",
+			"sourceUpdatedAt": "2026-09-20T18:17:53Z",
+			"sourceFingerprint": "81bb5d88b19c4405218d3b82895388c31cefa667845afd72139e08e9d40e2afb",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#536",
+				"issue:minion-meta#648"
+			],
+			"rationale": "Duplicate exit-126/turns=0 infra signature occurring 6 minutes after #536; should be consolidated with #536 and #648 rather than tracked separately.",
+			"evidence": [
+				"same signature as run 82695d34, 6 minutes earlier",
+				"Recommendation for human: inspect the runner box's claude CLI install"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T18:28:53.557Z"
+		},
+		{
 			"key": "issue:minion-meta#581",
 			"kind": "issue",
 			"stage": "proposal",
@@ -10886,6 +10956,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T06:29:26.069Z"
+		},
+		{
+			"key": "issue:minion-meta#648",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#648 [monitor:unstick] reconcile run 92fa6565 (minion-meta): claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/648",
+			"sourceUpdatedAt": "2026-09-27T18:17:17Z",
+			"sourceFingerprint": "6af46596724b717ce37de4c286f24ad0e447f6342f732754a5b47febe28752fb",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#536",
+				"issue:minion-meta#537"
+			],
+			"rationale": "A third recurrence of the same exit-126/turns=0 claude-provider infra fault a week later, confirming a recurring stall class that should be grouped with #536/#537 into one host-classifier fix.",
+			"evidence": [
+				"exit-126 with turns=0 and permission_denials=0 from the claude provider step",
+				"If exit-126/turns=0 recurs across multiple runs or repos, escalate to fix the box"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T18:28:53.557Z"
 		},
 		{
 			"key": "pr:minion-meta#561",
@@ -11853,74 +11958,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T14:58:44.492Z"
-		},
-		{
-			"key": "issue:minion-meta#536",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#536 [monitor:unstick] reconcile run 82695d34 (minion-meta): agent launch exit-126, infra fault",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/536",
-			"sourceUpdatedAt": "2026-09-20T18:17:53Z",
-			"sourceFingerprint": "988485c2741ff995023bdf6d53cf395f668fecccc85b7c4e3d292eff5827bf8a",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#537"
-			],
-			"rationale": "This is one of two identical infra-fault reports (exit-126) that should be consolidated into a single host-classifier fix goal.",
-			"evidence": [
-				"exit_code=1 / note exit-126, turns=0, cost_usd=0",
-				"recurred twice within 6 minutes (see also run a8a056ea)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T18:22:48.987Z"
-		},
-		{
-			"key": "issue:minion-meta#537",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#537 [monitor:unstick] reconcile run a8a056ea (minion-meta): agent launch exit-126, infra fault",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/537",
-			"sourceUpdatedAt": "2026-09-20T18:17:53Z",
-			"sourceFingerprint": "81bb5d88b19c4405218d3b82895388c31cefa667845afd72139e08e9d40e2afb",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#536"
-			],
-			"rationale": "Same exit-126 agent-launch infra signature as #536 six minutes apart, warranting a single combined classifier fix rather than duplicate tracking.",
-			"evidence": [
-				"same signature as run 82695d34, 6 minutes earlier",
-				"exit 126 = not executable / permission denied ... infra fault on the runner"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-20T18:22:48.987Z"
 		},
 		{
 			"key": "issue:minion-meta#605",
@@ -14492,6 +14529,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:39:09.996Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 88314 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-09-27T18:19:11Z",
+			"sourceFingerprint": "42d72bdf91e2c28ecea8da4d9f43f0439da570861942f3126f89267d40c39c29",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "An automated dump of 88314 upstream commits has no scoped, verifiable outcome as a single goal and should be reframed into targeted, reviewable sync slices.",
+			"evidence": [
+				"title: 'Upstream sync: 88314 new commit(s) available'",
+				"summary is a raw commit-log dump with no stated scope or acceptance criteria"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T18:28:53.557Z"
 		},
 		{
 			"key": "issue:minion-meta#306",
@@ -18774,38 +18843,6 @@
 			"scoredAt": "2026-09-27T01:07:41.322Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-27",
-			"sourceFingerprint": "a6848d1ad62a8d2361641529b09084f690368015cbf39b446915cd8cf420c4a9",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a self-referential handoff marker citing lines inside the rankings/index.json ranking artifact itself rather than real source-code TODOs, making it non-actionable as filed.",
-			"evidence": [
-				"markers point to NikolasP98/minion-meta@dev rankings/index.json (a generated ranking data file, not source code)",
-				"summary text is truncated/malformed at the end ('minio')"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T14:28:28.266Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-29ee60e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20532,39 +20569,6 @@
 			"scoredAt": "2026-09-25T09:28:32.378Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 88224 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-09-27T12:24:54Z",
-			"sourceFingerprint": "35a188ce3e91b9c62263dbd57d95240d614e8b96f8e1b078c0289dd2c646a359",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "An auto-generated upstream-sync notice listing thousands of commits is not a scoped, actionable goal as written.",
-			"evidence": [
-				"title states 88224 new commit(s) available",
-				"tags: upstream-sync",
-				"body is a raw commit log dump, no defined scope or acceptance criteria"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T12:28:26.428Z"
-		},
-		{
 			"key": "issue:minion-meta#345",
 			"kind": "issue",
 			"stage": "proposal",
@@ -20832,6 +20836,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T01:05:10.940Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-27",
+			"sourceFingerprint": "1a67deb5044e22d6cd5964af28af2906c3cbcf3d5c274eb65236d5145c6595f6",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This sweep bundles 15+ unrelated TODO markers (auth audit, billing signal, race window, HDS-05 gating, backup scheduler dead code, etc.) into one proposal with no unifying scope, so it needs reframing into separately scoped specs per marker.",
+			"evidence": [
+				"Markers span rankings/index.json lines 3691 through 16522 on unrelated topics",
+				"Definition of done requires resolving every listed marker before the sweep closes the proposal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-27T18:28:53.557Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2934878458",
@@ -21267,38 +21303,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T04:28:31.385Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already merged the nitter persistence/shutdown fix, leaving no outstanding deployment action.",
-			"evidence": [
-				"summary shows a merged fix(nitter) commit for serialize persistence and drain shutdown",
-				"status is unknown with no indication of unresolved deployment risk"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T14:58:44.492Z"
 		},
 		{
 			"key": "issue:minion-meta#427",
