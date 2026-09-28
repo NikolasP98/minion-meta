@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-28T02:08:13.018Z",
+	"generatedAt": "2026-09-28T02:13:20.881Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5684,6 +5684,41 @@
 			"scoredAt": "2026-09-21T10:59:16.651Z"
 		},
 		{
+			"key": "pr:minion_hub#393",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#393 feat(tables): configurable formatting for calculated columns",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/393",
+			"sourceUpdatedAt": "2026-09-28T02:06:48Z",
+			"sourceFingerprint": "2fc40e658690d7bce2e438b5624d50a4473581aedfc910bb9dbeb41633786487",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#650"
+			],
+			"rationale": "Well-specified, independently reviewed feature PR with passing CI and a ready preview is actionable now.",
+			"evidence": [
+				"Independent reviewer approved exact head commit with two browser-found fixes",
+				"CI check/build passed and Vercel preview is READY",
+				"validated with real PostgreSQL tests, HTTP qualification, and deterministic seed coverage"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T02:13:20.730Z"
+		},
+		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6047,6 +6082,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-21T10:35:53.852Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-7cff7d845501",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7cff7d845501.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "4133769f7e08d599892515c7df3cace2d9076e80cce54a88496704cbdb3bc470",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A concrete non-atomic read-then-write race in booking group moves is a correctness risk with a clear, bounded transaction fix.",
+			"evidence": [
+				"marker: 'this read and moveGroup are two transactions, so a visit ...' race window",
+				"fix direction: wrap read and moveGroup in a single Drizzle transaction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T02:13:20.730Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-92e3e453a2ae",
@@ -7905,41 +7972,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T02:07:06.301Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-0a366fa7d8f4",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/pos/appointments/[id]/group/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0a366fa7d8f4.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "29afcf1c6a096a0349bca15b75e37bb5c6467c393787522878d4849211178b6a",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-551c45cff1cc",
-				"proposal:postmerge-minion-hub-8dc5df280f16"
-			],
-			"rationale": "A clear transaction-safety bug from PR #370 that shares scope with the other two merge-target findings from the same PR.",
-			"evidence": [
-				"diagnosis: read and moveGroup are separate transactions causing a race window",
-				"same PR #370 as merge-target test findings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T03:58:54.544Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ccb2014a7cbb",
@@ -12335,6 +12367,40 @@
 			"scoredAt": "2026-09-22T14:59:09.259Z"
 		},
 		{
+			"key": "pr:minion-meta#650",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#650 docs: specify calculated column formatting",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/650",
+			"sourceUpdatedAt": "2026-09-28T01:59:20Z",
+			"sourceFingerprint": "ae37058f0c21f360b75531f355910353d80facbf40cf6882fe1e92d6b9ac43a7",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#393"
+			],
+			"rationale": "The spec is two-pass reviewed and already driving the paired implementation PR, so it is progressing rather than blocked or newly actionable.",
+			"evidence": [
+				"pass-2 independent Sol standards/security and requirements/UI approvals noted",
+				"still draft while implementation is being qualified on live QA server"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T02:13:20.730Z"
+		},
+		{
 			"key": "proposal:2026-08-18-factory-g0-ci-watch-auto-close",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13965,39 +14031,6 @@
 			"scoredAt": "2026-09-27T05:58:27.412Z"
 		},
 		{
-			"key": "pr:minion-meta#650",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#650 docs: specify calculated column formatting",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/650",
-			"sourceUpdatedAt": "2026-09-28T01:41:59Z",
-			"sourceFingerprint": "db103c4acaa8e7306ed0faf8e3843efc5659acf527212f83cbae798efe032f97",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This draft PR already has pass-2 standards/security and requirements/UI approvals and is being qualified on the live QA dev server, so it is close to shippable.",
-			"evidence": [
-				"pass-2 independent Sol standards/security and requirements/UI approvals",
-				"being qualified on the live local QA dev server",
-				"scope explicitly excludes native/non-formula formatting"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T01:59:25.973Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14323,38 +14356,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T02:05:38.579Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-4fa81393a263",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/pos/appointments/[id]/group/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-4fa81393a263.md",
-			"sourceUpdatedAt": "2026-09-25",
-			"sourceFingerprint": "1c091de8a6d5541961c418eedb16eeb9508dfde6c52003626562227406610d91",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Clear API-parity gap with a concrete, bounded fix direction (mirror the appointments group endpoint for bookings).",
-			"evidence": [
-				"Fix direction: 'Create src/routes/api/scheduling/bookings/[id]/group/+server.ts mirroring the appointments implementation'",
-				"Diagnosis flags asymmetry between /api/pos/appointments and /api/scheduling/bookings group endpoints"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T00:28:54.749Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-755c81782da8",
@@ -17684,6 +17685,38 @@
 			"scoredAt": "2026-09-25T08:59:04.748Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-448f726f8923",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/kit/calendar-prefs.svelte.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-448f726f8923.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "6f4baadef8a4b1d076a393f9fd6b2f1424e0ceb90b15af4e446a93f9cac62b6e",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The fix direction is reasonable but whether the underlying persistence bug actually exists still needs verification before committing implementation effort.",
+			"evidence": [
+				"TODO marks an incomplete test for 'reads back a persisted preference on init'",
+				"diagnosis is auto-generated and says the component behavior needs confirming"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T02:13:20.730Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-94ad6c223964",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17847,39 +17880,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T00:59:01.323Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-e8772f3b9c75",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/pos/appointments/[id]/group/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e8772f3b9c75.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "3b73327ec4ae14efa3fb32d22ae0447dc13d5ce3b36266953f0f19f1b6c41891",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Missing route-level tests for a union-typed body have a clear, bounded fix (add per-variant Vitest cases) and are already approved.",
-			"evidence": [
-				"fix direction: add route-level tests per union variant",
-				"status: approved",
-				"narrow scope: single route file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T02:30:28.805Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-a357d1f6520e",
@@ -20318,6 +20318,38 @@
 			"scoredAt": "2026-09-25T09:28:32.378Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a status snapshot of an already-merged fix commit, not an open goal requiring further action.",
+			"evidence": [
+				"commit message describes a completed fix: 'serialize persistence and drain poller shutdown'",
+				"status is 'unknown' with no open work items listed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T02:13:20.730Z"
+		},
+		{
 			"key": "issue:minion-meta#345",
 			"kind": "issue",
 			"stage": "proposal",
@@ -20719,6 +20751,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T21:56:35.707Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-c9fcac2c905d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/kit/settled-day.svelte.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c9fcac2c905d.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "76e2e1c95cc25a55ed316caa4b39d4edc70bc604e2ad5a56bd58f97e8c4a0cda",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Diagnosis is speculative about whether the test setup is actually broken, so it needs verification before scoping real work.",
+			"evidence": [
+				"auto diagnosis says the issue 'likely flags' a test/config problem",
+				"fix direction is exploratory: run the test file and check vitest/Svelte plugin config"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T02:13:20.730Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d4a019b21d9a",
@@ -24300,7 +24364,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "4060babe75241fd39e51b972a4b607d9aca3838ca3ef6a75bc4d286152d3d1be",
+			"sourceFingerprint": "8ecec26c002f83fd9dacd602a4da171a52a00dae0d9048fffc32384a73ce2d96",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -24312,17 +24376,49 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 3,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "These are quoted rationale/evidence fragments from prior ranking output inside rankings/index.json itself, not real code TODOs.",
+			"rationale": "All cited markers point into rankings/index.json itself, a generated ledger file quoting prior findings' text, not real source code needing a fix.",
 			"evidence": [
-				"target file is rankings/index.json, the generated ranking artifact",
-				"quoted lines are fragments of prior evidence strings, not source comments"
+				"every marker location is 'rankings/index.json' at various line numbers",
+				"marker text fragments match quoted proposal content rather than code comments"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T02:07:06.301Z"
+			"scoredAt": "2026-09-28T02:13:20.730Z"
+		},
+		{
+			"key": "run:minion_hub#36368807023",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/36368807023",
+			"sourceUpdatedAt": "2026-09-28T02:10:58Z",
+			"sourceFingerprint": "4409072cc39cb48d0ff7d056de5f72af550a2226cd8fd49fd6fde2acdc204798",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress automated CI run, not a discrete goal with a defined outcome to execute.",
+			"evidence": [
+				"kind: run, status: in_progress",
+				"summary: 'push on master'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T02:13:20.730Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
