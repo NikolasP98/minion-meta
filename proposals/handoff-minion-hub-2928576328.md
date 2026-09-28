@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-28)
 
-- `NikolasP98/minion_hub@master src/lib/tables/custom-properties.ts:20` — Admit guarded formula/relation types and required-on-create only
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/custom-properties.ts#L20
+- `NikolasP98/minion_hub@master src/lib/tables/custom-properties.ts:19` — Admit guarded formula/relation types and required-on-create only
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/custom-properties.ts#L19
