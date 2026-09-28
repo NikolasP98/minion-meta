@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-202148102
 title: Handoff marker — src/routes/api/pos/appointments/[id]/group/+server.ts (minion_hub)
-status: draft
+status: closed
 created: 2026-09-25
 updated: 2026-09-28
 repos: [minion-hub]
@@ -32,3 +32,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/pos/appointments/[id]/group/+server.ts#L65
 - `NikolasP98/minion_hub@master src/routes/api/pos/appointments/[id]/group/+server.ts:70` — no route-level test for this body union — the /group route
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/pos/appointments/[id]/group/+server.ts#L70
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-09-28; the sweep closed this proposal.

@@ -1,14 +1,14 @@
 ---
-id: handoff-minion-hub-2557316487
-title: Handoff marker — src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)
+id: handoff-minion-hub-1315287309
+title: Handoff marker — src/lib/components/scheduling/kit/settled-day.svelte.test.ts (minion_hub)
 status: draft
-created: 2026-09-20
+created: 2026-09-28
 updated: 2026-09-28
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — src/routes/api/scheduling/bookings/_handlers.ts
+# Handoff marker — src/lib/components/scheduling/kit/settled-day.svelte.test.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,7 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-28)
 
-- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:236` — Persist realization admission with the status change; this
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L236
-- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:313` — this read and moveGroup are two transactions, so a visit
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L313
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/kit/settled-day.svelte.test.ts:4` — this repo's bun+vitest+@sveltejs/vite-plugin-svelte setup
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/kit/settled-day.svelte.test.ts#L4
