@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-28T11:41:09.458Z",
+	"generatedAt": "2026-09-28T11:59:04.345Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5302,6 +5302,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T19:10:37.228Z"
+		},
+		{
+			"key": "run:minion (gateway)#36393924411",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/36393924411",
+			"sourceUpdatedAt": "2026-09-28T08:29:11Z",
+			"sourceFingerprint": "8b0971bae23aad65d12cadc8b7a300ec95de7f470fd5bb69c9aa3370ba285a56",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A failing CI run on the DEV branch blocks confidence in the pipeline and should be investigated promptly.",
+			"evidence": [
+				"status: failure",
+				"workflow_dispatch on DEV",
+				"updatedAt 2026-09-28"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T11:59:04.204Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-gateway-client-onevent-errors",
@@ -13533,70 +13566,6 @@
 			"scoredAt": "2026-09-26T10:28:43.990Z"
 		},
 		{
-			"key": "run:minion (gateway)#36226955717",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/36226955717",
-			"sourceUpdatedAt": "2026-09-26T07:46:37Z",
-			"sourceFingerprint": "2f0adedeb8cf77fad5cd541329d5eca0f6f792525b959d3e454f96d4ad5e5737",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failed CI run on DEV with no diagnostic detail requires investigation before it can be scoped into actionable work.",
-			"evidence": [
-				"workflow_dispatch run status failure on 2026-09-26",
-				"no failure logs or scope included in the catalog entry"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T11:41:09.342Z"
-		},
-		{
-			"key": "run:minion_site#31686953033",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_site",
-			"title": "Claude Code",
-			"sourceUrl": "https://github.com/NikolasP98/minion-site/actions/runs/31686953033",
-			"sourceUpdatedAt": "2026-09-12T09:31:54Z",
-			"sourceFingerprint": "fd33d67a9bcb040c710991818cff95818ec5463761e5c0012f15091f3395c7b6",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failing CI run on dev is worth checking but lacks enough detail here to scope a fix.",
-			"evidence": [
-				"status: failure",
-				"trigger: pull_request_review_comment on dev"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T06:58:57.054Z"
-		},
-		{
 			"key": "spec:2026-08-18-sdlc-transformation-roadmap",
 			"kind": "spec",
 			"stage": "spec",
@@ -17164,6 +17133,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:39:42.070Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix commit with no indication of unresolved deployment issue provides little actionable signal on its own.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"tags: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T11:59:04.204Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
