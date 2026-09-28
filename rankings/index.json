@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-28T03:28:46.762Z",
+	"generatedAt": "2026-09-28T03:53:56.040Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -15639,14 +15639,14 @@
 			"scoredAt": "2026-09-23T04:59:02.949Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-94a4fd2563f2",
+			"key": "proposal:postmerge-minion-hub-9068ad039a31",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/calendar/SchedulingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-94a4fd2563f2.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "3aaad6dde3d2f71323af959542e69a9731768d052a07044a7e61d7043f3ee4ca",
+			"title": "Post-merge finding — todo-handoff in src/server/services/calendar-window.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-9068ad039a31.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "657362519caf791ef9dd5518e13cb1bd77fdefe9b1a560321a4cf37bd43c5e21",
 			"score": 38,
 			"band": "low",
 			"axes": {
@@ -15656,20 +15656,22 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 7
 			},
 			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A clearly scoped, already-approved fix for an invalid calendar time-range edge case in a merged PR with concrete fix-direction guidance.",
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-88eff33e9845",
+				"proposal:postmerge-minion-hub-98cb61c2223d"
+			],
+			"rationale": "Missing status filter causes noisy/incorrect data reaching the calendar grid, a data-layer bug with clear fix.",
 			"evidence": [
-				"status: approved",
-				"file and line identified: SchedulingCalendar.svelte fold-spanning logic",
-				"fix direction with 3 concrete options provided"
+				"no status filter — every status reaches the grid",
+				"fix direction: add status parameter and filter query"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-25T22:28:35.003Z"
+			"scoredAt": "2026-09-28T03:53:55.891Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
@@ -16558,39 +16560,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T19:10:37.228Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-43cdb4988560",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-43cdb4988560.md",
-			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "413bd953d8ba294ee55e0dad4648c897087ff983ca6bee46e9090c9ff95b4b33",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Already-approved post-merge finding with a clear diagnosis pointing to an incomplete calendar-component migration.",
-			"evidence": [
-				"status approved",
-				"auto diagnosis names @event-calendar/core migration gap",
-				"merged PR #392 referenced"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T02:08:12.865Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c371d6639113",
@@ -19118,6 +19087,41 @@
 			"scoredAt": "2026-09-25T23:58:59.849Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-98cb61c2223d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-98cb61c2223d.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "9d27b54efc8b602bf177fbc252ee4de7939322b66e9c8b2dd357ffc73990ad80",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-88eff33e9845",
+				"proposal:postmerge-minion-hub-9068ad039a31"
+			],
+			"rationale": "Unpaginated agenda list is a scaling/performance concern in the same component, not urgent today.",
+			"evidence": [
+				"agenda lists every booking — no pagination or virtualization",
+				"fix direction: paginate, virtualize, or filter by range"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T03:53:55.891Z"
+		},
+		{
 			"key": "spec:2026-08-17-hub-dead-mirrors-cleanup-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -20359,6 +20363,41 @@
 			"scoredAt": "2026-09-23T20:28:44.463Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-88eff33e9845",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-88eff33e9845.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "b6f773fe0d62272e401428215feb08384c736e68fcb7868a4a7368bf3cf79f78",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-9068ad039a31",
+				"proposal:postmerge-minion-hub-98cb61c2223d"
+			],
+			"rationale": "A minor visual overflow edge case in BookingCalendar, low urgency but clearly scoped and fixable.",
+			"evidence": [
+				"no overflow clip — booking before startHour visually overflows",
+				"fix direction: add overflow hidden or clip-path"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T03:53:55.891Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9e4f9427d5e3",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20486,38 +20525,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T09:28:32.378Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit is already merged, fixing nitter persistence/shutdown, leaving no further actionable deployment goal.",
-			"evidence": [
-				"commit b841c36 merges fix(nitter): serialize persistence and drain shutdown",
-				"status unknown with no described pending deployment action"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T03:28:46.584Z"
 		},
 		{
 			"key": "issue:minion-meta#345",
@@ -23724,6 +23731,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T00:28:54.749Z"
+		},
+		{
+			"key": "run:minion_hub#36375375360",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/36375375360",
+			"sourceUpdatedAt": "2026-09-28T03:52:09Z",
+			"sourceFingerprint": "37a2de5f7d00209573b97513a589914fd297442fcaeee71264ef4e4993d0bc2b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An in-progress routine CI run on master with no failure signal is not an actionable goal.",
+			"evidence": [
+				"push on master",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T03:53:55.891Z"
 		},
 		{
 			"key": "issue:minion-meta#433",
