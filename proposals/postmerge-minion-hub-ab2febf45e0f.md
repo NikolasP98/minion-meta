@@ -1,7 +1,8 @@
 ---
 id: postmerge-minion-hub-ab2febf45e0f
 title: "Post-merge finding — todo-handoff in src/server/services/custom-properties.service.ts (minion_hub)"
-status: draft
+status: merged
+merged_into: 2026-09-27-hub-column-presentation-admission
 created: 2026-09-28
 updated: 2026-09-28
 repos: [minion-hub]
@@ -28,17 +29,11 @@ Marker text:
 
 The `TODO(handoff)` marker at `src/server/services/custom-properties.service.ts` is removed, or intentionally left with an updated rationale.
 
-## Diagnosis (auto)
+## Verified disposition
 
-I'll examine the file to understand the context of this handoff item.
+Merged into `2026-09-27-hub-column-presentation-admission`, the explicit follow-up requested by the user. Hub PR #393 deliberately admits presentation only for numeric formula columns; native and other custom-column admission is a later phase.
 
-Reading `minion_hub/src/server/services/custom-properties.service.ts` to understand the admission seam and what needs extending.
-
-The finding indicates incomplete custom property validation: there's logic handling some numeric column types, but it doesn't yet cover native numeric columns or other variants. This creates an inconsistency where certain property types bypass validation while others receive it.
-
-**Why it matters**: Custom properties drive the hub's extensibility — unvalidated admission of some numeric types could allow schema mismatches, runtime type errors, or data inconsistency when properties interact with the database or UI layer.
-
-**Fix direction**: Identify all numeric column variants (native numeric, custom numeric subtypes, etc.) and apply the same validation logic uniformly across them. Add tests covering each variant to prevent future drift. Flag this as blocked if the full list of numeric types is still evolving.
+The automatic inference of a validation bypass was incorrect. `validatePresentation` rejects non-formula rules and incompatible output types; the POST/PATCH routes independently guard applicability. The retained TODO names the canonical follow-up and its rationale. No expansion of admission is authorized by this finding.
 
 ## Latest occurrence
 
