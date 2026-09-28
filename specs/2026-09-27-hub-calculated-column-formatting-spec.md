@@ -58,3 +58,5 @@ Native/other-custom formatting admission, arbitrary threshold-expression colors,
 ## Verification
 
 Prove strict request validation and persisted roundtrips, permission-aware projection and non-destructive restricted-manager writes, formatter compatibility and raw numeric behavior, and manager/cell browser save-reload behavior on seeded local QA. Run typecheck/build, design/token checks, independent Sol implementation review and hosted CI before release. Record exact deployed commit, production migration and optional targeted example outcomes separately.
+
+- Every explicit presentation create/update carries catalogRevision, which the server revalidates under the graph lock even when rules are omitted. This rejects a secondary whose type/sensitivity changes between catalog load and write. Unrelated omission-preserving updates do not acquire a new client revision requirement. The manager omits unchanged formula rules on presentation-only saves.
