@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-4fa81393a263
 title: "Post-merge finding — todo-handoff in src/routes/api/pos/appointments/[id]/group/+server.ts (minion_hub)"
-status: approved
+status: closed
 created: 2026-09-25
-updated: 2026-09-25
+updated: 2026-09-28
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still approved — closing"
 ---
 
 # Post-merge finding — todo-handoff in `src/routes/api/pos/appointments/[id]/group/+server.ts`
