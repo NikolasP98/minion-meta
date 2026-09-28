@@ -1,8 +1,8 @@
 ---
 id: 2026-09-27-hub-calculated-column-formatting-spec
 title: Calculated column presentation infrastructure
-stage: dev
-status: implementing
+stage: done
+status: shipped
 pass: 2
 verdict: approved
 created: 2026-09-27
@@ -60,3 +60,9 @@ Native/other-custom formatting admission, arbitrary threshold-expression colors,
 Prove strict request validation and persisted roundtrips, permission-aware projection and non-destructive restricted-manager writes, formatter compatibility and raw numeric behavior, and manager/cell browser save-reload behavior on seeded local QA. Run typecheck/build, design/token checks, independent Sol implementation review and hosted CI before release. Record exact deployed commit, production migration and optional targeted example outcomes separately.
 
 - Every explicit presentation create/update carries catalogRevision, which the server revalidates under the graph lock even when rules are omitted. This rejects a secondary whose type/sensitivity changes between catalog load and write. Unrelated omission-preserving updates do not acquire a new client revision requirement. The manager omits unchanged formula rules on presentation-only saves.
+
+## Release evidence
+
+Hub PR [393](https://github.com/NikolasP98/minion_hub/pull/393) merged as `72414eb7d1e5186142081d7fe29f87a5a3919c47` after independent Sol approval of head `4dd53490c02702399487e5dd2e8222b392b50ed8`, full CI, and seeded browser qualification. Production deployment `dpl_DnCGpPC63kXVjyKS5mhrgLSv7nZA` is READY on that merge SHA at `hub.minion-ai.org`; migration `20260927010000` applied successfully.
+
+The guarded example setup configured the existing FACES margin formula and created its ratio companion. Replay returned unchanged. The read-only comparison covered 84 authorized catalog rows: 35 complete matches, 0 differences, 43 blank, 6 partial, and 0 errors. Partial rows remain explicitly qualified. Evidence, final CI status, and screenshots are recorded in `audits/2026-09-27-hub-calculated-column-formatting/qualification.json` and sibling artifacts.

@@ -1,5 +1,5 @@
 {
-  "status": "qualifying",
+  "status": "shipped",
   "date": "2026-09-27",
   "baseline": "31f023cd433fec96680e7b822bf546eb68aa919f",
   "scope": "numeric calculated-column presentation",
@@ -15,7 +15,9 @@
       "invalid precision7 disables Save with inline validation",
       "primary code and precision preview PEN60.0 with secondary60.0%",
       "save and full reload retain primary and secondary formatting",
-      "partial sources preserve explicit warnings without sign tone"
+      "partial sources preserve explicit warnings without sign tone",
+      "restored symbol2 + ratio1 and verified after reload",
+      "Spanish localized ratio renders 60,0 percent with currency symbol unchanged"
     ],
     "design": "no changed file increased governed debt versus origin/master",
     "tokens": "0 violations",
@@ -23,17 +25,141 @@
       "dryrun",
       "apply",
       "replay unchanged"
-    ]
+    ],
+    "ui_tests": {
+      "files": 3,
+      "tests": 11,
+      "includes": [
+        "presentation-only updates omit rules and carry catalog revision",
+        "invalid precision blocks Save",
+        "configured missing currency stays unavailable",
+        "partial secondary remains qualified",
+        "empty catalog loads only once"
+      ]
+    },
+    "typecheck": {
+      "errors": 0,
+      "warnings": 0,
+      "sha": "0796fd675fb92961fb8a8195957a1f66ed89bc01"
+    },
+    "local_build": "Node adapter build passed",
+    "previous_ci": {
+      "run_id": 36368248462,
+      "outcome": "cancelled after identifying empty-catalog retry loop",
+      "passed_jobs": [
+        "check-and-build",
+        "qa-stack",
+        "crm-deposit-rule-postgres",
+        "crm-funnel-concurrent-postgres",
+        "jobs-stock-finance-postgres",
+        "migration-seed-pairing"
+      ]
+    },
+    "hosted_ci": {
+      "run_id": 36368921594,
+      "sha": "4dd53490c02702399487e5dd2e8222b392b50ed8",
+      "conclusion": "success",
+      "test_files_passed": 564,
+      "tests_passed": 4687,
+      "test_files_skipped": 5,
+      "tests_skipped": 231
+    },
+    "preview_deployment": {
+      "id": "dpl_Bjt8VFE9noj5YMx9X2TzWMf7d1y3",
+      "status": "READY",
+      "target": null,
+      "aliases": [
+        "minion-hub-git-feature-column-forma-d51c02-nikolasp98s-projects.vercel.app"
+      ],
+      "gitSHA": "4dd53490c02702399487e5dd2e8222b392b50ed8"
+    }
   },
   "release": {
-    "merged": false,
-    "deployed": false,
-    "production_presentation_applied": false
+    "merged": true,
+    "deployed": true,
+    "production_presentation_applied": true,
+    "merge_sha": "72414eb7d1e5186142081d7fe29f87a5a3919c47",
+    "merged_at": "2026-09-28T02:18:13Z",
+    "deployment": {
+      "id": "dpl_DnCGpPC63kXVjyKS5mhrgLSv7nZA",
+      "status": "READY",
+      "target": "production",
+      "aliases": [
+        "hub.minion-ai.org",
+        "minionhub.admin-console.dev",
+        "minion-hub-nikolasp98s-projects.vercel.app",
+        "minion-hub-git-master-nikolasp98s-projects.vercel.app"
+      ],
+      "gitSHA": "72414eb7d1e5186142081d7fe29f87a5a3919c47"
+    },
+    "migration": {
+      "version": "20260927010000",
+      "file": "20260927010000_column_presentation.sql",
+      "applied_at": "2026-09-28T02:18:22.950Z",
+      "source": "production Vercel build log; 1 applied"
+    },
+    "production_example": {
+      "outcome": "configured",
+      "org": "FACES SCULPTORS",
+      "margin": {
+        "id": "dfb97dd0-90ba-46b1-8aa9-7513058c00e1",
+        "version": 2,
+        "templateKey": "builtin:pos.catalog:margin-v1"
+      },
+      "ratio": {
+        "id": "b5070c5a-98c9-44fa-befc-70a810b85733",
+        "version": 1,
+        "templateKey": "builtin:pos.catalog:margin-ratio-v1"
+      },
+      "changes": [
+        "create_ratio",
+        "configure_margin"
+      ]
+    },
+    "production_replay": {
+      "outcome": "unchanged",
+      "org": "FACES SCULPTORS",
+      "margin": {
+        "id": "dfb97dd0-90ba-46b1-8aa9-7513058c00e1",
+        "version": 2,
+        "templateKey": "builtin:pos.catalog:margin-v1"
+      },
+      "ratio": {
+        "id": "b5070c5a-98c9-44fa-befc-70a810b85733",
+        "version": 1,
+        "templateKey": "builtin:pos.catalog:margin-ratio-v1"
+      },
+      "changes": []
+    },
+    "production_comparison": {
+      "outcome": "compared",
+      "orgSlug": "faces-sculptors",
+      "formulaDefinitionId": "dfb97dd0-90ba-46b1-8aa9-7513058c00e1",
+      "candidateRows": 84,
+      "authorized": 84,
+      "match": 35,
+      "different": 0,
+      "blank": 43,
+      "partial": 6,
+      "error": 0
+    },
+    "post_merge_ci": {
+      "run_id": 36369305947,
+      "conclusion": "pending"
+    },
+    "public_route": "Unauthenticated production catalog redirects to the working login boundary; authenticated UI qualification used seeded local QA."
   },
   "production_preflight": {
     "org_slug": "faces-sculptors",
     "margin_id": "dfb97dd0-90ba-46b1-8aa9-7513058c00e1",
     "margin_version": 1,
     "presentation_column": "absent before release"
+  },
+  "hub_pr": "https://github.com/NikolasP98/minion_hub/pull/393",
+  "review": {
+    "agent": "guardians_dob",
+    "model": "gpt-5.6-sol",
+    "verdict": "approved",
+    "sha": "4dd53490c02702399487e5dd2e8222b392b50ed8"
   }
 }
