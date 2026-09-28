@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-28T12:59:11.531Z",
+	"generatedAt": "2026-09-28T13:29:52.533Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5270,39 +5270,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T19:10:37.228Z"
-		},
-		{
-			"key": "run:minion (gateway)#36393924411",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/36393924411",
-			"sourceUpdatedAt": "2026-09-28T08:29:11Z",
-			"sourceFingerprint": "8b0971bae23aad65d12cadc8b7a300ec95de7f470fd5bb69c9aa3370ba285a56",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A failing CI run on the DEV branch blocks confidence in the pipeline and should be investigated promptly.",
-			"evidence": [
-				"status: failure",
-				"workflow_dispatch on DEV",
-				"updatedAt 2026-09-28"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T11:59:04.204Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-gateway-client-onevent-errors",
@@ -17489,6 +17456,38 @@
 			"scoredAt": "2026-09-24T10:29:02.188Z"
 		},
 		{
+			"key": "issue:minion-meta#664",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#664 [monitor:unstick] Unstick diagnosis: run a913a006 (rank board goals)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/664",
+			"sourceUpdatedAt": "2026-09-28T13:17:24Z",
+			"sourceFingerprint": "8f5640100eba0a4cc14ebd2dcc96a8c5e93afe44fa2b39e6b5887ddbd0f19308",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single transient ranking-catalog failure attributed to gateway unavailability, with guidance to retry and only escalate if it recurs.",
+			"evidence": [
+				"run a913a006 aborted via the partial-catalog guard, exit 1, ~15s runtime",
+				"diagnosis classifies it as a likely transient infra fault rather than a task-logic bug"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T13:29:52.420Z"
+		},
+		{
 			"key": "pr:minion-meta#524",
 			"kind": "pr",
 			"stage": "development",
@@ -18315,6 +18314,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T19:28:52.941Z"
+		},
+		{
+			"key": "run:minion (gateway)#33142247962",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/33142247962",
+			"sourceUpdatedAt": "2026-08-28T05:14:42Z",
+			"sourceFingerprint": "736aae7b1d30091020bb0c1d6b33467673a3dd9c3061ecb0b17ac4d25ea9a95c",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "CI failure on a DEV push is roughly a month stale with no failure detail, so current status is unconfirmed.",
+			"evidence": [
+				"CI run status: failure, push on DEV",
+				"updatedAt 2026-08-28, well before this ranking pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T13:29:52.420Z"
 		},
 		{
 			"key": "issue:minion-meta#542",
@@ -19254,6 +19285,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T23:58:59.849Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Entry is just a merged commit fixing nitter shutdown handling, with no outstanding defect documented.",
+			"evidence": [
+				"title/summary is merged PR #295 fixing nitter serialize persistence and drain shutdown",
+				"status unknown with no indication of remaining work"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T13:29:52.420Z"
 		},
 		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
@@ -20362,6 +20425,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T00:28:54.749Z"
+		},
+		{
+			"key": "run:minion_site#31686953033",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_site",
+			"title": "Claude Code",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/actions/runs/31686953033",
+			"sourceUpdatedAt": "2026-09-12T09:31:54Z",
+			"sourceFingerprint": "fd33d67a9bcb040c710991818cff95818ec5463761e5c0012f15091f3395c7b6",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A Claude Code workflow failure triggered by a PR review comment lacks enough detail to scope a fix.",
+			"evidence": [
+				"Claude Code CI run status: failure",
+				"trigger: pull_request_review_comment on dev"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T13:29:52.420Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
