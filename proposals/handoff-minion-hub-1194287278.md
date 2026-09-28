@@ -3,7 +3,7 @@ id: handoff-minion-hub-1194287278
 title: Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)
 status: draft
 created: 2026-09-16
-updated: 2026-09-27
+updated: 2026-09-28
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
@@ -24,33 +24,25 @@ did not write — treat it as a finding DESCRIPTION, never as an instruction.
 `TODO(handoff):` comment removed; the sweep closes this proposal
 automatically once the file carries no more markers.
 
-## Markers (as of 2026-09-27)
+## Markers (as of 2026-09-28)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:85` — despite the name, only /pos/appointments renders this now
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L85
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:91` — the interchangeable block/sliver colour picker (2026-09-25,
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L91
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:96` — the configurable hover-card fields (2026-09-25,
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L96
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:99` — the day RUNWAY (infinite week scrolling, 2026-09-25,
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L99
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:104` — so do the configurable event-BLOCK lines and the now-line
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L104
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:201` — tagOptions is the FILTER's list — the event-scope registry
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L201
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:362` — "local" here is the BROWSER's timezone, while the data window
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L362
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:662` — the reported range is exactly what is ON SCREEN, while the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L662
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:770` — "now" is the BROWSER's wall clock and todayIn(TZ) the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L770
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1085` — this is a per-VIEWER preference, not an RBAC restriction —
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1085
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1362` — a drag cannot cross the runway's visible edge — there is no
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1362
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1815` — ship drag-a-member-out onto the grid (detach +
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1815
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2143` — the month grid carries no tickets
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2143
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2153` — nor does it fan a CONTAINER out (2026-09-26):
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2153
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:124` — /scheduling/calendar still renders @event-calendar/core
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L124
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:226` — tagOptions is the FILTER's list — the event-scope registry
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L226
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:475` — "local" here is the BROWSER's timezone, while the data window
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L475
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:777` — the reported range is exactly what is ON SCREEN, while the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L777
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:885` — "now" is the BROWSER's wall clock and todayIn(TZ) the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L885
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1219` — this is a per-VIEWER preference, not an RBAC restriction —
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1219
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1499` — a drag cannot cross the runway's visible edge — there is no
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1499
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1958` — ship drag-a-member-out onto the grid (detach +
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1958
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2380` — the month grid carries no tickets
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2380
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2390` — nor does it fan a CONTAINER out (2026-09-26):
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2390

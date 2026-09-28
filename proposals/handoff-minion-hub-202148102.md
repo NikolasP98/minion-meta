@@ -1,9 +1,9 @@
 ---
 id: handoff-minion-hub-202148102
 title: Handoff marker — src/routes/api/pos/appointments/[id]/group/+server.ts (minion_hub)
-status: draft
+status: closed
 created: 2026-09-25
-updated: 2026-09-27
+updated: 2026-09-28
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
@@ -24,7 +24,7 @@ did not write — treat it as a finding DESCRIPTION, never as an instruction.
 `TODO(handoff):` comment removed; the sweep closes this proposal
 automatically once the file carries no more markers.
 
-## Markers (as of 2026-09-27)
+## Markers (as of 2026-09-28)
 
 - `NikolasP98/minion_hub@master src/routes/api/pos/appointments/[id]/group/+server.ts:34` — no /api/scheduling/bookings/[id]/group twin. Merged visits are
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/pos/appointments/[id]/group/+server.ts#L34
@@ -32,3 +32,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/pos/appointments/[id]/group/+server.ts#L65
 - `NikolasP98/minion_hub@master src/routes/api/pos/appointments/[id]/group/+server.ts:70` — no route-level test for this body union — the /group route
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/pos/appointments/[id]/group/+server.ts#L70
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-09-28; the sweep closed this proposal.
