@@ -1,14 +1,14 @@
 ---
-id: handoff-minion-hub-2928576328
-title: Handoff marker — src/lib/tables/custom-properties.ts (minion_hub)
+id: handoff-minion-hub-608949306
+title: Handoff marker — src/server/services/custom-properties.service.ts (minion_hub)
 status: draft
-created: 2026-09-26
+created: 2026-09-28
 updated: 2026-09-28
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — src/lib/tables/custom-properties.ts
+# Handoff marker — src/server/services/custom-properties.service.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-28)
 
-- `NikolasP98/minion_hub@master src/lib/tables/custom-properties.ts:20` — Admit guarded formula/relation types and required-on-create only
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/custom-properties.ts#L20
+- `NikolasP98/minion_hub@master src/server/services/custom-properties.service.ts:246` — Extend this admission seam to native and other custom numeric columns under
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/custom-properties.service.ts#L246
