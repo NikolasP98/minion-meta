@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-28T08:58:41.785Z",
+	"generatedAt": "2026-09-28T09:28:57.703Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2073,6 +2073,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T09:58:54.452Z"
+		},
+		{
+			"key": "pr:minion_hub#400",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#400 feat(data-table): T1 contract — one configurable table (no consumer edits)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/400",
+			"sourceUpdatedAt": "2026-09-28T09:17:34Z",
+			"sourceFingerprint": "f7fcebfb92f34e25ef30eecad2bea78ea68a1752cf72a1cb8c583c5475486139",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Open PR delivering a fully-specified, backward-compatible DataTable contract slice that unblocks 33 existing consumers without edits.",
+			"evidence": [
+				"defaults preserve behavior for all 33 DataTable consumers",
+				"detailed prop/default contract tied to a numbered spec slice (T1)",
+				"status open, updated same day"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T09:28:57.584Z"
 		},
 		{
 			"key": "proposal:2026-09-20-hub-component-service-centralization",
@@ -8426,6 +8459,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T22:58:44.421Z"
+		},
+		{
+			"key": "issue:minion-meta#659",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#659 [monitor:unstick] reconcile proposals run 69ae8fea: agent exec fault (exit-126) despite completed sweep",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/659",
+			"sourceUpdatedAt": "2026-09-28T09:18:27Z",
+			"sourceFingerprint": "6572476b414f4777ef75930b493391eec6007904a84a75b6cae5e7ceb0968411",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#660"
+			],
+			"rationale": "Automated infra-fault report (claude CLI exit-126 on the runner host) recurring across back-to-back reconcile runs, best merged with its sibling report into one host-fix goal.",
+			"evidence": [
+				"exit-126, turns=0 signature recurred across 4 runs in ~30 minutes",
+				"deterministic reconcile output already landed; only the agent sub-step failed to spawn",
+				"recommends adding a host-classifier signature, same ask as #660"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T09:28:57.584Z"
+		},
+		{
+			"key": "issue:minion-meta#660",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#660 [monitor:unstick] reconcile proposals run f2ad52eb: agent exec fault (exit-126) despite completed sweep + rebase",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/660",
+			"sourceUpdatedAt": "2026-09-28T09:18:27Z",
+			"sourceFingerprint": "6e09127cc262142a13d9c6642bf39947d0ab1a4ca90b2304880401624c3b6b93",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#659"
+			],
+			"rationale": "Duplicate automated infra-fault report of the same exit-126 exec signature within the same window as #659, should be consolidated into one goal.",
+			"evidence": [
+				"same exec-permission signature as #659 and other sibling runs (69ae8fea, 39c357d5, 94fcb051)",
+				"auto-rebase and push already succeeded; only the downstream agent failed to launch",
+				"recommends the same host-classifier addition as #659"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T09:28:57.584Z"
 		},
 		{
 			"key": "proposal:2026-08-24-minion-ai-secret-baseline-refresh",
@@ -21392,6 +21495,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T04:28:31.385Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The linked commit is an already-merged nitter persistence/shutdown fix, not an open deployment issue.",
+			"evidence": [
+				"commit message shows completed fix with co-author sign-off",
+				"status unknown but content is a merged commit, not a pending deploy problem"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-28T09:28:57.584Z"
 		},
 		{
 			"key": "issue:minion-meta#435",
