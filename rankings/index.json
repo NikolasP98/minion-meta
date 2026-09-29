@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-29T09:59:08.581Z",
+	"generatedAt": "2026-09-29T10:29:16.692Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10247,6 +10247,38 @@
 			"scoredAt": "2026-09-28T11:37:41.128Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "9a5541229da6e39b2c72259b21a80527f6e55e7a102536728c39ef32769089ee",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "A single handoff marker proposal bundles 17+ unrelated TODO markers spanning security, billing, backend, and workshop code that need to be split into individually scoped items before any can be executed.",
+			"evidence": [
+				"18 distinct rankings/index.json line markers listed",
+				"spans topics: requireAdmin audit, credit-card tender id, HDS-05 gating, streamed-response bounds, startBackupScheduler no call site"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T10:29:16.571Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3082127154",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17693,6 +17725,38 @@
 			"scoredAt": "2026-09-28T11:39:42.070Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown draining with no reported outage evidence in the record itself.",
+			"evidence": [
+				"commit message: fix(nitter): serialize persistence and drain poller shutdown",
+				"tags: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T10:29:16.571Z"
+		},
+		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -19389,6 +19453,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T06:28:54.325Z"
+		},
+		{
+			"key": "issue:minion-meta#683",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#683 [monitor:unstick] reconcile run 2fd71e8d (minion-meta): claude agent exec failure (exit-126, 0 turns)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/683",
+			"sourceUpdatedAt": "2026-09-29T10:17:40Z",
+			"sourceFingerprint": "069f5ace5f03672a7f0ca7fcd942610a738cd721ea29115c944b9184ce0a212e",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"issue:minion-meta#565"
+			],
+			"rationale": "Second occurrence of the same exit-126/turns=0 claude-exec infra fault suggests a recurring pattern worth adding to the host classifier rather than a one-off retry.",
+			"evidence": [
+				"exit-126 and turns=0/permission_denials=0",
+				"If exit-126/turns=0 recurs across other runs... worth adding to the host classifier"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T10:29:16.571Z"
 		},
 		{
 			"key": "proposal:2026-08-28-hub-faces-insumos-reconciliation-followups",
@@ -24208,21 +24306,22 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 5,
 				"implementation": 3
 			},
 			"confidence": 4,
 			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Automated monitor intake diagnosing a transient exit-126/zero-turns infra blip after the underlying reconcile work already succeeded, with no recurrence evidence requiring action.",
+			"relatedKeys": [
+				"issue:minion-meta#683"
+			],
+			"rationale": "Transient exit-126/turns=0 infra retry from 2026-09-22 that the diagnosis itself says is safe to simply retry, and is superseded by the more recent identical-pattern issue #683.",
 			"evidence": [
-				"reconcile pipeline itself completed normally",
-				"exit_code=1 and note exit-126/turns=0/permission_denials=0",
+				"exit-126, 0 provider turns after successful sweep work",
 				"Recommendation: safe to retry this run as-is"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-22T10:28:33.208Z"
+			"scoredAt": "2026-09-29T10:29:16.571Z"
 		},
 		{
 			"key": "issue:minion-meta#574",
@@ -24797,38 +24896,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T02:36:11.869Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "fe607a5151d43868efdf4fd31e3838a27a47b8d5b042c69a28994c663ed78d41",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "All cited markers point to lines in rankings/index.json that appear to be quoted evidence text copied from unrelated proposals rather than genuine source TODO(handoff) comments needing resolution.",
-			"evidence": [
-				"cited lines are excerpts like 'the id is the ONLY signal' and 'Full Workshop composition/camera' spanning unrelated topics within a generated index file",
-				"target file rankings/index.json is a generated ranking artifact, not hand-authored source code"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T06:59:36.318Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3518589653",
