@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-29T21:32:53.002Z",
+	"generatedAt": "2026-09-29T23:40:10.323Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4527,6 +4527,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T14:59:57.328Z"
+		},
+		{
+			"key": "pr:minion-factory#195",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-factory",
+			"title": "#195 fix(agent): make /opt/factory-hooks traversable and prove it at build time",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/195",
+			"sourceUpdatedAt": "2026-09-29T23:36:35Z",
+			"sourceFingerprint": "e2367055e3d0e89281cebc871822ebaeb8247369f9b8959d31c3b3628b8d6f6f",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An open PR fixing a silently-inert security guard (unreadable settings file breaking --settings enforcement) with a concrete root cause and build-time proof added.",
+			"evidence": [
+				"COPY --chmod=0444 stamped dir 0444, uid 1100 couldn't traverse /opt/factory-hooks",
+				"guard was silently inert; adds su agent test -r/-x proof at build time"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T23:40:10.159Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-439295008",
@@ -10440,6 +10472,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T01:09:47.096Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-f0ba8a3",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ f0ba8a3",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f0ba8a3.md",
+			"sourceUpdatedAt": "2026-09-01",
+			"sourceFingerprint": "eb63e9bd660af5c072a36be65d89a79ffa35b517763263c7bd11938739d44bcd",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Multiple high-severity unchecked-access findings in merged test code that could mask real query failures by crashing or silently converting undefined to strings.",
+			"evidence": [
+				"res.rows[0] accessed without checking if rows array exists",
+				"wrapping in String() masks test failure by converting undefined to \"undefined\" string"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T23:40:10.159Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-3a27d70e9419",
@@ -16554,6 +16618,38 @@
 			"scoredAt": "2026-09-29T05:00:01.492Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a merged, already-shipped fix for a nitter persistence/shutdown bug, not open work.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"Co-authored-by commit already merged"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T23:40:10.159Z"
+		},
+		{
 			"key": "issue:minion-meta#562",
 			"kind": "issue",
 			"stage": "proposal",
@@ -19597,40 +19693,6 @@
 			"scoredAt": "2026-09-23T17:31:19.046Z"
 		},
 		{
-			"key": "issue:minion-meta#440",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#440 [monitor:unstick] reconcile run 9ad9ad8b (minion-meta) failed to launch agent: exit-126, zero turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/440",
-			"sourceUpdatedAt": "2026-09-15T22:17:26Z",
-			"sourceFingerprint": "f1e5d739a195de5513f96b5ec531b74618d5ee73436e622a8582423916c0723b",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"issue:minion-meta#568"
-			],
-			"rationale": "Older instance of the same transient exit-126/turns=0 monitor signature superseded by the more recent #568 report of identical cause.",
-			"evidence": [
-				"exit code 126 and turns=0, permission_denials=0",
-				"Recommendation: retry the run — this looks transient/environmental"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-22T22:29:08.054Z"
-		},
-		{
 			"key": "issue:minion-meta#516",
 			"kind": "issue",
 			"stage": "proposal",
@@ -19661,40 +19723,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T18:36:17.359Z"
-		},
-		{
-			"key": "issue:minion-meta#568",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#568 [monitor:unstick] reconcile run b9a8ea7e (minion-meta): claude agent exec failure exit-126",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/568",
-			"sourceUpdatedAt": "2026-09-22T22:17:28Z",
-			"sourceFingerprint": "9a215aee0018d9f1e258a5753e58c1cf4b6ab80cd4156745fd67cd73f89622ca",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"issue:minion-meta#440"
-			],
-			"rationale": "Recurrence of the same exit-126/turns=0 signature strengthens the case for building the suggested host-classifier/auto-retry rather than treating it as one-off noise.",
-			"evidence": [
-				"reconcile script itself completed all real work successfully",
-				"good candidate for a new host-classifier signature (auto-retry on claude-provider exit-126 with turns=0)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-22T22:29:08.054Z"
 		},
 		{
 			"key": "issue:minion-meta#600",
@@ -21506,38 +21534,6 @@
 			"scoredAt": "2026-09-23T21:28:30.123Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-f0ba8a3",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ f0ba8a3",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f0ba8a3.md",
-			"sourceUpdatedAt": "2026-09-01",
-			"sourceFingerprint": "eb63e9bd660af5c072a36be65d89a79ffa35b517763263c7bd11938739d44bcd",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Machine-flagged unchecked-access issues in test files are low-risk but easily fixable, with specific file/line locations given.",
-			"evidence": [
-				"high unchecked-access at contact-update.server.test.ts:189 and :305",
-				"high unchecked-access at crm-contacts.custom-fields.test.ts:179"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-22T21:58:38.232Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-18215ee1e8fc",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21696,38 +21692,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T00:28:54.749Z"
-		},
-		{
-			"key": "run:minion-factory#36633840500",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion-factory",
-			"title": "Promote Factory dev to production",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/actions/runs/36633840500",
-			"sourceUpdatedAt": "2026-09-29T21:31:56Z",
-			"sourceFingerprint": "e5d86a590d884c4dd55294f033347cdde8d830bb7b7acef748227b9d05fcd29c",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI workflow run is not a plannable work item since it is already executing automatically.",
-			"evidence": [
-				"status: in_progress",
-				"workflow_run on main"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T21:32:52.882Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
@@ -24171,6 +24135,40 @@
 			"scoredAt": "2026-09-29T18:59:08.998Z"
 		},
 		{
+			"key": "issue:minion-meta#440",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#440 [monitor:unstick] reconcile run 9ad9ad8b (minion-meta) failed to launch agent: exit-126, zero turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/440",
+			"sourceUpdatedAt": "2026-09-15T22:17:26Z",
+			"sourceFingerprint": "f1e5d739a195de5513f96b5ec531b74618d5ee73436e622a8582423916c0723b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#568"
+			],
+			"rationale": "Automated monitor intake diagnosing a transient exit-126/turns=0 launch fault with explicit recommendation to just retry, no real action needed.",
+			"evidence": [
+				"exit code 126 and turns=0",
+				"Recommendation: retry the run - this looks transient/environmental"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T23:40:10.159Z"
+		},
+		{
 			"key": "issue:minion-meta#441",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24596,6 +24594,40 @@
 			"scoredAt": "2026-09-29T10:29:16.571Z"
 		},
 		{
+			"key": "issue:minion-meta#568",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#568 [monitor:unstick] reconcile run b9a8ea7e (minion-meta): claude agent exec failure exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/568",
+			"sourceUpdatedAt": "2026-09-22T22:17:28Z",
+			"sourceFingerprint": "9a215aee0018d9f1e258a5753e58c1cf4b6ab80cd4156745fd67cd73f89622ca",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#440"
+			],
+			"rationale": "Same recurring exit-126/turns=0 claude-agent exec fault as #440; recurrence suggests grouping into one host-classifier signature investigation rather than two separate tickets.",
+			"evidence": [
+				"exited 126 with turns=0 and permission_denials=0",
+				"If this exit-126/turns=0 signature recurs across runs, it is a good candidate for a new host-classifier signature"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T23:40:10.159Z"
+		},
+		{
 			"key": "issue:minion-meta#574",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24853,6 +24885,73 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T02:30:16.797Z"
+		},
+		{
+			"key": "issue:minion-meta#689",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#689 [monitor:unstick] Requeued transient failure of run a8a1bb07",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/689",
+			"sourceUpdatedAt": "2026-09-29T22:17:02Z",
+			"sourceFingerprint": "00aa001e5fd99260c1f380ee3874cbdf60e8fe5f01c3a37ed5b7c2f0e5fb882e",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#690"
+			],
+			"rationale": "Automated transient clone-failure requeue notice, already auto-requeued and resolved by the system itself.",
+			"evidence": [
+				"class=C note=clone failed (3 tries); requeue -> 201"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T23:40:10.159Z"
+		},
+		{
+			"key": "issue:minion-meta#690",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#690 [monitor:unstick] Requeued transient failure of run c7281dec",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/690",
+			"sourceUpdatedAt": "2026-09-29T22:17:03Z",
+			"sourceFingerprint": "2ef7f213a1cff55d8ab2d4e35976463db8c9afc3c557a28f3bd19977c1e6afc8",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#689"
+			],
+			"rationale": "Identical transient clone-failure requeue pattern to #689, same day, indicating a recurring infra flake worth grouping into one tracking item.",
+			"evidence": [
+				"class=C note=clone failed (3 tries); requeue -> 201",
+				"same day as #689 (2026-09-29)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T23:40:10.159Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
