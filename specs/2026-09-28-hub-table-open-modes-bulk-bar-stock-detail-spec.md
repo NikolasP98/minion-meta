@@ -3,7 +3,8 @@ id: 2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec
 title: Tables — configurable open mode (page/modal/tray), floating bulk bar; stock entries provenance + item detail restructure
 stage: dev
 status: implementing
-pass: 1
+pass: 2
+next_slice: 2
 created: 2026-09-28
 updated: 2026-09-28
 repos: [minion_hub]
@@ -25,6 +26,21 @@ with an action button that drops down into entry actions (issue/receipt/
 adjustment); Consumed-by rows clickable (modal + expand). (6) Top section =
 "Overview", per-USER configurable property visibility, default home for custom
 properties, tags (own + inherited) as its last item.
+
+## 0. Product
+
+Notion-grade record handling for every hub table: a record opens the way the org
+configured it (page / modal / tray), row selection exposes a floating bulk bar,
+and the stock module's entries and item pages show provenance and stock state
+where the user acts. Ships as hub PR #406 (slice 1) + a gaps slice (slice 2).
+
+**Out of scope:** a new custom-property type, per-user open-mode overrides in
+slice 1, nested peeks (a peek inside a peek), purchases module beyond the
+receipt link + one detail route.
+
+**Verification:** slice 1 = Playwright `tests/e2e/ui-audit/record-peek.spec.ts`
+(4 cases) on the seeded QA stack + full vitest + svelte-check + lint:design /
+lint:tokens; slice 2 adds cases per bundle (below).
 
 ## AS-IS (master `0e5eac77` + T3 `1422f76d`)
 
@@ -208,3 +224,59 @@ pre-add that line), `lib/records/peek-registry.ts` NO (owned by core), `messages
 - Any open end = `TODO(handoff)` at the site + a line in
   `proposals/2026-09-28-hub-table-open-modes-followups.md` (report it; the
   orchestrator writes the proposal).
+
+## Slice 2 — gaps (ledger `proposals/2026-09-28-hub-table-open-modes-followups.md`, owner 2026-09-28: "address all gaps")
+
+Branch stacked on `feat/table-open-modes-bulk-bar` (hub #406). Three file-disjoint bundles.
+
+### Bundle D — receipt ↔ purchase link + purchase detail route + attachment count (§1, §2)
+Owns: `server/db/pg-schema` NO (link lives in `stk_entries.metadata.purchaseId`);
+`server/services/purchases.service.ts` (+`getPurchase(ctx,id)`, `listPurchaseRefs(ctx, ids)`),
+`server/services/stock.service.ts` ONLY `createEntry` metadata pass-through if missing,
+`routes/(app)/stock/entries/new/+page.svelte` (+ `+page.server.ts`) — receipt form gains a
+"Provider invoice" `PickerCombobox` over `listPurchases` (label `serie-numero · supplierName · total`),
+stored as `metadata: { purchaseId, providerRef: 'serie-numero' }`; `routes/(app)/finances/purchases/[id]/`
+(new record-detail page: header `serie-numero`, kv facts supplier/RUC/doc type/issued/period/base/IGV/total,
+linked stock entries via `findEntryBySource`-style lookup on `metadata.purchaseId`) + the SIX route-contract
+places (`route-design-manifest.ts`, `route-design-validation.ts` counts, `route-design-contracts.test.ts` wave,
+`business-route-shells.test.ts` finances count, `frontend-contract-scanner.test.ts`, `scripts/ui-audit-inventory.test.ts`)
++ `route-access-registry` (`finances:view`); `lib/components/stock/entry-document.ts` (+test): receipts with
+`metadata.purchaseId` → `{kind:'purchase', href:'/finances/purchases/{id}'}`; `routes/(app)/stock/entries/+page.server.ts`
+(resolve purchase labels; `attachmentCount` via a new `countAttachmentsByObjects(ctx, objectType, ids)` in
+`attachments.service.ts`) + `+page.svelte` (Document cell for purchases; `attachments` column with a paperclip
+count → `PeekLink` to the entry); `lib/records/peek-registry.ts` (+ `/finances/purchases/:id`);
+`routes/(app)/finances/purchases/+page.svelte` (`titleColumn` → the new route); `messages/*.json` APPEND.
+
+### Bundle E — DataTable: bulk edit of custom properties, bulk tags, per-user open mode, peek label (§4, §6, §7)
+Owns: `lib/components/data-table/DataTable.svelte`, `bulk-edit.ts` (+tests), `custom-properties/*` (read
+only unless a save helper is missing), `lib/records/RecordPeek.svelte` + `peek.svelte.ts`,
+`routes/api/me/preferences/[section]/+server.ts` (+ section `tableOpenIn` = `{[tableId]: OpenMode}`),
+`lib/components/tags/*` (a `bulkLinkTags(scope, ids, add[], remove[])` client helper if none),
+`routes/api/tags/**` (bulk link endpoint if none exists), `messages/*.json` APPEND.
+1. "Edit property" lists custom properties (types text/number/date/boolean/select/multi_select) and saves
+   through the same custom-property values API the cell uses (`custom-properties/api.ts`), per selected row.
+2. Bulk bar action "Tags ▾": `TagOptionList`-style popover to add/remove tags on all selected rows for
+   tables with a tag scope (`stock.items`→stock, `pos.catalog`→pos, `crm.customers`→crm); wired through a
+   new `tagScope` DataTable prop set by those three pages.
+3. Per-user open mode: `openModeFor` resolves explicit > USER pref (`preferences.tableOpenIn[tableId]`) >
+   org config > page; the column-menu quick switch gets a "For me / For everyone" toggle (everyone = existing
+   PUT, gated as today; me = `syncPreferenceToServer('tableOpenIn', …)`).
+4. `RecordPeek` labels the dialog with the embedded page's heading: after the page mounts, find the first
+   `h1[id]` inside the dialog and set `labelledBy` to it (fallback = the caption).
+
+### Bundle F — Overview prefs on CRM contact / POS ticket / invoice, archived default, QA seed (§3, §8, §9)
+Owns: `routes/(app)/crm/[contactId]/+page.svelte` (+server), `routes/(app)/pos/tickets/[id]/+page.svelte`,
+`routes/(app)/finances/invoices/[id]/+page.svelte`, `lib/components/stock/overview-prefs.ts` → MOVE to
+`lib/records/overview-prefs.ts` (update the stock import), new `lib/records/OverviewCard.svelte` (facts rows +
+Configure popover + custom-property rows, used by all four pages incl. `stock/items/[id]`),
+`server/services/stock.service.ts` `listItems` default → `includeArchived: true` with pickers opting OUT
+(`stock/entries/new`, `pos/catalog` product form, `pos-catalog-form.service`, `brains.service`, `GET /api/stock/items`),
+`scripts/qa/seed/formula-columns.ts` / `formula-variables.ts` + `server/services/formula-properties.service.ts`
+(guard `formulaDependencies` for legacy rule shapes so `/pos/catalog` never 500s), `messages/*.json` APPEND.
+Each record page: first card becomes `OverviewCard` with keys for its facts; org-hidden fields never render;
+tags row last where the entity has tags.
+
+**Verification (slice 2):** D = e2e case "receipt with a purchase opens the purchase peek"; E = unit tests for
+custom-property bulk jobs + mode precedence, e2e "bulk tag add on two items"; F = e2e "contact Overview
+Configure hides a fact and persists". Same gates as slice 1.
+
