@@ -27,4 +27,4 @@ created: 2026-09-28
 - Production deployment `6726610476` reports success for exact merge SHA `b36f2191305113d4fe66d679c5659400a5922b3f` at 2026-09-29 04:22:34 UTC. URL: `https://minion-af8fknwmk-nikolasp98s-projects.vercel.app`.
 - Fresh same-origin browser GET and POST to the canonical `https://hub.minion-ai.org/api/dev/qa-login` both returned 404 after deployment. No production session or tenant data was created by qualification.
 - Restarted local server on port 5199: anonymous `/api/dev/qa-login` returned 200, and the login page visibly rendered `[data-qa-login-picker]`. It remains available at `http://127.0.0.1:5199/en/login`.
-- Post-merge CI run `36521112070` passed check/build and PostgreSQL lanes; final unit and QA-stack jobs are still running at this record's update. Pre-merge exact-head CI completed successfully.
+- Post-merge CI run `36521112070` passed all applicable jobs, including check/build, unit tests, PostgreSQL lanes and QA stack. Pre-merge exact-head CI also completed successfully.
