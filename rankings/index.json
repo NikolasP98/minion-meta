@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-29T23:40:10.323Z",
+	"generatedAt": "2026-09-29T23:58:36.174Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4527,38 +4527,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T14:59:57.328Z"
-		},
-		{
-			"key": "pr:minion-factory#195",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#195 fix(agent): make /opt/factory-hooks traversable and prove it at build time",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/195",
-			"sourceUpdatedAt": "2026-09-29T23:36:35Z",
-			"sourceFingerprint": "e2367055e3d0e89281cebc871822ebaeb8247369f9b8959d31c3b3628b8d6f6f",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An open PR fixing a silently-inert security guard (unreadable settings file breaking --settings enforcement) with a concrete root cause and build-time proof added.",
-			"evidence": [
-				"COPY --chmod=0444 stamped dir 0444, uid 1100 couldn't traverse /opt/factory-hooks",
-				"guard was silently inert; adds su agent test -r/-x proof at build time"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T23:40:10.159Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-439295008",
@@ -16618,38 +16586,6 @@
 			"scoredAt": "2026-09-29T05:00:01.492Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 8
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged, already-shipped fix for a nitter persistence/shutdown bug, not open work.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"Co-authored-by commit already merged"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T23:40:10.159Z"
-		},
-		{
 			"key": "issue:minion-meta#562",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17367,6 +17303,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T02:31:45.734Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "25ecfcdc3bc837439b85cd5cb3a3e4b391c81e0909bec551d20ff9ceae0f3ccf",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-factory-1962723814"
+			],
+			"rationale": "All 17 markers are quoted rationale/evidence string fragments pulled from a generated JSON ranking file rather than genuine TODO(handoff) source comments, pointing to the same sweep matcher bug as the minion-factory candidate.",
+			"evidence": [
+				"17 markers all located in rankings/index.json, a generated data file, not source code",
+				"marker text like 'a full per-handler audit of the remaining requireAdmin' is a quoted rationale snippet, not a code comment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T23:58:36.030Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-5e55396",
@@ -23012,6 +22982,40 @@
 			"scoredAt": "2026-09-29T02:30:16.797Z"
 		},
 		{
+			"key": "proposal:handoff-minion-factory-1962723814",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Handoff marker — runner/src/queue.test.ts (minion-factory)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-factory-1962723814.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "0e789e6f560bc150c84055c7c83ba2a2c6ee7f712c4993bc0afbae6bc7f903c2",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-meta-221859101"
+			],
+			"rationale": "The quoted marker text 'x', 'x', 'new', ?, ?) reads as a SQL-like test literal rather than an actual TODO(handoff) comment, suggesting a sweep false-positive that shares root cause with the minion-meta case.",
+			"evidence": [
+				"marker at queue.test.ts:1012 is 'x', 'x', 'new', ?, ?)'",
+				"single-line proposal with no description of an actual open engineering task"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T23:58:36.030Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-1178956012",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25269,38 +25273,6 @@
 			"scoredAt": "2026-09-29T02:36:11.869Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "e552ecb18359ce4029d2a662c09ea4c034f76779e325d722247c28c323831f20",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The quoted markers read like excerpts of prior ranking rationale text embedded in the generated rankings/index.json data file rather than genuine source-code TODO(handoff) comments, so the sweep approach itself needs reframing before this can be actionable.",
-			"evidence": [
-				"quoted lines like 'HDS-05 remains pending; do not run without separate backend-loss authorization' resemble prior evidence text, not code comments",
-				"target file rankings/index.json is a generated ranking data artifact, not source code"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T20:52:30.337Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3518589653",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26520,37 +26492,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T06:29:01.270Z"
-		},
-		{
-			"key": "proposal:handoff-minion-factory-1962723814",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Handoff marker — runner/src/queue.test.ts (minion-factory)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-factory-1962723814.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "3a616211fdaf64b24b6b356f9bcf7bbd2c515e4f116c94c2dce5190304cff7d9",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The extracted marker text is a garbled quoted fragment resembling test fixture data rather than an actual open engineering item.",
-			"evidence": [
-				"runner/src/queue.test.ts:823 — \"x', 'x', 'new', ?, ?)\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T02:31:11.985Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-2704064834",
