@@ -10,6 +10,8 @@ spec: specs/2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec.md
 
 # Open ends from the open-modes / bulk-bar / stock-detail slice
 
+**Slice 2 status (2026-09-29):** §1 (purchase link + `/finances/purchases/[id]`), §2 (attachment count column), §3 (`listItems` default inverted), §4 (peek labelled by the page heading), §6 (custom-property bulk edit + bulk Tags), §7 (per-user `tableOpenIn`), §8 (OverviewCard on contact/ticket/invoice), §9 (catalog seed) are addressed by hub branch `feat/table-open-gaps`. Remaining: §5 and the new §10–§11 below.
+
 Ledger for hub branch `feat/table-open-modes-bulk-bar` (core + bundles A/B/C).
 
 ## 1. Receipts have no purchase-record link
@@ -67,3 +69,23 @@ those pages are next touched.
 
 ## 9. QA seed: `/pos/catalog` 500 on master (`loadFormulaCatalog`)
 On the seeded QA stack `/pos/catalog` throws `Cannot read properties of undefined (reading 'some')` at `formula-properties.service.ts:180` (`dependencyIds(formula)` undefined for a seeded formula definition). Not touched by this branch — reproduced on the untouched master server; the T3 e2e `table-interactions.spec.ts` catalog cases fail for the same reason. Fix the seed (or guard `dependencyIds` for legacy rule shapes) so the catalog e2e runs.
+
+## 10. Purchase detail has no attachments card
+`fin_purchase` is not an `AttachmentObjectType`, so `/finances/purchases/[id]`
+cannot list supplier PDFs the way stock entries do. Add the object type to
+`attachment-access.ts` (+ module mapping `finances`) and render the shared
+attachments card on the purchase page; then the receipt form can show the
+linked purchase's documents.
+
+## 11. CRM bulk tags fan out per contact
+Contacts store tags in `crm_contact_tags`, not the polymorphic `tag_links`,
+so the bulk-bar "Tags" action on `/crm/customers` issues one request per
+(row × tag) through the existing per-contact endpoint. Fine at bulk-bar
+selection sizes; add a `POST /api/crm/contacts/tags/bulk` if selections grow.
+
+
+## 12. OverviewCard adoption edges (slice 2, Bundle F)
+- CRM contact: tags stay in their dedicated grid cell (auto-tag / funnel integration), not folded into the Overview — fold once the auto-tag ribbon has a home in the card.
+- CRM "additional" custom fields render as plain text inside the Overview (the previous mailto link is gone) — give `OverviewCard` facts an optional `href`.
+- Invoice page: the Overview `.card` reads as a seam in an otherwise continuous document — either restyle the invoice page onto the card recipe everywhere or give `OverviewCard` a `variant="flush"`.
+- `listItems` default is now `includeArchived: true`; every list-style consumer that should hide archived items must opt out (dashboards `/stock`, pickers) — audited in slice 2, but a NEW consumer defaults to "show archived".
