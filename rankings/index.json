@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-29T03:33:41.958Z",
+	"generatedAt": "2026-09-29T04:22:24.429Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2028,39 +2028,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T09:58:54.452Z"
-		},
-		{
-			"key": "pr:minion_hub#401",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#401 refactor(tables): T3 — consumers on the DataTable contract + kit; first table e2e",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/401",
-			"sourceUpdatedAt": "2026-09-29T02:15:44Z",
-			"sourceFingerprint": "1e00be408def3c37546f2621bb2323dfeed3a9309cfe5a1abdcffcda263b38f8",
-			"score": 64,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A large, already-implemented table-standardization PR with e2e tests that also fixes two concrete shared-component bugs, so it is ready to merge/review now.",
-			"evidence": [
-				"fixes virtualizer getItemKey TypeError on groupBy switch",
-				"adds tests/e2e/ui-audit/table-interactions.spec.ts",
-				"migrates crm/pos/finances/stock pages onto the shared DataTable contract"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T02:30:16.797Z"
 		},
 		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
@@ -9254,14 +9221,14 @@
 			"scoredAt": "2026-09-23T03:59:16.962Z"
 		},
 		{
-			"key": "pr:minion_hub#402",
+			"key": "pr:minion_hub#358",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#402 refactor(picker): T4 — Picker rows render through DataTable",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/402",
-			"sourceUpdatedAt": "2026-09-29T02:16:12Z",
-			"sourceFingerprint": "6066b6339110a9f18658a109969beb41777080383b4e1bf34520402ac8cfc8c4",
+			"title": "#358 feat(crm): isolated seven-day JEV shadow pilot",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/358",
+			"sourceUpdatedAt": "2026-09-22T03:50:48Z",
+			"sourceFingerprint": "f385f9424589e532bd99765f2748ff1887824a680ddcc9fb38f5d5b5017b0291",
 			"score": 49,
 			"band": "low",
 			"axes": {
@@ -9270,21 +9237,22 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 8
+				"specification": 7,
+				"implementation": 6
 			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Completes the DataTable migration for the last hand-built row-list (Picker) while preserving its public API, with one documented follow-up gap.",
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion-meta#555"
+			],
+			"rationale": "Well-tested, tightly bounded shadow pilot but blocked on explicit human acceptance of the token/spend policy before it can proceed.",
 			"evidence": [
-				"public API unchanged, existing consumers untouched",
-				"TODO(handoff) notes a missing DataTable onRowActivate API",
-				"picker contract deliberately keeps single-verb row actions, no selectable column"
+				"inference defaults off pending explicit acceptance of an empirical small-request policy",
+				"seven unit tests plus a native PostgreSQL isolation test, status draft"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T02:30:16.797Z"
+			"scoredAt": "2026-09-29T04:22:16.204Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-workitem-handoff-schema",
@@ -12064,49 +12032,14 @@
 			"scoredAt": "2026-09-24T01:58:46.913Z"
 		},
 		{
-			"key": "pr:minion_hub#358",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#358 feat(crm): isolated seven-day JEV shadow pilot",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/358",
-			"sourceUpdatedAt": "2026-09-22T03:50:48Z",
-			"sourceFingerprint": "f385f9424589e532bd99765f2748ff1887824a680ddcc9fb38f5d5b5017b0291",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#555"
-			],
-			"rationale": "Isolated, guarded shadow-pilot PR with unit/isolation tests and CI is well-specified and ready for review despite deliberately narrow blast radius.",
-			"evidence": [
-				"dedicated PostgreSQL role, no CRM mutation",
-				"seven unit tests plus native isolation/bounds test and dedicated CI",
-				"inference off by default pending policy acceptance"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-22T03:59:02.691Z"
-		},
-		{
-			"key": "pr:minion-meta#669",
+			"key": "pr:minion-meta#671",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion-meta",
-			"title": "#669 docs: specify ordered formula variables and visual formatting",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/669",
-			"sourceUpdatedAt": "2026-09-29T02:31:24Z",
-			"sourceFingerprint": "fd470e8eb89c74fd0dbf0bbbdec6874da335ed29f06c9088ee34c0499876d96a",
+			"title": "#671 docs(spec,ui-gov): table open modes spec + governance contracts (Sep 16–28 taste)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/671",
+			"sourceUpdatedAt": "2026-09-29T04:13:24Z",
+			"sourceFingerprint": "f3e756e38d06189cfed2137e366b0abe837bf52819c4d758aa965de5a09c8cb5",
 			"score": 44,
 			"band": "low",
 			"axes": {
@@ -12115,22 +12048,21 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 3
+				"specification": 7,
+				"implementation": 6
 			},
 			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#403"
-			],
-			"rationale": "The spec has already cleared standards/security and requirements/UI approval, so remaining value now lives in tracking the implementation PR rather than further spec work.",
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Open, freshly updated governance/spec PR with concrete scope mined from real commit history and a hub mirror already underway.",
 			"evidence": [
-				"'Includes independent Sol standards/security and requirements/UI approval'",
-				"'Implementation and release qualification are pending'"
+				"status: open, updated 2026-09-29",
+				"hub mirror lands in hub #405",
+				"four concrete governance corrections listed"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T02:59:28.495Z"
+			"scoredAt": "2026-09-29T04:22:16.204Z"
 		},
 		{
 			"key": "proposal:2026-08-18-base-ui-primitives-and-shell",
@@ -13240,38 +13172,6 @@
 			"scoredAt": "2026-09-26T19:10:37.228Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-7634077dc475",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/finances/purchases/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7634077dc475.md",
-			"sourceUpdatedAt": "2026-09-21",
-			"sourceFingerprint": "dad4a73058a41351277857d07ba74f561e4b9db33a13b16d6a23a16ba0b2269a",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved post-merge finding names a concrete TODO(handoff) marker for an incomplete actions column in a merged purchases-page PR with a defined done-state.",
-			"evidence": [
-				"TODO(handoff): the actions column (edit/delete) is only built for...",
-				"status=approved, merged PR NikolasP98/minion_hub#352"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T15:29:59.072Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-97024660f7ac",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13504,6 +13404,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-22T14:28:51.003Z"
+		},
+		{
+			"key": "issue:minion-meta#672",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#672 [monitor:unstick] reconcile run 65ce8434 (minion-meta): claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/672",
+			"sourceUpdatedAt": "2026-09-29T04:17:34Z",
+			"sourceFingerprint": "3788155a6be0233c12da66a394a91ef60dc942be37cc2f4bbb2484fba8514682",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Recurring infra exit-126 failure needs a human runner-box check, which is operational rather than a bounded development task.",
+			"evidence": [
+				"exit-126, turns=0, recurred within ~1.5 hours (5f751591)",
+				"recommendation: verify claude CLI binary/path/deploy state",
+				"surrounding pipeline steps completed successfully"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T04:22:16.204Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-release-probe-red-and-silent",
@@ -14899,6 +14832,111 @@
 			"scoredAt": "2026-09-29T02:30:16.797Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-2249203609",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/data-table/DataTable.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2249203609.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "93ebd52d32862d9bd756bfc61eb6e3242258a024d01b3914cb8dd478d8e4d4b6",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-2928576328",
+				"proposal:handoff-minion-hub-608949306"
+			],
+			"rationale": "A DataTable sort/filter/export planning marker is one piece of the same custom-properties type-handling effort as the other two hub markers.",
+			"evidence": [
+				"TODO(handoff) at DataTable.svelte:654",
+				"\"add global server custom-property sort/filter/export planning\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T03:59:27.683Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2928576328",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/tables/custom-properties.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2928576328.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "e233c99e9414a1008d1de22b5744b36e141dd120149d0cba15ec4b1c95c7b733",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-2249203609",
+				"proposal:handoff-minion-hub-608949306"
+			],
+			"rationale": "Admitting guarded formula/relation types in custom-properties.ts is the type-definition half of the same feature spanning DataTable and the service layer.",
+			"evidence": [
+				"TODO(handoff) at custom-properties.ts:24",
+				"\"Admit guarded formula/relation types and required-on-create only\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T03:59:27.683Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-608949306",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/custom-properties.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-608949306.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "60f78e926cce51390d674d5240a8ea96cb4cb653c812721e064fb8749ea9cc6b",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-2249203609",
+				"proposal:handoff-minion-hub-2928576328"
+			],
+			"rationale": "Extending the admission seam to other numeric columns is the service-layer counterpart of the same custom-properties work as the other two markers.",
+			"evidence": [
+				"TODO(handoff) at custom-properties.service.ts:337",
+				"\"Extend this admission seam to native and other custom numeric columns\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T03:59:27.683Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-277751425",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15016,23 +15054,22 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 5,
+				"implementation": 4
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-bdc3ef8ab34d"
 			],
-			"rationale": "This finding explicitly depends on the sibling proposal's 'part 2' sequence-column work, so the two should become one goal.",
+			"rationale": "Describes the same deferred per-org sequence-numbering 'part 2' work in the same file/PR as bdc3ef8ab34d and should become one goal.",
 			"evidence": [
-				"marker text: 'same as crm.customers — numbered in part 2'",
-				"fix direction says apply the pattern used in part 2",
-				"same merged PR #357 and same file as the sibling proposal"
+				"same as crm.customers — numbered in part 2",
+				"same file src/lib/tables/defs/index.ts, PR #357, status approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-22T03:59:02.691Z"
+			"scoredAt": "2026-09-29T04:22:16.204Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b9ec3f0147a5",
@@ -15086,23 +15123,22 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 5
+				"specification": 5,
+				"implementation": 4
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-948e27d654f8"
 			],
-			"rationale": "Defines the 'part 2' per-org sequence column that the sibling proposal's crm.customers marker references, so combining them avoids splitting one schema change into two goals.",
+			"rationale": "Deferred per-org sequence column ('part 2') in the same table-defs file/PR as 948e27d654f8; the two should merge into one goal.",
 			"evidence": [
-				"fix direction: add sequence column, migration, query layer, UI updates",
-				"same merged PR #357 and file as sibling proposal",
-				"diagnosis notes it affects data model completeness and display IDs"
+				"UUID-only today — part 2 adds a per-org sequence column",
+				"same file/PR #357 as 948e27d654f8, status approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-22T03:59:02.691Z"
+			"scoredAt": "2026-09-29T04:22:16.204Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fcb3411ee30e",
@@ -16061,6 +16097,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T04:59:02.949Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-adb53e4fbbd5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/stock/commitments/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-adb53e4fbbd5.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "f7c050be127655c34735e670150c7e7aeab8a341c2d5b89e48cc3a1a1425f1a0",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Possible financial double-counting bug, but the auto-diagnosis itself admits it hasn't yet confirmed the actual file structure.",
+			"evidence": [
+				"realizedSpend + variance below are literal column totals",
+				"diagnosis admits: 'I need to check the actual file to understand the context properly'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T04:22:16.204Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
@@ -17188,38 +17256,6 @@
 			"scoredAt": "2026-09-28T11:39:42.070Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Commit-derived deployment record describes an already-merged fix with no indication of open follow-up work.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"status unknown, no failure signal cited"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T03:33:41.812Z"
-		},
-		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17671,6 +17707,73 @@
 			"scoredAt": "2026-09-27T03:58:27.486Z"
 		},
 		{
+			"key": "pr:minion-meta#555",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#555 docs: record JEV shadow deployment and week-one review",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/555",
+			"sourceUpdatedAt": "2026-09-22T03:54:56Z",
+			"sourceFingerprint": "9a8b586922123dee24a559b2282f4345964562a52ef78ce6719b6066ca207196",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#358"
+			],
+			"rationale": "Docs-only record of the linked shadow pilot whose progress depends entirely on #358's own resolution.",
+			"evidence": [
+				"Related implementation: NikolasP98/minion_hub#358",
+				"status: draft, no Hub merge or release claimed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T04:22:16.204Z"
+		},
+		{
+			"key": "pr:minion-meta#670",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#670 docs: specify guarded development QA login",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/670",
+			"sourceUpdatedAt": "2026-09-29T03:57:57Z",
+			"sourceFingerprint": "f8b90decc727184c5e52b9c757cf4a3cdfe892495672a0094ddee973f9decb36",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Dev-only guarded QA login is well-specified but implementation and release evidence are explicitly deferred until after qualification.",
+			"evidence": [
+				"status: draft",
+				"\"Implementation and release evidence will be added after qualification\"",
+				"records two-pass review and validation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T03:59:27.683Z"
+		},
+		{
 			"key": "proposal:2026-08-18-factory-g0-ci-watch-auto-close",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17934,38 +18037,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:37:41.128Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-2928576328",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/tables/custom-properties.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2928576328.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "e9384da4b009503aa042ff927f8179d6b3ee19c2394ae98077637e2b4559fc0e",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Custom-properties type system is missing guarded formula/relation and required-on-create handling, a scoped feature gap worth a spec pass.",
-			"evidence": [
-				"Admit guarded formula/relation types and required-on-create only",
-				"src/lib/tables/custom-properties.ts:19"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T02:33:24.868Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-3215540846",
@@ -18387,6 +18458,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T23:28:56.595Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-dc247fbe1f2a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/agents/AgentMemoryPanel.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dc247fbe1f2a.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "431352229d9101254b677a69208bffb2033d033c66f6404269255200fbc97f5c",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Duplicate search/filter UI paths risk behavior divergence; fix is to drop the redundant copy in favor of DataTable's built-in filtering.",
+			"evidence": [
+				"search box + category pills now live in the DataTable's...",
+				"fix direction: remove duplicate UI, rely on DataTable filtering"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T04:22:16.204Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-de95b8a03fe5",
@@ -19307,6 +19410,38 @@
 			"scoredAt": "2026-09-25T23:58:59.849Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-a65726c1d1d9",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/finances/purchases/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a65726c1d1d9.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "9dcc85080a39cc1bf935f71ffb4ced9750e5d173f77373bbc231c09b1444a2ca",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Clear timeline-continuity bug with a concrete fix direction of padding empty periods.",
+			"evidence": [
+				"a period with NO purchases no longer appears at all",
+				"fix direction: pad results with empty-purchase period entries"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T04:22:16.204Z"
+		},
+		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19465,6 +19600,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T02:37:31.463Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-de7821f4ab4f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-de7821f4ab4f.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "9e86e300b8693159e619b5c4db341890f9ee09eba052b11ed49356c200a9135a",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A generics type-alignment TODO between FilterValue and TableFilterValue is a minor type-safety cleanup, not urgent or high-impact.",
+			"evidence": [
+				"marker: FilterValue (component) ⇄ TableFilterValue (kit) is a generic",
+				"fix direction proposes generic type parameter threading"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T04:22:24.306Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-f17e52eaac73",
@@ -20166,37 +20333,6 @@
 			"scoredAt": "2026-09-28T11:33:54.022Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2249203609",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/data-table/DataTable.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2249203609.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "9cb615f2936b93f197388249381ef4af4861082973febc2082737b2431ffae9c",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The marker itself is only a planning note with no concrete scope, so it needs to be reframed into a spec before it is actionable.",
-			"evidence": [
-				"add global server custom-property sort/filter/export planning"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T02:32:36.183Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-184419011",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20622,6 +20758,38 @@
 			"scoredAt": "2026-09-26T00:28:54.749Z"
 		},
 		{
+			"key": "run:minion_hub#36521112070",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/36521112070",
+			"sourceUpdatedAt": "2026-09-29T04:19:36Z",
+			"sourceFingerprint": "4aca495d42a54c033c9f058aee3ceff568c95c173808c89ac53a8400d5a204a0",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 8
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run on master is routine automated testing with no indication of failure or blocking issue yet.",
+			"evidence": [
+				"push on master",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T04:22:24.306Z"
+		},
+		{
 			"key": "issue:minion-meta#409",
 			"kind": "issue",
 			"stage": "proposal",
@@ -20723,41 +20891,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T08:20:00.251Z"
-		},
-		{
-			"key": "pr:minion-meta#555",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#555 docs: record JEV shadow deployment and week-one review",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/555",
-			"sourceUpdatedAt": "2026-09-22T03:54:56Z",
-			"sourceFingerprint": "9a8b586922123dee24a559b2282f4345964562a52ef78ce6719b6066ca207196",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#358"
-			],
-			"rationale": "Docs-only PR recording the authorized shadow deployment and review checkpoint is narrow in scope but clearly specified and evidence-linked.",
-			"evidence": [
-				"proposal index check passes",
-				"references shadow CI and production source-role checks",
-				"explicitly linked to minion_hub#358"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-22T03:59:02.691Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
@@ -20986,37 +21119,6 @@
 			"scoredAt": "2026-09-29T02:33:46.121Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-608949306",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/server/services/custom-properties.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-608949306.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "4d91edd173afd952d969d2a45e0977cab11921175cddcbd49c2c29fc0b6b7eb6",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Extending a custom-properties admission seam to more numeric columns is a scoped enhancement with modest urgency.",
-			"evidence": [
-				"custom-properties.service.ts:246 Extend this admission seam to native and other custom numeric columns"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T02:33:46.121Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21113,6 +21215,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T03:58:54.544Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-464643f50d6e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/ui/Picker.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-464643f50d6e.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "c11b1a3f01c3eefdaec5671c02452fe01ce53e1904ce3d85644be58342e4ff85",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, clearly scoped UX gap with an obvious wiring fix.",
+			"evidence": [
+				"TODO(handoff): needs DataTable onRowActivate",
+				"fix direction mirrors existing button-click selection logic"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T04:22:16.204Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-77a6343cc924",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/finances/purchases/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-77a6343cc924.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "36752be69141d6bc70e6a3a6cb7a1f3659ecfc89246365668a660533a92a2143",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Narrow, bounded accessibility fix for an icon-only state indicator.",
+			"evidence": [
+				"lone Lock icon for closed state lacks label/ARIA",
+				"fix direction: add aria-label/title per design token contract"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T04:22:16.204Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-88eff33e9845",
@@ -24004,39 +24170,6 @@
 			"scoredAt": "2026-09-29T02:36:11.869Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "27f067e2ea1e1c604c90ca4a0425a068e6fbc2f2503bf5214e65d85afd29008c",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited markers are quoted evidence text embedded inside the rankings index data file itself, not actionable TODOs in application code.",
-			"evidence": [
-				"rankings/index.json:3566-16770 (self-referential data file)",
-				"quoted fragments from unrelated prior proposals",
-				"status: review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T02:36:11.869Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3518589653",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24165,38 +24298,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T00:28:54.749Z"
-		},
-		{
-			"key": "run:minion_hub#36517458901",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/36517458901",
-			"sourceUpdatedAt": "2026-09-29T03:30:50Z",
-			"sourceFingerprint": "8922b8feb63d6843800a254bc12d10f3a587f9922bc21c9fdaff6fa3f94c0b43",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run on master with no indication of failure or blocking issue requiring action.",
-			"evidence": [
-				"status: in_progress",
-				"push on master, CI workflow"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T03:33:41.812Z"
 		},
 		{
 			"key": "proposal:2026-08-18-spec-heading-lint-baseline-backfill",
@@ -25250,6 +25351,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T02:31:45.734Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "f6df730071c1ac3c44936f1f002b87b56174887d4ca7f27e770bb585d911e16a",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 0
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "All listed markers point into rankings/index.json, a generated data file, so they are quoted text fragments rather than actionable code TODOs.",
+			"evidence": [
+				"every marker location is rankings/index.json (a generated index)",
+				"excerpts are fragments of quoted strings from other findings, not code comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T03:59:27.683Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",

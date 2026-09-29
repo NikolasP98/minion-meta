@@ -1,14 +1,14 @@
 ---
-id: handoff-minion-hub-872171422
-title: Handoff marker — src/routes/(app)/pos/accounts/+page.svelte (minion_hub)
+id: handoff-minion-hub-2195640700
+title: Handoff marker — src/lib/components/ui/Picker.svelte (minion_hub)
 status: draft
-created: 2026-09-16
+created: 2026-09-29
 updated: 2026-09-29
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — src/routes/(app)/pos/accounts/+page.svelte
+# Handoff marker — src/lib/components/ui/Picker.svelte
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-29)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/accounts/+page.svelte:120` — the link targets /pos/sell, so a role holding
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/accounts/+page.svelte#L120
+- `NikolasP98/minion_hub@master src/lib/components/ui/Picker.svelte:393` — needs DataTable onRowActivate (double-click / Enter on the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/ui/Picker.svelte#L393
