@@ -1,8 +1,8 @@
 ---
 id: 2026-09-29-hub-qa-personal-agent-provisioning-spec
 title: Complete local QA personal-agent fixtures
-stage: dev
-status: approved
+stage: done
+status: shipped
 pass: 2
 verdict: approved
 created: 2026-09-29
@@ -41,3 +41,7 @@ Tenancy seed writes active `personal_agents` for ordinary users, but UI Audit an
 ## Out of scope
 
 Production onboarding changes, live model workers, external gateway provisioning and production account repair.
+
+## Release evidence
+
+Hub PR #407 merged at 2026-09-29 05:29:00 UTC as `e7d80d79379e500d3915b9582ba6f61be35b712d`. Independent Sol review approved exact head `d0341b0424f3428fdd201591f6183c395448fd74`, and all jobs in final-head CI run `36525838850` passed. Local fixture repair, fresh login for six affected profiles, visual Home/POS checks and the 16-profile readiness audit passed. Details are in the sibling review artifact.
