@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-868827312
 title: Handoff marker — src/lib/records/RecordPeek.svelte (minion_hub)
-status: draft
+status: closed
 created: 2026-09-29
 updated: 2026-09-29
 repos: [minion-hub]
@@ -28,3 +28,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/lib/records/RecordPeek.svelte:33` — label the dialog with the embedded page's own heading id instead of the generic caption — proposals/2026-09-28-hub-table-open-modes-followups.md §4 -->
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/records/RecordPeek.svelte#L33
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-09-29; the sweep closed this proposal.

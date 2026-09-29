@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-29)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/tickets/[id]/+page.svelte:145` — no calendar deep-link param exists yet —
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/tickets/[id]/+page.svelte#L145
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/tickets/[id]/+page.svelte:146` — no calendar deep-link param exists yet —
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/tickets/[id]/+page.svelte#L146

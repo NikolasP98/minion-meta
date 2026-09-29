@@ -1,15 +1,14 @@
 ---
-id: handoff-minion-hub-2249203609
-title: Handoff marker — src/lib/components/data-table/DataTable.svelte (minion_hub)
+id: handoff-minion-hub-2778272735
+title: Handoff marker — src/routes/(app)/crm/[contactId]/+page.svelte (minion_hub)
 status: draft
-created: 2026-08-22
+created: 2026-09-29
 updated: 2026-09-29
 repos: [minion-hub]
 tags: [handoff-sweep]
-duplicate_candidate: 2026-08-20-hub-datatable-server-mode-test-gap
 ---
 
-# Handoff marker — src/lib/components/data-table/DataTable.svelte
+# Handoff marker — src/routes/(app)/crm/[contactId]/+page.svelte
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -27,5 +26,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-29)
 
-- `NikolasP98/minion_hub@master src/lib/components/data-table/DataTable.svelte:708` — add global server custom-property sort/filter/export planning;
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/data-table/DataTable.svelte#L708
+- `NikolasP98/minion_hub@master src/routes/(app)/crm/[contactId]/+page.svelte:767` — additional custom fields lose their mailto link
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/+page.svelte#L767
+- `NikolasP98/minion_hub@master src/routes/(app)/crm/[contactId]/+page.svelte:892` — spec 2026-09-28 Bundle F asks for tags LAST inside
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/+page.svelte#L892
