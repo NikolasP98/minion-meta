@@ -61,5 +61,26 @@
         "line": 163
       }
     ]
+  },
+  "NikolasP98/minion-factory:dev": {
+    "cursor": "e8cac0635e5a5e12cda9abcfbf76e2b6c9e640ac",
+    "head": "707f4e44b72662a03e6d8683ba850f5fb559ddda",
+    "done": 8,
+    "kept": [
+      {
+        "file": "agent/hooks/claude-settings.json",
+        "desc": "Hardcoded path /opt/factory-hooks/jev-guard.sh should be configurable via environment variable to support different factory deployments.",
+        "severity": "medium",
+        "category": "hardcoded-config",
+        "line": 10
+      },
+      {
+        "file": "agent/lib/jev.sh",
+        "desc": "Accesses .usage.inputTokens/outputTokens without validation; produces null values if proxy response lacks these fields, resulting in invalid result JSON",
+        "severity": "medium",
+        "category": "unchecked-access",
+        "line": 273
+      }
+    ]
   }
 }
