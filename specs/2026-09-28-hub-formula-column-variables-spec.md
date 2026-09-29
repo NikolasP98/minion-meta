@@ -14,6 +14,10 @@ tags: [ui, data, security]
 
 # Formula column variables
 
+## 0. Product
+
+Let authorized users compose one custom column from ordered, named formula variables and format each value visually without changing its underlying numeric meaning.
+
 ## AS-IS
 
 - `formula/contracts.ts` models one expression/AST/output/dependency list per formula. `custom-properties.service.ts` validates writes under an org/table graph lock, optimistic property version and catalog revision.
@@ -59,6 +63,10 @@ tags: [ui, data, security]
 3. Manager, variable editor, formatting editor, cell renderer, DataTable integration and EN/ES strings. Tests for simple-to-complex names, duplicate names, drag/move, identity-preserving rename/reorder, removal/primary selection, mixed scalar formula outputs, stale preview protection, formatting and partial/blank/error behavior.
 4. Seeded local QA: create a two-variable margin and percentage; preview; save; reload; reverse display order; rename; edit per-variable decimals/emphasis; verify persisted output and unchanged primary sorting. Exercise keyboard move and tooltip paths, duplicate names, incompatible formula types and a stale save. Preserve the running dev server for user testing.
 5. Run clean check/build, focused tests, database qualification, design/token ratchets and full CI. Obtain independent exact-head Sol standards/spec approval before the authorized merge. Verify production deployment/ancestry and record evidence separately from local UI proof.
+
+## Verification
+
+Qualification must prove the DELTA cases through focused tests, PostgreSQL and HTTP boundaries, seeded browser save/reload flows, design/type/build checks, independent implementation review and exact-release deployment evidence. Specification approval is not completion evidence.
 
 ## Out of scope
 
