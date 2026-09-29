@@ -26,5 +26,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-29)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/finances/purchases/+page.svelte:44` — the actions column (edit/delete) is only built for
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/finances/purchases/+page.svelte#L44
+- `NikolasP98/minion_hub@master src/routes/(app)/finances/purchases/+page.svelte:32` — a period with NO purchases no longer appears at all — a
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/finances/purchases/+page.svelte#L32
+- `NikolasP98/minion_hub@master src/routes/(app)/finances/purchases/+page.svelte:56` — the pre-migration markup rendered a lone Lock icon for closed
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/finances/purchases/+page.svelte#L56
