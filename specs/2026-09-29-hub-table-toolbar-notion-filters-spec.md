@@ -233,6 +233,8 @@ export interface FilterGroup { id: string; logic: 'and' | 'or'; items: Array<Fil
 ## DELTA — two parallel slices + one wiring slice
 
 ### Slice 1 — (stage 1A) filter core + editors (no `DataTable.svelte` edits)
+
+**Topics:** ui, ux
 Branch `feat/table-filters-core`. `filters.ts` (model, ops, `matchesFilter`,
 `matchesGroup`, helpers) + `filters.test.ts` (every op × kind, empties, relative
 windows with pinned `now`, nested and/or groups, unknown key inert);
@@ -242,6 +244,8 @@ a two-rule group, duplicates a rule, wraps one in a group, turns it back, and
 switches logic); `ColumnFilter.svelte` rehosted on `FilterRuleEditor`; i18n keys.
 
 ### Slice 2 — (stage 1B) toolbar + header + catalog (edits `DataTable.svelte`)
+
+**Topics:** ui, ux
 Branch `feat/table-toolbar`. `GroupByPicker.svelte` (+ test: idle icon-only,
 active label, × clears, body click opens options); trailing add-column cell
 (+ test: it is the last `th`/`td`, colspans intact, absent without
@@ -250,6 +254,8 @@ menu (+ test); toolbar "+ Add column" removed; catalog: toggle removed,
 `includeInactive` always, `GroupByPicker` in the view-bar; i18n keys.
 
 ### Slice 3 — wiring (after 1A + 1B merge into `feat/table-toolbar-filters`)
+
+**Topics:** ui, ux
 `DataTable.svelte`: `advanced` prop, `filterKindOf`/enum-options/`matchOf`,
 pipeline, toolbar Filter icon (`FilterAddMenu`), chip bar with `FilterChip` +
 advanced chip + builder popover, Clear all; catalog `active` boolean default
