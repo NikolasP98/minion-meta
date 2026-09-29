@@ -1,14 +1,14 @@
 ---
-id: handoff-minion-hub-348234352
-title: Handoff marker — src/routes/(app)/stock/entries/new/+page.svelte (minion_hub)
+id: handoff-minion-hub-868827312
+title: Handoff marker — src/lib/records/RecordPeek.svelte (minion_hub)
 status: draft
-created: 2026-09-17
+created: 2026-09-29
 updated: 2026-09-29
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — src/routes/(app)/stock/entries/new/+page.svelte
+# Handoff marker — src/lib/records/RecordPeek.svelte
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-29)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/stock/entries/new/+page.svelte:659` — on adjustment/transfer entries (5 columns: item, qty,
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/stock/entries/new/+page.svelte#L659
+- `NikolasP98/minion_hub@master src/lib/records/RecordPeek.svelte:33` — label the dialog with the embedded page's own heading id instead of the generic caption — proposals/2026-09-28-hub-table-open-modes-followups.md §4 -->
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/records/RecordPeek.svelte#L33

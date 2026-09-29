@@ -26,7 +26,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-29)
 
-- `NikolasP98/minion_hub@master src/lib/tables/defs/index.ts:71` — UUID-only today — part 2 adds a per-org sequence column +
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/defs/index.ts#L71
-- `NikolasP98/minion_hub@master src/lib/tables/defs/index.ts:147` — same as crm.customers — numbered in part 2.
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/defs/index.ts#L147
+- `NikolasP98/minion_hub@master src/lib/tables/defs/index.ts:76` — UUID-only today — part 2 adds a per-org sequence column +
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/defs/index.ts#L76
+- `NikolasP98/minion_hub@master src/lib/tables/defs/index.ts:152` — same as crm.customers — numbered in part 2.
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/defs/index.ts#L152
