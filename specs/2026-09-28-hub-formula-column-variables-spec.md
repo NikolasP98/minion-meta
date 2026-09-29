@@ -1,8 +1,8 @@
 ---
 id: 2026-09-28-hub-formula-column-variables-spec
 title: Formula column variables and visual formatting
-stage: dev
-status: approved
+stage: done
+status: shipped
 pass: 2
 verdict: approved
 created: 2026-09-28
@@ -79,7 +79,7 @@ Qualification must prove the DELTA cases through focused tests, PostgreSQL and H
 - Compatibility clarification: when the caller may edit the visible V1 primary expression but cannot see its external legacy secondary, the expression edit may proceed under graph lock and CAS while the canonical V1 presentation remains unchanged. Supplying presentation explicitly or converting that restricted definition to V2 returns 422.
 - No database migration is required because rules and presentation remain in the existing JSON storage.
 
-Final-head CI run `36517049538` passed all jobs. Preview deployment `6725968007` succeeded at `https://minion-jrc824ec5-nikolasp98s-projects.vercel.app`. Hub PR #403 merged through the authorized workflow at 2026-09-29 03:30:42 UTC as squash commit `2c39b3494b8cfe05f131d42d512fe2db13c85b02`. Production deployment identity, production ancestry and post-deploy runtime evidence remain pending and must be added before this artifact claims release completion.
+Final-head CI run `36517049538` passed all jobs. Preview deployment `6725968007` succeeded at `https://minion-jrc824ec5-nikolasp98s-projects.vercel.app`. Hub PR #403 merged through the authorized workflow at 2026-09-29 03:30:42 UTC as squash commit `2c39b3494b8cfe05f131d42d512fe2db13c85b02`. Production deployment `6726033312` succeeded for that exact merge SHA at 2026-09-29 03:34:00 UTC, at `https://minion-opqi7mmk6-nikolasp98s-projects.vercel.app`. A source-tree diff between reviewed head and merge commit is empty. Post-merge CI run `36517458901` passed. The canonical production login route rendered a complete sign-in page in a fresh browser request after deployment. Production verification covers deployment identity and the public authentication boundary; authenticated create/edit behavior was qualified on the synthetic local QA stack. No production definitions were rewritten. The local dev server remains available at `http://127.0.0.1:5199/en/pos/catalog`.
 
 ## Out of scope
 

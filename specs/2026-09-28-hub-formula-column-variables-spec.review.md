@@ -14,13 +14,13 @@ Specification: `2026-09-28-hub-formula-column-variables-spec.md`.
 - Requirements/UI review: independent Sol agent `quick_add`, APPROVED after revisions. One variable is unnamed; complex variables require unique names. Stable IDs preserve formatting under rename/reorder. Preview diagnostics/results identify the variable. Visual per-variable controls, primary sorting selection, accessible reorder, legacy repair states and partial-quality behavior are specified.
 - User confirmations: visual controls per variable; formula variables only. Existing session authorization covers implementation, independent review, verified merge and deployment.
 
-Implementation review and release evidence will be recorded after qualification; specification approval alone is not release proof.
+Implementation and release qualification are recorded below.
 
 ## Implementation review
 
 Reviewed Hub head: `049bb8f8c73b8ade42599321a5d3a96d201d6908`.
 
-Verdict: **APPROVED** for merge readiness, subject to the separate hosted CI, browser and release gates.
+Verdict: **APPROVED**. The separate CI, browser and release gates below also passed.
 
 The independent implementation review covered:
 
@@ -51,6 +51,10 @@ The restricted legacy-secondary compatibility rule was reviewed separately. A vi
 
 An earlier hosted run for `84043dd` passed test and check/build but failed the QA stack on the legacy V1 expression compatibility case. The implementation fixed that regression before the approved head. The older run must not be represented as final-head CI evidence.
 
-## Pending release evidence
+## Production release evidence
 
-Production deployment identity, ancestry and post-deploy runtime verification are not yet recorded. Until the release orchestrator supplies those facts, this review establishes merged and preview-qualified implementation rather than production deployment.
+- GitHub Production deployment `6726033312` reports success for exact merge SHA `2c39b3494b8cfe05f131d42d512fe2db13c85b02` at 2026-09-29 03:34:00 UTC. Deployment URL: `https://minion-opqi7mmk6-nikolasp98s-projects.vercel.app`.
+- Reviewed head and squash merge have identical source trees (`git diff --exit-code` passed), and `origin/master` contains the merge.
+- Post-merge CI run `36517458901` passed all applicable jobs.
+- A fresh browser request to `https://hub.minion-ai.org/en/login?release=2c39b34` rendered the complete Minion Hub sign-in page after deployment. Authenticated formula create/edit flows were tested on the local synthetic QA stack; production verification did not mutate tenant definitions.
+- Dev server remains available at `http://127.0.0.1:5199/en/pos/catalog`.

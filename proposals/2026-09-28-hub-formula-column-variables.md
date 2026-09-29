@@ -1,7 +1,7 @@
 ---
 id: 2026-09-28-hub-formula-column-variables
 title: Named variables and visual formatting in formula columns
-status: approved
+status: done
 created: 2026-09-28
 updated: 2026-09-28
 repos: [minion_hub]
@@ -27,4 +27,4 @@ Add versioned inline variable rules and presentation, atomic validated writes, p
 
 Implementation is review-approved at Hub commit `049bb8f8c73b8ade42599321a5d3a96d201d6908`. Focused UI, backend, PostgreSQL, authenticated loopback HTTP and final-head browser qualification passed. The review confirmed that a permitted visible V1 expression edit preserves a hidden external legacy secondary presentation; explicit presentation changes and conversion to V2 remain forbidden for that restricted state.
 
-Hub PR #403 merged through the authorized workflow at 2026-09-29 03:30:42 UTC as squash commit `2c39b3494b8cfe05f131d42d512fe2db13c85b02`. Final-head CI run `36517049538` passed all jobs, and preview deployment `6725968007` succeeded at `https://minion-jrc824ec5-nikolasp98s-projects.vercel.app`. Earlier hosted checks on `84043dd` passed test and check/build, while its QA stack exposed the legacy-expression compatibility regression subsequently fixed before merge. Production deployment and verification remain pending.
+Hub PR #403 merged through the authorized workflow at 2026-09-29 03:30:42 UTC as squash commit `2c39b3494b8cfe05f131d42d512fe2db13c85b02`. Final-head CI run `36517049538` passed all jobs, and preview deployment `6725968007` succeeded at `https://minion-jrc824ec5-nikolasp98s-projects.vercel.app`. Earlier hosted checks on `84043dd` passed test and check/build, while its QA stack exposed the legacy-expression compatibility regression subsequently fixed before merge. Production deployment `6726033312` succeeded for the merge SHA at 2026-09-29 03:34:00 UTC. The reviewed and merged source trees are identical. Post-merge CI run `36517458901` passed. A fresh browser request to the canonical production login route rendered the complete sign-in page after deployment; authenticated feature flows were qualified against the local QA stack.
