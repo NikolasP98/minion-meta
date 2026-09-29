@@ -15,3 +15,42 @@ Specification: `2026-09-28-hub-formula-column-variables-spec.md`.
 - User confirmations: visual controls per variable; formula variables only. Existing session authorization covers implementation, independent review, verified merge and deployment.
 
 Implementation review and release evidence will be recorded after qualification; specification approval alone is not release proof.
+
+## Implementation review
+
+Reviewed Hub head: `049bb8f8c73b8ade42599321a5d3a96d201d6908`.
+
+Verdict: **APPROVED** for merge readiness, subject to the separate hosted CI, browser and release gates.
+
+The independent implementation review covered:
+
+- actor-visible authoring with canonical graph validation under the existing org/table advisory lock and property CAS;
+- stable primary and auxiliary UUID identity through rename, reorder, primary selection, formatting and legacy adaptation;
+- primary dependency ordering, auxiliary evaluation after primaries, true-cycle rejection, transitive type checks and all-dependency archive protection;
+- masked non-primary redaction across definitions, values, catalog, mutation responses and metadata-only updates without hidden ID/name leakage;
+- deterministic V1 adapter IDs and blocked restricted/unavailable repair states;
+- coherent list, bundle, create, update and lifecycle projections;
+- statement chunking at no more than 500 variable/record pairs and aggregate expression limits;
+- partial, blank, error and restricted rendering with one accessible warning and unchanged primary scalar semantics;
+- catalog refresh after successful mutations without changing the active draft, plus preservation of UUID-keyed formatting while analysis is pending.
+
+The restricted legacy-secondary compatibility rule was reviewed separately. A visible V1 primary expression edit is allowed and preserves the canonical hidden V1 presentation. The same caller cannot submit a presentation mutation or convert the definition to V2; both are rejected with 422. This maintains the existing V1 editing path without exposing or overwriting the hidden secondary identity.
+
+## Qualification evidence
+
+- Focused UI: 3 files / 18 tests passed; manager catalog lifecycle 5/5 passed; deferred-analysis formatting regression passed.
+- PostgreSQL: 2 files / 8 tests passed.
+- Authenticated loopback HTTP: formula variables 7/7 groups and column presentation 6/6 groups passed.
+- Formula-variable QA seed registration: 3/3 fixtures passed.
+- Final-head browser qualification passed persisted create/edit/reopen, keyboard reorder and UUID-bound formatting. The API retained the primary UUID and the exact currency/sign plus percent/ratio/muted mappings after rename and reorder. Complete, partial and blank rows rendered the expected two values, exactly one accessible partial warning without positive tone, and one dash. Screenshots: `/tmp/column-variables-final-editor.png` and `/tmp/column-variables-final-cells.png`.
+- Independent exact-head Sol review: approved `049bb8f8c73b8ade42599321a5d3a96d201d6908` with no remaining code, specification or security finding.
+- Final-head CI run `36517049538`: all jobs passed.
+- Preview deployment `6725968007`: succeeded at `https://minion-jrc824ec5-nikolasp98s-projects.vercel.app`.
+- Hub PR #403: merged through the authorized workflow at 2026-09-29 03:30:42 UTC as squash commit `2c39b3494b8cfe05f131d42d512fe2db13c85b02`.
+- No schema migration was required.
+
+An earlier hosted run for `84043dd` passed test and check/build but failed the QA stack on the legacy V1 expression compatibility case. The implementation fixed that regression before the approved head. The older run must not be represented as final-head CI evidence.
+
+## Pending release evidence
+
+Production deployment identity, ancestry and post-deploy runtime verification are not yet recorded. Until the release orchestrator supplies those facts, this review establishes merged and preview-qualified implementation rather than production deployment.

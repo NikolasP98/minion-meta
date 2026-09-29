@@ -68,6 +68,19 @@ Let authorized users compose one custom column from ordered, named formula varia
 
 Qualification must prove the DELTA cases through focused tests, PostgreSQL and HTTP boundaries, seeded browser save/reload flows, design/type/build checks, independent implementation review and exact-release deployment evidence. Specification approval is not completion evidence.
 
+### Implementation qualification at `049bb8f8c73b8ade42599321a5d3a96d201d6908`
+
+- Independent Sol implementation review: **APPROVED** for the exact head after fixes for projected-variable preservation, canonical legacy projection order, response consistency, bounded evaluation chunks, catalog freshness and UUID-keyed formatting during deferred analysis.
+- Focused UI qualification: 3 files / 18 tests passed; the manager catalog lifecycle suite passed 5/5, including a second same-session save with a fresh catalog revision. The deferred-catalog regression preserves money/sign and percent/ratio formatting by variable UUID through rename, reorder and save.
+- Backend and API qualification passed, including strict V2 parsing, optimistic version/catalog conflicts, permission projections, blocked legacy repair states and response projection consistency.
+- PostgreSQL qualification: 2 files / 8 tests passed. Coverage includes atomic graph validation, primary-before-auxiliary evaluation, true-cycle rejection, archive dependency guards, restricted legacy behavior and the 500 variable/record-pair statement bound.
+- Authenticated loopback HTTP qualification passed: formula-variable smoke 7/7 groups and existing column-presentation smoke 6/6 groups. Formula-variable QA seeds registered 3/3 fixtures. Synthetic properties were archived during deterministic cleanup.
+- Final-head browser qualification passed the persisted edit flow. It restored the saved currency/sign and percent/ratio/muted formats, renamed and keyboard-reordered the percentage variable, saved again, and confirmed through the API that formatting remained keyed to the same UUIDs while the primary UUID stayed unchanged. Complete, partial and blank cells rendered respectively as `S/ 60.00` plus `60.0%`, `S/ 55.00` plus `100.0%` with exactly one accessible warning and no positive tone, and one dash. Earlier browser qualification also covered HTML5 drag, preview and initial save. Evidence screenshots are `/tmp/column-variables-final-editor.png` and `/tmp/column-variables-final-cells.png` in the qualification environment.
+- Compatibility clarification: when the caller may edit the visible V1 primary expression but cannot see its external legacy secondary, the expression edit may proceed under graph lock and CAS while the canonical V1 presentation remains unchanged. Supplying presentation explicitly or converting that restricted definition to V2 returns 422.
+- No database migration is required because rules and presentation remain in the existing JSON storage.
+
+Final-head CI run `36517049538` passed all jobs. Preview deployment `6725968007` succeeded at `https://minion-jrc824ec5-nikolasp98s-projects.vercel.app`. Hub PR #403 merged through the authorized workflow at 2026-09-29 03:30:42 UTC as squash commit `2c39b3494b8cfe05f131d42d512fe2db13c85b02`. Production deployment identity, production ancestry and post-deploy runtime evidence remain pending and must be added before this artifact claims release completion.
+
 ## Out of scope
 
 Manual variables in complex columns, formatting templates, native-column formatting, sibling-variable formula syntax, arbitrary colors/CSS/SQL, references to non-primary variables from other columns, and new server sort/filter/export capabilities. These are deliberate scope boundaries confirmed by the user or compatibility constraints; do not expose unwired controls.

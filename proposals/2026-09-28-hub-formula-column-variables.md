@@ -22,3 +22,9 @@ The user confirmed visual formatting controls and formula variables only. One co
 ## DELTA
 
 Add versioned inline variable rules and presentation, atomic validated writes, permission-aware projections, combined preview/evaluation, an ordered variable editor, and per-variable visual formatting. Preserve existing formulas, explicit primary scalar semantics, RBAC, type guards, calculation quality and user data. Qualify through local QA, independent Sol review, CI and the already-authorized merge/deploy workflow.
+
+## Qualification status
+
+Implementation is review-approved at Hub commit `049bb8f8c73b8ade42599321a5d3a96d201d6908`. Focused UI, backend, PostgreSQL, authenticated loopback HTTP and final-head browser qualification passed. The review confirmed that a permitted visible V1 expression edit preserves a hidden external legacy secondary presentation; explicit presentation changes and conversion to V2 remain forbidden for that restricted state.
+
+Hub PR #403 merged through the authorized workflow at 2026-09-29 03:30:42 UTC as squash commit `2c39b3494b8cfe05f131d42d512fe2db13c85b02`. Final-head CI run `36517049538` passed all jobs, and preview deployment `6725968007` succeeded at `https://minion-jrc824ec5-nikolasp98s-projects.vercel.app`. Earlier hosted checks on `84043dd` passed test and check/build, while its QA stack exposed the legacy-expression compatibility regression subsequently fixed before merge. Production deployment and verification remain pending.
