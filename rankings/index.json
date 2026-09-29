@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-29T00:29:10.490Z",
+	"generatedAt": "2026-09-29T00:59:28.995Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2081,20 +2081,20 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 5
+				"implementation": 6
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "An already-approved, well-specified multi-slice proposal that both centralizes core Hub domain logic and fixes named consistency risks (unchecked-HTTP CRM mutations, a save race in flow editor) across stock, CRM, POS, and flow-editor.",
+			"rationale": "This is an approved proposal with a detailed AS-IS/TO-BE/DELTA plan broken into proof-bearing slices, making slice 1 immediately actionable.",
 			"evidence": [
 				"status: approved",
-				"CRM contact tag mutations bypass jsonMutation and do not check HTTP success before invalidating",
-				"flow editor saveFlow clears dirty/draft state without a revision guard"
+				"DELTA table defines four slices each with required proof",
+				"AS-IS cites specific file:line evidence for each gap"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-22T00:29:30.569Z"
+			"scoredAt": "2026-09-29T00:59:28.833Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ab7a33dc7fa6",
@@ -12140,32 +12140,32 @@
 			"kind": "issue",
 			"stage": "proposal",
 			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 88880 new commit(s) available",
+			"title": "#264 Upstream sync: 89050 new commit(s) available",
 			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-09-28T18:22:37Z",
-			"sourceFingerprint": "7f79f3be46390c8e7953ae7dca940231e26b86efcbf62f00fb6b94b0d8e6db74",
+			"sourceUpdatedAt": "2026-09-29T00:40:32Z",
+			"sourceFingerprint": "1b1f08e73addd40c29060445768c5ac35b76547a891d006656d393ccd4ae9aac",
 			"score": 43,
 			"band": "low",
 			"axes": {
 				"criticality": 4,
-				"importance": 5,
-				"impact": 4
+				"importance": 4,
+				"impact": 5
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 2
+				"specification": 1,
+				"implementation": 1
 			},
-			"confidence": 5,
+			"confidence": 4,
 			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "An auto-generated tracker listing 88880 unscoped upstream commits cannot be executed as one goal and needs to be broken into bounded sync batches.",
+			"rationale": "An auto-generated dump of 89050 upstream commits has no triage or scoping, so it cannot be executed as a single actionable task.",
 			"evidence": [
-				"Upstream sync: 88880 new commit(s) available",
-				"list mixes unrelated fix/perf/ci/refactor commits across dozens of subsystems"
+				"title states '89050 new commit(s) available'",
+				"summary is a raw unscoped commit log excerpt"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T18:29:26.772Z"
+			"scoredAt": "2026-09-29T00:59:28.833Z"
 		},
 		{
 			"key": "issue:minion-meta#327",
@@ -21264,6 +21264,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T04:28:31.385Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The commit log shows the nitter persistence/shutdown fix is already merged, leaving no outstanding deployment action.",
+			"evidence": [
+				"commit message describes fix already merged (#295)",
+				"tags only list 'deployment' with no open follow-up"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-29T00:59:28.833Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
