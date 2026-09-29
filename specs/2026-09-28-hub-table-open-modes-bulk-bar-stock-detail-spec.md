@@ -225,11 +225,11 @@ pre-add that line), `lib/records/peek-registry.ts` NO (owned by core), `messages
   `proposals/2026-09-28-hub-table-open-modes-followups.md` (report it; the
   orchestrator writes the proposal).
 
-## Slice 2 — gaps (ledger `proposals/2026-09-28-hub-table-open-modes-followups.md`, owner 2026-09-28: "address all gaps")
+### Slice 2 — gaps (ledger `proposals/2026-09-28-hub-table-open-modes-followups.md`, owner 2026-09-28: "address all gaps")
 
 Branch stacked on `feat/table-open-modes-bulk-bar` (hub #406). Three file-disjoint bundles.
 
-### Bundle D — receipt ↔ purchase link + purchase detail route + attachment count (§1, §2)
+#### Bundle D — receipt ↔ purchase link + purchase detail route + attachment count (§1, §2)
 Owns: `server/db/pg-schema` NO (link lives in `stk_entries.metadata.purchaseId`);
 `server/services/purchases.service.ts` (+`getPurchase(ctx,id)`, `listPurchaseRefs(ctx, ids)`),
 `server/services/stock.service.ts` ONLY `createEntry` metadata pass-through if missing,
@@ -247,7 +247,7 @@ places (`route-design-manifest.ts`, `route-design-validation.ts` counts, `route-
 count → `PeekLink` to the entry); `lib/records/peek-registry.ts` (+ `/finances/purchases/:id`);
 `routes/(app)/finances/purchases/+page.svelte` (`titleColumn` → the new route); `messages/*.json` APPEND.
 
-### Bundle E — DataTable: bulk edit of custom properties, bulk tags, per-user open mode, peek label (§4, §6, §7)
+#### Bundle E — DataTable: bulk edit of custom properties, bulk tags, per-user open mode, peek label (§4, §6, §7)
 Owns: `lib/components/data-table/DataTable.svelte`, `bulk-edit.ts` (+tests), `custom-properties/*` (read
 only unless a save helper is missing), `lib/records/RecordPeek.svelte` + `peek.svelte.ts`,
 `routes/api/me/preferences/[section]/+server.ts` (+ section `tableOpenIn` = `{[tableId]: OpenMode}`),
@@ -264,7 +264,7 @@ only unless a save helper is missing), `lib/records/RecordPeek.svelte` + `peek.s
 4. `RecordPeek` labels the dialog with the embedded page's heading: after the page mounts, find the first
    `h1[id]` inside the dialog and set `labelledBy` to it (fallback = the caption).
 
-### Bundle F — Overview prefs on CRM contact / POS ticket / invoice, archived default, QA seed (§3, §8, §9)
+#### Bundle F — Overview prefs on CRM contact / POS ticket / invoice, archived default, QA seed (§3, §8, §9)
 Owns: `routes/(app)/crm/[contactId]/+page.svelte` (+server), `routes/(app)/pos/tickets/[id]/+page.svelte`,
 `routes/(app)/finances/invoices/[id]/+page.svelte`, `lib/components/stock/overview-prefs.ts` → MOVE to
 `lib/records/overview-prefs.ts` (update the stock import), new `lib/records/OverviewCard.svelte` (facts rows +
