@@ -1,8 +1,8 @@
 ---
 id: 2026-09-28-hub-dev-qa-login-spec
 title: Development-only QA profile sign-in
-stage: dev
-status: approved
+stage: done
+status: shipped
 pass: 2
 verdict: approved
 created: 2026-09-28
@@ -52,7 +52,7 @@ Focused UI and server tests, real local QA login and RBAC checks, production-bui
 - The local full check and build were stopped under host resource pressure at 21 of 22 GiB memory, 30 GiB swap, and load 40. Hosted CI run `36520020471` passed all applicable jobs, including full check/build and the production-preview negative smoke.
 - Browser owner sign-in through the picker produced a real session, followed the redirect and rendered authenticated Home. Owner management read returned 200; a separate viewer browser session returned identity 200 and the same management read 403.
 - Production preview omitted the picker and returned 404 for direct GET/POST to the QA endpoint.
-- Hub PR #404 merged as `b36f2191305113d4fe66d679c5659400a5922b3f`; the feature files match reviewed head. Independent concurrent table/picker changes are also present in master. Production deployment verification remains pending.
+- Hub PR #404 merged as `b36f2191305113d4fe66d679c5659400a5922b3f`; the feature files match reviewed head. Independent concurrent table/picker changes are also present in master. Production deployment `6726610476` succeeded for the merge SHA at 2026-09-29 04:22:34 UTC. Fresh browser GET/POST calls to `https://hub.minion-ai.org/api/dev/qa-login` returned 404 after deployment, independently of UI visibility.
 - The updated dev server is available at `http://127.0.0.1:5199/en/login`.
 
 ## Out of scope
