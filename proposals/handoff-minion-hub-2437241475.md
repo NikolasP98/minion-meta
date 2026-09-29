@@ -1,15 +1,14 @@
 ---
-id: handoff-minion-hub-2249203609
-title: Handoff marker — src/lib/components/data-table/DataTable.svelte (minion_hub)
+id: handoff-minion-hub-2437241475
+title: Handoff marker — src/lib/components/data-table/filters.ts (minion_hub)
 status: draft
-created: 2026-08-22
+created: 2026-09-29
 updated: 2026-09-29
 repos: [minion-hub]
 tags: [handoff-sweep]
-duplicate_candidate: 2026-08-20-hub-datatable-server-mode-test-gap
 ---
 
-# Handoff marker — src/lib/components/data-table/DataTable.svelte
+# Handoff marker — src/lib/components/data-table/filters.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -27,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-29)
 
-- `NikolasP98/minion_hub@master src/lib/components/data-table/DataTable.svelte:732` — add global server custom-property sort/filter/export planning;
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/data-table/DataTable.svelte#L732
+- `NikolasP98/minion_hub@master src/lib/components/data-table/filters.ts:60` — adding the boolean variant makes DataTable.svelte's
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/data-table/filters.ts#L60
