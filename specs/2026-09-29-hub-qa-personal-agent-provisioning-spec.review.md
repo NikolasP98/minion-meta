@@ -1,0 +1,25 @@
+---
+spec: 2026-09-29-hub-qa-personal-agent-provisioning-spec
+pass: 2
+verdict: approved
+reviewer: sol-guardians-dob
+created: 2026-09-29
+---
+
+# QA personal-agent provisioning review
+
+- Pass 1 requested an explicit fixture set, valid-active preservation, and atomic agent/profile-pointer repair with rollback and rerun-stability tests.
+- Pass 2 approved after those amendments. The contract names all 16 ordinary personas, excludes the pending-agent and no-org scenarios, and forbids blanket namespace repair or external gateway calls.
+- Local root-cause proof: UI Audit owner authenticated successfully, but `/en/home/__data.json` returned `{type: "redirect", location: "/onboarding"}`. HTML status 200 alone was not treated as route success because the app disables server rendering.
+- Bounded local repair matched six exact profiles and repaired all six. A repeated dry run required zero changes. All 16 ordinary seeded personas have active personal agents with nonempty agent IDs; pending-agent remains pending and no-org remains without an agent.
+- All six repaired personas completed fresh real QA sign-in and returned Home route data with no error nodes. UI Audit owner also returned POS catalog route data. Home and POS catalog both visibly rendered after cold development imports completed; screenshots `/tmp/qa-agent-home-after.png` and `/tmp/qa-agent-pos-after.png`.
+- Final exact-head review approved `d0341b0424f3428fdd201591f6183c395448fd74` on requirements/spec and standards/security. The first pass requested blank-name detection in the repair CLI and nonempty-field assertions in the aggregate contract; both were implemented and reviewed.
+- Focused tests: six pure detector tests and seven real-PostgreSQL fixture tests passed. Coverage includes blank names/IDs, active-row preservation, pointer-only repair, error repair, blank/whitespace ID repair in place and transaction rollback. Formatting and diff checks passed.
+- The enhanced repair found one existing active row with a blank display name; the bounded second repair fixed that row. A final dry run reports six matched and zero needing repair.
+- The running dev checkout now contains the reviewed seed changes (cherry-picks `a8a4cda`, `2845e80` and `bcad723`), so future seed runs in that checkout preserve the corrected setup. The dev server remains on port 5199.
+- Final-head CI run `36525838850` passed all seven jobs: check/build, unit tests, QA stack, migration/seed pairing and the three PostgreSQL qualification lanes. QA stack includes fresh seed, second seed, matrix contract and runtime smoke checks.
+- Hub PR: https://github.com/NikolasP98/minion_hub/pull/407 . This changes local fixture scripts only; it does not provision live model workers or alter production onboarding.
+
+- Final local audit: 16 ready profiles with nonempty agent IDs and display names, one intentional pending-agent profile and one intentional no-org profile without an agent. Final repair dry run reports zero changes needed.
+
+- Hub PR #407 merged as `e7d80d79379e500d3915b9582ba6f61be35b712d` at 2026-09-29 05:29:00 UTC. GitHub required a platform review despite external independent Sol approval; the authorized administrator merge was used after all checks passed, matching the reviewed head. This is a fixture-script change; no production tenant mutation is part of release.

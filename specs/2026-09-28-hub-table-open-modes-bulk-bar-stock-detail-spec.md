@@ -227,6 +227,8 @@ pre-add that line), `lib/records/peek-registry.ts` NO (owned by core), `messages
 
 ### Slice 2 — gaps (ledger `proposals/2026-09-28-hub-table-open-modes-followups.md`, owner 2026-09-28: "address all gaps")
 
+**Topics:** ui, ux
+
 Branch stacked on `feat/table-open-modes-bulk-bar` (hub #406). Three file-disjoint bundles.
 
 #### Bundle D — receipt ↔ purchase link + purchase detail route + attachment count (§1, §2)
