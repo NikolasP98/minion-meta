@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T09:24:05.293Z",
+	"generatedAt": "2026-09-30T09:54:25.584Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -14337,21 +14337,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 7
+				"specification": 7,
+				"implementation": 6
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Approved, single-file UX/contract bug with a concrete fix direction (SvelteKit form actions) is ready for bounded execution.",
+			"rationale": "Approved handoff finding names a specific file/line and a concrete SvelteKit form-action fix for the ?new=1 POST semantics break.",
 			"evidence": [
-				"TODO(handoff) in crm/customers/+page.svelte",
-				"fix direction: use <form method=POST action=?/createCustomer>",
-				"status: approved"
+				"TODO(handoff) marker at src/routes/(app)/crm/customers/+page.svelte:167 re ?new=1 POST semantics",
+				"status: approved; fix direction: replace query-param toggle with a form action"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T09:28:57.500Z"
+			"scoredAt": "2026-09-30T09:54:25.439Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-6200323e3d73",
@@ -15110,37 +15109,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T22:58:57.724Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-hub-be019c6",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ be019c6",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-be019c6.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "77569202c6f0f72305adb3ad8cadb073f77fde00ef016a48d87fcbe8da0395bf",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Four specific medium-severity empty-catch findings with exact file:line locations give a bounded, well-scoped error-handling fix.",
-			"evidence": [
-				"4 medium empty-catch findings across guide.svelte.ts, prompt-contract.live.test.ts, runner.ts, +page.svelte:320"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T09:28:57.500Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-249dc0b349bf",
@@ -16394,38 +16362,6 @@
 			"scoredAt": "2026-09-29T04:22:16.204Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-fcb3411ee30e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/assistant/ui-blocks.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fcb3411ee30e.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "93cbb8799e721e0341e36b642d24fe9acaa848c34d392f852887c03ad952f866",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Approved but the fix direction spans protocol redesign, parsing, and multi-adapter testing, which is too broad to treat as a single bounded task yet.",
-			"evidence": [
-				"TODO(handoff): prompt-driven protocol instead of native tool_use",
-				"fix direction touches response parser, decoupling, and multi-model adapters"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T09:28:57.500Z"
-		},
-		{
 			"key": "spec:2026-08-19-gateway-client-error-hook-consumer-adoption-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -16801,6 +16737,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T05:00:01.492Z"
+		},
+		{
+			"key": "issue:minion-meta#573",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#573 [monitor:unstick] rank run 9af58437: both bounded LLM providers failed during ranking",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/573",
+			"sourceUpdatedAt": "2026-09-23T09:17:17Z",
+			"sourceFingerprint": "581482d7d97f540b3f8a81dfd63b40f77ee7cc1eb240cdc4e98169ae93098677",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The diagnosis frames this as a transient dual-provider outage during one rank run, actionable only as a monitoring/classifier improvement if the pattern recurs.",
+			"evidence": [
+				"Diagnosis: claude and codex bounded providers both failed/returned invalid JSON on batch 1 of run 9af58437",
+				"Recommendation given: retry the run; add a host-classifier signature only if this recurs across multiple runs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T09:54:25.439Z"
 		},
 		{
 			"key": "issue:minion-meta#575",
@@ -18250,6 +18218,38 @@
 			"scoredAt": "2026-09-24T07:59:05.912Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-be019c6",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ be019c6",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-be019c6.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "77569202c6f0f72305adb3ad8cadb073f77fde00ef016a48d87fcbe8da0395bf",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Multiple medium-severity empty-catch findings are pinpointed to exact files and lines, giving a clear and bounded fix scope.",
+			"evidence": [
+				"4 medium empty-catch findings listed with file:line across guide.svelte.ts, prompt-contract.live.test.ts, runner.ts, +page.svelte",
+				"Commit range 7012cd5..be019c6 explicitly scanned"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T09:54:25.439Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-2841d2ba75ad",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18751,38 +18751,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T14:29:47.374Z"
-		},
-		{
-			"key": "issue:minion-meta#573",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#573 [monitor:unstick] rank run 9af58437: both bounded LLM providers failed during ranking",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/573",
-			"sourceUpdatedAt": "2026-09-23T09:17:17Z",
-			"sourceFingerprint": "581482d7d97f540b3f8a81dfd63b40f77ee7cc1eb240cdc4e98169ae93098677",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Transient dual-provider failure on one ranking run with no bounded fix beyond 'retry' and a speculative future classifier suggestion.",
-			"evidence": [
-				"both bounded providers failed/invalid JSON on batch 1",
-				"recommendation: retry the run; add classifier signature if recurring"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T09:28:57.500Z"
 		},
 		{
 			"key": "issue:minion-meta#587",
@@ -21849,6 +21817,38 @@
 			"scoredAt": "2026-09-26T05:00:15.748Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-fcb3411ee30e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/assistant/ui-blocks.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fcb3411ee30e.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "93cbb8799e721e0341e36b642d24fe9acaa848c34d392f852887c03ad952f866",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Replacing native tool_use with a prompt-driven protocol is a broad architectural change lacking a bounded scope or concrete verifiable outcome.",
+			"evidence": [
+				"TODO(handoff) marker at src/lib/assistant/ui-blocks.ts:15 re tool_use vs prompt-driven protocol",
+				"Fix direction proposes a new response parser/protocol rather than a bounded fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T09:54:25.439Z"
+		},
+		{
 			"key": "spec:2026-08-26-spec-heading-lint-baseline-backfill-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -24544,6 +24544,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T01:09:47.096Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine already-merged commit summary with no indication of an open deployment problem to act on.",
+			"evidence": [
+				"Summary is the commit message for fix(nitter): serialize persistence and drain shutdown, already merged",
+				"No failure or unresolved status noted for the deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T09:54:25.439Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
