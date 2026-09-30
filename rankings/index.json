@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T15:54:20.812Z",
+	"generatedAt": "2026-09-30T16:24:38.425Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -13564,6 +13564,39 @@
 			"scoredAt": "2026-09-26T07:00:26.628Z"
 		},
 		{
+			"key": "issue:minion-meta#719",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#719 [monitor:unstick] reconcile run d88d2538 (minion-meta): claude agent exit-126/turns=0 after successful scan",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/719",
+			"sourceUpdatedAt": "2026-09-30T16:17:33Z",
+			"sourceFingerprint": "eb5f17a83bc116a0efada868224d33c69a1c8317c14b35ec11c2284da4b2b20e",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The diagnosis clearly isolates a bounded exec/permission fault launching the claude binary while the reconcile data itself already landed successfully.",
+			"evidence": [
+				"exit-126/turns=0 confirms the agent process never started a turn",
+				"reconcile sweep data landed successfully in this attempt",
+				"recommends checking claude CLI binary permissions/PATH on the runner"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T16:24:38.299Z"
+		},
+		{
 			"key": "pr:minion (gateway)#256",
 			"kind": "pr",
 			"stage": "development",
@@ -17229,6 +17262,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T00:28:54.749Z"
+		},
+		{
+			"key": "run:minion (gateway)#31686911500",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Claude Code",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/31686911500",
+			"sourceUpdatedAt": "2026-09-12T09:31:57Z",
+			"sourceFingerprint": "08122e13e4c986b0a2c34dd42ccc1ad6458c9234ddd8151631e56ef9975fd17e",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A CI run is flagged as failed but the record supplies no failure detail or logs to act on.",
+			"evidence": [
+				"status: failure",
+				"trigger: pull_request_review_comment on DEV",
+				"title only reads \"Claude Code\" with no error detail"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T16:24:38.299Z"
 		},
 		{
 			"key": "issue:minion-meta#559",
@@ -22706,6 +22772,38 @@
 			"scoredAt": "2026-09-26T00:28:54.749Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The entry is a deployment-health snapshot showing an already-merged fix commit with no indication of an ongoing problem.",
+			"evidence": [
+				"commit message describes a completed fix for nitter persistence/shutdown",
+				"status is unknown with no outage or regression signal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T16:24:38.299Z"
+		},
+		{
 			"key": "issue:minion-meta#409",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26503,7 +26601,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "7f590514a0677c2572d8c6a266f54d54a653612bad0f91097a44fdebb1db18a4",
+			"sourceFingerprint": "a991cf54f719c0538d89ee47126f40923be0aacb8b0aa2ddd11586844869552e",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -26512,20 +26610,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 1,
+				"specification": 2,
 				"implementation": 1
 			},
 			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The marker list bundles 15+ unrelated one-line quotes pulled from rankings/index.json (a generated ranking artifact, not source code), so it has no coherent single scope to act on.",
+			"rationale": "The cited markers point into the generated rankings/index.json output file rather than genuine in-code TODO(handoff) comments, so the handoff has no real open end to resolve.",
 			"evidence": [
-				"markers span unrelated topics: auth audit, backup scheduler, workshop composition, Supabase testing, discount affordance",
-				"source file is rankings/index.json, a generated ranking output, not application source"
+				"markers cite lines inside rankings/index.json, a generated ranking artifact, not source code",
+				"quoted fragments are rationale/evidence snippets, not TODO(handoff) comments"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T12:24:44.018Z"
+			"scoredAt": "2026-09-30T16:24:38.299Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2934878458",
