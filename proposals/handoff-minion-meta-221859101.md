@@ -57,15 +57,15 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18274
 - `NikolasP98/minion-meta@dev rankings/index.json:18374` — Full Workshop composition/camera and keyboard relationship/element",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18374
-- `NikolasP98/minion-meta@dev rankings/index.json:20212` — tagOptions is the FILTER's list — the event-scope registry"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20212
-- `NikolasP98/minion-meta@dev rankings/index.json:20405` — nothing links here with these params yet — the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20405
-- `NikolasP98/minion-meta@dev rankings/index.json:22502` — the confirmed root cause (QA-stack app logs) was'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22502
-- `NikolasP98/minion-meta@dev rankings/index.json:23030` — raw fetch moved verbatim from TeamTab — migrate to",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23030
-- `NikolasP98/minion-meta@dev rankings/index.json:23096` — no overflow clip for bookings starting before startHour",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23096
-- `NikolasP98/minion-meta@dev rankings/index.json:23131` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23131
+- `NikolasP98/minion-meta@dev rankings/index.json:20179` — tagOptions is the FILTER's list — the event-scope registry"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20179
+- `NikolasP98/minion-meta@dev rankings/index.json:20372` — nothing links here with these params yet — the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20372
+- `NikolasP98/minion-meta@dev rankings/index.json:22469` — the confirmed root cause (QA-stack app logs) was'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22469
+- `NikolasP98/minion-meta@dev rankings/index.json:22997` — raw fetch moved verbatim from TeamTab — migrate to",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22997
+- `NikolasP98/minion-meta@dev rankings/index.json:23063` — no overflow clip for bookings starting before startHour",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23063
+- `NikolasP98/minion-meta@dev rankings/index.json:23098` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23098
