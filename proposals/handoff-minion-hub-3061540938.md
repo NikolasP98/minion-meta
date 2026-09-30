@@ -1,14 +1,14 @@
 ---
-id: handoff-minion-hub-4205181910
-title: Handoff marker — src/lib/components/scheduling/kit/calendar-prefs.svelte.test.ts (minion_hub)
+id: handoff-minion-hub-3061540938
+title: Handoff marker — src/lib/components/data-table/GroupByPicker.svelte (minion_hub)
 status: draft
-created: 2026-09-28
+created: 2026-09-30
 updated: 2026-09-30
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — src/lib/components/scheduling/kit/calendar-prefs.svelte.test.ts
+# Handoff marker — src/lib/components/data-table/GroupByPicker.svelte
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-30)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/kit/calendar-prefs.svelte.test.ts:74` — "reads back a persisted preference on init" and "ignores
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/kit/calendar-prefs.svelte.test.ts#L74
+- `NikolasP98/minion_hub@master src/lib/components/data-table/GroupByPicker.svelte:137` — this × is a Button SIBLING of the Dropdown trigger (never
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/data-table/GroupByPicker.svelte#L137
