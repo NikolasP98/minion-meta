@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T18:54:13.612Z",
+	"generatedAt": "2026-09-30T19:24:38.849Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5289,39 +5289,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T05:58:27.412Z"
-		},
-		{
-			"key": "run:minion (gateway)#36685181315",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/36685181315",
-			"sourceUpdatedAt": "2026-09-30T08:05:10Z",
-			"sourceFingerprint": "7e4b6a53349f827f18c2035d377ca0fd42cc0fdd915921040713a82db881b947",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A manually-triggered CI run on minion's DEV branch failed but no logs or failure details are given to diagnose or act on.",
-			"evidence": [
-				"status: failure",
-				"workflow_dispatch on DEV",
-				"title: CI"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T15:54:20.676Z"
 		},
 		{
 			"key": "issue:minion-meta#681",
@@ -11494,6 +11461,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T08:29:37.368Z"
+		},
+		{
+			"key": "run:minion (gateway)#34587949149",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949149",
+			"sourceUpdatedAt": "2026-09-11T10:46:59Z",
+			"sourceFingerprint": "82bcff565fd5b409b3f4fe7fab98082e953214bbd231af0206d034e22b97120c",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"run:minion (gateway)#34587949471"
+			],
+			"rationale": "A CI failure on the DEV branch can block releases, but the entry lacks failure detail and is nearly three weeks stale, so current status must be confirmed.",
+			"evidence": [
+				"status: failure",
+				"push on DEV",
+				"updatedAt 2026-09-11T10:46:59Z"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T19:24:38.721Z"
+		},
+		{
+			"key": "run:minion (gateway)#34587949471",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949471",
+			"sourceUpdatedAt": "2026-09-11T10:13:03Z",
+			"sourceFingerprint": "bff3ad4ee3500a2aec6da97aca9215d1679d66023b6066cb22d3e02f7198b91a",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"run:minion (gateway)#34587949149"
+			],
+			"rationale": "A failed Docker Release build on DEV could block deployment, but with no detail and timestamps close to a sibling CI failure, current relevance needs verification.",
+			"evidence": [
+				"status: failure",
+				"push on DEV",
+				"updatedAt 2026-09-11T10:13:03Z"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T19:24:38.721Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-brain-org-all-scope-spec",
@@ -22777,6 +22814,38 @@
 			"scoredAt": "2026-09-26T00:28:54.749Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This entry documents an already-merged fix (nitter persistence/shutdown) with no indication of outstanding work.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"Co-authored-by commit already merged"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T19:24:38.721Z"
+		},
+		{
 			"key": "issue:minion-meta#409",
 			"kind": "issue",
 			"stage": "proposal",
@@ -25376,20 +25445,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 7,
 				"implementation": 3
 			},
-			"confidence": 4,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Automated monitor intake diagnoses a transient worker-infra exit-126 fault with the actual reconcile work having succeeded, and explicitly recommends retry rather than dedicated engineering work.",
+			"rationale": "The intake's own diagnosis concludes this is a transient worker infra fault (exit-126, not a logic failure) that is safe to retry, so no code action is needed.",
 			"evidence": [
-				"actual reconcile work succeeded",
-				"Recommendation: safe to retry as-is once the box/exec environment is confirmed healthy"
+				"Recommendation: safe to retry as-is once the box/exec environment is confirmed healthy",
+				"classified as infra/box fault on the worker, NOT a task/logic failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T18:58:37.198Z"
+			"scoredAt": "2026-09-30T19:24:38.721Z"
 		},
 		{
 			"key": "issue:minion-meta#496",
