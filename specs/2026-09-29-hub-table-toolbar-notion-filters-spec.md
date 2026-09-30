@@ -4,7 +4,7 @@ title: Tables — Notion-style filters (basic + advanced rule tree), group-by pi
 stage: dev
 status: implementing
 pass: 2
-next_slice: 1
+next_slice: 4
 created: 2026-09-29
 updated: 2026-09-29
 repos: [minion_hub]
@@ -265,6 +265,24 @@ Playwright `tests/e2e/ui-audit/table-filters.spec.ts` on `/pos/catalog` (default
 `Active` chip present; removing it shows an inactive seeded sellable — seed one
 via `scripts/qa/seed/pos.ts` if none exists; "+ Filter" → pick "Stock" → `>`
 `100` narrows rows; group picker shows "Type" and its × clears).
+
+### Slice 4 — polish (owner feedback 2026-09-29 on the shipped slice)
+
+**Topics:** ui, ux
+
+Hub branch `feat/table-polish-round2` (merges `fix/chips-stacking`,
+`fix/table-toolbar-polish`, `feat/catalog-editor-autosave`): one chip contract
+app-wide (`.chip`/`.chip-x` in `app.css`); nested floating panels stack above
+their host (`portalInLayer` writes the layer on the CONTENT); table options are
+per-user with an org "Apply to everyone" kebab gated on `settings:manage`;
+toolbar = Export → [Filter · Group by (`Layers`) · Columns · ⚙] segment → +,
+one icon-button recipe; `groupOptions` prop hosts `GroupByPicker` (ledger §3
+closed); header context menu with Aggregate ▸ / Filter ▸ flyouts; column and
+context menus dismiss via document listeners (the pointer-cursor backdrop is
+gone); row click no longer opens a record and the `.dt-open` arrow is
+right-aligned on an opaque surface; the catalog editor autosaves on blur with a
+title-bar `SaveIndicator`, flat sections, no back button inside a peek and an
+inline-editable name heading.
 
 ## Verification
 
