@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T16:24:38.425Z",
+	"generatedAt": "2026-09-30T16:54:15.778Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2152,14 +2152,14 @@
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Well-bounded Slice 2 wake coordinator building on merged Slice 1 with explicit failure/rollback and concurrency test requirements, tagged high risk/security.",
+			"rationale": "Bounded Slice 2 wake coordinator with security/concurrency tags and explicit failure/rollback scope on top of merged Slice 1.",
 			"evidence": [
-				"Gateway PR #216 delivered Slice 1 persistence",
-				"risk:high, topic:security tags"
+				"risk:high, topic:security",
+				"builds on merged PR #216 Slice 1"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T16:28:45.092Z"
+			"scoredAt": "2026-09-30T16:54:15.655Z"
 		},
 		{
 			"key": "pr:minion-base#43",
@@ -3471,38 +3471,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T06:59:15.405Z"
-		},
-		{
-			"key": "pr:minion (gateway)#254",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#254 factory: Nostr dispatch S2: buffered encrypted DM reply pipeline",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/254",
-			"sourceUpdatedAt": "2026-08-31T01:26:10Z",
-			"sourceFingerprint": "721731983240d89aa7de5581a174568e2141ff1fd542d67436112b37647f2956",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Scoped Slice 2 continuation of an already-landed Slice 1 seam with clear exclusions and test coverage requirements.",
-			"evidence": [
-				"Gateway PR #229 delivered Slice 1 seam",
-				"draft, gates pending"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T16:28:45.092Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-3174605053",
@@ -5515,38 +5483,6 @@
 			"scoredAt": "2026-09-29T07:29:34.805Z"
 		},
 		{
-			"key": "pr:minion (gateway)#262",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#262 factory: board issue minion-ai#249: test(memory): eliminate nondeterministic atomic-reindex rollback failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/262",
-			"sourceUpdatedAt": "2026-08-31T04:08:10Z",
-			"sourceFingerprint": "a52aa68a9f8025441e08fd557bc097a509459ed3efac9c2d616eb6ce68410e4c",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Targets a concrete nondeterministic test-flake issue affecting multiple channels with a bounded fix-or-close instruction.",
-			"evidence": [
-				"issue #249 nondeterministic rollback failure",
-				"channels: discord, telegram, voice-call, whatsapp-web"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T16:28:45.092Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-25e2bb7",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5612,6 +5548,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T04:54:15.786Z"
+		},
+		{
+			"key": "pr:minion (gateway)#257",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#257 factory: Repository policy S3: gateway instruction parity and contradiction repair",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/257",
+			"sourceUpdatedAt": "2026-08-31T03:24:19Z",
+			"sourceFingerprint": "006d17de3aa33c2230615e0d6f1ec324696de4b02cd30249c9c3e3871426a253",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Cross-repo instruction parity fix with fail-closed guardrails and a pinned spec, though scope/risk is broader (XL, risk:high).",
+			"evidence": [
+				"risk:high, topic:infra/docs",
+				"fail-closed if spec conflicts with current policy"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T16:54:15.655Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-gateway-client-onevent-errors",
@@ -5935,6 +5903,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T03:28:46.584Z"
+		},
+		{
+			"key": "pr:minion (gateway)#262",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#262 factory: board issue minion-ai#249: test(memory): eliminate nondeterministic atomic-reindex rollback failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/262",
+			"sourceUpdatedAt": "2026-08-31T04:08:10Z",
+			"sourceFingerprint": "a52aa68a9f8025441e08fd557bc097a509459ed3efac9c2d616eb6ce68410e4c",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Targeted fix for a nondeterministic test failure affecting multiple channel paths, small bounded scope.",
+			"evidence": [
+				"size: S, resolves issue #249",
+				"affects discord/telegram/voice-call/whatsapp-web channels"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T16:54:15.655Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -6983,14 +6983,14 @@
 			"scoredAt": "2026-09-28T02:20:56.148Z"
 		},
 		{
-			"key": "pr:minion (gateway)#257",
+			"key": "pr:minion (gateway)#254",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion (gateway)",
-			"title": "#257 factory: Repository policy S3: gateway instruction parity and contradiction repair",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/257",
-			"sourceUpdatedAt": "2026-08-31T03:24:19Z",
-			"sourceFingerprint": "006d17de3aa33c2230615e0d6f1ec324696de4b02cd30249c9c3e3871426a253",
+			"title": "#254 factory: Nostr dispatch S2: buffered encrypted DM reply pipeline",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/254",
+			"sourceUpdatedAt": "2026-08-31T01:26:10Z",
+			"sourceFingerprint": "721731983240d89aa7de5581a174568e2141ff1fd542d67436112b37647f2956",
 			"score": 53,
 			"band": "medium",
 			"axes": {
@@ -6999,21 +6999,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 5
+				"specification": 8,
+				"implementation": 6
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Instruction-parity repair slice with fail-closed guardrails and explicit scope limits, though it depends on exact spec/commit fetch succeeding.",
+			"rationale": "Well-scoped Slice 2 continuation of an existing typed seam with clear exclusions and a pinned spec commit.",
 			"evidence": [
-				"S1-S2 already merged",
-				"fail closed if spec unreadable",
-				"risk:high tag"
+				"Slice 2 of pinned spec, builds on merged PR #229",
+				"status draft, size XL"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T16:28:45.092Z"
+			"scoredAt": "2026-09-30T16:54:15.655Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
@@ -13619,15 +13618,14 @@
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Small, opt-in default-off config addition building on merged Slice 1, low risk and already open (not just draft).",
+			"rationale": "Small, tightly scoped opt-in config slice with default-off safety and focused tests ready to merge.",
 			"evidence": [
-				"status: open",
-				"default OFF, no secret handling expansion",
-				"size: M"
+				"size: M, status open",
+				"default OFF opt-in config per spec"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T16:28:45.092Z"
+			"scoredAt": "2026-09-30T16:54:15.655Z"
 		},
 		{
 			"key": "pr:minion_site#28",
@@ -22770,38 +22768,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T00:28:54.749Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The entry is a deployment-health snapshot showing an already-merged fix commit with no indication of an ongoing problem.",
-			"evidence": [
-				"commit message describes a completed fix for nitter persistence/shutdown",
-				"status is unknown with no outage or regression signal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T16:24:38.299Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
