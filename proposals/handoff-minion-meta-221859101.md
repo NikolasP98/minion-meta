@@ -27,45 +27,43 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-30)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:3634` — a full per-handler audit of the remaining requireAdmin",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3634
-- `NikolasP98/minion-meta@dev rankings/index.json:5344` — \\\"retries on the next settle\\\" means a week that failed",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5344
-- `NikolasP98/minion-meta@dev rankings/index.json:8058` — this narrows the race window, it does not close it —",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8058
-- `NikolasP98/minion-meta@dev rankings/index.json:11212` — HDS-05 remains pending; do not run without separate backend-loss authorization",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11212
-- `NikolasP98/minion-meta@dev rankings/index.json:11244` — Bound streamed response bytes before allocation; arrayBuffer()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11244
-- `NikolasP98/minion-meta@dev rankings/index.json:11382` — Backend-loss qualification remains gated by HDS-05",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11382
-- `NikolasP98/minion-meta@dev rankings/index.json:11415` — remove once the phone failure is root-caused",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11415
-- `NikolasP98/minion-meta@dev rankings/index.json:12976` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12976
-- `NikolasP98/minion-meta@dev rankings/index.json:14011` — the affordance is one-way — once opened, a line's discount",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14011
-- `NikolasP98/minion-meta@dev rankings/index.json:14345` — Historical receipt/tombstone retention and missing-owner recovery need",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14345
-- `NikolasP98/minion-meta@dev rankings/index.json:15002` — drop column (proposal #16)"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15002
-- `NikolasP98/minion-meta@dev rankings/index.json:16252` — prompt-driven protocol instead of native tool_use",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16252
-- `NikolasP98/minion-meta@dev rankings/index.json:18209` — no status filter — every status reaches the grid",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18209
-- `NikolasP98/minion-meta@dev rankings/index.json:18274` — startBackupScheduler() has no call site anywhere in src/",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18274
-- `NikolasP98/minion-meta@dev rankings/index.json:18374` — Full Workshop composition/camera and keyboard relationship/element",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18374
-- `NikolasP98/minion-meta@dev rankings/index.json:20179` — tagOptions is the FILTER's list — the event-scope registry"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20179
-- `NikolasP98/minion-meta@dev rankings/index.json:20372` — nothing links here with these params yet — the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20372
-- `NikolasP98/minion-meta@dev rankings/index.json:22469` — the confirmed root cause (QA-stack app logs) was'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22469
-- `NikolasP98/minion-meta@dev rankings/index.json:22997` — raw fetch moved verbatim from TeamTab — migrate to",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22997
-- `NikolasP98/minion-meta@dev rankings/index.json:23063` — no overflow clip for bookings starting before startHour",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23063
-- `NikolasP98/minion-meta@dev rankings/index.json:23098` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23098
+- `NikolasP98/minion-meta@dev rankings/index.json:3632` — a full per-handler audit of the remaining requireAdmin",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3632
+- `NikolasP98/minion-meta@dev rankings/index.json:5342` — \\\"retries on the next settle\\\" means a week that failed",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5342
+- `NikolasP98/minion-meta@dev rankings/index.json:8056` — this narrows the race window, it does not close it —",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8056
+- `NikolasP98/minion-meta@dev rankings/index.json:11347` — HDS-05 remains pending; do not run without separate backend-loss authorization",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11347
+- `NikolasP98/minion-meta@dev rankings/index.json:11379` — Bound streamed response bytes before allocation; arrayBuffer()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11379
+- `NikolasP98/minion-meta@dev rankings/index.json:11517` — Backend-loss qualification remains gated by HDS-05",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11517
+- `NikolasP98/minion-meta@dev rankings/index.json:11550` — remove once the phone failure is root-caused",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11550
+- `NikolasP98/minion-meta@dev rankings/index.json:13143` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13143
+- `NikolasP98/minion-meta@dev rankings/index.json:14178` — the affordance is one-way — once opened, a line's discount",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14178
+- `NikolasP98/minion-meta@dev rankings/index.json:14511` — Historical receipt/tombstone retention and missing-owner recovery need",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14511
+- `NikolasP98/minion-meta@dev rankings/index.json:15137` — drop column (proposal #16)"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15137
+- `NikolasP98/minion-meta@dev rankings/index.json:18344` — no status filter — every status reaches the grid",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18344
+- `NikolasP98/minion-meta@dev rankings/index.json:18409` — startBackupScheduler() has no call site anywhere in src/",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18409
+- `NikolasP98/minion-meta@dev rankings/index.json:18509` — Full Workshop composition/camera and keyboard relationship/element",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18509
+- `NikolasP98/minion-meta@dev rankings/index.json:20281` — tagOptions is the FILTER's list — the event-scope registry"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20281
+- `NikolasP98/minion-meta@dev rankings/index.json:20474` — nothing links here with these params yet — the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20474
+- `NikolasP98/minion-meta@dev rankings/index.json:22635` — the confirmed root cause (QA-stack app logs) was'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22635
+- `NikolasP98/minion-meta@dev rankings/index.json:23163` — raw fetch moved verbatim from TeamTab — migrate to",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23163
+- `NikolasP98/minion-meta@dev rankings/index.json:23229` — no overflow clip for bookings starting before startHour",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23229
+- `NikolasP98/minion-meta@dev rankings/index.json:23264` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23264
