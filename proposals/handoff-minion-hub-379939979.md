@@ -1,14 +1,14 @@
 ---
-id: handoff-minion-hub-2632898496
-title: Handoff marker — src/lib/tables/defs/index.ts (minion_hub)
+id: handoff-minion-hub-379939979
+title: Handoff marker — src/server/db/pg-schema/stock.ts (minion_hub)
 status: draft
-created: 2026-09-22
+created: 2026-09-30
 updated: 2026-09-30
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — src/lib/tables/defs/index.ts
+# Handoff marker — src/server/db/pg-schema/stock.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,7 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-30)
 
-- `NikolasP98/minion_hub@master src/lib/tables/defs/index.ts:73` — UUID-only today — part 2 adds a per-org sequence column +
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/defs/index.ts#L73
-- `NikolasP98/minion_hub@master src/lib/tables/defs/index.ts:149` — same as crm.customers — numbered in part 2.
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/defs/index.ts#L149
+- `NikolasP98/minion_hub@master src/server/db/pg-schema/stock.ts:38` — item_group/reorder_qty/moq (this column + reorderQty +
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/db/pg-schema/stock.ts#L38
