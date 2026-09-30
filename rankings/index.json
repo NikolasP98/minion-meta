@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T10:24:16.392Z",
+	"generatedAt": "2026-09-30T10:53:57.488Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -23562,6 +23562,38 @@
 			"scoredAt": "2026-09-24T04:28:31.385Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a merged commit description for a shutdown/persistence fix, not an open actionable goal.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown (#295)",
+				"no open status or unresolved issue described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T10:53:57.340Z"
+		},
+		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -25728,21 +25760,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 4,
 				"implementation": 2
 			},
-			"confidence": 6,
-			"recommendation": "prune",
+			"confidence": 3,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The diagnosis already establishes this was a transient infra exec fault with the reconcile pipeline's actual work completed successfully, leaving nothing actionable beyond passive monitoring for recurrence.",
+			"rationale": "The diagnosis indicates a possible recurring infra exec failure (exit-126/turns=0) that warrants monitoring before treating as actionable work.",
 			"evidence": [
 				"exit-126 with turns=0 for the claude provider process",
-				"reconcile pipeline itself completed its work in the log",
-				"Recommendation: retry the run as-is"
+				"recommendation: retry as-is, escalate only if recurring"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T10:28:51.950Z"
+			"scoredAt": "2026-09-30T10:53:57.340Z"
 		},
 		{
 			"key": "issue:minion-meta#579",
