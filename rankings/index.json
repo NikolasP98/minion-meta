@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T06:54:08.374Z",
+	"generatedAt": "2026-09-30T07:25:15.743Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7253,7 +7253,7 @@
 			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/AppointmentForm.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3e55b8b7c010.md",
 			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "2c8f7e91ac653cac37e3d175abfc46271a9f69f4d25f8bf6ae205246861d036e",
+			"sourceFingerprint": "3d1fd2ce49d515853364f839b4efc175131b3397a42c4877a3212e95614a083c",
 			"score": 53,
 			"band": "medium",
 			"axes": {
@@ -7262,22 +7262,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 7,
+				"implementation": 5
 			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-3a27d70e9419"
-			],
-			"rationale": "Missing real price plumbing in AppointmentForm is the client-side counterpart of the booking endpoint's newly-returned money fields.",
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved finding that appointment pricing has no real data source, risking incorrect quotes and billing mismatches.",
 			"evidence": [
-				"TODO(handoff): no server data source plumbs a real price for a service",
-				"merged PR #419 in minion_hub master, checked 2026-09-30"
+				"no server data source plumbs a real price for a service",
+				"status approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T06:42:03.162Z"
+			"scoredAt": "2026-09-30T07:25:15.597Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5006c27444a5",
@@ -10585,6 +10583,111 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:32:45.089Z"
+		},
+		{
+			"key": "issue:minion-meta#711",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#711 [monitor:unstick] reconcile run 5acf0014: claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/711",
+			"sourceUpdatedAt": "2026-09-30T07:18:06Z",
+			"sourceFingerprint": "7ce543a46ab9bf5a04f934c75b02515e8f834a6d16efb5e51bb4d145c117cb5d",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#712",
+				"issue:minion-meta#713"
+			],
+			"rationale": "Identical claude-provider exit-126/turns=0 launch failure recurred multiple times in a 45-minute window, warranting one combined host-fix/classifier action.",
+			"evidence": [
+				"4th consecutive occurrence of identical signature within 45 minutes",
+				"shell-phase succeeded; only claude agent process failed to launch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T07:25:15.597Z"
+		},
+		{
+			"key": "issue:minion-meta#712",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#712 [monitor:unstick] reconcile run e71278ed: claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/712",
+			"sourceUpdatedAt": "2026-09-30T07:18:06Z",
+			"sourceFingerprint": "fe655be068d90ead4980cfa4b334b9a444d25f133ddd2af6a72e618a08feecc9",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#711",
+				"issue:minion-meta#713"
+			],
+			"rationale": "Same recurring exit-126/turns=0 signature, 3rd of 4 identical occurrences, should be resolved as one runner/host fix.",
+			"evidence": [
+				"3rd of 4 identical occurrences 06:06-06:49 UTC",
+				"exit-126, turns=0, permission_denials=0"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T07:25:15.597Z"
+		},
+		{
+			"key": "issue:minion-meta#713",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#713 [monitor:unstick] reconcile run 1a201df0: claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/713",
+			"sourceUpdatedAt": "2026-09-30T07:18:07Z",
+			"sourceFingerprint": "6ed914ad84a6463b928e49e8476e5fa4cd43acb62639069a977eadfa27d09acb",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#711",
+				"issue:minion-meta#712"
+			],
+			"rationale": "2nd of 4 identical exit-126/turns=0 occurrences; group with siblings into a single host-fix/classifier goal.",
+			"evidence": [
+				"2nd of 4 identical occurrences",
+				"recommends new host-classifier signature"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T07:25:15.597Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
@@ -13910,6 +14013,38 @@
 			"scoredAt": "2026-09-23T23:28:56.595Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-198db99358ad",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/SellCart.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-198db99358ad.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "f2fbe8eb409b19c7bff35df3513e409fc72e97f1bb931cb15691686870f7d970",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved finding describing a real one-way UX trap in the POS discount editor with a clear fix direction.",
+			"evidence": [
+				"TODO(handoff): the affordance is one-way — once opened, a line's discount",
+				"status approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T07:25:15.597Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-2164a4547ea3",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14077,6 +14212,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T09:28:57.500Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-6200323e3d73",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/db/pg-schema/stock.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6200323e3d73.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "c780367e267d02cc2dcd76e815abb7d4ed88e0ba6adb28318e8366d598f0e543",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The TODO exposes an unresolved schema design question (moq vs reorder_qty vs item_group ownership) that needs a design decision before it is actionable implementation work.",
+			"evidence": [
+				"unresolved schema design around inventory ordering constraints",
+				"fix direction: document the ordering hierarchy in a proposal, then update the migration"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T07:25:15.597Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-97024660f7ac",
@@ -14507,39 +14674,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T02:33:46.766Z"
-		},
-		{
-			"key": "run:minion_site#31686953033",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_site",
-			"title": "Claude Code",
-			"sourceUrl": "https://github.com/NikolasP98/minion-site/actions/runs/31686953033",
-			"sourceUpdatedAt": "2026-09-12T09:31:54Z",
-			"sourceFingerprint": "fd33d67a9bcb040c710991818cff95818ec5463761e5c0012f15091f3395c7b6",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "CI run failed weeks ago with no diagnostic detail, so it needs investigation before any action can be taken.",
-			"evidence": [
-				"status: failure",
-				"updatedAt 2026-09-12T09:31:54Z",
-				"pull_request_review_comment on dev"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T19:59:17.668Z"
 		},
 		{
 			"key": "spec:2026-08-18-sdlc-transformation-roadmap",
@@ -17680,6 +17814,41 @@
 			"scoredAt": "2026-09-29T18:29:56.564Z"
 		},
 		{
+			"key": "pr:minion_hub#421",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#421 feat(stock): edit mode owns header actions on item detail",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/421",
+			"sourceUpdatedAt": "2026-09-30T07:22:46Z",
+			"sourceFingerprint": "1b526c0744f0a629c9201e24facebae50acc7904e6099fde7a401a1e41e9a091",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#714"
+			],
+			"rationale": "Small UI governance PR with passing tests and lint gates, ready to merge.",
+			"evidence": [
+				"bun run check → 0 new errors",
+				"Playwright spec ran green",
+				"lint:design and lint:tokens exit 0"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T07:25:15.597Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-pos-appointments-fork",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18073,41 +18242,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T07:29:34.805Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-6200323e3d73",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/db/pg-schema/stock.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6200323e3d73.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "6704b6544f80adf4e8c76d6053f5ec9e219ff9154f0685ea55aa78b8f9c0c915",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns",
-				"proposal:handoff-minion-hub-379939979"
-			],
-			"rationale": "Duplicate discovery of the same stock.ts TODO already scoped and scheduled for resolution by the stock-custom-columns proposal.",
-			"evidence": [
-				"same marker text 'item_group/reorder_qty/moq' in src/server/db/pg-schema/stock.ts",
-				"merged PR #420 is the same branch referenced by the sibling proposal's 'Implemented' section"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T06:54:08.238Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9068ad039a31",
@@ -20603,38 +20737,6 @@
 			"scoredAt": "2026-09-30T06:41:39.252Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Deploy health item shows only an already-merged routine commit with unknown deploy status, no evidence of an actual incident.",
-			"evidence": [
-				"status: unknown",
-				"commit message describes an already-merged fix (#295)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T06:54:08.238Z"
-		},
-		{
 			"key": "issue:minion-meta#516",
 			"kind": "issue",
 			"stage": "proposal",
@@ -21279,38 +21381,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T19:29:06.075Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-198db99358ad",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/SellCart.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-198db99358ad.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "f2fbe8eb409b19c7bff35df3513e409fc72e97f1bb931cb15691686870f7d970",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A merged PR left a known UX trap (one-way discount editor) documented via TODO(handoff) with a clear fix direction and definition of done.",
-			"evidence": [
-				"TODO(handoff): the affordance is one-way — once opened, a line's discount",
-				"file: src/lib/components/pos/SellCart.svelte, merged PR #278"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T06:58:31.640Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2d728adb7c22",
@@ -22632,6 +22702,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T08:20:00.251Z"
+		},
+		{
+			"key": "pr:minion-meta#714",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#714 docs(governance): edit mode owns the header actions",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/714",
+			"sourceUpdatedAt": "2026-09-30T07:22:34Z",
+			"sourceFingerprint": "9c8d847809b4c254e4002f8ea779773796da00e89f2f5dad3d3e940dbdb49990",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#421"
+			],
+			"rationale": "Trivial companion documentation update mirroring the already-tested hub PR #421.",
+			"evidence": [
+				"Companion to hub #421",
+				"One bullet doc change under Records"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T07:25:15.597Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
@@ -25066,17 +25170,19 @@
 				"specification": 5,
 				"implementation": 2
 			},
-			"confidence": 5,
+			"confidence": 4,
 			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Automated monitor intake diagnoses a transient exit-126 infra fault that self-recovered, with checkpointed state, so no action is needed unless the pattern recurs.",
+			"relatedKeys": [
+				"issue:minion-meta#711"
+			],
+			"rationale": "Single older exit-126/turns=0 infra occurrence from two weeks prior, superseded by the more recent recurring-signature reports.",
 			"evidence": [
-				"exit 126 turns=0, likely transient/infra fault on the runner box",
-				"git/merge-scan state was checkpointed and persisted"
+				"updatedAt 2026-09-16, single occurrence",
+				"diagnosis: likely transient/infra fault, not task failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T06:58:31.640Z"
+			"scoredAt": "2026-09-30T07:25:15.597Z"
 		},
 		{
 			"key": "issue:minion-meta#447",
@@ -26510,38 +26616,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T00:28:54.749Z"
-		},
-		{
-			"key": "run:minion_hub#36680273423",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/36680273423",
-			"sourceUpdatedAt": "2026-09-30T06:49:46Z",
-			"sourceFingerprint": "77b0e92c84add0f861fef6304e7d4045d2c8a376c6b18e6f2dcb836eaf09dcb6",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Routine in-progress CI run on master with no failure signal or additional detail to act on.",
-			"evidence": [
-				"status: in_progress",
-				"summary: 'push on master' with no failure or error detail"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T06:54:08.238Z"
 		},
 		{
 			"key": "proposal:2026-08-18-spec-heading-lint-baseline-backfill",
