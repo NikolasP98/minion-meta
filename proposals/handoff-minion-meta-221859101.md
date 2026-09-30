@@ -29,47 +29,47 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-meta@dev rankings/index.json:3536` — a full per-handler audit of the remaining requireAdmin",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3536
-- `NikolasP98/minion-meta@dev rankings/index.json:4791` — the id is the ONLY signal. An org that names a credit-CARD",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4791
-- `NikolasP98/minion-meta@dev rankings/index.json:5018` — \\\"retries on the next settle\\\" means a week that failed",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5018
-- `NikolasP98/minion-meta@dev rankings/index.json:7654` — this narrows the race window, it does not close it —",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7654
-- `NikolasP98/minion-meta@dev rankings/index.json:10508` — the tender only appears when the org registered a method",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10508
-- `NikolasP98/minion-meta@dev rankings/index.json:10543` — HDS-05 remains pending; do not run without separate backend-loss authorization",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10543
-- `NikolasP98/minion-meta@dev rankings/index.json:10575` — Bound streamed response bytes before allocation; arrayBuffer()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10575
-- `NikolasP98/minion-meta@dev rankings/index.json:10713` — Backend-loss qualification remains gated by HDS-05",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10713
-- `NikolasP98/minion-meta@dev rankings/index.json:10746` — remove once the phone failure is root-caused",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10746
-- `NikolasP98/minion-meta@dev rankings/index.json:12277` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12277
-- `NikolasP98/minion-meta@dev rankings/index.json:13450` — Historical receipt/tombstone retention and missing-owner recovery need",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13450
-- `NikolasP98/minion-meta@dev rankings/index.json:14067` — drop column (proposal #16)"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14067
-- `NikolasP98/minion-meta@dev rankings/index.json:15287` — prompt-driven protocol instead of native tool_use",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15287
-- `NikolasP98/minion-meta@dev rankings/index.json:17401` — no status filter — every status reaches the grid",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17401
-- `NikolasP98/minion-meta@dev rankings/index.json:17466` — startBackupScheduler() has no call site anywhere in src/",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17466
-- `NikolasP98/minion-meta@dev rankings/index.json:17566` — Full Workshop composition/camera and keyboard relationship/element",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17566
-- `NikolasP98/minion-meta@dev rankings/index.json:19134` — tagOptions is the FILTER's list — the event-scope registry"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19134
-- `NikolasP98/minion-meta@dev rankings/index.json:19295` — nothing links here with these params yet — the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19295
-- `NikolasP98/minion-meta@dev rankings/index.json:20340` — the affordance is one-way — once opened, a line's discount",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20340
-- `NikolasP98/minion-meta@dev rankings/index.json:21597` — the confirmed root cause (QA-stack app logs) was'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21597
-- `NikolasP98/minion-meta@dev rankings/index.json:22057` — raw fetch moved verbatim from TeamTab — migrate to",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22057
-- `NikolasP98/minion-meta@dev rankings/index.json:22123` — no overflow clip for bookings starting before startHour",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22123
-- `NikolasP98/minion-meta@dev rankings/index.json:22158` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22158
+- `NikolasP98/minion-meta@dev rankings/index.json:4823` — the id is the ONLY signal. An org that names a credit-CARD",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4823
+- `NikolasP98/minion-meta@dev rankings/index.json:5050` — \\\"retries on the next settle\\\" means a week that failed",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5050
+- `NikolasP98/minion-meta@dev rankings/index.json:7686` — this narrows the race window, it does not close it —",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7686
+- `NikolasP98/minion-meta@dev rankings/index.json:10572` — the tender only appears when the org registered a method",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10572
+- `NikolasP98/minion-meta@dev rankings/index.json:10607` — HDS-05 remains pending; do not run without separate backend-loss authorization",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10607
+- `NikolasP98/minion-meta@dev rankings/index.json:10639` — Bound streamed response bytes before allocation; arrayBuffer()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10639
+- `NikolasP98/minion-meta@dev rankings/index.json:10777` — Backend-loss qualification remains gated by HDS-05",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10777
+- `NikolasP98/minion-meta@dev rankings/index.json:10810` — remove once the phone failure is root-caused",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10810
+- `NikolasP98/minion-meta@dev rankings/index.json:12341` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12341
+- `NikolasP98/minion-meta@dev rankings/index.json:13514` — Historical receipt/tombstone retention and missing-owner recovery need",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13514
+- `NikolasP98/minion-meta@dev rankings/index.json:14131` — drop column (proposal #16)"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14131
+- `NikolasP98/minion-meta@dev rankings/index.json:15351` — prompt-driven protocol instead of native tool_use",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15351
+- `NikolasP98/minion-meta@dev rankings/index.json:17497` — no status filter — every status reaches the grid",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17497
+- `NikolasP98/minion-meta@dev rankings/index.json:17562` — startBackupScheduler() has no call site anywhere in src/",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17562
+- `NikolasP98/minion-meta@dev rankings/index.json:17662` — Full Workshop composition/camera and keyboard relationship/element",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17662
+- `NikolasP98/minion-meta@dev rankings/index.json:19230` — tagOptions is the FILTER's list — the event-scope registry"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19230
+- `NikolasP98/minion-meta@dev rankings/index.json:19391` — nothing links here with these params yet — the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19391
+- `NikolasP98/minion-meta@dev rankings/index.json:20368` — the affordance is one-way — once opened, a line's discount",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20368
+- `NikolasP98/minion-meta@dev rankings/index.json:21593` — the confirmed root cause (QA-stack app logs) was'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21593
+- `NikolasP98/minion-meta@dev rankings/index.json:22021` — raw fetch moved verbatim from TeamTab — migrate to",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22021
+- `NikolasP98/minion-meta@dev rankings/index.json:22087` — no overflow clip for bookings starting before startHour",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22087
+- `NikolasP98/minion-meta@dev rankings/index.json:22122` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22122
