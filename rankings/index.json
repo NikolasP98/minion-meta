@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T07:25:15.743Z",
+	"generatedAt": "2026-09-30T07:34:04.685Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1600,38 +1600,6 @@
 			"scoredAt": "2026-09-30T02:32:06.996Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-d1c5d80",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ d1c5d80",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-d1c5d80.md",
-			"sourceUpdatedAt": "2026-09-09",
-			"sourceFingerprint": "0fabf2c5b81fe8181570b001d0bc2e49db9a1cb3b717a0f6c03944b5e4d5ff6c",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Merge-scan surfaces a high-severity cross-tenant data isolation gap alongside several unchecked-access crash risks across scheduling services.",
-			"evidence": [
-				"high unvalidated-input: tag-links.service.ts:117 missing org isolation, risking cross-tenant data access",
-				"high unchecked-access: scheduling.service.ts:261/476 destructure .returning() without checking row exists"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T07:28:54.990Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-b8113b095cdf",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1961,6 +1929,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T02:36:25.475Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-d1c5d80",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ d1c5d80",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-d1c5d80.md",
+			"sourceUpdatedAt": "2026-09-09",
+			"sourceFingerprint": "0fabf2c5b81fe8181570b001d0bc2e49db9a1cb3b717a0f6c03944b5e4d5ff6c",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Merge-scan surfaced a high-severity missing org-isolation filter enabling cross-tenant data access plus multiple unchecked-access crash risks with exact file:line locations.",
+			"evidence": [
+				"tag-links.service.ts:117 missing org isolation risking cross-tenant data access",
+				"two high-severity unchecked .returning() destructures that would throw TypeError",
+				"commit range a2b40f2..d1c5d80"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T07:34:04.510Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bf747956e314",
@@ -6259,6 +6260,39 @@
 			"scoredAt": "2026-09-28T11:41:09.342Z"
 		},
 		{
+			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Close the producer-side gaps the review-sidecar contract now exposes",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-review-sidecar-producer-gaps.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "ccd90c11b47f13a79ae85314b6e457461bf0834bcbfa50d1cc2da7944016aef8",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Bundles five distinct producer-side gaps in the review-sidecar scoring pipeline, several already partially remediated per the text, so scope should be narrowed before execution.",
+			"evidence": [
+				"lists 5 AS-IS gaps: no reviewed_commit writer, G2 scores only 4/6 axes, no G1 producer, optional sidecars, no index coverage contract",
+				"129 of 198 specs have no sidecar",
+				"status: draft, updatedAt 2026-09-02"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T07:34:04.510Z"
+		},
+		{
 			"key": "spec:2026-08-03-crm-icp-score-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -7774,6 +7808,39 @@
 			"scoredAt": "2026-09-26T17:28:52.676Z"
 		},
 		{
+			"key": "proposal:ci-minion-ai-auto-response",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Auto response on minion-ai main",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-auto-response.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "488a8f89387aba404437491c63fbd64b79e5b6c7f82fc020938085743abfaf4f",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The auto-response workflow on minion-ai main fails with a clear missing private-key secret error and an explicit definition of done.",
+			"evidence": [
+				"Error: Input required and not supplied: private-key",
+				"DoD: workflow's latest run on main is green, or deliberately disabled with rationale",
+				"checked: 2026-08-28"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T07:34:04.510Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-2582471367",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8027,38 +8094,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T23:58:59.849Z"
-		},
-		{
-			"key": "run:minion (gateway)#36538067266",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/36538067266",
-			"sourceUpdatedAt": "2026-09-29T08:16:55Z",
-			"sourceFingerprint": "c417a985f8a54f3fdb8d8f2c4dd2b8f49ca4ff8057c0575c369f8995c26fa2e2",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A CI run failed on the gateway's DEV branch but no failure details or logs are provided to scope the fix.",
-			"evidence": [
-				"status: failure",
-				"workflow_dispatch on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T15:59:13.543Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
@@ -9983,38 +10018,6 @@
 			"scoredAt": "2026-09-28T11:35:49.073Z"
 		},
 		{
-			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Close the producer-side gaps the review-sidecar contract now exposes",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-review-sidecar-producer-gaps.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "ccd90c11b47f13a79ae85314b6e457461bf0834bcbfa50d1cc2da7944016aef8",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The proposal precisely enumerates unfixed producer-side gaps blocking the review-sidecar scoring contract from functioning as specified.",
-			"evidence": [
-				"G2 reviewer only scores 4 of 6 required rubric axes so sidecars validate but derive no chip",
-				"No G1 producer exists for proposals/*.review.md"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T07:28:54.990Z"
-		},
-		{
 			"key": "proposal:2026-09-16-hub-minion-run-dev-switcher",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11646,38 +11649,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T06:54:08.238Z"
-		},
-		{
-			"key": "proposal:ci-minion-ai-auto-response",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Auto response on minion-ai main",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-auto-response.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "488a8f89387aba404437491c63fbd64b79e5b6c7f82fc020938085743abfaf4f",
-			"score": 47,
-			"band": "low",
-			"axes": {
-				"criticality": 6,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The failure log pinpoints an exact, low-risk fix: the create-github-app-token step is missing its private-key input.",
-			"evidence": [
-				"Error: Input required and not supplied: private-key",
-				"DoD: workflow's latest run on main is green or deliberately disabled"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T07:28:54.990Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-98cb61c2223d",
@@ -17814,41 +17785,6 @@
 			"scoredAt": "2026-09-29T18:29:56.564Z"
 		},
 		{
-			"key": "pr:minion_hub#421",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#421 feat(stock): edit mode owns header actions on item detail",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/421",
-			"sourceUpdatedAt": "2026-09-30T07:22:46Z",
-			"sourceFingerprint": "1b526c0744f0a629c9201e24facebae50acc7904e6099fde7a401a1e41e9a091",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#714"
-			],
-			"rationale": "Small UI governance PR with passing tests and lint gates, ready to merge.",
-			"evidence": [
-				"bun run check → 0 new errors",
-				"Playwright spec ran green",
-				"lint:design and lint:tokens exit 0"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T07:25:15.597Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-pos-appointments-fork",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18904,6 +18840,72 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:38:40.092Z"
+		},
+		{
+			"key": "run:minion (gateway)#34472281102",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34472281102",
+			"sourceUpdatedAt": "2026-09-10T11:56:50Z",
+			"sourceFingerprint": "7aa662de472d5b08b047d388747abd7104ffe7a29bd1aa21734214dd84ea9f34",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "CI failure on the gateway DEV branch lacks any failure detail beyond status, limiting immediate actionability.",
+			"evidence": [
+				"status: failure",
+				"push on DEV",
+				"updatedAt 2026-09-10T11:56:50Z"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T07:34:04.510Z"
+		},
+		{
+			"key": "run:minion_site#31686953033",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_site",
+			"title": "Claude Code",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/actions/runs/31686953033",
+			"sourceUpdatedAt": "2026-09-12T09:31:54Z",
+			"sourceFingerprint": "fd33d67a9bcb040c710991818cff95818ec5463761e5c0012f15091f3395c7b6",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The Claude Code workflow failed on a PR review comment event but no error detail is provided to determine root cause or next step.",
+			"evidence": [
+				"status: failure",
+				"pull_request_review_comment on dev",
+				"updatedAt 2026-09-12T09:31:54Z"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T07:34:04.510Z"
 		},
 		{
 			"key": "spec:2026-08-18-minion-base-mobile-hitl-ux-plan",
@@ -22704,40 +22706,6 @@
 			"scoredAt": "2026-09-28T08:20:00.251Z"
 		},
 		{
-			"key": "pr:minion-meta#714",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#714 docs(governance): edit mode owns the header actions",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/714",
-			"sourceUpdatedAt": "2026-09-30T07:22:34Z",
-			"sourceFingerprint": "9c8d847809b4c254e4002f8ea779773796da00e89f2f5dad3d3e940dbdb49990",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#421"
-			],
-			"rationale": "Trivial companion documentation update mirroring the already-tested hub PR #421.",
-			"evidence": [
-				"Companion to hub #421",
-				"One bullet doc change under Records"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T07:25:15.597Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24441,6 +24409,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T01:09:47.096Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Entry only restates an already-merged commit fixing nitter persistence with status unknown, leaving no outstanding deployment issue to act on.",
+			"evidence": [
+				"status: unknown",
+				"summary is a merged commit message",
+				"fix(nitter): serialize persistence and drain shutdown (#295)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T07:34:04.510Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
@@ -27319,6 +27320,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T06:17:33.259Z"
+		},
+		{
+			"key": "run:minion_hub#36684161332",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/36684161332",
+			"sourceUpdatedAt": "2026-09-30T07:31:54Z",
+			"sourceFingerprint": "33ef9bd6fa97c141d1be5f2b9ae921c5af6a4086446cbf90efcd363183ee76ee",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The run is still in progress as of today with no failure or outcome to act on yet.",
+			"evidence": [
+				"status: in_progress",
+				"push on master",
+				"updatedAt 2026-09-30T07:31:54Z"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T07:34:04.510Z"
 		},
 		{
 			"key": "issue:minion-meta#541",
