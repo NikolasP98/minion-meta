@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T18:24:51.210Z",
+	"generatedAt": "2026-09-30T18:54:13.612Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -22777,38 +22777,6 @@
 			"scoredAt": "2026-09-26T00:28:54.749Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The linked commit already shipped a fix serializing nitter persistence and draining poller shutdown, leaving no open action.",
-			"evidence": [
-				"commit message: fix(nitter): serialize persistence and drain shutdown (#295)",
-				"status: unknown, no failure described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T18:24:51.046Z"
-		},
-		{
 			"key": "issue:minion-meta#409",
 			"kind": "issue",
 			"stage": "proposal",
@@ -23535,39 +23503,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:32:45.089Z"
-		},
-		{
-			"key": "issue:minion-meta#576",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#576 [monitor:unstick] reconcile run 686e7b9a: agent exec failure (exit-126, turns=0)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/576",
-			"sourceUpdatedAt": "2026-09-23T18:17:19Z",
-			"sourceFingerprint": "f4a82662c94cebcc48352eb9fbea5b1dc85f824779cd497df19856b4fc9f2da3",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The monitor's own analysis shows the reconcile run actually succeeded and the exit-126/turns=0 failure is an isolated, likely transient agent-launch fault already recommended for safe retry.",
-			"evidence": [
-				"'reconcile script itself completed normally... git push of dev succeeded'",
-				"'this looks like a transient/infra fault... not a genuine task or spec failure'",
-				"'Recommendation for a human: safe to retry the run'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T18:28:35.077Z"
 		},
 		{
 			"key": "issue:minion-meta#580",
@@ -25882,6 +25817,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T14:54:14.688Z"
+		},
+		{
+			"key": "issue:minion-meta#576",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#576 [monitor:unstick] reconcile run 686e7b9a: agent exec failure (exit-126, turns=0)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/576",
+			"sourceUpdatedAt": "2026-09-23T18:17:19Z",
+			"sourceFingerprint": "f4a82662c94cebcc48352eb9fbea5b1dc85f824779cd497df19856b4fc9f2da3",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated monitor report describes a transient exit-126/turns=0 provider launch fault with the underlying reconcile task completing successfully, so no real action is needed beyond possibly adding a classifier signature.",
+			"evidence": [
+				"reconcile script itself completed normally... git push of dev succeeded",
+				"exited 126 with turns=0... transient/infra fault in launching the claude provider process, not a genuine task or spec failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T18:54:13.482Z"
 		},
 		{
 			"key": "issue:minion-meta#579",
