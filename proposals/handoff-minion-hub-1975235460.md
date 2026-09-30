@@ -26,9 +26,9 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-30)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:371` — that till-side draw happens on CLICK, not on submit, so an
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L371
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:427` — the line posts finProductId: null (revenue-by-product does
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L427
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:555` — the tender only appears when the org registered a method
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L555
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:466` — that till-side draw happens on CLICK, not on submit, so an
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L466
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:522` — the line posts finProductId: null (revenue-by-product does
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L522
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:650` — the tender only appears when the org registered a method
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L650
