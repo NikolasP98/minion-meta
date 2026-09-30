@@ -51,3 +51,9 @@ can open).
 ## 7. `InlineCategoryCell` still owns its own trigger
 The catalog Category cell keeps an always-visible trigger; migrate it to the
 select-then-click contract the Tags cell got in hub #414 (`DataCellContext.open`).
+
+## 8. Stock item columns dropped from the DB schema
+`item_group`, `reorder_qty`, `moq` stay read-only for one release (hub #420,
+`TODO(handoff)` in `pg-schema/stock.ts`); drop them once the prod backfill
+(`scripts/stock-optional-fields-to-custom.ts`) is verified. The low-stock
+alert lost its suggested quantity until notifications can read custom values.
