@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T05:24:46.903Z",
+	"generatedAt": "2026-09-30T05:54:17.160Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5016,41 +5016,6 @@
 			"scoredAt": "2026-09-26T20:58:56.379Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-6b39120c48a2",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6b39120c48a2.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "6d661b6862b97d190103f8af9457e34f99f77a79e75369046258435d79373258",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-4c987be11c56",
-				"proposal:postmerge-minion-hub-5bc07f54a4ac"
-			],
-			"rationale": "ID-only entity matching risking org/payment-method collision in POS processing is a concrete data-integrity risk with a clear fix direction, related to the same PR's POS TODOs.",
-			"evidence": [
-				"TODO(handoff): the id is the ONLY signal. An org that names a credit-CARD",
-				"fix direction: discriminated union types + composite identity checks"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T05:28:46.320Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-749505623182",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5510,6 +5475,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T16:28:45.092Z"
+		},
+		{
+			"key": "pr:minion_hub#417",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#417 fix(ui): client-side record navigation (no black screen), ⚙ View section + reactive Archive/Restore, select editor on 2nd click, checkbox alignment, peek focus/close",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/417",
+			"sourceUpdatedAt": "2026-09-30T05:52:34Z",
+			"sourceFingerprint": "e3097a0d31d2f9b0436039a01b97de45ca88e808f33350e1287f372c0b3d5fad",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#418"
+			],
+			"rationale": "Fixes a navigation black-screen regression plus four other UI defects with verified tests and probes, ready to merge.",
+			"evidence": [
+				"title cites 'client-side record navigation (no black screen)'",
+				"summary reports 232/232 vitest and 4/4 Playwright probes",
+				"notes conflicts textually with #418, same file"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T05:54:16.999Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-25e2bb7",
@@ -6061,6 +6061,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T02:29:52.306Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-6b39120c48a2",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6b39120c48a2.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "6d661b6862b97d190103f8af9457e34f99f77a79e75369046258435d79373258",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Possible ID-collision risk between orgs and payment entities in POS flows is flagged but the diagnosis is speculative and unimplemented.",
+			"evidence": [
+				"marker: 'the id is the ONLY signal. An org that names a credit-CARD'",
+				"diagnosis proposes discriminated union types and a denylist, phrased as a hypothetical scenario"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T05:54:16.999Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-92e3e453a2ae",
@@ -6881,6 +6913,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T16:28:45.092Z"
+		},
+		{
+			"key": "pr:minion_hub#418",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#418 feat(data-table): drag range selection + spreadsheet copy/paste with a dotted copied-range outline",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/418",
+			"sourceUpdatedAt": "2026-09-30T05:52:35Z",
+			"sourceFingerprint": "87436eaf77f6e8fe6a4ca01699c4a729e25bf0a87f3ff18d1eeb2b2a3d5f8a5a",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#417"
+			],
+			"rationale": "Owner-requested spreadsheet-style multi-cell selection/copy-paste feature is implemented and verified but needs rebase after #417.",
+			"evidence": [
+				"summary states 'Depends on nothing but conflicts textually with #417 (same file) — rebase after #417 lands'",
+				"227/227 vitest with +9 clipboard, +7 copy tests",
+				"Playwright table-copy.spec.ts 3/3 on QA stack"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T05:54:16.999Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
@@ -11011,41 +11078,6 @@
 			"scoredAt": "2026-09-23T06:29:21.553Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-4c987be11c56",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/sell/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-4c987be11c56.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "0885c5577d3c417c26dd55103e78c57e04514a8e3e76fdedca5a9923c9d56446",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-5bc07f54a4ac",
-				"proposal:postmerge-minion-hub-6b39120c48a2"
-			],
-			"rationale": "Missing tender selector when no payment method is registered blocks checkout UX in a well-diagnosed, boundable fix from the same PR as related POS TODOs.",
-			"evidence": [
-				"TODO(handoff): the tender only appears when the org registered a method",
-				"fix direction: conditional disabled selector or CTA to payment setup"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T05:28:46.320Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-a5a65f6d6dac",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12745,6 +12777,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T04:59:11.196Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-4c987be11c56",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/sell/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-4c987be11c56.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "0885c5577d3c417c26dd55103e78c57e04514a8e3e76fdedca5a9923c9d56446",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Checkout tender selector is missing when no payment method is registered, with a plausible fix direction but no code yet.",
+			"evidence": [
+				"marker: 'the tender only appears when the org registered a method'",
+				"diagnosis proposes disabled selector or CTA linking to payment setup",
+				"status approved, filed against merged PR #278"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T05:54:16.999Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-91262d537ce6",
@@ -16958,41 +17023,6 @@
 			"scoredAt": "2026-09-28T02:58:50.321Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-5bc07f54a4ac",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos-accounts.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5bc07f54a4ac.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "9370353674e473e9b79ed2fcc12bcac56a27b0773db2941b291775a8545d9c60",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-4c987be11c56",
-				"proposal:postmerge-minion-hub-6b39120c48a2"
-			],
-			"rationale": "The auto-diagnosis itself is incomplete and explicitly requests the truncated TODO text, so no actionable scope exists until someone reads the file and restates the finding.",
-			"evidence": [
-				"Marker text truncated: 'a client whose older rows'",
-				"Diagnosis: 'Could you share the complete TODO text?'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T05:28:46.320Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-6e3297fea67e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21124,6 +21154,38 @@
 			"scoredAt": "2026-09-23T06:29:21.553Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-5bc07f54a4ac",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos-accounts.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5bc07f54a4ac.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "9370353674e473e9b79ed2fcc12bcac56a27b0773db2941b291775a8545d9c60",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The auto-diagnosis is incomplete, explicitly asking for the full TODO text before any fix direction can be given.",
+			"evidence": [
+				"diagnosis text: 'Could you share the complete TODO text? The finding is truncated'",
+				"marker itself cuts off mid-sentence: 'whose older rows'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T05:54:16.999Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-77a6343cc924",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24076,38 +24138,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T01:09:47.096Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This entry is a deployment-health snapshot describing an already-merged commit, not an open actionable goal.",
-			"evidence": [
-				"commit message: 'serialize persistence and drain poller shutdown'",
-				"status: unknown, tags: [deployment]"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T05:24:46.739Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
