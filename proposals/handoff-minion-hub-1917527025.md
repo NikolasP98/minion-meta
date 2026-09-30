@@ -1,14 +1,14 @@
 ---
-id: handoff-minion-hub-2557316487
-title: Handoff marker — src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)
+id: handoff-minion-hub-1917527025
+title: Handoff marker — tests/e2e/ui-audit/pos-calendar-fan-drag.spec.ts (minion_hub)
 status: draft
-created: 2026-09-20
+created: 2026-09-30
 updated: 2026-09-30
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — src/routes/api/scheduling/bookings/_handlers.ts
+# Handoff marker — tests/e2e/ui-audit/pos-calendar-fan-drag.spec.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,7 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-09-30)
 
-- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:237` — Persist realization admission with the status change; this
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L237
-- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:320` — this read and moveGroup are two transactions, so a visit
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L320
+- `NikolasP98/minion_hub@master tests/e2e/ui-audit/pos-calendar-fan-drag.spec.ts:13` — the "drag outside separates" test occasionally times out
+  https://github.com/NikolasP98/minion_hub/blob/master/tests/e2e/ui-audit/pos-calendar-fan-drag.spec.ts#L13
