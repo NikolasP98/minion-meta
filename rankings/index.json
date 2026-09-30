@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-29T23:58:36.174Z",
+	"generatedAt": "2026-09-30T00:25:34.284Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3859,6 +3859,258 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T07:59:37.558Z"
+		},
+		{
+			"key": "issue:minion-meta#694",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#694 [monitor:unstick] rank board goals run 150c5ded: host disk full",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/694",
+			"sourceUpdatedAt": "2026-09-30T00:18:48Z",
+			"sourceFingerprint": "6510db913907dc88adee165bd875ad461aad3130447a7071ca9cedff57d78c74",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#695",
+				"issue:minion-meta#696",
+				"issue:minion-meta#700"
+			],
+			"rationale": "One of at least 7 runs failing purely on host disk exhaustion in the same 40-minute window; should be consolidated into one infra ticket.",
+			"evidence": [
+				"literal 'No space left on device' across 3 attempts",
+				"explicitly part of a cluster of 7 runs in the same window"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T00:25:23.622Z"
+		},
+		{
+			"key": "issue:minion-meta#695",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#695 [monitor:unstick] rank board goals run 799b1239: host disk full",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/695",
+			"sourceUpdatedAt": "2026-09-30T00:18:54Z",
+			"sourceFingerprint": "dac9774c7cca5161ae56511fb96fa28c55b4720c847059bf5de40b699b6d6d61",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#694",
+				"issue:minion-meta#696",
+				"issue:minion-meta#698"
+			],
+			"rationale": "Same disk-full signature as #694, part of the same incident cluster that should be merged into one host-disk-space goal.",
+			"evidence": [
+				"same fatal work-tree/output write failures as 150c5ded",
+				"explicitly noted as same incident affecting 7 runs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T00:25:23.622Z"
+		},
+		{
+			"key": "issue:minion-meta#696",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#696 [monitor:unstick] reconcile proposals run 11f0e523: host disk full (mislabeled as GitHub blip)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/696",
+			"sourceUpdatedAt": "2026-09-30T00:19:00Z",
+			"sourceFingerprint": "cb3d0fbce0d04d75cca2f52dbda4270edc12a5599a2e91e4684a60bae2b26e24",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#694",
+				"issue:minion-meta#697",
+				"issue:minion-meta#699"
+			],
+			"rationale": "Disk-full incident additionally mislabeled by the retry harness as a GitHub blip, part of the same 7-run cluster that should be one consolidated goal.",
+			"evidence": [
+				"retry harness mislabeled disk-full failure as 'clone retry (GitHub blip?)'",
+				"part of same disk-full incident window as the other 6 runs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T00:25:23.622Z"
+		},
+		{
+			"key": "issue:minion-meta#697",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#697 [monitor:unstick] reconcile proposals run fc0c31d8: host disk full, concurrent with 11f0e523",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/697",
+			"sourceUpdatedAt": "2026-09-30T00:19:06Z",
+			"sourceFingerprint": "f56aebbea261705390e593a4e8dd1c8651a24715a7c677b7667d101ec6b0e919",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#696",
+				"issue:minion-meta#694",
+				"issue:minion-meta#700"
+			],
+			"rationale": "Near-simultaneous launch with #696 against the same full-disk host, part of the same incident cluster with a possible secondary scheduling question.",
+			"evidence": [
+				"started one second before run 11f0e523 (#696)",
+				"raises a possible concurrent-launch scheduling/dedup question"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T00:25:23.622Z"
+		},
+		{
+			"key": "issue:minion-meta#698",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#698 [monitor:unstick] rank board goals run 060ed364: host disk full",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/698",
+			"sourceUpdatedAt": "2026-09-30T00:19:12Z",
+			"sourceFingerprint": "742dcc3c481805adc79170c0a6afb28989d35cc46bda137268895670eae21bda",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#694",
+				"issue:minion-meta#695",
+				"issue:minion-meta#699"
+			],
+			"rationale": "Same disk-full signature as 150c5ded/799b1239, part of the same incident cluster needing one consolidated fix.",
+			"evidence": [
+				"repeated fatal work-tree/output write failures",
+				"explicitly same signature as two other runs in the window"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T00:25:23.622Z"
+		},
+		{
+			"key": "issue:minion-meta#699",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#699 [monitor:unstick] rank board goals run 016bd205: host disk full during checkout (3 tries)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/699",
+			"sourceUpdatedAt": "2026-09-30T00:19:17Z",
+			"sourceFingerprint": "102a01bbe90d4f46389ab89deec856633ca7941ceea7daeb9da8fcb0a1464034",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#696",
+				"issue:minion-meta#698",
+				"issue:minion-meta#700"
+			],
+			"rationale": "Clone succeeded but checkout failed on disk-full writing an audit directory, same incident cluster as the other 6 runs.",
+			"evidence": [
+				"checkout failed 3 tries writing audits/2026-09-26-hub-formula-columns",
+				"same host disk-full incident window"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T00:25:23.622Z"
+		},
+		{
+			"key": "issue:minion-meta#700",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#700 [monitor:unstick] rank board goals run 5d201d3a: host disk full writing many spec files (3 tries)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/700",
+			"sourceUpdatedAt": "2026-09-30T00:19:23Z",
+			"sourceFingerprint": "f318622b6b3706b9583d8c785471f96e6ea9bd15130526f2cc7dd053f6ec8466",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#694",
+				"issue:minion-meta#697",
+				"issue:minion-meta#699"
+			],
+			"rationale": "Checkout failed writing over 20 spec files due to disk-full, same incident cluster as the other 6 runs in the window.",
+			"evidence": [
+				"failed writing 20+ files under specs/ then specs/audits",
+				"same host disk-full incident as 150c5ded and others"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T00:25:23.622Z"
 		},
 		{
 			"key": "pr:minion-base#45",
@@ -7856,6 +8108,74 @@
 			"scoredAt": "2026-09-28T11:31:31.200Z"
 		},
 		{
+			"key": "issue:minion-meta#692",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#692 [monitor:unstick] reconcile proposals run c7c092b9: agent exec failure (exit-126, 0 turns)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/692",
+			"sourceUpdatedAt": "2026-09-30T00:18:32Z",
+			"sourceFingerprint": "56c8e32521c8f0454e3bee4f10def8809ec8e71b9b0076b6b276378492e4d3ba",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#693"
+			],
+			"rationale": "Exit-126 agent-launch failure blocks reconcile automation and shares the same signature as #693, so the two should become one runner-environment investigation goal.",
+			"evidence": [
+				"exit-126, turns=0 agent-launch failure distinct from disk-full incidents",
+				"recommends checking binary permissions/PATH/noexec mount on runner"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T00:25:23.622Z"
+		},
+		{
+			"key": "issue:minion-meta#693",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#693 [monitor:unstick] reconcile proposals run f0c88e2d: agent exec failure (exit-126, 0 turns)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/693",
+			"sourceUpdatedAt": "2026-09-30T00:18:40Z",
+			"sourceFingerprint": "a1f50f8351825f5e306f0cf9887519b28b28bf1206008545e603f94bd2a129ae",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#692"
+			],
+			"rationale": "Same exit-126 agent-launch failure signature as #692 roughly 18 minutes apart, indicating one systemic runner fault to investigate together.",
+			"evidence": [
+				"same exit-126, turns=0 signature as run c7c092b9",
+				"occurred about 18 minutes after the companion run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T00:25:23.622Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gateway-client-lifecycle-swallows-handoff",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10813,6 +11133,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:38:40.092Z"
+		},
+		{
+			"key": "pr:minion_hub#412",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#412 feat(ui): table toolbar polish round 2 — chip contract, nested-panel stacking, per-user table options, icon-button recipe, open-arrow-only rows, catalog editor autosave",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/412",
+			"sourceUpdatedAt": "2026-09-30T00:04:41Z",
+			"sourceFingerprint": "1462dfb982c74519f2c0e6a8692d5e2a35e3722766420880bb2de5690378c5c6",
+			"score": 47,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-09-29-hub-table-filters-followups"
+			],
+			"rationale": "Spec-backed PR with full verification (tests, lint, Playwright) ready to merge and closes an open ledger item.",
+			"evidence": [
+				"cites spec slice 4 and closes ledger §3",
+				"bun run check 0 errors, vitest 774/774, Playwright screenshots passed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T00:25:23.622Z"
 		},
 		{
 			"key": "proposal:2026-08-18-factory-orchestration-round7",
@@ -13941,6 +14295,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T02:58:50.321Z"
+		},
+		{
+			"key": "proposal:2026-09-29-hub-table-filters-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Table toolbar + Notion-style filters — open ends",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-table-filters-followups.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "5ac6d409440742c6b3303a738be6e1414d557ca5202effec00adb67061f99f8a",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#412"
+			],
+			"rationale": "Well-scoped enumerated backlog of hub UI follow-ups with concrete next-step pointers, though item 3 is already closed by #412.",
+			"evidence": [
+				"item 3 marked CLOSED 2026-09-29 via groupOptions/groupValue on DataTable",
+				"items 1,2,4,5,6 each cite a concrete next-step file or prop"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T00:25:23.622Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-368607906",
@@ -17305,40 +17693,6 @@
 			"scoredAt": "2026-09-29T02:31:45.734Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "25ecfcdc3bc837439b85cd5cb3a3e4b391c81e0909bec551d20ff9ceae0f3ccf",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-factory-1962723814"
-			],
-			"rationale": "All 17 markers are quoted rationale/evidence string fragments pulled from a generated JSON ranking file rather than genuine TODO(handoff) source comments, pointing to the same sweep matcher bug as the minion-factory candidate.",
-			"evidence": [
-				"17 markers all located in rankings/index.json, a generated data file, not source code",
-				"marker text like 'a full per-handler audit of the remaining requireAdmin' is a quoted rationale snippet, not a code comment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T23:58:36.030Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-5e55396",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18675,41 +19029,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T21:56:35.707Z"
-		},
-		{
-			"key": "proposal:2026-09-29-hub-table-filters-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Table toolbar + Notion-style filters — open ends",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-table-filters-followups.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "1bcefb8970375222a5afb0b937183e16fd44f32b40885a1a8480fa0b2101bbf5",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-09-29-hub-table-toolbar-notion-filters-spec",
-				"proposal:2026-09-29-hub-data-view-container"
-			],
-			"rationale": "Three concretely scoped follow-on gaps (server-mode operators, filter persistence, GroupByPicker location) from a filters slice whose parent spec is still mid-implementation, so timing should follow that spec's completion.",
-			"evidence": [
-				"server-mode tables hide non-default operators and the advanced tree because filterToParam only parses legacy shapes",
-				"storageKey persists hidden/order/widths but not filters/advanced"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T20:33:16.263Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-4278431509",
@@ -26555,6 +26874,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T02:31:45.734Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "a2f035470ebb74ef87a35bb045351e1aea566a0c66e21fd15cc7665618596d5a",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 0
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a self-referential sweep flagging text fragments inside the generated rankings/index.json data file itself, not real TODO markers in source code.",
+			"evidence": [
+				"target file is rankings/index.json, the ranking output artifact",
+				"cited markers are quoted excerpts of other candidates' text, not code comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T00:25:34.143Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
