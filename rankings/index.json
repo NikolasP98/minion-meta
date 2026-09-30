@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T19:54:07.299Z",
+	"generatedAt": "2026-09-30T20:24:02.768Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -16975,6 +16975,38 @@
 			"scoredAt": "2026-09-29T21:32:52.882Z"
 		},
 		{
+			"key": "issue:minion-meta#721",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#721 [monitor:unstick] reconcile run 167dc353 failed: claude agent exit-126, turns=0 (infra fault)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/721",
+			"sourceUpdatedAt": "2026-09-30T20:17:32Z",
+			"sourceFingerprint": "9a1a33769282189f169955f1278fb1e832f06ab5e6f4d0f796f812ca3948a516",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An automated infra-fault report (exit-126, turns=0) suggesting a transient runner issue that needs a human spot-check before further automation changes.",
+			"evidence": [
+				"claude-provider reconcile agent step exited 126 with turns=0",
+				"Recommendation: retry the run; add host-classifier signature if recurring"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T20:24:02.628Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18419,39 +18451,6 @@
 			"scoredAt": "2026-09-29T21:32:52.882Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-c371d6639113",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/backup-scheduler.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c371d6639113.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "0706e420210c0b31a559be2122b366b36922bfdaa6e0aa279bbc94424f8ae350",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved proposal gives a clear diagnosis and fix direction for an orphaned backup-scheduler function, making it directly actionable.",
-			"evidence": [
-				"TODO(handoff): startBackupScheduler() has no call site anywhere in src/",
-				"status: approved",
-				"Definition of done specifies removing or resolving the marker with concrete fix directions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T19:58:52.972Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-d56bb9cb0b58",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19045,6 +19044,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:39:42.070Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown serialization with no indication of ongoing regression or deploy failure.",
+			"evidence": [
+				"commit message: fix(nitter): serialize persistence and drain poller shutdown (#295)",
+				"tag: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T20:24:02.628Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
@@ -20513,6 +20544,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T17:57:07.493Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-c371d6639113",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/backup-scheduler.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c371d6639113.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "0706e420210c0b31a559be2122b366b36922bfdaa6e0aa279bbc94424f8ae350",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:handoff-minion-meta-221859101"
+			],
+			"rationale": "A well-scoped, approved post-merge finding on dead/unwired backup-scheduler code with a clear diagnosis and fix direction.",
+			"evidence": [
+				"status: approved",
+				"TODO(handoff): startBackupScheduler() has no call site anywhere in src/",
+				"Fix direction: search references, wire call or remove file"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T20:24:02.628Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c91882e7ec6a",
@@ -23172,6 +23238,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T02:30:48.662Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "aa05f10e2af1d1dae16d877737780356afa905f74760c20650b96886f3d16566",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-c371d6639113"
+			],
+			"rationale": "A bundled handoff marker listing 17 disparate TODO/ledger entries across unrelated files is too broad to action as one goal and should be split into individually scoped items.",
+			"evidence": [
+				"17 distinct marker lines spanning unrelated files/topics (auth audit, SQL migration, race window, backup scheduler)",
+				"status: review, definition of done requires resolving each marker individually"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T20:24:02.628Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-02cb576f3102",
@@ -26593,38 +26693,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T02:32:06.996Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "a991cf54f719c0538d89ee47126f40923be0aacb8b0aa2ddd11586844869552e",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited markers point into the generated rankings/index.json output file rather than genuine in-code TODO(handoff) comments, so the handoff has no real open end to resolve.",
-			"evidence": [
-				"markers cite lines inside rankings/index.json, a generated ranking artifact, not source code",
-				"quoted fragments are rationale/evidence snippets, not TODO(handoff) comments"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T16:24:38.299Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2934878458",
