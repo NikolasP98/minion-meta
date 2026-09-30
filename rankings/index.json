@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T22:24:18.372Z",
+	"generatedAt": "2026-09-30T22:54:05.083Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2922,6 +2922,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T22:24:18.253Z"
+		},
+		{
+			"key": "pr:minion_hub#425",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#425 fix(pos): catalog new-item Save no longer silently bricks after a Price edit",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/425",
+			"sourceUpdatedAt": "2026-09-30T22:47:54Z",
+			"sourceFingerprint": "fdff4d4f426e8864f10dfc3948402038eec16c867f7fb8fb057975575c625c0d",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-diagnosed regression fix for a dead Save button on POS catalog creation, with passing unit and Playwright tests and clean lint checks.",
+			"evidence": [
+				"root cause: unitPrice.trim() threw before try block, leaving busy=true and Save inert",
+				"vitest 4/4 passing; Playwright verified 201 POST /api/pos/sellables",
+				"lint:design/tokens clean, only pre-existing env warnings"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T22:54:04.950Z"
 		},
 		{
 			"key": "proposal:ci-minion-site-claude-code",
@@ -19111,38 +19144,6 @@
 			"scoredAt": "2026-09-28T11:39:42.070Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This deploy-health entry only surfaces a merged nitter persistence fix with no distinct actionable goal stated.",
-			"evidence": [
-				"Commit message describes serializing nitter persistence and draining poller shutdown",
-				"Status is unknown with only a generic 'deployment' tag"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T22:24:18.253Z"
-		},
-		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22519,39 +22520,6 @@
 			"scoredAt": "2026-09-29T01:29:01.456Z"
 		},
 		{
-			"key": "issue:minion-meta#577",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#577 [monitor:unstick] run 35a8838d (minion-meta reconcile) - agent exec failure exit-126",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/577",
-			"sourceUpdatedAt": "2026-09-23T22:17:25Z",
-			"sourceFingerprint": "726bf08176ff9d5e96c2b844fd70c24dcb8ed73ab665666995b4f9fb52f1aba8",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single transient exit-126/turns=0 runner-box fault on an otherwise-successful reconcile sweep is cheap to retry and not yet a bounded dev task.",
-			"evidence": [
-				"reconcile sweep itself completed cleanly - all handoffs refreshed, merge-scan ran",
-				"exit-126 with turns=0 and permission_denials=0",
-				"Recommendation: retry the run ... also have a human check the runner box's claude binary"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T22:28:55.993Z"
-		},
-		{
 			"key": "issue:minion-meta#601",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24160,6 +24128,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T12:24:44.018Z"
+		},
+		{
+			"key": "issue:minion-meta#577",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#577 [monitor:unstick] run 35a8838d (minion-meta reconcile) - agent exec failure exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/577",
+			"sourceUpdatedAt": "2026-09-23T22:17:25Z",
+			"sourceFingerprint": "726bf08176ff9d5e96c2b844fd70c24dcb8ed73ab665666995b4f9fb52f1aba8",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Single-occurrence runner-box exec fault where the actual reconcile task already succeeded and the stated action is a cheap retry, not a standing engineering goal.",
+			"evidence": [
+				"reconcile sweep completed cleanly and pushed proposals/index.json",
+				"exit-126 with turns=0 indicates a box-level exec fault, not a task/repo issue",
+				"recommendation is retry now, escalate only if the signature recurs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T22:54:04.950Z"
 		},
 		{
 			"key": "issue:minion-meta#680",
