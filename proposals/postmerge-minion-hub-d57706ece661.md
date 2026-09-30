@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-d57706ece661
 title: "Post-merge finding — todo-handoff in tests/e2e/ui-audit/pos-sell-toolbar.spec.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-09-30
 updated: 2026-09-30
 repos: [minion-hub]
