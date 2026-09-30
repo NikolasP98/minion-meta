@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T20:54:03.611Z",
+	"generatedAt": "2026-09-30T21:24:11.492Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8708,6 +8708,38 @@
 			"scoredAt": "2026-09-29T02:59:28.495Z"
 		},
 		{
+			"key": "issue:minion-meta#454",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#454 [monitor:unstick] reconcile run 944f4125 (minion-meta) - exit-126 turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/454",
+			"sourceUpdatedAt": "2026-09-16T20:17:37Z",
+			"sourceFingerprint": "d67cd5fa2464aee78d8a8a2142226071adf8f057e72e5a83436b4a272554ccf6",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Diagnosis identifies a repeated exit-126/turns=0 provider-invocation fault distinct from reconcile logic failures and explicitly recommends human inspection before retrying.",
+			"evidence": [
+				"sibling run 1a3422fa shows identical exit-126/turns=0 signature ~1 hour earlier",
+				"recommendation: inspect runner box claude CLI install/permissions before assuming retry fixes it"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T21:24:11.347Z"
+		},
+		{
 			"key": "issue:minion-meta#462",
 			"kind": "issue",
 			"stage": "proposal",
@@ -12655,38 +12687,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T21:29:04.729Z"
-		},
-		{
-			"key": "issue:minion-meta#454",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#454 [monitor:unstick] reconcile run 944f4125 (minion-meta) - exit-126 turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/454",
-			"sourceUpdatedAt": "2026-09-16T20:17:37Z",
-			"sourceFingerprint": "d67cd5fa2464aee78d8a8a2142226071adf8f057e72e5a83436b4a272554ccf6",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An automated monitor flagged a repeated exit-126/turns=0 provider-invocation failure pattern that needs human runner inspection before it can be actioned as a fix.",
-			"evidence": [
-				"exit 126/turns=0 signature repeats on sibling run 1a3422fa about an hour earlier",
-				"recommendation is human inspection of runner claude CLI install/permissions, not a code fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T20:58:35.967Z"
 		},
 		{
 			"key": "issue:minion-meta#514",
@@ -23602,6 +23602,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T04:28:31.385Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine merged bugfix commit surfaced as a deploy-health candidate with no indication of ongoing failure.",
+			"evidence": [
+				"commit title: fix(nitter): serialize persistence and drain shutdown (#295)",
+				"status: unknown, no failure signal noted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T21:24:11.347Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
