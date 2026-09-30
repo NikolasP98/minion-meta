@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T22:54:05.083Z",
+	"generatedAt": "2026-09-30T23:24:14.644Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2358,39 +2358,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T04:28:31.385Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-factory-0290030",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Precise file:line findings include high-severity bugs in core factory scripts, including an infinite-loop risk in rank.sh and a test that silently masks failing assertions.",
-			"evidence": [
-				"rank.sh:74 non-numeric FACTORY_RANK_BATCH_SIZE never increments loop",
-				"rank.sh:71 missing candidates field silently defaults to 0",
-				"unslop.test.sh:63 bare greps report success even on failed assertions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T22:58:53.789Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-77b26984c8ea",
@@ -5617,6 +5584,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T06:41:39.252Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-factory-0290030",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Merge-scan surfaced concrete high-severity bugs, including an infinite-loop risk and silently-passing tests, across core factory automation scripts.",
+			"evidence": [
+				"rank.sh:74 unvalidated FACTORY_RANK_BATCH_SIZE risks infinite loop",
+				"unslop.test.sh:63 bare grep lacks error handling, masking failures",
+				"12 findings spanning discovery, reconcile, and rank scripts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T23:24:14.513Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-f696097",
@@ -10386,6 +10386,76 @@
 			"scoredAt": "2026-09-27T20:28:44.098Z"
 		},
 		{
+			"key": "issue:minion-meta#456",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#456 [monitor:unstick] reconcile run 956f82ec: claude agent exit-126/turns=0 despite pipeline completing",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/456",
+			"sourceUpdatedAt": "2026-09-16T22:17:24Z",
+			"sourceFingerprint": "787e4cd1cdbafb910df9a486e0419d184177ed11042d3e72dd1aa43f7982379c",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#457"
+			],
+			"rationale": "Recurring exit-126/turns=0 runner exec-failure signature that duplicates issue #457 filed the same day.",
+			"evidence": [
+				"exit 126 with turns=0 (process could not be executed)",
+				"Recurring 3x today with identical signature",
+				"sibling issue #457 same diagnosis"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T23:24:14.513Z"
+		},
+		{
+			"key": "issue:minion-meta#457",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#457 [monitor:unstick] reconcile run 83034d70: claude agent exit-126/turns=0 despite pipeline completing",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/457",
+			"sourceUpdatedAt": "2026-09-16T22:17:40Z",
+			"sourceFingerprint": "f8f9d791a8cd77fda51bd16f6bb8dffa4011f4a11b5430bf9513b16bf831560d",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#456"
+			],
+			"rationale": "Same-day duplicate of issue #456 with an identical exit-126 runner exec-failure signature.",
+			"evidence": [
+				"same pattern as sibling runs today",
+				"exit 126, exec-level failure",
+				"Recurring 3x today with identical signature"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T23:24:14.513Z"
+		},
+		{
 			"key": "issue:minion-meta#483",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11857,76 +11927,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T03:59:05.295Z"
-		},
-		{
-			"key": "issue:minion-meta#456",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#456 [monitor:unstick] reconcile run 956f82ec: claude agent exit-126/turns=0 despite pipeline completing",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/456",
-			"sourceUpdatedAt": "2026-09-16T22:17:24Z",
-			"sourceFingerprint": "787e4cd1cdbafb910df9a486e0419d184177ed11042d3e72dd1aa43f7982379c",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#457"
-			],
-			"rationale": "Duplicate exit-126/turns=0 infra-fault report from the same day as #457 describing the identical recurring signature and fix recommendation.",
-			"evidence": [
-				"exit 126 turns=0 with otherwise-healthy pipeline",
-				"recurred 3x today per the note",
-				"recommends a new host-classifier signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T22:58:53.789Z"
-		},
-		{
-			"key": "issue:minion-meta#457",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#457 [monitor:unstick] reconcile run 83034d70: claude agent exit-126/turns=0 despite pipeline completing",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/457",
-			"sourceUpdatedAt": "2026-09-16T22:17:40Z",
-			"sourceFingerprint": "f8f9d791a8cd77fda51bd16f6bb8dffa4011f4a11b5430bf9513b16bf831560d",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#456"
-			],
-			"rationale": "Sibling duplicate of #456 with the same exit-126/turns=0 signature and same proposed host-classifier fix, filed 16 minutes apart.",
-			"evidence": [
-				"identical signature across minion-meta reconcile runs",
-				"recurring 3x today",
-				"same recommendation to add host-classifier signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T22:58:53.789Z"
 		},
 		{
 			"key": "issue:minion-meta#472",
@@ -21673,19 +21673,19 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 7
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Narrow, well-specified fix for empty-catch localStorage handling in a single component with clear line references.",
+			"rationale": "Small, well-specified fix for silent localStorage failures affecting chat session persistence in one component.",
 			"evidence": [
-				"FloatingAssistant.svelte:119 localStorage.getItem silently fails on restore",
-				"FloatingAssistant.svelte:142 localStorage.setItem silently fails on persist"
+				"localStorage.getItem() silently fails during session restoration",
+				"localStorage.setItem() silently fails during session persistence"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T22:58:53.789Z"
+			"scoredAt": "2026-09-30T23:24:14.513Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-77445c0",
@@ -23667,6 +23667,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T04:28:31.385Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a record of an already-merged nitter persistence/shutdown fix, not a forward-looking actionable goal.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"kind: deploy, stage: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T23:24:14.513Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
