@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T06:42:03.333Z",
+	"generatedAt": "2026-09-30T06:54:08.374Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7047,6 +7047,40 @@
 			"scoredAt": "2026-09-23T09:58:54.452Z"
 		},
 		{
+			"key": "proposal:2026-09-30-hub-appointment-services-table-price",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "New-appointment services table — Price column has no data source",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-30-hub-appointment-services-table-price.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "83e14460c7d18986024bfc840dbb423daa6bfc52d7ee63893c1d817ed42e9305",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-2746481724"
+			],
+			"rationale": "Appointment price column is unpopulated with a clear, bounded join fix already identified.",
+			"evidence": [
+				"Price column always renders '—' via formatMoney(undefined)",
+				"TODO(handoff) names the fix direction: join on productId in listEventTypes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T06:54:08.238Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-1224301425",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8229,6 +8263,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:32:45.089Z"
+		},
+		{
+			"key": "proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Stock items — MOQ, Group and Reorder qty become custom columns (core schema keeps only what logic reads)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-30-hub-stock-item-optional-fields-to-custom-columns.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "0b48c2f71c5753ac0b71593e43882ec062e58cea4aab7a4363619e853e843b01",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-379939979",
+				"proposal:postmerge-minion-hub-6200323e3d73"
+			],
+			"rationale": "Schema-cleanup work is already substantially implemented across two branches with a documented follow-up to drop the read-only columns.",
+			"evidence": [
+				"Part 1 (5cc6ae6d) and Part 2 (cdbd69e0) implemented on feat/stock-optional-fields-custom",
+				"migration script planOrgBackfill has dry-run + apply modes with tests"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T06:54:08.238Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-3219321730",
@@ -11444,6 +11513,38 @@
 			"scoredAt": "2026-09-29T20:33:16.263Z"
 		},
 		{
+			"key": "proposal:2026-09-29-hub-table-filters-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Table toolbar + Notion-style filters — open ends",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-table-filters-followups.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "fa7c95518037b5adec5e75e0d6a74e2113811c8eb06feda350127eb0afa9e900",
+			"score": 47,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Well-documented ledger of seven remaining UI follow-ups but bundles unrelated scoped items that should be split before execution.",
+			"evidence": [
+				"ledger lists 8 numbered items, one already closed 2026-09-29",
+				"spans persistence, group-by, editor, and schema follow-ups across multiple files"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T06:54:08.238Z"
+		},
+		{
 			"key": "proposal:ci-minion-ai-auto-response",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14474,38 +14575,6 @@
 			"scoredAt": "2026-09-28T11:40:43.883Z"
 		},
 		{
-			"key": "pr:minion_hub#420",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#420 refactor(stock): MOQ, Group and Reorder qty become custom columns (backfill script for existing orgs)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/420",
-			"sourceUpdatedAt": "2026-09-30T06:39:06Z",
-			"sourceFingerprint": "43c0b2ade5b14920167839fd7cab429b186d9e91c8ca3ab011295894a3723149",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-scoped, tested, and QA-verified refactor with an owner-run backfill script ready to merge.",
-			"evidence": [
-				"bun run check 0 · 288 tests passed · Playwright 2/2",
-				"idempotent backfill script with dry-run/--apply and invariant checks"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T06:41:39.252Z"
-		},
-		{
 			"key": "proposal:2026-08-18-base-attention-queue-responsive-runs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15880,38 +15949,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-23T23:28:56.595Z"
-		},
-		{
-			"key": "proposal:2026-09-29-hub-table-filters-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Table toolbar + Notion-style filters — open ends",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-table-filters-followups.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "003b9470dd5c9dfe63808cdc1f7e4ad07922278f4a3d7d6868888f71486f0e5a",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A multi-item follow-up ledger with one item already closed and six still open of varying scope needs triage into individually actionable specs rather than one bundled goal.",
-			"evidence": [
-				"item 3 marked \"CLOSED 2026-09-29\"",
-				"items 1,2,4,5,6,7 remain open with differing scope/readiness"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T03:24:36.045Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-2877399286",
@@ -17904,6 +17941,41 @@
 			"scoredAt": "2026-09-30T03:54:57.361Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-379939979",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/db/pg-schema/stock.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-379939979.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "df0992740cd157696a4ddd8d5406acf2012b4a43e9b47229ba58d2a03918ad0e",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns",
+				"proposal:postmerge-minion-hub-6200323e3d73"
+			],
+			"rationale": "This marker is the exact TODO the stock-custom-columns proposal intentionally left and already tracks for a follow-up drop-column migration.",
+			"evidence": [
+				"marker text: 'item_group/reorder_qty/moq (this column + reorderQty +'",
+				"sibling proposal states DB columns are 'kept read-only with a TODO(handoff)' for this exact column set"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T06:54:08.238Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-5e55396",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18001,6 +18073,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T07:29:34.805Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-6200323e3d73",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/db/pg-schema/stock.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6200323e3d73.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "6704b6544f80adf4e8c76d6053f5ec9e219ff9154f0685ea55aa78b8f9c0c915",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns",
+				"proposal:handoff-minion-hub-379939979"
+			],
+			"rationale": "Duplicate discovery of the same stock.ts TODO already scoped and scheduled for resolution by the stock-custom-columns proposal.",
+			"evidence": [
+				"same marker text 'item_group/reorder_qty/moq' in src/server/db/pg-schema/stock.ts",
+				"merged PR #420 is the same branch referenced by the sibling proposal's 'Implemented' section"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T06:54:08.238Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9068ad039a31",
@@ -20496,6 +20603,38 @@
 			"scoredAt": "2026-09-30T06:41:39.252Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Deploy health item shows only an already-merged routine commit with unknown deploy status, no evidence of an actual incident.",
+			"evidence": [
+				"status: unknown",
+				"commit message describes an already-merged fix (#295)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T06:54:08.238Z"
+		},
+		{
 			"key": "issue:minion-meta#516",
 			"kind": "issue",
 			"stage": "proposal",
@@ -20884,6 +21023,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T02:28:17.869Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2746481724",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/scheduling/AppointmentForm.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2746481724.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "b64aa1f88631456d8f12ab5de92af680e163f588b4fd0efea00544b41b3a27ce",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:2026-09-30-hub-appointment-services-table-price"
+			],
+			"rationale": "Duplicates the appointment-price gap that is already fully specified with a fix plan in the sibling proposal.",
+			"evidence": [
+				"same file/line: AppointmentForm.svelte:245 'no server data source plumbs a real price for a service'",
+				"sibling proposal already has a full AS-IS/TO-BE fix plan"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T06:54:08.238Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2778272735",
@@ -22700,7 +22873,7 @@
 			"title": "Handoff marker — src/lib/tables/defs/index.ts (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2632898496.md",
 			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "c9a2ec72a8fd0fe75ad7321c75c2c6da558bad56c559c9c5721489c2feadce6e",
+			"sourceFingerprint": "c9b030154aa2f83028d2c26b0b69d5aea29e0169127ad32c1c00cbdc24ebd52d",
 			"score": 26,
 			"band": "low",
 			"axes": {
@@ -22709,20 +22882,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 5,
+				"implementation": 3
 			},
-			"confidence": 4,
-			"recommendation": "prune",
+			"confidence": 5,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Both markers explicitly defer the per-org sequence column work to a named future 'part 2', indicating it is already planned elsewhere and not an independent open end now.",
+			"rationale": "Notes a deferred per-org sequence-column enhancement with no current urgency or blocking need.",
 			"evidence": [
-				"marker: 'UUID-only today — part 2 adds a per-org sequence column' at defs/index.ts:76",
-				"marker: 'same as crm.customers — numbered in part 2' at defs/index.ts:152"
+				"markers say 'UUID-only today — part 2 adds a per-org sequence column'",
+				"two markers reference the same deferred part-2 work"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T02:29:04.796Z"
+			"scoredAt": "2026-09-30T06:54:08.238Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-3867107013",
@@ -26339,6 +26512,38 @@
 			"scoredAt": "2026-09-26T00:28:54.749Z"
 		},
 		{
+			"key": "run:minion_hub#36680273423",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/36680273423",
+			"sourceUpdatedAt": "2026-09-30T06:49:46Z",
+			"sourceFingerprint": "77b0e92c84add0f861fef6304e7d4045d2c8a376c6b18e6f2dcb836eaf09dcb6",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress CI run on master with no failure signal or additional detail to act on.",
+			"evidence": [
+				"status: in_progress",
+				"summary: 'push on master' with no failure or error detail"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T06:54:08.238Z"
+		},
+		{
 			"key": "proposal:2026-08-18-spec-heading-lint-baseline-backfill",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27106,6 +27311,38 @@
 			"scoredAt": "2026-09-25T02:59:44.134Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "ea1dc16c130f122edca6169c0e1161d6f310e9cb733139482d557b3f7ae49fda",
+			"score": 13,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The flagged file is the ranking system's own generated index containing quoted marker text copied from other files, not an actual unresolved code TODO.",
+			"evidence": [
+				"target file is rankings/index.json, a generated data index",
+				"quoted 'markers' are fragments of other files' TODO text embedded as JSON strings"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T06:54:08.238Z"
+		},
+		{
 			"key": "issue:minion-meta#373",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27328,70 +27565,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T06:24:34.773Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "c6fcf2a3fe256d4e548df092ad608be9cfbe142009252fe0612cd4466eb30c55",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The markers are lines inside an aggregated rankings/index.json data artifact quoting other files' TODOs, not real actionable source TODOs in this file.",
-			"evidence": [
-				"all markers point at rankings/index.json line numbers, a generated data/index file",
-				"marker text fragments are quoted snippets from unrelated proposals, not code comments"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T06:41:39.252Z"
-		},
-		{
-			"key": "run:minion_hub#36679273863",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/36679273863",
-			"sourceUpdatedAt": "2026-09-30T06:38:38Z",
-			"sourceFingerprint": "12acf2390c0a3abb673d1c6443fa3ab0d6ec47703967259d47849cdc78ad82b6",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An in-progress routine CI run on master is a status event, not an actionable goal.",
-			"evidence": [
-				"status: in_progress",
-				"summary: push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T06:42:03.162Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
