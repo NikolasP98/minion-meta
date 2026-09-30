@@ -47,3 +47,7 @@ The autosave + `SaveIndicator` + flat-sections contract ships on the catalog
 editor only. Candidates: `/crm/[contactId]`, `/stock/items/[id]`,
 `/finances/invoices/[id]`, `/pos/tickets/[id]` (every page the peek registry
 can open).
+
+## 7. `InlineCategoryCell` still owns its own trigger
+The catalog Category cell keeps an always-visible trigger; migrate it to the
+select-then-click contract the Tags cell got in hub #414 (`DataCellContext.open`).
