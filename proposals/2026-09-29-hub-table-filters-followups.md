@@ -26,8 +26,24 @@ service honouring each op; then lift the gate in `FilterAddMenu`/`FilterChip`.
 keeps filters per view. Next: persist both under `storageKey` (or per-user
 preference `tableFilters[tableId]`), with a "Reset" affordance.
 
-## 3. `GroupByPicker` lives in the catalog page only
+## 3. `GroupByPicker` lives in the catalog page only — CLOSED 2026-09-29 (`groupOptions`/`groupValue`/`onGroupChange` on `DataTable`, slice 4)
 `/pos/catalog` hosts the picker in its own view-bar (it serves the board view
 too). A `groupOptions`/`groupValue` prop on `DataTable` rendering the same
 component in the toolbar is the standard home once a second table groups
 along a user-chosen axis.
+
+## 4. Sellable editor: modal presentation not ported to autosave
+`SellableWizard` `presentation="modal"` has no consumer today; it still shows
+Name + Save/Cancel instead of the inline-title/autosave flow (`TODO(handoff)`
+in `SellableWizard.svelte`). Port it the same way if a modal consumer appears.
+
+## 5. Consumption gauge on other consumption surfaces
+`/stock/items/[id]` and `/pos/appointments` render a `ConsumptionGauge` per
+row for `diagramEnabled` items; the editor's Supply consumption rows do not yet
+(`TODO(handoff)` in `SellableWizard.svelte`).
+
+## 6. Record-editor contract adoption
+The autosave + `SaveIndicator` + flat-sections contract ships on the catalog
+editor only. Candidates: `/crm/[contactId]`, `/stock/items/[id]`,
+`/finances/invoices/[id]`, `/pos/tickets/[id]` (every page the peek registry
+can open).
