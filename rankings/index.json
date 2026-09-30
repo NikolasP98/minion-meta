@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-09-30T14:24:10.735Z",
+	"generatedAt": "2026-09-30T14:54:14.822Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -16737,38 +16737,6 @@
 			"scoredAt": "2026-09-30T09:54:25.439Z"
 		},
 		{
-			"key": "issue:minion-meta#575",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#575 [monitor:unstick] reconcile run f3e10952 (minion-meta): claude provider exec failure (exit-126)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/575",
-			"sourceUpdatedAt": "2026-09-23T14:17:28Z",
-			"sourceFingerprint": "86d3f6093012f5b0121cdef0dc3a02154431425da0a6c1cca94ebf9afd65bee8",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Automated monitor intake shows the reconcile logic itself succeeded while a separate exit-126 runner-level claude binary/PATH failure self-recovered on retry.",
-			"evidence": [
-				"provider=claude exited with code 126, turns=0/permission_denials=0",
-				"reconcile script completed end-to-end and pushed OK on retry"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-23T14:29:00.859Z"
-		},
-		{
 			"key": "issue:minion-meta#585",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18976,38 +18944,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:39:42.070Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged fix for nitter persistence/shutdown handling shown as deployment status without evidence of ongoing failure or urgency.",
-			"evidence": [
-				"commit message: fix(nitter): serialize persistence and drain poller shutdown",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T13:24:22.348Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
@@ -25843,6 +25779,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T10:53:57.340Z"
+		},
+		{
+			"key": "issue:minion-meta#575",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#575 [monitor:unstick] reconcile run f3e10952 (minion-meta): claude provider exec failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/575",
+			"sourceUpdatedAt": "2026-09-23T14:17:28Z",
+			"sourceFingerprint": "86d3f6093012f5b0121cdef0dc3a02154431425da0a6c1cca94ebf9afd65bee8",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The report itself states the reconcile logic already succeeded and the exit-126 was a transient runner PATH/permission issue with no recurrence pattern established.",
+			"evidence": [
+				"reconcile shell script itself completed successfully end-to-end",
+				"provider=claude exited with code 126",
+				"a plain retry of the run is also reasonable once the binary issue is fixed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-09-30T14:54:14.688Z"
 		},
 		{
 			"key": "issue:minion-meta#579",
