@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-01T16:54:32.183Z",
+	"generatedAt": "2026-10-01T17:54:22.488Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4112,6 +4112,39 @@
 			"scoredAt": "2026-09-25T18:29:18.912Z"
 		},
 		{
+			"key": "run:minion (gateway)#36831905945",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/36831905945",
+			"sourceUpdatedAt": "2026-10-01T08:21:34Z",
+			"sourceFingerprint": "bd6a4c3f88c9ac27e341d28bf9263b6f914d562a3a2ee0b67df89d3fad899250",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A failing CI run on the gateway's DEV branch is potentially release-blocking but the catalog gives no failed-job or log detail to act on yet.",
+			"evidence": [
+				"status: failure",
+				"workflow_dispatch on DEV",
+				"updatedAt 2026-10-01T08:21:34Z"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T17:54:22.346Z"
+		},
+		{
 			"key": "spec:2026-08-13-crm-customers-server-pagination-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -7511,38 +7544,6 @@
 			"scoredAt": "2026-09-27T21:58:26.738Z"
 		},
 		{
-			"key": "issue:minion-meta#485",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#485 [monitor:unstick] reconcile run f5ba1a9d (minion-meta): claude agent exec failure (exit-126, 0 turns)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/485",
-			"sourceUpdatedAt": "2026-09-17T17:17:45Z",
-			"sourceFingerprint": "c0ddb8a3418ec8879095df528930ab8b2a13dad49ec6db19499d1a6625d44d47",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Recurring exit-126/turns-0 exec failures across 5 reconcile runs in ~2.5h point to a host/container-level breakage of the claude CLI that blocks automated pipeline execution until fixed.",
-			"evidence": [
-				"same signature seen in 4 other minion-meta reconcile runs within ~2.5h",
-				"exit 126, turns=0, 0 permission_denials indicates OS-level exec failure, not task/content issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T17:28:41.824Z"
-		},
-		{
 			"key": "issue:minion-meta#597",
 			"kind": "issue",
 			"stage": "proposal",
@@ -10215,21 +10216,23 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 3
+				"implementation": 5
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
-				"issue:minion-meta#484"
+				"issue:minion-meta#484",
+				"issue:minion-meta#485"
 			],
-			"rationale": "Recurring claude exit-126 launch failure on the reconcile runner is an infra fault best tracked as one goal with its sibling occurrence rather than duplicated per-run.",
+			"rationale": "Recurring host-side exec failure (exit-126, turns=0) in minion-meta reconcile runs, duplicated across three near-identical monitor-intake issues that should become one runner-fix goal.",
 			"evidence": [
-				"exit-126, turns=0, $0 cost — agent process never launched",
-				"4th-5th occurrence of identical signature within ~2 hours per the alert text"
+				"exit-126, turns=0, cost $0; agent process never launched",
+				"4th-5th occurrence of identical signature within ~2 hours",
+				"reconcile logic (handoff refresh, merge-scan, git push) completed normally before the claude step failed"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T16:58:47.308Z"
+			"scoredAt": "2026-10-01T17:54:22.346Z"
 		},
 		{
 			"key": "issue:minion-meta#484",
@@ -10249,21 +10252,59 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 3
+				"implementation": 5
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
-				"issue:minion-meta#483"
+				"issue:minion-meta#483",
+				"issue:minion-meta#485"
 			],
-			"rationale": "Same exit-126/turns=0 runner-launch signature as #483 on the same reconcile pipeline, so it should be consolidated into a single infra-fix goal rather than tracked separately.",
+			"rationale": "Same exit-126/turns=0 runner exec-failure signature as sibling issues on the same day, warranting consolidation into a single host-fix goal.",
 			"evidence": [
-				"reconcile state (handoff, merge-scan, git push) completed normally; only the claude provider call failed with exit-126",
-				"described as a recurring signature across multiple runs today, not isolated"
+				"same signature as sibling runs today; only trailing claude provider call failed (exit-126, turns=0)",
+				"dev branch fast-forwarded 5e61adf..b74aadd before the failure",
+				"recurring signature across multiple runs today, not an isolated blip"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T16:58:47.308Z"
+			"scoredAt": "2026-10-01T17:54:22.346Z"
+		},
+		{
+			"key": "issue:minion-meta#485",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#485 [monitor:unstick] reconcile run f5ba1a9d (minion-meta): claude agent exec failure (exit-126, 0 turns)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/485",
+			"sourceUpdatedAt": "2026-09-17T17:17:45Z",
+			"sourceFingerprint": "c0ddb8a3418ec8879095df528930ab8b2a13dad49ec6db19499d1a6625d44d47",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#483",
+				"issue:minion-meta#484"
+			],
+			"rationale": "Third occurrence of the identical exec-failure signature naming the two sibling runs directly, confirming this should be consolidated into one host/runner fix goal rather than tracked as three separate issues.",
+			"evidence": [
+				"same signature seen in 4 other minion-meta reconcile runs within ~2.5h (1c3d2c19, a9b4829d, 8362ab1d, 47ecd4c6)",
+				"pipeline infra steps all completed successfully per log tail; only the claude agent step exited 126 with turns=0",
+				"recommends verifying claude CLI binary presence/exec bit/PATH on the runner"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T17:54:22.346Z"
 		},
 		{
 			"key": "issue:minion-meta#500",
@@ -14562,39 +14603,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T20:54:03.465Z"
-		},
-		{
-			"key": "run:minion (gateway)#33158423737",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/33158423737",
-			"sourceUpdatedAt": "2026-08-28T09:36:01Z",
-			"sourceFingerprint": "f80ad657da7f27b3026f8bec110a0827a18ec223cec7ded1b70a3f93f1246f9b",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The CI failure is over a month stale with only a bare 'push on DEV' description and no diagnostic detail to act on.",
-			"evidence": [
-				"status: failure",
-				"updatedAt 2026-08-28T09:36:01Z, roughly a month before current date",
-				"summary only states 'push on DEV' with no error detail"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T16:54:32.054Z"
 		},
 		{
 			"key": "spec:2026-08-18-sdlc-transformation-roadmap",
@@ -21492,38 +21500,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T23:58:59.849Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The summary is a commit message for an already-merged fix (PR #295) with no outstanding unresolved issue described.",
-			"evidence": [
-				"summary is a merged commit message co-authored and referencing PR #295",
-				"status field is unknown with no indication of ongoing deployment problem"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T16:54:32.054Z"
 		},
 		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
