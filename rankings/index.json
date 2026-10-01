@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-01T10:54:07.376Z",
+	"generatedAt": "2026-10-01T11:24:16.795Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3090,38 +3090,6 @@
 			"scoredAt": "2026-09-30T04:24:59.873Z"
 		},
 		{
-			"key": "run:minion (gateway)#36831905945",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/36831905945",
-			"sourceUpdatedAt": "2026-10-01T08:21:34Z",
-			"sourceFingerprint": "bd6a4c3f88c9ac27e341d28bf9263b6f914d562a3a2ee0b67df89d3fad899250",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failing CI run on the DEV branch blocks confidence in the pipeline but lacks detail on root cause or scope.",
-			"evidence": [
-				"status: failure",
-				"workflow_dispatch on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T09:54:19.717Z"
-		},
-		{
 			"key": "spec:2026-08-18-agent-instruction-parity-and-repo-policy-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -5307,6 +5275,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T05:58:27.412Z"
+		},
+		{
+			"key": "run:minion (gateway)#34587949149",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949149",
+			"sourceUpdatedAt": "2026-09-11T10:46:59Z",
+			"sourceFingerprint": "82bcff565fd5b409b3f4fe7fab98082e953214bbd231af0206d034e22b97120c",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"run:minion (gateway)#34587949471"
+			],
+			"rationale": "CI failed on a DEV push with no detail, and a same-repo Docker Release failure from the same push window suggests a shared root cause worth investigating together.",
+			"evidence": [
+				"status: failure",
+				"push on DEV",
+				"updatedAt 2026-09-11T10:46:59Z close to sibling run's 10:13:03Z"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T11:24:16.667Z"
+		},
+		{
+			"key": "run:minion (gateway)#34587949471",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949471",
+			"sourceUpdatedAt": "2026-09-11T10:13:03Z",
+			"sourceFingerprint": "bff3ad4ee3500a2aec6da97aca9215d1679d66023b6066cb22d3e02f7198b91a",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"run:minion (gateway)#34587949149"
+			],
+			"rationale": "Docker Release failed on the same DEV push as a concurrent CI failure, indicating a likely shared build/test root cause rather than two separate issues.",
+			"evidence": [
+				"status: failure",
+				"push on DEV",
+				"same repo and date as sibling CI failure run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T11:24:16.667Z"
 		},
 		{
 			"key": "issue:minion-meta#681",
@@ -22645,6 +22683,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T00:28:54.749Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"run:minion (gateway)#34587949149",
+				"run:minion (gateway)#34587949471"
+			],
+			"rationale": "Entry describes an already-merged commit fixing nitter shutdown/persistence, so there is no remaining deployment action.",
+			"evidence": [
+				"commit message: fix(nitter): serialize persistence and drain poller shutdown",
+				"co-authored-by line indicates merged PR #295"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T11:24:16.667Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
