@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-01T07:24:00.443Z",
+	"generatedAt": "2026-10-01T07:54:14.742Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3088,76 +3088,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T04:24:59.873Z"
-		},
-		{
-			"key": "run:minion (gateway)#34587949149",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949149",
-			"sourceUpdatedAt": "2026-09-11T10:46:59Z",
-			"sourceFingerprint": "82bcff565fd5b409b3f4fe7fab98082e953214bbd231af0206d034e22b97120c",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"run:minion (gateway)#34587949471"
-			],
-			"rationale": "CI failure on DEV push blocks reliable merges but lacks diagnostic detail in this record.",
-			"evidence": [
-				"status: failure",
-				"stage: testing",
-				"branch: DEV push"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T07:24:00.310Z"
-		},
-		{
-			"key": "run:minion (gateway)#34587949471",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "Docker Release",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949471",
-			"sourceUpdatedAt": "2026-09-11T10:13:03Z",
-			"sourceFingerprint": "bff3ad4ee3500a2aec6da97aca9215d1679d66023b6066cb22d3e02f7198b91a",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"run:minion (gateway)#34587949149"
-			],
-			"rationale": "Docker Release failure on DEV push risks broken deploy artifacts but needs log investigation before actionable scoping.",
-			"evidence": [
-				"status: failure",
-				"title: Docker Release",
-				"branch: DEV push"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T07:24:00.310Z"
 		},
 		{
 			"key": "spec:2026-08-18-agent-instruction-parity-and-repo-policy-spec",
@@ -18055,6 +17985,38 @@
 			"scoredAt": "2026-09-24T07:59:05.912Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-0f5a066",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 0f5a066",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-0f5a066.md",
+			"sourceUpdatedAt": "2026-09-03",
+			"sourceFingerprint": "e645deaf10e6d7e308550f0f41bc1e46cd3c866f81a3ca082089aa03bbf5e599",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Clear bounded fix: add a missing in-code TODO(handoff) marker at a named file/line per the AGENTS.md handoff contract.",
+			"evidence": [
+				"medium src/routes/(app)/scheduling/resources/+page.server.ts:1 (missing-handoff)",
+				"lacks in-code TODO(handoff) marker per AGENTS.md contract"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T07:54:14.628Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-be019c6",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22587,6 +22549,37 @@
 			"scoredAt": "2026-09-26T00:28:54.749Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a log of an already-merged fix commit with no outstanding actionable work.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown (#295)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T07:54:14.628Z"
+		},
+		{
 			"key": "issue:minion-meta#409",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24442,38 +24435,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-24T11:58:38.007Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-hub-0f5a066",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 0f5a066",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-0f5a066.md",
-			"sourceUpdatedAt": "2026-09-03",
-			"sourceFingerprint": "e645deaf10e6d7e308550f0f41bc1e46cd3c866f81a3ca082089aa03bbf5e599",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A single well-located missing TODO(handoff) marker is a small, clearly-scoped compliance fix with no urgency or broad impact.",
-			"evidence": [
-				"file src/routes/(app)/scheduling/resources/+page.server.ts:1 flagged missing-handoff",
-				"severity labeled medium by merge-scan"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T07:28:40.359Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-1697a678cf5f",
@@ -26983,6 +26944,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T00:28:54.749Z"
+		},
+		{
+			"key": "run:minion (gateway)#36831905945",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/36831905945",
+			"sourceUpdatedAt": "2026-10-01T07:46:13Z",
+			"sourceFingerprint": "f77781c1554941eea8bca49a0a50028fb714cca5c175ea6115d78f131dcebbb5",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is merely an in-progress CI run status, not a discrete work goal.",
+			"evidence": [
+				"workflow_dispatch on DEV",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T07:54:14.628Z"
 		},
 		{
 			"key": "proposal:2026-08-18-spec-heading-lint-baseline-backfill",
