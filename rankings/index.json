@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-01T01:35:51.216Z",
+	"generatedAt": "2026-10-01T01:54:23.421Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7969,38 +7969,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T23:58:59.849Z"
-		},
-		{
-			"key": "run:minion (gateway)#36685181315",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/36685181315",
-			"sourceUpdatedAt": "2026-09-30T08:05:10Z",
-			"sourceFingerprint": "7e4b6a53349f827f18c2035d377ca0fd42cc0fdd915921040713a82db881b947",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "CI run failed on DEV but the catalog provides no failure details to act on directly.",
-			"evidence": [
-				"status: failure",
-				"workflow_dispatch on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T19:54:07.150Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
@@ -17268,6 +17236,39 @@
 			"scoredAt": "2026-09-30T16:24:38.299Z"
 		},
 		{
+			"key": "run:minion (gateway)#35429469071",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/35429469071",
+			"sourceUpdatedAt": "2026-09-19T07:46:41Z",
+			"sourceFingerprint": "06a15af174df6d59c4759b8f57b461a78d2c3149789143eb1b54bd7943aa045e",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "CI failed via workflow_dispatch on the DEV branch but the catalog gives no failure detail, so the cause needs investigation before action can be scoped.",
+			"evidence": [
+				"status: failure",
+				"workflow_dispatch on DEV",
+				"title: CI"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T01:54:23.294Z"
+		},
+		{
 			"key": "issue:minion-meta#559",
 			"kind": "issue",
 			"stage": "proposal",
@@ -19093,6 +19094,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T18:59:09.445Z"
+		},
+		{
+			"key": "issue:minion-meta#460",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#460 [monitor:unstick] reconcile 44336b57 (minion-meta): claude agent exec failure (exit-126, turns=0) despite successful script work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/460",
+			"sourceUpdatedAt": "2026-09-17T00:17:48Z",
+			"sourceFingerprint": "b5344a3b4470a18d68d6aa6a62c54a1a850c4dc6e6969eda6b81842fb4e4e140",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"issue:minion-meta#578"
+			],
+			"rationale": "Diagnosis confirms the reconcile task output already succeeded and this exit-126/turns=0 infra artifact recurred three times, so the real fix is a host classifier rule or runner-permissions check rather than a task repair.",
+			"evidence": [
+				"exit-126, turns=0, permission_denials=0",
+				"recurred 3x within ~2.5h (44336b57, 956f82ec, 83034d70)",
+				"actual reconcile output was already produced and pushed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T01:54:23.294Z"
 		},
 		{
 			"key": "issue:minion-meta#468",
@@ -22619,41 +22655,6 @@
 			"scoredAt": "2026-09-26T23:29:07.820Z"
 		},
 		{
-			"key": "issue:minion-meta#460",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#460 [monitor:unstick] reconcile 44336b57 (minion-meta): claude agent exec failure (exit-126, turns=0) despite successful script work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/460",
-			"sourceUpdatedAt": "2026-09-17T00:17:48Z",
-			"sourceFingerprint": "b5344a3b4470a18d68d6aa6a62c54a1a850c4dc6e6969eda6b81842fb4e4e140",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#578"
-			],
-			"rationale": "The underlying reconcile work already succeeded and the only real ask is a monitor host-classifier rule for a recurring infra signature, which overlaps with the similar #578 provider-fallback signature.",
-			"evidence": [
-				"reconcile output already pushed despite exit-126, turns=0",
-				"recurred 3x within ~2.5h on minion-meta reconcile",
-				"recommendation: add a host classifier rule"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T01:29:00.202Z"
-		},
-		{
 			"key": "issue:minion-meta#657",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24672,6 +24673,38 @@
 			"scoredAt": "2026-10-01T01:33:23.632Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Entry only shows a commit message for an already-merged nitter fix with deployment status marked unknown and no stated problem.",
+			"evidence": [
+				"status: unknown",
+				"summary is merged commit 'fix(nitter): serialize persistence and drain shutdown'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T01:54:23.294Z"
+		},
+		{
 			"key": "issue:minion-meta#322",
 			"kind": "issue",
 			"stage": "proposal",
@@ -25935,6 +25968,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T18:54:13.482Z"
+		},
+		{
+			"key": "issue:minion-meta#578",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#578 [monitor:unstick] Run ad4fda86 (rank board goals, minion-meta) failed: both LLM providers rejected ranking batch",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/578",
+			"sourceUpdatedAt": "2026-09-24T01:17:19Z",
+			"sourceFingerprint": "8eb8ec1c40e6b08805585a5303e0150b9d66480653cff5d9eb5d362b989cb115",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#460"
+			],
+			"rationale": "Diagnosis identifies a transient LLM provider fallback failure affecting only 3 of 622 candidates at trivial cost, with a cheap retry as the only recommended action.",
+			"evidence": [
+				"both bounded providers (claude and codex) unavailable or invalid JSON for batch",
+				"cost incurred was low ($0.15)",
+				"only 3/622 candidates were pending"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T01:54:23.294Z"
 		},
 		{
 			"key": "issue:minion-meta#579",
@@ -27220,41 +27288,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T20:28:44.098Z"
-		},
-		{
-			"key": "issue:minion-meta#578",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#578 [monitor:unstick] Run ad4fda86 (rank board goals, minion-meta) failed: both LLM providers rejected ranking batch",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/578",
-			"sourceUpdatedAt": "2026-09-24T01:17:19Z",
-			"sourceFingerprint": "8eb8ec1c40e6b08805585a5303e0150b9d66480653cff5d9eb5d362b989cb115",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#460"
-			],
-			"rationale": "A cheap, transient LLM-provider fallback failure with a trivial retry fix, whose only durable value is a classifier-rule addition shared with #460's recurring-signature request.",
-			"evidence": [
-				"only 3/622 candidates were pending",
-				"cost incurred was low ($0.15)",
-				"recommendation: retry; candidate for a new host-classifier signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T01:29:00.202Z"
 		},
 		{
 			"key": "pr:minion-meta#561",
