@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-01T11:54:22.297Z",
+	"generatedAt": "2026-10-01T12:24:31.906Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2655,39 +2655,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T09:28:31.801Z"
-		},
-		{
-			"key": "run:minion (gateway)#36831905945",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/36831905945",
-			"sourceUpdatedAt": "2026-10-01T08:21:34Z",
-			"sourceFingerprint": "bd6a4c3f88c9ac27e341d28bf9263b6f914d562a3a2ee0b67df89d3fad899250",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "CI failure on the core gateway repo's DEV branch signals a broken build but lacks failure detail needed to act.",
-			"evidence": [
-				"status: failure",
-				"workflow_dispatch on DEV",
-				"repo: minion (gateway)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T11:54:22.172Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-capability-separation-spec",
@@ -10813,6 +10780,38 @@
 			"scoredAt": "2026-09-30T08:25:09.920Z"
 		},
 		{
+			"key": "issue:minion-meta#731",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#731 [monitor:unstick] reconcile proposals run 0b57655f failed: claude provider exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/731",
+			"sourceUpdatedAt": "2026-10-01T12:17:30Z",
+			"sourceFingerprint": "4e0555dea3322a1c8caad8e8aa625c43b602428381aa4190f4fa0aa6d1478f68",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The diagnosis points to a host-level claude CLI exec fault (exit-126, turns=0) that a human should check even though the reconcile work already persisted.",
+			"evidence": [
+				"exit-126, turns=0 diagnosed as environment/exec fault, not task/logic failure",
+				"recommendation to check runner's claude CLI install (exec bit, PATH, arch)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T12:24:31.785Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11225,6 +11224,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T01:35:09.460Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-698ce81",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 698ce81",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-698ce81.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "7657571bd4101a5b0914a0f3d6cd2218b3388c294ba16153f8c86ca098198149",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A specific medium-severity finding identifies a Windows-skipped test that removes regression coverage, with an exact file/line and existing remediation reference.",
+			"evidence": [
+				"src/infra/message-ledger-provenance.test.ts:131 skipped on Windows, removing regression coverage",
+				"documented with TODO(handoff) reference to remediation proposal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T12:24:31.785Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-10e9567",
@@ -21208,7 +21239,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-10-01",
-			"sourceFingerprint": "72c63c2390307677c6feb812d0974413b80558c2a9390998edee4c4e82b84722",
+			"sourceFingerprint": "54ef7416c2394f39f10e0acbe6daf806f65d47e9b94d5d174cf02e253eca8502",
 			"score": 30,
 			"band": "low",
 			"axes": {
@@ -21223,14 +21254,14 @@
 			"confidence": 3,
 			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "The listed 'markers' are quoted fragments embedded in the rankings/index.json data artifact (past evidence/rationale text), not real code TODO(handoff) comments, so the sweep's framing of this as resolvable markers is not actionable as written.",
+			"rationale": "The proposal bundles many unrelated TODO(handoff) markers from one file by line number rather than by topic, so it cannot resolve as one coherent goal.",
 			"evidence": [
-				"markers point at rankings/index.json, a generated ranking output file, not source code",
-				"quoted lines like 'HDS-05 remains pending' and 'ALTER TABLE' read as embedded evidence text, not TODO comments"
+				"17 markers spanning DB migrations, backend-loss gating, raw-fetch refactors, and UI filters grouped only by file path",
+				"definition of done requires clearing all markers from a single file regardless of topic"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T08:24:58.905Z"
+			"scoredAt": "2026-10-01T12:24:31.785Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-29ee60e",
@@ -22646,6 +22677,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T00:28:54.749Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit already merged the nitter persistence/shutdown fix, leaving no open deployment action described.",
+			"evidence": [
+				"commit message shows the fix already merged",
+				"no pending action or failure described beyond the merged commit"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T12:24:31.785Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
@@ -24470,39 +24533,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T01:35:51.080Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-698ce81",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 698ce81",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-698ce81.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "7657571bd4101a5b0914a0f3d6cd2218b3388c294ba16153f8c86ca098198149",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single skipped Windows test with documented TODO handoff is low urgency and narrow in scope but worth tracking for eventual fix.",
-			"evidence": [
-				"medium severity weakened-test finding",
-				"test skipped on Windows platform only",
-				"TODO(handoff) already documents remediation reference"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T11:58:38.007Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-1697a678cf5f",
@@ -27012,6 +27042,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T00:28:54.749Z"
+		},
+		{
+			"key": "run:minion (gateway)#33158423737",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/33158423737",
+			"sourceUpdatedAt": "2026-08-28T09:36:01Z",
+			"sourceFingerprint": "f80ad657da7f27b3026f8bec110a0827a18ec223cec7ded1b70a3f93f1246f9b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a month-old CI failure record with no diagnostic detail, and a later deploy entry on the same repo shows subsequent merged fixes.",
+			"evidence": [
+				"CI failure updated 2026-08-28 with no detail beyond 'push on DEV'",
+				"later deploy entry shows a subsequent merged commit to the same gateway repo"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T12:24:31.785Z"
 		},
 		{
 			"key": "proposal:2026-08-18-spec-heading-lint-baseline-backfill",
