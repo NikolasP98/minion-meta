@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-01T17:54:22.488Z",
+	"generatedAt": "2026-10-01T18:24:01.829Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -21502,6 +21502,38 @@
 			"scoredAt": "2026-09-25T23:58:59.849Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged nitter persistence/shutdown fix with no indication of ongoing deployment failure.",
+			"evidence": [
+				"commit message: fix(nitter): serialize persistence and drain shutdown (#295)",
+				"tag: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T18:24:01.690Z"
+		},
+		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23631,6 +23663,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:32:45.089Z"
+		},
+		{
+			"key": "issue:minion-meta#734",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#734 [monitor:unstick] rank run 805a3164: provider fallback exhausted on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/734",
+			"sourceUpdatedAt": "2026-10-01T18:17:38Z",
+			"sourceFingerprint": "fd8aa48341059ca47ce88941c6ed2ea8cc5838a8ecaf99b72894290cb70a13f8",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated monitor intake describes a transient dual-provider batch failure that the diagnosis itself says should just be retried rather than tracked as new work.",
+			"evidence": [
+				"Diagnosis: transient provider/API fault, not a spec or data defect",
+				"Recommendation: retry the run; a single bad batch from a provider is not unusual"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T18:24:01.690Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
