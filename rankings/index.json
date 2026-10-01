@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-01T20:24:36.364Z",
+	"generatedAt": "2026-10-01T20:54:07.455Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2788,74 +2788,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T07:59:37.558Z"
-		},
-		{
-			"key": "issue:minion-meta#488",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#488 [monitor:unstick] reconcile proposals run 9807a867 (minion-meta) - claude exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/488",
-			"sourceUpdatedAt": "2026-09-17T20:17:56Z",
-			"sourceFingerprint": "01bd5bad56fe74baa4c2ef8883d0040d6654a49e461543d06943ef46952c698c",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#489"
-			],
-			"rationale": "Recurring claude-CLI exec-126/turns-0 launch failure on the reconcile runner is the same signature as #489 and should be tracked as one infra fix.",
-			"evidence": [
-				"4th identical occurrence in under 2 hours (17:57,18:20,19:18,19:42)",
-				"diagnosis: exit-126+turns=0 indicates host-exec-permission fault, not repo/task issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T20:28:49.557Z"
-		},
-		{
-			"key": "issue:minion-meta#489",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#489 [monitor:unstick] reconcile proposals run 41849c81 (minion-meta) - claude exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/489",
-			"sourceUpdatedAt": "2026-09-17T20:17:56Z",
-			"sourceFingerprint": "3c5a9238789707974c6baab4a2049cf232e31dfbfebc56d687abef8b012a5eec",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#488"
-			],
-			"rationale": "Duplicate alert of the same recurring claude-CLI exec-126 runner fault already described in #488.",
-			"evidence": [
-				"same signature as 3 other minion-meta reconcile runs in this window",
-				"recommendation: check claude CLI binary present/executable/on PATH on the runner"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T20:28:49.557Z"
 		},
 		{
 			"key": "issue:minion-meta#528",
@@ -5864,6 +5796,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:31:31.200Z"
+		},
+		{
+			"key": "issue:minion-meta#488",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#488 [monitor:unstick] reconcile proposals run 9807a867 (minion-meta) - claude exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/488",
+			"sourceUpdatedAt": "2026-09-17T20:17:56Z",
+			"sourceFingerprint": "01bd5bad56fe74baa4c2ef8883d0040d6654a49e461543d06943ef46952c698c",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#489"
+			],
+			"rationale": "Duplicate of the same recurring host-exec fault (claude exit-126, 0 turns) reported 4x in 2 hours and should be merged with #489 into one infra-fix goal.",
+			"evidence": [
+				"note: reconcile agent failed (provider=claude; exit-126; turns=0)",
+				"4th occurrence of identical signature in under 2 hours (17:57, 18:20, 19:18, 19:42)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T20:54:07.287Z"
+		},
+		{
+			"key": "issue:minion-meta#489",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#489 [monitor:unstick] reconcile proposals run 41849c81 (minion-meta) - claude exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/489",
+			"sourceUpdatedAt": "2026-09-17T20:17:56Z",
+			"sourceFingerprint": "3c5a9238789707974c6baab4a2049cf232e31dfbfebc56d687abef8b012a5eec",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#488"
+			],
+			"rationale": "Same host-exec fault signature as #488 (claude exit-126, 0 turns) from the same incident window and should be consolidated into one goal.",
+			"evidence": [
+				"note: reconcile agent failed (provider=claude; exit-126; turns=0)",
+				"one of 4 identical occurrences today (17:57, 18:20, 19:18, 19:42)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T20:54:07.287Z"
 		},
 		{
 			"key": "issue:minion-meta#642",
@@ -21535,38 +21535,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T23:58:59.849Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 8
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The referenced commit already fixed the nitter persistence/shutdown issue, leaving no outstanding deployment-health work.",
-			"evidence": [
-				"commit serializes persistence and drains poller shutdown",
-				"tagged as deployment with no further action described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T20:24:36.235Z"
 		},
 		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
