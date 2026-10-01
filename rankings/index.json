@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-01T02:24:17.768Z",
+	"generatedAt": "2026-10-01T02:35:37.389Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7971,6 +7971,38 @@
 			"scoredAt": "2026-09-25T23:58:59.849Z"
 		},
 		{
+			"key": "run:minion (gateway)#36685181315",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/36685181315",
+			"sourceUpdatedAt": "2026-09-30T08:05:10Z",
+			"sourceFingerprint": "7e4b6a53349f827f18c2035d377ca0fd42cc0fdd915921040713a82db881b947",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A failing CI run on the DEV branch needs investigation but the catalog gives no failure detail to act on yet.",
+			"evidence": [
+				"status: failure",
+				"workflow_dispatch on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T02:35:37.250Z"
+		},
+		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -14608,74 +14640,6 @@
 			"scoredAt": "2026-09-30T20:54:03.465Z"
 		},
 		{
-			"key": "run:minion (gateway)#34587949149",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949149",
-			"sourceUpdatedAt": "2026-09-11T10:46:59Z",
-			"sourceFingerprint": "82bcff565fd5b409b3f4fe7fab98082e953214bbd231af0206d034e22b97120c",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "group",
-			"relatedKeys": [
-				"run:minion (gateway)#34587949471"
-			],
-			"rationale": "Bare CI failure on push to DEV with no diagnostic detail and over two weeks stale, best combined with the near-simultaneous Docker Release failure into one investigation.",
-			"evidence": [
-				"status: failure",
-				"updatedAt: 2026-09-11T10:46:59Z, push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T02:24:17.600Z"
-		},
-		{
-			"key": "run:minion (gateway)#34587949471",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "Docker Release",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949471",
-			"sourceUpdatedAt": "2026-09-11T10:13:03Z",
-			"sourceFingerprint": "bff3ad4ee3500a2aec6da97aca9215d1679d66023b6066cb22d3e02f7198b91a",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "group",
-			"relatedKeys": [
-				"run:minion (gateway)#34587949149"
-			],
-			"rationale": "Docker Release failure from the same DEV push window as the CI run failure, with no diagnostic detail, warrants joint investigation rather than a standalone goal.",
-			"evidence": [
-				"status: failure",
-				"updatedAt: 2026-09-11T10:13:03Z, push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T02:24:17.600Z"
-		},
-		{
 			"key": "spec:2026-08-18-sdlc-transformation-roadmap",
 			"kind": "spec",
 			"stage": "spec",
@@ -18955,6 +18919,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:39:42.070Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a merged fix commit already deployed, so there is no remaining actionable work.",
+			"evidence": [
+				"commit title fix(nitter): serialize persistence and drain shutdown (#295)",
+				"co-authored, PR-merged format"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T02:35:37.250Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
@@ -23478,6 +23474,38 @@
 			"scoredAt": "2026-09-26T02:59:05.362Z"
 		},
 		{
+			"key": "run:minion_hub#36806394414",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/36806394414",
+			"sourceUpdatedAt": "2026-10-01T02:33:32Z",
+			"sourceFingerprint": "cf8f233b293b3cea9b5627a98040c7d3f9e29a8b44d5c397040e16f925947379",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "This run is still in progress on master and has no outcome yet to act on.",
+			"evidence": [
+				"status: in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T02:35:37.250Z"
+		},
+		{
 			"key": "spec:2026-08-17-hub-dead-mirrors-cleanup-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -24098,6 +24126,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T22:54:04.950Z"
+		},
+		{
+			"key": "issue:minion-meta#579",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#579 [monitor:unstick] reconcile proposals failed on minion-meta (run 40509170)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/579",
+			"sourceUpdatedAt": "2026-09-24T02:17:23Z",
+			"sourceFingerprint": "cfbe143b20a1b0f26b45ff8afc1e8c70e6d31f011afb437e641a8319037fd994",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated monitor intake already diagnosed as a transient infra exec-126 fault with core reconcile work completed successfully, so retry rather than new paid work is recommended.",
+			"evidence": [
+				"481 proposals written, pushed dev->dev, merge-scan state persisted",
+				"exit-126 turns=0 reads as infra/box-level fault, not task or spec failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T02:35:37.250Z"
 		},
 		{
 			"key": "issue:minion-meta#680",
@@ -26040,38 +26100,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T01:54:23.294Z"
-		},
-		{
-			"key": "issue:minion-meta#579",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#579 [monitor:unstick] reconcile proposals failed on minion-meta (run 40509170)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/579",
-			"sourceUpdatedAt": "2026-09-24T02:17:23Z",
-			"sourceFingerprint": "cfbe143b20a1b0f26b45ff8afc1e8c70e6d31f011afb437e641a8319037fd994",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The embedded diagnosis states the reconcile task's core work already succeeded and no spec or code fix is needed, only a retry.",
-			"evidence": [
-				"diagnosis: reconcile agent step completed core work despite exit-126/turns=0",
-				"recommendation: retry as-is, no spec or code fix needed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T02:29:14.751Z"
 		},
 		{
 			"key": "issue:minion-meta#588",
