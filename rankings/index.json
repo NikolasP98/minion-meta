@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-01T19:23:57.276Z",
+	"generatedAt": "2026-10-01T19:54:05.455Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6744,38 +6744,6 @@
 			"scoredAt": "2026-09-27T22:58:38.580Z"
 		},
 		{
-			"key": "issue:minion-meta#487",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#487 [monitor:unstick] reconcile run 6f93037e (minion-meta): reconcile-agent exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/487",
-			"sourceUpdatedAt": "2026-09-17T19:17:57Z",
-			"sourceFingerprint": "417b7f7db4aff55298028af83e6f784d8bab72210b2a75419c35a236c2d782a7",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A recurring exit-126/turns=0 failure isolated to the reconcile-agent CLI invocation across three runs points to a fixable runner permissions/PATH issue with no data loss.",
-			"evidence": [
-				"exit-126 turns=0 recurs across runs 7f695b37 and f5ba1a9d",
-				"merge-scan/push succeeded; failure isolated to the trailing claude CLI invocation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-24T19:28:51.677Z"
-		},
-		{
 			"key": "issue:minion-meta#540",
 			"kind": "issue",
 			"stage": "proposal",
@@ -10237,6 +10205,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T17:54:22.346Z"
+		},
+		{
+			"key": "issue:minion-meta#487",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#487 [monitor:unstick] reconcile run 6f93037e (minion-meta): reconcile-agent exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/487",
+			"sourceUpdatedAt": "2026-09-17T19:17:57Z",
+			"sourceFingerprint": "417b7f7db4aff55298028af83e6f784d8bab72210b2a75419c35a236c2d782a7",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Recurring exit-126/turns=0 reconcile-agent failure is systemic but the pipeline's actual work still succeeds, and the runner/host causing it isn't identified yet.",
+			"evidence": [
+				"exit-126 turns=0 recurs across runs 6f93037e, 7f695b37, f5ba1a9d",
+				"merge-scan/push already succeeded so no data was lost",
+				"fix is speculative: 'check exec permissions/PATH/container image'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-01T19:54:05.315Z"
 		},
 		{
 			"key": "issue:minion-meta#500",
@@ -23665,38 +23666,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T18:24:01.690Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged commit about serializing persistence and shutdown draining, not an actionable open goal.",
-			"evidence": [
-				"Commit title: fix(nitter): serialize persistence and drain shutdown (#295)",
-				"status: unknown, already merged per commit message"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T19:23:57.151Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
