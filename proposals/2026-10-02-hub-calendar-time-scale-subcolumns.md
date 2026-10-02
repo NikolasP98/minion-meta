@@ -35,18 +35,35 @@ of the existing two-per-day Invoiced | Scheduled split.
   subcolumn would fall under 64px; day view widens `.col` the same way.
   Persisted as `hub-<ns>-calendar-subcolumns`.
 
+- **Custom columns + drop-to-reclassify** (owner follow-up, same day: "I need
+  events to be reclassified if dropped in another subcolumn … custom columns
+  are set at the events level. They're not groupings of another table").
+  NO migration: `scheduling.bookings` registered as a custom-property table
+  (registry row, policy = scheduling module, entity authorization over
+  `sched_bookings`), so `app_table_properties` / `_values` carry the org's
+  own event-level select columns. Each active select column is a subcolumn
+  source (`prop:<id>`): one lane per option + "Unclassified"; values load
+  lazily for the loaded window; a drop into another lane WRITES the option
+  (optimistic, per record with version, re-read on refusal); "Unclassified"
+  clears. Staff lanes reclassify via `onmove`'s `resourceId`. Kebab gains
+  "Manage custom columns…" (shared `CustomPropertyManager`, mounted outside
+  the popover).
+
 Browser-verified on the local QA stack (private headless Chromium): drag
 down/up, keyboard, reload persistence, status/service subcolumns, split +
-subcolumns, drag-move ghost inside the subcolumn.
+subcolumns, drag-move ghost inside the subcolumn; "Room" column created,
+three lane-to-lane drops with the DB value following each (v1→v3→null).
 
 ## Open ends (TODO(handoff) sites in `BookingCalendar.svelte`)
 
-1. **Drop-to-reclassify.** Dragging a box into another subcolumn keeps its
-   value — only the time moves (the ghost stays in the source subcolumn to say
-   so). A per-source write path (staff → move chair, status → set status,
-   kind/service → PATCH booking, tags → add/remove) would make the subcolumns a
-   kanban. Needs: hit-test the subcolumn at drop, a confirm for status/tag
-   changes, and `onmove` growing a `facet` field or a sibling callback.
+1. **Built-in lanes are view-only on drop.** status / kind / service / tags
+   keep their value when dropped elsewhere (the ghost stays in its own lane).
+   Status has a workflow (cancel/complete), kind/service need a booking PATCH,
+   tags an add/remove — each is its own write path + confirm.
+1b. **Custom column surfaces.** The value is only visible/editable on the
+   calendar lanes today: the appointments list table and the booking drawer
+   do not show `scheduling.bookings` custom columns yet (DataTable's
+   `customProperties` wiring exists — thread it into `BookingsView`).
 2. **Multi-tag bookings file under their FIRST tag** (`bookingFacet`). A
    booking with two tags appears once. Duplicating across subcolumns needs the
    box key to carry the tag id and the move/merge paths to ignore duplicates.
