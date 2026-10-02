@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-02T14:24:01.029Z",
+	"generatedAt": "2026-10-02T14:54:10.838Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -22507,38 +22507,6 @@
 			"scoredAt": "2026-10-01T06:54:18.583Z"
 		},
 		{
-			"key": "issue:minion-meta#601",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#601 [monitor:unstick] reconcile run ba9d37bb (minion-meta): claude agent exec failure exit-126/turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/601",
-			"sourceUpdatedAt": "2026-09-25T14:17:28Z",
-			"sourceFingerprint": "2b0df9c4671e09a2c9f91c66beb37729bab4210a666301c310636938ca8ebd97",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The reconcile side effects already completed and the failure is a self-diagnosed transient runner-infra fault (exit-126/turns=0) recommended for a simple idempotent retry, not a real task or spec defect.",
-			"evidence": [
-				"reconcile side effects already look complete, so a retry should be idempotent",
-				"exit 126 ... turns=0 ... this failed before any agent reasoning/task-logic was involved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-25T14:29:06.515Z"
-		},
-		{
 			"key": "issue:minion-meta#604",
 			"kind": "issue",
 			"stage": "proposal",
@@ -23775,38 +23743,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T04:24:06.173Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Entry describes a commit that already merged a fix, leaving no open deployment action.",
-			"evidence": [
-				"commit message shows fix already applied for nitter persistence/shutdown",
-				"status field is unknown with no pending task described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T13:54:18.229Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
@@ -26651,6 +26587,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T04:53:48.744Z"
+		},
+		{
+			"key": "issue:minion-meta#601",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#601 [monitor:unstick] reconcile run ba9d37bb (minion-meta): claude agent exec failure exit-126/turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/601",
+			"sourceUpdatedAt": "2026-09-25T14:17:28Z",
+			"sourceFingerprint": "2b0df9c4671e09a2c9f91c66beb37729bab4210a666301c310636938ca8ebd97",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a single infra-runner exec failure (exit-126/turns=0) where the scripted reconcile work already completed and persisted, so the remaining item is a transient runner fault rather than actionable repo work.",
+			"evidence": [
+				"exit_code=1 but reconcile stage completed and pushed dev branch",
+				"exit 126 turns=0 indicates claude CLI never started (infra/runner fault)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T14:54:10.690Z"
 		},
 		{
 			"key": "issue:minion-meta#617",
