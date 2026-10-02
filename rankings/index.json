@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-02T06:53:57.294Z",
+	"generatedAt": "2026-10-02T07:24:03.127Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3980,39 +3980,6 @@
 			"scoredAt": "2026-09-25T18:29:18.912Z"
 		},
 		{
-			"key": "run:minion (gateway)#36831905945",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/36831905945",
-			"sourceUpdatedAt": "2026-10-01T08:21:34Z",
-			"sourceFingerprint": "bd6a4c3f88c9ac27e341d28bf9263b6f914d562a3a2ee0b67df89d3fad899250",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failing CI run on the gateway's DEV branch is potentially release-blocking but the catalog gives no failed-job or log detail to act on yet.",
-			"evidence": [
-				"status: failure",
-				"workflow_dispatch on DEV",
-				"updatedAt 2026-10-01T08:21:34Z"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T17:54:22.346Z"
-		},
-		{
 			"key": "spec:2026-08-13-crm-customers-server-pagination-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -7603,6 +7570,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-25T23:58:59.849Z"
+		},
+		{
+			"key": "run:minion (gateway)#34587949149",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949149",
+			"sourceUpdatedAt": "2026-09-11T10:46:59Z",
+			"sourceFingerprint": "82bcff565fd5b409b3f4fe7fab98082e953214bbd231af0206d034e22b97120c",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"run:minion (gateway)#34587949471"
+			],
+			"rationale": "Stale three-week-old CI failure on DEV push with no diagnostic detail, likely from the same push as the Docker Release failure.",
+			"evidence": [
+				"status: failure",
+				"push on DEV",
+				"updatedAt 2026-09-11"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T07:24:02.989Z"
+		},
+		{
+			"key": "run:minion (gateway)#34587949471",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949471",
+			"sourceUpdatedAt": "2026-09-11T10:13:03Z",
+			"sourceFingerprint": "bff3ad4ee3500a2aec6da97aca9215d1679d66023b6066cb22d3e02f7198b91a",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"run:minion (gateway)#34587949149"
+			],
+			"rationale": "Docker Release failure on same repo/branch within 34 minutes of the CI failure suggests a shared root cause worth investigating together.",
+			"evidence": [
+				"status: failure",
+				"push on DEV",
+				"updatedAt 2026-09-11"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T07:24:02.989Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
@@ -17115,6 +17152,39 @@
 			"scoredAt": "2026-09-30T16:24:38.299Z"
 		},
 		{
+			"key": "run:minion_site#31686953033",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_site",
+			"title": "Claude Code",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/actions/runs/31686953033",
+			"sourceUpdatedAt": "2026-09-12T09:31:54Z",
+			"sourceFingerprint": "fd33d67a9bcb040c710991818cff95818ec5463761e5c0012f15091f3395c7b6",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Stale CI failure triggered by a PR review comment lacks detail to judge whether it is still unresolved or already superseded.",
+			"evidence": [
+				"status: failure",
+				"pull_request_review_comment on dev",
+				"updatedAt 2026-09-12"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T07:24:02.989Z"
+		},
+		{
 			"key": "issue:minion-meta#559",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22819,38 +22889,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T00:28:54.749Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged commit log entry for a nitter persistence/shutdown fix with no indication of an open problem to act on.",
-			"evidence": [
-				"commit message describes a completed fix(nitter) change",
-				"co-authored and merged, no open follow-up described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T06:53:57.166Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
