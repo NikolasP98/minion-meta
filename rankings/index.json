@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-02T23:17:02.726Z",
+	"generatedAt": "2026-10-02T23:24:18.101Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1573,6 +1573,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-26T20:29:01.278Z"
+		},
+		{
+			"key": "issue:minion-meta#743",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#743 [monitor:unstick] reconcile run a5fa3e14 (minion-meta): claude agent exec failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/743",
+			"sourceUpdatedAt": "2026-10-02T23:17:33Z",
+			"sourceFingerprint": "6d07186d1654c6db0af411f66c9e908eaaf972051e82f2b0dd551650015b6d2d",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#744"
+			],
+			"rationale": "Exit-126/turns=0 runner-level failure recurring twice within 30 minutes should become one host-classifier fix goal rather than two separate tickets.",
+			"evidence": [
+				"exit-126, turns=0, permission_denials=0 indicates agent process never executed a turn",
+				"identical signature occurred in run f8c07e90 about 30 minutes earlier"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T23:24:17.960Z"
+		},
+		{
+			"key": "issue:minion-meta#744",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#744 [monitor:unstick] reconcile run f8c07e90 (minion-meta): claude agent exec failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/744",
+			"sourceUpdatedAt": "2026-10-02T23:17:33Z",
+			"sourceFingerprint": "9ef0ed064d5e18aa81d0cbd5d9aef74a2588edfa2b319e5edeaef28e0242acf8",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#743"
+			],
+			"rationale": "Same exit-126 runner-level exec failure signature as #743 occurring ~30 minutes apart, warranting a single combined remediation goal.",
+			"evidence": [
+				"git/merge-scan phase completed normally; failure is isolated to claude agent invocation with exit-126",
+				"same signature as run a5fa3e14 (#743) about 30 minutes earlier"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T23:24:17.960Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -13627,6 +13695,38 @@
 			"scoredAt": "2026-10-02T04:32:06.847Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-02",
+			"sourceFingerprint": "2bcad80d5784a26c8cc6a4de0befa77fda4db9773448ccce669ca3730355489b",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The proposal bundles 15 unrelated TODO markers spanning disparate subsystems into one artifact, so it cannot be specified or executed as a single coherent goal.",
+			"evidence": [
+				"markers span drizzle migration SQL, HDS-05 backend-loss gating, backup scheduler, and booking UI overflow clip",
+				"definition of done requires every listed marker resolved before the sweep auto-closes it"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T23:24:17.960Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3287487637",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19003,6 +19103,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:39:42.070Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Commit message describes a fix already merged with no indication of an open follow-up task.",
+			"evidence": [
+				"commit co-authored and describes completed fix to nitter persistence/shutdown",
+				"status field is unknown, no open defect referenced"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T23:24:17.960Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
@@ -27606,38 +27738,6 @@
 			"scoredAt": "2026-10-02T04:30:43.489Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-02",
-			"sourceFingerprint": "6359b7138225488382f1d0393223bff307746184925de7268b889ae26226bea3",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "These 14 disparate marker strings sit inside the meta-repo's own generated rankings/index.json data file rather than genuine in-code TODOs, so there is no real source open-end to resolve.",
-			"evidence": [
-				"14 unrelated marker lines (drizzle migrations, HDS-05 gating, phone failures) all inside rankings/index.json",
-				"file is a generated data index, not application source"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T22:54:42.974Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3518589653",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -28703,38 +28803,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T04:33:44.178Z"
-		},
-		{
-			"key": "run:minion_hub#37076602620",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/37076602620",
-			"sourceUpdatedAt": "2026-10-02T23:14:22Z",
-			"sourceFingerprint": "cc01e013ff4a31a21c2473d45464432a72bf38772f2025e0af2933e3f5776bf2",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a transient in-progress CI run status, not a work item to rank.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T23:17:02.574Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
