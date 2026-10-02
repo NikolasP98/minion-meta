@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-02T23:24:18.101Z",
+	"generatedAt": "2026-10-02T23:54:08.952Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3604,6 +3604,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T08:25:02.567Z"
+		},
+		{
+			"key": "pr:minion_hub#430",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#430 feat(calendar): nested options menu + inline cell editing on the appointments table",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/430",
+			"sourceUpdatedAt": "2026-10-02T23:51:55Z",
+			"sourceFingerprint": "28a730c2beb1cd3e548463dcd61250310f6fe0a826d8c8da6292ddb244ee4cf1",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#745"
+			],
+			"rationale": "Feature work plus a staff-facing 403 access bug fix, already verified with passing tests and QA-stack checks.",
+			"evidence": [
+				"svelte-check baseline, scheduling vitest green, lint:design/tokens clean",
+				"staff 403 reproduced and fixed on QA stack (includeArchived=1 → 403, =0 → 200)",
+				"known sticky-rail overlap issue already ledgered"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T23:54:08.801Z"
 		},
 		{
 			"key": "pr:minion-base#45",
@@ -10282,6 +10317,39 @@
 			"scoredAt": "2026-10-01T22:54:05.157Z"
 		},
 		{
+			"key": "issue:minion-meta#605",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#605 [monitor:unstick] reconcile ad83d350 (minion-meta): claude agent exit-126, turns=0, shell steps succeeded",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/605",
+			"sourceUpdatedAt": "2026-09-25T23:17:38Z",
+			"sourceFingerprint": "42993df4c98315d1ca16ff11783fddb4e2f8781d4d39cdf730704767a82c667e",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A recurring exit-126/turns=0 runner fault needs human infra triage (binary/PATH/exec bit) before any agent-executable task can be scoped.",
+			"evidence": [
+				"companion run cd5cf34f ~1h earlier shows identical exit-126/turns=0 signature",
+				"recommendation text: 'a human should check the claude CLI binary permissions/PATH/exec bit'",
+				"shell-side reconcile steps completed successfully; only the agent invocation failed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T23:54:08.801Z"
+		},
+		{
 			"key": "issue:minion-meta#613",
 			"kind": "issue",
 			"stage": "proposal",
@@ -13107,39 +13175,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T09:24:39.612Z"
-		},
-		{
-			"key": "issue:minion-meta#605",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#605 [monitor:unstick] reconcile ad83d350 (minion-meta): claude agent exit-126, turns=0, shell steps succeeded",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/605",
-			"sourceUpdatedAt": "2026-09-25T23:17:38Z",
-			"sourceFingerprint": "42993df4c98315d1ca16ff11783fddb4e2f8781d4d39cdf730704767a82c667e",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Recurring exit-126/turns=0 exec fault blocks agent invocation on a runner box even though the shell-side reconcile work already completed successfully.",
-			"evidence": [
-				"run marked error, note cites exit-126, turns=0, permission_denials=0",
-				"companion run cd5cf34f ~1h earlier shows the identical signature",
-				"shell steps (handoff refresh, merge-scan retries, proposals/index.json write, git push) all succeeded"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-25T23:30:07.803Z"
 		},
 		{
 			"key": "issue:minion-meta#606",
@@ -16230,6 +16265,39 @@
 			"scoredAt": "2026-09-29T04:22:16.204Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-e5bc9fd11deb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/hover-fields.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e5bc9fd11deb.md",
+			"sourceUpdatedAt": "2026-09-25",
+			"sourceFingerprint": "0779d47bb8a546829a511d961790110962b3ff921644d7a754a6298cbbfa102b",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved proposal with a clear TODO site and two concrete fix directions for a POS-coupling limitation in scheduling hover fields.",
+			"evidence": [
+				"status: approved",
+				"marker at src/lib/components/scheduling/hover-fields.ts ties client sub-items to a POS limitation",
+				"diagnosis proposes either POS adapter change or view-layer selector decoupling"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T23:54:08.801Z"
+		},
+		{
 			"key": "spec:2026-08-19-gateway-client-error-hook-consumer-adoption-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -19103,38 +19171,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:39:42.070Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 8
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Commit message describes a fix already merged with no indication of an open follow-up task.",
-			"evidence": [
-				"commit co-authored and describes completed fix to nitter persistence/shutdown",
-				"status field is unknown, no open defect referenced"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T23:24:17.960Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
@@ -23618,38 +23654,6 @@
 			"scoredAt": "2026-09-26T21:56:35.707Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-e5bc9fd11deb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/hover-fields.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e5bc9fd11deb.md",
-			"sourceUpdatedAt": "2026-09-25",
-			"sourceFingerprint": "0779d47bb8a546829a511d961790110962b3ff921644d7a754a6298cbbfa102b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Filed as a bug TODO but the diagnosis describes an architectural POS coupling requiring backend changes, not a bounded scheduling-component fix.",
-			"evidence": [
-				"marker: 'client has exactly ONE sub-item today because the POS'",
-				"diagnosis: 'temporary workaround... requires POS API changes'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-25T23:30:39.237Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-fbd7c21e9aff",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24595,6 +24599,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T12:24:25.230Z"
+		},
+		{
+			"key": "pr:minion-meta#745",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#745 docs(proposals): calendar ledger — nested menu, cell editing, staff 403",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/745",
+			"sourceUpdatedAt": "2026-10-02T23:51:22Z",
+			"sourceFingerprint": "590873588a59d4cc4aa4a38b78dcb99c1d6f366e60c3ce40d3f4c2f881b21fcc",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#430"
+			],
+			"rationale": "This is only the required ledger entry documenting hub PR #430 and has no independent value outside it.",
+			"evidence": [
+				"title explicitly says 'Ledger for hub #430'",
+				"summary restates #430's content with no new scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T23:54:08.801Z"
 		},
 		{
 			"key": "proposal:2026-08-20-hub-datatable-server-mode-test-gap",
