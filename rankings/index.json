@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-02T19:54:03.555Z",
+	"generatedAt": "2026-10-02T20:24:27.216Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -20701,6 +20701,38 @@
 			"scoredAt": "2026-10-01T00:24:13.201Z"
 		},
 		{
+			"key": "issue:minion-meta#741",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#741 [monitor:unstick] run f2c1e694 (minion-meta reconcile) - exit-126 after reconcile work completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/741",
+			"sourceUpdatedAt": "2026-10-02T20:17:23Z",
+			"sourceFingerprint": "38b834172e9530ea3390593f7789351d82575baa33b3229d0302ba77a4d87f8e",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The reconcile work itself completed and persisted successfully; only a one-off exit-126 agent-launch fault on the runner remains, which is a narrow infra check rather than a scoped deliverable yet.",
+			"evidence": [
+				"reconcile/merge-scan state persisted and pushed before the failure",
+				"exit-126 with turns=0 points to an environment/permission fault invoking the claude binary"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T20:24:27.093Z"
+		},
+		{
 			"key": "proposal:2026-08-28-gateway-plugin-effect-disposers",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21501,38 +21533,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T04:32:06.847Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-02",
-			"sourceFingerprint": "58ed9051b91ee514d4751231fc48bfb4b54fb4e0bcfffd7fbd8772cd6aacf67e",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are quoted TODO-like text embedded as evidence inside the generated rankings/index.json rather than genuine unresolved code in that file, so the definition of done is not well targeted.",
-			"evidence": [
-				"file flagged is rankings/index.json, this pipeline's own output artifact",
-				"14 heterogeneous quoted snippets spanning unrelated repos/topics (drizzle migration, HDS-05, Supabase)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T16:24:49.083Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3045707328",
@@ -22795,6 +22795,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T17:54:06.144Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit already merged a fix for nitter persistence serialization and shutdown drain, so there is no outstanding deployment action.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"commit already present on gateway history (b841c36)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T20:24:27.093Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
@@ -28253,6 +28285,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T04:29:56.862Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-02",
+			"sourceFingerprint": "26ef2bde6f7a9bdad6a24662c26053420e3e16530a9098f83d95e9c64af72478",
+			"score": 13,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed markers are line references inside rankings/index.json, a generated ranking-output artifact, not genuine TODO(handoff) code comments, so the sweep's findings are not actionable as filed.",
+			"evidence": [
+				"all 15 markers point at rankings/index.json, the ranking system's own output file",
+				"quoted marker text are fragments of historical rationale strings, not TODO comments in source"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T20:24:27.093Z"
 		},
 		{
 			"key": "issue:minion-meta#373",
