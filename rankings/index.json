@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-02T05:53:40.900Z",
+	"generatedAt": "2026-10-02T06:24:07.997Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -18136,6 +18136,40 @@
 			"scoredAt": "2026-09-30T09:54:25.439Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-e3c8ec8",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ e3c8ec8",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-e3c8ec8.md",
+			"sourceUpdatedAt": "2026-09-04",
+			"sourceFingerprint": "a121b18630264a99869dd5786155fb7dbe3440ef8d718d199df1c69b0fc21f77",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-981acd88c1d3"
+			],
+			"rationale": "Two concrete medium-severity findings with exact file/line locations give enough scope to fix as a small bounded hub PR.",
+			"evidence": [
+				"PeopleView.svelte:281 unvalidated-input on email field",
+				"JoinLinkForm.svelte:49 empty-catch swallows parsing error"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T06:24:07.871Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-2841d2ba75ad",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21760,38 +21794,6 @@
 			"scoredAt": "2026-09-25T23:58:59.849Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged commit log entry for a nitter persistence/shutdown fix, not an open actionable goal.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown (#295)",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T04:53:48.744Z"
-		},
-		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21822,6 +21824,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:34:57.682Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-02cb576f3102",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/users/MemberAccessControls.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-02cb576f3102.md",
+			"sourceUpdatedAt": "2026-09-04",
+			"sourceFingerprint": "a871c257fac66fa1580009753ca45e6fd503b945c822afffa75ecbdf4119c159",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-981acd88c1d3"
+			],
+			"rationale": "Same merged PR introduced the identical raw-fetch-from-TeamTab pattern in a sibling component, so this should become one combined API-client migration goal rather than two separate ones.",
+			"evidence": [
+				"repo: NikolasP98/minion_hub@e3c8ec8, merged PR #233",
+				"marker: 'raw fetch moved verbatim from TeamTab'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T06:24:07.871Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-981acd88c1d3",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/users/JoinLinkForm.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-981acd88c1d3.md",
+			"sourceUpdatedAt": "2026-09-04",
+			"sourceFingerprint": "8ffbf0e88303edeeba53174dc8256f0b07b7c5b8291098dd2b5cb8e9f986c6ff",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-02cb576f3102"
+			],
+			"rationale": "Same merged PR #233 left an identical raw-fetch-from-TeamTab debt plus hardcoded strings, pairing naturally with the sibling MemberAccessControls finding into one migration goal.",
+			"evidence": [
+				"repo: NikolasP98/minion_hub@e3c8ec8, merged PR #233",
+				"marker: 'raw fetch + hardcoded EN strings moved verbatim from TeamTab'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T06:24:07.871Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-cb4eec61bb4f",
@@ -23275,40 +23345,6 @@
 			"scoredAt": "2026-10-02T04:32:06.847Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-02cb576f3102",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/users/MemberAccessControls.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-02cb576f3102.md",
-			"sourceUpdatedAt": "2026-09-04",
-			"sourceFingerprint": "a871c257fac66fa1580009753ca45e6fd503b945c822afffa75ecbdf4119c159",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-981acd88c1d3"
-			],
-			"rationale": "Approved TODO(handoff) fix for a raw fetch copied verbatim from TeamTab shares the same root cause and fix pattern as the JoinLinkForm proposal.",
-			"evidence": [
-				"TODO(handoff): raw fetch moved verbatim from TeamTab — migrate to",
-				"merged PR #233, status approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-25T05:59:01.886Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-3ba60040d060",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23373,41 +23409,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T04:28:53.583Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-981acd88c1d3",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/users/JoinLinkForm.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-981acd88c1d3.md",
-			"sourceUpdatedAt": "2026-09-04",
-			"sourceFingerprint": "8ffbf0e88303edeeba53174dc8256f0b07b7c5b8291098dd2b5cb8e9f986c6ff",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-02cb576f3102",
-				"proposal:merge-scan-minion-hub-e3c8ec8"
-			],
-			"rationale": "Same TeamTab-copied raw-fetch pattern as MemberAccessControls plus an i18n gap, and shares the JoinLinkForm.svelte file with the merge-scan empty-catch finding.",
-			"evidence": [
-				"TODO(handoff): raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-				"merged PR #233, status approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-25T05:59:01.886Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-a43d6ad81ac3",
@@ -27361,40 +27362,6 @@
 			"scoredAt": "2026-09-25T21:58:46.474Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-e3c8ec8",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ e3c8ec8",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-e3c8ec8.md",
-			"sourceUpdatedAt": "2026-09-04",
-			"sourceFingerprint": "a121b18630264a99869dd5786155fb7dbe3440ef8d718d199df1c69b0fc21f77",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-981acd88c1d3"
-			],
-			"rationale": "Two unrelated medium findings bundled together, one of which (JoinLinkForm empty-catch) touches the same file as the JoinLinkForm handoff proposal and should be consolidated with it.",
-			"evidence": [
-				"empty-catch in JoinLinkForm.svelte:49 swallows parsing error",
-				"unvalidated email field in PeopleView.svelte:281"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-25T05:59:01.886Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-ae985ee3170a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27555,38 +27522,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T03:10:09.255Z"
-		},
-		{
-			"key": "issue:minion-meta#589",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#589 [monitor:unstick] reconcile proposals failed (run a993aea0, minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/589",
-			"sourceUpdatedAt": "2026-09-25T06:17:22Z",
-			"sourceFingerprint": "e8160c37d2192ecb04e21e90761c67df787b5db01b10da6504d2a8df957c9041",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The quoted analysis indicates the underlying reconcile work already succeeded and the exit-126 was a transient infra fault safe to retry.",
-			"evidence": [
-				"reconcile work already succeeded",
-				"recommendation: safe to retry (underlying work already landed)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-25T06:23:13.006Z"
 		},
 		{
 			"key": "issue:minion-meta#382",
@@ -28250,6 +28185,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T10:59:19.079Z"
+		},
+		{
+			"key": "issue:minion-meta#589",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#589 [monitor:unstick] reconcile proposals failed (run a993aea0, minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/589",
+			"sourceUpdatedAt": "2026-09-25T06:17:22Z",
+			"sourceFingerprint": "e8160c37d2192ecb04e21e90761c67df787b5db01b10da6504d2a8df957c9041",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The monitor's own log states the underlying reconcile work already succeeded and pushed to dev, with the exit-126 flagged as a transient infra fault safe to retry.",
+			"evidence": [
+				"log: 'reconcile work completed successfully... pushed to dev'",
+				"exit-126 described as 'transient/infra fault on the runner box'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-02T06:24:07.871Z"
 		},
 		{
 			"key": "issue:minion-meta#599",
