@@ -27,33 +27,33 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-02)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:4637` — drizzle/0008_workshop_thumbnail.sql (ALTER TABLE",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4637
-- `NikolasP98/minion-meta@dev rankings/index.json:4737` — \\\"retries on the next settle\\\" means a week that failed",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4737
-- `NikolasP98/minion-meta@dev rankings/index.json:11099` — --apply is intentionally unimplemented",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11099
-- `NikolasP98/minion-meta@dev rankings/index.json:11134` — HDS-05 remains pending; do not run without separate backend-loss authorization",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11134
-- `NikolasP98/minion-meta@dev rankings/index.json:11166` — Bound streamed response bytes before allocation; arrayBuffer()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11166
-- `NikolasP98/minion-meta@dev rankings/index.json:11269` — Backend-loss qualification remains gated by HDS-05",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11269
-- `NikolasP98/minion-meta@dev rankings/index.json:11302` — remove once the phone failure is root-caused",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11302
-- `NikolasP98/minion-meta@dev rankings/index.json:12187` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12187
-- `NikolasP98/minion-meta@dev rankings/index.json:13717` — the affordance is one-way — once opened, a line's discount",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13717
-- `NikolasP98/minion-meta@dev rankings/index.json:13984` — this hasn't been exercised against a live local Supabase"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13984
-- `NikolasP98/minion-meta@dev rankings/index.json:14119` — Historical receipt/tombstone retention and missing-owner recovery need",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14119
-- `NikolasP98/minion-meta@dev rankings/index.json:18271` — no status filter — every status reaches the grid",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18271
-- `NikolasP98/minion-meta@dev rankings/index.json:18437` — Full Workshop composition/camera and keyboard relationship/element",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18437
-- `NikolasP98/minion-meta@dev rankings/index.json:20330` — startBackupScheduler() has no call site anywhere in src/",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20330
-- `NikolasP98/minion-meta@dev rankings/index.json:23444` — no overflow clip for bookings starting before startHour",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23444
+- `NikolasP98/minion-meta@dev rankings/index.json:4605` — drizzle/0008_workshop_thumbnail.sql (ALTER TABLE",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4605
+- `NikolasP98/minion-meta@dev rankings/index.json:4705` — \\\"retries on the next settle\\\" means a week that failed",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4705
+- `NikolasP98/minion-meta@dev rankings/index.json:11100` — --apply is intentionally unimplemented",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11100
+- `NikolasP98/minion-meta@dev rankings/index.json:11135` — HDS-05 remains pending; do not run without separate backend-loss authorization",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11135
+- `NikolasP98/minion-meta@dev rankings/index.json:11167` — Bound streamed response bytes before allocation; arrayBuffer()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11167
+- `NikolasP98/minion-meta@dev rankings/index.json:11270` — Backend-loss qualification remains gated by HDS-05",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11270
+- `NikolasP98/minion-meta@dev rankings/index.json:11303` — remove once the phone failure is root-caused",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11303
+- `NikolasP98/minion-meta@dev rankings/index.json:12222` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12222
+- `NikolasP98/minion-meta@dev rankings/index.json:13752` — the affordance is one-way — once opened, a line's discount",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13752
+- `NikolasP98/minion-meta@dev rankings/index.json:14019` — this hasn't been exercised against a live local Supabase"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14019
+- `NikolasP98/minion-meta@dev rankings/index.json:14154` — Historical receipt/tombstone retention and missing-owner recovery need",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14154
+- `NikolasP98/minion-meta@dev rankings/index.json:18306` — no status filter — every status reaches the grid",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18306
+- `NikolasP98/minion-meta@dev rankings/index.json:18472` — Full Workshop composition/camera and keyboard relationship/element",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18472
+- `NikolasP98/minion-meta@dev rankings/index.json:20365` — startBackupScheduler() has no call site anywhere in src/",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20365
+- `NikolasP98/minion-meta@dev rankings/index.json:23480` — no overflow clip for bookings starting before startHour",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23480

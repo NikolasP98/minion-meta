@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-02)
 
-- `NikolasP98/minion_hub@master src/server/services/custom-properties.service.ts:337` — Extend this admission seam to native and other custom numeric columns under
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/custom-properties.service.ts#L337
+- `NikolasP98/minion_hub@master src/server/services/custom-properties.service.ts:338` — Extend this admission seam to native and other custom numeric columns under
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/custom-properties.service.ts#L338
