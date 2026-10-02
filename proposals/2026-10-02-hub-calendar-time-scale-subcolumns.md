@@ -54,16 +54,24 @@ down/up, keyboard, reload persistence, status/service subcolumns, split +
 subcolumns, drag-move ghost inside the subcolumn; "Room" column created,
 three lane-to-lane drops with the DB value following each (v1→v3→null).
 
+- **View switcher** (owner, same day): Calendar | Table | Board on both
+  calendar pages through the new `DataView` host — see
+  `2026-09-29-hub-data-view-container.md` §3.5.
+
 ## Open ends (TODO(handoff) sites in `BookingCalendar.svelte`)
 
 1. **Built-in lanes are view-only on drop.** status / kind / service / tags
    keep their value when dropped elsewhere (the ghost stays in its own lane).
    Status has a workflow (cancel/complete), kind/service need a booking PATCH,
    tags an add/remove — each is its own write path + confirm.
-1b. **Custom column surfaces.** The value is only visible/editable on the
-   calendar lanes today: the appointments list table and the booking drawer
-   do not show `scheduling.bookings` custom columns yet (DataTable's
-   `customProperties` wiring exists — thread it into `BookingsView`).
+1b. **Custom column surfaces.** Visible/editable on the calendar lanes, the
+   calendar pages' Table view and the Board; NOT yet in `/scheduling/bookings`
+   (`BookingsView`) or the booking drawer.
+1c. **Switching views unmounts the grid** — the runway scroll position and the
+   fan deck reset on Calendar → Table → Calendar. Keep both renderers mounted
+   (hidden) if that gets annoying.
+1d. **Board drag has no keyboard path** beyond opening the card; a "Move to…"
+   action in the drawer would cover it.
 2. **Multi-tag bookings file under their FIRST tag** (`bookingFacet`). A
    booking with two tags appears once. Duplicating across subcolumns needs the
    box key to carry the tag id and the move/merge paths to ignore duplicates.

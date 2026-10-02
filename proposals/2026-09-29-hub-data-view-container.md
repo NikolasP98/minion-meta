@@ -336,6 +336,31 @@ semantic clashes, not textual ones.
 
 ---
 
+## 3.5 Shipped 2026-10-02 — S1 landed on the CALENDAR pages first (hub PR #428)
+
+Owner (2026-10-02): "I want calendars to have a view switcher as well … to
+switch between cals, tables, cards, etc." — picked "calendar pages first".
+The §3.3 "calendar: probably never as a DataView" verdict is superseded in
+one specific sense: `BookingCalendar` is NOT wrapped; it is one of the
+renderers a `DataView` host switches between.
+
+- `src/lib/components/data-view/`: `data-view.ts` (`DATA_VIEW_KINDS`,
+  `parseDataView`), `DataView.svelte` (the host: `views` per page, `value`,
+  `onchange`, hands the `switcher` snippet back so each renderer places it in
+  its own toolbar), `BoardView.svelte` (generic kanban: explicit columns +
+  trailing unclassified, card snippet, native drag between columns via
+  `onmove`). `SegmentedControl` gained `icon` + `iconOnly`.
+- Calendar pages: `?view=` now also takes `table` | `board`
+  (`parseCalendarPageView` / `calendarViewOf` keep the week data window);
+  `BookingTable` (DataTable on `scheduling.bookings`, custom columns live) and
+  `BookingBoard` (axis = status | staff | any custom select column; a drop
+  writes status via the mover, staff via `onmove`, a custom column via the
+  shared `createBookingCustomValues` store). Switcher sits at the start of the
+  calendar toolbar; table/board get a bar with it + the tag filter.
+- NOT done here: S0 pipeline extraction, `/pos/catalog` + `/pos/sell`
+  migration (they keep their bespoke `.view-toggle`), S2 persistence (view
+  lives in the URL only; the board axis is a per-viewer pref), gallery.
+
 ## 4. Verdict
 
 **Yes for table + board + gallery; no for chart, calendar and map.**
