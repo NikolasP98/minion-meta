@@ -58,6 +58,14 @@ three lane-to-lane drops with the DB value following each (v1→v3→null).
   calendar pages through the new `DataView` host — see
   `2026-09-29-hub-data-view-container.md` §3.5.
 
+- **Nested options menu + table cell editing + staff 403** (owner, same
+  day) — hub PR #430: two-level kebab (root rows with current values →
+  setting pages with Back); `BookingTable` Status (badge kept) and Staff are
+  inline select cells committing through the mover; drawer opens from a row
+  action, not the row click; the definitions loader asks for ACTIVE columns
+  only (the archived list is a manage-level read — staff got 403 and saw no
+  custom columns); `scheduling.bookings` accepts `pos` capabilities too.
+
 ## Open ends (TODO(handoff) sites in `BookingCalendar.svelte`)
 
 1. **Built-in lanes are view-only on drop.** status / kind / service / tags
