@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "authorized_scope": "All 97 original findings, 10 FACES backend/product findings, 1 baseline device-auth regression and 5 parent blast-radius findings (113 total); autonomous implementation authorized. Merge/deploy remain separate.",
+  "authorized_scope": "All 97 original findings, 10 FACES backend/product findings, 1 baseline device-auth regression and 6 parent blast-radius findings (114 total); autonomous implementation authorized. Merge/deploy remain separate.",
   "updated": "2026-10-03",
   "bases": {
     "hub": "7ac3bfdffdd885d80fbaf2056eb22e387626a3ee",
@@ -47,7 +47,8 @@
       "HC-007",
       "UI-001",
       "HC-033",
-      "HC-034"
+      "HC-034",
+      "GW-022"
     ],
     "hub-calendar": [
       "HC-008",
@@ -545,15 +546,24 @@
       "priority": "P1",
       "title": "Calendar loads in the organization timezone but lays out and writes in the browser timezone",
       "batch": "hub-calendar",
-      "status": "implementing",
+      "status": "implemented-awaiting-integration",
       "owner": "hub_client_fixes",
       "acceptance": "Run with browser TZ UTC and org TZ America/Lima, including a near-midnight booking and a 09:00 drag/drop round trip; assert display, cache key, request instant, and now line are org-zoned.",
-      "code_commits": [],
-      "tests": [],
+      "code_commits": [
+        "hub:adb58edb",
+        "hub:a2306c7c"
+      ],
+      "tests": [
+        "Temporal mounted/unit suites passed; AppointmentForm and BookingCreateForm concurrent slot/write and scope-switch suite13/13; timezone compatibility16/16.",
+        "Full Hubcheck4 zero errors/warnings precedes final server-only compatibility hunk; focused16/16 covers that hunk.",
+        "Temporal follow-up: shared inclusive civil-day presets and CRM loader DST/timezone regression, 34 focused tests; complete Hub check 0 errors/0 warnings with synthetic CI public env."
+      ],
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Critical browser integration and complete follow-on calendar slices remain tracked separately."
+      ]
     },
     {
       "id": "HC-011",
@@ -575,7 +585,7 @@
       "priority": "P1",
       "title": "In-flight week responses can overwrite post-mutation data or resurrect evicted weeks",
       "batch": "hub-calendar",
-      "status": "queued",
+      "status": "implementing",
       "owner": "root",
       "acceptance": "Use deferred promises: start old fetch, mutate/refetch, resolve old last; assert only new generation appears. Repeat with eviction and assert old response is discarded.",
       "code_commits": [],
@@ -590,7 +600,7 @@
       "priority": "P1",
       "title": "A failed visible week is rendered as a genuinely empty schedule until another scroll settles",
       "batch": "hub-calendar",
-      "status": "queued",
+      "status": "implementing",
       "owner": "root",
       "acceptance": "Fail the visible week and do not emit another range settle; assert it is labeled unavailable with Retry, then succeeds from that control.",
       "code_commits": [],
@@ -665,21 +675,25 @@
       "priority": "P1",
       "title": "Anonymous callers can trigger global marketplace synchronization",
       "batch": "hub-authority-jobs",
-      "status": "implementing",
+      "status": "implemented-awaiting-integration",
       "owner": "root",
       "acceptance": "Assert anonymous=401, ordinary member=403, authorized sync=200, and two concurrent authorized calls execute one provider fetch/update.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:8cd6123a"
+      ],
       "tests": [
-        "Parent ordinary marketplace suites: 58 passed before final cron/install/mounted additions.",
-        "Native marketplace ownership: 14 tests passed on marked loopback PostgreSQL 18.6; source not yet committed."
+        "Marketplace ordinary server suites and mounted catalog/detail coverage pass; combined filters, stale replies, retry and A-to-B-to-A page reset are exercised.",
+        "Real application hook plus cron handler: 35 passed.",
+        "Full Hub check4: zero errors and warnings; design and token checks passed.",
+        "Final native jobs lane: 179 named cases across 7 files passed, zero skips. Includes 15 marketplace publication/provenance cases. evidence/native-nine-lanes-final.json"
       ],
       "reviews": [
-        "Independent Sol spec review pass2 approved. Implementation review caught legacy false loaded markers; migration now invalidates them while preserving content. Commit-response loss is reconciled through canonical ready state and exact published page token."
+        "Sol implementation review accepted A/B/C after pagination revisit, rollout digest provenance, automation registry/copy and legacy verification corrections. Exact cron registry omission was drift, not a route reachability defect: the broad marketplace handler delegation already existed."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": [
-        "Mounted filter/detail acceptance and accessibility adjustments; full typecheck, final independent review, source commit, CI and release qualification."
+        "Exact staged source commit, final jobs179 receipt, hosted CI and release qualification."
       ]
     },
     {
@@ -988,13 +1002,17 @@
       "owner": "hub_test_fixes",
       "acceptance": "The dedicated job must fail when the browser marker/session is absent and must report five tests passed with zero pending. A forced sanitizer or editor mutation must make the job red.",
       "code_commits": [
-        "hub:0881493c"
+        "hub:0881493c",
+        "hub:42717d99"
       ],
       "tests": [
         "Built dependency fixture131modules/2artifacts1.18MB and critical fixture5475modules/139artifacts24.42MB; boundary scans0, exact4/30-case lists, focused tests21passed. Browser execution not yet qualified.",
-        "Parent Browser Harness: all four native dependency checks passed in Chromium 152; fresh artifact, observed only loopback script resource. This is not the exact Playwright CI receipt."
+        "Parent Browser Harness: all four native dependency checks passed in Chromium 152; fresh artifact, observed only loopback script resource. This is not the exact Playwright CI receipt.",
+        "Parent executed CJ1–CJ6 production-component journeys in dedicated headless Chromium (desktop/mobile), with synthetic transport; no authenticated or five-project claim. Corrected stale renderer selector and native BODY focus assertion discovered during execution."
       ],
-      "reviews": [],
+      "reviews": [
+        "Independent Sol hub_test_fixes accepted current-grid selector and native modal focus corrections: exact staff identities/count required, outside interactive focus rejected, BODY allowed only while native modal remains, focus must re-enter and return on Escape. Full matrix remains required."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -1172,30 +1190,48 @@
       "priority": "P2",
       "title": "Date-only quick ranges mix local calendar arithmetic with UTC serialization",
       "batch": "hub-calendar",
-      "status": "implementing",
+      "status": "implemented-awaiting-integration",
       "owner": "hub_client_fixes",
       "acceptance": "Set TZ=America/Lima at 2026-10-03T01:30Z and TZ=Pacific/Kiritimati at local 00:30; assert local-day endpoints for every date-only preset.",
-      "code_commits": [],
-      "tests": [],
+      "code_commits": [
+        "hub:adb58edb",
+        "hub:a2306c7c"
+      ],
+      "tests": [
+        "Temporal mounted/unit suites passed; AppointmentForm and BookingCreateForm concurrent slot/write and scope-switch suite13/13; timezone compatibility16/16.",
+        "Full Hubcheck4 zero errors/warnings precedes final server-only compatibility hunk; focused16/16 covers that hunk.",
+        "Temporal follow-up: shared inclusive civil-day presets and CRM loader DST/timezone regression, 34 focused tests; complete Hub check 0 errors/0 warnings with synthetic CI public env."
+      ],
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Critical browser integration and complete follow-on calendar slices remain tracked separately."
+      ]
     },
     {
       "id": "HC-010",
       "priority": "P2",
       "title": "Quick-range 'now' freezes at component mount",
       "batch": "hub-calendar",
-      "status": "implementing",
+      "status": "implemented-awaiting-integration",
       "owner": "hub_client_fixes",
       "acceptance": "Mount under fake time, advance hours/across midnight without changing props, click 1h and 1d, and assert bounds use the advanced clock.",
-      "code_commits": [],
-      "tests": [],
+      "code_commits": [
+        "hub:adb58edb",
+        "hub:a2306c7c"
+      ],
+      "tests": [
+        "Temporal mounted/unit suites passed; AppointmentForm and BookingCreateForm concurrent slot/write and scope-switch suite13/13; timezone compatibility16/16.",
+        "Full Hubcheck4 zero errors/warnings precedes final server-only compatibility hunk; focused16/16 covers that hunk.",
+        "Temporal follow-up: shared inclusive civil-day presets and CRM loader DST/timezone regression, 34 focused tests; complete Hub check 0 errors/0 warnings with synthetic CI public env."
+      ],
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Critical browser integration and complete follow-on calendar slices remain tracked separately."
+      ]
     },
     {
       "id": "HC-014",
@@ -1215,7 +1251,7 @@
     {
       "id": "HC-016",
       "priority": "P2",
-      "title": "Calendar\u2194Table/Board switching destroys runway and fan interaction state",
+      "title": "Calendar↔Table/Board switching destroys runway and fan interaction state",
       "batch": "hub-calendar",
       "status": "queued",
       "owner": "root",
@@ -1371,12 +1407,16 @@
       "owner": "hub_test_fixes",
       "acceptance": "CI meta-test asserts required critical spec IDs executed with passed/failed status (never skipped), and intentionally failing a 503/focus/timezone contract fails the job.",
       "code_commits": [
-        "hub:0881493c"
+        "hub:0881493c",
+        "hub:42717d99"
       ],
       "tests": [
-        "Built dependency fixture131modules/2artifacts1.18MB and critical fixture5475modules/139artifacts24.42MB; boundary scans0, exact4/30-case lists, focused tests21passed. Browser execution not yet qualified."
+        "Built dependency fixture131modules/2artifacts1.18MB and critical fixture5475modules/139artifacts24.42MB; boundary scans0, exact4/30-case lists, focused tests21passed. Browser execution not yet qualified.",
+        "Parent executed CJ1–CJ6 production-component journeys in dedicated headless Chromium (desktop/mobile), with synthetic transport; no authenticated or five-project claim. Corrected stale renderer selector and native BODY focus assertion discovered during execution."
       ],
-      "reviews": [],
+      "reviews": [
+        "Independent Sol hub_test_fixes accepted current-grid selector and native modal focus corrections: exact staff identities/count required, outside interactive focus rejected, BODY allowed only while native modal remains, focus must re-enter and return on Escape. Full matrix remains required."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -1408,13 +1448,16 @@
       "priority": "P2",
       "title": "A stale meta-sync job can be reclaimed repeatedly by concurrent workers",
       "batch": "hub-authority-jobs",
-      "status": "implemented-awaiting-integration",
+      "status": "locally-verified-awaiting-release",
       "owner": "hub_test_fixes",
       "acceptance": "With two database connections and a stale job, assert exactly one claimant for a generation; expire/steal it, then prove the old owner can no longer update progress or completion.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:50bd4cae"
+      ],
       "tests": [
         "184 focused ordinary assertions passed before final timestamp-precision regression.",
-        "16 native lease/effect tests passed on stable owned source; includes legacy microsecond timestamp positive and revocation/competing-refresh negatives."
+        "16 native lease/effect tests passed on stable owned source; includes legacy microsecond timestamp positive and revocation/competing-refresh negatives.",
+        "Combined jobs178 passed with zero skips; full Hubcheck4 passed0errors0warnings."
       ],
       "reviews": [
         "Parent rejected catch-all message SQL isolation and unobserved renewal cancellation; corrected to permanent row SQLSTATE isolation and bounded fail-closed renewal.",
@@ -1423,7 +1466,7 @@
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": [
-        "Combined native jobs lane and full Hub typecheck, selective commit and release qualification."
+        "Hosted CI, production migration and release qualification."
       ]
     },
     {
@@ -1460,18 +1503,21 @@
       "priority": "P2",
       "title": "Five SQL-critical test files are excluded from ordinary tests and absent from explicit CI lanes",
       "batch": "hub-test-quality",
-      "status": "implemented-awaiting-review",
+      "status": "locally-verified-awaiting-release",
       "owner": "hub_test_fixes",
       "acceptance": "Add a meta-test that enumerates excluded files and diffs them against every CI contract. It must currently identify exactly the five uncovered files and fail when any unassigned file appears.",
       "code_commits": [
         "hub:81d07cb6",
-        "hub:0b977082"
+        "hub:0b977082",
+        "hub:7e019139"
       ],
       "tests": [
-        "43 manifest/QC tests passed; all 298 exact named behaviors across 21 native files and 9 lanes are required, with duplicate and missing names rejected. Runtime qualification remains pending."
+        "43 manifest/QC tests passed; all 298 exact named behaviors across 21 native files and 9 lanes are required, with duplicate and missing names rejected. Runtime qualification remains pending.",
+        "All nine exact-name native PostgreSQL lanes: 330 cases across 23 files, zero skips. evidence/native-nine-lanes-final.json"
       ],
       "reviews": [
-        "Parent requested broader named invariant coverage and duplicate assertion-name rejection before acceptance."
+        "Parent requested broader named invariant coverage and duplicate assertion-name rejection before acceptance.",
+        "Root independently provisioned owned marked/full-schema runtimes, retained failures, corrected unsafe business-persistence environment selection and stale CRM parity schema, reran every required lane."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -1575,7 +1621,8 @@
       "owner": "root",
       "acceptance": "Rewrite the current assertion to 2/3 for the selected denominator and add void-only customer/product cases across summary, series, and CRM ranking.",
       "code_commits": [
-        "hub:f5404c16"
+        "hub:f5404c16",
+        "hub:7e019139"
       ],
       "tests": [
         {
@@ -1600,15 +1647,17 @@
       "priority": "P2",
       "title": "Binary floating-point rounding produces 1.00 for 1.005",
       "batch": "hub-metrics",
-      "status": "queued",
+      "status": "spec-review",
       "owner": "root",
-      "acceptance": "Approve a rounding table first; then property-test exact decimal inputs including \u00b11.005, large values, allocations, and currencies with 0/2/3 minor units. Keep the fixture expectation aligned with the chosen policy.",
+      "acceptance": "Approve a rounding table first; then property-test exact decimal inputs including ±1.005, large values, allocations, and currencies with 0/2/3 minor units. Keep the fixture expectation aligned with the chosen policy.",
       "code_commits": [],
       "tests": [],
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Root exact-decimal and reconciled-schedule spec pending two independent reviews."
+      ]
     },
     {
       "id": "HS-029",
@@ -1720,19 +1769,22 @@
       "priority": "P2",
       "title": "PostgreSQL result contracts accept wholesale assertion deletion as long as one passing test remains per file",
       "batch": "hub-test-quality",
-      "status": "implemented-awaiting-review",
+      "status": "locally-verified-awaiting-release",
       "owner": "hub_test_fixes",
       "acceptance": "Reject a synthetic report containing one passing assertion per admitted file and reject a report with a missing or renamed expected assertion. Accept additions through an explicit manifest update.",
       "code_commits": [
         "hub:81d07cb6",
-        "hub:0b977082"
+        "hub:0b977082",
+        "hub:7e019139"
       ],
       "tests": [
         "43 manifest/QC tests passed; all 298 exact named behaviors across 21 native files and 9 lanes are required, with duplicate and missing names rejected. Runtime qualification remains pending.",
-        "New exact admissions include CRM void-only finance row, Meta lease/effect fixture and marketplace ownership fixture; current native register has 23 files. Deposit5 and CRM pagination31 passed zero-skip native validators. Combined jobs178 verification in progress."
+        "New exact admissions include CRM void-only finance row, Meta lease/effect fixture and marketplace ownership fixture; current native register has 23 files. Deposit5 and CRM pagination31 passed zero-skip native validators. Combined jobs178 verification in progress.",
+        "All nine exact-name native PostgreSQL lanes: 330 cases across 23 files, zero skips. evidence/native-nine-lanes-final.json"
       ],
       "reviews": [
-        "Parent requested broader named invariant coverage and duplicate assertion-name rejection before acceptance."
+        "Parent requested broader named invariant coverage and duplicate assertion-name rejection before acceptance.",
+        "Root independently provisioned owned marked/full-schema runtimes, retained failures, corrected unsafe business-persistence environment selection and stale CRM parity schema, reran every required lane."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -1893,7 +1945,7 @@
       "priority": "P3",
       "title": "Due schedules are not required to reconcile to plan principal",
       "batch": "hub-money",
-      "status": "queued",
+      "status": "spec-review",
       "owner": "root",
       "acceptance": "Test under-sum, over-sum, zero/negative rows, residual cents, and schedule exhaustion; assert the selected policy in API errors and collection views.",
       "code_commits": [],
@@ -1901,7 +1953,9 @@
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Root exact-decimal and reconciled-schedule spec pending two independent reviews."
+      ]
     },
     {
       "id": "MR-OP-003",
@@ -2269,19 +2323,23 @@
         "src/server/services/marketplace.service.ts:304-314",
         "src/routes/(app)/marketplace/agents/+page.svelte:48-88"
       ],
-      "status": "implementing",
-      "code_commits": [],
+      "status": "implemented-awaiting-integration",
+      "code_commits": [
+        "hub:8cd6123a"
+      ],
       "tests": [
-        "Parent ordinary marketplace suites: 58 passed before final cron/install/mounted additions.",
-        "Native marketplace ownership: 14 tests passed on marked loopback PostgreSQL 18.6; source not yet committed."
+        "Marketplace ordinary server suites and mounted catalog/detail coverage pass; combined filters, stale replies, retry and A-to-B-to-A page reset are exercised.",
+        "Real application hook plus cron handler: 35 passed.",
+        "Full Hub check4: zero errors and warnings; design and token checks passed.",
+        "Final native jobs lane: 179 named cases across 7 files passed, zero skips. Includes 15 marketplace publication/provenance cases. evidence/native-nine-lanes-final.json"
       ],
       "reviews": [
-        "Independent Sol spec review pass2 approved. Implementation review caught legacy false loaded markers; migration now invalidates them while preserving content. Commit-response loss is reconciled through canonical ready state and exact published page token."
+        "Sol implementation review accepted A/B/C after pagination revisit, rollout digest provenance, automation registry/copy and legacy verification corrections. Exact cron registry omission was drift, not a route reachability defect: the broad marketplace handler delegation already existed."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": [
-        "Mounted filter/detail acceptance and accessibility adjustments; full typecheck, final independent review, source commit, CI and release qualification."
+        "Exact staged source commit, final jobs179 receipt, hosted CI and release qualification."
       ]
     },
     {
@@ -2298,19 +2356,24 @@
         "src/server/services/marketplace.service.ts:203-259",
         "src/lib/state/features/marketplace.svelte.ts:64-74"
       ],
-      "status": "implementing",
-      "code_commits": [],
+      "status": "implemented-awaiting-integration",
+      "code_commits": [
+        "hub:8cd6123a"
+      ],
       "tests": [
-        "Parent ordinary marketplace suites: 58 passed before final cron/install/mounted additions.",
-        "Native marketplace ownership: 14 tests passed on marked loopback PostgreSQL 18.6; source not yet committed."
+        "Marketplace ordinary server suites and mounted catalog/detail coverage pass; combined filters, stale replies, retry and A-to-B-to-A page reset are exercised.",
+        "Real application hook plus cron handler: 35 passed.",
+        "Full Hub check4: zero errors and warnings; design and token checks passed.",
+        "Final native jobs lane: 179 named cases across 7 files passed, zero skips. Includes 15 marketplace publication/provenance cases. evidence/native-nine-lanes-final.json"
       ],
       "reviews": [
-        "Independent Sol spec review pass2 approved. Implementation review caught legacy false loaded markers; migration now invalidates them while preserving content. Commit-response loss is reconciled through canonical ready state and exact published page token."
+        "Sol implementation review accepted A/B/C after pagination revisit, rollout digest provenance, automation registry/copy and legacy verification corrections. Exact cron registry omission was drift, not a route reachability defect: the broad marketplace handler delegation already existed."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": [
-        "Mounted filter/detail acceptance and accessibility adjustments; full typecheck, final independent review, source commit, CI and release qualification."
+        "Exact staged source commit, final jobs179 receipt, hosted CI and release qualification.",
+        "HC-034 immutable version-bound install admission and exact-target gateway receipt; full finding stays open until that path is replaced."
       ]
     },
     {
@@ -2326,15 +2389,42 @@
         "src/routes/api/marketplace/install/+server.ts:30-71",
         "src/lib/state/features/marketplace.svelte.ts:128-144"
       ],
-      "status": "queued",
+      "status": "spec-review",
       "code_commits": [],
       "tests": [],
       "reviews": [
-        "Found during parent marketplace blast-radius review."
+        "Found during parent marketplace blast-radius review.",
+        "Install consumption can race catalog invalidation; JSON.parse(tags) follows committed effects; gateway writes an unregistered bundle (GW-022). Combined intent/receipt spec assigned to Sol."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
+    },
+    {
+      "id": "GW-022",
+      "priority": "P1",
+      "title": "Marketplace install writes an unused bundle without registering a runnable gateway agent",
+      "batch": "hub-mutations",
+      "owner": "root",
+      "status": "spec-review",
+      "acceptance": [
+        "Confirmed install is visible through actual agents.list and its configured workspace contains the verified prompt bundle.",
+        "Existing non-marketplace agents cannot be overwritten, retries reuse the same effect, and unrelated concurrent configuration changes survive."
+      ],
+      "source_evidence": [
+        "gateway/src/gateway/server-methods/marketplace.ts:41-96 only creates marketplace/agents files",
+        "gateway/src/gateway/server-methods/agents.ts:308-369 registers the real config/workspace; no marketplace bundle reader exists in other runtime source"
+      ],
+      "code_commits": [],
+      "tests": [],
+      "reviews": [
+        "Parent traced all marketplace runtime references and compared agents.create registration. Paired remediation with HC-034 exact-target immutable install intents."
+      ],
+      "pull_requests": [],
+      "runtime": "not-qualified",
+      "remaining": [
+        "Review and implement the bounded cross-repository install-intent and gateway publication spec."
+      ]
     }
   ]
 }

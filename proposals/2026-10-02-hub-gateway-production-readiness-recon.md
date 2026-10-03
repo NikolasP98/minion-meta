@@ -104,3 +104,22 @@ of this audit deliverable. Implementation and any operational access work follow
 - Application code, production records and unrelated WIP remain unchanged.
 
 Completion of the recon does not close this remediation proposal. The user selected all findings; subsequent batch specs own implementation and release qualification.
+
+## Parent review additions — October 3
+
+The implementation ledger now tracks 114 findings. The sixth parent finding is
+GW-022: `agent.install` writes a marketplace bundle but no gateway runtime reader
+consumes that directory or registers the agent. The normal `agents.create` path
+separately updates configuration and prepares the runtime workspace. HC-034 and
+GW-022 therefore share a bounded install-intent specification: exact authorized
+target, immutable verified bytes, durable receipt/reconciliation, actual runtime
+registration, and deferred idempotent Hub registration/counting. The same slice
+must remove the malformed-tags-after-write and catalog-invalidation-consumption
+races found during independent review. No install completion is claimed yet.
+
+Marketplace catalog A/B/C implementation passed independent source review with
+that explicit installation dependency remaining open. Rolling deployment readiness
+requires a new publisher's digest of exact nullable document contents; historical
+`files_loaded_at` alone is not proof. The local native and browser validation
+receipts live under `.planning/operations/readiness-2026-10-03/`; none establishes
+production release or a production write.

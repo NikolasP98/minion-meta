@@ -21,3 +21,19 @@ readiness before even the install handler's server-row write, and bounded cache
 key admission. The normative second-reviewer section records all three. Its
 approval was conditional on recording those requirements; implementation must
 prove each before acceptance.
+
+## Implementation review and local qualification
+
+Sol accepted A/B/C after the parent corrected filter revisit pagination, database
+verification digest pairing, old-writer provenance overwrite detection, scheduled
+operation metadata and honest empty-state copy. The explicit cron-path registry
+addition repairs registry drift; the broad marketplace handler delegation already
+made the route reachable. No route-unreachable claim is retained.
+
+Source commit: Hub `8cd6123a`. The combined native jobs lane passes 179 named cases,
+including 15 marketplace cases, without skips. Mounted catalog cases cover every
+filter, pagination revisit, reordered replies, load retry and stale install blocking.
+Actual hook-to-cron authority cases and full Hub typecheck passed. See the readiness
+ledger for receipts. Installation remains separately tracked as HC-034/GW-022; its
+exact-target durable consumption and runnable-agent registration are not closed by
+catalog/file-loading work.

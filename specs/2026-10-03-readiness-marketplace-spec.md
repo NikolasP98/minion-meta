@@ -268,3 +268,22 @@ truncated snapshot is complete. [GitHub repository contents API](https://docs.gi
   surfaces a failure and retains its lease/cursor for safe recovery.
 - Mounted review found unlabeled catalog controls and duplicate h1 titles in the
   detail view. Add semantic labels and retain one page h1 with an h2 record card.
+
+### Rolling-deployment provenance correction
+
+A legacy application instance can write `files_loaded_at` after the additive migration has
+cleared old markers. The marker alone therefore never authorizes a ready bundle. Readiness
+requires the leased publisher's SHA-256 over agent id, version, GitHub path and all five exact
+nullable document values. Publication writes that digest and its verification timestamp in
+the same fenced transaction as the contents. Native constraints reject either half of the
+verification pair and malformed hashes. Every readiness fast path and lost-response readback
+uses the same digest check. Legacy text remains cached stale content, with no fabricated
+verification timestamp. A new regression also simulates an old writer replacing content after
+a valid new publication; that content cannot remain ready.
+
+Installation consumption and version pinning are tracked by HC-034. A ready read followed by
+old cross-database registration does not yet prove the bundle remained current at install
+admission. HS-031 is not fully closed until the immutable install intent and gateway receipt
+replace that path. The existing registered browser install also uses the active gateway, not
+the selected target, and can register/count before delivery; the linked fix must address all
+three failure modes together.

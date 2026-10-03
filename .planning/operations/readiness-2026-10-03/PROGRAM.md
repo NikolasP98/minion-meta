@@ -1,6 +1,6 @@
 # Hub and gateway readiness implementation
 
-The user authorized all 97 findings after reviewing the October 2 recon. The second FACES read-only pass adds 10 confirmed findings plus one reproduced baseline device-auth defect plus five parent-review findings (113 tracked total). This program owns their implementation; the historical 360 task denominator is unchanged.
+The user authorized all 97 findings after reviewing the October 2 recon. The second FACES read-only pass adds 10 confirmed findings plus one reproduced baseline device-auth defect plus six parent-review findings (114 tracked total). This program owns their implementation; the historical 360 task denominator is unchanged.
 
 ## Evidence and completion
 
@@ -45,15 +45,15 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | HC-003 | P1 | hub-mutations | implemented-awaiting-review | Compound entity-plus-tag saves report success after the tag write fails |
 | HC-004 | P1 | hub-mutations | implemented-awaiting-review | Add gateway is an unchecked dual write that can show success with half the gateway missing |
 | HC-007 | P1 | hub-mutations | implemented-awaiting-review | Voided tickets render as green Submitted because the client checks the wrong status literal |
-| HC-008 | P1 | hub-calendar | implementing | Calendar loads in the organization timezone but lays out and writes in the browser timezone |
+| HC-008 | P1 | hub-calendar | implemented-awaiting-integration | Calendar loads in the organization timezone but lays out and writes in the browser timezone |
 | HC-011 | P1 | hub-calendar | queued | A drag can partially commit custom lane, group members, and time/resource as independent writes |
-| HC-012 | P1 | hub-calendar | queued | In-flight week responses can overwrite post-mutation data or resurrect evicted weeks |
-| HC-013 | P1 | hub-calendar | queued | A failed visible week is rendered as a genuinely empty schedule until another scroll settles |
+| HC-012 | P1 | hub-calendar | implementing | In-flight week responses can overwrite post-mutation data or resurrect evicted weeks |
+| HC-013 | P1 | hub-calendar | implementing | A failed visible week is rendered as a genuinely empty schedule until another scroll settles |
 | HC-015 | P1 | hub-calendar | queued | Board reclassification is pointer-drag-only |
 | HC-024 | P1 | hub-reactivity-accessibility | queued | Older reliability responses can overwrite newer range/filter/host selections |
 | HC-026 | P1 | hub-reactivity-accessibility | queued | Nested delete buttons bubble Enter into card navigation; Flow and Workshop also mishandle Space |
 | HC-028 | P1 | hub-reactivity-accessibility | queued | Hand-rolled overlays bypass the shared dialog contract; HostsOverlay even swallows Escape from its content |
-| HS-001 | P1 | hub-authority-jobs | implementing | Anonymous callers can trigger global marketplace synchronization |
+| HS-001 | P1 | hub-authority-jobs | implemented-awaiting-integration | Anonymous callers can trigger global marketplace synchronization |
 | HS-002 | P1 | hub-authority-jobs | queued | Capability enforcement does not cover several privileged platform mutations |
 | HS-004 | P1 | hub-authority-jobs | spec-review | The automatic backup and chat/unified-event retention scheduler has no production entrypoint |
 | HS-009 | P1 | hub-money | queued | Stored-value balances add nominal amounts across currencies |
@@ -81,8 +81,8 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | GW-020 | P2 | gateway-ci-shells | queued | The durable shells receiver is present, but the sender and lifecycle endpoints remain incomplete |
 | HC-005 | P2 | hub-mutations | implemented-awaiting-review | Event-kind create, rename, recolor, default, and delete ignore rejected responses |
 | HC-006 | P2 | hub-mutations | implemented-awaiting-review | Pulse proposal editing closes and discards the draft on any HTTP failure |
-| HC-009 | P2 | hub-calendar | implementing | Date-only quick ranges mix local calendar arithmetic with UTC serialization |
-| HC-010 | P2 | hub-calendar | implementing | Quick-range 'now' freezes at component mount |
+| HC-009 | P2 | hub-calendar | implemented-awaiting-integration | Date-only quick ranges mix local calendar arithmetic with UTC serialization |
+| HC-010 | P2 | hub-calendar | implemented-awaiting-integration | Quick-range 'now' freezes at component mount |
 | HC-014 | P2 | hub-calendar | queued | Built-in status, kind, service, and tag lanes look draggable but cannot reclassify |
 | HC-016 | P2 | hub-calendar | queued | Calendar↔Table/Board switching destroys runway and fan interaction state |
 | HC-017 | P2 | hub-calendar | queued | Multi-tag bookings are filed under only the first server-ordered tag |
@@ -96,16 +96,16 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | HC-030 | P2 | hub-reactivity-accessibility | queued | Core interactive systems remain multi-thousand-line change hotspots |
 | HC-031 | P2 | hub-test-quality | implemented-awaiting-review | Client interaction E2E coverage is outside the default CI gate and many specs can skip entirely |
 | HS-003 | P2 | hub-authority-jobs | locally-verified | Removed memberships can remain authorized in the identity cache for up to 60 seconds |
-| HS-005 | P2 | hub-authority-jobs | implemented-awaiting-integration | A stale meta-sync job can be reclaimed repeatedly by concurrent workers |
+| HS-005 | P2 | hub-authority-jobs | locally-verified-awaiting-release | A stale meta-sync job can be reclaimed repeatedly by concurrent workers |
 | HS-006 | P2 | hub-authority-jobs | locally-verified | Finance cache keys ignore whether stock accounting is enabled |
-| HS-008 | P2 | hub-test-quality | implemented-awaiting-review | Five SQL-critical test files are excluded from ordinary tests and absent from explicit CI lanes |
+| HS-008 | P2 | hub-test-quality | locally-verified-awaiting-release | Five SQL-critical test files are excluded from ordinary tests and absent from explicit CI lanes |
 | HS-014 | P2 | hub-money | queued | Stored payment-plan status drifts from ticket-derived reality |
 | HS-015 | P2 | hub-money | queued | Package sessions are consumed before the sale or booking is committed |
 | HS-023 | P2 | hub-stock-bookings | queued | Series cancellation commits each occurrence independently |
 | HS-024 | P2 | hub-stock-bookings | queued | Concurrent bookings for a new person can create an orphan duplicate contact |
 | HS-026 | P2 | hub-metrics | locally-verified | Negative profit and margin are clamped to zero |
 | HS-027 | P2 | hub-metrics | locally-verified | Void-rate and rankings use inconsistent invoice populations |
-| HS-028 | P2 | hub-metrics | queued | Binary floating-point rounding produces 1.00 for 1.005 |
+| HS-028 | P2 | hub-metrics | spec-review | Binary floating-point rounding produces 1.00 for 1.005 |
 | HS-029 | P2 | hub-money | queued | The supposedly append-only POS credit ledger grants UPDATE and DELETE |
 | OB-001 | P2 | observability | queued | Server telemetry delivery is not tied to request lifetime |
 | OB-002 | P2 | observability | queued | Source-map and live alert qualification remains incomplete |
@@ -113,7 +113,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | TQ-005 | P2 | hub-test-quality | spec-review | The tag-cell E2E can pass without selecting a tag or rendering the chip behavior named by the test |
 | TQ-006 | P2 | hub-test-quality | spec-review | The POS category filter E2E accepts a no-op filter despite a multi-category seed |
 | TQ-007 | P2 | hub-test-quality | spec-review | Seeded E2E suites turn missing deterministic contract fixtures into runtime skips after the page loads |
-| TQ-008 | P2 | hub-test-quality | implemented-awaiting-review | PostgreSQL result contracts accept wholesale assertion deletion as long as one passing test remains per file |
+| TQ-008 | P2 | hub-test-quality | locally-verified-awaiting-release | PostgreSQL result contracts accept wholesale assertion deletion as long as one passing test remains per file |
 | UI-001 | P2 | hub-mutations | implemented-awaiting-review | Opening bulk tags expands the mobile document beyond the viewport |
 | OP-001 | P2 | operations | implemented-awaiting-review | Current planning state still lists attachment defects fixed on master |
 | OP-002 | P2 | operations | implemented-awaiting-review | Contributor guidance contradicts the canonical branch and database/auth model |
@@ -122,7 +122,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | HC-023 | P3 | hub-calendar | queued | Truncated calendar lane headers rely on native title text |
 | HS-007 | P3 | hub-authority-jobs | locally-verified | Page commits during finance sync are invisible until the whole job completes |
 | HS-016 | P3 | hub-money | queued | Equal grant allocation drops the rounding residual |
-| HS-017 | P3 | hub-money | queued | Due schedules are not required to reconcile to plan principal |
+| HS-017 | P3 | hub-money | spec-review | Due schedules are not required to reconcile to plan principal |
 | MR-OP-003 | P3 | hub-stock-bookings | queued | Stock valuation persists unquantized binary-float artifacts |
 | FACES-001 | P1 | faces-production | locally-verified-awaiting-release | A 4.62 GB core dump is retained inside the durable FACES state volume |
 | FACES-002 | P1 | faces-production | locally-verified-awaiting-release | The raw FACES gateway port is reachable from the public internet and bypasses the edge |
@@ -137,6 +137,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | FACES-PROD-005 | P2 | faces-meta-socials | queued | Sync failures retain and expose unbounded provider error payloads |
 | HC-032 | P2 | hub-reactivity-accessibility | implemented-awaiting-integration | Team timeline and leave-balance reads hide failures as empty data |
 | HC-033 | P2 | hub-mutations | queued | Scheduling link and event-type deletion ignore rejected HTTP responses |
-| HS-030 | P2 | hub-authority-jobs | implementing | Marketplace filters and sorting operate on an incorrectly filtered truncated population |
-| HS-031 | P2 | hub-authority-jobs | implementing | Transient marketplace document failures are cached as permanent empty content |
-| HC-034 | P1 | hub-mutations | queued | Marketplace installation can deliver to the wrong active gateway and duplicate pre-delivery effects on retry |
+| HS-030 | P2 | hub-authority-jobs | implemented-awaiting-integration | Marketplace filters and sorting operate on an incorrectly filtered truncated population |
+| HS-031 | P2 | hub-authority-jobs | implemented-awaiting-integration | Transient marketplace document failures are cached as permanent empty content |
+| HC-034 | P1 | hub-mutations | spec-review | Marketplace installation can deliver to the wrong active gateway and duplicate pre-delivery effects on retry |
+| GW-022 | P1 | hub-mutations | spec-review | Marketplace install writes an unused bundle without registering a runnable gateway agent |

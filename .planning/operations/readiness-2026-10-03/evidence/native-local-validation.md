@@ -1,32 +1,44 @@
 # Disposable PostgreSQL validation
 
-All fixtures used owned loopback PostgreSQL 18.6 on port 55461, database marker
-`minion-360-disposable:v1` where required. No FACES/customer database was written.
-The container provenance is recorded in `native-runtime.json`; cleanup follows
-completion of the remaining native lanes.
+All nine native lanes pass locally: **330 named cases across 23 files, zero skips**.
+`native-nine-lanes-final.json` records the exact behaviors and SHA-256 of each full
+private report. The manifest validators accepted each final report.
 
-- Deposit classifier: 5 passed, zero skips; exact lane report validator passed.
-- CRM pagination: 31 passed, zero skips; exact lane report validator passed.
-  The initial run exposed a real fixture mismatch with the void-invoice finance
-  correction. The fixture now includes invoice status and a void-only invoice
-  regression, and the exact-name admission requires that regression.
-- Initial combined jobs run: 161 passed, 3 failed. This is not a passing receipt.
-  Two failures exposed Meta SQL Date handling, including a production media
-  supersession defect. Both were corrected. One 4-second transport barrier timed
-  out under concurrent work; isolated diagnostic passed in 2245ms without a
-  timeout change. The isolated diagnostic skipped unrelated cases and is not
-  counted as complete lane qualification.
-- Stable Meta fixture after subsequent parent review corrections: 16 passed,
-  zero skips. Before/after owned source hashes match. It covers cancel/steal,
-  stale publication, connection CAS, late object puts, immutable digest keys,
-  tombstone cleanup, RLS and foreign keys. Final combined lane remains separate.
-- Marketplace ownership: 14 passed, zero skips. Uses distinct native backends,
-  real operational migration, rejected tenant/browser privileges, expired leases,
-  rollback after final-guard expiry, row savepoints, infrastructure abort, paging,
-  commit-response loss, stale hydration, lock timeout and legacy marker invalidation.
-- Combined 7-file / 178-behavior jobs qualification is running. No final passing
-  claim is made until its exact report validator succeeds.
+| Lane | Files | Passed |
+|---|---:|---:|
+| crm-deposit | 1 | 5 |
+| crm-pagination | 3 | 31 |
+| crm-concurrent | 1 | 7 |
+| attachments | 2 | 47 |
+| principal | 1 | 8 |
+| custom-properties | 1 | 1 |
+| formula | 2 | 8 |
+| qa-native | 5 | 44 |
+| jobs | 7 | 179 |
 
-The private local JSON reports are under the implementation run's
-`native-parent-proof/` directory. Hosted CI and production migration/release are
-not represented by these local receipts.
+Marked fixture lanes used owned loopback PostgreSQL 18.6 on port 55461. Full-schema
+lanes used the separately owned Supabase QA runtime on ports 54421/54422, with a
+fresh baseline plus current migrations. Its latest bootstrap reports 87 restored
+migration rows, zero pending migrations and a valid QA marker. Synthetic seed
+coverage is 206/206. The pre-existing developer QA volume was preserved. The
+pgvector fixture used a separate owned marked database. No FACES/customer database
+was written. Both runtimes remain explicitly owned for subsequent money tests.
+
+Initial failures remain in the private run directory. They found SQL Date handling
+in Meta media supersession, a stale CRM fixture missing invoice status, unsafe
+normal-env selection in the mixed business-persistence fixture, a missing pgvector
+fixture setup, and a lease-test admission deadline that prevented its handler from
+running. Each was corrected and its full lane rerun. A later expanded marketplace
+fixture selected an unspecified row; its query was corrected before the final
+179-case jobs run. None of those failed/partial runs is counted as passing.
+
+The ordinary CRM parity fixture now includes a void-only invoice and requires it
+not to promote the customer. The business-persistence fixture uses the explicit
+loopback test database selector. Marketplace native cases include paired
+verification constraints, SHA-256 content provenance, legacy loaded-marker
+invalidation, publication fences and commit-response loss. Meta cases include stale
+ownership, cancel/steal, fresh token CAS, immutable media and cleanup fencing.
+
+These are local disposable receipts. Hosted CI, production migration, deployment
+and live behavior are separate gates. Private full receipts remain under the
+implementation run's `native-parent-proof/`; sanitized summaries are committed here.
