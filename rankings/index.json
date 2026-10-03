@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-03T14:20:54.025Z",
+	"generatedAt": "2026-10-03T14:50:59.062Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -22093,6 +22093,38 @@
 			"scoredAt": "2026-10-02T19:54:03.387Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown is routine deployment health signal with no indication of ongoing incident.",
+			"evidence": [
+				"commit fixes nitter persistence serialize and drain poller shutdown",
+				"tagged deployment, no failure status reported"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T14:50:58.917Z"
+		},
+		{
 			"key": "issue:minion-meta#616",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22729,6 +22761,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T03:54:02.979Z"
+		},
+		{
+			"key": "issue:minion-meta#617",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#617 [monitor:unstick] reconcile run caf335b7 (minion-meta): claude agent exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/617",
+			"sourceUpdatedAt": "2026-09-26T14:17:22Z",
+			"sourceFingerprint": "537c59ed94a45888fa33e41e34e4aac25c5b5d94e59b743d4bf4c82ba19d9b06",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single automated monitor-intake report of an infra-level exit-126 agent failure where the surrounding pipeline succeeded suggests a low-risk retry rather than urgent repo work.",
+			"evidence": [
+				"exit 126 with 0 turns and 0 cost_usd indicates agent process never launched",
+				"pipeline itself completed: refreshed handoffs, wrote proposals/index.json, pushed dev->dev successfully"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T14:50:58.917Z"
 		},
 		{
 			"key": "issue:minion-meta#643",
@@ -26819,38 +26883,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T18:54:20.098Z"
-		},
-		{
-			"key": "issue:minion-meta#617",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#617 [monitor:unstick] reconcile run caf335b7 (minion-meta): claude agent exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/617",
-			"sourceUpdatedAt": "2026-09-26T14:17:22Z",
-			"sourceFingerprint": "537c59ed94a45888fa33e41e34e4aac25c5b5d94e59b743d4bf4c82ba19d9b06",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A single transient infra exit-126 already diagnosed as a low-risk retry with the rest of the pipeline healthy is not a durable engineering task worth tracking as a goal.",
-			"evidence": [
-				"claude provider agent exited 126 with 0 turns and 0 cost_usd",
-				"reconcile pipeline otherwise completed and pushed dev->dev successfully"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T14:29:03.694Z"
 		},
 		{
 			"key": "issue:minion-meta#646",
