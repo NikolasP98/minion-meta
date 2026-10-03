@@ -3,7 +3,7 @@ id: 2026-09-16-hub-backup-scheduler-never-started
 title: Hub backup scheduler is never started — backups and retention pruning never run
 status: draft
 created: 2026-09-16
-updated: 2026-09-16
+updated: 2026-10-03
 repos: [minion_hub]
 tags: [data, unwired, infra]
 ---
@@ -50,3 +50,14 @@ Either:
 Deciding the *backup strategy* itself (frequency, retention window, storage
 target) — this proposal is only about the fact that the existing
 implementation, whatever its policy, currently never executes.
+
+## Related
+
+- `handoff-minion-hub-892615684` (handoff-sweep marker for the same
+  `TODO(handoff)` at `src/server/services/backup-scheduler.ts:164`) merged
+  into this proposal as the same finding — merged_into set there.
+- `postmerge-minion-hub-c371d6639113` (post-merge discovery finding for the
+  same marker, PR #282) describes the identical issue but already carries
+  `status: approved`, so it is left untouched per the no-touch rule for
+  proposals that left the draft stage; treat it as corroborating evidence
+  for this proposal rather than a separate open item.

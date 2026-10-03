@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-892615684
 title: Handoff marker — src/server/services/backup-scheduler.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-09-16
 updated: 2026-10-03
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-09-16-hub-backup-scheduler-never-started
+merged_into: 2026-09-16-hub-backup-scheduler-never-started
 ---
 
 # Handoff marker — src/server/services/backup-scheduler.ts
