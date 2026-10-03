@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-03T09:20:51.014Z",
+	"generatedAt": "2026-10-03T09:51:00.278Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2611,15 +2611,15 @@
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Approved proposal with clear scope identifies a multi-tenant data isolation bug in CRM dashboard aggregation that leaks cross-owner data.",
+			"rationale": "A clear multi-tenant isolation bug in merged CRM dashboard code lets owners see each other's aggregated data, with a well-specified fix direction and file/line pointer.",
 			"evidence": [
 				"Unscoped rollups mix CRM metrics across all owners/users, breaking multi-tenant isolation",
-				"status: approved",
-				"Add owner_id grouping to word-frequency, sentiment, and win-index aggregation queries"
+				"TODO(handoff) marker at crm-insights-dashboard.service.ts:40",
+				"caught by two independent sweeps (post-merge + handoff-ledger)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T09:28:31.801Z"
+			"scoredAt": "2026-10-03T09:51:00.116Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-capability-separation-spec",
@@ -23786,20 +23786,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 2,
+				"specification": 3,
 				"implementation": 2
 			},
-			"confidence": 3,
+			"confidence": 4,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Automated monitor intake reports a transient failure already requeued successfully, indicating self-resolution.",
+			"rationale": "Automated monitor intake shows a transient push failure that was already requeued successfully, indicating self-resolution rather than ongoing action needed.",
 			"evidence": [
-				"push failed; requeue -> 201",
-				"fingerprint: unstick-transient-68142f89"
+				"note=push failed; requeue -> 201",
+				"class=C (transient)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T09:28:31.801Z"
+			"scoredAt": "2026-10-03T09:51:00.116Z"
 		},
 		{
 			"key": "issue:minion-meta#430",
@@ -24941,38 +24941,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:25:32.539Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit is an already-merged fix for nitter persistence/shutdown, leaving no outstanding deployment action.",
-			"evidence": [
-				"commit message 'fix(nitter): serialize persistence and drain poller shutdown'",
-				"status: unknown with no further open action described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T09:00:55.377Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
