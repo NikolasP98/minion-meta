@@ -37,6 +37,8 @@ The current state points to this97-finding program and has an explicit dispositi
 2. Correct Hub workflow/setup/backend/API guidance from repo-policy.yaml, package.json, hooks/auth/context helpers and QA documentation.
 3. Verify each referenced path/declared command and run meta instruction/index checks. Read-only source/merge receipts never imply runtime acceptance.
 
+The same source review found stale meta-repo architecture prose describing SQLite/Turso as the complete Hub database and shared authentication sessions. Correct those statements without changing policy projection blocks manually. Factory main/dev 86254ea instructions and promotion workflow also prove a stale registry branch role: development and PR base are dev, release/default are main. Change repo-policy.yaml and regenerate projections; never advance release refs as part of documentation repair.
+
 ## 4. Out-of-scope
 
 Production runner repair/alert closure OP-003, application code, branch switching, dependency installation in active original checkouts, deployment and production writes.

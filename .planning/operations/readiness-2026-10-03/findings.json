@@ -1,11 +1,12 @@
 {
   "schema_version": 1,
-  "authorized_scope": "All 97 recon findings; user authorized autonomous implementation on 2026-10-02 America/Lima. Merge/deploy remain separate.",
+  "authorized_scope": "All 97 original recon findings plus 5 confirmed FACES production findings; autonomous implementation authorized. Merge/deploy remain separate.",
   "updated": "2026-10-03",
   "bases": {
     "hub": "7ac3bfdffdd885d80fbaf2056eb22e387626a3ee",
     "gateway": "b841c36750e4bf10dd3f81a4896b19c699fe3132",
-    "meta": "bb88676fb8f63d25381981a76b22f3c1e4ebcd96"
+    "meta": "bb88676fb8f63d25381981a76b22f3c1e4ebcd96",
+    "factory": "86254ea8f9996718409704427db1b939d35d47a0"
   },
   "batches": {
     "gateway-security": [
@@ -130,6 +131,13 @@
       "OP-001",
       "OP-002",
       "OP-003"
+    ],
+    "faces-production": [
+      "FACES-001",
+      "FACES-002",
+      "FACES-003",
+      "FACES-004",
+      "FACES-005"
     ]
   },
   "findings": [
@@ -164,16 +172,20 @@
         "sessions.list, preview, and usage return only authorized resources.",
         "Admin behavior and legacy single-tenant token behavior remain explicitly covered."
       ],
-      "code_commits": [],
+      "code_commits": [
+        "hub:0e365b6f"
+      ],
       "tests": [
         {
           "receipt": "evidence/hub-jwt-green.log",
           "scope": "Hub issuer signed claims, jti uniqueness, actualSQL cross-org agent exclusion",
           "result": "passed; gateway integration pending"
         },
-        "Hub dependency: 31 tests across actual PostgreSQL authority, signed JWT issuance/verification, installed SvelteKit text-ID routing, exact identity bypass and Sentry forwarded-credential scrubbing passed. evidence/hub-authority-tests.log; independent review pending."
+        "Hub dependency: 38 tests passed across signed JWT issuance, fresh canonical membership, authority SQL, exact routing, credential redaction and all-outcome no-store. evidence/hub-authority-tests.log"
       ],
-      "reviews": [],
+      "reviews": [
+        "Hub dependency independently approved by Sol hub_test_fixes; gateway implementation review remains pending."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -190,11 +202,15 @@
         "A binary frame whose room id differs from the authorized membership is discarded and audited.",
         "Legacy rooms are migrated or denied according to an explicit policy."
       ],
-      "code_commits": [],
-      "tests": [
-        "Hub dependency: 31 tests across actual PostgreSQL authority, signed JWT issuance/verification, installed SvelteKit text-ID routing, exact identity bypass and Sentry forwarded-credential scrubbing passed. evidence/hub-authority-tests.log; independent review pending."
+      "code_commits": [
+        "hub:0e365b6f"
       ],
-      "reviews": [],
+      "tests": [
+        "Hub dependency: 38 tests passed across signed JWT issuance, fresh canonical membership, authority SQL, exact routing, credential redaction and all-outcome no-store. evidence/hub-authority-tests.log"
+      ],
+      "reviews": [
+        "Hub dependency independently approved by Sol hub_test_fixes; gateway implementation review remains pending."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -249,16 +265,20 @@
         "Restart the revocation store and assert the token remains rejected until expiry.",
         "A different jti for the same user remains usable unless user-wide revocation is requested."
       ],
-      "code_commits": [],
+      "code_commits": [
+        "hub:0e365b6f"
+      ],
       "tests": [
         {
           "receipt": "evidence/hub-jwt-green.log",
           "scope": "Hub issuer signed claims, jti uniqueness, actualSQL cross-org agent exclusion",
           "result": "passed; gateway integration pending"
         },
-        "Hub dependency: 31 tests across actual PostgreSQL authority, signed JWT issuance/verification, installed SvelteKit text-ID routing, exact identity bypass and Sentry forwarded-credential scrubbing passed. evidence/hub-authority-tests.log; independent review pending."
+        "Hub dependency: 38 tests passed across signed JWT issuance, fresh canonical membership, authority SQL, exact routing, credential redaction and all-outcome no-store. evidence/hub-authority-tests.log"
       ],
-      "reviews": [],
+      "reviews": [
+        "Hub dependency independently approved by Sol hub_test_fixes; gateway implementation review remains pending."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -1654,15 +1674,23 @@
       "priority": "P2",
       "title": "The meta backlog contains 367 open monitor alerts and repeated reconcile execution failures",
       "batch": "operations",
-      "status": "queued",
+      "status": "implemented-awaiting-runtime",
       "owner": "root",
       "acceptance": "Run an isolated runner preflight and one controlled reconcile fixture; verify exec succeeds, source identity is recorded, and failure recurrence routes to one incident. No production runner change was made in this audit.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "factory:cb68380"
+      ],
+      "tests": [
+        "20 shell input tests and 19 classifier tests pass; spec-integrity dry runs and runner typecheck pass. evidence/factory-*.txt"
+      ],
+      "reviews": [
+        "Independent Sol hub_test_fixes code/blast-radius review approved; no production reconciliation turn was run."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Deploy reviewed input fix and qualify a real reconciliation with exact prompt identity; reconcile live alert inventory after runtime proof."
+      ]
     },
     {
       "id": "HC-020",
@@ -1699,15 +1727,23 @@
       "priority": "P3",
       "title": "Page commits during finance sync are invisible until the whole job completes",
       "batch": "hub-authority-jobs",
-      "status": "queued",
+      "status": "locally-verified",
       "owner": "root",
       "acceptance": "Cache a summary, commit one page, force the deadline branch, and assert the next summary either includes that page or intentionally remains on an explicitly versioned previous snapshot.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "hub:1d72021c"
+      ],
+      "tests": [
+        "Actual-cache regression fails before change; 20 tests across 3 files pass after page-commit invalidation. evidence/finance-sync-green.txt"
+      ],
+      "reviews": [
+        "Independent Sol hub_test_fixes code/blast-radius review approved."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Independent review and integrated checks; deployment/runtime qualification."
+      ]
     },
     {
       "id": "HS-016",
@@ -1753,6 +1789,116 @@
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
+    },
+    {
+      "id": "FACES-001",
+      "priority": "P1",
+      "title": "A 4.62 GB core dump is retained inside the durable FACES state volume",
+      "batch": "faces-production",
+      "status": "queued",
+      "owner": null,
+      "acceptance": [
+        "Treat the dump as a restricted incident artifact: decide retention, rotate credentials that could have been resident, then remove or quarantine it through an approved production change.",
+        "Set the gateway entrypoint core limit to zero before Node starts, or route explicitly authorized crash captures to a separate restricted and quota-managed location outside minion_faces_state.",
+        "Add a non-production crash canary proving that no core file lands in the durable state volume and add a volume-size alert."
+      ],
+      "code_commits": [],
+      "tests": [],
+      "reviews": [],
+      "pull_requests": [],
+      "runtime": "defect-confirmed-production-read-only",
+      "remaining": [
+        "Source remediation, review, local regression, release and live post-change verification."
+      ],
+      "source_report": "evidence/faces-backend-recon.json"
+    },
+    {
+      "id": "FACES-002",
+      "priority": "P1",
+      "title": "The raw FACES gateway port is reachable from the public internet and bypasses the edge",
+      "batch": "faces-production",
+      "status": "queued",
+      "owner": null,
+      "acceptance": [
+        "Extend the idempotent gateway firewall helper with IPv4 and IPv6 DOCKER-USER conntrack drops for original destination ports 18789 and 18790 while retaining the INPUT rules.",
+        "Make deployment preflight fail when either INPUT or DOCKER-USER protection is absent.",
+        "Verify from an external host that raw ports time out or reject, then verify the approved proxy and Tailscale paths still work and inspect rule counters."
+      ],
+      "code_commits": [],
+      "tests": [],
+      "reviews": [],
+      "pull_requests": [],
+      "runtime": "defect-confirmed-production-read-only",
+      "remaining": [
+        "Source remediation, review, local regression, release and live post-change verification."
+      ],
+      "source_report": "evidence/faces-backend-recon.json"
+    },
+    {
+      "id": "FACES-003",
+      "priority": "P1",
+      "title": "Both configured WhatsApp accounts are unauthorized while process health remains green",
+      "batch": "faces-production",
+      "status": "queued",
+      "owner": null,
+      "acceptance": [
+        "Add a separate authenticated readiness/integration summary with reason class, credential age and last successful connection. Keep the existing Docker liveness health green during provider outages to avoid restart loops.",
+        "Reconcile whether the user's stated Meta connection refers to Hub Business OAuth or a gateway messaging channel before changing configuration.",
+        "Schedule a controlled WhatsApp relink for both account-specific auth directories only with explicit production authorization, then verify receive and send with a predeclared reversible test plan."
+      ],
+      "code_commits": [],
+      "tests": [],
+      "reviews": [],
+      "pull_requests": [],
+      "runtime": "defect-confirmed-production-read-only",
+      "remaining": [
+        "Source remediation, review, local regression, release and live post-change verification."
+      ],
+      "source_report": "evidence/faces-backend-recon.json"
+    },
+    {
+      "id": "FACES-004",
+      "priority": "P2",
+      "title": "The explicit persistent debug log has grown to 475 MB without a retention control",
+      "batch": "faces-production",
+      "status": "queued",
+      "owner": null,
+      "acceptance": [
+        "Move production to info unless a bounded debug window is approved.",
+        "Use the dated rolling-log path with pruning or implement an explicit size/day retention policy for configured file paths.",
+        "Verify rotation while the process is writing and alert on both application-log and state-volume growth."
+      ],
+      "code_commits": [],
+      "tests": [],
+      "reviews": [],
+      "pull_requests": [],
+      "runtime": "defect-confirmed-production-read-only",
+      "remaining": [
+        "Source remediation, review, local regression, release and live post-change verification."
+      ],
+      "source_report": "evidence/faces-backend-recon.json"
+    },
+    {
+      "id": "FACES-005",
+      "priority": "P1",
+      "title": "The configured Workforce/Paperclip upstream refuses connections",
+      "batch": "faces-production",
+      "status": "queued",
+      "owner": null,
+      "acceptance": [
+        "Confirm the intended Paperclip deployment identity and listener address, then correct the runtime secret or restore the service through a separately approved production change.",
+        "Add startup and periodic readiness telemetry for the upstream with failure class and last success, without logging the URL or credentials.",
+        "After repair, exercise an authenticated read-only identity and issue-list request before allowing mutation tools."
+      ],
+      "code_commits": [],
+      "tests": [],
+      "reviews": [],
+      "pull_requests": [],
+      "runtime": "defect-confirmed-production-read-only",
+      "remaining": [
+        "Source remediation, review, local regression, release and live post-change verification."
+      ],
+      "source_report": "evidence/faces-backend-recon.json"
     }
   ]
 }

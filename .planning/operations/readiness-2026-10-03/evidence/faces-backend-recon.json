@@ -1,0 +1,287 @@
+{
+  "schemaVersion": 1,
+  "reportId": "faces-backend-recon-2026-10-03",
+  "generatedAt": "2026-10-03T02:58:23Z",
+  "verdict": "action_required",
+  "scope": {
+    "environment": "FACES production backend",
+    "mode": "read_only",
+    "perspectives": ["cto", "quant", "product"],
+    "included": [
+      "gateway runtime identity and deployment",
+      "host firewall and externally observable health paths",
+      "active gateway configuration without secret values",
+      "channel readiness and provider failure classes",
+      "local event, delivery and cron aggregates",
+      "configured Workforce/Paperclip upstream reachability",
+      "JEV shadow aggregate lifecycle state"
+    ],
+    "excludedOrUnavailable": [
+      "customer message bodies, contact identifiers and credential contents",
+      "core dump contents",
+      "provider-side Meta APIs and token introspection",
+      "Hub PostgreSQL meta_connections state because the FACES runtime has no Hub PostgreSQL read credential or tenant-authenticated Meta read endpoint",
+      "browser and UI behavior",
+      "fault injection, restart, deploy and any production write"
+    ]
+  },
+  "runtimeIdentity": {
+    "service": "minion_gateway-faces",
+    "containerObserved": "c2fc7d31949c",
+    "health": {
+      "ok": true,
+      "protocol": 3,
+      "version": "2026.8.7-dev"
+    },
+    "imageDigest": "sha256:26ca10558b46b902085fb828c1db928e77eab5eb4bed9b85c2fc316d65787bbb",
+    "imageRevision": "7a1501e969014ec2fcfb69021bda843d0f90d23b",
+    "startedAt": "2026-09-30T08:20:17Z",
+    "restartCount": 0,
+    "activeConfig": {
+      "path": "/home/node/.minion/gateway.json",
+      "sha256": "ad67ba7c117a549b178e8941e833d996daa3b4ead138a109082c0a1912788bff",
+      "bytes": 32863,
+      "mtimeUtc": "2026-08-23T07:04:22.997189Z",
+      "agentCount": 4,
+      "bindingCount": 3
+    },
+    "configPathEvidence": {
+      "thinMinionJsonIsNotTheActiveInventory": true,
+      "sourceAnchor": "src/config/paths.ts:139-195",
+      "runtimeAnchor": "gateway CLI emitted four agents.list manifest warnings from gateway.json and stated that gateway.json deployment overrides were applied"
+    },
+    "auditSourceComparison": {
+      "auditCommit": "b841c36750e4bf10dd3f81a4896b19c699fe3132",
+      "auditTree": "a61dc1769f5737ed3c18ef196257d4a1d763c3c2",
+      "deployedCommit": "7a1501e969014ec2fcfb69021bda843d0f90d23b",
+      "deployedTree": "a61dc1769f5737ed3c18ef196257d4a1d763c3c2",
+      "sameTree": true
+    }
+  },
+  "findings": [
+    {
+      "id": "FACES-001",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "A 4.62 GB core dump is retained inside the durable FACES state volume",
+      "observed": {
+        "relativePath": "agents/panik/workspace/core.47",
+        "bytes": 4620193792,
+        "mode": "0600",
+        "mtimeUtc": "2026-08-26T01:47:34.822489Z",
+        "stateVolumeBytesObserved": 5188788224,
+        "approximateVolumeShare": 0.89,
+        "containerCoreLimit": "unlimited",
+        "hostCorePattern": "core"
+      },
+      "impact": "The dump can retain process memory containing credentials or customer data and consumes most of the observed durable state bytes. The artifact survives container replacement because the workspace is mounted from minion_faces_state.",
+      "evidenceBoundary": "Only stat metadata, ulimit and core_pattern were read. The core contents were not opened.",
+      "repair": [
+        "Treat the dump as a restricted incident artifact: decide retention, rotate credentials that could have been resident, then remove or quarantine it through an approved production change.",
+        "Set the gateway entrypoint core limit to zero before Node starts, or route explicitly authorized crash captures to a separate restricted and quota-managed location outside minion_faces_state.",
+        "Add a non-production crash canary proving that no core file lands in the durable state volume and add a volume-size alert."
+      ],
+      "anchors": [
+        "deploy/swarm/stack.yml:137-144",
+        "deploy/swarm/gateway-entrypoint.sh:45-56"
+      ]
+    },
+    {
+      "id": "FACES-002",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "The raw FACES gateway port is reachable from the public internet and bypasses the edge",
+      "observed": {
+        "publicRawHealthStatus": 200,
+        "publicRawHealth": {"ok": true, "protocol": 3, "version": "2026.8.7-dev"},
+        "edgeHealthStatusFromSameObserver": 403,
+        "publicInterface": "eth0",
+        "inputDropPresentIpv4": true,
+        "inputDropPresentIpv6": true,
+        "dockerUserOriginalDestinationDropPresentIpv4": false,
+        "dockerUserOriginalDestinationDropPresentIpv6": false,
+        "firewallService": "enabled-active-success"
+      },
+      "cause": "Swarm publishes 18790 in host mode and Docker DNAT sends published traffic through FORWARD/DOCKER-USER. The installed service adds only INPUT multiport drops, so the published path bypasses them.",
+      "impact": "Clients can reach the gateway without the intended Caddy/Cloudflare policy layer. Gateway authentication still applies where implemented, but direct protocol and denial-of-service exposure violates the deployment invariant.",
+      "repair": [
+        "Extend the idempotent gateway firewall helper with IPv4 and IPv6 DOCKER-USER conntrack drops for original destination ports 18789 and 18790 while retaining the INPUT rules.",
+        "Make deployment preflight fail when either INPUT or DOCKER-USER protection is absent.",
+        "Verify from an external host that raw ports time out or reject, then verify the approved proxy and Tailscale paths still work and inspect rule counters."
+      ],
+      "anchors": [
+        "deploy/swarm/README.md:26-38",
+        "deploy/swarm/minion-swarm-firewall.service:1-13",
+        "deploy/swarm/stack.yml:147-162",
+        "deploy/swarm/deploy-brain-vector.sh:25-38"
+      ]
+    },
+    {
+      "id": "FACES-003",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "Both configured WhatsApp accounts are unauthorized while process health remains green",
+      "observed": {
+        "configuredAccounts": 2,
+        "enabledAccounts": 2,
+        "runningAccounts": 0,
+        "connectedAccounts": 0,
+        "linkedAccounts": 2,
+        "lastConnectedAtAvailable": false,
+        "lastInboundAtAvailable": false,
+        "lastOutboundAtAvailable": false,
+        "providerFailureClass": "unauthorized",
+        "gatewayHealthOk": true,
+        "currentProcessRestartCount": 0
+      },
+      "freshnessEvidence": "An authenticated channels.status probe used a five-second provider probe timeout. The active channel mirror was hydrated and current during the observation; this was not a disabled-hydration fallback. The full retained application log contained repeated logged-out/unauthorized event classes, but no reliable successful-connection timestamp could be recovered without retaining message text.",
+      "metaScope": {
+        "gatewayMetaGraphPluginEnabled": true,
+        "gatewayMetaGraphHasAppSecret": true,
+        "gatewayMetaGraphHasVerifyToken": true,
+        "gatewayMetaGraphHasAccessToken": false,
+        "gatewayInstagramChannelConfigured": false,
+        "gatewayMessengerChannelConfigured": false,
+        "gatewayWhatsAppCloudChannelConfigured": false,
+        "configuredTursoContainsMetaTables": false,
+        "hubPostgresMetaConnectionState": "unavailable",
+        "interpretation": "This confirms the observed gateway messaging runtime is not connected to a Meta Graph channel. It does not refute a separate Meta Business OAuth connection stored in Hub PostgreSQL."
+      },
+      "impact": "Inbound and outbound WhatsApp workflows are unavailable even though Docker and /health report a live gateway. Operators can mistake process liveness for customer-channel readiness.",
+      "repair": [
+        "Add a separate authenticated readiness/integration summary with reason class, credential age and last successful connection. Keep the existing Docker liveness health green during provider outages to avoid restart loops.",
+        "Reconcile whether the user's stated Meta connection refers to Hub Business OAuth or a gateway messaging channel before changing configuration.",
+        "Schedule a controlled WhatsApp relink for both account-specific auth directories only with explicit production authorization, then verify receive and send with a predeclared reversible test plan."
+      ],
+      "anchors": [
+        "src/channels/whatsapp/accounts.ts:89-149",
+        "src/channels/whatsapp/auth-store.ts:30-40",
+        "src/gateway/server-core/server-channels.ts:334-354"
+      ]
+    },
+    {
+      "id": "FACES-004",
+      "priority": "P2",
+      "status": "confirmed_new",
+      "title": "The explicit persistent debug log has grown to 475 MB without a retention control",
+      "observed": {
+        "relativePath": "logs/minion.log",
+        "bytes": 475051577,
+        "mode": "0664",
+        "mtimeUtc": "2026-10-03T02:54:10.592342Z",
+        "configuredLevel": "debug",
+        "configuredRedactionMode": "tools",
+        "configuredRetentionKeysPresent": false,
+        "dockerStdoutRotation": {"driver": "json-file", "maxSize": "50m", "maxFiles": 5},
+        "applicationFileCoveredByDockerRotation": false
+      },
+      "impact": "The file grows independently of Docker stdout rotation, consumes durable volume capacity and retains a broad debug history with only tool-summary redaction.",
+      "repair": [
+        "Move production to info unless a bounded debug window is approved.",
+        "Use the dated rolling-log path with pruning or implement an explicit size/day retention policy for configured file paths.",
+        "Verify rotation while the process is writing and alert on both application-log and state-volume growth."
+      ],
+      "anchors": [
+        "src/config/types.base.ts:134-143",
+        "src/logging/logger.ts:53-70",
+        "src/logging/logger.ts:102-123",
+        "deploy/swarm/stack.yml:147-151"
+      ]
+    },
+    {
+      "id": "FACES-005",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "The configured Workforce/Paperclip upstream refuses connections",
+      "observed": {
+        "workforceProxyConfigured": true,
+        "paperclipPluginUrlConfigured": true,
+        "sameConfiguredTarget": true,
+        "targetClass": "public-ip",
+        "targetPort": 3200,
+        "credentialSent": false,
+        "healthProbe": "connection_refused_errno_111",
+        "apiHealthProbe": "connection_refused_errno_111"
+      },
+      "impact": "The opt-in /api/workforce-backend proxy and Paperclip integration point at the same unavailable upstream, so workforce reads and agent control-plane operations cannot complete from FACES.",
+      "repair": [
+        "Confirm the intended Paperclip deployment identity and listener address, then correct the runtime secret or restore the service through a separately approved production change.",
+        "Add startup and periodic readiness telemetry for the upstream with failure class and last success, without logging the URL or credentials.",
+        "After repair, exercise an authenticated read-only identity and issue-list request before allowing mutation tools."
+      ],
+      "anchors": [
+        "src/gateway/workforce-proxy.ts:23-143",
+        "extensions/paperclip/minion.plugin.json:1-24",
+        "extensions/paperclip/src/tool.ts:81-94"
+      ]
+    }
+  ],
+  "operationalEvidence": {
+    "gatewayEventStore": {
+      "rows": 19469,
+      "firstEventUtc": "2026-08-03T08:23:04.190Z",
+      "lastEventUtc": "2026-10-03T02:51:05.255Z",
+      "severityCounts": {"info": 19414, "medium": 11, "high": 44},
+      "categoryCounts": {"gateway": 17510, "auth": 1463, "agent": 263, "memory": 99, "channel": 88, "skill": 42, "tool": 4}
+    },
+    "messageLedger": {
+      "rows": 59205,
+      "synced": 59205,
+      "pending": 0,
+      "maxAttempts": 0,
+      "lastCreatedUtc": "2026-07-19T23:53:15.762Z",
+      "lastSyncedUtc": "2026-07-20T00:02:36.288Z",
+      "interpretation": "This proves no current local outbox backlog. It does not prove current channel delivery because no ledger rows have been created since July 19."
+    },
+    "gatewayCron": {"jobCount": 0, "enabledCount": 0},
+    "jevShadow": {
+      "classification": "known_review_residual_not_new_runtime_defect",
+      "reviewDueAt": "2026-09-29T03:45:46.298Z",
+      "reviewDue": true,
+      "calls": 519,
+      "succeeded": 518,
+      "unknown": 1,
+      "haltReason": "provider_transport_or_parse_error",
+      "runsAfterReviewDue": 0,
+      "customerVisibleWrites": 0,
+      "humanLabels": 0,
+      "qualityStatus": "unmeasured-no-human-labels",
+      "lastSuccessfulTick": "2026-09-28T13:45:38.006Z",
+      "reportTimerStillActive": true,
+      "interpretation": "Expiry worked: no model calls occurred after the deadline. The active timer continues aggregate report generation as designed. The promised human review remains incomplete, and the pilot remains halted on one unknown result."
+    }
+  },
+  "original97Comparison": {
+    "gatewayFindingsInOriginalAudit": 20,
+    "sameDeployedSourceTree": true,
+    "refuted": [],
+    "sourcePresentRuntimeTriggerNotExercised": [
+      "GW-001", "GW-002", "GW-003", "GW-004", "GW-005", "GW-006", "GW-007", "GW-008", "GW-009", "GW-010", "GW-011", "GW-012", "GW-013", "GW-014", "GW-015", "GW-016", "GW-017", "GW-020"
+    ],
+    "deploymentGovernanceOnly": ["GW-018", "GW-019"],
+    "runtimeContext": {
+      "GW-004": "Browser is enabled and remote extension relay is allowed; no low-privilege invocation was attempted.",
+      "GW-005": "Hub metrics and the local event store are active and current; no low-privilege telemetry read was attempted.",
+      "GW-008": "The local message outbox has no pending rows; a partial delivery failure was not induced.",
+      "GW-011": "The gateway cron store has zero jobs, so the cancellation trigger is absent in this runtime.",
+      "GW-015": "All 59,205 retained outbox rows are marked synced; replay/idempotency failure was not induced.",
+      "GW-016": "Memory sync is enabled using valid Hub metrics credentials; transport failure behavior was not injected.",
+      "GW-017": "The event store is current through the recon window; cross-tenant sampling behavior remains source-confirmed and unexercised."
+    },
+    "remaining77": "Hub and meta-repository findings were outside this backend runtime probe and are neither confirmed nor refuted here."
+  },
+  "mutationLedger": {
+    "businessMutationCount": 0,
+    "configWrites": 0,
+    "databaseWrites": 0,
+    "messagesSent": 0,
+    "payments": 0,
+    "syncOrJobTriggers": 0,
+    "deploys": 0,
+    "restarts": 0,
+    "credentialChanges": 0,
+    "coreContentsRead": false,
+    "customerBodiesRetained": false,
+    "rawPiiRetained": false
+  }
+}

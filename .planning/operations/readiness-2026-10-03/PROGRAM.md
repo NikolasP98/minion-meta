@@ -1,6 +1,6 @@
 # Hub and gateway readiness implementation
 
-The user authorized all 97 findings after reviewing the October 2 recon. This program owns their implementation; the historical 360 task denominator is unchanged.
+The user authorized all 97 findings after reviewing the October 2 recon. The second FACES read-only pass adds 5 confirmed findings (102 tracked total). This program owns their implementation; the historical 360 task denominator is unchanged.
 
 ## Evidence and completion
 
@@ -117,10 +117,15 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | UI-001 | P2 | hub-mutations | implementing | Opening bulk tags expands the mobile document beyond the viewport |
 | OP-001 | P2 | operations | implemented-awaiting-review | Current planning state still lists attachment defects fixed on master |
 | OP-002 | P2 | operations | implemented-awaiting-review | Contributor guidance contradicts the canonical branch and database/auth model |
-| OP-003 | P2 | operations | queued | The meta backlog contains 367 open monitor alerts and repeated reconcile execution failures |
+| OP-003 | P2 | operations | implemented-awaiting-runtime | The meta backlog contains 367 open monitor alerts and repeated reconcile execution failures |
 | HC-020 | P3 | hub-calendar | queued | Category is offered for color but cannot be selected as a subcolumn |
 | HC-023 | P3 | hub-calendar | queued | Truncated calendar lane headers rely on native title text |
-| HS-007 | P3 | hub-authority-jobs | queued | Page commits during finance sync are invisible until the whole job completes |
+| HS-007 | P3 | hub-authority-jobs | locally-verified | Page commits during finance sync are invisible until the whole job completes |
 | HS-016 | P3 | hub-money | queued | Equal grant allocation drops the rounding residual |
 | HS-017 | P3 | hub-money | queued | Due schedules are not required to reconcile to plan principal |
 | MR-OP-003 | P3 | hub-stock-bookings | queued | Stock valuation persists unquantized binary-float artifacts |
+| FACES-001 | P1 | faces-production | queued | A 4.62 GB core dump is retained inside the durable FACES state volume |
+| FACES-002 | P1 | faces-production | queued | The raw FACES gateway port is reachable from the public internet and bypasses the edge |
+| FACES-003 | P1 | faces-production | queued | Both configured WhatsApp accounts are unauthorized while process health remains green |
+| FACES-004 | P2 | faces-production | queued | The explicit persistent debug log has grown to 475 MB without a retention control |
+| FACES-005 | P1 | faces-production | queued | The configured Workforce/Paperclip upstream refuses connections |

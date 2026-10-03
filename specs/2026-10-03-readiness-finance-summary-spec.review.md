@@ -14,3 +14,7 @@ Root reviewed standards in pass 1. Independent Sol review in pass 2 required ful
 ## Independent implementation review
 
 Sol hub_test_fixes found a remaining contactFinanceSummary aggregate that admitted voids; root added a real SQL-engine regression, observed900revenue/purchased=true for a void-only contact, then excluded voids from the aggregate while retaining recentInvoices history. The reviewer found no other blocking regression in cache identity, signed summary/series math, rankings or the shared chart helper. The corrected combined finance/CRM and mounted-rune review run passed128tests across9files. Full integrated app/runtime gates remain pending.
+
+## Page-commit visibility review (HS-007)
+
+Sol hub_test_fixes approved cache visibility after every committed sync page, including later-page failures. The actual-cache regression failed before the fix; the corrected 20-test run passed across three files. Hub commit: `1d72021c`.

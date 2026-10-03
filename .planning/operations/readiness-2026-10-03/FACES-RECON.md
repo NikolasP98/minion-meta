@@ -15,3 +15,7 @@ Read-only preflight at 2026-10-03T02:31:24Z: FACES `/health` returned `ok:true`,
 ## Mutation ledger
 
 No production mutation has been performed. The ledger must be updated before the first mutation, then reconciled against cleanup receipts at the end of each test.
+
+## Backend round completed
+
+The Sol backend report is retained in `evidence/faces-backend-recon.json` and `.md`. Five new source/operations findings are registered as FACES-001..005. The deployed gateway tree exactly matches the initial audit tree, even though the commit IDs differ. The mutation ledger remains zero. The second perspective round remains pending. A bounded Hub PostgreSQL read-only transaction confirmed two active Meta connections (Instagram Login and Facebook Login for Business), two enabled Instagram assets, one page and one ad account. The Instagram token expiry is November 7, 2026; token validity and service workflows still require separate read-only qualification. Receipt: `evidence/faces-hub-meta-preflight.json`. No customer bodies or credentials were exported.

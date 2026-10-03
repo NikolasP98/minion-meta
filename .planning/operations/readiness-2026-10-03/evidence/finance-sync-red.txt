@@ -1,0 +1,32 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-03-hub-gw/hub
+
+ ❯ src/server/services/finance-sync.service.test.ts (10 tests | 1 failed) 25ms
+     × makes a committed page visible through the real cache even when the job yields 8ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/services/finance-sync.service.test.ts > advanceJob > makes a committed page visible through the real cache even when the job yields
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/server/services/finance-sync.service.test.ts:195:33
+    193|     await advanceJob(ctx, 'j1', { budgetMs: -1 });
+    194|     expect(committedCount).toBe(1);
+    195|     expect(await readSummary()).toBe(1);
+       |                                 ^
+    196|     expect(finishJob).not.toHaveBeenCalled();
+    197|     expect(upsertInvoicesBatch).toHaveBeenCalledTimes(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  21:53:32
+   Duration  1.36s (transform 438ms, setup 42ms, import 1.12s, tests 25ms, environment 0ms)
