@@ -18,4 +18,15 @@ No production mutation has been performed. The ledger must be updated before the
 
 ## Backend round completed
 
-The Sol backend report is retained in `evidence/faces-backend-recon.json` and `.md`. Five new source/operations findings are registered as FACES-001..005. The deployed gateway tree exactly matches the initial audit tree, even though the commit IDs differ. The mutation ledger remains zero. The second perspective round remains pending. A bounded Hub PostgreSQL read-only transaction confirmed two active Meta connections (Instagram Login and Facebook Login for Business), two enabled Instagram assets, one page and one ad account. The Instagram token expiry is November 7, 2026; token validity and service workflows still require separate read-only qualification. Receipt: `evidence/faces-hub-meta-preflight.json`. No customer bodies or credentials were exported.
+The Sol backend report is retained in `evidence/faces-backend-recon.json` and `.md`. Five new source/operations findings are registered as FACES-001..005. The deployed gateway tree exactly matches the initial audit tree, even though the commit IDs differ. The mutation ledger remains zero. The second perspective round is complete below. A bounded Hub PostgreSQL read-only transaction confirmed two active Meta connections (Instagram Login and Facebook Login for Business), two enabled Instagram assets, one page and one ad account. The Instagram token expiry is November 7, 2026; token validity and service workflows still require separate read-only qualification. Receipt: `evidence/faces-hub-meta-preflight.json`. No customer bodies or credentials were exported.
+
+## Product and integration round completed
+
+The second Sol dossier is `evidence/faces-product-recon.json` and `.md`. It ran
+21 bounded read-only database probes, unauthenticated HTTP boundaries and a
+Vercel deployment read. FACES-PROD-001..005 record Ads cursor replay, hidden
+freshness boundaries, historical heuristic attribution, incomplete collection
+reported as success, and unbounded operator error payloads. The deployed Hub
+source SHA was not exposed, so source causality is explicitly an inference.
+No authenticated browser behavior or Meta provider token validity is certified.
+The mutation count remains **zero**; there are no test writes to reverse.

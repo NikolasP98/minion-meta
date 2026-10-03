@@ -274,7 +274,7 @@ for the number of assertions expected from each source file.
 The shared admission export is additive and preserves Paperclip normalization and
 UUID v1-v5 behavior. Paperclip keeps its transactional provisioning and actor
 construction. Hub and Paperclip consume the same reproducibly packed
-`0.4.0-readiness.0` artifact through checked `file:vendor/...tgz` dependencies until
+`0.4.0-readiness.1` artifact through checked `file:vendor/...tgz` dependencies until
 normal package promotion. This keeps both CI installs reproducible without an
 unpublished registry range or an unreviewed npm publication. Each artifact records
 its exact meta source commit, package tree, build command and SHA-256. The two

@@ -1,12 +1,13 @@
 {
   "schema_version": 1,
-  "authorized_scope": "All 97 original recon findings plus 5 confirmed FACES production findings; autonomous implementation authorized. Merge/deploy remain separate.",
+  "authorized_scope": "All 97 original recon findings, 10 confirmed FACES backend/product findings and 1 baseline device-auth regression (108 total); autonomous implementation authorized. Merge/deploy remain separate.",
   "updated": "2026-10-03",
   "bases": {
     "hub": "7ac3bfdffdd885d80fbaf2056eb22e387626a3ee",
     "gateway": "b841c36750e4bf10dd3f81a4896b19c699fe3132",
     "meta": "bb88676fb8f63d25381981a76b22f3c1e4ebcd96",
-    "factory": "86254ea8f9996718409704427db1b939d35d47a0"
+    "factory": "86254ea8f9996718409704427db1b939d35d47a0",
+    "paperclip": "06e36792e"
   },
   "batches": {
     "gateway-security": [
@@ -16,7 +17,8 @@
       "GW-004",
       "GW-005",
       "GW-006",
-      "GW-007"
+      "GW-007",
+      "GW-021"
     ],
     "gateway-lifecycle": [
       "GW-008",
@@ -138,6 +140,13 @@
       "FACES-003",
       "FACES-004",
       "FACES-005"
+    ],
+    "faces-meta-socials": [
+      "FACES-PROD-001",
+      "FACES-PROD-002",
+      "FACES-PROD-003",
+      "FACES-PROD-004",
+      "FACES-PROD-005"
     ]
   },
   "findings": [
@@ -146,16 +155,20 @@
       "priority": "P0",
       "title": "Chat events are broadcast across organizations when the payload has no top-level agent id",
       "batch": "gateway-security",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "gateway_fixes",
       "acceptance": [
         "Connect org A and org B, emit delta/final/error/injected chat for A, assert B receives zero frames and A receives exactly one.",
         "Connect two users in one org with disjoint assigned agents and assert only the assigned recipient sees the session event.",
         "Assert an audience-required event with no resolvable owner is refused and logged without message content."
       ],
-      "code_commits": [],
+      "code_commits": [
+        "gateway:98767f4de"
+      ],
       "tests": [],
-      "reviews": [],
+      "reviews": [
+        "Parent security review corrected corrupt revocation overwrite, shortened revocation expiry and unhealthy-store read ordering. Final review active. Session mutation bypass suspicion was refuted by direct method-table inspection; dispatcher regressions added."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -165,7 +178,7 @@
       "priority": "P1",
       "title": "Session and chat methods bypass assigned-agent authorization when the selector is sessionKey",
       "batch": "gateway-security",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "gateway_fixes",
       "acceptance": [
         "Assigned user A cannot history/send/abort/patch/delete a session owned by agent B.",
@@ -173,7 +186,8 @@
         "Admin behavior and legacy single-tenant token behavior remain explicitly covered."
       ],
       "code_commits": [
-        "hub:0e365b6f"
+        "hub:0e365b6f",
+        "gateway:98767f4de"
       ],
       "tests": [
         {
@@ -184,7 +198,8 @@
         "Hub dependency: 38 tests passed across signed JWT issuance, fresh canonical membership, authority SQL, exact routing, credential redaction and all-outcome no-store. evidence/hub-authority-tests.log"
       ],
       "reviews": [
-        "Hub dependency independently approved by Sol hub_test_fixes; gateway implementation review remains pending."
+        "Hub dependency independently approved by Sol hub_test_fixes; gateway implementation review remains pending.",
+        "Parent security review corrected corrupt revocation overwrite, shortened revocation expiry and unhealthy-store read ordering. Final review active. Session mutation bypass suspicion was refuted by direct method-table inspection; dispatcher regressions added."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -195,7 +210,7 @@
       "priority": "P1",
       "title": "Any authenticated write-scoped user can join and mutate any guessed workshop room",
       "batch": "gateway-security",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "gateway_fixes",
       "acceptance": [
         "Org B cannot join, sync, claim authority, or submit a binary update to org A's save id.",
@@ -203,13 +218,15 @@
         "Legacy rooms are migrated or denied according to an explicit policy."
       ],
       "code_commits": [
-        "hub:0e365b6f"
+        "hub:0e365b6f",
+        "gateway:98767f4de"
       ],
       "tests": [
         "Hub dependency: 38 tests passed across signed JWT issuance, fresh canonical membership, authority SQL, exact routing, credential redaction and all-outcome no-store. evidence/hub-authority-tests.log"
       ],
       "reviews": [
-        "Hub dependency independently approved by Sol hub_test_fixes; gateway implementation review remains pending."
+        "Hub dependency independently approved by Sol hub_test_fixes; gateway implementation review remains pending.",
+        "Parent security review corrected corrupt revocation overwrite, shortened revocation expiry and unhealthy-store read ordering. Final review active. Session mutation bypass suspicion was refuted by direct method-table inspection; dispatcher regressions added."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -220,16 +237,20 @@
       "priority": "P1",
       "title": "Normal users can enumerate and invoke globally registered nodes and browser relays",
       "batch": "gateway-security",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "gateway_fixes",
       "acceptance": [
         "Org B cannot list, describe, invoke, or browser-proxy through org A's node.",
         "Org administrators can access only their org; platform admins retain explicit global behavior.",
         "Unowned legacy nodes fail closed until claimed/migrated."
       ],
-      "code_commits": [],
+      "code_commits": [
+        "gateway:98767f4de"
+      ],
       "tests": [],
-      "reviews": [],
+      "reviews": [
+        "Parent security review corrected corrupt revocation overwrite, shortened revocation expiry and unhealthy-store read ordering. Final review active. Session mutation bypass suspicion was refuted by direct method-table inspection; dispatcher regressions added."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -239,16 +260,20 @@
       "priority": "P1",
       "title": "Events, raw logs, and usage endpoints expose gateway-global operational data to normal users",
       "batch": "gateway-security",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "gateway_fixes",
       "acceptance": [
         "User/org-admin requests never return another org's events, usage, or logs.",
         "Queries without an owner predicate fail closed for tenant identities.",
         "Admin access is explicit and sensitive fields are redaction-tested."
       ],
-      "code_commits": [],
+      "code_commits": [
+        "gateway:98767f4de"
+      ],
       "tests": [],
-      "reviews": [],
+      "reviews": [
+        "Parent security review corrected corrupt revocation overwrite, shortened revocation expiry and unhealthy-store read ordering. Final review active. Session mutation bypass suspicion was refuted by direct method-table inspection; dispatcher regressions added."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -258,7 +283,7 @@
       "priority": "P1",
       "title": "JWT revocation neither disconnects active sockets nor survives gateway restart",
       "batch": "gateway-security",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "gateway_fixes",
       "acceptance": [
         "Revoking jti closes an active socket and blocks subsequent frames.",
@@ -266,7 +291,8 @@
         "A different jti for the same user remains usable unless user-wide revocation is requested."
       ],
       "code_commits": [
-        "hub:0e365b6f"
+        "hub:0e365b6f",
+        "gateway:98767f4de"
       ],
       "tests": [
         {
@@ -277,7 +303,8 @@
         "Hub dependency: 38 tests passed across signed JWT issuance, fresh canonical membership, authority SQL, exact routing, credential redaction and all-outcome no-store. evidence/hub-authority-tests.log"
       ],
       "reviews": [
-        "Hub dependency independently approved by Sol hub_test_fixes; gateway implementation review remains pending."
+        "Hub dependency independently approved by Sol hub_test_fixes; gateway implementation review remains pending.",
+        "Parent security review corrected corrupt revocation overwrite, shortened revocation expiry and unhealthy-store read ordering. Final review active. Session mutation bypass suspicion was refuted by direct method-table inspection; dispatcher regressions added."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -288,16 +315,20 @@
       "priority": "P1",
       "title": "Concurrent connect frames can authenticate one socket twice and leave a ghost client entry",
       "batch": "gateway-security",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "gateway_fixes",
       "acceptance": [
         "Pause first-token verification, send a second connect, then resolve both; exactly one client is registered.",
         "Close the socket and assert the client set and per-user connection count are empty.",
         "Repeat with different org/scopes and assert the second identity is never observable."
       ],
-      "code_commits": [],
+      "code_commits": [
+        "gateway:98767f4de"
+      ],
       "tests": [],
-      "reviews": [],
+      "reviews": [
+        "Parent security review corrected corrupt revocation overwrite, shortened revocation expiry and unhealthy-store read ordering. Final review active. Session mutation bypass suspicion was refuted by direct method-table inspection; dispatcher regressions added."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -307,8 +338,8 @@
       "priority": "P1",
       "title": "bestEffort delivery without an onError callback acknowledges and deletes partially failed queue entries",
       "batch": "gateway-lifecycle",
-      "status": "queued",
-      "owner": "root",
+      "status": "implementing",
+      "owner": "gateway_fixes",
       "acceptance": [
         "bestEffort true plus no onError plus one rejected payload must call failDelivery and never ackDelivery.",
         "Mixed success/failure returns an explicit partial result.",
@@ -422,10 +453,12 @@
       "priority": "P1",
       "title": "Bulk tag writes treat every HTTP response as success",
       "batch": "hub-mutations",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "hub_client_fixes",
       "acceptance": "Inject a 503 for /api/tags/bulk and one failed CRM fan-out response; assert error/partial feedback, no success toast, and failed staged intent remains.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:a1e7170f"
+      ],
       "tests": [],
       "reviews": [],
       "pull_requests": [],
@@ -437,10 +470,12 @@
       "priority": "P1",
       "title": "Selections survive data/query replacement and can act on hidden record IDs",
       "batch": "hub-mutations",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "hub_client_fixes",
       "acceptance": "Select A, replace data/query with B, then invoke each bulk action; assert A is cleared or explicitly disclosed and never silently submitted.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:a1e7170f"
+      ],
       "tests": [],
       "reviews": [],
       "pull_requests": [],
@@ -452,10 +487,12 @@
       "priority": "P1",
       "title": "Compound entity-plus-tag saves report success after the tag write fails",
       "batch": "hub-mutations",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "hub_client_fixes",
       "acceptance": "Force the second write to 503 after a successful primary write; assert committed-partial feedback, preserved tag draft, and retry only the tag write.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:ba6b6ba2"
+      ],
       "tests": [],
       "reviews": [],
       "pull_requests": [],
@@ -467,10 +504,12 @@
       "priority": "P1",
       "title": "Add gateway is an unchecked dual write that can show success with half the gateway missing",
       "batch": "hub-mutations",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "hub_client_fixes",
       "acceptance": "Make the second endpoint fail and assert no generic success, no draft erasure, and an idempotent repair path that does not duplicate /api/servers.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:ba6b6ba2"
+      ],
       "tests": [],
       "reviews": [],
       "pull_requests": [],
@@ -482,10 +521,12 @@
       "priority": "P1",
       "title": "Voided tickets render as green Submitted because the client checks the wrong status literal",
       "batch": "hub-mutations",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "hub_client_fixes",
       "acceptance": "Render the detail with status 'void'; assert Voided/error, and add a compile-time shared status exhaustiveness test.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:145536de"
+      ],
       "tests": [],
       "reviews": [],
       "pull_requests": [],
@@ -497,8 +538,8 @@
       "priority": "P1",
       "title": "Calendar loads in the organization timezone but lays out and writes in the browser timezone",
       "batch": "hub-calendar",
-      "status": "queued",
-      "owner": "root",
+      "status": "implementing",
+      "owner": "hub_client_fixes",
       "acceptance": "Run with browser TZ UTC and org TZ America/Lima, including a near-midnight booking and a 09:00 drag/drop round trip; assert display, cache key, request instant, and now line are org-zoned.",
       "code_commits": [],
       "tests": [],
@@ -886,15 +927,30 @@
       "priority": "P1",
       "title": "The workforce proxy integration test exercises a copied verifier that has drifted from the runtime middleware",
       "batch": "hub-test-quality",
-      "status": "spec-review",
+      "status": "locally-verified",
       "owner": "hub_test_fixes",
       "acceptance": "Run the same missing-header, malformed token, non-UUID company, UUID match/mismatch, roleKeys, and existing actor vectors against the actual exported middleware. A runtime middleware mutation must fail the Hub compatibility lane without editing a copied fixture.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "meta:46f9cf29",
+        "hub:2524a4a6",
+        "paperclip:04c3f2b9e",
+        "meta:f4171a63",
+        "hub:37ce1eac",
+        "paperclip:a91725a5a",
+        "paperclip:de675f207"
+      ],
+      "tests": [
+        "98 shared-package tests; isolated .1 Hub artifact 15 tests, full check 0 errors/0 warnings; Paperclip production middleware plus embedded PostgreSQL and artifact seam 11 tests. SHA256 4d327de904c004a2473b4a57981fddc5230a4c0f2e9fad64912cc30fa3bb0a3e. Independent byte comparison: seven allowed files changed, 235 unchanged, none deleted against SRI-verified published 0.3.0."
+      ],
+      "reviews": [
+        "Sol hub_test_fixes approved shared semantic equivalence and Paperclip runtime diff; parent inspected actual runtime import, file dependencies and install lock changes.",
+        "Parent full check found unrelated unreleased role types in the initial .0 bundle. Corrected packer overlays only identity export on the verified published package; both consumer checks pass."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Integrated consumer CI, human merge and deployment gates."
+      ]
     },
     {
       "id": "TQ-003",
@@ -935,8 +991,8 @@
       "priority": "P2",
       "title": "The write-ahead delivery queue provides at-least-once replay but lacks per-payload checkpoints/idempotency",
       "batch": "gateway-lifecycle",
-      "status": "queued",
-      "owner": "root",
+      "status": "implementing",
+      "owner": "gateway_fixes",
       "acceptance": [
         "Crash after payload 1 acceptance; recovery sends only unfinished payloads.",
         "Partial failure checkpoints successes and retries only failures.",
@@ -1050,10 +1106,12 @@
       "priority": "P2",
       "title": "Event-kind create, rename, recolor, default, and delete ignore rejected responses",
       "batch": "hub-mutations",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "hub_client_fixes",
       "acceptance": "Return 403 and 500 for each verb; assert draft/value is retained and no success-state invalidation masks the error.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:ba6b6ba2"
+      ],
       "tests": [],
       "reviews": [],
       "pull_requests": [],
@@ -1065,10 +1123,12 @@
       "priority": "P2",
       "title": "Pulse proposal editing closes and discards the draft on any HTTP failure",
       "batch": "hub-mutations",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "hub_client_fixes",
       "acceptance": "Inject 409/500 and assert editor remains open with unchanged draft and one request; success alone closes it.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:ba6b6ba2"
+      ],
       "tests": [],
       "reviews": [],
       "pull_requests": [],
@@ -1080,8 +1140,8 @@
       "priority": "P2",
       "title": "Date-only quick ranges mix local calendar arithmetic with UTC serialization",
       "batch": "hub-calendar",
-      "status": "queued",
-      "owner": "root",
+      "status": "implementing",
+      "owner": "hub_client_fixes",
       "acceptance": "Set TZ=America/Lima at 2026-10-03T01:30Z and TZ=Pacific/Kiritimati at local 00:30; assert local-day endpoints for every date-only preset.",
       "code_commits": [],
       "tests": [],
@@ -1095,8 +1155,8 @@
       "priority": "P2",
       "title": "Quick-range 'now' freezes at component mount",
       "batch": "hub-calendar",
-      "status": "queued",
-      "owner": "root",
+      "status": "implementing",
+      "owner": "hub_client_fixes",
       "acceptance": "Mount under fake time, advance hours/across midnight without changing props, click 1h and 1d, and assert bounds use the advanced clock.",
       "code_commits": [],
       "tests": [],
@@ -1290,12 +1350,19 @@
       "priority": "P2",
       "title": "Removed memberships can remain authorized in the identity cache for up to 60 seconds",
       "batch": "hub-authority-jobs",
-      "status": "queued",
+      "status": "locally-verified",
       "owner": "root",
       "acceptance": "Warm the cache, remove/downgrade membership, then make the next sensitive request through the same and a second app instance; both must reject immediately.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "hub:5e391e52"
+      ],
+      "tests": [
+        "80 focused tests passed across10files, including signed JWT + canonical PGlite SQL request resolver, role downgrade, membership deletion, expiry, empty selection, page-only recovery and explicit org switching.",
+        "Integrated Hub check with CI public env: zero errors and zero warnings, independently run by hub_test_fixes."
+      ],
+      "reviews": [
+        "Independent Sol hub_test_fixes approved after strict empty-cookie handling, exact active-org dispatch and dead-cache cleanup. Final integrated check passed with zero errors and zero warnings."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -1305,7 +1372,7 @@
       "priority": "P2",
       "title": "A stale meta-sync job can be reclaimed repeatedly by concurrent workers",
       "batch": "hub-authority-jobs",
-      "status": "queued",
+      "status": "spec-review",
       "owner": "root",
       "acceptance": "With two database connections and a stale job, assert exactly one claimant for a generation; expire/steal it, then prove the old owner can no longer update progress or completion.",
       "code_commits": [],
@@ -1349,12 +1416,19 @@
       "priority": "P2",
       "title": "Five SQL-critical test files are excluded from ordinary tests and absent from explicit CI lanes",
       "batch": "hub-test-quality",
-      "status": "spec-review",
+      "status": "implemented-awaiting-review",
       "owner": "hub_test_fixes",
       "acceptance": "Add a meta-test that enumerates excluded files and diffs them against every CI contract. It must currently identify exactly the five uncovered files and fail when any unassigned file appears.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "hub:81d07cb6",
+        "hub:0b977082"
+      ],
+      "tests": [
+        "43 manifest/QC tests passed; all 298 exact named behaviors across 21 native files and 9 lanes are required, with duplicate and missing names rejected. Runtime qualification remains pending."
+      ],
+      "reviews": [
+        "Parent requested broader named invariant coverage and duplicate assertion-name rejection before acceptance."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -1602,12 +1676,19 @@
       "priority": "P2",
       "title": "PostgreSQL result contracts accept wholesale assertion deletion as long as one passing test remains per file",
       "batch": "hub-test-quality",
-      "status": "spec-review",
+      "status": "implemented-awaiting-review",
       "owner": "hub_test_fixes",
       "acceptance": "Reject a synthetic report containing one passing assertion per admitted file and reject a report with a missing or renamed expected assertion. Accept additions through an explicit manifest update.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "hub:81d07cb6",
+        "hub:0b977082"
+      ],
+      "tests": [
+        "43 manifest/QC tests passed; all 298 exact named behaviors across 21 native files and 9 lanes are required, with duplicate and missing names rejected. Runtime qualification remains pending."
+      ],
+      "reviews": [
+        "Parent requested broader named invariant coverage and duplicate assertion-name rejection before acceptance."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -1617,10 +1698,12 @@
       "priority": "P2",
       "title": "Opening bulk tags expands the mobile document beyond the viewport",
       "batch": "hub-mutations",
-      "status": "implementing",
+      "status": "implemented-awaiting-review",
       "owner": "hub_client_fixes",
       "acceptance": "Open and close the bulk tag popover at 390 and 320 px, after rotation, and while horizontally scrolling the table. Assert document scrollWidth equals clientWidth, the panel remains reachable, and keyboard focus/Escape restore correctly. Repeat on a physical touch browser before release.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:a1e7170f"
+      ],
       "tests": [],
       "reviews": [],
       "pull_requests": [],
@@ -1795,20 +1878,26 @@
       "priority": "P1",
       "title": "A 4.62 GB core dump is retained inside the durable FACES state volume",
       "batch": "faces-production",
-      "status": "queued",
-      "owner": null,
+      "status": "locally-verified-awaiting-release",
+      "owner": "root",
       "acceptance": [
         "Treat the dump as a restricted incident artifact: decide retention, rotate credentials that could have been resident, then remove or quarantine it through an approved production change.",
         "Set the gateway entrypoint core limit to zero before Node starts, or route explicitly authorized crash captures to a separate restricted and quota-managed location outside minion_faces_state.",
         "Add a non-production crash canary proving that no core file lands in the durable state volume and add a volume-size alert."
       ],
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "gateway:45b294ec3"
+      ],
+      "tests": [
+        "Logging/tail/CLI 33 tests; logs RPC33; generated Swift source compatibility3; firewall8; real disposable image permission layer blocks append/unlink/ancestor replacement as node; child core limits zero and cannot be raised. Touched lint/format passed."
+      ],
+      "reviews": [
+        "Independent Sol gateway_fixes approved after parent fixed root-started file/ancestor ownership and systemd stop rule-removal gap. Optional Swift constructor source compatibility preserved through generator nil defaults. No native Swift compiler available."
+      ],
       "pull_requests": [],
-      "runtime": "defect-confirmed-production-read-only",
+      "runtime": "release-not-performed",
       "remaining": [
-        "Source remediation, review, local regression, release and live post-change verification."
+        "After human-reviewed release: externally probe both IP families and private proxy; verify built production image core limits and log bounds; exact existing crash artifact cleanup remains a separate reviewed operation."
       ],
       "source_report": "evidence/faces-backend-recon.json"
     },
@@ -1817,20 +1906,26 @@
       "priority": "P1",
       "title": "The raw FACES gateway port is reachable from the public internet and bypasses the edge",
       "batch": "faces-production",
-      "status": "queued",
-      "owner": null,
+      "status": "locally-verified-awaiting-release",
+      "owner": "root",
       "acceptance": [
         "Extend the idempotent gateway firewall helper with IPv4 and IPv6 DOCKER-USER conntrack drops for original destination ports 18789 and 18790 while retaining the INPUT rules.",
         "Make deployment preflight fail when either INPUT or DOCKER-USER protection is absent.",
         "Verify from an external host that raw ports time out or reject, then verify the approved proxy and Tailscale paths still work and inspect rule counters."
       ],
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "gateway:45b294ec3"
+      ],
+      "tests": [
+        "Logging/tail/CLI 33 tests; logs RPC33; generated Swift source compatibility3; firewall8; real disposable image permission layer blocks append/unlink/ancestor replacement as node; child core limits zero and cannot be raised. Touched lint/format passed."
+      ],
+      "reviews": [
+        "Independent Sol gateway_fixes approved after parent fixed root-started file/ancestor ownership and systemd stop rule-removal gap. Optional Swift constructor source compatibility preserved through generator nil defaults. No native Swift compiler available."
+      ],
       "pull_requests": [],
-      "runtime": "defect-confirmed-production-read-only",
+      "runtime": "release-not-performed",
       "remaining": [
-        "Source remediation, review, local regression, release and live post-change verification."
+        "After human-reviewed release: externally probe both IP families and private proxy; verify built production image core limits and log bounds; exact existing crash artifact cleanup remains a separate reviewed operation."
       ],
       "source_report": "evidence/faces-backend-recon.json"
     },
@@ -1861,20 +1956,26 @@
       "priority": "P2",
       "title": "The explicit persistent debug log has grown to 475 MB without a retention control",
       "batch": "faces-production",
-      "status": "queued",
-      "owner": null,
+      "status": "locally-verified-awaiting-release",
+      "owner": "root",
       "acceptance": [
         "Move production to info unless a bounded debug window is approved.",
         "Use the dated rolling-log path with pruning or implement an explicit size/day retention policy for configured file paths.",
         "Verify rotation while the process is writing and alert on both application-log and state-volume growth."
       ],
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "gateway:45b294ec3"
+      ],
+      "tests": [
+        "Logging/tail/CLI 33 tests; logs RPC33; generated Swift source compatibility3; firewall8; real disposable image permission layer blocks append/unlink/ancestor replacement as node; child core limits zero and cannot be raised. Touched lint/format passed."
+      ],
+      "reviews": [
+        "Independent Sol gateway_fixes approved after parent fixed root-started file/ancestor ownership and systemd stop rule-removal gap. Optional Swift constructor source compatibility preserved through generator nil defaults. No native Swift compiler available."
+      ],
       "pull_requests": [],
-      "runtime": "defect-confirmed-production-read-only",
+      "runtime": "release-not-performed",
       "remaining": [
-        "Source remediation, review, local regression, release and live post-change verification."
+        "After human-reviewed release: externally probe both IP families and private proxy; verify built production image core limits and log bounds; exact existing crash artifact cleanup remains a separate reviewed operation."
       ],
       "source_report": "evidence/faces-backend-recon.json"
     },
@@ -1899,6 +2000,161 @@
         "Source remediation, review, local regression, release and live post-change verification."
       ],
       "source_report": "evidence/faces-backend-recon.json"
+    },
+    {
+      "id": "GW-021",
+      "priority": "P1",
+      "title": "Paired-device authentication returns the stored token hash as a credential and breaks reconnect",
+      "batch": "gateway-security",
+      "status": "locally-verified",
+      "owner": "gateway_fixes",
+      "acceptance": [
+        "WebSocket hello and token rotation return an issued plaintext credential exactly once; persistence stores only its hash.",
+        "Paired-device reconnect, shared-secret refresh, revocation and both lockout directions pass.",
+        "The complete auth E2E suite passes; immutable baseline reproduces the original two failures."
+      ],
+      "code_commits": [
+        "gateway:758757b00"
+      ],
+      "tests": [
+        "Immutable b841c367 baseline: 28 passed and two paired-device auth failures. Security branch: 30 passed and same two failures.",
+        "Fixed full real WebSocket auth suite: 32/32; paired/client units 9/9; typecheck and touched lint passed."
+      ],
+      "reviews": [
+        "Root reviewed issued-versus-persisted token boundaries, all ensure/rotate production callers, revocation races and legacy migration; accepted with full real WebSocket regression evidence."
+      ],
+      "pull_requests": [],
+      "runtime": "not-qualified",
+      "remaining": []
+    },
+    {
+      "id": "FACES-PROD-001",
+      "priority": "P1",
+      "title": "The Ads sync deterministically replays one completed 90-day window instead of advancing",
+      "batch": "faces-meta-socials",
+      "status": "locally-verified-awaiting-release",
+      "owner": "root",
+      "acceptance": [
+        "On a terminal page, advance to the next window or target before returning a resume cursor; finish when no successor exists. Add a regression where a terminal page crosses the row cap and prove the first page is never replayed."
+      ],
+      "code_commits": [
+        "hub:66a89fab"
+      ],
+      "tests": [
+        "Meta sync/provider suite: 104 tests passed. Actual dispatcher regressions cover next Ads page/window/target, Posts/Messages targets, exact and exceeded row limits, malformed cursor failure and unchanged tail behavior."
+      ],
+      "reviews": [
+        "Read-only production observation; deployed Hub revision not attested, source cause is a high-confidence inference.",
+        "Independent Sol hub_test_fixes approved source and all successor regressions, including malformed truthy next URL. Root checked shared Posts/Messages and cursor credential stripping blast radius."
+      ],
+      "pull_requests": [],
+      "runtime": "production-defect-observed",
+      "remaining": [],
+      "source_evidence": [
+        "src/server/services/meta/meta-sync.service.ts:912-979",
+        "src/server/services/meta/meta-sync-jobs.service.ts:215-258"
+      ]
+    },
+    {
+      "id": "FACES-PROD-002",
+      "priority": "P1",
+      "title": "The UI reports connection and sync activity without exposing the stale paid-data boundary",
+      "batch": "faces-meta-socials",
+      "status": "queued",
+      "owner": "root",
+      "acceptance": [
+        "Show active jobs ahead of recent terminal history, parse per-kind sync results, poll or refresh until terminal, and display the paid, post, and message freshness boundaries on the relevant surfaces."
+      ],
+      "code_commits": [],
+      "tests": [],
+      "reviews": [
+        "Read-only production observation; deployed Hub revision not attested, source cause is a high-confidence inference."
+      ],
+      "pull_requests": [],
+      "runtime": "production-defect-observed",
+      "remaining": [],
+      "source_evidence": [
+        "src/routes/(app)/socials/settings/+page.svelte:101-143",
+        "src/routes/(app)/socials/settings/+page.svelte:164-201",
+        "src/server/services/meta/meta-insights.service.ts:662-769",
+        "src/routes/(app)/socials/+page.server.ts:9-55",
+        "src/routes/(app)/socials/+page.svelte:172-203"
+      ]
+    },
+    {
+      "id": "FACES-PROD-003",
+      "priority": "P1",
+      "title": "Campaign lead attribution is a July heuristic snapshot, while the UI presents it as an ongoing lead feed",
+      "batch": "faces-meta-socials",
+      "status": "queued",
+      "owner": "root",
+      "acceptance": [
+        "Either qualify and wire the exact gateway referral relay, or explicitly label the current rows as a July heuristic snapshot. Display provenance and data-through time before using these counts for campaign decisions."
+      ],
+      "code_commits": [],
+      "tests": [],
+      "reviews": [
+        "Read-only production observation; deployed Hub revision not attested, source cause is a high-confidence inference."
+      ],
+      "pull_requests": [],
+      "runtime": "production-defect-observed",
+      "remaining": [],
+      "source_evidence": [
+        "src/routes/api/meta/attribution/+server.ts:10-68",
+        "src/server/services/meta/attribution.service.ts:175-217",
+        "src/routes/(app)/socials/campaigns/[campaignId]/+page.svelte:172-214",
+        "src/routes/(app)/socials/campaigns/[campaignId]/+page.svelte:301-331"
+      ]
+    },
+    {
+      "id": "FACES-PROD-004",
+      "priority": "P2",
+      "title": "Successful post and message jobs conceal partial collection",
+      "batch": "faces-meta-socials",
+      "status": "queued",
+      "owner": "root",
+      "acceptance": [
+        "Introduce complete, partial, and failed outcome states per target and metric family. Define a comparable ranking metric or separate platform leaderboards, and show missing-permission coverage in the UI."
+      ],
+      "code_commits": [],
+      "tests": [],
+      "reviews": [
+        "Read-only production observation; deployed Hub revision not attested, source cause is a high-confidence inference."
+      ],
+      "pull_requests": [],
+      "runtime": "production-defect-observed",
+      "remaining": [],
+      "source_evidence": [
+        "src/server/services/meta/meta-sync.service.ts:982-1110",
+        "src/server/services/meta/meta-insights.service.ts:407-454",
+        "src/server/services/meta/meta-insights.service.ts:476-495",
+        "src/routes/(app)/socials/+page.svelte:111-168"
+      ]
+    },
+    {
+      "id": "FACES-PROD-005",
+      "priority": "P2",
+      "title": "Sync failures retain and expose unbounded provider error payloads",
+      "batch": "faces-meta-socials",
+      "status": "queued",
+      "owner": "root",
+      "acceptance": [
+        "Persist a bounded operator-safe summary and error class with a correlation id. Keep full diagnostics only in a size-bounded restricted log."
+      ],
+      "code_commits": [],
+      "tests": [],
+      "reviews": [
+        "Read-only production observation; deployed Hub revision not attested, source cause is a high-confidence inference."
+      ],
+      "pull_requests": [],
+      "runtime": "production-defect-observed",
+      "remaining": [],
+      "source_evidence": [
+        "src/server/services/meta/meta-sync-jobs.service.ts:261-272",
+        "src/server/services/meta/meta-insights.service.ts:732-769",
+        "src/routes/(app)/socials/settings/+page.svelte:125-143",
+        "src/routes/(app)/socials/settings/+page.svelte:347-371"
+      ]
     }
   ]
 }
