@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-03T20:51:25.484Z",
+	"generatedAt": "2026-10-03T21:22:02.341Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -806,8 +806,8 @@
 			"repo": "minion_hub",
 			"title": "#431 fix: harden Hub readiness and qualification gates",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/431",
-			"sourceUpdatedAt": "2026-10-03T20:33:42Z",
-			"sourceFingerprint": "8b21db5a78f4f41c632d6f3ac0acce2d756349e1ff8228466957d438d6e9a6d9",
+			"sourceUpdatedAt": "2026-10-03T21:11:31Z",
+			"sourceFingerprint": "55ed234456bd269c078d26360a7d4d32bbfcad9109e268e1ade0b60ac37b6df5",
 			"score": 73,
 			"band": "high",
 			"axes": {
@@ -816,21 +816,21 @@
 				"impact": 7
 			},
 			"readiness": {
-				"specification": 8,
+				"specification": 6,
 				"implementation": 7
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Draft PR with verifiable test evidence fixes concrete financial-write and stale-read correctness bugs across Hub's core reliability and POS/notification systems.",
+			"rationale": "Large hardening PR with concrete verification evidence across hub's most critical paths, still draft but demonstrably progressing.",
 			"evidence": [
-				"fixes stale-record commits and repeated financial writes",
-				"465 and 258 focused tests pass on signed head 950361092",
-				"still draft; production migration/deploy/merge not yet performed"
+				"465 and 258 focused tests pass for staged POS/Reliability snapshots",
+				"notification monitoring correction passes 34 tests reproducing the omitted-field failure",
+				"draft checkpoint in a 145-finding readiness program, more findings remain"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T20:51:25.314Z"
+			"scoredAt": "2026-10-03T21:22:02.187Z"
 		},
 		{
 			"key": "proposal:2026-08-23-minion-ai-ci-baseline-debt",
@@ -4220,41 +4220,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T23:17:02.574Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-2769d3127d2e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2769d3127d2e.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "a771ff5e10545641be750137f230423cc47ac8796dbeee04ce257ef72d84f17c",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-2557316487"
-			],
-			"rationale": "Already approved post-merge finding about ambiguous packageGrantId/paymentPlanId sourcing in the bookings service, with diagnosis already underway.",
-			"evidence": [
-				"status: approved",
-				"marker ties packageGrantId/paymentPlanId to LEAD in scheduling-bookings.service.ts",
-				"diagnosis steps already invoked against the merged PR #384"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T20:58:56.379Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2e738f3f945a",
@@ -9154,22 +9119,20 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 5
+				"implementation": 6
 			},
 			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-a5a65f6d6dac",
-				"proposal:postmerge-minion-hub-ec389eb71f89"
-			],
-			"rationale": "Includes a high-severity crash risk plus a weakened-test regression and touches the same job-stock-backend-fault.fixture.ts/PR #269 area as two other HDS-05-gated findings, so they should be consolidated into one remediation goal.",
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Includes a high-severity unchecked-access crash risk plus a weakened-test regression gap, both precisely located and independently fixable.",
 			"evidence": [
-				"high: destructured array element used without null check, crashes on 0 rows",
-				"medium: test assertion weakened to validate against HEAD instead of a captured baseline"
+				"high: destructured array element used without null check; crashes if query returns 0 rows",
+				"medium: test assertion changed to validate against HEAD, eliminating regression detection",
+				"exact file/line locations given for all four findings"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T21:05:44.911Z"
+			"scoredAt": "2026-10-03T21:22:02.187Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-86b35d6fff89",
@@ -11121,73 +11084,6 @@
 			"scoredAt": "2026-10-02T08:25:52.185Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-a5a65f6d6dac",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/job-stock-backend-fault.fixture.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a5a65f6d6dac.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "07d796ea5e9da3fcc9fb1aff033c6913734b78082581dd309138440f3a41fa50",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-ec389eb71f89",
-				"proposal:merge-scan-minion-hub-f97efb2"
-			],
-			"rationale": "This HDS-05-gated TODO in the same fixture file flagged by the f97efb2 merge-scan and shares a remediation proposal with the concurrency-test TODO, so all three should become one goal.",
-			"evidence": [
-				"TODO(handoff): HDS-05 remains pending; do not run without separate backend-loss authorization",
-				"references proposals/2026-09-08-platform-qc-remediation.md"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T21:05:44.911Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-ac3dd6e80c62",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/finance-statements.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ac3dd6e80c62.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "15137a6aaa1d2254997f604d7219a749421164a70122093e6cfea2765c137f83",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The TODO flags a real unbounded-allocation risk on a streamed response, but the auto-diagnosis is truncated tool-call output with no actual fix direction, so scope needs clarifying before execution.",
-			"evidence": [
-				"TODO(handoff): Bound streamed response bytes before allocation; arrayBuffer()",
-				"diagnosis section contains incomplete tool-call artifacts instead of an analysis"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T21:05:44.911Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-c1b3044762bb",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11253,41 +11149,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T00:11:03.768Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-ec389eb71f89",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/job-stock-concurrency.sql.integration.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ec389eb71f89.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "830cc4711e203f716efcdb9e06965a6485936416915da70aa6fab8c826415ecf",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-a5a65f6d6dac",
-				"proposal:merge-scan-minion-hub-f97efb2"
-			],
-			"rationale": "Same HDS-05 gate and remediation proposal as the backend-fault fixture TODO, and both relate to code flagged in the f97efb2 merge-scan for the same PR #269.",
-			"evidence": [
-				"TODO(handoff): Backend-loss qualification remains gated by HDS-05",
-				"references the same proposals/2026-09-08-platform-qc-remediation.md as the related fixture TODO"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T21:05:44.911Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
@@ -12767,6 +12628,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T05:54:16.999Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ac3dd6e80c62",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/finance-statements.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ac3dd6e80c62.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "15137a6aaa1d2254997f604d7219a749421164a70122093e6cfea2765c137f83",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Identifies a concrete unbounded-allocation risk in streamed response handling but the diagnosis is truncated before stating a fix, so readiness is unclear.",
+			"evidence": [
+				"TODO(handoff): Bound streamed response bytes before allocation; arrayBuffer()",
+				"file src/server/services/finance-statements.service.ts",
+				"Diagnosis (auto) shows only file-read/glob invocations, no stated fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T21:22:02.187Z"
 		},
 		{
 			"key": "proposal:2026-08-18-base-ui-primitives-and-shell",
@@ -15344,6 +15238,41 @@
 			"scoredAt": "2026-10-01T06:24:24.939Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-a5a65f6d6dac",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/job-stock-backend-fault.fixture.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a5a65f6d6dac.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "07d796ea5e9da3fcc9fb1aff033c6913734b78082581dd309138440f3a41fa50",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-ec389eb71f89"
+			],
+			"rationale": "This is one of two merged findings both gated on the same HDS-05 backend-loss authorization referenced in proposals/2026-09-08-platform-qc-remediation.md, so they should resolve as one goal.",
+			"evidence": [
+				"TODO(handoff): HDS-05 remains pending; do not run without separate backend-loss authorization",
+				"references meta proposals/2026-09-08-platform-qc-remediation.md",
+				"fixture test, blocks CI only under the HDS-05 authorization gate"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T21:22:02.187Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-b1533fc3bb8c",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15376,6 +15305,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T04:54:15.786Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ec389eb71f89",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/job-stock-concurrency.sql.integration.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ec389eb71f89.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "830cc4711e203f716efcdb9e06965a6485936416915da70aa6fab8c826415ecf",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-a5a65f6d6dac"
+			],
+			"rationale": "Shares the same HDS-05 backend-loss authorization gate and referenced remediation proposal as the sibling finding, so resolving them together avoids duplicate authorization work.",
+			"evidence": [
+				"TODO(handoff): Backend-loss qualification remains gated by HDS-05",
+				"see meta proposals/2026-09-08-platform-qc-remediation.md",
+				"integration test file job-stock-concurrency.sql.integration.test.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T21:22:02.187Z"
 		},
 		{
 			"key": "issue:minion-meta#448",
@@ -18702,20 +18666,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 3
+				"specification": 3,
+				"implementation": 2
 			},
-			"confidence": 5,
+			"confidence": 4,
 			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "The finding's own fix direction says the single broad TODO should be split into three separate specs (camera, keyboard, element lifecycle) before it is actionable.",
+			"rationale": "The stated fix direction itself recommends splitting this single broad TODO into three separate specs (camera, keyboard, element lifecycle), indicating the current framing is too coarse to execute directly.",
 			"evidence": [
 				"TODO(handoff): Full Workshop composition/camera and keyboard relationship/element",
-				"fix direction: break TODO into three focused specs each with acceptance tests"
+				"Fix direction: Break the TODO into three focused specs... each with acceptance tests"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T21:05:44.911Z"
+			"scoredAt": "2026-10-03T21:22:02.187Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-f173c4e5b58a",
@@ -21831,40 +21795,6 @@
 			"scoredAt": "2026-10-03T00:31:55.240Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-03",
-			"sourceFingerprint": "f6e667c68ce2ab17c596e42d29a91605c9d79592bc891870364fff6092871400",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:2026-09-16-hub-backup-scheduler-never-started"
-			],
-			"rationale": "This is a bulk auto-generated handoff marker aggregating many unrelated TODO lines from a data file rather than an actionable engineering task.",
-			"evidence": [
-				"Filed automatically by the factory handoff-ledger sweep",
-				"markers reference disparate unrelated lines in rankings/index.json across many repos/topics"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T17:21:05.918Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-29ee60e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21914,19 +21844,20 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 7
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A single well-localized medium-severity unchecked-access bug in a test fixture is small, clear, and bounded enough to fix directly.",
+			"rationale": "Single well-localized medium finding with exact file/line and a clear fix (add bounds check).",
 			"evidence": [
-				"tests/fixtures/workshop-motion/main.ts:54 .at(-1) without bounds check will crash if precondition fails",
+				".at(-1) without bounds check assumes showReactionEmoji adds a child",
+				"file tests/fixtures/workshop-motion/main.ts:54",
 				"medium severity, single finding"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T21:05:44.911Z"
+			"scoredAt": "2026-10-03T21:22:02.187Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2d728adb7c22",
@@ -23835,38 +23766,6 @@
 			"scoredAt": "2026-10-01T18:24:01.690Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 8
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged commit fixing nitter persistence/shutdown, already implemented and not an outstanding goal.",
-			"evidence": [
-				"commit fix(nitter): serialize persistence and drain poller shutdown (#295)",
-				"deployment status is 'unknown' but work is already committed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T20:51:25.314Z"
-		},
-		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24814,6 +24713,39 @@
 			"scoredAt": "2026-10-03T00:28:49.448Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-03",
+			"sourceFingerprint": "7a19c23b84fef1fa535c939bfb9c735262fb781d95fe0dab4682af102cd443ff",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The markers are text fragments scraped from a generated rankings data file rather than actionable source-code TODOs, so the sweep's framing doesn't map to a fixable code defect.",
+			"evidence": [
+				"markers point at rankings/index.json lines like L4487, L7031, L11116",
+				"file is a generated ranking index, not source with real TODO(handoff) comments",
+				"18 markers listed spanning unrelated topics (SQL, policy, UI) suggesting pattern-match noise"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T21:22:02.187Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-403744372",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24876,6 +24808,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-27T01:09:47.096Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-2769d3127d2e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2769d3127d2e.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "a771ff5e10545641be750137f230423cc47ac8796dbeee04ce257ef72d84f17c",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The marker text is truncated and the auto-diagnosis contains only tool-call stubs with no stated conclusion, leaving the scope unclear.",
+			"evidence": [
+				"Marker text: packageGrantId/paymentPlanId are drawn against the LEAD (truncated)",
+				"Diagnosis (auto) section shows only read/grep invocations, no findings or fix direction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T21:22:02.187Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-df5cae93bfc8",
@@ -25588,17 +25552,18 @@
 				"specification": 3,
 				"implementation": 2
 			},
-			"confidence": 5,
+			"confidence": 7,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The monitor's own diagnosis calls this a one-off transient provider fault safe to retry, not a code or spec defect.",
+			"rationale": "Diagnosis identifies a transient one-off provider JSON-parse fault with no code defect, recommending retry rather than action.",
 			"evidence": [
-				"Diagnosis: transient provider fault, not a spec/code defect",
+				"parse error: Invalid numeric literal at line 1, column 4",
+				"both bounded providers ultimately failed or returned invalid JSON",
 				"Recommendation: safe to retry the run as-is"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T21:05:44.911Z"
+			"scoredAt": "2026-10-03T21:22:02.187Z"
 		},
 		{
 			"key": "issue:minion-meta#403",
@@ -25620,17 +25585,18 @@
 				"specification": 3,
 				"implementation": 2
 			},
-			"confidence": 5,
+			"confidence": 7,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Diagnosis indicates an infra/launch fault (exit 126, turns=0) rather than a reconcile logic failure, and the underlying reconcile work completed successfully.",
+			"rationale": "Diagnosis attributes the failure to a worker-box launch fault (exit 126, turns=0) unrelated to reconcile logic, with retry recommended.",
 			"evidence": [
-				"exit 126, turns=0 suggests launch failure not task failure",
-				"recommendation: safe to retry the run"
+				"claude provider agent invocation exited 126 with turns=0",
+				"reconcile sweep itself completed substantial real work in-log",
+				"Recommendation: safe to retry the run"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T21:05:44.911Z"
+			"scoredAt": "2026-10-03T21:22:02.187Z"
 		},
 		{
 			"key": "issue:minion-meta#415",
