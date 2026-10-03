@@ -1,0 +1,42 @@
+BEGIN
+CREATE TABLE
+CREATE ROLE
+CREATE ROLE
+CREATE ROLE
+   phase   |                   target                   |                   member                   |    grantor     | admin_option | inherit_option | set_option 
+-----------+--------------------------------------------+--------------------------------------------+----------------+--------------+----------------+------------
+ temporary | notification_projection_bridge_receipt_v10 | postgres                                   | postgres       | f            | t              | t
+ temporary | notification_projection_bridge_receipt_v10 | postgres                                   | supabase_admin | t            | f              | f
+ temporary | notification_projection_final_receipt_v10  | notification_projection_bridge_receipt_v10 | postgres       | f            | f              | t
+ temporary | notification_projection_final_receipt_v10  | postgres                                   | supabase_admin | t            | f              | f
+(4 rows)
+
+DO
+INSERT 0 1
+CREATE FUNCTION
+GRANT
+ALTER FUNCTION
+REVOKE
+DROP ROLE
+DO
+COMMIT
+   phase   | bridge_absent | owner_exact | schema_create_absent | runtime_set_denied | runtime_usage_denied 
+-----------+---------------+-------------+----------------------+--------------------+----------------------
+ committed | t             | t           | t                    | t                  | t
+(1 row)
+
+      phase      |                  target                   |  member  |    grantor     | admin_option | inherit_option | set_option 
+-----------------+-------------------------------------------+----------+----------------+--------------+----------------+------------
+ committed_graph | notification_projection_final_receipt_v10 | postgres | supabase_admin | t            | f              | f
+(1 row)
+
+BEGIN
+DROP FUNCTION
+DROP ROLE
+DROP ROLE
+COMMIT
+ runtime_probe_clean | bridge_clean | final_clean | function_clean 
+---------------------+--------------+-------------+----------------
+ t                   | t            | t           | t
+(1 row)
+
