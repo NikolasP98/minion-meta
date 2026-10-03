@@ -127,6 +127,8 @@ test('generated CSS exposes every theme mode and excludes undeclared legacy toke
     css.includes('@theme static {'),
     'foundation tokens must be emitted even when a consumer does not generate a matching utility',
   );
+  assert.equal(contract.foundations.layout['--page-max'], '80rem');
+  assert.match(css, /\n\s*--page-max: 80rem;/);
   for (const themeId of Object.keys(contract.themes)) {
     if (themeId === contract.defaultTheme) continue;
     assert.ok(css.includes(`data-minion-theme='${themeId}'`), themeId);
