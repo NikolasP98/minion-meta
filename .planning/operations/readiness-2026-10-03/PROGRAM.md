@@ -4,7 +4,7 @@ The user authorized all 97 findings after reviewing the October 2 recon. The sec
 
 ## Evidence and completion
 
-`findings.json` is the per-finding implementation ledger. Each finding requires source changes (or demonstrated existing satisfaction), a meaningful regression, independent review, and a recorded remaining runtime gate. Local validation, hosted CI, merge, deployment, and live acceptance are separate statuses. A placeholder, TODO, passing mock, or prepared draft is not closure.
+`findings.json` is the per-finding implementation ledger. Each finding requires source changes (or demonstrated existing satisfaction), a meaningful regression, independent review, and a recorded remaining runtime gate. Local validation, hosted CI, merge, deployment, and live acceptance are separate statuses. A placeholder, TODO, passing mock, or prepared draft is not closure. Every finding in the Lavish report must expose before/after evidence: screenshots where captured, frozen source anchors, exact committed changes and console/test receipts otherwise. Missing after evidence stays explicitly pending. Performance claims require the measured workload, environment, sample count and observation window; test duration is not p99 latency.
 
 Security and data scope approval comes from the user selecting every finding. Human merge remains required. Production migration, release, live alert configuration, and customer-data writes require their own concrete qualification and authorization. Local disposable fixtures are authorized.
 
@@ -25,7 +25,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 
 ## Draft qualification
 
-[Hub draft PR431](https://github.com/NikolasP98/minion_hub/pull/431) now contains checkpoint `f333cbc2`, including HC-033 scheduling recovery, formatting and clean-checkout CI fixes. Refreshed hosted CI is running. The prior checkpoint passed three PostgreSQL jobs and critical journeys; unit tests had one stale warning-copy assertion (5,353 passed), while dependency-browser and QA bootstrap exposed generated-config/import assumptions. The seed label is now attached. Money and payment-plan recovery remain uncommitted review candidates. No merge or production release was performed.
+[Hub draft PR431](https://github.com/NikolasP98/minion_hub/pull/431) contains reviewed server/core money checkpoint `82821c11`. Hosted CI passed 11 of 12 checks: build, QA stack, three PostgreSQL jobs, both browser lanes, labels and preview. The unit lane found one stale native-test count assertion among 5,721 passes and 249 explicit skips; `bbcbbd13` corrects that assertion and awaits the next hosted run. The earlier `13300fad` checkpoint passed all 12 checks. Payment-plan server recovery is committed as `c600711c` with independent review and the full 198-case native lane; hosted CI is running. Durable client recovery and money client adoption remain in progress. Gateway delivery recovery is committed as `3e352a68a`, with 162 focused tests and clean type/lint/format checks. No merge or intentional production release was performed.
 
 ## Register
 
@@ -77,7 +77,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | TQ-002 | P1 | hub-test-quality | locally-verified | The workforce proxy integration test exercises a copied verifier that has drifted from the runtime middleware |
 | TQ-003 | P1 | hub-test-quality | hosted-verified-awaiting-release | Hub CI always skips the native editor, paste, and sanitizer security qualification |
 | GW-014 | P2 | gateway-lifecycle | queued | Node invocation has no pending-request cap, timeout clamp, or socket backpressure check |
-| GW-015 | P2 | gateway-lifecycle | implementing | The write-ahead delivery queue provides at-least-once replay but lacks per-payload checkpoints/idempotency |
+| GW-015 | P2 | gateway-lifecycle | locally-verified-awaiting-release | The write-ahead delivery queue provides at-least-once replay but lacks per-payload checkpoints/idempotency |
 | GW-016 | P2 | gateway-lifecycle | queued | Memory ingest/delete treats every HTTP response as success and has no bounded retry/drain |
 | GW-017 | P2 | gateway-lifecycle | queued | Global five-second event sampling drops unrelated tenants' message/tool records before storage |
 | GW-018 | P2 | gateway-ci-shells | queued | The nightly wrapper reports success after dispatch and does not reflect the child DEV CI conclusion |

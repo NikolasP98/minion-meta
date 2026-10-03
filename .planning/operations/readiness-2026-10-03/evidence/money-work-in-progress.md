@@ -1,6 +1,8 @@
 # Money implementation proof — work in progress
 
-Root server/core changes remain uncommitted pending independent implementation review. Client work has unresolved parent review findings. HS-028 and HS-017 remain implementing.
+Root server/core changes are committed as `hub:82821c11` after independent implementation re-review. Client work and HC-035 durable recovery remain in progress; HS-028 and HS-017 are not yet complete.
+
+The final server/core sweep passed 578 tests across 33 files; three tests in the separate legacy `pos-categories.pg.test.ts` skipped and are explicitly assigned to the mandatory database-lane followup. Shared Svelte check passed with zero errors and warnings using disposable public telemetry configuration. The earlier unconfigured check exposed missing public env exports, not a source type failure.
 
 - `money-server-broad-first.log`: 25 files, 514 passing tests, including existing emission regression suites. This run preceded the source-ticket grant currency adjustment.
 - `money-jobs-all.json`: actual disposable PostgreSQL jobs lane, eight files and 187 passing tests. The exact named behavior validator reports zero skips. This includes the new eight-case money service fixture and existing marketplace, Meta jobs and vector lifecycle cases.
