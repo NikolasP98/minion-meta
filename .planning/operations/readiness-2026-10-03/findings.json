@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "authorized_scope": "All 97 original recon findings, 10 confirmed FACES backend/product findings and 1 baseline device-auth regression (108 total); autonomous implementation authorized. Merge/deploy remain separate.",
+  "authorized_scope": "All 97 original findings, 10 FACES backend/product findings, 1 baseline device-auth regression and 5 parent blast-radius findings (113 total); autonomous implementation authorized. Merge/deploy remain separate.",
   "updated": "2026-10-03",
   "bases": {
     "hub": "7ac3bfdffdd885d80fbaf2056eb22e387626a3ee",
@@ -45,7 +45,9 @@
       "HC-005",
       "HC-006",
       "HC-007",
-      "UI-001"
+      "UI-001",
+      "HC-033",
+      "HC-034"
     ],
     "hub-calendar": [
       "HC-008",
@@ -72,7 +74,8 @@
       "HC-027",
       "HC-028",
       "HC-029",
-      "HC-030"
+      "HC-030",
+      "HC-032"
     ],
     "hub-test-quality": [
       "TQ-001",
@@ -94,7 +97,9 @@
       "HS-005",
       "HS-006",
       "HS-007",
-      "MR-OP-001"
+      "MR-OP-001",
+      "HS-030",
+      "HS-031"
     ],
     "hub-money": [
       "HS-009",
@@ -347,7 +352,9 @@
       ],
       "code_commits": [],
       "tests": [],
-      "reviews": [],
+      "reviews": [
+        "Parent blocked stale lock reclamation TOCTOU and unbounded cumulative recovery materialization. Worker added serialized acquisition gates, real two-process race test and 64MiB aggregate/elapsed scan bounds; final parent check pending."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -658,15 +665,22 @@
       "priority": "P1",
       "title": "Anonymous callers can trigger global marketplace synchronization",
       "batch": "hub-authority-jobs",
-      "status": "queued",
+      "status": "implementing",
       "owner": "root",
       "acceptance": "Assert anonymous=401, ordinary member=403, authorized sync=200, and two concurrent authorized calls execute one provider fetch/update.",
       "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "tests": [
+        "Parent ordinary marketplace suites: 58 passed before final cron/install/mounted additions.",
+        "Native marketplace ownership: 14 tests passed on marked loopback PostgreSQL 18.6; source not yet committed."
+      ],
+      "reviews": [
+        "Independent Sol spec review pass2 approved. Implementation review caught legacy false loaded markers; migration now invalidates them while preserving content. Commit-response loss is reconciled through canonical ready state and exact published page token."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Mounted filter/detail acceptance and accessibility adjustments; full typecheck, final independent review, source commit, CI and release qualification."
+      ]
     },
     {
       "id": "HS-002",
@@ -688,7 +702,7 @@
       "priority": "P1",
       "title": "The automatic backup and chat/unified-event retention scheduler has no production entrypoint",
       "batch": "hub-authority-jobs",
-      "status": "queued",
+      "status": "spec-review",
       "owner": "root",
       "acceptance": "Use a fake clock and disposable database to prove the deployed entrypoint claims once, creates the due backup, performs due retention, records success/failure, and does not double-run across two workers.",
       "code_commits": [],
@@ -696,7 +710,9 @@
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Bounded scheduler spec must cover persisted vs actual backup path mismatch, remote deletion failure retention and later signal-preserving unified-event policy."
+      ]
     },
     {
       "id": "HS-009",
@@ -868,15 +884,26 @@
       "priority": "P1",
       "title": "Scheduling booking reads bypass scheduling:view",
       "batch": "hub-authority-jobs",
-      "status": "queued",
+      "status": "implemented-awaiting-integration",
       "owner": "root",
       "acceptance": "Enumerate every scheduling GET handler and fail when it lacks an explicit public or view policy; test a no-view member gets 403 from list/detail/calendar while public slug reads still work.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "hub:b5940d59"
+      ],
+      "tests": [
+        "67 scheduling authority/write compatibility tests passed across seven files.",
+        "6 mounted Team read tests passed, including two-range retry after organization change.",
+        "2 actual TimeOff component tests passed: retry and late response after organization switch.",
+        "Design CI against origin/master: no changed-file debt regression; token lint zero; git diff check passed."
+      ],
+      "reviews": [
+        "Independent Sol server authority and final corrected Team code review PASS; multi-range retry issue corrected and its regression passed."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Full Hub typecheck after concurrent Meta API migration settles; native browser and hosted CI release qualification."
+      ]
     },
     {
       "id": "MR-OP-002",
@@ -957,11 +984,16 @@
       "priority": "P1",
       "title": "Hub CI always skips the native editor, paste, and sanitizer security qualification",
       "batch": "hub-test-quality",
-      "status": "spec-review",
+      "status": "implemented-awaiting-review",
       "owner": "hub_test_fixes",
       "acceptance": "The dedicated job must fail when the browser marker/session is absent and must report five tests passed with zero pending. A forced sanitizer or editor mutation must make the job red.",
-      "code_commits": [],
-      "tests": [],
+      "code_commits": [
+        "hub:0881493c"
+      ],
+      "tests": [
+        "Built dependency fixture131modules/2artifacts1.18MB and critical fixture5475modules/139artifacts24.42MB; boundary scans0, exact4/30-case lists, focused tests21passed. Browser execution not yet qualified.",
+        "Parent Browser Harness: all four native dependency checks passed in Chromium 152; fresh artifact, observed only loopback script resource. This is not the exact Playwright CI receipt."
+      ],
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -1335,11 +1367,15 @@
       "priority": "P2",
       "title": "Client interaction E2E coverage is outside the default CI gate and many specs can skip entirely",
       "batch": "hub-test-quality",
-      "status": "spec-review",
+      "status": "implemented-awaiting-review",
       "owner": "hub_test_fixes",
       "acceptance": "CI meta-test asserts required critical spec IDs executed with passed/failed status (never skipped), and intentionally failing a 503/focus/timezone contract fails the job.",
-      "code_commits": [],
-      "tests": [],
+      "code_commits": [
+        "hub:0881493c"
+      ],
+      "tests": [
+        "Built dependency fixture131modules/2artifacts1.18MB and critical fixture5475modules/139artifacts24.42MB; boundary scans0, exact4/30-case lists, focused tests21passed. Browser execution not yet qualified."
+      ],
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -1372,15 +1408,23 @@
       "priority": "P2",
       "title": "A stale meta-sync job can be reclaimed repeatedly by concurrent workers",
       "batch": "hub-authority-jobs",
-      "status": "spec-review",
-      "owner": "root",
+      "status": "implemented-awaiting-integration",
+      "owner": "hub_test_fixes",
       "acceptance": "With two database connections and a stale job, assert exactly one claimant for a generation; expire/steal it, then prove the old owner can no longer update progress or completion.",
       "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "tests": [
+        "184 focused ordinary assertions passed before final timestamp-precision regression.",
+        "16 native lease/effect tests passed on stable owned source; includes legacy microsecond timestamp positive and revocation/competing-refresh negatives."
+      ],
+      "reviews": [
+        "Parent rejected catch-all message SQL isolation and unobserved renewal cancellation; corrected to permanent row SQLSTATE isolation and bounded fail-closed renewal.",
+        "Native test found a real raw Date interpolation defect in media supersession; SQL now references its timestamp column."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Combined native jobs lane and full Hub typecheck, selective commit and release qualification."
+      ]
     },
     {
       "id": "HS-006",
@@ -1684,7 +1728,8 @@
         "hub:0b977082"
       ],
       "tests": [
-        "43 manifest/QC tests passed; all 298 exact named behaviors across 21 native files and 9 lanes are required, with duplicate and missing names rejected. Runtime qualification remains pending."
+        "43 manifest/QC tests passed; all 298 exact named behaviors across 21 native files and 9 lanes are required, with duplicate and missing names rejected. Runtime qualification remains pending.",
+        "New exact admissions include CRM void-only finance row, Meta lease/effect fixture and marketplace ownership fixture; current native register has 23 files. Deposit5 and CRM pagination31 passed zero-skip native validators. Combined jobs178 verification in progress."
       ],
       "reviews": [
         "Parent requested broader named invariant coverage and duplicate assertion-name rejection before acceptance."
@@ -2155,6 +2200,141 @@
         "src/routes/(app)/socials/settings/+page.svelte:125-143",
         "src/routes/(app)/socials/settings/+page.svelte:347-371"
       ]
+    },
+    {
+      "id": "HC-032",
+      "priority": "P2",
+      "title": "Team timeline and leave-balance reads hide failures as empty data",
+      "batch": "hub-reactivity-accessibility",
+      "owner": "root",
+      "acceptance": [
+        "A rejected or failed timeline/leave-balance read shows a visible unavailable state and retry; previous data is retained only with stale indication; older responses cannot overwrite the current selection."
+      ],
+      "source_evidence": [
+        "src/lib/components/team/timeline.svelte.ts:238",
+        "src/lib/components/team/TimeOffView.svelte:211"
+      ],
+      "status": "implemented-awaiting-integration",
+      "code_commits": [
+        "hub:b5940d59"
+      ],
+      "tests": [
+        "67 scheduling authority/write compatibility tests passed across seven files.",
+        "6 mounted Team read tests passed, including two-range retry after organization change.",
+        "2 actual TimeOff component tests passed: retry and late response after organization switch.",
+        "Design CI against origin/master: no changed-file debt regression; token lint zero; git diff check passed."
+      ],
+      "reviews": [
+        "Independent Sol server authority and final corrected Team code review PASS; multi-range retry issue corrected and its regression passed."
+      ],
+      "pull_requests": [],
+      "runtime": "not-qualified",
+      "remaining": [
+        "Full Hub typecheck after concurrent Meta API migration settles; native browser and hosted CI release qualification."
+      ]
+    },
+    {
+      "id": "HC-033",
+      "priority": "P2",
+      "title": "Scheduling link and event-type deletion ignore rejected HTTP responses",
+      "batch": "hub-mutations",
+      "owner": "hub_client_fixes",
+      "acceptance": [
+        "Rejected deletion preserves the record and shows an actionable error; successful deletion refreshes the exact affected data; no automatic replay after an ambiguous commit."
+      ],
+      "source_evidence": [
+        "src/routes/(app)/scheduling/links/+page.svelte:62",
+        "src/routes/(app)/scheduling/event-types/+page.svelte:70"
+      ],
+      "status": "queued",
+      "code_commits": [],
+      "tests": [],
+      "reviews": [
+        "Found during parent blast-radius review of scheduling read authority."
+      ],
+      "pull_requests": [],
+      "runtime": "not-qualified",
+      "remaining": []
+    },
+    {
+      "id": "HS-030",
+      "priority": "P2",
+      "title": "Marketplace filters and sorting operate on an incorrectly filtered truncated population",
+      "batch": "hub-authority-jobs",
+      "owner": "root",
+      "acceptance": [
+        "Combine category/search/model/featured filters in SQL before stable pagination; all sort orders/counts reflect the full matching population."
+      ],
+      "source_evidence": [
+        "src/server/services/marketplace.service.ts:304-314",
+        "src/routes/(app)/marketplace/agents/+page.svelte:48-88"
+      ],
+      "status": "implementing",
+      "code_commits": [],
+      "tests": [
+        "Parent ordinary marketplace suites: 58 passed before final cron/install/mounted additions.",
+        "Native marketplace ownership: 14 tests passed on marked loopback PostgreSQL 18.6; source not yet committed."
+      ],
+      "reviews": [
+        "Independent Sol spec review pass2 approved. Implementation review caught legacy false loaded markers; migration now invalidates them while preserving content. Commit-response loss is reconciled through canonical ready state and exact published page token."
+      ],
+      "pull_requests": [],
+      "runtime": "not-qualified",
+      "remaining": [
+        "Mounted filter/detail acceptance and accessibility adjustments; full typecheck, final independent review, source commit, CI and release qualification."
+      ]
+    },
+    {
+      "id": "HS-031",
+      "priority": "P2",
+      "title": "Transient marketplace document failures are cached as permanent empty content",
+      "batch": "hub-authority-jobs",
+      "owner": "root",
+      "acceptance": [
+        "Only confirmed missing files are absent; transient failures preserve prior content and remain retryable, with bounded provider reads and explicit UI failure."
+      ],
+      "source_evidence": [
+        "src/server/services/marketplace.service.ts:103-111",
+        "src/server/services/marketplace.service.ts:203-259",
+        "src/lib/state/features/marketplace.svelte.ts:64-74"
+      ],
+      "status": "implementing",
+      "code_commits": [],
+      "tests": [
+        "Parent ordinary marketplace suites: 58 passed before final cron/install/mounted additions.",
+        "Native marketplace ownership: 14 tests passed on marked loopback PostgreSQL 18.6; source not yet committed."
+      ],
+      "reviews": [
+        "Independent Sol spec review pass2 approved. Implementation review caught legacy false loaded markers; migration now invalidates them while preserving content. Commit-response loss is reconciled through canonical ready state and exact published page token."
+      ],
+      "pull_requests": [],
+      "runtime": "not-qualified",
+      "remaining": [
+        "Mounted filter/detail acceptance and accessibility adjustments; full typecheck, final independent review, source commit, CI and release qualification."
+      ]
+    },
+    {
+      "id": "HC-034",
+      "priority": "P1",
+      "title": "Marketplace installation can deliver to the wrong active gateway and duplicate pre-delivery effects on retry",
+      "batch": "hub-mutations",
+      "owner": "root",
+      "acceptance": [
+        "Bind file delivery to the selected authorized target; idempotently track registration and delivery states so retries cannot duplicate counts or report complete before delivery."
+      ],
+      "source_evidence": [
+        "src/routes/api/marketplace/install/+server.ts:30-71",
+        "src/lib/state/features/marketplace.svelte.ts:128-144"
+      ],
+      "status": "queued",
+      "code_commits": [],
+      "tests": [],
+      "reviews": [
+        "Found during parent marketplace blast-radius review."
+      ],
+      "pull_requests": [],
+      "runtime": "not-qualified",
+      "remaining": []
     }
   ]
 }

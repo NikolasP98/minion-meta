@@ -16,6 +16,14 @@ proposal: 2026-10-02-hub-gateway-production-readiness-recon
 
 # Fresh Hub request authority
 
+## 0. Product
+
+Hub request authorization must use current membership and profile records so revocation takes effect on the next request. This slice covers HS-003.
+
+## Out of scope
+
+Changing identity providers, membership product policy, browser authentication UX and production deployment are outside this slice.
+
 ## AS-IS
 
 HS-003: `resolveViaSupabase` returns a cached complete identity for 60 seconds.
@@ -60,3 +68,8 @@ Pass 1: authentication, current profile authority, strict tenant selection and
 machine-token path isolation. Pass 2: multi-org mutation routing, page recovery,
 DB outage cookie preservation, dev impersonation and removal of orphan cache
 code. Independent implementation review remains required.
+
+
+## Verification
+
+Run the behavior and failure-path checks in DELTA against actual handlers or runtime boundaries. Record focused test receipts and independent review in the readiness ledger. Full typecheck, native runtime acceptance, hosted CI, merge and deployment remain separate qualification gates.

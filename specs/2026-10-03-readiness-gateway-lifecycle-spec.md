@@ -15,6 +15,14 @@ verdict: approved
 
 # Gateway readiness batch 2: delivery durability and owned lifecycle
 
+## 0. Product
+
+The gateway must retain undelivered work, bound background resource use and make shutdown observable. This batch covers GW-008 through GW-017 in independently reviewed slices.
+
+## Out of scope
+
+UI changes, production deployment and security RPC policy are separate batches. Provider exactly-once delivery is claimed only where the provider offers an actual idempotency receipt.
+
 Status: Slice A/A2 approved after two-pass review corrections; later slices directionally accepted and require a slice-specific limits/deadlines revision before mutation (revision 2)  
 Baseline: `minion/minion` `origin/DEV` at `b841c36750e4bf10dd3f81a4896b19c699fe3132`, with reviewed gateway security checkpoints `98767f4de` and `758757b00` applied  
 Findings: GW-008 through GW-017  
@@ -343,7 +351,7 @@ Storage/retention load is measured before release. If exact durable volume excee
 
 Slices A and A2 may share a scoped commit only if their queue contract and tests are reviewed together. The other slices receive separate commits and review receipts. No item is marked fixed merely because its seam or TODO exists.
 
-## Test matrix
+## Verification — test matrix
 
 | Finding | Red signal | Green acceptance |
 |---|---|---|

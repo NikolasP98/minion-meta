@@ -15,6 +15,14 @@ verdict: approved
 
 # Meta sync terminal-page progress
 
+## 0. Product
+
+Meta sync must advance its durable cursor across terminal pages, windows and accounts without replaying a completed budget boundary. This slice covers FACES-PROD-001.
+
+## Out of scope
+
+Lease fencing, provider metric definitions, account reconnection and production job mutation are separate slices.
+
 ## AS-IS
 
 FACES-PROD-001: read-only production probes observed a queued Ads job whose
@@ -50,3 +58,8 @@ acceptance. No provider API calls, migrations or production job rewrites occur.
 Pass 1 verified terminal, next-page, next-window and next-target transitions.
 Pass 2 checked shared Posts/Messages blast radius, credential stripping, status
 completion and budget behavior at equality and above the threshold.
+
+
+## Verification
+
+Run the behavior and failure-path checks in DELTA against actual handlers or runtime boundaries. Record focused test receipts and independent review in the readiness ledger. Full typecheck, native runtime acceptance, hosted CI, merge and deployment remain separate qualification gates.

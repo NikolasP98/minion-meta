@@ -1,6 +1,6 @@
 # Hub and gateway readiness implementation
 
-The user authorized all 97 findings after reviewing the October 2 recon. The second FACES read-only pass adds 10 confirmed findings plus one reproduced baseline device-auth defect (108 tracked total). This program owns their implementation; the historical 360 task denominator is unchanged.
+The user authorized all 97 findings after reviewing the October 2 recon. The second FACES read-only pass adds 10 confirmed findings plus one reproduced baseline device-auth defect plus five parent-review findings (113 tracked total). This program owns their implementation; the historical 360 task denominator is unchanged.
 
 ## Evidence and completion
 
@@ -53,9 +53,9 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | HC-024 | P1 | hub-reactivity-accessibility | queued | Older reliability responses can overwrite newer range/filter/host selections |
 | HC-026 | P1 | hub-reactivity-accessibility | queued | Nested delete buttons bubble Enter into card navigation; Flow and Workshop also mishandle Space |
 | HC-028 | P1 | hub-reactivity-accessibility | queued | Hand-rolled overlays bypass the shared dialog contract; HostsOverlay even swallows Escape from its content |
-| HS-001 | P1 | hub-authority-jobs | queued | Anonymous callers can trigger global marketplace synchronization |
+| HS-001 | P1 | hub-authority-jobs | implementing | Anonymous callers can trigger global marketplace synchronization |
 | HS-002 | P1 | hub-authority-jobs | queued | Capability enforcement does not cover several privileged platform mutations |
-| HS-004 | P1 | hub-authority-jobs | queued | The automatic backup and chat/unified-event retention scheduler has no production entrypoint |
+| HS-004 | P1 | hub-authority-jobs | spec-review | The automatic backup and chat/unified-event retention scheduler has no production entrypoint |
 | HS-009 | P1 | hub-money | queued | Stored-value balances add nominal amounts across currencies |
 | HS-010 | P1 | hub-money | queued | Manual credit adjustments have no idempotency key |
 | HS-011 | P1 | hub-money | queued | Ticket submission has no idempotency key |
@@ -67,11 +67,11 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | HS-021 | P1 | hub-stock-bookings | queued | Committed bookings and tickets can permanently miss their stock effects |
 | HS-022 | P1 | hub-stock-bookings | queued | Assistant reschedule is non-atomic and drops package/payment-plan funding |
 | HS-025 | P1 | hub-metrics | queued | Finance and CRM rankings aggregate mixed currencies as raw nominal values |
-| MR-OP-001 | P1 | hub-authority-jobs | queued | Scheduling booking reads bypass scheduling:view |
+| MR-OP-001 | P1 | hub-authority-jobs | implemented-awaiting-integration | Scheduling booking reads bypass scheduling:view |
 | MR-OP-002 | P1 | hub-money | queued | Voiding a package sale races a concurrent session redemption |
 | TQ-001 | P1 | hub-test-quality | locally-verified | Nine Svelte reactive tests pass without executing their $effect.root callbacks |
 | TQ-002 | P1 | hub-test-quality | locally-verified | The workforce proxy integration test exercises a copied verifier that has drifted from the runtime middleware |
-| TQ-003 | P1 | hub-test-quality | spec-review | Hub CI always skips the native editor, paste, and sanitizer security qualification |
+| TQ-003 | P1 | hub-test-quality | implemented-awaiting-review | Hub CI always skips the native editor, paste, and sanitizer security qualification |
 | GW-014 | P2 | gateway-lifecycle | queued | Node invocation has no pending-request cap, timeout clamp, or socket backpressure check |
 | GW-015 | P2 | gateway-lifecycle | implementing | The write-ahead delivery queue provides at-least-once replay but lacks per-payload checkpoints/idempotency |
 | GW-016 | P2 | gateway-lifecycle | queued | Memory ingest/delete treats every HTTP response as success and has no bounded retry/drain |
@@ -94,9 +94,9 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | HC-027 | P2 | hub-reactivity-accessibility | queued | Several role=button controls omit required Space behavior or all keyboard behavior |
 | HC-029 | P2 | hub-reactivity-accessibility | queued | Date-range configuration menu lacks composite keyboard focus and coarse-pointer target sizing |
 | HC-030 | P2 | hub-reactivity-accessibility | queued | Core interactive systems remain multi-thousand-line change hotspots |
-| HC-031 | P2 | hub-test-quality | spec-review | Client interaction E2E coverage is outside the default CI gate and many specs can skip entirely |
+| HC-031 | P2 | hub-test-quality | implemented-awaiting-review | Client interaction E2E coverage is outside the default CI gate and many specs can skip entirely |
 | HS-003 | P2 | hub-authority-jobs | locally-verified | Removed memberships can remain authorized in the identity cache for up to 60 seconds |
-| HS-005 | P2 | hub-authority-jobs | spec-review | A stale meta-sync job can be reclaimed repeatedly by concurrent workers |
+| HS-005 | P2 | hub-authority-jobs | implemented-awaiting-integration | A stale meta-sync job can be reclaimed repeatedly by concurrent workers |
 | HS-006 | P2 | hub-authority-jobs | locally-verified | Finance cache keys ignore whether stock accounting is enabled |
 | HS-008 | P2 | hub-test-quality | implemented-awaiting-review | Five SQL-critical test files are excluded from ordinary tests and absent from explicit CI lanes |
 | HS-014 | P2 | hub-money | queued | Stored payment-plan status drifts from ticket-derived reality |
@@ -135,3 +135,8 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | FACES-PROD-003 | P1 | faces-meta-socials | queued | Campaign lead attribution is a July heuristic snapshot, while the UI presents it as an ongoing lead feed |
 | FACES-PROD-004 | P2 | faces-meta-socials | queued | Successful post and message jobs conceal partial collection |
 | FACES-PROD-005 | P2 | faces-meta-socials | queued | Sync failures retain and expose unbounded provider error payloads |
+| HC-032 | P2 | hub-reactivity-accessibility | implemented-awaiting-integration | Team timeline and leave-balance reads hide failures as empty data |
+| HC-033 | P2 | hub-mutations | queued | Scheduling link and event-type deletion ignore rejected HTTP responses |
+| HS-030 | P2 | hub-authority-jobs | implementing | Marketplace filters and sorting operate on an incorrectly filtered truncated population |
+| HS-031 | P2 | hub-authority-jobs | implementing | Transient marketplace document failures are cached as permanent empty content |
+| HC-034 | P1 | hub-mutations | queued | Marketplace installation can deliver to the wrong active gateway and duplicate pre-delivery effects on retry |
