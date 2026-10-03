@@ -1,5 +1,7 @@
 # Priority delivery and independent review — 2026-09-12
 
+> October3 reconciliation: this report preserves September12 evidence. The attachment source findings below were later repaired in Hub PR272/274; use [current dispositions](../readiness-2026-10-03/PRIOR-DISPOSITIONS.md) and the [readiness program](../readiness-2026-10-03/PROGRAM.md) for current work. Historical percentages are not current production-readiness scores.
+
 **193/229 original scoped tasks are complete (84.3%); 29 remain partial and seven lack complete receipts.** This measures planned deliverables, including audits and preparation, not production readiness. No whole requirement is independently closed (0/51). Hub jobs/stock, UI and the scoped Linux Gateway repairs are deployed; Factory source remains blocked before rollout. There is no whole-platform security or production certification.
 
 ## Findings and corrections

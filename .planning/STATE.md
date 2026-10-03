@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: 360 quality and reliability
 status: executing
-stopped_at: Executing security and jobs-stock gap closure before SDK-transport
-last_updated: "2026-09-12"
+stopped_at: Implementing the 97-finding Hub/gateway readiness program and FACES production recon
+last_updated: "2026-10-03"
 ---
 
 # Project State
@@ -15,23 +15,31 @@ See PROJECT.md and operations/360/PROGRAM.md. Historical v1.0 files copied to mi
 
 ## Current Position
 
+The user selected all 97 findings from the October2 Hub/gateway recon for autonomous implementation, with Sol subagents and explicit blast-radius review. Current ownership, tests, code review, PRs and runtime gates live in [the readiness program](operations/readiness-2026-10-03/PROGRAM.md) and its [per-finding register](operations/readiness-2026-10-03/findings.json). The requested [FACES production recon](operations/readiness-2026-10-03/FACES-RECON.md) runs alongside implementation with logged, reversible tests; initial access is read-only.
+
+Current source baselines: Hub `7ac3bfdffdd885d80fbaf2056eb22e387626a3ee`; gateway DEV `b841c36750e4bf10dd3f81a4896b19c699fe3132`; meta dev `bb88676fb8f63d25381981a76b22f3c1e4ebcd96`. Implementation uses independent feature checkouts and preserves original dirty work. No readiness fix has been merged or deployed by this program.
+
+Attachment authority/lifecycle findings in the September12 checkpoint are **fixed in current Hub source**, through PR272 (`096756e0`) and PR274 (`1a799f6e`). Their relevant commits are ancestors of the current Hub baseline. This source/merge disposition does not establish fresh authenticated B2/runtime acceptance; see [current dispositions](operations/readiness-2026-10-03/PRIOR-DISPOSITIONS.md).
+
+## Historical September12 position
+
 Independent takeover review and resumed repairs are recorded in [PRIORITY-DELIVERY-2026-09-12.md](operations/360/PRIORITY-DELIVERY-2026-09-12.md), with the original findings in [REVIEW-2026-09-12.md](operations/360/REVIEW-2026-09-12.md) and the refreshed [task table](operations/360/PROGRESS-2026-09-12.md).
 
 **89 plans / 229 tasks / 51 requirements / 12 phases.** 193 scoped deliverables complete (84.3%),29 partial, seven without complete receipts. This includes private/preparatory work; no whole requirement is independently closed. New review findings remain outside the historical denominator.
 
 Hub jobs repairs PR269 deployed f97efb2d; UI PR270 deployed77445c01 with3800 ordinary passing tests (25 existing skips),148 native cases without skips, required build/design gates and public mobile/desktop smoke. Meta Node-floor PR400 mergeddev6103e982. Gateway security/portability PR292/294 and Nitter/fixture PR295 are merged through DEVb841c367; production PR293 merged normally to7a1501e9 after full repaired DEV Windows qualification; both production Gateway services are verified healthy on the exact immutable image with on-host HTTP200/WS101 challenge. Public ingress and authenticated durable-session acceptance remain separate. Factory boundary/planner repairs are merged to dev467906db; trusted promotion failed before rollout twice with an unclassified broker502, leaving live/main02900306 unchanged. ACP qualification PR401 is merged to dev48e67faf as a dev-only candidate. Current exact final release status belongs to the priority-delivery report rather than inferred branch state.
 
-## Current Decisions
+## Historical September12 decisions
 
 - Current user priority: close remaining security and jobs/stock gaps, then SDK/transport. See operations/360/GAP-CLOSURE-2026-09-12.md. Bounded subagents implement and independently verify; root owns canonical planning and cross-project admission.
 - Preserve active dirty checkouts; separate private, merged, published and deployed identities.
 - Exact SDK1.4.0/Zod4.3.6 qualify outside production build/exports. Do not silently replace caller conversation history with one-shot sessions.
 - Original task metric stays comparable; an audit deliverable and its proposed repairs are counted separately.
 
-## Current Blockers / Evidence Gaps
+## Historical September12 evidence gaps (reconciled where stated)
 
 - Netcup jobs-only cron is paused after verifying an August10 unfenced runtime.10-15 owns safe Node worker adoption and exact restoration; other scheduled work remains unchanged.
-- Attachment linked-record authorization and link/sweeper deletion races remain high findings; cron scheduling stays pending.
+- Attachment linked-record authority and deletion races: October3 source reconciliation supersedes this blocker through Hub PR272/274. Live storage/cron acceptance remains a separate gate; do not reopen the repaired source finding from this historical list.
 - Booking transaction rollback is fixed; postcommit stock realization/release still needs durable admission and recovery. The bounded design is recorded in phase10; source-backed compatibility policy now preserves existing drafts, operation-time resolution and explicit business retry; durable producer/worker implementation is active.
 - Authenticated ERP/UI, remaining Workshop/chart keyboard tasks, native AT/devices, B2 acceptance and actual provider revocation remain unqualified.
 - SDK/provider session continuation, complete governance corpus, installed sender/image adoption, containers, application load and cross-store restore remain open.

@@ -138,7 +138,7 @@
       "priority": "P0",
       "title": "Chat events are broadcast across organizations when the payload has no top-level agent id",
       "batch": "gateway-security",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "gateway_fixes",
       "acceptance": [
         "Connect org A and org B, emit delta/final/error/injected chat for A, assert B receives zero frames and A receives exactly one.",
@@ -157,7 +157,7 @@
       "priority": "P1",
       "title": "Session and chat methods bypass assigned-agent authorization when the selector is sessionKey",
       "batch": "gateway-security",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "gateway_fixes",
       "acceptance": [
         "Assigned user A cannot history/send/abort/patch/delete a session owned by agent B.",
@@ -165,7 +165,14 @@
         "Admin behavior and legacy single-tenant token behavior remain explicitly covered."
       ],
       "code_commits": [],
-      "tests": [],
+      "tests": [
+        {
+          "receipt": "evidence/hub-jwt-green.log",
+          "scope": "Hub issuer signed claims, jti uniqueness, actualSQL cross-org agent exclusion",
+          "result": "passed; gateway integration pending"
+        },
+        "Hub dependency: 31 tests across actual PostgreSQL authority, signed JWT issuance/verification, installed SvelteKit text-ID routing, exact identity bypass and Sentry forwarded-credential scrubbing passed. evidence/hub-authority-tests.log; independent review pending."
+      ],
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -176,7 +183,7 @@
       "priority": "P1",
       "title": "Any authenticated write-scoped user can join and mutate any guessed workshop room",
       "batch": "gateway-security",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "gateway_fixes",
       "acceptance": [
         "Org B cannot join, sync, claim authority, or submit a binary update to org A's save id.",
@@ -184,7 +191,9 @@
         "Legacy rooms are migrated or denied according to an explicit policy."
       ],
       "code_commits": [],
-      "tests": [],
+      "tests": [
+        "Hub dependency: 31 tests across actual PostgreSQL authority, signed JWT issuance/verification, installed SvelteKit text-ID routing, exact identity bypass and Sentry forwarded-credential scrubbing passed. evidence/hub-authority-tests.log; independent review pending."
+      ],
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -195,7 +204,7 @@
       "priority": "P1",
       "title": "Normal users can enumerate and invoke globally registered nodes and browser relays",
       "batch": "gateway-security",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "gateway_fixes",
       "acceptance": [
         "Org B cannot list, describe, invoke, or browser-proxy through org A's node.",
@@ -214,7 +223,7 @@
       "priority": "P1",
       "title": "Events, raw logs, and usage endpoints expose gateway-global operational data to normal users",
       "batch": "gateway-security",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "gateway_fixes",
       "acceptance": [
         "User/org-admin requests never return another org's events, usage, or logs.",
@@ -233,7 +242,7 @@
       "priority": "P1",
       "title": "JWT revocation neither disconnects active sockets nor survives gateway restart",
       "batch": "gateway-security",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "gateway_fixes",
       "acceptance": [
         "Revoking jti closes an active socket and blocks subsequent frames.",
@@ -241,7 +250,14 @@
         "A different jti for the same user remains usable unless user-wide revocation is requested."
       ],
       "code_commits": [],
-      "tests": [],
+      "tests": [
+        {
+          "receipt": "evidence/hub-jwt-green.log",
+          "scope": "Hub issuer signed claims, jti uniqueness, actualSQL cross-org agent exclusion",
+          "result": "passed; gateway integration pending"
+        },
+        "Hub dependency: 31 tests across actual PostgreSQL authority, signed JWT issuance/verification, installed SvelteKit text-ID routing, exact identity bypass and Sentry forwarded-credential scrubbing passed. evidence/hub-authority-tests.log; independent review pending."
+      ],
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -252,7 +268,7 @@
       "priority": "P1",
       "title": "Concurrent connect frames can authenticate one socket twice and leave a ghost client entry",
       "batch": "gateway-security",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "gateway_fixes",
       "acceptance": [
         "Pause first-token verification, send a second connect, then resolve both; exactly one client is registered.",
@@ -386,7 +402,7 @@
       "priority": "P1",
       "title": "Bulk tag writes treat every HTTP response as success",
       "batch": "hub-mutations",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "hub_client_fixes",
       "acceptance": "Inject a 503 for /api/tags/bulk and one failed CRM fan-out response; assert error/partial feedback, no success toast, and failed staged intent remains.",
       "code_commits": [],
@@ -401,7 +417,7 @@
       "priority": "P1",
       "title": "Selections survive data/query replacement and can act on hidden record IDs",
       "batch": "hub-mutations",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "hub_client_fixes",
       "acceptance": "Select A, replace data/query with B, then invoke each bulk action; assert A is cleared or explicitly disclosed and never silently submitted.",
       "code_commits": [],
@@ -416,7 +432,7 @@
       "priority": "P1",
       "title": "Compound entity-plus-tag saves report success after the tag write fails",
       "batch": "hub-mutations",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "hub_client_fixes",
       "acceptance": "Force the second write to 503 after a successful primary write; assert committed-partial feedback, preserved tag draft, and retry only the tag write.",
       "code_commits": [],
@@ -431,7 +447,7 @@
       "priority": "P1",
       "title": "Add gateway is an unchecked dual write that can show success with half the gateway missing",
       "batch": "hub-mutations",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "hub_client_fixes",
       "acceptance": "Make the second endpoint fail and assert no generic success, no draft erasure, and an idempotent repair path that does not duplicate /api/servers.",
       "code_commits": [],
@@ -446,7 +462,7 @@
       "priority": "P1",
       "title": "Voided tickets render as green Submitted because the client checks the wrong status literal",
       "batch": "hub-mutations",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "hub_client_fixes",
       "acceptance": "Render the detail with status 'void'; assert Voided/error, and add a compile-time shared status exhaustiveness test.",
       "code_commits": [],
@@ -821,12 +837,26 @@
       "priority": "P1",
       "title": "Nine Svelte reactive tests pass without executing their $effect.root callbacks",
       "batch": "hub-test-quality",
-      "status": "spec-review",
+      "status": "locally-verified",
       "owner": "hub_test_fixes",
       "acceptance": "The harness canary must prove callback execution. A mutation inside each callback (for example changing the expected initial loading value) must make the suite red. Keep the three pure createConnectedFetch and direct keyed-debouncer cases separate.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "hub:19b41bf3"
+      ],
+      "tests": [
+        {
+          "receipt": "evidence/finance-and-d1-review.log",
+          "scope": "18 mounted owner cases included in128test combined run",
+          "result": "passed"
+        }
+      ],
+      "reviews": [
+        {
+          "reviewer": "root",
+          "result": "pass",
+          "scope": "All assertions outside lifecycle callback; owner canaries execute; no production transform change; server/finance suites remain passing."
+        }
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -1000,7 +1030,7 @@
       "priority": "P2",
       "title": "Event-kind create, rename, recolor, default, and delete ignore rejected responses",
       "batch": "hub-mutations",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "hub_client_fixes",
       "acceptance": "Return 403 and 500 for each verb; assert draft/value is retained and no success-state invalidation masks the error.",
       "code_commits": [],
@@ -1015,7 +1045,7 @@
       "priority": "P2",
       "title": "Pulse proposal editing closes and discards the draft on any HTTP failure",
       "batch": "hub-mutations",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "hub_client_fixes",
       "acceptance": "Inject 409/500 and assert editor remains open with unchanged draft and one request; success alone closes it.",
       "code_commits": [],
@@ -1270,12 +1300,26 @@
       "priority": "P2",
       "title": "Finance cache keys ignore whether stock accounting is enabled",
       "batch": "hub-authority-jobs",
-      "status": "queued",
+      "status": "locally-verified",
       "owner": "root",
       "acceptance": "Seed nonzero COGS, cache summary/series, toggle stock off and on, and assert the next read immediately follows the new state in both directions.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "hub:f5404c16"
+      ],
+      "tests": [
+        {
+          "receipt": "evidence/finance-and-d1-review.log",
+          "scope": "110 finance/CRM/math and18 mounted-rune cases",
+          "result": "passed"
+        }
+      ],
+      "reviews": [
+        {
+          "reviewer": "Sol hub_test_fixes",
+          "result": "gap-corrected",
+          "scope": "Contact-detail void aggregate added after review; failing SQLfixture verified then corrected. Source review included ranking/funnel/chart consumers."
+        }
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -1360,12 +1404,26 @@
       "priority": "P2",
       "title": "Negative profit and margin are clamped to zero",
       "batch": "hub-metrics",
-      "status": "queued",
+      "status": "locally-verified",
       "owner": "root",
       "acceptance": "Run the preserved fixture and assert -40 profit and -0.8 margin; add zero/negative-revenue policies and reconciliation to statement lines.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "hub:f5404c16"
+      ],
+      "tests": [
+        {
+          "receipt": "evidence/finance-and-d1-review.log",
+          "scope": "110 finance/CRM/math and18 mounted-rune cases",
+          "result": "passed"
+        }
+      ],
+      "reviews": [
+        {
+          "reviewer": "Sol hub_test_fixes",
+          "result": "gap-corrected",
+          "scope": "Contact-detail void aggregate added after review; failing SQLfixture verified then corrected. Source review included ranking/funnel/chart consumers."
+        }
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -1375,12 +1433,26 @@
       "priority": "P2",
       "title": "Void-rate and rankings use inconsistent invoice populations",
       "batch": "hub-metrics",
-      "status": "queued",
+      "status": "locally-verified",
       "owner": "root",
       "acceptance": "Rewrite the current assertion to 2/3 for the selected denominator and add void-only customer/product cases across summary, series, and CRM ranking.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "hub:f5404c16"
+      ],
+      "tests": [
+        {
+          "receipt": "evidence/finance-and-d1-review.log",
+          "scope": "110 finance/CRM/math and18 mounted-rune cases",
+          "result": "passed"
+        }
+      ],
+      "reviews": [
+        {
+          "reviewer": "Sol hub_test_fixes",
+          "result": "gap-corrected",
+          "scope": "Contact-detail void aggregate added after review; failing SQLfixture verified then corrected. Source review included ranking/funnel/chart consumers."
+        }
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": []
@@ -1525,7 +1597,7 @@
       "priority": "P2",
       "title": "Opening bulk tags expands the mobile document beyond the viewport",
       "batch": "hub-mutations",
-      "status": "spec-review",
+      "status": "implementing",
       "owner": "hub_client_fixes",
       "acceptance": "Open and close the bulk tag popover at 390 and 320 px, after rotation, and while horizontally scrolling the table. Assert document scrollWidth equals clientWidth, the panel remains reachable, and keyboard focus/Escape restore correctly. Repeat on a physical touch browser before release.",
       "code_commits": [],
@@ -1540,11 +1612,16 @@
       "priority": "P2",
       "title": "Current planning state still lists attachment defects fixed on master",
       "batch": "operations",
-      "status": "queued",
+      "status": "implemented-awaiting-review",
       "owner": "root",
       "acceptance": "A reconciliation fixture must distinguish fixed source, merged, deployed and runtime-qualified; stale resolved items must not reopen automatically.",
       "code_commits": [],
-      "tests": [],
+      "tests": [
+        {
+          "command": "Attachment PR272/274 git ancestry + meta instruction/index checks",
+          "result": "passed"
+        }
+      ],
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -1555,11 +1632,18 @@
       "priority": "P2",
       "title": "Contributor guidance contradicts the canonical branch and database/auth model",
       "batch": "operations",
-      "status": "queued",
+      "status": "implemented-awaiting-review",
       "owner": "root",
       "acceptance": "Run instruction parity/repo-policy checks and a clean-clone onboarding smoke; validate documentation paths against current tree.",
-      "code_commits": [],
-      "tests": [],
+      "code_commits": [
+        "hub:87c90a3f"
+      ],
+      "tests": [
+        {
+          "command": "node scripts/check-agent-instructions.mjs ../hub",
+          "result": "passed"
+        }
+      ],
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
