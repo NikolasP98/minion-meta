@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-03T07:55:42.630Z",
+	"generatedAt": "2026-10-03T08:24:22.768Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11485,6 +11485,38 @@
 			"scoredAt": "2026-09-29T08:29:37.368Z"
 		},
 		{
+			"key": "run:minion (gateway)#37107049589",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37107049589",
+			"sourceUpdatedAt": "2026-10-03T07:59:50Z",
+			"sourceFingerprint": "0bb0be399cfcab58a5eccae8e7bcaf9a3df970c3b0456c2fa4a574fa4b448ae4",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A failed CI run on the gateway DEV branch is a real signal but lacks enough detail here to act on without inspecting logs.",
+			"evidence": [
+				"status failure",
+				"workflow_dispatch on DEV branch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T08:24:22.639Z"
+		},
+		{
 			"key": "spec:2026-08-17-hub-brain-org-all-scope-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -17374,39 +17406,6 @@
 			"scoredAt": "2026-10-03T00:31:55.240Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-03",
-			"sourceFingerprint": "6b5656c26de33f798f8b28ff6f8dfeabbf5df368fc73e500c01584f519847228",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "It bundles 17+ unrelated TODO markers scattered across the codebase into one proposal, which cannot be executed as a single bounded unit of work.",
-			"evidence": [
-				"Markers (as of 2026-10-03)\" lists 17 distinct unrelated marker lines",
-				"--apply is intentionally unimplemented",
-				"startBackupScheduler() has no call site anywhere in src/"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T04:24:14.799Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-0323908",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19996,6 +19995,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T01:24:40.225Z"
+		},
+		{
+			"key": "issue:minion-meta#750",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#750 [monitor:unstick] rank run a828b1ce: batch 2 provider returned invalid JSON, fallback also failed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/750",
+			"sourceUpdatedAt": "2026-10-03T08:17:47Z",
+			"sourceFingerprint": "53218aaa6d051fea310db160203b6e8d9b2db70a3acf9d4d676122ddfdc37c2a",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A distinct genuine ranking-batch JSON-parse failure that needs its own retry/hardening decision rather than being folded into the provider-spawn group.",
+			"evidence": [
+				"parse error: Invalid numeric literal at line 1, column 2",
+				"batch 2 fallback to codex also failed, run ended in error"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T08:24:22.639Z"
 		},
 		{
 			"key": "pr:minion-meta#524",
@@ -24656,6 +24687,74 @@
 			"scoredAt": "2026-10-02T12:24:25.230Z"
 		},
 		{
+			"key": "issue:minion-meta#748",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#748 [monitor:unstick] reconcile run 9d6a6129 (minion-meta) failed on provider spawn, not task logic",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/748",
+			"sourceUpdatedAt": "2026-10-03T08:14:46Z",
+			"sourceFingerprint": "8f78eafc30c3131c823314c3f12e3005ae6a566e928054aa9b7bed0ed08912d7",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#749"
+			],
+			"rationale": "A transient provider-exec failure where the rest of the pipeline completed and pushed successfully, sharing an identical signature with #749.",
+			"evidence": [
+				"exit-126 turns=0 permission_denials=0, reconcile otherwise completed and pushed",
+				"diagnosis recommends adding a host-classifier signature"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T08:24:22.639Z"
+		},
+		{
+			"key": "issue:minion-meta#749",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#749 [monitor:unstick] reconcile run 123b237a: claude agent exited 126 (turns=0), rest of pipeline completed normally",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/749",
+			"sourceUpdatedAt": "2026-10-03T08:17:46Z",
+			"sourceFingerprint": "1dcc6b4d465afe74f2f2aeeaa7e36d908dc4d5e3889eaa87b61a6a6df0aba0f4",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#748"
+			],
+			"rationale": "Same exit-126/turns=0 provider-spawn signature as #748 on a different run, better handled as one combined classifier goal than two.",
+			"evidence": [
+				"exit-126 turns=0 permission_denials=0, pipeline pushed successfully",
+				"diagnosis text nearly identical to #748"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T08:24:22.639Z"
+		},
+		{
 			"key": "proposal:2026-08-20-hub-datatable-server-mode-test-gap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27154,38 +27253,6 @@
 			"scoredAt": "2026-10-02T16:24:49.083Z"
 		},
 		{
-			"key": "issue:minion-meta#748",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#748 [monitor:unstick] reconcile run 9d6a6129 (minion-meta) failed on provider spawn, not task logic",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/748",
-			"sourceUpdatedAt": "2026-10-03T04:17:34Z",
-			"sourceFingerprint": "5dcdbcabd67ea02e09b92e62ba20260b0b2c6d48c4c0fc441c36eff007297e61",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The diagnosis confirms the actual reconcile work completed successfully despite a transient provider-spawn exit-126, leaving no corrective action needed now.",
-			"evidence": [
-				"reconcile sweep ran to completion...pushed to dev (0fdb863..7a3da30)",
-				"Recommendation for a human: safe to retry this run"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T04:24:14.799Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -28216,6 +28283,37 @@
 			"scoredAt": "2026-10-03T00:34:34.120Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an already-merged fix commit tracked as a deploy-health record, so no open action remains.",
+			"evidence": [
+				"commit fixes nitter persistence/shutdown, merged as #295"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T08:24:22.639Z"
+		},
+		{
 			"key": "issue:minion-meta#421",
 			"kind": "issue",
 			"stage": "proposal",
@@ -28372,6 +28470,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T00:30:53.644Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-03",
+			"sourceFingerprint": "fe5c20393e4d7da6494fe75e0efbf6eb4ce0b09e0abdd95f3a847f2d5e42524f",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed markers point into rankings/index.json's own stored evidence text rather than real unresolved code TODOs, making this sweep self-referential noise.",
+			"evidence": [
+				"markers cite rankings/index.json lines (e.g. L4845, L7351) which are the ranking output's own data",
+				"no actual source file or live TODO(handoff) comment is identified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T08:24:22.639Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-51431d943fcd",
@@ -28983,38 +29113,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T08:16:16.935Z"
-		},
-		{
-			"key": "run:minion (gateway)#37107049589",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37107049589",
-			"sourceUpdatedAt": "2026-10-03T07:42:22Z",
-			"sourceFingerprint": "4d40c6650de07372612e35d9ca022f51f5e2f7a794dd92b8737a68e32705bc46",
-			"score": 0,
-			"band": "low",
-			"axes": {
-				"criticality": 0,
-				"importance": 0,
-				"impact": 0
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is just an in-progress CI run status entry, not an actionable goal.",
-			"evidence": [
-				"status: in_progress",
-				"workflow_dispatch on DEV, no described problem or outcome"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:55:42.494Z"
 		}
 	]
 }
