@@ -2,9 +2,9 @@
 id: 2026-10-03-notification-slice5-audience-projection-spec
 title: Project notification events into exact per-recipient candidates under current authority
 stage: spec
-status: approved
-pass: 2
-verdict: approved
+status: draft
+pass: 1
+verdict: pending
 created: 2026-10-03
 updated: 2026-10-03
 repos: [minion_hub]
