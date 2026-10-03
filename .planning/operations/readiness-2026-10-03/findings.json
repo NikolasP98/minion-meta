@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "authorized_scope": "All 97 original findings, 10 FACES backend/product findings, 1 baseline device-auth regression and 8 parent blast-radius findings (116 total); autonomous implementation authorized. Merge/deploy remain separate. User additionally authorized full notification-system recon and implementation, configurable user/role/universal audiences and agent-defined reports, plus UI-governance lessons updates; notification findings are being inventoried.",
+  "authorized_scope": "All 149 readiness findings, including original recon, FACES, notifications and parent-discovered defects; autonomous implementation and UI governance lessons updates authorized. Merge/deployment remain separate.",
   "updated": "2026-10-03",
   "bases": {
     "hub": "7ac3bfdffdd885d80fbaf2056eb22e387626a3ee",
@@ -19,7 +19,10 @@
       "GW-005",
       "GW-006",
       "GW-007",
-      "GW-021"
+      "GW-021",
+      "GW-023",
+      "GW-024",
+      "GW-025"
     ],
     "gateway-lifecycle": [
       "GW-008",
@@ -31,7 +34,8 @@
       "GW-014",
       "GW-015",
       "GW-016",
-      "GW-017"
+      "GW-017",
+      "GW-026"
     ],
     "gateway-ci-shells": [
       "GW-018",
@@ -50,7 +54,8 @@
       "HC-033",
       "HC-034",
       "GW-022",
-      "HC-035"
+      "HC-035",
+      "HC-037"
     ],
     "hub-calendar": [
       "HC-008",
@@ -79,7 +84,14 @@
       "HC-029",
       "HC-030",
       "HC-032",
-      "UI-002"
+      "UI-002",
+      "HC-036",
+      "HS-032",
+      "HC-038",
+      "HC-039",
+      "HC-040",
+      "HC-041",
+      "HC-042"
     ],
     "hub-test-quality": [
       "TQ-001",
@@ -103,7 +115,8 @@
       "HS-007",
       "MR-OP-001",
       "HS-030",
-      "HS-031"
+      "HS-031",
+      "HS-033"
     ],
     "hub-money": [
       "HS-009",
@@ -156,6 +169,32 @@
       "FACES-PROD-003",
       "FACES-PROD-004",
       "FACES-PROD-005"
+    ],
+    "notifications": [
+      "NOTIF-001",
+      "NOTIF-002",
+      "NOTIF-003",
+      "NOTIF-004",
+      "NOTIF-005",
+      "NOTIF-006",
+      "NOTIF-007",
+      "NOTIF-008",
+      "NOTIF-009",
+      "NOTIF-010",
+      "NOTIF-011",
+      "NOTIF-012",
+      "NOTIF-013",
+      "NOTIF-014",
+      "NOTIF-015",
+      "NOTIF-016",
+      "NOTIF-017",
+      "NOTIF-018"
+    ],
+    "site-integration": [
+      "SITE-001",
+      "SITE-002",
+      "SITE-003",
+      "SITE-004"
     ]
   },
   "findings": [
@@ -277,7 +316,7 @@
       "priority": "P1",
       "title": "Events, raw logs, and usage endpoints expose gateway-global operational data to normal users",
       "batch": "gateway-security",
-      "status": "implemented-awaiting-review",
+      "status": "partially-implemented",
       "owner": "gateway_fixes",
       "acceptance": [
         "User/org-admin requests never return another org's events, usage, or logs.",
@@ -285,15 +324,24 @@
         "Admin access is explicit and sensitive fields are redaction-tested."
       ],
       "code_commits": [
-        "gateway:98767f4de"
+        "gateway:98767f4de",
+        "gateway:e46d7f630fd48dc66b1c228b90d9b37cfeb0bc87"
       ],
-      "tests": [],
+      "tests": [
+        "24 actual SQLite cases: process contention, restart, punctuation/digit identifiers, physical-cap preflight,50,001-row rejection, trigger/CAS and fault behavior."
+      ],
       "reviews": [
-        "Parent security review corrected corrupt revocation overwrite, shortened revocation expiry and unhealthy-store read ordering. Final review active. Session mutation bypass suspicion was refuted by direct method-table inspection; dispatcher regressions added."
+        "Parent security review corrected corrupt revocation overwrite, shortened revocation expiry and unhealthy-store read ordering. Final review active. Session mutation bypass suspicion was refuted by direct method-table inspection; dispatcher regressions added.",
+        "Orchestration contract ae471b85 passed independent Sol Standards and parent Spec review. GW022A native prerequisite and GW024 credential-class integration remain explicit gates.",
+        "Standalone SQLite authority module accepted by parent after correcting binary-versus-locale counter ordering and pre-scan capacity admission. Manifestbd78c6e9;24 actual SQLite cases pass with type/lint checks. No runtime caller is wired yet.",
+        "Bounded orchestration authority store checkpoint signed and verified on its exact10-file manifest; this substrate has no production imports yet and does not close endpoint/lifecycle authority integration."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Parent producer trace: server.impl.ts global event-bus bridge publishes pi-agent.orchestration-progress with task metadata and no authoritative tenant audience; separate correction required, not covered by GW-023 raw/session events.",
+        "Amend initial-publish crash recovery and pinned import manifest contract, then integrate descriptor-relative native package; standalone authority module does not close this finding."
+      ]
     },
     {
       "id": "GW-006",
@@ -386,42 +434,62 @@
       "priority": "P1",
       "title": "A single cleanup error or hung channel stop aborts the remaining gateway shutdown sequence",
       "batch": "gateway-lifecycle",
-      "status": "implementing",
+      "status": "locally-verified-awaiting-release",
       "owner": "root",
       "acceptance": [
         "Inject a throw/hang into each early cleanup and assert every later finalizer runs once.",
         "Call close twice and assert idempotent completion.",
         "Assert shutdown meets a fixed deadline while reporting timed-out components."
       ],
-      "code_commits": [],
-      "tests": [],
+      "code_commits": [
+        "gateway:0cdd31d4cc3102a1ec3c24eedb1630e75d0663a0"
+      ],
+      "tests": [
+        "Final file-store unit 17 PASS; cleanup fan-out 18 PASS; combined real reload/shutdown E2E 2 files/5 PASS in one reused worker. Removing only mkdir reproduces SQLite error14; removing only suite reset reproduces two later-suite timeouts. Both mutations restored before the final manifest.",
+        "Parent latest full pnpm tsgo PASS; exact 58-file formatting and type-aware lint PASS. Earlier broad 216-case gate is retained as historical coverage, not claimed rerun after corrections."
+      ],
       "reviews": [
-        "Slice B revision6 Standards root PASS and independent Sol Spec PASS; source reviewed SHA256 ad39136d. Shared artifact plus Hub/Site authenticated-session adoption is a required cross-project release dependency."
+        "Slice B revision6 Standards root PASS and independent Sol Spec PASS; source reviewed SHA256 ad39136d. Shared artifact plus Hub/Site authenticated-session adoption is a required cross-project release dependency.",
+        "Parent accepted lifecycle Slice B after correcting zero-budget false fences and failed initializer rollback tracking. 53-file manifest 83a68d7b; 216 broad tests plus 23 superseding correction tests, lifecycle/reload and full tsgo passed. Shared consumer qualification and release remain separate.",
+        "Additional parent blast-radius review found cleanup fan-out defects after the earlier packet: discarded fallback-channel rejections and grouped registry/scheduler/HTTP cleanup could skip siblings. Acceptance is held until the revised independent-resource tasks and receiver-preservation tests are qualified. Earlier 53-file manifest does not qualify the new correction.",
+        "Final 58-file manifest 2a7a7f69 independently verified. Parent and Sol review PASS after cleanup fan-out and receiver fixes, real absent-state file-store startup correction, and suite-only E2E module-cache isolation. Signed source matches all 58 hashes."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Exact-source hosted CI and release qualification; cross-project authenticated-session adoption has separate receipts and release gates."
+      ]
     },
     {
       "id": "GW-010",
       "priority": "P1",
       "title": "Gateway startup creates background resources that are not reliably owned or stopped",
       "batch": "gateway-lifecycle",
-      "status": "implementing",
+      "status": "locally-verified-awaiting-release",
       "owner": "root",
       "acceptance": [
         "Close while event init is paused, then resolve init; no timer/store remains.",
         "Start/close repeatedly under fake timers and assert zero scheduled handles.",
         "Spy every returned shutdown handle and workshop DB close; each runs once."
       ],
-      "code_commits": [],
-      "tests": [],
+      "code_commits": [
+        "gateway:0cdd31d4cc3102a1ec3c24eedb1630e75d0663a0"
+      ],
+      "tests": [
+        "Final file-store unit 17 PASS; cleanup fan-out 18 PASS; combined real reload/shutdown E2E 2 files/5 PASS in one reused worker. Removing only mkdir reproduces SQLite error14; removing only suite reset reproduces two later-suite timeouts. Both mutations restored before the final manifest.",
+        "Parent latest full pnpm tsgo PASS; exact 58-file formatting and type-aware lint PASS. Earlier broad 216-case gate is retained as historical coverage, not claimed rerun after corrections."
+      ],
       "reviews": [
-        "Slice B revision6 Standards root PASS and independent Sol Spec PASS; source reviewed SHA256 ad39136d. Shared artifact plus Hub/Site authenticated-session adoption is a required cross-project release dependency."
+        "Slice B revision6 Standards root PASS and independent Sol Spec PASS; source reviewed SHA256 ad39136d. Shared artifact plus Hub/Site authenticated-session adoption is a required cross-project release dependency.",
+        "Same accepted lifecycle Slice B; runtime fence proof and retained rollback failures prevent unsafe dependent-store closure. Exact source manifest 83a68d7b.",
+        "Additional parent blast-radius review found cleanup fan-out defects after the earlier packet: discarded fallback-channel rejections and grouped registry/scheduler/HTTP cleanup could skip siblings. Acceptance is held until the revised independent-resource tasks and receiver-preservation tests are qualified. Earlier 53-file manifest does not qualify the new correction.",
+        "Final 58-file manifest 2a7a7f69 independently verified. Parent and Sol review PASS after cleanup fan-out and receiver fixes, real absent-state file-store startup correction, and suite-only E2E module-cache isolation. Signed source matches all 58 hashes."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Exact-source hosted CI and release qualification; cross-project authenticated-session adoption has separate receipts and release gates."
+      ]
     },
     {
       "id": "GW-011",
@@ -712,30 +780,119 @@
       "priority": "P1",
       "title": "Older reliability responses can overwrite newer range/filter/host selections",
       "batch": "hub-reactivity-accessibility",
-      "status": "queued",
+      "status": "locally-verified-awaiting-release",
       "owner": "root",
       "acceptance": "Resolve request B before request A for every aggregate; assert B remains, A is ignored, and loading stays true until B completes.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "hub:3eac14225557958ccdcc5c74b3f07c09d4164c80",
+        "hub:1ead0620bce7ededc362c790dc3a35a71608b47f",
+        "hub:e6c5f32609bdb5add8552964c57df758e26ceebe"
+      ],
+      "tests": [
+        "Negative control: removing request generation produces32 failures; exact bytes restored and66 loader cases pass.",
+        "Design lint against eb6867db: no per-file debt increase; token integrity zero violations.",
+        "128 distinct local cases pass across actual loaders, malformed response admission, bounded sanitized telemetry, mounted coordinator, storage, live batching and Gateway session/bootstrap neighbors.",
+        "Removing the settled-snapshot owner getter guard causes exactly two mounted query-transition failures; exact bytes restored and fourteen mounted/bootstrap cases pass.",
+        "Actual Chromium component fixture: mobile document width390, all controls at least44px, final Retry reached by scrolling and clicked successfully; eight failures clear without hard refresh.",
+        "Configured full Hub check v7 passes with zero errors and zero warnings at the reviewed source checkpoint; later concurrent changes require fresh qualification.",
+        "Final v3: 129 distinct focused cases pass; v6 actual-component Chromium recovery at1440x1000 and390x844 passes with 8-to-0 errors, real final Retry, no hard refresh and all mobile controls44px.",
+        "Panel/API expansion:28files253focused cases; actual bounded SQL materialization,50k heartbeat indexed lookup,100001-row cap denial; configured0errors0warnings before currentSlice4 work. Three real panels recover at1440/390; mobilearchitecturev5 corrects two independent visual failures, alltoolbarcontrols44px and realmode/depth/refresh actions pass.",
+        "Exact staged snapshot 0e30e8c5b56d93b8eb62aba92f395dac29494a71:30 files,258 tests PASS; reliability-staged-focused.log. 82 reviewed nonlocale source hashes match; 17 locale keys per language staged separately.",
+        "Authenticated Gateway prerequisite exact staged snapshot d4d6e2355b1baefd10052274179fcba95595fe52:3 files14 tests PASS; installed shared runtime/declaration bytes verified.",
+        "Installed shared readiness.2 archive SHA994ac7f5: 73 compatibility/error cases and independent packed-root probe PASS; accepted-then-throw mutation fails the no-write-replay assertion. Canonical source 199 cases and typecheck PASS. Hub consumer 15 cases PASS. See shared-errors-independent-review-v1.md and shared-error-hub-consumer.log."
+      ],
+      "reviews": [
+        "Canonical owner+session+query resource isolation and coalesced loading are implemented. Post-change error/recovery fixture is synthetic, not complete route or production proof.",
+        "Second source packet frozen after independent decoder/monitoring/settled-snapshot blockers were corrected; follow-up review pending. Full configured check has eight errors only in three concurrent wallet test files, no reliability diagnostic.",
+        "Independent v2 review blocked tab-sensitive notice Retry on Performance; corrected by direct coordinator capability. Nine mounted cases pass including eight-read Retry versus panel-only toolbar.",
+        "Independent Sol incremental source PASS on packet8504824b / manifest42a9b27d: resource-owned Retry cannot be redirected by active tab. Remaining panel/API slice is separate.",
+        "Remaining panel/API contract17762e5b independently approved. Three active panels plus two dormant state/API factories have separate, honest coverage requirements.",
+        "Panel/API expansion parent review found false connected substring matches, unbounded latest-heartbeat history scans and authority row/field materialization. Worker corrections are under renewed source review; focused tests alone did not close this slice.",
+        "Parent inspected corrected exact-status predicate, bounded native/libSQL queries, preserved publicgatewayhelper blast radius, retained WebSocket cleanup and actualpanelbrowser v5. Bounded source/visualPASS; signature/release remains pending.",
+        "Parent reviewed exact staged archive, neighboring Gateway session/bootstrap and native QC registration; signed commit verified."
+      ],
       "pull_requests": [],
-      "runtime": "not-qualified",
-      "remaining": []
+      "runtime": "locally-qualified",
+      "remaining": [
+        "Exact committed-source hosted CI and normal release/runtime verification."
+      ],
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "path": "src/lib/state/async.svelte.ts",
+          "lines": "66-87",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6",
+          "note": "Generic resource publishes late data/errors/loading without request or reset generation."
+        },
+        {
+          "repo": "hub",
+          "path": "src/lib/state/reliability/plugin-health.svelte.ts",
+          "lines": "124-149",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6",
+          "note": "Plugin snapshot ignores the requested server identity and uses ambient Gateway transport."
+        },
+        {
+          "repo": "hub",
+          "path": "src/lib/state/reliability/insights.svelte.ts",
+          "lines": "16-37",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6",
+          "note": "Historical insight requests use the unfenced generic resource."
+        },
+        {
+          "repo": "hub",
+          "path": "src/lib/components/reliability/architecture/ArchitectureGraph.svelte",
+          "lines": "139-151",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6",
+          "note": "Polling/manual architecture loads directly publish completion without generation ownership."
+        },
+        {
+          "repo": "hub",
+          "path": "src/lib/components/reliability/PluginHealthPanel.svelte",
+          "lines": "90-106",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6",
+          "note": "Live sample increments snapshot totals without a shared watermark."
+        },
+        {
+          "repo": "hub",
+          "path": "src/lib/components/agents/AgentDashboard.svelte",
+          "lines": "79,118",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6",
+          "note": "Independent review found unavailable summary rendered as zero errors; preserve truthful unknown outside the reliability route."
+        }
+      ]
     },
     {
       "id": "HC-026",
       "priority": "P1",
       "title": "Nested delete buttons bubble Enter into card navigation; Flow and Workshop also mishandle Space",
       "batch": "hub-reactivity-accessibility",
-      "status": "queued",
+      "status": "hosted-verified-awaiting-release",
       "owner": "root",
       "acceptance": "For every card grid, keyboard-activate delete and assert only delete/confirmation runs; activate the card itself and assert only navigation runs.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
-      "pull_requests": [],
-      "runtime": "not-qualified",
-      "remaining": []
+      "code_commits": [
+        "a1b4783486ff9ec0b643e2e5663ae67de99ca4a4",
+        "0040a8fbb483ae52bf78366fd6d0dcfee7cebf54"
+      ],
+      "tests": [
+        "Exact 37-path accepted source: 8 files / 51 focused tests PASS; full check 0 errors / 0 warnings; production build PASS; client boundary 1996 modules / 882 artifacts / 0 violations; both negative canaries rejected.",
+        "Original actual Chromium Enter triggers both navigation and deletion on all five destructive surfaces; source hashes and screenshots retained.",
+        "Final v3 actual six-card fixture: 10 native Delete Enter/Space, 12 EN/ES 390px layout, 17 native navigation/key/modifier cases PASS. Synthetic data, zero production writes. Six component bytes unchanged by later nullable-ID helper correction.",
+        "Actual unencoded-helper mutant: positive control 13 PASS; negative 7 failures and 6 invalid-ID cases still PASS; exact source restored. Design debt did not increase and token violations are zero.",
+        "Hosted a1b47834:10 checks PASS; check/build stopped at Prettier on nine preserved-baseline-format consumers. Signed follow-up0040a8fb contains exactly the canonical formatter output for those HEAD blobs; all concurrent worker source was preserved. Exact follow-up CI pending.",
+        "Exact signed0040a8fb hosted checks: 11 PASS, zero FAIL, Vercel preview pending; hub-0040a8fb-hosted-checks.log. This qualifies HC026 source before the separate HC038 adoption."
+      ],
+      "reviews": [
+        "Approved two-pass contract d846b3bf; independent accepted-source review 43bbc58220a57035a825e570b6fe359e1bb9f48ea191fe6cc74849228c293184.",
+        "Parent qualification hc026-parent-qualification.json binds source manifest 4577cc0000820a910521e8325098a54700d4bfb33dad42cbc405b369f2fe8a77; all 37 committed blobs verified and SSH signature verified.",
+        "Blast radius: all 43 API builders and five adjacent programmatic destinations; native form defaults, custom/gateway tool permissions, collapse, workshop callback ordering, locale rewriting and route decoding. HC037/038/039 remain separate open scopes."
+      ],
+      "pull_requests": [
+        "https://github.com/NikolasP98/minion_hub/pull/431"
+      ],
+      "runtime": "synthetic-native-browser-qualified",
+      "remaining": [
+        "Human merge and authorized release/live acceptance remain pending."
+      ]
     },
     {
       "id": "HC-028",
@@ -819,64 +976,96 @@
       "priority": "P1",
       "title": "Stored-value balances add nominal amounts across currencies",
       "batch": "hub-money",
-      "status": "spec-approved",
+      "status": "locally-verified-awaiting-release",
       "owner": "root",
       "acceptance": "Create mixed-currency entries and assert per-currency balances and rejection/explicit conversion of a mismatched redemption; run the preserved fixture recipe in hs-numeric-repro.README.md.",
-      "code_commits": [],
-      "tests": [],
+      "code_commits": [
+        "hub:b3c88d998bbb8d4e9ff10eb68ed30d1bf2eebc23"
+      ],
+      "tests": [
+        "144 focused cases and27 native PostgreSQL cases pass; native additions exercise contact-only refund vs party spend and bridge winner, zero skips.",
+        "POS v11 focused120/120, configured check0/0, design and token gates passed; mounted delayed POST and delayed post-commit refresh cannot publish to another actor/org.",
+        "Combined exact staged POS checkpoint:43 files465 tests PASS; pos-staged-focused.log. Approved server/client/native source hashes reconciled;55 locale keys per language isolated."
+      ],
       "reviews": [
-        "Wallet currency/identity/tender spec Standards and Spec PASS on f6fc894d8a807eda87b662ace9cdb5005f44943c8b5d82285e59cd17575ca49e; source implementation remains pending."
+        "Wallet currency/identity/tender spec Standards and Spec PASS on f6fc894d8a807eda87b662ace9cdb5005f44943c8b5d82285e59cd17575ca49e; source implementation remains pending.",
+        "Parent BLOCK: legacy contact-only refund locks must follow the same serialized current wallet owner as spend; native void/spend/bridge race correction requested.",
+        "Parent accepted server behavior after31file manifest verification and refund lock correction; original facets remain unchanged and shared index tree remains29115dc3.",
+        "Wallet client v11 parent source PASS on ba27605d packet and4e24c024 manifest: semantic payment methods, frozen policy revision, canonical v2 identity and immutable post-commit owner.120 focused cases passed. HS-011 remains open.",
+        "Parent reviewed wallet currency, checkout recovery, schedule rollback, module boundaries and shared native QC; preserved prior notification reminder cascade comment. Signed checkpoint verified."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Exact committed-source hosted CI and normal release/runtime verification; no production mutation or deployment performed."
+      ]
     },
     {
       "id": "HS-010",
       "priority": "P1",
       "title": "Manual credit adjustments have no idempotency key",
       "batch": "hub-money",
-      "status": "queued",
-      "owner": "root",
+      "status": "spec-in-progress",
+      "owner": "hub_test_fixes",
       "acceptance": "Drop the first HTTP response after commit, retry the same key, and assert one ledger row and the identical response; changing payload under the key must conflict.",
       "code_commits": [],
       "tests": [],
-      "reviews": [],
+      "reviews": [
+        "Sol worker reconciling current wallet/POS v11 callers and durable operation mechanisms before authoring bounded idempotency contract; no runtime changes in this slice yet."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Freeze AS-IS/TO-BE/DELTA contract, independent and parent review, then implementation and meaningful native/client recovery qualification."
+      ]
     },
     {
       "id": "HS-011",
       "priority": "P1",
       "title": "Ticket submission has no idempotency key",
       "batch": "hub-money",
-      "status": "queued",
-      "owner": "root",
+      "status": "spec-in-progress",
+      "owner": "hub_test_fixes",
       "acceptance": "Force a post-commit transport failure and retry the same key; assert one ticket, one payment set, one credit effect, one stock source, and stable response.",
       "code_commits": [],
       "tests": [],
-      "reviews": [],
+      "reviews": [
+        "Sol worker reconciling current wallet/POS v11 callers and durable operation mechanisms before authoring bounded idempotency contract; no runtime changes in this slice yet."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Freeze AS-IS/TO-BE/DELTA contract, independent and parent review, then implementation and meaningful native/client recovery qualification."
+      ]
     },
     {
       "id": "HS-012",
       "priority": "P1",
       "title": "Any payment method whose identifier is credit debits stored value",
       "batch": "hub-money",
-      "status": "spec-approved",
+      "status": "locally-verified-awaiting-release",
       "owner": "root",
       "acceptance": "Configure a non-stored-value method with the display label Credit and prove it does not debit; configure the semantic stored-value method and prove it does, including migration compatibility.",
-      "code_commits": [],
-      "tests": [],
+      "code_commits": [
+        "hub:b3c88d998bbb8d4e9ff10eb68ed30d1bf2eebc23"
+      ],
+      "tests": [
+        "144 focused cases and27 native PostgreSQL cases pass; native additions exercise contact-only refund vs party spend and bridge winner, zero skips.",
+        "POS v11 focused120/120, configured check0/0, design and token gates passed; mounted delayed POST and delayed post-commit refresh cannot publish to another actor/org.",
+        "Combined exact staged POS checkpoint:43 files465 tests PASS; pos-staged-focused.log. Approved server/client/native source hashes reconciled;55 locale keys per language isolated."
+      ],
       "reviews": [
-        "Wallet currency/identity/tender spec Standards and Spec PASS on f6fc894d8a807eda87b662ace9cdb5005f44943c8b5d82285e59cd17575ca49e; source implementation remains pending."
+        "Wallet currency/identity/tender spec Standards and Spec PASS on f6fc894d8a807eda87b662ace9cdb5005f44943c8b5d82285e59cd17575ca49e; source implementation remains pending.",
+        "Parent BLOCK: legacy contact-only refund locks must follow the same serialized current wallet owner as spend; native void/spend/bridge race correction requested.",
+        "Parent accepted server behavior after31file manifest verification and refund lock correction; original facets remain unchanged and shared index tree remains29115dc3.",
+        "Wallet client v11 parent source PASS on ba27605d packet and4e24c024 manifest: semantic payment methods, frozen policy revision, canonical v2 identity and immutable post-commit owner.120 focused cases passed. HS-011 remains open.",
+        "Parent reviewed wallet currency, checkout recovery, schedule rollback, module boundaries and shared native QC; preserved prior notification reminder cascade comment. Signed checkpoint verified."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Exact committed-source hosted CI and normal release/runtime verification; no production mutation or deployment performed."
+      ]
     },
     {
       "id": "HS-013",
@@ -1230,19 +1419,25 @@
       "priority": "P2",
       "title": "The nightly wrapper reports success after dispatch and does not reflect the child DEV CI conclusion",
       "batch": "gateway-ci-shells",
-      "status": "queued",
+      "status": "partially-implemented",
       "owner": "root",
       "acceptance": [
         "Workflow fixture/shell test proves a failing child makes the wrapper fail.",
         "Wrapper validates exact branch/SHA and exposes child URL/conclusion.",
         "No child found within deadline is a failure, not success."
       ],
-      "code_commits": [],
+      "code_commits": [
+        "meta:50374ac2c890d300b69f3c13f08a678b643de97f"
+      ],
       "tests": [],
-      "reviews": [],
+      "reviews": [
+        "Independent v2 contract PASS. Three scripts/ci modules exist only as untested/unreviewed/unwired local drafts in gateway-review. No hosted dispatch performed."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Complete state-machine, HTTP-adapter and CLI-process negative tests; wire exact helper/test commands in nightly, check and ci-contract jobs; replace old parsed workflow acceptance test; independent review and required gates."
+      ]
     },
     {
       "id": "GW-019",
@@ -1257,7 +1452,9 @@
         "Fault-injected shutdown and delivery recovery run in a process-level harness."
       ],
       "code_commits": [],
-      "tests": [],
+      "tests": [
+        "Integrated gateway-review E2E candidate twice reports unexpected vmFork worker exit. Lifecycle-only forks run2/2 PASS and instrumented combined run29/29 PASS, but neither resolves the uninstrumented combined failure. Preserve all failures; do not claim clean qualification."
+      ],
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -1288,44 +1485,64 @@
       "priority": "P2",
       "title": "Event-kind create, rename, recolor, default, and delete ignore rejected responses",
       "batch": "hub-mutations",
-      "status": "implemented-awaiting-review",
-      "owner": "hub_client_fixes",
+      "status": "locally-verified-awaiting-release",
+      "owner": "root",
       "acceptance": "Return 403 and 500 for each verb; assert draft/value is retained and no success-state invalidation masks the error.",
       "code_commits": [
-        "hub:ba6b6ba2"
+        "hub:ba6b6ba2",
+        "hub:0020b6734d197f4f532ba0a5de324c70c70c09fd"
       ],
       "tests": [
         "Hub checkpoint13300fad hosted CI all12 checks green: unit, check/build, QA stack, 3native database lanes, security and critical-journey browser, labels and preview. Does not prove later uncommitted source or production release.",
-        "Hosted Hub82821c11:11of12checks PASS including build,QAstack,3nativeSQL and bothbrowser lanes. Unit lane5721PASS/1FAIL/249SKIP; sole failure stale jobs manifest count corrected separately in bbcbbd13, awaiting next hosted run. Exact receipts are not proof for later WIP."
+        "Hosted Hub82821c11:11of12checks PASS including build,QAstack,3nativeSQL and bothbrowser lanes. Unit lane5721PASS/1FAIL/249SKIP; sole failure stale jobs manifest count corrected separately in bbcbbd13, awaiting next hosted run. Exact receipts are not proof for later WIP.",
+        "Actual historical and corrected route components in headless Chromium reproduce draft loss before and preservation after. Pulse lost-response read repair: writes stay2 while reads1→2(failed)→3(success); unknown message/draft retained;44px controls and390px document. Exact v3 fixture manifest attached.15 mounted cases after final scope defense are being qualified.",
+        "Exact accepted source full check:0 errors/0warnings; full production build+client boundary1994modules/881artifacts/0violations and2real bundling-negative canaries PASS. Scoped15mounted tests PASS; signed16file snapshot. Fixture-only transport whitelist/teardown tightened after typecheck and independently reviewed before build."
       ],
-      "reviews": [],
+      "reviews": [
+        "Independent follow-up BLOCK: lost Pulse PATCH reply re-enabled writes and Scheduling create draft survived organization change. Root reproduced 3 failures across 13 mounted cases; corrections and re-review underway. Earlier draft-revision acknowledgement defects were independently reproduced and corrected.",
+        "Follow-up review corrections preserve uncertain action history and clear workspace-owned drafts. Explicit Pulse save scope defense plus real runtime A→B cases added. Final source review/check remains pending.",
+        "Independent final four-file review PASS: hc005-006-independent-final-review.md SHA723adf02, exact source manifest fec4d401. Two mounted suites /15 tests PASS, log6b62e098. Root accepted-source configured full check is running; browser v3 proof predates only the final explicit scope guard defense covered by mounted runtime cases.",
+        "Final signed0020b673 source passed parent full check/build. Exact0020 hosted unit run found only stale shared artifact assertions, corrected independently at8dd12564; latest hosted run pending. All database/browser/build checks on0020 passed."
+      ],
       "pull_requests": [
         "https://github.com/NikolasP98/minion_hub/pull/431"
       ],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Exact-head hosted CI and release qualification. Optional final fixture rebuild binds screenshots to signed scope-guard/transport hardening bytes; existing v3 screenshots retain exact prior provenance. Pulse decision/delivery semantics remain separately tracked in NOTIF-011."
+      ]
     },
     {
       "id": "HC-006",
       "priority": "P2",
       "title": "Pulse proposal editing closes and discards the draft on any HTTP failure",
       "batch": "hub-mutations",
-      "status": "implemented-awaiting-review",
-      "owner": "hub_client_fixes",
+      "status": "locally-verified-awaiting-release",
+      "owner": "root",
       "acceptance": "Inject 409/500 and assert editor remains open with unchanged draft and one request; success alone closes it.",
       "code_commits": [
-        "hub:ba6b6ba2"
+        "hub:ba6b6ba2",
+        "hub:0020b6734d197f4f532ba0a5de324c70c70c09fd"
       ],
       "tests": [
         "Hub checkpoint13300fad hosted CI all12 checks green: unit, check/build, QA stack, 3native database lanes, security and critical-journey browser, labels and preview. Does not prove later uncommitted source or production release.",
-        "Hosted Hub82821c11:11of12checks PASS including build,QAstack,3nativeSQL and bothbrowser lanes. Unit lane5721PASS/1FAIL/249SKIP; sole failure stale jobs manifest count corrected separately in bbcbbd13, awaiting next hosted run. Exact receipts are not proof for later WIP."
+        "Hosted Hub82821c11:11of12checks PASS including build,QAstack,3nativeSQL and bothbrowser lanes. Unit lane5721PASS/1FAIL/249SKIP; sole failure stale jobs manifest count corrected separately in bbcbbd13, awaiting next hosted run. Exact receipts are not proof for later WIP.",
+        "Actual historical and corrected route components in headless Chromium reproduce draft loss before and preservation after. Pulse lost-response read repair: writes stay2 while reads1→2(failed)→3(success); unknown message/draft retained;44px controls and390px document. Exact v3 fixture manifest attached.15 mounted cases after final scope defense are being qualified.",
+        "Exact accepted source full check:0 errors/0warnings; full production build+client boundary1994modules/881artifacts/0violations and2real bundling-negative canaries PASS. Scoped15mounted tests PASS; signed16file snapshot. Fixture-only transport whitelist/teardown tightened after typecheck and independently reviewed before build."
       ],
-      "reviews": [],
+      "reviews": [
+        "Independent follow-up BLOCK: lost Pulse PATCH reply re-enabled writes and Scheduling create draft survived organization change. Root reproduced 3 failures across 13 mounted cases; corrections and re-review underway. Earlier draft-revision acknowledgement defects were independently reproduced and corrected.",
+        "Follow-up review corrections preserve uncertain action history and clear workspace-owned drafts. Explicit Pulse save scope defense plus real runtime A→B cases added. Final source review/check remains pending.",
+        "Independent final four-file review PASS: hc005-006-independent-final-review.md SHA723adf02, exact source manifest fec4d401. Two mounted suites /15 tests PASS, log6b62e098. Root accepted-source configured full check is running; browser v3 proof predates only the final explicit scope guard defense covered by mounted runtime cases.",
+        "Final signed0020b673 source passed parent full check/build. Exact0020 hosted unit run found only stale shared artifact assertions, corrected independently at8dd12564; latest hosted run pending. All database/browser/build checks on0020 passed."
+      ],
       "pull_requests": [
         "https://github.com/NikolasP98/minion_hub/pull/431"
       ],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Exact-head hosted CI and release qualification. Optional final fixture rebuild binds screenshots to signed scope-guard/transport hardening bytes; existing v3 screenshots retain exact prior provenance. Pulse decision/delivery semantics remain separately tracked in NOTIF-011."
+      ]
     },
     {
       "id": "HC-009",
@@ -1493,15 +1710,37 @@
       "priority": "P2",
       "title": "Reliability mount can issue duplicate full data batches",
       "batch": "hub-reactivity-accessibility",
-      "status": "queued",
+      "status": "locally-verified-awaiting-release",
       "owner": "root",
       "acceptance": "Instrument loader counts on mount and stored-default application; assert one request per endpoint per effective key.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "hub:3eac14225557958ccdcc5c74b3f07c09d4164c80",
+        "hub:1ead0620bce7ededc362c790dc3a35a71608b47f",
+        "hub:e6c5f32609bdb5add8552964c57df758e26ceebe"
+      ],
+      "tests": [
+        "Negative control: removing request generation produces32 failures; exact bytes restored and66 loader cases pass.",
+        "Design lint against eb6867db: no per-file debt increase; token integrity zero violations.",
+        "128 distinct local cases pass across actual loaders, malformed response admission, bounded sanitized telemetry, mounted coordinator, storage, live batching and Gateway session/bootstrap neighbors.",
+        "Removing the settled-snapshot owner getter guard causes exactly two mounted query-transition failures; exact bytes restored and fourteen mounted/bootstrap cases pass.",
+        "Actual Chromium component fixture: mobile document width390, all controls at least44px, final Retry reached by scrolling and clicked successfully; eight failures clear without hard refresh.",
+        "Final v3: 129 distinct focused cases pass; v6 actual-component Chromium recovery at1440x1000 and390x844 passes with 8-to-0 errors, real final Retry, no hard refresh and all mobile controls44px.",
+        "Exact staged snapshot 0e30e8c5b56d93b8eb62aba92f395dac29494a71:30 files,258 tests PASS; reliability-staged-focused.log. 82 reviewed nonlocale source hashes match; 17 locale keys per language staged separately.",
+        "Authenticated Gateway prerequisite exact staged snapshot d4d6e2355b1baefd10052274179fcba95595fe52:3 files14 tests PASS; installed shared runtime/declaration bytes verified.",
+        "Installed shared readiness.2 archive SHA994ac7f5: 73 compatibility/error cases and independent packed-root probe PASS; accepted-then-throw mutation fails the no-write-replay assertion. Canonical source 199 cases and typecheck PASS. Hub consumer 15 cases PASS. See shared-errors-independent-review-v1.md and shared-error-hub-consumer.log."
+      ],
+      "reviews": [
+        "Canonical owner+session+query resource isolation and coalesced loading are implemented. Post-change error/recovery fixture is synthetic, not complete route or production proof.",
+        "Second source packet frozen after independent decoder/monitoring/settled-snapshot blockers were corrected; follow-up review pending. Full configured check has eight errors only in three concurrent wallet test files, no reliability diagnostic.",
+        "Independent Sol incremental source PASS on packet8504824b / manifest42a9b27d: resource-owned Retry cannot be redirected by active tab. Remaining panel/API slice is separate.",
+        "Final independent Sol PASS and parent acceptance on8504824b/42a9b27d; coherent Hub checkv9 subsequently0errors0warnings. No remaining source-review blocker in this eight-resource coordinator slice.",
+        "Parent reviewed exact staged archive, neighboring Gateway session/bootstrap and native QC registration; signed commit verified."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Exact committed-source hosted CI and normal release/runtime verification."
+      ]
     },
     {
       "id": "HC-027",
@@ -1540,16 +1779,27 @@
       "priority": "P2",
       "title": "Core interactive systems remain multi-thousand-line change hotspots",
       "batch": "hub-reactivity-accessibility",
-      "status": "queued",
+      "status": "partially-implemented",
       "owner": "root",
       "acceptance": "Before extraction, add contract tests at each seam (selection/query replacement, partial bulk outcomes, zoned drag, request generations, event routing); require parity snapshots/call traces after each move.",
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "hub:b3c88d998bbb8d4e9ff10eb68ed30d1bf2eebc23"
+      ],
+      "tests": [
+        "POS extraction:148 focused cases and27 native wallet cases pass, with15 moved projection bodies mechanically unchanged.",
+        "Runtime graph and module-load checks detect both reintroduced import cycles. The vacuous tuple-type test was replaced with a compiler-symbol exact public type export inventory; three boundary checks pass.",
+        "POS module-boundary extraction is included in43 files465PASS combined checkpoint."
+      ],
+      "reviews": [
+        "POS settings/account projection extraction contract approved after closing both runtime import cycles in the design; implementation in progress.",
+        "Parent source review accepted19-file extraction manifest97038e73; public barrels, SQL, transaction and lock order preserved. Final coherent configured check pending.",
+        "Parent checked preserved service exports/callers and transaction ownership; other god-files remain separate work."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": [
-        "Parent reproduced calendar toolbar vertical overlap and crowded linked-tags control at390x844; evidence/calendar-074-mobile-failure.png. Fix and visually recheck without losing focus/touch behavior."
+        "Parent reproduced calendar toolbar vertical overlap and crowded linked-tags control at390x844; evidence/calendar-074-mobile-failure.png. Fix and visually recheck without losing focus/touch behavior.",
+        "Complete the remaining non-POS god-file extractions after their behavior contracts; POS extraction awaits final configured check and signed commit."
       ]
     },
     {
@@ -1868,17 +2118,27 @@
       "priority": "P2",
       "title": "The supposedly append-only POS credit ledger grants UPDATE and DELETE",
       "batch": "hub-money",
-      "status": "spec-approved",
+      "status": "locally-verified-awaiting-release",
       "owner": "root",
       "acceptance": "As authenticated/app role, assert INSERT succeeds for the tenant while UPDATE/DELETE fail; assert a compensating entry changes derived balance and preserves history.",
-      "code_commits": [],
-      "tests": [],
+      "code_commits": [
+        "hub:b3c88d998bbb8d4e9ff10eb68ed30d1bf2eebc23"
+      ],
+      "tests": [
+        "144 focused cases and27 native PostgreSQL cases pass; native additions exercise contact-only refund vs party spend and bridge winner, zero skips.",
+        "Combined exact staged POS checkpoint:43 files465 tests PASS; pos-staged-focused.log. Approved server/client/native source hashes reconciled;55 locale keys per language isolated."
+      ],
       "reviews": [
-        "Wallet currency/identity/tender spec Standards and Spec PASS on f6fc894d8a807eda87b662ace9cdb5005f44943c8b5d82285e59cd17575ca49e; source implementation remains pending."
+        "Wallet currency/identity/tender spec Standards and Spec PASS on f6fc894d8a807eda87b662ace9cdb5005f44943c8b5d82285e59cd17575ca49e; source implementation remains pending.",
+        "Parent BLOCK: legacy contact-only refund locks must follow the same serialized current wallet owner as spend; native void/spend/bridge race correction requested.",
+        "Parent accepted server behavior after31file manifest verification and refund lock correction; original facets remain unchanged and shared index tree remains29115dc3.",
+        "Parent reviewed wallet currency, checkout recovery, schedule rollback, module boundaries and shared native QC; preserved prior notification reminder cascade comment. Signed checkpoint verified."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Exact committed-source hosted CI and normal release/runtime verification; no production mutation or deployment performed."
+      ]
     },
     {
       "id": "OB-001",
@@ -2178,11 +2438,12 @@
       "priority": "P3",
       "title": "Due schedules are not required to reconcile to plan principal",
       "batch": "hub-money",
-      "status": "implementing",
+      "status": "locally-verified-awaiting-release",
       "owner": "root",
       "acceptance": "Test under-sum, over-sum, zero/negative rows, residual cents, and schedule exhaustion; assert the selected policy in API errors and collection views.",
       "code_commits": [
-        "hub:82821c11"
+        "hub:82821c11",
+        "hub:b3c88d998bbb8d4e9ff10eb68ed30d1bf2eebc23"
       ],
       "tests": [
         "Work in progress: native PostgreSQL service fixture8 cases pass; real plan/booking rollback, partial/overpaid reads, corruption visibility, signed ledger conservation and source-ticket grant currency/org fencing. No production data touched.",
@@ -2191,20 +2452,24 @@
         "Full disposable native jobs lane8 files/187 tests passes exact named report with zero skips; latest monetary currency read/cancel changes also pass8 native cases separately. SQL fixture schemas dropped and cleanup verified. money-jobs-all.json and money-native-currency-final.json.",
         "Latest root void blast-radius preflight regression:2files56tests pass; malformed/unsupported ledger currency rejects before external stock cancellation. Separate overlapping receipt money-void-blast-radius.log.",
         "Final server/core broad run: 33 files578passed; separate legacy pos-categories.pg.test.ts3skips explicitly tracked in test-quality followup. Configured shared svelte-check0errors0warnings. Tests overlap earlier/native counts.",
-        "Hosted Hub82821c11:11of12checks PASS including build,QAstack,3nativeSQL and bothbrowser lanes. Unit lane5721PASS/1FAIL/249SKIP; sole failure stale jobs manifest count corrected separately in bbcbbd13, awaiting next hosted run. Exact receipts are not proof for later WIP."
+        "Hosted Hub82821c11:11of12checks PASS including build,QAstack,3nativeSQL and bothbrowser lanes. Unit lane5721PASS/1FAIL/249SKIP; sole failure stale jobs manifest count corrected separately in bbcbbd13, awaiting next hosted run. Exact receipts are not proof for later WIP.",
+        "POS v11 focused120/120, configured check0/0, design and token gates passed; mounted delayed POST and delayed post-commit refresh cannot publish to another actor/org.",
+        "Combined exact staged POS checkpoint:43 files465 tests PASS; pos-staged-focused.log. Approved server/client/native source hashes reconciled;55 locale keys per language isolated."
       ],
       "reviews": [
         "Sol Standards pass1 and Spec pass2 approved after explicit numeric field bounds, currency policy, stored DTO checks, line-discount rounding order, mandatory shift arithmetic, invalid-draft retention and legacy schedule classification.",
         "Independent Sol review of exact decimal core PASS:171 focused cases and3200 Python Decimal differential cases.",
         "Sol server blast-radius review blocked booking facet swallowing, unclassified collection schedules, and incomplete void preflight. Root fixes all3; production caller regressions71pass across4files. Re-review pending.",
-        "Sol focused server re-review PASS after all3 caller-boundary corrections. Root exact-scoped40-file commit82821c11; client adoption and HC035 remain in progress."
+        "Sol focused server re-review PASS after all3 caller-boundary corrections. Root exact-scoped40-file commit82821c11; client adoption and HC035 remain in progress.",
+        "Wallet client v11 parent source PASS on ba27605d packet and4e24c024 manifest: semantic payment methods, frozen policy revision, canonical v2 identity and immutable post-commit owner.120 focused cases passed. HS-011 remains open.",
+        "Parent reviewed wallet currency, checkout recovery, schedule rollback, module boundaries and shared native QC; preserved prior notification reminder cascade comment. Signed checkpoint verified."
       ],
       "pull_requests": [
         "https://github.com/NikolasP98/minion_hub/pull/431"
       ],
       "runtime": "not-qualified",
       "remaining": [
-        "Complete client invalid-draft retention and server adoption; add adversarial caller/DTO tests, independent implementation review, final branch checks and release currency inventory."
+        "Exact committed-source hosted CI and normal release/runtime verification; no production mutation or deployment performed."
       ]
     },
     {
@@ -2685,7 +2950,7 @@
       "title": "Marketplace install writes an unused bundle without registering a runnable gateway agent",
       "batch": "hub-mutations",
       "owner": "root",
-      "status": "spec-review",
+      "status": "partially-implemented",
       "acceptance": [
         "Confirmed install is visible through actual agents.list and its configured workspace contains the verified prompt bundle.",
         "Existing non-marketplace agents cannot be overwritten, retries reuse the same effect, and unrelated concurrent configuration changes survive."
@@ -2694,15 +2959,28 @@
         "gateway/src/gateway/server-methods/marketplace.ts:41-96 only creates marketplace/agents files",
         "gateway/src/gateway/server-methods/agents.ts:308-369 registers the real config/workspace; no marketplace bundle reader exists in other runtime source"
       ],
-      "code_commits": [],
-      "tests": [],
+      "code_commits": [
+        "gateway:7e0409651fba63d2092929ffde5207a3fdb968b0"
+      ],
+      "tests": [
+        "GW022A native substrate v3: 13 runtime cases and native/static checks; parent independent probes reject moved-child writes, replaced live locks across root handles/processes and blocking FIFO opens. Temporary probe data removed.",
+        "Admissionv2:23focusednative/child cases; independentabnormaldescendant reproductionfixed. Current sync-addon150ms lease blocks10ms timer; nextasync executor spec underreview.",
+        "gw022a-parent-drain-probe.log: first fresh process before64/after0, second before64/after64 despite drained/complete. Owned temporary roots removed; no production effects. 44 author tests did not detect this race.",
+        "Native executor correction: 7 Rust tests, 46 addon tests, six quality gates PASS; independent20-process descriptor-drain proof. See gw022a-corrective-parent-review-v2.json and gw022a-parent-drain-corrected-v2.log."
+      ],
       "reviews": [
-        "Parent traced all marketplace runtime references and compared agents.create registration. Paired remediation with HC-034 exact-target immutable install intents."
+        "Parent traced all marketplace runtime references and compared agents.create registration. Paired remediation with HC-034 exact-target immutable install intents.",
+        "Parent bounded substrate SOURCE PASS on28-file manifest6f765e93 and reviewd01d8096 after correcting three independent negative probes plus the cross-root lock follow-on. This does not qualify a marketplace install or full filesystem admission.",
+        "Bounded38-file admissionv2SOURCEPASS; fullGW022A requiresasync syscall lifetime, packaging, ledger/writer/crashmatrix.",
+        "Native asynchronous candidate blocked by parent review: unmodified actual addon drain returned complete while64 directory descriptors remained open on second fresh-process probe. Also requires poison control-lane survival and lifetime registry retirement; worker correcting.",
+        "Parent accepts bounded native executor corrective packet: all62 source hashes match; independent unchanged drain reproducer releases all64 descriptors in each of20 fresh processes after correction. Runtime gateway integration remains open."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": [
-        "Review and implement the bounded cross-repository install-intent and gateway publication spec."
+        "Finish reviewed asyncsyscall/finalizer layer, four-target packaging, durablewriter/CAS and crashmatrix.",
+        "Implement and qualify exact-target install intents, prompt publication, config concurrency and actual agents.list visibility with HC-034.",
+        "Signed commits, hosted CI and normal release verification."
       ]
     },
     {
@@ -2731,32 +3009,37 @@
       "priority": "P1",
       "title": "Payment-plan creation permits a duplicate POST after a lost or malformed acknowledgement",
       "batch": "hub-mutations",
-      "status": "implementing",
+      "status": "locally-verified-awaiting-release",
       "owner": "hub_client_fixes",
       "acceptance": "After transport rejection or a2xx response without a valid plan identity, preserve the submitted snapshot and show unknown; prevent blind repeatedPOST. Acknowledged create plus failed hostrefresh offers only readrepair. Scope change/unmount cannot apply a late result to another client.",
       "code_commits": [
         "hub:c600711c8344eb7a98082ba0337e1ae2e9984d30",
-        "hub:0bbb9aaa"
+        "hub:0bbb9aaa",
+        "hub:b3c88d998bbb8d4e9ff10eb68ed30d1bf2eebc23"
       ],
       "tests": [
         "Committed server packet: full native jobs lane8files198passed0skips and exact semantic qualifier PASS; focused6files73passed; neighboring services8files111passed. Matrices overlap. Shared check found only concurrent client WIP10errors/2warnings, assigned and corrected by client worker; final integrated check pending.",
         "Hosted c600711c: 11/12 checks PASS, including full migration QA and native198. Unit lane caught omitted central capability exception plus static read-inventory mismatch (3 failures, 5735 passes, 249 explicit skips). Corrected in0bbb9aaa; exact hooks/nav/operation-route3files51PASS. New hosted run pending.",
-        "Hosted0bbb9aaa: all GitHub CI jobs PASS,11checks passed/0failed/1pending (Vercel preview). This receipt qualifies that commit, not later POS client/dependency WIP or production."
+        "Hosted0bbb9aaa: all GitHub CI jobs PASS,11checks passed/0failed/1pending (Vercel preview). This receipt qualifies that commit, not later POS client/dependency WIP or production.",
+        "POS v11 focused120/120, configured check0/0, design and token gates passed; mounted delayed POST and delayed post-commit refresh cannot publish to another actor/org.",
+        "Combined exact staged POS checkpoint:43 files465 tests PASS; pos-staged-focused.log. Approved server/client/native source hashes reconciled;55 locale keys per language isolated."
       ],
       "reviews": [
         "Parent source review of PlanOpenForm found committed is set only after successful JSON/plan parsing; catch otherwise re-enables submit even if the server committed. Added to the money client correction packet.",
         "Final durable-recovery specification Standards and Spec PASS; canonical specification and review stored in meta. Server source review completed separately; client not yet submitted for final review.",
         "Independent Sol server review PASS after settling-path internal hash leak correction. Native keyed settlement proves nested detail.plan strips request identity while DB retains it. Parent accepted exact18file server commit; client implementation remains uncommitted and unaccepted.",
         "Independent integration review PASS: exact UUID operation-cancel POST requires create; neighboring agreement cancel remains edit. The minimal own-operation receipt GET requires create; all other account reads retain view.",
-        "Parent client review found late JSON account publication, actor/org cart persistence ownership and inaccessible narrow-panel recovery actions. Corrections assigned; v6 desktop/mobile failure screenshots retained as before evidence. Client packet is not accepted yet."
+        "Parent client review found late JSON account publication, actor/org cart persistence ownership and inaccessible narrow-panel recovery actions. Corrections assigned; v6 desktop/mobile failure screenshots retained as before evidence. Client packet is not accepted yet.",
+        "Parent accepted v10 client 39-file packet af4cdeb1, manifest 405b7e13. 100 focused tests, check0/0, design/tokens and 390/1440 actual component evidence passed. Same-party recovery performs one fresh account read. Server operation slice already recorded separately.",
+        "Wallet client v11 parent source PASS on ba27605d packet and4e24c024 manifest: semantic payment methods, frozen policy revision, canonical v2 identity and immutable post-commit owner.120 focused cases passed. HS-011 remains open.",
+        "Parent reviewed wallet currency, checkout recovery, schedule rollback, module boundaries and shared native QC; preserved prior notification reminder cascade comment. Signed checkpoint verified."
       ],
       "pull_requests": [
         "https://github.com/NikolasP98/minion_hub/pull/431"
       ],
       "runtime": "not-qualified",
       "remaining": [
-        "Complete durable client continuation, mounted crash/reload/cross-tab/explicit-restore proofs, parent review and screenshots.",
-        "Final integrated typecheck and hosted CI, migration rehearsal, human merge and release."
+        "Exact committed-source hosted CI and normal release/runtime verification; no production mutation or deployment performed."
       ]
     },
     {
@@ -2764,7 +3047,7 @@
       "priority": "P1",
       "title": "The generic engine records sent before delivery and cannot reliably record failure",
       "batch": "notifications",
-      "status": "spec-review",
+      "status": "spec-approved",
       "owner": "hub_test_fixes",
       "acceptance": "A rejected send cannot leave sent status. A crash before, during and after provider acceptance converges without blind resend. The recorded message receipt belongs to the exact destination and operation.",
       "code_commits": [],
@@ -2772,7 +3055,8 @@
         "Read-only source recon: git show frozen commits plus grant inspection. No runtime execution or production send was performed."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S0-security-and-ledger"
+        "Parent source and cross-project contract review pending; S0-security-and-ledger",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -2826,22 +3110,26 @@
       "priority": "P1",
       "title": "A Gateway token can insert Pulse cards into an arbitrary organization",
       "batch": "notifications",
-      "status": "implementing",
+      "status": "locally-verified-awaiting-release",
       "owner": "hub_test_fixes",
       "acceptance": "An org-A token with org-B body receives 403 and writes zero rows. A shared Gateway may publish only to an org explicitly bound to that authenticated connection. Logs do not retain card bodies or recipient PII.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:ea15c6732e1e6775e53841d151e68038caec7766",
+        "gateway:c20f73964a46fec217f878b39cfca7f05f2954c7"
+      ],
       "tests": [
-        "Read-only source recon: frozen source data-flow trace. No runtime execution or production send was performed."
+        "Read-only source recon: frozen source data-flow trace. No runtime execution or production send was performed.",
+        "Narrow boundary: 110 focused Hub tests, 20 Gateway tool tests, full native11files208tests0skips. Parent exact-SQL negative control fails1of3; restored native authority/Pulse6of6 PASS. No production sends or writes."
       ],
       "reviews": [
         "Parent source and cross-project contract review pending; S0-security-and-ledger",
-        "Narrow tenant-boundary spec Standards and Spec PASS; audience portion of NOTIF-014 only. Remaining durable delivery tracked separately."
+        "Narrow tenant-boundary spec Standards and Spec PASS; audience portion of NOTIF-014 only. Remaining durable delivery tracked separately.",
+        "Parent source/blast-radius review PASS for narrow tenant/audience slice. Actual PostgreSQL negative control removing org predicate fails; exact source restored and 6 native cases PASS. Signed commit now created and SSH signature independently verified. Durable notification platform remains separate."
       ],
       "pull_requests": [],
-      "runtime": "not-qualified",
+      "runtime": "locally-qualified",
       "remaining": [
-        "Derive the org from authenticated server authority, reject any supplied mismatch before parsing cards, and bind the Gateway tool to its hydrated canonical org rather than an agent argument.",
-        "Two-pass specification approval, implementation, native tenant/receipt tests, actual UI evidence and release qualification."
+        "Independent hosted CI/release qualification and deployed tenant-boundary verification. Durable notification delivery remains separately tracked."
       ],
       "sourceAnchors": [
         {
@@ -2889,21 +3177,39 @@
       "priority": "P1",
       "title": "Notification and reminder settings can be enabled while both production ticks are unscheduled",
       "batch": "notifications",
-      "status": "spec-review",
+      "status": "partially-implemented",
       "owner": "hub_test_fixes",
       "acceptance": "Enabled settings show a current scheduler receipt and next run. A removed or stale schedule changes UI state to blocked/degraded. A scheduler retry cannot overlap or double-publish the same event.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:506d53ddaa50f224e9952ef9c32dd0e40174b1c5",
+        "hub:29b1856d43d89bebc7c619404f2401b61208cb97",
+        "hub:742c202a71ac5e7ed7a7c8449eb664102f9c7546",
+        "hub:f02189dd"
+      ],
       "tests": [
-        "Read-only source recon: compare vercel.json, canonical automation manifest and route comments. No runtime execution or production send was performed."
+        "Read-only source recon: compare vercel.json, canonical automation manifest and route comments. No runtime execution or production send was performed.",
+        "Slice 4: 63 focused tests, 16 native scheduler cases, and the complete jobs lane (16 files, 268 cases) pass with zero skips. Three deliberate source defects and four removed indexes fail their intended gates. Both adapter builds pass. Ten actual Node 22 process scenarios pass, including two database outages, crash takeover and shutdown during unfinished work. Final Hub check: zero errors and warnings. Cleanup: zero owned child databases, notification roles or worker sessions.",
+        "Actual settings components at1440px and390px: failed refresh retains5000+ queue, retry recovers, delayed workspaceA response cannot populateB. Final v6 mobile actions44px; Edit reveals heading and focuses Name below sticky header; Cancel restores row focus; reduced motion passes. Synthetic PageData/transport.11mounted tests include same-tick ownership and missing-identity denial.",
+        "Old signed S4 snapshot:1FAIL/33PASS because shared capture sanitizer dropped all notification worker fields; correction:34PASS, notification-slice4-monitoring-checkpoint.log.",
+        "Fresh isolated accepted source: PostgreSQL18 legacy10/10; SupabasePG17.6 bootstrap87 ledger+16 migrations through160000, pending0. Non-superuser ownership transfer and temporary-grant cleanup verified. Three disposable containers removed. This excludes in-progress Slice5 migration170000.",
+        "Hosted outbox CI correction f02189dd: parent accepted-source native14/14PASS; restoring old policy under sameANALYZE intentionally fails eligible-population sort bound. Current170000projectionWIP excluded. No p99 claim.",
+        "S5 focused native audience23/23 PASS. Exact CI-shaped combined jobs lane failed:275 pass,10 fail,13 pending out of298; scheduler regressions require diagnosis. Current S5 WIP is not included in remote Hub e1979fbd.",
+        "Pause clarification:10 scheduler failures came from old fixture routing schema; corrected fixture subsequently passed16/16 in isolation. Thirteen brain cases were pending because the full-lane command used minion_qc_vectors instead of required minion_qc_corpus. Complete298-case current-byte rerun remains required."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S1-durable-event-foundation"
+        "Parent source and cross-project contract review pending; S1-durable-event-foundation",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding.",
+        "Independent source review and parent native, compiled-process, adjacent-caller and mobile UI reviews pass for Slice 4. The final nullable-type correction produces identical client and server JavaScript/CSS. Signed commit 506d53dd; production audience projection and notification delivery remain pending.",
+        "Parent exact-snapshot audit caught omitted reviewed observability-context allowlist; corrective single-file signed commit includes finite operational fields without tenant identities or payloads. No release contained the omission.",
+        "Latest hosted native jobs run exposed an outbox query-plan Sort after ANALYZE; worker reproduced text-cast RLS causing bitmap scan/sort and is qualifying UUID-equality policy correction. No current hosted-green claim.",
+        "Parent signature/hash review accepts CI mutation contract and planner-safe UUID tenant predicate; restricted role, owner, generation and lease predicates preserved."
       ],
       "pull_requests": [],
-      "runtime": "not-qualified",
+      "runtime": "local-compiled-qualified; production projector pending",
       "remaining": [
-        "Admit durable worker jobs through the approved scheduler architecture, record heartbeat/next-run/last-success/last-failure receipts, and make enablement fail visibly when no runnable schedule exists.",
-        "Two-pass specification approval, implementation, native tenant/receipt tests, actual UI evidence and release qualification."
+        "Implement and qualify the Slice 5 audience projector. Production reports projection_unavailable until that adapter is admitted.",
+        "Complete recipient preferences, durable inbox, civil-time scheduling, source adapters, channel receipts and deployment qualification in remaining notification slices.",
+        "Resolve S5 combined scheduler failures and pending cases; final source/catalog/migration/worker review and cleanup receipt before acceptance."
       ],
       "sourceAnchors": [
         {
@@ -2951,21 +3257,28 @@
       "priority": "P1",
       "title": "A busy rule can silently discard every matching row after the first 500",
       "batch": "notifications",
-      "status": "spec-review",
-      "owner": "hub_test_fixes",
-      "acceptance": "A 501-row same-timestamp burst publishes all eligible events across bounded pages. Crash and resume starts after the last committed cursor, not wall-clock now. Every catalog event appears identically in settings, worker and validation code.",
-      "code_commits": [],
+      "status": "partially-implemented",
+      "owner": "root",
+      "acceptance": "A 501-row burst is consumed across bounded committed outbox row-state claims. Transaction B can commit before earlier transaction A; A remains eligible after its later commit. Crash reclaim and exact retries neither lose nor duplicate projection. The typed catalog governs source, validation and later settings/worker consumers.",
+      "code_commits": [
+        "hub:b6c10c621c51c3b12ca0c916f027250deb1ba79f"
+      ],
       "tests": [
-        "Read-only source recon: static cursor/window trace. No runtime execution or production send was performed."
+        "Read-only source recon: static cursor/window trace. No runtime execution or production send was performed.",
+        "Slice3 foundation:14/14 actual PostgreSQL cases including501 rows, commit inversion, crash reclaim and250-row malformed-page quarantine;100000-row production-emitted SQL plan gates and four deliberate failing source mutants. Combined jobs lane15files/252tests/zero skips passed."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S1-durable-event-foundation"
+        "Parent source and cross-project contract review pending; S1-durable-event-foundation",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding.",
+        "Independent source and native review accepted this foundation; legacy rules are not yet migrated, so their pagination defect remains open until producer/rule adoption.",
+        "Independent Sol source review and root native/source review accepted Slice3. Legacy pagination remains open untilproducer/rule adoption. Slice4 worker/health contract809a1e passedtwo-pass review and implementation is in progress."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": [
-        "Replace time-only watermarks with a stable `(event_time, event_id)` cursor or consume a transaction outbox in bounded pages. Make the typed catalog explicit and independent of imports.",
-        "Two-pass specification approval, implementation, native tenant/receipt tests, actual UI evidence and release qualification."
+        "The Slice 4 worker foundation is locally qualified and signed; implement and qualify Slice 5 audience projection next.",
+        "Wire qualified producers, worker, audience projection and typed rules; retire legacy pagination only after migration/reconciliation proof.",
+        "Signed integration commit, hosted CI and release qualification."
       ],
       "sourceAnchors": [
         {
@@ -3020,7 +3333,7 @@
       "priority": "P1",
       "title": "Scheduling reminders permanently suppress failed, crashed and ambiguous sends",
       "batch": "notifications",
-      "status": "spec-review",
+      "status": "spec-approved",
       "owner": "hub_test_fixes",
       "acceptance": "A stale sending claim is reclaimed by generation, not treated as delivered. Permanent provider rejection is visible and retry policy is explicit. Response loss never causes a blind second send.",
       "code_commits": [],
@@ -3028,7 +3341,8 @@
         "Read-only source recon: static state-machine trace. No runtime execution or production send was performed."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S2-delivery-effects"
+        "Parent source and cross-project contract review pending; S2-delivery-effects",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -3082,7 +3396,7 @@
       "priority": "P2",
       "title": "Low-stock alerts are permanent level alarms rather than threshold crossings",
       "batch": "notifications",
-      "status": "spec-review",
+      "status": "spec-approved",
       "owner": "hub_test_fixes",
       "acceptance": "Low, recover, low emits two crossing events. Oscillation inside the hysteresis band emits none. Concurrent stock commits create one event for one crossing.",
       "code_commits": [],
@@ -3090,7 +3404,8 @@
         "Read-only source recon: static source and dedupe trace. No runtime execution or production send was performed."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S4-requested-business-events"
+        "Parent source and cross-project contract review pending; S4-requested-business-events",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -3137,21 +3452,30 @@
       "priority": "P1",
       "title": "Notification rule data is readable by any tenant member and rule semantics are weakly validated",
       "batch": "notifications",
-      "status": "spec-review",
+      "status": "partially-implemented",
       "owner": "hub_test_fixes",
       "acceptance": "A member without manage receives 403 and no rule secrets. Every persisted rule validates as one catalog event with a typed audience and delivery policy. Changing only event/table/date fields cannot create an invalid merged rule.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:0ce7047575be721e2e4b4e2ef8ee7977f2bf7695"
+      ],
       "tests": [
-        "Read-only source recon: route/schema authority trace. No runtime execution or production send was performed."
+        "Read-only source recon: route/schema authority trace. No runtime execution or production send was performed.",
+        "Authority portion:28actual route/helper/mounted navigation cases pass;5actual PostgreSQL authority cases including2new comms cases pass; removing fresh denial yields8route failures, exact bytes restored.",
+        "Actual historical/current SettingsNav side-by-side: non-admin manager entry added, view-only entry absent; desktop1440/mobile390 zero overflow; mobile notification link44px.",
+        "S5 focused native audience23/23 PASS. Exact CI-shaped combined jobs lane failed:275 pass,10 fail,13 pending out of298; scheduler regressions require diagnosis. Current S5 WIP is not included in remote Hub e1979fbd.",
+        "Pause clarification:10 scheduler failures came from old fixture routing schema; corrected fixture subsequently passed16/16 in isolation. Thirteen brain cases were pending because the full-lane command used minion_qc_vectors instead of required minion_qc_corpus. Complete298-case current-byte rerun remains required."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S3-preferences-and-rule-builder"
+        "Parent source and cross-project contract review pending; S3-preferences-and-rule-builder",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding.",
+        "Slice2 authority independent Sol and parent source PASS;14-file manifest7440fc8b, clean configured Hub checkv11 0/0, exact-base design and token gates pass. Actual navigation browser evidence attached to NOTIF-007."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": [
-        "Gate rule reads and writes with explicit notification management capability, replace JSON unknowns with versioned typed conditions/audiences, validate the merged row, and reference canonical channel accounts.",
-        "Two-pass specification approval, implementation, native tenant/receipt tests, actual UI evidence and release qualification."
+        "Signed authority commit/release; broader typed catalog, policy and durable effect work remains open.",
+        "Typed catalog/merged rule validation, verified destinations and durable receipt/effect integration remain open in subsequent notification slices.",
+        "Resolve S5 combined scheduler failures and pending cases; final source/catalog/migration/worker review and cleanup receipt before acceptance."
       ],
       "sourceAnchors": [
         {
@@ -3199,7 +3523,7 @@
       "priority": "P2",
       "title": "The bell, notifications page and toast store are not a durable user notification inbox",
       "batch": "notifications",
-      "status": "spec-review",
+      "status": "spec-approved",
       "owner": "hub_test_fixes",
       "acceptance": "A user sees only notifications for which current membership and capability still permit the subject. Read state survives reload and another tab. A board artifact or agent inbox body never appears in the human bell without an explicit safe projection.",
       "code_commits": [],
@@ -3207,7 +3531,8 @@
         "Read-only source recon: UI state and server-loader inventory. No runtime execution or production send was performed."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S3-preferences-and-rule-builder"
+        "Parent source and cross-project contract review pending; S3-preferences-and-rule-builder",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -3275,21 +3600,29 @@
       "priority": "P1",
       "title": "The agent notify_user path bypasses notification policy, uses mismatched authority and drops subject",
       "batch": "notifications",
-      "status": "spec-review",
+      "status": "partially-implemented",
       "owner": "hub_test_fixes",
       "acceptance": "A view-only principal receives 403 before recipient lookup or send. Same operation replay returns the same receipt. Subject support is either implemented end to end or rejected at validation.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:0ce7047575be721e2e4b4e2ef8ee7977f2bf7695"
+      ],
       "tests": [
-        "Read-only source recon: cross-repo permission and payload trace. No runtime execution or production send was performed."
+        "Read-only source recon: cross-repo permission and payload trace. No runtime execution or production send was performed.",
+        "Authority portion:28actual route/helper/mounted navigation cases pass;5actual PostgreSQL authority cases including2new comms cases pass; removing fresh denial yields8route failures, exact bytes restored.",
+        "S5 focused native audience23/23 PASS. Exact CI-shaped combined jobs lane failed:275 pass,10 fail,13 pending out of298; scheduler regressions require diagnosis. Current S5 WIP is not included in remote Hub e1979fbd.",
+        "Pause clarification:10 scheduler failures came from old fixture routing schema; corrected fixture subsequently passed16/16 in isolation. Thirteen brain cases were pending because the full-lane command used minion_qc_vectors instead of required minion_qc_corpus. Complete298-case current-byte rerun remains required."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S2-delivery-effects"
+        "Parent source and cross-project contract review pending; S2-delivery-effects",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding.",
+        "Slice2 authority independent Sol and parent source PASS;14-file manifest7440fc8b, clean configured Hub checkv11 0/0, exact-base design and token gates pass. Actual navigation browser evidence attached to NOTIF-007."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": [
-        "Require the same create/send capability at tool and route, admit a stable user-approved operation into the durable delivery ledger, apply preferences and verified destinations, and expose only receipt-backed status.",
-        "Two-pass specification approval, implementation, native tenant/receipt tests, actual UI evidence and release qualification."
+        "Signed authority commit/release; broader typed catalog, policy and durable effect work remains open.",
+        "Typed catalog/merged rule validation, verified destinations and durable receipt/effect integration remain open in subsequent notification slices.",
+        "Resolve S5 combined scheduler failures and pending cases; final source/catalog/migration/worker review and cleanup receipt before acceptance."
       ],
       "sourceAnchors": [
         {
@@ -3337,7 +3670,7 @@
       "priority": "P1",
       "title": "Gateway release notifications are best-effort fan-out with version-wide loss and incomplete release provenance",
       "batch": "notifications",
-      "status": "spec-review",
+      "status": "spec-approved",
       "owner": "hub_test_fixes",
       "acceptance": "An unavailable target can retry without re-notifying successful targets. The same release+recipient is delivered at most once after a receipt. Unreleased, rolled-back or mismatched-digest revisions do not enter the user catalog.",
       "code_commits": [],
@@ -3345,7 +3678,8 @@
         "Read-only source recon: git show Gateway HEAD and compare concurrent diff. No runtime execution or production send was performed."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S6-release-notifications"
+        "Parent source and cross-project contract review pending; S6-release-notifications",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -3406,7 +3740,7 @@
       "priority": "P2",
       "title": "Pulse settings do not create the configured briefing and approved actions lack executed receipts",
       "batch": "notifications",
-      "status": "spec-review",
+      "status": "spec-approved",
       "owner": "hub_test_fixes",
       "acceptance": "Enabling or changing time creates/updates one canonical job and disabling removes it. DST/civil-time behavior is explicit and tested. Approved, executed and failed remain distinct states backed by exact receipts.",
       "code_commits": [],
@@ -3414,7 +3748,8 @@
         "Read-only source recon: cross-repo settings consumer search and action trace. No runtime execution or production send was performed."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S4-requested-business-events"
+        "Parent source and cross-project contract review pending; S4-requested-business-events",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -3475,21 +3810,28 @@
       "priority": "P1",
       "title": "Hub's deploy migration directory omits the notification and reminder migrations",
       "batch": "notifications",
-      "status": "spec-review",
+      "status": "locally-verified-awaiting-release",
       "owner": "hub_test_fixes",
       "acceptance": "An empty disposable PostgreSQL database reaches the exact schema through Hub's canonical runner. A legacy database with existing tables reconciles without destructive recreation or false ledger claims. RLS, grants, constraints and indexes are asserted on the actual migrated catalog.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:5bd129a1ae49e0b72ff522ff1a48bb52a07ca002",
+        "hub:742c202a71ac5e7ed7a7c8449eb664102f9c7546"
+      ],
       "tests": [
-        "Read-only source recon: git ls-files and Hub runner source comparison. No runtime execution or production send was performed."
+        "Read-only source recon: git ls-files and Hub runner source comparison. No runtime execution or production send was performed.",
+        "Exact historical fixture prefixes and supported QA baseline: actual migration runner, 10 passing native cases, zero skips; four source mutants rejected; zero remaining child databases or fixture roles.",
+        "The final complete jobs lane passes all 268 cases across 16 files, with zero skips. The configured Hub check reports zero errors and warnings. Signed commit 5bd129a1 includes the reviewed fixture cleanup changes.",
+        "Fresh isolated accepted source: PostgreSQL18 legacy10/10; SupabasePG17.6 bootstrap87 ledger+16 migrations through160000, pending0. Non-superuser ownership transfer and temporary-grant cleanup verified. Three disposable containers removed. This excludes in-progress Slice5 migration170000."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S0-security-and-ledger"
+        "Parent source and cross-project contract review pending; S0-security-and-ledger",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding.",
+        "Parent source/blast-radius PASS for reconciliation migration e79a5699; actual reminder finalize and booking-delete callers traced. Minimal prefix fixtures isolate this migration; full supported baseline is the separate runner integration proof."
       ],
       "pull_requests": [],
-      "runtime": "not-qualified",
+      "runtime": "local-native-qualified",
       "remaining": [
-        "Adopt additive Hub-owned migrations with exact historical-state reconciliation and real fresh-schema qualification. Do not copy old IF NOT EXISTS files blindly without recording whether their versions were already applied outside hub_migrations.",
-        "Two-pass specification approval, implementation, native tenant/receipt tests, actual UI evidence and release qualification."
+        "Hosted CI, merge, deployment and post-release verification."
       ],
       "sourceAnchors": [
         {
@@ -3537,7 +3879,7 @@
       "priority": "P2",
       "title": "There is no configurable financial daily summary; only a global best-effort sync-failure alert",
       "batch": "notifications",
-      "status": "spec-review",
+      "status": "spec-approved",
       "owner": "hub_test_fixes",
       "acceptance": "A failed/in-progress sync never masquerades as a financial summary. A completed summary contains only fields the recipient may view. One org's configured destination cannot receive another org's summary or failure detail.",
       "code_commits": [],
@@ -3545,7 +3887,8 @@
         "Read-only source recon: route and scheduler inventory. No runtime execution or production send was performed."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S4-requested-business-events"
+        "Parent source and cross-project contract review pending; S4-requested-business-events",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -3599,16 +3942,20 @@
       "priority": "P1",
       "title": "Join-request email sends requester identity to every global profile admin, not target-org managers",
       "batch": "notifications",
-      "status": "implementing",
+      "status": "partially-implemented",
       "owner": "hub_test_fixes",
       "acceptance": "Admins outside the target org receive no row and no external delivery. Target-org managers without users:manage receive none. Audience revocation before dispatch prevents later publication.",
-      "code_commits": [],
+      "code_commits": [
+        "hub:ea15c6732e1e6775e53841d151e68038caec7766"
+      ],
       "tests": [
-        "Read-only source recon: Supabase query scope trace. No runtime execution or production send was performed."
+        "Read-only source recon: Supabase query scope trace. No runtime execution or production send was performed.",
+        "Narrow boundary: 110 focused Hub tests, 20 Gateway tool tests, full native11files208tests0skips. Parent exact-SQL negative control fails1of3; restored native authority/Pulse6of6 PASS. No production sends or writes."
       ],
       "reviews": [
         "Parent source and cross-project contract review pending; S0-security-and-ledger",
-        "Narrow tenant-boundary spec Standards and Spec PASS; audience portion of NOTIF-014 only. Remaining durable delivery tracked separately."
+        "Narrow tenant-boundary spec Standards and Spec PASS; audience portion of NOTIF-014 only. Remaining durable delivery tracked separately.",
+        "Parent source/blast-radius review PASS for narrow tenant/audience slice. Actual PostgreSQL negative control removing org predicate fails; exact source restored and 6 native cases PASS. Signed commit now created and SSH signature independently verified. Durable notification platform remains separate."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -3662,7 +4009,7 @@
       "priority": "P2",
       "title": "Requested, approved and activated membership are not distinct durable events",
       "batch": "notifications",
-      "status": "spec-review",
+      "status": "spec-approved",
       "owner": "hub_test_fixes",
       "acceptance": "Approval without effective role activation cannot emit membership.activated. Applicant receives exactly one outcome for a request or invite operation. Retrying approval does not create a second activation event.",
       "code_commits": [],
@@ -3670,7 +4017,8 @@
         "Read-only source recon: join write-path inventory. No runtime execution or production send was performed."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S4-requested-business-events"
+        "Parent source and cross-project contract review pending; S4-requested-business-events",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -3724,7 +4072,7 @@
       "priority": "P2",
       "title": "Hub has status-bearing records but no notification subscription registry",
       "batch": "notifications",
-      "status": "spec-review",
+      "status": "spec-approved",
       "owner": "hub_test_fixes",
       "acceptance": "A user can subscribe to an authorized subject and selected terminal/transitional states. Losing subject access removes visibility and prevents later external dispatch. A guessed cross-org subject ID creates no subscription and leaks no existence.",
       "code_commits": [],
@@ -3732,7 +4080,8 @@
         "Read-only source recon: schema/service inventory plus negative symbol search. No runtime execution or production send was performed."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S4-requested-business-events"
+        "Parent source and cross-project contract review pending; S4-requested-business-events",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -3779,7 +4128,7 @@
       "priority": "P2",
       "title": "Agent-defined report rules and visual artifacts have no durable notification authority model",
       "batch": "notifications",
-      "status": "spec-review",
+      "status": "spec-approved",
       "owner": "hub_test_fixes",
       "acceptance": "Creator revocation before query prevents execution; recipient revocation before publication prevents delivery. Role audiences receive per-recipient field masking and brain-source checks. Visual notifications link to an auth-checked immutable snapshot and never attach executable artifact HTML.",
       "code_commits": [],
@@ -3787,7 +4136,8 @@
         "Read-only source recon: assistant query and artifact boundary trace. No runtime execution or production send was performed."
       ],
       "reviews": [
-        "Parent source and cross-project contract review pending; S5-agent-defined-reports"
+        "Parent source and cross-project contract review pending; S5-agent-defined-reports",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -3848,21 +4198,36 @@
       "priority": "P1",
       "title": "Pending join-request lookup ignores organization despite per-org uniqueness",
       "batch": "notifications",
-      "status": "spec-review",
-      "owner": "hub_test_fixes",
+      "status": "implemented-awaiting-release",
+      "owner": "root",
       "acceptance": [
         "A pending request for organization A does not block or satisfy a request for organization B; B receives its own row and receipt.",
         "Retrying organization B returns only B's pending request, while approval or denial remains bound to the exact request organization.",
         "The generic join page handles zero, one and multiple legal pending requests without maybeSingle ambiguity or disclosure of another organization's private data."
       ],
-      "code_commits": [],
-      "tests": [],
+      "code_commits": [
+        "hub:515c1ae3c1d2f3c926bda9fa8c1e2db526a42aa8"
+      ],
+      "tests": [
+        "58 focused cases passed across nine files, including bounded-form parsing, exact-target membership/pending reads and stale-form rejection.",
+        "Nine real PostgreSQL cases pass on a marked disposable database, including two-organization create/retry, eight concurrent requests, exact-target read, own-only bounded list and safe errors.",
+        "Removing the create/retry organization predicate fails the native regression; independently removing the target-aware read predicate also fails. Exact bytes restored and nine native cases pass.",
+        "Actual component before/after evidence shows the historical Request sent claim with no records, the corrected explicit empty state, multiple workspace names and the final 44px refresh control reachable at390px. Synthetic data, local Chromium; no production write.",
+        "Coherent configured Hub check v9: zero errors and warnings. Exact-base design correction replaces the new literal icon size with the sanctioned same-size token constant.",
+        "Exact final same-size semantic icon source captured in v3: 50-row final action44px at390px, failed refresh then successful real retry; source/font manifest attached.",
+        "Exact staged tree a3320c32: native ownership/job admission 2 files6 tests PASS using installed Vitest4.1.11. Signed commit515c1ae3 cryptographically verified against allowed signer. Prior9 native behaviors and actual-component evidence remain the behavior qualification."
+      ],
       "reviews": [
-        "Frozen source and schema independently confirmed by root; no production mutation."
+        "Frozen source and schema independently confirmed by root; no production mutation.",
+        "Broad platform spec aff602 received independent Standards PASS and root final Spec PASS; implementation qualification remains outstanding.",
+        "Independent Sol review caught aggregate pending-state redirect blocking another workspace. Corrected exact target membership/pending read and stale-form target conflict; incremental review pending.",
+        "Final independent Sol and parent PASS bind 23-file manifest ae941bd2 and packet b2a68327. Shared locale drift is the separately owned additive POS refresh-failure key; 21 nonshared hashes match."
       ],
       "pull_requests": [],
-      "runtime": "not-qualified",
-      "remaining": [],
+      "runtime": "local-synthetic-component-and-disposable-postgresql",
+      "remaining": [
+        "Exact-source hosted CI and normal release verification; no production deployment claimed."
+      ],
       "summary": "The database explicitly permits one pending request per user and organization, but createRequest searches only by user and pending status and returns whichever single row it sees. The generic pending lookup has the same user-only shape and uses maybeSingle, which becomes ambiguous when the allowed second organization row exists.",
       "impact": "A pending request for organization A can prevent a request for organization B, return A's receipt to a B request, or make the generic join page lose its pending state once both rows exist. This crosses request identity between tenants even though approval and the database uniqueness rule are organization-scoped.",
       "lenses": [
@@ -3903,12 +4268,1045 @@
           "detail": "The no-token page redirects on a user-only pending lookup, while its request action independently selects a concrete target organization."
         }
       ]
+    },
+    {
+      "id": "GW-023",
+      "priority": "P0",
+      "title": "Raw agent and run-metadata streams bypass the chat tenant-audience guard",
+      "batch": "gateway-security",
+      "status": "implemented-awaiting-commit",
+      "summary": "Actual agent handler sends org A assistant text and pi-agent.run-start metadata to org B through the parallel raw stream, while the chat frame is correctly scoped.",
+      "impact": "Cross-organization disclosure of assistant content, session identity and run/tool metadata.",
+      "lenses": [
+        "CTO",
+        "Product owner",
+        "Power user"
+      ],
+      "acceptance": [
+        "Actual handler→broadcaster tests deny foreign/unassigned recipients for all protected stream names.",
+        "Targeted tool frames and sequence-gap diagnostics preserve the same audience boundary.",
+        "Unknown audience fails closed for tenant users; approved platform and legacy compatibility remains intact."
+      ],
+      "sourceAnchors": [
+        {
+          "repo": "gateway",
+          "path": "src/gateway/server-core/server-broadcast.ts",
+          "lines": "125-160",
+          "repoCommit": "98767f4de",
+          "note": "Only chat requires a server-derived organization audience."
+        },
+        {
+          "repo": "gateway",
+          "path": "src/gateway/server-core/server-chat.ts",
+          "lines": "457-478",
+          "repoCommit": "98767f4de",
+          "note": "Raw agent payload contains text/session key and bypasses the scoped chat publication."
+        },
+        {
+          "repo": "gateway",
+          "path": "src/infra/agent-events.ts",
+          "lines": "5-12",
+          "repoCommit": "98767f4de",
+          "note": "AgentEventPayload has no top-level agent ID for the fallback filter."
+        }
+      ],
+      "code_commits": [],
+      "tests": [
+        "Parent baseline: actual handler→broadcaster regression fails, observing 2 foreign-organization frames; gw023-agent-event-baseline.log."
+      ],
+      "reviews": [
+        "Root implementation and independent Sol review passed. Actual agent event handler/broadcaster audience proof: 53 neighbor tests pass; removing guard yields 10 failing tests. No production messages."
+      ],
+      "remaining": [
+        "Signed commit and exact-source CI/release qualification."
+      ],
+      "runtime": "synthetic-handler-broadcaster-qualified"
+    },
+    {
+      "id": "GW-024",
+      "priority": "P0",
+      "title": "Linked non-admin browsers receive a gateway admin secret and can omit the tenant JWT",
+      "batch": "gateway-security",
+      "status": "spec-approved",
+      "summary": "The server-token endpoint discloses the shared gateway credential after a non-admin user link check. The gateway maps that credential without a JWT to platform-admin scope. The Hub also intentionally drops JWT after token errors.",
+      "impact": "An approved non-admin user can bypass tenant and role restrictions by using the provided admin credential without the additive JWT.",
+      "lenses": [
+        "CTO",
+        "Product owner",
+        "Power user"
+      ],
+      "acceptance": [
+        "Non-admin browser admission uses a scoped expiring identity credential and never receives a gateway admin secret.",
+        "Gateway admits verified scoped JWT credentials without requiring an admin-secret bootstrap; missing/failed JWT cannot silently escalate browser identity.",
+        "Platform/CLI/service-account compatibility and already-exposed credential rotation are separately qualified."
+      ],
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "path": "src/routes/api/servers/[id]/token/+server.ts",
+          "lines": "85-105",
+          "repoCommit": "eb6867db",
+          "note": "Linked non-admin users pass token-disclosure gate."
+        },
+        {
+          "repo": "hub",
+          "path": "src/lib/services/gateway.svelte.ts",
+          "lines": "397-424",
+          "repoCommit": "eb6867db",
+          "note": "Baseline challenge treats org JWT as best effort while supplying shared operator token; current session WIP retains this behavior."
+        },
+        {
+          "repo": "gateway",
+          "path": "src/gateway/server/ws-jwt-auth.ts",
+          "lines": "110-145",
+          "repoCommit": "85fe0f6a8",
+          "note": "Missing JWT plus shared token yields platform-admin role/scopes."
+        }
+      ],
+      "code_commits": [],
+      "tests": [
+        "Actual Hub token route, Site layout and Gateway identity resolver: three synthetic baseline proofs pass, confirming the current privilege bypass; no real credentials or production writes."
+      ],
+      "reviews": [
+        "Parent confirmed the cross-repo credential flow from source; independent Sol reproduction/contract assigned.",
+        "Two-pass contract PASS on author cfc51922. Exact caller inventory includes all seven global reliability read methods plus plugins; no platform authority on tenant sockets."
+      ],
+      "remaining": [
+        "Implement and qualify all browser/server/operator callers.",
+        "Rotate previously disclosed credentials under a concrete production release plan."
+      ],
+      "runtime": "source-confirmed-no-production-exploit-test"
+    },
+    {
+      "id": "GW-025",
+      "priority": "P1",
+      "title": "Orchestration manifests and filesystem selectors lack tenant ownership",
+      "batch": "gateway-security",
+      "status": "spec-approved",
+      "owner": "gateway_fixes",
+      "summary": "Orchestration list/get and in-agent gather share per-agent manifests across organizations. Caller-supplied identifiers and mutable output paths can cross filesystem boundaries.",
+      "impact": "Cross-organization access to run outputs and possible unintended file reads or cleanup; same-agent assignments cannot establish ownership.",
+      "lenses": [
+        "CTO",
+        "Product owner",
+        "Power user"
+      ],
+      "acceptance": [
+        "Same agent in two organizations returns only authoritative organization-owned records.",
+        "Creation reserves durable ownership before any filesystem or provider effect.",
+        "Traversal, symlink and writable-ancestor swap tests prove zero outside read/write/delete.",
+        "Unknown legacy ownership is explicit and requires operator qualification; failures never become empty success."
+      ],
+      "sourceAnchors": [
+        {
+          "repo": "gateway",
+          "path": "src/gateway/server-methods/orchestrations.ts",
+          "lines": "56-73",
+          "repoCommit": "85fe0f6a8",
+          "note": "List selects a shared agent workspace without an organization-owned manifest registry."
+        },
+        {
+          "repo": "gateway",
+          "path": "src/gateway/server-methods/orchestrations.ts",
+          "lines": "105-127",
+          "repoCommit": "85fe0f6a8",
+          "note": "Detail joins caller-selected orchestration ID into a filesystem path."
+        },
+        {
+          "repo": "gateway",
+          "path": "src/gateway/server-methods/pi-agent.ts",
+          "lines": "442-457",
+          "repoCommit": "85fe0f6a8",
+          "note": "RPC creation uses the shared main session and defaults an omitted agent after dispatch authorization."
+        },
+        {
+          "repo": "gateway",
+          "path": "src/agents/subagents/orchestration/orchestration-output.ts",
+          "lines": "18-33",
+          "repoCommit": "85fe0f6a8",
+          "note": "Caller ID is used for recursive directory creation."
+        },
+        {
+          "repo": "gateway",
+          "path": "src/agents/subagents/orchestration/orchestration-gather.ts",
+          "lines": "129-139",
+          "repoCommit": "85fe0f6a8",
+          "note": "Gather may recursively clean up the selected directory."
+        },
+        {
+          "repo": "gateway",
+          "path": "src/agents/subagents/orchestration/orchestration-gather.ts",
+          "lines": "159-168",
+          "repoCommit": "85fe0f6a8",
+          "note": "Gather reads a mutable manifest outputDir."
+        }
+      ],
+      "code_commits": [
+        "gateway:e46d7f630fd48dc66b1c228b90d9b37cfeb0bc87"
+      ],
+      "tests": [
+        "24 actual SQLite cases: process contention, restart, punctuation/digit identifiers, physical-cap preflight,50,001-row rejection, trigger/CAS and fault behavior."
+      ],
+      "reviews": [
+        "Sol source audit confirmed live Hub list/get and internal tool callers; root contract review requires durable ownership and descriptor-rooted path safety.",
+        "Orchestration contract ae471b85 passed independent Sol Standards and parent Spec review. GW022A native prerequisite and GW024 credential-class integration remain explicit gates.",
+        "Standalone SQLite authority module accepted by parent after correcting binary-versus-locale counter ordering and pre-scan capacity admission. Manifestbd78c6e9;24 actual SQLite cases pass with type/lint checks. No runtime caller is wired yet.",
+        "Bounded orchestration authority store checkpoint signed and verified on its exact10-file manifest; this substrate has no production imports yet and does not close endpoint/lifecycle authority integration."
+      ],
+      "remaining": [
+        "Implement reviewed contract and qualify exact native package prerequisite.",
+        "Implement tenant registry, safe filesystem access and Hub unavailable/retry behavior.",
+        "Run real dispatcher/tool, SQLite, adversarial filesystem and mounted UI qualification.",
+        "Amend initial-publish crash recovery and pinned import manifest contract, then integrate descriptor-relative native package; standalone authority module does not close this finding."
+      ],
+      "runtime": "source-confirmed-no-production-exploit-test"
+    },
+    {
+      "id": "SITE-001",
+      "priority": "P1",
+      "title": "Prelocalized anchors acquire a second English prefix and break prerender",
+      "batch": "site-integration",
+      "status": "hosted-verified-awaiting-release",
+      "owner": "hub_client_fixes",
+      "summary": "Build or navigate the English marketing/auth surface while a shared component emits an already localized href such as /en/login.",
+      "impact": "English navigation points at fabricated /en/en/* routes and the production prerender cannot complete, blocking a qualified release artifact.",
+      "lenses": [
+        "Site operator",
+        "English visitor",
+        "Release engineer"
+      ],
+      "acceptance": "Render Navbar, Footer, AuthShell and auth cross-links through the installed Vite/Paraglide integration in both locales; assert one English prefix, no Spanish prefix, correct language switches and homepage section targets. Build all eight prerender pages and assert exit zero with no /en/en link or crawl request.",
+      "sourceAnchors": [
+        {
+          "repo": "site",
+          "path": "src/lib/i18n.ts",
+          "lines": "29-36",
+          "detail": "localizedPath canonicalizes and resolves a path to a locale-prefixed URL before it reaches an anchor.",
+          "repoCommit": "7f4c3b25679e9aaa622ad695c95069fe97d00c20"
+        },
+        {
+          "repo": "site",
+          "path": "src/lib/components/layout/Navbar.svelte",
+          "lines": "27-36,50-53,73,101",
+          "detail": "Navbar supplies localizedPath results to ordinary anchors; the installed Paraglide anchor context localizes those hrefs again.",
+          "repoCommit": "7f4c3b25679e9aaa622ad695c95069fe97d00c20"
+        },
+        {
+          "repo": "site",
+          "path": "src/lib/components/layout/Footer.svelte",
+          "lines": "7-8,38-42,60-65",
+          "detail": "Footer resolves privacy, terms and data-deletion paths before passing them to ordinary anchors.",
+          "repoCommit": "7f4c3b25679e9aaa622ad695c95069fe97d00c20"
+        },
+        {
+          "repo": "site",
+          "path": "src/lib/components/layout/AuthShell.svelte",
+          "lines": "25-39",
+          "detail": "Auth chrome prelocalizes both home and language-switch targets before anchor translation.",
+          "repoCommit": "7f4c3b25679e9aaa622ad695c95069fe97d00c20"
+        },
+        {
+          "repo": "site",
+          "path": "src/routes/(app)/login/+page.svelte",
+          "lines": "116-119",
+          "detail": "The login-to-register anchor is prelocalized; register has the symmetric pattern at lines 133-136.",
+          "repoCommit": "7f4c3b25679e9aaa622ad695c95069fe97d00c20"
+        }
+      ],
+      "code_commits": [
+        "site:8cefc800670a1319d4076cf970eab9dcfb48c0ac",
+        "site:ee0f4ae205ec347c157300c973399225ec0003d3",
+        "site:fa2638b45c0d77e54a0a5019be8f54618e7d3f16"
+      ],
+      "tests": [
+        "Baseline and candidate production builds fail on /en/en/ after successful bundle compilation.",
+        "Actual Vite/Paraglide mounted anchors: eight cases pass, including English mobile Navbar and Spanish Footer; old source fails six of eight.",
+        "Production Site build completes eight prerender pages, zero /en/en links; full Site check zero errors/warnings and 33 separate unit cases pass.",
+        "Exact staged product source: 33 ordinary and 86 locale/authentication cases PASS; final archive format/design/token gates and 4 token tests PASS. Source review and 8-file formatter-output equivalence verified. These receipts predate the current dev integration.",
+        "Installed readiness.2 shared artifact consumer suite: 8 files / 34 cases PASS, including exact archive/runtime/declaration bytes.",
+        "Exact signed Site fa2638b4: hosted check-and-build SUCCESS, run37148934173. Local merge:55 Vitest +86 locale/auth +11 Node checks; final NODE_OPTIONS defense separately5PASS parent and actual compile. Counts describe separate gates, not total unique coverage."
+      ],
+      "reviews": [
+        "Sol source audit: reproduced.",
+        "Independent Standards and parent Spec PASS on a84ba08; implementation authorized.",
+        "Parent verified all19 source hashes in manifest dd0e7808 and receipt corrections; packet34b1feca accepted.",
+        "Signed draft PR33 conflicts with newer dev 5be5ff6. Hosted CI has not run; Vercel preview failed. Integration must preserve upstream Gateway failure visibility, authentication error handling, formatting gates and dependency removals while retaining this branch ownership fences.",
+        "Parent merge review PASS: preserves upstream auth containment, diagnostics, dependency cleanup and formatting CI with accepted owner/locale/redirect fences.79 path hashes verified; signed exact parents."
+      ],
+      "remaining": [
+        "Vercel preview fails its project collaboration gate. Merge/release and authenticated live journeys remain unqualified."
+      ],
+      "runtime": "local-build-and-component-qualified",
+      "pull_requests": [
+        "https://github.com/NikolasP98/minion-site/pull/33"
+      ]
+    },
+    {
+      "id": "SITE-002",
+      "priority": "P1",
+      "title": "OAuth callback redirects to an unvalidated next target",
+      "batch": "site-integration",
+      "status": "hosted-verified-awaiting-release",
+      "owner": "hub_client_fixes",
+      "summary": "Open login with an attacker-controlled redirectTo, complete Google OAuth, and return through /auth/callback with that value as next; ordinary auth navigation also crosses locale boundaries through raw fixed paths.",
+      "impact": "A successful authentication can send a user to an attacker-chosen destination, and legitimate authentication flows can silently leave the active locale or lose the intended route.",
+      "lenses": [
+        "Security engineer",
+        "Authenticated visitor",
+        "Localization owner"
+      ],
+      "acceptance": "Table-test local paths with query/hash and both locales; reject https/http, //host, encoded slash/backslash, credentials, control characters and malformed encodings. Exercise password and OAuth success/error callbacks end to end and assert the final Location stays same-origin and retains the approved localized route.",
+      "sourceAnchors": [
+        {
+          "repo": "site",
+          "path": "src/routes/(app)/login/+page.svelte",
+          "lines": "23,30-37,45-55",
+          "detail": "redirectTo is read directly from the query, used for password goto, and embedded as the OAuth callback next value without an application-path allowlist.",
+          "repoCommit": "7f4c3b25679e9aaa622ad695c95069fe97d00c20"
+        },
+        {
+          "repo": "site",
+          "path": "src/routes/auth/callback/+server.ts",
+          "lines": "7-10,12-25",
+          "detail": "The callback reads next from the request and issues a 303 redirect to it after establishing the session.",
+          "repoCommit": "7f4c3b25679e9aaa622ad695c95069fe97d00c20"
+        },
+        {
+          "repo": "site",
+          "path": "src/routes/(app)/register/+page.svelte",
+          "lines": "39-50,58-68",
+          "detail": "Successful registration and OAuth signup use fixed unlocalized /members targets, showing the adjacent locale-loss side of the same programmatic-navigation boundary.",
+          "repoCommit": "7f4c3b25679e9aaa622ad695c95069fe97d00c20"
+        },
+        {
+          "repo": "site",
+          "path": "src/routes/(app)/members/+layout.server.ts",
+          "lines": "7-10",
+          "detail": "The auth guard redirects to unlocalized /login and does not retain the requested localized destination.",
+          "repoCommit": "7f4c3b25679e9aaa622ad695c95069fe97d00c20"
+        }
+      ],
+      "code_commits": [
+        "site:8cefc800670a1319d4076cf970eab9dcfb48c0ac",
+        "site:ee0f4ae205ec347c157300c973399225ec0003d3",
+        "site:fa2638b45c0d77e54a0a5019be8f54618e7d3f16"
+      ],
+      "tests": [
+        "Parent negative: four split-hex encodings passed parser; dot-segment vector resolved to /privacy outside permitted members subtree. Original failing log preserved.",
+        "Corrected v2:6 files80 focused tests PASS, actual callback and mounted password/OAuth vectors included; standard33PASS, configured check0errors0warnings, production buildPASS. Parent33-file hashes match.",
+        "Root v3 rerun:6 files86 tests PASS, including mounted deferred A-to-B-to-A, unmount, stale OAuth and replacement busy-state cases; site002-003-parent-v3-focused.log. Tests exposed external PostHog flush tail and CI omission; both under correction before signing.",
+        "Exact staged product source: 33 ordinary and 86 locale/authentication cases PASS; final archive format/design/token gates and 4 token tests PASS. Source review and 8-file formatter-output equivalence verified. These receipts predate the current dev integration.",
+        "Exact signed Site fa2638b4: hosted check-and-build SUCCESS, run37148934173. Local merge:55 Vitest +86 locale/auth +11 Node checks; final NODE_OPTIONS defense separately5PASS parent and actual compile. Counts describe separate gates, not total unique coverage."
+      ],
+      "reviews": [
+        "Sol source audit: source-confirmed. Root rates open redirect P1; no cross-tenant/session theft demonstrated.",
+        "Independent Sol Standards and root Spec PASS; canonical approved specs and review receipts recorded2026-10-03. Actual handlers/mounted/head output and regression-negative proofs required before acceptance.",
+        "Root reproduced and rejected v1 encoded-path escape. v2 canonical routing correction passes source review; adjacent late-auth continuation ownership is under review before final client acceptance.",
+        "Signed draft PR33 conflicts with newer dev 5be5ff6. Hosted CI has not run; Vercel preview failed. Integration must preserve upstream Gateway failure visibility, authentication error handling, formatting gates and dependency removals while retaining this branch ownership fences.",
+        "Parent merge review PASS: preserves upstream auth containment, diagnostics, dependency cleanup and formatting CI with accepted owner/locale/redirect fences.79 path hashes verified; signed exact parents."
+      ],
+      "remaining": [
+        "Vercel preview fails its project collaboration gate. Merge/release and authenticated live journeys remain unqualified."
+      ],
+      "runtime": "source-confirmed-no-production-exploit-test",
+      "pull_requests": [
+        "https://github.com/NikolasP98/minion-site/pull/33"
+      ]
+    },
+    {
+      "id": "SITE-003",
+      "priority": "P2",
+      "title": "Marketing pages emit duplicate locale alternates and an English x-default despite a Spanish default",
+      "batch": "site-integration",
+      "status": "hosted-verified-awaiting-release",
+      "owner": "hub_client_fixes",
+      "summary": "Render any marketing page in either locale and inspect its head metadata.",
+      "impact": "Search engines receive redundant alternate declarations and an x-default policy that conflicts with the configured Spanish-first default; maintainers have two authorities that can drift independently.",
+      "lenses": [
+        "SEO owner",
+        "Spanish-first visitor",
+        "Site maintainer"
+      ],
+      "acceptance": "Render every prerendered marketing route in both locales and assert exactly one self-consistent en/es alternate pair and one policy-approved x-default; assert auth/API pages follow the explicit inclusion policy and emitted absolute URLs are canonical.",
+      "sourceAnchors": [
+        {
+          "repo": "site",
+          "path": "src/routes/+layout.svelte",
+          "lines": "7-10,24-26",
+          "detail": "The root layout wraps every page in ParaglideJS, whose installed component emits one alternate per configured language.",
+          "repoCommit": "7f4c3b25679e9aaa622ad695c95069fe97d00c20"
+        },
+        {
+          "repo": "site",
+          "path": "src/routes/(marketing)/+layout.svelte",
+          "lines": "11-26",
+          "detail": "The marketing layout independently emits en/es alternates plus an x-default URL resolved explicitly to English.",
+          "repoCommit": "7f4c3b25679e9aaa622ad695c95069fe97d00c20"
+        },
+        {
+          "repo": "site",
+          "path": "src/lib/i18n.ts",
+          "lines": "16-26",
+          "detail": "The configured default is Spanish with no prefix, while the stale outer comment says English is unprefixed and Spanish lives under /es.",
+          "repoCommit": "7f4c3b25679e9aaa622ad695c95069fe97d00c20"
+        }
+      ],
+      "code_commits": [
+        "site:8cefc800670a1319d4076cf970eab9dcfb48c0ac",
+        "site:ee0f4ae205ec347c157300c973399225ec0003d3",
+        "site:fa2638b45c0d77e54a0a5019be8f54618e7d3f16"
+      ],
+      "tests": [
+        "Actual production prerender v2:8 marketing documents each have exactly en/es/x-default alternates, canonical https://www.minion-ai.org host, Spanish x-default; build/check and focused tests pass.",
+        "Exact staged product source: 33 ordinary and 86 locale/authentication cases PASS; final archive format/design/token gates and 4 token tests PASS. Source review and 8-file formatter-output equivalence verified. These receipts predate the current dev integration.",
+        "Exact signed Site fa2638b4: hosted check-and-build SUCCESS, run37148934173. Local merge:55 Vitest +86 locale/auth +11 Node checks; final NODE_OPTIONS defense separately5PASS parent and actual compile. Counts describe separate gates, not total unique coverage."
+      ],
+      "reviews": [
+        "Sol source audit: reproduced.",
+        "Independent Sol Standards and root Spec PASS; canonical approved specs and review receipts recorded2026-10-03. Actual handlers/mounted/head output and regression-negative proofs required before acceptance.",
+        "Root source and33-file v2 manifest confirmed; metadata authority isolated from redirect correction.",
+        "Signed draft PR33 conflicts with newer dev 5be5ff6. Hosted CI has not run; Vercel preview failed. Integration must preserve upstream Gateway failure visibility, authentication error handling, formatting gates and dependency removals while retaining this branch ownership fences.",
+        "Parent merge review PASS: preserves upstream auth containment, diagnostics, dependency cleanup and formatting CI with accepted owner/locale/redirect fences.79 path hashes verified; signed exact parents."
+      ],
+      "remaining": [
+        "Vercel preview fails its project collaboration gate. Merge/release and authenticated live journeys remain unqualified."
+      ],
+      "runtime": "local-baseline-reproduced",
+      "pull_requests": [
+        "https://github.com/NikolasP98/minion-site/pull/33"
+      ]
+    },
+    {
+      "id": "GW-026",
+      "priority": "P1",
+      "title": "Reliability aggregation failures are returned as successful zero activity",
+      "batch": "gateway-lifecycle",
+      "status": "locally-verified-awaiting-release",
+      "owner": "root",
+      "summary": "Reliability summary, flow, usage, activity and performance handlers catch storage/cache exceptions and respond with success plus empty or zero projections.",
+      "impact": "An outage can appear as healthy inactivity or zero spend; Hub cannot distinguish a valid empty period from backend failure.",
+      "lenses": [
+        "Senior quant analyst",
+        "CTO",
+        "Product owner"
+      ],
+      "acceptance": [
+        "Inject store/cache/aggregate rejection into actual handlers; return stable non-OK unavailable without raw error details.",
+        "Legitimate empty stores return success with valid zero projections; Hub shows failed retry state only for failure."
+      ],
+      "sourceAnchors": [
+        {
+          "repo": "gateway",
+          "path": "src/gateway/server-methods/reliability.ts",
+          "lines": "111-123",
+          "repoCommit": "85fe0f6a8"
+        },
+        {
+          "repo": "gateway",
+          "path": "src/gateway/server-methods/reliability.ts",
+          "lines": "212-216",
+          "repoCommit": "85fe0f6a8"
+        },
+        {
+          "repo": "gateway",
+          "path": "src/gateway/server-methods/reliability.ts",
+          "lines": "230-241",
+          "repoCommit": "85fe0f6a8"
+        },
+        {
+          "repo": "gateway",
+          "path": "src/gateway/server-methods/reliability.ts",
+          "lines": "257-272",
+          "repoCommit": "85fe0f6a8"
+        },
+        {
+          "repo": "gateway",
+          "path": "src/gateway/server-methods/reliability.ts",
+          "lines": "307-310",
+          "repoCommit": "85fe0f6a8"
+        }
+      ],
+      "code_commits": [
+        "gateway:cd996bbde6d22217df39630a68edf8b27a4ba654"
+      ],
+      "tests": [
+        "72 cases in seven actual handler/cache/emitter/dispatcher files pass;44 overlapping handler cases pass after exact negative-control restoration.",
+        "Catch-to-success mutation fails targeted summary test; escaping responder mutation fails both actual-dispatch tests, then exact bytes restore.",
+        "Full tsgo v5 exit0;10 touched files lint zero warnings/errors."
+      ],
+      "reviews": [
+        "Parent source-confirmed while validating complete Hub wire projections.",
+        "Independent spec PASS on 843ec17; actual producers now capture emitter UUID generation, preserve healthy cache fallback and return a sanitized unavailable error on failure.",
+        "Sol final source/blast-radius PASS on exact10file manifest8e75ff37 / packetc5ee8581; monotonic warning limit and actual dispatcher response containment accepted.",
+        "Exact 10-file reviewed manifest rechecked before scoped commit; SSH signature independently verified. No release or production execution claimed."
+      ],
+      "remaining": [
+        "Hosted qualification and release verification of the signed reviewed candidate."
+      ],
+      "runtime": "source-confirmed"
+    },
+    {
+      "id": "SITE-004",
+      "priority": "P2",
+      "title": "Site page width consumes an undefined shared token and has no token-integrity CI gate",
+      "batch": "site-integration",
+      "status": "hosted-verified-awaiting-release",
+      "owner": "root",
+      "summary": "Ten Site components reference --page-max but the installed shared contract and CSS declare no producer. Site exposes design lint but no token-integrity script.",
+      "impact": "The documented80rem layout measure is ignored by CSS, and the missing-token regression can pass current CI.",
+      "lenses": [
+        "UX/UI expert",
+        "CTO",
+        "Release engineer"
+      ],
+      "acceptance": "Add the documented80rem shared layout token through the canonical contract and generated package; install the exact artifact, verify computed max-width across both themes, and wire a token-integrity gate whose missing-producer negative control fails.",
+      "sourceAnchors": [
+        {
+          "repo": "site",
+          "path": "src/lib/components/layout/Navbar.svelte",
+          "lines": "200-215",
+          "repoCommit": "7f4c3b25679e9aaa622ad695c95069fe97d00c20",
+          "note": "Navbar is one of ten consumers of undefined --page-max; exact consumer receipt is retained."
+        },
+        {
+          "repo": "site",
+          "path": "package.json",
+          "lines": "7-17",
+          "repoCommit": "7f4c3b25679e9aaa622ad695c95069fe97d00c20",
+          "note": "No lint:tokens command exists."
+        }
+      ],
+      "code_commits": [
+        "meta:8f10900f5a9bc21583d0bbbdd29cf6b90a460310",
+        "hub:b7980e2ae785c706d2a892508d098c9500dcc142",
+        "site:8cefc800670a1319d4076cf970eab9dcfb48c0ac",
+        "site:ee0f4ae205ec347c157300c973399225ec0003d3",
+        "site:fa2638b45c0d77e54a0a5019be8f54618e7d3f16"
+      ],
+      "tests": [
+        "Actual shared scanner over Site reports10 undefined --page-max consumers; locale candidate adds none.",
+        "Shared package12/12, actual Site missing-token mutations4/4, Hub wrapper6/6 and Site unit33/33; configured Site check0/0 and build passed.",
+        "All four actual Site renders at1440x900 and390x844 in dark/light themes show10 containers computed max-width1280px and zero document overflow; screenshot and DOM proof retained.",
+        "Shared design-token package12 tests PASS; site004-meta-checkpoint.log.",
+        "Hub installed-token wrapper6 tests PASS; zero token violations; same 2b893413 archive as Site.",
+        "Exact staged product source: 33 ordinary and 86 locale/authentication cases PASS; final archive format/design/token gates and 4 token tests PASS. Source review and 8-file formatter-output equivalence verified. These receipts predate the current dev integration.",
+        "Exact signed Site fa2638b4: hosted check-and-build SUCCESS, run37148934173. Local merge:55 Vitest +86 locale/auth +11 Node checks; final NODE_OPTIONS defense separately5PASS parent and actual compile. Counts describe separate gates, not total unique coverage."
+      ],
+      "reviews": [
+        "Parent and Sol source-confirmed; Site DESIGN.md documents80rem measure.",
+        "Independent Standards and parent Spec PASS on9bab5593, including dev workflow triggers and removal of synthetic shared token declarations.",
+        "Parent source and cross-consumer review PASS: no removed or changed old contract leaves, both apps install exact same 2b893413 archive, isolated consumer exceptions, real parser regression proof.",
+        "Parent scoped exact package/packer/spec/index entry and verified signature.",
+        "Parent preserved shared-session pin and verified signed Hub token checkpoint.",
+        "Signed draft PR33 conflicts with newer dev 5be5ff6. Hosted CI has not run; Vercel preview failed. Integration must preserve upstream Gateway failure visibility, authentication error handling, formatting gates and dependency removals while retaining this branch ownership fences.",
+        "Parent merge review PASS: preserves upstream auth containment, diagnostics, dependency cleanup and formatting CI with accepted owner/locale/redirect fences.79 path hashes verified; signed exact parents."
+      ],
+      "remaining": [
+        "Vercel preview fails its project collaboration gate. Merge/release and authenticated live journeys remain unqualified."
+      ],
+      "runtime": "local-built-site-and-installed-package-mutation",
+      "pull_requests": [
+        "https://github.com/NikolasP98/minion-site/pull/33"
+      ]
+    },
+    {
+      "id": "HS-032",
+      "priority": "P2",
+      "title": "Skill duration averages weight missing measurements as if they were measured executions",
+      "batch": "hub-reactivity-accessibility",
+      "status": "locally-verified-awaiting-release",
+      "owner": "root",
+      "summary": "SQL count(*) includes NULL-duration executions while avg(duration_ms) does not; the client weights per-status means by all executions.",
+      "impact": "The displayed mean can change merely because unmeasured runs occur and can misstate performance across status groups.",
+      "lenses": [
+        "Senior quant analyst",
+        "CTO"
+      ],
+      "acceptance": "Expose count(duration_ms), compute weighted means only over measured samples, preserve total execution counts and render unknown when historical responses lack sample counts. Prove against a NULL/mixed/zero-duration SQL fixture and failing old-weighting control.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "path": "src/server/services/skill-stats.service.ts",
+          "lines": "151-165",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6"
+        },
+        {
+          "repo": "hub",
+          "path": "src/lib/state/reliability/skill-stats.svelte.ts",
+          "lines": "59-82",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6"
+        }
+      ],
+      "code_commits": [
+        "hub:3eac14225557958ccdcc5c74b3f07c09d4164c80"
+      ],
+      "tests": [
+        "Actual PostgreSQL measured-duration denominator case passed in252-case native lane; client/focused253-case reliability packet passed. Explicit old-weighting mutation receipt pending confirmation.",
+        "Old-weighting negative control: isolated production durationCount → count mutation fails the actual decoder assertion (37.2727 vs 20); restored source passes. Receipt reliability-skill-duration-negative.json.",
+        "Exact staged reliability suite:30 files258PASS; known negative skill-duration receipt preserved."
+      ],
+      "reviews": [
+        "Parent source-confirmed during remaining panel ownership inventory; four generic resource consumers enumerated.",
+        "Independent Sol and parent approved panel/API author17762e5b: canonical-only PG skill targets, consistent bounded telemetry snapshots and held architecture work admission are explicit.",
+        "Parent bounded source acceptance: explicit failing-old-weighting proof received; reliability 72-file manifest refreshed after translation keys stabilized.",
+        "Parent included bounded skill-duration correction and actual API materialization in signed reliability checkpoint."
+      ],
+      "remaining": [
+        "Hosted CI and release verification."
+      ],
+      "runtime": "locally-qualified"
+    },
+    {
+      "id": "HC-036",
+      "priority": "P1",
+      "title": "Agent settings reads and mutation completions can publish into a different selected agent",
+      "batch": "hub-reactivity-accessibility",
+      "status": "implementing",
+      "owner": "root",
+      "summary": "AgentDashboard file counts and shared agent-tools/agent-skills loaders publish ambient Gateway results without agent/session generations. Settings writes also update global state after awaiting an older selection.",
+      "impact": "Switching agents during loading or a settings change can show or alter controls using another agent's data; overlapping optimistic writes can restore stale values.",
+      "lenses": [
+        "Power user",
+        "CTO",
+        "UX/UI expert"
+      ],
+      "acceptance": "Fence every agent read and mutation publication by canonical actor/org/host/session and agent identity; serialize conflicting writes, preserve committed outcomes without replay, and prove actual mounted selection/reconnect and overlapping failure cases. Disabling the last skill sends [] and stays disabled; null is an explicit inheritance action only. ChatInput suggestions and all seven UI consumers must use their own agent owner.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "path": "src/lib/components/agents/AgentDashboard.svelte",
+          "lines": "24-40",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6",
+          "note": "Late file count completion has no agent/session owner fence."
+        },
+        {
+          "repo": "hub",
+          "path": "src/lib/state/agents/agent-tools.svelte.ts",
+          "lines": "1-140",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6",
+          "note": "Ambient tools load and optimistic settings rollback share global mutable state."
+        },
+        {
+          "repo": "hub",
+          "path": "src/lib/state/agents/agent-skills.svelte.ts",
+          "lines": "1-150",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6",
+          "note": "Late agent skill settings result publishes into the current global selection."
+        },
+        {
+          "repo": "hub",
+          "path": "src/lib/components/agents/AgentSkillsPanel.svelte",
+          "lines": "50-61",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6",
+          "note": "Disabling the last enabled skill sends null (inherit all) instead of an empty explicit allowlist; actual Gateway preserves [] and removes the filter for null."
+        }
+      ],
+      "code_commits": [
+        "hub:e6c5f32609bdb5add8552964c57df758e26ceebe",
+        "gateway:2f46c5023faa9eee8303b868c4db9136f26a5a91",
+        "gateway:72fa69dcb49cb5a1f0a97a947d9b143f2803f321"
+      ],
+      "tests": [
+        "Installed shared readiness.2 archive SHA994ac7f5: 73 compatibility/error cases and independent packed-root probe PASS; accepted-then-throw mutation fails the no-write-replay assertion. Canonical source 199 cases and typecheck PASS. Hub consumer 15 cases PASS. See shared-errors-independent-review-v1.md and shared-error-hub-consumer.log.",
+        "Gateway prerequisite 2f46c5023 plus72fa69dcb: parent exact archived source4files107PASS, actual hello/dispatcher/config and non-admin denial. Shared readiness2 artifact and both consumers separately qualified.",
+        "Actual tool-page negative reproduction:8 existing cases PASS and3 safety cases FAIL. Lost run acknowledgement permits replay after Retry and same-owner remount; lost save acknowledgement allows Retry to erase the uncertain draft. hc036-tool-page-unknown-negative-v2.log."
+      ],
+      "reviews": [
+        "Parent source-confirmed during reliability cross-consumer review; distinct from unsupported fleet-to-agent error count in HC024.",
+        "Root authored the bounded agent resource, shared catalog and configuration-draft ownership contract; independent Spec and Standards passes requested. Adjacent config and catalog publication paths are included in required blast-radius scope.",
+        "Independent reviews expanded the required scope: the GW-022A atomic configuration writer, structured errors from the installed shared package, exact channel-creation reconciliation, and durable recovery after lost replies. The contract is being revised; these mutation paths are not yet qualified.",
+        "v11 Spec PASS on4eea2eee; exact Gateway advertisements added for four installed-but-omitted methods so capability admission preserves authorized channel setup. Renewed Standards delta pending; D still requires separate durable-effect child contract.",
+        "Canonical ownership specification d8a008f7 passed two review passes. Shared typed-error prerequisite is signed in meta 1bc8f1b5e2ffdf58e1a5119eaf52e69eaab8360c. Agent-scoped resource/decoder foundation is in implementation; four-method Gateway advertisement and error taxonomy packet is under parent review."
+      ],
+      "remaining": [
+        "Complete two-pass review/canonicalization of spec-hc036b-tool-operation-recovery.md; parent bounded agent-resource contract is already approved. Restore AgentTools drag+keyboard tools.update; AgentSkills agents.skills.set with [] distinct from null; AgentFiles create/edit/save durable receipt/CAS; tool-detail tools.update via reviewed GW022A/config gate.",
+        "Implement actual read/write owner fencing and independently verify adjacent agent consumers.",
+        "Do not accept current client WIP: durable tool save/run acknowledgement recovery contract and implementation remain open. Ordinary GET is not proof that a prior write failed.",
+        "Restore temporarily disabled agent tool assignment, agent skill allowlist editing, agent file create/edit and Gateway tool enablement with reviewed recovery/authorization; read-only controls are not completion.",
+        "Split oversized resource decoders and tool-page controller by logical responsibility; preserve actual-page negative tests."
+      ],
+      "runtime": "source-confirmed"
+    },
+    {
+      "id": "HS-033",
+      "priority": "P1",
+      "title": "Reliability HTTP reads omit current capability and exact target authorization",
+      "batch": "hub-authority-jobs",
+      "status": "locally-verified-awaiting-release",
+      "owner": "root",
+      "summary": "Insights uses host linkage/global admin without reliability:view; skill and credential metrics accept tenant context plus unverified serverId. Query windows, limits and body materialization also lack finite admission.",
+      "impact": "Direct requests can bypass page permissions and use stale or foreign target selectors; unbounded metrics work can exhaust shared resources.",
+      "lenses": [
+        "CTO",
+        "Product owner",
+        "Power user"
+      ],
+      "acceptance": "Fresh capability, membership and exact canonical target proof before cache/data access; no org bypass for admin. Bound admitted ranges, rows, blobs and HTTP body reads; prove direct denial, cap+1 and actual timeout disposal cases.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "path": "src/routes/api/reliability/insights/+server.ts",
+          "lines": "24-65",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6"
+        },
+        {
+          "repo": "hub",
+          "path": "src/routes/api/metrics/skill-stats/+server.ts",
+          "lines": "31-55",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6"
+        },
+        {
+          "repo": "hub",
+          "path": "src/routes/api/metrics/credential-health/+server.ts",
+          "lines": "32-48",
+          "repoCommit": "eb6867db52623f408e69458168e1efbb30e4f7e6"
+        }
+      ],
+      "code_commits": [
+        "hub:3eac14225557958ccdcc5c74b3f07c09d4164c80"
+      ],
+      "tests": [
+        "Panel/API expansion:28files253focused cases; actual bounded SQL materialization,50k heartbeat indexed lookup,100001-row cap denial; configured0errors0warnings before currentSlice4 work. Three real panels recover at1440/390; mobilearchitecturev5 corrects two independent visual failures, alltoolbarcontrols44px and realmode/depth/refresh actions pass.",
+        "Actual bounded reliability API and authority projections included in signed30-file258-test checkpoint; prior native indexed50k-heartbeat and100001-row cap proof retained."
+      ],
+      "reviews": [
+        "Independent Sol source review of remaining reliability panels confirmed missing HTTP authority and unbounded work.",
+        "Independent Sol and parent approved panel/API author17762e5b: canonical-only PG skill targets, consistent bounded telemetry snapshots and held architecture work admission are explicit.",
+        "Parent inspected corrected exact-status predicate, bounded native/libSQL queries, preserved publicgatewayhelper blast radius, retained WebSocket cleanup and actualpanelbrowser v5. Bounded source/visualPASS; signature/release remains pending.",
+        "Parent checked current capability and exact target identity through actual API/repository callers before signed Reliability checkpoint."
+      ],
+      "remaining": [
+        "Exact committed-source hosted CI and normal release/runtime verification; no production mutation or deployment performed."
+      ],
+      "runtime": "locally-qualified"
+    },
+    {
+      "id": "HC-037",
+      "priority": "P1",
+      "title": "Workshop workspace loads and writes can erase current state or hide failed persistence",
+      "batch": "hub-mutations",
+      "status": "queued",
+      "owner": "root",
+      "summary": "createBlankSave resets shared state before its POST is acknowledged; openSave publishes unvalidated results without a request/owner generation; debounced persistence ignores rejected HTTP responses. The list page exposes async create/open/delete without owned pending/error handling.",
+      "impact": "A rejected create can erase the current client workspace, an older load can replace the selected workspace, and failed autosave can appear saved. Keyboard card fixes do not repair these data transitions.",
+      "lenses": [
+        "Clueless user",
+        "Power user",
+        "CTO",
+        "Product owner"
+      ],
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "path": "src/lib/state/workshop/workshop.svelte.ts",
+          "lines": "410-429,441-475,511-515",
+          "note": "Unchecked autosave HTTP response, unconditional late load publication, pre-acknowledgement reset."
+        },
+        {
+          "repo": "hub",
+          "path": "src/routes/(app)/agents/workshop/+page.svelte",
+          "lines": "42-60",
+          "note": "Open/create/delete promise paths have no visible error or operation admission state."
+        }
+      ],
+      "acceptance": [
+        "Reject create after an existing workspace is loaded: preserve its state and selection, show failure, and make no autosave of reset data.",
+        "Race open A/B and rotate actor/org before each completion: only the current owner/request may publish state, active-save identity or navigation.",
+        "Reject autosave or lose its response: expose truthful unsaved/unknown status and bounded recovery without silently replaying a mutation.",
+        "Actual mounted/browser tests cover create/open/delete failure, double activation, scope change and teardown; independent review covers canvas consumers and persistent active-save keys."
+      ],
+      "code_commits": [],
+      "tests": [],
+      "reviews": [
+        "Parent source-confirmed during HC026 direct-consumer review. Existing checked HTTP responses in open/delete do not fence state publication or provide page-level error handling."
+      ],
+      "pull_requests": [],
+      "runtime": "not-qualified",
+      "remaining": [
+        "Dedicated owned workspace lifecycle spec and implementation; preserve HC026 native action semantics and route-ID encoding."
+      ]
+    },
+    {
+      "id": "HC-038",
+      "priority": "P1",
+      "title": "Shared Button overrides consumer roles and roving tabindex",
+      "batch": "hub-reactivity-accessibility",
+      "status": "hosted-verified-awaiting-release",
+      "owner": "root",
+      "summary": "Explicit role and tabindex props are replaced after the rest spread, so semantic switch/menu/option consumers lose their intended accessibility behavior.",
+      "sourceAnchors": [
+        {
+          "repo": "meta",
+          "path": "packages/ui/src/lib/Button.svelte",
+          "lines": "90-116",
+          "note": "Explicit role and tabindex props are replaced after the rest spread, so semantic switch/menu/option consumers lose their intended accessibility behavior."
+        }
+      ],
+      "acceptance": [
+        "Actual Button consumers expose supplied switch/menuitem/option roles and tabindex; native defaults remain correct.",
+        "Disabled/loading native buttons and links cannot activate, and disabled links retain truthful role/focus semantics.",
+        "Verify exact canonical source plus Hub/Site artifacts, meaningful original-artifact failure and browser keyboard evidence."
+      ],
+      "code_commits": [
+        "meta:e5887e75472458dde74b12090977893b772f3ef7",
+        "hub:909b13ec097c6d5a7752013f3a9cf9082e0b448a",
+        "site:cb9cd1a54665f1a8dcf820d717bfc42c324dda52",
+        "hub:b91fd8c6e3109eeb1be7b43b8c734a3906f1afdc"
+      ],
+      "tests": [
+        "Original canonical SSR:10 failures/8 passes. Expanded corrected SSR26 PASS; canonical typecheck/build PASS.",
+        "Final exact Hub clone39 focused cases PASS; Site ordinary Vitest65 PASS including10 artifact cases. Final Hub PR674 files formatted, strict per-file design ratchet PASS and token violations zero.",
+        "Native Chromium v3:10 sequences PASS, exact packed Button/FlowExports, Tab/Enter/Space/pointer/disabled/loading/forms/390px. Source-bound before/after screenshots; synthetic data, zero production writes.",
+        "Hub and Site full checks/builds PASS on reviewed v4 source; final v5 differs only by seven independently reviewed formatter/receipt-pin changes. Exact v5 full hosted CI remains pending; earlier builds are not relabelled as exact-v5 execution.",
+        "30-member package: only Button runtime, declaration and version differ. Two final packs produce byte-identical archive403344ff and receipta95dcf74. Both consumer manifests/locks/installed bytes verified; mutation tests reject missing/extra/adjacent/stale artifacts."
+      ],
+      "reviews": [
+        "Approved contract 4b918f83c34e0f006e5912fb01cae224535afe4ddc6990fa4851eda11db19468; independent standards review 91103d24a30ca03b5fdd333ff6044912a1505055ba22cc267fa3c7549e4d0868; second review 019737ed6bf84df47d80dde9bb6e4fc0d19dfb9521845d3b10cb12bcc4947b90.",
+        "Final independent source review PASS297e5e6b; exact26-path manifest0b9d0563. Parent qualification hc038-parent-qualification-v5.json binds source, tests, native evidence and all three verified signed commits.",
+        "Blast radius includes eight role families, native links/forms and callbacks, 39 explicit semantic call sites, strict numeric tabindex correction in AgentFiles/BugReporter, exact consumer artifact isolation. Active HC036 AgentFiles source was preserved outside the commit.",
+        "Hosted exact909check/build passed. Full suite exposed10 stale semantic queries in3files; independently reviewed follow-up23PASS plus final neighboring suite. Signed follow-up pending.",
+        "Semantic query correction signed b91fd8c6; subsequent exact remote e1979fbd has12/12 green including Vercel. Site cb9cd1a5 check-and-build passes; Vercel status reports Deployment was blocked."
+      ],
+      "pull_requests": [
+        "https://github.com/NikolasP98/minion_hub/pull/431",
+        "https://github.com/NikolasP98/minion-site/pull/33"
+      ],
+      "runtime": "synthetic-native-browser-qualified",
+      "remaining": [
+        "Exact new-head hosted CI, human merge and authorized release/live acceptance. HC039 alias directory and HC040 flow-export mutation ownership remain separately tracked."
+      ]
+    },
+    {
+      "id": "HC-039",
+      "priority": "P1",
+      "title": "Mention alias reads leak rejections and retain unowned cached identities",
+      "batch": "hub-reactivity-accessibility",
+      "status": "locally-verified-awaiting-release",
+      "owner": "root",
+      "summary": "The browser cache lacks actor/org and request ownership; the server directory uses a global service-role profiles query despite receiving an organization context.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "path": "src/lib/state/features/aliases.svelte.ts",
+          "lines": "1-35",
+          "note": "ensureAliases stores cache/inflight globally without current actor/org fencing; ChatMessage starts it without handling rejection."
+        },
+        {
+          "repo": "hub",
+          "path": "src/server/services/user.service.ts",
+          "lines": "244-253",
+          "note": "listAliases ignores tenant context and returns global profile IDs/aliases through service-role Supabase; no production query was used to reproduce."
+        },
+        {
+          "repo": "hub",
+          "path": "src/routes/api/users/aliases/+server.ts",
+          "lines": "7-24",
+          "note": "Tenant gate alone does not scope the downstream directory query."
+        }
+      ],
+      "acceptance": [
+        "Reject alias reads with real mounted chat consumers: no unhandled rejection or request loop.",
+        "Change actor/org and reverse replies: no stale cache or response may publish into the new scope.",
+        "Validate malformed replies, bounded request coalescing, recovery and mention-rendering/management invalidation.",
+        "Current-member admission and exact organization directory query in one read-only snapshot; no other-org identities or silently truncated success. Echo actor/org to bind replies to browser owner; preserve global alias availability semantics."
+      ],
+      "code_commits": [
+        "hub:875fb04369a3787aa93fb8d35f72f89c7946d460"
+      ],
+      "tests": [
+        "Actual mounted failure recorded in hc026-route-panels-v1.log. No production writes.",
+        "Actual browser7cases6screenshots: themes,390px, keyboard mention select/submit, reverse replies and failure recovery; hc039-042-native-proof-v4.json.",
+        "Full Hub svelte-check0errors0warnings; exact-base designCI and token gates pass.",
+        "Resource27PASS; actual ChatMessage/ChatInput/Team11PASS; route8PASS.",
+        "Actual PostgreSQL7PASS; org-filter removal2FAIL5PASS. Both child databases dropped, zero roles created, zero production writes.",
+        "Final adjacent qualification88tests across8files:85PASS then corrected external-SDK test seam3PASS; no product change for the seam.",
+        "Final isolated candidate: production build and configured check PASS; 8 files/88 tests PASS, final portable fixture seams 2 files/14 tests PASS. Native proof v7: 7 cases, 6 images, zero production writes."
+      ],
+      "reviews": [
+        "Parent source-confirmed during HC026 direct consumer verification; dedicated contract/implementation pending.",
+        "Parent expanded HC039 after source-confirming the ignored tenant parameter. Draft spec-hc039-mention-directory.md under independent review; no production identity retrieval.",
+        "Independent Sol source reviewPASS; HC039 review found and closed teardown cooldown and omitted Team mutation invalidation. Evidence frozen with full source hashes.",
+        "Independent exact source review v2 with final fixture addendum PASS. Signed checkpoint875fb043 verified using configured 1Password key; local only at user pause."
+      ],
+      "pull_requests": [],
+      "runtime": "synthetic-native-browser-qualified",
+      "remaining": [
+        "Push signed875fb043 and qualify exact hosted head; human review/merge and production acceptance remain separate."
+      ]
+    },
+    {
+      "id": "HC-040",
+      "priority": "P1",
+      "title": "Flow export toggles retain another flow’s state and accept stale write rollbacks",
+      "batch": "hub-reactivity-accessibility",
+      "status": "queued",
+      "owner": "root",
+      "summary": "One-time prop seeding and unowned asynchronous rollback allow flow A state to appear on flow B.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "path": "src/lib/components/flow-editor/FlowExports.svelte",
+          "lines": "19-55",
+          "note": "One-time local state seed; failure callbacks mutate the current component without flow/request/actor ownership."
+        }
+      ],
+      "acceptance": [
+        "Fresh selected-flow data updates the visible state; late replies cannot alter a different flow or a newer operation.",
+        "Pending/failed/unknown writes use the shared action contract; permissions, role, accessible label and touch target stay correct.",
+        "Actual mounted negative controls and native browser evidence cover replacement, reversal, reactivity and recovery."
+      ],
+      "code_commits": [],
+      "tests": [
+        "Two actual mounted regressions fail on the current component: A-to-B prop replacement and late A failure into B. Synthetic requests only; hc040-flow-export-ownership-recon.log."
+      ],
+      "reviews": [
+        "Parent-confirmed while tracing HC038 blast radius; dedicated contract and independent review pending."
+      ],
+      "pull_requests": [],
+      "runtime": "not-qualified",
+      "remaining": [
+        "Bounded contract, two-pass review, implementation and source/native qualification."
+      ]
+    },
+    {
+      "id": "HC-041",
+      "priority": "P1",
+      "title": "Gateway organization identity reads an obsolete field hidden by a coupled test fixture",
+      "batch": "hub-reactivity-accessibility",
+      "status": "hosted-verified-awaiting-release",
+      "owner": "root",
+      "summary": "The app layout returns top-level activeOrgId, while userState reads user.orgId; gateway owner publication and HC036 resource admission disagree.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "path": "src/lib/state/features/user.svelte.ts",
+          "lines": "45-52",
+          "note": "Getter reads obsolete nested organization field; parent actual-shape tests reproduce12 failures."
+        },
+        {
+          "repo": "hub",
+          "path": "src/lib/state/features/user.svelte.test.ts",
+          "lines": "4-13",
+          "note": "Original fixture manufactured the same incorrect nested field, masking production contract drift."
+        },
+        {
+          "repo": "hub",
+          "path": "src/routes/(app)/+layout.server.ts",
+          "lines": "224-231",
+          "note": "Canonical app layout returns activeOrgId separately from user."
+        }
+      ],
+      "acceptance": [
+        "Read only canonical top-level activeOrgId; missing/malformed/blank identities fail closed; no nested fallback.",
+        "Actual-shape negative control fails original getter; initial/A-to-B/logout/precedence tests pass corrected source.",
+        "Real getter through gateway session publication and HC036 resource admission preserves current organization and retires prior owners."
+      ],
+      "code_commits": [
+        "hub:e1979fbd240c1c7a8c2ea25a93f96fd60ffea75b"
+      ],
+      "tests": [
+        "Original source with actual-shape fixture:12 failures/4 passes; hc041-original-negative.log. Corrected source focused suite captured separately.",
+        "Corrected getter16PASS; independent real-getter/session/resource3files31PASS; source-bound receipts retained.",
+        "Remote e1979fbd checked at pause: 11 GitHub/check-run successes plus successful Vercel status, 12/12 green."
+      ],
+      "reviews": [
+        "Parent Standards and independent Sol Spec PASS ondd07221f; canonical contract signed in meta87f57459. Exact source and cross-scope integration review pending.",
+        "Independent Sol exact getter integration PASS; parent source qualification recorded in hc041-parent-qualification.json."
+      ],
+      "pull_requests": [
+        "https://github.com/NikolasP98/minion_hub/pull/431"
+      ],
+      "runtime": "not-qualified",
+      "remaining": [
+        "Human review and merge; production acceptance remains separate."
+      ]
+    },
+    {
+      "id": "HC-042",
+      "priority": "P1",
+      "title": "Resolved mentions disappear against user message backgrounds",
+      "batch": "hub-reactivity-accessibility",
+      "status": "locally-verified-awaiting-release",
+      "owner": "root",
+      "summary": "Native Chromium renders .mention accent text on the same accent user-bubble background, making resolved names invisible.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "path": "src/app.css",
+          "lines": "1448-1452",
+          "note": "Global mention color is the accent color."
+        },
+        {
+          "repo": "hub",
+          "path": "src/lib/components/chat/ChatMessage.svelte",
+          "lines": "47-58",
+          "note": "User bubble uses accent background and semantic on-accent text; global mention color overrides the inherited foreground."
+        }
+      ],
+      "acceptance": [
+        "Actual resolved user mentions remain legible in dark/light themes and mobile without changing mention IDs or HTML escaping.",
+        "Use existing semantic foreground, preserve visible non-color distinction and retain shared mention styling on other surfaces.",
+        "Before screenshot/computed colors and after native browser contrast evidence."
+      ],
+      "tests": [
+        "Native Chromium before screenshot hc039-after-initial-v1.png: mention foreground and parent background both rgb(59,130,246).",
+        "Actual browser7cases6screenshots: themes,390px, keyboard mention select/submit, reverse replies and failure recovery; hc039-042-native-proof-v4.json.",
+        "Full Hub svelte-check0errors0warnings; exact-base designCI and token gates pass.",
+        "Final adjacent qualification88tests across8files:85PASS then corrected external-SDK test seam3PASS; no product change for the seam.",
+        "Final isolated candidate: production build and configured check PASS; 8 files/88 tests PASS, final portable fixture seams 2 files/14 tests PASS. Native proof v7: 7 cases, 6 images, zero production writes."
+      ],
+      "reviews": [
+        "Independent Sol source reviewPASS; HC039 review found and closed teardown cooldown and omitted Team mutation invalidation. Evidence frozen with full source hashes.",
+        "Independent exact source review v2 with final fixture addendum PASS. Signed checkpoint875fb043 verified using configured 1Password key; local only at user pause."
+      ],
+      "code_commits": [
+        "hub:875fb04369a3787aa93fb8d35f72f89c7946d460"
+      ],
+      "pull_requests": [],
+      "runtime": "synthetic-native-browser-qualified",
+      "remaining": [
+        "Push signed875fb043 and qualify exact hosted head; human review/merge and production acceptance remain separate."
+      ]
+    },
+    {
+      "id": "HC-043",
+      "priority": "P2",
+      "title": "Ordinary dark-theme mention text has insufficient contrast; error surfaces need valid measurement",
+      "batch": "hub-reactivity-accessibility",
+      "status": "queued",
+      "owner": "root",
+      "summary": "Actual synthetic component fixture measured ordinary New York dark mention foreground rgb(37,99,235) on rgb(24,24,27), 16px/600, contrast3.42779813:1. User-bubble-only HC042 does not change this surface.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "path": "src/app.css",
+          "lines": "1448-1452",
+          "repoCommit": "e1979fbd240c1c7a8c2ea25a93f96fd60ffea75b",
+          "note": "Global mention uses accent foreground on ordinary dark backgrounds."
+        }
+      ],
+      "acceptance": [
+        "Recalculate rendered backgrounds using valid CSS color conversion, including Oklab and alpha compositing.",
+        "Review semantic foreground correction across ordinary/assistant/error surfaces and supported themes; keep accepted user-bubble identity/underline and keyboard behavior.",
+        "Capture actual computed contrast and desktop/mobile screenshots; no claim from unconverted Oklab values."
+      ],
+      "code_commits": [],
+      "tests": [
+        "Historical mention-other-surfaces-contrast-v1.json retains valid ordinary RGB evidence; its derived error-surface ratios are INVALID because its parser did not convert Oklab."
+      ],
+      "reviews": [
+        "Registered at user-requested pause; source correction not started. Separate follow-on documented in readiness-mention-contrast proposal and exact selector TODO."
+      ],
+      "remaining": [
+        "Valid error-surface measurement, reviewed contract, implementation and native proof."
+      ],
+      "runtime": "ordinary-surface-observed-error-measurement-incomplete"
     }
   ],
   "requested_workstreams": [
     {
       "id": "notifications",
-      "status": "spec-review",
+      "status": "spec-approved-narrow-boundary-implemented",
       "owner": "hub_test_fixes",
       "scope": "User/role/universal notifications; settings; event/cron triggers; release changelogs; authorized agent reports, visual artifacts and AI Brains data; page or board destinations.",
       "findings": 18,
@@ -3921,7 +5319,20 @@
       "source": ".claude/skills/ui-design-governance/SKILL.md",
       "review": "Independent Sol review PASS after clarifying reconciliation availability, primitive dismissal contracts and executable/verified negative controls; parent reconciled contradictory currency, optimistic-state and chip rules.",
       "commit": "meta:572081f0",
-      "latest_lesson": "HC035 mobile proof: zero document overflow can still hide offscreen recovery controls. Verify bounds and reachability."
+      "latest_lesson": "Settled-query getters hide stale data immediately; validate complete projections; resource Retry owns its coordinator even on a different tab; reach last mobile control in actual scroller."
+    },
+    {
+      "id": "maintainability",
+      "status": "in-progress",
+      "owner": "root",
+      "scope": "Preserve public APIs while extracting bounded modules and removing always-green tests; qualify behavior before and after extraction.",
+      "next": "Wallet account read projections/DTO parsing and POS settings admission;1412/2822 current source lines versus945/2601 at Hub base."
     }
-  ]
+  ],
+  "checkpoint": {
+    "status": "paused-by-user",
+    "recorded_at_utc": "2026-10-03T23:17:47.240293+00:00",
+    "resume": "RESUME-2026-10-03.md",
+    "note": "Implementation intentionally paused until next week; registry is not a completion claim."
+  }
 }

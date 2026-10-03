@@ -25,3 +25,7 @@ A green wrapper identifies and observes its one exact child, expected DEV revisi
 ## DELTA
 
 Use the versioned dispatch response to bind one run ID, bounded read-only observation and truthful summaries. Never retry an ambiguously acknowledged dispatch. Run deterministic negative and actual-workflow tests in the workflow-only CI lane as well as ordinary source CI. The exact implementation contract is the companion spec; CI coverage expansion remains GW-019.
+
+## User-requested pause, 2026-10-03
+
+The v2-reviewed contract is signed in meta `50374ac2c890d300b69f3c13f08a678b643de97f`. Three dependency-free modules were started under `gateway-review/scripts/ci/`: `observe-dev-ci.mjs`, `github-request.mjs`, and `nightly-dev-ci.mjs`. They are uncommitted drafts, untested, independently unreviewed, and not wired into either workflow. Their handoff comments prohibit treating them as accepted implementation. Resume with meaningful transition/HTTP/process tests, exact workflow wiring including ci-contract, the replacement parsed nightly contract test, independent blast-radius review, then required checks. No hosted workflow was dispatched.
