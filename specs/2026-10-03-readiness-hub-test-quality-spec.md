@@ -268,3 +268,17 @@ for the number of assertions expected from each source file.
   service credentials are accepted.
 - Any unfinished item requires both an exact-site `TODO(handoff)` and a meta-repo proposal before
   handoff. No test-only bypass, unconditional skip, or reduced assertion may be called a fix.
+
+## D2 dependency delivery
+
+The shared admission export is additive and preserves Paperclip normalization and
+UUID v1-v5 behavior. Paperclip keeps its transactional provisioning and actor
+construction. Hub and Paperclip consume the same reproducibly packed
+`0.4.0-readiness.0` artifact through checked `file:vendor/...tgz` dependencies until
+normal package promotion. This keeps both CI installs reproducible without an
+unpublished registry range or an unreviewed npm publication. Each artifact records
+its exact meta source commit, package tree, build command and SHA-256. The two
+consumer digests must match, and their compatibility checks execute this export.
+A normal registry release may replace the file dependency after qualification;
+it must preserve the same contract and rerun both consumers. This packaging choice
+was independently reviewed by Sol hub_test_fixes for install and runtime impact.
