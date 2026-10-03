@@ -31,18 +31,18 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4450
 - `NikolasP98/minion-meta@dev rankings/index.json:7026` — add explicitly reviewed indeterminate recovery policy in job-effects.service.ts",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7026
-- `NikolasP98/minion-meta@dev rankings/index.json:11211` — --apply is intentionally unimplemented",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11211
-- `NikolasP98/minion-meta@dev rankings/index.json:11246` — HDS-05 remains pending; do not run without separate backend-loss authorization",
+- `NikolasP98/minion-meta@dev rankings/index.json:11179` — --apply is intentionally unimplemented",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11179
+- `NikolasP98/minion-meta@dev rankings/index.json:11214` — HDS-05 remains pending; do not run without separate backend-loss authorization",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11214
+- `NikolasP98/minion-meta@dev rankings/index.json:11246` — Bound streamed response bytes before allocation; arrayBuffer()",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11246
-- `NikolasP98/minion-meta@dev rankings/index.json:11278` — Bound streamed response bytes before allocation; arrayBuffer()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11278
-- `NikolasP98/minion-meta@dev rankings/index.json:11380` — Backend-loss qualification remains gated by HDS-05",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11380
-- `NikolasP98/minion-meta@dev rankings/index.json:11413` — remove once the phone failure is root-caused",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11413
-- `NikolasP98/minion-meta@dev rankings/index.json:12360` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12360
+- `NikolasP98/minion-meta@dev rankings/index.json:11348` — Backend-loss qualification remains gated by HDS-05",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11348
+- `NikolasP98/minion-meta@dev rankings/index.json:11381` — remove once the phone failure is root-caused",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11381
+- `NikolasP98/minion-meta@dev rankings/index.json:12328` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12328
 - `NikolasP98/minion-meta@dev rankings/index.json:14062` — the affordance is one-way — once opened, a line's discount",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14062
 - `NikolasP98/minion-meta@dev rankings/index.json:14329` — this hasn't been exercised against a live local Supabase"
@@ -57,9 +57,9 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18718
 - `NikolasP98/minion-meta@dev rankings/index.json:18852` — Full Workshop composition/camera and keyboard relationship/element",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18852
-- `NikolasP98/minion-meta@dev rankings/index.json:20838` — startBackupScheduler() has no call site anywhere in src/",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20838
-- `NikolasP98/minion-meta@dev rankings/index.json:23696` — no overflow clip for bookings starting before startHour",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23696
-- `NikolasP98/minion-meta@dev rankings/index.json:28035` — the sideways-page overflow this card showed was fixed in",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28035
+- `NikolasP98/minion-meta@dev rankings/index.json:20806` — startBackupScheduler() has no call site anywhere in src/",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20806
+- `NikolasP98/minion-meta@dev rankings/index.json:23761` — no overflow clip for bookings starting before startHour",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23761
+- `NikolasP98/minion-meta@dev rankings/index.json:28004` — the sideways-page overflow this card showed was fixed in",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28004
