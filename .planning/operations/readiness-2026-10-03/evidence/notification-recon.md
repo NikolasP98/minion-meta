@@ -36,8 +36,8 @@ mutated. No message or notification was sent. Business mutation count is **zero*
 not prove the current production migration ledger, cron deployment, provider account state, or UI
 appearance. Those remain explicit release-time evidence gates.
 
-The machine-readable companion is `scratchnotification-recon.json`. It contains 17 stable finding
-IDs, 72 frozen source anchors, one zero-mutation baseline receipt per finding, acceptance criteria,
+The machine-readable companion is `scratchnotification-recon.json`. It contains 18 stable finding
+IDs, 76 frozen source anchors, one zero-mutation baseline receipt per finding, acceptance criteria,
 and proposed implementation slices.
 
 ## 1. Outcome
@@ -49,7 +49,7 @@ finance failure alerts, direct agent sends, release notifications, Pulse cards, 
 Workforce assignments, and workshop cards each use separate authority, retry, audience, and storage
 rules.
 
-Three findings require security or data-boundary correction before broader notification features:
+Four findings require security or data-boundary correction before broader notification features:
 
 1. A server-authenticated Pulse request can use a body-controlled organization rather than its
    canonical credential tenant (`NOTIF-002`).
@@ -57,6 +57,8 @@ Three findings require security or data-boundary correction before broader notif
    organization and exposes applicant identity across tenant boundaries (`NOTIF-014`).
 3. Notification rule definitions and recipient/template details are readable under ordinary tenant
    context even though the settings page is admin-only (`NOTIF-007`).
+4. Pending join-request lookup ignores organization even though the schema intentionally permits one
+   pending request per user and organization (`NOTIF-018`).
 
 Delivery correctness also needs a shared foundation. The generic engine marks a record `sent`
 before the Gateway call, the runtime role may be unable to record failure, and Gateway ignores the
@@ -71,7 +73,7 @@ to either current engine would expand the blast radius.
 | --------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | Generic notification rules  | `notif_rules` scans tables or process-registered sources; `notif_log` is used as both dedupe and delivery claim | Rule rows carry recipient/channel/template fields; API GET uses tenant context only | Row is inserted as `sent` before `channels.send`; failure repair is not reliably writable | Unscheduled; lossy over 500 candidates; no durable inbox                          |
 | Scheduling reminders        | Derives booking windows and inserts a unique `sched_reminder_log` row                                           | Booking recipient/channel configuration                                             | Claims `sending`, calls Gateway, then updates; all prior statuses suppress later work     | Unscheduled; failed, crashed, and ambiguous sends are not reclaimed               |
-| Join-request email          | Emitted after an org-scoped request insert                                                                      | All profiles with global `admin` role                                               | Best-effort email, no durable recipient effect or applicant outcome                       | Cross-org audience defect; only request creation is represented                   |
+| Join-request email          | Emitted after an org-scoped request insert; existing-request lookup is user-only despite per-org uniqueness     | All profiles with global `admin` role                                               | Best-effort email, no durable recipient effect or applicant outcome                       | Cross-org audience and request-selection defects; only creation is represented    |
 | Pulse proposal cards        | Gateway tool posts action cards to Hub                                                                          | Server token exists, but route consumes body `orgId`                                | Hub persists a card; approval does not prove that a proposed action executed              | Tenant substitution is possible; settings do not schedule a briefing              |
 | Agent `notify_user`         | Gateway tool calls Hub route                                                                                    | Tool metadata asks for `comms:create`; route admits weaker read capabilities        | Direct `channels.send` with a timestamp key; subject is discarded by Gateway              | Bypasses preferences, durable receipt, quiet hours, and inbox                     |
 | Gateway release update      | Gateway checks update metadata and fans out on connected channels                                               | Every eligible connected target                                                     | Per-target failures are swallowed; a version-wide state record suppresses retry           | No released-artifact attestation, sanitized changelog audience, or target receipt |
@@ -108,22 +110,28 @@ it cannot reuse the creator's authority or send generated HTML, raw brain eviden
 ## 3. Requested event coverage
 
 The requested feature set is finite enough to define a typed initial catalog without inventing an
-open-ended list:
+open-ended list. A universal release event is distinct from the operator-only Gateway update event.
+A daily organization digest may combine finance and stock snapshots, but each snapshot keeps its
+own cutoff and source semantics:
 
-| Event kind                      | Required source-of-truth transition                                                                                                                          |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `scheduling.booking.upcoming`   | A durable booking revision is in a configured upcoming window and remains eligible after cancellation/status recheck.                                        |
-| `domain.status.changed`         | An authorized subject's status changes from a captured prior value to a committed new value. Subscribers are subject-scoped.                                 |
-| `stock.low.crossed`             | Quantity crosses below the threshold from an armed state; recovery plus hysteresis re-arms it.                                                               |
-| `join.requested`                | An organization-scoped access request commits.                                                                                                               |
-| `join.approved`                 | The request decision commits; this is not yet proof of usable membership.                                                                                    |
-| `join.denied`                   | A denial commits for the exact request and applicant.                                                                                                        |
-| `membership.activated`          | Both membership and effective role authority are durable. Invite and request origins converge here.                                                          |
-| `finance.daily_summary.ready`   | An authoritative finance snapshot finishes and is frozen for the exact day/org/currency scope.                                                               |
-| `release.gateway.available`     | A released artifact with digest/version provenance exists for an eligible audience. Draft, build, or merely detected source changes do not qualify.          |
-| `automation.schedule.committed` | A durable schedule revision commits. An in-progress task or failed reconciliation emits a different operational state and never claims the schedule changed. |
-| `automation.run.failed`         | A durable automation run reaches a failed terminal state with bounded, sanitized diagnostics.                                                                |
-| `agent.report.ready`            | A catalog query finishes under fresh creator authority and produces an immutable, audience-safe result snapshot.                                             |
+| Event kind                      | Required source-of-truth transition                                                                                                                            |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `scheduling.booking.upcoming`   | A durable booking revision is in a configured upcoming window and remains eligible after cancellation/status recheck.                                          |
+| `domain.status.changed`         | An authorized subject's status changes from a captured prior value to a committed new value. Subscribers are subject-scoped.                                   |
+| `stock.low.crossed`             | Quantity crosses below the threshold from an armed state; recovery plus hysteresis re-arms it.                                                                 |
+| `join.requested`                | An organization-scoped access request commits.                                                                                                                 |
+| `join.approved`                 | The request decision commits; this is not yet proof of usable membership.                                                                                      |
+| `join.denied`                   | A denial commits for the exact request and applicant.                                                                                                          |
+| `membership.activated`          | Both membership and effective role authority are durable. Invite and request origins converge here.                                                            |
+| `finance.daily_summary.ready`   | An authoritative finance snapshot finishes and is frozen for the exact day/org/currency scope.                                                                 |
+| `stock.daily_summary.ready`     | A stock cutoff snapshot commits movement, threshold-crossing, and low-stock sections without inventing a monetary valuation.                                   |
+| `release.product.published`     | A minor or major product release with version, digest, publication receipt, and sanitized notes is available to all active users through per-user preferences. |
+| `release.gateway.available`     | A released artifact with digest/version provenance exists for an eligible audience. Draft, build, or merely detected source changes do not qualify.            |
+| `automation.schedule.committed` | A durable schedule revision commits. An in-progress task or failed reconciliation emits a different operational state and never claims the schedule changed.   |
+| `automation.run.failed`         | A durable automation run reaches a failed terminal state with bounded, sanitized diagnostics.                                                                  |
+| `automation.effects.committed`  | A run commits declared domain effects and records their immutable event/receipt identities; a no-op success does not qualify.                                  |
+| `agent.user_notice`             | An agent with current create authority admits bounded content for one exact authorized user under the same preference and receipt contract.                    |
+| `agent.report.ready`            | A catalog query finishes under fresh creator authority and produces an immutable, audience-safe result snapshot.                                               |
 
 Catalog extension must be reviewed code and migration data, not arbitrary table and column input.
 The settings UI, worker, schema validator, authorization map, and tests must consume the same catalog
@@ -136,7 +144,9 @@ inside the organization when it projects an event. Before inbox visibility or ex
 the system must recheck active membership, the event-specific capability, and subject-level access.
 A newly promoted user must not automatically inherit old sensitive event bodies, and a revoked user
 must not receive a pending external delivery. Exact-user lifecycle events still require current
-organization and subject binding.
+organization and subject binding. An approved or denied applicant who is not yet a member needs one
+narrow entitlement through `join_request.user_id`; it may expose only the sanitized outcome and safe
+organization display name, never organization records or navigation.
 
 Sensitive bodies should be projected per recipient with current field masking. External previews
 should contain minimal safe text and an authenticated Hub link. Logs and telemetry may carry event
@@ -181,7 +191,8 @@ its own immutable identity and causal link.
 Current tests mostly cover pure condition/template functions, import registration, missing Pulse
 authentication fields, and email no-op behavior without a provider key. They do not exercise the
 database grants, forced RLS, two-worker claim races, response loss, provider duplication, 501-row
-pagination, cross-org join audiences, role revocation, migration reconciliation, or DST behavior.
+pagination, cross-org join audiences, per-org pending-request identity, role revocation, migration
+reconciliation, or DST behavior.
 
 Notification work should not make existing large files larger. At the frozen Hub commit,
 `stock.service.ts`, the central RBAC service, and `hooks.server.ts` already span broad concerns.
@@ -197,10 +208,10 @@ separate parent-owned Browser Harness gate and are not claimed by this recon.
 ## 8. Prioritized delivery slices
 
 1. **S0 — security and schema reconciliation:** bind Pulse to its authenticated organization, fix
-   join audience selection, protect notification-rule definitions, reconcile Hub-owned migrations,
-   and correct ledger grants/state claims.
-2. **S1 — durable event foundation:** reviewed typed catalog, transaction outbox, stable cursor,
-   scheduler admission and heartbeat receipts, bounded catch-up, and producer contract.
+   join audience and pending-request selection, protect notification-rule definitions, reconcile
+   Hub-owned migrations, and correct ledger grants/state claims.
+2. **S1 — durable event foundation:** reviewed typed catalog, transaction outbox, leased row-state
+   claims, scheduler admission and heartbeat receipts, bounded catch-up, and producer contract.
 3. **S2 — delivery effects:** leased/fenced attempts, Gateway V2 operation receipts, unknown-result
    reconciliation, reminder migration, and direct-send migration.
 4. **S3 — human inbox and preferences:** RLS-scoped inbox, safe navigation, read/dismiss state,
@@ -241,6 +252,7 @@ below is the human index.
 | `NOTIF-015` |       P2 | confirmed gap | Requested, approved, denied, and activated are not durable separate events     | S4    |
 | `NOTIF-016` |       P2 | confirmed gap | No status-subscription registry exists                                         | S4    |
 | `NOTIF-017` |       P2 | confirmed gap | Agent reports and visuals lack durable authority and audience provenance       | S5    |
+| `NOTIF-018` |       P1 | confirmed new | Pending join-request lookup ignores organization despite per-org uniqueness    | S0    |
 
 Every finding has its full summary, impact, frozen anchors, baseline receipt, remediation, and
 falsifiable acceptance checks in `scratchnotification-recon.json`.

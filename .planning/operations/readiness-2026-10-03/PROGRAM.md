@@ -1,6 +1,6 @@
 # Hub and gateway readiness implementation
 
-The user authorized all 97 findings after reviewing the October 2 recon. The second FACES read-only pass adds 10 confirmed findings plus one reproduced baseline device-auth defect plus eight parent-review findings (116 tracked total). Notifications and configurable agent reports add 17 confirmed source findings from the October 3 recon (133 tracked total). Their implementation spec is under review; no live notification was sent. The canonical UI governance skill now receives evidence-backed lessons from each UI correction. This program owns their implementation; the historical 360 task denominator is unchanged.
+The user authorized all 97 findings after reviewing the October 2 recon. The second FACES read-only pass adds 10 confirmed findings plus one reproduced baseline device-auth defect plus eight parent-review findings (116 tracked total). Notifications and configurable agent reports add 18 confirmed source findings from the October 3 recon (134 tracked total). Their implementation spec is under review; no live notification was sent. The canonical UI governance skill now receives evidence-backed lessons from each UI correction. This program owns their implementation; the historical 360 task denominator is unchanged.
 
 ## Evidence and completion
 
@@ -149,3 +149,5 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | HC-035 | P1 | hub-mutations | implementing | Payment-plan creation permits a duplicate POST after a lost or malformed acknowledgement |
 
 The category migration fixture is now required by the native jobs lane (`hub:a65b2840`): 202 cases passed with zero skips; its exact-name validator and 25 contract cases passed, and disposable category schemas were verified removed. This local commit is not yet hosted-qualified. The UI governance lesson update passed independent review and reconciles older contradictory currency, optimistic-state and chip guidance.
+
+NOTIF-018 is confirmed by the `(user_id, organization_id)` pending uniqueness index versus the user-only service lookup. The narrow Pulse/join audience patch is approved and implementing; the broader notification platform remains in spec review. Wallet identity/currency/tender specification is approved after independent review; no wallet source completion is implied.
