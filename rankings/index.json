@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-03T16:51:00.332Z",
+	"generatedAt": "2026-10-03T17:21:06.094Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -939,38 +939,6 @@
 			"scoredAt": "2026-09-30T17:56:20.025Z"
 		},
 		{
-			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub backup scheduler is never started — backups and retention pruning never run",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-backup-scheduler-never-started.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "d65caaafbb438afdfee41a8826af665fcc74c526e37081dfdca07cd2a72c6df3",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Backup and retention pruning silently never run, risking unbounded data loss with no error signal.",
-			"evidence": [
-				"startBackupScheduler() has zero call sites anywhere in the repo",
-				"backs up and prunes unified_events/chat retention"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T19:54:07.150Z"
-		},
-		{
 			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1067,37 +1035,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:37:41.128Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-892615684",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/server/services/backup-scheduler.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-892615684.md",
-			"sourceUpdatedAt": "2026-10-03",
-			"sourceFingerprint": "49898406b2e2af48a5a2e12b5ba81921db7f326f713df3030ba2f5a4fb44f4c3",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "startBackupScheduler() having no call site anywhere means scheduled backups silently never run, a concrete and high-consequence data-protection gap.",
-			"evidence": [
-				"startBackupScheduler() has no call site anywhere in src/ or"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T00:31:55.240Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5accda62ce08",
@@ -1197,39 +1134,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:40:43.883Z"
-		},
-		{
-			"key": "pr:minion (gateway)#296",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#296 fix(gateway): harden tenant boundaries and durable delivery recovery",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/296",
-			"sourceUpdatedAt": "2026-10-03T16:46:32Z",
-			"sourceFingerprint": "4610d4cd0c641fe13f36744e8f0d57a7b74359129d7e3a08b6f734e654a4ca5d",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Security-hardening and durable-delivery work is high value but ships as an XL draft PR with only agent-level verification and pending parent security review.",
-			"evidence": [
-				"draft with five committed slices through 3e352a68",
-				"final security slice review pending per PR body",
-				"162 passing focused tests, no hosted CI or production qualification claimed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T16:51:00.185Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-supervised-release-defense-in-depth",
@@ -1466,6 +1370,40 @@
 			"scoredAt": "2026-09-27T03:58:27.486Z"
 		},
 		{
+			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub backup scheduler is never started — backups and retention pruning never run",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-backup-scheduler-never-started.md",
+			"sourceUpdatedAt": "2026-10-03",
+			"sourceFingerprint": "8ffcbe3e311cb3deb0e5036cd3d06088c7e4d796fbcc251c17e7b9f822c6d4f5",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:handoff-minion-meta-221859101"
+			],
+			"rationale": "Backup/retention scheduler is fully implemented but never invoked, meaning no backups or retention pruning currently run, with a clear fix or deletion path specified.",
+			"evidence": [
+				"startBackupScheduler() ... has zero call sites anywhere in the repo",
+				"no backup is ever taken and unified_events/chat retention pruning never runs, silently"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T17:21:05.918Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-3701397223",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1566,6 +1504,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T00:33:18.826Z"
+		},
+		{
+			"key": "pr:minion (gateway)#296",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#296 fix(gateway): harden tenant boundaries and durable delivery recovery",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/296",
+			"sourceUpdatedAt": "2026-10-03T17:07:53Z",
+			"sourceFingerprint": "35a78890ca711914089fcd2d6c2d5110d4fabba9f4dcf2ea36eef8cd6a05f658",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Large security-hardening PR (tenant isolation, delivery recovery) with agent-only verification and pending human security review before merge.",
+			"evidence": [
+				"Security changes require independent review before merge. This draft is not a production authorization.",
+				"Final parent review of the earlier security slices remains pending.",
+				"162 passing focused tests, passing TypeScript checks, and scoped lint"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T17:21:05.918Z"
 		},
 		{
 			"key": "pr:minion_hub#431",
@@ -19347,6 +19318,38 @@
 			"scoredAt": "2026-09-28T11:39:42.070Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown draining is routine maintenance with no indication of ongoing deployment issues.",
+			"evidence": [
+				"commit fix(nitter): serialize persistence and drain poller shutdown",
+				"tag: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T17:21:05.918Z"
+		},
+		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -21856,6 +21859,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T00:31:55.240Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-03",
+			"sourceFingerprint": "f6e667c68ce2ab17c596e42d29a91605c9d79592bc891870364fff6092871400",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:2026-09-16-hub-backup-scheduler-never-started"
+			],
+			"rationale": "This is a bulk auto-generated handoff marker aggregating many unrelated TODO lines from a data file rather than an actionable engineering task.",
+			"evidence": [
+				"Filed automatically by the factory handoff-ledger sweep",
+				"markers reference disparate unrelated lines in rankings/index.json across many repos/topics"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T17:21:05.918Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-29ee60e",
@@ -28850,38 +28887,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T00:26:00.479Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-03",
-			"sourceFingerprint": "f5b83318e4dc752907b6260e555706b50e7665eb2a7b8e13cbcf9ee5a3983ad4",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The flagged 'markers' are quoted text fragments from unrelated past proposals embedded in the generated rankings/index.json data file, not real TODO(handoff) code comments needing resolution.",
-			"evidence": [
-				"Target file is rankings/index.json, a generated index/data artifact, not source code",
-				"Quoted lines are disparate unrelated snippets (SQL migration, workshop camera, backup scheduler) consistent with indexed proposal text rather than one coherent open end"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T13:21:13.333Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
