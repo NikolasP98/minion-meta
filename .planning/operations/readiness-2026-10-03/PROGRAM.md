@@ -1,6 +1,6 @@
 # Hub and gateway readiness implementation
 
-The user authorized all 97 findings after reviewing the October 2 recon. The second FACES read-only pass adds 10 confirmed findings plus one reproduced baseline device-auth defect plus eight parent-review findings (116 tracked total). This program owns their implementation; the historical 360 task denominator is unchanged.
+The user authorized all 97 findings after reviewing the October 2 recon. The second FACES read-only pass adds 10 confirmed findings plus one reproduced baseline device-auth defect plus eight parent-review findings (116 tracked total). Notifications and configurable agent reports add 17 confirmed source findings from the October 3 recon (133 tracked total). Their implementation spec is under review; no live notification was sent. The canonical UI governance skill now receives evidence-backed lessons from each UI correction. This program owns their implementation; the historical 360 task denominator is unchanged.
 
 ## Evidence and completion
 
@@ -25,7 +25,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 
 ## Draft qualification
 
-[Hub draft PR431](https://github.com/NikolasP98/minion_hub/pull/431) contains reviewed server/core money checkpoint `82821c11`. Hosted CI passed 11 of 12 checks: build, QA stack, three PostgreSQL jobs, both browser lanes, labels and preview. The unit lane found one stale native-test count assertion among 5,721 passes and 249 explicit skips; `bbcbbd13` corrects that assertion and awaits the next hosted run. The earlier `13300fad` checkpoint passed all 12 checks. Payment-plan server recovery is committed as `c600711c` with independent review and the full 198-case native lane; hosted CI is running. Durable client recovery and money client adoption remain in progress. Gateway delivery recovery is committed as `3e352a68a`, with 162 focused tests and clean type/lint/format checks. No merge or intentional production release was performed.
+[Hub draft PR431](https://github.com/NikolasP98/minion_hub/pull/431) contains reviewed server/core money and payment-plan recovery. Hosted `c600711c` passed 11 of 12 checks, including build, the complete migration/seed QA stack, native PostgreSQL jobs and both browser lanes. Its unit lane caught three failures: an omitted central capability change and the old read-inventory assumption. Commit `0bbb9aaa` corrects both after independent review and 51 focused passing tests; all GitHub CI jobs now pass on that commit (11 checks passed, only the Vercel preview remains pending). The earlier `13300fad` checkpoint passed all 12 checks. Durable client recovery and money client adoption remain in progress. Gateway delivery recovery is committed as `3e352a68a`, with 162 focused tests and clean type/lint/format checks. No merge or intentional production release was performed.
 
 ## Register
 
@@ -39,8 +39,8 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | GW-006 | P1 | gateway-security | implemented-awaiting-review | JWT revocation neither disconnects active sockets nor survives gateway restart |
 | GW-007 | P1 | gateway-security | implemented-awaiting-review | Concurrent connect frames can authenticate one socket twice and leave a ghost client entry |
 | GW-008 | P1 | gateway-lifecycle | locally-verified-awaiting-release | bestEffort delivery without an onError callback acknowledges and deletes partially failed queue entries |
-| GW-009 | P1 | gateway-lifecycle | queued | A single cleanup error or hung channel stop aborts the remaining gateway shutdown sequence |
-| GW-010 | P1 | gateway-lifecycle | queued | Gateway startup creates background resources that are not reliably owned or stopped |
+| GW-009 | P1 | gateway-lifecycle | implementing | A single cleanup error or hung channel stop aborts the remaining gateway shutdown sequence |
+| GW-010 | P1 | gateway-lifecycle | implementing | Gateway startup creates background resources that are not reliably owned or stopped |
 | GW-011 | P1 | gateway-lifecycle | queued | Cron timeout and service stop mark work finished without cancelling the underlying agent run |
 | GW-012 | P1 | gateway-lifecycle | queued | Brain-vector leases are not fenced and external effects have no durable receipt boundary |
 | GW-013 | P1 | gateway-lifecycle | queued | Workshop binary sync bypasses the gateway's slow-consumer and bounded-work controls |
@@ -147,3 +147,5 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | GW-022 | P1 | hub-mutations | spec-review | Marketplace install writes an unused bundle without registering a runnable gateway agent |
 | UI-002 | P2 | hub-reactivity-accessibility | queued | Calendar toolbar controls overlap vertically on a narrow mobile viewport |
 | HC-035 | P1 | hub-mutations | implementing | Payment-plan creation permits a duplicate POST after a lost or malformed acknowledgement |
+
+The category migration fixture is now required by the native jobs lane (`hub:a65b2840`): 202 cases passed with zero skips; its exact-name validator and 25 contract cases passed, and disposable category schemas were verified removed. This local commit is not yet hosted-qualified. The UI governance lesson update passed independent review and reconciles older contradictory currency, optimistic-state and chip guidance.

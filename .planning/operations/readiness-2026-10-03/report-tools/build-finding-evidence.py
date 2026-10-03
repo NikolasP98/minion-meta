@@ -9,9 +9,9 @@ EV=BASE/'meta/.planning/operations/readiness-2026-10-03/evidence'
 REG=json.loads((EV.parent/'findings.json').read_text())
 RECON=json.loads(re.search(r'<script type="application/json" id="report-data">(.*?)</script>',(OLD/'report.html').read_text(),re.S)[1])
 ORIGINAL={r['id']:r for r in RECON['findings']}
-REPOS={k:BASE/k for k in ['hub','gateway','meta','factory','paperclip']}
+REPOS={k:BASE/k for k in ['hub','gateway','meta','factory','paperclip','site']}
 GH={k:v['github'] for k,v in RECON['repos'].items()}
-GH.update(factory='NikolasP98/minion-factory',paperclip='NikolasP98/paperclip-minion')
+GH.update(factory='NikolasP98/minion-factory',paperclip='NikolasP98/paperclip-minion',site='NikolasP98/minion-site')
 BEFORE={k:v['sha'] for k,v in RECON['repos'].items()}
 BEFORE.update({k:v for k,v in REG['bases'].items() if k not in BEFORE})
 ASSET=OUT/'assets/finding-evidence';ASSET.mkdir(parents=True,exist_ok=True)
@@ -58,12 +58,14 @@ def source_record(repo,path,ref,line=None,lines=None,note=''):
 BEFORE_LOGS={'GW-001':['gw-broadcast-cross-org-repro.log'],'HC-001':['hc-bulk-tag-repro.log'],'HS-028':['hs-numeric-repro.log'],'TQ-001':['tq001-effect-root-probe.log'],'TQ-004':['test-quality-reproductions.log'],'TQ-005':['test-quality-reproductions.log'],'TQ-006':['test-quality-reproductions.log'],'TQ-007':['test-quality-reproductions.log']}
 # Explicit mapping: a suite receipt is supporting evidence, not an assertion that every case is live-qualified.
 AFTER_LOGS={
+ 'HS-008':['native-categories-jobs.log','native-categories-qualified.log','native-categories-cleanup.log'],
+ 'TQ-008':['native-categories-contracts.log','native-categories-qualified.log'],
  'GW-015':['gw-lifecycle-final-commit-tests.log','gw-lifecycle-lock-reclaim-review.log'],
  'GW-008':['gw-lifecycle-core-final.log'],
  'GW-021':['evidence/gw021-fixed-auth-e2e.log'],
  'HS-028':['money-core-focused-final.log','money-server-final-broad.log'],
  'HS-017':['money-server-final-broad.log'],
- 'HC-035':['hc035-settlement-combined.log'],
+ 'HC-035':['hc035-jobs-final.log','hc035-hosted-unit-failure.log','hc035-capability-integration.log'],
  'HC-012':['hc012-013-focused-tests.log'], 'HC-013':['hc012-013-focused-tests.log'],
  'HC-033':['hc033-final-tests.log'], 'HC-032':['hub-scheduling-read-final.log'],
  'HS-003':['hub-fresh-authority-final-tests.log'],
@@ -73,6 +75,15 @@ AFTER_LOGS={
  'FACES-001':['faces-logger-final-tests.log'], 'FACES-002':['faces-firewall-tests.log'], 'FACES-004':['faces-log-final-tests.log'],
  'HS-030':['marketplace-mounted-final.log'], 'HS-031':['marketplace-mounted-final.log'],
  'TQ-003':['tq003-mutation-focused-tests.log'],
+}
+LOG_CONTEXT={
+ 'native-categories-jobs.log':('Local marked disposable PostgreSQL; actual category migration; zero production mutations','hub:a65b2840'),
+ 'native-categories-qualified.log':('Exact native jobs manifest validator; 202 passing cases, zero skips','hub:a65b2840'),
+ 'native-categories-contracts.log':('Local manifest and disposable-runtime safety contracts','hub:a65b2840'),
+ 'native-categories-cleanup.log':('Owned disposable PostgreSQL: zero remaining category fixture schemas','hub:a65b2840'),
+ 'hc035-jobs-final.log':('Local disposable PostgreSQL; 198 native cases; no production data','hub:c600711c'),
+ 'hc035-hosted-unit-failure.log':('GitHub Actions unit lane: three failures exposed incomplete integration','hub:c600711c'),
+ 'hc035-capability-integration.log':('Local focused correction: hooks, route authority and neighboring access rules','hub:0bbb9aaa'),
 }
 # Captured source evidence for findings added after the original report.
 EXTRA={
@@ -99,10 +110,11 @@ for finding in REG['findings']:
  for name in BEFORE_LOGS.get(fid,[]):
   p=OLD/'evidence'/name
   if p.exists():before.append(text_receipt(p,'Baseline reproduction: '+name,'Frozen audit source; synthetic local fixture',BEFORE.get(old.get('repo','hub'))))
+ if fid=='HS-008':before.append(text_receipt(BASE/'native-categories-baseline.log','Category native tests skipped in the old ordinary lane','Local baseline test discovery','hub:0bbb9aaa'))
  if fid=='OP-003':before.append(text_receipt(BASE/'factory-input-baseline.log','Factory provider-spawn baseline failure','Local reproduction of runner invocation'))
  if fid=='GW-021':before.append(text_receipt(BASE/'evidence/gw021-baseline-auth-e2e.log','Paired-device baseline failures','Local real WebSocket fixture',BEFORE['gateway']))
- anchors=old.get('evidence',[])
- for e in anchors[:6]:
+ anchors=[*old.get('evidence',[]),*finding.get('sourceAnchors',[])]
+ for e in anchors:
   if not isinstance(e,dict):continue
   repo=e.get('repo',old.get('repo','hub'));repo=repo if repo in REPOS else 'hub'
   path=e.get('file',e.get('path',''));ref=e.get('repoCommit',BEFORE[repo])
@@ -137,10 +149,16 @@ for finding in REG['findings']:
   after.append(dict(kind='diff',title='Committed implementation: '+repo+' '+full[:9],environment='Feature branch; not production',commit=full,excerpt=excerpt,href='assets/finding-evidence/'+patch_name,sha256=hashlib.sha256(diff.encode()).hexdigest(),source=f'git show {full} -- selected finding paths',note='Code evidence only. '+('Diff follows the original source anchors.' if matched else 'Representative changed files from this recorded commit; the commit may cover several findings.')))
  for name in AFTER_LOGS.get(fid,[]):
   p=BASE/name
-  if p.exists():after.append(text_receipt(p,'Verification: '+Path(name).name,'Local synthetic/disposable test environment',finding.get('code_commits',[])[-1] if finding.get('code_commits') else 'Uncommitted review candidate'))
+  if p.exists():
+   environment,revision=LOG_CONTEXT.get(name,('Local synthetic/disposable test environment',finding.get('code_commits',[])[-1] if finding.get('code_commits') else 'Uncommitted review candidate'))
+   after.append(text_receipt(p,'Verification: '+Path(name).name,environment,revision))
  if fid in ('HC-012','HC-013'):
   after.insert(0,image_record(EV/'calendar-074-mobile-recovered.png','After Retry: both failed weeks recover','Headless Chromium; actual calendar; synthetic fixture','07463ec1','Same 390 × 844 fixture after each Retry. The separate UI-002 toolbar overlap remains open.'))
   after.insert(0,image_record(EV/'calendar-074-mobile-failure.png','Fixed error handling under injected HTTP 503','Headless Chromium; actual calendar; synthetic fixture','07463ec1','Post-change failure state: missing data is visibly unavailable and retryable. This is not a pre-fix screenshot.'))
+ if fid=='HC-035' and (EV/'hc035-v6-desktop-overlap.png').exists():
+  before.insert(0,image_record(EV/'hc035-v6-desktop-overlap.png','Review found recovery actions overlapping adjacent card','Headless Chromium; actual PlanOpenForm; synthetic recovery records','Uncommitted v6 fixture on hub:a65b2840','1280 × 960 viewport with narrow form panels. The new recovery buttons overflow their panel. Correction remains in progress; this is captured failure evidence, not acceptance.'))
+ if fid=='HC-035' and (EV/'hc035-v6-mobile-clipped-actions.png').exists():
+  before.insert(0,image_record(EV/'hc035-v6-mobile-clipped-actions.png','Mobile action clipping despite zero document overflow','Headless Chromium; actual PlanOpenForm; synthetic recovery records','Uncommitted v6 fixture on hub:a65b2840','390 × 844 viewport: the recovery action extends offscreen while document.scrollWidth remains390. Visible control bounds are part of acceptance.'))
  if fid=='TQ-003':
   after.insert(0,image_record(EV/'dependency-parent-chromium.png','Actual browser security fixture','Headless Chromium; synthetic paste/sanitizer inputs','71152adb','Screenshot supports fixture provenance. The hosted receipt and mutation results establish the four behaviors.'))
   after.append(text_receipt(EV/'tq003-f333cbc2-hosted-browser.md','Hosted Chromium and deliberate regression receipts','GitHub Actions Chromium fixture','f333cbc2'))

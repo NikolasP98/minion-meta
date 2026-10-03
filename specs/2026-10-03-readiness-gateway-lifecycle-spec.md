@@ -17,16 +17,17 @@ verdict: approved
 
 ## 0. Product
 
-The gateway must retain undelivered work, bound background resource use and make shutdown observable. This batch covers GW-008 through GW-017 in independently reviewed slices.
+The gateway must retain undelivered work, bound background resource use and make startup and shutdown observable. This batch covers GW-008 through GW-017 in independently reviewed slices.
 
 ## Out of scope
 
-UI changes, production deployment and security RPC policy are separate batches. Provider exactly-once delivery is claimed only where the provider offers an actual idempotency receipt.
+Production release and merges are separate gates. Slice B includes shared-client and Hub/Site session adoption only as its explicit dependency; other UI and security RPC work retains separate ownership. Provider exactly-once delivery is claimed only with a verified provider idempotency receipt.
 
-Status: Slice A/A2 approved after two-pass review corrections and committed as locally reviewed checkpoint `860b9746d`; GW-015 operator resolution/provider inventory is specified for its next review; later slices remain directionally accepted and require a slice-specific limits/deadlines revision before mutation (revision 3)
-Baseline: `minion/minion` `origin/DEV` at `b841c36750e4bf10dd3f81a4896b19c699fe3132`, with reviewed gateway security checkpoints `98767f4de` and `758757b00` applied
+
+Status: Slice A/A2 and the GW-015 operator/provider closure slice are implemented and reviewed; Slice B (GW-009/GW-010) is approved for implementation after Standards and Spec review (revision 6)
+Baseline: `minion/minion` `origin/DEV` at `b841c36750e4bf10dd3f81a4896b19c699fe3132`, with reviewed gateway checkpoints through `3e352a68acd396bad09d22309cbab8d82a9cc01d` applied
 Findings: GW-008 through GW-017
-Immediate implementation slice after approval: GW-008 and the durable per-payload checkpoint portion of GW-015
+Immediate implementation slice after approval: Slice B, GW-009 and GW-010 together
 Primary scope: outbound delivery, gateway-owned background resources and shutdown, cron cancellation, brain-vector fencing, workshop/node work limits, memory sink durability, and event-store sampling. Cross-project Hub or protocol changes remain separately owned and must land before their dependent gateway slice is called complete.
 
 ## Observable outcome
@@ -106,47 +107,187 @@ No WebSocket or shared-package protocol change is required for this slice.
 
 ### AS-IS
 
-Shutdown awaits cleanup sequentially. A thrown `tailscaleCleanup`, channel stop, Gmail watcher stop, or HTTP close prevents later cron, heartbeat, event, socket, timer, database, and server finalizers. A hung channel account task can prevent shutdown indefinitely. Existing tests assert order in a success-only fixture.
+`createGatewayCloseHandler` in `src/gateway/server-core/server-close.ts` awaits cleanup in one sequential function. `tailscaleCleanup`, `stopChannel`, `stopGmailWatcher`, `WebSocketServer.close`, and each HTTP `close` can throw or wait without a local deadline; a failure or hang prevents later cron, heartbeat, event, socket, timer, database, and listener finalizers. Channel plugin types are stopped serially. Account stops within one plugin use a shared `Promise.all`, so one rejected or hung account prevents that plugin's finalizer and blocks the outer loop.
+
+The wrapper returned from `src/gateway/server.impl.ts` runs `gateway_stop` hooks and several global cleanup functions before the core close handler. It does not memoize a close promise, so a second close can repeat hooks and cleanup. Several catches intentionally suppress errors and therefore cannot tell the process coordinator whether an in-process restart is safe.
+
+The CLI and macOS runners duplicate `DRAIN_TIMEOUT_MS = 30_000` and `SHUTDOWN_TIMEOUT_MS = 5_000`. The generated systemd unit uses `TimeoutStopSec=15`. A cleanup path can therefore be killed after five seconds even though no component or overall shutdown budget exists, while changing one runner can silently diverge from the other.
+
+Both runners assign `server` only after `await startGatewayServer(...)`. A SIGTERM/SIGINT during a paused required initializer therefore sees `server === null`, exits through the outer shutdown path, and cannot ask the partially constructed gateway to roll back. Conversely, SIGTERM during the 30-second restart drain is ignored because `shuttingDown` is already true, so a systemd stop can retain the restart action and its 42-second force timer beyond `TimeoutStopSec=15`.
 
 ### TO-BE
 
-Shutdown is an idempotent state machine: `open -> stopping-admission -> finalizing -> closed`. The first caller owns one shared close promise; later callers receive that promise. Admission and new scheduled work stop first. Independent finalizers run with `Promise.allSettled`, per-component deadlines, and one overall deadline. Ordered dependencies are expressed as phases, not one fragile chain:
+Shutdown is an idempotent state machine:
 
-1. stop admission and scheduling;
-2. abort/drain active work within its component budget;
-3. close channel/accounts and sidecars independently;
-4. flush durable stores;
-5. close sockets, HTTP servers, databases, and remaining timers.
+```text
+starting -> ready | degraded -> stopping-admission -> draining -> finalizing
+         -> closed-clean | closed-dirty
+```
 
-A thrown or timed-out task is recorded once in a bounded summary and never prevents later phases from starting. A timeout releases the coordinator but does not claim that an uncooperative task stopped; its component is reported as timed out. Shutdown emits no message content or secrets.
+The first `close()` or `shutdown()` call synchronously enters `stopping-admission`, aborts the lifecycle signal, and owns one shared coordinator promise. Later callers join that coordinator. Each registered finalizer runs at most once. A startup failure enters the same rollback coordinator; it does not use a second cleanup path.
+
+Before invoking `startGatewayServer`, each runner creates a startup `AbortController` and passes its signal into the registry at construction. A stop/restart signal while `start()` is pending aborts that exact generation. The start promise settles only after the same bounded rollback coordinator settles and returns or carries its bounded shutdown summary; the runner never needs a published `GatewayServer` object to clean partial startup. A startup abort whose rollback is dirty cannot enter an in-process retry.
+
+Phases run in order because later phases depend on earlier admission and producer shutdown. Tasks within one phase are independent and execute through settled aggregation. Each task has a local deadline, each phase has a budget, and every wait is capped by one monotonic overall deadline. A throw or timeout is recorded and the next phase still starts. A timeout releases the coordinator but does not claim that an uncooperative task stopped.
+
+| Phase                   | Default phase budget | Required work                                                                                                                                                                                                                  | Default task caps                                                                                                  |
+| ----------------------- | -------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| P0 `stopping-admission` |               250 ms | Close the admission gate; synchronously stop cron/heartbeat/channel replacement scheduling, reconnect/reload admission, and new deferred work; emit the bounded shutdown event while authenticated sockets are still writable. | Synchronous tasks; an asynchronous stop hook is capped by the remaining phase budget.                              |
+| P1 `draining`           |             2,000 ms | Abort active chat turns, node invokes, approvals, wizards, debug sessions, startup initializers, and owned background tasks; wait only for cooperative settlement.                                                             | 2,000 ms per task, capped by the phase/overall remainder.                                                          |
+| P2 `producers`          |             3,000 ms | Stop channel accounts, Gmail, plugins, browser/canvas/Tailscale/Bonjour, config reload, refresh/user services, and other effect producers.                                                                                     | 1,500 ms per channel account with concurrency 8; 1,000 ms per plugin/hook; no task may exceed the phase remainder. |
+| P3 `durability`         |             2,500 ms | Flush/close independent stores after the producer phase. A store whose producer timed out closes only after old-generation access is fenced; otherwise its unsafe close is withheld and reported for process-exit containment. | 2,000 ms per flush/close pair, capped by the phase/overall remainder.                                              |
+| P4 `transports`         |             1,500 ms | Close main, PTY, shell-bridge and canvas WebSockets; close every HTTP alias; dispose remaining timers/listeners and generation-owned global callbacks.                                                                         | 1,250 ms graceful socket/listener close, then destroy only sockets owned by this generation.                       |
+
+The coordinator overall deadline is **10,000 ms**. The listed phase budgets total 9,250 ms and leave 750 ms for transition and summary work. Unused time in one phase does not extend the overall deadline. CLI and macOS runners import one shared constant and arm their outer forced-exit deadline at **12,000 ms** for ordinary shutdown and `30,000 + 12,000 ms` for a restart drain plus shutdown when no stop signal intervenes. The generated systemd unit remains at 15 seconds, leaving three seconds after the ordinary process-level deadline. A constants regression enforces `coordinator < process outer < systemd` and prevents duplicate runner literals.
+
+`SIGTERM` or `SIGINT` has priority over a pending restart, including its 30-second task drain. The stop signal aborts that drain, changes the requested action permanently to stop, cancels respawn/in-process restart, and replaces the old force timer with a deadline no later than 12 seconds from the stop signal. A second restart signal cannot lower the priority back to restart. This keeps systemd stop inside 15 seconds rather than retaining a 42-second restart timer.
+
+Channel ownership is normalized to a two-step handle: synchronous, idempotent `requestStop()` for every account, then asynchronous `finalize(signal)` with concurrency eight. This avoids both an unbounded simultaneous cleanup burst and a queued account that never receives its stop signal. One rejected or hung account cannot suppress sibling account attempts or the plugin-level stop hook. If the phase deadline is exhausted before a queued finalizer begins, it is recorded as `deadline-exhausted`, shutdown becomes dirty, and no clean completion is claimed.
+
+Every asynchronous task receives the already-aborted lifecycle signal plus its phase signal. On timeout, the generation is permanently revoked before later phases continue, so a late task cannot publish state, enqueue a new effect through a generation-checked boundary, or clear a successor's resource. In-repo effect and store entry points reject the revoked generation before access. P3 tracks producer dependencies for each store: if the timed-out producer is fenced at every access boundary, the store may flush/close; if any path is not fenced, that store's destructive close is withheld, the summary records `producer-unsettled`, and process exit remains the containment boundary. Other independent P3/P4 finalizers still run. Code that ignores abort may therefore remain alive until process exit; shutdown reports possible external/store effect uncertainty, forbids an in-process restart, and never describes the producer as stopped or cancelled.
+
+The public `GatewayServer.close(opts): Promise<void>` signature remains source-compatible for the many tests, embedders and callers that only await cleanup. A sibling `GatewayServer.shutdown(opts): Promise<GatewayShutdownSummary>` exposes the result to the CLI, macOS runner and lifecycle tests. Both methods cache their public promise and share the same underlying coordinator; calling either first cannot start a second shutdown. The summary is bounded:
+
+```ts
+type GatewayShutdownSummary = {
+  state: "closed-clean" | "closed-dirty";
+  reason: string;
+  startedAt: number;
+  durationMs: number;
+  phases: Array<{
+    name: "stopping-admission" | "draining" | "producers" | "durability" | "transports";
+    durationMs: number;
+    failed: number;
+    timedOut: number;
+    uncertain: number;
+  }>;
+  failed: Array<{ component: string; phase: string; errorClass: string }>;
+  timedOut: Array<{ component: string; phase: string; timeoutMs: number }>;
+  uncertain: Array<{ component: string; phase: string; reasonClass: string }>;
+  truncated: { failed: number; timedOut: number; uncertain: number };
+  safeForInProcessRestart: boolean;
+};
+```
+
+The three detail arrays contain at most 64 total entries. Static component names are at most 96 characters. `errorClass` and `reasonClass` come from a fixed allowlist rather than `Error.message`; the shutdown reason is sanitized and capped at 256 characters. Exact aggregate counts remain available through `truncated`. No stack, path, payload, message body, token, JWT, workshop update, or provider response enters the summary.
+
+Any rejected/timed-out task or pending late initializer produces `closed-dirty` and `safeForInProcessRestart: false`. Ordinary process shutdown may still exit after reporting the dirty summary because process death is the final containment boundary. A restart may respawn or hand control to a supervisor, but the CLI and macOS runners must refuse an in-process restart when the summary is dirty. They exit for supervisor recovery or return a visible restart failure when no full-process path exists; they never start a second generation over unresolved work.
+
+GW-011 remains a named dependency. Until its active cron-run cancellation/receipt contract lands, any cron run still active when P1 expires makes shutdown dirty and blocks an in-process restart. Slice B does not claim that an abandoned cron effect was cancelled.
 
 ### DELTA
 
-1. Add an owned shutdown coordinator with named phases, per-task deadlines, and an overall deadline.
-2. Wrap each channel account stop/task so one account cannot block siblings.
-3. Return/reuse one close promise and run every registered finalizer at most once.
-4. Preserve required ordering only where a resource dependency exists; use settled aggregation inside each phase.
-5. Emit a bounded `{failed, timedOut}` component summary and return it to tests.
+1. Add `server-owned-resources.ts` with the five named phases, monotonic budgets, settled task containment, exact-once ownership, and a shared close promise.
+2. Move the wrapper cleanup in `server.impl.ts` into named registry tasks so `gateway_stop`, diagnostics, skills, auth-rate-limit, channel-health, orchestration, template, request-metrics, and core finalizers share one failure boundary.
+3. Change channel ownership to synchronous `requestStop()` plus asynchronous `finalize(signal)`: signal all owned accounts first, then await finalizers with concurrency 8 and the stated deadlines; run the plugin stop hook independently.
+4. Preserve `GatewayServer.close(): Promise<void>` as a shared compatibility wrapper, add shared `shutdown(): Promise<GatewayShutdownSummary>`, and make the CLI/macOS restart coordinators inspect `safeForInProcessRestart`.
+5. Pass a runner-owned startup `AbortSignal` into `startGatewayServer`; make start rejection/abort await the shared rollback and expose its bounded summary even before a server handle is returned.
+6. Centralize the coordinator, drain, process-outer, and systemd relationship constants; add stop-over-restart action precedence and retain the existing 15-second systemd contract.
+7. Preserve restart wire behavior: authenticated non-node clients receive close code 1012 only for a deliberate restart; ordinary stop remains 1001. A timed-out close does not emit a false clean/restart-complete signal.
 
 ## GW-010: one owner for startup resources
 
 ### AS-IS
 
-Event-system initialization is detached. Close only shuts it down if assignment completed, so init can finish after teardown. The heartbeat interval is not cleared. Startup returns a refresh scheduler and user subsystem that production does not retain or stop. Workshop SQLite exposes a close function but the gateway close path does not call it.
+`startGatewayServer` creates resources before and after the main listeners are published, and ownership is split across locals, module globals, closures, and detached promises. `createGatewayRuntimeState` opens the Files store/cleanup interval, binds every HTTP alias, installs the main WebSocket server, and creates an optional PTY WebSocket server before most later startup work. A failure after that point has no common rollback path.
+
+The event system is initialized through a detached promise. Close shuts it down only when assignment already completed; a paused initializer can resolve after teardown and start its heartbeat interval. `startGatewaySidecars` returns a refresh scheduler and user subsystem, but production retains neither finalizer. Workshop exposes `closeWorkshopYjsDb`, but close does not call it and the current function does not clear room persistence/empty-room timers, memberships, documents, or awareness. Template loading, plugin `gateway_start`, memory startup, model checks, interrupted-turn recovery, delivery recovery, update checks, and several initial refreshes are detached without a lifecycle generation fence.
+
+The current concrete ownership gaps are:
+
+| Resource family                | Current source/behavior                                                                                                                                                                                            | Missing ownership boundary                                                                                                               |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Process/global timers          | diagnostic heartbeat, auth limiter, request metrics, reliability cleanup/broadcast, subagent registry sweep/listeners/retry timers                                                                                 | Some individual stop calls exist; reliability and subagent production teardown are absent, and all are outside one generation registry.  |
+| Restart/global callbacks       | SIGUSR1 policy, pre-restart deferral, health broadcaster, update notifier                                                                                                                                          | Module-global callbacks can retain the old gateway; setters need nullable or owner-token disposal.                                       |
+| Secrets/free-tier/files        | `secrets.sqlite`, `openFreeTierDb`, `createFilesHttpHandler` store plus ten-minute cleanup                                                                                                                         | Raw database/interval handles are hidden behind managers/handlers and cannot all be closed by the server.                                |
+| Event/workshop                 | detached `initEventSystem`, event heartbeat, Turso/retention/rate-limit timers, workshop Yjs DB and room timers                                                                                                    | Late resolution can publish after close; workshop close is incomplete and unwired.                                                       |
+| Ledger/observations/trajectory | gateway hook-owned message ledger and personal observations; trajectory lifecycle writers                                                                                                                          | Start hooks can race stop; trajectory hooks/writers lack a production generation teardown.                                               |
+| Memory                         | detached memory backend; cached builtin/QMD managers and typed DB registry                                                                                                                                         | Managers expose close operations but the gateway owns no close-all handle and can publish after stop.                                    |
+| Main transports                | all HTTP aliases, main WSS, auth-pending and authenticated clients                                                                                                                                                 | Main handles are retained, but close is unbounded and startup failure does not roll them back.                                           |
+| Auxiliary transports           | PTY WSS, shell bridge WSS/access relay, canvas host/server                                                                                                                                                         | PTY and bridge WSS ownership is not returned consistently; relay close is coupled only to the first HTTP server.                         |
+| Network sidecars               | Bonjour, Tailscale, Gmail watcher/pubsub, channels/accounts, plugin services, browser control, config reloader                                                                                                     | Mixed local ownership and sequential teardown; no shared init/close generation.                                                          |
+| Scheduled/background work      | refresh scheduler, user subsystem, cron, channel health, channel mirror refresh, maintenance timers, heartbeat runner/wake timer, delivery recovery, model checks, interrupted-turn recovery, update outcome timer | Several handles are returned but discarded; several promises/timers are detached; heartbeat wake and mirror globals can cross a restart. |
+| Channel state                  | channel restart handler, mirror account source, mirror tick, status-debounce timer                                                                                                                                 | Module globals/timer can target the old channel manager after in-process restart.                                                        |
+| Request-scoped registries      | `NodeRegistry` pending invoke timers, node subscriptions, `ExecApprovalManager`, exec-approval forwarder, wizard sessions, debug stepped-build sessions, chat abort controllers                                    | Pending callers/timers lack a gateway-wide cancel/dispose pass.                                                                          |
+| Hook/dispatcher globals        | MCP dispatcher/identity resolver, Google ADC client, Hub REST client, skills remote registry, internal/global hook runners                                                                                         | Existing nullable/reset APIs are not applied as generation-owned disposers; a stale close could clear a newer generation.                |
+| Observability globals          | reliability broadcaster, debug broadcaster, health broadcaster, orchestration bridge                                                                                                                               | Closures retain old client sets and can deliver into a closed generation.                                                                |
+| Shell/durable stores           | Shell run durability, in-flight-turn DB                                                                                                                                                                            | Current close covers part of this family; it must move into the common ordered durability phase without regressing quiesce-before-close. |
 
 ### TO-BE
 
-`startGateway` owns one `GatewayOwnedResources` registry created before resource initialization. Registration is synchronous: every resource either registers an idempotent finalizer before it becomes externally visible or initialization fails. Async initializers receive the lifecycle `AbortSignal`; close waits for their settlement and immediately finalizes any resource that resolves after stop began.
+`startGatewayServer` creates one generation-numbered `GatewayOwnedResources` registry before the first resource allocation. A resource slot is registered synchronously before its initializer starts. The initializer receives the lifecycle `AbortSignal`, immutable generation, and a child registrar. Any socket, timer, database, listener, or global callback allocated before the initializer resolves is registered immediately; otherwise the initializer must roll it back before rejecting.
 
-The registry includes event readiness/store, heartbeat interval, refresh scheduler, user subsystem, workshop Yjs database, channel health monitor, mirror refresh, cron, browser/config services, HTTP/WS servers, and every existing sidecar. The server does not advertise readiness until required resources have either initialized or produced an explicit degraded-readiness state permitted by current product policy.
+An initializer may publish its result only while its generation is current, non-revoked and in `starting`, `ready` or `degraded`; publication is forbidden from `stopping-admission` onward. Required initializers additionally must publish before the separate `requiredAdmissionReady` predicate can open the main listener. Optional initializers may publish while the live generation is already `ready` or `degraded` and update only their named component state. If close begins first, the registry aborts them. A result that resolves after abort is finalized immediately and is never assigned to a server field, installed in a module global, used to start a timer, or exposed to a handler. The registry waits only through the P1 initializer budget; an initializer that neither settles nor proves rollback makes the close dirty. Registration after `stopping-admission` immediately finalizes the submitted child and reports a late-registration failure.
+
+All global setters use an owner-token disposer or compare-and-clear operation. A generation may clear only the exact callback/client/runner it installed. A late cleanup from generation N cannot null generation N+1. Existing nullable APIs such as MCP dispatcher/identity, Google ADC, Hub REST, skills registry, health broadcaster, channel mirror source/restart handler, debug broadcaster, internal hooks, global hook runner, and trajectory registration are wired through that rule; missing production reset APIs are added for reliability, subagent state, update notification, heartbeat wake, approvals, wizard/debug sessions, and memory manager registries.
+
+Startup listener publication moves to the end of required initialization. HTTP servers and WebSocket servers may be constructed earlier and registered for rollback, but no TCP listener is published until the registry, auth/admission gate, request handlers, durable stores required by enabled features, and generation cleanup are ready. The final primary-listen callback opens admission synchronously before yielding; a racing client either receives connection refusal before the bind or reaches an open core, never a new pre-handshake close contract. Bonjour and Tailscale publication happen only after that transition.
+
+Optional initializers that can produce external effects do not run before core readiness merely to hold the main port closed. After core publication they have explicit `initializing -> ready | degraded` component state, remain generation-owned, and obey the same late-resolution rule. Their handlers fail with their existing explicit unavailable result while `initializing` or `degraded`; they do not appear as mysteriously empty data. Required initialization stays fail-closed. This gives existing consumers a connection refusal during required startup without making a hung Gmail/channel/browser/plugin initializer block the core indefinitely.
+
+This choice is based on the actual consumers:
+
+- Hub uses installed `@minion-stack/shared@0.9.0` `GatewayClient` with `autoReconnect: true`, handles deliberate 1012 restarts with a flat eager retry window, and otherwise uses the shared exponential backoff. Its authenticated-state/hello path runs only from the original `connect().then`.
+- Site also resolves installed `@minion-stack/shared@0.9.0` and uses `autoReconnect: true`, but likewise publishes member connected state and `onHelloOk` only from the original `connect().then`.
+- Paperclip uses a one-shot client and retries `ECONNREFUSED`, `ECONNRESET`, socket hang-up, and connect timeout twice. It does not classify a 1013 pre-handshake close as transient, and an active request must not be blindly replayed after an ambiguous disconnect.
+
+The transport reconnect in Hub and Site is insufficient by itself: after an initial connection refusal, the later socket can authenticate while the application remains visibly disconnected and skips its hello initialization. Their installed 0.9.0 runtime and declarations do not expose `GatewayClientOptions.onAuthenticated`; the reconnect timer discards the successful `connect()` result. Meta source at commit `900a988f` contains an unreleased callback implementation, but the package version remains 0.9.0 and the release changeset is pending. Slice B therefore depends on publishing or otherwise producing one reviewed immutable `@minion-stack/shared` artifact that contains the callback in both runtime and declarations, then pinning Hub and Site to that exact artifact.
+
+The released callback contract fires once for every successful current handshake, including automatic reconnect, with immutable session/generation identity. It settles the corresponding connect promise before notification; stale/superseded attempts never notify; a synchronous throw or rejected callback is contained and reported without changing socket state or creating an unhandled rejection. Shared tests cover initial success, automatic reconnect, stale close/reentrant connect, callback throw/rejection, and exactly-once delivery.
+
+Hub and Site then move successful-session publication to that callback, fenced by current client plus session generation. The initial `connect().then` does not publish the same session twice. A successful reconnect clears the prior startup error and runs the same hello/state load exactly once. Hub backup/cutover clients suppress publication while they are not current; promotion explicitly applies their already-authenticated hello once, and their callback cannot mutate primary state before or after promotion. This changes a shared client API but not the WebSocket schema.
+
+With the shared artifact and consumer adoption, keeping the listener unpublished through required initialization preserves all three behaviors without changing Paperclip or the wire protocol. Release order is shared package/artifact first, Hub/Site pins and callback adoption second, and Gateway late listener publication last or in a coordinated release that proves those exact installed artifacts before enabling it. Once listeners are published, health/readiness reports core `ready` plus bounded per-component `initializing`, `ready`, or `degraded` state; it never reports core ready while required initialization is pending. A tenant-JWT configuration requires the user subsystem and durable revocation store to be healthy before publication. Optional browser, Gmail, Tailscale, channel, plugin, memory, Turso mirror, update-check, and similar failures retain their current product degradation policy but are explicit in readiness. Enabled durable Shells/store prerequisites remain startup-fatal as today.
+
+The registry owns this implementation inventory before Slice B is complete:
+
+| Registry owner     | Required lifecycle work                                                                                                                                                      | Shutdown phase                                       |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `startup/global`   | diagnostic/auth/metrics/reliability/subagent timers and all global callback/token disposers                                                                                  | P0/P4                                                |
+| `stores/core`      | secrets, free-tier, Files store/cleanup, event/Turso, workshop rooms/DB, ledger, observations, trajectory, memory managers/typed DBs, Shells, in-flight turns                | P3                                                   |
+| `transport/http`   | every bound HTTP alias and all accepted sockets, including first-listener shell relay coupling                                                                               | P4                                                   |
+| `transport/ws`     | main WSS, PTY WSS, shell bridge WSS, canvas sockets, authenticated/auth-pending clients                                                                                      | P0/P4                                                |
+| `sidecars/network` | Bonjour, Tailscale, Gmail, channels/accounts, plugin services, browser, canvas, config reloader                                                                              | P2                                                   |
+| `schedulers`       | refresh scheduler, user subsystem, cron admission, channel health/mirror/status debounce, maintenance, heartbeat runner/wake, delivery recovery, model checks, update timers | P0/P1/P2                                             |
+| `requests`         | node invokes/subscriptions, approvals/forwarder, wizards, debug sessions, chat controllers                                                                                   | P0/P1                                                |
+| `initializers`     | event, template, gateway-start hooks, memory, interrupted-turn recovery, model checks, update checks, delivery recovery and any future detached startup                      | P1, followed by the resolved resource's normal phase |
+
+Readiness publication and startup rollback use the same registry. Failure after opening Files/free-tier/secrets/workshop databases or after constructing any server closes them and leaves every port re-bindable. A dirty startup cannot retry in process.
 
 ### DELTA
 
-1. Add `server-owned-resources.ts` with synchronous registration, lifecycle abort, idempotent phase-aware close, and test-visible summaries.
-2. Return/retain refresh scheduler and user subsystem finalizers from startup.
-3. Own event initialization as an awaited/abortable promise and close the late-resolve race.
-4. Register heartbeat and every periodic timer at creation; wire workshop DB close into the final phase.
-5. Route GW-009 shutdown through this registry and remove detached cleanup ownership.
+1. Split runtime construction from `listen`: register constructed HTTP/WSS/PTY/Files resources first, finish required initialization, then publish every configured bind host as one readiness transition. Open admission synchronously in the primary-listen completion path before yielding; start Bonjour/Tailscale advertisement afterward. If a secondary alias fails, preserve the current explicit degraded warning; if the primary fails, roll back the whole generation.
+2. Change resource factories that hide ownership (`createFilesHttpHandler`, free-tier/secrets construction, PTY/bridge setup, workshop, memory, reliability/subagent globals) to return explicit idempotent handles or register children as they allocate.
+3. Replace detached event/template/hook/memory/recovery/model/update/delivery startup with registry initializer slots and generation-checked publication.
+4. Retain and register refresh scheduler and user subsystem finalizers; require healthy revocation state before publishing a tenant-JWT listener.
+5. Extend workshop shutdown to flush/clear persistence and empty-room timers, memberships, documents, awareness, and the DB once; register it in P3.
+6. Add dispose/cancel ownership for node invokes/subscriptions, approvals/forwarder, wizards, debug sessions, active chat controllers, heartbeat wake, channel debounce/mirror, and the enumerated globals.
+7. Route startup rollback and GW-009 close through the same registry. Remove direct duplicated teardown only after each resource has an inventory test proving its new owner.
+8. Release/pin the reviewed shared-client callback runtime plus declarations, then adopt it in Hub and Site as the single generation-fenced successful-session path before late listener publication ships. Keep Paperclip one-shot semantics and its existing pre-admission connection-refusal retries; do not replay an admitted request after disconnect.
+
+### Slice B acceptance matrix
+
+**Topics:** infra, auth, test
+
+| Case                    | Required proof                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Idempotence             | Two concurrent `close()` calls receive the same cached void promise; concurrent or mixed `close()` and `shutdown()` calls share one coordinator and summary; every hook and finalizer runs once.                                                                                                                                                                                                                                                                                                                                                                                     |
+| Failure containment     | Each P0-P4 task is injected once with a throw and once with a never-settling promise; every later phase starts, and the bounded summary records the exact failed/timed-out component.                                                                                                                                                                                                                                                                                                                                                                                                |
+| Channel fan-out         | More than eight accounts, including healthy, rejecting and hanging cases, all receive synchronous stop; at most eight finalizers run at once, healthy siblings settle, queued deadline exhaustion is named, and the plugin hook runs.                                                                                                                                                                                                                                                                                                                                                |
+| Late initialization     | Pause event, template, plugin-hook, memory, user, and delivery-recovery initializers; close, then resolve. Each returned resource finalizes once and no field/global/timer is published.                                                                                                                                                                                                                                                                                                                                                                                             |
+| Partial allocation      | An initializer opens a real loopback listener or SQLite handle and then rejects/aborts; the port rebinds and the database reopens immediately after rollback.                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| Transport ownership     | Real main, PTY, bridge, canvas, authenticated, and auth-pending sockets close; every HTTP alias closes; remaining owned sockets are destroyed only after the grace cap.                                                                                                                                                                                                                                                                                                                                                                                                              |
+| Durable ownership       | Files, free-tier, secrets, workshop, event, ledger, observation, memory, Shells, and in-flight-turn stores each flush/close once after settled/fenced producers; independent stores still finalize when one dependency is unsafe.                                                                                                                                                                                                                                                                                                                                                    |
+| Producer timeout        | A fake P2 producer ignores abort and attempts a store/effect after its deadline. Old-generation guarded access is rejected; an unfenced-store fixture withholds only that unsafe close, records uncertainty/dirty state, and cannot start N+1 before process exit.                                                                                                                                                                                                                                                                                                                   |
+| Deferred registries     | Pending node invoke, approval, wizard, debug pause, chat, heartbeat wake, channel debounce, and subscription operations settle as cancelled/unavailable and leave no timer.                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Global fencing          | Start N, close N, start N+1, then settle a late N initializer/cleanup. N cannot clear N+1 globals or deliver an event to either generation.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| Admission compatibility | Installed artifact tests prove Hub/Site runtime and declarations contain the reviewed callback. Before required readiness, the real port is not accepting. Hub and Site retry, then publish the later successful session exactly once and clear the startup error; a callback throw/rejection is contained. Backup/cutover stays inert until promotion. Paperclip follows its existing bounded pre-admission refusal retry, all three complete the existing handshake after publication, and an admitted Paperclip request is never replayed merely because shutdown disconnects it. |
+| Degraded readiness      | Every optional initializer family can fail independently; readiness names that family as degraded while required auth/revocation and enabled durable prerequisites still fail startup closed.                                                                                                                                                                                                                                                                                                                                                                                        |
+| Repetition              | Twenty real start/close cycles on loopback with fake timers where appropriate leave zero registry-owned handles, ports, databases, module callbacks, and pending promises.                                                                                                                                                                                                                                                                                                                                                                                                           |
+| Outer deadlines         | Never-settling tasks consume the configured per-phase caps and the coordinator still summarizes by 10 seconds before the 12-second process deadline; constants remain below systemd's 15 seconds in CLI and macOS paths.                                                                                                                                                                                                                                                                                                                                                             |
+| Signal during startup   | Pause a required initializer before `start()` returns, send SIGTERM in the real CLI and macOS runner harnesses, and prove the runner aborts that registry, waits for bounded rollback, leaves the port/store reusable, and never starts another generation.                                                                                                                                                                                                                                                                                                                          |
+| Stop supersedes restart | Begin the 30-second restart drain, then send SIGTERM. The drain aborts, restart/respawn is permanently cancelled, a new outer deadline is at most 12 seconds from SIGTERM, shutdown uses ordinary-stop semantics, and no 42-second/systemd overrun remains.                                                                                                                                                                                                                                                                                                                          |
+| Dirty restart           | A timed-out resource or active pre-GW-011 cron run returns `safeForInProcessRestart: false`; CLI and macOS do not execute the next in-process `start()`.                                                                                                                                                                                                                                                                                                                                                                                                                             |
 
 ## GW-011: cancellable, generation-owned cron runs
 
@@ -301,11 +442,11 @@ the 26 bundled outbound adapters can receive the stable
 `{queueId,payloadId,operationIndex}` key, regardless of whether a downstream provider may have an
 unwired idempotency feature. The source-supported classification for this revision is:
 
-| Classification | Channel adapters | Automatic uncertain replay |
-| --- | --- | --- |
-| `unsupported` in the current gateway contract | `bluebubbles`, `discord`, `feishu`, `googlechat`, `imessage`, `irc`, `line`, `linq`, `matrix`, `mattermost`, `whatsapp-cloud`, `messenger`, `instagram`, `msteams`, `nextcloud-talk`, `nostr`, `signal`, `slack`, `telegram`, `tlon`, `twitch`, `wati`, `weixin`, `whatsapp`, `zalo`, `zalouser` | Withheld |
-| `unknown` | Every externally installed channel plugin whose source and provider contract were not reviewed in this checkout | Withheld |
-| `supported` | None verified | Not applicable |
+| Classification                                | Channel adapters                                                                                                                                                                                                                                                                                 | Automatic uncertain replay |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `unsupported` in the current gateway contract | `bluebubbles`, `discord`, `feishu`, `googlechat`, `imessage`, `irc`, `line`, `linq`, `matrix`, `mattermost`, `whatsapp-cloud`, `messenger`, `instagram`, `msteams`, `nextcloud-talk`, `nostr`, `signal`, `slack`, `telegram`, `tlon`, `twitch`, `wati`, `weixin`, `whatsapp`, `zalo`, `zalouser` | Withheld                   |
+| `unknown`                                     | Every externally installed channel plugin whose source and provider contract were not reviewed in this checkout                                                                                                                                                                                  | Withheld                   |
+| `supported`                                   | None verified                                                                                                                                                                                                                                                                                    | Not applicable             |
 
 `unsupported` here is a statement about the present adapter boundary, not a claim that the remote
 provider can never support idempotency. A future `supported` declaration requires primary provider
@@ -323,7 +464,7 @@ the gateway WebSocket, HTTP, Hub, Site, Paperclip, or shared protocol:
    receipt counts, truncation flags, and legacy status. It never prints message text, media URLs,
    raw recipient/account IDs, provider error messages, credentials, or raw provider receipt IDs.
 2. `delivery queue resolve-delivered --id <queue-id> --payload <payload-id>
-   --generation <n> --evidence-code <bounded-code>` may change only `uncertain` to an
+--generation <n> --evidence-code <bounded-code>` may change only `uncertain` to an
    operator-confirmed terminal state. The checkpoint stores the resolution kind, timestamp,
    invoking local uid, and a digest of the bounded evidence code before terminal cleanup. It cannot
    alter `pending`, `in-flight`, `accepted`, or `suppressed` payloads.
@@ -348,6 +489,51 @@ PID is not live, preserves the marker under a no-clobber evidence name, syncs th
 removes the gate. PID uncertainty, token drift, a live owner, filesystem ambiguity, or an active
 primary lease fails closed. Normal startup and recovery never auto-reap this gate.
 
+Heartbeat delivery has a second durable owner record in the session store. Before queue admission,
+the runner allocates the queue ID and persists a content-free correlation-v1 marker containing the
+attempt ID, random owner token, owner PID, and queue ID. The outbound queue retains a successful
+terminal caller-managed entry until the runner has first changed that marker to `withheld` and
+persisted `lastHeartbeatText`; only then does it unlink the queue and clear the marker. A crash at
+each boundary therefore has an inspectable state:
+
+Admission and every settlement use the exact bounded strict store updater: the lock owner is
+revalidated before publication, the temporary file is synced, and the containing directory is
+synced after rename. A failure to durably admit stops before the provider boundary. A failure to
+durably mark completion stops before caller-managed queue acknowledgement, leaving the terminal
+queue and the correlated marker available for recovery. The final marker cleanup is also strict;
+its failure remains a visible completed marker rather than permitting an automatic replay.
+Queue and session-store persistence share one low-level directory-sync policy. `EINVAL`, `ENOTSUP`,
+and `EBADF` mean the platform does not support syncing a directory handle and are the only tolerated
+codes; real I/O failures such as `EIO` remain fatal and visible. Ordinary entry and last-route
+writers re-read with the cache bypassed after taking the shared lock, so a cross-process strict
+marker cannot be overwritten when a replacement file happens to retain the cached coarse mtime.
+
+- dead `in-flight` owner plus an exact terminal caller-managed queue is resolved as confirmed
+  delivery, with the marker checkpoint preceding queue cleanup;
+- dead `in-flight` owner plus no active or failed queue artifact is resolved only by the separate
+  explicit no-provider-effect command;
+- a live owner, legacy marker without correlation-v1, pending/uncertain/failed queue, mismatched
+  queue ID, or held entry lease is never reset by either command.
+
+Both commands require the exact session key, attempt ID, queue ID, bounded evidence digest, local
+state ownership, entry fence, and a durable audit intent. They redact the session key, owner token,
+PID, recipient, message body, and provider receipt IDs from inspection output. The 32-entry
+heartbeat bound never evicts unresolved evidence; after a process crash, the two explicit recovery
+paths free exactly one provable entry without treating an unknown provider effect as delivered or
+absent.
+
+The strict operator writer and every normal gateway session writer share the same tokenized
+cross-process lock. A live PID is never reclaimed because its timestamp is old, and the watchdog is
+diagnostic only. Dead-owner reclaim opens the source inode, reads its PID/token through that handle,
+and takes a no-clobber hard-link claim only while the path still names that inode. An existing claim
+fails closed for explicit operator repair; a second process never resumes it or unlinks the primary
+path. Publication and release re-check the open handle inode plus PID/token owner. The strict reader
+also bounds bytes, rejects symlinks/non-files, validates UTF-8/JSON, and checks that the open inode and
+size still match the path after the read. This is a cooperative local-writer boundary: a
+same-UID process that deliberately edits the same inode in place without taking the gateway lock
+can evade an inode/size-only race check, and is already inside the local state-owner trust boundary.
+No remote authorization decision relies on granting that process additional authority.
+
 Version-1 entries remain visibly `legacyAtLeastOnce`. They are never automatically upgraded to
 safe replay. An operator may resolve a specific migrated payload only through the same exact-ID,
 generation, lease, audit, and duplicate-risk flow. Listing and parsing remain bounded by the
@@ -359,13 +545,16 @@ Correctness review precedes a mechanical split of the current queue module. Publ
 source-compatible through `delivery-queue.ts`, which becomes a re-export facade. The bounded file
 ownership is:
 
-| Module | Responsibility |
-| --- | --- |
-| `delivery-queue-types.ts` | Public constants/types plus pure V1/V2 validation and migration |
-| `delivery-queue-files.ts` | Safe paths, bounded reads, atomic persistence, directory sync, acquisition gates, entry/recovery leases |
-| `delivery-queue-store.ts` | Enqueue, checkpoint, failure, acknowledgement, terminal cleanup, and failed-entry moves |
-| `delivery-queue-recovery.ts` | Bounded scan, V1 visibility, uncertainty suppression, backoff, and recovery orchestration |
-| `delivery-queue.ts` | Stable re-exports only |
+| Module                                     | Responsibility                                                                                          |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| `delivery-queue-types.ts`                  | Public constants/types plus pure V1/V2 validation and migration                                         |
+| `delivery-queue-files.ts`                  | Safe paths, bounded reads, atomic persistence, directory sync, acquisition gates, entry/recovery leases |
+| `delivery-queue-store.ts`                  | Enqueue, checkpoint, failure, acknowledgement, terminal cleanup, and failed-entry moves                 |
+| `delivery-queue-recovery.ts`               | Bounded scan, V1 visibility, uncertainty suppression, backoff, and recovery orchestration               |
+| `delivery-queue.ts`                        | Stable re-exports only                                                                                  |
+| `heartbeat-delivery-operator-state.ts`     | Bounded/redacted session-marker parsing, authority checks, inspection, and correlation helpers          |
+| `heartbeat-delivery-operator.ts`           | Confirmed-delivery resolution and caller-managed terminal cleanup                                       |
+| `heartbeat-delivery-abandoned-operator.ts` | Explicit dead-owner/no-provider-effect resolution                                                       |
 
 The split changes no queue bytes, transition, error class, path, bound, retry timing, or exported
 symbol. The facade stays below 100 source lines and no extracted production module exceeds 600.
@@ -418,33 +607,37 @@ Storage/retention load is measured before release. If exact durable volume excee
 
 ## Dependency-aware delivery slices
 
-| Slice | Findings | Scope and completion rule | Dependencies |
-|---|---|---|---|
-| A | GW-008 | Outcome API, unconditional tracking, partial queue retention, outcome-aware recovery and operational callers. Complete when mixed success cannot be acknowledged or hidden. | Approved spec. |
-| A2 | GW-015 | Queue V2, durable serialized checkpoints, V1 compatibility, uncertainty handling, required-durability outcome. This slice is partial until adapter idempotency inventory/support is qualified. | Slice A outcome model; provider capability inventory for full closure. |
-| B | GW-009, GW-010 | Owned-resource registry and phased bounded shutdown. Both close together because shutdown cannot be reliable while resources remain unowned. | No cross-project dependency. |
-| C | GW-013, GW-014 | Shared socket-send policy, node caps, workshop work/room/document limits and owned persistence. | Product workshop limits; Slice B for timers/flush. |
-| D | GW-011 | Generation-owned cron cancellation and durable uncertain state. | Slice B lifecycle; downstream AbortSignal audit. |
-| E | GW-012 | Forward-only DB fencing and external-effect receipts. | Independent DB/human migration review; provider/Qdrant semantics; meta QC proposal. |
-| F | GW-016 | Checked requests, policy-classified memory outbox, owned drain. | Slice B; Hub idempotency; product classification. |
-| G | GW-017 | Exact durable storage and sampled live path. | GW-005 ownership; Hub consumer update; approved volume/retention budget. |
+| Slice | Findings       | Scope and completion rule                                                                                                                                                                      | Dependencies                                                                                                                                            |
+| ----- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A     | GW-008         | Outcome API, unconditional tracking, partial queue retention, outcome-aware recovery and operational callers. Complete when mixed success cannot be acknowledged or hidden.                    | Approved spec.                                                                                                                                          |
+| A2    | GW-015         | Queue V2, durable serialized checkpoints, V1 compatibility, uncertainty handling, required-durability outcome. This slice is partial until adapter idempotency inventory/support is qualified. | Slice A outcome model; provider capability inventory for full closure.                                                                                  |
+| B     | GW-009, GW-010 | Owned-resource registry and phased bounded shutdown. Both close together because shutdown cannot be reliable while resources remain unowned.                                                   | Publish/pin reviewed shared callback runtime+declarations, then Hub/Site adoption before late listener publication; no wire-schema or Paperclip change. |
+| C     | GW-013, GW-014 | Shared socket-send policy, node caps, workshop work/room/document limits and owned persistence.                                                                                                | Product workshop limits; Slice B for timers/flush.                                                                                                      |
+| D     | GW-011         | Generation-owned cron cancellation and durable uncertain state.                                                                                                                                | Slice B lifecycle; downstream AbortSignal audit.                                                                                                        |
+| E     | GW-012         | Forward-only DB fencing and external-effect receipts.                                                                                                                                          | Independent DB/human migration review; provider/Qdrant semantics; meta QC proposal.                                                                     |
+| F     | GW-016         | Checked requests, policy-classified memory outbox, owned drain.                                                                                                                                | Slice B; Hub idempotency; product classification.                                                                                                       |
+| G     | GW-017         | Exact durable storage and sampled live path.                                                                                                                                                   | GW-005 ownership; Hub consumer update; approved volume/retention budget.                                                                                |
 
 Slices A and A2 may share a scoped commit only if their queue contract and tests are reviewed together. The other slices receive separate commits and review receipts. No item is marked fixed merely because its seam or TODO exists.
 
-## Verification — test matrix
+## Verification
 
-| Finding | Red signal | Green acceptance |
-|---|---|---|
-| GW-008 | `bestEffort`, no callback, one provider failure resolves and ACKs/deletes. | Aggregate is `partial`; success and failure IDs are explicit; entry is retained; recovery and operational callers surface partial; successful payload is not resent once GW-015 checkpointing is active. |
-| GW-009 | Early cleanup throws/hangs and later finalizers never run; second close repeats work. | Every later phase runs once; hung task times out; both close callers share completion; bounded summary names the failed/timed-out component. |
-| GW-010 | Close races paused event init or repeated starts leave timers/stores. | Late init is aborted/finalized; refresh/user/workshop/event handles stop once; repeated start/close leaves zero fake-timer handles. |
-| GW-011 | Timeout clears marker while old run later delivers; replacement overlaps. | Old generation observes abort and cannot deliver/apply result; replacement is blocked while uncertain; stop aborts and drains active jobs. |
-| GW-012 | Worker A's expired token mutates worker B's claim; ACK failure recomputes provider work. | All stale mutations return false; durable receipt avoids repeated paid/Qdrant effects; abort reaches stable uncertain; migration refuses unexpected catalog where feasible. |
-| GW-013 | Oversized/rate-heavy update is applied; slow client buffers indefinitely; empty rooms grow. | Limits reject before live apply; slow socket closes with no later send; room/document quotas and coalesced persistence remain bounded. |
-| GW-014 | N+1 invoke allocates timer/send; huge timeout persists; slow socket buffers. | N+1 rejects before timer; timeout clamps/refuses; send failure releases reservation once. |
-| GW-015 | Crash after payload 1 causes full replay; queue write fault is silent. | Recovery sends only unfinished payloads; ambiguous in-flight becomes uncertain or safe same-key replay; V1 migrates read-compatibly; required durability refuses before send; fs fault leaves prior valid state recoverable. |
-| GW-016 | 401/429/500/stall is success; delete vanishes on restart. | Typed visible failure/retry; stable-key delete survives restart; shutdown persists/drains admitted work within deadline. |
-| GW-017 | Same event name from two orgs stores one record. | Both durable rows exist; sampled live path exposes exact drops; load test stays inside the approved storage/broadcast budget. |
+The following matrix defines regression and operational proof for each slice. A prepared case is not a passing receipt.
+
+### Test matrix
+
+| Finding | Red signal                                                                                  | Green acceptance                                                                                                                                                                                                             |
+| ------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GW-008  | `bestEffort`, no callback, one provider failure resolves and ACKs/deletes.                  | Aggregate is `partial`; success and failure IDs are explicit; entry is retained; recovery and operational callers surface partial; successful payload is not resent once GW-015 checkpointing is active.                     |
+| GW-009  | Early cleanup throws/hangs and later finalizers never run; second close repeats work.       | Every later phase runs once; hung task times out; both close callers share completion; bounded summary names the failed/timed-out component.                                                                                 |
+| GW-010  | Close races paused event init or repeated starts leave timers/stores.                       | Late init is aborted/finalized; refresh/user/workshop/event handles stop once; repeated start/close leaves zero fake-timer handles.                                                                                          |
+| GW-011  | Timeout clears marker while old run later delivers; replacement overlaps.                   | Old generation observes abort and cannot deliver/apply result; replacement is blocked while uncertain; stop aborts and drains active jobs.                                                                                   |
+| GW-012  | Worker A's expired token mutates worker B's claim; ACK failure recomputes provider work.    | All stale mutations return false; durable receipt avoids repeated paid/Qdrant effects; abort reaches stable uncertain; migration refuses unexpected catalog where feasible.                                                  |
+| GW-013  | Oversized/rate-heavy update is applied; slow client buffers indefinitely; empty rooms grow. | Limits reject before live apply; slow socket closes with no later send; room/document quotas and coalesced persistence remain bounded.                                                                                       |
+| GW-014  | N+1 invoke allocates timer/send; huge timeout persists; slow socket buffers.                | N+1 rejects before timer; timeout clamps/refuses; send failure releases reservation once.                                                                                                                                    |
+| GW-015  | Crash after payload 1 causes full replay; queue write fault is silent.                      | Recovery sends only unfinished payloads; ambiguous in-flight becomes uncertain or safe same-key replay; V1 migrates read-compatibly; required durability refuses before send; fs fault leaves prior valid state recoverable. |
+| GW-016  | 401/429/500/stall is success; delete vanishes on restart.                                   | Typed visible failure/retry; stable-key delete survives restart; shutdown persists/drains admitted work within deadline.                                                                                                     |
+| GW-017  | Same event name from two orgs stores one record.                                            | Both durable rows exist; sampled live path exposes exact drops; load test stays inside the approved storage/broadcast budget.                                                                                                |
 
 ## Immediate Slice A/A2 blast-radius checks
 
@@ -461,17 +654,17 @@ Slices A and A2 may share a scoped commit only if their queue contract and tests
 
 ### Production caller inventory
 
-| Caller | Current policy | Slice A/A2 behavior |
-|---|---|---|
-| `server-restart-sentinel.ts` | One payload, hard-coded `bestEffort`, no callback; relies on `catch`. | Consume outcome; failed/uncertain/degraded reaches the existing session error event. |
-| `server-node-events.ts` receipt ACK | One payload, hard-coded `bestEffort`, no callback. | Consume outcome; do not report a receipt ACK as sent unless provider and durability are both successful. |
-| `delivery-queue.ts` recovery | Treats any resolved delivery as success. | Consume outcome under the existing entry/fence; ACK only durable terminal success, retain failure, withhold uncertainty. |
-| CLI agent delivery | Dynamic `bestEffort`, `onError` and `onPayload` observers. | Consume outcome, print bounded partial/failed/uncertain/degraded summary, preserve intended continuation; observer errors never change provider state. |
-| Cron isolated structured delivery | Dynamic `bestEffort`; sets `delivered` from non-empty result array. | Consume outcome and record partial/uncertain/degraded telemetry; accepted results may set delivered, but job summary cannot call the batch complete. |
-| Outbound message service/tool path | Dynamic `bestEffort`; formerly returned only the last provider result. | Return an optional typed provider receipt plus bounded delivery/durability/retry metadata in direct and gateway modes. The CLI renders nonterminal states as incomplete, and the agent tool returns the same withheld metadata rather than a plain sent result. |
-| Plugin-dispatched message action with transcript mirror | Provider/plugin effect completes before the mirror callback; a mirror throw previously rejected the accepted send. | Preserve the accepted plugin result, return a bounded `observerErrors` entry, and never expose the mirror exception message. |
-| Route reply, flow reply, gateway `send`, heartbeat sends, maintenance warning | Strict delivery. | Consume the outcome API with required durability. Zero-effect outcomes remain retryable; possible provider effects return or persist `withheld`, suppress automatic fallback, and stay visible for queue recovery/operator resolution. Heartbeat persists up to 32 keyed content-free unresolved attempts, each with an attempt ID, owner token, and queue correlation. A different heartbeat cannot overwrite an older unresolved effect; full capacity emits an explicit blocked reason and performs no provider call. |
-| Transcript mirroring on route/send/message paths | Post-provider side effect currently inside the provider wrapper. | Isolated observer stage. Failure is visible but never makes accepted provider work replayable. |
+| Caller                                                                        | Current policy                                                                                                     | Slice A/A2 behavior                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `server-restart-sentinel.ts`                                                  | One payload, hard-coded `bestEffort`, no callback; relies on `catch`.                                              | Consume outcome; failed/uncertain/degraded reaches the existing session error event.                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `server-node-events.ts` receipt ACK                                           | One payload, hard-coded `bestEffort`, no callback.                                                                 | Consume outcome; do not report a receipt ACK as sent unless provider and durability are both successful.                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `delivery-queue.ts` recovery                                                  | Treats any resolved delivery as success.                                                                           | Consume outcome under the existing entry/fence; ACK only durable terminal success, retain failure, withhold uncertainty.                                                                                                                                                                                                                                                                                                                                                                                                 |
+| CLI agent delivery                                                            | Dynamic `bestEffort`, `onError` and `onPayload` observers.                                                         | Consume outcome, print bounded partial/failed/uncertain/degraded summary, preserve intended continuation; observer errors never change provider state.                                                                                                                                                                                                                                                                                                                                                                   |
+| Cron isolated structured delivery                                             | Dynamic `bestEffort`; sets `delivered` from non-empty result array.                                                | Consume outcome and record partial/uncertain/degraded telemetry; accepted results may set delivered, but job summary cannot call the batch complete.                                                                                                                                                                                                                                                                                                                                                                     |
+| Outbound message service/tool path                                            | Dynamic `bestEffort`; formerly returned only the last provider result.                                             | Return an optional typed provider receipt plus bounded delivery/durability/retry metadata in direct and gateway modes. The CLI renders nonterminal states as incomplete, and the agent tool returns the same withheld metadata rather than a plain sent result.                                                                                                                                                                                                                                                          |
+| Plugin-dispatched message action with transcript mirror                       | Provider/plugin effect completes before the mirror callback; a mirror throw previously rejected the accepted send. | Preserve the accepted plugin result, return a bounded `observerErrors` entry, and never expose the mirror exception message.                                                                                                                                                                                                                                                                                                                                                                                             |
+| Route reply, flow reply, gateway `send`, heartbeat sends, maintenance warning | Strict delivery.                                                                                                   | Consume the outcome API with required durability. Zero-effect outcomes remain retryable; possible provider effects return or persist `withheld`, suppress automatic fallback, and stay visible for queue recovery/operator resolution. Heartbeat persists up to 32 keyed content-free unresolved attempts, each with an attempt ID, owner token, and queue correlation. A different heartbeat cannot overwrite an older unresolved effect; full capacity emits an explicit blocked reason and performs no provider call. |
+| Transcript mirroring on route/send/message paths                              | Post-provider side effect currently inside the provider wrapper.                                                   | Isolated observer stage. Failure is visible but never makes accepted provider work replayable.                                                                                                                                                                                                                                                                                                                                                                                                                           |
 
 No production caller of the compatibility `deliverOutboundPayloads` wrapper remains under `src/` or in-repository extensions at revision 3. The wrapper remains exported for source compatibility. Tests and mocks cover both APIs so an external or newly added caller cannot infer completeness from a non-empty results array.
 
@@ -489,7 +682,7 @@ No production caller of the compatibility `deliverOutboundPayloads` wrapper rema
 - Pass 1 checks current evidence, API compatibility, queue state transitions, crash boundaries, shutdown phase order, and cross-project dependencies.
 - Pass 2 checks blast radius: all production callers, V1 files, provider capability claims, transcript mirroring, abort behavior, restart recovery, repeated close/start, Hub consumers, and migration forward safety.
 - Any slice with a remaining edge is reported partial. It receives an exact-site `TODO(handoff)` only when code genuinely must name the seam and matching proposed meta-ledger text; a TODO never counts as the fix.
-- Later slices B through G require a revision with concrete default deadlines, quotas, byte/rate limits, retention budgets, and error contracts, followed by slice-specific pass 1/pass 2 acceptance. Directional acceptance is not authorization to mutate those production seams.
+- Slice B now has the concrete lifecycle defaults above but remains unauthorized until its two-pass review and shared/consumer dependency are approved. Later slices C through G still require concrete quotas, byte/rate limits, retention budgets, and error contracts followed by slice-specific pass 1/pass 2 acceptance.
 
 ### Release qualification
 
@@ -524,4 +717,43 @@ Focused local evidence after self-review:
 - `pnpm tsgo --noEmit` passed (`../gw-lifecycle-tsgo-final.log`); scoped formatting checked 35 files, scoped oxlint reported zero warnings/errors, and `git diff --check` passed. No production or network qualification was performed.
 - Final heartbeat/delivery boundary matrix: 2 files, 83 tests passed (`../gw-lifecycle-heartbeat-ledger-final.log`), including A-withheld/B-complete/A-suppressed after store reserialization, conservative untyped-throw suppression, typed no-effect retry, owner-token fencing, and the 32-entry capacity block.
 
-GW-015 remains partial. The exact-site `TODO(handoff)` in `delivery-queue.ts` and the correlated session-type TODO point to the required meta ledger: **GW-015 uncertain outbound delivery operator resolution and provider idempotency inventory**. That follow-up must inventory every channel as supported/unsupported/unknown, thread `{queueId,payloadId,operationIndex}` only through verified providers, and add a local authenticated inspect/resolve workflow that redacts bodies and credentials while showing queue/payload IDs, target descriptor, bounded receipts, attempt and legacy marker. Heartbeat resolution additionally requires the exact `attemptId` and correlated `queueId`, refuses active owner tokens, and clears only that fingerprint after the audit intent is durable. Automatic replay remains withheld for unknown/unsupported and uncertain effects. Queue V1 remains visibly at-least-once because historical provider acceptance cannot be reconstructed.
+The prior partial status is superseded by the GW-015 closure candidate in this revision. The source
+inventory classifies all 26 bundled adapters as unsupported by the current delivery-identity
+contract and all external adapters as unknown; no adapter is claimed idempotent and automatic
+uncertain replay stays withheld. The local-owner queue CLI now lists and inspects redacted entries,
+resolves one exact uncertain payload as delivered or explicit duplicate-risk retry, and repairs one
+proved-dead acquisition gate. V1 remains visibly at-least-once. Heartbeat recovery separately
+handles dead correlated owners with either an exact caller-managed terminal queue or proved queue
+absence. Live owners, legacy/unprovable markers, nonterminal/failed queues, and active entry leases
+remain untouched. There is no GW-015 `TODO(handoff)` left in production source; this finding is
+source-complete subject to independent parent review and release qualification, with no claim of
+production deployment.
+
+Final focused evidence for the closure candidate:
+
+- Operator, audit, redaction, CLI, exact-generation, active/in-flight refusal, and dead-heartbeat
+  recovery matrix: 3 files, 33 tests passed (`../gw-lifecycle-operator-final.log`).
+- Provider outcome/checkpoint matrix: 1 file, 39 tests passed
+  (`../gw-lifecycle-deliver-final.log`).
+- Queue V1/V2, aggregate bound, filesystem fault, caller-managed recovery, and real two-process
+  lease-race matrix: 1 file, 72 tests passed (`../gw-lifecycle-outbound-final.log`).
+- Heartbeat A/B/A reload, terminal caller checkpoint, typed no-effect, generic-throw withholding,
+  stale-owner token, 32-entry capacity, admission-sync zero-provider effect, and completion-sync
+  pre-ACK retention matrix: 1 file, 47 tests passed
+  (`../gw-lifecycle-heartbeat-durability-review.log`).
+- Heartbeat durability, operator correlation, queue resolution, and session-lock matrix: 4 files,
+  92 tests passed (`../gw-lifecycle-heartbeat-durable-boundary-matrix.log`).
+- Shared platform directory-sync policy and same-mtime external-marker preservation: 2 files, 36
+  tests passed (`../gw-lifecycle-fs-policy-cache-review.log`).
+- Platform policy, normal-writer cache safety, heartbeat strict boundaries, and queue persistence:
+  4 files, 155 tests passed (`../gw-lifecycle-fs-policy-cache-full.log`).
+- Session lock watchdog, bound-inode single-winner dead reclaim, unresolved-claim fail-closed,
+  inode/token release fence, real two-reclaimer race, and real-process live-old strict writer versus
+  normal-writer matrix: 1 file, 16 tests passed (`../gw-lifecycle-lock-reclaim-review.log`). The exact
+  two-reclaimer regression also passed three additional isolated runs
+  (`../gw-lifecycle-lock-reclaim-race-repeat.log`).
+- `pnpm tsgo --noEmit` passed (`../gw-lifecycle-tsgo-heartbeat-durability-review.log`); scoped
+  oxlint checked the five durability/lock files with zero warnings/errors
+  (`../gw-lifecycle-lint-heartbeat-durability-review.log`); scoped formatting and
+  `git diff --check` passed. Queue implementation is split behind the stable facade; the standalone
+  facade subprocess regression also passes. No production, network, or deployment action was run.

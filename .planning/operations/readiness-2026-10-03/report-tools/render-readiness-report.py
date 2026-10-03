@@ -7,7 +7,7 @@ out=root/'.lavish/hub-gateway-readiness-2026-10-03'; (out/'assets').mkdir(parent
 reg=json.loads((base/'meta/.planning/operations/readiness-2026-10-03/findings.json').read_text())
 recon=json.loads(re.search(r'<script type="application/json" id="report-data">(.*?)</script>',(old/'report.html').read_text(),re.S)[1]); originals={f['id']:f for f in recon['findings']}
 for f in reg['findings']:
- f['recon']=originals.get(f['id'],{})
+ f['recon']=originals.get(f['id'],{'trigger':f.get('summary'),'impact':f.get('impact'),'lenses':f.get('lenses',[]),'evidence':f.get('sourceAnchors',[])})
 for name in ['tokens.css','Inter-Regular.woff2','Inter-SemiBold.woff2','Inter-Bold.woff2','JetBrainsMonoNerdFontMono-Regular.woff2']:
  shutil.copy2(old/'assets'/name,out/'assets'/name)
 ev=base/'meta/.planning/operations/readiness-2026-10-03/evidence'
