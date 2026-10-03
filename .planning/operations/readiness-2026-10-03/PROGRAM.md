@@ -47,8 +47,8 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | HC-007 | P1 | hub-mutations | implemented-awaiting-review | Voided tickets render as green Submitted because the client checks the wrong status literal |
 | HC-008 | P1 | hub-calendar | implemented-awaiting-integration | Calendar loads in the organization timezone but lays out and writes in the browser timezone |
 | HC-011 | P1 | hub-calendar | queued | A drag can partially commit custom lane, group members, and time/resource as independent writes |
-| HC-012 | P1 | hub-calendar | implementing | In-flight week responses can overwrite post-mutation data or resurrect evicted weeks |
-| HC-013 | P1 | hub-calendar | implementing | A failed visible week is rendered as a genuinely empty schedule until another scroll settles |
+| HC-012 | P1 | hub-calendar | locally-verified-awaiting-release | In-flight week responses can overwrite post-mutation data or resurrect evicted weeks |
+| HC-013 | P1 | hub-calendar | locally-verified-awaiting-release | A failed visible week is rendered as a genuinely empty schedule until another scroll settles |
 | HC-015 | P1 | hub-calendar | queued | Board reclassification is pointer-drag-only |
 | HC-024 | P1 | hub-reactivity-accessibility | queued | Older reliability responses can overwrite newer range/filter/host selections |
 | HC-026 | P1 | hub-reactivity-accessibility | queued | Nested delete buttons bubble Enter into card navigation; Flow and Workshop also mishandle Space |
@@ -71,7 +71,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | MR-OP-002 | P1 | hub-money | queued | Voiding a package sale races a concurrent session redemption |
 | TQ-001 | P1 | hub-test-quality | locally-verified | Nine Svelte reactive tests pass without executing their $effect.root callbacks |
 | TQ-002 | P1 | hub-test-quality | locally-verified | The workforce proxy integration test exercises a copied verifier that has drifted from the runtime middleware |
-| TQ-003 | P1 | hub-test-quality | implemented-awaiting-review | Hub CI always skips the native editor, paste, and sanitizer security qualification |
+| TQ-003 | P1 | hub-test-quality | implemented-awaiting-integration | Hub CI always skips the native editor, paste, and sanitizer security qualification |
 | GW-014 | P2 | gateway-lifecycle | queued | Node invocation has no pending-request cap, timeout clamp, or socket backpressure check |
 | GW-015 | P2 | gateway-lifecycle | implementing | The write-ahead delivery queue provides at-least-once replay but lacks per-payload checkpoints/idempotency |
 | GW-016 | P2 | gateway-lifecycle | queued | Memory ingest/delete treats every HTTP response as success and has no bounded retry/drain |
@@ -105,7 +105,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | HS-024 | P2 | hub-stock-bookings | queued | Concurrent bookings for a new person can create an orphan duplicate contact |
 | HS-026 | P2 | hub-metrics | locally-verified | Negative profit and margin are clamped to zero |
 | HS-027 | P2 | hub-metrics | locally-verified | Void-rate and rankings use inconsistent invoice populations |
-| HS-028 | P2 | hub-metrics | spec-review | Binary floating-point rounding produces 1.00 for 1.005 |
+| HS-028 | P2 | hub-metrics | implementing | Binary floating-point rounding produces 1.00 for 1.005 |
 | HS-029 | P2 | hub-money | queued | The supposedly append-only POS credit ledger grants UPDATE and DELETE |
 | OB-001 | P2 | observability | spec-review | Server telemetry delivery is not tied to request lifetime |
 | OB-002 | P2 | observability | queued | Source-map and live alert qualification remains incomplete |
@@ -122,7 +122,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | HC-023 | P3 | hub-calendar | queued | Truncated calendar lane headers rely on native title text |
 | HS-007 | P3 | hub-authority-jobs | locally-verified | Page commits during finance sync are invisible until the whole job completes |
 | HS-016 | P3 | hub-money | queued | Equal grant allocation drops the rounding residual |
-| HS-017 | P3 | hub-money | spec-review | Due schedules are not required to reconcile to plan principal |
+| HS-017 | P3 | hub-money | implementing | Due schedules are not required to reconcile to plan principal |
 | MR-OP-003 | P3 | hub-stock-bookings | queued | Stock valuation persists unquantized binary-float artifacts |
 | FACES-001 | P1 | faces-production | locally-verified-awaiting-release | A 4.62 GB core dump is retained inside the durable FACES state volume |
 | FACES-002 | P1 | faces-production | locally-verified-awaiting-release | The raw FACES gateway port is reachable from the public internet and bypasses the edge |

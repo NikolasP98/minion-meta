@@ -1,16 +1,16 @@
 ---
 id: 2026-10-03-readiness-money-precision-schedules-spec
 title: Exact decimal boundaries and reconciled payment-plan schedules
-stage: spec
-status: review
-pass: 1
+stage: dev
+status: implementing
+pass: 2
 created: 2026-10-03
 updated: 2026-10-03
 repos: [minion_hub]
 tags: [data, logic, test]
 type: fix
 proposal: 2026-10-02-hub-gateway-production-readiness-recon
-verdict: changes_requested
+verdict: approved
 ---
 
 # Exact decimal boundaries and reconciled schedules
@@ -31,7 +31,7 @@ an assertion about legal tax treatment or an exchange-rate recommendation.
 
 Tax emission semantics, FX policy, stock valuation, grant residual persistence,
 transactional overpayment prevention and historical data repair remain separately
-tracked findings; no incidental changes to those contracts belong in this slice.
+tracked findings. No incidental change to those contracts belongs in this slice.
 
 ## AS-IS
 
@@ -114,7 +114,9 @@ Use bounded coefficient/exponent parsing and BigInt integer arithmetic (or an
 already qualified decimal dependency if one is discovered before implementation).
 Initial contract: strings <=80 characters, <=40 significant digits, decimal
 exponent magnitude <=18, scales 0..6; reject unsupported values before allocating
-large powers or loops. Allocation count is an integer in 1..10000. Public Number
+large powers or loops. Allocation count is an integer in 1..10000; a sum accepts 0..10000 operands.
+Internal arithmetic and minor-unit formatting cap intermediate coefficients at
+128 digits; no caller-supplied exponent can request an unbounded power. Public Number
 conversion requires exact safe minor units and validates finite output. Export
 only the operations production callers use. The following grammar is normative:
 
@@ -188,15 +190,74 @@ the server. The page's total/paid/credit guards share the same integer units.
 
 Comparisons are exact at each boundary: plan isPaid iff paidMinor >=
 principalMinor (99.99 is not 100.00); tender sums equal ticket totalMinor exactly;
-credit is sufficient iff balanceMinor >= drawMinor; cash tenderedMinor must be
->= amountMinor. Remove the 0.01/0.005 tolerances. A line discount is nonnegative
-and cannot exceed quantize(qty*price,2); compute the line as
-quantize(qty*price - exact(discount),2), never round unit price first. The order
-discount is quantized once and cannot exceed summed line cents. UI discount caps
-use the same limit and arithmetic, so valid client previews equal server results.
-The existing shift expected-cash path is in the helper-consumer inventory and
-must either migrate coherently or retain an explicit follow-up boundary; no
-accidental changed call-site semantics are permitted.
+for a same-currency balance, credit is sufficient iff balanceMinor >= drawMinor; cash tenderedMinor must be
+>= amountMinor. Remove the 0.01/0.005 tolerances. For a line, grossMinor = quantize(exact(qty)*exact(unitPrice),2). A discount
+must be cent-exact and nonnegative, and discountMinor <= grossMinor. The line
+total is grossMinor - discountMinor; never round unit price before multiplication
+and never subtract a discount from an unquantized gross. For gross 1.005, the
+displayed gross is 1.01: discounts 1.00, 1.01 and 1.02 respectively yield 0.01,
+0.00 and invalid_discount. A sub-cent discount is invalid_discount. This policy
+permits a full displayed discount without creating a negative half-cent result. The order
+discount is quantized once and cannot exceed summed line cents. UI discount validation uses the same limit and arithmetic. Replace the current
+`capDiscount` silent-rewrite behavior at input handlers with a typed validation
+result; a helper computing the maximum display value is not an input sanitizer.
+Raw 1.02 and sub-cent discount drafts stay visible and block submission when the
+gross is 1.005. Mounted tests must assert that text, error and disabled submit,
+then the successful 1.01 correction. Valid client previews equal server results.
+The existing shift expected-cash path is mandatory M1 scope: migrate
+`computeExpected`, `paymentsByMethod`, `shiftSummary`, opening/closing floats and
+shift read DTO conversion coherently. Test exact opening float + cash payments
+minus change and count/close deltas. This scope cannot be left as a vague follow-up
+while claiming HS-028 complete.
+
+### M1a. Currency scale and stored-value conversion boundaries
+
+This slice enforces the currently persisted two-minor-unit POS policy rather than
+silently applying it to every currency code. Add a pure currency policy boundary:
+trim/uppercase input, require exactly three ASCII letters, membership in the
+runtime-supported ISO currency list (`Intl.supportedValuesOf('currency')`), and
+resolved standard currency fraction digits exactly two. Unknown codes and ISO
+zero-/three-minor-unit currencies fail with `unsupported_pos_currency`. The
+configured runtime ICU policy and representative PEN/USD/EUR acceptance,
+JPY/KRW/KWD/BHD rejection are characterized in browser/Node tests. The arithmetic
+core itself remains currency-independent with explicit scale 0..6 for other
+future adapters; this does not claim production support for those currencies.
+
+Enforce policy in `PUT /api/pos/settings`, POS ticket/shift creation and settlement,
+manual credit adjustment, plan creation and package grant monetary writes,
+including direct service entry points. Plan/topup currency overrides cannot bypass
+it. Existing settings read must remain available to correct an unsupported legacy
+configuration: return its canonical value plus a typed currencyIssue rather than
+silently coercing to PEN/USD. The settings read returns the server-authoritative supported currency list. The
+settings form displays currencyIssue and restricts new selections to that list;
+browser ICU must not independently decide admissibility. Business operations and financial
+DTO reads involving an unsupported legacy currency return a visible stable
+`unsupported_pos_currency` error without changing historical values. This is a
+compatibility change requiring a read-only pre-release inventory of distinct
+stored POS currencies; unknown/unsupported rows must be explicitly qualified,
+not relabeled, rounded or silently skipped. Local fixtures prove the behavior;
+no production currency rewrite is authorized.
+
+Exact credit comparison in M1 is an arithmetic guarantee on same-currency input.
+The separate HS-009 slice must isolate balances by currency and qualify legacy
+mixed-currency data; this spec does not claim the nominal mixed-currency defect is
+fixed by exact cents. Preserve that explicit dependency in the final finding ledger.
+
+Inventory every monetary DTO projection before coercion: `listSellables` stored
+`unit_price`, `listClientAccounts` balance/principal totals, shift rows and
+`paymentsByMethod`/`shiftSummary`, plan/grant/ledger reads and checkout settings.
+Replace raw `Number(storedDecimal)` before any summing/rendering with the checked
+canonical round-trip conversion. Required malformed/null/unsafe stored decimals
+return `invalid_stored_amount`; they never become zero or a nearby valid price.
+The regression corpus must carry stored `90071992547409.91` through the sellable
+projection and assert explicit rejection instead of displaying/reusing
+90071992547409.9. Ordinary stored 0.335 remains exact through cart and server line
+math. SQL aggregate values are checked before Number DTO conversion as well.
+
+`/api/gateway/actions/pos-sale` is an explicit preview/submit consumer: wrap its
+money computation in the same domain error mapping as submit, so decimal/range
+failures return stable PosError responses rather than an uncaught 500. Preview
+and confirmed submission must use the same validation, price and discount policy.
 
 This step includes client/server checkout parity. It does not change emitted tax
 XML, legal document policy, valuation order or historical FX; inventory those
@@ -233,7 +294,7 @@ option may use the positive remaining balance with the schedule warning.
 
 `instalmentPrefillAmount` returns `number | null`: null for invalid/nonpositive
 remaining; for a valid positive nextDue it returns min(nextDue, remaining); for
-no schedule or an invalid schedule it may return positive remaining, accompanied
+no schedule or an invalid schedule it returns positive remaining, accompanied
 by scheduleIssue warning for the latter. `/pos/sell` Account type carries
 scheduleIssue; its openPlans list, pending-plan effect, action buttons and
 `addInstalment` refuse nonpositive/overpaid rows rather than creating a zero or
@@ -252,14 +313,14 @@ slice, not established by the read calculation.
 | Boundary | Required proof |
 |---|---|
 | exact decimal core | independent BigInt oracle/property corpus; positive/negative ties, exponent bounds, malformed and nonfinite values, negative zero, max value and scale 0/2/3 |
-| line × quantity − discount | adversarial decimal operands, fractional quantities, multiple lines; client preview equals server persisted subtotal/total |
-| payments/credit | sums and comparisons use integer cents; no tolerance admits a one-cent underpayment; prior reversal restores exact balance |
+| line × quantity − discount | adversarial decimal operands, fractional quantities, half-cent gross with partial/full/excessive and sub-cent discounts, multiple lines; client preview equals server persisted subtotal/total |
+| payments/credit | same-currency sums and comparisons use integer cents; no tolerance admits a one-cent underpayment; prior reversal restores exact balance |
 | allocation | exact sum equals normalized total for positive/negative corpus and counts; no dropped residual; bounded counts fail before loop |
 | plan creation | under/over-sum, impossible Gregorian date, zero/negative/sub-cent/nonfinite rows rejected before DB write; no schedule still succeeds |
 | plan reads | legacy invalid/mismatch stays explicitly flagged; partial next installment and settled/overpaid cases truthful |
 | UI | mounted account/plan behavior renders schedule warning; prefill <= positive remaining; shared design/token checks |
 | native DB | actual createPlan round-trip and rejected transactions under owned PostgreSQL; no production data, report admitted names added to manifest |
-| neighbors | existing POS tickets/packages/accounts/checkout/emission golden suites pass; no blanket expected-value replacement |
+| neighbors | existing POS tickets/packages/accounts/checkout/shift/assistant-preview/emission golden suites pass; no blanket expected-value replacement |
 
 Tests asserting `round2(1.005) === 1.00`, lost allocation residuals or excessive
 prefill are replaced with normative behavior, never deleted without replacement.
@@ -268,11 +329,11 @@ values with the same new function. Do not add tests that merely inspect source.
 
 ## Review and release
 
-Pass 1 Standards returned BLOCK on the initial draft (range, grammar, client
-parity, instalment action, legacy classification, comparison and signed-allocation
-contracts). This revision addresses those requests and awaits reviewer recheck.
-Pass 2 Spec remains pending independent review. Implement M1 and
-M2 as separate exact commits after approval, preserving all other workers' edits.
-Native tests run in the root-owned disposable runtime. Source, migration, tests,
-review and local receipts are required; no production write or historical money
-rewrite is authorized by this local slice.
+Standards pass 1: Sol hub_client_fixes approved the final decimal, discount,
+schedule and M1a currency/UI contracts after corrections. Spec pass 2: Sol
+gateway_fixes approved the full amended contract after enforcing currency scale,
+stored DTO conversion, mandatory shift arithmetic and assistant preview errors.
+The settings UI consumes the server-authoritative currency list. Root may now
+implement M1 and M2 as separately reviewed commits; all local qualification and
+release gates remain required. No production write or historical money rewrite
+is authorized by this local slice.
