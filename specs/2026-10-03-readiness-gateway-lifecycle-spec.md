@@ -23,10 +23,10 @@ The gateway must retain undelivered work, bound background resource use and make
 
 UI changes, production deployment and security RPC policy are separate batches. Provider exactly-once delivery is claimed only where the provider offers an actual idempotency receipt.
 
-Status: Slice A/A2 approved after two-pass review corrections; later slices directionally accepted and require a slice-specific limits/deadlines revision before mutation (revision 2)  
-Baseline: `minion/minion` `origin/DEV` at `b841c36750e4bf10dd3f81a4896b19c699fe3132`, with reviewed gateway security checkpoints `98767f4de` and `758757b00` applied  
-Findings: GW-008 through GW-017  
-Immediate implementation slice after approval: GW-008 and the durable per-payload checkpoint portion of GW-015  
+Status: Slice A/A2 approved after two-pass review corrections and committed as locally reviewed checkpoint `860b9746d`; GW-015 operator resolution/provider inventory is specified for its next review; later slices remain directionally accepted and require a slice-specific limits/deadlines revision before mutation (revision 3)
+Baseline: `minion/minion` `origin/DEV` at `b841c36750e4bf10dd3f81a4896b19c699fe3132`, with reviewed gateway security checkpoints `98767f4de` and `758757b00` applied
+Findings: GW-008 through GW-017
+Immediate implementation slice after approval: GW-008 and the durable per-payload checkpoint portion of GW-015
 Primary scope: outbound delivery, gateway-owned background resources and shutdown, cron cancellation, brain-vector fencing, workshop/node work limits, memory sink durability, and event-store sampling. Cross-project Hub or protocol changes remain separately owned and must land before their dependent gateway slice is called complete.
 
 ## Observable outcome
@@ -74,10 +74,11 @@ type OutboundDeliveryOutcome = {
     queueId?: string;
   };
   observerErrors: Array<{
-    stage: "onPayload" | "onError" | "mirror";
+    stage: "onPayload" | "onError" | "messageSending" | "messageSent" | "mirror";
     error: string;
   }>;
   observerErrorCount: number;
+  retryDisposition: "not-needed" | "retryable" | "withheld";
 };
 ```
 
@@ -85,7 +86,7 @@ Failure lists, uncertain IDs, observer errors, provider receipt IDs, and error s
 
 The existing `deliverOutboundPayloads` remains a source-compatible adapter returning `outcome.delivery.results`. Its internal behavior still changes safely: it always installs the failure tracker and never acknowledges failed, partial, uncertain, or durability-degraded work. Call sites that must surface completeness use the outcome API. In this slice those include restart sentinel, node receipt ACK, queue recovery, and production paths with dynamic `bestEffort` policy. A single-payload operational ACK treats `failed` or `uncertain` as failure and reaches its existing error path. Recovery acknowledges only provider `succeeded` plus durable accepted/suppressed checkpoints.
 
-Caller observers are outside the provider boundary. `onPayload`, `onError`, and transcript mirroring run in isolated `try/catch` blocks after the corresponding delivery/checkpoint fact is recorded. Their exceptions are appended to bounded `observerErrors`; they cannot turn an accepted provider send into pending/retryable work or stop later best-effort payloads. The compatibility adapter may surface an observer error after queue finalization to preserve failure visibility, but it must not cause provider replay. Mirroring is inventoried as a separate post-delivery side effect and is never repaired by resending the provider message.
+Caller observers are outside the provider boundary. `onPayload`, `onError`, message hooks, and transcript mirroring run in isolated `try/catch` blocks around the corresponding delivery/checkpoint fact. Their exceptions are appended to bounded `observerErrors`; they cannot turn an accepted provider send into pending/retryable work or stop later best-effort payloads. The compatibility adapter logs the bounded observer class after queue finalization and returns accepted provider receipts; it never throws an observer failure that could invite provider replay. Mirroring is inventoried as a separate post-delivery side effect and is never repaired by resending the provider message.
 
 `bestEffort` continues sending later payloads after a definite failure. It does not mean partial or all-failed delivery succeeded. An abort remains a deliberate cancellation rather than a provider rejection, but a queued entry is removed on abort only when durable state proves every payload accepted/suppressed; GW-015 makes that decision from durable payload state.
 
@@ -273,13 +274,13 @@ During a live attempt, a definite provider rejection before any child operation 
 
 For one logical payload that expands to chunks/media operations, future child idempotency keys derive from `{queueId, payloadId, operationIndex}`. A top-level accepted checkpoint occurs only after every child operation is accepted. Channel adapters declare `supported`, `unsupported`, or `unknown`; absent declaration means `unknown`, and unknown/unsupported is never treated as safe deduplication. The initial GW-015 implementation lands logical-payload checkpoints and safe uncertainty handling. Full closure requires an explicit channel capability inventory, per-child checkpoints for adapters where useful, and an operator workflow that can inspect an uncertain item and deliberately mark it delivered or retry it. That workflow must show the queue/payload ID, channel, target descriptor, receipt summary, attempt, legacy marker, and warning without printing message bodies or credentials. Retry requires an explicit local operator action; the gateway never invents provider support.
 
-Queue writes use a shared serialized read-modify-write path plus temp write, file sync, rename, and directory sync. Process-local serialization is insufficient: recovery takes an exclusive path-level recovery lease using an atomic filesystem owner record, and every existing-entry mutation uses an exclusive entry lease/fencing generation. A second live recovery owner fails closed; stale-owner takeover preserves the old owner record for diagnosis and requires proof that the recorded local PID is no longer live. Unique new-entry creation remains multi-process safe, but a process that cannot obtain the entry fence reports degraded durability rather than racing a live sender/recovery worker.
+Queue writes use a shared serialized read-modify-write path plus temp write, file sync, rename, and directory sync. Process-local serialization is insufficient: recovery takes an exclusive path-level recovery lease using an atomic filesystem owner record, and every existing-entry mutation uses an exclusive entry lease/fencing generation. Every lease acquisition first creates a no-clobber per-lock acquisition gate, then inspects or reclaims the primary owner while holding that gate. A stale primary is preserved with a no-clobber hard link before removal. A second contender cannot cross the gate and move a newly created live lease into the stale slot. A crash or ambiguous filesystem error during acquisition leaves the gate in place and fails all later acquisition closed until the bounded operator repair workflow below verifies the gate owner is dead. A second live recovery owner fails closed; stale-owner takeover preserves the old owner record for diagnosis and requires proof that the recorded local PID is no longer live. Unique new-entry creation remains multi-process safe, but a process that cannot obtain the entry fence reports degraded durability rather than racing a live sender/recovery worker.
 
-Queue create failure is returned as `durability.status === "degraded"` by the outcome API, independently of provider status. A new `durability: "required" | "best-effort"` option defaults to current compatibility behavior; `required` fails before provider send when the initial write cannot be made. A checkpoint write failure after any provider send stops all later sends immediately. The prior durable `in-flight` bytes remain untouched, the outcome is provider `uncertain` plus durability `degraded`, and restart withholds replay. `failDelivery` cannot overwrite a last-known-good entry after a failed load/write.
+Queue create failure is returned as `durability.status === "degraded"` by the outcome API, independently of provider status. A new `durability: "required" | "best-effort"` option lets outcome callers state their policy; strict compatibility calls establish required durability before the provider boundary. Required admission fails before a provider send when the initial write cannot be made. A checkpoint write failure after any provider send stops all later sends immediately. The prior durable `in-flight` bytes remain untouched, the outcome is provider `uncertain` plus durability `degraded`, and restart withholds replay. `failDelivery` cannot overwrite a last-known-good entry after a failed load/write.
 
 Acknowledgement always follows a durable accepted/suppressed checkpoint. If unlink or directory sync fails, the outcome is durability `degraded`; the fully terminal queue file remains or may reappear after crash, and recovery performs cleanup without resending its terminal payloads. Missing-file idempotency is accepted only when the caller supplies the already durable terminal generation it expected to remove.
 
-Parsing is bounded before `JSON.parse`: at most 32 MiB per file, 256 logical payloads, 1,024 characters per stored error, 32 sampled provider receipt IDs per payload with an exact total/truncated flag, and 10,000 active entries per recovery scan. Values beyond a bound are explicit unhealthy/quarantine results, not truncation of authority fields. Outcome failure/observer/uncertain arrays are bounded to the payload count and expose exact overflow counts.
+Parsing is bounded before `JSON.parse`: at most 32 MiB per file, 64 MiB of active queue bodies per scan, 256 logical payloads per entry, 1,024 characters per stored error, 32 sampled provider receipt IDs per payload with an exact total/truncated flag, and 10,000 active entries per recovery scan. The recovery wall-clock deadline starts before directory/body scanning and is checked throughout the scan, before any provider call. A growing file is read through a byte-capped reader rather than an unbounded `readFile`. Values beyond a bound are explicit unhealthy/quarantine results, not truncation of authority fields. Outcome failure/observer/uncertain arrays are bounded to the payload count and expose exact overflow counts.
 
 ### DELTA
 
@@ -292,6 +293,85 @@ Parsing is bounded before `JSON.parse`: at most 32 MiB per file, 256 logical pay
 7. Inventory channel/provider idempotency and receipt semantics, then thread keys only through adapters with verified support and add the explicit uncertain-item inspect/resolve workflow before claiming full closure.
 
 No Hub, Site, Paperclip, or shared WebSocket protocol change is needed for queue V2. Adapter type additions are internal gateway/plugin contracts and require all in-repository extension adapters to typecheck.
+
+### GW-015 closure slice: capability inventory and operator resolution
+
+The current `ChannelOutboundContext` has no delivery identity or operation index. Therefore none of
+the 26 bundled outbound adapters can receive the stable
+`{queueId,payloadId,operationIndex}` key, regardless of whether a downstream provider may have an
+unwired idempotency feature. The source-supported classification for this revision is:
+
+| Classification | Channel adapters | Automatic uncertain replay |
+| --- | --- | --- |
+| `unsupported` in the current gateway contract | `bluebubbles`, `discord`, `feishu`, `googlechat`, `imessage`, `irc`, `line`, `linq`, `matrix`, `mattermost`, `whatsapp-cloud`, `messenger`, `instagram`, `msteams`, `nextcloud-talk`, `nostr`, `signal`, `slack`, `telegram`, `tlon`, `twitch`, `wati`, `weixin`, `whatsapp`, `zalo`, `zalouser` | Withheld |
+| `unknown` | Every externally installed channel plugin whose source and provider contract were not reviewed in this checkout | Withheld |
+| `supported` | None verified | Not applicable |
+
+`unsupported` here is a statement about the present adapter boundary, not a claim that the remote
+provider can never support idempotency. A future `supported` declaration requires primary provider
+documentation or an executable provider fixture, stable-key propagation through every child send,
+response-loss and duplicate-key tests, and an independently reviewed capability change. Missing
+declarations remain `unknown`; the gateway never upgrades them by inference. The adapter capability
+type is internal to the gateway/plugin SDK and defaults to `unknown` for external source
+compatibility.
+
+The closure slice adds a local-owner CLI with three bounded operations. It is not exposed through
+the gateway WebSocket, HTTP, Hub, Site, Paperclip, or shared protocol:
+
+1. `delivery queue inspect --id <queue-id>` acquires the entry lease and prints version,
+   generation, enqueue time, channel, a one-way target fingerprint, payload IDs/states/attempts,
+   receipt counts, truncation flags, and legacy status. It never prints message text, media URLs,
+   raw recipient/account IDs, provider error messages, credentials, or raw provider receipt IDs.
+2. `delivery queue resolve-delivered --id <queue-id> --payload <payload-id>
+   --generation <n> --evidence-code <bounded-code>` may change only `uncertain` to an
+   operator-confirmed terminal state. The checkpoint stores the resolution kind, timestamp,
+   invoking local uid, and a digest of the bounded evidence code before terminal cleanup. It cannot
+   alter `pending`, `in-flight`, `accepted`, or `suppressed` payloads.
+3. `delivery queue resolve-retry ... --acknowledge-duplicate-risk` may change only `uncertain` to
+   `pending`, under the exact entry generation and lease. It records the local uid and durable audit
+   intent before the state transition. Unknown/unsupported capability remains prominently visible;
+   the explicit command is the authorization for the possible duplicate. It never resets an active
+   `in-flight` operation, accepted payload, or a whole entry.
+
+The CLI resolves the configured gateway state directory, rejects symlinks/non-regular files and
+wrong-owner or group/world-accessible queue directories, and requires the same OS uid that owns the
+gateway state. An exact entry generation prevents a decision based on stale inspection. The entry
+lease prevents a running sender or recovery process from being reset. Each resolution has an
+append-only, file-and-directory-synced audit record containing only opaque IDs, action, generation,
+uid, timestamp, and evidence digest. A failed audit intent or checkpoint leaves the entry
+unresolved. A terminal-cleanup failure remains visible and is safe for recovery to clean without a
+provider send.
+
+A separate `delivery queue repair-acquire-gate` command is the only maintenance path for a dead
+`.acquire` marker. It requires the exact scope and token read during inspection, proves the recorded
+PID is not live, preserves the marker under a no-clobber evidence name, syncs the directory, then
+removes the gate. PID uncertainty, token drift, a live owner, filesystem ambiguity, or an active
+primary lease fails closed. Normal startup and recovery never auto-reap this gate.
+
+Version-1 entries remain visibly `legacyAtLeastOnce`. They are never automatically upgraded to
+safe replay. An operator may resolve a specific migrated payload only through the same exact-ID,
+generation, lease, audit, and duplicate-risk flow. Listing and parsing remain bounded by the
+existing count, byte, deadline, and metadata limits.
+
+### Queue module maintenance slice
+
+Correctness review precedes a mechanical split of the current queue module. Public imports remain
+source-compatible through `delivery-queue.ts`, which becomes a re-export facade. The bounded file
+ownership is:
+
+| Module | Responsibility |
+| --- | --- |
+| `delivery-queue-types.ts` | Public constants/types plus pure V1/V2 validation and migration |
+| `delivery-queue-files.ts` | Safe paths, bounded reads, atomic persistence, directory sync, acquisition gates, entry/recovery leases |
+| `delivery-queue-store.ts` | Enqueue, checkpoint, failure, acknowledgement, terminal cleanup, and failed-entry moves |
+| `delivery-queue-recovery.ts` | Bounded scan, V1 visibility, uncertainty suppression, backoff, and recovery orchestration |
+| `delivery-queue.ts` | Stable re-exports only |
+
+The split changes no queue bytes, transition, error class, path, bound, retry timing, or exported
+symbol. The facade stays below 100 source lines and no extracted production module exceeds 600.
+Existing filesystem-fault, two-subprocess lease race, recovery-deadline/aggregate-byte, V1/V2, and
+caller suites must pass unchanged before operator commands are added. The operator CLI lives in its
+own command module and does not grow the queue facade or recovery orchestrator.
 
 ## GW-016: checked memory HTTP effects and durable policy
 
@@ -388,11 +468,12 @@ Slices A and A2 may share a scoped commit only if their queue contract and tests
 | `delivery-queue.ts` recovery | Treats any resolved delivery as success. | Consume outcome under the existing entry/fence; ACK only durable terminal success, retain failure, withhold uncertainty. |
 | CLI agent delivery | Dynamic `bestEffort`, `onError` and `onPayload` observers. | Consume outcome, print bounded partial/failed/uncertain/degraded summary, preserve intended continuation; observer errors never change provider state. |
 | Cron isolated structured delivery | Dynamic `bestEffort`; sets `delivered` from non-empty result array. | Consume outcome and record partial/uncertain/degraded telemetry; accepted results may set delivered, but job summary cannot call the batch complete. |
-| Outbound message service/tool path | Dynamic `bestEffort`; returns the last result. | Consume outcome internally and add bounded status metadata without changing existing result fields. |
-| Route reply, flow reply, gateway `send`, heartbeat sends, maintenance warning | Strict delivery. | Array compatibility API remains; provider failures still throw. Queue state is finalized before any observer/mirror error is surfaced. |
+| Outbound message service/tool path | Dynamic `bestEffort`; formerly returned only the last provider result. | Return an optional typed provider receipt plus bounded delivery/durability/retry metadata in direct and gateway modes. The CLI renders nonterminal states as incomplete, and the agent tool returns the same withheld metadata rather than a plain sent result. |
+| Plugin-dispatched message action with transcript mirror | Provider/plugin effect completes before the mirror callback; a mirror throw previously rejected the accepted send. | Preserve the accepted plugin result, return a bounded `observerErrors` entry, and never expose the mirror exception message. |
+| Route reply, flow reply, gateway `send`, heartbeat sends, maintenance warning | Strict delivery. | Consume the outcome API with required durability. Zero-effect outcomes remain retryable; possible provider effects return or persist `withheld`, suppress automatic fallback, and stay visible for queue recovery/operator resolution. Heartbeat persists up to 32 keyed content-free unresolved attempts, each with an attempt ID, owner token, and queue correlation. A different heartbeat cannot overwrite an older unresolved effect; full capacity emits an explicit blocked reason and performs no provider call. |
 | Transcript mirroring on route/send/message paths | Post-provider side effect currently inside the provider wrapper. | Isolated observer stage. Failure is visible but never makes accepted provider work replayable. |
 
-No other production `deliverOutboundPayloads` caller was found under `src/` or in-repository extensions at revision 2. Tests and mocks must cover both APIs so an added caller cannot accidentally infer completeness from a non-empty results array.
+No production caller of the compatibility `deliverOutboundPayloads` wrapper remains under `src/` or in-repository extensions at revision 3. The wrapper remains exported for source compatibility. Tests and mocks cover both APIs so an external or newly added caller cannot infer completeness from a non-empty results array.
 
 ## Review and release gates
 
@@ -427,3 +508,20 @@ No production write, deployment, or network qualification is performed from this
 Pass 1 and pass 2 approved Slice A/A2 after revision-2 corrections. The accepted corrections separate provider completeness from queue durability, preserve honest all-failed/partial/uncertain states, isolate observer and mirror exceptions, withhold mixed-child and unknown-provider replay, add cross-process recovery/entry fencing, stop after checkpoint failure, make ACK cleanup faults recoverable, bound queue parsing/outcome metadata, and inventory operational/mirroring callers.
 
 One red regression was added before production mutation: `deliver.test.ts` proves that `bestEffort: true` without `onError` currently calls `ackDelivery` after one of two payloads fails. On baseline plus the security checkpoints it fails exactly at `expect(ackDelivery).not.toHaveBeenCalled()`, confirming GW-008. Slice A/A2 implementation may now proceed. Full GW-015 remains open until provider capability inventory plus the safe uncertain-item inspect/resolve workflow pass their own tests; the initial checkpoint/uncertainty slice must report that status explicitly.
+
+## Slice A/A2 implementation receipt
+
+GW-008 is implemented in the gateway checkout. Provider status and queue durability are separate outcome axes; all-failed, partial and uncertain results remain distinct; caller, hook and mirror failures cannot convert an accepted provider effect into retryable work. Restart sentinel, node receipt, CLI, cron, recovery and the outbound message/tool path consume or surface the aggregate. Strict direct-message delivery requires durable admission before the provider. If durability degrades after a possible provider effect, it returns a typed `withheld` outcome instead of throwing a generic retryable error. Direct and gateway message modes preserve an optional typed receipt plus the same delivery summary; CLI and agent-tool consumers expose incomplete/withheld state rather than reporting sent. The compatibility array API keeps its existing provider-result shape and emits a safe durability warning.
+
+The approved initial GW-015 portion is implemented. Queue V2 has stable payload IDs, strict bounded V1/V2 parsing, per-payload pending/in-flight/accepted/suppressed/uncertain checkpoints, atomic file and directory sync, entry generation fences, exclusive recovery ownership, crash-time uncertainty, terminal cleanup without resend, V1 read compatibility and an explicit legacy at-least-once marker. A post-rename admission sync fault retains its fence and must be repaired by a durable pre-provider checkpoint. Dead-owner acquisition uses a no-clobber single-winner gate; an interrupted reclaimer leaves an explicit operator-repair state rather than admitting a second sender. Recovery admission is bounded by count, cumulative bytes and wall time before large payload bodies are materialized. Filesystem paths and lease owner records fail closed on non-regular files, malformed safe IDs or mismatched scope. Provider, observer and durability output stores only bounded error class/code metadata rather than provider messages or credentials. Heartbeat persists a bounded keyed ledger of `in-flight`/`withheld` content-free fingerprints around provider calls. Each entry has a stable attempt ID, random settlement owner token, and bounded queue ID; only the matching owner can clear or complete it. `A -> B -> A` therefore suppresses the final A even after reloading the store, and 32 unresolved entries block further heartbeat effects without evicting evidence. Only the exported typed no-provider-effect error clears a thrown attempt; an untyped throw remains conservatively in-flight. GW-015 operator resolution must reconcile and audit the exact attempt/queue pair and must never clear an active owner token.
+
+Focused local evidence after self-review:
+
+- Core outcome, queue, message-service, action-runner, and CLI formatter matrix: 6 files, 149 tests passed (`../gw-lifecycle-core-final.log`).
+- Route/follow-up, heartbeat, and cron caller matrix: 5 files, 84 tests passed (`../gw-lifecycle-callers-final.log`).
+- Gateway send, node-receipt, and restart-sentinel matrix: 3 files, 27 tests passed (`../gw-lifecycle-gateway-final.log`).
+- Message CLI, agent CLI, agent message tool, and cron E2E matrix: 4 files, 37 tests passed (`../gw-lifecycle-e2e-final.log`). The CLI never renders an uncertain gateway reply as sent, and the agent tool retains `retryDisposition: withheld` in both text and details.
+- `pnpm tsgo --noEmit` passed (`../gw-lifecycle-tsgo-final.log`); scoped formatting checked 35 files, scoped oxlint reported zero warnings/errors, and `git diff --check` passed. No production or network qualification was performed.
+- Final heartbeat/delivery boundary matrix: 2 files, 83 tests passed (`../gw-lifecycle-heartbeat-ledger-final.log`), including A-withheld/B-complete/A-suppressed after store reserialization, conservative untyped-throw suppression, typed no-effect retry, owner-token fencing, and the 32-entry capacity block.
+
+GW-015 remains partial. The exact-site `TODO(handoff)` in `delivery-queue.ts` and the correlated session-type TODO point to the required meta ledger: **GW-015 uncertain outbound delivery operator resolution and provider idempotency inventory**. That follow-up must inventory every channel as supported/unsupported/unknown, thread `{queueId,payloadId,operationIndex}` only through verified providers, and add a local authenticated inspect/resolve workflow that redacts bodies and credentials while showing queue/payload IDs, target descriptor, bounded receipts, attempt and legacy marker. Heartbeat resolution additionally requires the exact `attemptId` and correlated `queueId`, refuses active owner tokens, and clears only that fingerprint after the audit intent is durable. Automatic replay remains withheld for unknown/unsupported and uncertain effects. Queue V1 remains visibly at-least-once because historical provider acceptance cannot be reconstructed.

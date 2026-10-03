@@ -344,21 +344,27 @@
       "priority": "P1",
       "title": "bestEffort delivery without an onError callback acknowledges and deletes partially failed queue entries",
       "batch": "gateway-lifecycle",
-      "status": "implementing",
+      "status": "locally-verified-awaiting-release",
       "owner": "gateway_fixes",
       "acceptance": [
         "bestEffort true plus no onError plus one rejected payload must call failDelivery and never ackDelivery.",
         "Mixed success/failure returns an explicit partial result.",
         "Restart sentinel and node receipt callers surface the failure without duplicating successful payloads."
       ],
-      "code_commits": [],
-      "tests": [],
+      "code_commits": [
+        "gateway:860b9746d"
+      ],
+      "tests": [
+        "Post-NoEffect core 6 files/149; callers 5/84; heartbeat/delivery boundary 2/83; overlapping matrices are not summed. Gateway 3/27 and CLI/tool/cron 4/37 also pass; tsgo, scoped oxlint/oxfmt and diff-check pass. evidence/gateway-delivery-checkpoint.json"
+      ],
       "reviews": [
-        "Parent blocked stale lock reclamation TOCTOU and unbounded cumulative recovery materialization. Worker added serialized acquisition gates, real two-process race test and 64MiB aggregate/elapsed scan bounds; final parent check pending."
+        "Root blast-radius review blocked lock-reclamation TOCTOU, unbounded scan materialization, caller retries and single-heartbeat-marker loss. All corrected before commit, with cross-process ownership and A/B/A persisted-ledger regressions."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Hosted CI, merge, deployment and live qualification."
+      ]
     },
     {
       "id": "GW-009",
@@ -1048,12 +1054,21 @@
         "Partial failure checkpoints successes and retries only failures.",
         "Queue-write failure is observable to durability-required callers."
       ],
-      "code_commits": [],
-      "tests": [],
-      "reviews": [],
+      "code_commits": [
+        "gateway:860b9746d"
+      ],
+      "tests": [
+        "Post-NoEffect core 6 files/149; callers 5/84; heartbeat/delivery boundary 2/83; overlapping matrices are not summed. Gateway 3/27 and CLI/tool/cron 4/37 also pass; tsgo, scoped oxlint/oxfmt and diff-check pass. evidence/gateway-delivery-checkpoint.json"
+      ],
+      "reviews": [
+        "Root blast-radius review blocked lock-reclamation TOCTOU, unbounded scan materialization, caller retries and single-heartbeat-marker loss. All corrected before commit, with cross-process ownership and A/B/A persisted-ledger regressions."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Operator resolution for exact attempt/queue identity; provider idempotency inventory; split delivery queue and heartbeat policy into focused modules.",
+        "Hosted CI, merge, deployment and live qualification."
+      ]
     },
     {
       "id": "GW-016",
@@ -1652,7 +1667,9 @@
       "acceptance": "Approve a rounding table first; then property-test exact decimal inputs including ±1.005, large values, allocations, and currencies with 0/2/3 minor units. Keep the fixture expectation aligned with the chosen policy.",
       "code_commits": [],
       "tests": [],
-      "reviews": [],
+      "reviews": [
+        "Sol Standards pass 1 blocked numeric field scope, grammar, client conversion parity, instalment action contract, legacy schedule classification, exact comparison and signed residual policy; amended spec awaiting recheck and pass 2."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": [
@@ -1679,7 +1696,7 @@
       "priority": "P2",
       "title": "Server telemetry delivery is not tied to request lifetime",
       "batch": "observability",
-      "status": "queued",
+      "status": "spec-review",
       "owner": "root",
       "acceptance": "Disposable delayed-ingest fixture: request completes, lifecycle closes, exactly accepted events are delivered or explicit drop counts rise; burst test bounds concurrent flushes.",
       "code_commits": [],
@@ -1687,7 +1704,9 @@
       "reviews": [],
       "pull_requests": [],
       "runtime": "not-qualified",
-      "remaining": []
+      "remaining": [
+        "Bounded request-owned analytics spec prepared; independent Standards and Spec review pending. No source implementation yet."
+      ]
     },
     {
       "id": "OB-002",
@@ -1950,7 +1969,9 @@
       "acceptance": "Test under-sum, over-sum, zero/negative rows, residual cents, and schedule exhaustion; assert the selected policy in API errors and collection views.",
       "code_commits": [],
       "tests": [],
-      "reviews": [],
+      "reviews": [
+        "Sol Standards pass 1 blocked numeric field scope, grammar, client conversion parity, instalment action contract, legacy schedule classification, exact comparison and signed residual policy; amended spec awaiting recheck and pass 2."
+      ],
       "pull_requests": [],
       "runtime": "not-qualified",
       "remaining": [

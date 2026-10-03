@@ -123,3 +123,16 @@ requires a new publisher's digest of exact nullable document contents; historica
 `files_loaded_at` alone is not proof. The local native and browser validation
 receipts live under `.planning/operations/readiness-2026-10-03/`; none establishes
 production release or a production write.
+
+
+## Gateway delivery checkpoint and remaining GW-015 work
+
+Gateway commit `860b9746d` closes the local GW-008 regression and implements
+GW-015 per-payload checkpoints. It does not close GW-015. The exact-site handoffs
+in `src/infra/outbound/delivery-queue.ts` and `src/config/sessions/types.ts` require
+a content-redacted local operator inspect/resolve path, explicit provider
+idempotency support inventory and exact heartbeat attempt/queue reconciliation.
+An active owner token cannot be cleared, and an uncertain effect cannot be
+automatically retried. Split queue persistence, ownership, recovery and operator
+policy into focused modules under the accepted behavioral tests. The current
+slice has no production write, merge or deployed qualification.

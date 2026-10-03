@@ -34,7 +34,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | GW-005 | P1 | gateway-security | implemented-awaiting-review | Events, raw logs, and usage endpoints expose gateway-global operational data to normal users |
 | GW-006 | P1 | gateway-security | implemented-awaiting-review | JWT revocation neither disconnects active sockets nor survives gateway restart |
 | GW-007 | P1 | gateway-security | implemented-awaiting-review | Concurrent connect frames can authenticate one socket twice and leave a ghost client entry |
-| GW-008 | P1 | gateway-lifecycle | implementing | bestEffort delivery without an onError callback acknowledges and deletes partially failed queue entries |
+| GW-008 | P1 | gateway-lifecycle | locally-verified-awaiting-release | bestEffort delivery without an onError callback acknowledges and deletes partially failed queue entries |
 | GW-009 | P1 | gateway-lifecycle | queued | A single cleanup error or hung channel stop aborts the remaining gateway shutdown sequence |
 | GW-010 | P1 | gateway-lifecycle | queued | Gateway startup creates background resources that are not reliably owned or stopped |
 | GW-011 | P1 | gateway-lifecycle | queued | Cron timeout and service stop mark work finished without cancelling the underlying agent run |
@@ -107,7 +107,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | HS-027 | P2 | hub-metrics | locally-verified | Void-rate and rankings use inconsistent invoice populations |
 | HS-028 | P2 | hub-metrics | spec-review | Binary floating-point rounding produces 1.00 for 1.005 |
 | HS-029 | P2 | hub-money | queued | The supposedly append-only POS credit ledger grants UPDATE and DELETE |
-| OB-001 | P2 | observability | queued | Server telemetry delivery is not tied to request lifetime |
+| OB-001 | P2 | observability | spec-review | Server telemetry delivery is not tied to request lifetime |
 | OB-002 | P2 | observability | queued | Source-map and live alert qualification remains incomplete |
 | TQ-004 | P2 | hub-test-quality | spec-review | The workforce dashboard E2E passes when the company switcher behavior in its title is absent |
 | TQ-005 | P2 | hub-test-quality | spec-review | The tag-cell E2E can pass without selecting a tag or rendering the chip behavior named by the test |
