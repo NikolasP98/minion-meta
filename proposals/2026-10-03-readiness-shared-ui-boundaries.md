@@ -20,6 +20,8 @@ HC-038: the canonical `packages/ui/src/lib/Button.svelte` and Hub's installed pi
 
 HC-039: `hub/src/lib/state/features/aliases.svelte.ts` caches aliases and one inflight promise globally, without actor/org scope. `ChatMessage.svelte` calls it with `void ensureAliases()` and does not catch a rejected fetch. The mounted copilot test produces two unhandled rejections when the child alias reads reject. Tenant/session races are source-confirmed exposure risks; they have not been exercised against production data.
 
+The HC-039 server boundary is also defective: `src/server/services/user.service.ts:listAliases(_ctx)` ignores its tenant context and queries all profiles through the Supabase service role. The route's tenant gate therefore does not restrict returned identities to that organization, and the PostgREST row limit can silently truncate the directory. The implementation must admit a current member and query only their active organization in a bounded read-only snapshot. Preserve the separate global alias-availability check. This extension was found through source review, without retrieving production identities; the user's all-findings authorization covers it and the security merge gate remains in place.
+
 ## TO-BE
 
 Preserve explicitly supplied accessibility semantics and roving focus on shared Button while retaining disabled native-button and disabled-link behavior. Qualify canonical source and the exact package artifacts used by Hub and Site. Give mention-alias reads current owner/request fencing, validation and contained failure behavior; cache success only for its owner and retire stale data on identity changes.
