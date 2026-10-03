@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "authorized_scope": "All 97 original findings, 10 FACES backend/product findings, 1 baseline device-auth regression and 6 parent blast-radius findings (114 total); autonomous implementation authorized. Merge/deploy remain separate.",
+  "authorized_scope": "All 97 original findings, 10 FACES backend/product findings, 1 baseline device-auth regression and 8 parent blast-radius findings (116 total); autonomous implementation authorized. Merge/deploy remain separate.",
   "updated": "2026-10-03",
   "bases": {
     "hub": "7ac3bfdffdd885d80fbaf2056eb22e387626a3ee",
@@ -1056,7 +1056,7 @@
       "priority": "P1",
       "title": "Hub CI always skips the native editor, paste, and sanitizer security qualification",
       "batch": "hub-test-quality",
-      "status": "implemented-awaiting-integration",
+      "status": "hosted-verified-awaiting-release",
       "owner": "hub_test_fixes",
       "acceptance": "The dedicated job must fail when browser availability is absent and must report DS1–DS4 native editor, paste, sanitizer and clipboard cases passed with zero pending. A forced sanitizer or editor mutation must make the job red. The original count of five referred to four ordinary cases plus one composite browser case, not five native behaviors.",
       "code_commits": [
@@ -1064,7 +1064,8 @@
         "hub:42717d99",
         "hub:5f2f7c65",
         "hub:71152adb",
-        "hub:78c20943"
+        "hub:78c20943",
+        "hub:631aa167"
       ],
       "tests": [
         "Built dependency fixture131modules/2artifacts1.18MB and critical fixture5475modules/139artifacts24.42MB; boundary scans0, exact4/30-case lists, focused tests21passed. Browser execution not yet qualified.",
@@ -1072,7 +1073,9 @@
         "Parent executed CJ1–CJ6 production-component journeys in dedicated headless Chromium (desktop/mobile), with synthetic transport; no authenticated or five-project claim. Corrected stale renderer selector and native BODY focus assertion discovered during execution.",
         "Normal production build now checks actual Rollup client graph: 4560 modules, 1978 manifest entries, 875 artifacts, 21481670 bytes, 0 boundary violations; two real bundle mutation canaries reject; focused21 and Svelte0/0 pass. Supporting boundary evidence is not native editor/sanitizer acceptance.",
         "71152adb parent Browser Harness: normal4/4, editor mutation onlyDS2 unsafe paste red, sanitizer mutation onlyDS3 executable HTML red; expected compile-time identities verified. Exact Playwright/hosted CI remains pending. Source qualifier12 tests pass, including actual installed Playwright serialized error spelling.",
-        "Native no-HTTP TCP preconnect regression passes: SIGTERM closes the owned socket and exits0 naturally within2seconds. Parent reviewed cleanup and server stop-admission/close-connections sequence; followup78c20943."
+        "Native no-HTTP TCP preconnect regression passes: SIGTERM closes the owned socket and exits0 naturally within2seconds. Parent reviewed cleanup and server stop-admission/close-connections sequence; followup78c20943.",
+        "Hosted first-checkpoint dependency browser failed before test execution because fixture inherited missing generated tsconfig; clean archive standalone fixture now builds132modules/2artifacts with zero boundary violations and fixture TypeScript passes. Refreshed CI on f333cbc2 running.",
+        "Hosted CI37104496343 job111150272912 at f333cbc2 PASS: unmodified Chromium DS1–DS4 4/4, editor mutant onlyDS2 fails/other3pass, sanitizer mutant onlyDS3fails/other3pass; outer exact-failure qualifier accepts both. Zero pending. Parent inspected exact job log."
       ],
       "reviews": [
         "Independent Sol hub_test_fixes accepted current-grid selector and native modal focus corrections: exact staff identities/count required, outside interactive focus rejected, BODY allowed only while native modal remains, focus must re-enter and return on Escape. Full matrix remains required.",
@@ -1083,10 +1086,9 @@
       "pull_requests": [
         "https://github.com/NikolasP98/minion_hub/pull/431"
       ],
-      "runtime": "not-qualified",
+      "runtime": "hosted-disposable-browser-verified",
       "remaining": [
-        "Execute exact current four-case DS1–DS4 required browser runner with zero pending and forced editor/sanitizer mutation-red proof.",
-        "Run final combined readiness branch build; the checkpoint build predates later money changes."
+        "Final combined readiness branch build and release qualification; production rollout is separate from this hosted browser proof."
       ]
     },
     {
@@ -1768,7 +1770,8 @@
       ],
       "reviews": [
         "Sol Standards pass1 and Spec pass2 approved after explicit numeric field bounds, currency policy, stored DTO checks, line-discount rounding order, mandatory shift arithmetic, invalid-draft retention and legacy schedule classification.",
-        "Independent Sol review of exact decimal core PASS:171 focused cases and3200 Python Decimal differential cases."
+        "Independent Sol review of exact decimal core PASS:171 focused cases and3200 Python Decimal differential cases.",
+        "Sol server blast-radius review blocked booking facet swallowing, unclassified collection schedules, and incomplete void preflight. Root fixes all3; production caller regressions71pass across4files. Re-review pending."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -2089,7 +2092,8 @@
       ],
       "reviews": [
         "Sol Standards pass1 and Spec pass2 approved after explicit numeric field bounds, currency policy, stored DTO checks, line-discount rounding order, mandatory shift arithmetic, invalid-draft retention and legacy schedule classification.",
-        "Independent Sol review of exact decimal core PASS:171 focused cases and3200 Python Decimal differential cases."
+        "Independent Sol review of exact decimal core PASS:171 focused cases and3200 Python Decimal differential cases.",
+        "Sol server blast-radius review blocked booking facet swallowing, unclassified collection schedules, and incomplete void preflight. Root fixes all3; production caller regressions71pass across4files. Re-review pending."
       ],
       "pull_requests": [],
       "runtime": "not-qualified",
@@ -2444,8 +2448,10 @@
         "src/routes/(app)/scheduling/links/+page.svelte:62",
         "src/routes/(app)/scheduling/event-types/+page.svelte:70"
       ],
-      "status": "implementing",
-      "code_commits": [],
+      "status": "implemented-awaiting-integration",
+      "code_commits": [
+        "hub:f333cbc2"
+      ],
       "tests": [
         "Initial source16 controller and20 mounted-route tests passed. Expanded scope/deadline matrix40 passed; global action reconciliation and actual-hook permission regressions now running after independent review.",
         "Corrected expanded suite4files141tests passes, including real-runtime attention reconciliation,140failed local repairs without capacity growth, mounted org change/unmount/deadline, real central mapping and hook403/allowed cases. Design origin/master no debt increase; token0violations."
@@ -2455,10 +2461,12 @@
         "Sol independent spec PASS, then implementation BLOCK: POST actually maps to edit (not create), and local repair left original runtime attention unresolved. Corrections preserve existing server authority and reconcile original action IDs without adding confirmed-write records for read repair.",
         "Independent Sol implementation re-review PASS: actual manage+edit/create and manage+delete authority preserved; original action reconciled only on matching proof, read repairs do not create confirmed attention, uncertain discard cannot falsely acknowledge mutation."
       ],
-      "pull_requests": [],
+      "pull_requests": [
+        "https://github.com/NikolasP98/minion_hub/pull/431"
+      ],
       "runtime": "not-qualified",
       "remaining": [
-        "Finish expanded runtime/hook/mounted tests, independent re-review, UI qualification and final shared gates."
+        "Authenticated UI qualification and final combined branch gates; local141 tests, independent review, shared0/0 and design/token gates passed."
       ]
     },
     {

@@ -25,7 +25,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 
 ## Draft qualification
 
-[Hub draft PR431](https://github.com/NikolasP98/minion_hub/pull/431) contains committed checkpoint78c20943. Hosted CI is running. The first seed-pairing job read the opening event before GitHub applied the requested seed-unaffected label; the label and documented justification are present now. A subsequent source push will supply the current metadata. Money and scheduling WIP are not included in that checkpoint. No merge or production release was performed.
+[Hub draft PR431](https://github.com/NikolasP98/minion_hub/pull/431) now contains checkpoint `f333cbc2`, including HC-033 scheduling recovery, formatting and clean-checkout CI fixes. Refreshed hosted CI is running. The prior checkpoint passed three PostgreSQL jobs and critical journeys; unit tests had one stale warning-copy assertion (5,353 passed), while dependency-browser and QA bootstrap exposed generated-config/import assumptions. The seed label is now attached. Money and payment-plan recovery remain uncommitted review candidates. No merge or production release was performed.
 
 ## Register
 
@@ -75,7 +75,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | MR-OP-002 | P1 | hub-money | queued | Voiding a package sale races a concurrent session redemption |
 | TQ-001 | P1 | hub-test-quality | locally-verified | Nine Svelte reactive tests pass without executing their $effect.root callbacks |
 | TQ-002 | P1 | hub-test-quality | locally-verified | The workforce proxy integration test exercises a copied verifier that has drifted from the runtime middleware |
-| TQ-003 | P1 | hub-test-quality | implemented-awaiting-integration | Hub CI always skips the native editor, paste, and sanitizer security qualification |
+| TQ-003 | P1 | hub-test-quality | hosted-verified-awaiting-release | Hub CI always skips the native editor, paste, and sanitizer security qualification |
 | GW-014 | P2 | gateway-lifecycle | queued | Node invocation has no pending-request cap, timeout clamp, or socket backpressure check |
 | GW-015 | P2 | gateway-lifecycle | implementing | The write-ahead delivery queue provides at-least-once replay but lacks per-payload checkpoints/idempotency |
 | GW-016 | P2 | gateway-lifecycle | queued | Memory ingest/delete treats every HTTP response as success and has no bounded retry/drain |
@@ -140,7 +140,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | FACES-PROD-004 | P2 | faces-meta-socials | queued | Successful post and message jobs conceal partial collection |
 | FACES-PROD-005 | P2 | faces-meta-socials | queued | Sync failures retain and expose unbounded provider error payloads |
 | HC-032 | P2 | hub-reactivity-accessibility | implemented-awaiting-integration | Team timeline and leave-balance reads hide failures as empty data |
-| HC-033 | P2 | hub-mutations | implementing | Scheduling link and event-type deletion ignore rejected HTTP responses |
+| HC-033 | P2 | hub-mutations | implemented-awaiting-integration | Scheduling link and event-type deletion ignore rejected HTTP responses |
 | HS-030 | P2 | hub-authority-jobs | implemented-awaiting-integration | Marketplace filters and sorting operate on an incorrectly filtered truncated population |
 | HS-031 | P2 | hub-authority-jobs | implemented-awaiting-integration | Transient marketplace document failures are cached as permanent empty content |
 | HC-034 | P1 | hub-mutations | spec-review | Marketplace installation can deliver to the wrong active gateway and duplicate pre-delivery effects on retry |
