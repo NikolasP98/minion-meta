@@ -37,29 +37,69 @@ execFileSync("pnpm", ["--filter", "@minion-stack/workforce-client", "build"], {
 });
 const temporary = mkdtempSync(path.join(os.tmpdir(), "workforce-readiness-"));
 try {
-  const pkg = path.join(root, "packages/workforce-client");
-  const manifest = JSON.parse(
-    readFileSync(path.join(pkg, "package.json"), "utf8"),
+  // The meta package may contain unrelated unreleased API work. Qualify only
+  // this new export on the exact published consumer baseline, never that work.
+  const baseVersion = "0.3.0";
+  const baseIntegrity =
+    "sha512-6lOD60XIXDM4ykyzp7erMLhooCGFje92o/V3Sqv5ocjfU1NJkCw7kJpC75JvvkL9XG48+lH1BPsbl6+EQU0trA==";
+  const response = await fetch(
+    "https://registry.npmjs.org/@minion-stack/workforce-client/-/workforce-client-0.3.0.tgz",
+    { signal: AbortSignal.timeout(15_000) },
   );
-  manifest.version = "0.4.0-readiness.0";
+  if (!response.ok)
+    throw new Error(`Published baseline download failed: ${response.status}`);
+  const baseline = Buffer.from(await response.arrayBuffer());
+  if (
+    baseline.length > 1024 * 1024 ||
+    `sha512-${createHash("sha512").update(baseline).digest("base64")}` !==
+      baseIntegrity
+  )
+    throw new Error("Published baseline integrity mismatch");
+  const baselineFile = path.join(temporary, "baseline.tgz");
+  writeFileSync(baselineFile, baseline);
+  execFileSync("tar", ["-xzf", baselineFile, "-C", temporary]);
+  const packageRoot = path.join(temporary, "package");
+  const manifest = JSON.parse(
+    readFileSync(path.join(packageRoot, "package.json"), "utf8"),
+  );
+  if (
+    manifest.name !== "@minion-stack/workforce-client" ||
+    manifest.version !== baseVersion
+  )
+    throw new Error("Wrong package baseline");
+  manifest.version = "0.4.0-readiness.1";
   delete manifest.devDependencies;
   delete manifest.scripts;
-  for (const file of ["dist", "README.md"])
-    cpSync(path.join(pkg, file), path.join(temporary, file), {
-      recursive: true,
-    });
-  // Incremental compiler state is not part of the runtime package.
-  for (const file of readdirSync(path.join(temporary, "dist"))) {
-    if (file.endsWith(".tsbuildinfo"))
-      rmSync(path.join(temporary, "dist", file));
+  manifest.exports["./hub-identity-contract"] = {
+    import: "./dist/hub-identity-contract.js",
+    types: "./dist/hub-identity-contract.d.ts",
+  };
+  const pkg = path.join(root, "packages/workforce-client");
+  const overlayFiles = readdirSync(path.join(pkg, "dist")).filter((file) =>
+    /^hub-identity-contract\.(?:js|d\.ts)(?:\.map)?$/.test(file),
+  );
+  if (
+    !overlayFiles.includes("hub-identity-contract.js") ||
+    !overlayFiles.includes("hub-identity-contract.d.ts")
+  )
+    throw new Error("Missing built identity contract");
+  for (const file of overlayFiles)
+    cpSync(path.join(pkg, "dist", file), path.join(packageRoot, "dist", file));
+  for (const file of ["index.js", "index.d.ts"]) {
+    const destination = path.join(packageRoot, "dist", file);
+    writeFileSync(
+      destination,
+      readFileSync(destination, "utf8") +
+        "\nexport * from './hub-identity-contract.js';\n",
+    );
   }
   writeFileSync(
-    path.join(temporary, "package.json"),
+    path.join(packageRoot, "package.json"),
     JSON.stringify(manifest, null, 2) + "\n",
   );
   mkdirSync(output, { recursive: true });
   execFileSync("pnpm", ["pack", "--pack-destination", output], {
-    cwd: temporary,
+    cwd: packageRoot,
     stdio: "inherit",
   });
   const artifact = `minion-stack-workforce-client-${manifest.version}.tgz`;
@@ -68,6 +108,14 @@ try {
     .digest("hex");
   const receipt = {
     schemaVersion: 1,
+    baseVersion,
+    baseIntegrity,
+    overlayFiles: [
+      ...overlayFiles.map((file) => `dist/${file}`),
+      "dist/index.js",
+      "dist/index.d.ts",
+      "package.json",
+    ],
     artifact,
     sha256,
     sourceRepository: "NikolasP98/minion-meta",
