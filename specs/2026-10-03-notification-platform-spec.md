@@ -2,15 +2,15 @@
 id: 2026-10-03-notification-platform-spec
 title: Durable configurable notification platform
 stage: spec
-status: review
-pass: 1
+status: approved
+pass: 2
 created: 2026-10-03
 updated: 2026-10-03
 repos: [minion_hub, minion, minion-meta]
 tags: [data, logic, migrations, security, test]
 type: feature
 proposal: 2026-10-03-notification-recon
-verdict: pending
+verdict: approved
 ---
 
 # Durable configurable notification platform
@@ -32,7 +32,7 @@ Workshop. It must reuse current finance, AIBRAINS, assistant-principal, and arti
 rather than creating a stored-SQL or generated-HTML bypass.
 
 This pass-1 contract is based on `scratchnotification-recon.md` and
-`scratchnotification-recon.json`: 17 findings, 72 frozen anchors, and 17 zero-mutation baseline
+`scratchnotification-recon.json`: 18 findings, 76 frozen anchors, and 18 zero-mutation baseline
 receipts at Hub `a65b28403c5bc1b8ecaa69ad515beb108579c94d`, Gateway
 `3e352a68acd396bad09d22309cbab8d82a9cc01d`, and meta
 `f45cb024785c3dcc7636f178ef3ebd683a128b71`. It authorizes no source work until two-pass review is
@@ -95,7 +95,10 @@ every profile with global role `admin` and sends the applicant's name/email (`NO
 settings page is admin-only, but the rules GET route uses tenant context without the matching rule
 management capability and returns recipient/template data. Rule JSON is weakly validated
 (`NOTIF-007`). Direct agent sending also admits read capabilities weaker than the tool's declared
-`comms:create` authority (`NOTIF-009`).
+`comms:create` authority (`NOTIF-009`). The database permits one pending request per user and
+organization, but both create dedupe and the generic waiting-page lookup select by user alone; one
+organization's pending request can substitute for another or make the permitted multi-row state
+ambiguous (`NOTIF-018`).
 
 ### 2.4 Requested producer gaps
 
@@ -211,10 +214,25 @@ request organization/ID match the event, and the event exposes only decision sta
 display name, decision time, and a next step. This entitlement confers no organization membership,
 role, list, record, or navigation access. Managers still use current target-org `users:manage`.
 
+Pending-request identity is `(canonical_user_id, organization_id, pending status)`, matching the
+database's partial unique index. A create or retry with a known target organization can return only
+that organization's request. A generic page with no target must handle zero, one, or a bounded list
+of pending organizations explicitly; it cannot use a single-row query or silently choose a request.
+
 The projector stores either a bounded per-recipient safe body or an authenticated payload reference.
 It never stores one broad role-rendered body and assumes every member may read it. Server-owned
 navigation is selected from an allowlisted event resolver; event payloads cannot inject external or
 cross-tenant hrefs.
+
+An aggregate, join, scalar, chart, or brain-assisted summary is computed under the intersection of
+the report owner and one recipient's current row, field, subject, and brain-source authority. A
+broader owner result cannot be computed once and masked afterward: a total, rank, bucket, chart
+shape, or model summary can disclose rows and sources that the recipient could never read. Snapshot
+reuse requires an authority-equivalence key containing the effective role/rule revisions, field
+level, row-scope policy and canonical allowed subject/brain-source set; recipients with a different
+key receive separately executed and materialized results. Authority is rechecked before snapshot
+read and dispatch. Revocation of any contributing source suppresses the already-frozen aggregate
+for that recipient rather than merely hiding labels while retaining leaked totals.
 
 ### 3.4 Preferences, channels, time, and digests
 
@@ -239,10 +257,26 @@ publish the same event/channel unless the policy explicitly asks for both.
 
 ### 3.5 Rule contract
 
-Rule management requires an explicit notification-management capability in addition to canonical
-tenant context. Reads, creates, edits, deletes, previews, and test evaluations use the same policy.
-Rule records contain a catalog event kind, versioned allowlisted conditions over that kind's typed
-fields, explicit audience policy, template key, preference-default policy, and rate policy. Unknown
+Organization-wide, role-audience, and default rule management uses the existing `comms:manage`
+capability in addition to canonical tenant context; this contract does not invent a `notifications`
+module. Reads, creates, edits, deletes, previews, organization defaults, and test evaluations for
+those scopes use that same policy. An exact-self personal report or subject-status subscription may
+instead be owned by an ordinary active member with `comms:create` and current read authority for
+every catalog source, subject, field, row, and brain it can query. Its audience is immutably the
+canonical owner only. It cannot choose another recipient, role, or organization audience; an agent
+acting for the owner cannot expand that audience or bypass a source policy. Reading one's own
+personal rule also requires exact ownership and `comms:view`; operating another user's rule requires
+`comms:manage` and still does not grant access to that user's private inbox or data snapshot. Direct
+notification admission uses `comms:create`. A user's own inbox read/dismiss and preference overrides
+require the exact canonical recipient, active organization membership, `comms:view`, and the
+event-specific subject capability; they never inherit `comms:manage` merely because the row exists. The sanitized
+mandatory `release.product.published` board item is the explicit exception to event-specific domain
+capability, while still requiring exact active membership and recipient identity. Cross-user inbox
+or preference operations require neither a broader fallback nor an administrator bypass: support
+work must use a separately reviewed impersonation/audit flow.
+Rule records contain an immutable scope (`organization`, `role`, or `personal`), owner identity, a
+catalog event kind, versioned allowlisted conditions over that kind's typed fields, explicit audience
+policy, template key, preference-default policy, and rate policy. Unknown
 keys/operators/types, invalid merged patches, forbidden audiences, and stale catalog revisions are
 rejected before storage.
 
@@ -276,11 +310,38 @@ not claim that post-dispatch revocation prevented external delivery.
 
 Gateway exposes a versioned notification-delivery method that requires operation ID, canonical
 organization binding, channel/account/recipient reference, bounded text, optional supported subject,
-and payload digest. It persists a bounded durable operation receipt before provider work and returns
-the same canonical result for a duplicate operation. If the provider supports idempotency or a
-message receipt, Gateway binds it to the operation. Response loss is reconciled by reading the exact
-Gateway receipt; Hub never blindly resends. Unsupported V2 capability is a visible upgrade state,
-with no unsafe fallback to legacy `channels.send` for durable effects.
+payload digest, journal epoch, Gateway state/restore epoch, and a Hub-signed dispatch grant. The grant
+binds all of those fields, the exact Gateway, issued time, and an absolute dispatch deadline no more
+than seven days later.
+Gateway rejects an invalid, changed, expired, future-dated, wrong-Gateway, or below-floor epoch grant
+before provider work. Hub never reissues a grant with a later deadline for the same operation.
+
+Gateway persists a bounded durable operation receipt before provider work and returns the same
+canonical result for a duplicate while that epoch remains active. If the provider supports
+idempotency or a message receipt, Gateway binds it to the operation. Response loss is reconciled by
+reading the exact Gateway receipt; Hub never blindly resends. Unsupported V2 capability is a visible
+upgrade state, with no unsafe fallback to legacy `channels.send` for durable effects.
+
+Journal retirement preserves no-resend semantics without promising unbounded exact-receipt storage.
+Gateway records a Hub-signed settlement acknowledgement only after Hub has durably stored the exact
+receipt digest and terminal effect state. The acknowledgement binds operation/epoch, Gateway state
+epoch, Hub effect/revision, terminal state, receipt digest, and settlement time; Gateway accepts it
+only against the exact receipt. `delivered`, permanent `failed`/`cancelled`, and explicitly closed
+`accepted` for a provider with no delivery observation are terminal. `unknown` is not. A receipt
+remains detailed for at least 30 days after its terminal provider observation and is ineligible for
+retirement until that acknowledgement. `unknown`, in-flight, unacknowledged, or operator-review
+effects are never evicted; they consume capacity until a reviewed terminal disposition and Hub
+acknowledgement. Gateway may retire a whole journal epoch only when every operation satisfies those
+conditions. Retirement atomically advances a root-owned durable
+`minimum_accepted_notification_epoch`, stores the retired epoch's final receipt-set digest/count/time,
+then removes its detailed rows. The floor and Gateway state/restore epoch live in the external
+root-owned monotonic authority excluded from restorable Gateway state. Restore/replacement advances
+the state epoch before notification delivery resumes; old-state grants cannot become current again.
+A submission or lookup below either floor returns
+`operation_epoch_retired` and performs no provider call. The monotonic floor plus at most 64 recent
+epoch digest records is the bounded aggregate tombstone; older digest records may compact while the
+floor remains. Missing, rolled-back, corrupt, or unreadable floor state suppresses the V2 capability
+rather than recreating a journal. Exact result history remains in Hub's acknowledged audit row.
 
 Provider `accepted` is distinct from human `delivered`. A permanent validated recipient/content
 error becomes `failed`; transient transport/availability errors use bounded backoff; ambiguous
@@ -294,6 +355,15 @@ server-resolved navigation, created/read/dismissed timestamps, and status. The b
 from unread inbox rows. Pagination has a stable cursor. Read/dismiss mutations require exact user,
 org, row, and current visibility. If a user loses access, the body and navigation disappear even if
 an audit tombstone remains.
+
+User inbox SQL runs through `withOrgCore` with a nonempty canonical `profileId`; its RLS policy
+requires both `organization_id = app.current_org_id` and
+`recipient_profile_id = app.current_profile_id`. An empty or absent profile GUC denies all inbox
+rows. Projection uses a distinct `app_notification_worker` NOLOGIN, NOSUPERUSER, NOBYPASSRLS role
+with only bounded projection/settlement grants and an organization-GUC policy; it cannot read user
+inbox bodies through the user policy. The runtime owner may `SET LOCAL ROLE` to this reviewed role,
+but ordinary `app_ledger`, `anon`, and `authenticated` roles cannot acquire it. The migration proves
+the worker is not a table owner and provides no global profile fallback.
 
 Browser toasts remain immediate action feedback. Workforce assignments and Workshop cards retain
 their domain stores and controls. A domain may deliberately emit a catalog event, but the inbox does
@@ -315,16 +385,22 @@ hysteresis -> low` creates two events. Oscillation inside the band creates none.
    `membership.activated`; activation occurs only after membership and effective role authority are
    durable. Invite and request paths use the same activation contract.
 5. **Daily finance and stock:** the scheduler freezes an inclusive-start/exclusive-end UTC window
-   derived from the organization IANA timezone and local accounting date. Financial rows are grouped
-   by stored currency; currencies are never summed or converted by an implicit current rate. The
-   finance snapshot declares separate signed fields for non-void invoice/POS sales, discounts,
-   taxes, recognized revenue under the versioned finance metric, posted expenses/cost, refunds or
-   negative documents, and void/reversal totals. It preserves losses and negative values. The stock
-   snapshot declares committed movement counts/quantities, low-stock crossings, and current low-item
-   count at the same cutoff; it reports monetary stock value only if an approved valuation policy and
-   currency own that field. A source unavailable at cutoff is `unavailable`, never zero. Late
-   corrections create a new snapshot revision with explicit reversal/correction fields; they do not
-   rewrite a delivered snapshot. Provider/sync failures remain operational incidents.
+   derived from the organization IANA timezone and local accounting date, plus immutable source
+   revision/cutoff provenance. That organization cutoff record does not freeze broad totals for later
+   masking. For each authority-equivalence group from section 3.3, the worker queries and aggregates
+   only rows and fields visible to the owner-recipient intersection; reuse is permitted only when the
+   full equivalence key is identical. A rule may use one organization-wide aggregate only when a
+   reviewed query proves every intended recipient has identical full authority to every contributing
+   row and field. Financial rows are grouped by stored currency; currencies are never summed or
+   converted by an implicit current rate. Each authorized result declares separate signed fields for
+   non-void invoice/POS sales, discounts, taxes, recognized revenue under the versioned finance
+   metric, posted expenses/cost, refunds or negative documents, and void/reversal totals. It preserves
+   losses and negative values. The stock result declares authorized committed movement
+   counts/quantities, low-stock crossings, and current low-item count at the same cutoff; it reports
+   monetary stock value only if an approved valuation policy, currency, and recipient field authority
+   own that field. A source unavailable at cutoff is `unavailable`, never zero. Late corrections create
+   a new cutoff/result revision with explicit reversal/correction fields; they do not rewrite a
+   delivered result. Provider/sync failures remain operational incidents.
 6. **Automation:** schedule commit, run start, no-op success, committed effects, and run failure are
    distinct. `automation.effects.committed` requires immutable IDs for the exact domain events or
    receipts committed by the run and a bounded safe summary. A run that merely completed, is still
@@ -352,7 +428,9 @@ The first implementation includes `finance.invoice-status-summary.v1`,
 `finance.revenue-summary.v1`, `pos.sales-summary.v1`, `stock.daily-summary.v1`, and
 `brains.authorized-search.v1`. “Invoice 10 AM” is a real qualification rule: the user selects
 `finance.invoice-status-summary.v1`, a daily 10:00 civil time in an IANA timezone, an allowed invoice
-window/status filter, exact recipients, and table or chart output. “Report X” is only a user label;
+window/status filter, and table or chart output. A personal plan fixes its recipient to its canonical
+owner; selecting exact recipients is available only to an organization-scoped owner with
+`comms:manage`, and each selected recipient must pass section 3.3 authority. “Report X” is only a user label;
 its revision must still compose those approved nodes. The editor displays timezone, next three civil
 occurrences, fold/gap policy, estimated maximum cost, recipients, and fields before save. Edit creates
 a new immutable revision and cancels unclaimed old slots. Pause prevents new claims immediately. An
@@ -360,16 +438,30 @@ already-running query may finish, but a pause recheck before snapshot publicatio
 result; an external dispatch already past section 3.6's final boundary follows the after-revocation
 receipt rule.
 
-At execution Hub resolves the owner/assistant principal fresh, applies the catalog query's module,
-field, row, per-brain, and source permissions, then materializes an immutable result snapshot with
-query revision, parameter digest, source cutoff, masking revision, and provenance. Owner revocation
-prevents execution. Every recipient is resolved and masked separately before inbox publication or
-external dispatch. Recipient revocation before the final boundary prevents publication. A visual
+At execution Hub resolves the owner/assistant principal and every recipient fresh before querying.
+It executes each query under the owner-intersect-recipient module, field, row, per-brain, and source
+authority from section 3.3; recipients may share execution only when their reviewed authority
+equivalence key is identical. Each immutable result snapshot records that authority key, query
+revision, parameter digest, source cutoff, masking revision, and provenance. It is never a wider
+owner aggregate later masked for a narrower recipient. Owner revocation prevents execution, and
+recipient revocation before the final boundary suppresses that recipient's snapshot publication and
+external dispatch. A visual
 links to an authenticated, org-scoped snapshot rendered under the existing artifact sandbox/context
 boundary. `brains.authorized-search.v1` binds explicit brain IDs and reruns `brains:view` plus
 per-brain source access; an LLM may summarize frozen authorized rows but may not expand the query,
 audience, or source set. External channels receive safe summary text and an authenticated link,
 never artifact HTML or raw evidence.
+
+One civil schedule slot is one all-or-nothing execution budget across every authority-equivalence
+group, not a fresh budget per group or recipient. Hub derives and sorts the complete equivalence-key
+set before querying. More than 64 distinct keys marks the slot `authority_partition_overflow` and
+publishes no snapshot, inbox item, artifact, or external effect; it never collapses unlike keys. At
+most four data groups and one AI group execute concurrently. The row, byte, wall-time, token, model
+cost, snapshot, and artifact ceilings in section 3.11 are cumulative across the slot. Results remain
+staged and invisible until every group finishes and the aggregate counters pass. If a late result,
+model call, or artifact crosses a ceiling, Hub cancels remaining work, erases staged sensitive bytes,
+records one sanitized slot failure, and publishes zero groups. Retry uses the same immutable slot and
+plan revision; already staged or failed groups are never independently published.
 
 ### 3.10 Migrations, RLS, retention, and telemetry
 
@@ -398,25 +490,27 @@ These are hard version-1 ceilings. Organization settings may lower them. Raising
 catalog/config revision, capacity evidence, and review; a deployment environment variable cannot
 silently bypass them.
 
-| Resource                                                         |                                                                                            Version-1 limit | Overflow behavior                                                                                                                          |
-| ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| Canonical event payload                                          |                                                                 32 KiB UTF-8 after canonical serialization | Reject producer transaction with a typed error before outbox insert                                                                        |
-| Per-recipient safe inbox body                                    |                                                                                                8 KiB UTF-8 | Reject projection; use a bounded authenticated payload reference instead                                                                   |
-| External rendered body/subject                                   |                                                             8 KiB / 256 bytes before a lower adapter limit | Reject; never silently truncate a digest or security-relevant value                                                                        |
-| Candidate recipients per organization event                      |                                                                                                     10,000 | Quarantine event as `audience_overflow`; create no partial audience                                                                        |
-| Audience/outbox claim page                                       |                                                                                                   250 rows | Continue by row claims; no event-time cursor                                                                                               |
-| Rules per organization / subject subscriptions per user          |                                                                                                  200 / 500 | Typed 409/429 before insertion                                                                                                             |
-| Delivery attempts                                                |                              6 new dispatches at 0, 30 seconds, 2 minutes, 10 minutes, 1 hour, and 6 hours | Permanent failure after the sixth proven non-acceptance; an ambiguous attempt becomes `unknown` and is not counted as permission to resend |
-| Unknown receipt reconciliation                                   |                                                                   Poll for at most 7 days; no new dispatch | Retain `unknown` for operator disposition                                                                                                  |
-| Scheduler catch-up                                               |                                                     100 civil slots and 7 days, whichever is reached first | Visible degraded backlog; no unbounded loop                                                                                                |
-| Immediate external rate                                          |     20 per recipient/channel rolling hour, 100 per recipient/channel day, and 10,000 per organization/hour | Defer to the next window or an enabled digest; never drop the durable event                                                                |
-| Low-stock immediate rate                                         |                                                                    50 crossings per organization/rule/hour | Remaining crossings join the next digest or remain pending                                                                                 |
-| Inbox sensitive body / report snapshot / minimal audit retention |                                                                              180 days / 30 days / 400 days | Erase body/snapshot, keep bounded digest/identity audit; legal hold requires separate policy                                               |
-| Report plan                                                      | 8 nodes, 4 source datasets, 10,000 fetched logical rows total, 2,000 output rows, 8 MiB intermediate bytes | Fail before snapshot publication                                                                                                           |
-| Report execution                                                 |                                                       30 seconds per data node, 60 seconds total wall time | Cancel query/model work and record sanitized failure                                                                                       |
-| Report snapshot / visual artifact                                |                                                             1 MiB canonical data / 5 MiB rendered artifact | Fail; no partial publication                                                                                                               |
-| AI report budget                                                 |                          64,000 source tokens, 4,000 output tokens, and USD 1.00 estimated maximum per run | Refuse model call when the configured lower org budget or hard cap would be exceeded                                                       |
-| Gateway V2 journal                                               |                                       100,000 receipts and 256 MiB per Gateway; 4 KiB metadata per receipt | Advertise capability unavailable before provider work; never overwrite/recreate evidence                                                   |
+| Resource                                                         |                                                                                        Version-1 limit | Overflow behavior                                                                                                                          |
+| ---------------------------------------------------------------- | -----------------------------------------------------------------------------------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Canonical event payload                                          |                                                             32 KiB UTF-8 after canonical serialization | Reject producer transaction with a typed error before outbox insert                                                                        |
+| Per-recipient safe inbox body                                    |                                                                                            8 KiB UTF-8 | Reject projection; use a bounded authenticated payload reference instead                                                                   |
+| External rendered body/subject                                   |                                                         8 KiB / 256 bytes before a lower adapter limit | Reject; never silently truncate a digest or security-relevant value                                                                        |
+| Candidate recipients per organization event                      |                                                                                                 10,000 | Quarantine event as `audience_overflow`; create no partial audience                                                                        |
+| Audience/outbox claim page                                       |                                                                                               250 rows | Continue by row claims; no event-time cursor                                                                                               |
+| Rules per organization / subject subscriptions per user          |                                                                                              200 / 500 | Typed 409/429 before insertion                                                                                                             |
+| Delivery attempts                                                |                          6 new dispatches at 0, 30 seconds, 2 minutes, 10 minutes, 1 hour, and 6 hours | Permanent failure after the sixth proven non-acceptance; an ambiguous attempt becomes `unknown` and is not counted as permission to resend |
+| Unknown receipt reconciliation                                   |                                                               Poll for at most 7 days; no new dispatch | Retain `unknown` for operator disposition                                                                                                  |
+| Scheduler catch-up                                               |                                                 100 civil slots and 7 days, whichever is reached first | Visible degraded backlog; no unbounded loop                                                                                                |
+| Immediate external rate                                          | 20 per recipient/channel rolling hour, 100 per recipient/channel day, and 10,000 per organization/hour | Defer to the next window or an enabled digest; never drop the durable event                                                                |
+| Low-stock immediate rate                                         |                                                                50 crossings per organization/rule/hour | Remaining crossings join the next digest or remain pending                                                                                 |
+| Inbox sensitive body / report snapshot / minimal audit retention |                                                                          180 days / 30 days / 400 days | Erase body/snapshot, keep bounded digest/identity audit; legal hold requires separate policy                                               |
+| Report plan                                                      |                                                                          8 nodes and 4 source datasets | Reject plan before storage                                                                                                                 |
+| Authority-equivalence groups per report slot                     |                                                  64, sorted before execution; 4 data / 1 AI concurrent | Mark the whole slot `authority_partition_overflow`; publish no group                                                                       |
+| Report slot data budget across all groups                        |         10,000 fetched logical rows, 2,000 output rows, 8 MiB intermediate bytes, 60 seconds wall time | Cancel remaining work, erase staged bytes, fail the whole slot; 30-second per-node sub-limit                                               |
+| Report snapshots / visual artifacts                              |                    1 MiB / 5 MiB per authority group and 8 MiB / 20 MiB cumulatively per schedule slot | Fail the whole slot; no partial group publication                                                                                          |
+| AI report slot budget across all groups                          |                     64,000 source tokens, 4,000 output tokens, and USD 1.00 estimated maximum per slot | Refuse/cancel model work when the configured lower org budget or cumulative hard cap would be exceeded                                     |
+| Gateway V2 detailed journal                                      |                  100,000 receipts and 256 MiB per Gateway; 4 KiB metadata per receipt; minimum 30 days | Advertise capability unavailable before provider work; never overwrite/evict unknown, unacknowledged, or too-young evidence                |
+| Gateway V2 retired-epoch fence                                   |             One monotonic minimum epoch plus 64 recent digest/count/time records, at most 32 KiB total | Reject retired operations without provider work; corrupt/missing/regressed fence suppresses V2 rather than resetting                       |
 
 Count and byte admissions that can race use one database transaction and the appropriate row/advisory
 lock. A universal release is split into organization events, so it never bypasses the per-event
@@ -425,22 +519,22 @@ inbox item.
 
 ## 4. DELTA
 
-| Delta | Transition                                                                                | Findings                      | Proof                                                                                             |
-| ----- | ----------------------------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------- |
-| D1    | Bind Pulse writes to authenticated canonical tenant; remove agent org selection           | NOTIF-002                     | Cross-org server-token HTTP test writes zero rows; valid canonical request persists once          |
-| D2    | Scope join audiences and direct-send/rule authority to exact capability and org           | NOTIF-007, 009, 014           | Real hook/route plus disposable-DB negative tests for ordinary member and foreign org             |
-| D3    | Reconcile historical migrations and legal runtime grants/state constraints                | NOTIF-001, 005, 012           | Clean and legacy disposable PostgreSQL catalogs both converge and pass exact catalog assertions   |
-| D4    | Introduce the reviewed typed catalog and transaction outbox                               | NOTIF-004, 006, 015, 016      | Rollback emits none; commit emits one; catalog/settings/worker hashes match                       |
-| D5    | Replace time-only scan with leased row claims and durable scheduler receipts              | NOTIF-003, 004                | A/B commit inversion, 501-row same-time burst, crash/reclaim, catch-up cap, stale schedule UI     |
-| D6    | Add per-recipient audience projection with current authority and privacy projection       | NOTIF-007, 014, 016, 017      | Role snapshot, promotion/revocation, row/field/brain/cross-org tests                              |
-| D7    | Add preferences, civil-time slots, quiet hours, digests, rates, and exact caps            | NOTIF-006, 008, 013           | DST fold/gap, overnight quiet, timezone change, digest uniqueness and boundary-cap tests          |
-| D8    | Add Gateway V2 operation receipts and Hub leased delivery effects                         | NOTIF-001, 005, 009, 010      | Duplicate, response loss, lease steal, late settle/revocation, wrong target, old-server handling  |
-| D9    | Project a durable RLS inbox and derive bell/navigation from it                            | NOTIF-008                     | Cross-user/org denial, cursor, read/dismiss, stale refresh, safe href mounted tests               |
-| D10   | Migrate reminders and direct agent sends to the effect contract                           | NOTIF-005, 009                | Crash points, ambiguous result, revocation, booking revision/cancel, no legacy fallback           |
-| D11   | Implement producers for stock, membership, daily snapshots, effects, and status           | NOTIF-006, 011, 013, 015, 016 | Currency/cutoff/reversal, crossing, applicant, subscription, and committed-effect native tests    |
-| D12   | Implement scheduled composable reports, fresh authority, snapshot, and safe artifact link | NOTIF-017                     | Invoice 10:00/Report X, pause/edit, cost caps, masking, brain source, SQL/HTML rejection          |
-| D13   | Emit universal and operator events only from releases; reconcile every target             | NOTIF-010                     | Minor/major all-user projection, draft/build negatives, digest positive, partial fan-out recovery |
-| D14   | Expose scheduler/delivery health and configurable UX without exposing sensitive details   | NOTIF-003, 008, 011           | Minimum-role mounted tests and Browser Harness release evidence                                   |
+| Delta | Transition                                                                                         | Findings                      | Proof                                                                                             |
+| ----- | -------------------------------------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------- |
+| D1    | Bind Pulse writes to authenticated canonical tenant; remove agent org selection                    | NOTIF-002                     | Cross-org server-token HTTP test writes zero rows; valid canonical request persists once          |
+| D2    | Scope join audiences, pending identity, and direct-send/rule authority to exact capability and org | NOTIF-007, 009, 014, 018      | Real hook/route plus disposable-DB ordinary-member, foreign-org, and multi-pending tests          |
+| D3    | Reconcile historical migrations and legal runtime grants/state constraints                         | NOTIF-001, 005, 012           | Clean and legacy disposable PostgreSQL catalogs both converge and pass exact catalog assertions   |
+| D4    | Introduce the reviewed typed catalog and transaction outbox                                        | NOTIF-004, 006, 015, 016      | Rollback emits none; commit emits one; catalog/settings/worker hashes match                       |
+| D5    | Replace time-only scan with leased row claims and durable scheduler receipts                       | NOTIF-003, 004                | A/B commit inversion, 501-row same-time burst, crash/reclaim, catch-up cap, stale schedule UI     |
+| D6    | Add per-recipient audience projection with current authority and privacy projection                | NOTIF-007, 014, 016, 017      | Role snapshot, promotion/revocation, row/field/brain/cross-org tests                              |
+| D7    | Add preferences, civil-time slots, quiet hours, digests, rates, and exact caps                     | NOTIF-006, 008, 013           | DST fold/gap, overnight quiet, timezone change, digest uniqueness and boundary-cap tests          |
+| D8    | Add Gateway V2 operation receipts and Hub leased delivery effects                                  | NOTIF-001, 005, 009, 010      | Duplicate, response loss, lease steal, late settle/revocation, wrong target, old-server handling  |
+| D9    | Project a durable RLS inbox and derive bell/navigation from it                                     | NOTIF-008                     | Cross-user/org denial, cursor, read/dismiss, stale refresh, safe href mounted tests               |
+| D10   | Migrate reminders and direct agent sends to the effect contract                                    | NOTIF-005, 009                | Crash points, ambiguous result, revocation, booking revision/cancel, no legacy fallback           |
+| D11   | Implement producers for stock, membership, daily snapshots, effects, and status                    | NOTIF-006, 011, 013, 015, 016 | Currency/cutoff/reversal, crossing, applicant, subscription, and committed-effect native tests    |
+| D12   | Implement scheduled composable reports, fresh authority, snapshot, and safe artifact link          | NOTIF-017                     | Invoice 10:00/Report X, pause/edit, cost caps, masking, brain source, SQL/HTML rejection          |
+| D13   | Emit universal and operator events only from releases; reconcile every target                      | NOTIF-010                     | Minor/major all-user projection, draft/build negatives, digest positive, partial fan-out recovery |
+| D14   | Expose scheduler/delivery health and configurable UX without exposing sensitive details            | NOTIF-003, 008, 011           | Minimum-role mounted tests and Browser Harness release evidence                                   |
 
 ## 5. Implementation slices
 
@@ -456,7 +550,18 @@ it. A security/data slice retains human approval and merge gates.
 Implements D1 and the join portion of D2 only. It is independently releasable: derive the Pulse org
 from authenticated server context, reject supplied mismatch, remove org from the agent tool schema,
 resolve join recipients inside the target org with current `users:manage`, and add bounded sanitized
-logging. Definition of done is the exact cross-org and no-recipient-write matrix, with no real sends.
+logging. Definition of done is the canonical machine-to-org, target-org audience, revocation,
+overflow, and no-recipient-write matrix, with no real sends. NOTIF-018 pending-request selection is
+explicitly excluded from this already-approved narrow slice.
+
+### Slice 1b — Pending join-request identity
+
+**Topics:** `security`, `permissions`, `test`
+
+Implements the NOTIF-018 portion of D2 as a subsequent bounded change. It binds create/retry to the
+exact target organization and replaces a no-target single-row lookup with explicit zero, one, or
+bounded-many pending state. Two-organization create/retry and generic-page disclosure tests must
+pass before this slice can close; Slice 1 does not claim this result.
 
 ### Slice 2 — Rule/direct-send authority and migration reconciliation
 
@@ -515,10 +620,11 @@ table tests cover DST transitions, timezone edits, pause/resume, old backlog, an
 
 Implements the Gateway half of D8 with version negotiation, canonical org/Gateway binding, durable
 bounded operation journal, provider receipt classification, exact duplicate response, sanitized
-telemetry, and corruption/capacity failure behavior. Hub compatibility tests prove that an old or
-degraded Gateway becomes an honest unavailable/upgrade state without legacy fallback. The additive
-shared protocol runtime/declarations are packaged and tested against Hub plus the unchanged Site and
-Paperclip consumers before adoption; source-only types do not count as runtime compatibility proof.
+telemetry, signed dispatch deadline, Hub settlement acknowledgement, epoch retirement/floor, and
+corruption/capacity failure behavior. Hub compatibility tests prove that an old or degraded Gateway
+becomes an honest unavailable/upgrade state without legacy fallback. The additive shared protocol
+runtime/declarations are packaged and tested against Hub plus the unchanged Site and Paperclip
+consumers before adoption; source-only types do not count as runtime compatibility proof.
 
 ### Slice 9 — Hub delivery effects
 
@@ -567,9 +673,11 @@ status transition selection, access-loss behavior, and safe navigation.
 
 **Topics:** `data`, `logic`, `test`
 
-Completes D11 with per-currency finance snapshots, stock/finance daily digest composition,
+Completes D11 with per-currency finance cutoff provenance, separately executed
+owner-intersect-recipient authority groups, stock/finance daily digest composition,
 cutoff/timezone/reversal semantics, schedule-commit events, run-failure events, and
-`automation.effects.committed` receipt linkage. No-op and in-progress runs are mandatory negatives.
+`automation.effects.committed` receipt linkage. A broad organization total may be reused only after
+full-authority equivalence proof. No-op and in-progress runs are mandatory negatives.
 
 ### Slice 15 — Agent reports and visuals
 
@@ -577,7 +685,8 @@ cutoff/timezone/reversal semantics, schedule-commit events, run-failure events, 
 
 Implements D12 with the five initial query nodes, the eight-node composable plan, “Invoice 10 AM” and
 “Report X” fixtures, timezone confirmation, revision/edit/pause behavior, fresh assistant/owner
-authority, per-recipient masking, exact cost/time/row caps, immutable snapshots, AIBRAINS source
+authority, owner-intersect-recipient execution, a 64-equivalence-group ceiling, slot-wide cumulative
+cost/time/row/byte/token caps, all-or-nothing staged publication, immutable snapshots, AIBRAINS source
 checks, and authenticated artifact links. Stored SQL, prompt authority, raw evidence, and external
 HTML are mandatory negatives.
 
@@ -618,23 +727,32 @@ Use two independent connections and fake provider/Gateway adapters. Mandatory ca
 4. Two workers race claim, expiry, steal, renewal, and settlement. The stale generation cannot
    project, advance, accept, fail, cancel, or settle after replacement.
 5. A current role audience projects only org members. Promotion after projection does not reveal the
-   old item; revocation before inbox read or dispatch hides/cancels it.
+   old item; revocation before inbox read or dispatch hides/cancels it. `app_ledger` with the exact
+   org but empty, wrong, or missing `app.current_profile_id` reads and mutates no inbox row; the exact
+   recipient can read/dismiss only their rows.
 6. Cross-org subject, user, role, preference, destination, Gateway, inbox, subscription, and report
-   IDs fail under forced RLS and write zero rows.
+   IDs fail under forced RLS and write zero rows. `app_notification_worker` can project only within
+   its organization GUC and legal state transition, is not a table owner, and cannot use the user
+   profile policy; `anon`, `authenticated`, and `app_ledger` cannot acquire worker authority.
 7. Runtime-role legal transitions succeed, while direct forbidden `sent`/`delivered` fabrication and
    illegal partial lease states fail.
 8. Low-stock concurrent writes create one crossing; recovery plus hysteresis re-arms; band
    oscillation creates none; rate cap defers without losing the event.
-9. Join request selects only current target-org `users:manage` recipients. The exact applicant can
-   read only their sanitized approved/denied result through request ownership while still lacking
-   membership, and cannot enumerate or navigate the org. Approval without effective role emits no
-   activation. Retry or invite convergence emits one activation.
+9. Join request selects only current target-org `users:manage` recipients. A pending request in org A
+   does not block, satisfy, or supply the receipt for org B; exact-org retry returns B, and a generic
+   no-target lookup handles both rows without single-row ambiguity or private-data disclosure. The
+   exact applicant can read only their sanitized approved/denied result through request ownership
+   while still lacking membership, and cannot enumerate or navigate the org. Approval without
+   effective role emits no activation. Retry or invite convergence emits one activation.
 10. Status subscribe and projection both require current exact-subject access; revocation between
     them prevents inbox and delivery.
 11. Daily snapshots freeze one local-day UTC window and keep PEN/USD/other currencies separate.
     Non-void sales/revenue, signed negatives, discounts, tax, expense/cost, refunds, void/reversal,
     low-stock crossings, late corrections, and unavailable sources match the declared metric
-    revision. In-progress/failed sync and foreign currency/org scope emit no summary.
+    revision. Two recipients with different row/field authority recompute from the same cutoff
+    provenance and receive different authorized totals; rows invisible to one never affect that
+    recipient's scalar, group, rank, or chart. Reuse occurs only for an identical full-authority key.
+    In-progress/failed sync and foreign currency/org scope emit no summary.
 12. Every numerical boundary in section 3.11 is tested at limit and limit + 1. Two connections racing
     recipient/count/byte admission cannot both exceed an org or global cap; rejection occurs before
     partial rows.
@@ -646,6 +764,11 @@ database marker and refuse production-shaped or unmarked URLs.
 
 - Duplicate V2 operation before provider call, during call, after provider acceptance, after journal
   commit, and after response loss returns/reconciles one canonical receipt.
+- Fill a journal epoch to its count and byte boundaries. Too-young, unknown, or unacknowledged rows
+  make capacity honestly unavailable. After every row becomes terminal, passes 30 days, and receives
+  an exact Hub receipt-digest acknowledgement, retire the epoch atomically and admit the next epoch.
+  A duplicate from the retired epoch and an expired signed dispatch grant both return a bounded
+  retired/expired result and make zero provider calls; floor rollback/corruption suppresses V2.
 - A provider that supports an idempotency key receives the exact stable operation ID. A provider that
   does not support it records that limitation and never upgrades `accepted` to `delivered`.
 - Permanent recipient/content rejection, transient transport failure, timeout, shutdown, journal
@@ -675,6 +798,16 @@ database marker and refuse production-shaped or unmarked URLs.
 - Rule GET/write/preview, direct agent send, inbox read/dismiss, subscription, report rule, and
   settings routes test admin/member/minimum-role, foreign org, stale tab, membership loss, and
   capability refresh using the real handler/hook chain.
+- The exact map is executable: organization, role, and default rule management requires
+  `comms:manage`; exact-self personal report/subscription mutation requires `comms:create` plus every
+  source/subject read policy and can target only the owner; direct notification admission requires
+  `comms:create`; and own inbox/preferences require canonical recipient plus active membership,
+  `comms:view`, and the event's subject capability. Unknown routes or actions fail registry
+  validation rather than inheriting a prefix default.
+- A minimum-role member can create, preview, edit, pause, and delete their own authorized daily
+  invoice report and status subscription without `comms:manage`. Attempts to add another recipient,
+  use a denied source/brain, or have an agent widen the audience fail before storage. An administrator
+  cannot read or mutate another user's private inbox or personal snapshot through rule authority.
 - Mounted UI proves restricted users cannot see or operate gated controls, while a stale client still
   receives server denial. Preference and inbox state refresh after capability/org changes.
 - Inbox tests cover stable pagination, unread count, safe navigation, missing target, body expiry,
@@ -698,6 +831,16 @@ database marker and refuse production-shaped or unmarked URLs.
   limits. Creator revocation before query prevents execution. Recipient revocation after snapshot but
   before final publication admission prevents inbox/dispatch. Finance masking and AIBRAINS
   per-source denial apply independently per recipient.
+- Two recipients with different row scope, field level, and brain-source authority receive
+  independently executed snapshots: forbidden rows do not influence a scalar total, group/rank,
+  chart geometry, or model summary. Authority-equivalent recipients may reuse one snapshot only
+  when the full equivalence key matches. Revoking one contributing source after freeze suppresses
+  that recipient's snapshot at read and dispatch without hiding labels around the leaked aggregate.
+- Generate 65 distinct authority-equivalence keys and require pre-query
+  `authority_partition_overflow` with zero publication. For 64 keys, cross the slot-wide row, byte,
+  wall-time, snapshot, artifact, token, and USD limits one at a time while individual groups stay
+  below their limits; every case cancels remaining work and publishes zero groups. Concurrency never
+  exceeds four data groups or one AI group.
 - Stored SQL, unknown query ID, invalid params, excessive result, raw brain excerpt, arbitrary href,
   artifact HTML attachment, and expired snapshot all fail closed.
 - Release tests reject draft commits, successful builds without publish, failed publish, missing
@@ -726,25 +869,26 @@ test recipient.
 
 ## 7. Finding closure map
 
-| Finding   | Required deltas | Earliest closure evidence                                         |
-| --------- | --------------- | ----------------------------------------------------------------- |
-| NOTIF-001 | D3, D8          | Legal grant/state catalog plus response-loss receipt test         |
-| NOTIF-002 | D1              | Cross-org token/body denial with zero writes                      |
-| NOTIF-003 | D5, D14         | Deployed durable worker receipt and degraded-state UI             |
-| NOTIF-004 | D4, D5          | Commit-inversion plus 501-row row-claim native fixtures           |
-| NOTIF-005 | D8, D10         | Stale claim/unknown result reconciliation without resend          |
-| NOTIF-006 | D4, D7, D11     | Crossing/recovery/hysteresis/rate tests                           |
-| NOTIF-007 | D2, D6          | Exact capability registry and rule-body denial                    |
-| NOTIF-008 | D9              | RLS inbox, bell/read/dismiss, safe navigation proof               |
-| NOTIF-009 | D2, D8, D10     | Matching create authority and effect receipt                      |
-| NOTIF-010 | D8, D13         | Attested universal/operator release plus per-target recovery      |
-| NOTIF-011 | D5, D11         | Settings-to-job reconciliation and committed-action receipt chain |
-| NOTIF-012 | D3              | Fresh/legacy canonical migration qualification                    |
-| NOTIF-013 | D7, D11         | Completed snapshot, timezone, audience/masking tests              |
-| NOTIF-014 | D2, D6          | Target-org manager-only native/service proof                      |
-| NOTIF-015 | D4, D11         | Separate decision/activation events and retry convergence         |
-| NOTIF-016 | D6, D11         | Subject subscription plus access-loss proof                       |
-| NOTIF-017 | D6, D12         | Fresh creator/recipient authority and immutable safe snapshot     |
+| Finding   | Required deltas | Earliest closure evidence                                          |
+| --------- | --------------- | ------------------------------------------------------------------ |
+| NOTIF-001 | D3, D8          | Legal grant/state catalog plus response-loss receipt test          |
+| NOTIF-002 | D1              | Cross-org token/body denial with zero writes                       |
+| NOTIF-003 | D5, D14         | Deployed durable worker receipt and degraded-state UI              |
+| NOTIF-004 | D4, D5          | Commit-inversion plus 501-row row-claim native fixtures            |
+| NOTIF-005 | D8, D10         | Stale claim/unknown result reconciliation without resend           |
+| NOTIF-006 | D4, D7, D11     | Crossing/recovery/hysteresis/rate tests                            |
+| NOTIF-007 | D2, D6          | Exact capability registry and rule-body denial                     |
+| NOTIF-008 | D9              | RLS inbox, bell/read/dismiss, safe navigation proof                |
+| NOTIF-009 | D2, D8, D10     | Matching create authority and effect receipt                       |
+| NOTIF-010 | D8, D13         | Attested universal/operator release plus per-target recovery       |
+| NOTIF-011 | D5, D11         | Settings-to-job reconciliation and committed-action receipt chain  |
+| NOTIF-012 | D3              | Fresh/legacy canonical migration qualification                     |
+| NOTIF-013 | D7, D11         | Completed snapshot, timezone, audience/masking tests               |
+| NOTIF-014 | D2, D6          | Target-org manager-only native/service proof                       |
+| NOTIF-015 | D4, D11         | Separate decision/activation events and retry convergence          |
+| NOTIF-016 | D6, D11         | Subject subscription plus access-loss proof                        |
+| NOTIF-017 | D6, D12         | Fresh creator/recipient authority and immutable safe snapshot      |
+| NOTIF-018 | D2              | Two-org pending create/retry and explicit multi-pending page proof |
 
 No finding is closed by source existence, a settings checkbox, an admitted job, a mocked always-green
 test, a skipped native lane, or an external request with no canonical receipt.

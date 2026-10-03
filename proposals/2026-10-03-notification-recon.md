@@ -44,7 +44,7 @@ The UI refreshes without hard reloads, and errors preserve user settings and int
 
 ## DELTA
 
-The program register now contains NOTIF-001 through NOTIF-017, with priorities, evidence, required
+The program register now contains NOTIF-001 through NOTIF-018, with priorities, evidence, required
 proof and implementation ownership. A bounded tenant-boundary correction has its own specification
 and review; the larger feature specification covers catalog/outbox, worker leases, audience,
 preferences/destinations, civil time/digests, Gateway receipts, inbox/settings, business producers,
@@ -61,3 +61,14 @@ Unknown outcomes never authorize blind resend. Production sends are not test fix
 
 This proposal stays open until every notification finding and requested feature has its own
 verified implementation and the remaining release/runtime work is explicitly recorded.
+
+## Current implementation checkpoint
+
+Slice1 tenant/audience, Slice1b truthful pending identity and Slice2 fresh configuration authority passed local source review. Slice2 legacy migration reconciliation passed10 native cases and parent review; combined integration/release gates remain open. Slice3 typed catalog/outbox has36 focused passing cases and a first13-case native pass, but its performance qualification is being strengthened to explain actual emitted queries and test full malformed-page progress. These are separate receipts, not additive coverage or a release claim.
+
+The next worker-health draft covers a persistent adapter-node entrypoint, bounded row-state organization discovery with wrapping fairness cursors, restricted coordinator authority, organization/event lease separation and truthful runnable health. It is under independent Standards review; no scheduler implementation or production heartbeat is claimed. The remaining audience, preferences, civil time, delivery, inbox, reports and release slices stay open.
+
+Slice4 scheduler and health implementation now follows the independently approved [durable worker contract](../specs/2026-10-03-notification-slice4-worker-health-spec.md). Slice3 has independent source PASS and native qualification (14 focused tests, combined 15 files/252 tests, zero skips); source producers and the qualified projection adapter remain unwired until their owning slices.
+
+
+Slice4 health/scheduler and fresh PostgreSQL17/18 bootstrap are now locally qualified. The outbox plan fix is signed at Hub `f02189dd`: 14 native cases pass and restoring the old policy makes the plan regression fail. Slice5 audience projection follows the renewed v8 two-pass contract, including exact policy-role adoption after a reproduced recursion and PostgreSQL17 creator semantics. Projection, inbox, producer integrations, personal reports and release announcements remain open; no production notification has been sent.

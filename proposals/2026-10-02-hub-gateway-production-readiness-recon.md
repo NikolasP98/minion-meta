@@ -136,3 +136,41 @@ An active owner token cannot be cleared, and an uncertain effect cannot be
 automatically retried. Split queue persistence, ownership, recovery and operator
 policy into focused modules under the accepted behavioral tests. The current
 slice has no production write, merge or deployed qualification.
+
+### Parent review: GW-023 parallel stream disclosure
+
+The production agent-event handler connected to the production broadcaster sends org A assistant text and run metadata to org B through `agent` and `pi-agent.run-start`, even though `chat` is scoped. A synthetic failing regression is captured in `gw023-agent-event-baseline.log`; no real data was used. The bounded correction and required cross-stream/targeted-recipient matrix live in `specs/2026-10-03-readiness-agent-event-audience-spec.md`. This P0 remains open pending implementation and independent qualification.
+
+### Parent review: GW-024 shared administrator credential disclosure
+
+A linked non-admin user can fetch the gateway shared secret from Hub, and the gateway treats that secret without JWT as platform administrator authority. Hub also intentionally reconnects without JWT after validation errors. Source proof is recorded under GW-024; independent synthetic reproduction and a JWT-as-credential contract are assigned before implementation. Prior tenant-event fixes do not contain a user holding the underlying administrator credential. Release must address already-disclosed credentials with an explicit rotation plan. No real credential was extracted or exercised.
+
+
+## Additional consumer and reliability findings, October 3
+
+The full register now includes 141 findings. Blast-radius qualification of the shared Gateway client exposed Site release-build and navigation defects: SITE-001 doubles localized anchor prefixes and blocks prerender; SITE-002 passes an unvalidated OAuth continuation to a 303 redirect (source-confirmed P1, no credential theft demonstrated); SITE-003 duplicates alternate metadata across two layouts. Their exact baseline anchors and separate proof targets are in the readiness register. SITE-001 passed two review rounds, including query/hash preservation and all eleven actual anchors.
+
+GW-026 records the Gateway reliability handlers returning successful empty/zero projections after storage or aggregate exceptions. This is separate from HC-024/025 client ownership. A valid zero result and an unavailable source need different response outcomes; actual handler fault injection is required. The orchestration audience/authority contract for GW-005/GW-025 is approved, with GW022A native packaging and GW024 credential-class integration explicitly pending. No production mutation was performed for these findings.
+
+
+HC-024 remains partially implemented after the eight-resource correction: parent blast-radius review found unfenced plugin/insights resources and architecture polling, plus live plugin arithmetic without a snapshot watermark. Their source anchors and a required second slice are part of the same finding. The fixed resource packet does not close these adjacent consumers. A frozen source packet and browser evidence are available for the implemented portion.
+
+
+## Token and refund review additions, October 3
+
+The current register contains142 findings. SITE-004 records ten undefined `--page-max` consumers and missing Site token-integrity CI. Its additive shared-token and reusable scanner contract is under review. SITE-001 locale anchors are locally qualified through actual Paraglide components and the full eight-page production build.
+
+Wallet server review remains blocked on legacy contact-only refund lock ownership: refund and spend must hold the same serialized canonical wallet key. The existing25 native cases did not exercise that race; dedicated cases are being added. HC-024 also includes truthful unavailable display in AgentDashboard, and direct coordinator-owned Retry on the Performance tab. No production writes were made.
+
+
+The next reliability panel inventory identified HS-032: skill duration means use all executions as weights although SQL AVG ignores null durations. The143-finding ledger records a measured-sample-count correction and unknown legacy state. All four generic async-resource consumers (plugin, insights, skill and credential health) are in the HC-024 follow-on, together with architecture polling and recent-feed ownership.
+
+
+### HC036 agent settings ownership
+
+Parent source recon found AgentDashboard file-count and global tools/skills read/write completions crossing selected-agent boundaries. ChatInput, AgentSettingsPanel and AgentCapabilitiesPanel consume the same singleton. AgentSkillsPanel also sends null when disabling the final skill, which the real Gateway interprets as removing the filter (all inherited), rather than the supported empty allowlist. A bounded follow-on must fence canonical owners, coordinate writes without replay, migrate every consumer and preserve empty-list semantics. Source anchors and acceptance are in findings.json; no implementation is claimed.
+
+
+## Current qualification, October 3
+
+The readiness register contains145 findings. Signed code, local tests, hosted qualification and production acceptance remain separate states. Site integration `fa2638b4` incorporates current dev while preserving reviewed scope/auth/locale fences; its hosted run is pending. Gateway method advertisement `2f46c5023` and inherited-handler correction `72fa69dcb` passed the parent107-case exact-source suite. Native executor checkpoint `7e040965` remains a prerequisite; config CAS, target distribution and managed-writer cleanup are not closed. Hub CI contract repairs `fae8ff43`, migration/plan fixes `742c202a`/`f02189dd`, and current draft-ownership UI evidence are recorded separately. The full per-finding state remains in `.planning/operations/readiness-2026-10-03/findings.json`.
