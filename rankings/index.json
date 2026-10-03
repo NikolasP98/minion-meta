@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-03T23:20:47.821Z",
+	"generatedAt": "2026-10-03T23:51:12.868Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3864,23 +3864,23 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 3
+				"specification": 6,
+				"implementation": 6
 			},
 			"confidence": 6,
-			"recommendation": "execute",
+			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#408",
 				"issue:minion-meta#409"
 			],
-			"rationale": "The recurring claude exit-126 host-exec failure has now hit 7 reconcile runs in under two hours and needs a human to check the runner's CLI permissions.",
+			"rationale": "Most developed report of the recurring host exec fault with a clear actionable fix and classifier proposal, making it the natural anchor for a merged goal.",
 			"evidence": [
-				"identical signature ... seen on 7 minion-meta reconcile runs within a ~1h50m window",
-				"exit 126 conventionally means the binary was found but could not be executed"
+				"identical signature... seen on 7 minion-meta reconcile runs within a ~1h50m window",
+				"worth promoting to a named host-classifier signature"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T23:29:07.820Z"
+			"scoredAt": "2026-10-03T23:51:12.738Z"
 		},
 		{
 			"key": "issue:minion-meta#705",
@@ -9488,6 +9488,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:30:37.362Z"
+		},
+		{
+			"key": "issue:minion-meta#408",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#408 [monitor:unstick] reconcile a0747071: claude provider exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/408",
+			"sourceUpdatedAt": "2026-09-12T22:18:05Z",
+			"sourceFingerprint": "415830db44788b6ee6a22bf2fc58a850f1e895a5023dc2cff8012f976cdaf736",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#409",
+				"issue:minion-meta#638"
+			],
+			"rationale": "Same recurring claude-CLI exit-126 host exec fault reported independently three times and should consolidate into one host-infra-fix goal.",
+			"evidence": [
+				"exit-126 turns=0 permission_denials=0",
+				"identical signature seen on 4 other reconcile runs today"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T23:51:12.738Z"
 		},
 		{
 			"key": "issue:minion-meta#414",
@@ -17565,6 +17600,41 @@
 			"scoredAt": "2026-09-29T05:00:01.492Z"
 		},
 		{
+			"key": "issue:minion-meta#409",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#409 [monitor:unstick] reconcile 4ccfc914: claude provider exit-126, turns=0 (after successful push)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/409",
+			"sourceUpdatedAt": "2026-09-12T22:18:06Z",
+			"sourceFingerprint": "2044cc9a3783d1ead2d3d0ac7270f34db7eb56dd3b0d36eef03024db155e394a",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#408",
+				"issue:minion-meta#638"
+			],
+			"rationale": "Confirms the exit-126 fault is benign post-push but is evidence for the same recurring host issue, better tracked as one classifier goal.",
+			"evidence": [
+				"proposals/index.json written (367 proposals), and dev branch pushed successfully",
+				"no data appears lost... but flag to a human that the runner box's claude CLI exec setup needs checking"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T23:51:12.738Z"
+		},
+		{
 			"key": "issue:minion-meta#518",
 			"kind": "issue",
 			"stage": "proposal",
@@ -19206,40 +19276,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T00:54:19.340Z"
-		},
-		{
-			"key": "issue:minion-meta#408",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#408 [monitor:unstick] reconcile a0747071: claude provider exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/408",
-			"sourceUpdatedAt": "2026-09-12T22:18:05Z",
-			"sourceFingerprint": "415830db44788b6ee6a22bf2fc58a850f1e895a5023dc2cff8012f976cdaf736",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"issue:minion-meta#638"
-			],
-			"rationale": "Superseded by issue #638, which aggregates the same claude exit-126 signature across a much larger and more recent run sample.",
-			"evidence": [
-				"Identical signature seen on 4 other reconcile runs today",
-				"recurring class -- worth adding a host classifier signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T23:29:07.820Z"
 		},
 		{
 			"key": "issue:minion-meta#433",
@@ -22862,72 +22898,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:25:32.539Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a commit message for an already-merged nitter persistence/shutdown fix with no outstanding action.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"commit already exists at the cited sourceUrl"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T22:51:33.350Z"
-		},
-		{
-			"key": "issue:minion-meta#409",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#409 [monitor:unstick] reconcile 4ccfc914: claude provider exit-126, turns=0 (after successful push)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/409",
-			"sourceUpdatedAt": "2026-09-12T22:18:06Z",
-			"sourceFingerprint": "2044cc9a3783d1ead2d3d0ac7270f34db7eb56dd3b0d36eef03024db155e394a",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"issue:minion-meta#638"
-			],
-			"rationale": "A benign duplicate of the same exit-126 signature where the run's data already succeeded, now superseded by the aggregated #638 report.",
-			"evidence": [
-				"no data appears lost (push succeeded), so no retry needed for this run",
-				"same as 4 other reconcile runs today"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T23:29:07.820Z"
 		},
 		{
 			"key": "issue:minion-meta#583",
