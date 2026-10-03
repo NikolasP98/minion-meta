@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-03T03:24:11.262Z",
+	"generatedAt": "2026-10-03T03:54:03.155Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4899,21 +4899,21 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 6,
+				"implementation": 5
 			},
-			"confidence": 5,
-			"recommendation": "reframe",
+			"confidence": 6,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "The underlying risk (ambiguous settlement retry semantics in POS appointments risking double-charges or billing disputes) is real but not yet scoped enough to execute — the settle cadence and retry limits must first be clarified before a boundable fix or tests can be written.",
+			"rationale": "An approved, file-scoped TODO(handoff) in a payments/settlement path with a concrete definition of done and fix steps addresses a plausible double-charge/billing-dispute risk.",
 			"evidence": [
-				"TODO(handoff): \\\"retries on the next settle\\\" means a week that failed",
-				"diagnosis asks to first clarify what \\\"settle\\\" means (daily batch? weekly?)",
-				"merged PR #370 touches payment/financial POS appointments flow"
+				"TODO(handoff) in src/routes/(app)/pos/appointments/+page.svelte",
+				"\"can cause double-charges, lost transactions, or billing disputes\"",
+				"status: approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T03:28:51.003Z"
+			"scoredAt": "2026-10-03T03:54:02.979Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-dca03692bd9a",
@@ -13426,39 +13426,6 @@
 			"scoredAt": "2026-10-02T09:24:39.612Z"
 		},
 		{
-			"key": "issue:minion-meta#608",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#608 [monitor:unstick] reconcile run 4d7752c5 (minion-meta): agent launch exit-126, task work completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/608",
-			"sourceUpdatedAt": "2026-09-26T03:17:59Z",
-			"sourceFingerprint": "0b11c19e4e065e76411582b3f7380f7b78fc21d2446dd79f4add237a445d3812",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Diagnosis shows the reconcile task itself succeeded and only the wrapping agent launcher failed (exit 126, turns=0), a recurring host/image issue needing human infra triage rather than a code fix.",
-			"evidence": [
-				"push landed at 414df2d despite error status",
-				"identical exit_code=126/turns=0 signature across 3 runs in ~90 minutes",
-				"recommendation is to check claude CLI/agent launcher exec permissions on the worker image"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T03:28:51.003Z"
-		},
-		{
 			"key": "issue:minion-meta#614",
 			"kind": "issue",
 			"stage": "proposal",
@@ -21311,38 +21278,6 @@
 			"scoredAt": "2026-09-30T08:54:44.828Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit shows the nitter persistence/shutdown fix already merged, leaving no outstanding deployment action.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown (#295)",
-				"status: unknown, tags: deployment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T03:24:11.063Z"
-		},
-		{
 			"key": "issue:minion-meta#497",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22868,6 +22803,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T06:54:18.583Z"
+		},
+		{
+			"key": "issue:minion-meta#608",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#608 [monitor:unstick] reconcile run 4d7752c5 (minion-meta): agent launch exit-126, task work completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/608",
+			"sourceUpdatedAt": "2026-09-26T03:17:59Z",
+			"sourceFingerprint": "0b11c19e4e065e76411582b3f7380f7b78fc21d2446dd79f4add237a445d3812",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The report itself states the task completed and pushed successfully and the error was a launcher exit-126 with zero turns, so the real fix is an infra/host or classifier change rather than a reconcile task.",
+			"evidence": [
+				"\"the task output was written and pushed\"",
+				"\"exec-time failure... rather than any task or spec problem\"",
+				"identical signature across 3 runs in ~90 minutes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T03:54:02.979Z"
 		},
 		{
 			"key": "issue:minion-meta#643",
