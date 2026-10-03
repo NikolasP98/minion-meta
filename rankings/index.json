@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-03T14:50:59.062Z",
+	"generatedAt": "2026-10-03T15:20:58.963Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -22093,38 +22093,6 @@
 			"scoredAt": "2026-10-02T19:54:03.387Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged fix for nitter persistence/shutdown is routine deployment health signal with no indication of ongoing incident.",
-			"evidence": [
-				"commit fixes nitter persistence serialize and drain poller shutdown",
-				"tagged deployment, no failure status reported"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T14:50:58.917Z"
-		},
-		{
 			"key": "issue:minion-meta#616",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26309,20 +26277,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 2
+				"specification": 6,
+				"implementation": 3
 			},
-			"confidence": 5,
+			"confidence": 4,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Automated monitor intake diagnosing a single isolated worker-box exit-126 fault where the underlying reconcile state already persisted successfully, making a retry low-value busywork rather than a real goal.",
+			"rationale": "Single isolated worker-box exec-permission fault with underlying reconcile state already persisted successfully, so no action is needed beyond a cheap retry already noted as handled.",
 			"evidence": [
 				"reconcile shell logic ran to completion in this run",
-				"failure looks isolated to that worker box rather than to this repo or spec"
+				"exit 126 with turns=0 indicates process launch failure, not task/spec failure",
+				"recommendation in report is simply to retry, state already persisted"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T14:58:29.248Z"
+			"scoredAt": "2026-10-03T15:20:58.803Z"
 		},
 		{
 			"key": "issue:minion-meta#518",
