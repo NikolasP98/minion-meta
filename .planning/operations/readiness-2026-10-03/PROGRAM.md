@@ -107,7 +107,7 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | HS-027 | P2 | hub-metrics | locally-verified | Void-rate and rankings use inconsistent invoice populations |
 | HS-028 | P2 | hub-metrics | implementing | Binary floating-point rounding produces 1.00 for 1.005 |
 | HS-029 | P2 | hub-money | queued | The supposedly append-only POS credit ledger grants UPDATE and DELETE |
-| OB-001 | P2 | observability | spec-review | Server telemetry delivery is not tied to request lifetime |
+| OB-001 | P2 | observability | implementing | Server telemetry delivery is not tied to request lifetime |
 | OB-002 | P2 | observability | queued | Source-map and live alert qualification remains incomplete |
 | TQ-004 | P2 | hub-test-quality | spec-review | The workforce dashboard E2E passes when the company switcher behavior in its title is absent |
 | TQ-005 | P2 | hub-test-quality | spec-review | The tag-cell E2E can pass without selecting a tag or rendering the chip behavior named by the test |
