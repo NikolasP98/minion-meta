@@ -1,6 +1,6 @@
 # Hub and gateway readiness implementation
 
-The user authorized all 97 findings after reviewing the October 2 recon. The second FACES read-only pass adds 10 confirmed findings plus one reproduced baseline device-auth defect plus six parent-review findings (114 tracked total). This program owns their implementation; the historical 360 task denominator is unchanged.
+The user authorized all 97 findings after reviewing the October 2 recon. The second FACES read-only pass adds 10 confirmed findings plus one reproduced baseline device-auth defect plus eight parent-review findings (116 tracked total). This program owns their implementation; the historical 360 task denominator is unchanged.
 
 ## Evidence and completion
 
@@ -22,6 +22,10 @@ Work runs in new independent feature checkouts. Original dirty repositories and 
 6. Integrated checks and independent review; create concrete draft PRs and retain the final human release gate.
 
 Batch specs define smaller implementation slices with separate tests. Existing open PRs are sources to inspect, not assumed merged. In particular Hub #340 may supply reviewed money/booking corrections; #358 is a separate experimental JEV deployment.
+
+## Draft qualification
+
+[Hub draft PR431](https://github.com/NikolasP98/minion_hub/pull/431) contains committed checkpoint78c20943. Hosted CI is running. The first seed-pairing job read the opening event before GitHub applied the requested seed-unaffected label; the label and documented justification are present now. A subsequent source push will supply the current metadata. Money and scheduling WIP are not included in that checkpoint. No merge or production release was performed.
 
 ## Register
 
@@ -136,8 +140,10 @@ Batch specs define smaller implementation slices with separate tests. Existing o
 | FACES-PROD-004 | P2 | faces-meta-socials | queued | Successful post and message jobs conceal partial collection |
 | FACES-PROD-005 | P2 | faces-meta-socials | queued | Sync failures retain and expose unbounded provider error payloads |
 | HC-032 | P2 | hub-reactivity-accessibility | implemented-awaiting-integration | Team timeline and leave-balance reads hide failures as empty data |
-| HC-033 | P2 | hub-mutations | queued | Scheduling link and event-type deletion ignore rejected HTTP responses |
+| HC-033 | P2 | hub-mutations | implementing | Scheduling link and event-type deletion ignore rejected HTTP responses |
 | HS-030 | P2 | hub-authority-jobs | implemented-awaiting-integration | Marketplace filters and sorting operate on an incorrectly filtered truncated population |
 | HS-031 | P2 | hub-authority-jobs | implemented-awaiting-integration | Transient marketplace document failures are cached as permanent empty content |
 | HC-034 | P1 | hub-mutations | spec-review | Marketplace installation can deliver to the wrong active gateway and duplicate pre-delivery effects on retry |
 | GW-022 | P1 | hub-mutations | spec-review | Marketplace install writes an unused bundle without registering a runnable gateway agent |
+| UI-002 | P2 | hub-reactivity-accessibility | queued | Calendar toolbar controls overlap vertically on a narrow mobile viewport |
+| HC-035 | P1 | hub-mutations | implementing | Payment-plan creation permits a duplicate POST after a lost or malformed acknowledgement |
