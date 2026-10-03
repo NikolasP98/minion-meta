@@ -13,6 +13,18 @@ type: fix
 proposal: 2026-10-03-readiness-shared-ui-boundaries
 ---
 
+## 0. Product
+
+Hub chat messages and composers need a current-organization mention directory with bounded, recoverable reads.
+
+## Out of scope
+
+Global alias uniqueness, profile mutation semantics, new database roles/migrations, Gateway-owned resources and production deployment are outside this correction.
+
+## Verification
+
+Execute the SQL, resource, actual-consumer and native-browser verification matrix in the DELTA section below.
+
 # Mention directory ownership
 
 ## AS-IS

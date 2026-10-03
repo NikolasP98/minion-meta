@@ -14,6 +14,18 @@ proposal: 2026-10-02-hub-gateway-production-readiness-recon
 findings: [GW-022A]
 ---
 
+## 0. Product
+
+Gateway configuration publication recovery within the existing private native package. The recovery path must classify durable intent before permitting another write.
+
+## Out of scope
+
+Production config/RPC/CLI imports, public release, loader ABI changes and distribution are outside this amendment.
+
+## Verification
+
+Execute the recovery/factory crash matrix and retained baseline proof obligations below against the actual addon; publication and release remain separate.
+
 # GW022A config recovery-factory amendment
 
 ## 0. Product and scope

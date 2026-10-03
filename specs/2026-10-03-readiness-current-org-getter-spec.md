@@ -13,6 +13,18 @@ type: fix
 proposal: 2026-10-03-readiness-current-org-getter
 ---
 
+## 0. Product
+
+Hub Gateway identity and owned resources must consume the organization returned by the actual authenticated layout.
+
+## Out of scope
+
+Authentication, server layout output, Gateway selection and RPC semantics are unchanged; merge and deployment are separate.
+
+## Verification
+
+Run the actual-shape original negative and corrected getter tests plus real session/resource integration defined below.
+
 # HC-041 canonical organization getter
 
 ## AS-IS

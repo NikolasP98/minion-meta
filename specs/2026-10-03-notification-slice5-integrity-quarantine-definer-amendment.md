@@ -9,10 +9,22 @@ created: 2026-10-03
 updated: 2026-10-03
 repos: [minion_hub]
 tags: [security, data, logic, test]
-type: correction
+type: fix
 parent: 2026-10-03-notification-slice5-audience-projection-spec
 findings: [S5Q-001, S5Q-002, S5Q-003, S5Q-004]
 ---
+
+## 0. Product
+
+Notification audience projection needs a narrow atomic quarantine operation while workers remain unable to read terminal events.
+
+## Out of scope
+
+New roles, expanded worker terminal reads, unrelated notification producers, live notifications and deployment are outside this amendment.
+
+## Verification
+
+Run the exact native quarantine, role/ACL/catalog mutation and full migration checks described below on the admitted PostgreSQL runtimes; retain cleanup receipts.
 
 # Notification Slice5 integrity-quarantine authority amendment
 
