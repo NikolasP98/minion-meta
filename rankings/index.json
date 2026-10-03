@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-03T21:22:02.341Z",
+	"generatedAt": "2026-10-03T21:52:38.770Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -806,8 +806,8 @@
 			"repo": "minion_hub",
 			"title": "#431 fix: harden Hub readiness and qualification gates",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/431",
-			"sourceUpdatedAt": "2026-10-03T21:11:31Z",
-			"sourceFingerprint": "55ed234456bd269c078d26360a7d4d32bbfcad9109e268e1ade0b60ac37b6df5",
+			"sourceUpdatedAt": "2026-10-03T21:30:06Z",
+			"sourceFingerprint": "02f16cf1a37fbf25f8aaf52d65edd37e04502f18269b6a38d5996334103b6845",
 			"score": 73,
 			"band": "high",
 			"axes": {
@@ -816,21 +816,21 @@
 				"impact": 7
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 8,
 				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Large hardening PR with concrete verification evidence across hub's most critical paths, still draft but demonstrably progressing.",
+			"rationale": "Draft PR with detailed as-is/to-be scope, passing test evidence, and real data-integrity fixes (stale reads, repeated financial writes) still requires remaining tracked findings before merge.",
 			"evidence": [
-				"465 and 258 focused tests pass for staged POS/Reliability snapshots",
-				"notification monitoring correction passes 34 tests reproducing the omitted-field failure",
-				"draft checkpoint in a 145-finding readiness program, more findings remain"
+				"465 and 258 focused tests pass on signed head",
+				"draft checkpoint in 145-finding readiness program, items still in progress",
+				"fixes checkout recovery and reliability loader coordination"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T21:22:02.187Z"
+			"scoredAt": "2026-10-03T21:52:38.633Z"
 		},
 		{
 			"key": "proposal:2026-08-23-minion-ai-ci-baseline-debt",
@@ -11767,6 +11767,111 @@
 			"scoredAt": "2026-09-27T19:28:42.731Z"
 		},
 		{
+			"key": "issue:minion-meta#631",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#631 [monitor:unstick] reconcile run 2303dadb: claude reconcile-agent launch failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/631",
+			"sourceUpdatedAt": "2026-09-26T21:18:45Z",
+			"sourceFingerprint": "ac552c3f7d86fbf042530219149fd0f9e1c194487803ad53642995f353be9013",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#632",
+				"issue:minion-meta#633"
+			],
+			"rationale": "Identical infra-fault signature (claude provider exit-126) repeated across 9 runs should be consolidated into one runner-fix goal instead of tracked as separate incidents.",
+			"evidence": [
+				"exit-126, turns=0, cost_usd=0 across 9 identical runs 18:34-21:03 UTC",
+				"deterministic reconcile stages already succeeded independently of this failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T21:52:38.633Z"
+		},
+		{
+			"key": "issue:minion-meta#632",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#632 [monitor:unstick] reconcile run d0316541: claude reconcile-agent launch failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/632",
+			"sourceUpdatedAt": "2026-09-26T21:18:45Z",
+			"sourceFingerprint": "1c1e1617eba0dbe20c748b071c264ae2ea9eb9c8ab58d7efe88d411eea665c06",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#631",
+				"issue:minion-meta#633"
+			],
+			"rationale": "Same claude provider launch failure signature as #631 and #633, part of the same cluster and should be merged into a single runner-fix goal.",
+			"evidence": [
+				"provider=claude, exit-126, turns=0 identical to sibling reports",
+				"self-healed push race noted as unrelated to the real infra fault"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T21:52:38.633Z"
+		},
+		{
+			"key": "issue:minion-meta#633",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#633 [monitor:unstick] reconcile run f1d5a7bb: claude reconcile-agent launch failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/633",
+			"sourceUpdatedAt": "2026-09-26T21:18:46Z",
+			"sourceFingerprint": "2c974903bab8ba6de82ca9f5cdf768355b02ad4d6aa958806ae1f83002ab8027",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#631",
+				"issue:minion-meta#632"
+			],
+			"rationale": "Third duplicate of the same claude provider exit-126 launch failure cluster; should be consolidated with #631 and #632 into one runner-fix goal.",
+			"evidence": [
+				"provider=claude, exit-126, turns=0 matches the other two reports",
+				"diagnosis explicitly states infra fault on the runner, not a task failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T21:52:38.633Z"
+		},
+		{
 			"key": "issue:minion-meta#648",
 			"kind": "issue",
 			"stage": "proposal",
@@ -12360,111 +12465,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T15:29:59.072Z"
-		},
-		{
-			"key": "issue:minion-meta#631",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#631 [monitor:unstick] reconcile run 2303dadb: claude reconcile-agent launch failure (exit-126)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/631",
-			"sourceUpdatedAt": "2026-09-26T21:18:45Z",
-			"sourceFingerprint": "ac552c3f7d86fbf042530219149fd0f9e1c194487803ad53642995f353be9013",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#632",
-				"issue:minion-meta#633"
-			],
-			"rationale": "Identical exit-126 claude-provider launch failure repeated across a same-day cluster points to one runner infra fix, not three separate issues.",
-			"evidence": [
-				"provider=claude, exit-126, turns=0, cost_usd=0",
-				"part of the same 18:34-21:03 cluster of 9 identical minion-meta reconcile errors today"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T21:28:53.563Z"
-		},
-		{
-			"key": "issue:minion-meta#632",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#632 [monitor:unstick] reconcile run d0316541: claude reconcile-agent launch failure (exit-126)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/632",
-			"sourceUpdatedAt": "2026-09-26T21:18:45Z",
-			"sourceFingerprint": "1c1e1617eba0dbe20c748b071c264ae2ea9eb9c8ab58d7efe88d411eea665c06",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#631",
-				"issue:minion-meta#633"
-			],
-			"rationale": "Same exit-126 provider launch signature as the other two issues in this cluster; deterministic work already self-healed via rebase/re-push.",
-			"evidence": [
-				"Same signature as the other reconcile failures in this cluster",
-				"claude process was never actually executed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T21:28:53.563Z"
-		},
-		{
-			"key": "issue:minion-meta#633",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#633 [monitor:unstick] reconcile run f1d5a7bb: claude reconcile-agent launch failure (exit-126)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/633",
-			"sourceUpdatedAt": "2026-09-26T21:18:46Z",
-			"sourceFingerprint": "2c974903bab8ba6de82ca9f5cdf768355b02ad4d6aa958806ae1f83002ab8027",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#631",
-				"issue:minion-meta#632"
-			],
-			"rationale": "Third identical exit-126 claude provider launch failure in the same 9-run cluster, best resolved as one infra ticket.",
-			"evidence": [
-				"Part of the same repeating cluster (9 identical failures across minion-meta reconcile runs)",
-				"reconcile agent failed with provider=claude, exit-126, turns=0"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-26T21:28:53.563Z"
 		},
 		{
 			"key": "issue:minion-meta#684",
@@ -22927,6 +22927,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:25:32.539Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a changelog-style record of an already-merged nitter persistence fix with no open problem statement.",
+			"evidence": [
+				"summary is a commit message for a merged fix (#295)",
+				"status: unknown, no described outstanding issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-03T21:52:38.633Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
