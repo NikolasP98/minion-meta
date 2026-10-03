@@ -1,0 +1,98 @@
+--- a/src/gateway/client.ts
++++ b/src/gateway/client.ts
+@@ -2,6 +2,7 @@
+ // Runtime-agnostic GatewayClient — browser uses globalThis.WebSocket, Node uses ws via ./node subpath.
+ import { flushPending, handleResponseFrame, type PendingRequest } from './protocol.js';
+ import type { EventFrame } from './types.js';
++import { CLIENT_ERROR_CODES, GatewayError } from './errors.js';
+ import { uuid } from '../utils/uuid.js';
+ import { newTraceparent } from './traceparent.js';
+ 
+@@ -135,9 +136,9 @@
+     this.ws = null;
+     if (this.attempt) {
+       this.attempt.active = false;
+-      this.attempt.reject?.(new Error('connection superseded'));
+-    }
+-    flushPending(this.pending, new Error('connection superseded'));
++      this.attempt.reject?.(GatewayError.client(CLIENT_ERROR_CODES.DISCONNECTED, 'connection superseded'));
++    }
++    flushPending(this.pending, GatewayError.client(CLIENT_ERROR_CODES.DISCONNECTED, 'connection superseded'));
+     // Its event handlers are already fenced by the new generation.
+     previousSocket?.close();
+ 
+@@ -158,7 +159,7 @@
+       const timeoutMs = this.opts.connectTimeoutMs ?? 10000;
+       timer = setTimeout(() => {
+         if (!this.isLiveAttempt(attempt)) return;
+-        this.failHandshake(attempt, new Error(`connect timed out after ${timeoutMs}ms`), true);
++        this.failHandshake(attempt, GatewayError.client(CLIENT_ERROR_CODES.TIMEOUT, `connect timed out after ${timeoutMs}ms`), true);
+       }, timeoutMs);
+ 
+       try {
+@@ -180,22 +181,35 @@
+   async request<T>(method: string, params?: unknown, opts?: { timeoutMs?: number }): Promise<T> {
+     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     const ws: any = this.ws;
+-    if (!ws || ws.readyState !== 1 /* OPEN */) throw new Error('not connected');
++    if (!ws || ws.readyState !== 1 /* OPEN */) throw GatewayError.client(CLIENT_ERROR_CODES.NOT_CONNECTED, 'not connected');
+     const id = uuid();
++    let serialized: string;
++    try {
++      if (typeof method !== 'string' || !method.trim()) throw new Error('empty method');
++      const parent = this.parentTraceparent ?? this.opts.getParentTraceparent?.() ?? undefined;
++      serialized = JSON.stringify({ type: 'req', id, method, params, traceparent: newTraceparent(parent) });
++    } catch {
++      throw GatewayError.client(CLIENT_ERROR_CODES.INVALID_REQUEST, 'request could not be serialized');
++    }
+     const timeoutMs = opts?.timeoutMs ?? this.opts.requestTimeoutMs ?? 15000;
+     return new Promise<T>((resolve, reject) => {
+       const timer = setTimeout(() => {
+         this.pending.delete(id);
+-        reject(new Error(`request '${method}' timed out after ${timeoutMs}ms`));
++        reject(GatewayError.client(CLIENT_ERROR_CODES.TIMEOUT, `request '${method}' timed out after ${timeoutMs}ms`));
+       }, timeoutMs);
+       this.pending.set(id, {
+         resolve: (v) => { clearTimeout(timer); resolve(v as T); },
+         reject: (e) => { clearTimeout(timer); reject(e); },
+       });
+-      const parent = this.parentTraceparent ?? this.opts.getParentTraceparent?.() ?? undefined;
+-      // TODO(handoff): Generic request send/serialization failures need pending-map cleanup in 14-01;
+-      // handshake failure cleanup here does not qualify every request. See proposals/2026-09-08-platform-qc-remediation.md.
+-      ws.send(JSON.stringify({ type: 'req', id, method, params, traceparent: newTraceparent(parent) }));
++      try {
++        ws.send(serialized);
++      } catch (error) {
++        clearTimeout(timer);
++        this.pending.delete(id);
++        // An injected transport may accept the frame and then throw. Never promise rollback.
++        reject(GatewayError.client(CLIENT_ERROR_CODES.SEND_FAILED, `request '${method}' send failed`,
++          error instanceof Error ? error.message : String(error)));
++      }
+     });
+   }
+ 
+@@ -213,9 +227,9 @@
+     this.ws = null;
+     if (this.attempt) {
+       this.attempt.active = false;
+-      this.attempt.reject?.(new Error('disconnected'));
+-    }
+-    flushPending(this.pending, new Error('disconnected'));
++      this.attempt.reject?.(GatewayError.client(CLIENT_ERROR_CODES.DISCONNECTED, 'disconnected'));
++    }
++    flushPending(this.pending, GatewayError.client(CLIENT_ERROR_CODES.DISCONNECTED, 'disconnected'));
+     this.backoffMs = 800;
+     // Keep the attempt identity until the native close event delivers onClose.
+     // Any reentrant connect from onClose owns its own fields after this point.
+@@ -280,8 +294,8 @@
+ 
+       this.ws = null;
+       attempt.active = false;
+-      flushPending(this.pending, new Error(`closed (${code}): ${reason}`));
+-      attempt.reject?.(new Error(`closed before hello (${code})`));
++      flushPending(this.pending, GatewayError.client(CLIENT_ERROR_CODES.DISCONNECTED, `closed (${code}): ${reason}`));
++      attempt.reject?.(GatewayError.client(CLIENT_ERROR_CODES.DISCONNECTED, `closed before hello (${code})`));
+       this.opts.onClose?.(code, reason);
+ 
+       // onClose can synchronously close or replace this client connection.

@@ -27,7 +27,7 @@ describe('constants', () => {
   });
   it('lists exactly the gateway error codes from error-codes.ts', () => {
     expect(Object.values(GATEWAY_ERROR_CODES).sort()).toEqual(
-      ['AGENT_TIMEOUT', 'CONFLICT', 'FORBIDDEN', 'INVALID_REQUEST', 'NOT_IMPLEMENTED', 'NOT_LINKED', 'NOT_PAIRED', 'UNAVAILABLE'],
+      ['AGENT_TIMEOUT', 'CONFLICT', 'FORBIDDEN', 'INVALID_REQUEST', 'METHOD_NOT_FOUND', 'NOT_IMPLEMENTED', 'NOT_LINKED', 'NOT_PAIRED', 'UNAVAILABLE'],
     );
   });
 });
@@ -212,7 +212,7 @@ describe('GatewayError + canRetry', () => {
     ['TIMEOUT, idempotent', local('TIMEOUT'), true, true],
     ['TIMEOUT, NON-idempotent (effect unknown)', local('TIMEOUT'), false, false],
     ['NOT_CONNECTED never sent — safe even when non-idempotent', local('NOT_CONNECTED'), false, true],
-    ['SEND_FAILED never sent — safe even when non-idempotent', local('SEND_FAILED'), false, true],
+    ['SEND_FAILED may have dispatched — no non-idempotent replay', local('SEND_FAILED'), false, false],
     ['PAYLOAD_TOO_LARGE is not transient', local('PAYLOAD_TOO_LARGE'), true, false],
     ['UNSUPPORTED_PROTOCOL is not transient', local('UNSUPPORTED_PROTOCOL'), true, false],
     ['MALFORMED_FRAME is not transient', local('MALFORMED_FRAME'), true, false],
