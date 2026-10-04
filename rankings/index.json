@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-04T10:21:24.065Z",
+	"generatedAt": "2026-10-04T10:50:58.178Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -26933,20 +26933,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 5,
+				"specification": 4,
 				"implementation": 3
 			},
-			"confidence": 5,
+			"confidence": 4,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The diagnosis itself states the underlying reconcile work completed successfully and the exit-126 is a transient host/exec fault safe to retry, not a real defect needing paid work.",
+			"rationale": "Automated monitor report indicates a transient exec-level infra fault with the underlying reconcile work already completed successfully, so no action is needed beyond passive classifier tuning.",
 			"evidence": [
-				"exit code 126 and turns=0",
-				"Recommendation: safe to retry as-is since the underlying reconcile state already advanced cleanly"
+				"claude provider process exited with code 126 and turns=0",
+				"reconcile logic completed fully and successfully with git push succeeded"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T10:28:28.697Z"
+			"scoredAt": "2026-10-04T10:50:58.007Z"
 		},
 		{
 			"key": "issue:minion-meta#647",
@@ -28141,38 +28141,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T01:30:39.738Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The summary is a commit message showing the nitter persistence/shutdown fix already merged via PR #295, leaving no outstanding work.",
-			"evidence": [
-				"commit message co-authored and describes a completed fix",
-				"no open status or remaining scope stated"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T10:21:23.911Z"
 		},
 		{
 			"key": "issue:minion-meta#421",
