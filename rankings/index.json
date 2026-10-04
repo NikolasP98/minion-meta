@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-04T19:21:28.601Z",
+	"generatedAt": "2026-10-04T19:51:23.104Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6122,6 +6122,40 @@
 			"scoredAt": "2026-10-02T08:25:02.567Z"
 		},
 		{
+			"key": "issue:minion-meta#538",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#538 [monitor:unstick] reconcile run 9729955c (minion-meta) - claude agent exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/538",
+			"sourceUpdatedAt": "2026-09-20T19:17:37Z",
+			"sourceFingerprint": "ebaf92376e9cce0d6570c9633d76a4374be40cb243e8cf8d5d92f800a1707ddf",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#419"
+			],
+			"rationale": "This confirms the same exit-126/turns=0 provider-launch signature recurring across three runs within ~25 minutes, so it should be consolidated with #419 into one worker-box infra investigation rather than handled as separate monitor intakes.",
+			"evidence": [
+				"identical exit-126/turns=0/permission_denials=0 signature also seen on runs 82695d34 and a8a056ea (same repo, within ~25 min)",
+				"recommendation: a human should check that the claude binary/wrapper is executable and resolvable on this runner box"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T19:51:22.958Z"
+		},
+		{
 			"key": "issue:minion-meta#540",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11265,41 +11299,6 @@
 			"scoredAt": "2026-10-03T10:51:15.326Z"
 		},
 		{
-			"key": "issue:minion-meta#538",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#538 [monitor:unstick] reconcile run 9729955c (minion-meta) - claude agent exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/538",
-			"sourceUpdatedAt": "2026-09-20T19:17:37Z",
-			"sourceFingerprint": "ebaf92376e9cce0d6570c9633d76a4374be40cb243e8cf8d5d92f800a1707ddf",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#419"
-			],
-			"rationale": "Same recurring exit-126/turns=0 provider-launch infra fault explicitly noted as seen on three separate runs, indicating a systemic worker-image issue that should be consolidated with #419 rather than tracked as isolated alerts.",
-			"evidence": [
-				"Recurring class: identical exit-126/turns=0/permission_denials=0 signature also seen on runs 82695d34 and a8a056ea",
-				"exit 126 is the standard OS signal for \"command found but not executable\"",
-				"a human should check that the claude binary/wrapper is executable and resolvable on this runner box"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T19:28:42.731Z"
-		},
-		{
 			"key": "issue:minion-meta#631",
 			"kind": "issue",
 			"stage": "proposal",
@@ -12457,23 +12456,22 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 2
+				"specification": 5,
+				"implementation": 3
 			},
-			"confidence": 4,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#538"
 			],
-			"rationale": "Automated monitor alert describing an infra-level exit-126/0-turns provider launch fault during reconcile, not a task failure, and duplicates the same recurring signature reported in #538.",
+			"rationale": "This is a provider-launch exit-126/turns=0 infra fault during reconcile that the note itself says should be tracked as a recurring classifier signature rather than a one-off ticket.",
 			"evidence": [
-				"exit_code=1, note: provider=claude, exit-126, turns=0, permission_denials=0",
-				"This looks like a worker-box/infra launch fault, not a task or spec failure",
-				"If exit-126 on provider=claude recurs across multiple runs/boxes... worth fixing at the host level"
+				"note: exit_code=1, provider=claude, exit-126, turns=0, permission_denials=0",
+				"note recommends retry and flags recurrence across runs/boxes as the actionable signal"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T19:28:42.731Z"
+			"scoredAt": "2026-10-04T19:51:22.958Z"
 		},
 		{
 			"key": "issue:minion-meta#470",
@@ -23668,6 +23666,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T17:22:50.330Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit is a nitter persistence/shutdown fix already merged, so there is no outstanding deployment action left to take.",
+			"evidence": [
+				"commit message: fix(nitter): serialize persistence and drain poller shutdown (#295)",
+				"status: unknown, no indication of ongoing deployment failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T19:51:22.958Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
