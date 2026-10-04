@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-1816477971
 title: Handoff marker — .planning/operations/360/checkpoint-2026-09-11/ui/hub-ui.patch (minion-meta)
-status: draft
+status: review
 created: 2026-09-16
 updated: 2026-10-04
 repos: [minion-meta]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Handoff marker — .planning/operations/360/checkpoint-2026-09-11/ui/hub-ui.patch

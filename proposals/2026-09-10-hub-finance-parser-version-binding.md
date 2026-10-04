@@ -3,7 +3,7 @@ id: 2026-09-10-hub-finance-parser-version-binding
 title: Bind stored statement parser_version to the parser's own exported version
 status: draft
 created: 2026-09-10
-updated: 2026-09-11
+updated: 2026-10-04
 repos: [minion_hub]
 ---
 
@@ -72,3 +72,9 @@ The exact service call to `Response.arrayBuffer()` still materializes a stored r
 ## 2026-09-11 independent binding qualification
 
 15-07 now independently passes102 unit/parser and41 native PostgreSQL cases on final source. The five-file checkpoint preserves the correction; production adoption still requires the staged10x foundation and canonical test-lane integration. Full-file fetch buffering and repeated parsing remain open. No historical backfill or customer mutation was performed.
+
+## Reconciliation merge — 2026-10-04
+
+handoff-minion-meta-3045707328 (`.planning/operations/360/checkpoint-2026-09-11/finance/source/src/server/services/finance-statement-parser.ts`) carries only the "service now binds this version" marker already described above; tombstoned as merged here, no new content.
+
+Related but not merged (each also carries markers matching the broader `2026-09-08-platform-qc-remediation` finance sections — blob reconciliation, job failure/recovery UI — not just parser-version binding, so flagged for human review instead of merged): handoff-minion-meta-1254928260 (`finance.patch`), handoff-minion-meta-3082127154 (`finance/source/.../finance-statements.service.ts`), handoff-minion-meta-403744372 (`finance/before/.../finance-statements.service.ts`).

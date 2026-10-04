@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-2071590033
 title: Handoff marker — .planning/operations/360/priority-delivery-2026-09-12/native-swift-handoff.patch (minion-meta)
-status: draft
+status: merged
 created: 2026-09-12
 updated: 2026-10-04
 repos: [minion-meta]
 tags: [handoff-sweep]
+merged_into: 2026-09-12-gateway-native-swift-qualification
 ---
 
 # Handoff marker — .planning/operations/360/priority-delivery-2026-09-12/native-swift-handoff.patch

@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-3082127154
 title: Handoff marker — .planning/operations/360/checkpoint-2026-09-11/finance/source/src/server/services/finance-statements.service.ts (minion-meta)
-status: draft
+status: review
 created: 2026-09-16
 updated: 2026-10-04
 repos: [minion-meta]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-09-10-hub-finance-parser-version-binding
 ---
 
 # Handoff marker — .planning/operations/360/checkpoint-2026-09-11/finance/source/src/server/services/finance-statements.service.ts

@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-factory-3080677443
 title: Handoff marker — tool-host/src/runner-effects.test.ts (minion-factory)
-status: draft
+status: merged
 created: 2026-09-12
 updated: 2026-10-04
 repos: [minion-factory]
 tags: [handoff-sweep]
+merged_into: 2026-09-08-platform-qc-remediation
 ---
 
 # Handoff marker — tool-host/src/runner-effects.test.ts

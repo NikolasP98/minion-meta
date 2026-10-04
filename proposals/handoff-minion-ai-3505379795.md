@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-3505379795
 title: Handoff marker — extensions/nitter/src/feed-state.ts (minion-ai)
-status: draft
+status: merged
 created: 2026-09-12
 updated: 2026-10-04
 repos: [minion-ai]
 tags: [handoff-sweep]
+merged_into: 2026-09-12-360-continuation-review-followups
 ---
 
 # Handoff marker — extensions/nitter/src/feed-state.ts

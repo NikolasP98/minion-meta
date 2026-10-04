@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-1967076684
 title: Handoff marker — .planning/operations/360/checkpoint-2026-09-11/sender/source/packages/shells-bridge/src/run-journal.ts (minion-meta)
-status: draft
+status: merged
 created: 2026-09-16
 updated: 2026-10-04
 repos: [minion-meta]
 tags: [handoff-sweep]
+merged_into: 2026-09-08-platform-qc-remediation
 ---
 
 # Handoff marker — .planning/operations/360/checkpoint-2026-09-11/sender/source/packages/shells-bridge/src/run-journal.ts
