@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-04T10:50:58.178Z",
+	"generatedAt": "2026-10-04T11:21:02.274Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3443,38 +3443,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T17:57:07.493Z"
-		},
-		{
-			"key": "issue:minion-meta#534",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#534 [monitor:unstick] reconcile agent exit-126 on run 7f9b94e4 (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/534",
-			"sourceUpdatedAt": "2026-09-20T10:17:32Z",
-			"sourceFingerprint": "be01cb96455f9df6b7186e7258be50bdc45820a2c7587f7dc44dcf5a9ec5ac5b",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Recurring exit-126/zero-turn failures across 5 consecutive reconcile runs indicate a persistent host-level claude CLI exec/permission fault blocking the reconcile agent step.",
-			"evidence": [
-				"exit-126, turns=0, cost_usd=0 recurs identically across 5 consecutive runs 07:24-09:56 UTC",
-				"deterministic reconcile script itself succeeds; failure isolated to separate claude-provider agent step"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T10:58:27.865Z"
 		},
 		{
 			"key": "issue:minion-meta#590",
@@ -16429,6 +16397,38 @@
 			"scoredAt": "2026-10-04T04:50:59.734Z"
 		},
 		{
+			"key": "issue:minion-meta#534",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#534 [monitor:unstick] reconcile agent exit-126 on run 7f9b94e4 (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/534",
+			"sourceUpdatedAt": "2026-09-20T10:17:32Z",
+			"sourceFingerprint": "be01cb96455f9df6b7186e7258be50bdc45820a2c7587f7dc44dcf5a9ec5ac5b",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The diagnosis points to a host-level exec-permission fault on the claude CLI runner rather than a code/spec issue, so the goal should be reframed as an infra/runner fix-the-box task rather than a dev task.",
+			"evidence": [
+				"exit-126 with turns=0, cost_usd=0 recurring identically across 5 consecutive runs 07:24-09:56 UTC",
+				"diagnosis explicitly states 'fix-the-box case, not fix-the-spec'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T11:21:02.126Z"
+		},
+		{
 			"key": "issue:minion-meta#556",
 			"kind": "issue",
 			"stage": "proposal",
@@ -23797,6 +23797,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T01:24:14.128Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine merged fix commit shown as deployment health with no indication of ongoing failure or required action.",
+			"evidence": [
+				"commit title: fix(nitter): serialize persistence and drain shutdown (#295)",
+				"status: unknown, no failure signal present"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T11:21:02.126Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
