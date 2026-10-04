@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-04T03:50:57.972Z",
+	"generatedAt": "2026-10-04T04:20:59.110Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1290,15 +1290,15 @@
 			"relatedKeys": [
 				"pr:minion-meta#524"
 			],
-			"rationale": "Payment/booking hardening with duplicate-charge protection, migration, and extensive test evidence is ready pending CI rerun and protected-branch review.",
+			"rationale": "Open PR hardens POS billing/scheduling with race protection and extensive test evidence, gated on standard branch review before production deploy.",
 			"evidence": [
-				"Additive pos_workflow_policy migration with default-preserving policy",
-				"4,305 tests passed, 213 skipped on clean release commit",
-				"CI rerunning after baseline-ownership migration fix"
+				"307 targeted tests plus 4,305 passing in release commit 79a0175a",
+				"additive migration 20260920000000_pos_workflow_policy.sql with QA seeds",
+				"requires protected-branch review and CI gates before deploy, no bypass requested"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T03:58:27.486Z"
+			"scoredAt": "2026-10-04T04:20:58.940Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
@@ -12465,38 +12465,6 @@
 			"scoredAt": "2026-09-28T11:34:57.682Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged fix for nitter persistence/shutdown drain landed but there is no deployment health signal confirming post-merge verification.",
-			"evidence": [
-				"commit message: fix(nitter): serialize persistence and drain poller shutdown (#295)",
-				"stage: deployment, status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T03:50:57.800Z"
-		},
-		{
 			"key": "issue:minion-meta#327",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18017,6 +17985,40 @@
 			"scoredAt": "2026-10-01T00:24:13.201Z"
 		},
 		{
+			"key": "pr:minion-meta#524",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#524 docs: record POS two-flow hardening and qualification",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/524",
+			"sourceUpdatedAt": "2026-09-20T02:59:38Z",
+			"sourceFingerprint": "6d68fcb8a3090c904c7a79dbdffc5c12a2d90bad79b7265aec1fb8ab41e08b1d",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#340"
+			],
+			"rationale": "Companion documentation PR recording the spec/review ledger for the POS hardening work has no independent value and should be tracked with its implementation PR.",
+			"evidence": [
+				"explicitly a companion evidence ledger for pr:minion_hub#340",
+				"passes only doc-index and diff checks, no functional change"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T04:20:58.940Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-pos-appointments-fork",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19756,40 +19758,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T01:24:40.225Z"
-		},
-		{
-			"key": "pr:minion-meta#524",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#524 docs: record POS two-flow hardening and qualification",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/524",
-			"sourceUpdatedAt": "2026-09-20T02:59:38Z",
-			"sourceFingerprint": "6d68fcb8a3090c904c7a79dbdffc5c12a2d90bad79b7265aec1fb8ab41e08b1d",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion_hub#340"
-			],
-			"rationale": "Documentation-only companion ledger for the Hub PR has no independent value and should be tracked alongside it rather than as a separate goal.",
-			"evidence": [
-				"Companion evidence ledger for minion_hub#340",
-				"Passes spec-index and proposal-index checks only"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T03:58:27.486Z"
 		},
 		{
 			"key": "pr:minion-meta#555",
