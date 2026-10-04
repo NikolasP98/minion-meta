@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-04T04:20:59.110Z",
+	"generatedAt": "2026-10-04T04:50:59.904Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -14298,39 +14298,6 @@
 			"scoredAt": "2026-09-28T11:40:43.883Z"
 		},
 		{
-			"key": "issue:minion-meta#525",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#525 [monitor:unstick] reconcile proposals run adcc48d8: claude provider exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/525",
-			"sourceUpdatedAt": "2026-09-20T04:17:34Z",
-			"sourceFingerprint": "df49143f7e1ec6082f3d4ffc698663e5938926f5b9dfd579e4858fe58977235c",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Recurring exit-126/turns=0 provider failure signature on a worker host needs a human to check CLI install/exec permissions.",
-			"evidence": [
-				"second occurrence of this exact signature within ~2 hours",
-				"exit-126, turns=0, permission_denials=0",
-				"reconcile push already succeeded so retry is low-risk"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T04:28:23.355Z"
-		},
-		{
 			"key": "issue:minion-meta#544",
 			"kind": "issue",
 			"stage": "proposal",
@@ -16526,6 +16493,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T02:21:05.244Z"
+		},
+		{
+			"key": "issue:minion-meta#525",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#525 [monitor:unstick] reconcile proposals run adcc48d8: claude provider exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/525",
+			"sourceUpdatedAt": "2026-09-20T04:17:34Z",
+			"sourceFingerprint": "df49143f7e1ec6082f3d4ffc698663e5938926f5b9dfd579e4858fe58977235c",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Diagnosis points to a worker-host exec-permission fault (exit-126) blocking the claude provider agent, recurring within 2 hours, but the reconcile side-effects already succeeded so only a low-risk infra check/retry remains.",
+			"evidence": [
+				"exit-126, turns=0, permission_denials=0 indicates agent process never started",
+				"second occurrence of this exact signature within ~2 hours (run a75abe45)",
+				"reconcile push to minion-meta already completed successfully"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T04:50:59.734Z"
 		},
 		{
 			"key": "issue:minion-meta#556",
@@ -21997,6 +21997,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T19:54:03.387Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a merged commit fixing nitter persistence/shutdown with no indication of ongoing deployment issue, so there is no outstanding goal to act on.",
+			"evidence": [
+				"Commit message shows fix already merged: 'serialize persistence and drain poller shutdown'",
+				"status is unknown with no failure signal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T04:50:59.734Z"
 		},
 		{
 			"key": "issue:minion-meta#616",
