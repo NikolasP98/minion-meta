@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-04T09:50:58.819Z",
+	"generatedAt": "2026-10-04T10:21:24.065Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4998,6 +4998,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T07:21:12.907Z"
+		},
+		{
+			"key": "issue:minion-meta#532",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#532 [monitor:unstick] reconcile run fa3019c2 (minion-meta): claude agent exec failure exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/532",
+			"sourceUpdatedAt": "2026-09-20T09:17:41Z",
+			"sourceFingerprint": "5ae74c2348d828e256f30db5abdb16f18275dbffb599404f2238de0398e83e35",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#533"
+			],
+			"rationale": "This is one of four identical exit-126 claude-agent exec failures (with #533) on the reconcile runner that should be consolidated into a single box-health ticket.",
+			"evidence": [
+				"exit-126, turns=0, permission_denials=0 recurs across 4 consecutive runs",
+				"diagnosis recommends a human check runner box exec permissions, not a retry"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T10:21:23.911Z"
+		},
+		{
+			"key": "issue:minion-meta#533",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#533 [monitor:unstick] reconcile run bf633da4 (minion-meta): claude agent exec failure exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/533",
+			"sourceUpdatedAt": "2026-09-20T09:18:04Z",
+			"sourceFingerprint": "8eeadd56862454a9f7a52a464902351f5175473c40c54fe249ac44510ff29c09",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#532"
+			],
+			"rationale": "Identical exit-126 signature to #532 within the same ~70 minute window, so these should be merged into one host-classifier/box-health goal rather than tracked separately.",
+			"evidence": [
+				"same fingerprint pattern as fa3019c2/e3ca01f2/94c9e865 and #532",
+				"recommendation calls for a new host-classifier signature for auto-routing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T10:21:23.911Z"
 		},
 		{
 			"key": "issue:minion-meta#598",
@@ -12828,74 +12896,6 @@
 			"scoredAt": "2026-10-03T07:54:55.713Z"
 		},
 		{
-			"key": "issue:minion-meta#532",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#532 [monitor:unstick] reconcile run fa3019c2 (minion-meta): claude agent exec failure exit-126",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/532",
-			"sourceUpdatedAt": "2026-09-20T09:17:41Z",
-			"sourceFingerprint": "5ae74c2348d828e256f30db5abdb16f18275dbffb599404f2238de0398e83e35",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#533"
-			],
-			"rationale": "Duplicate monitor-intake report of the same recurring runner-box exec-126 fault as #533 and should be consolidated into one host-classifier/infra-escalation goal.",
-			"evidence": [
-				"exit-126, turns=0, permission_denials=0 at final claude-provider invocation",
-				"same signature recurs across 4 consecutive runs in ~70 minutes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T09:58:33.330Z"
-		},
-		{
-			"key": "issue:minion-meta#533",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#533 [monitor:unstick] reconcile run bf633da4 (minion-meta): claude agent exec failure exit-126",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/533",
-			"sourceUpdatedAt": "2026-09-20T09:18:04Z",
-			"sourceFingerprint": "8eeadd56862454a9f7a52a464902351f5175473c40c54fe249ac44510ff29c09",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#532"
-			],
-			"rationale": "Duplicate monitor-intake report of the same recurring runner-box exec-126 fault as #532 and should be consolidated into one host-classifier/infra-escalation goal.",
-			"evidence": [
-				"exit-126, turns=0, permission_denials=0 at final claude-provider invocation",
-				"identical signature across 4 consecutive runs in ~70 minutes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T09:58:33.330Z"
-		},
-		{
 			"key": "issue:minion-meta#535",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14434,6 +14434,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T20:54:03.465Z"
+		},
+		{
+			"key": "run:minion (gateway)#37192477680",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37192477680",
+			"sourceUpdatedAt": "2026-10-04T10:10:06Z",
+			"sourceFingerprint": "24e7b07a89c851177fae8727e1b204c593539a8ca6b89ea52142b2bac92580d3",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A CI failure on DEV today could block gateway work but the entry gives no failure detail beyond a generic CI label, so it needs more information before action.",
+			"evidence": [
+				"status failure on workflow_dispatch run updated 2026-10-04",
+				"no logs or failing step named in the summary"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T10:21:23.911Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
@@ -22885,38 +22917,6 @@
 			"scoredAt": "2026-10-03T05:25:32.539Z"
 		},
 		{
-			"key": "run:minion (gateway)#37192477680",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37192477680",
-			"sourceUpdatedAt": "2026-10-04T09:47:49Z",
-			"sourceFingerprint": "a46c5447b950bbffe5c18f271d626a835e0bfd1e21c040e8f47526e1c9c972fb",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A routine in-progress CI run on DEV has no evidence of failure or blocking impact yet.",
-			"evidence": [
-				"status: in_progress",
-				"workflow_dispatch on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T09:50:58.680Z"
-		},
-		{
 			"key": "issue:minion-meta#583",
 			"kind": "issue",
 			"stage": "proposal",
@@ -28141,6 +28141,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T01:30:39.738Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The summary is a commit message showing the nitter persistence/shutdown fix already merged via PR #295, leaving no outstanding work.",
+			"evidence": [
+				"commit message co-authored and describes a completed fix",
+				"no open status or remaining scope stated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T10:21:23.911Z"
 		},
 		{
 			"key": "issue:minion-meta#421",
