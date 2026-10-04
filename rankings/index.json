@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-04T14:21:06.346Z",
+	"generatedAt": "2026-10-04T14:51:02.383Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -17494,6 +17494,38 @@
 			"scoredAt": "2026-09-29T05:00:01.492Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown with no indication of ongoing deployment failure.",
+			"evidence": [
+				"commit title: fix(nitter): serialize persistence and drain shutdown (#295)",
+				"tag: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T14:51:02.227Z"
+		},
+		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24392,6 +24424,39 @@
 			"scoredAt": "2026-10-02T22:46:25.704Z"
 		},
 		{
+			"key": "issue:minion-meta#647",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#647 [monitor:unstick] reconcile proposals run d812785c: claude agent sub-process failed to launch (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/647",
+			"sourceUpdatedAt": "2026-09-27T14:17:49Z",
+			"sourceFingerprint": "a589416c682aa2f1f304434b25983907f8fbbfec855617efb935410a67b528ac",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The quoted diagnosis indicates the actual reconcile work already succeeded and persisted, with the error being only a sub-process exit-126 infra blip on an idempotent, retriable sweep.",
+			"evidence": [
+				"reconcile sweep completed successfully and persisted state per the log tail",
+				"marked error solely because a separate reconcile-agent sub-step failed with exit-126 and turns=0",
+				"safe to retry this run (idempotent sweep, no data loss risk)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T14:51:02.227Z"
+		},
+		{
 			"key": "issue:minion-meta#680",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26913,38 +26978,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T10:50:58.007Z"
-		},
-		{
-			"key": "issue:minion-meta#647",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#647 [monitor:unstick] reconcile proposals run d812785c: claude agent sub-process failed to launch (exit-126)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/647",
-			"sourceUpdatedAt": "2026-09-27T14:17:49Z",
-			"sourceFingerprint": "a589416c682aa2f1f304434b25983907f8fbbfec855617efb935410a67b528ac",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Self-diagnosed transient infra exit-126 sub-process launch failure with underlying reconcile work already completed and persisted successfully.",
-			"evidence": [
-				"reconcile sweep completed successfully and persisted state",
-				"claude sub-process failed exit-126 turns=0, consistent with OS-level launch failure not task failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T14:28:28.266Z"
 		},
 		{
 			"key": "issue:minion-meta#666",
