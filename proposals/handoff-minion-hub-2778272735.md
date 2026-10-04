@@ -31,9 +31,3 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/+page.svelte#L767
 - `NikolasP98/minion_hub@master src/routes/(app)/crm/[contactId]/+page.svelte:892` — spec 2026-09-28 Bundle F asks for tags LAST inside
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/+page.svelte#L892
-
-**Reconciliation note (2026-10-04):** L767 matches
-`postmerge-minion-hub-302a578cc5a5` (set above as duplicate_candidate) and
-L892 matches `postmerge-minion-hub-ae985ee3170a`. Both are already
-`status: approved` and protected from edits by this sweep; a human should
-confirm coverage before closing this marker.

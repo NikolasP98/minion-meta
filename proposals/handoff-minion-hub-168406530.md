@@ -31,10 +31,3 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/ConsumptionConfirmDialog.svelte#L18
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/ConsumptionConfirmDialog.svelte:91` — the defaults fallback posts stk_consumption item ids
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/ConsumptionConfirmDialog.svelte#L91
-
-**Reconciliation note (2026-10-04):** both markers above were independently
-discovered by postmerge-discovery with identical marker text — L18 as
-`postmerge-minion-hub-821abba8cc10` (set above as duplicate_candidate) and L91
-as `postmerge-minion-hub-8aa8cf0c136b`. Both are already `status: approved`
-and protected from edits by this sweep; a human should confirm coverage and
-close this marker if both ends are tracked there.
