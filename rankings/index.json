@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-04T20:21:02.258Z",
+	"generatedAt": "2026-10-04T20:51:22.064Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9349,22 +9349,22 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 5
+				"specification": 6,
+				"implementation": 4
 			},
 			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#423"
 			],
-			"rationale": "Recurring exit-126/turns=0 claude CLI launch failure across 3 runs points to a real runner exec/permissions fault worth a human fix, and is duplicated by #423.",
+			"rationale": "Recurring exit-126 claude CLI launch failure is blocking the reconcile agent step and is duplicated verbatim by #423.",
 			"evidence": [
-				"'exit-126, turns=0, provider=claude) recurred identically across 3 runs today'",
-				"'a human should check the claude CLI invocation on the runner (file permissions, PATH, binary presence)'"
+				"recurred identically across 3 runs today (17:56, 18:50, 18:55 UTC)",
+				"Recommendation: a human should check the claude CLI invocation on the runner"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T20:28:44.098Z"
+			"scoredAt": "2026-10-04T20:51:21.896Z"
 		},
 		{
 			"key": "issue:minion-meta#423",
@@ -9383,22 +9383,22 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 5
+				"specification": 6,
+				"implementation": 4
 			},
 			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#422"
 			],
-			"rationale": "Identical exit-126/turns=0 reconcile-agent launch failure signature and diagnosis as #422, so these should be consolidated into one runner-fix goal.",
+			"rationale": "Identical signature and summary to #422, so these should be consolidated into one infra-fix goal rather than tracked twice.",
 			"evidence": [
-				"'reconcile agent failed (provider=claude; exit-126; turns=0; permission_denials=0)'",
-				"'recurred identically across 3 runs today (17:56, 18:50, 18:55 UTC)'"
+				"title and summary text are identical to issue:minion-meta#422",
+				"exit-126, turns=0, provider=claude"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T20:28:44.098Z"
+			"scoredAt": "2026-10-04T20:51:21.896Z"
 		},
 		{
 			"key": "issue:minion-meta#456",
@@ -14228,6 +14228,38 @@
 			"scoredAt": "2026-09-30T20:54:03.465Z"
 		},
 		{
+			"key": "run:minion (gateway)#37192477680",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37192477680",
+			"sourceUpdatedAt": "2026-10-04T10:10:06Z",
+			"sourceFingerprint": "24e7b07a89c851177fae8727e1b204c593539a8ca6b89ea52142b2bac92580d3",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "CI failed on the DEV branch but the catalog gives no root-cause or failing-job detail to act on yet.",
+			"evidence": [
+				"status: failure",
+				"workflow_dispatch on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T20:51:21.896Z"
+		},
+		{
 			"key": "spec:2026-08-18-sdlc-transformation-roadmap",
 			"kind": "spec",
 			"stage": "spec",
@@ -14624,39 +14656,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T21:22:02.187Z"
-		},
-		{
-			"key": "run:minion (gateway)#34819118490",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34819118490",
-			"sourceUpdatedAt": "2026-09-14T08:01:29Z",
-			"sourceFingerprint": "046ed524a1b11cee3ca1959e90306d29c7fb6379251b97fd4ffa6e9a37bacb88",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A CI run failed on the gateway's DEV branch but the catalog gives no error detail to size or action the fix.",
-			"evidence": [
-				"workflow_dispatch run on DEV",
-				"status: failure",
-				"updatedAt 2026-09-14T08:01:29Z"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T20:21:02.067Z"
 		},
 		{
 			"key": "issue:minion-meta#448",
@@ -23669,6 +23668,38 @@
 			"scoredAt": "2026-10-04T17:22:50.330Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Commit log shows the nitter persistence/shutdown fix already merged with no outstanding deployment action.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"status: unknown, no failure signal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T20:51:21.896Z"
+		},
+		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27916,6 +27947,38 @@
 			"scoredAt": "2026-09-28T11:35:49.073Z"
 		},
 		{
+			"key": "issue:minion-meta#421",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#421 [monitor:unstick] rank board goals run b01dbb6b: bounded-provider fallback exhausted",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/421",
+			"sourceUpdatedAt": "2026-09-13T19:18:14Z",
+			"sourceFingerprint": "23d7cc314fb8044c60fb3ae0d7f1bca8bd6f52f8eeb11fab7b91b8db6cb751e2",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The monitor's own diagnosis calls this transient provider flakiness and recommends simply retrying, not a genuine defect.",
+			"evidence": [
+				"Diagnosis: transient/infra fault on batch 1 of the ranking pass, not a task-logic failure",
+				"Recommendation: retry the rank run as-is"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T20:51:21.896Z"
+		},
+		{
 			"key": "issue:minion-meta#428",
 			"kind": "issue",
 			"stage": "proposal",
@@ -28044,38 +28107,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T01:30:39.738Z"
-		},
-		{
-			"key": "issue:minion-meta#421",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#421 [monitor:unstick] rank board goals run b01dbb6b: bounded-provider fallback exhausted",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/421",
-			"sourceUpdatedAt": "2026-09-13T19:18:14Z",
-			"sourceFingerprint": "23d7cc314fb8044c60fb3ae0d7f1bca8bd6f52f8eeb11fab7b91b8db6cb751e2",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Monitor diagnosis attributes the failure to transient provider flakiness and explicitly recommends retrying as-is rather than any code change.",
-			"evidence": [
-				"'consistent with genuine upstream provider flakiness rather than a stall or spec bug'",
-				"'Recommendation: retry the rank run as-is'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T20:28:44.098Z"
 		},
 		{
 			"key": "pr:minion-meta#561",
@@ -28929,17 +28960,17 @@
 				"specification": 0,
 				"implementation": 0
 			},
-			"confidence": 8,
+			"confidence": 9,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Automated test-intake ticket with no real content beyond placeholder text.",
+			"rationale": "This is an automated monitor test entry with placeholder content, not real work.",
 			"evidence": [
-				"title: '[monitor:unstick] test'",
-				"summary: 'test detail'"
+				"fingerprint: unstick-unknown-test",
+				"detail body is literally 'test detail'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T20:28:44.098Z"
+			"scoredAt": "2026-10-04T20:51:21.896Z"
 		},
 		{
 			"key": "issue:minion-meta#445",
