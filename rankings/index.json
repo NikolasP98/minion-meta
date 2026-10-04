@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-04T06:21:18.547Z",
+	"generatedAt": "2026-10-04T06:51:14.577Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9327,38 +9327,6 @@
 			"scoredAt": "2026-10-03T23:51:12.738Z"
 		},
 		{
-			"key": "issue:minion-meta#414",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#414 [monitor:unstick] Run 40465359 (minion-meta rank): ranking catalog build refused for minion_hub",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/414",
-			"sourceUpdatedAt": "2026-09-13T05:17:25Z",
-			"sourceFingerprint": "8005950ec70ed243a6bcc94e6c7c5ffb5aee376e4acc64c282e1136bcd8983a8",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The ranking catalog guard refuses to build for minion_hub and the diagnosis says a human must first confirm whether the source is truly misconfigured or transiently unreachable before fixing or retrying.",
-			"evidence": [
-				"board-ranking-catalog.mjs throws 'ranking catalog source unavailable for minion_hub; refusing a partial catalog'",
-				"diagnosis states it cannot tell from this log alone whether it's transient or a real config problem"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T06:29:01.270Z"
-		},
-		{
 			"key": "issue:minion-meta#422",
 			"kind": "issue",
 			"stage": "proposal",
@@ -16283,6 +16251,38 @@
 			"scoredAt": "2026-09-28T11:30:37.362Z"
 		},
 		{
+			"key": "issue:minion-meta#414",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#414 [monitor:unstick] Run 40465359 (minion-meta rank): ranking catalog build refused for minion_hub",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/414",
+			"sourceUpdatedAt": "2026-09-13T05:17:25Z",
+			"sourceFingerprint": "8005950ec70ed243a6bcc94e6c7c5ffb5aee376e4acc64c282e1136bcd8983a8",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The catalog-build guard blocks ranking for minion_hub until a human confirms whether the source is transiently unreachable or actually misconfigured.",
+			"evidence": [
+				"script throws at line 107 refusing a partial catalog for minion_hub",
+				"no earlier fetch/network trace exists to distinguish transient vs config cause"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T06:51:14.418Z"
+		},
+		{
 			"key": "issue:minion-meta#431",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18878,38 +18878,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T10:53:57.559Z"
-		},
-		{
-			"key": "issue:minion-meta#645",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#645 [monitor:unstick] reconcile run 60ff7393 (minion-meta) failed: claude provider exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/645",
-			"sourceUpdatedAt": "2026-09-27T06:18:23Z",
-			"sourceFingerprint": "bb347faa93645c9ed168e612b6e975f19108843136ff6f850ee9669b2393e7ab",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The reconcile run's git work completed successfully and only the claude CLI process failed to launch (exit-126, 0 turns), so the diagnosis recommends a safe retry plus a host-level exec-permission check rather than code changes.",
-			"evidence": [
-				"exit-126 with turns=0 and permission_denials=0 means the provider process never began executing",
-				"diagnosis notes the git push and state persistence already succeeded before the agent step failed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T06:29:01.270Z"
 		},
 		{
 			"key": "issue:minion-meta#733",
@@ -22914,38 +22882,6 @@
 			"scoredAt": "2026-10-03T05:25:32.539Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already merged a fix for nitter persistence/shutdown, leaving no outstanding action.",
-			"evidence": [
-				"commit b841c36 title: fix(nitter): serialize persistence and drain shutdown",
-				"status: unknown with no open problem statement"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T06:21:18.394Z"
-		},
-		{
 			"key": "issue:minion-meta#583",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26914,6 +26850,38 @@
 			"scoredAt": "2026-10-02T18:54:20.098Z"
 		},
 		{
+			"key": "issue:minion-meta#645",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#645 [monitor:unstick] reconcile run 60ff7393 (minion-meta) failed: claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/645",
+			"sourceUpdatedAt": "2026-09-27T06:18:23Z",
+			"sourceFingerprint": "bb347faa93645c9ed168e612b6e975f19108843136ff6f850ee9669b2393e7ab",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The substantive reconcile work already completed and persisted successfully; the only failure was a transient agent-process launch error (exit-126) needing a simple retry, not a goal.",
+			"evidence": [
+				"git push and merge-scan state persistence already succeeded before the agent step",
+				"exit-126 with 0 turns means the claude CLI never executed, pointing to a host/env issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T06:51:14.418Z"
+		},
+		{
 			"key": "issue:minion-meta#646",
 			"kind": "issue",
 			"stage": "proposal",
@@ -28621,38 +28589,6 @@
 			"scoredAt": "2026-10-02T10:53:57.559Z"
 		},
 		{
-			"key": "issue:minion-meta#644",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#644 [monitor:unstick] probe-check-60ff7393-e",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/644",
-			"sourceUpdatedAt": "2026-09-27T06:18:03Z",
-			"sourceFingerprint": "b5b9f5d6b07c31cac56dabb89f75462dea76f234a9de30175ca2f90e9c5a97af",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The issue body is only a synthetic probe placeholder with no real diagnostic content.",
-			"evidence": [
-				"body text is literally 'probe body check e'",
-				"title labeled 'probe-check-60ff7393-e'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-27T06:29:01.270Z"
-		},
-		{
 			"key": "issue:minion-meta#725",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29033,6 +28969,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T08:16:16.935Z"
+		},
+		{
+			"key": "issue:minion-meta#644",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#644 [monitor:unstick] probe-check-60ff7393-e",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/644",
+			"sourceUpdatedAt": "2026-09-27T06:18:03Z",
+			"sourceFingerprint": "b5b9f5d6b07c31cac56dabb89f75462dea76f234a9de30175ca2f90e9c5a97af",
+			"score": 0,
+			"band": "low",
+			"axes": {
+				"criticality": 0,
+				"importance": 0,
+				"impact": 0
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an empty synthetic probe artifact with no real diagnostic content.",
+			"evidence": [
+				"summary text is only 'probe body check e'",
+				"fingerprint is literally 'unstick-unknown-60ff7393-probee'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-04T06:51:14.418Z"
 		}
 	]
 }
