@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-2195640700
 title: Handoff marker — src/lib/components/ui/Picker.svelte (minion_hub)
-status: draft
+status: review
 created: 2026-09-29
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-464643f50d6e
 ---
 
 # Handoff marker — src/lib/components/ui/Picker.svelte

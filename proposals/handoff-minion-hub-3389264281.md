@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-3389264281
 title: Handoff marker — src/server/services/finance.service.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-08-20
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-08-20-hub-finance-provider-source-refs
+merged_into: 2026-08-20-hub-finance-provider-source-refs
 ---
 
 # Handoff marker — src/server/services/finance.service.ts

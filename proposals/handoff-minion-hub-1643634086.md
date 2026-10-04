@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-1643634086
 title: Handoff marker — src/lib/components/ui/foundations/Dialog.svelte (minion_hub)
-status: draft
+status: review
 created: 2026-09-17
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-18215ee1e8fc
 ---
 
 # Handoff marker — src/lib/components/ui/foundations/Dialog.svelte

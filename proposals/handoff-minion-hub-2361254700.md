@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-2361254700
 title: Handoff marker — src/lib/components/scheduling/fan-out.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-26
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-2841d2ba75ad
 ---
 
 # Handoff marker — src/lib/components/scheduling/fan-out.ts

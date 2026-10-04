@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-732128239
 title: Handoff marker — src/lib/components/scheduling/merge-target.test.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-26
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-551c45cff1cc
 ---
 
 # Handoff marker — src/lib/components/scheduling/merge-target.test.ts

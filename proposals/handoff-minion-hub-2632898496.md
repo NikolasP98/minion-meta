@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-2632898496
 title: Handoff marker — src/lib/tables/defs/index.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-22
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-948e27d654f8
 ---
 
 # Handoff marker — src/lib/tables/defs/index.ts
@@ -32,3 +33,9 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/defs/index.ts#L151
 - `NikolasP98/minion_hub@master src/lib/tables/defs/index.ts:165` — same as crm.customers — numbered in part 2.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/defs/index.ts#L165
+
+**Reconciliation note (2026-10-04):** the L165/L151 marker text matches
+`postmerge-minion-hub-948e27d654f8` (set above as duplicate_candidate) and the
+L73 marker text matches `postmerge-minion-hub-bdc3ef8ab34d`. Both are already
+`status: approved` and protected from edits by this sweep; a human should
+confirm coverage before closing this marker.

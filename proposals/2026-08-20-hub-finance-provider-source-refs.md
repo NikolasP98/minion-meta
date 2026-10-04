@@ -3,7 +3,7 @@ id: 2026-08-20-hub-finance-provider-source-refs
 title: Replace the temporary SUNAT-SUSII overlay with provider-neutral invoice source references
 status: draft
 created: 2026-08-20
-updated: 2026-08-20
+updated: 2026-10-04
 repos: [minion_hub]
 tags: [billing, data]
 value: 8
@@ -59,3 +59,12 @@ remain idempotent.
 - Deleting historical SUSII-only invoices.
 - Changing SUNAT emission or certificate handling.
 - Inferring invoice identity from customer name, amount, or approximate dates.
+
+## Merged content (from handoff-minion-hub-3389264281, 2026-10-04)
+
+Factory handoff-ledger sweep independently flagged the same open end via a
+`TODO(handoff):` marker still present in the file as of 2026-10-04:
+
+- `NikolasP98/minion_hub@master src/server/services/finance.service.ts:82` —
+  Replace metadata.sourceOverlays with provider-neutral
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/finance.service.ts#L82

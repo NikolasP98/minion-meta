@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-1765522123
 title: Handoff marker — src/lib/components/data-table/custom-properties/SelectOptionList.svelte (minion_hub)
-status: draft
+status: review
 created: 2026-09-30
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-cdf2e33a24b0
 ---
 
 # Handoff marker — src/lib/components/data-table/custom-properties/SelectOptionList.svelte

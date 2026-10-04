@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-2634414043
 title: Handoff marker — src/lib/components/agents/AgentMemoryPanel.svelte (minion_hub)
-status: draft
+status: review
 created: 2026-09-29
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-dc247fbe1f2a
 ---
 
 # Handoff marker — src/lib/components/agents/AgentMemoryPanel.svelte

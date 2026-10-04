@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-991916159
 title: Handoff marker — src/lib/components/scheduling/booking-color.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-25
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-1f676fb29e24
 ---
 
 # Handoff marker — src/lib/components/scheduling/booking-color.ts

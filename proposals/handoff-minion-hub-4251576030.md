@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-4251576030
 title: Handoff marker — scripts/repair-verified-customer-metadata.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-22
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-ab7a33dc7fa6
 ---
 
 # Handoff marker — scripts/repair-verified-customer-metadata.ts

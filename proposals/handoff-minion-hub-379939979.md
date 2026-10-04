@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-379939979
 title: Handoff marker — src/server/db/pg-schema/stock.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-30
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-6200323e3d73
 ---
 
 # Handoff marker — src/server/db/pg-schema/stock.ts

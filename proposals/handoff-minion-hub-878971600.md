@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-878971600
 title: Handoff marker — src/lib/components/scheduling/FieldsList.svelte (minion_hub)
-status: draft
+status: review
 created: 2026-09-25
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-8caaf18d5ca3
 ---
 
 # Handoff marker — src/lib/components/scheduling/FieldsList.svelte

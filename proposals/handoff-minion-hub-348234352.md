@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-348234352
 title: Handoff marker — src/routes/(app)/stock/entries/new/+page.svelte (minion_hub)
-status: draft
+status: review
 created: 2026-09-17
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-88c1258817d5
 ---
 
 # Handoff marker — src/routes/(app)/stock/entries/new/+page.svelte

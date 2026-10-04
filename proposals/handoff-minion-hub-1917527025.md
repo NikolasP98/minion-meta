@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-1917527025
 title: Handoff marker — tests/e2e/ui-audit/pos-calendar-fan-drag.spec.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-30
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-c91882e7ec6a
 ---
 
 # Handoff marker — tests/e2e/ui-audit/pos-calendar-fan-drag.spec.ts

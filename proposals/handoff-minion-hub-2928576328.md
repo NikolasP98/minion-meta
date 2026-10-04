@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-2928576328
 title: Handoff marker — src/lib/tables/custom-properties.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-26
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-755c81782da8
 ---
 
 # Handoff marker — src/lib/tables/custom-properties.ts

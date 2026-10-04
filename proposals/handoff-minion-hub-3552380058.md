@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-3552380058
 title: Handoff marker — src/lib/components/tags/tag-bulk.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-29
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-0d842850a5ca
 ---
 
 # Handoff marker — src/lib/components/tags/tag-bulk.ts

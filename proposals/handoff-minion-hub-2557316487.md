@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-2557316487
 title: Handoff marker — src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-20
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-fc192ff88fe3
 ---
 
 # Handoff marker — src/routes/api/scheduling/bookings/_handlers.ts

@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-3542676477
 title: Handoff marker — src/lib/components/scheduling/hover-fields.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-25
 updated: 2026-10-04
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-e5bc9fd11deb
 ---
 
 # Handoff marker — src/lib/components/scheduling/hover-fields.ts
