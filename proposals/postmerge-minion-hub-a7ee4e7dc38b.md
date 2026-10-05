@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-a7ee4e7dc38b
 title: "Post-merge finding — todo-handoff in src/server/services/notifications/scheduler/admission.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-05
 updated: 2026-10-05
 repos: [minion-hub]
