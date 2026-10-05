@@ -1,14 +1,14 @@
 ---
-id: handoff-minion-hub-2310019459
-title: Handoff marker — src/routes/(app)/pos/tickets/[id]/+page.svelte (minion_hub)
+id: handoff-minion-hub-3097506921
+title: Handoff marker — src/lib/notifications/catalog.ts (minion_hub)
 status: draft
-created: 2026-09-28
+created: 2026-10-05
 updated: 2026-10-05
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-# Handoff marker — src/routes/(app)/pos/tickets/[id]/+page.svelte
+# Handoff marker — src/lib/notifications/catalog.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-05)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/tickets/[id]/+page.svelte:149` — no calendar deep-link param exists yet —
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/tickets/[id]/+page.svelte#L149
+- `NikolasP98/minion_hub@master src/lib/notifications/catalog.ts:336` — Domain producers and audience/template/navigation consumers must register their
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/notifications/catalog.ts#L336

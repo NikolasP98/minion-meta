@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-05)
 
-- `NikolasP98/minion_hub@master src/server/services/pos-packages.service.ts:375` — §4.2's "cancel a grant" action on /pos/accounts will hit this
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-packages.service.ts#L375
+- `NikolasP98/minion_hub@master src/server/services/pos-packages.service.ts:396` — §4.2's "cancel a grant" action on /pos/accounts will hit this
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-packages.service.ts#L396

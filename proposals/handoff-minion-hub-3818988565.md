@@ -26,11 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-05)
 
-- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:178` — accounts are GROUPED by this key, so a client whose older rows
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L178
-- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:217` — a client with SEVERAL pending tickets only gets a link to
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L217
-- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:301` — this counts EVERY historical service line without a
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L301
-- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:649` — cancelling a plan leaves its already-paid instalment lines
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L649
+- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:388` — cancelling a plan leaves its already-paid instalment lines
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L388

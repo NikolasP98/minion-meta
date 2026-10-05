@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-05)
 
-- `NikolasP98/minion_hub@master tests/fixtures/critical-journeys/README.md:47` — Qualify actual login/session and authenticated CRM routing using a
-  https://github.com/NikolasP98/minion_hub/blob/master/tests/fixtures/critical-journeys/README.md#L47
+- `NikolasP98/minion_hub@master tests/fixtures/critical-journeys/README.md:40` — Qualify actual login/session and authenticated CRM routing using a
+  https://github.com/NikolasP98/minion_hub/blob/master/tests/fixtures/critical-journeys/README.md#L40

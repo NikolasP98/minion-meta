@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-3035029616
 title: Handoff marker — src/routes/(app)/pos/appointments/+page.svelte (minion_hub)
-status: draft
+status: closed
 created: 2026-09-02
 updated: 2026-10-05
 repos: [minion-hub]
@@ -29,3 +29,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/routes/(app)/pos/appointments/+page.svelte:127` — "retries on the next settle" means a week that failed
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/appointments/+page.svelte#L127
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-05; the sweep closed this proposal.

@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-1315287309
 title: Handoff marker — src/lib/components/scheduling/kit/settled-day.svelte.test.ts (minion_hub)
-status: draft
+status: closed
 created: 2026-09-28
 updated: 2026-10-05
 repos: [minion-hub]
@@ -28,3 +28,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/kit/settled-day.svelte.test.ts:4` — this repo's bun+vitest+@sveltejs/vite-plugin-svelte setup
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/kit/settled-day.svelte.test.ts#L4
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-05; the sweep closed this proposal.

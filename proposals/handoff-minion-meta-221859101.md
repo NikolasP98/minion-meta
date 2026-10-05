@@ -55,17 +55,17 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15295
 - `NikolasP98/minion-meta@dev rankings/index.json:15687` — UUID-only like crm.customers — numbered in part 2",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15687
-- `NikolasP98/minion-meta@dev rankings/index.json:16964` — qualify error-storm flush fan-out and serverless delivery",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16964
-- `NikolasP98/minion-meta@dev rankings/index.json:18326` — no status filter — every status reaches the grid",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18326
-- `NikolasP98/minion-meta@dev rankings/index.json:18425` — Full Workshop composition/camera and keyboard relationship/element",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18425
-- `NikolasP98/minion-meta@dev rankings/index.json:20356` — startBackupScheduler() has no call site anywhere in src/",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20356
-- `NikolasP98/minion-meta@dev rankings/index.json:23350` — no overflow clip for bookings starting before startHour",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23350
-- `NikolasP98/minion-meta@dev rankings/index.json:24807` — Qualify full Workshop composition and remaining keyboard camera",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24807
-- `NikolasP98/minion-meta@dev rankings/index.json:27598` — the sideways-page overflow this card showed was fixed in",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27598
+- `NikolasP98/minion-meta@dev rankings/index.json:16997` — qualify error-storm flush fan-out and serverless delivery",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16997
+- `NikolasP98/minion-meta@dev rankings/index.json:18359` — no status filter — every status reaches the grid",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18359
+- `NikolasP98/minion-meta@dev rankings/index.json:18458` — Full Workshop composition/camera and keyboard relationship/element",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18458
+- `NikolasP98/minion-meta@dev rankings/index.json:20389` — startBackupScheduler() has no call site anywhere in src/",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20389
+- `NikolasP98/minion-meta@dev rankings/index.json:23319` — no overflow clip for bookings starting before startHour",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23319
+- `NikolasP98/minion-meta@dev rankings/index.json:24776` — Qualify full Workshop composition and remaining keyboard camera",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24776
+- `NikolasP98/minion-meta@dev rankings/index.json:27567` — the sideways-page overflow this card showed was fixed in",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27567

@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-05)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/AppointmentForm.svelte:245` — no server data source plumbs a real price for a service
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/AppointmentForm.svelte#L245
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/AppointmentForm.svelte:264` — no server data source plumbs a real price for a service
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/AppointmentForm.svelte#L264
