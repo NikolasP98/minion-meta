@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2621188553
 title: Handoff marker — src/server/auth/authorize.ts (minion_hub)
-status: draft
+status: merged
+merged_into: 2026-09-16-hub-requireadmin-audit-followup
 created: 2026-09-16
 updated: 2026-10-05
 repos: [minion-hub]
