@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-05T04:21:00.503Z",
+	"generatedAt": "2026-10-05T04:51:20.827Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11390,38 +11390,6 @@
 			"scoredAt": "2026-10-05T03:51:34.638Z"
 		},
 		{
-			"key": "issue:minion-meta#655",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#655 [monitor:unstick] reconcile run 5c1c442d (minion-meta) - exit-126/turns=0 after successful git work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/655",
-			"sourceUpdatedAt": "2026-09-28T04:17:55Z",
-			"sourceFingerprint": "c48a0eb49b872a5ebf6d93978efd095f29043e04a31900c63432e5e72b00a4af",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Diagnosis already isolates a repeated exit-126/turns=0 failure to a trailing agent invocation after the substantive reconcile work succeeds, giving a concrete runner-host fix target.",
-			"evidence": [
-				"5th identical-signature failure on minion-meta reconcile between 2026-09-28T01:35 and 03:53",
-				"exit-126 indicates the claude CLI binary was found but not executable on the runner"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T04:28:53.583Z"
-		},
-		{
 			"key": "issue:minion-meta#663",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14505,6 +14473,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T19:51:57.382Z"
+		},
+		{
+			"key": "issue:minion-meta#655",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#655 [monitor:unstick] reconcile run 5c1c442d (minion-meta) - exit-126/turns=0 after successful git work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/655",
+			"sourceUpdatedAt": "2026-09-28T04:17:55Z",
+			"sourceFingerprint": "c48a0eb49b872a5ebf6d93978efd095f29043e04a31900c63432e5e72b00a4af",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A 5x-recurring exit-126/turns=0 signature on the reconcile runner has a concrete diagnosis (claude CLI exec/PATH issue) and a bounded fix (host exec-permission check) that can be executed and then added to the deterministic classifier.",
+			"evidence": [
+				"1st of 5 identical-signature failures between 2026-09-28T01:35 and 03:53",
+				"Recommendation: fix the box -- check the claude CLI binary's exec permissions/PATH resolution"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T04:51:20.674Z"
 		},
 		{
 			"key": "issue:minion-meta#719",
@@ -20274,21 +20274,21 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 7
 			},
-			"confidence": 7,
-			"recommendation": "execute",
+			"confidence": 6,
+			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-88eff33e9845"
 			],
-			"rationale": "Approved data-layer fix for an unfiltered status query that pollutes the calendar grid, with a clear though slightly broader fix path requiring UI wiring.",
+			"rationale": "Missing status filter lets archived/cancelled/draft items leak into the calendar grid for all users, a data-correctness issue from the same merged PR as the sibling overflow finding, better consolidated into one calendar cleanup goal.",
 			"evidence": [
 				"TODO(handoff): no status filter — every status reaches the grid",
-				"fix direction: add status/statusFilter parameter and wire to UI selection"
+				"same merged PR https://github.com/NikolasP98/minion_hub/pull/395 as proposal:postmerge-minion-hub-88eff33e9845"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T04:28:53.583Z"
+			"scoredAt": "2026-10-05T04:51:20.674Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-be298870a398",
@@ -25014,6 +25014,38 @@
 			"scoredAt": "2026-10-03T05:25:32.539Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit already lands the nitter persistence/shutdown fix, so the deploy-health candidate describes already-satisfied work rather than an open task.",
+			"evidence": [
+				"commit message: 'fix(nitter): serialize persistence and drain poller shutdown'",
+				"status: unknown with no further deployment issue described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T04:51:20.674Z"
+		},
+		{
 			"key": "issue:minion-meta#583",
 			"kind": "issue",
 			"stage": "proposal",
@@ -25558,22 +25590,22 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 8
+				"specification": 7,
+				"implementation": 7
 			},
-			"confidence": 7,
-			"recommendation": "execute",
+			"confidence": 6,
+			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-9068ad039a31"
 			],
-			"rationale": "Already-approved, narrowly scoped CSS fix for an edge-case visual overflow with a clear fix direction.",
+			"rationale": "A well-scoped cosmetic overflow fix in BookingCalendar.svelte from the same merged PR as a sibling calendar-window finding, making a combined calendar post-merge cleanup goal more efficient than two separate small goals.",
 			"evidence": [
-				"TODO(handoff): no overflow clip for bookings starting before startHour",
-				"status: approved, fix direction is add overflow:hidden or clip-path to the bookings container"
+				"TODO(handoff): no overflow clip — booking before startHour visually overflows",
+				"same merged PR https://github.com/NikolasP98/minion_hub/pull/395 as proposal:postmerge-minion-hub-9068ad039a31"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T04:28:53.583Z"
+			"scoredAt": "2026-10-05T04:51:20.674Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-98cb61c2223d",
