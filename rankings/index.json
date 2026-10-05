@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-05T07:21:17.690Z",
+	"generatedAt": "2026-10-05T07:51:23.048Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -20948,6 +20948,38 @@
 			"scoredAt": "2026-09-28T11:39:42.070Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged fix for nitter persistence/shutdown ordering with no indication of ongoing deployment failure.",
+			"evidence": [
+				"commit title: fix(nitter): serialize persistence and drain shutdown (#295)",
+				"tags: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T07:51:22.891Z"
+		},
+		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27829,6 +27861,38 @@
 			"scoredAt": "2026-10-04T11:51:01.311Z"
 		},
 		{
+			"key": "issue:minion-meta#428",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#428 [monitor:unstick] reconcile run bd6e0e38 (minion-meta): claude agent launch exit-126, pipeline otherwise completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/428",
+			"sourceUpdatedAt": "2026-09-14T06:17:27Z",
+			"sourceFingerprint": "321eadd659af1c720f1104ade66e6a758859b7d93f2752018b51cbdbcc473170",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated monitor intake itself diagnoses a one-off infra launch failure (exit-126) with no state corruption and a recommendation to simply retry.",
+			"evidence": [
+				"note=exit-126, turns=0, cost_usd=0",
+				"Recommendation: safe to retry as-is (no state corruption evident)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T07:51:22.891Z"
+		},
+		{
 			"key": "issue:minion-meta#438",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30085,39 +30149,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T20:51:21.896Z"
-		},
-		{
-			"key": "issue:minion-meta#428",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#428 [monitor:unstick] reconcile run bd6e0e38 (minion-meta): claude agent launch exit-126, pipeline otherwise completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/428",
-			"sourceUpdatedAt": "2026-09-14T06:17:27Z",
-			"sourceFingerprint": "321eadd659af1c720f1104ade66e6a758859b7d93f2752018b51cbdbcc473170",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Automated monitor report describes a single transient infra fault (exit-126, claude binary not executable) with no downstream corruption, already recommended safe to retry.",
-			"evidence": [
-				"exit 126 = permission denied / not executable, before doing any work",
-				"overall exit_code=1 attributable solely to the failed agent invocation step",
-				"sweep is level-triggered/idempotent and already persisted its progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T07:28:44.105Z"
 		},
 		{
 			"key": "issue:minion-meta#441",
