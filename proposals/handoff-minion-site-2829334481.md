@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-site-2829334481
 title: Handoff marker — src/lib/services/member-gateway.svelte.ts (minion-site)
-status: review
+status: closed
 duplicate_candidate: 2026-08-17-site-member-gateway-swallowed-errors
 created: 2026-08-23
 updated: 2026-10-05
@@ -29,3 +29,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-site@dev src/lib/services/member-gateway.svelte.ts:83` — published @minion-stack/shared@0.9.0 still swallows failed
   https://github.com/NikolasP98/minion-site/blob/dev/src/lib/services/member-gateway.svelte.ts#L83
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-05; the sweep closed this proposal.
