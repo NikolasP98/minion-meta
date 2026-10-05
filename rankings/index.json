@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-05T01:31:15.472Z",
+	"generatedAt": "2026-10-05T01:55:04.484Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -633,38 +633,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-15T14:58:39.472Z"
-		},
-		{
-			"key": "pr:minion_hub#431",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#431 fix: harden Hub readiness and qualification gates",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/431",
-			"sourceUpdatedAt": "2026-10-05T01:15:26Z",
-			"sourceFingerprint": "314354d977e84d4b986973d64338eed9ed6897e8dd6866ecf55d9836bd5bfb93",
-			"score": 79,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Large, already largely-implemented PR hardening financial/data-integrity and notification infrastructure with production migrations already applied and verified against live DB.",
-			"evidence": [
-				"fixes stale commits, duplicate financial writes, and ownership gaps in Hub",
-				"61 commits, 7 production migrations applied via vercel-build, pre-merge verification run against prod 2026-10-04"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:21:21.606Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-qa-stack-first-pass-defects",
@@ -1365,39 +1333,6 @@
 			"scoredAt": "2026-10-05T01:23:26.852Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2303234027",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2303234027.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "fa695c94103d33f3666b4dcc59872865a059dacbcefe3b84aa5a3408f78ef86f",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "One marker flags that a pos:create action is gated client-side with no corresponding server-side enforcement, a real authorization gap alongside missing spec-required drawer actions.",
-			"evidence": [
-				"plan button is gated on pos:create, but server-side ...",
-				"drawer still shows no LINKED POS TICKETS — spec §4.1",
-				"spec §4.1 also lists reschedule, charge in POS and book the ..."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:24:35.191Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-420076982",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2033,14 +1968,14 @@
 			"scoredAt": "2026-09-30T04:54:15.786Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-ee6ab5707843",
+			"key": "proposal:postmerge-minion-hub-f523e410f9a1",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos-accounts.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ee6ab5707843.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "a5cd33027e86e770f0b354456dd805137c9d8bbcefc44b002e7257448f5c7e5f",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/sell/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f523e410f9a1.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "d06e5cf42a05ea2d3b84a813e1effe0456348640266408e696d5337126b71585",
 			"score": 65,
 			"band": "medium",
 			"axes": {
@@ -2049,20 +1984,21 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 7,
+				"implementation": 6
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "An unscoped historical count in a POS accounts service risks inflating billing/analytics metrics, a concrete financial-accuracy defect with a clear fix path.",
+			"rationale": "Posting a null finProductId in the POS sell flow risks invalid financial sale records and has a clear, bounded fix path already outlined.",
 			"evidence": [
-				"merged PR #278, marker: 'this counts EVERY historical service line without a...'",
-				"diagnosis flags direct impact on billing/analytics accuracy in a POS service"
+				"TODO(handoff): this synthetic line posts finProductId: null",
+				"file src/routes/(app)/pos/sell/+page.svelte",
+				"status: approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T03:54:57.361Z"
+			"scoredAt": "2026-10-05T01:55:04.322Z"
 		},
 		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
@@ -2391,38 +2327,6 @@
 			"scoredAt": "2026-09-30T05:24:46.739Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-80b7daf173aa",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-80b7daf173aa.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "b5a03283d6d90789a1186c2cc3e457a9fdaa976f83a311cb6c769ce6eeba1839",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Clear timezone-mismatch diagnosis with a concrete three-step fix affecting every user viewing the booking calendar.",
-			"evidence": [
-				"TODO: browser-local time vs server data window mismatch",
-				"fix: store/display via UTC + explicit timezone, avoid browser-local inference"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T05:24:46.739Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-c5d86be403fa",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2692,6 +2596,74 @@
 			"scoredAt": "2026-10-05T01:21:21.606Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1975235460",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/pos/sell/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1975235460.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "4dce96ddb520cf81689fa268af0d94865d2d52ce6db27cf9a616d34cf2aedd70",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-2303234027"
+			],
+			"rationale": "POS sell-page markers point to a synthetic line posting a null product id, a real financial/inventory data-integrity risk tied to the HS-011 readiness recon.",
+			"evidence": [
+				"\"this synthetic line posts finProductId: null\"",
+				"references HS-011 in production-readiness recon doc"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:05.276Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2303234027",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2303234027.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "d6e7bd3f0781c8cd217fd0639fa6e743fec844a3ab07bdf02a81cc12dd80aa80",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-1975235460"
+			],
+			"rationale": "One marker flags a plan action gated client-side on pos:create without server-side enforcement, a plausible authorization gap alongside missing POS-booking linkage from spec §4.1.",
+			"evidence": [
+				"\"the plan button is gated on pos:create, but server-side\"",
+				"\"spec §4.1 also lists reschedule, charge in POS\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:05.276Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-2557316487",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2788,39 +2760,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:39:42.070Z"
-		},
-		{
-			"key": "pr:minion_site#33",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_site",
-			"title": "#33 fix: scope member sessions and authentication continuations",
-			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/33",
-			"sourceUpdatedAt": "2026-10-03T21:53:14Z",
-			"sourceFingerprint": "d1537c12ae04c3060af00b57c5563df6aaee9ce8213e56655d881043c178b8a6",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes member session leakage and unsafe auth redirect continuation under approved specs with passing targeted test suites.",
-			"evidence": [
-				"scopes reads/continuations to current owner, validates redirect targets",
-				"33 ordinary + 86 locale/auth tests pass, typecheck/build green",
-				"approved specs 2026-10-03-site-auth-redirect-spec.md"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T22:22:01.505Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-igv-rate-from-org-config",
@@ -3279,39 +3218,6 @@
 			"scoredAt": "2026-09-29T14:59:57.328Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-1975235460",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/pos/sell/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1975235460.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "6e90d559272b06fed4ff16e0cca79c309cac3e5e0f621942ce578a8194617b50",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Three distinct POS-sell bugs (till draw timing, null finProductId breaking revenue-by-product, conditional tender display) are bundled and need separate scoping before execution.",
-			"evidence": [
-				"till-side draw happens on CLICK, not on submit",
-				"posts finProductId: null (revenue-by-product does ...)",
-				"tender only appears when org registered a method"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:24:35.191Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-25e2bb7",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3343,6 +3249,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T19:51:57.382Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ae7bedc4474a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in supabase/migrations/20261003150000_notification_event_outbox.sql (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ae7bedc4474a.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "e976f5ce9d50fb7c96138562c33b06b79db04df65a09067f94d51c0fd611ced1",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-bb9baf1f3156",
+				"proposal:postmerge-minion-hub-cfb9f10ced2a"
+			],
+			"rationale": "Outbox wiring, scheduler projector, and notify-user endpoint findings all describe one unfinished notification pipeline and should become a single goal.",
+			"evidence": [
+				"outbox table created but never wired into the event pipeline",
+				"diagnosis says to convert into a spec once channels/retention are clarified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:55:04.322Z"
 		},
 		{
 			"key": "spec:2026-08-13-crm-customers-server-pagination-spec",
@@ -3506,6 +3447,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T06:24:24.939Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-1979367351",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — supabase/migrations/20261003150000_notification_event_outbox.sql (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1979367351.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "a53812ff14eaebfbcccffa87468a868dab650e4bae5d0db952b86dbe9e9b8fb7",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The outbox migration marker bundles four separate unfinished subsystems (producers, projection, retention, tenant-deletion reconciliation) with no bounded scope for one execution.",
+			"evidence": [
+				"\"Wire qualified producers, projection, retention and tenant-deletion reconciliation\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:05.276Z"
 		},
 		{
 			"key": "spec:2026-09-16-hub-local-qa-stack-spec",
@@ -3750,6 +3722,38 @@
 			"scoredAt": "2026-09-30T03:24:36.045Z"
 		},
 		{
+			"key": "pr:minion_site#33",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_site",
+			"title": "#33 fix: scope member sessions and authentication continuations",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/33",
+			"sourceUpdatedAt": "2026-10-05T01:43:09Z",
+			"sourceFingerprint": "dc34a505005e13653fbecb63761a99d21bde70e63372a85d392f5a8309a99b40",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Security-relevant session/redirect scoping fix is well specified and locally tested but explicitly withholds merge pending hosted CI/identity-provider evidence.",
+			"evidence": [
+				"\"No merge or release requested\"",
+				"scopes stale session reuse and unsafe redirect targets"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:05.276Z"
+		},
+		{
 			"key": "pr:minion-base#41",
 			"kind": "pr",
 			"stage": "development",
@@ -3915,6 +3919,38 @@
 			"scoredAt": "2026-10-05T01:22:20.442Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1580198442",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/state/workshop/workshop.svelte.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1580198442.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "9627fe36cd86c4793cc4b5b3e65b67030a58fe1f5cb45c8b0c31923e5ae6e6f2",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Three markers under one HC-037 scope cover autosave failure visibility, snapshot validation, and workspace preservation — a coherent data-safety fix.",
+			"evidence": [
+				"\"HC-037 must expose failed/unknown autosave outcomes\"",
+				"\"HC-037 must validate and fence this snapshot before publishing\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:05.276Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-821383456",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4014,40 +4050,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T06:41:39.252Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-3a27d70e9419",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/scheduling/bookings/[id]/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3a27d70e9419.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "caacfafb1fce427526b556a1ae2c175cd4485b213408f2790ece70fc30eff027",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-3e55b8b7c010"
-			],
-			"rationale": "An undocumented money-field change on the booking read endpoint pairs with the sibling pricing-gap finding in the same scheduling feature.",
-			"evidence": [
-				"TODO(handoff) marker: returns package-grant money, plan money",
-				"merged PR #278 in minion_hub master, checked 2026-09-16"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T06:42:03.162Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-490d681c114f",
@@ -4313,14 +4315,14 @@
 			"scoredAt": "2026-09-29T06:17:33.259Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-ba6133139e27",
+			"key": "proposal:postmerge-minion-hub-bb9baf1f3156",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/appointments/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ba6133139e27.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "ec311f610767571cad69005d74768dbf9dd2364c5cba5e330e5b5216af803833",
+			"title": "Post-merge finding — todo-handoff in supabase/migrations/20261003160000_notification_worker_scheduler.sql (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bb9baf1f3156.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "a8a1de4bce4ea6f893a57ddad4123f94fd038dcaa3fcc28bd888513da8e4d9ad",
 			"score": 58,
 			"band": "medium",
 			"axes": {
@@ -4329,21 +4331,23 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 4,
+				"implementation": 3
 			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved, file-scoped TODO(handoff) in a payments/settlement path with a concrete definition of done and fix steps addresses a plausible double-charge/billing-dispute risk.",
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-ae7bedc4474a",
+				"proposal:postmerge-minion-hub-cfb9f10ced2a"
+			],
+			"rationale": "Scheduler migration enables a feature dependent on an unregistered projector, part of the same incomplete notification pipeline as the outbox and notify-user findings.",
 			"evidence": [
-				"TODO(handoff) in src/routes/(app)/pos/appointments/+page.svelte",
-				"\"can cause double-charges, lost transactions, or billing disputes\"",
-				"status: approved"
+				"TODO(handoff): Register and qualify the real Slice5 projector before enabling the",
+				"truncated marker text leaves exact dependency unclear"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T03:54:02.979Z"
+			"scoredAt": "2026-10-05T01:55:04.322Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-dca03692bd9a",
@@ -4645,6 +4649,38 @@
 			"scoredAt": "2026-10-05T01:21:21.606Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1194287278",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "41856ca8da2af12947100ad29ba2faaab441d151b80a224eedc8daf78dfd8115",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Nine disparate markers spanning filters, RBAC, drag limits, and rendering are bundled into one file-scoped proposal with no single verifiable outcome.",
+			"evidence": [
+				"9 separate TODO(handoff) markers across one file",
+				"issues span tag filters, permissions, drag bounds, and grid rendering"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:05.276Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-1d40d9a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4708,38 +4744,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T23:24:14.513Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-420bc99ef6af",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-420bc99ef6af.md",
-			"sourceUpdatedAt": "2026-09-25",
-			"sourceFingerprint": "be029c9169da9d5c74ccb29ca0e9855aad47d22b05244cc96ca34513dc8c58ca",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved, well-localized timezone-comparison bug in the booking calendar can cause incorrect slot availability for any user not sharing the provider's timezone, which is an actionable and broadly impactful correctness fix.",
-			"evidence": [
-				"TODO(handoff) marker identifies browser wall-clock vs provider-timezone mismatch in BookingCalendar.svelte",
-				"status: approved, merged PR #368 with exact file location given"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T18:54:20.098Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-defaces-crm-tools-spec",
@@ -6605,6 +6609,38 @@
 			"scoredAt": "2026-09-30T16:54:15.655Z"
 		},
 		{
+			"key": "pr:minion_hub#432",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#432 fix(chat): scope mention directory and preserve bubble contrast",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/432",
+			"sourceUpdatedAt": "2026-10-05T01:47:47Z",
+			"sourceFingerprint": "7f40172890c77f6aca9e91f1422f568cb45d8cedf9551f2cc721e7d14e90627a",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Reviewed, locally qualified cherry-pick with strong test/build evidence is ready to proceed in the merge pipeline.",
+			"evidence": [
+				"88 tests PASS, 0 errors/0 warnings build",
+				"contrast 5.1686:1 verified across two themes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:05.276Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6736,39 +6772,6 @@
 			"scoredAt": "2026-09-30T06:54:08.238Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-3818988565",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/server/services/pos-accounts.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3818988565.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "213893a2606d3791eb3db4051a6da0fd07fa66eeaec8139672390f85667661ca",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Four distinct markers in the POS accounts service describe financial-correctness bugs (mis-grouped accounts, hidden pending tickets, unfiltered historical totals, orphaned paid instalments on cancellation), making this the highest-stakes item in the batch.",
-			"evidence": [
-				"marker: 'cancelling a plan leaves its already-paid instalment lines' at pos-accounts.service.ts:649",
-				"marker: 'this counts EVERY historical service line without a' at :301",
-				"marker: 'a client with SEVERAL pending tickets only gets a link to' at :217"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:26:32.290Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-3e55b8b7c010",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6867,39 +6870,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T01:54:11.712Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-c9fcac2c905d",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/kit/settled-day.svelte.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c9fcac2c905d.md",
-			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "284bc66ccc898334dc7bbd5ec9447e792b18a6f31b0f759141cfc41a04f23188",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved finding identifies a broken test setup blocking CI coverage of a reliability-critical scheduling component, with a concrete fix direction given.",
-			"evidence": [
-				"approved, merged PR #394",
-				"fix direction: verify vitest config includes @sveltejs/vite-plugin-svelte",
-				"diagnosis notes scheduling UI tests are reliability-critical"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T02:29:23.351Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ccb2014a7cbb",
@@ -7294,6 +7264,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T07:34:04.510Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-3818988565",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/pos-accounts.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3818988565.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "02040b88c3cf3a937fd738fde9e0ba0c7dd882e3c57c5ce53106232c53d92208",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-2582471367"
+			],
+			"rationale": "Cancelling a plan leaves already-paid instalment lines in an inconsistent state, a financial data-integrity gap tied to the related pos-packages cancel marker.",
+			"evidence": [
+				"marker: 'cancelling a plan leaves its already-paid instalment lines'",
+				"related to pos-packages.service.ts cancel-grant marker"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:49.184Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-factory-e8cac06",
@@ -7696,38 +7700,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T00:24:48.062Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-1194287278",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "3ddf9332c2c2a06526779d9da04d112dbe86deae840ee4535e926ad46f83e4ad",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Ten distinct timezone, drag-boundary, and overflow edge-case markers are bundled into one draft proposal for a core scheduling component, which needs to be broken into separately scoped specs rather than treated as one actionable unit.",
-			"evidence": [
-				"10 separate markers across BookingCalendar.svelte (lines 245-3962)",
-				"status draft, covers timezone, RBAC, drag, and overflow issues"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:22:20.442Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2621188553",
@@ -8647,41 +8619,6 @@
 			"scoredAt": "2026-09-28T11:34:57.682Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2746481724",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/scheduling/AppointmentForm.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2746481724.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "515a84209686c8b815295bf6f6d2bccb3db6f6fb9bac4495dc2a0ed1bcbb2ca3",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-2843825962",
-				"proposal:handoff-minion-hub-3035029616"
-			],
-			"rationale": "No server data source plumbs a real price for a service in the appointment form, a pricing-correctness gap in the same POS/appointments area as two related markers.",
-			"evidence": [
-				"src/lib/components/scheduling/AppointmentForm.svelte:245 marker",
-				"status review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:25:24.171Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-afd023b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8747,14 +8684,14 @@
 			"scoredAt": "2026-10-03T21:22:02.187Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-86b35d6fff89",
+			"key": "proposal:postmerge-minion-hub-aa66710175de",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/sell/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-86b35d6fff89.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "463d84cf3442fbfd0777c16ed7de595f6e130e23dd34b1786efa78d11b321290",
+			"title": "Post-merge finding — todo-handoff in src/lib/state/workshop/workshop.svelte.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-aa66710175de.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "165e876faeea698e4b75c4b3e699ecd9671561b7548fe222449f40c73ecdbd15",
 			"score": 50,
 			"band": "medium",
 			"axes": {
@@ -8763,20 +8700,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 7,
 				"implementation": 5
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Diagnosis identifies a concrete revenue-attribution bug (finProductId null) with a preferred fix, though it notes needing to check surrounding cart-state context.",
+			"rationale": "Autosave status ambiguity risks silent data loss for workshop users and has a clear fix direction already specified.",
 			"evidence": [
-				"TODO: 'posts finProductId: null (revenue-by-product...)'",
-				"fix direction: capture actual finProductId from sale/cart context"
+				"TODO(handoff): HC-037 must expose failed/unknown autosave outcomes",
+				"file src/lib/state/workshop/workshop.svelte.ts"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T05:24:46.739Z"
+			"scoredAt": "2026-10-05T01:55:04.322Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bbd5a8516623",
@@ -9142,6 +9079,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T01:22:20.442Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-519a349c5d17",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — blast-radius in src/server/db/schema/unified-events.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-519a349c5d17.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "5dde33b8d04e6db627112c0f22d35fbd389194b06daaaf8ed8766c2d7e60d24b",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Flags a shared-schema (@minion-stack/db) change with real cross-project blast radius, but the definition of done is vague and no concrete migration/test evidence is given.",
+			"evidence": [
+				"file is src/server/db/schema/unified-events.ts, shared by hub and site per AGENTS.md",
+				"DoD: 'documented impact surfaces are reviewed... or isolation is confirmed intentional'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:53:57.051Z"
 		},
 		{
 			"key": "spec:2026-08-17-maintenance-lane-monitors-spec",
@@ -10306,6 +10275,38 @@
 			"scoredAt": "2026-10-05T01:22:20.442Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1097951829",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/api/pos/settings/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1097951829.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "ab534715c1fce0152188f726583e37449bf78f62ee13d9af98a6e62412892710",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Single bounded POS-settings marker with a confirmed root cause from QA logs is actionable now.",
+			"evidence": [
+				"root cause confirmed via QA-stack app logs",
+				"single marker at one line"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:05.276Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-1649151658",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10337,14 +10338,14 @@
 			"scoredAt": "2026-10-05T01:23:26.852Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-3035029616",
+			"key": "proposal:handoff-minion-hub-2746481724",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/pos/appointments/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3035029616.md",
+			"title": "Handoff marker — src/lib/components/scheduling/AppointmentForm.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2746481724.md",
 			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "c5b97f4d10c1c9f7c869a202e3f9db886ed189f1700f929b0bb785dd889aab88",
+			"sourceFingerprint": "1b4a67034c42aa09cb1f3305924367172d79cee1ba2c3a090d11c3721e8fbdb1",
 			"score": 48,
 			"band": "low",
 			"axes": {
@@ -10353,23 +10354,88 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 3,
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Missing real pricing data source for appointment services is a billing-correctness gap and has already progressed to review status.",
+			"evidence": [
+				"marker: 'no server data source plumbs a real price for a service'",
+				"status: review"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:49.184Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-3641010326",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/notifications/scheduler/admission.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3641010326.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "37491e2a81e90944db8c7cc986faf17487a3ff6a58a1e134a98190ccdfc46e3d",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
 				"implementation": 3
 			},
 			"confidence": 4,
 			"recommendation": "group",
 			"relatedKeys": [
-				"proposal:handoff-minion-hub-2746481724",
-				"proposal:handoff-minion-hub-2843825962"
+				"proposal:handoff-minion-hub-4195909731"
 			],
-			"rationale": "Ambiguity over whether a failed settlement week retries on the next cycle is a financial-correctness gap in the same POS/appointments area as two related markers.",
+			"rationale": "Admission logic is missing the real Slice5 audience projector wiring, directly paired with the matching migration marker in this batch.",
 			"evidence": [
-				"src/routes/(app)/pos/appointments/+page.svelte:127 marker: 'retries on the next settle'",
-				"status review"
+				"marker: 'Wire the qualified Slice5 audience projector here'",
+				"same Slice5 projector referenced in migration marker"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:25:24.171Z"
+			"scoredAt": "2026-10-05T01:52:49.184Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-4195909731",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — supabase/migrations/20261003160000_notification_worker_scheduler.sql (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-4195909731.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "c5d72f76d3d5d6b6782c07750c46317b68c4b2552f47735f4495e52f0c654b40",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-3641010326"
+			],
+			"rationale": "Migration marker requires registering the real Slice5 projector before enabling the scheduler, matching the admission.ts marker in this batch.",
+			"evidence": [
+				"marker: 'Register and qualify the real Slice5 projector before enabling'",
+				"pairs with admission.ts Slice5 marker"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:49.184Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-902723699",
@@ -11529,38 +11595,6 @@
 			"scoredAt": "2026-10-03T00:11:03.768Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-0d842850a5ca",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/tags/tag-bulk.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0d842850a5ca.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "3c159e340df2fbe1f6bc2cdad6eba412bd7005b1f0085c999e3a4152a3076507",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved finding gives a concrete N+1 diagnosis and a clear batching fix direction for tag-bulk.ts.",
-			"evidence": [
-				"applying 5 tags to 10 rows triggers 50 API calls instead of 1-2",
-				"Fix direction: Batch the tag operations into a single bulk API call"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T07:29:34.805Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-20449cc8b981",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12081,39 +12115,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:24:29.546Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-4c987be11c56",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/sell/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-4c987be11c56.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "0885c5577d3c417c26dd55103e78c57e04514a8e3e76fdedca5a9923c9d56446",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Checkout tender selector is missing when no payment method is registered, with a plausible fix direction but no code yet.",
-			"evidence": [
-				"marker: 'the tender only appears when the org registered a method'",
-				"diagnosis proposes disabled selector or CTA linking to payment setup",
-				"status approved, filed against merged PR #278"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T05:54:16.999Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ac3dd6e80c62",
@@ -13539,6 +13540,38 @@
 			"scoredAt": "2026-10-03T05:25:32.539Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-547fb86d71ab",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/join/requests.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-547fb86d71ab.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "205bef9565d57063dde01db17b53982eb8962958788d12d6904442f86a9151bb",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Identifies a concrete reliability gap (best-effort fan-out can silently drop join requests) with a reasonably clear fix direction toward a durable queue.",
+			"evidence": [
+				"marker: 'Replace this bounded best-effort fan-out with the durable'",
+				"fix direction names durable queue with retry semantics"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:53:57.051Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-6200323e3d73",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13635,6 +13668,73 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T02:24:17.600Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-9e5476fb9464",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/agents/workshop/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-9e5476fb9464.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "87aa4ff2f032c0a6bebd927ea105ab1e8e3011bad99500ba312c9903e18c322f",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-173e649b1baf",
+				"proposal:postmerge-minion-hub-6f2aa5ee82ec"
+			],
+			"rationale": "Describes missing pending/error state handling for workshop create/open/delete under the same HC-037 effort as two other findings touching the same workshop state files.",
+			"evidence": [
+				"marker: 'HC-037 owns pending/error admission for create/open/delete'",
+				"fix direction names src/lib/state/workshop.ts state machine wiring"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:53:57.051Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-a7ee4e7dc38b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/notifications/scheduler/admission.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a7ee4e7dc38b.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "d2fa999b6a86080efe73b24ff5f9ca2416b6525c7b7d191276df93c5800c0c90",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Flags that the notification admission gate is missing audience targeting logic, which could let notifications bypass segmentation, but the fix still requires locating an unverified 'Slice5 projector' implementation.",
+			"evidence": [
+				"marker: 'Wire the qualified Slice5 audience projector here'",
+				"diagnosis: 'notifications may bypass intended targeting constraints'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:53:57.051Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-adb53e4fbbd5",
@@ -13738,6 +13838,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T01:24:06.901Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-cfb9f10ced2a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/gateway/actions/notify-user/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-cfb9f10ced2a.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "331ed5a6d80599387a5736c9be970e02c106d2632776de0bb89f49ad83795900",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-ae7bedc4474a",
+				"proposal:postmerge-minion-hub-bb9baf1f3156"
+			],
+			"rationale": "Legacy email call replacement is part of the same incomplete notification pipeline and the auto-diagnosis admits it lacks enough context to act alone.",
+			"evidence": [
+				"diagnosis states 'I need to read the incomplete TODO to give you a specific fix direction'",
+				"marker text truncated mid-sentence"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:55:04.322Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d4a019b21d9a",
@@ -15077,38 +15212,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T01:28:13.878Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-902041533",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/pos/SellCart.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-902041533.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "f0b7e0560b8ccf75b0c89dcf026aee79b2bfc25e1b38a269992713168c0290e1",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A one-way discount affordance in the POS sell cart risks inconsistent cart state during checkout.",
-			"evidence": [
-				"marker: 'the affordance is one-way — once opened, a line's discount'",
-				"status: draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:29:42.152Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-7854cfd",
@@ -16755,6 +16858,37 @@
 			"scoredAt": "2026-09-28T11:36:36.137Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1444958243",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/api/gateway/actions/notify-user/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1444958243.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "a1d343c6722e8c0a0637c2f7fc137ff8dd9b467bfc7dab61c0aa40fc44afe6dc",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Single clear marker to replace a legacy email call and destination is bounded and actionable.",
+			"evidence": [
+				"\"Replace the legacy email call and profile destination\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:05.276Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-1917527025",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16784,6 +16918,71 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T01:23:26.852Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2582471367",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/pos-packages.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2582471367.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "7e02647f3623f0e3e288f06ecb7600dcc7f64e84188d678057c9c7b5911e5f51",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-3818988565"
+			],
+			"rationale": "Marker flags a future cancel-grant action dependency in pos-packages.service.ts but is truncated and thin on scope detail.",
+			"evidence": [
+				"marker: 'cancel a grant action on /pos/accounts will hit this'",
+				"status draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:49.184Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-824196027",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/join/requests.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-824196027.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "cbbde36d102c036e7a9e38956038b2ee13a203ca0b4204a832fa5ad9a51d9c07",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Join-request fan-out is described as bounded best-effort needing a durable replacement, a reliability gap with unclear scope.",
+			"evidence": [
+				"marker: 'Replace this bounded best-effort fan-out with the durable'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:49.184Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-0323908",
@@ -16980,6 +17179,40 @@
 			"scoredAt": "2026-10-03T00:11:03.768Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-b6fd4bd15db2",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/lib/money/decimal-oracle.json (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b6fd4bd15db2.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "8fbb5063027c8a9ee050ef715294fc216a1cccc12fd9984ecec9c4201e0580c2",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-e73000965c43"
+			],
+			"rationale": "Two unscanned, oddly-named decimal-oracle files in the same money module from the same PR should be investigated as one review task.",
+			"evidence": [
+				"file src/lib/money/decimal-oracle.json unscanned by merge-verification pipeline",
+				"sibling decimal-oracle.py also unscanned in same PR"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:55:04.322Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-cff27fef4e3c",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17010,6 +17243,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T23:17:02.574Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-e73000965c43",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/lib/money/decimal-oracle.py (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e73000965c43.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "f2e83307aaefff21505afcb553ed186eab27619e78f5ca4e7d7f75db7e641849",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b6fd4bd15db2"
+			],
+			"rationale": "A Python file unexpectedly present in a TypeScript money module alongside an unscanned JSON sibling suggests one combined review task.",
+			"evidence": [
+				"Python file appeared in a SvelteKit/TypeScript project but wasn't scanned",
+				"sibling decimal-oracle.json also unscanned from the same PR"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:55:04.322Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-f67a7acec33b",
@@ -18106,6 +18373,37 @@
 			"scoredAt": "2026-10-05T01:24:35.191Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-3097506921",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/notifications/catalog.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3097506921.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "f702792fb6f291310d91311fd02693c2701758abaf1366a4eee9523504e22767",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Marker describes an unfinished producer/consumer registration contract in the notification catalog, an architectural gap but underspecified.",
+			"evidence": [
+				"marker: 'producers and audience/template/navigation consumers must register'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:49.184Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-3867107013",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18496,6 +18794,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T08:25:52.185Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-78f81166a2c1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/notifications/catalog.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-78f81166a2c1.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "f16fe013a0fd2732f8ef6923516a5fcc6d112d414fd9b1c94487c121a474e7df",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Truncated TODO about a notification producer/consumer registration contract; the risk described (silent integration failures) is plausible but the diagnosis is speculative and the marker itself is incomplete.",
+			"evidence": [
+				"marker cuts off: 'must register their'",
+				"diagnosis explicitly speculates: 'the concern is clear... but text cuts off'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:53:57.051Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9068ad039a31",
@@ -19024,37 +19354,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:38:40.092Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-2249203609",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/data-table/DataTable.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2249203609.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "2d95519af381f07e3f5abb6347d211d5ec9de9f5233c6c4488d932ac3e0ff0fc",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The marker only gestures at future 'global server custom-property sort/filter/export planning' without a concrete scope or outcome to execute against.",
-			"evidence": [
-				"add global server custom-property sort/filter/export planning"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:24:35.191Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1883922325",
@@ -20108,37 +20407,6 @@
 			"scoredAt": "2026-09-28T11:37:41.128Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2582471367",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/server/services/pos-packages.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2582471367.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "a7be5ccec38e6d4304aaa7eed3f61b898a443ede735a37999a908948f59c0cfd",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Marker is a forward-looking dependency note for a future cancel-grant action (spec §4.2) rather than an immediately actionable task.",
-			"evidence": [
-				"§4.2's cancel a grant action on /pos/accounts will hit this"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:24:35.191Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-2785164896",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20174,14 +20442,14 @@
 			"scoredAt": "2026-09-28T11:37:41.128Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2843825962",
+			"key": "proposal:handoff-minion-hub-3215540846",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/pos/appointments/new/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2843825962.md",
+			"title": "Handoff marker — tests/fixtures/critical-journeys/README.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3215540846.md",
 			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "dc8fdf63513d7eacf438df795b8273aeef3d436dc86df26f1f38276c0482367d",
+			"sourceFingerprint": "cfe4200ba40f5e190a2cbac5007c2b502e8025d4816b873c3973a30b2d2b2840",
 			"score": 33,
 			"band": "low",
 			"axes": {
@@ -20193,54 +20461,17 @@
 				"specification": 3,
 				"implementation": 2
 			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-2746481724",
-				"proposal:handoff-minion-hub-3035029616"
-			],
-			"rationale": "An orphaned new-appointment route with no caller yet is in the same POS/appointments feature area as two related pricing/settlement markers.",
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Critical-journey test fixtures lack real login/session and CRM routing qualification, weakening test coverage confidence.",
 			"evidence": [
-				"src/routes/(app)/pos/appointments/new/+page.svelte:26 marker: 'nothing links here with these params yet'",
-				"status draft"
+				"marker: 'Qualify actual login/session and authenticated CRM routing'",
+				"file: tests/fixtures/critical-journeys/README.md"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:25:24.171Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-3579215965",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/api/scheduling/bookings/[id]/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3579215965.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "90f1d0005e2b8617f33b123b39f4b8f56b7e0cfd580775021300b2fa69afa3df",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-34104122",
-				"proposal:handoff-minion-hub-3542676477"
-			],
-			"rationale": "Booking read endpoint mixing package-grant and plan money is a financial-correctness concern in the same scheduling area as other batch markers.",
-			"evidence": [
-				"marker: 'this read now returns package-grant money, plan money and an' at bookings/[id]/+server.ts:13"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:26:32.290Z"
+			"scoredAt": "2026-10-05T01:52:49.184Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-368607906",
@@ -20470,6 +20701,41 @@
 			"scoredAt": "2026-10-04T01:31:58.334Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-173e649b1baf",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/state/workshop/workshop.svelte.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-173e649b1baf.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "65797fbd03c611cc21b52e0179c2c2c166f7f95fc2024083284de6989bc18cdb",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-6f2aa5ee82ec",
+				"proposal:postmerge-minion-hub-9e5476fb9464"
+			],
+			"rationale": "Truncated TODO about workspace preservation under HC-037 shares the same feature and file family as two other HC-037 workshop-state findings and should be consolidated into one goal.",
+			"evidence": [
+				"marker text cuts off: 'HC-037 must preserve the current workspace until create is'",
+				"diagnosis admits: 'I'd need to see the full TODO comment and HC-037 details'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:53:57.051Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-464643f50d6e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20534,6 +20800,41 @@
 			"scoredAt": "2026-09-30T22:24:18.253Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-6f2aa5ee82ec",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/state/workshop/workshop.svelte.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6f2aa5ee82ec.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "f838bc58bb5e8939a5fe6de97a27a26aea36977431a783dc9a50918ba8ddfb24",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-173e649b1baf",
+				"proposal:postmerge-minion-hub-9e5476fb9464"
+			],
+			"rationale": "Another HC-037 workshop-snapshot TODO with an auto-diagnosis that only shows unfinished tool invocations and no actual findings, so it should be merged into the combined HC-037 goal.",
+			"evidence": [
+				"marker: 'HC-037 must validate and fence this snapshot before publishing'",
+				"diagnosis section shows only incomplete read/grep tool-call stubs, no conclusion"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:53:57.051Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-821abba8cc10",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20567,6 +20868,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T00:11:03.768Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-86d372957953",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/sell/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-86d372957953.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "5d2ef8bd7480e90325571b8781339ca510be54c7b7dc694ebb8c2cde27f0cfaa",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Points to an existing proposal document (HS-011) for fuller context, which improves traceability, but the auto-diagnosis never actually reports what that proposal says.",
+			"evidence": [
+				"marker: 'HS-011 in minion-meta/proposals/2026-10-02-hub-gateway-production-readiness-recon.md'",
+				"diagnosis only shows attempted reads, no extracted content"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:53:57.051Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9732f7ab41ad",
@@ -21561,38 +21894,6 @@
 			"scoredAt": "2026-10-05T01:21:21.606Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-1097951829",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/api/pos/settings/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1097951829.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "832e0c242399191babcce397aa4b40c21c99cb4e965e42a7a593f2db3f8a124a",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The marker text is truncated mid-sentence, leaving no clear description of the root cause or remediation needed.",
-			"evidence": [
-				"'the confirmed root cause (QA-stack app logs) was' [truncated]",
-				"status draft, single marker"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:22:20.442Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-1447734948",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21722,14 +22023,14 @@
 			"scoredAt": "2026-10-03T21:22:02.187Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-2d728adb7c22",
+			"key": "proposal:postmerge-minion-hub-0f6b2d0e3194",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2d728adb7c22.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "69b42c57304fa7b533338e67852f483e3ddd4a71264404d9ecae7f8032d0aa0a",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-design-tokens-0.1.1-readiness.2.tgz (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0f6b2d0e3194.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "67e58d32c3bba85c4e73b3903c7d808b8d5c78b9e2259f75be3f09c9d9b207ca",
 			"score": 30,
 			"band": "low",
 			"axes": {
@@ -21738,34 +22039,32 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 7,
+				"implementation": 7
 			},
-			"confidence": 3,
+			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-2164a4547ea3",
-				"proposal:postmerge-minion-hub-310f268c7aca",
-				"proposal:postmerge-minion-hub-2e738f3f945a"
+				"proposal:postmerge-minion-hub-6510cf161973"
 			],
-			"rationale": "Truncated TODO on an 'optional' POS field is low-clarity in isolation and belongs with the other PR#278 POS gaps for a single scoping pass.",
+			"rationale": "A clearly actionable but low-severity repo-hygiene fix (remove binary tgz, gitignore, declare as dependency) that duplicates the other tgz finding and should be handled as one cleanup goal.",
 			"evidence": [
-				"marker text cuts off mid-sentence: \"'optional' is STORED and surfaced in /pos/settings but is\"",
-				"same merged PR #278 as sibling POS findings"
+				"file: deps/minion-stack-design-tokens-0.1.1-readiness.2.tgz committed to git",
+				"fix direction: gitignore, git rm --cached, declare as package.json dependency"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T06:41:39.252Z"
+			"scoredAt": "2026-10-05T01:53:57.051Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-3602cf6ee4f0",
+			"key": "proposal:postmerge-minion-hub-6510cf161973",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos-accounts.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3602cf6ee4f0.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "3814e8c597a3b48672febde57cd81cab4490b9ed673996e659e9bbe4911c3109",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-ui-0.1.0-readiness.1.tgz (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6510cf161973.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "63a7975e2bad55bf999c92075cd2a6540328db414443329c81827910a9d3ce31",
 			"score": 30,
 			"band": "low",
 			"axes": {
@@ -21774,56 +22073,22 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 7,
+				"implementation": 7
 			},
-			"confidence": 3,
+			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-2164a4547ea3",
-				"proposal:postmerge-minion-hub-310f268c7aca",
-				"proposal:postmerge-minion-hub-2e738f3f945a"
+				"proposal:postmerge-minion-hub-0f6b2d0e3194"
 			],
-			"rationale": "Multi-ticket client handling gap in the POS accounts service is another PR#278 loose end that should be consolidated with the rest.",
+			"rationale": "Same binary-tgz-in-git hygiene issue as the design-tokens tarball finding; best handled as a single cleanup goal rather than two separate ones.",
 			"evidence": [
-				"marker: 'a client with SEVERAL pending tickets only gets a link to'",
-				"same merged PR #278 as sibling POS findings"
+				"file: deps/minion-stack-ui-0.1.0-readiness.1.tgz committed to git",
+				"fix direction: gitignore, rebuild from source or use git-lfs/registry"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T06:41:39.252Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-5bc07f54a4ac",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos-accounts.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5bc07f54a4ac.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "9370353674e473e9b79ed2fcc12bcac56a27b0773db2941b291775a8545d9c60",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The auto-diagnosis is incomplete, explicitly asking for the full TODO text before any fix direction can be given.",
-			"evidence": [
-				"diagnosis text: 'Could you share the complete TODO text? The finding is truncated'",
-				"marker itself cuts off mid-sentence: 'whose older rows'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T05:54:16.999Z"
+			"scoredAt": "2026-10-05T01:53:57.051Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-77a6343cc924",
@@ -21858,6 +22123,111 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T05:29:21.227Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-de937a67722d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.1-readiness.1.tgz (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-de937a67722d.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "d3f66d510cde76af414989db7544d81389f341de851a661c9e189e4598ef755f",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-edfa7d5328ee",
+				"proposal:postmerge-minion-hub-fb35d494ee25"
+			],
+			"rationale": "Three committed dependency tarballs under deps/ share the identical anti-pattern and remediation, so one cleanup goal covers all.",
+			"evidence": [
+				"binary .tgz committed to deps/ blocks diff scanning",
+				"fix direction: git rm the tarball, gitignore deps/, fetch via package manager"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:55:04.322Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-edfa7d5328ee",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.1-readiness.2.tgz (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-edfa7d5328ee.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "e04fc4dd9d6e450c0a92e19037d5303306ce721fe8efa851363a5bd290b1e4ac",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-de937a67722d",
+				"proposal:postmerge-minion-hub-fb35d494ee25"
+			],
+			"rationale": "Duplicate instance of the committed-tarball anti-pattern found in sibling deps/ scan-gaps, sharing the same remediation.",
+			"evidence": [
+				"deps/minion-stack-shared-0.9.1-readiness.2.tgz is a committed binary archive",
+				"identical fix direction to readiness.1 and workforce-client tarballs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:55:04.322Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-fb35d494ee25",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-workforce-client-0.4.0-readiness.1.tgz (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fb35d494ee25.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "53e26fcbab0a564ea22bc2204386a717331b6429e4d045b1004a7e7d028d30dd",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-de937a67722d",
+				"proposal:postmerge-minion-hub-edfa7d5328ee"
+			],
+			"rationale": "Another committed dependency tarball in deps/, part of the same cleanup as the other two tgz scan-gaps.",
+			"evidence": [
+				"deps/minion-stack-workforce-client-0.4.0-readiness.1.tgz committed binary",
+				"fix direction: git rm and .gitignore deps/"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:55:04.322Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-a357d1f6520e",
@@ -21923,6 +22293,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T10:51:15.326Z"
+		},
+		{
+			"key": "pr:minion-meta#754",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#754 docs: readiness program contracts, evidence and shared-package corrections (checkpoint 2026-10-03)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/754",
+			"sourceUpdatedAt": "2026-10-05T01:45:31Z",
+			"sourceFingerprint": "18d020a904c98195bc4caf5b2ada16221437e40a5fe61d4a52b596dbc821d29e",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Low-risk documentation/checkpoint bundle with clear scope and already-applied upstream merge (hub #431) ready to land.",
+			"evidence": [
+				"37 commits of evidence/contracts under readiness-2026-10-03",
+				"Hub #431 merged and deployed with 7 migrations"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:05.276Z"
 		},
 		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
@@ -22053,38 +22455,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T01:25:24.171Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-3215540846",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — tests/fixtures/critical-journeys/README.md (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3215540846.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "d83f5c98bfd5fd916a43a9aaed860b3b3745a296329728c141b4ef8d7a8f9efa",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A note that critical-journey test fixtures don't yet qualify real login/session and CRM routing is a test-coverage gap worth tracking but lacks defined scope.",
-			"evidence": [
-				"tests/fixtures/critical-journeys/README.md:47 flags unqualified login/session + CRM routing",
-				"status draft, no further scope given"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:26:32.290Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-3542676477",
@@ -22945,39 +23315,6 @@
 			"scoredAt": "2026-10-03T05:25:32.539Z"
 		},
 		{
-			"key": "run:minion_site#31686953033",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_site",
-			"title": "Claude Code",
-			"sourceUrl": "https://github.com/NikolasP98/minion-site/actions/runs/31686953033",
-			"sourceUpdatedAt": "2026-09-12T09:31:54Z",
-			"sourceFingerprint": "fd33d67a9bcb040c710991818cff95818ec5463761e5c0012f15091f3395c7b6",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failed CI run on minion_site's dev branch lacks enough detail to act on without first inspecting the actual failure logs.",
-			"evidence": [
-				"status: failure",
-				"repo: minion_site, branch dev",
-				"updatedAt 2026-09-12 (over 3 weeks old)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T16:51:01.296Z"
-		},
-		{
 			"key": "issue:minion-meta#583",
 			"kind": "issue",
 			"stage": "proposal",
@@ -23275,14 +23612,14 @@
 			"scoredAt": "2026-10-05T01:23:26.852Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2310019459",
+			"key": "proposal:handoff-minion-hub-2249203609",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/pos/tickets/[id]/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2310019459.md",
+			"title": "Handoff marker — src/lib/components/data-table/DataTable.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2249203609.md",
 			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "1e6a3a432b5bceb0ed870de9e59d567f8f5c38c81681289fc9447023bd72f9e5",
+			"sourceFingerprint": "4c56305e35ab00e2386fe06e37b3a1968bd15ef9c4d08b4ad063d03a82acad26",
 			"score": 26,
 			"band": "low",
 			"axes": {
@@ -23291,19 +23628,19 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 5
+				"specification": 2,
+				"implementation": 2
 			},
 			"confidence": 5,
-			"recommendation": "reevaluate",
+			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Missing calendar deep-link param is a small, low-urgency feature gap on the POS ticket page.",
+			"rationale": "Marker reads as a speculative future-feature note rather than a scoped, verifiable task.",
 			"evidence": [
-				"no calendar deep-link param exists yet"
+				"\"add global server custom-property sort/filter/export planning\""
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:24:35.191Z"
+			"scoredAt": "2026-10-05T01:52:05.276Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2599625050",
@@ -27178,37 +27515,6 @@
 			"scoredAt": "2026-10-05T01:22:20.442Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-1315287309",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/scheduling/kit/settled-day.svelte.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1315287309.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "365379c759ef3143f49917672904cd846bd51bce980a46daaa328b8c5ae6da50",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Marker text is truncated and gives no clear actionable detail about the test setup issue.",
-			"evidence": [
-				"TODO references bun+vitest+@sveltejs/vite-plugin-svelte setup, text cut off at L4"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:23:26.852Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-2131986185",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27238,6 +27544,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T01:24:35.191Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2310019459",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/pos/tickets/[id]/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2310019459.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "517de4ddef6a01a66ad57410a37150e1bb75ccd14efa5ff98a3481e61fd31fcc",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Marker is a vague note about a missing calendar deep-link param on one ticket page, low urgency and narrow scope.",
+			"evidence": [
+				"marker: 'no calendar deep-link param exists yet'",
+				"single file, single route"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:49.184Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2778272735",
@@ -27272,6 +27610,37 @@
 			"scoredAt": "2026-10-05T01:25:24.171Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-505979950",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/agents/workshop/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-505979950.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "e99c1d0bc2c7906ce5307d4f2979ad0a704cebe917fe83b9f26ca4c642a9ee29",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Marker reads as an ownership note pointing to ticket HC-037 rather than describing an unresolved open end in this file.",
+			"evidence": [
+				"marker: 'HC-037 owns pending/error admission for create/open/delete'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:49.184Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-815818272",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27302,6 +27671,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T01:29:42.152Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-902041533",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/pos/SellCart.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-902041533.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "c02aa78dfb04109298683a55fd9ed5bdbde2091cdf3fa2067304984a928ead14",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "One-way discount affordance on the POS sell cart is a minor UX inconsistency with limited blast radius.",
+			"evidence": [
+				"marker: 'the affordance is one-way — once opened, a line's discount'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:52:49.184Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-991916159",
@@ -27530,6 +27930,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:25:32.539Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-a271953da5c9",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/lib/money/decimal.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a271953da5c9.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "988901a51eb0e691ee367f067c8d9575c1e1c1072b2605d1be247ee42a22746a",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A scan-gap on a test file with zero reported changes is likely a scanner artifact rather than a real defect, but needs a quick human/rescan confirmation before closing.",
+			"evidence": [
+				"changes=0 for src/lib/money/decimal.test.ts, suggesting empty file or failed diff retrieval",
+				"DoD: rescan retrieves file or human confirms gap is expected"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:53:57.051Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ae985ee3170a",
@@ -28046,37 +28478,6 @@
 			"scoredAt": "2026-10-05T01:26:32.290Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-3552380058",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/tags/tag-bulk.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3552380058.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "3bb4b22ce6142cb3791abcdbfcfa6638ee2129ea9e37e96875ae66288cb3df0d",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The marker itself states the per-row-per-tag fetch pattern is fine for the bulk bar's current scale, indicating no real open defect.",
-			"evidence": [
-				"marker: 'one fetch per (row × tag) — fine for the bulk bar's' at tag-bulk.ts:65"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:26:32.290Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-51431d943fcd",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -28207,6 +28608,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T17:56:20.025Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in AGENTS.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d57ab49bab2f.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "cdcc5247a0ef0c42d8fbd213c34afea4a80320fbd666dc3aa5f3fb1c12a0e153",
+			"score": 13,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The flagged marker text is AGENTS.md's own documentation of the TODO(handoff) ledger convention, not an actual unresolved task, making this a scan false-positive.",
+			"evidence": [
+				"marker text quotes AGENTS.md's handoff-ledger policy wording verbatim",
+				"file: AGENTS.md (the policy document itself, not application code)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:55:04.322Z"
 		},
 		{
 			"key": "issue:minion-meta#373",
@@ -28497,14 +28930,14 @@
 			"scoredAt": "2026-10-05T01:23:26.852Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
+			"key": "proposal:handoff-minion-hub-2843825962",
 			"kind": "proposal",
 			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/pos/appointments/new/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2843825962.md",
 			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "5232d4cb420e9f7532a7292b60a005833519fcdbbb3dc10ec953db836aa6f6f6",
+			"sourceFingerprint": "cfc6adbc3c7f9f579edd10f66562b081f25522f78d7498c1f6bc0de6cdb3342d",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -28513,20 +28946,51 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 1,
-				"implementation": 1
+				"specification": 2,
+				"implementation": 2
 			},
-			"confidence": 7,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The quoted markers are substrings copied from historical ranking evidence/rationale text inside a generated data file, not real TODO(handoff) comments requiring work.",
+			"rationale": "Marker states nothing currently links to this route with the relevant params, suggesting dead/unused code path.",
 			"evidence": [
-				"rankings/index.json:10674 — --apply is intentionally unimplemented",
-				"rankings/index.json:4074 — drizzle/0008_workshop_thumbnail.sql"
+				"marker: 'nothing links here with these params yet'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T01:31:01.539Z"
+			"scoredAt": "2026-10-05T01:52:49.184Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "3a295506afd4fa019a1a1a8ab5e7ed05c18848e9ec604145cb4074d1a0a51b22",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The quoted 'markers' are text snippets from rankings/index.json itself, which aggregates other candidates' prose, not actual TODO(handoff) comments in source code.",
+			"evidence": [
+				"file flagged is rankings/index.json, the ranking data file itself",
+				"quoted lines are fragments of other proposals' summaries (e.g. ALTER TABLE, drop column) not code comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T01:53:57.051Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
