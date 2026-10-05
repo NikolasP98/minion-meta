@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-4036985971
 title: Handoff marker — scripts/qc/proposal-requirement-map.mjs (minion-meta)
-status: draft
+status: merged
 created: 2026-09-16
 updated: 2026-10-05
 repos: [minion-meta]
 tags: [handoff-sweep]
+merged_into: 2026-09-08-platform-qc-remediation
 ---
 
 # Handoff marker — scripts/qc/proposal-requirement-map.mjs

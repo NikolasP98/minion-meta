@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-451854561
 title: Handoff marker — src/server/services/job-stock-backend-fault.fixture.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-12
 updated: 2026-10-05
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-7440051c7752
 ---
 
 # Handoff marker — src/server/services/job-stock-backend-fault.fixture.ts

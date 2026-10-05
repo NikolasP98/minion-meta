@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-1536014697
 title: Handoff marker — src/routes/api/pos/packages/grants/[id]/redeem/+server.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-16
 updated: 2026-10-05
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-2e738f3f945a
 ---
 
 # Handoff marker — src/routes/api/pos/packages/grants/[id]/redeem/+server.ts

@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-815818272
 title: Handoff marker — scripts/qa/seed/seed.contract.test.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-16
 updated: 2026-10-05
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-cb4eec61bb4f
 ---
 
 # Handoff marker — scripts/qa/seed/seed.contract.test.ts

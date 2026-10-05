@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-2582471367
 title: Handoff marker — src/server/services/pos-packages.service.ts (minion_hub)
-status: draft
+status: review
 created: 2026-09-16
 updated: 2026-10-05
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-7ec5d7436363
 ---
 
 # Handoff marker — src/server/services/pos-packages.service.ts

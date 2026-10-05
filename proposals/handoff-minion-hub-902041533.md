@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-902041533
 title: Handoff marker — src/lib/components/pos/SellCart.svelte (minion_hub)
-status: draft
+status: review
 created: 2026-09-16
 updated: 2026-10-05
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-198db99358ad
 ---
 
 # Handoff marker — src/lib/components/pos/SellCart.svelte

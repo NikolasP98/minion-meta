@@ -445,3 +445,4 @@ The following handoff-sweep marker proposals are duplicates of items already tra
 - handoff-minion-meta-2934878458 (`.../sender/before/packages/shells-bridge/src/run-journal.ts`)
 - handoff-minion-meta-915328540 (`.../sender/source/packages/shells-bridge/src/bridge.ts`)
 - handoff-minion-factory-3080677443 (`tool-host/src/runner-effects.test.ts`, matches the "2026-09-12 governance and ACP qualification limits" runner-effects TODO above)
+- handoff-minion-meta-4036985971 (`scripts/qc/proposal-requirement-map.mjs`, matches the `qc-history-body-review` record in the handoff-ledger block above)

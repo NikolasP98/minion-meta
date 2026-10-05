@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-3867107013
 title: Handoff marker — src/lib/components/workshop/WorkshopCanvas.svelte (minion_hub)
-status: draft
+status: review
 created: 2026-09-12
 updated: 2026-10-05
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-e2abba73de07
 ---
 
 # Handoff marker — src/lib/components/workshop/WorkshopCanvas.svelte
