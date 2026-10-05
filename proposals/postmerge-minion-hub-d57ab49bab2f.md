@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-d57ab49bab2f
 title: "Post-merge finding — todo-handoff in AGENTS.md (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-05
 updated: 2026-10-05
 repos: [minion-hub]
