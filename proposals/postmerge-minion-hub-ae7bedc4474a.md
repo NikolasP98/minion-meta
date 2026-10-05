@@ -42,3 +42,11 @@ This outbox table was created but never wired into the event pipeline — notifi
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/431
 - file: `supabase/migrations/20261003150000_notification_event_outbox.sql`
 - checked: 2026-10-05
+
+## Merged content (from handoff-minion-hub-1979367351)
+
+Same `TODO(handoff)` marker, reported by the handoff-ledger sweep. Exact
+source line:
+
+- `NikolasP98/minion_hub@master supabase/migrations/20261003150000_notification_event_outbox.sql:234`
+  https://github.com/NikolasP98/minion_hub/blob/master/supabase/migrations/20261003150000_notification_event_outbox.sql#L234

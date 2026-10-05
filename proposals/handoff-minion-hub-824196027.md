@@ -1,12 +1,18 @@
 ---
 id: handoff-minion-hub-824196027
 title: Handoff marker — src/server/services/join/requests.service.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-547fb86d71ab
 created: 2026-10-05
 updated: 2026-10-05
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
+
+> Reconciled: duplicates `postmerge-minion-hub-547fb86d71ab`, which covers the
+> identical `TODO(handoff)` marker (same file, line 39, same merged PR #431)
+> with added diagnosis. This proposal's unique content (the exact source line
+> + permalink) has been appended to the canonical file.
 
 # Handoff marker — src/server/services/join/requests.service.ts
 

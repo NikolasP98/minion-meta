@@ -49,3 +49,11 @@ This incomplete TODO flags a **registration pattern gap** in the notifications s
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/431
 - file: `src/lib/notifications/catalog.ts`
 - checked: 2026-10-05
+
+## Merged content (from handoff-minion-hub-3097506921)
+
+Same `TODO(handoff)` marker, reported by the handoff-ledger sweep. Exact
+source line:
+
+- `NikolasP98/minion_hub@master src/lib/notifications/catalog.ts:336`
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/notifications/catalog.ts#L336

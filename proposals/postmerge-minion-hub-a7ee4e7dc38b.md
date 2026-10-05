@@ -40,3 +40,11 @@ The `TODO(handoff)` marker at `src/server/services/notifications/scheduler/admis
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/431
 - file: `src/server/services/notifications/scheduler/admission.ts`
 - checked: 2026-10-05
+
+## Merged content (from handoff-minion-hub-3641010326)
+
+Same `TODO(handoff)` marker, reported by the handoff-ledger sweep. Exact
+source line:
+
+- `NikolasP98/minion_hub@master src/server/services/notifications/scheduler/admission.ts:74`
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/notifications/scheduler/admission.ts#L74

@@ -1,12 +1,18 @@
 ---
 id: handoff-minion-hub-1444958243
 title: Handoff marker — src/routes/api/gateway/actions/notify-user/+server.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-cfb9f10ced2a
 created: 2026-10-05
 updated: 2026-10-05
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
+
+> Reconciled: duplicates `postmerge-minion-hub-cfb9f10ced2a`, which covers the
+> identical `TODO(handoff)` marker (same file, line 30, same merged PR #431)
+> with added diagnosis. That proposal is already `approved`, so this tombstone
+> carries no further action.
 
 # Handoff marker — src/routes/api/gateway/actions/notify-user/+server.ts
 

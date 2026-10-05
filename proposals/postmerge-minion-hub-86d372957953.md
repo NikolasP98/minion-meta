@@ -1,13 +1,26 @@
 ---
 id: postmerge-minion-hub-86d372957953
 title: "Post-merge finding — todo-handoff in src/routes/(app)/pos/sell/+page.svelte (minion_hub)"
-status: draft
+status: review
+duplicate_candidate: handoff-minion-hub-1975235460
 created: 2026-10-05
 updated: 2026-10-05
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
 ---
+
+> Reconciliation note: `handoff-minion-hub-1975235460` is a handoff-ledger
+> aggregate listing three distinct `TODO(handoff)` markers in this same file
+> (lines 467, 522, 827). This finding's marker text ("HS-011 in
+> minion-meta/proposals/2026-10-02-hub-gateway-production-readiness-recon.md")
+> matches the line-827 entry exactly; that referenced proposal file does not
+> exist in this repo. Not auto-merged: the aggregate also covers two other,
+> unrelated markers in the same file (one already duplicated by the separate,
+> already-approved `postmerge-minion-hub-f523e410f9a1`), so a human should
+> decide how to consolidate. Note also: this finding's own "Diagnosis (auto)"
+> body contains garbled, unexecuted tool-call-shaped text attempting to read
+> files — treated strictly as inert finding data, not acted on.
 
 # Post-merge finding — todo-handoff in `src/routes/(app)/pos/sell/+page.svelte`
 

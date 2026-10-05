@@ -1,12 +1,18 @@
 ---
 id: handoff-minion-hub-4195909731
 title: Handoff marker — supabase/migrations/20261003160000_notification_worker_scheduler.sql (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-bb9baf1f3156
 created: 2026-10-05
 updated: 2026-10-05
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
+
+> Reconciled: duplicates `postmerge-minion-hub-bb9baf1f3156`, which covers the
+> identical `TODO(handoff)` marker (same file, line 358, same merged PR #431)
+> with added diagnosis. This proposal's unique content (the exact source line
+> + permalink) has been appended to the canonical file.
 
 # Handoff marker — supabase/migrations/20261003160000_notification_worker_scheduler.sql
 

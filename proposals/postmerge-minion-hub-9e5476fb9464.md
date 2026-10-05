@@ -40,3 +40,11 @@ The `TODO(handoff)` marker at `src/routes/(app)/agents/workshop/+page.svelte` is
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/431
 - file: `src/routes/(app)/agents/workshop/+page.svelte`
 - checked: 2026-10-05
+
+## Merged content (from handoff-minion-hub-505979950)
+
+Same `TODO(handoff)` marker, reported by the handoff-ledger sweep. Exact
+source line:
+
+- `NikolasP98/minion_hub@master src/routes/(app)/agents/workshop/+page.svelte:45`
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/agents/workshop/+page.svelte#L45

@@ -1,13 +1,21 @@
 ---
 id: postmerge-minion-hub-aa66710175de
 title: "Post-merge finding — todo-handoff in src/lib/state/workshop/workshop.svelte.ts (minion_hub)"
-status: draft
+status: review
+duplicate_candidate: handoff-minion-hub-1580198442
 created: 2026-10-05
 updated: 2026-10-05
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
 ---
+
+> Reconciliation note: `handoff-minion-hub-1580198442` is a handoff-ledger
+> aggregate listing three distinct `TODO(handoff)` markers in this same file
+> (lines 410, 439, 460). This finding's marker text matches the line-410 entry
+> exactly. Not auto-merged: the aggregate also covers two other, unrelated
+> markers in the same file, so a human should decide how the two findings
+> should be consolidated (e.g. per-marker vs. per-file granularity).
 
 # Post-merge finding — todo-handoff in `src/lib/state/workshop/workshop.svelte.ts`
 

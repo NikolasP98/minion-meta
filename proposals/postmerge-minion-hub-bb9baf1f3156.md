@@ -40,3 +40,11 @@ The `TODO(handoff)` marker at `supabase/migrations/20261003160000_notification_w
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/431
 - file: `supabase/migrations/20261003160000_notification_worker_scheduler.sql`
 - checked: 2026-10-05
+
+## Merged content (from handoff-minion-hub-4195909731)
+
+Same `TODO(handoff)` marker, reported by the handoff-ledger sweep. Exact
+source line:
+
+- `NikolasP98/minion_hub@master supabase/migrations/20261003160000_notification_worker_scheduler.sql:358`
+  https://github.com/NikolasP98/minion_hub/blob/master/supabase/migrations/20261003160000_notification_worker_scheduler.sql#L358
