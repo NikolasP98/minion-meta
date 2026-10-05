@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-05T12:51:40.451Z",
+	"generatedAt": "2026-10-05T13:22:17.433Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2700,39 +2700,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T01:55:04.322Z"
-		},
-		{
-			"key": "run:minion (gateway)#37280408703",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37280408703",
-			"sourceUpdatedAt": "2026-10-05T08:37:10Z",
-			"sourceFingerprint": "f7bbaaec4bf9f0ff2b74c2e808619956850173c5183dd36ee52220d359e36dfa",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "CI failure on the DEV branch is a reliability gate worth fixing soon but the record lacks error detail needed to act on now.",
-			"evidence": [
-				"status: failure",
-				"workflow_dispatch on DEV",
-				"title: CI"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T12:51:40.305Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-marketplace-spec",
@@ -5512,6 +5479,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T06:21:18.394Z"
+		},
+		{
+			"key": "run:minion (gateway)#34587949149",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949149",
+			"sourceUpdatedAt": "2026-09-11T10:46:59Z",
+			"sourceFingerprint": "82bcff565fd5b409b3f4fe7fab98082e953214bbd231af0206d034e22b97120c",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"run:minion (gateway)#34587949471"
+			],
+			"rationale": "This CI failure on a DEV push closely coincides with a Docker Release failure on the same push, suggesting one shared root cause worth triaging together.",
+			"evidence": [
+				"status: failure, push on DEV, 2026-09-11T10:46:59Z",
+				"paired Docker Release run failed within the same ~30min window"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T13:22:17.294Z"
+		},
+		{
+			"key": "run:minion (gateway)#34587949471",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949471",
+			"sourceUpdatedAt": "2026-09-11T10:13:03Z",
+			"sourceFingerprint": "bff3ad4ee3500a2aec6da97aca9215d1679d66023b6066cb22d3e02f7198b91a",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"run:minion (gateway)#34587949149"
+			],
+			"rationale": "This Docker Release failure on a DEV push closely coincides with a CI failure on the same push, suggesting one shared root cause worth triaging together.",
+			"evidence": [
+				"status: failure, push on DEV, 2026-09-11T10:13:03Z",
+				"paired CI run failed within the same ~30min window"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T13:22:17.294Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-memory-governance-spec",
@@ -20735,6 +20770,38 @@
 			"scoredAt": "2026-10-05T01:29:42.152Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "7a94ad4c52c45e3adb45d08881ca669104dfde39b02a825716ea73f25d97aea1",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "All 18+ markers are located inside rankings/index.json itself, the ranking tool's own generated output, so this bundle is a self-referential sweep artifact rather than a coherent actionable goal.",
+			"evidence": [
+				"every marker cites rankings/index.json:LINE, the ranking tool's own file",
+				"markers quoted are disparate unrelated fragments, not one scoped problem"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T13:22:17.294Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-cfb9f10ced2a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20797,6 +20864,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T01:31:01.539Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit already merged a fix for nitter persistence/shutdown, leaving no open action for this deployment-health entry.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown (#295)",
+				"commit is co-authored and reads as already landed, not pending"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T13:22:17.294Z"
 		},
 		{
 			"key": "issue:minion-meta#327",
@@ -30251,38 +30350,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T01:26:32.290Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "35af3583fed2892e7578cab5e3ad35a36eea0397ca5108ae5d3b6c68ad0cb1d7",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are disjointed text fragments scraped from line numbers inside a generated rankings/index.json data file rather than genuine actionable TODO(handoff) comments in source code.",
-			"evidence": [
-				"all markers cite line numbers in rankings/index.json, a generated data artifact, not source",
-				"quoted fragments like \"drop column (proposal #16)\" and \"a drag cannot cross the runway's visible edge\" are disjointed JSON string excerpts, not coherent TODO text"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T09:22:06.908Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-51431d943fcd",
