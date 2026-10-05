@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-05T03:21:43.250Z",
+	"generatedAt": "2026-10-05T03:51:34.825Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6620,40 +6620,6 @@
 			"scoredAt": "2026-10-03T07:55:42.494Z"
 		},
 		{
-			"key": "issue:minion-meta#654",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#654 [monitor:unstick] reconcile run 3b721474 (minion-meta): claude agent step launch failure after successful deterministic reconcile",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/654",
-			"sourceUpdatedAt": "2026-09-28T03:17:52Z",
-			"sourceFingerprint": "df85b24607306b8ef26b3739020b694b834f1dc224ae6b2cbb85bdf90193d589",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#427"
-			],
-			"rationale": "The identical exit-126/turns=0 provider-launch signature recurred on four consecutive reconcile runs, indicating a systemic runner-box fault needing an infra fix rather than isolated retries.",
-			"evidence": [
-				"identical signature recurred on 4 consecutive runs within ~45 minutes",
-				"exit-126, turns=0, permission_denials=0, cost_usd=0"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T03:28:46.584Z"
-		},
-		{
 			"key": "issue:minion-meta#730",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11390,6 +11356,40 @@
 			"scoredAt": "2026-10-03T07:55:42.494Z"
 		},
 		{
+			"key": "issue:minion-meta#654",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#654 [monitor:unstick] reconcile run 3b721474 (minion-meta): claude agent step launch failure after successful deterministic reconcile",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/654",
+			"sourceUpdatedAt": "2026-09-28T03:17:52Z",
+			"sourceFingerprint": "df85b24607306b8ef26b3739020b694b834f1dc224ae6b2cbb85bdf90193d589",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"issue:minion-meta#427"
+			],
+			"rationale": "Four consecutive runs show an identical exit-126/turns=0 provider-launch fault, pointing to a systemic runner permission/PATH issue with a bounded fix path.",
+			"evidence": [
+				"4 consecutive runs (026c9691, dd679730, a71a0106, 3b721474) within ~45 minutes share the exit-126, turns=0, permission_denials=0, cost=0 signature",
+				"recommendation is to check claude CLI binary permissions/PATH on the runner image and add the signature to the host classifier"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T03:51:34.638Z"
+		},
+		{
 			"key": "issue:minion-meta#655",
 			"kind": "issue",
 			"stage": "proposal",
@@ -15862,38 +15862,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T20:54:03.465Z"
-		},
-		{
-			"key": "run:minion (gateway)#37107049589",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37107049589",
-			"sourceUpdatedAt": "2026-10-03T07:59:50Z",
-			"sourceFingerprint": "0bb0be399cfcab58a5eccae8e7bcaf9a3df970c3b0456c2fa4a574fa4b448ae4",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A CI failure on the gateway's DEV branch is reported with no logs or diagnosis, so its actual cause and actionability cannot be assessed from the catalog alone.",
-			"evidence": [
-				"status: failure",
-				"workflow_dispatch on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T03:21:43.070Z"
 		},
 		{
 			"key": "spec:2026-08-18-sdlc-transformation-roadmap",
@@ -20524,40 +20492,6 @@
 			"scoredAt": "2026-10-05T02:25:57.895Z"
 		},
 		{
-			"key": "issue:minion-meta#427",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#427 [monitor:unstick] reconcile run c512376f: provider launch failure (exit-126) after successful reconcile work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/427",
-			"sourceUpdatedAt": "2026-09-14T02:17:22Z",
-			"sourceFingerprint": "97226c88f5c4815f21c4e31439f2a83a8483491b4ae751be9ae46b3e1c08d4f6",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#654"
-			],
-			"rationale": "This is an earlier single instance of the same exit-126/turns=0 provider-launch fault later shown to be systemic in #654.",
-			"evidence": [
-				"exit-126, turns=0, permission_denials=0",
-				"reconcile work completed successfully before the provider step failed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T03:28:46.584Z"
-		},
-		{
 			"key": "issue:minion-meta#429",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22748,6 +22682,38 @@
 			"scoredAt": "2026-10-05T02:28:35.907Z"
 		},
 		{
+			"key": "run:minion (gateway)#37192477680",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37192477680",
+			"sourceUpdatedAt": "2026-10-04T10:10:06Z",
+			"sourceFingerprint": "24e7b07a89c851177fae8727e1b204c593539a8ca6b89ea52142b2bac92580d3",
+			"score": 32,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A recent CI failure on DEV is flagged but no failure cause or scope is given, so more diagnosis is needed before this can be actioned.",
+			"evidence": [
+				"CI run status: failure",
+				"workflow_dispatch trigger on DEV branch, updated 2026-10-04"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T03:51:34.638Z"
+		},
+		{
 			"key": "issue:minion-meta#542",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24422,6 +24388,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T02:29:26.851Z"
+		},
+		{
+			"key": "issue:minion-meta#427",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#427 [monitor:unstick] reconcile run c512376f: provider launch failure (exit-126) after successful reconcile work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/427",
+			"sourceUpdatedAt": "2026-09-14T02:17:22Z",
+			"sourceFingerprint": "97226c88f5c4815f21c4e31439f2a83a8483491b4ae751be9ae46b3e1c08d4f6",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#654"
+			],
+			"rationale": "This single exit-126/turns=0 occurrence is superseded by #654's more complete record of four consecutive recurrences with a concrete fix recommendation.",
+			"evidence": [
+				"single run c512376f with exit-126, turns=0, permission_denials=0",
+				"note says reconcile work already succeeded and retry was deemed safe"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T03:51:34.638Z"
 		},
 		{
 			"key": "issue:minion-meta#434",
@@ -30053,6 +30053,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T03:10:09.255Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The summary describes a nitter persistence/shutdown fix that was already merged, leaving no outstanding deployment action.",
+			"evidence": [
+				"summary is a merged commit message fixing nitter persistence and shutdown",
+				"status field is unknown with no pending deployment task described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T03:51:34.638Z"
 		},
 		{
 			"key": "pr:minion-meta#561",
