@@ -1,7 +1,7 @@
 import { uuid } from '../utils/uuid.js';
 import { newTraceparent } from './traceparent.js';
 import type { RequestFrame } from './types.js';
-import { CLIENT_ERROR_CODES, GatewayError } from './envelope-contract.js';
+import { CLIENT_ERROR_CODES, GatewayError } from './errors.js';
 
 /** Pending request tracker */
 export interface PendingRequest {
@@ -26,6 +26,15 @@ export function sendRequest(
       return reject(GatewayError.client(CLIENT_ERROR_CODES.NOT_CONNECTED, 'not connected'));
     }
     const id = uuid();
+    let serialized: string;
+    try {
+      if (typeof method !== 'string' || !method.trim()) throw new Error('empty method');
+      const frame: RequestFrame = { type: 'req', id, method, params, traceparent: newTraceparent(parentTraceparent) };
+      serialized = JSON.stringify(frame);
+    } catch {
+      reject(GatewayError.client(CLIENT_ERROR_CODES.INVALID_REQUEST, 'request could not be serialized'));
+      return;
+    }
     const timer = setTimeout(() => {
       pending.delete(id);
       reject(GatewayError.client(CLIENT_ERROR_CODES.TIMEOUT, `request '${method}' timed out after ${timeoutMs}ms`));
@@ -34,9 +43,8 @@ export function sendRequest(
       resolve: (v) => { clearTimeout(timer); resolve(v); },
       reject: (e) => { clearTimeout(timer); reject(e); },
     });
-    const frame: RequestFrame = { type: 'req', id, method, params, traceparent: newTraceparent(parentTraceparent) };
     try {
-      ws.send(JSON.stringify(frame));
+      ws.send(serialized);
     } catch (error) {
       clearTimeout(timer);
       pending.delete(id);

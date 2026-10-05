@@ -1,0 +1,124 @@
+TAP version 13
+# Subtest: the eight-row snapshot resolves known signatures, defers one refusal and leaves exactly two unmatched
+ok 1 - the eight-row snapshot resolves known signatures, defers one refusal and leaves exactly two unmatched
+  ---
+  duration_ms: 308.345178
+  type: 'test'
+  ...
+# Subtest: a canceled timeout requeues only after live PR/head reclassification completes
+ok 2 - a canceled timeout requeues only after live PR/head reclassification completes
+  ---
+  duration_ms: 289.863506
+  type: 'test'
+  ...
+# Subtest: a later cron tick resumes durable dev and non-dev canceled recovery intents
+ok 3 - a later cron tick resumes durable dev and non-dev canceled recovery intents
+  ---
+  duration_ms: 378.162196
+  type: 'test'
+  ...
+# Subtest: a refused canceled recovery reports failure instead of resumption
+ok 4 - a refused canceled recovery reports failure instead of resumption
+  ---
+  duration_ms: 194.529834
+  type: 'test'
+  ...
+# Subtest: a wedged queue files one board event and takes no run-level action
+ok 5 - a wedged queue files one board event and takes no run-level action
+  ---
+  duration_ms: 90.982606
+  type: 'test'
+  ...
+# Subtest: a budget-paused queue is healthy, not wedged
+ok 6 - a budget-paused queue is healthy, not wedged
+  ---
+  duration_ms: 76.133244
+  type: 'test'
+  ...
+# Subtest: an operator pause withholds remedies and the facilitator but still reports classification
+ok 7 - an operator pause withholds remedies and the facilitator but still reports classification
+  ---
+  duration_ms: 106.663282
+  type: 'test'
+  ...
+# Subtest: an operator pause escalates unmatched signatures instead of spawning the facilitator
+ok 8 - an operator pause escalates unmatched signatures instead of spawning the facilitator
+  ---
+  duration_ms: 95.124797
+  type: 'test'
+  ...
+# Subtest: a deliberate runner refusal is deferred: no requeue, no facilitator, no board event
+ok 9 - a deliberate runner refusal is deferred: no requeue, no facilitator, no board event
+  ---
+  duration_ms: 396.304146
+  type: 'test'
+  ...
+# Subtest: lineage depth: a chain that lives entirely in the local batch never falls back to the network
+ok 10 - lineage depth: a chain that lives entirely in the local batch never falls back to the network
+  ---
+  duration_ms: 344.526715
+  type: 'test'
+  ...
+# Subtest: lineage depth: a batch-truncated chain resolves through the exact ancestors[] GET sequence
+ok 11 - lineage depth: a batch-truncated chain resolves through the exact ancestors[] GET sequence
+  ---
+  duration_ms: 327.970982
+  type: 'test'
+  ...
+# Subtest: lineage depth: an unresolvable parent fails closed — no mutation, one unknown-lineage event, no facilitator
+ok 12 - lineage depth: an unresolvable parent fails closed — no mutation, one unknown-lineage event, no facilitator
+  ---
+  duration_ms: 405.879197
+  type: 'test'
+  ...
+# Subtest: lineage depth: a malformed (non-string, non-null) requeue_of fails closed the same way
+ok 13 - lineage depth: a malformed (non-string, non-null) requeue_of fails closed the same way
+  ---
+  duration_ms: 692.539932
+  type: 'test'
+  ...
+# Subtest: lineage depth: a fallback response that omits requeue_of entirely fails closed, not open to a known root
+ok 14 - lineage depth: a fallback response that omits requeue_of entirely fails closed, not open to a known root
+  ---
+  duration_ms: 604.695872
+  type: 'test'
+  ...
+# Subtest: lineage depth: all five rows in the lineage fixture resolve deterministically — no facilitator, no hang
+ok 15 - lineage depth: all five rows in the lineage fixture resolve deterministically — no facilitator, no hang
+  ---
+  duration_ms: 488.39527
+  type: 'test'
+  ...
+# Subtest: facilitator forwards credentials through the Docker client environment, never argv
+ok 16 - facilitator forwards credentials through the Docker client environment, never argv
+  ---
+  duration_ms: 1446.859004
+  type: 'test'
+  ...
+# Subtest: host API calls stream the admin bearer header to curl without credential argv
+ok 17 - host API calls stream the admin bearer header to curl without credential argv
+  ---
+  duration_ms: 64.036476
+  type: 'test'
+  ...
+# Subtest: facilitator API calls and guidance keep the scoped bearer value out of curl argv
+ok 18 - facilitator API calls and guidance keep the scoped bearer value out of curl argv
+  ---
+  duration_ms: 46.081834
+  type: 'test'
+  ...
+# Subtest: reconcile input failures share a causal incident and never trigger blind requeue or paid diagnosis
+ok 19 - reconcile input failures share a causal incident and never trigger blind requeue or paid diagnosis
+  ---
+  duration_ms: 187.134442
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6847.03499

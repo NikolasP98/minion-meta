@@ -151,7 +151,7 @@ minion/ (gateway)
   └── REST API + CLI
 
 minion_hub/ ←──shared DB──→ minion_site/
-  (@minion-stack/db schema + @minion-stack/auth factory — identical config both sides)
+  (shared schema packages; Hub uses Supabase Auth, Site uses Better Auth)
 ```
 
 ### Gateway Protocol
@@ -162,9 +162,9 @@ Connection flow: WS connect → `connect.challenge` event → `connect` request 
 
 ### Multi-Tenant Database
 
-`minion_hub` and `minion_site` share a database (Drizzle ORM + LibSQL/Turso). Local dev: SQLite file (`file:./data/minion_hub.db`). Production: Turso. Auth: `minion_hub` uses Supabase Auth (GoTrue); `minion_site` uses Better Auth 1.4.19.
+The Hub uses canonical PostgreSQL domain data through Drizzle and org-scoped `CoreCtx`/`withOrgCore` access. Legacy LibSQL/Turso tables remain compatibility surfaces; do not assume a SQLite-only fixture exercises production behavior. Read each subproject's database setup and migrations before changing shared schema. The Hub authenticates with Supabase Auth (GoTrue); the Site uses Better Auth and has a separate session.
 
-Hub DB has 35+ schema tables covering: agents, sessions, chat-messages, servers, channels, skills, reliability-events, missions, tasks, marketplace, workshop-saves, users, settings, and more. Schema files: `minion_hub/src/server/db/schema/`.
+Hub schema definitions live in `minion_hub/src/server/db/`, including PostgreSQL domain files and legacy compatibility schemas. Canonical shared definitions are published through `@minion-stack/db`; inspect consumers and migrations before changing them.
 
 ## Subproject Details
 

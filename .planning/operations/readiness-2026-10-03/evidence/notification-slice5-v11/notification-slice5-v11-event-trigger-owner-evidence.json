@@ -1,0 +1,183 @@
+{
+  "asIsFailure": {
+    "actor": {
+      "createRole": true,
+      "role": "postgres",
+      "superuser": false
+    },
+    "cause": "Slice3 owner notification_event_trigger has only the platform ADMIN-only edge to postgres; SET and USAGE are false",
+    "environment": "pinned disposable Supabase PostgreSQL 17.6",
+    "error": "must be owner of function notification_event_enqueue",
+    "outcome": "transactional failure before 20261003170000 ledger insertion",
+    "runner": "unchanged scripts/qa/db-bootstrap.ts -> production scripts/db-migrate.ts"
+  },
+  "files": {
+    "notification-slice5-pg17-bootstrap.stderr.log": {
+      "bytes": 1605,
+      "sha256": "c028c0a06e4c5d640bd0df13345868a5a6a714f2c5e1f94c49084ea6d23be270"
+    },
+    "notification-slice5-pg17-bootstrap.stdout.log": {
+      "bytes": 106,
+      "sha256": "28bb8e582de9849ce6fde5a794a3a06001c35e98b5edb85b2243c16bb1e7e86f"
+    },
+    "notification-slice5-pg17-init/00-roles.sql": {
+      "bytes": 1816,
+      "sha256": "d3cd4e16a7cb5fc6d8962f746eb29da7943c0789cfa7fe15d8e4e035fa05a3de"
+    },
+    "notification-slice5-v11-event-trigger-owner-failure.sql": {
+      "bytes": 4986,
+      "sha256": "9ddec9eb5e52227ac6830f0b8d92e239ece02887d6c7d9d584f3ccc9aa6dfc04"
+    },
+    "notification-slice5-v11-event-trigger-owner-success.sql": {
+      "bytes": 10272,
+      "sha256": "e3264d7458f485567007f5cb6718219f014a5bcfa15ccb1923693db15d1dc864"
+    },
+    "notification-slice5-v11-pg17-container-cleanup.log": {
+      "bytes": 49,
+      "sha256": "5fed05bca9025015ccf19aec2f39a22651d78e6473892d2c74a1282be1ff8d1b"
+    },
+    "notification-slice5-v11-pg17-container.json": {
+      "bytes": 553,
+      "sha256": "4110f09e6439a1359792bc5b0a21b35f8605ce6f213c0a09eaf931c529b9022f"
+    },
+    "notification-slice5-v11-pg17-container.log": {
+      "bytes": 972298,
+      "sha256": "2c3be9065da510621531353af77687b641c2ec77a4fec3140fe6ee969b92c592"
+    },
+    "notification-slice5-v11-pg17-event-owner-failure.log": {
+      "bytes": 1235,
+      "sha256": "1420c7ce6662e3d92602375ec450f781db80c8eeda501938024348379791cb91"
+    },
+    "notification-slice5-v11-pg17-event-owner-postcommit.log": {
+      "bytes": 712,
+      "sha256": "69a139af7fc9f6979ba7d5a9f97e3c1996300daa1f2affd67d3b3293dc24de94"
+    },
+    "notification-slice5-v11-pg17-event-owner-success.log": {
+      "bytes": 820,
+      "sha256": "b9bcdba302bc11b6a7d7e22234c5bf0683c93ac3328998739212fb5242df0254"
+    },
+    "notification-slice5-v11-pg18-event-owner-cleanup.log": {
+      "bytes": 49,
+      "sha256": "c9f8157848c31f3e6981866e3a24fc168d73bdf37532397314106ecb2e14649d"
+    },
+    "notification-slice5-v11-pg18-event-owner-failure.log": {
+      "bytes": 1238,
+      "sha256": "413f588a3c8939c17a24f9ca93f704b3d9611c58693f8d956413d703369565a6"
+    },
+    "notification-slice5-v11-pg18-event-owner-setup.log": {
+      "bytes": 113,
+      "sha256": "ea60e8efc2a12aee3e46bd7ccd902d9194fe49440c7e66f43529cbbc109302af"
+    },
+    "notification-slice5-v11-pg18-event-owner-success.log": {
+      "bytes": 823,
+      "sha256": "29252c948f2e6aa36c7321a4b4d5fc15bbdc8bd06d06ea512228bbfe9a3098c8"
+    }
+  },
+  "image": {
+    "applicationData": false,
+    "bind": "127.0.0.1:55472",
+    "id": "sha256:9ff6402f578a9b0d4f2aa31f660bd398b8e378761d61d31efda6ff9ad92408e5",
+    "name": "public.ecr.aws/supabase/postgres:17.6.1.106",
+    "productionConnection": false,
+    "repositoryDigest": "public.ecr.aws/supabase/postgres@sha256:21ab971149317ea9cd12a8126fe4ebb34def08c8972956b0958cba0924409dab"
+  },
+  "mechanism": {
+    "bridge": "notification_projection_owner_bridge",
+    "cleanup": "DROP ROLE bridge removes only bridge edges; no direct actor-to-owner GRANT or REVOKE",
+    "creation": "one CREATE ROLE with IN ROLE notification_event_trigger and ROLE exact migration actor",
+    "preserved": [
+      "function owner",
+      "function ACL",
+      "SECURITY DEFINER",
+      "fixed empty search_path",
+      "public schema ACL",
+      "complete persistent owner graph"
+    ],
+    "replacement": "temporary schema CREATE; SET LOCAL ROLE notification_event_trigger; exact CREATE OR REPLACE; RESET ROLE; immediate CREATE revoke"
+  },
+  "observedAt": "2026-10-03",
+  "remainingGate": "The actual 20261003170000 migration must implement and admit the combined v11 six-row PG17 / three-row PG18 graph for this existing owner plus the v10 finalizer, then pass the full production runner and native mutation matrix. These focused mechanism proofs do not claim that final gate.",
+  "results": {
+    "postgres17": {
+      "actorSetAfter": false,
+      "actorUsageAfter": false,
+      "committedSuccess": true,
+      "containerRemoved": true,
+      "injectedRollback": true,
+      "portUnbound": true,
+      "versionNum": "170006"
+    },
+    "postgres18": {
+      "committedSuccess": true,
+      "databaseRemoved": true,
+      "injectedRollback": true,
+      "ordinaryProbe": "anon",
+      "probeSetAfter": false,
+      "probeUsageAfter": false,
+      "roleRemoved": true,
+      "versionNum": "180006"
+    }
+  },
+  "scope": "Notification Slice5 replacement of the existing notification_event_trigger-owned enqueue function",
+  "spec": {
+    "authorRevision": "v11",
+    "bytes": 108398,
+    "path": "spec-notification-slice5-audience-projection.md",
+    "sha256": "425eb193f6cf86f3f27b721a474362653f8133602f108e8ee374bc07b1268fe6"
+  },
+  "temporaryProofGraphs": {
+    "postgres17": [
+      {
+        "admin": false,
+        "grantor": "postgres",
+        "inherit": false,
+        "member": "notification_projection_owner_bridge",
+        "set": true,
+        "target": "notification_event_trigger"
+      },
+      {
+        "admin": true,
+        "grantor": "supabase_admin",
+        "inherit": false,
+        "member": "postgres",
+        "set": false,
+        "target": "notification_event_trigger"
+      },
+      {
+        "admin": false,
+        "grantor": "postgres",
+        "inherit": true,
+        "member": "postgres",
+        "set": true,
+        "target": "notification_projection_owner_bridge"
+      },
+      {
+        "admin": true,
+        "grantor": "supabase_admin",
+        "inherit": false,
+        "member": "postgres",
+        "set": false,
+        "target": "notification_projection_owner_bridge"
+      }
+    ],
+    "postgres18": [
+      {
+        "admin": false,
+        "grantor": "minion_qc",
+        "inherit": false,
+        "member": "notification_projection_owner_bridge",
+        "set": true,
+        "target": "notification_event_trigger"
+      },
+      {
+        "admin": false,
+        "grantor": "minion_qc",
+        "inherit": true,
+        "member": "minion_qc",
+        "set": true,
+        "target": "notification_projection_owner_bridge"
+      }
+    ]
+  },
+  "version": 1
+}

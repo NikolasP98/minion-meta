@@ -24,6 +24,27 @@ The root, `./gateway`, `./utils` and `./brain-vector` entries never import `ws` 
 - `pnpm test` — the package's Vitest suite (all ten `*.test.ts` files, including a live-`WebSocketServer` test under `src/node/`).
 - `pnpm typecheck` — `tsc --noEmit` against the full source graph, tests included. This is also what `prepublishOnly` runs, so a broken publish cannot re-emit test output.
 
+## Request failures and retries
+
+`GatewayError` preserves `source`, `code`, `details`, `retryable` and
+`retryAfterMs`, and adds `dispatch` as transport evidence:
+
+- `not-sent`: a local disconnected, invalid-request or oversized-request rejection.
+- `unknown`: a timeout, disconnect or send exception. A transport can accept a
+  frame and then throw, so a send exception does not prove that a write failed.
+- `responded`: a server error response. This does not itself prove business rollback.
+
+`canRetry(error, { idempotent })` never retries automatically. For a
+non-idempotent request it allows only a local `NOT_CONNECTED` rejection;
+invalid input must be corrected and an uncertain write must be reconciled.
+Classify failures by their typed fields rather than matching English messages.
+
+The readiness compatibility archive is built with
+`node scripts/pack-shared-error-readiness.mjs <readiness.1.tgz> <fresh-output-directory>`
+from the meta-repo root. It verifies the pinned baseline, applies the reviewed
+client patch, runs the compatibility/error suites, and records source and archive
+hashes. It is a local consumer qualification artifact, not an npm release.
+
 ## Debugging limits
 
 This build omits both JS and declaration source maps. There is no shipped `.ts` source and no embedded `sourcesContent` — stepping into original TypeScript source from a consumer is not supported. What you get is declaration-driven type navigation (`.d.ts`) and ordinary compiled-JS debugging (breakpoints/stack traces resolve to the shipped `.js`, not the original source lines).

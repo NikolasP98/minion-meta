@@ -53,6 +53,7 @@ Voxelized behavior remains consumer-owned and should target stable
 
 | Need | Use | Avoid |
 |---|---|---|
+| Page measure | `--page-max` (80rem) | route-local max-width literals |
 | Page background | `--color-canvas` | literal gray/black values |
 | Cards and panels | `--color-surface-1..3` | elevation guessed from opacity |
 | Modals/menus | `--color-overlay` and `--shadow-overlay` | bespoke shadow stacks |
@@ -111,6 +112,7 @@ utility classes there (in `@layer components`) alongside a README row.
 
 | Export | Purpose |
 |---|---|
+| `./audit` | Installed-artifact CSS custom-property audit engine for repository wrappers |
 | `./contract.json` | Canonical values and theme metadata for code/Figma tooling |
 | `./contract.schema.json` | JSON Schema for contract-aware tools |
 | `./tokens.css` | Generated Tailwind 4 `@theme` variables and theme-mode selectors |

@@ -1293,7 +1293,7 @@ describe('14-01 wire boundary: outbound requests and pending cleanup', () => {
     const err = await client.request('x').catch((e: unknown) => e);
     expect(err).toMatchObject({ code: 'SEND_FAILED', source: 'client', details: 'EPIPE' });
     expect(pendingSize(client)).toBe(0);
-    expect(canRetry(err, { idempotent: false })).toBe(true); // never left the client
+    expect(canRetry(err, { idempotent: false })).toBe(false); // injected send may throw after dispatch
     sendSpy.mockRestore();
     const ok = client.request('y');
     mockWs.__simulateMessage(JSON.stringify({ type: 'res', id: lastSent(mockWs).id, ok: true, payload: 'fine' }));

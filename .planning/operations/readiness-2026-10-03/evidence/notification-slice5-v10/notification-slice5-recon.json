@@ -1,0 +1,497 @@
+{
+  "authorRevision": {
+    "changes": [
+      "retains the approved v8 source-policy and persistent finalizer-edge contract unchanged",
+      "retains v9 prohibition of the PostgreSQL 17 crashing direct finalizer GRANT/REVOKE path",
+      "enumerates the exact four-row PostgreSQL 17 and two-row PostgreSQL 18 temporary membership graphs with zero extras",
+      "freezes the persistent platform subset from the complete initial temporary graph and compares the complete post-drop finalizer graph byte-for-byte",
+      "proves committed post-drop owner, schema-CREATE, restricted-runtime SET/USAGE, graph and cleanup state",
+      "proves injected partial-transfer rollback after ownership transfer on PostgreSQL 17 and 18"
+    ],
+    "previousSpecSha256": "d042424bb352976e8d40ba8eca706264adc37d8cf0300b5fdc72e494b171783e",
+    "reviewState": "frozen for renewed two-pass review",
+    "revision": "v10",
+    "specBytes": 105868,
+    "specLines": 1280,
+    "specSha256": "167f99e8c32859a2f392d39ecd592981f082acebb8774493faa0b04df4e8c762"
+  },
+  "explicitExclusions": [
+    "domain producer integration",
+    "external delivery",
+    "browser inbox/read/dismiss",
+    "preferences and destinations",
+    "aggregates and reports",
+    "retention and production deployment"
+  ],
+  "facts": {
+    "assignmentRowCap": 100000,
+    "authorityBundleByteCap": 16777216,
+    "authorityGroupCap": 256,
+    "bodyByteCap": 8192,
+    "candidateCap": 10000,
+    "candidateConstraintTriggerCount": 0,
+    "catalogKinds": 16,
+    "catalogRevision": "2026-10-03.1",
+    "commitGuardLogicalSqlOperations": 2,
+    "commitGuardTriggerCount": 1,
+    "currentFreshAuthorityRawMemberCap": 1000,
+    "currentProductionProjector": "absent",
+    "currentProjectedSettlementRole": "notification_worker",
+    "currentProjectorSupportDimension": "catalog revision only",
+    "finalizerCreatorModes": {
+      "plainPostgres18": "no pg_auth_members target row",
+      "supabasePostgres17": "exact member postgres, target notification_projection_finalizer, grantor supabase_admin, admin=true, inherit=false, set=false, usage=false"
+    },
+    "finalizerForbiddenEdges": "any worker/ordinary role ADMIN edge; any non-platform member/grantor; any INHERIT/SET/USAGE reachability",
+    "finalizerFunctionInternalLogicalSqlOperations": 6,
+    "finalizerLockOrder": [
+      "notification_worker_runtime",
+      "notification_org_control",
+      "notification_outbox"
+    ],
+    "finalizerLockTimeoutMilliseconds": 250,
+    "finalizerMinimumLeaseMarginSeconds": 3,
+    "finalizerOwnedFunctionCount": 3,
+    "finalizerOwnerTransfer": "transaction-local NOINHERIT bridge created through exact admitted CREATE ROLE initial-membership graph, then dropped after three function ownership transfers",
+    "finalizerOwnerTransferEvidence": "notification-slice5-v10-owner-transfer-evidence.json",
+    "finalizerOwnerTransferEvidenceSha256": "25dafe4fffc45d2270ffb51ecd650a0a66f71ecdb6fae16efff42f9a45b53d98",
+    "finalizerOwnerTransferRevision": "v10",
+    "finalizerReservedWallSeconds": 3,
+    "finalizerRlsCommands": ["SELECT", "UPDATE"],
+    "finalizerRuntimeAdmission": "exact captured creator mode plus ordered source ACL/policy/owner, role attributes/membership closure, three definer functions and commit-guard trigger; every field compared before runtime lease",
+    "integratedKinds": 0,
+    "permissionRuleCap": 256,
+    "postgres17BridgeProofSha256": "3e4fae653102bea8c1be3e70de8d681e1362ec3bd1f0ee0f7497986baff59f78",
+    "postgres18BridgeProofSha256": "507dcc994617a1b387d16942420a95b97ab253c8dcb54969549bd7aa56d4b536",
+    "projectedFinalizationLogicalSqlOperationsIncludingOuterCall": 9,
+    "projectionCallbackCurrentInput": "OrganizationLease plus AbortSignal; RuntimeIdentity omitted",
+    "projectionCommitGuard": "one deferred receipt INSERT trigger; trigger-only definer derives exact scope from immutable NEW identity, reselects current finalized receipt and attributed terminal outbox, and never reads candidates",
+    "projectionCommitGuardNewUsage": "immutable row identity only; NEW.finalized_at is ignored and current finalized_at is reselected",
+    "projectionCommitGuardRls": "finalizer-role projection_commit_guard SELECT branches only; no application role or caller GUC can activate them",
+    "projectionCommitGuardWindowSeconds": 3,
+    "projectionIsolation": "READ COMMITTED with one MATERIALIZED authority-bundle statement and a fixed finalizer that locks runtime, organization, then outbox through COMMIT",
+    "projectionReceiptFinalization": "receipt inserted with finalized_at null; fixed finalizer alone sets it after candidate-set verification in the same terminal transaction",
+    "projectionScopeModes": [
+      "projection: exact live runtime/organization/event lease",
+      "revalidation: exact ready candidate receipt; no historical scheduler lease"
+    ],
+    "quarantineFinalizationLogicalSqlOperationsIncludingOuterCall": 6,
+    "revalidationStatementCap": 8,
+    "revalidationWallSeconds": 10,
+    "roleKeyCap": 256,
+    "rolesPerRecipientCap": 32,
+    "sameGenerationRenewalSemantics": "runtime heartbeat and organization/event renewal preserve scoped identity; the finalizer reads the refreshed deadline and may proceed, while release/replacement/reclaim invalidates scope",
+    "slice5ProductionKinds": ["join.requested", "join.approved", "join.denied"],
+    "slice5ProjectedSettlementRole": "notification_projection_finalizer fixed function, executable only by app_notification_worker",
+    "sourcePoliciesRetargeted": [
+      "join_request_admin_all",
+      "join_request_self_insert",
+      "join_request_self_select",
+      "organization_members_admin_all",
+      "organization_members_self_select",
+      "organizations_admin_all",
+      "organizations_member_select",
+      "profiles_self_select",
+      "profiles_self_update",
+      "permission_rules_org_guc"
+    ],
+    "sourcePolicyAdoption": "retarget ten inventoried PUBLIC policies to exact command-capable roles plus the exact relation owner; retain two existing app_ledger policies; add one complete app_notification_worker SELECT policy per source relation",
+    "sourcePolicyAdoptionRevision": "v8",
+    "sourcePolicyBaselineSha256": "90422f4b78a0d28a0b9b455b17c5cd1dc95f822e312b589382fd0627d301512c",
+    "sourcePolicyCommandRoleInventory": "notification-slice5-v8-command-role-inventory.sql",
+    "sourcePolicyCommandRoleInventorySha256": "489154021e0c0466d1726749209265407f805931ca566da5cef9e85d54f7bdb8",
+    "sourcePolicyExcludedRoles": ["app_assistant_ro", "brain_vector_worker"],
+    "sourcePolicyInventory": "notification-slice5-v8-policy-inventory.json",
+    "sourcePolicyInventorySha256": "74e3da957caa7470859736edd61348d9d7dd7d8cd527f39eb333f1b1bcf4cc83",
+    "sourcePolicyRecursiveResult": "42P17 infinite recursion detected in policy for relation organization_members",
+    "sourcePolicyReproduction": "notification-slice5-v8-rls-repro.sh",
+    "sourcePolicyReproductionRerunSha256": "e5c5ff67e80a561534e2ce73b35ce332a14720dc5febbcda534d4aa37d6f7e46",
+    "sourcePolicyReproductionResultSha256": "30962fc551b1a60dc620b3948b28516c5dc467100ef240f4db1f37209b42cf00",
+    "sourcePolicyReproductionSha256": "20e937c27a73b24bbe83663346deb04def6e9722fa0029910eee8f2e183c5ff1",
+    "sourcePolicyRuntimeAdmission": "exact post-v8 ACL, owner, membership and policy catalog before acquiring the worker runtime lease",
+    "sourceRlsCombination": "no PUBLIC source policy; exact legacy policies retargeted to current command-capable roles plus relation owner, plus one complete permissive app_notification_worker SELECT policy per relation",
+    "terminalObservationStates": [
+      "committed",
+      "same_generation_processing",
+      "superseded",
+      "quarantined",
+      "terminal_unattributed",
+      "pending",
+      "absent",
+      "integrity_failed",
+      "unavailable"
+    ],
+    "terminalObserverCandidateReads": 0,
+    "terminalObserverProof": "exact terminal outbox attribution plus immutable finalized receipt; later candidate cancellation/cascade cannot invalidate committed evidence",
+    "terminalObserverStatementCap": 3,
+    "terminalObserverWallSeconds": 5,
+    "terminalOperationIdentity": "notification_outbox terminal_owner_id + terminal_generation, trigger-captured from the old live lease; historical null/null is unattributed",
+    "unsafeDirectGrantResult": "pinned Supabase PostgreSQL 17.6 backend terminated by signal 11; transaction recovered with no probe role",
+    "unsafeGrantCrashExcerptSha256": "f8122e9f62d18d0a2ec5492b80a71cdb5f659ea88660c1e08de8ccffc560549e",
+    "finalizerOwnerTransferEvidenceMarkdownSha256": "ded2e014eab3d649c31c7970393e87e4b144063200fc2460fdc13eee455617c5",
+    "finalizerTemporaryGraphRows": {
+      "supabasePostgres17": 4,
+      "plainPostgres18": 2
+    },
+    "finalizerPersistentGraphComparison": "complete finalizer graph equals the frozen initial graph subset excluding every exact bridge target/member edge before and after commit",
+    "postgres17InjectedRollbackProofSha256": "c96b2dc5c51691a58075dd7cea49ec04125ddb110daccbb24df678aa68b37d5f",
+    "postgres18InjectedRollbackProofSha256": "5f94a6eac34cca625c48d1b5d383a0c68df23943e89f4d4347ea822e1c997cd9",
+    "ownerTransferSuccessProofSqlSha256": "737f2d7b201dbc1c6d4e7b45d59cf291e1afec958e15f51c03142e1ced1b402f",
+    "ownerTransferFailureProofSqlSha256": "19a83bba89572c257cfbd5b05712155033eb27f63b0a27bac6e92fc0fe574e24"
+  },
+  "gaps": [
+    {
+      "id": "S5-001",
+      "requiredDecision": "Route, discover, claim and report support by exact catalog revision/kind/schema tuple plus adapter revision.",
+      "severity": "blocker",
+      "summary": "Revision-only support would let a partial projector claim unsupported kinds in the same catalog revision."
+    },
+    {
+      "id": "S5-002",
+      "requiredDecision": "Add forced-RLS receipt/candidate storage and a distinct least-privilege projection role.",
+      "severity": "blocker",
+      "summary": "No per-recipient candidate table, projection receipt, projection role, atomic cap or cancellation state exists."
+    },
+    {
+      "id": "S5-003",
+      "requiredDecision": "Create transaction-bound role-first in-app authority resolution with shared RBAC semantics and no auth.users read.",
+      "severity": "blocker",
+      "summary": "The existing fresh email resolver has the wrong 1000 raw-member cap and destination surface for a 10000-recipient in-app audience."
+    },
+    {
+      "id": "S5-004",
+      "requiredDecision": "Require exact request/org/profile/status/revision agreement and one no-leak invalid-subject outcome.",
+      "severity": "blocker",
+      "summary": "Join applicant entitlement can be forged if payload, request, organization and both historical identity columns are not bound together."
+    },
+    {
+      "id": "S5-005",
+      "requiredDecision": "Store authority digest and require current revalidation with irreversible cancellation before future publication.",
+      "severity": "blocker",
+      "summary": "A candidate created before revocation can become stale before a later read/effect."
+    },
+    {
+      "id": "S5-006",
+      "requiredDecision": "Keep integrated false and qualify adapters with controlled real event appends; producer wiring remains a later slice.",
+      "severity": "blocker",
+      "summary": "Current join flows are not transaction-outbox producers, so marking them integrated in Slice5 would invent durable source evidence."
+    },
+    {
+      "id": "S5-007",
+      "requiredDecision": "Bind immutable versioned template bytes and digests into the projector manifest and every candidate; changed copy requires a new adapter revision.",
+      "severity": "blocker",
+      "summary": "A template key alone does not freeze localized candidate bytes or enforce the per-recipient body limit across later builds."
+    },
+    {
+      "id": "S5-008",
+      "requiredDecision": "Keep READ COMMITTED; use one bounded MATERIALIZED authority-bundle statement, then serialize final publication under runtime -> organization -> outbox locks through COMMIT without automatic replay.",
+      "severity": "blocker",
+      "summary": "Separate READ COMMITTED source reads could mix membership, request, role and rule states, while REPEATABLE READ would hide a later operational lease replacement."
+    },
+    {
+      "id": "S5-009",
+      "requiredDecision": "Carry RuntimeLease plus OrganizationLease and event receipt; enforce exact DB fences and derive source subject from the exact event instead of a free subject GUC.",
+      "severity": "blocker",
+      "summary": "Current projector input and application grants cannot prove the exact live runtime, organization and event generations at claim and final projection."
+    },
+    {
+      "id": "S5-010",
+      "requiredDecision": "Revoke claim-role projection and direct application-role terminal updates; a fixed finalizer recomputes exact receipt count, bytes and sorted digest. Quarantine requires an empty set.",
+      "severity": "blocker",
+      "summary": "notification_worker can currently mark a live claim projected without any durable projection receipt or candidate-set proof."
+    },
+    {
+      "id": "S5-011",
+      "requiredDecision": "Use pending tuple/event and expired-processing tuple/expiry/event query classes with exact EXPLAIN and removal gates.",
+      "severity": "blocker",
+      "summary": "The draft processing query order omitted lease expiry even though its partial index orders tuple, expiry, event."
+    },
+    {
+      "id": "S5-012",
+      "requiredDecision": "Enforce exact pre-insert role/rule/assignment/group/byte caps and quarantine atomically on overflow.",
+      "severity": "blocker",
+      "summary": "Recipient cap alone does not bound role/rule fanout, assignment rows, equivalence groups or authority evidence bytes."
+    },
+    {
+      "id": "S5-013",
+      "requiredDecision": "Use one bounded RC authority statement plus fresh CAS; unavailable never cancels, profile deletion cascades the row and leaves the receipt, digest drift uses authority_changed.",
+      "severity": "blocker",
+      "summary": "Revalidation lacked exact time/query limits and conflated profile erasure with a retained cancelled candidate."
+    },
+    {
+      "id": "S5-014",
+      "requiredDecision": "Use a narrow fixed finalizer owned by an inaccessible role; lock runtime, organization and outbox in canonical order, recheck all identities/deadlines after acquisition, update inside the function and hold locks through immediate COMMIT.",
+      "severity": "blocker",
+      "summary": "A fresh READ COMMITTED fence without row locks can observe the old runtime/organization tuple and still publish after a concurrent replacement commits."
+    },
+    {
+      "id": "S5-015",
+      "requiredDecision": "Retarget only the exact inventoried PUBLIC policies to every command-capable browser/service/application role plus the exact relation owner, add one complete nonrecursive worker policy per source relation, and prove pre/post consumer parity plus runtime catalog admission.",
+      "severity": "blocker",
+      "summary": "The supported baseline PUBLIC policy graph becomes recursively self-referential for the projection role; a restrictive worker policy cannot make the v6 adoption executable."
+    },
+    {
+      "id": "S5-016",
+      "requiredDecision": "Persist exact claim owner/generation in the receipt and add one bounded fixed terminal observer with finite committed/processing/superseded/quarantined/pending/absent/integrity/unavailable no-replay outcomes.",
+      "severity": "blocker",
+      "summary": "After projected commit the live processing scope disappears, so an ambiguous commit response cannot be classified by either current worker role and must not rerun projection."
+    },
+    {
+      "id": "S5-017",
+      "requiredDecision": "Observe a winning valid renewal and proceed only with sufficient refreshed deadline; only retirement/release/replacement/reclaim/identity change or expiry invalidates scope.",
+      "severity": "blocker",
+      "summary": "The prior wording incorrectly said a normal same-generation heartbeat or renewal invalidates the finalizer even though Slice4 renewals preserve all scoped identity fields and only extend deadlines."
+    },
+    {
+      "id": "S5-018",
+      "requiredDecision": "Finalizer-attest the immutable receipt after set verification; observe exact projected terminal identity plus that finalized receipt without rereading mutable candidate rows.",
+      "severity": "blocker",
+      "summary": "Recomputing the current candidate set during ambiguous-commit observation would reject a valid committed projection after the supported profile cascade or candidate cancellation changes that set."
+    },
+    {
+      "id": "S5-019",
+      "requiredDecision": "Trigger-capture terminal owner and generation on every new terminal transition; classify historical null attribution separately and require both values for exact committed/quarantined outcomes.",
+      "severity": "blocker",
+      "summary": "A terminal quarantine clears lease_owner, so generation alone cannot attribute it to the observing operation and a newer quarantine or wrong owner could be mistaken for this operation."
+    },
+    {
+      "id": "S5-020",
+      "requiredDecision": "Add one fixed trigger-only definer and one deferred receipt INSERT constraint trigger; derive exact guard scope internally from immutable trigger identity, reselect current finalized evidence through narrow terminal RLS, reject direct execution, and use no per-candidate trigger.",
+      "severity": "blocker",
+      "summary": "After the SECURITY DEFINER finalizer returns, a deferred trigger runs from the application transaction while terminal-row RLS hides the finalized receipt/outbox; the inserted NEW row also still carries finalized_at null, so the prior two-function model could not enforce its claimed commit guard."
+    }
+  ],
+  "hubHead": "742c202a71ac5e7ed7a7c8449eb664102f9c7546",
+  "observedAt": "2026-10-03",
+  "platformSpec": {
+    "path": "meta/specs/2026-10-03-notification-platform-spec.md",
+    "repoCommit": "f3794c077e6101ca615e483bcde163eef857cd40",
+    "sections": ["3.3", "3.7", "3.11", "D6", "Slice 5"],
+    "sha256": "1fa2c337d03fc14c626e6fbd48f643225408e643a41fd58ae12308e98de1db4d"
+  },
+  "productionSupport": [
+    {
+      "adapterRevision": "join-requested.v1",
+      "catalogRevision": "2026-10-03.1",
+      "kind": "join.requested",
+      "schemaVersion": 1
+    },
+    {
+      "adapterRevision": "join-outcome.v1",
+      "catalogRevision": "2026-10-03.1",
+      "kind": "join.approved",
+      "schemaVersion": 1
+    },
+    {
+      "adapterRevision": "join-outcome.v1",
+      "catalogRevision": "2026-10-03.1",
+      "kind": "join.denied",
+      "schemaVersion": 1
+    }
+  ],
+  "scope": "Notification Slice5 audience projection author recon",
+  "sourceAnchors": [
+    {
+      "detail": "Revision is 2026-10-03.1; entry() fixes schemaVersion 1 and integrated false; lines 98-132 define the three join policies.",
+      "file": "src/lib/notifications/catalog.ts",
+      "line": 16,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "87993a4ab4d68832304dd948aaf37e25799a8232a49feb22de8c968787e8b9fa"
+    },
+    {
+      "detail": "users.manage is exact-target users:manage; subject.or_users_manage is applicant/subject OR target-org manager.",
+      "file": "src/lib/notifications/policy-contracts.ts",
+      "line": 12,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "8feaeb5410b3559345be466093227b192164fb7ebb991c5c5f2b7f17e7160b69"
+    },
+    {
+      "detail": "Events store kind/schema/catalog; outbox lines 71-95 store only catalog revision and index claims by revision.",
+      "file": "supabase/migrations/20261003150000_notification_event_outbox.sql",
+      "line": 31,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "6dc0e6f275668d46f445728bd73c327c2ca3f827287dc760d4f62041e87fb1b1"
+    },
+    {
+      "detail": "Projector advertises only supportedCatalogRevisions and owns one projectPage callback.",
+      "file": "src/server/services/notifications/scheduler/projector-contract.ts",
+      "line": 3,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "252d1412393e6021ebe8bc72cd05bfba242fb6309596c9f9284cef675db61940"
+    },
+    {
+      "detail": "Production projector remains null; current check only asks whether the projector supports the current catalog revision.",
+      "file": "src/server/services/notifications/scheduler/admission.ts",
+      "line": 59,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "3911c7c3fdf7d95c36a2b0f7d45d33092e8595c4f1869b99ca986fa56fe9cc86"
+    },
+    {
+      "detail": "Discovery accepts 1..8 revisions and eligibility probes exact organization/state/revision, not kind/schema.",
+      "file": "src/server/services/notifications/scheduler/discovery.ts",
+      "line": 96,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "2284e5033e2756a33f6539cda76e6f8ed938d5641a6927aa38975dc82a1d7ed3"
+    },
+    {
+      "detail": "Claim and unsupported probes are catalog-revision based and can return up to 250 events.",
+      "file": "src/server/services/notifications/outbox-claim.ts",
+      "line": 1,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "2a12e9481f2f0445def822634ed2933c3c22e274c27af761aa45e3baed473bf0"
+    },
+    {
+      "detail": "The durable loop passes revision support to discovery and invokes one owned projector callback per organization lease.",
+      "file": "src/server/services/notifications/scheduler/loop.ts",
+      "line": 136,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "9ca3c8597b9b25ebe936059bf649e195073aa0dc2668b5f8f36fa85e7b25a84f"
+    },
+    {
+      "detail": "Existing worker transactions set notification_worker, exact org/owner GUCs, 3s statement and 250ms lock timeouts.",
+      "file": "src/server/services/notifications/worker-transaction.ts",
+      "line": 9,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "1bffe8e03911c4e34f55cf7d1552103a616ba3f7107e302d753295c108ccd5b9"
+    },
+    {
+      "detail": "Current fresh resolver caps raw members at 1000, requires active exact-org membership, evaluates roles/rules, and also reads auth.users email state.",
+      "file": "src/server/services/fresh-org-authority.ts",
+      "line": 10,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "6a8e819c3fcb5c97f38373734929f00a2ee78e3244653354b94ca4c8152e0d88"
+    },
+    {
+      "detail": "defaultCaps, explicit-role replacement, overrides, owner scope and field level are code-owned authority semantics.",
+      "file": "src/server/services/rbac.service.ts",
+      "line": 161,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "0591580f5cb6093558ae6a1031ed5ff2eba92e7c510f5b7871d526f112cdeda1"
+    },
+    {
+      "detail": "Current insert writes both canonical user_id and supabase_id; own pending reads are applicant-scoped and bounded.",
+      "file": "src/server/services/join/pending.repository.ts",
+      "line": 27,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "26e28f2ffc2e373a38ceaecf30c78da9228467230a3b422c8f2721b7d2ee7556"
+    },
+    {
+      "detail": "Create commits before best-effort email; approve/deny use separate Supabase operations and are not appendNotificationEvent producers.",
+      "file": "src/server/services/join/requests.service.ts",
+      "line": 31,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "8a815bfd1a725493be4886dc2bd8e95c948c1b2fac1b745126f26efe1a00fa06"
+    },
+    {
+      "detail": "join_request has UUID id/supabase_id, text user_id/organization_id, status, created/reviewed timestamps and applicant PII columns; this anchor is distinct from the exact RLS-policy inventory below.",
+      "file": "supabase/qa/baseline/schema.sql",
+      "line": 3112,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "90422f4b78a0d28a0b9b455b17c5cd1dc95f822e312b589382fd0627d301512c"
+    },
+    {
+      "detail": "/users/join-requests is gated by org-capability users:manage.",
+      "file": "src/lib/routes/route-access-registry.ts",
+      "line": 151,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "ed82959fed5a128b1878596608134d6f390fe95a88a837663140c630adcef3d8"
+    },
+    {
+      "detail": "The authenticated applicant waiting route reads only own pending requests and redirects a now-member home.",
+      "file": "src/routes/join/sent/+page.server.ts",
+      "line": 7,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "736e99c7cbcc24558024d429235255ab6f21f35b32d25e1d9b321bca25787507"
+    },
+    {
+      "detail": "notification_scheduler_fence is a volatile EXISTS predicate; runtime/org rows and coordinator transition guards exist, but no projection finalizer serializes runtime -> organization -> outbox.",
+      "file": "supabase/migrations/20261003160000_notification_worker_scheduler.sql",
+      "line": 224,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "57ef30dbce9c7fc49677815dadd7d7421ddace849ff303319ab42948f36c1b27"
+    },
+    {
+      "detail": "Current notification_worker settlement accepts projected directly, verifies only live event owner/generation, and provides no post-terminal receipt/outbox observation entrypoint.",
+      "file": "src/server/services/notifications/outbox-settlement.ts",
+      "line": 22,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "ba2504d263e0c8fc986ba8680b4c43551dbbb310e22f368b024f04c7e5c7df3d"
+    },
+    {
+      "detail": "RuntimeIdentity plus generation/expiry form RuntimeLease; OrganizationLease is separate; the current projector callback receives neither RuntimeLease nor its generation.",
+      "file": "src/server/services/notifications/scheduler/contracts.ts",
+      "line": 3,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "b78badd98f9575555a1644735bf64f7ee4adb9f2c9d9716a3f3f93bb77098d25"
+    },
+    {
+      "detail": "Coordinator transitions lock runtime before organization. Same-generation organization renewal changes only renewal_count and lease_expires_at; release clears authority and reclaim increments generation.",
+      "file": "src/server/services/notifications/scheduler/organization-lease.ts",
+      "line": 12,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "c6fac3535f02a735729274bf44c4045ef28d8dee64c84838944a0eb361af77d8"
+    },
+    {
+      "detail": "Supported baseline begins ten relevant policies as PUBLIC. The exact organization_members admin branch reads profiles while the required worker profiles branch reads organization_members; the executable child-database reproduction proves the combined graph raises PostgreSQL 42P17.",
+      "file": "supabase/qa/baseline/schema.sql",
+      "line": 9261,
+      "repo": "minion_hub",
+      "repoCommit": "b76d58f21a6d0d756b0ba445e89d18264de9c88a",
+      "worktreeSha256": "90422f4b78a0d28a0b9b455b17c5cd1dc95f822e312b589382fd0627d301512c"
+    },
+    {
+      "detail": "Runtime heartbeat preserves owner, generation and build/catalog/projector identity while refreshing last_heartbeat_at and lease_expires_at; release clears owner/expiry and acquisition increments generation.",
+      "file": "src/server/services/notifications/scheduler/runtime-lease.ts",
+      "line": 59,
+      "repo": "minion_hub",
+      "repoCommit": "3eac14225557958ccdcc5c74b3f07c09d4164c80",
+      "worktreeSha256": "033d78d3fa61c1e75791040dc89a66d54b5f84583b257d5f879f92d45ae60e24"
+    },
+    {
+      "detail": "organization_members_admin_all reads profiles and organization_members_self_select uses auth.uid; both are PUBLIC in the supported baseline.",
+      "file": "supabase/qa/baseline/schema.sql",
+      "line": 9503,
+      "repo": "minion_hub",
+      "repoCommit": "b76d58f21a6d0d756b0ba445e89d18264de9c88a",
+      "worktreeSha256": "90422f4b78a0d28a0b9b455b17c5cd1dc95f822e312b589382fd0627d301512c"
+    },
+    {
+      "detail": "profiles self SELECT and UPDATE are PUBLIC; exact command-specific grantees differ because app_ledger has SELECT only.",
+      "file": "supabase/qa/baseline/schema.sql",
+      "line": 9659,
+      "repo": "minion_hub",
+      "repoCommit": "b76d58f21a6d0d756b0ba445e89d18264de9c88a",
+      "worktreeSha256": "90422f4b78a0d28a0b9b455b17c5cd1dc95f822e312b589382fd0627d301512c"
+    },
+    {
+      "detail": "Exact grants show anon, authenticated and service_role on all six source relations; app_ledger has only the listed organization-member/profile/member-role/permission-rule commands, while app_assistant_ro and brain_vector_worker have none.",
+      "file": "supabase/qa/baseline/schema.sql",
+      "line": 11065,
+      "repo": "minion_hub",
+      "repoCommit": "b76d58f21a6d0d756b0ba445e89d18264de9c88a",
+      "worktreeSha256": "90422f4b78a0d28a0b9b455b17c5cd1dc95f822e312b589382fd0627d301512c"
+    }
+  ],
+  "sourceState": "Slice5 v6 source anchors remain individually hash-bound; v8 adds exact supported-baseline source policy adoption and persistent creator catalogs; v10 binds the only admitted temporary ownership graphs plus committed and rollback-clean transfer evidence.",
+  "version": 10
+}
