@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-05T07:51:23.048Z",
+	"generatedAt": "2026-10-05T08:51:55.803Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8378,6 +8378,39 @@
 			"scoredAt": "2026-10-03T00:54:19.340Z"
 		},
 		{
+			"key": "run:minion (gateway)#37280408703",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37280408703",
+			"sourceUpdatedAt": "2026-10-05T08:37:10Z",
+			"sourceFingerprint": "f7bbaaec4bf9f0ff2b74c2e808619956850173c5183dd36ee52220d359e36dfa",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A failed CI run on the core gateway's DEV branch could matter, but no failure logs or step detail are given, so it isn't actionable yet.",
+			"evidence": [
+				"status: failure",
+				"workflow_dispatch on DEV",
+				"repo: minion (gateway), core product"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T08:51:55.667Z"
+		},
+		{
 			"key": "spec:2026-08-17-gw-shells-lifecycle-stubs-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -16705,6 +16738,41 @@
 			"scoredAt": "2026-10-04T19:21:28.450Z"
 		},
 		{
+			"key": "issue:minion-meta#658",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#658 [monitor:unstick] reconcile proposals run 39c357d5 (minion-meta): claude provider exit-126/turns=0 AND pipeline did not finish (no write/push)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/658",
+			"sourceUpdatedAt": "2026-09-28T08:18:18Z",
+			"sourceFingerprint": "95c7668164cb5582c4f47b686c4d65fb38ca7affe0516692c38fd56932168e67",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#657"
+			],
+			"rationale": "Unlike #657 this run did not complete its write/push, but both reports describe the same recurring claude exit-126 signature and propose the same host-classifier fix, so they should be consolidated into one goal.",
+			"evidence": [
+				"log stops after merge-scan retries, no write/push",
+				"started ~46s after #657's run finished (possible race)",
+				"same claude-provider-exec-126 signature recurrence noted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T08:51:55.667Z"
+		},
+		{
 			"key": "issue:minion-meta#750",
 			"kind": "issue",
 			"stage": "proposal",
@@ -16833,39 +16901,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T19:54:07.150Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-0cc2c41bf943",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/tickets/[id]/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0cc2c41bf943.md",
-			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "9b4e4548dfbc51bb33905931fc95d458919ab8eeae47b9149fc60debf46345e8",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A merged-PR finding gives an exact file, a clear diagnosis of broken calendar deep-links, and a bounded ~10-line fix direction, making it actionable now.",
-			"evidence": [
-				"file: src/routes/(app)/pos/tickets/[id]/+page.svelte, merged PR #398",
-				"diagnosis: missing calendarDate query param breaks shared ticket links",
-				"fix direction: add query param, read via $page.url.searchParams, pass to calendar init state"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T08:29:00.985Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-302a578cc5a5",
@@ -18251,40 +18286,6 @@
 			"scoredAt": "2026-10-04T01:50:56.093Z"
 		},
 		{
-			"key": "issue:minion-meta#658",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#658 [monitor:unstick] reconcile proposals run 39c357d5 (minion-meta): claude provider exit-126/turns=0 AND pipeline did not finish (no write/push)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/658",
-			"sourceUpdatedAt": "2026-09-28T08:18:18Z",
-			"sourceFingerprint": "95c7668164cb5582c4f47b686c4d65fb38ca7affe0516692c38fd56932168e67",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#657"
-			],
-			"rationale": "Same recurring exit-126 signature but this run aborted before write/push and shows a possible race with the prior run, warranting one combined host-classifier/locking investigation.",
-			"evidence": [
-				"run stopped before proposals/index.json write or push",
-				"started ~46s after a prior run on the same repo_id, suggesting lock/race contention"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T08:20:00.251Z"
-		},
-		{
 			"key": "issue:minion-meta#687",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18604,6 +18605,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T23:17:02.574Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-0cc2c41bf943",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/tickets/[id]/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0cc2c41bf943.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "9b4e4548dfbc51bb33905931fc95d458919ab8eeae47b9149fc60debf46345e8",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is an approved, well-scoped handoff with a clear fix direction (add/read a calendar date query param) that is immediately actionable.",
+			"evidence": [
+				"status: approved",
+				"fix direction: add query param, read via $page.url.searchParams, ~10-line change",
+				"file and merged PR #398 identified precisely"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T08:51:55.667Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-274eede277fe",
@@ -19360,6 +19394,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-29T18:29:56.564Z"
+		},
+		{
+			"key": "issue:minion-meta#657",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#657 [monitor:unstick] reconcile proposals run 94fcb051 (minion-meta): claude provider exit-126/turns=0, but pipeline actually completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/657",
+			"sourceUpdatedAt": "2026-09-28T08:18:03Z",
+			"sourceFingerprint": "67a5e7a4bef0c7fdf3b63794b13f040033bd78b2c7ea4e9e00a09708343f4741",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#658"
+			],
+			"rationale": "This run's pipeline already completed and pushed successfully, so the actionable value is the shared claude-exec-126 classifier idea it shares with #658, not this instance alone.",
+			"evidence": [
+				"push already landed (ac88033..5e75062)",
+				"same exit-126/turns=0 signature recurred 3x in ~2h",
+				"proposes new host-classifier signature 'claude-provider-exec-126'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-05T08:51:55.667Z"
 		},
 		{
 			"key": "issue:minion-meta#677",
@@ -20946,38 +21015,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-28T11:39:42.070Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged fix for nitter persistence/shutdown ordering with no indication of ongoing deployment failure.",
-			"evidence": [
-				"commit title: fix(nitter): serialize persistence and drain shutdown (#295)",
-				"tags: deployment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T07:51:22.891Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
@@ -22746,38 +22783,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T02:28:35.907Z"
-		},
-		{
-			"key": "run:minion (gateway)#37192477680",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37192477680",
-			"sourceUpdatedAt": "2026-10-04T10:10:06Z",
-			"sourceFingerprint": "24e7b07a89c851177fae8727e1b204c593539a8ca6b89ea52142b2bac92580d3",
-			"score": 32,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A recent CI failure on DEV is flagged but no failure cause or scope is given, so more diagnosis is needed before this can be actioned.",
-			"evidence": [
-				"CI run status: failure",
-				"workflow_dispatch trigger on DEV branch, updated 2026-10-04"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T03:51:34.638Z"
 		},
 		{
 			"key": "issue:minion-meta#546",
@@ -25115,40 +25120,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T15:24:13.712Z"
-		},
-		{
-			"key": "issue:minion-meta#657",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#657 [monitor:unstick] reconcile proposals run 94fcb051 (minion-meta): claude provider exit-126/turns=0, but pipeline actually completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/657",
-			"sourceUpdatedAt": "2026-09-28T08:18:03Z",
-			"sourceFingerprint": "67a5e7a4bef0c7fdf3b63794b13f040033bd78b2c7ea4e9e00a09708343f4741",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#658"
-			],
-			"rationale": "Transient claude-provider exit-126 alert where the pipeline already completed successfully, best merged with the related recurring-signature issue into one investigation goal.",
-			"evidence": [
-				"pipeline reached 'merge-scan state persisted' despite provider exit-126",
-				"signature recurred 3x in ~2 hours per the alert"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-28T08:20:00.251Z"
 		},
 		{
 			"key": "issue:minion-meta#729",
