@@ -37,45 +37,45 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8175
 - `NikolasP98/minion-meta@dev rankings/index.json:8275` — add explicitly reviewed indeterminate recovery policy in job-effects.service.ts",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8275
-- `NikolasP98/minion-meta@dev rankings/index.json:12143` — --apply is intentionally unimplemented",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12143
-- `NikolasP98/minion-meta@dev rankings/index.json:12245` — Historical version replacement needs an explicit data contract",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12245
-- `NikolasP98/minion-meta@dev rankings/index.json:12380` — remove once the phone failure is root-caused",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12380
-- `NikolasP98/minion-meta@dev rankings/index.json:12706` — add global server custom-property sort/filter/export planning",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12706
-- `NikolasP98/minion-meta@dev rankings/index.json:13311` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13311
-- `NikolasP98/minion-meta@dev rankings/index.json:13798` — Bound streamed response bytes before allocation; arrayBuffer()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13798
-- `NikolasP98/minion-meta@dev rankings/index.json:15053` — the affordance is one-way — once opened, a line's discount",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15053
-- `NikolasP98/minion-meta@dev rankings/index.json:15288` — this hasn't been exercised against a live local Supabase"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15288
-- `NikolasP98/minion-meta@dev rankings/index.json:16117` — HDS-05 remains pending; do not run without separate backend-loss authorization",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16117
-- `NikolasP98/minion-meta@dev rankings/index.json:16186` — Backend-loss qualification remains gated by HDS-05",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16186
-- `NikolasP98/minion-meta@dev rankings/index.json:16961` — a drag cannot cross the runway's visible edge",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16961
-- `NikolasP98/minion-meta@dev rankings/index.json:17389` — UUID-only like crm.customers — numbered in part 2",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17389
-- `NikolasP98/minion-meta@dev rankings/index.json:18599` — qualify error-storm flush fan-out and serverless delivery",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18599
-- `NikolasP98/minion-meta@dev rankings/index.json:20286` — no status filter — every status reaches the grid",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20286
-- `NikolasP98/minion-meta@dev rankings/index.json:20385` — Full Workshop composition/camera and keyboard relationship/element",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20385
-- `NikolasP98/minion-meta@dev rankings/index.json:22187` — \"reads back a persisted preference on init\" ... test is incomplete",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22187
-- `NikolasP98/minion-meta@dev rankings/index.json:22382` — HC-037 owns pending/error admission for create/open/delete",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22382
-- `NikolasP98/minion-meta@dev rankings/index.json:22449` — startBackupScheduler() has no call site anywhere in src/",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22449
-- `NikolasP98/minion-meta@dev rankings/index.json:25571` — no overflow clip for bookings starting before startHour",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25571
-- `NikolasP98/minion-meta@dev rankings/index.json:26999` — Qualify full Workshop composition and remaining keyboard camera",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26999
-- `NikolasP98/minion-meta@dev rankings/index.json:29886` — the sideways-page overflow this card showed was fixed in",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29886
+- `NikolasP98/minion-meta@dev rankings/index.json:12146` — --apply is intentionally unimplemented",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12146
+- `NikolasP98/minion-meta@dev rankings/index.json:12248` — Historical version replacement needs an explicit data contract",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12248
+- `NikolasP98/minion-meta@dev rankings/index.json:12383` — remove once the phone failure is root-caused",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12383
+- `NikolasP98/minion-meta@dev rankings/index.json:12709` — add global server custom-property sort/filter/export planning",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12709
+- `NikolasP98/minion-meta@dev rankings/index.json:13314` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13314
+- `NikolasP98/minion-meta@dev rankings/index.json:13801` — Bound streamed response bytes before allocation; arrayBuffer()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13801
+- `NikolasP98/minion-meta@dev rankings/index.json:15088` — the affordance is one-way — once opened, a line's discount",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15088
+- `NikolasP98/minion-meta@dev rankings/index.json:15323` — this hasn't been exercised against a live local Supabase"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15323
+- `NikolasP98/minion-meta@dev rankings/index.json:16184` — HDS-05 remains pending; do not run without separate backend-loss authorization",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16184
+- `NikolasP98/minion-meta@dev rankings/index.json:16253` — Backend-loss qualification remains gated by HDS-05",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16253
+- `NikolasP98/minion-meta@dev rankings/index.json:17028` — a drag cannot cross the runway's visible edge",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17028
+- `NikolasP98/minion-meta@dev rankings/index.json:17456` — UUID-only like crm.customers — numbered in part 2",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17456
+- `NikolasP98/minion-meta@dev rankings/index.json:18633` — qualify error-storm flush fan-out and serverless delivery",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18633
+- `NikolasP98/minion-meta@dev rankings/index.json:20320` — no status filter — every status reaches the grid",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20320
+- `NikolasP98/minion-meta@dev rankings/index.json:20419` — Full Workshop composition/camera and keyboard relationship/element",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20419
+- `NikolasP98/minion-meta@dev rankings/index.json:22288` — \"reads back a persisted preference on init\" ... test is incomplete",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22288
+- `NikolasP98/minion-meta@dev rankings/index.json:22483` — HC-037 owns pending/error admission for create/open/delete",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22483
+- `NikolasP98/minion-meta@dev rankings/index.json:22550` — startBackupScheduler() has no call site anywhere in src/",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22550
+- `NikolasP98/minion-meta@dev rankings/index.json:25640` — no overflow clip — booking before startHour visually overflows",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25640
+- `NikolasP98/minion-meta@dev rankings/index.json:27068` — Qualify full Workshop composition and remaining keyboard camera",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27068
+- `NikolasP98/minion-meta@dev rankings/index.json:30051` — the sideways-page overflow this card showed was fixed in",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30051
