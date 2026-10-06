@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-34104122
 title: Handoff marker — src/server/services/calendar-window.service.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-9068ad039a31
 created: 2026-09-28
 updated: 2026-10-06
 repos: [minion-hub]

@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-608949306
 title: Handoff marker — src/server/services/custom-properties.service.ts (minion_hub)
-status: draft
+status: merged
+merged_into: 2026-09-27-hub-column-presentation-admission
 created: 2026-09-28
 updated: 2026-10-06
 repos: [minion-hub]

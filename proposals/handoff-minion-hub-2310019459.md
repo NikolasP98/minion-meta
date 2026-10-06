@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2310019459
 title: Handoff marker — src/routes/(app)/pos/tickets/[id]/+page.svelte (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-0cc2c41bf943
 created: 2026-09-28
 updated: 2026-10-06
 repos: [minion-hub]

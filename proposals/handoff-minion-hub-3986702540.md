@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-3986702540
 title: Handoff marker — scripts/sunat-baja-hub-emissions.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-0cbe5486fa58
 created: 2026-09-25
 updated: 2026-10-06
 repos: [minion-hub]

@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-4205181910
 title: Handoff marker — src/lib/components/scheduling/kit/calendar-prefs.svelte.test.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-448f726f8923
 created: 2026-09-28
 updated: 2026-10-06
 repos: [minion-hub]
