@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-06T06:52:05.748Z",
+	"generatedAt": "2026-10-06T07:21:39.108Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -13191,21 +13191,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 7,
+				"implementation": 6
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Missing attachments relationship on purchase records affects financial audit completeness and has a clear schema+wiring fix direction.",
+			"rationale": "A missing fin_purchase attachment relation is a concrete schema gap with a clearly bounded fix path affecting financial-record completeness.",
 			"evidence": [
-				"fin_purchase is not in",
-				"Add fin_purchase to the Drizzle schema",
-				"status: approved"
+				"TODO(handoff): 'no attachments card — fin_purchase is not in' schema",
+				"fix direction names the exact schema directory and page-wiring steps"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T06:52:17.761Z"
+			"scoredAt": "2026-10-06T07:21:38.942Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-cdf2e33a24b0",
@@ -17257,38 +17256,6 @@
 			"scoredAt": "2026-09-30T19:54:07.150Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-302a578cc5a5",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/[contactId]/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-302a578cc5a5.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "4e67668aef4125b29c3fea34932e5ccb8de650e52878b83a474d107ee4612000",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, well-scoped bug with a clear file location and fix direction for a real UX regression.",
-			"evidence": [
-				"Custom email fields in CRM contacts can't be clicked as mailto links",
-				"status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T06:52:17.761Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-66cd0246e677",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17879,6 +17846,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T06:51:14.418Z"
+		},
+		{
+			"key": "issue:minion-meta#436",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#436 [monitor:unstick] run 62192a39 (minion-meta reconcile) — exit-126/turns=0 on claude provider despite successful reconcile sweep",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/436",
+			"sourceUpdatedAt": "2026-09-15T06:17:40Z",
+			"sourceFingerprint": "c39678daa1983df919433b28eb1f2173afa2494639dc43c5b0c3ba115e7f8506",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The attached diagnosis frames this as a transient worker-box exec permission fault whose pipeline side effects already succeeded, so it merits monitoring for recurrence before being treated as a standalone paid goal.",
+			"evidence": [
+				"diagnosis: 'exit-126+turns=0 ... is an environment signature, not a per-run one'",
+				"'git-visible side effects already succeeded' and state was persisted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T07:21:38.942Z"
 		},
 		{
 			"key": "issue:minion-meta#486",
@@ -18806,6 +18805,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:24:29.546Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-302a578cc5a5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/[contactId]/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-302a578cc5a5.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "4e67668aef4125b29c3fea34932e5ccb8de650e52878b83a474d107ee4612000",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-ae985ee3170a"
+			],
+			"rationale": "A concrete mailto-link regression for custom CRM fields shares both the merged PR and the exact file with another open finding, so the two should become one CRM contact-page goal.",
+			"evidence": [
+				"TODO(handoff): 'additional custom fields lose their mailto link'",
+				"same file src/routes/(app)/crm/[contactId]/+page.svelte and merged PR #408 as postmerge-minion-hub-ae985ee3170a"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T07:21:38.942Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-77a6343cc924",
@@ -20598,38 +20631,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T02:25:57.895Z"
-		},
-		{
-			"key": "issue:minion-meta#436",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#436 [monitor:unstick] run 62192a39 (minion-meta reconcile) — exit-126/turns=0 on claude provider despite successful reconcile sweep",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/436",
-			"sourceUpdatedAt": "2026-09-15T06:17:40Z",
-			"sourceFingerprint": "c39678daa1983df919433b28eb1f2173afa2494639dc43c5b0c3ba115e7f8506",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The quoted diagnosis indicates the reconcile pipeline itself succeeded and the error is a transient exit-126/turns=0 infra fault requiring manual worker-box inspection rather than a bounded code fix.",
-			"evidence": [
-				"exit-126 turns=0 with an otherwise-successful reconcile sweep",
-				"result pushed to minion-meta dev; only the trailing claude-agent step failed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T06:59:36.318Z"
 		},
 		{
 			"key": "issue:minion-meta#545",
@@ -25573,6 +25574,40 @@
 			"scoredAt": "2026-10-05T04:21:00.335Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-ae985ee3170a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/[contactId]/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ae985ee3170a.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "f6f793e1747b136e0a7fd0053dfba215e8e64b1bf43cd20010675dc529919ff3",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-302a578cc5a5"
+			],
+			"rationale": "This tag-ordering spec-compliance finding shares the same file and merged PR as another open CRM contact-page finding, but its own auto-diagnosis never actually verified the referenced spec.",
+			"evidence": [
+				"diagnosis admits: 'I need to check that spec to give you accurate guidance. Let me find it first.'",
+				"same file and merged PR #408 as postmerge-minion-hub-302a578cc5a5"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T07:21:38.942Z"
+		},
+		{
 			"key": "spec:2026-08-17-hub-dead-mirrors-cleanup-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -26985,6 +27020,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:25:32.539Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The summary is a commit message for a nitter persistence/shutdown fix that is already merged, leaving no outstanding deployment-health action.",
+			"evidence": [
+				"commit message: 'fix(nitter): serialize persistence and drain poller shutdown'",
+				"no indication of an ongoing or unresolved deployment issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T07:21:38.942Z"
 		},
 		{
 			"key": "issue:minion-meta#332",
@@ -29786,38 +29853,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T01:53:57.051Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-ae985ee3170a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/[contactId]/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ae985ee3170a.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "f6f793e1747b136e0a7fd0053dfba215e8e64b1bf43cd20010675dc529919ff3",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The auto-diagnosis itself admits the referenced spec hasn't been confirmed, so the layout fix direction is unverified.",
-			"evidence": [
-				"I need to check that spec to give you accurate guidance. Let me find it first.",
-				"spec 2026-09-28 Bundle F"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T06:52:17.761Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d56bb9cb0b58",
