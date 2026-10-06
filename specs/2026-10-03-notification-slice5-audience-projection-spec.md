@@ -1,12 +1,12 @@
 ---
 id: 2026-10-03-notification-slice5-audience-projection-spec
 title: Project notification events into exact per-recipient candidates under current authority
-stage: spec
-status: approved
+stage: dev
+status: implementing
 pass: 2
 verdict: approved
 created: 2026-10-03
-updated: 2026-10-03
+updated: 2026-10-05
 repos: [minion_hub]
 tags: [security, data, logic, test]
 type: feature
@@ -1305,3 +1305,193 @@ After implementation, the worker may truthfully project only the three declared 
 event is externally delivered and no browser can read a candidate. NOTIF-007/014/016/017 remain open
 for their producer, inbox, preferences, external effect, aggregate/report, retention, release, and
 deployment slices. Exact-site `TODO(handoff)` comments and the meta proposal retain those boundaries.
+
+## Implementation record — 2026-10-05
+
+The program was paused on 2026-10-03 with this contract approved and the implementation uncommitted.
+It resumed on owner authorization. This section records verified state against the completion
+boundary above; it changes no invariant and grants no release authority.
+
+### Source identity
+
+The 48 owned/compatibility files were verified byte-for-byte against the frozen pause manifest
+`readiness-notification-s5-source-2026-10-03.sha256` (manifest SHA-256
+`62767c39b05d7a535945297c93c121fdea59833b824782064e6e7a1bd935145d`): 48 of 48 matched, so no source
+drifted while the program was paused.
+
+Eight shared notification/QC compatibility files were then format-qualified for the first time at
+final bytes (`outbox-claim.ts`, `outbox-settlement.ts`, scheduler `admission.ts`, `discovery.ts`,
+`loop.ts`, `loop.test.ts`, `projector-contract.ts` and
+`tests/fixtures/notification-scheduler/authority-cases.ts`). Prettier changed string-quote style and
+array wrapping only; no statement, identifier or SQL text changed.
+
+Prettier inertness was then proven rather than assumed: each file was parsed before and after with
+the TypeScript parser and compared as a position-free syntax-tree signature, with string literals
+compared by decoded value and template literals by **raw** text, so any change to an embedded SQL
+byte would fail. All nine reformatted files are syntax-tree identical. Note that `git diff -w` is
+not a valid whitespace-only proof for a Prettier pass, because reflowing moves line boundaries, and
+a standalone token scanner is not either, because it mis-handles template-literal continuation
+without parser context.
+
+### Final receipts
+
+The authoritative manifest is `readiness-notification-s5-source-2026-10-06.sha256` (v2), self-SHA-256
+`523bf2a88c54fbe0c43c4cde1fea042e31f4c030efacb57e1cb996d043afd2f3`, **49 paths**, verified 49 of 49
+against the worktree. At those exact bytes:
+
+- combined CI-shaped lane: 18 files, 298 tests, 298 passed, 0 failed, 0 pending, 282s, validated as
+  `{files:18, passed:298, skipped:0}`;
+- focused units: 8 files, 33 passed (30 before, plus the three new ordering regressions);
+- configured Hub check: 11,698 files, 0 errors, 0 warnings, 0 files with problems;
+- Prettier check clean across all 49 TypeScript/JSON paths, and `git diff --check` clean.
+
+One operational note for whoever reruns this lane: a run killed before fixture teardown leaves its
+transient `notification_*` and `app_notification_worker` roles behind, and PostgreSQL roles are
+cluster-wide, so the next run fails at `db:migrate` with `Notification role already exists; reviewed
+role reconciliation required`. That is the migration's own non-idempotency assertion working
+correctly, not a regression. Recreating the disposable parent restores a pristine cluster.
+
+### Combined CI-shaped lane
+
+The required PostgreSQL lane now passes with zero skips, closing the pause-time failure of 275
+passed / 10 failed / 13 pending out of 298:
+
+- `vitest.jobs-postgres.config.ts`, 18 admitted test files, 18 passed, 298 tests, 298 passed, 0
+  failed, 0 pending.
+- `scripts/qc/jobs-postgres-contract.ts` returns the required `{files:18, passed:298, skipped:0}`.
+- Both pause-time failures were invocation/fixture defects, not contract defects. The brain-corpus
+  effect-ownership fixture admits correctly once the supplied disposable parent is `minion_qc_corpus`
+  rather than `minion_qc_vectors`, restoring its 13 semantic cases. The Slice4 scheduler fixture's
+  routing-column compatibility step holds in the full lane, not only in the isolated 16/16 rerun, so
+  discovery reading `notification_outbox.kind` and `schema_version` from migration `20261003170000`
+  is satisfied end to end.
+
+The lane ran against the pinned disposable parent rebuilt to the same identity recorded at the pause
+(`minion_qc_corpus` / `minion_qc` / `minion-360-disposable:v1`, loopback, PostgreSQL 18.6), with no
+source edited while it ran.
+
+### Configured check
+
+The configured Hub `check` passes at final formatted bytes: 11,698 files, 0 errors, 0 warnings, 0
+files with problems. A first attempt reported two errors in `src/hooks.client.ts` for
+`PUBLIC_POSTHOG_KEY` and `PUBLIC_POSTHOG_HOST`; those were absent `$env/static/public` exports in a
+checkout with no `.env`, not source defects, and the run is only the configured gate once the
+environment exists the way `vercel-build` creates it. No Slice5 file was implicated in either run.
+
+### Outstanding before this slice may be committed
+
+1. Human merge gate, production migration and post-release verification remain outside this
+   contract, unchanged.
+
+### Independent blast-radius review — verdict `concerns`
+
+An independent read-only review confirmed the 49 in-scope hashes, confirmed the migration carries no
+`BEGIN`/`COMMIT` of its own (unlike the sibling `20261003110000_marketplace_operations.sql`),
+confirmed `PUBLIC` retargeting is safe against the admitted pre-state ACL, confirmed no production
+producer writes `notification_events` and both tables hold zero production rows, confirmed the
+worker cannot start on Vercel (double-gated on `DESKTOP=1` in `src/hooks.server.ts` and again in
+`worker-bootstrap.ts`, with no `vercel.json` cron touching notifications), and confirmed HC039's
+seven-case mention-directory manifest entry is preserved with the 34/18/298 totals arithmetically
+consistent. It corrected two claims made earlier in this record, both of which are fixed above:
+
+- The scheduler fixture's routing compatibility step was **not** added after the pause.
+  `tests/fixtures/notification-scheduler/postgres-harness.ts` hashes identically in the 2026-10-03
+  and 2026-10-05 manifests (`b40d12b8…`) with an mtime of 2026-10-03 18:08:35. It is also strictly
+  confined: `installProjectionRoutingCompatibility` is module-private, its only importers are two
+  test-only modules, and each of its six operations has an exact counterpart in the migration, so it
+  is a subset of the real schema rather than compensation for a missing one.
+- The reformatted set is the eight files named above. `worker-transaction.ts` and
+  `scheduler/qualification-projector.ts` were **not** reformatted; they hash identically across both
+  manifests.
+
+Three concerns were raised and all three are now corrected:
+
+1. **Routing order diverged from the SQL it feeds.** `canonicalNotificationProjectionSupport` sorted
+   a NUL-joined key with `localeCompare(key, 'en-US')`, while the complement ranges in
+   `unsupportedProjectionPending` compare
+   `row(catalog_revision collate "C", kind collate "C", schema_version)` with `schema_version` as an
+   integer. Two divergence classes: a stringified `schemaVersion` orders `"10"` before `"2"`, and a
+   locale collation treats the NUL separator and punctuation as ignorable. With a second schema
+   version in the manifest the generated ranges would invert, leaving a gap in which unsupported
+   `pending` rows sit undetected while the health signal reports a drained queue. The sort now
+   compares the two ASCII-validated text fields by code unit, which equals C collation, and
+   `schemaVersion` numerically. Three regression tests were added that call the function directly
+   and check it against an independent `Buffer.compare` oracle; restoring the locale sort fails two
+   of them, and the pre-existing shipped-manifest assertion passes either way, which is why the
+   defect was latent.
+2. **The frozen manifest was incomplete.** `src/server/db/notification-legacy-reconciliation.sql.integration.test.ts`
+   is Slice5-owned (it imports `projection/catalog-admission` and `projection/catalog-fingerprint`
+   and gained 77 lines) and is a jobs-lane member, so the `{files:18, passed:298, skipped:0}` receipt
+   rested on bytes no manifest covered. It is now the 49th entry. Having been outside the manifest it
+   had also never been format-qualified; it is now formatted, with an identical AST before and after.
+3. **The backfill completeness guard could not fail.** The guard is a plain `SELECT` on
+   `public.notification_outbox`, which carries `force row level security` and has no owner policy,
+   so an actor without row visibility would write zero rows and then read zero nulls and report
+   itself complete, surfacing later only as a bare not-null violation. The preflight asserts the
+   actor's name, `rolsuper` and `rolcreaterole` but never this attribute. A named precondition now
+   runs immediately before the backfill and raises unless the actor bypasses row level security.
+   Production `postgres` has `rolbypassrls=t` and the PG18 fixture actor is superuser, so both
+   satisfy it; the guard converts a silent class of failure into a named one.
+
+Remaining review items are deliberately not addressed in this slice and are recorded as follow-ups
+rather than fixed, because each is inert at current bytes: a `revoke`/`grant` pair on eight outbox
+columns whose comment overstates its effect (the real mechanism is the worker-update policy's
+`with check`), a Slice3-only `claimNotificationEventsInTransaction` duplicate whose sole export
+`claimNotificationEventsForOrg` has no callers, the absence of a bounded-plan assertion for
+`unsupportedProjectionPending`'s row-comparison probe.
+
+The review's final nit — that the QC count bumps absorb another owner's missed bump — does not apply
+to a branch based on production `master`, and the record is corrected here. The reviewer was right
+about `875fb043`, which left the expectations at 32/16/268 after landing HC039's manifest entry, but
+`master` already carries that repair at 33/17/275 (it was fixed while shipping #432). Measured
+against `master`, this slice's diff is exactly one manifest entry and its behaviors: 33→34 discovered
+files, 17→18 jobs-lane files and 275→298 semantic tests. Nothing stale is absorbed and no
+pull-request caveat is needed.
+
+### Production preflight dry-run — found and fixed a real blocker
+
+Before offering the merge, the migration's own preflight was executed against production read-only.
+Lines 1 to 378 are exclusively `create temporary table`, inserts into those temp tables and
+assertions; the first DDL is the `create role` at line 380, and the extract ends in a deliberate
+`raise exception`, so nothing could persist. The lone `insert into public.notification_outbox` in
+that span is inert: it sits inside a `$body$`-quoted literal being compared as the expected trigger
+source.
+
+**It failed**, on `Notification projection source role reachability changed`. Merging without this
+check would have failed the production build, because the migration runner executes inside
+`vercel-build`.
+
+The drift was narrow and benign, and nothing was missing — no authority had been removed. Six extra
+reachability rows existed, all transitive and all `MEMBER`/`SET` only, never `USAGE`: Supabase grants
+`supabase_storage_admin` the ability to `SET ROLE` into `authenticator` (grantor `supabase_admin`,
+`inherit_option=false`, `set_option=true`), and `authenticator` is already an admitted member of
+`anon`, `authenticated` and `service_role`. The existing edge assertion could not catch it, because
+`authenticator` is not one of the five targets it freezes; only the reachability assertion did.
+
+This is pre-existing platform capability rather than new exposure: `supabase_storage_admin` cannot
+reach `app_notification_worker`, and `service_role` already holds full privileges on these
+relations. The expectation was therefore corrected rather than loosened. The PG17 branch now admits
+that chain **only** when the exact platform edge is present with exactly those options, so an
+inheriting edge, a different grantor, or any `USAGE` reachability still fails. The admission is
+derived from the live edge, so fixtures that lack the role are unaffected, and it sits inside the
+PG17 branch so the PG18 fixture path is untouched.
+
+After the correction, production reachability matches the contract exactly: 39 actual rows, 39
+expected, zero unexpected, zero missing. The remaining preflight assertions, which the first run
+never reached, were then dry-run separately and all matched: policy inventory, PUBLIC and app-ledger
+policy roles, source ownership, absence of the three Slice-5 roles, enqueue trigger source, the
+quarantine function's identity and ACL, and the PG17 event-owner graph. The jobs lane was rerun on
+the corrected migration and stayed green at 18 files / 298 passed / 0 skipped.
+
+### Independent mergeability of this slice
+
+The slice was re-verified as standing on its own rather than only inside the shared worktree. Its 49
+paths were applied to a branch created from production `master` (`ce1ec6c3`) and all 49 hashes match
+the manifest. A static import audit of the 46 TypeScript sources resolves every relative, `$lib` and
+`$server` specifier to either one of the 49 paths or a file already tracked in `master`; none
+resolves into the other owner's uncommitted work. The only non-resolving specifier is the Vite
+`?raw` suffix on `$lib/notifications/catalog.manifest.json`, which `master` already tracks.
+
+NOTIF-007/014/016/017 stay open for their producer, inbox, preferences, external-effect,
+aggregate/report, retention, release and deployment slices. Slice4 health remains
+`projection_unavailable` in production until this slice is released.
