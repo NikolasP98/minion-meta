@@ -30,17 +30,17 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L253
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:898` — the reported range is exactly what is ON SCREEN, while the
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L898
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1472` — this is a per-VIEWER preference, not an RBAC restriction —
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1472
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1769` — a drag cannot cross the runway's visible edge — there is no
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1769
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2727` — a drop reclassifies only for a custom column (its
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2727
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2809` — the agenda lists every booking in bookings — the whole
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2809
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2922` — the month grid carries no tickets
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2922
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2932` — nor does it fan a CONTAINER out (2026-09-26):
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2932
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:4022` — no overflow clip — a booking that starts before startHour
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L4022
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1477` — this is a per-VIEWER preference, not an RBAC restriction —
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1477
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1774` — a drag cannot cross the runway's visible edge — there is no
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1774
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2732` — a drop reclassifies only for a custom column (its
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2732
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2814` — the agenda lists every booking in bookings — the whole
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2814
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2927` — the month grid carries no tickets
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2927
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2937` — nor does it fan a CONTAINER out (2026-09-26):
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2937
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:4027` — no overflow clip — a booking that starts before startHour
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L4027

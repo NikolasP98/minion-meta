@@ -29,10 +29,3 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:388` — cancelling a plan leaves its already-paid instalment lines
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L388
-
-## Reconciliation note
-
-This marker's text ("cancelling a plan leaves its already-paid instalment
-lines") exactly matches `postmerge-minion-hub-bf747956e314` (approved, same
-PR #278 / commit 2ffbf0b). Flagging for human review rather than merging,
-since that proposal is already past the draft stage.
