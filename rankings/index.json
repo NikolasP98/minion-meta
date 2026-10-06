@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-06T21:22:33.999Z",
+	"generatedAt": "2026-10-06T21:51:33.024Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -18216,20 +18216,21 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 5,
+				"specification": 4,
 				"implementation": 2
 			},
 			"confidence": 5,
-			"recommendation": "reframe",
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Recurring worker-exec fault (exit-126/turns=0, second identical signature in ~45min) needs infra/binary-provisioning investigation rather than a simple retry.",
+			"rationale": "This is a transient worker-exec fault with git state already safely pushed and an explicit recommendation to retry and only escalate if the pattern recurs further.",
 			"evidence": [
-				"exit-126/turns=0 with 0 permission_denials points to worker-box exec fault, not a task failure",
-				"second identical signature on minion-meta reconcile within ~45 minutes"
+				"exit-126, turns=0 for the reconcile agent step",
+				"second identical exit-126/turns=0 signature within ~45 minutes",
+				"git-side reconcile state already pushed successfully"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T21:32:52.882Z"
+			"scoredAt": "2026-10-06T21:51:32.848Z"
 		},
 		{
 			"key": "issue:minion-meta#721",
@@ -20271,39 +20272,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T04:51:20.674Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-be298870a398",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/data-table/filters.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-be298870a398.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "92f7bc2b5f6b4ead95f07d7309bda1e37554f36a13b3e20b96ee437ef388663a",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved post-merge finding with a clear, bounded definition of done in a single file.",
-			"evidence": [
-				"status: approved",
-				"Definition of done: TODO(handoff) marker removed or updated with rationale",
-				"scoped to src/lib/components/data-table/filters.ts"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T21:32:52.882Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d57706ece661",
@@ -24559,6 +24527,38 @@
 			"scoredAt": "2026-10-03T05:25:32.539Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy-health entry only records an already-merged commit fixing nitter persistence/shutdown, leaving no remaining actionable work.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown (#295)",
+				"status: unknown with no further description of an ongoing issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T21:51:32.848Z"
+		},
+		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27059,6 +27059,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T22:22:24.883Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-be298870a398",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/data-table/filters.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-be298870a398.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "92f7bc2b5f6b4ead95f07d7309bda1e37554f36a13b3e20b96ee437ef388663a",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The TODO(handoff) marker in filters.ts has a clear definition of done and diagnosis already underway, making it a small bounded task ready for execution.",
+			"evidence": [
+				"TODO(handoff) marker at src/lib/components/data-table/filters.ts",
+				"Definition of done: marker removed or intentionally left with updated rationale",
+				"merged PR #411 referenced as source"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T21:51:32.848Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-f17e52eaac73",
