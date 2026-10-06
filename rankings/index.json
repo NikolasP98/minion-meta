@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-06T01:31:22.059Z",
+	"generatedAt": "2026-10-06T01:51:04.017Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -20792,6 +20792,38 @@
 			"scoredAt": "2026-10-05T02:23:33.166Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Commit shows a shutdown/persistence fix for the nitter extension but no indication of ongoing deployment failure or urgency.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain poller shutdown",
+				"tags: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T01:51:03.838Z"
+		},
+		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22605,6 +22637,39 @@
 			"scoredAt": "2026-10-05T02:28:35.907Z"
 		},
 		{
+			"key": "issue:minion-meta#553",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#553 [monitor:unstick] reconcile run ab9228c4 (minion-meta) failed: agent exec exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/553",
+			"sourceUpdatedAt": "2026-09-22T01:17:29Z",
+			"sourceFingerprint": "d9351e62cae65655750f97d776cc064a0bf838646af2ed7885abd5c23fa145b3",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single transient exit-126/zero-turn agent exec failure where the substantive reconcile work already succeeded, warranting monitoring rather than immediate action unless it recurs.",
+			"evidence": [
+				"exit-126, turns=0, cost_usd=0",
+				"Recommendation: retry the run -- only the agent step needs to re-run",
+				"candidate for a new host-classifier signature if pattern recurs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T01:51:03.838Z"
+		},
+		{
 			"key": "issue:minion-meta#723",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24374,39 +24439,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T11:24:00.056Z"
-		},
-		{
-			"key": "issue:minion-meta#553",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#553 [monitor:unstick] reconcile run ab9228c4 (minion-meta) failed: agent exec exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/553",
-			"sourceUpdatedAt": "2026-09-22T01:17:29Z",
-			"sourceFingerprint": "d9351e62cae65655750f97d776cc064a0bf838646af2ed7885abd5c23fa145b3",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Single transient exit-126/zero-turn agent-exec failure with no cost or evidence of recurrence, so it warrants monitoring rather than immediate dedicated work.",
-			"evidence": [
-				"exit-126, turns=0, cost_usd=0",
-				"worker_started_at ~0.7s before finished_at",
-				"pre-agent reconcile steps completed and logged successfully"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T01:29:01.456Z"
 		},
 		{
 			"key": "issue:minion-meta#581",
