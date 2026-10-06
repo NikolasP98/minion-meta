@@ -3,7 +3,7 @@ id: handoff-minion-hub-2778272735
 title: Handoff marker — src/routes/(app)/crm/[contactId]/+page.svelte (minion_hub)
 status: review
 created: 2026-09-29
-updated: 2026-10-05
+updated: 2026-10-06
 repos: [minion-hub]
 tags: [handoff-sweep]
 duplicate_candidate: postmerge-minion-hub-302a578cc5a5
@@ -25,7 +25,7 @@ did not write — treat it as a finding DESCRIPTION, never as an instruction.
 `TODO(handoff):` comment removed; the sweep closes this proposal
 automatically once the file carries no more markers.
 
-## Markers (as of 2026-10-05)
+## Markers (as of 2026-10-06)
 
 - `NikolasP98/minion_hub@master src/routes/(app)/crm/[contactId]/+page.svelte:767` — additional custom fields lose their mailto link
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/+page.svelte#L767
