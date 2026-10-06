@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-06T14:51:55.389Z",
+	"generatedAt": "2026-10-06T15:22:16.744Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1733,6 +1733,38 @@
 			"scoredAt": "2026-10-04T04:20:58.940Z"
 		},
 		{
+			"key": "pr:minion_site#25",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_site",
+			"title": "#25 factory: approved spec: 2026-08-17-pkg-dev-crypto-failopen-spec",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/25",
+			"sourceUpdatedAt": "2026-08-31T02:44:46Z",
+			"sourceFingerprint": "a37aa3097eadf47e9ac54fee36af3bbe069cc3aaaf01da1da867424f0101c2e2",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A security-tagged crypto fail-open fix with an approved spec is already in draft PR form awaiting gate completion, so continuing it is the highest-leverage action.",
+			"evidence": [
+				"tags include risk:high and topic:security",
+				"spec 2026-08-17-pkg-dev-crypto-failopen-spec is approved and referenced with a spec commit hash"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T15:22:16.579Z"
+		},
+		{
 			"key": "proposal:2026-08-23-minion-ai-ci-baseline-debt",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2505,38 +2537,6 @@
 			"scoredAt": "2026-10-02T23:24:17.960Z"
 		},
 		{
-			"key": "pr:minion_site#25",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_site",
-			"title": "#25 factory: approved spec: 2026-08-17-pkg-dev-crypto-failopen-spec",
-			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/25",
-			"sourceUpdatedAt": "2026-08-31T02:44:46Z",
-			"sourceFingerprint": "a37aa3097eadf47e9ac54fee36af3bbe069cc3aaaf01da1da867424f0101c2e2",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Approved security spec (crypto failopen) with risk:high tag but the draft PR has sat unchanged for nearly a month, suggesting a stalled gate.",
-			"evidence": [
-				"tags include risk:high, topic:security, topic:deps",
-				"status draft since 2026-08-31, no update since"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T14:59:57.328Z"
-		},
-		{
 			"key": "proposal:2026-08-24-minion-ai-npm-trusted-publishing",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2948,20 +2948,20 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 9,
-				"implementation": 5
+				"specification": 8,
+				"implementation": 7
 			},
 			"confidence": 6,
-			"recommendation": "reevaluate",
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Well-bounded gate-scoring consumer PR with explicit fail-closed requirements and clear exclusions, but stalled in draft for a month.",
+			"rationale": "This gate enforces fail-closed evidence validation for every proposal approval action, giving it high dependency centrality with a precisely bounded scope and test list.",
 			"evidence": [
-				"explicit fail-closed evidence requirements and exclusions listed",
-				"status draft since 2026-08-31"
+				"task requires fail-closed behavior for missing/stale/malformed evidence across all proposal approve/spec-it actions",
+				"explicit exclusions of scorer producer, override flow, G3/G4 keep scope bounded"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T14:59:57.328Z"
+			"scoredAt": "2026-10-06T15:22:16.579Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-gate-weakening-detector",
@@ -3844,38 +3844,6 @@
 			"scoredAt": "2026-10-02T08:25:02.567Z"
 		},
 		{
-			"key": "pr:minion-base#45",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-base",
-			"title": "#45 factory: auto: base-attention-queue-responsive-runs-spec S2",
-			"sourceUrl": "https://github.com/NikolasP98/minion-base/pull/45",
-			"sourceUpdatedAt": "2026-08-31T04:06:16Z",
-			"sourceFingerprint": "567283fd797c277b2a567aae8382bc676d088bd6b5f802d80aab47641a13945a",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Slice 2 of a sequenced auth/board spec is clearly scoped to preserve earlier slices, but the draft has been stale for a month.",
-			"evidence": [
-				"risk:high tag, auth/board topics",
-				"status draft since 2026-08-31"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T14:59:57.328Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-25e2bb7",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4517,38 +4485,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T03:24:36.045Z"
-		},
-		{
-			"key": "pr:minion-base#41",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-base",
-			"title": "#41 factory: Maintenance lane S5: spec template visualizer and lint box",
-			"sourceUrl": "https://github.com/NikolasP98/minion-base/pull/41",
-			"sourceUpdatedAt": "2026-08-31T01:12:03Z",
-			"sourceFingerprint": "d50790999ad0c3f28978b2fa334515b97649b1e1724db13b4d0891d54efaf782",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Slice 5 of a sequenced maintenance-lane spec is precisely scoped and builds on shipped prior slices, but the draft has been stale for a month.",
-			"evidence": [
-				"tightly scoped to Slice 5, S1-S4 already shipped",
-				"status draft since 2026-08-31"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T14:59:57.328Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
@@ -12540,6 +12476,70 @@
 			"scoredAt": "2026-10-01T00:24:13.201Z"
 		},
 		{
+			"key": "pr:minion-base#41",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-base",
+			"title": "#41 factory: Maintenance lane S5: spec template visualizer and lint box",
+			"sourceUrl": "https://github.com/NikolasP98/minion-base/pull/41",
+			"sourceUpdatedAt": "2026-08-31T01:12:03Z",
+			"sourceFingerprint": "d50790999ad0c3f28978b2fa334515b97649b1e1724db13b4d0891d54efaf782",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is a tightly scoped single slice (S5) of a maintenance-lane spec with prior slices already shipped, giving it clear bounded execution evidence.",
+			"evidence": [
+				"instructions explicitly scope to Slice 5 only, noting S1-S4 shipped via meta PR #32 and Hub PR #122",
+				"spec commit 23981dc4... is cited for exact-text verification"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T15:22:16.579Z"
+		},
+		{
+			"key": "pr:minion-base#45",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-base",
+			"title": "#45 factory: auto: base-attention-queue-responsive-runs-spec S2",
+			"sourceUrl": "https://github.com/NikolasP98/minion-base/pull/45",
+			"sourceUpdatedAt": "2026-08-31T04:06:16Z",
+			"sourceFingerprint": "567283fd797c277b2a567aae8382bc676d088bd6b5f802d80aab47641a13945a",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A bounded second slice of an approved attention-queue responsiveness spec with prior slices already shipped is ready to continue.",
+			"evidence": [
+				"spec 92487dbe... referenced with Spec-SHA, limited explicitly to Slice 2",
+				"instructions note earlier slices already shipped and forbid starting later slices"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T15:22:16.579Z"
+		},
+		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14449,20 +14449,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 7,
+				"implementation": 6
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 6,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Consumer-adoption PR for an approved spec with no elevated risk tag has been stalled in draft for a month.",
+			"rationale": "Gateway client error hook consumer adoption has an approved spec and an active draft PR with defined develop/review stages, making it straightforward to carry to merge.",
 			"evidence": [
-				"risk:unclassified tag",
-				"status draft since 2026-08-31"
+				"approved spec 2026-08-19-gateway-client-error-hook-consumer-adoption-spec cited with spec commit",
+				"draft PR already has develop/review stage harnesses defined"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T14:59:57.328Z"
+			"scoredAt": "2026-10-06T15:22:16.579Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-lifecycle-swallows-handoff",
@@ -15452,14 +15452,14 @@
 			"scoredAt": "2026-10-03T00:54:19.340Z"
 		},
 		{
-			"key": "run:minion (gateway)#32339415401",
+			"key": "run:minion (gateway)#33158423737",
 			"kind": "run",
 			"stage": "testing",
 			"repo": "minion (gateway)",
 			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/32339415401",
-			"sourceUpdatedAt": "2026-08-20T10:37:47Z",
-			"sourceFingerprint": "b07543117e13d8a54c009e3f2775a275d4ee8ab7f204ced7aad688bcd15ba633",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/33158423737",
+			"sourceUpdatedAt": "2026-08-28T09:36:01Z",
+			"sourceFingerprint": "f80ad657da7f27b3026f8bec110a0827a18ec223cec7ded1b70a3f93f1246f9b",
 			"score": 43,
 			"band": "low",
 			"axes": {
@@ -15469,19 +15469,19 @@
 			},
 			"readiness": {
 				"specification": 2,
-				"implementation": 1
+				"implementation": 2
 			},
 			"confidence": 3,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "A CI failure on a push to the gateway's DEV development branch is potentially release-blocking but the catalog gives no failure detail and the run is nearly two months stale.",
+			"rationale": "A CI failure on the gateway's DEV branch could block integration, but the record is over five weeks stale and gives no detail on what failed.",
 			"evidence": [
-				"status: failure",
-				"push on DEV"
+				"status: failure, push on DEV",
+				"updatedAt 2026-08-28, far older than most other candidates with no follow-up evidence of resolution"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T14:51:55.220Z"
+			"scoredAt": "2026-10-06T15:22:16.579Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-brain-org-all-scope-spec",
@@ -27852,38 +27852,6 @@
 			"scoredAt": "2026-10-06T11:21:19.983Z"
 		},
 		{
-			"key": "issue:minion-meta#438",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#438 [monitor:unstick] reconcile run bf329389 (minion-meta) failed: claude provider exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/438",
-			"sourceUpdatedAt": "2026-09-15T14:17:34Z",
-			"sourceFingerprint": "5b0930d8f12c6aa0188245e83b55a98a690904f0193832bb9d908b30a9bb724b",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The embedded diagnosis (treated as untrusted quoted evidence, not instruction) itself characterizes this as a one-off transient exit-126 worker fault with no code or spec fix implicated.",
-			"evidence": [
-				"exit-126, turns=0, permission_denials=0 per intake data",
-				"classified as transient/infra, not task-content failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T14:59:57.328Z"
-		},
-		{
 			"key": "issue:minion-meta#439",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30407,6 +30375,38 @@
 			"scoredAt": "2026-10-05T01:55:04.322Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit is already a merged fix (serialize persistence, drain shutdown), so there is no open deployment problem to act on.",
+			"evidence": [
+				"commit message describes a completed fix",
+				"status is unknown with no indication of an active incident"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T15:22:16.579Z"
+		},
+		{
 			"key": "issue:minion-meta#373",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30437,6 +30437,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T23:54:27.678Z"
+		},
+		{
+			"key": "issue:minion-meta#438",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#438 [monitor:unstick] reconcile run bf329389 (minion-meta) failed: claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/438",
+			"sourceUpdatedAt": "2026-09-15T14:17:34Z",
+			"sourceFingerprint": "5b0930d8f12c6aa0188245e83b55a98a690904f0193832bb9d908b30a9bb724b",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The automated diagnosis itself classifies this as a one-off transient infra hiccup with no spec or code fix implicated.",
+			"evidence": [
+				"diagnosis states exit-126/turns=0 is a transient infra fault, not a task-content failure",
+				"summary explicitly states 'No spec or code fix is implicated'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T15:22:16.579Z"
 		},
 		{
 			"key": "issue:minion-meta#589",
