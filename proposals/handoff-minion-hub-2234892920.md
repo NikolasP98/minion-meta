@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-2234892920
 title: Handoff marker — src/routes/(app)/finances/purchases/+page.svelte (minion_hub)
-status: draft
+status: review
 created: 2026-09-21
 updated: 2026-10-06
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-a65726c1d1d9
 ---
 
 # Handoff marker — src/routes/(app)/finances/purchases/+page.svelte
@@ -30,3 +31,11 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/finances/purchases/+page.svelte#L32
 - `NikolasP98/minion_hub@master src/routes/(app)/finances/purchases/+page.svelte:56` — the pre-migration markup rendered a lone Lock icon for closed
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/finances/purchases/+page.svelte#L56
+
+## Reconciliation note
+
+Both markers listed above appear to already be tracked by separately-approved
+proposals: the line-32 marker text matches `postmerge-minion-hub-a65726c1d1d9`
+(approved) and the line-56 marker text matches `postmerge-minion-hub-77a6343cc924`
+(approved). Flagging for human review rather than merging, since those two
+proposals are already past the draft stage.
