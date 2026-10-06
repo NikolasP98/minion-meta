@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-06T18:51:51.331Z",
+	"generatedAt": "2026-10-06T19:21:41.921Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11671,6 +11671,38 @@
 			"scoredAt": "2026-10-03T00:11:03.768Z"
 		},
 		{
+			"key": "run:minion (gateway)#37431179196",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37431179196",
+			"sourceUpdatedAt": "2026-10-06T08:03:29Z",
+			"sourceFingerprint": "e9617587d312221aeffec87ecb8a0a70a1933375d9b340887126e2626d702e65",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A same-day CI failure on the gateway's DEV branch is recent and could affect release readiness but the catalog gives no failure detail to act on yet.",
+			"evidence": [
+				"status: failure",
+				"workflow_dispatch on DEV, updatedAt 2026-10-06"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T19:21:41.768Z"
+		},
+		{
 			"key": "spec:2026-08-17-gw-msteams-large-upload-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -22519,70 +22551,6 @@
 			"scoredAt": "2026-10-06T08:51:33.396Z"
 		},
 		{
-			"key": "run:minion (gateway)#34587949149",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949149",
-			"sourceUpdatedAt": "2026-09-11T10:46:59Z",
-			"sourceFingerprint": "82bcff565fd5b409b3f4fe7fab98082e953214bbd231af0206d034e22b97120c",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A month-old CI failure on DEV with no logs or error detail is not actionable and is very likely superseded by subsequent pushes to that branch.",
-			"evidence": [
-				"status failure with no error detail, only 'push on DEV'",
-				"updatedAt 2026-09-11, nearly a month stale versus current date"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T18:51:51.166Z"
-		},
-		{
-			"key": "run:minion (gateway)#34587949471",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "Docker Release",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949471",
-			"sourceUpdatedAt": "2026-09-11T10:13:03Z",
-			"sourceFingerprint": "bff3ad4ee3500a2aec6da97aca9215d1679d66023b6066cb22d3e02f7198b91a",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Same pattern as the sibling CI run: a month-old Docker Release failure with no diagnostic content to act on.",
-			"evidence": [
-				"status failure with no error detail, only 'push on DEV'",
-				"updatedAt 2026-09-11, nearly a month stale versus current date"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T18:51:51.166Z"
-		},
-		{
 			"key": "spec:2026-10-03-readiness-operations-guidance-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -24874,6 +24842,38 @@
 			"scoredAt": "2026-10-03T05:25:32.539Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy entry only echoes an already-merged nitter persistence/shutdown fix with status unknown and no stated outstanding problem.",
+			"evidence": [
+				"status: unknown",
+				"summary is a merged commit message for a nitter fix already landed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T19:21:41.768Z"
+		},
+		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26148,6 +26148,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T15:51:43.911Z"
+		},
+		{
+			"key": "issue:minion-meta#439",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#439 [monitor:unstick] reconcile run 1971ab3c (minion-meta) failed: agent launch exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/439",
+			"sourceUpdatedAt": "2026-09-15T18:17:37Z",
+			"sourceFingerprint": "18102fa2ea31db3ae74f3981ed98e313de30c562dfaf1dd1ba0fcaa73e6e046e",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The automated monitor intake itself reports the underlying reconcile work already succeeded and pushed, with only a trivial agent-launch exit-126 needing a cheap idempotent retry.",
+			"evidence": [
+				"fingerprint unstick-unknown-1971ab3c, exit-126, turns=0",
+				"reconcile work already pushed (aacc135..f5edce2) before the agent-launch failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-06T19:21:41.768Z"
 		},
 		{
 			"key": "issue:minion-meta#447",
@@ -27881,38 +27913,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T11:21:19.983Z"
-		},
-		{
-			"key": "issue:minion-meta#439",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#439 [monitor:unstick] reconcile run 1971ab3c (minion-meta) failed: agent launch exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/439",
-			"sourceUpdatedAt": "2026-09-15T18:17:37Z",
-			"sourceFingerprint": "18102fa2ea31db3ae74f3981ed98e313de30c562dfaf1dd1ba0fcaa73e6e046e",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Diagnosis confirms the substantive reconcile work already completed and pushed, with only a cheap agent-launch retry remaining and no recurring infra signal reported yet.",
-			"evidence": [
-				"reconcile sweep succeeded end-to-end...already persisted/pushed",
-				"Recommendation: safe to retry — the reconcile work is idempotent and already landed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-29T18:59:08.998Z"
 		},
 		{
 			"key": "issue:minion-meta#440",
