@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-site-c268d8c264ba
 title: "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.1-readiness.2.tgz (minion-site)"
-status: draft
+status: review
 created: 2026-10-05
-updated: 2026-10-05
+updated: 2026-10-06
 repos: [minion-site]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `deps/minion-stack-shared-0.9.1-readiness.2.tgz`
@@ -42,3 +43,14 @@ Binary tarballs shouldn't be committed to git — they bloat the repo, hide depe
 - merged PR: https://github.com/NikolasP98/minion-site/pull/33
 - file: `deps/minion-stack-shared-0.9.1-readiness.2.tgz`
 - checked: 2026-10-05
+
+## Reconciliation note (2026-10-06, proposal-sweep)
+
+Same tarball family (`@minion-stack/shared`, now at `0.9.1`) already tracked
+in `2026-09-08-platform-qc-remediation`'s "Shared package release emission
+gate" section (prior hash `d01a5285…` at `0.9.0`, originally flagged against
+this same site repo as `postmerge-minion-site-a357d1f6520e`). Likely a near-
+duplicate of `postmerge-minion-site-0315da964f10` (readiness.1 of the same
+package/version) as well as of the remediation doc. Flagged `duplicate_candidate`
+rather than merged — a human should confirm whether readiness.1/readiness.2 are
+sequential rebuilds of the same unresolved gap before disposing of either.

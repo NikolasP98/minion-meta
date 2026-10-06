@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-site-0e436304bf6c
 title: "Post-merge finding — scan-gap in deps/minion-stack-ui-0.1.0-readiness.1.tgz (minion-site)"
-status: draft
+status: review
 created: 2026-10-05
-updated: 2026-10-05
+updated: 2026-10-06
 repos: [minion-site]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `deps/minion-stack-ui-0.1.0-readiness.1.tgz`
@@ -42,3 +43,15 @@ Run `git log --all -- "deps/minion-stack-ui*"` to see when/why it was added.
 - merged PR: https://github.com/NikolasP98/minion-site/pull/33
 - file: `deps/minion-stack-ui-0.1.0-readiness.1.tgz`
 - checked: 2026-10-05
+
+## Reconciliation note (2026-10-06, proposal-sweep)
+
+Same class of finding already tracked under `2026-09-08-platform-qc-remediation`'s
+"Dependency/release provenance (UI-06)" priority item (no blanket version bump;
+publish distinct package versions/digests before adoption) and its "Shared
+package release emission gate" section, which covers a sibling vendored
+`@minion-stack/shared` tarball (the prior `postmerge-minion-site-a357d1f6520e`
+precedent for this same site repo). Flagged `duplicate_candidate` rather than
+merged: that doc's packaging work so far is scoped to `@minion-stack/shared`,
+not `ui`, so a human should confirm this specific package/version is covered
+by the same remediation slice before folding it in or closing it separately.

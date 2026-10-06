@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-de937a67722d
 title: "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.1-readiness.1.tgz (minion_hub)"
-status: draft
+status: review
 created: 2026-10-05
-updated: 2026-10-05
+updated: 2026-10-06
 repos: [minion-hub]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `deps/minion-stack-shared-0.9.1-readiness.1.tgz`
@@ -37,3 +38,14 @@ A complete rescan retrieves this file, or a human confirms the gap is expected a
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/431
 - file: `deps/minion-stack-shared-0.9.1-readiness.1.tgz`
 - checked: 2026-10-05
+
+## Reconciliation note (2026-10-06, proposal-sweep)
+
+Same tarball family (`@minion-stack/shared`, now at `0.9.1`) already tracked
+in `2026-09-08-platform-qc-remediation`'s "Shared package release emission
+gate" section (prior hash `d01a5285…` at `0.9.0`; adoption by hub/site/paperclip
+still open pending license text and an immutable version). Flagged
+`duplicate_candidate` rather than merged: that section describes producing a
+clean publishable release; this is a newer, separately-hashed vendored build
+under the same open gate, and a human should confirm it is the same unresolved
+packaging gap (vs. a regression) before disposing of it.

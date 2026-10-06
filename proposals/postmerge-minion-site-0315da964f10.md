@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-site-0315da964f10
 title: "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.1-readiness.1.tgz (minion-site)"
-status: draft
+status: review
 created: 2026-10-05
-updated: 2026-10-05
+updated: 2026-10-06
 repos: [minion-site]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `deps/minion-stack-shared-0.9.1-readiness.1.tgz`
@@ -37,3 +38,14 @@ This tarball was committed to git instead of managed through `bun` — binary de
 - merged PR: https://github.com/NikolasP98/minion-site/pull/33
 - file: `deps/minion-stack-shared-0.9.1-readiness.1.tgz`
 - checked: 2026-10-05
+
+## Reconciliation note (2026-10-06, proposal-sweep)
+
+Same tarball family (`@minion-stack/shared`, now at `0.9.1`) already tracked
+in `2026-09-08-platform-qc-remediation`'s "Shared package release emission
+gate" section (prior hash `d01a5285…` at `0.9.0`, originally flagged against
+this same site repo as `postmerge-minion-site-a357d1f6520e`). Flagged
+`duplicate_candidate` rather than merged, consistent with that earlier
+disposition: adoption/publication of the package remains open, so a human
+should confirm this newer vendored build is the same unresolved gap before
+disposing of it.

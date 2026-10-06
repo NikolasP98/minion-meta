@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-0f6b2d0e3194
 title: "Post-merge finding — scan-gap in deps/minion-stack-design-tokens-0.1.1-readiness.2.tgz (minion_hub)"
-status: draft
+status: review
 created: 2026-10-05
-updated: 2026-10-05
+updated: 2026-10-06
 repos: [minion-hub]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `deps/minion-stack-design-tokens-0.1.1-readiness.2.tgz`
@@ -37,3 +38,15 @@ A complete rescan retrieves this file, or a human confirms the gap is expected a
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/431
 - file: `deps/minion-stack-design-tokens-0.1.1-readiness.2.tgz`
 - checked: 2026-10-05
+
+## Reconciliation note (2026-10-06, proposal-sweep)
+
+Same class of finding already tracked under `2026-09-08-platform-qc-remediation`'s
+"Dependency/release provenance (UI-06)" priority item (no blanket version bump;
+publish distinct package versions/digests before adoption) and its "Shared
+package release emission gate" section, which covers a sibling vendored
+`@minion-stack/shared` tarball. Flagged `duplicate_candidate` rather than
+merged: that doc's packaging work so far is scoped to `@minion-stack/shared`,
+not `design-tokens`, so a human should confirm this specific package/version
+is covered by the same remediation slice before folding it in or closing it
+separately.
