@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-07T17:22:08.452Z",
+	"generatedAt": "2026-10-07T17:51:46.869Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2728,6 +2728,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T01:55:04.322Z"
+		},
+		{
+			"key": "run:minion (gateway)#37588928167",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37588928167",
+			"sourceUpdatedAt": "2026-10-07T08:21:43Z",
+			"sourceFingerprint": "96201808f80041776e45ecb071ee6b371ecd7e3fd541a3f25fe4fbad7e3e626c",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A same-day failing CI run on the gateway's DEV branch should be investigated promptly since it can block merges and validation.",
+			"evidence": [
+				"status: failure",
+				"workflow_dispatch on DEV, updatedAt 2026-10-07T08:21:43Z"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T17:51:46.717Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-marketplace-spec",
@@ -8029,38 +8061,6 @@
 			"scoredAt": "2026-10-05T02:22:05.574Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2303234027",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2303234027.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "d569655c0e2ab95d7a2a15cf5b761d1e6fd06ceb56ec32dc68117e6557c11727",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Mixes a spec-gap feature set with a client/server permission-gating mismatch that needs scoping before execution.",
-			"evidence": [
-				"spec §4.1 also lists reschedule, \"charge in POS\" and \"book the",
-				"the plan button is gated on pos:create, but server-side"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T01:25:57.418Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-547fb86d71ab",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8452,76 +8452,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T01:30:33.537Z"
-		},
-		{
-			"key": "run:minion (gateway)#34587949149",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949149",
-			"sourceUpdatedAt": "2026-09-11T10:46:59Z",
-			"sourceFingerprint": "82bcff565fd5b409b3f4fe7fab98082e953214bbd231af0206d034e22b97120c",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"run:minion (gateway)#34587949471"
-			],
-			"rationale": "CI failure on DEV push with no diagnosis, closely timed with a Docker Release failure suggesting a shared root cause worth investigating together.",
-			"evidence": [
-				"status: failure",
-				"\"push on DEV\"",
-				"timestamp 2026-09-11T10:46:59Z close to #34587949471"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T17:22:08.309Z"
-		},
-		{
-			"key": "run:minion (gateway)#34587949471",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "Docker Release",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949471",
-			"sourceUpdatedAt": "2026-09-11T10:13:03Z",
-			"sourceFingerprint": "bff3ad4ee3500a2aec6da97aca9215d1679d66023b6066cb22d3e02f7198b91a",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"run:minion (gateway)#34587949149"
-			],
-			"rationale": "Docker Release failure on the same DEV push timeframe as the CI failure, likely the same underlying build issue.",
-			"evidence": [
-				"status: failure",
-				"\"push on DEV\"",
-				"timestamp 2026-09-11T10:13:03Z close to #34587949149"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T17:22:08.309Z"
 		},
 		{
 			"key": "spec:2026-10-03-notification-slice2-migration-reconciliation-spec",
@@ -22098,14 +22028,14 @@
 			"scoredAt": "2026-10-05T12:00:37.623Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2260904492",
+			"key": "proposal:handoff-minion-hub-2303234027",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/flow-editor/FlowExports.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2260904492.md",
+			"title": "Handoff marker — src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2303234027.md",
 			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "8e30036fe753ddc20141a21a635b4f5b5305242f012a67250e4fc9cdbe5abb69",
+			"sourceFingerprint": "a0e083a031d7c557819eb914c271bd11b2f622eefb37948e313d33f06fe483f0",
 			"score": 33,
 			"band": "low",
 			"axes": {
@@ -22114,22 +22044,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 3,
+				"implementation": 2
 			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-13ff7afd0042"
-			],
-			"rationale": "This handoff marker and the post-merge finding describe the exact same TODO at the same file/line and should become one goal.",
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The sweep's own reconciliation note flags this for human review because two of three markers are confirmed duplicates while one unique marker about pos:create gating remains unresolved.",
 			"evidence": [
-				"TODO(handoff): HC-040 — give agents/autonomous/[id]/+page.server.ts a depends()",
-				"FlowExports.svelte:30"
+				"reconciliation note: two markers match existing approved proposals verbatim",
+				"line 311 marker about server-side pos:create gating is unique and not yet covered"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T14:52:17.671Z"
+			"scoredAt": "2026-10-07T17:51:46.717Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-379939979",
@@ -26422,6 +26350,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T18:24:01.690Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy-health entry only reports an already-merged fix commit with no stated open problem to action.",
+			"evidence": [
+				"summary is a merged commit message for a nitter persistence/shutdown fix",
+				"status field is unknown with no described deployment issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T17:51:46.717Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
