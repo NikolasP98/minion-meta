@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-07T10:21:26.579Z",
+	"generatedAt": "2026-10-07T10:51:56.072Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -963,6 +963,39 @@
 			"scoredAt": "2026-10-05T02:28:35.907Z"
 		},
 		{
+			"key": "run:minion_hub#37587099251",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/37587099251",
+			"sourceUpdatedAt": "2026-10-07T07:30:31Z",
+			"sourceFingerprint": "ff8694677bbcb7ffc430fafca052877ca82cd254b2f93b8484b76a5663335ce1",
+			"score": 77,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A CI failure on minion_hub's master release branch is time-sensitive and blocks deploys, but the catalog gives no failure detail to act on yet.",
+			"evidence": [
+				"status failure",
+				"push on master branch",
+				"updatedAt 2026-10-07 (today)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T10:51:55.918Z"
+		},
+		{
 			"key": "spec:2026-10-03-readiness-gateway-lifecycle-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1362,39 +1395,6 @@
 			"scoredAt": "2026-10-03T22:22:01.505Z"
 		},
 		{
-			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion-meta",
-			"title": "@minion-stack/env — stop leaving the gateway vault master key in a plaintext cache file",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-17-pkg-infisical-cache-plaintext-spec.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "845defe93b439ce9cba22a9845c8e238d0a36b806d63c1a1ab12deb1a944f6b7",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, well-evidenced spec fixing a plaintext-on-disk vault master key (MINION_SECRETS_KEY) with clear slices, security gating, and prior partial implementation (S1 merged).",
-			"evidence": [
-				"file holds the master key to the entire gateway vault (hierarchy.ts:63)",
-				"0o600 mode does not apply to pre-existing files (verified empirically)",
-				"status: approved with defined slice plan and gate conventions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T10:24:16.253Z"
-		},
-		{
 			"key": "spec:2026-10-03-readiness-faces-runtime-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1462,6 +1462,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T02:29:26.851Z"
+		},
+		{
+			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion-meta",
+			"title": "@minion-stack/env — stop leaving the gateway vault master key in a plaintext cache file",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-17-pkg-infisical-cache-plaintext-spec.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "845defe93b439ce9cba22a9845c8e238d0a36b806d63c1a1ab12deb1a944f6b7",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-08-17-pkg-infisical-cache-plaintext"
+			],
+			"rationale": "Approved security spec with precisely scoped files, verified code evidence, and mandatory human gate conventions makes the remaining S2/S3 slices actionable now.",
+			"evidence": [
+				"status approved, security-tagged with mandatory human gate",
+				"exact files named: packages/env/src/cache.ts, infisical.ts, hierarchy.ts",
+				"verified empirical finding that mode:0o600 does not apply to existing files"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T10:51:55.918Z"
 		},
 		{
 			"key": "spec:2026-08-28-factory-containment-base-reconciliation-spec",
@@ -3421,6 +3456,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T17:55:16.937Z"
+		},
+		{
+			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Infisical secret cache stored plaintext on disk (0600 only)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-17-pkg-infisical-cache-plaintext.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "a3e91af04253a3e0c05aedb9f102e14e27e0dbf330b09e0738d22ec6b623b92c",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-08-17-pkg-infisical-cache-plaintext-spec"
+			],
+			"rationale": "The proposal's goal has already been superseded by an approved, more detailed spec with S1 shipped, so remaining value is tracking S2/S3 completion rather than independent action.",
+			"evidence": [
+				"status in-spec with approved sibling spec",
+				"handoff notes S1 merged, S2 outstanding",
+				"definition of done already partially met per cache.ts changes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T10:51:55.918Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9654a64b55fa",
@@ -6761,40 +6831,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T11:56:28.567Z"
-		},
-		{
-			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Infisical secret cache stored plaintext on disk (0600 only)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-17-pkg-infisical-cache-plaintext.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "a3e91af04253a3e0c05aedb9f102e14e27e0dbf330b09e0738d22ec6b623b92c",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"spec:2026-08-17-pkg-infisical-cache-plaintext-spec"
-			],
-			"rationale": "This proposal has already advanced to an approved spec with the same problem statement, making the proposal-stage artifact redundant.",
-			"evidence": [
-				"status: in-spec",
-				"identical problem framing (cache.ts:32-36 plaintext) as the approved spec"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T10:24:16.253Z"
 		},
 		{
 			"key": "proposal:2026-10-03-readiness-current-org-getter",
@@ -24868,38 +24904,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:25:32.539Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already merged the nitter persistence/shutdown fix, leaving no further action implied by this deploy-health entry.",
-			"evidence": [
-				"commit b841c36 title: fix(nitter): serialize persistence and drain poller shutdown",
-				"status is unknown with no described pending action"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T10:21:26.402Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
