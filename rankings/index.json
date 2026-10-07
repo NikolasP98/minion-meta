@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-07T07:27:16.926Z",
+	"generatedAt": "2026-10-07T07:53:19.140Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2002,6 +2002,38 @@
 			"scoredAt": "2026-10-05T02:22:05.574Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-d1c5d80",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ d1c5d80",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-d1c5d80.md",
+			"sourceUpdatedAt": "2026-09-09",
+			"sourceFingerprint": "0fabf2c5b81fe8181570b001d0bc2e49db9a1cb3b717a0f6c03944b5e4d5ff6c",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Includes a high-severity missing org-isolation filter risking cross-tenant data access plus several unchecked-access crash risks, all with exact file:line locations.",
+			"evidence": [
+				"high: missing org isolation in getContactTagsBulk risking cross-tenant data access",
+				"two high unchecked-access findings in scheduling.service.ts that could throw on insert failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:52:30.752Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-ae7bedc4474a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2631,39 +2663,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T01:28:59.520Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-hub-d1c5d80",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ d1c5d80",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-d1c5d80.md",
-			"sourceUpdatedAt": "2026-09-09",
-			"sourceFingerprint": "0fabf2c5b81fe8181570b001d0bc2e49db9a1cb3b717a0f6c03944b5e4d5ff6c",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Merge-scan surfaced a high-severity missing org-isolation filter enabling cross-tenant data access plus multiple unchecked-access crash risks with exact file:line locations.",
-			"evidence": [
-				"tag-links.service.ts:117 missing org isolation risking cross-tenant data access",
-				"two high-severity unchecked .returning() destructures that would throw TypeError",
-				"commit range a2b40f2..d1c5d80"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T07:34:04.510Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-570b9d39c7eb",
@@ -3851,6 +3850,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T06:24:24.939Z"
+		},
+		{
+			"key": "proposal:ci-minion-ai-auto-response",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Auto response on minion-ai main",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-auto-response.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "488a8f89387aba404437491c63fbd64b79e5b6c7f82fc020938085743abfaf4f",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "CI is red on minion-ai main with an exact, actionable root cause (missing private-key input for github-app-token).",
+			"evidence": [
+				"Error: Input required and not supplied: private-key",
+				"failing run on main branch, checked 2026-08-28"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:52:30.752Z"
 		},
 		{
 			"key": "proposal:ci-minion-ai-ci",
@@ -5312,6 +5343,38 @@
 			"scoredAt": "2026-10-04T06:21:18.394Z"
 		},
 		{
+			"key": "run:minion_hub#37587099251",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/37587099251",
+			"sourceUpdatedAt": "2026-10-07T07:30:31Z",
+			"sourceFingerprint": "ff8694677bbcb7ffc430fafca052877ca82cd254b2f93b8484b76a5663335ce1",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "CI is failing on a push to master with no error detail provided, so it needs investigation before it can be scoped as actionable work.",
+			"evidence": [
+				"status failure",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:53:18.976Z"
+		},
+		{
 			"key": "spec:2026-08-18-factory-memory-governance-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -5871,6 +5934,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-30T23:24:14.513Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-b4c1ff54fd37",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/app.css (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b4c1ff54fd37.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "96edea22a9ced657da7293e76ea1536d3b48b81aaf1e15fc77b3e7bcb5ee41d9",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-f91a16126171"
+			],
+			"rationale": "Cross-project design-token defect (accent-as-link) explicitly tied to HC-043, shares root cause with the contrast finding and should be fixed together.",
+			"evidence": [
+				"marker: shares HC-043's structural defect",
+				"diagnosis notes cross-project fix touching hub, site, and shared package"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:53:18.976Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-server-telemetry-lifecycle-spec",
@@ -6858,6 +6955,42 @@
 			"scoredAt": "2026-10-03T01:54:11.712Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-c14a5898d7d0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/agents/SectionProseEditor.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c14a5898d7d0.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "669479e9a5735347c0cef960daff7687d028d779c04d9d59fd1fca2f445131b2",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-66d88ed81830",
+				"proposal:postmerge-minion-hub-93789f3a94af",
+				"proposal:postmerge-minion-hub-f05b351ac858"
+			],
+			"rationale": "Hand-rolled modal with a real data-loss bug (outside-click discards unsaved edits) under the same HC-028 contract as three sibling findings.",
+			"evidence": [
+				"outside-click dismissal discards unsaved slot.dirty edits today",
+				"references spec-hc028-overlay-dialog-contract.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:53:18.976Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-c7c309cb2647",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7051,39 +7184,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T11:58:34.335Z"
-		},
-		{
-			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Close the producer-side gaps the review-sidecar contract now exposes",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-review-sidecar-producer-gaps.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "ccd90c11b47f13a79ae85314b6e457461bf0834bcbfa50d1cc2da7944016aef8",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Bundles five distinct producer-side gaps in the review-sidecar scoring pipeline, several already partially remediated per the text, so scope should be narrowed before execution.",
-			"evidence": [
-				"lists 5 AS-IS gaps: no reviewed_commit writer, G2 scores only 4/6 axes, no G1 producer, optional sidecars, no index coverage contract",
-				"129 of 198 specs have no sidecar",
-				"status: draft, updatedAt 2026-09-02"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T07:34:04.510Z"
 		},
 		{
 			"key": "proposal:2026-09-29-hub-data-view-container",
@@ -8221,39 +8321,6 @@
 			"scoredAt": "2026-09-30T17:56:20.025Z"
 		},
 		{
-			"key": "proposal:ci-minion-ai-auto-response",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Auto response on minion-ai main",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-auto-response.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "488a8f89387aba404437491c63fbd64b79e5b6c7f82fc020938085743abfaf4f",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The auto-response workflow on minion-ai main fails with a clear missing private-key secret error and an explicit definition of done.",
-			"evidence": [
-				"Error: Input required and not supplied: private-key",
-				"DoD: workflow's latest run on main is green, or deliberately disabled with rationale",
-				"checked: 2026-08-28"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T07:34:04.510Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-439295008",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8613,38 +8680,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T00:24:48.062Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-1194287278",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "6e04077583233c09a5417b006e015baebcc13c7ffb65e29931bc847a0275a1ed",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Eight distinct UI/behavior nuances (filter scope, range reporting, RBAC vs preference, drag bounds, drop reclassification, agenda scope, grid/container display, overflow clipping) are bundled under one marker-resolution goal, so the problem is real but needs splitting into separate scoped specs rather than one proposal.",
-			"evidence": [
-				"8 separate markers across lines 253-4027 in BookingCalendar.svelte",
-				"issues span filtering, RBAC, drag/drop, and rendering — unrelated concerns"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T01:23:35.045Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2582471367",
@@ -9624,6 +9659,40 @@
 			"scoredAt": "2026-10-07T05:51:52.914Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-f91a16126171",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in scripts/qa/hc043/resolve.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f91a16126171.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "13192063702778935d737cf58b4c8e20e45f1aad1b35139118ccf2d535d37a15",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b4c1ff54fd37"
+			],
+			"rationale": "WCAG AA contrast failure in the solarized-light palette tied to the same HC-043 structural defect as the app.css finding, best resolved together.",
+			"evidence": [
+				"text-primary #586e75 on surface-3 fails ~2.5:1 vs required 4.5:1",
+				"diagnosis says verify at scripts/qa/hc043/resolve.ts then run lint:design && lint:tokens"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:53:18.976Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-site-d5d1a8c9d6a9",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9919,6 +9988,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T01:53:57.051Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-93789f3a94af",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/agents/AgentSettingsPanel.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-93789f3a94af.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "8a2da54077baa6d50a835e0ef09518eb84c89e911f9ed86d9b3f906c342e2d61",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-66d88ed81830",
+				"proposal:postmerge-minion-hub-c14a5898d7d0",
+				"proposal:postmerge-minion-hub-f05b351ac858"
+			],
+			"rationale": "Hand-rolled drawer blocking UI design governance with two concrete non-mechanical blockers, part of the same HC-028 Sheet/Dialog migration as sibling findings.",
+			"evidence": [
+				"680px two-column layout exceeds Sheet's 28rem width",
+				"window-level Escape listener conflicts with nested Zag menu"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:53:18.976Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-orchestration-round7-spec",
@@ -13488,6 +13593,38 @@
 			"scoredAt": "2026-10-05T11:58:34.335Z"
 		},
 		{
+			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Close the producer-side gaps the review-sidecar contract now exposes",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-review-sidecar-producer-gaps.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "ccd90c11b47f13a79ae85314b6e457461bf0834bcbfa50d1cc2da7944016aef8",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Well-documented process-integrity gap in the SDLC scoring pipeline but bundles four separate producer fixes with no single bounded slice.",
+			"evidence": [
+				"AS-IS lists 4 distinct gaps (reviewed_commit, partial rubric, missing G1 producer, optional sidecars)",
+				"129 of 198 specs have no sidecar at all"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:52:30.752Z"
+		},
+		{
 			"key": "spec:2026-08-18-agent-instruction-parity-and-repo-policy-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -14973,6 +15110,40 @@
 			"scoredAt": "2026-10-01T06:54:18.583Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-302658e86e88",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/marketplace/AgentCreatorWizard.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-302658e86e88.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "f48da70df1a8906e552d110a25fd7c2b8d48eb8ba5110fbee92183aae4d718d3",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-234ac5245d15"
+			],
+			"rationale": "Same HC-028 Dialog-migration pattern as a sibling wizard in this batch, and additionally lacks any Escape dismissal path, an accessibility gap.",
+			"evidence": [
+				"marker: 'multi-step wizard with its own step chrome and no Escape path at all'",
+				"same spec-hc028-overlay-dialog-contract.md DELTA 2 reference as the related wizard fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:52:30.752Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-435bdc58c70c",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15101,6 +15272,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T07:27:16.742Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-66d88ed81830",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/my-agent/ZenMode.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-66d88ed81830.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "6969018d3eb1b37bf41133d5783d4647ac17118c519373f60d0b7cc666521460",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-93789f3a94af",
+				"proposal:postmerge-minion-hub-c14a5898d7d0",
+				"proposal:postmerge-minion-hub-f05b351ac858"
+			],
+			"rationale": "An aria-modal a11y defect that shares the same HC-028 overlay-dialog contract as three other merged findings and should be resolved as one migration effort.",
+			"evidence": [
+				"aria-modal=\"true\" without native modal behavior per marker text",
+				"references spec-hc028-overlay-dialog-contract.md DELTA 3"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:53:18.976Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-88c1258817d5",
@@ -17493,6 +17700,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T01:30:33.537Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-234ac5245d15",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/builder/AgentCreateWizard.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-234ac5245d15.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "a89722e1f0d17aa351a7097724a26273ff5f7153fff0c9c1d6fb87979ffc6fcf",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-302658e86e88"
+			],
+			"rationale": "Hand-rolled wizard modal needs migration to shared Dialog per design-token governance, and a near-identical wizard migration exists in this same batch.",
+			"evidence": [
+				"TODO(handoff): HC-028 hand-rolled wizard modal; migrate to the shared Dialog",
+				"points to spec-hc028-overlay-dialog-contract.md DELTA 2, same spec as the related key"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:52:30.752Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2d7b4a1718f3",
@@ -20129,6 +20370,40 @@
 			"scoredAt": "2026-10-03T05:25:32.539Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-380ed33fff7f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/layout/BugReporter.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-380ed33fff7f.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "a350523b2bb2ebd2cbcd1938fab8d1173646ba87934d05a339c9a8a073a9d9e0",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-509e3a8d8c64"
+			],
+			"rationale": "Clear, single-attribute accessibility fix (aria-modal mismatch) with an exact precedent component to mirror, and a sibling aria-modal bug in this same batch.",
+			"evidence": [
+				"marker: 'claims aria-modal=\"true\" but is non-blocking by design...drop the modal claim'",
+				"fix direction names the exact pattern to copy (DraggableWindow) and references DELTA 3, shared with the related EaselBoard finding"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:52:30.752Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-3ba60040d060",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20160,6 +20435,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T04:24:14.799Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-509e3a8d8c64",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/my-agent/EaselBoard.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-509e3a8d8c64.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "79054a6b9e8ad49bb4acbdaa66fdbd94e7c0771bb8ef961732442bc0d1b215ac",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-380ed33fff7f"
+			],
+			"rationale": "Shares the exact same aria-modal misuse defect class and spec reference (DELTA 3) as another finding in this batch, better resolved as one aria-modal audit.",
+			"evidence": [
+				"marker: 'claims aria-modal=\"true\" without a native modal...either open through the shared Dialog or drop the modal claim'",
+				"references spec-hc028-overlay-dialog-contract.md DELTA 3, same section as the related BugReporter finding"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:52:30.752Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-6e3297fea67e",
@@ -22212,6 +22521,42 @@
 			"scoredAt": "2026-10-01T22:54:05.157Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-f05b351ac858",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/workshop/RelationshipPrompt.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f05b351ac858.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "294a0818f746697081ed6730d45c76c1d2d9b0e8c5af6fe61b2ad2b5ad52edc1",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-66d88ed81830",
+				"proposal:postmerge-minion-hub-93789f3a94af",
+				"proposal:postmerge-minion-hub-c14a5898d7d0"
+			],
+			"rationale": "Niche workshop-canvas anchored-modal gap under the same HC-028 overlay contract as sibling findings, needing a Dialog-vs-Popover decision before mechanical work.",
+			"evidence": [
+				"shared Dialog has no anchor API, needs positioned-dialog decision",
+				"references spec-hc028-overlay-dialog-contract.md DELTA 2"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:53:18.976Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23324,6 +23669,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T21:22:02.187Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-3a0cbc999981",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/CalendarWindowIssues.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3a0cbc999981.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "f7108ad5346b27a0dd002ec013a2c8c60dc865c7087fb3738a30c0cc74299e9e",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Real touch-target accessibility issue but the fix direction offers multiple unresolved implementation options rather than one verifiable approach.",
+			"evidence": [
+				"fix direction lists three alternative approaches (media query, conditional class, or design-token lookup) without choosing one",
+				"marker text itself is truncated: 'on a coarse pointer this Retry is the `sm`'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:52:30.752Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-7ec5d7436363",
@@ -24949,6 +25326,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T01:22:08.044Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-1194287278",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "3b7a9d6e8d0d0ba20b657c3e15e208f1a241f3e75a1224d2304078b630c78405",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Markers read as explanatory design-decision comments rather than open bugs, so the handoff framing may not fit the actual content.",
+			"evidence": [
+				"marker text e.g. 'this is a per-VIEWER preference, not an RBAC restriction'",
+				"8 markers listed across a single large component file"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:52:30.752Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1765522123",
@@ -29650,6 +30059,38 @@
 			"scoredAt": "2026-10-03T19:51:57.382Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-315b73ded9bb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in tests/e2e/ui-audit/calendar-mobile.spec.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-315b73ded9bb.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "55198e063867632fb43092f47006dfe82e1b7bb943a8b6a12dd0276722dfe047",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The marker text itself is truncated mid-sentence, leaving the actual test gap unclear before any fix can be scoped.",
+			"evidence": [
+				"marker text: 'this test and \"Staff and event-type filters narrow the' (cut off)",
+				"diagnosis admits 'the scan cut it off mid-sentence'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:52:30.752Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-51431d943fcd",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30207,6 +30648,38 @@
 			"scoredAt": "2026-10-07T01:28:59.520Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "fc238adda20409b6f87aca50bc07188d8bcf338788bdcf48f64a3c7f79f5a71b",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Markers are quoted text fragments from other proposals/rankings stored inside rankings/index.json, not real code TODOs needing a fix.",
+			"evidence": [
+				"file flagged is rankings/index.json itself",
+				"quoted lines are fragments of other findings' prose, e.g. '--apply is intentionally unimplemented'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:52:30.752Z"
+		},
+		{
 			"key": "issue:minion-meta#664",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30269,38 +30742,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T02:51:06.416Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "e96324159405d7597e51096aa8e045fc7012091f5c01f9da956401853b4d2865",
-			"score": 15,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The quoted markers are fragments scraped from the ranking file's own generated output (rankings/index.json), making this a self-referential, non-actionable artifact rather than a real finding.",
-			"evidence": [
-				"all cited markers point to NikolasP98/minion-meta@dev rankings/index.json, the generated ranking file itself",
-				"summary is a grab-bag of unrelated, disjoint line fragments with no coherent problem statement"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T06:18:07.246Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
