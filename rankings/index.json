@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-07T14:52:17.836Z",
+	"generatedAt": "2026-10-07T15:21:59.317Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9790,6 +9790,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T02:24:50.022Z"
+		},
+		{
+			"key": "run:minion (gateway)#34587949149",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949149",
+			"sourceUpdatedAt": "2026-09-11T10:46:59Z",
+			"sourceFingerprint": "82bcff565fd5b409b3f4fe7fab98082e953214bbd231af0206d034e22b97120c",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"run:minion (gateway)#34587949471"
+			],
+			"rationale": "CI failure on the DEV branch of the core gateway is potentially release-blocking but the record carries no logs or error detail, and it shares the same push/date as the Docker Release failure making a joint root-cause investigation more efficient.",
+			"evidence": [
+				"CI",
+				"push on DEV",
+				"status: failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T15:21:59.155Z"
+		},
+		{
+			"key": "run:minion (gateway)#34587949471",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/34587949471",
+			"sourceUpdatedAt": "2026-09-11T10:13:03Z",
+			"sourceFingerprint": "bff3ad4ee3500a2aec6da97aca9215d1679d66023b6066cb22d3e02f7198b91a",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"run:minion (gateway)#34587949149"
+			],
+			"rationale": "Docker Release failure on the same DEV push as the CI failure suggests a shared root cause worth triaging as one investigation rather than two separate goals.",
+			"evidence": [
+				"Docker Release",
+				"push on DEV",
+				"status: failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T15:21:59.155Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-reliability-requests-spec",
@@ -22257,7 +22327,7 @@
 			"title": "Post-merge finding — todo-handoff in src/lib/components/flow-editor/FlowExports.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-13ff7afd0042.md",
 			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "84233e8800d6b54e8745c3402e51bc1177da7648d4498bfceab2436cac2eec4c",
+			"sourceFingerprint": "a27efb5d8791bad1db7f1724fa2eab7ab4acd37f7e1f42acb171f047e1a84c0b",
 			"score": 33,
 			"band": "low",
 			"axes": {
@@ -22266,22 +22336,21 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 5
+				"specification": 8,
+				"implementation": 7
 			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-2260904492"
-			],
-			"rationale": "This post-merge finding duplicates the handoff marker for the same file/line and includes a concrete diagnosis, so the two should be merged into one goal.",
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Already-approved handoff ticket with a concrete, bounded fix (add depends()/invalidate() call) for a stale-data cache-invalidation bug in a single component.",
 			"evidence": [
-				"file: src/lib/components/flow-editor/FlowExports.svelte, same marker as handoff-minion-hub-2260904492",
-				"Diagnosis suggests depends()/invalidate() wiring between editor and agent detail view"
+				"TODO(handoff): HC-040 — give agents/autonomous/[id]/+page.server.ts a depends()",
+				"status: approved",
+				"Fix: Add depends('agent:<id>') ... then call invalidate('agent:${id}')"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T14:52:17.671Z"
+			"scoredAt": "2026-10-07T15:21:59.155Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-1697a678cf5f",
@@ -22999,38 +23068,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T09:22:17.789Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This deploy-health entry is just a merged commit message about a nitter persistence/shutdown fix with no stated outstanding problem.",
-			"evidence": [
-				"status: unknown",
-				"commit: 'fix(nitter): serialize persistence and drain poller shutdown'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T14:52:17.671Z"
 		},
 		{
 			"key": "issue:minion-meta#405",
@@ -24645,6 +24682,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T11:24:00.056Z"
+		},
+		{
+			"key": "issue:minion-meta#575",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#575 [monitor:unstick] reconcile run f3e10952 (minion-meta): claude provider exec failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/575",
+			"sourceUpdatedAt": "2026-09-23T14:17:28Z",
+			"sourceFingerprint": "86d3f6093012f5b0121cdef0dc3a02154431425da0a6c1cca94ebf9afd65bee8",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Diagnosis confirms the reconcile logic itself succeeded and the git-push 500 self-recovered, leaving only a transient runner-level exit-126 with no identified host to fix.",
+			"evidence": [
+				"reconcile shell script itself completed successfully end-to-end",
+				"git push ... self-recovered on retry",
+				"provider=claude exited with code 126 ... not a task/logic failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T15:21:59.155Z"
 		},
 		{
 			"key": "issue:minion-meta#581",
@@ -29068,39 +29138,6 @@
 			"scoredAt": "2026-10-07T11:21:19.725Z"
 		},
 		{
-			"key": "issue:minion-meta#575",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#575 [monitor:unstick] reconcile run f3e10952 (minion-meta): claude provider exec failure (exit-126)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/575",
-			"sourceUpdatedAt": "2026-09-23T14:17:28Z",
-			"sourceFingerprint": "86d3f6093012f5b0121cdef0dc3a02154431425da0a6c1cca94ebf9afd65bee8",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The report itself states the reconcile logic already succeeded and the exit-126 was a transient runner PATH/permission issue with no recurrence pattern established.",
-			"evidence": [
-				"reconcile shell script itself completed successfully end-to-end",
-				"provider=claude exited with code 126",
-				"a plain retry of the run is also reasonable once the binary issue is fixed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T14:54:14.688Z"
-		},
-		{
 			"key": "issue:minion-meta#576",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30472,38 +30509,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T03:24:11.063Z"
-		},
-		{
-			"key": "run:minion (gateway)#33142247962",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/33142247962",
-			"sourceUpdatedAt": "2026-08-28T05:14:42Z",
-			"sourceFingerprint": "736aae7b1d30091020bb0c1d6b33467673a3dd9c3061ecb0b17ac4d25ea9a95c",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This failed CI run is over five weeks stale with no diagnostic detail and has likely been superseded by later commits/runs.",
-			"evidence": [
-				"status: failure, updatedAt 2026-08-28T05:14:42Z",
-				"push on DEV with no further context given"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T14:52:17.671Z"
 		},
 		{
 			"key": "issue:minion-meta#421",
