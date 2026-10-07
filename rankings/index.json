@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-07T11:51:11.834Z",
+	"generatedAt": "2026-10-07T12:21:33.418Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -20961,38 +20961,6 @@
 			"scoredAt": "2026-10-06T05:26:20.196Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged bugfix commit shown as deploy health with no indication of ongoing issues needing action.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain shutdown (#295)",
-				"status: unknown, tags: deployment only"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T11:21:19.725Z"
-		},
-		{
 			"key": "issue:minion-meta#327",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22975,6 +22943,39 @@
 			"scoredAt": "2026-10-03T22:22:01.505Z"
 		},
 		{
+			"key": "issue:minion-meta#446",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#446 [monitor:unstick] reconcile run f66b5a2d: exit-126 with 0 agent turns after successful merge-scan work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/446",
+			"sourceUpdatedAt": "2026-09-16T10:17:31Z",
+			"sourceFingerprint": "9d71fce7265e5a5ad05120bf939418e9ac7d40388d470ffe8e11d2a9cfa93f70",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Single automated monitor alert describes a one-off exec-layer failure (exit-126, turns=0) after otherwise-successful reconcile work, with no evidence yet of recurrence to justify building new tooling.",
+			"evidence": [
+				"exit-126 with turns=0 for the claude provider agent step",
+				"merge-scan state was already checkpointed/persisted so a retry should be cheap",
+				"recommendation is contingent: 'if exit-126/turns=0 recurs on the same worker box across other runs'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T12:21:33.252Z"
+		},
+		{
 			"key": "issue:minion-meta#497",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24418,39 +24419,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T03:51:34.638Z"
-		},
-		{
-			"key": "issue:minion-meta#446",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#446 [monitor:unstick] reconcile run f66b5a2d: exit-126 with 0 agent turns after successful merge-scan work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/446",
-			"sourceUpdatedAt": "2026-09-16T10:17:31Z",
-			"sourceFingerprint": "9d71fce7265e5a5ad05120bf939418e9ac7d40388d470ffe8e11d2a9cfa93f70",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single exit-126/turns=0 infra-layer failure after already-checkpointed work suggests a cheap retry, with escalation only if the pattern recurs on the same runner.",
-			"evidence": [
-				"exit-126 with turns=0 for claude provider agent step",
-				"permission_denials=0 rules out permission-prompt stall",
-				"merge-scan state already checkpointed/persisted per diagnosis"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T11:53:59.440Z"
 		},
 		{
 			"key": "issue:minion-meta#501",
