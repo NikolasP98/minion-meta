@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-07T18:51:59.222Z",
+	"generatedAt": "2026-10-07T19:21:43.529Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -26334,6 +26334,39 @@
 			"scoredAt": "2026-10-01T18:24:01.690Z"
 		},
 		{
+			"key": "run:minion_site#31686953033",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_site",
+			"title": "Claude Code",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/actions/runs/31686953033",
+			"sourceUpdatedAt": "2026-09-12T09:31:54Z",
+			"sourceFingerprint": "fd33d67a9bcb040c710991818cff95818ec5463761e5c0012f15091f3395c7b6",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The CI failure record gives only a generic title and event type with no detail on the actual cause, making it unactionable as specified.",
+			"evidence": [
+				"title: \"Claude Code\"",
+				"summary: \"pull_request_review_comment on dev\"",
+				"status: \"failure\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T19:21:43.405Z"
+		},
+		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27687,38 +27720,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T06:15:43.007Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a deployment-health log entry for a fix already merged, with no outstanding action described.",
-			"evidence": [
-				"commit message describes a completed fix(nitter) persistence/shutdown change",
-				"status is 'unknown' with no open follow-up noted"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T18:51:59.069Z"
 		},
 		{
 			"key": "issue:minion-meta#332",
@@ -29136,17 +29137,17 @@
 				"specification": 6,
 				"implementation": 2
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Automated monitor report describes a transient exit-126/turns=0 provider launch fault with the underlying reconcile task completing successfully, so no real action is needed beyond possibly adding a classifier signature.",
+			"rationale": "The quoted log analysis indicates the reconcile run actually completed successfully and the exit-126/turns=0 signature was a transient infra fault in launching the provider process, not a real task failure.",
 			"evidence": [
-				"reconcile script itself completed normally... git push of dev succeeded",
-				"exited 126 with turns=0... transient/infra fault in launching the claude provider process, not a genuine task or spec failure"
+				"\"the reconcile script itself completed normally... proposals/index.json was written... git push of dev succeeded\"",
+				"\"Recommendation for a human: safe to retry the run\""
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T18:54:13.482Z"
+			"scoredAt": "2026-10-07T19:21:43.405Z"
 		},
 		{
 			"key": "issue:minion-meta#578",
