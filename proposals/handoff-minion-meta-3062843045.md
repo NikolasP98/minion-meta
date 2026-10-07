@@ -3,7 +3,7 @@ id: handoff-minion-meta-3062843045
 title: Handoff marker — .planning/operations/readiness-2026-10-03/evidence/notification-slice5-v11/notification-slice5-v11-pg17-container.log (minion-meta)
 status: review
 created: 2026-10-05
-updated: 2026-10-06
+updated: 2026-10-07
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: 2026-10-03-notification-recon
@@ -37,7 +37,7 @@ suspected duplicate for human review rather than merged, since
 and this sweep cannot be certain the log-scan finding doesn't cover a
 distinct residual gap.
 
-## Markers (as of 2026-10-06)
+## Markers (as of 2026-10-07)
 
 - `NikolasP98/minion-meta@dev .planning/operations/readiness-2026-10-03/evidence/notification-slice5-v11/notification-slice5-v11-pg17-container.log:9572` — Wire qualified producers, projection, retention and tenant-deletion reconciliation
   https://github.com/NikolasP98/minion-meta/blob/dev/.planning/operations/readiness-2026-10-03/evidence/notification-slice5-v11/notification-slice5-v11-pg17-container.log#L9572
