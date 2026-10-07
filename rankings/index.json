@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-07T18:23:42.322Z",
+	"generatedAt": "2026-10-07T18:51:59.222Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5254,20 +5254,20 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "An approved handoff finding names a specific incomplete ALTER TABLE migration with a concrete fix-and-verify path that could otherwise block schema pushes.",
+			"rationale": "A concrete, approved finding names an incomplete ALTER TABLE migration with a clear fix path that could block future schema pushes.",
 			"evidence": [
-				"marker: TODO(handoff): drizzle/0008_workshop_thumbnail.sql (`ALTER TABLE",
-				"fix direction: verify ALTER TABLE statement ... test locally with bun run db:push",
-				"status: approved"
+				"TODO(handoff) marker names drizzle/0008_workshop_thumbnail.sql with an incomplete ALTER TABLE",
+				"diagnosis recommends verifying the statement and testing with 'bun run db:push'",
+				"status is 'approved'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T18:24:51.046Z"
+			"scoredAt": "2026-10-07T18:51:59.069Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-92e3e453a2ae",
@@ -19343,10 +19343,10 @@
 			"kind": "issue",
 			"stage": "proposal",
 			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 93258 new commit(s) available",
+			"title": "#264 Upstream sync: 93313 new commit(s) available",
 			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-07T12:26:23Z",
-			"sourceFingerprint": "b234e02944884c6be12550aab4242794244c0f3b9f57ae1f681b89046c9fe92c",
+			"sourceUpdatedAt": "2026-10-07T18:23:12Z",
+			"sourceFingerprint": "8dc3efe4cf04d333b412a3006963338f4256e00c49abcde1d908f8fd4f08ee48",
 			"score": 36,
 			"band": "low",
 			"axes": {
@@ -19355,20 +19355,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 1,
-				"implementation": 1
+				"specification": 2,
+				"implementation": 2
 			},
-			"confidence": 5,
+			"confidence": 3,
 			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "A single bounded task cannot responsibly land 93,258 upstream commits at once, so this needs to be reframed into scoped, incremental sync batches.",
+			"rationale": "A 93,313-commit upstream delta is too large for manual triage and needs an automated sync/merge strategy rather than being treated as a single actionable goal.",
 			"evidence": [
-				"Upstream sync: 93258 new commit(s) available",
-				"dump of dozens of unrelated upstream commit subjects with no scoping"
+				"title cites 93313 new commit(s) available",
+				"summary is a raw commit log dump with no scoped plan or outcome"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T12:51:56.608Z"
+			"scoredAt": "2026-10-07T18:51:59.069Z"
 		},
 		{
 			"key": "issue:minion-meta#356",
@@ -27689,6 +27689,38 @@
 			"scoredAt": "2026-10-07T06:15:43.007Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a deployment-health log entry for a fix already merged, with no outstanding action described.",
+			"evidence": [
+				"commit message describes a completed fix(nitter) persistence/shutdown change",
+				"status is 'unknown' with no open follow-up noted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T18:51:59.069Z"
+		},
+		{
 			"key": "issue:minion-meta#332",
 			"kind": "issue",
 			"stage": "proposal",
@@ -28505,17 +28537,17 @@
 				"specification": 3,
 				"implementation": 2
 			},
-			"confidence": 4,
+			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Diagnosis confirms a transient exit-126 agent-launch fault with all reconcile state already persisted and explicitly marked safe to retry.",
+			"rationale": "The embedded diagnosis already concludes the run is safe to retry with all state persisted, leaving no code-level fix to execute.",
 			"evidence": [
-				"diagnosis: all reconciliation state was already persisted",
-				"recommendation: safe to retry - not a task-logic failure, refusal, or repo/content issue"
+				"diagnosis states 'safe to retry' and 'all reconciliation state was already persisted'",
+				"turns=0 with permission_denials=0 indicates a transient launch fault, not a task defect"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T18:24:51.046Z"
+			"scoredAt": "2026-10-07T18:51:59.069Z"
 		},
 		{
 			"key": "issue:minion-meta#452",
@@ -29600,17 +29632,17 @@
 				"specification": 3,
 				"implementation": 2
 			},
-			"confidence": 4,
+			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Diagnosis identifies a transient dual-provider batch failure recommended for retry rather than an actual ranking task defect.",
+			"rationale": "Diagnosis attributes the failure to a transient dual-provider hiccup and recommends retrying as-is rather than any fix.",
 			"evidence": [
-				"diagnosis: transient dual-provider hiccup ... rather than a genuine task/spec failure",
-				"recommendation: safe to retry as-is"
+				"diagnosis states 'safe to retry as-is'",
+				"log shows only 2/839 candidates affected before fallback failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T18:24:51.046Z"
+			"scoredAt": "2026-10-07T18:51:59.069Z"
 		},
 		{
 			"key": "issue:minion-meta#737",
