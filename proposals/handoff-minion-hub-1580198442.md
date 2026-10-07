@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-1580198442
 title: Handoff marker — src/lib/state/workshop/workshop.svelte.ts (minion_hub)
-status: draft
+status: closed
 created: 2026-10-05
 updated: 2026-10-07
 repos: [minion-hub]
@@ -32,3 +32,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/state/workshop/workshop.svelte.ts#L439
 - `NikolasP98/minion_hub@master src/lib/state/workshop/workshop.svelte.ts:460` — HC-037 must preserve the current workspace until create is
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/state/workshop/workshop.svelte.ts#L460
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-07; the sweep closed this proposal.
