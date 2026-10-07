@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-750555389
 title: Handoff marker — scripts/qa/hc043/resolve.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-10-07
 updated: 2026-10-07
 repos: [minion-hub]
 tags: [handoff-sweep]
+merged_into: 2026-10-07-hub-readiness-ui-a11y-followups
 ---
 
 # Handoff marker — scripts/qa/hc043/resolve.ts

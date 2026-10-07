@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-1063105272
 title: Handoff marker — src/lib/components/marketplace/AgentCreatorWizard.svelte (minion_hub)
-status: draft
+status: merged
 created: 2026-10-07
 updated: 2026-10-07
 repos: [minion-hub]
 tags: [handoff-sweep]
+merged_into: 2026-10-07-hub-readiness-ui-a11y-followups
 ---
 
 # Handoff marker — src/lib/components/marketplace/AgentCreatorWizard.svelte

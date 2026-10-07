@@ -132,3 +132,24 @@ commits); GW-024 (owned by the readiness program).
 - Every numbered row has a closing commit sha or a rejection reason.
 - The two `git grep` commands in AS-IS return no rows that are absent from this file.
 - `proposals/index.json` regenerated (`node scripts/proposal-index.mjs`) on every edit.
+
+## Reconciliation merge — 2026-10-07
+
+The factory handoff-ledger sweep independently filed one `handoff-minion-hub-*`
+marker per file for the same 2026-10-07 batch; each is a mechanical, file-scoped
+duplicate of a row already tabulated above (same repo/path/line ± post-collection
+drift/no new content beyond a GitHub permalink). Tombstoned as merged, no unique
+content:
+
+- handoff-minion-hub-3801495216 (`src/app.css` → row #1)
+- handoff-minion-hub-750555389 (`scripts/qa/hc043/resolve.ts` → row #2)
+- handoff-minion-hub-2055892347 (`src/lib/components/agents/SectionProseEditor.svelte` → row #3)
+- handoff-minion-hub-2569479786 (`src/lib/components/agents/AgentSettingsPanel.svelte` → row #4)
+- handoff-minion-hub-1135390610 (`src/lib/components/builder/AgentCreateWizard.svelte` → row #5)
+- handoff-minion-hub-1063105272 (`src/lib/components/marketplace/AgentCreatorWizard.svelte` → row #6)
+- handoff-minion-hub-1848377581 (`src/lib/components/workshop/RelationshipPrompt.svelte` → row #7)
+- handoff-minion-hub-1393930408 (`src/lib/components/my-agent/EaselBoard.svelte` → row #8)
+- handoff-minion-hub-1528821121 (`src/lib/components/my-agent/ZenMode.svelte` → row #9)
+- handoff-minion-hub-4235974689 (`src/lib/components/layout/BugReporter.svelte` → row #10)
+- handoff-minion-hub-2471413522 (`src/lib/components/scheduling/CalendarWindowIssues.svelte` → row #11)
+- handoff-minion-hub-3787739678 (`tests/e2e/ui-audit/calendar-mobile.spec.ts` → row #12)
