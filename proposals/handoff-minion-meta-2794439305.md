@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-meta-2794439305
 title: Handoff marker — scripts/fixtures/shared-errors/client.patch (minion-meta)
-status: draft
+status: merged
+merged_into: 2026-09-08-platform-qc-remediation
 created: 2026-10-05
 updated: 2026-10-07
 repos: [minion-meta]

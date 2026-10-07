@@ -3,7 +3,7 @@ id: 2026-09-08-platform-qc-remediation
 title: Platform QC follow-ups — authorization, durable execution, compatibility and release evidence
 status: draft
 created: 2026-09-08
-updated: 2026-10-04
+updated: 2026-10-07
 repos: [minion-meta, minion_hub, minion, minion_site, minion-factory, paperclip, pixel-agents]
 ---
 
@@ -223,6 +223,8 @@ Draft 14-09 must reject cutover if the source authenticated tuple changed during
 ### Shared gateway source follow-ups
 
 14-08 preserves generic request send-failure behavior outside its handshake scope; request cleanup needs a separate 14-01 regression and repair. Runtime envelope/hello validation also remains14-01. Exact source TODOs at shared gateway client request and message dispatch preserve these gaps. Shared authenticated notification does not itself adopt any consumer package.
+
+Merged from `handoff-minion-meta-2794439305` (minion-meta `scripts/fixtures/shared-errors/client.patch:60`): "Generic request send/serialization failures need pending-map cleanup in 14-01" — this is the same 14-01 request-cleanup gap tracked above; https://github.com/NikolasP98/minion-meta/blob/dev/scripts/fixtures/shared-errors/client.patch#L60.
 
 ### Shared candidate artifact and shipping gap
 
