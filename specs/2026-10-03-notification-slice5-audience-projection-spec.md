@@ -6,7 +6,7 @@ status: implementing
 pass: 2
 verdict: approved
 created: 2026-10-03
-updated: 2026-10-05
+updated: 2026-10-07
 repos: [minion_hub]
 tags: [security, data, logic, test]
 type: feature
@@ -1335,21 +1335,55 @@ without parser context.
 
 ### Final receipts
 
-The authoritative manifest is `readiness-notification-s5-source-2026-10-06.sha256` (v2), self-SHA-256
-`523bf2a88c54fbe0c43c4cde1fea042e31f4c030efacb57e1cb996d043afd2f3`, **49 paths**, verified 49 of 49
-against the worktree. At those exact bytes:
+The authoritative manifest is `readiness-notification-s5-source-2026-10-07.sha256` (v3), self-SHA-256
+`3d05d85990585beb499b3b085f80de035a3aff8e77129df25bf07f72af8f5109`, **50 paths**, verified 50 of 50
+against the worktree. v3 supersedes v2, which listed 49 paths and was **short by one**: see
+"Manifest curation shipped an incomplete file set" below. At those exact bytes:
 
-- combined CI-shaped lane: 18 files, 298 tests, 298 passed, 0 failed, 0 pending, 282s, validated as
-  `{files:18, passed:298, skipped:0}`;
+- combined CI-shaped lane, re-run against a freshly provisioned cluster: 18 files, 298 tests, 298
+  passed, 0 failed, 0 pending, 322s, validated as `{files:18, passed:298, skipped:0}`;
 - focused units: 8 files, 33 passed (30 before, plus the three new ordering regressions);
 - configured Hub check: 11,698 files, 0 errors, 0 warnings, 0 files with problems;
 - Prettier check clean across all 49 TypeScript/JSON paths, and `git diff --check` clean.
 
-One operational note for whoever reruns this lane: a run killed before fixture teardown leaves its
-transient `notification_*` and `app_notification_worker` roles behind, and PostgreSQL roles are
-cluster-wide, so the next run fails at `db:migrate` with `Notification role already exists; reviewed
-role reconciliation required`. That is the migration's own non-idempotency assertion working
-correctly, not a regression. Recreating the disposable parent restores a pristine cluster.
+One operational note for whoever reruns this lane. PostgreSQL roles are cluster objects and the lane
+shares one cluster, so any notification fixture that fails to drop what its migration created poisons
+every later notification suite with `Notification role already exists; reviewed role reconciliation
+required` — the migration's own non-idempotency assertion working correctly, not a regression. Until
+the v3 fix that was reachable in two ways: a run killed before teardown, and the teardown guard
+defect below. With the fix, the lane leaves zero `notification*`, `app_notification*` and
+`minion_notification*` roles and zero `minion_qc_notification_%` databases behind, which was verified
+directly after the re-run. If a cluster is ever left dirty, recreating the disposable parent restores
+a pristine one.
+
+### Manifest curation shipped an incomplete file set
+
+The hosted `jobs-stock-finance-postgres` lane failed on PR #435's first push while the identical
+local lane was green. The branch was missing a three-line change the qualifying clone already had.
+
+`quoteRoleIdentifier` in `tests/fixtures/notification-migrations/reconciliation-harness.ts` is the
+injection guard that every role name in `teardownNotificationMigrationHarness`'s drop loop is routed
+through. This slice makes two fixtures collect whatever the migration created into
+`fixtureRolesCreated` so teardown can drop it — the reconciliation suite's `laterRoleNames` and the
+audience harness's `MIGRATION_ROLES` — and the migration creates three roles the guard did not
+admit: `app_notification_worker`, `notification_projection_owner_bridge` and
+`notification_projection_finalizer`. The first notification suite to run therefore threw `Invalid
+notification fixture role identifier` out of teardown, aborting the drop loop with the roles still
+present, and the three later notification suites failed on their own non-idempotency assertions. One
+teardown throw, four red suites.
+
+Two properties hid it, and both are the generalizable lesson:
+
+1. **The lane's file order is not stable.** `notification-legacy-reconciliation` ran 4th in the
+   qualifying run and 7th in the re-run, so which suite trips a shared-cluster guard first varies
+   between runs and between a warm local cache and cold CI. A suite that depends on cluster state
+   left by a sibling is order-dependent by construction; green once is not green.
+2. **A curated manifest cannot prove its own completeness.** v2 was honest about the 49 files it
+   listed, but the file set was derived by hand and omitted a path this slice modified, so a required
+   change never reached the branch. The static import audit could not catch it either, because the
+   file already exists on `master` and every specifier resolved. v3 is therefore derived mechanically
+   from `git diff --name-only $(git merge-base origin/master HEAD) HEAD`; the path set is now a
+   projection of the branch rather than an assertion about it.
 
 ### Combined CI-shaped lane
 
