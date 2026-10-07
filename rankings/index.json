@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-07T08:21:55.370Z",
+	"generatedAt": "2026-10-07T08:52:00.287Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5944,7 +5944,7 @@
 			"title": "Post-merge finding — todo-handoff in src/app.css (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b4c1ff54fd37.md",
 			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "96edea22a9ced657da7293e76ea1536d3b48b81aaf1e15fc77b3e7bcb5ee41d9",
+			"sourceFingerprint": "9fe3e26311ecb25c17a58d9d77c30914f31a3c1ac825ab6e8d83152c85ba9faf",
 			"score": 56,
 			"band": "medium",
 			"axes": {
@@ -5953,22 +5953,20 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 5,
+				"specification": 6,
 				"implementation": 4
 			},
 			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-f91a16126171"
-			],
-			"rationale": "Cross-project design-token defect (accent-as-link) explicitly tied to HC-043, shares root cause with the contrast finding and should be fixed together.",
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Cross-project design-token defect (accent-as-link) with real a11y/visual-hierarchy risk, but scope depends on first reviewing the referenced HC-043 finding and specs.",
 			"evidence": [
-				"marker: shares HC-043's structural defect",
-				"diagnosis notes cross-project fix touching hub, site, and shared package"
+				"cross-project fix touching hub, site, and shared package",
+				"shares HC-043's structural defect per marker text"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T07:53:18.976Z"
+			"scoredAt": "2026-10-07T08:52:00.129Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-server-telemetry-lifecycle-spec",
@@ -6591,6 +6589,111 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T00:51:47.404Z"
+		},
+		{
+			"key": "issue:minion-meta#715",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#715 [monitor:unstick] reconcile proposals run 80c580d6 (minion-meta) - claude provider exec failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/715",
+			"sourceUpdatedAt": "2026-09-30T08:17:59Z",
+			"sourceFingerprint": "4e78a629d38a9d7c0fa4c51d4f052ca7927dd8d60b0344a289445ccfdfa34dd8",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 3
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#716",
+				"issue:minion-meta#717"
+			],
+			"rationale": "Identical exit-126 claude-provider exec fault recurring across 7 reconcile runs is an infra/runner problem, not something fixable via a code PR.",
+			"evidence": [
+				"exit-126, turns=0 across 7 consecutive runs 06:06-08:14 UTC",
+				"scripted git/merge-scan portion completes cleanly every time"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T08:52:00.129Z"
+		},
+		{
+			"key": "issue:minion-meta#716",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#716 [monitor:unstick] reconcile proposals run cf98a30c (minion-meta) - claude provider exec failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/716",
+			"sourceUpdatedAt": "2026-09-30T08:17:59Z",
+			"sourceFingerprint": "1404f651dd5d85a03e60e6895ed9a99583ff44b94bcad0c92039d5693cd91d20",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 3
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#715",
+				"issue:minion-meta#717"
+			],
+			"rationale": "Duplicate of the same recurring claude-provider exec-126 signature as #715/#717; should be consolidated into one infra ticket.",
+			"evidence": [
+				"identical signature provider=claude exit-126 turns=0",
+				"git push succeeded first try, no push race"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T08:52:00.129Z"
+		},
+		{
+			"key": "issue:minion-meta#717",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#717 [monitor:unstick] reconcile proposals run 7033ccc3 (minion-meta) - claude provider exec failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/717",
+			"sourceUpdatedAt": "2026-09-30T08:18:00Z",
+			"sourceFingerprint": "52a5d342948b299f9a0ba452a2ce8de1017e0cde57de9f8403150c14900a2808",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 3
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#715",
+				"issue:minion-meta#716"
+			],
+			"rationale": "Third near-identical report of the same claude-provider exec-126 runner fault; grouping avoids triaging the same infra issue three times.",
+			"evidence": [
+				"identical signature provider=claude exit-126 turns=0",
+				"recurrence across 7 runs same day"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T08:52:00.129Z"
 		},
 		{
 			"key": "issue:minion-meta#730",
@@ -9928,7 +10031,7 @@
 			"title": "Post-merge finding — todo-handoff in src/lib/components/agents/AgentSettingsPanel.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-93789f3a94af.md",
 			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "8a2da54077baa6d50a835e0ef09518eb84c89e911f9ed86d9b3f906c342e2d61",
+			"sourceFingerprint": "3d0ed855cd94d9219c7953ad2469c415cf7600b132b1c0a977693cf68a989114",
 			"score": 49,
 			"band": "low",
 			"axes": {
@@ -9937,24 +10040,22 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 8,
+				"implementation": 5
 			},
 			"confidence": 6,
-			"recommendation": "group",
+			"recommendation": "reevaluate",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-66d88ed81830",
-				"proposal:postmerge-minion-hub-c14a5898d7d0",
-				"proposal:postmerge-minion-hub-f05b351ac858"
+				"proposal:postmerge-minion-hub-66d88ed81830"
 			],
-			"rationale": "Hand-rolled drawer blocking UI design governance with two concrete non-mechanical blockers, part of the same HC-028 Sheet/Dialog migration as sibling findings.",
+			"rationale": "Well-specified HC-028 migration but explicitly non-mechanical (width + Escape-key ownership blockers) so it needs a design decision before execution.",
 			"evidence": [
-				"680px two-column layout exceeds Sheet's 28rem width",
+				"680px two-column layout vs Sheet's fixed 28rem width",
 				"window-level Escape listener conflicts with nested Zag menu"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T07:53:18.976Z"
+			"scoredAt": "2026-10-07T08:52:00.129Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-orchestration-round7-spec",
@@ -10887,111 +10988,6 @@
 			"scoredAt": "2026-10-07T00:51:47.404Z"
 		},
 		{
-			"key": "issue:minion-meta#715",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#715 [monitor:unstick] reconcile proposals run 80c580d6 (minion-meta) - claude provider exec failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/715",
-			"sourceUpdatedAt": "2026-09-30T08:17:59Z",
-			"sourceFingerprint": "4e78a629d38a9d7c0fa4c51d4f052ca7927dd8d60b0344a289445ccfdfa34dd8",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#716",
-				"issue:minion-meta#717"
-			],
-			"rationale": "Duplicate monitor-intake report of the same host-level claude-CLI exec-126 fault already filed as #716 and #717 and should be consolidated into one infra ticket.",
-			"evidence": [
-				"identical signature 'provider=claude exit-126 turns=0' recurring across 7 runs",
-				"scripted reconcile work completes; only claude invocation fails"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T08:25:09.920Z"
-		},
-		{
-			"key": "issue:minion-meta#716",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#716 [monitor:unstick] reconcile proposals run cf98a30c (minion-meta) - claude provider exec failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/716",
-			"sourceUpdatedAt": "2026-09-30T08:17:59Z",
-			"sourceFingerprint": "1404f651dd5d85a03e60e6895ed9a99583ff44b94bcad0c92039d5693cd91d20",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#715",
-				"issue:minion-meta#717"
-			],
-			"rationale": "Same recurring exec-126 fault as #715/#717; three separate issues for one root cause should become a single infra goal.",
-			"evidence": [
-				"fingerprint unstick-unknown-cf98a30c, same 06:06-08:14 UTC window as siblings",
-				"recommendation is to check the runner's claude binary, not a code fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T08:25:09.920Z"
-		},
-		{
-			"key": "issue:minion-meta#717",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#717 [monitor:unstick] reconcile proposals run 7033ccc3 (minion-meta) - claude provider exec failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/717",
-			"sourceUpdatedAt": "2026-09-30T08:18:00Z",
-			"sourceFingerprint": "52a5d342948b299f9a0ba452a2ce8de1017e0cde57de9f8403150c14900a2808",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#715",
-				"issue:minion-meta#716"
-			],
-			"rationale": "Third identical report of the same reconcile exec-126 host fault; grouping avoids tripling the ranking/triage effort for one underlying issue.",
-			"evidence": [
-				"fingerprint unstick-unknown-7033ccc3 matches the same exit-126/turns=0 signature",
-				"git push and merge-scan succeed every time, isolating the fault to the claude binary invocation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T08:25:09.920Z"
-		},
-		{
 			"key": "issue:minion-meta#731",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11553,6 +11549,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T00:11:03.768Z"
+		},
+		{
+			"key": "run:minion (gateway)#37588928167",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37588928167",
+			"sourceUpdatedAt": "2026-10-07T08:21:43Z",
+			"sourceFingerprint": "96201808f80041776e45ecb071ee6b371ecd7e3fd541a3f25fe4fbad7e3e626c",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Recent CI failure on the core gateway's DEV branch warrants a look, but the catalog entry gives no failure detail to act on yet.",
+			"evidence": [
+				"status failure, updated 2026-10-07T08:21:43Z",
+				"workflow_dispatch on DEV branch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T08:52:00.129Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-msteams-large-upload-spec",
@@ -12994,6 +13022,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T09:24:39.612Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-66d88ed81830",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/my-agent/ZenMode.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-66d88ed81830.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "bb7878c4ea2b0f764017c0cebb01007039da23f3b67c4a466bdfec795f5154d8",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-93789f3a94af"
+			],
+			"rationale": "Clear, already-approved a11y fix with a named spec contract and two concrete fix options for a mislabeled aria-modal overlay.",
+			"evidence": [
+				"TODO cites spec-hc028-overlay-dialog-contract.md DELTA 3",
+				"status approved, exact file/PR identified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T08:52:00.129Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-6ccc8172373b",
@@ -15237,42 +15299,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T07:27:16.742Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-66d88ed81830",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/my-agent/ZenMode.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-66d88ed81830.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "6969018d3eb1b37bf41133d5783d4647ac17118c519373f60d0b7cc666521460",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-93789f3a94af",
-				"proposal:postmerge-minion-hub-c14a5898d7d0",
-				"proposal:postmerge-minion-hub-f05b351ac858"
-			],
-			"rationale": "An aria-modal a11y defect that shares the same HC-028 overlay-dialog contract as three other merged findings and should be resolved as one migration effort.",
-			"evidence": [
-				"aria-modal=\"true\" without native modal behavior per marker text",
-				"references spec-hc028-overlay-dialog-contract.md DELTA 3"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T07:53:18.976Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-88c1258817d5",
@@ -26029,38 +26055,6 @@
 			"scoredAt": "2026-10-01T18:24:01.690Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a deployment status entry showing an already-merged commit with no open issue or defined scope of work.",
-			"evidence": [
-				"commit fixes nitter persistence/shutdown drain",
-				"status: unknown, no incident or deficiency described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T08:21:55.181Z"
-		},
-		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27514,6 +27508,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T06:15:43.007Z"
+		},
+		{
+			"key": "run:minion_site#31686953033",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_site",
+			"title": "Claude Code",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/actions/runs/31686953033",
+			"sourceUpdatedAt": "2026-09-12T09:31:54Z",
+			"sourceFingerprint": "fd33d67a9bcb040c710991818cff95818ec5463761e5c0012f15091f3395c7b6",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Nearly a month-old CI failure tied to a one-off pull_request_review_comment trigger, with no detail suggesting it still reflects current state.",
+			"evidence": [
+				"updatedAt 2026-09-12T09:31:54Z",
+				"trigger: pull_request_review_comment on dev"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T08:52:00.129Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
@@ -31444,38 +31470,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T01:30:58.494Z"
-		},
-		{
-			"key": "run:minion (gateway)#37588928167",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37588928167",
-			"sourceUpdatedAt": "2026-10-07T08:02:57Z",
-			"sourceFingerprint": "5d457c356a18e72def4b93af5421eec6832cc2d2b26ce8bc4d4d70f416cad03e",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an in-progress CI run status with no defined problem or outcome to track as a goal.",
-			"evidence": [
-				"status: in_progress",
-				"workflow_dispatch on DEV, no issue described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T08:21:55.181Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
