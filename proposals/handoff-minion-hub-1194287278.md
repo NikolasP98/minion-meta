@@ -42,5 +42,5 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2927
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2937` — nor does it fan a CONTAINER out (2026-09-26):
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2937
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:4027` — no overflow clip — a booking that starts before startHour
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L4027
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:4049` — no overflow clip — a booking that starts before startHour
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L4049
