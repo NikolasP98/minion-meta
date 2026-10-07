@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-07T05:21:59.899Z",
+	"generatedAt": "2026-10-07T05:51:53.090Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2961,38 +2961,6 @@
 			"scoredAt": "2026-10-07T01:22:08.044Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-77b26984c8ea",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-77b26984c8ea.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "a60fb30d2077426782ace348ec78a357e5744e80ddd708205816c875f1808605",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Auto-diagnosis gives a concrete, bounded fix (carry forward package_id on reschedule) with a clear test assertion for a business-critical billing/quota linkage bug.",
-			"evidence": [
-				"TODO: 'RESCHEDULE currently loses the package link'",
-				"fix direction: carry forward package_id; test package_id equality"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T05:24:46.739Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-c5d86be403fa",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3190,39 +3158,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T02:24:50.022Z"
-		},
-		{
-			"key": "pr:minion_hub#435",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#435 feat(notifications): project leased events into exact per-recipient candidates",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/435",
-			"sourceUpdatedAt": "2026-10-07T05:16:12Z",
-			"sourceFingerprint": "7548f9588f5a03f4b411b6b4447de6732487b64f2073bca0e7133cedfd0f34f4",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Draft PR backed by approved specs and a read-only production preflight that already caught and fixed a real blocker is ready for human-gated merge.",
-			"evidence": [
-				"specs pass-2 approved per PR body",
-				"preflight dry-run against production caught a role-reachability blocker and was fixed",
-				"worker is double-gated so merge changes no user-visible behavior"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T05:21:59.724Z"
 		},
 		{
 			"key": "proposal:ci-minion-site-claude-code",
@@ -3961,33 +3896,34 @@
 			"repo": "minion_hub",
 			"title": "Project notification events into exact per-recipient candidates under current authority",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-03-notification-slice5-audience-projection-spec.md",
-			"sourceUpdatedAt": "2026-10-03",
-			"sourceFingerprint": "7da179b54b73521a12662350749d80825975d8ad70d8564ff85f623d35072b9d",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "5f99f3e9005281f6b140e6715834f66b873bbdbf4ef639c37df28439102683a1",
 			"score": 59,
 			"band": "medium",
 			"axes": {
 				"criticality": 5,
-				"importance": 7,
-				"impact": 6
+				"importance": 8,
+				"impact": 5
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 6,
+				"implementation": 7
 			},
-			"confidence": 4,
+			"confidence": 6,
 			"recommendation": "reevaluate",
 			"relatedKeys": [
-				"spec:2026-10-03-notification-slice4-worker-health-spec",
+				"pr:minion_hub#435",
 				"spec:2026-10-03-notification-slice5-integrity-quarantine-definer-amendment"
 			],
-			"rationale": "Seven revisions still pending renewed two-pass review, including a discovered recursive-RLS redesign, indicate the spec is not yet stable enough for paid execution.",
+			"rationale": "The spec itself is still at v7 'pending renewed two-pass review' even though the linked PR claims both contracts already passed review, so the authoritative approval state needs reconciling before further paid work.",
 			"evidence": [
-				"v1-v7 all marked 'pending renewed two-pass review'",
-				"v7 replaced an 'infeasible' RLS design after recursive RLS found"
+				"revision table shows v7 status 'author response, pending renewed two-pass review'",
+				"depends on accepted Slice3/Slice4 contracts",
+				"status field is 'implementing' while PR text asserts 'verdict approved'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T02:25:57.895Z"
+			"scoredAt": "2026-10-07T05:51:52.914Z"
 		},
 		{
 			"key": "issue:minion-meta#590",
@@ -7043,6 +6979,42 @@
 			"scoredAt": "2026-10-05T02:25:57.895Z"
 		},
 		{
+			"key": "spec:2026-10-03-notification-slice5-integrity-quarantine-definer-amendment",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Preserve private terminal rows while quarantining exact live notification claims",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-03-notification-slice5-integrity-quarantine-definer-amendment.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "fba6440ada2c9132c01f6bbf06306b9cd0004c144294f9be5b51ddc94d771f45",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#435",
+				"spec:2026-10-03-notification-slice5-audience-projection-spec"
+			],
+			"rationale": "This narrow amendment is also mid-revision (v4, pending renewed two-pass review) with the same approval-status discrepancy against the dependent PR, so it should be reconciled rather than treated as execution-ready.",
+			"evidence": [
+				"revision table shows v4 status 'pending renewed two-pass review'",
+				"explicitly out of scope: new roles, expanded worker reads, deployment",
+				"frozen inputs reference a native negative receipt and prior migration SHA as proof artifacts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T05:51:52.914Z"
+		},
+		{
 			"key": "issue:minion-meta#424",
 			"kind": "issue",
 			"stage": "proposal",
@@ -8069,6 +8041,42 @@
 			"scoredAt": "2026-10-05T12:03:01.297Z"
 		},
 		{
+			"key": "pr:minion_hub#435",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#435 feat(notifications): project leased events into exact per-recipient candidates",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/435",
+			"sourceUpdatedAt": "2026-10-07T05:23:53Z",
+			"sourceFingerprint": "fa79c2c8569c7b1e952116230fef598955f07b2fbbdc8c0be537159abfbd8f34",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 8,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-10-03-notification-slice5-audience-projection-spec",
+				"spec:2026-10-03-notification-slice5-integrity-quarantine-definer-amendment"
+			],
+			"rationale": "Migration work and preflight verification are already complete against production with no user-visible change, leaving only the deliberate human merge gate as the next step.",
+			"evidence": [
+				"preflight dry-run against production caught and fixed a real role-reachability drift",
+				"worker stays double-gated (DESKTOP + NOTIFICATION_WORKER) so merging changes no user-visible behavior",
+				"status is draft pending human migration-gate decision"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T05:51:52.914Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8823,40 +8831,6 @@
 			"scoredAt": "2026-10-06T00:51:29.965Z"
 		},
 		{
-			"key": "spec:2026-10-03-notification-slice5-integrity-quarantine-definer-amendment",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Preserve private terminal rows while quarantining exact live notification claims",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-03-notification-slice5-integrity-quarantine-definer-amendment.md",
-			"sourceUpdatedAt": "2026-10-03",
-			"sourceFingerprint": "8fabdc3d0317ffdf1658c0265f9518c31c01b88bf150d93ebc3efd024418cbd9",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-10-03-notification-slice5-audience-projection-spec"
-			],
-			"rationale": "Narrow security-definer amendment to an already-unstable parent slice, itself still cycling through unreviewed revisions.",
-			"evidence": [
-				"v1-v4 all 'pending renewed two-pass review'",
-				"amends still-unapproved Slice5 audience projection spec"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T02:25:57.895Z"
-		},
-		{
 			"key": "issue:minion-meta#354",
 			"kind": "issue",
 			"stage": "proposal",
@@ -9573,6 +9547,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T21:22:02.187Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-77b26984c8ea",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-77b26984c8ea.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "a60fb30d2077426782ace348ec78a357e5744e80ddd708205816c875f1808605",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The reschedule flow dropping package_id is a concrete, scoped business-logic bug with a clear fix direction and test criterion already stated.",
+			"evidence": [
+				"TODO(handoff) marker: RESCHEDULE loses the package link",
+				"fix direction: carry forward package_id and assert equality in a test",
+				"status approved, filed from merged PR #278"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T05:51:52.914Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-d5d1a8c9d6a9",
@@ -17100,38 +17107,6 @@
 			"scoredAt": "2026-09-30T19:54:07.150Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-7ec5d7436363",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos-packages.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7ec5d7436363.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "cf7ab4653cc7396bcb7f7eb2a43349a1184cee102cc0136825edb5b0aaf20d3a",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The diagnosis field is incomplete/garbled and gives no actual fix direction, so this cannot be executed as-is despite the marker flagging a real future collision risk.",
-			"evidence": [
-				"marker: 'cancel a grant action on /pos/accounts will hit this'",
-				"diagnosis text truncated with no fix direction, appears corrupted"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T05:24:46.739Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-c2239f0660dc",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23243,6 +23218,39 @@
 			"scoredAt": "2026-10-03T21:22:02.187Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-7ec5d7436363",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos-packages.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7ec5d7436363.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "cf7ab4653cc7396bcb7f7eb2a43349a1184cee102cc0136825edb5b0aaf20d3a",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The auto-diagnosis section contains a stray agent tool-exploration transcript instead of an actual root-cause analysis, so the finding needs re-diagnosis before it is actionable.",
+			"evidence": [
+				"diagnosis body reads 'Let me read the file...' and shows Glob/function_calls artifacts, not analysis",
+				"only the raw marker fragment ('cancel a grant action on /pos/accounts will hit this') hints at scope",
+				"status approved despite no usable fix direction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T05:51:52.914Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-a7b89c372c83",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24426,38 +24434,6 @@
 			"scoredAt": "2026-10-03T05:25:32.539Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The referenced fix is already committed and the entry gives no further actionable description.",
-			"evidence": [
-				"summary is a commit message for a fix already merged",
-				"status is unknown with no stated outstanding work"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T05:21:59.724Z"
-		},
-		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24702,38 +24678,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T04:24:04.388Z"
-		},
-		{
-			"key": "pr:minion-meta#757",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#757 docs(specs): record notification Slice 5 implementation and review outcome",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/757",
-			"sourceUpdatedAt": "2026-10-07T04:48:09Z",
-			"sourceFingerprint": "874982b430d299769c7b78cd361a90339bb7fdd94a509dff480d64ed3fe22d4b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Low-risk documentation update recording an already-completed implementation and review outcome with no package or production change.",
-			"evidence": [
-				"Local qualification only; changes no package",
-				"Corrects caller named in sections 2.4 and 4.1.9 and the DELTA"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T04:52:18.180Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-workforce-client-json-error",
